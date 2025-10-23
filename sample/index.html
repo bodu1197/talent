@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>재능마켓 - 당신의 재능을 거래하세요</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L15.09 8.26H22L17.55 12.5L19.64 18.74L12 14.49L4.36 18.74L6.45 12.5L2 8.26H8.91L12 2Z" fill="currentColor"/>
+                    </svg>
+                </div>
+                <span class="logo-text">TALENT MARKET</span>
+            </div>
+            
+            <nav class="nav-wrapper">
+                <div class="nav-category">
+                    <button class="category-btn">
+                        <span>카테고리</span>
+                        <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                            <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Mega Menu -->
+                <div class="mega-menu">
+                    <div class="mega-menu-content">
+                        <div class="mega-menu-main">
+                            <div id="mega-categories-container"></div>
+                        </div>
+                        <div class="mega-menu-footer">
+                            <div class="trending-keywords">
+                                <strong>🔥 인기 검색어</strong>
+                                <div id="trending-container"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            
+            <div class="search-bar">
+                <input type="text" placeholder="찾으시는 재능을 검색해보세요" class="search-input">
+                <button class="search-btn">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1"/>
+                        <path d="M10 10L15 15" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="auth-buttons">
+                <button class="btn btn-login">로그인</button>
+                <button class="btn btn-signup">회원가입</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>당신의 재능, 세상과 연결하세요</h1>
+            <p>전문가부터 취미까지, 모든 재능이 거래되는 플랫폼</p>
+            <div class="hero-cta">
+                <button class="btn btn-primary btn-lg">서비스 판매하기</button>
+                <button class="btn btn-secondary btn-lg">전문가 찾기</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Categories -->
+    <section class="featured-categories">
+        <div class="container">
+            <h2>인기 카테고리</h2>
+            <div class="category-grid" id="featured-grid"></div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2>시작하기</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>프로필 작성</h3>
+                    <p>당신의 재능과 경험을 소개하세요</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>서비스 등록</h3>
+                    <p>제공할 서비스를 상세히 설명하세요</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>거래 시작</h3>
+                    <p>의뢰자와 소통하고 거래를 진행하세요</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>수익 창출</h3>
+                    <p>서비스 완료 후 보수를 받으세요</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>회사</h4>
+                    <ul>
+                        <li><a href="#">소개</a></li>
+                        <li><a href="#">채용</a></li>
+                        <li><a href="#">뉴스</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>지원</h4>
+                    <ul>
+                        <li><a href="#">고객 지원</a></li>
+                        <li><a href="#">안전 가이드</a></li>
+                        <li><a href="#">커뮤니티</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>약관</h4>
+                    <ul>
+                        <li><a href="#">이용약관</a></li>
+                        <li><a href="#">개인정보</a></li>
+                        <li><a href="#">수수료</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TALENT MARKET. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav">
+        <a href="index.html" class="nav-item active">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>홈</span>
+        </a>
+        <button class="nav-item" id="mobile-search-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span>검색</span>
+        </button>
+        <a href="#" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>찜목록</span>
+        </a>
+        <a href="#" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>메시지</span>
+        </a>
+        <a href="#" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span>마이페이지</span>
+        </a>
+    </nav>
+
+    <!-- Mobile Search Overlay -->
+    <div class="mobile-search-overlay" id="mobile-search-overlay">
+        <div class="search-overlay-header">
+            <button class="back-btn" id="search-back-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <div class="search-overlay-bar">
+                <input type="text" placeholder="찾으시는 재능을 검색해보세요" class="search-overlay-input" id="search-overlay-input">
+            </div>
+        </div>
+        <div class="search-overlay-content">
+            <div class="search-suggestions">
+                <h3>인기 검색어</h3>
+                <div class="suggestion-tags" id="suggestion-tags"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- All Categories Overlay -->
+    <div class="all-categories-overlay" id="all-categories-overlay">
+        <div class="all-categories-header">
+            <div class="container-overlay-header">
+                <button class="back-btn" id="all-categories-back-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <h2>전체 카테고리</h2>
+            </div>
+        </div>
+        <div class="all-categories-content" id="all-categories-content"></div>
+    </div>
+
+    <script src="categories.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

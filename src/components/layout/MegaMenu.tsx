@@ -1,0 +1,289 @@
+'use client'
+
+import { useState, useRef, useEffect } from 'react'
+import Link from 'next/link'
+import { FULL_CATEGORIES } from '@/data/categories-full'
+import { CategoryItem } from '@/data/categories-full'
+
+export default function MegaMenu() {
+  const [activeCategory, setActiveCategory] = useState<string | null>(null)
+  const [isOpen, setIsOpen] = useState(false)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  // 마우스 벗어날 때 지연 후 닫기
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setActiveCategory(null)
+      setIsOpen(false)
+    }, 300)
+  }
+
+  // 마우스 진입 시 타이머 취소
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
+  }
+
+  // 카테고리 호버
+  const handleCategoryHover = (categoryId: string) => {
+    handleMouseEnter()
+    setActiveCategory(categoryId)
+    setIsOpen(true)
+  }
+
+  // 외부 클릭 감지
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+        setActiveCategory(null)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
+  // 현재 활성 카테고리의 하위 카테고리 가져오기
+  const getActiveSubCategories = (): CategoryItem['children'] => {
+    if (!activeCategory) return []
+    const category = FULL_CATEGORIES.find(cat => cat.id === activeCategory)
+    return category?.children || []
+  }
+
+  return (
+    <div className="relative" ref={menuRef}>
+      {/* 메인 카테고리 바 */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="container mx-auto px-4">
+          <nav className="flex items-center">
+            {/* 전체 카테고리 버튼 */}
+            <button
+              className="flex items-center gap-2 px-4 py-3 hover:bg-gray-50 font-medium border-r border-gray-200"
+              onMouseEnter={() => setIsOpen(true)}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              <span>전체 카테고리</span>
+            </button>
+
+            {/* 인기 카테고리 퀵링크 */}
+            <div className="flex items-center gap-6 px-6">
+              <Link href="/categories/ai-services" className="text-[#0f3460] font-medium hover:text-[#1a4b7d] flex items-center gap-1">
+                <i className="fas fa-robot"></i> AI 서비스
+              </Link>
+              <Link href="/categories/design" className="hover:text-gray-900">
+                디자인
+              </Link>
+              <Link href="/categories/it-programming" className="hover:text-gray-900">
+                IT/프로그래밍
+              </Link>
+              <Link href="/categories/marketing" className="hover:text-gray-900">
+                마케팅
+              </Link>
+              <Link href="/categories/video-photo" className="hover:text-gray-900">
+                영상/사진
+              </Link>
+              <Link href="/categories/writing" className="hover:text-gray-900">
+                문서/글쓰기
+              </Link>
+            </div>
+          </nav>
+        </div>
+      </div>
+
+      {/* 메가 메뉴 드롭다운 */}
+      {isOpen && (
+        <div
+          className="absolute left-0 right-0 bg-white border-b border-gray-200 shadow-lg z-50"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div className="container mx-auto px-4 py-6">
+            <div className="grid grid-cols-12 gap-8">
+              {/* 왼쪽: 대분류 카테고리 */}
+              <div className="col-span-3 border-r border-gray-200 pr-6">
+                <h3 className="text-sm font-semibold text-gray-500 mb-3">카테고리</h3>
+                <ul className="space-y-1">
+                  {FULL_CATEGORIES.map((category) => (
+                    <li key={category.id}>
+                      <Link
+                        href={`/categories/${category.slug}`}
+                        className={`flex items-center justify-between px-3 py-2 rounded-lg transition-colors ${
+                          activeCategory === category.id
+                            ? 'bg-blue-50 text-[#0f3460]'
+                            : 'hover:bg-gray-50'
+                        }`}
+                        onMouseEnter={() => handleCategoryHover(category.id)}
+                      >
+                        <span className="flex items-center gap-2">
+                          <span className="text-lg" style={{ color: '#0f3460' }}>
+                            {category.icon === 'robot' && <i className="fas fa-robot"></i>}
+                            {category.icon === 'palette' && <i className="fas fa-palette"></i>}
+                            {category.icon === 'code' && <i className="fas fa-code"></i>}
+                            {category.icon === 'bullhorn' && <i className="fas fa-bullhorn"></i>}
+                            {category.icon === 'camera' && <i className="fas fa-camera"></i>}
+                            {category.icon === 'language' && <i className="fas fa-language"></i>}
+                            {category.icon === 'pen-fancy' && <i className="fas fa-pen-fancy"></i>}
+                            {category.icon === 'briefcase' && <i className="fas fa-briefcase"></i>}
+                            {category.icon === 'book' && <i className="fas fa-book"></i>}
+                            {category.icon === 'music' && <i className="fas fa-music"></i>}
+                            {category.icon === 'calendar' && <i className="fas fa-calendar"></i>}
+                            {category.icon === 'spa' && <i className="fas fa-spa"></i>}
+                            {category.icon === 'bullseye' && <i className="fas fa-bullseye"></i>}
+                            {category.icon === 'star' && <i className="fas fa-star"></i>}
+                            {category.icon === 'book-open' && <i className="fas fa-book-open"></i>}
+                            {category.icon === 'gavel' && <i className="fas fa-gavel"></i>}
+                            {category.icon === 'hammer' && <i className="fas fa-hammer"></i>}
+                            {category.icon === 'graduation-cap' && <i className="fas fa-graduation-cap"></i>}
+                            {category.icon === 'chart-line' && <i className="fas fa-chart-line"></i>}
+                            {!category.icon && <i className="fas fa-circle"></i>}
+                          </span>
+                          <span className={category.is_ai ? 'font-medium' : ''}>
+                            {category.name}
+                          </span>
+                          {category.is_ai && (
+                            <span className="text-xs bg-blue-100 text-[#0f3460] px-1.5 py-0.5 rounded">AI</span>
+                          )}
+                        </span>
+                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* 오른쪽: 하위 카테고리 */}
+              <div className="col-span-9">
+                {activeCategory && (
+                  <>
+                    <div className="mb-4">
+                      <h3 className="text-lg font-semibold mb-2">
+                        {FULL_CATEGORIES.find(cat => cat.id === activeCategory)?.name}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {FULL_CATEGORIES.find(cat => cat.id === activeCategory)?.description}
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-6">
+                      {getActiveSubCategories()?.map((subCategory) => (
+                        <div key={subCategory.id}>
+                          <h4 className="font-semibold mb-3">
+                            <Link
+                              href={`/categories/${subCategory.slug}`}
+                              className="hover:text-[#0f3460]"
+                            >
+                              {subCategory.name}
+                            </Link>
+                          </h4>
+                          {subCategory.children && (
+                            <ul className="space-y-2">
+                              {subCategory.children.slice(0, 6).map((item) => (
+                                <li key={item.id}>
+                                  <Link
+                                    href={`/categories/${item.slug}`}
+                                    className="text-sm text-gray-600 hover:text-[#0f3460] flex items-center gap-1"
+                                  >
+                                    {item.name}
+                                    {item.is_popular && (
+                                      <span className="text-xs text-red-500">HOT</span>
+                                    )}
+                                  </Link>
+                                </li>
+                              ))}
+                              {subCategory.children.length > 6 && (
+                                <li>
+                                  <Link
+                                    href={`/categories/${subCategory.slug}`}
+                                    className="text-sm text-[#0f3460] hover:text-[#1a4b7d]"
+                                  >
+                                    더보기 →
+                                  </Link>
+                                </li>
+                              )}
+                            </ul>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* AI 카테고리인 경우 키워드 표시 */}
+                    {FULL_CATEGORIES.find(cat => cat.id === activeCategory)?.is_ai && (
+                      <div className="mt-6 pt-6 border-t border-gray-200">
+                        <h4 className="text-sm font-semibold text-gray-700 mb-2">인기 AI 툴</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {getActiveSubCategories()?.map(sub =>
+                            sub.keywords?.map(keyword => (
+                              <span
+                                key={keyword}
+                                className="px-3 py-1 bg-blue-50 text-[#0f3460] text-sm rounded-full"
+                              >
+                                {keyword}
+                              </span>
+                            ))
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {/* 기본 상태 - 인기 카테고리 */}
+                {!activeCategory && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                      <i className="fas fa-fire text-red-500"></i> 인기 카테고리
+                    </h3>
+                    <div className="grid grid-cols-4 gap-4">
+                      {FULL_CATEGORIES.flatMap(cat =>
+                        cat.children?.flatMap(sub =>
+                          sub.children?.filter(item => item.is_popular) || []
+                        ) || []
+                      ).slice(0, 16).map((item) => (
+                        <Link
+                          key={item.id}
+                          href={`/categories/${item.slug}`}
+                          className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg hover:bg-blue-50 hover:text-[#0f3460] transition-colors"
+                        >
+                          <span className="font-medium">{item.name}</span>
+                          <span className="text-xs text-red-500">HOT</span>
+                        </Link>
+                      ))}
+                    </div>
+
+                    <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                      <h4 className="font-semibold mb-2 flex items-center gap-2">
+                        <i className="fas fa-lightbulb text-yellow-500"></i> AI 서비스가 처음이신가요?
+                      </h4>
+                      <p className="text-sm text-gray-600 mb-3">
+                        AI 기술을 활용한 혁신적인 서비스들을 만나보세요
+                      </p>
+                      <Link
+                        href="/categories/ai-services"
+                        className="inline-flex items-center gap-1 text-[#0f3460] hover:text-[#1a4b7d] text-sm font-medium"
+                      >
+                        AI 서비스 둘러보기
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
