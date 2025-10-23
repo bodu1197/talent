@@ -60,7 +60,7 @@ export default function MegaMenu() {
     <div className="relative" ref={menuRef}>
       {/* 메인 카테고리 바 */}
       <div className="bg-white border-b border-gray-200">
-        <div className="container mx-auto px-4">
+        <div className="container-1200">
           <nav className="flex items-center">
             {/* 전체 카테고리 버튼 */}
             <button
@@ -105,17 +105,17 @@ export default function MegaMenu() {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <div className="container mx-auto px-4 py-6">
+          <div className="container-1200 py-6">
             <div className="grid grid-cols-12 gap-8">
               {/* 왼쪽: 대분류 카테고리 */}
               <div className="col-span-3 border-r border-gray-200 pr-6">
-                <h3 className="text-sm font-semibold text-gray-500 mb-3">카테고리</h3>
-                <ul className="space-y-1">
+                
+                <ul className="space-y-0">
                   {FULL_CATEGORIES.map((category) => (
                     <li key={category.id}>
                       <Link
                         href={`/categories/${category.slug}`}
-                        className={`flex items-center justify-between px-3 py-2 rounded-lg transition-colors ${
+                        className={`flex items-center justify-between px-3 py-0.5 rounded-lg transition-colors ${
                           activeCategory === category.id
                             ? 'bg-blue-50 text-[#0f3460]'
                             : 'hover:bg-gray-50'
@@ -145,7 +145,7 @@ export default function MegaMenu() {
                             {category.icon === 'chart-line' && <i className="fas fa-chart-line"></i>}
                             {!category.icon && <i className="fas fa-circle"></i>}
                           </span>
-                          <span className={category.is_ai ? 'font-medium' : ''}>
+                          <span className={category.is_ai ? 'font-medium text-sm' : 'text-sm'}>
                             {category.name}
                           </span>
                           {category.is_ai && (
@@ -165,19 +165,12 @@ export default function MegaMenu() {
               <div className="col-span-9">
                 {activeCategory && (
                   <>
-                    <div className="mb-4">
-                      <h3 className="text-lg font-semibold mb-2">
-                        {FULL_CATEGORIES.find(cat => cat.id === activeCategory)?.name}
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        {FULL_CATEGORIES.find(cat => cat.id === activeCategory)?.description}
-                      </p>
-                    </div>
+
 
                     <div className="grid grid-cols-3 gap-6">
                       {getActiveSubCategories()?.map((subCategory) => (
                         <div key={subCategory.id}>
-                          <h4 className="font-semibold mb-3">
+                          <h4 className="font-semibold mb-3 text-sm">
                             <Link
                               href={`/categories/${subCategory.slug}`}
                               className="hover:text-[#0f3460]"
@@ -191,7 +184,7 @@ export default function MegaMenu() {
                                 <li key={item.id}>
                                   <Link
                                     href={`/categories/${item.slug}`}
-                                    className="text-sm text-gray-600 hover:text-[#0f3460] flex items-center gap-1"
+                                    className="text-xs text-gray-600 hover:text-[#0f3460] flex items-center gap-1"
                                   >
                                     {item.name}
                                     {item.is_popular && (
@@ -260,23 +253,7 @@ export default function MegaMenu() {
                       ))}
                     </div>
 
-                    <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                      <h4 className="font-semibold mb-2 flex items-center gap-2">
-                        <i className="fas fa-lightbulb text-yellow-500"></i> AI 서비스가 처음이신가요?
-                      </h4>
-                      <p className="text-sm text-gray-600 mb-3">
-                        AI 기술을 활용한 혁신적인 서비스들을 만나보세요
-                      </p>
-                      <Link
-                        href="/categories/ai-services"
-                        className="inline-flex items-center gap-1 text-[#0f3460] hover:text-[#1a4b7d] text-sm font-medium"
-                      >
-                        AI 서비스 둘러보기
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </Link>
-                    </div>
+
                   </div>
                 )}
               </div>

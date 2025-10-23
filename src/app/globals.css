@@ -1,2 +1,18 @@
 @import '@fortawesome/fontawesome-free/css/all.css';
 @import "tailwindcss";
+
+.container-1200 {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.container-1500 {
+  max-width: 1500px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 10px;
+  padding-right: 10px;
+}

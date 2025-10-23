@@ -46,11 +46,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 카테고리 헤더 */}
-      <section className="bg-gray-50 py-12 border-b">
-        <div className="container mx-auto px-4">
+      <div className="bg-gray-50 py-12 border-b">
+        <div className="container-1200">
           <div className="max-w-4xl">
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-sm mb-4">
+            <nav className="flex items-center gap-2 text-sm mb-2">
               <Link href="/" className="text-gray-500 hover:text-gray-700">홈</Link>
               {categoryPath.map((cat, index) => (
                 <div key={cat.id} className="flex items-center gap-2">
@@ -66,49 +66,18 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               ))}
             </nav>
 
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-4xl" style={{ color: '#0f3460' }}>
-                {category.icon === 'robot' && <i className="fas fa-robot"></i>}
-                {category.icon === 'palette' && <i className="fas fa-palette"></i>}
-                {category.icon === 'code' && <i className="fas fa-code"></i>}
-                {category.icon === 'bullhorn' && <i className="fas fa-bullhorn"></i>}
-                {category.icon === 'camera' && <i className="fas fa-camera"></i>}
-                {category.icon === 'language' && <i className="fas fa-language"></i>}
-                {category.icon === 'pen-fancy' && <i className="fas fa-pen-fancy"></i>}
-                {category.icon === 'briefcase' && <i className="fas fa-briefcase"></i>}
-                {category.icon === 'book' && <i className="fas fa-book"></i>}
-                {category.icon === 'music' && <i className="fas fa-music"></i>}
-                {category.icon === 'calendar' && <i className="fas fa-calendar"></i>}
-                {category.icon === 'spa' && <i className="fas fa-spa"></i>}
-                {category.icon === 'bullseye' && <i className="fas fa-bullseye"></i>}
-                {category.icon === 'star' && <i className="fas fa-star"></i>}
-                {category.icon === 'book-open' && <i className="fas fa-book-open"></i>}
-                {category.icon === 'gavel' && <i className="fas fa-gavel"></i>}
-                {category.icon === 'hammer' && <i className="fas fa-hammer"></i>}
-                {category.icon === 'graduation-cap' && <i className="fas fa-graduation-cap"></i>}
-                {category.icon === 'chart-line' && <i className="fas fa-chart-line"></i>}
-                {!category.icon && <i className="fas fa-circle"></i>}
-              </span>
-              <h1 className="text-3xl font-bold">{category.name}</h1>
-              {category.is_ai && (
-                <span className="px-2 py-1 bg-blue-100 text-[#0f3460] text-sm font-medium rounded">AI Powered</span>
-              )}
-            </div>
-            {category.description && (
-              <p className="text-lg text-gray-600 mb-6">{category.description}</p>
-            )}
+
 
             {/* 하위 카테고리 또는 형제 카테고리 표시 */}
             {category.children && category.children.length > 0 ? (
               // 하위 카테고리가 있는 경우 하위 카테고리 표시
-              <div className="mt-4">
-                <h3 className="text-sm font-medium text-gray-700 mb-2">하위 카테고리</h3>
-                <div className="flex flex-wrap gap-2">
+              <div className="mt-2">
+                <div className="flex flex-wrap gap-1">
                   {category.children.map(child => (
                     <a
                       key={child.id}
                       href={`/categories/${child.slug}`}
-                      className="px-4 py-2 bg-white border border-gray-200 rounded-lg hover:border-[#0f3460] hover:text-[#0f3460] transition-colors"
+                      className="px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-lg hover:border-[#0f3460] hover:text-[#0f3460] transition-colors"
                     >
                       {child.name}
                     </a>
@@ -118,14 +87,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             ) : (
               // 하위 카테고리가 없는 경우 (3차 카테고리) 형제 카테고리 표시
               getSiblingCategories().length > 0 && (
-                <div className="mt-4">
-                  <h3 className="text-sm font-medium text-gray-700 mb-2">관련 카테고리</h3>
-                  <div className="flex flex-wrap gap-2">
+                <div className="mt-2">
+                  <div className="flex flex-wrap gap-1">
                     {getSiblingCategories().map(sibling => (
                       <a
                         key={sibling.id}
                         href={`/categories/${sibling.slug}`}
-                        className={`px-4 py-2 border rounded-lg transition-colors ${
+                        className={`px-3 py-1.5 text-sm border rounded-lg transition-colors ${
                           sibling.id === category.id
                             ? 'bg-[#0f3460] text-white border-[#0f3460]'
                             : 'bg-white border-gray-200 hover:border-[#0f3460] hover:text-[#0f3460]'
@@ -140,11 +108,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             )}
           </div>
         </div>
-      </section>
+      </div>
 
       {/* 필터 및 서비스 목록 */}
       <section className="py-8">
-        <div className="container mx-auto px-4">
+        <div className="container-1200">
           <div className="flex gap-8">
             {/* 왼쪽 필터 */}
             <aside className="w-64 flex-shrink-0 hidden lg:block">

@@ -19,82 +19,168 @@ export const FULL_CATEGORIES: CategoryItem[] = [
     name: 'AI 서비스',
     slug: 'ai-services',
     icon: 'robot',
-    description: 'AI 기술을 활용한 혁신적인 서비스',
+
     is_ai: true,
     service_count: 16,
     children: [
       {
-        id: 'ai-image-generation',
-        name: 'AI 이미지 생성',
-        slug: 'ai-image-generation',
+        id: 'ai-design',
+        name: 'AI 디자인',
+        slug: 'ai-design',
         parent_id: 'ai-services',
         is_ai: true,
-        keywords: ['Midjourney', 'DALL-E', 'Stable Diffusion', 'Leonardo AI'],
         children: [
-          { id: 'ai-logo-design', name: 'AI 로고 디자인', slug: 'ai-logo-design', parent_id: 'ai-image-generation', is_ai: true, is_popular: true },
-          { id: 'ai-illustration', name: 'AI 일러스트', slug: 'ai-illustration', parent_id: 'ai-image-generation', is_ai: true },
-          { id: 'ai-product-image', name: 'AI 제품 이미지', slug: 'ai-product-image', parent_id: 'ai-image-generation', is_ai: true },
-          { id: 'ai-character-design', name: 'AI 캐릭터 디자인', slug: 'ai-character-design', parent_id: 'ai-image-generation', is_ai: true },
-          { id: 'ai-pattern-design', name: 'AI 패턴 디자인', slug: 'ai-pattern-design', parent_id: 'ai-image-generation', is_ai: true },
-          { id: 'ai-thumbnail', name: 'AI 썸네일 제작', slug: 'ai-thumbnail', parent_id: 'ai-image-generation', is_ai: true, is_popular: true },
+          { id: 'ai-illustration', name: 'AI 일러스트', slug: 'ai-illustration', parent_id: 'ai-design', is_ai: true },
+          { id: 'ai-photorealistic-model', name: 'AI 실사·모델', slug: 'ai-photorealistic-model', parent_id: 'ai-design', is_ai: true },
+          { id: 'ai-ad-material-design', name: 'AI 광고소재 디자인', slug: 'ai-ad-material-design', parent_id: 'ai-design', is_ai: true },
+          { id: 'ai-character-design', name: 'AI 캐릭터 디자인', slug: 'ai-character-design', parent_id: 'ai-design', is_ai: true },
+          { id: 'ai-product-package-design', name: 'AI 제품·패키지 디자인', slug: 'ai-product-package-design', parent_id: 'ai-design', is_ai: true },
+          { id: 'ai-space-design', name: 'AI 공간 디자인', slug: 'ai-space-design', parent_id: 'ai-design', is_ai: true },
+          { id: 'ai-retouching-composition', name: 'AI 보정·누끼·합성', slug: 'ai-retouching-composition', parent_id: 'ai-design', is_ai: true },
+          { id: 'ai-book-cover', name: 'AI 책 표지', slug: 'ai-book-cover', parent_id: 'ai-design', is_ai: true },
+          { id: 'ai-design-etc', name: 'AI 디자인 기타', slug: 'ai-design-etc', parent_id: 'ai-design', is_ai: true },
         ]
       },
       {
-        id: 'ai-content-creation',
-        name: 'AI 콘텐츠 생성',
-        slug: 'ai-content-creation',
+        id: 'ai-image',
+        name: 'AI 이미지',
+        slug: 'ai-image',
         parent_id: 'ai-services',
         is_ai: true,
-        keywords: ['ChatGPT', 'Claude', 'Gemini', 'Jasper'],
         children: [
-          { id: 'ai-blog-writing', name: 'AI 블로그 작성', slug: 'ai-blog-writing', parent_id: 'ai-content-creation', is_ai: true, is_popular: true },
-          { id: 'ai-copywriting', name: 'AI 카피라이팅', slug: 'ai-copywriting', parent_id: 'ai-content-creation', is_ai: true },
-          { id: 'ai-translation', name: 'AI 번역', slug: 'ai-translation', parent_id: 'ai-content-creation', is_ai: true },
-          { id: 'ai-seo-content', name: 'AI SEO 콘텐츠', slug: 'ai-seo-content', parent_id: 'ai-content-creation', is_ai: true },
-          { id: 'ai-script-writing', name: 'AI 대본 작성', slug: 'ai-script-writing', parent_id: 'ai-content-creation', is_ai: true },
-        ]
-      },
-      {
-        id: 'ai-video-creation',
-        name: 'AI 영상 제작',
-        slug: 'ai-video-creation',
-        parent_id: 'ai-services',
-        is_ai: true,
-        keywords: ['Runway', 'Pika Labs', 'HeyGen', 'Synthesia', 'D-ID'],
-        children: [
-          { id: 'ai-video-editing', name: 'AI 영상 편집', slug: 'ai-video-editing', parent_id: 'ai-video-creation', is_ai: true },
-          { id: 'ai-avatar-video', name: 'AI 아바타 영상', slug: 'ai-avatar-video', parent_id: 'ai-video-creation', is_ai: true, is_popular: true },
-          { id: 'ai-animation', name: 'AI 애니메이션', slug: 'ai-animation', parent_id: 'ai-video-creation', is_ai: true },
-          { id: 'ai-video-effects', name: 'AI 영상 효과', slug: 'ai-video-effects', parent_id: 'ai-video-creation', is_ai: true },
-        ]
-      },
-      {
-        id: 'ai-audio-music',
-        name: 'AI 오디오/음악',
-        slug: 'ai-audio-music',
-        parent_id: 'ai-services',
-        is_ai: true,
-        keywords: ['ElevenLabs', 'Murf', 'Suno AI', 'AIVA', 'Soundraw'],
-        children: [
-          { id: 'ai-voice-generation', name: 'AI 음성 생성', slug: 'ai-voice-generation', parent_id: 'ai-audio-music', is_ai: true, is_popular: true },
-          { id: 'ai-music-composition', name: 'AI 음악 작곡', slug: 'ai-music-composition', parent_id: 'ai-audio-music', is_ai: true },
-          { id: 'ai-sound-effects', name: 'AI 효과음', slug: 'ai-sound-effects', parent_id: 'ai-audio-music', is_ai: true },
-          { id: 'ai-voice-cloning', name: 'AI 음성 클로닝', slug: 'ai-voice-cloning', parent_id: 'ai-audio-music', is_ai: true },
+          { id: 'ai-image-creation-retouching', name: 'AI 이미지 제작·누끼·보정', slug: 'ai-image-creation-retouching', parent_id: 'ai-image', is_ai: true },
+          { id: 'ai-product-photo', name: 'AI 제품 사진', slug: 'ai-product-photo', parent_id: 'ai-image', is_ai: true },
+          { id: 'ai-upscaling', name: 'AI 업스케일링(화질 개선)', slug: 'ai-upscaling', parent_id: 'ai-image', is_ai: true },
+          { id: 'ai-hair-model', name: 'AI 헤어 모델', slug: 'ai-hair-model', parent_id: 'ai-image', is_ai: true },
+          { id: 'ai-ad-model', name: 'AI 광고 모델', slug: 'ai-ad-model', parent_id: 'ai-image', is_ai: true },
         ]
       },
       {
         id: 'ai-development',
-        name: 'AI 개발 지원',
+        name: 'AI 개발',
         slug: 'ai-development',
         parent_id: 'ai-services',
         is_ai: true,
-        keywords: ['GitHub Copilot', 'Cursor', 'Tabnine', 'CodeWhisperer'],
         children: [
-          { id: 'ai-code-generation', name: 'AI 코드 생성', slug: 'ai-code-generation', parent_id: 'ai-development', is_ai: true },
-          { id: 'ai-code-review', name: 'AI 코드 리뷰', slug: 'ai-code-review', parent_id: 'ai-development', is_ai: true },
-          { id: 'ai-debugging', name: 'AI 디버깅', slug: 'ai-debugging', parent_id: 'ai-development', is_ai: true },
+          { id: 'custom-chatbot-gpt', name: '맞춤형 챗봇·GPT', slug: 'custom-chatbot-gpt', parent_id: 'ai-development', is_ai: true },
+          { id: 'ai-system-service', name: 'AI 시스템·서비스', slug: 'ai-system-service', parent_id: 'ai-development', is_ai: true },
+          { id: 'ai-automation-program', name: 'AI 자동화 프로그램', slug: 'ai-automation-program', parent_id: 'ai-development', is_ai: true },
+          { id: 'prompt-engineering', name: '프롬프트 설계(엔지니어링)', slug: 'prompt-engineering', parent_id: 'ai-development', is_ai: true },
+          { id: 'ai-modeling-optimization', name: 'AI 모델링·최적화', slug: 'ai-modeling-optimization', parent_id: 'ai-development', is_ai: true },
+          { id: 'image-voice-recognition', name: '이미지·음성 인식', slug: 'image-voice-recognition', parent_id: 'ai-development', is_ai: true },
+          { id: 'ai-feature-development-integration', name: 'AI 기능 개발·연동', slug: 'ai-feature-development-integration', parent_id: 'ai-development', is_ai: true },
+          { id: 'ai-agent', name: 'AI 에이전트', slug: 'ai-agent', parent_id: 'ai-development', is_ai: true },
+          { id: 'ai-data-analysis', name: 'AI 데이터 분석', slug: 'ai-data-analysis', parent_id: 'ai-development', is_ai: true },
+          { id: 'ai-introduction-consulting', name: 'AI 도입 컨설팅', slug: 'ai-introduction-consulting', parent_id: 'ai-development', is_ai: true },
+          { id: 'natural-language-processing', name: '자연어 처리', slug: 'natural-language-processing', parent_id: 'ai-development', is_ai: true },
         ]
-      }
+      },
+      {
+        id: 'ai-prompt',
+        name: 'AI 프롬프트',
+        slug: 'ai-prompt',
+        parent_id: 'ai-services',
+        is_ai: true,
+        children: [
+          { id: 'ai-prompt-child', name: 'AI 프롬프트', slug: 'ai-prompt-child', parent_id: 'ai-prompt', is_ai: true },
+        ]
+      },
+      {
+        id: 'ai-marketing',
+        name: 'AI 마케팅',
+        slug: 'ai-marketing',
+        parent_id: 'ai-services',
+        is_ai: true,
+        children: [
+          { id: 'ai-marketing-content', name: 'AI 마케팅 콘텐츠', slug: 'ai-marketing-content', parent_id: 'ai-marketing', is_ai: true },
+          { id: 'ai-aeo-geo', name: 'AI AEO·GEO', slug: 'ai-aeo-geo', parent_id: 'ai-marketing', is_ai: true },
+          { id: 'ai-short-form-ad-production', name: 'AI 숏폼 광고 제작', slug: 'ai-short-form-ad-production', parent_id: 'ai-marketing', is_ai: true },
+          { id: 'ai-marketing-consulting', name: 'AI 마케팅 컨설팅', slug: 'ai-marketing-consulting', parent_id: 'ai-marketing', is_ai: true },
+          { id: 'ai-marketing-etc', name: 'AI 마케팅 기타', slug: 'ai-marketing-etc', parent_id: 'ai-marketing', is_ai: true },
+        ]
+      },
+      {
+        id: 'ai-video',
+        name: 'AI 영상',
+        slug: 'ai-video',
+        parent_id: 'ai-services',
+        is_ai: true,
+        children: [
+          { id: 'ai-ad-video', name: 'AI 광고 영상', slug: 'ai-ad-video', parent_id: 'ai-video', is_ai: true },
+          { id: 'ai-short-form-video', name: 'AI 숏폼 영상', slug: 'ai-short-form-video', parent_id: 'ai-video', is_ai: true },
+          { id: 'ai-video-editing-retouching-captioning', name: 'AI 영상 편집·보정·자막', slug: 'ai-video-editing-retouching-captioning', parent_id: 'ai-video', is_ai: true },
+        ]
+      },
+      {
+        id: 'ai-sound',
+        name: 'AI 음향',
+        slug: 'ai-sound',
+        parent_id: 'ai-services',
+        is_ai: true,
+        children: [
+          { id: 'ai-music', name: 'AI 음원', slug: 'ai-music', parent_id: 'ai-sound', is_ai: true },
+          { id: 'ai-dubbing-narration', name: 'AI 더빙·나레이션', slug: 'ai-dubbing-narration', parent_id: 'ai-sound', is_ai: true },
+        ]
+      },
+      {
+        id: 'ai-content-writing',
+        name: 'AI 콘텐츠 라이팅',
+        slug: 'ai-content-writing',
+        parent_id: 'ai-services',
+        is_ai: true,
+        children: [
+          { id: 'ai-content-production', name: 'AI 콘텐츠 생산', slug: 'ai-content-production', parent_id: 'ai-content-writing', is_ai: true },
+          { id: 'ai-content-review-editing', name: 'AI 콘텐츠 검수·편집', slug: 'ai-content-review-editing', parent_id: 'ai-content-writing', is_ai: true },
+        ]
+      },
+      {
+        id: 'ai-startup-monetization',
+        name: 'AI 창업·수익화',
+        slug: 'ai-startup-monetization',
+        parent_id: 'ai-services',
+        is_ai: true,
+        children: [
+          { id: 'ai-business-monetization-ebook', name: 'AI 사업·수익화 전자책', slug: 'ai-business-monetization-ebook', parent_id: 'ai-startup-monetization', is_ai: true },
+          { id: 'ai-startup-consulting', name: 'AI 창업 자문', slug: 'ai-startup-consulting', parent_id: 'ai-startup-monetization', is_ai: true },
+          { id: 'ai-management-operation-consulting', name: 'AI 경영·운영 자문', slug: 'ai-management-operation-consulting', parent_id: 'ai-startup-monetization', is_ai: true },
+        ]
+      },
+      {
+        id: 'ai-employment-admission',
+        name: 'AI 취업·입시',
+        slug: 'ai-employment-admission',
+        parent_id: 'ai-services',
+        is_ai: true,
+        children: [
+          { id: 'ai-employment-admission-consulting', name: 'AI 취업·입시 컨설팅', slug: 'ai-employment-admission-consulting', parent_id: 'ai-employment-admission', is_ai: true },
+        ]
+      },
+      {
+        id: 'ai-education',
+        name: 'AI 교육',
+        slug: 'ai-education',
+        parent_id: 'ai-services',
+        is_ai: true,
+        children: [
+          { id: 'ai-skill-ebook', name: 'AI 스킬 전자책', slug: 'ai-skill-ebook', parent_id: 'ai-education', is_ai: true },
+          { id: 'ai-work-utilization-lesson', name: 'AI 업무 활용 레슨', slug: 'ai-work-utilization-lesson', parent_id: 'ai-education', is_ai: true },
+          { id: 'ai-development-analysis-lesson', name: 'AI 개발·분석 레슨', slug: 'ai-development-analysis-lesson', parent_id: 'ai-education', is_ai: true },
+          { id: 'ai-marketing-lesson', name: 'AI 마케팅 레슨', slug: 'ai-marketing-lesson', parent_id: 'ai-education', is_ai: true },
+          { id: 'ai-content-production-lesson', name: 'AI 콘텐츠 제작 레슨', slug: 'ai-content-production-lesson', parent_id: 'ai-education', is_ai: true },
+          { id: 'etc-ai-lesson', name: '기타 AI 레슨', slug: 'etc-ai-lesson', parent_id: 'ai-education', is_ai: true },
+        ]
+      },
+      {
+        id: 'ai-translation-interpretation',
+        name: 'AI 통·번역',
+        slug: 'ai-translation-interpretation',
+        parent_id: 'ai-services',
+        is_ai: true,
+        children: [
+          { id: 'ai-translation-review-editing', name: 'AI 번역 검수·편집', slug: 'ai-translation-review-editing', parent_id: 'ai-translation-interpretation', is_ai: true },
+          { id: 'ai-interpretation', name: 'AI 통역', slug: 'ai-interpretation', parent_id: 'ai-translation-interpretation', is_ai: true },
+        ]
+      },
     ]
   },
 
