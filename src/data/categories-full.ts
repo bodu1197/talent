@@ -10,16 +10,138 @@ export interface CategoryItem {
   is_popular?: boolean
   is_ai?: boolean
   service_count?: number
+  popularity_score?: number  // 클릭수/인기도 점수 (높을수록 인기)
 }
 
 export const FULL_CATEGORIES: CategoryItem[] = [
-  // =============== 1. AI 서비스 (별도 대메뉴) ===============
+  // =============== 1. 생활 서비스 ===============
+  {
+    id: 'life-service',
+    name: '생활 서비스',
+    slug: 'life-service',
+    icon: 'home',
+    service_count: 35,
+    popularity_score: 88,
+    description: '일상 생활 편의 서비스',
+    children: [
+      {
+        id: 'home-service',
+        name: '가정 서비스',
+        slug: 'home-service',
+        parent_id: 'life-service',
+        children: [
+          { id: 'cleaning-service', name: '청소 서비스', slug: 'cleaning-service', parent_id: 'home-service', is_popular: true },
+          { id: 'housekeeping', name: '파출부/가사도우미', slug: 'housekeeping', parent_id: 'home-service', is_popular: true },
+          { id: 'organizing-consulting', name: '정리정돈/수납 컨설팅', slug: 'organizing-consulting', parent_id: 'home-service' },
+          { id: 'appliance-install', name: '가전 설치/수리', slug: 'appliance-install', parent_id: 'home-service' },
+          { id: 'aircon-cleaning', name: '에어컨 청소', slug: 'aircon-cleaning', parent_id: 'home-service' },
+          { id: 'pest-control', name: '해충방제/방역', slug: 'pest-control', parent_id: 'home-service' },
+          { id: 'disinfection-service', name: '소독 서비스', slug: 'disinfection-service', parent_id: 'home-service' },
+          { id: 'repair-service', name: '일반 수리 서비스', slug: 'repair-service', parent_id: 'home-service' },
+          { id: 'moving-service', name: '이사 서비스', slug: 'moving-service', parent_id: 'home-service', is_popular: true },
+        ]
+      },
+      {
+        id: 'daily-service',
+        name: '일상 서비스',
+        slug: 'daily-service',
+        parent_id: 'life-service',
+        children: [
+          { id: 'laundry-service', name: '세탁 서비스', slug: 'laundry-service', parent_id: 'daily-service' },
+          { id: 'pet-care', name: '반려동물 케어', slug: 'pet-care', parent_id: 'daily-service', is_popular: true },
+          { id: 'pet-walking', name: '반려동물 산책 대행', slug: 'pet-walking', parent_id: 'daily-service' },
+          { id: 'pet-grooming', name: '반려동물 미용', slug: 'pet-grooming', parent_id: 'daily-service' },
+          { id: 'babysitter', name: '베이비시터', slug: 'babysitter', parent_id: 'daily-service', is_popular: true },
+          { id: 'senior-care', name: '시니어 케어/간병', slug: 'senior-care', parent_id: 'daily-service' },
+        ]
+      },
+      {
+        id: 'vehicle-service',
+        name: '차량 서비스',
+        slug: 'vehicle-service',
+        parent_id: 'life-service',
+        children: [
+          { id: 'car-wash', name: '세차 서비스', slug: 'car-wash', parent_id: 'vehicle-service' },
+          { id: 'car-maintenance', name: '차량 정비 예약 대행', slug: 'car-maintenance', parent_id: 'vehicle-service' },
+          { id: 'designated-driver', name: '대리 운전', slug: 'designated-driver', parent_id: 'vehicle-service' },
+          { id: 'chauffeur-service', name: '운전 기사', slug: 'chauffeur-service', parent_id: 'vehicle-service' },
+        ]
+      },
+      {
+        id: 'booking-agency',
+        name: '예약/대행 서비스',
+        slug: 'booking-agency',
+        parent_id: 'life-service',
+        children: [
+          { id: 'queue-waiting', name: '줄서기 대행', slug: 'queue-waiting', parent_id: 'booking-agency' },
+          { id: 'restaurant-booking', name: '레스토랑 예약 대행', slug: 'restaurant-booking', parent_id: 'booking-agency' },
+          { id: 'hospital-booking', name: '병원 예약/동행', slug: 'hospital-booking', parent_id: 'booking-agency' },
+          { id: 'government-office', name: '관공서 업무 대행', slug: 'government-office', parent_id: 'booking-agency' },
+          { id: 'interpretation-companion', name: '통역 동행', slug: 'interpretation-companion', parent_id: 'booking-agency' },
+        ]
+      },
+      {
+        id: 'rental-service',
+        name: '렌탈 서비스',
+        slug: 'rental-service',
+        parent_id: 'life-service',
+        children: [
+          { id: 'appliance-rental', name: '가전 렌탈', slug: 'appliance-rental', parent_id: 'rental-service' },
+          { id: 'living-goods-rental', name: '생활용품 렌탈', slug: 'living-goods-rental', parent_id: 'rental-service' },
+          { id: 'party-equipment-rental', name: '파티/이벤트 용품 렌탈', slug: 'party-equipment-rental', parent_id: 'rental-service' },
+        ]
+      }
+    ]
+  },
+
+  // =============== 2. 심부름 ===============
+  {
+    id: 'errands',
+    name: '심부름',
+    slug: 'errands',
+    icon: 'motorcycle',
+    service_count: 13,
+    popularity_score: 75,
+    description: '빠른 배달 및 심부름 서비스',
+    children: [
+      {
+        id: 'delivery-service',
+        name: '배달 서비스',
+        slug: 'delivery-service',
+        parent_id: 'errands',
+        children: [
+          { id: 'quick-delivery', name: '퀵 서비스', slug: 'quick-delivery', parent_id: 'delivery-service', is_popular: true },
+          { id: 'document-delivery', name: '서류 배달', slug: 'document-delivery', parent_id: 'delivery-service' },
+          { id: 'package-delivery', name: '택배 대행', slug: 'package-delivery', parent_id: 'delivery-service', is_popular: true },
+          { id: 'food-delivery', name: '음식 배달 대행', slug: 'food-delivery', parent_id: 'delivery-service' },
+          { id: 'medicine-delivery', name: '약 배달', slug: 'medicine-delivery', parent_id: 'delivery-service' },
+          { id: 'flower-delivery', name: '꽃 배달', slug: 'flower-delivery', parent_id: 'delivery-service' },
+          { id: 'gift-delivery', name: '선물 배달', slug: 'gift-delivery', parent_id: 'delivery-service' },
+        ]
+      },
+      {
+        id: 'errand-service',
+        name: '심부름 대행',
+        slug: 'errand-service',
+        parent_id: 'errands',
+        children: [
+          { id: 'shopping-errands', name: '장보기 대행', slug: 'shopping-errands', parent_id: 'errand-service', is_popular: true },
+          { id: 'pickup-service', name: '픽업 서비스', slug: 'pickup-service', parent_id: 'errand-service' },
+          { id: 'secondhand-trade', name: '중고 거래 대행', slug: 'secondhand-trade', parent_id: 'errand-service' },
+          { id: 'return-exchange', name: '반품/교환 대행', slug: 'return-exchange', parent_id: 'errand-service' },
+          { id: 'postal-service', name: '우편 업무 대행', slug: 'postal-service', parent_id: 'errand-service' },
+        ]
+      }
+    ]
+  },
+
+  // =============== 3. AI 서비스 (별도 대메뉴) ===============
   {
     id: 'ai-services',
     name: 'AI 서비스',
     slug: 'ai-services',
     icon: 'robot',
-
+    popularity_score: 999,  // 고정
     is_ai: true,
     service_count: 16,
     children: [
@@ -184,351 +306,645 @@ export const FULL_CATEGORIES: CategoryItem[] = [
     ]
   },
 
-  // =============== 2. 디자인 ===============
+  // =============== 4. 디자인 ===============
   {
     id: 'design',
     name: '디자인',
     slug: 'design',
     icon: 'palette',
-    service_count: 23,
+    service_count: 58,
+    popularity_score: 95,
     description: '창의적인 디자인 솔루션',
     children: [
+      {
+        id: 'logo-branding',
+        name: '로고·브랜딩',
+        slug: 'logo-branding',
+        parent_id: 'design',
+        children: [
+          { id: 'logo-design', name: '로고 디자인', slug: 'logo-design', parent_id: 'logo-branding', is_popular: true },
+          { id: 'brand-design-guide', name: '브랜드 디자인·가이드', slug: 'brand-design-guide', parent_id: 'logo-branding' },
+        ]
+      },
+      {
+        id: 'print-promotional',
+        name: '인쇄·홍보물',
+        slug: 'print-promotional',
+        parent_id: 'design',
+        children: [
+          { id: 'business-card', name: '명함', slug: 'business-card', parent_id: 'print-promotional' },
+          { id: 'flyer-poster-print', name: '전단지·포스터·인쇄물', slug: 'flyer-poster-print', parent_id: 'print-promotional' },
+          { id: 'banner-x-banner', name: '현수막·X배너', slug: 'banner-x-banner', parent_id: 'print-promotional' },
+          { id: 'menu-board', name: '메뉴판', slug: 'menu-board', parent_id: 'print-promotional' },
+          { id: 'promotional-print-output', name: '홍보물 인쇄·출력', slug: 'promotional-print-output', parent_id: 'print-promotional' },
+          { id: 'sticker-envelope-invitation', name: '스티커·봉투·초대장', slug: 'sticker-envelope-invitation', parent_id: 'print-promotional' },
+        ]
+      },
+      {
+        id: 'web-mobile-design',
+        name: '웹·모바일 디자인',
+        slug: 'web-mobile-design',
+        parent_id: 'design',
+        children: [
+          { id: 'web-ui-ux', name: '웹 UI·UX', slug: 'web-ui-ux', parent_id: 'web-mobile-design', is_popular: true },
+          { id: 'app-mobile-ui-ux', name: '앱·모바일 UI·UX', slug: 'app-mobile-ui-ux', parent_id: 'web-mobile-design', is_popular: true },
+          { id: 'template-homepage', name: '템플릿형 홈페이지', slug: 'template-homepage', parent_id: 'web-mobile-design' },
+          { id: 'icon-button', name: '아이콘·버튼', slug: 'icon-button', parent_id: 'web-mobile-design' },
+        ]
+      },
+      {
+        id: 'ai-design',
+        name: 'AI 디자인',
+        slug: 'ai-design',
+        parent_id: 'design',
+        children: [
+          { id: 'ai-design-service', name: 'AI 디자인', slug: 'ai-design-service', parent_id: 'ai-design', is_popular: true },
+        ]
+      },
+      {
+        id: 'marketing-design',
+        name: '마케팅 디자인',
+        slug: 'marketing-design',
+        parent_id: 'design',
+        children: [
+          { id: 'detail-page', name: '상세페이지', slug: 'detail-page', parent_id: 'marketing-design', is_popular: true },
+          { id: 'sns-ad-thumbnail', name: 'SNS·광고소재·썸네일', slug: 'sns-ad-thumbnail', parent_id: 'marketing-design', is_popular: true },
+          { id: 'channel-art-design', name: '채널아트 디자인', slug: 'channel-art-design', parent_id: 'marketing-design' },
+          { id: 'broadcast-avatar', name: '방송용 아바타', slug: 'broadcast-avatar', parent_id: 'marketing-design' },
+          { id: 'banner-delivery-app', name: '배너·배달어플', slug: 'banner-delivery-app', parent_id: 'marketing-design' },
+          { id: 'blog-cafe-design', name: '블로그·카페 디자인', slug: 'blog-cafe-design', parent_id: 'marketing-design' },
+        ]
+      },
+      {
+        id: 'package-cover',
+        name: '패키지·커버',
+        slug: 'package-cover',
+        parent_id: 'design',
+        children: [
+          { id: 'package', name: '패키지', slug: 'package', parent_id: 'package-cover' },
+          { id: 'book-cover-interior', name: '책표지·내지', slug: 'book-cover-interior', parent_id: 'package-cover' },
+          { id: 'ebook-cover-interior', name: '전자책 표지·내지', slug: 'ebook-cover-interior', parent_id: 'package-cover' },
+          { id: 'album-cover', name: '앨범커버', slug: 'album-cover', parent_id: 'package-cover' },
+        ]
+      },
+      {
+        id: 'character-illustration',
+        name: '캐릭터·일러스트',
+        slug: 'character-illustration',
+        parent_id: 'design',
+        children: [
+          { id: 'illustration', name: '일러스트', slug: 'illustration', parent_id: 'character-illustration', is_popular: true },
+          { id: 'caricature', name: '캐리커쳐', slug: 'caricature', parent_id: 'character-illustration' },
+          { id: 'webtoon-storyboard', name: '웹툰·콘티', slug: 'webtoon-storyboard', parent_id: 'character-illustration' },
+          { id: '2d-character', name: '2D 캐릭터', slug: '2d-character', parent_id: 'character-illustration' },
+          { id: 'emoticon', name: '이모티콘', slug: 'emoticon', parent_id: 'character-illustration' },
+        ]
+      },
       {
         id: 'graphic-design',
         name: '그래픽 디자인',
         slug: 'graphic-design',
         parent_id: 'design',
         children: [
-          { id: 'logo-design', name: '로고 디자인', slug: 'logo-design', parent_id: 'graphic-design', is_popular: true },
-          { id: 'business-card', name: '명함 디자인', slug: 'business-card', parent_id: 'graphic-design' },
-          { id: 'poster-design', name: '포스터 디자인', slug: 'poster-design', parent_id: 'graphic-design' },
-          { id: 'banner-design', name: '배너 디자인', slug: 'banner-design', parent_id: 'graphic-design' },
-          { id: 'infographic', name: '인포그래픽', slug: 'infographic', parent_id: 'graphic-design' },
-          { id: 'ppt-design', name: 'PPT 디자인', slug: 'ppt-design', parent_id: 'graphic-design', is_popular: true },
-          { id: 'thumbnail-design', name: '썸네일 디자인', slug: 'thumbnail-design', parent_id: 'graphic-design', is_popular: true },
-          { id: 'social-media-design', name: 'SNS 디자인', slug: 'social-media-design', parent_id: 'graphic-design' },
+          { id: 'ppt-infographic', name: 'PPT·인포그래픽', slug: 'ppt-infographic', parent_id: 'graphic-design', is_popular: true },
+          { id: 'photoshop-file-conversion', name: '포토샵·파일변환', slug: 'photoshop-file-conversion', parent_id: 'graphic-design' },
         ]
       },
       {
-        id: 'web-app-design',
-        name: '웹/앱 디자인',
-        slug: 'web-app-design',
+        id: '3d-design',
+        name: '3D 디자인',
+        slug: '3d-design',
         parent_id: 'design',
         children: [
-          { id: 'website-design', name: '웹사이트 디자인', slug: 'website-design', parent_id: 'web-app-design' },
-          { id: 'landing-page', name: '랜딩페이지', slug: 'landing-page', parent_id: 'web-app-design' },
-          { id: 'ui-ux-design', name: 'UI/UX 디자인', slug: 'ui-ux-design', parent_id: 'web-app-design', is_popular: true },
-          { id: 'mobile-app-design', name: '모바일 앱 디자인', slug: 'mobile-app-design', parent_id: 'web-app-design' },
-          { id: 'responsive-design', name: '반응형 디자인', slug: 'responsive-design', parent_id: 'web-app-design' },
-          { id: 'dashboard-design', name: '대시보드 디자인', slug: 'dashboard-design', parent_id: 'web-app-design' },
+          { id: '3d-character-figure', name: '3D 캐릭터·피규어', slug: '3d-character-figure', parent_id: '3d-design' },
+          { id: '3d-product-modeling-rendering', name: '3D 제품모델링·렌더링', slug: '3d-product-modeling-rendering', parent_id: '3d-design' },
+          { id: '3d-space-modeling', name: '3D 공간 모델링', slug: '3d-space-modeling', parent_id: '3d-design' },
+          { id: '3d-clothing-jewelry', name: '3D 의류·쥬얼리', slug: '3d-clothing-jewelry', parent_id: '3d-design' },
+          { id: '3d-game-source', name: '3D 게임용 소스', slug: '3d-game-source', parent_id: '3d-design' },
+          { id: '3d-graphics', name: '3D 그래픽', slug: '3d-graphics', parent_id: '3d-design' },
+          { id: 'prototype-3d-printing', name: '시제품·3D프린팅', slug: 'prototype-3d-printing', parent_id: '3d-design' },
         ]
       },
       {
-        id: 'product-package-design',
-        name: '제품/패키지 디자인',
-        slug: 'product-package-design',
+        id: 'game-web3',
+        name: '게임·웹3.0',
+        slug: 'game-web3',
         parent_id: 'design',
         children: [
-          { id: 'packaging-design', name: '패키지 디자인', slug: 'packaging-design', parent_id: 'product-package-design' },
-          { id: 'label-design', name: '라벨 디자인', slug: 'label-design', parent_id: 'product-package-design' },
-          { id: 'product-mockup', name: '제품 목업', slug: 'product-mockup', parent_id: 'product-package-design' },
+          { id: 'vr-ar-game', name: 'VR·AR·게임', slug: 'vr-ar-game', parent_id: 'game-web3' },
+          { id: 'metaverse', name: '메타버스', slug: 'metaverse', parent_id: 'game-web3' },
+          { id: 'nft-art', name: 'NFT아트', slug: 'nft-art', parent_id: 'game-web3' },
         ]
       },
       {
-        id: 'print-publishing',
-        name: '인쇄/출판물',
-        slug: 'print-publishing',
+        id: 'industrial-product-design',
+        name: '산업·제품 디자인',
+        slug: 'industrial-product-design',
         parent_id: 'design',
         children: [
-          { id: 'brochure-design', name: '브로슈어', slug: 'brochure-design', parent_id: 'print-publishing' },
-          { id: 'catalog-design', name: '카탈로그', slug: 'catalog-design', parent_id: 'print-publishing' },
-          { id: 'book-cover', name: '책 표지', slug: 'book-cover', parent_id: 'print-publishing' },
-          { id: 'magazine-layout', name: '잡지 레이아웃', slug: 'magazine-layout', parent_id: 'print-publishing' },
-          { id: 'menu-design', name: '메뉴판 디자인', slug: 'menu-design', parent_id: 'print-publishing' },
+          { id: 'product-mechanism-design', name: '제품·기구 설계', slug: 'product-mechanism-design', parent_id: 'industrial-product-design' },
+          { id: 'product-drawing-sketch', name: '제품 도면·스케치', slug: 'product-drawing-sketch', parent_id: 'industrial-product-design' },
         ]
       },
       {
-        id: '3d-ar-design',
-        name: '3D/AR 디자인',
-        slug: '3d-ar-design',
+        id: 'space-architecture',
+        name: '공간·건축',
+        slug: 'space-architecture',
         parent_id: 'design',
         children: [
-          { id: '3d-modeling', name: '3D 모델링', slug: '3d-modeling', parent_id: '3d-ar-design' },
-          { id: '3d-rendering', name: '3D 렌더링', slug: '3d-rendering', parent_id: '3d-ar-design' },
-          { id: 'cad-design', name: 'CAD 설계', slug: 'cad-design', parent_id: '3d-ar-design' },
-          { id: 'ar-filter', name: 'AR 필터', slug: 'ar-filter', parent_id: '3d-ar-design' },
+          { id: 'drawing-creation-modification', name: '도면 제작·수정', slug: 'drawing-creation-modification', parent_id: 'space-architecture' },
+          { id: 'interior-consulting', name: '인테리어 컨설팅', slug: 'interior-consulting', parent_id: 'space-architecture' },
+          { id: 'exhibition-stage-design', name: '전시·무대 디자인', slug: 'exhibition-stage-design', parent_id: 'space-architecture' },
+          { id: 'signboard-construction', name: '간판·시공', slug: 'signboard-construction', parent_id: 'space-architecture' },
         ]
       },
       {
-        id: 'fashion-design',
-        name: '패션 디자인',
-        slug: 'fashion-design',
+        id: 'calligraphy-font',
+        name: '캘리그라피·폰트',
+        slug: 'calligraphy-font',
         parent_id: 'design',
         children: [
-          { id: 'clothing-design', name: '의류 디자인', slug: 'clothing-design', parent_id: 'fashion-design' },
-          { id: 'textile-pattern', name: '텍스타일 패턴', slug: 'textile-pattern', parent_id: 'fashion-design' },
-          { id: 'accessory-design', name: '액세서리 디자인', slug: 'accessory-design', parent_id: 'fashion-design' },
+          { id: 'calligraphy', name: '캘리그라피', slug: 'calligraphy', parent_id: 'calligraphy-font' },
+          { id: 'typography', name: '타이포그래피', slug: 'typography', parent_id: 'calligraphy-font' },
+          { id: 'font-design', name: '폰트', slug: 'font-design', parent_id: 'calligraphy-font' },
+          { id: 'signature-seal', name: '사인·직인', slug: 'signature-seal', parent_id: 'calligraphy-font' },
+        ]
+      },
+      {
+        id: 'fashion-textile',
+        name: '패션·텍스타일',
+        slug: 'fashion-textile',
+        parent_id: 'design',
+        children: [
+          { id: 'clothing-jewelry-design', name: '의류·쥬얼리 디자인', slug: 'clothing-jewelry-design', parent_id: 'fashion-textile' },
+          { id: 'work-instruction-diagram', name: '작업지시서·도식화', slug: 'work-instruction-diagram', parent_id: 'fashion-textile' },
+          { id: 'pattern-sample-production', name: '패턴·샘플제작', slug: 'pattern-sample-production', parent_id: 'fashion-textile' },
+        ]
+      },
+      {
+        id: 'design-etc',
+        name: '기타',
+        slug: 'design-etc',
+        parent_id: 'design',
+        children: [
+          { id: 'designer-subscription', name: '디자이너 구독제', slug: 'designer-subscription', parent_id: 'design-etc' },
+          { id: 'design-template', name: '디자인 템플릿', slug: 'design-template', parent_id: 'design-etc' },
+          { id: 'ai-prompt-design', name: 'AI 프롬프트', slug: 'ai-prompt-design', parent_id: 'design-etc' },
+          { id: 'barcode-qr-code', name: '바코드·QR코드', slug: 'barcode-qr-code', parent_id: 'design-etc' },
+          { id: 'other-design', name: '기타 디자인', slug: 'other-design', parent_id: 'design-etc' },
         ]
       }
     ]
   },
 
-  // =============== 3. IT/프로그래밍 ===============
+  // =============== 5. IT/프로그래밍 ===============
   {
     id: 'it-programming',
     name: 'IT/프로그래밍',
     slug: 'it-programming',
     icon: 'code',
-    service_count: 18,
+    service_count: 66,
+    popularity_score: 999,  // 고정
     description: '웹, 앱, 소프트웨어 개발',
     children: [
       {
-        id: 'web-development',
-        name: '웹 개발',
-        slug: 'web-development',
+        id: 'web-builder',
+        name: '웹빌더',
+        slug: 'web-builder',
         parent_id: 'it-programming',
         children: [
-          { id: 'frontend-dev', name: '프론트엔드', slug: 'frontend-dev', parent_id: 'web-development', is_popular: true },
-          { id: 'backend-dev', name: '백엔드', slug: 'backend-dev', parent_id: 'web-development' },
-          { id: 'fullstack-dev', name: '풀스택', slug: 'fullstack-dev', parent_id: 'web-development' },
-          { id: 'wordpress-dev', name: '워드프레스', slug: 'wordpress-dev', parent_id: 'web-development', is_popular: true },
-          { id: 'shopify-dev', name: '쇼피파이', slug: 'shopify-dev', parent_id: 'web-development' },
-          { id: 'wix-dev', name: 'WIX', slug: 'wix-dev', parent_id: 'web-development' },
-          { id: 'landing-page-dev', name: '랜딩페이지 개발', slug: 'landing-page-dev', parent_id: 'web-development' },
+          { id: 'rhymix', name: '라이믹스', slug: 'rhymix', parent_id: 'web-builder' },
+          { id: 'gnuboard', name: '그누보드', slug: 'gnuboard', parent_id: 'web-builder' },
+          { id: 'wordpress', name: '워드프레스', slug: 'wordpress', parent_id: 'web-builder', is_popular: true },
+          { id: 'cafe24', name: '카페24', slug: 'cafe24', parent_id: 'web-builder' },
+          { id: 'imweb', name: '아임웹', slug: 'imweb', parent_id: 'web-builder' },
+          { id: 'notion-web', name: '노션', slug: 'notion-web', parent_id: 'web-builder' },
+          { id: 'shopify', name: '쇼피파이', slug: 'shopify', parent_id: 'web-builder' },
+          { id: 'wix', name: '윅스', slug: 'wix', parent_id: 'web-builder' },
         ]
       },
       {
-        id: 'mobile-app-dev',
-        name: '모바일 앱',
-        slug: 'mobile-app-dev',
+        id: 'web-creation',
+        name: '웹 제작',
+        slug: 'web-creation',
         parent_id: 'it-programming',
         children: [
-          { id: 'android-app', name: '안드로이드 앱', slug: 'android-app', parent_id: 'mobile-app-dev' },
-          { id: 'ios-app', name: 'iOS 앱', slug: 'ios-app', parent_id: 'mobile-app-dev' },
-          { id: 'hybrid-app', name: '하이브리드 앱', slug: 'hybrid-app', parent_id: 'mobile-app-dev' },
-          { id: 'flutter-app', name: 'Flutter', slug: 'flutter-app', parent_id: 'mobile-app-dev' },
-          { id: 'react-native-app', name: 'React Native', slug: 'react-native-app', parent_id: 'mobile-app-dev' },
+          { id: 'homepage-new-creation', name: '홈페이지 신규 제작', slug: 'homepage-new-creation', parent_id: 'web-creation', is_popular: true },
+          { id: 'shopping-mall-new-creation', name: '쇼핑몰 신규 제작', slug: 'shopping-mall-new-creation', parent_id: 'web-creation', is_popular: true },
+          { id: 'landing-page', name: '랜딩페이지', slug: 'landing-page', parent_id: 'web-creation' },
         ]
       },
       {
-        id: 'software-dev',
-        name: '소프트웨어 개발',
-        slug: 'software-dev',
+        id: 'web-maintenance',
+        name: '웹 유지보수',
+        slug: 'web-maintenance',
         parent_id: 'it-programming',
         children: [
-          { id: 'desktop-app', name: '데스크톱 앱', slug: 'desktop-app', parent_id: 'software-dev' },
-          { id: 'api-dev', name: 'API 개발', slug: 'api-dev', parent_id: 'software-dev' },
-          { id: 'plugin-dev', name: '플러그인 개발', slug: 'plugin-dev', parent_id: 'software-dev' },
-          { id: 'bot-dev', name: '봇 개발', slug: 'bot-dev', parent_id: 'software-dev' },
+          { id: 'homepage-modification-maintenance', name: '홈페이지 수정·유지보수', slug: 'homepage-modification-maintenance', parent_id: 'web-maintenance' },
+          { id: 'shopping-mall-modification-maintenance', name: '쇼핑몰 수정·유지보수', slug: 'shopping-mall-modification-maintenance', parent_id: 'web-maintenance' },
+          { id: 'publishing', name: '퍼블리싱', slug: 'publishing', parent_id: 'web-maintenance' },
+          { id: 'search-optimization-seo', name: '검색최적화·SEO', slug: 'search-optimization-seo', parent_id: 'web-maintenance', is_popular: true },
+          { id: 'analytics', name: '애널리틱스', slug: 'analytics', parent_id: 'web-maintenance' },
         ]
       },
       {
-        id: 'game-development',
-        name: '게임 개발',
-        slug: 'game-development',
+        id: 'program',
+        name: '프로그램',
+        slug: 'program',
         parent_id: 'it-programming',
         children: [
-          { id: 'unity-dev', name: 'Unity 개발', slug: 'unity-dev', parent_id: 'game-development' },
-          { id: 'unreal-dev', name: 'Unreal 개발', slug: 'unreal-dev', parent_id: 'game-development' },
-          { id: 'mobile-game', name: '모바일 게임', slug: 'mobile-game', parent_id: 'game-development' },
-          { id: 'web-game', name: '웹 게임', slug: 'web-game', parent_id: 'game-development' },
+          { id: 'complete-program-store', name: '완성형 프로그램 스토어', slug: 'complete-program-store', parent_id: 'program' },
+          { id: 'revenue-automation', name: '수익 자동화', slug: 'revenue-automation', parent_id: 'program', is_popular: true },
+          { id: 'work-automation', name: '업무 자동화', slug: 'work-automation', parent_id: 'program', is_popular: true },
+          { id: 'crawling-scraping', name: '크롤링·스크래핑', slug: 'crawling-scraping', parent_id: 'program' },
+          { id: 'general-program', name: '일반 프로그램', slug: 'general-program', parent_id: 'program' },
+          { id: 'program-modification-maintenance', name: '프로그램 수정·유지보수', slug: 'program-modification-maintenance', parent_id: 'program' },
+          { id: 'server-cloud', name: '서버·클라우드', slug: 'server-cloud', parent_id: 'program' },
+          { id: 'excel-spreadsheet', name: '엑셀·스프레드시트', slug: 'excel-spreadsheet', parent_id: 'program' },
+          { id: 'bot-chatbot', name: '봇·챗봇', slug: 'bot-chatbot', parent_id: 'program' },
         ]
       },
       {
-        id: 'data-analytics',
-        name: '데이터 분석',
-        slug: 'data-analytics',
+        id: 'mobile',
+        name: '모바일',
+        slug: 'mobile',
         parent_id: 'it-programming',
         children: [
-          { id: 'data-analysis', name: '데이터 분석', slug: 'data-analysis', parent_id: 'data-analytics' },
-          { id: 'data-visualization', name: '데이터 시각화', slug: 'data-visualization', parent_id: 'data-analytics' },
-          { id: 'machine-learning', name: '머신러닝', slug: 'machine-learning', parent_id: 'data-analytics' },
-          { id: 'web-crawling', name: '웹 크롤링', slug: 'web-crawling', parent_id: 'data-analytics', is_popular: true },
-          { id: 'excel-automation', name: '엑셀 자동화', slug: 'excel-automation', parent_id: 'data-analytics', is_popular: true },
+          { id: 'app', name: '앱', slug: 'app', parent_id: 'mobile', is_popular: true },
+          { id: 'app-packaging', name: '앱 패키징', slug: 'app-packaging', parent_id: 'mobile' },
+          { id: 'app-modification-maintenance', name: '앱 수정·유지보수', slug: 'app-modification-maintenance', parent_id: 'mobile' },
         ]
       },
       {
-        id: 'it-support',
-        name: 'IT 지원',
-        slug: 'it-support',
+        id: 'security-quality',
+        name: '보안·품질관리',
+        slug: 'security-quality',
         parent_id: 'it-programming',
         children: [
-          { id: 'server-hosting', name: '서버 호스팅', slug: 'server-hosting', parent_id: 'it-support' },
-          { id: 'database-admin', name: 'DB 관리', slug: 'database-admin', parent_id: 'it-support' },
-          { id: 'tech-support', name: '기술 지원', slug: 'tech-support', parent_id: 'it-support' },
-          { id: 'security-audit', name: '보안 점검', slug: 'security-audit', parent_id: 'it-support' },
+          { id: 'information-security', name: '정보 보안', slug: 'information-security', parent_id: 'security-quality' },
+          { id: 'qa-test', name: 'QA·테스트', slug: 'qa-test', parent_id: 'security-quality' },
+        ]
+      },
+      {
+        id: 'ai-it',
+        name: 'AI',
+        slug: 'ai-it',
+        parent_id: 'it-programming',
+        children: [
+          { id: 'ai-system-service-it', name: 'AI 시스템·서비스', slug: 'ai-system-service-it', parent_id: 'ai-it' },
+          { id: 'custom-chatbot-gpt-it', name: '맞춤형 챗봇·GPT', slug: 'custom-chatbot-gpt-it', parent_id: 'ai-it', is_popular: true },
+          { id: 'ai-automation-program-it', name: 'AI 자동화 프로그램', slug: 'ai-automation-program-it', parent_id: 'ai-it' },
+          { id: 'prompt-engineering-it', name: '프롬프트 설계(엔지니어링)', slug: 'prompt-engineering-it', parent_id: 'ai-it' },
+          { id: 'ai-modeling-optimization-it', name: 'AI 모델링·최적화', slug: 'ai-modeling-optimization-it', parent_id: 'ai-it' },
+          { id: 'image-voice-recognition-it', name: '이미지·음성 인식', slug: 'image-voice-recognition-it', parent_id: 'ai-it' },
+          { id: 'ai-feature-development-integration-it', name: 'AI 기능 개발·연동', slug: 'ai-feature-development-integration-it', parent_id: 'ai-it' },
+          { id: 'ai-agent-it', name: 'AI 에이전트', slug: 'ai-agent-it', parent_id: 'ai-it' },
+          { id: 'ai-data-analysis-it', name: 'AI 데이터 분석', slug: 'ai-data-analysis-it', parent_id: 'ai-it' },
+          { id: 'ai-introduction-consulting-it', name: 'AI 도입 컨설팅', slug: 'ai-introduction-consulting-it', parent_id: 'ai-it' },
+          { id: 'natural-language-processing-it', name: '자연어 처리', slug: 'natural-language-processing-it', parent_id: 'ai-it' },
+        ]
+      },
+      {
+        id: 'data',
+        name: '데이터',
+        slug: 'data',
+        parent_id: 'it-programming',
+        children: [
+          { id: 'data-purchase-construction', name: '데이터 구매·구축', slug: 'data-purchase-construction', parent_id: 'data' },
+          { id: 'data-labeling', name: '데이터 라벨링', slug: 'data-labeling', parent_id: 'data' },
+          { id: 'data-preprocessing-analysis-visualization', name: '데이터 전처리·분석·시각화', slug: 'data-preprocessing-analysis-visualization', parent_id: 'data', is_popular: true },
+          { id: 'database', name: '데이터베이스', slug: 'database', parent_id: 'data' },
+        ]
+      },
+      {
+        id: 'trend-tech',
+        name: '트렌드',
+        slug: 'trend-tech',
+        parent_id: 'it-programming',
+        children: [
+          { id: 'game-ar-vr', name: '게임·AR·VR', slug: 'game-ar-vr', parent_id: 'trend-tech' },
+          { id: 'metaverse-it', name: '메타버스', slug: 'metaverse-it', parent_id: 'trend-tech' },
+          { id: 'blockchain-nft', name: '블록체인·NFT', slug: 'blockchain-nft', parent_id: 'trend-tech' },
+        ]
+      },
+      {
+        id: 'job-position',
+        name: '직무직군',
+        slug: 'job-position',
+        parent_id: 'it-programming',
+        children: [
+          { id: 'ui-ux-planning', name: 'UI·UX 기획', slug: 'ui-ux-planning', parent_id: 'job-position' },
+          { id: 'frontend-position', name: '프론트엔드', slug: 'frontend-position', parent_id: 'job-position' },
+          { id: 'backend-position', name: '백엔드', slug: 'backend-position', parent_id: 'job-position' },
+          { id: 'fullstack-position', name: '풀스택', slug: 'fullstack-position', parent_id: 'job-position' },
+          { id: 'data-ml-dl', name: '데이터·ML·DL', slug: 'data-ml-dl', parent_id: 'job-position' },
+          { id: 'devops-infra', name: '데브옵스·인프라', slug: 'devops-infra', parent_id: 'job-position' },
+        ]
+      },
+      {
+        id: 'it-etc',
+        name: '기타',
+        slug: 'it-etc',
+        parent_id: 'it-programming',
+        children: [
+          { id: 'service-mvp-development', name: '서비스·MVP 개발', slug: 'service-mvp-development', parent_id: 'it-etc' },
+          { id: 'computer-tech-support', name: '컴퓨터 기술지원', slug: 'computer-tech-support', parent_id: 'it-etc' },
+          { id: 'hardware-embedded', name: '하드웨어·임베디드', slug: 'hardware-embedded', parent_id: 'it-etc' },
+          { id: 'file-conversion', name: '파일변환', slug: 'file-conversion', parent_id: 'it-etc' },
+          { id: 'other-programming', name: '기타 프로그래밍', slug: 'other-programming', parent_id: 'it-etc' },
         ]
       }
     ]
   },
 
-  // =============== 4. 마케팅 ===============
+  // =============== 6. 마케팅 ===============
   {
     id: 'marketing',
     name: '마케팅',
     slug: 'marketing',
     icon: 'bullhorn',
-    service_count: 16,
+    service_count: 48,
+    popularity_score: 90,
     description: '효과적인 마케팅 전략',
     children: [
       {
-        id: 'digital-advertising',
-        name: '디지털 광고',
-        slug: 'digital-advertising',
+        id: 'channel-activation',
+        name: '채널 활성화',
+        slug: 'channel-activation',
         parent_id: 'marketing',
         children: [
-          { id: 'google-ads', name: '구글 광고', slug: 'google-ads', parent_id: 'digital-advertising' },
-          { id: 'facebook-ads', name: '페이스북 광고', slug: 'facebook-ads', parent_id: 'digital-advertising' },
-          { id: 'naver-ads', name: '네이버 광고', slug: 'naver-ads', parent_id: 'digital-advertising', is_popular: true },
-          { id: 'kakao-ads', name: '카카오 광고', slug: 'kakao-ads', parent_id: 'digital-advertising' },
-          { id: 'instagram-ads', name: '인스타그램 광고', slug: 'instagram-ads', parent_id: 'digital-advertising' },
+          { id: 'blog-management', name: '블로그 관리', slug: 'blog-management', parent_id: 'channel-activation', is_popular: true },
+          { id: 'cafe-management', name: '카페 관리', slug: 'cafe-management', parent_id: 'channel-activation' },
+          { id: 'instagram-management', name: '인스타그램 관리', slug: 'instagram-management', parent_id: 'channel-activation', is_popular: true },
+          { id: 'youtube-management', name: '유튜브 관리', slug: 'youtube-management', parent_id: 'channel-activation', is_popular: true },
+          { id: 'reels-shorts-tiktok-management', name: '릴스·숏츠·틱톡 관리', slug: 'reels-shorts-tiktok-management', parent_id: 'channel-activation', is_popular: true },
+          { id: 'threads-marketing', name: '스레드 마케팅', slug: 'threads-marketing', parent_id: 'channel-activation' },
+          { id: 'linkedin-marketing', name: '링크드인 마케팅', slug: 'linkedin-marketing', parent_id: 'channel-activation' },
+          { id: 'other-channel-management', name: '기타 채널 관리', slug: 'other-channel-management', parent_id: 'channel-activation' },
         ]
       },
       {
-        id: 'content-marketing',
-        name: '콘텐츠 마케팅',
-        slug: 'content-marketing',
+        id: 'viral-sponsorship',
+        name: '바이럴·협찬',
+        slug: 'viral-sponsorship',
         parent_id: 'marketing',
         children: [
-          { id: 'blog-management', name: '블로그 운영 대행', slug: 'blog-management', parent_id: 'content-marketing', is_popular: true },
-          { id: 'seo-optimization', name: 'SEO 최적화', slug: 'seo-optimization', parent_id: 'content-marketing', is_popular: true },
-          { id: 'content-planning', name: '콘텐츠 기획', slug: 'content-planning', parent_id: 'content-marketing' },
-          { id: 'viral-marketing', name: '바이럴 마케팅', slug: 'viral-marketing', parent_id: 'content-marketing' },
+          { id: 'influencer-marketing', name: '인플루언서 마케팅', slug: 'influencer-marketing', parent_id: 'viral-sponsorship', is_popular: true },
+          { id: 'experience-group-recruitment', name: '체험단 모집', slug: 'experience-group-recruitment', parent_id: 'viral-sponsorship' },
+          { id: 'viral-posting', name: '바이럴·포스팅', slug: 'viral-posting', parent_id: 'viral-sponsorship' },
         ]
       },
       {
-        id: 'sns-marketing',
-        name: 'SNS 마케팅',
-        slug: 'sns-marketing',
+        id: 'map-marketing',
+        name: '지도 마케팅',
+        slug: 'map-marketing',
         parent_id: 'marketing',
         children: [
-          { id: 'instagram-marketing', name: '인스타그램 마케팅', slug: 'instagram-marketing', parent_id: 'sns-marketing', is_popular: true },
-          { id: 'youtube-marketing', name: '유튜브 마케팅', slug: 'youtube-marketing', parent_id: 'sns-marketing', is_popular: true },
-          { id: 'facebook-marketing', name: '페이스북 마케팅', slug: 'facebook-marketing', parent_id: 'sns-marketing' },
-          { id: 'tiktok-marketing', name: '틱톡 마케팅', slug: 'tiktok-marketing', parent_id: 'sns-marketing' },
-          { id: 'naver-blog-marketing', name: '네이버 블로그', slug: 'naver-blog-marketing', parent_id: 'sns-marketing', is_popular: true },
+          { id: 'map-setup', name: '지도 세팅', slug: 'map-setup', parent_id: 'map-marketing' },
+          { id: 'map-activation', name: '지도 활성화', slug: 'map-activation', parent_id: 'map-marketing' },
+          { id: 'map-optimization-exposure', name: '지도 최적화노출', slug: 'map-optimization-exposure', parent_id: 'map-marketing', is_popular: true },
+          { id: 'clip-marketing', name: '클립 마케팅', slug: 'clip-marketing', parent_id: 'map-marketing' },
         ]
       },
       {
-        id: 'branding-ci',
-        name: '브랜딩/CI',
-        slug: 'branding-ci',
+        id: 'industry-purpose',
+        name: '업종·목적별',
+        slug: 'industry-purpose',
         parent_id: 'marketing',
         children: [
-          { id: 'brand-identity', name: '브랜드 아이덴티티', slug: 'brand-identity', parent_id: 'branding-ci' },
-          { id: 'naming', name: '네이밍', slug: 'naming', parent_id: 'branding-ci' },
-          { id: 'brand-story', name: '브랜드 스토리', slug: 'brand-story', parent_id: 'branding-ci' },
-          { id: 'slogan', name: '슬로건', slug: 'slogan', parent_id: 'branding-ci' },
+          { id: 'store-marketing', name: '스토어 마케팅', slug: 'store-marketing', parent_id: 'industry-purpose' },
+          { id: 'press-release', name: '언론홍보', slug: 'press-release', parent_id: 'industry-purpose' },
+          { id: 'app-marketing', name: '앱마케팅', slug: 'app-marketing', parent_id: 'industry-purpose' },
+          { id: 'portal-qa', name: '포털질문·답변', slug: 'portal-qa', parent_id: 'industry-purpose' },
+          { id: 'live-commerce', name: '라이브커머스', slug: 'live-commerce', parent_id: 'industry-purpose' },
+          { id: 'industry-marketing-package', name: '업종별 마케팅 패키지', slug: 'industry-marketing-package', parent_id: 'industry-purpose' },
+          { id: 'total-ad-agency', name: '종합광고대행', slug: 'total-ad-agency', parent_id: 'industry-purpose' },
+          { id: 'db-marketing', name: 'DB 마케팅', slug: 'db-marketing', parent_id: 'industry-purpose' },
+          { id: 'message-marketing', name: '메시지 마케팅', slug: 'message-marketing', parent_id: 'industry-purpose' },
         ]
       },
       {
-        id: 'influencer-marketing',
-        name: '인플루언서 마케팅',
-        slug: 'influencer-marketing',
+        id: 'seo-optimization',
+        name: 'SEO 최적화 노출',
+        slug: 'seo-optimization',
         parent_id: 'marketing',
         children: [
-          { id: 'influencer-matching', name: '인플루언서 매칭', slug: 'influencer-matching', parent_id: 'influencer-marketing' },
-          { id: 'product-review', name: '제품 리뷰', slug: 'product-review', parent_id: 'influencer-marketing' },
-          { id: 'sponsored-content', name: '스폰서 콘텐츠', slug: 'sponsored-content', parent_id: 'influencer-marketing' },
+          { id: 'technical-seo', name: '테크니컬 SEO', slug: 'technical-seo', parent_id: 'seo-optimization', is_popular: true },
+          { id: 'content-seo', name: '콘텐츠 SEO', slug: 'content-seo', parent_id: 'seo-optimization', is_popular: true },
+          { id: 'keyword-competitor-analysis', name: '키워드·경쟁사 분석', slug: 'keyword-competitor-analysis', parent_id: 'seo-optimization' },
+          { id: 'backlink-traffic', name: '백링크·트래픽', slug: 'backlink-traffic', parent_id: 'seo-optimization' },
+          { id: 'portal-optimization-exposure', name: '포털 최적화노출', slug: 'portal-optimization-exposure', parent_id: 'seo-optimization' },
+          { id: 'popular-post-management', name: '인기게시물 관리', slug: 'popular-post-management', parent_id: 'seo-optimization' },
+        ]
+      },
+      {
+        id: 'global-marketing',
+        name: '해외 마케팅',
+        slug: 'global-marketing',
+        parent_id: 'marketing',
+        children: [
+          { id: 'global-press-release', name: '해외 언론홍보', slug: 'global-press-release', parent_id: 'global-marketing' },
+          { id: 'global-store-channel-operation', name: '해외 쇼핑몰·채널 운영', slug: 'global-store-channel-operation', parent_id: 'global-marketing' },
+          { id: 'global-store-channel-activation', name: '해외 쇼핑몰·채널 활성화', slug: 'global-store-channel-activation', parent_id: 'global-marketing' },
+          { id: 'global-influencer-seeding', name: '해외 인플루언서 시딩', slug: 'global-influencer-seeding', parent_id: 'global-marketing' },
+          { id: 'global-marketing-etc', name: '기타 해외 마케팅', slug: 'global-marketing-etc', parent_id: 'global-marketing' },
+        ]
+      },
+      {
+        id: 'performance-ads',
+        name: '광고(퍼포먼스)',
+        slug: 'performance-ads',
+        parent_id: 'marketing',
+        children: [
+          { id: 'sns-ads', name: 'SNS 광고', slug: 'sns-ads', parent_id: 'performance-ads', is_popular: true },
+          { id: 'keyword-search-ads', name: '키워드·검색 광고', slug: 'keyword-search-ads', parent_id: 'performance-ads', is_popular: true },
+          { id: 'display-video-banner', name: '디스플레이·영상·배너', slug: 'display-video-banner', parent_id: 'performance-ads' },
+        ]
+      },
+      {
+        id: 'analysis-strategy',
+        name: '분석·전략',
+        slug: 'analysis-strategy',
+        parent_id: 'marketing',
+        children: [
+          { id: 'marketing-consulting', name: '마케팅 컨설팅', slug: 'marketing-consulting', parent_id: 'analysis-strategy', is_popular: true },
+          { id: 'brand-consulting', name: '브랜드 컨설팅', slug: 'brand-consulting', parent_id: 'analysis-strategy' },
+          { id: 'data-performance-analysis', name: '데이터 성과 분석', slug: 'data-performance-analysis', parent_id: 'analysis-strategy' },
+        ]
+      },
+      {
+        id: 'ai-marketing',
+        name: 'AI 마케팅',
+        slug: 'ai-marketing',
+        parent_id: 'marketing',
+        children: [
+          { id: 'ai-marketing-service', name: 'AI 마케팅', slug: 'ai-marketing-service', parent_id: 'ai-marketing', is_popular: true },
+        ]
+      },
+      {
+        id: 'marketing-etc',
+        name: '기타 마케팅',
+        slug: 'marketing-etc',
+        parent_id: 'marketing',
+        children: [
+          { id: 'outdoor-print-broadcast-ad', name: '옥외·인쇄·방송 광고', slug: 'outdoor-print-broadcast-ad', parent_id: 'marketing-etc' },
+          { id: 'community-site-banner', name: '커뮤니티·사이트 배너', slug: 'community-site-banner', parent_id: 'marketing-etc' },
+          { id: 'video-ad', name: '영상 광고', slug: 'video-ad', parent_id: 'marketing-etc' },
+          { id: 'marketing-material-keyword', name: '마케팅 자료·키워드', slug: 'marketing-material-keyword', parent_id: 'marketing-etc' },
+          { id: 'event-promotion', name: '행사·이벤트', slug: 'event-promotion', parent_id: 'marketing-etc' },
+          { id: 'other-marketing', name: '기타 마케팅', slug: 'other-marketing', parent_id: 'marketing-etc' },
         ]
       }
     ]
   },
 
-  // =============== 5. 영상/사진 ===============
+  // =============== 7. 영상/사진 ===============
   {
     id: 'video-photo',
     name: '영상/사진',
     slug: 'video-photo',
     icon: 'camera',
-    service_count: 11,
+    service_count: 44,
+    popularity_score: 85,
     description: '영상 제작 및 사진 촬영',
     children: [
       {
-        id: 'video-editing',
-        name: '영상 편집',
-        slug: 'video-editing',
+        id: 'video',
+        name: '영상',
+        slug: 'video',
         parent_id: 'video-photo',
         children: [
-          { id: 'youtube-editing', name: '유튜브 영상 편집', slug: 'youtube-editing', parent_id: 'video-editing', is_popular: true },
-          { id: 'shorts-editing', name: '숏폼 영상 편집', slug: 'shorts-editing', parent_id: 'video-editing', is_popular: true },
-          { id: 'vlog-editing', name: '브이로그 편집', slug: 'vlog-editing', parent_id: 'video-editing' },
-          { id: 'wedding-video', name: '웨딩 영상', slug: 'wedding-video', parent_id: 'video-editing' },
-          { id: 'event-video', name: '행사 영상', slug: 'event-video', parent_id: 'video-editing' },
+          { id: 'ad-promo-video', name: '광고·홍보 영상', slug: 'ad-promo-video', parent_id: 'video', is_popular: true },
+          { id: 'short-form-video', name: '숏폼 영상', slug: 'short-form-video', parent_id: 'video', is_popular: true },
+          { id: 'industry-video', name: '업종별 영상', slug: 'industry-video', parent_id: 'video' },
+          { id: 'product-video', name: '제품 영상', slug: 'product-video', parent_id: 'video' },
+          { id: 'educational-video', name: '교육 영상', slug: 'educational-video', parent_id: 'video' },
+          { id: 'event-video', name: '행사 영상', slug: 'event-video', parent_id: 'video' },
+          { id: 'youtube-video', name: '유튜브 영상', slug: 'youtube-video', parent_id: 'video', is_popular: true },
+          { id: 'online-streaming', name: '온라인 중계', slug: 'online-streaming', parent_id: 'video' },
+          { id: 'drone-filming', name: '드론 촬영', slug: 'drone-filming', parent_id: 'video' },
+          { id: 'video-post-production', name: '영상 후반작업', slug: 'video-post-production', parent_id: 'video' },
+          { id: 'on-site-staff', name: '현장 스탭', slug: 'on-site-staff', parent_id: 'video' },
+          { id: 'video-etc', name: '영상 기타', slug: 'video-etc', parent_id: 'video' },
         ]
       },
       {
-        id: 'video-production',
-        name: '영상 제작',
-        slug: 'video-production',
+        id: 'computer-graphics',
+        name: '컴퓨터 그래픽(CG)',
+        slug: 'computer-graphics',
         parent_id: 'video-photo',
         children: [
-          { id: 'promotional-video', name: '홍보 영상', slug: 'promotional-video', parent_id: 'video-production' },
-          { id: 'product-video', name: '제품 영상', slug: 'product-video', parent_id: 'video-production' },
-          { id: 'drone-filming', name: '드론 촬영', slug: 'drone-filming', parent_id: 'video-production' },
-          { id: 'music-video', name: '뮤직비디오', slug: 'music-video', parent_id: 'video-production' },
+          { id: 'motion-graphics', name: '모션그래픽', slug: 'motion-graphics', parent_id: 'computer-graphics', is_popular: true },
+          { id: 'infographic', name: '인포그래픽', slug: 'infographic', parent_id: 'computer-graphics' },
+          { id: 'media-art', name: '미디어 아트', slug: 'media-art', parent_id: 'computer-graphics' },
+          { id: 'intro-logo', name: '인트로·로고', slug: 'intro-logo', parent_id: 'computer-graphics' },
+          { id: 'typography-cg', name: '타이포그래피', slug: 'typography-cg', parent_id: 'computer-graphics' },
+          { id: '3d-modeling-cg', name: '3D 모델링', slug: '3d-modeling-cg', parent_id: 'computer-graphics' },
+          { id: 'ar-vr-xr', name: 'AR·VR·XR', slug: 'ar-vr-xr', parent_id: 'computer-graphics' },
         ]
       },
       {
-        id: 'animation-motion',
-        name: '애니메이션/모션',
-        slug: 'animation-motion',
+        id: 'animation',
+        name: '애니메이션',
+        slug: 'animation',
         parent_id: 'video-photo',
         children: [
-          { id: 'motion-graphics', name: '모션그래픽', slug: 'motion-graphics', parent_id: 'animation-motion' },
-          { id: '2d-animation', name: '2D 애니메이션', slug: '2d-animation', parent_id: 'animation-motion' },
-          { id: '3d-animation', name: '3D 애니메이션', slug: '3d-animation', parent_id: 'animation-motion' },
-          { id: 'whiteboard-animation', name: '화이트보드 애니메이션', slug: 'whiteboard-animation', parent_id: 'animation-motion' },
+          { id: '2d-animation', name: '2D 애니메이션', slug: '2d-animation', parent_id: 'animation' },
+          { id: '3d-animation', name: '3D 애니메이션', slug: '3d-animation', parent_id: 'animation' },
+          { id: 'whiteboard-animation', name: '화이트보드 애니메이션', slug: 'whiteboard-animation', parent_id: 'animation' },
+          { id: 'lottie-web-animation', name: '로티·web 애니메이션', slug: 'lottie-web-animation', parent_id: 'animation' },
+        ]
+      },
+      {
+        id: 'ai-content',
+        name: 'AI 콘텐츠',
+        slug: 'ai-content',
+        parent_id: 'video-photo',
+        children: [
+          { id: 'ai-video', name: 'AI 영상', slug: 'ai-video', parent_id: 'ai-content', is_popular: true },
+          { id: 'ai-image', name: 'AI 이미지', slug: 'ai-image', parent_id: 'ai-content', is_popular: true },
+          { id: 'ai-sound', name: 'AI 음향', slug: 'ai-sound', parent_id: 'ai-content' },
         ]
       },
       {
         id: 'photography',
-        name: '사진 촬영',
+        name: '사진',
         slug: 'photography',
         parent_id: 'video-photo',
         children: [
-          { id: 'product-photography', name: '제품 사진', slug: 'product-photography', parent_id: 'photography', is_popular: true },
-          { id: 'profile-photography', name: '프로필 사진', slug: 'profile-photography', parent_id: 'photography' },
-          { id: 'food-photography', name: '음식 사진', slug: 'food-photography', parent_id: 'photography' },
-          { id: 'event-photography', name: '행사 사진', slug: 'event-photography', parent_id: 'photography' },
-          { id: 'wedding-photography', name: '웨딩 촬영', slug: 'wedding-photography', parent_id: 'photography' },
+          { id: 'product-promo-photography', name: '제품·홍보 사진', slug: 'product-promo-photography', parent_id: 'photography', is_popular: true },
+          { id: 'personal-profile-photography', name: '개인·프로필 사진', slug: 'personal-profile-photography', parent_id: 'photography' },
+          { id: 'event-snap', name: '이벤트 스냅', slug: 'event-snap', parent_id: 'photography' },
+          { id: 'photo-retouching', name: '사진 보정', slug: 'photo-retouching', parent_id: 'photography', is_popular: true },
         ]
       },
       {
-        id: 'photo-editing',
-        name: '사진 편집',
-        slug: 'photo-editing',
+        id: 'audio',
+        name: '음향',
+        slug: 'audio',
         parent_id: 'video-photo',
         children: [
-          { id: 'photo-retouching', name: '사진 보정', slug: 'photo-retouching', parent_id: 'photo-editing', is_popular: true },
-          { id: 'background-removal', name: '배경 제거', slug: 'background-removal', parent_id: 'photo-editing' },
-          { id: 'photo-restoration', name: '사진 복원', slug: 'photo-restoration', parent_id: 'photo-editing' },
+          { id: 'voice-actor', name: '성우', slug: 'voice-actor', parent_id: 'audio' },
+          { id: 'music-source', name: '음악·음원', slug: 'music-source', parent_id: 'audio' },
+          { id: 'audio-content', name: '오디오 콘텐츠', slug: 'audio-content', parent_id: 'audio' },
+          { id: 'audio-engineering', name: '오디오 엔지니어링', slug: 'audio-engineering', parent_id: 'audio' },
+          { id: 'audio-etc', name: '기타 음향·음악', slug: 'audio-etc', parent_id: 'audio' },
+        ]
+      },
+      {
+        id: 'entertainer',
+        name: '엔터테이너',
+        slug: 'entertainer',
+        parent_id: 'video-photo',
+        children: [
+          { id: 'model', name: '모델', slug: 'model', parent_id: 'entertainer' },
+          { id: 'actor', name: '배우', slug: 'actor', parent_id: 'entertainer' },
+          { id: 'show-host', name: '쇼호스트', slug: 'show-host', parent_id: 'entertainer' },
+          { id: 'mc', name: 'MC', slug: 'mc', parent_id: 'entertainer' },
+          { id: 'performance', name: '공연', slug: 'performance', parent_id: 'entertainer' },
+        ]
+      },
+      {
+        id: 'video-photo-etc',
+        name: '기타',
+        slug: 'video-photo-etc',
+        parent_id: 'video-photo',
+        children: [
+          { id: 'storyboard', name: '콘티·스토리보드', slug: 'storyboard', parent_id: 'video-photo-etc' },
+          { id: 'hair-makeup', name: '헤어·메이크업', slug: 'hair-makeup', parent_id: 'video-photo-etc' },
+          { id: 'studio-rental', name: '스튜디오 렌탈', slug: 'studio-rental', parent_id: 'video-photo-etc' },
+          { id: 'video-photo-other', name: '기타 영상·사진·음향', slug: 'video-photo-other', parent_id: 'video-photo-etc' },
         ]
       }
     ]
   },
 
-  // =============== 6. 번역/통역 ===============
+  // =============== 8. 번역/통역 ===============
   {
     id: 'translation',
     name: '번역/통역',
     slug: 'translation',
     icon: 'language',
-    service_count: 16,
+    service_count: 25,
+    popularity_score: 70,
     description: '전문 번역 및 통역 서비스',
     children: [
       {
         id: 'document-translation',
-        name: '문서 번역',
+        name: '번역',
         slug: 'document-translation',
         parent_id: 'translation',
         children: [
           { id: 'english-translation', name: '영어 번역', slug: 'english-translation', parent_id: 'document-translation', is_popular: true },
-          { id: 'chinese-translation', name: '중국어 번역', slug: 'chinese-translation', parent_id: 'document-translation' },
-          { id: 'japanese-translation', name: '일본어 번역', slug: 'japanese-translation', parent_id: 'document-translation' },
+          { id: 'chinese-translation', name: '중국어 번역', slug: 'chinese-translation', parent_id: 'document-translation', is_popular: true },
+          { id: 'japanese-translation', name: '일본어 번역', slug: 'japanese-translation', parent_id: 'document-translation', is_popular: true },
           { id: 'spanish-translation', name: '스페인어 번역', slug: 'spanish-translation', parent_id: 'document-translation' },
           { id: 'french-translation', name: '프랑스어 번역', slug: 'french-translation', parent_id: 'document-translation' },
           { id: 'german-translation', name: '독일어 번역', slug: 'german-translation', parent_id: 'document-translation' },
+          { id: 'other-language-translation', name: '기타 언어 번역', slug: 'other-language-translation', parent_id: 'document-translation' },
+          { id: 'proofreading', name: '감수', slug: 'proofreading', parent_id: 'document-translation' },
+          { id: 'notarized-translation', name: '번역공증대행', slug: 'notarized-translation', parent_id: 'document-translation' },
+          { id: 'ai-translation-review', name: 'AI 번역 검수·편집', slug: 'ai-translation-review', parent_id: 'document-translation' },
         ]
       },
       {
@@ -560,35 +976,94 @@ export const FULL_CATEGORIES: CategoryItem[] = [
         slug: 'interpretation',
         parent_id: 'translation',
         children: [
+          { id: 'english-interpretation', name: '영어 통역', slug: 'english-interpretation', parent_id: 'interpretation', is_popular: true },
+          { id: 'chinese-interpretation', name: '중국어 통역', slug: 'chinese-interpretation', parent_id: 'interpretation' },
+          { id: 'japanese-interpretation', name: '일본어 통역', slug: 'japanese-interpretation', parent_id: 'interpretation' },
+          { id: 'other-language-interpretation', name: '기타 언어 통역', slug: 'other-language-interpretation', parent_id: 'interpretation' },
           { id: 'simultaneous-interpretation', name: '동시통역', slug: 'simultaneous-interpretation', parent_id: 'interpretation' },
           { id: 'consecutive-interpretation', name: '순차통역', slug: 'consecutive-interpretation', parent_id: 'interpretation' },
           { id: 'business-interpretation', name: '비즈니스 통역', slug: 'business-interpretation', parent_id: 'interpretation' },
+          { id: 'ai-interpretation', name: 'AI 통역', slug: 'ai-interpretation', parent_id: 'interpretation' },
         ]
       }
     ]
   },
 
-  // =============== 7. 문서/글쓰기 ===============
+  // =============== 9. 문서/글쓰기 ===============
   {
     id: 'writing',
     name: '문서/글쓰기',
     slug: 'writing',
     icon: 'pen-fancy',
-    service_count: 11,
+    service_count: 32,
+    popularity_score: 80,
     description: '전문적인 문서 작성 서비스',
     children: [
       {
         id: 'content-writing',
-        name: '콘텐츠 작성',
+        name: '콘텐츠 글쓰기',
         slug: 'content-writing',
         parent_id: 'writing',
         children: [
-          { id: 'blog-posting', name: '블로그 포스팅', slug: 'blog-posting', parent_id: 'content-writing', is_popular: true },
-          { id: 'article-writing', name: '기사 작성', slug: 'article-writing', parent_id: 'content-writing' },
-          { id: 'product-description', name: '상품 설명', slug: 'product-description', parent_id: 'content-writing' },
-          { id: 'copywriting', name: '카피라이팅', slug: 'copywriting', parent_id: 'content-writing', is_popular: true },
-          { id: 'press-release', name: '보도자료', slug: 'press-release', parent_id: 'content-writing' },
-          { id: 'script-writing', name: '스크립트 작성', slug: 'script-writing', parent_id: 'content-writing' },
+          { id: 'blog-cafe-manuscript', name: '블로그·카페 원고', slug: 'blog-cafe-manuscript', parent_id: 'content-writing', is_popular: true },
+          { id: 'script-writing', name: '대본 작성', slug: 'script-writing', parent_id: 'content-writing' },
+          { id: 'press-article-column', name: '보도자료·기사·칼럼', slug: 'press-article-column', parent_id: 'content-writing', is_popular: true },
+          { id: 'book-ebook-publishing', name: '책·전자책 출판', slug: 'book-ebook-publishing', parent_id: 'content-writing' },
+          { id: 'industry-specialized-writing', name: '산업별 전문 글작성', slug: 'industry-specialized-writing', parent_id: 'content-writing' },
+        ]
+      },
+      {
+        id: 'business-copy',
+        name: '비즈니스 카피',
+        slug: 'business-copy',
+        parent_id: 'writing',
+        children: [
+          { id: 'naming-branding', name: '네이밍·브랜딩', slug: 'naming-branding', parent_id: 'business-copy', is_popular: true },
+          { id: 'product-copywriting', name: '제품 카피라이팅', slug: 'product-copywriting', parent_id: 'business-copy', is_popular: true },
+          { id: 'ad-copywriting', name: '광고 카피라이팅', slug: 'ad-copywriting', parent_id: 'business-copy', is_popular: true },
+          { id: 'other-copywriting', name: '기타 카피라이팅', slug: 'other-copywriting', parent_id: 'business-copy' },
+        ]
+      },
+      {
+        id: 'thesis-research',
+        name: '논문·자료 조사',
+        slug: 'thesis-research',
+        parent_id: 'writing',
+        children: [
+          { id: 'thesis-consulting', name: '논문 컨설팅', slug: 'thesis-consulting', parent_id: 'thesis-research' },
+          { id: 'thesis-editing-proofreading', name: '논문 교정·편집', slug: 'thesis-editing-proofreading', parent_id: 'thesis-research', is_popular: true },
+          { id: 'thesis-statistics-analysis', name: '논문 통계분석', slug: 'thesis-statistics-analysis', parent_id: 'thesis-research' },
+          { id: 'data-research', name: '자료 조사', slug: 'data-research', parent_id: 'thesis-research' },
+        ]
+      },
+      {
+        id: 'typing-editing',
+        name: '타이핑·편집',
+        slug: 'typing-editing',
+        parent_id: 'writing',
+        children: [
+          { id: 'typing-document', name: '타이핑(문서)', slug: 'typing-document', parent_id: 'typing-editing' },
+          { id: 'typing-video', name: '타이핑(영상)', slug: 'typing-video', parent_id: 'typing-editing' },
+          { id: 'document-editing', name: '문서 편집', slug: 'document-editing', parent_id: 'typing-editing' },
+        ]
+      },
+      {
+        id: 'proofreading-revision',
+        name: '교정·첨삭',
+        slug: 'proofreading-revision',
+        parent_id: 'writing',
+        children: [
+          { id: 'proofreading-correction', name: '교정·교열 첨삭', slug: 'proofreading-correction', parent_id: 'proofreading-revision' },
+        ]
+      },
+      {
+        id: 'ai-writing',
+        name: 'AI 글쓰기',
+        slug: 'ai-writing',
+        parent_id: 'writing',
+        children: [
+          { id: 'ai-content-production', name: 'AI 콘텐츠 생산', slug: 'ai-content-production', parent_id: 'ai-writing', is_popular: true },
+          { id: 'ai-content-review-editing', name: 'AI 콘텐츠 검수·편집', slug: 'ai-content-review-editing', parent_id: 'ai-writing' },
         ]
       },
       {
@@ -601,6 +1076,7 @@ export const FULL_CATEGORIES: CategoryItem[] = [
           { id: 'proposal-writing', name: '제안서 작성', slug: 'proposal-writing', parent_id: 'business-documents' },
           { id: 'report-writing', name: '보고서 작성', slug: 'report-writing', parent_id: 'business-documents' },
           { id: 'presentation', name: '프레젠테이션', slug: 'presentation', parent_id: 'business-documents' },
+          { id: 'cv-resume', name: '이력서/자소서', slug: 'cv-resume', parent_id: 'business-documents', is_popular: true },
         ]
       },
       {
@@ -609,10 +1085,8 @@ export const FULL_CATEGORIES: CategoryItem[] = [
         slug: 'academic-documents',
         parent_id: 'writing',
         children: [
-          { id: 'thesis-editing', name: '논문 교정', slug: 'thesis-editing', parent_id: 'academic-documents' },
           { id: 'research-paper', name: '연구 보고서', slug: 'research-paper', parent_id: 'academic-documents' },
           { id: 'essay-writing', name: '에세이', slug: 'essay-writing', parent_id: 'academic-documents' },
-          { id: 'cv-resume', name: '이력서/자소서', slug: 'cv-resume', parent_id: 'academic-documents', is_popular: true },
         ]
       },
       {
@@ -626,17 +1100,28 @@ export const FULL_CATEGORIES: CategoryItem[] = [
           { id: 'webtoon-story', name: '웹툰 스토리', slug: 'webtoon-story', parent_id: 'creative-writing' },
           { id: 'poetry', name: '시/수필', slug: 'poetry', parent_id: 'creative-writing' },
         ]
+      },
+      {
+        id: 'writing-etc',
+        name: '기타',
+        slug: 'writing-etc',
+        parent_id: 'writing',
+        children: [
+          { id: 'other-writing', name: '기타 글쓰기', slug: 'other-writing', parent_id: 'writing-etc' },
+          { id: 'document-materials', name: '문서 자료', slug: 'document-materials', parent_id: 'writing-etc' },
+        ]
       }
     ]
   },
 
-  // =============== 8. 음악/오디오 ===============
+  // =============== 10. 음악/오디오 ===============
   {
     id: 'music-audio',
     name: '음악/오디오',
     slug: 'music-audio',
     icon: 'music',
     service_count: 10,
+    popularity_score: 65,
     description: '음악 제작 및 오디오 서비스',
     children: [
       {
@@ -677,22 +1162,81 @@ export const FULL_CATEGORIES: CategoryItem[] = [
     ]
   },
 
-  // =============== 9. 비즈니스 ===============
+  // =============== 11. 비즈니스 ===============
   {
     id: 'business',
     name: '비즈니스',
     slug: 'business',
     icon: 'briefcase',
-    service_count: 14,
+    service_count: 42,
+    popularity_score: 78,
     description: '비즈니스 성장을 위한 전문 서비스',
     children: [
+      {
+        id: 'business-plan',
+        name: '사업계획',
+        slug: 'business-plan',
+        parent_id: 'business',
+        children: [
+          { id: 'business-plan-investment-proposal', name: '사업계획서·투자제안서', slug: 'business-plan-investment-proposal', parent_id: 'business-plan', is_popular: true },
+          { id: 'business-research', name: '리서치', slug: 'business-research', parent_id: 'business-plan' },
+        ]
+      },
+      {
+        id: 'corporate-consulting',
+        name: '기업 자문',
+        slug: 'corporate-consulting',
+        parent_id: 'business',
+        children: [
+          { id: 'sales-consulting', name: '세일즈', slug: 'sales-consulting', parent_id: 'corporate-consulting', is_popular: true },
+          { id: 'general-management-consulting', name: '일반 경영 자문', slug: 'general-management-consulting', parent_id: 'corporate-consulting' },
+          { id: 'branding-consulting', name: '브랜딩', slug: 'branding-consulting', parent_id: 'corporate-consulting' },
+          { id: 'logistics-production', name: '물류·생산', slug: 'logistics-production', parent_id: 'corporate-consulting' },
+          { id: 'hr-corporate-culture', name: 'HR·기업문화', slug: 'hr-corporate-culture', parent_id: 'corporate-consulting' },
+          { id: 'global-business', name: '해외 사업·해외 진출', slug: 'global-business', parent_id: 'corporate-consulting' },
+          { id: 'it-consulting', name: 'IT 컨설팅', slug: 'it-consulting', parent_id: 'corporate-consulting' },
+          { id: 'financial-consulting', name: '재무 자문', slug: 'financial-consulting', parent_id: 'corporate-consulting' },
+          { id: 'operation-support', name: '운영 지원', slug: 'operation-support', parent_id: 'corporate-consulting' },
+        ]
+      },
+      {
+        id: 'industry-startup',
+        name: '업종별 창업',
+        slug: 'industry-startup',
+        parent_id: 'business',
+        children: [
+          { id: 'online-store-startup', name: '온라인 쇼핑몰 창업', slug: 'online-store-startup', parent_id: 'industry-startup', is_popular: true },
+          { id: 'cafe-restaurant-startup', name: '카페·요식업 창업', slug: 'cafe-restaurant-startup', parent_id: 'industry-startup', is_popular: true },
+          { id: 'fashion-startup', name: '패션 창업', slug: 'fashion-startup', parent_id: 'industry-startup' },
+          { id: 'beauty-care-startup', name: '미용·뷰티케어 창업', slug: 'beauty-care-startup', parent_id: 'industry-startup' },
+          { id: 'health-food-startup', name: '건강기능식품 창업', slug: 'health-food-startup', parent_id: 'industry-startup' },
+          { id: 'cosmetics-startup', name: '화장품 창업', slug: 'cosmetics-startup', parent_id: 'industry-startup' },
+          { id: 'hospital-pharmacy-startup', name: '병원·약국 창업', slug: 'hospital-pharmacy-startup', parent_id: 'industry-startup' },
+          { id: 'franchise-startup', name: '프랜차이즈 창업', slug: 'franchise-startup', parent_id: 'industry-startup' },
+          { id: 'unmanned-space-rental-startup', name: '무인점포·공간대여 창업', slug: 'unmanned-space-rental-startup', parent_id: 'industry-startup' },
+          { id: 'pet-startup', name: '반려동물 창업', slug: 'pet-startup', parent_id: 'industry-startup' },
+          { id: 'other-startup', name: '기타 창업', slug: 'other-startup', parent_id: 'industry-startup' },
+        ]
+      },
+      {
+        id: 'startup-consulting',
+        name: '스타트업 자문',
+        slug: 'startup-consulting',
+        parent_id: 'business',
+        children: [
+          { id: 'vision-mission-branding', name: '비전·미션·초기 브랜딩', slug: 'vision-mission-branding', parent_id: 'startup-consulting', is_popular: true },
+          { id: 'personal-org-goal-management', name: '개인·조직 목표 관리', slug: 'personal-org-goal-management', parent_id: 'startup-consulting' },
+          { id: 'startup-hr-consulting', name: '스타트업 인사 자문', slug: 'startup-hr-consulting', parent_id: 'startup-consulting' },
+          { id: 'startup-investment-attraction', name: '스타트업 투자 유치', slug: 'startup-investment-attraction', parent_id: 'startup-consulting', is_popular: true },
+        ]
+      },
       {
         id: 'consulting',
         name: '컨설팅',
         slug: 'consulting',
         parent_id: 'business',
         children: [
-          { id: 'startup-consulting', name: '창업 컨설팅', slug: 'startup-consulting', parent_id: 'consulting', is_popular: true },
+          { id: 'startup-consulting-general', name: '창업 컨설팅', slug: 'startup-consulting-general', parent_id: 'consulting', is_popular: true },
           { id: 'management-consulting', name: '경영 컨설팅', slug: 'management-consulting', parent_id: 'consulting' },
           { id: 'marketing-consulting', name: '마케팅 컨설팅', slug: 'marketing-consulting', parent_id: 'consulting' },
           { id: 'hr-consulting', name: '인사 컨설팅', slug: 'hr-consulting', parent_id: 'consulting' },
@@ -730,6 +1274,24 @@ export const FULL_CATEGORIES: CategoryItem[] = [
           { id: 'virtual-assistant', name: '가상 비서', slug: 'virtual-assistant', parent_id: 'business-support' },
           { id: 'data-entry', name: '데이터 입력', slug: 'data-entry', parent_id: 'business-support' },
           { id: 'market-research', name: '시장 조사', slug: 'market-research', parent_id: 'business-support' },
+        ]
+      },
+      {
+        id: 'business-materials',
+        name: '자료·콘텐츠',
+        slug: 'business-materials',
+        parent_id: 'business',
+        children: [
+          { id: 'business-documents', name: '비즈니스 문서', slug: 'business-documents', parent_id: 'business-materials' },
+        ]
+      },
+      {
+        id: 'business-etc',
+        name: '기타',
+        slug: 'business-etc',
+        parent_id: 'business',
+        children: [
+          { id: 'other-consulting-support', name: '기타 자문·지원', slug: 'other-consulting-support', parent_id: 'business-etc' },
         ]
       }
     ]
@@ -836,7 +1398,7 @@ export const FULL_CATEGORIES: CategoryItem[] = [
     id: 'hobby-handmade',
     name: '취미/핸드메이드',
     slug: 'hobby-handmade',
-    icon: 'palette',
+    icon: 'scissors',
     service_count: 23,
     description: '취미 활동과 수제 작품',
     children: [
@@ -1013,27 +1575,63 @@ export const FULL_CATEGORIES: CategoryItem[] = [
     name: '세무/법무/노무',
     slug: 'tax-legal-labor',
     icon: 'gavel',
-    service_count: 14,
+    service_count: 16,
     description: '세무, 법률, 노무 전문 서비스',
     children: [
       {
-        id: 'tax-service',
-        name: '세무 서비스',
-        slug: 'tax-service',
-        parent_id: 'tax-legal-labor',
-        children: [
-          { id: 'tax-return', name: '세금 신고', slug: 'tax-return', parent_id: 'tax-service' },
-          { id: 'tax-consulting', name: '세무 상담', slug: 'tax-consulting', parent_id: 'tax-service' },
-        ]
-      },
-      {
         id: 'legal-service',
-        name: '법무 서비스',
+        name: '법무',
         slug: 'legal-service',
         parent_id: 'tax-legal-labor',
         children: [
+          { id: 'business-legal-consulting', name: '사업자 법률 자문', slug: 'business-legal-consulting', parent_id: 'legal-service', is_popular: true },
+          { id: 'personal-legal-consulting', name: '개인 법률 자문', slug: 'personal-legal-consulting', parent_id: 'legal-service', is_popular: true },
+          { id: 'legal-administration', name: '법무·행정', slug: 'legal-administration', parent_id: 'legal-service' },
           { id: 'contract-review', name: '계약서 검토', slug: 'contract-review', parent_id: 'legal-service' },
           { id: 'legal-consulting', name: '법률 상담', slug: 'legal-consulting', parent_id: 'legal-service' },
+        ]
+      },
+      {
+        id: 'tax-accounting',
+        name: '세무·회계',
+        slug: 'tax-accounting',
+        parent_id: 'tax-legal-labor',
+        children: [
+          { id: 'business-tax-accounting', name: '사업자 세무·회계', slug: 'business-tax-accounting', parent_id: 'tax-accounting', is_popular: true },
+          { id: 'personal-tax-accounting', name: '개인 세무·회계', slug: 'personal-tax-accounting', parent_id: 'tax-accounting', is_popular: true },
+          { id: 'tax-return', name: '세금 신고', slug: 'tax-return', parent_id: 'tax-accounting' },
+          { id: 'tax-consulting', name: '세무 상담', slug: 'tax-consulting', parent_id: 'tax-accounting' },
+        ]
+      },
+      {
+        id: 'intellectual-property',
+        name: '지식재산권 보호',
+        slug: 'intellectual-property',
+        parent_id: 'tax-legal-labor',
+        children: [
+          { id: 'domestic-patent-trademark', name: '국내 특허·상표', slug: 'domestic-patent-trademark', parent_id: 'intellectual-property', is_popular: true },
+          { id: 'other-intellectual-property', name: '기타 지식재산권', slug: 'other-intellectual-property', parent_id: 'intellectual-property' },
+        ]
+      },
+      {
+        id: 'labor-service',
+        name: '노무',
+        slug: 'labor-service',
+        parent_id: 'tax-legal-labor',
+        children: [
+          { id: 'employer-labor-consulting', name: '고용인 노무 상담', slug: 'employer-labor-consulting', parent_id: 'labor-service', is_popular: true },
+          { id: 'worker-labor-consulting', name: '근로자 노무 상담', slug: 'worker-labor-consulting', parent_id: 'labor-service' },
+          { id: 'employment-contract-consulting', name: '근로계약서 상담', slug: 'employment-contract-consulting', parent_id: 'labor-service' },
+          { id: 'employment-subsidy-consulting', name: '고용지원금 상담', slug: 'employment-subsidy-consulting', parent_id: 'labor-service' },
+        ]
+      },
+      {
+        id: 'tax-legal-labor-etc',
+        name: '기타',
+        slug: 'tax-legal-labor-etc',
+        parent_id: 'tax-legal-labor',
+        children: [
+          { id: 'other-consulting-customs', name: '기타 자문(관세사 등)', slug: 'other-consulting-customs', parent_id: 'tax-legal-labor-etc' },
         ]
       }
     ]
@@ -1045,28 +1643,52 @@ export const FULL_CATEGORIES: CategoryItem[] = [
     name: '주문제작',
     slug: 'custom-order',
     icon: 'hammer',
-    service_count: 16,
+    service_count: 13,
     description: '맞춤형 주문 제작 서비스',
     children: [
+      {
+        id: 'print-promotional',
+        name: '인쇄·판촉물',
+        slug: 'print-promotional',
+        parent_id: 'custom-order',
+        children: [
+          { id: 'printing', name: '인쇄', slug: 'printing', parent_id: 'print-promotional', is_popular: true },
+          { id: '3d-printing', name: '3D프린팅', slug: '3d-printing', parent_id: 'print-promotional' },
+          { id: 'package-making', name: '패키지 제작', slug: 'package-making', parent_id: 'print-promotional' },
+          { id: 'store-goods-making', name: '가게용품 제작', slug: 'store-goods-making', parent_id: 'print-promotional' },
+          { id: 'souvenir-making', name: '기념품 제작', slug: 'souvenir-making', parent_id: 'print-promotional', is_popular: true },
+          { id: 'model-making', name: '모형 제작', slug: 'model-making', parent_id: 'print-promotional' },
+          { id: 'product-making', name: '제품 제작', slug: 'product-making', parent_id: 'print-promotional' },
+        ]
+      },
       {
         id: 'custom-goods',
         name: '굿즈 제작',
         slug: 'custom-goods',
         parent_id: 'custom-order',
         children: [
-          { id: 'tshirt-making', name: '티셔츠 제작', slug: 'tshirt-making', parent_id: 'custom-goods' },
+          { id: 'tshirt-making', name: '티셔츠 제작', slug: 'tshirt-making', parent_id: 'custom-goods', is_popular: true },
           { id: 'mug-making', name: '머그컵 제작', slug: 'mug-making', parent_id: 'custom-goods' },
           { id: 'sticker-making', name: '스티커 제작', slug: 'sticker-making', parent_id: 'custom-goods' },
         ]
       },
       {
-        id: 'printing',
+        id: 'printing-materials',
         name: '인쇄물',
-        slug: 'printing',
+        slug: 'printing-materials',
         parent_id: 'custom-order',
         children: [
-          { id: 'business-card', name: '명함 인쇄', slug: 'business-card', parent_id: 'printing' },
-          { id: 'poster-printing', name: '포스터 인쇄', slug: 'poster-printing', parent_id: 'printing' },
+          { id: 'business-card-printing', name: '명함 인쇄', slug: 'business-card-printing', parent_id: 'printing-materials' },
+          { id: 'poster-printing', name: '포스터 인쇄', slug: 'poster-printing', parent_id: 'printing-materials' },
+        ]
+      },
+      {
+        id: 'custom-order-etc',
+        name: '기타',
+        slug: 'custom-order-etc',
+        parent_id: 'custom-order',
+        children: [
+          { id: 'other-custom-order', name: '기타 주문제작', slug: 'other-custom-order', parent_id: 'custom-order-etc' },
         ]
       }
     ]

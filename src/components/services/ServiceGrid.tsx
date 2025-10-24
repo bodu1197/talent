@@ -93,7 +93,7 @@ export default function ServiceGrid({ categoryId, sellerId, featured }: ServiceG
   if (services.length === 0) {
     return (
       <div className="text-center py-16">
-        <div className="text-6xl mb-4">🔍</div>
+        <div className="text-[40px] mb-4">🔍</div>
         <h3 className="text-xl font-semibold mb-2">서비스를 찾을 수 없습니다</h3>
         <p className="text-gray-600">다른 필터를 선택해 보세요</p>
       </div>

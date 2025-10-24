@@ -28,7 +28,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-6xl opacity-50">
+              <span className="text-[40px] opacity-50">
                 {service.ai_services?.[0]?.ai_tool === 'Midjourney' && '🎨'}
                 {service.ai_services?.[0]?.ai_tool === 'ChatGPT' && '✍️'}
                 {service.ai_services?.[0]?.ai_tool === 'Stable Diffusion' && '🖼️'}

@@ -181,7 +181,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             <div className="bg-white rounded-xl overflow-hidden shadow-sm">
               <div className="aspect-video relative bg-gray-100">
                 <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                  <i className="fas fa-image text-6xl"></i>
+                  <i className="fas fa-image text-[40px]"></i>
                 </div>
               </div>
               <div className="grid grid-cols-4 gap-2 p-4">

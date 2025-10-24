@@ -18,8 +18,8 @@ export default function Header() {
             <div className="w-8 h-8 bg-[#0f3460] rounded-lg flex items-center justify-center">
               <i className="fas fa-star text-white text-sm"></i>
             </div>
-            <span className="text-xl font-bold hidden sm:inline">TALENT MARKET</span>
-            <span className="text-xl font-bold sm:hidden">TM</span>
+            <span className="text-xl font-bold hidden sm:inline">돌파구</span>
+            <span className="text-xl font-bold sm:hidden">돌파구</span>
           </Link>
 
           {/* 검색바 (데스크톱) */}
@@ -28,7 +28,7 @@ export default function Header() {
               <input
                 type="text"
                 placeholder="찾으시는 재능을 검색해보세요"
-                className="w-full pl-4 pr-10 py-2.5 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460] focus:bg-white transition-all"
+                className="w-full pl-4 pr-10 py-2.5 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460] focus:bg-white transition-all text-sm"
               />
               <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#0f3460]">
                 <i className="fas fa-search"></i>
@@ -168,14 +168,20 @@ export default function Header() {
               // 비로그인 상태
               <>
                 <Link
+                  href="/expert/register"
+                  className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm"
+                >
+                  전문가등록
+                </Link>
+                <Link
                   href="/auth/login"
-                  className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium"
+                  className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm"
                 >
                   로그인
                 </Link>
                 <Link
                   href="/auth/register"
-                  className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] hover:shadow-lg transition-all font-medium"
+                  className="px-3 py-1.5 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] hover:shadow-lg transition-all font-medium text-sm"
                 >
                   회원가입
                 </Link>

@@ -16,12 +16,22 @@ export default function CategoryGrid() {
 
   const hasMoreCategories = topLevelCategories.length > initialVisibleCount;
 
-  // Define bright Tailwind colors for hover effect
+  // Define bright colors for default state
   const brightColors = [
-    'text-red-500', 'text-blue-500', 'text-green-500', 'text-yellow-500',
-    'text-purple-500', 'text-pink-500', 'text-indigo-500', 'text-teal-500',
-    'text-orange-500', 'text-cyan-500', 'text-lime-500', 'text-fuchsia-500',
+    'text-red-500',
+    'text-blue-500',
+    'text-green-500',
+    'text-yellow-500',
+    'text-purple-500',
+    'text-pink-500',
+    'text-indigo-500',
+    'text-teal-500',
+    'text-orange-500',
+    'text-cyan-500',
+    'text-lime-500',
+    'text-fuchsia-500',
   ];
+
 
   return (
     <section className="py-8 bg-white">
@@ -37,9 +47,10 @@ export default function CategoryGrid() {
               href={`/categories/${category.slug}`}
               className="flex flex-col items-center group cursor-pointer"
             >
-              <div className={`text-4xl mb-1 h-12 w-12 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[index % brightColors.length]} group-hover:bg-current group-hover:text-white`}>
+              <div className={`text-4xl mb-1 h-12 w-12 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[index % brightColors.length]} group-hover:text-[#0f3460]`}>
                 {category.icon === 'robot' && <i className="fas fa-robot"></i>}
                 {category.icon === 'palette' && <i className="fas fa-palette"></i>}
+                {category.icon === 'scissors' && <i className="fas fa-scissors"></i>}
                 {category.icon === 'code' && <i className="fas fa-code"></i>}
                 {category.icon === 'bullhorn' && <i className="fas fa-bullhorn"></i>}
                 {category.icon === 'camera' && <i className="fas fa-camera"></i>}
@@ -57,9 +68,11 @@ export default function CategoryGrid() {
                 {category.icon === 'hammer' && <i className="fas fa-hammer"></i>}
                 {category.icon === 'graduation-cap' && <i className="fas fa-graduation-cap"></i>}
                 {category.icon === 'chart-line' && <i className="fas fa-chart-line"></i>}
+                {category.icon === 'home' && <i className="fas fa-home"></i>}
+                {category.icon === 'motorcycle' && <i className="fas fa-motorcycle"></i>}
                 {!category.icon && <i className="fas fa-circle"></i>}
               </div>
-              <div className="text-sm font-medium text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200">{category.name}</div>
+              <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-[15px]">{category.name}</div>
             </Link>
           ))}
 
@@ -87,9 +100,10 @@ export default function CategoryGrid() {
                 href={`/categories/${category.slug}`}
                 className="flex flex-col items-center group cursor-pointer"
               >
-                <div className={`text-4xl mb-1 h-12 w-12 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[(index + initialVisibleCount) % brightColors.length]} group-hover:bg-current group-hover:text-white`}>
+                <div className={`text-4xl mb-1 h-12 w-12 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[(index + initialVisibleCount) % brightColors.length]} group-hover:text-[#0f3460]`}>
                   {category.icon === 'robot' && <i className="fas fa-robot"></i>}
                   {category.icon === 'palette' && <i className="fas fa-palette"></i>}
+                  {category.icon === 'scissors' && <i className="fas fa-scissors"></i>}
                   {category.icon === 'code' && <i className="fas fa-code"></i>}
                   {category.icon === 'bullhorn' && <i className="fas fa-bullhorn"></i>}
                   {category.icon === 'camera' && <i className="fas fa-camera"></i>}
@@ -107,9 +121,11 @@ export default function CategoryGrid() {
                   {category.icon === 'hammer' && <i className="fas fa-hammer"></i>}
                   {category.icon === 'graduation-cap' && <i className="fas fa-graduation-cap"></i>}
                   {category.icon === 'chart-line' && <i className="fas fa-chart-line"></i>}
+                  {category.icon === 'home' && <i className="fas fa-home"></i>}
+                  {category.icon === 'motorcycle' && <i className="fas fa-motorcycle"></i>}
                   {!category.icon && <i className="fas fa-circle"></i>}
                 </div>
-                <div className="text-sm font-medium text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200">{category.name}</div>
+                <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-[15px]">{category.name}</div>
               </Link>
             ))}
           </div>

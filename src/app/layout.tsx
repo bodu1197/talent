@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import Header from "@/components/layout/Header";
-import MegaMenu from "@/components/layout/MegaMenu";
+import ConditionalMegaMenu from "@/components/layout/ConditionalMegaMenu";
 import Footer from "@/components/layout/Footer";
 import MobileBottomNav from "@/components/layout/MobileBottomNav";
 
@@ -27,14 +27,14 @@ export default function RootLayout({
     <html lang="ko">
       <head>
         <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen bg-gray-50 flex flex-col font-noto">
+      <body className="min-h-screen bg-gray-50 flex flex-col">
         <AuthProvider>
           <Header />
-          <MegaMenu />
+          <ConditionalMegaMenu />
           <main className="flex-1 pb-16 lg:pb-0">
             {children}
           </main>
