@@ -68,8 +68,8 @@ export default function RegisterPage() {
             email: formData.email,
             name: formData.name,
             phone: formData.phone || null,
-            user_type: formData.userType,
-          })
+            user_type: formData.userType as 'buyer' | 'seller' | 'both',
+          } as any)
 
         if (profileError) throw profileError
 
@@ -79,7 +79,7 @@ export default function RegisterPage() {
             .from('seller_profiles')
             .insert({
               user_id: authData.user.id,
-            })
+            } as any)
 
           if (sellerError) console.error('판매자 프로필 생성 실패:', sellerError)
         }
@@ -95,7 +95,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-blue-50 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* 헤더 */}

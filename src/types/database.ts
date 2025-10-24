@@ -220,6 +220,73 @@ export type Database = {
           updated_at?: string
         }
       }
+      seller_profiles: {
+        Row: {
+          user_id: string
+          business_name: string | null
+          description: string | null
+          rating: number
+          total_reviews: number
+          total_sales: number
+          response_time: string | null
+          is_verified: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          user_id: string
+          business_name?: string | null
+          description?: string | null
+          rating?: number
+          total_reviews?: number
+          total_sales?: number
+          response_time?: string | null
+          is_verified?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          user_id?: string
+          business_name?: string | null
+          description?: string | null
+          rating?: number
+          total_reviews?: number
+          total_sales?: number
+          response_time?: string | null
+          is_verified?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      ai_services: {
+        Row: {
+          service_id: string
+          ai_tool: string
+          version: string | null
+          features: string[]
+          sample_prompts: string[]
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          service_id: string
+          ai_tool: string
+          version?: string | null
+          features?: string[]
+          sample_prompts?: string[]
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          service_id?: string
+          ai_tool?: string
+          version?: string | null
+          features?: string[]
+          sample_prompts?: string[]
+          created_at?: string
+          updated_at?: string
+        }
+      }
     }
     Views: {}
     Functions: {

@@ -80,7 +80,7 @@ export default function HomePage() {
       </section>
 
       {/* 기존 '실시간 리뷰' 섹션 */}
-      <section className="py-16 bg-gradient-to-br from-gray-50 to-gray-100">
+      <section className="py-16 bg-gray-50">
         <div className="container-1200">
           <div className="text-center mb-12">
             <h2 className="text-xl font-bold mb-4">실시간 구매 후기</h2>

@@ -113,7 +113,7 @@ export default function MegaMenu() {
             {/* AI Hub 버튼 */}
             <Link
               href="/ai"
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#0f3460] to-[#1a5490] text-white rounded-lg hover:shadow-lg transition-all font-medium text-sm mr-4"
+              className="flex items-center gap-2 px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:shadow-lg transition-all font-medium text-sm mr-4"
             >
               <i className="fas fa-robot"></i>
               <span>AI Hub</span>

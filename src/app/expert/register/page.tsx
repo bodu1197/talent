@@ -358,7 +358,7 @@ export default function ExpertRegisterPage() {
       </div>
 
       {/* Final CTA */}
-      <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 py-16">
+      <div className="bg-yellow-400 py-16">
         <div className="container-1200">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">

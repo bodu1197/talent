@@ -116,7 +116,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           <div className="flex gap-8">
             {/* 왼쪽 필터 */}
             <aside className="w-64 flex-shrink-0 hidden lg:block">
-              <CategoryFilter categoryId={category.id} isAI={category.is_ai} />
+              <CategoryFilter categoryId={category.id} isAI={category.is_ai || false} />
             </aside>
 
             {/* 오른쪽 서비스 그리드 */}

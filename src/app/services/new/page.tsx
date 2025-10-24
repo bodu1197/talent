@@ -4,13 +4,14 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/providers/AuthProvider'
 import { CATEGORIES, AI_TOOLS } from '@/lib/constants'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/client'
 
 export default function NewServicePage() {
   const router = useRouter()
   const { user, profile } = useAuth()
   const [loading, setLoading] = useState(false)
   const [step, setStep] = useState(1)
+  const supabase = createClient()
 
   // 서비스 기본 정보
   const [serviceData, setServiceData] = useState({
@@ -120,7 +121,7 @@ export default function NewServicePage() {
           metadata: {
             packages
           }
-        })
+        } as any)
         .select()
         .single()
 
@@ -131,12 +132,12 @@ export default function NewServicePage() {
         const { error: aiError } = await supabase
           .from('ai_services')
           .insert({
-            service_id: service.id,
+            service_id: (service as any).id,
             ai_tool: aiServiceData.ai_tool,
             version: aiServiceData.version,
             features: aiServiceData.features,
             sample_prompts: aiServiceData.sample_prompts
-          })
+          } as any)
 
         if (aiError) throw aiError
       }
@@ -144,7 +145,7 @@ export default function NewServicePage() {
       // 3. 썸네일 업로드 (있는 경우)
       if (serviceData.thumbnail && service) {
         const fileExt = serviceData.thumbnail.name.split('.').pop()
-        const fileName = `${service.id}/thumbnail.${fileExt}`
+        const fileName = `${(service as any).id}/thumbnail.${fileExt}`
 
         const { error: uploadError } = await supabase.storage
           .from('service-thumbnails')
@@ -157,10 +158,10 @@ export default function NewServicePage() {
           .from('service-thumbnails')
           .getPublicUrl(fileName)
 
-        await supabase
+        const updateResult = await (supabase as any)
           .from('services')
           .update({ thumbnail_url: publicUrl })
-          .eq('id', service.id)
+          .eq('id', (service as any).id)
       }
 
       alert('서비스가 성공적으로 등록되었습니다. 관리자 승인 후 공개됩니다.')

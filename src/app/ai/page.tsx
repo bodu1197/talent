@@ -30,14 +30,14 @@ export default function AIServicesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-white">
+    <div className="min-h-screen bg-white">
       {/* 히어로 섹션 */}
-      <section className="relative bg-gradient-to-r from-[#0f3460] to-[#1a5490] text-white py-20">
+      <section className="relative bg-[#0f3460] text-white py-20">
         <div className="container-1200">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-[40px] font-bold mb-6">
               AI로 새로운 가능성을 <br />
-              <span className="bg-gradient-to-r from-blue-200 to-blue-400 bg-clip-text text-transparent">
+              <span className="text-blue-200">
                 이어주는 돌파구 AI 서비스
               </span>
             </h1>
@@ -68,9 +68,6 @@ export default function AIServicesPage() {
             </div>
           </div>
         </div>
-
-        {/* 데코레이션 */}
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-blue-50 to-transparent"></div>
       </section>
 
       {/* 스티키 네비게이션 */}
@@ -158,7 +155,7 @@ export default function AIServicesPage() {
       </section>
 
       {/* 통계 섹션 */}
-      <section className="py-16 bg-gradient-to-r from-[#0f3460] to-[#1a5490] text-white">
+      <section className="py-16 bg-[#0f3460] text-white">
         <div className="container-1200">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">많은 분들이 이용한 AI 서비스</h2>
@@ -190,7 +187,7 @@ export default function AIServicesPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
-              <div className="h-48 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+              <div className="h-48 bg-blue-500 flex items-center justify-center">
                 <i className="fas fa-image text-white text-[40px]"></i>
               </div>
               <div className="p-6">
@@ -205,7 +202,7 @@ export default function AIServicesPage() {
             </div>
 
             <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
-              <div className="h-48 bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
+              <div className="h-48 bg-purple-500 flex items-center justify-center">
                 <i className="fas fa-blog text-white text-[40px]"></i>
               </div>
               <div className="p-6">
@@ -220,7 +217,7 @@ export default function AIServicesPage() {
             </div>
 
             <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
-              <div className="h-48 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+              <div className="h-48 bg-green-500 flex items-center justify-center">
                 <i className="fas fa-video text-white text-[40px]"></i>
               </div>
               <div className="p-6">
@@ -249,7 +246,7 @@ export default function AIServicesPage() {
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="bg-white rounded-xl p-6 border border-gray-200 hover:border-[#0f3460] hover:shadow-lg transition-all">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                  <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
                     AI
                   </div>
                   <div>
@@ -330,7 +327,7 @@ export default function AIServicesPage() {
       </section>
 
       {/* CTA 섹션 */}
-      <section className="py-20 bg-gradient-to-r from-[#0f3460] to-[#1a5490] text-white">
+      <section className="py-20 bg-[#0f3460] text-white">
         <div className="container-1200 text-center">
           <h2 className="text-4xl font-bold mb-6">지금 바로 AI 서비스를 시작하세요</h2>
           <p className="text-xl mb-8 text-blue-100">
