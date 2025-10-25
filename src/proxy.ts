@@ -1,11 +1,9 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export async function proxy(request: NextRequest) {
-  let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
+export async function proxy(request: NextRequest) { // Renamed to proxy
+  let supabaseResponse = NextResponse.next({
+    request,
   })
 
   const supabase = createServerClient(
@@ -13,81 +11,49 @@ export async function proxy(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value
+        getAll() {
+          return request.cookies.getAll()
         },
-        set(name: string, value: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value,
-            ...options,
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
+          supabaseResponse = NextResponse.next({
+            request,
           })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-        },
-        remove(name: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options)
+          )
         },
       },
     }
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
+  // 세션 새로고침 - 세션이 만료되었는지 확인
+  const { 
+    data: { user }, 
+  } = await supabase.auth.getUser()
 
-  // 보호된 라우트 체크
-  const protectedPaths = ['/dashboard', '/seller', '/buyer', '/admin', '/profile', '/settings']
-  const authPaths = ['/auth/login', '/auth/register']
+  // 보호된 경로 설정
+  const protectedPaths = ['/dashboard', '/profile/edit', '/messages', '/orders']
+  const isProtectedPath = protectedPaths.some(path =>
+    request.nextUrl.pathname.startsWith(path)
+  )
 
-  const path = request.nextUrl.pathname
-  const isProtectedPath = protectedPaths.some(p => path.startsWith(p))
-  const isAuthPath = authPaths.some(p => path.startsWith(p))
-
+  // 인증이 필요한 페이지인데 로그인하지 않은 경우
   if (isProtectedPath && !user) {
-    // 로그인되지 않은 사용자가 보호된 페이지 접근시 로그인 페이지로
-    return NextResponse.redirect(new URL('/auth/login', request.url))
+    const redirectUrl = request.nextUrl.clone()
+    redirectUrl.pathname = '/login'
+    redirectUrl.searchParams.set('redirect', request.nextUrl.pathname)
+    return NextResponse.redirect(redirectUrl)
   }
 
-  if (isAuthPath && user) {
-    // 이미 로그인한 사용자가 로그인/회원가입 페이지 접근시 홈으로
-    return NextResponse.redirect(new URL('/', request.url))
+  // 로그인한 사용자가 로그인/회원가입 페이지 접근 시 홈으로 리다이렉트
+  if ((request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/signup') && user) {
+    const redirectUrl = request.nextUrl.clone()
+    redirectUrl.pathname = '/'
+    return NextResponse.redirect(redirectUrl)
   }
 
-  // 관리자 페이지 접근 제한
-  if (path.startsWith('/admin') && user) {
-    const { data: adminCheck } = await supabase
-      .from('admins')
-      .select('id')
-      .eq('user_id', user.id)
-      .single()
-
-    if (!adminCheck) {
-      return NextResponse.redirect(new URL('/', request.url))
-    }
-  }
-
-  return response
+  return supabaseResponse
 }
 
 export const config = {
@@ -97,7 +63,7 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - public folder
+     * Feel free to modify this pattern to include more paths.
      */
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
