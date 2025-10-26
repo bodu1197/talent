@@ -285,7 +285,7 @@ export default function AIServicesPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl p-6 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+              <div className="w-12 h-12 bg-[#0f3460]/10 rounded-lg flex items-center justify-center mb-4">
                 <i className="fas fa-lightbulb text-[#0f3460] text-xl"></i>
               </div>
               <h3 className="font-bold text-lg mb-2">AI로 업무 자동화하기</h3>
@@ -298,7 +298,7 @@ export default function AIServicesPage() {
             </div>
 
             <div className="bg-white rounded-xl p-6 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+              <div className="w-12 h-12 bg-[#0f3460]/10 rounded-lg flex items-center justify-center mb-4">
                 <i className="fas fa-chart-line text-[#0f3460] text-xl"></i>
               </div>
               <h3 className="font-bold text-lg mb-2">AI로 마케팅 효과 높이기</h3>
@@ -311,7 +311,7 @@ export default function AIServicesPage() {
             </div>
 
             <div className="bg-white rounded-xl p-6 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+              <div className="w-12 h-12 bg-[#0f3460]/10 rounded-lg flex items-center justify-center mb-4">
                 <i className="fas fa-magic text-[#0f3460] text-xl"></i>
               </div>
               <h3 className="font-bold text-lg mb-2">AI 도구 완벽 활용법</h3>

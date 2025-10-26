@@ -135,20 +135,9 @@ export default function Header() {
                         className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
                         onClick={() => setIsMenuOpen(false)}
                       >
-                        <i className="fas fa-cog w-4"></i>
-                        프로필 설정
+                        <i className="fas fa-user-circle w-4"></i>
+                        마이페이지
                       </Link>
-
-                      {profile?.user_type === 'buyer' && (
-                        <Link
-                          href="/seller/register"
-                          className="flex items-center gap-3 px-4 py-2 text-[#0f3460] hover:bg-gray-50"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          <i className="fas fa-store w-4"></i>
-                          판매자 되기
-                        </Link>
-                      )}
 
                       <button
                         onClick={() => {

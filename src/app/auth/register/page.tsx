@@ -12,7 +12,6 @@ export default function RegisterPage() {
     passwordConfirm: '',
     name: '',
     phone: '',
-    userType: 'buyer' as 'buyer' | 'seller' | 'both',
     agreeTerms: false,
     agreePrivacy: false,
     agreeMarketing: false,
@@ -60,7 +59,7 @@ export default function RegisterPage() {
       if (authError) throw authError
 
       if (authData.user) {
-        // 2. users 테이블에 프로필 정보 저장
+        // 2. users 테이블에 프로필 정보 저장 (기본값: buyer)
         const { error: profileError } = await supabase
           .from('users')
           .insert({
@@ -68,21 +67,10 @@ export default function RegisterPage() {
             email: formData.email,
             name: formData.name,
             phone: formData.phone || null,
-            user_type: formData.userType as 'buyer' | 'seller' | 'both',
+            user_type: 'buyer', // 기본값: 구매자
           } as any)
 
         if (profileError) throw profileError
-
-        // 3. 판매자인 경우 seller_profiles 생성
-        if (formData.userType === 'seller' || formData.userType === 'both') {
-          const { error: sellerError } = await supabase
-            .from('seller_profiles')
-            .insert({
-              user_id: authData.user.id,
-            } as any)
-
-          if (sellerError) console.error('판매자 프로필 생성 실패:', sellerError)
-        }
 
         // 회원가입 성공
         router.push('/auth/login?registered=true')
@@ -193,47 +181,8 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* 회원 유형 */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                회원 유형 *
-              </label>
-              <div className="grid grid-cols-3 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, userType: 'buyer' })}
-                  className={`py-2 px-3 rounded-lg border transition-all ${
-                    formData.userType === 'buyer'
-                      ? 'border-purple-600 bg-purple-50 text-purple-600'
-                      : 'border-gray-300 hover:border-gray-400'
-                  }`}
-                >
-                  구매자
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, userType: 'seller' })}
-                  className={`py-2 px-3 rounded-lg border transition-all ${
-                    formData.userType === 'seller'
-                      ? 'border-purple-600 bg-purple-50 text-purple-600'
-                      : 'border-gray-300 hover:border-gray-400'
-                  }`}
-                >
-                  판매자
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, userType: 'both' })}
-                  className={`py-2 px-3 rounded-lg border transition-all ${
-                    formData.userType === 'both'
-                      ? 'border-purple-600 bg-purple-50 text-purple-600'
-                      : 'border-gray-300 hover:border-gray-400'
-                  }`}
-                >
-                  둘 다
-                </button>
-              </div>
-            </div>
+            {/* 회원 유형 선택 제거 - 기본값: 구매자 */}
+            {/* 마이페이지에서 판매자로 전환 가능 */}
 
             {/* 약관 동의 */}
             <div className="space-y-2 pt-2">
