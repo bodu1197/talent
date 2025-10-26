@@ -287,6 +287,210 @@ export type Database = {
           updated_at?: string
         }
       }
+      orders: {
+        Row: {
+          id: string
+          order_number: string
+          buyer_id: string
+          seller_id: string
+          service_id: string
+          title: string
+          description: string | null
+          requirements: string | null
+          attachments: string[] | null
+          base_amount: number
+          express_amount: number
+          additional_amount: number
+          discount_amount: number
+          total_amount: number
+          commission_rate: number
+          commission_fee: number
+          seller_amount: number
+          delivery_date: string
+          revision_count: number
+          used_revisions: number
+          status: string
+          payment_status: string
+          work_status: string
+          paid_at: string | null
+          started_at: string | null
+          delivered_at: string | null
+          completed_at: string | null
+          cancelled_at: string | null
+          cancellation_reason: string | null
+          auto_complete_at: string | null
+          buyer_satisfied: boolean | null
+          seller_rating: number | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          order_number: string
+          buyer_id: string
+          seller_id: string
+          service_id: string
+          title: string
+          description?: string | null
+          requirements?: string | null
+          attachments?: string[] | null
+          base_amount: number
+          express_amount?: number
+          additional_amount?: number
+          discount_amount?: number
+          total_amount: number
+          commission_rate: number
+          commission_fee: number
+          seller_amount: number
+          delivery_date: string
+          revision_count?: number
+          used_revisions?: number
+          status?: string
+          payment_status?: string
+          work_status?: string
+          paid_at?: string | null
+          started_at?: string | null
+          delivered_at?: string | null
+          completed_at?: string | null
+          cancelled_at?: string | null
+          cancellation_reason?: string | null
+          auto_complete_at?: string | null
+          buyer_satisfied?: boolean | null
+          seller_rating?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          order_number?: string
+          buyer_id?: string
+          seller_id?: string
+          service_id?: string
+          title?: string
+          description?: string | null
+          requirements?: string | null
+          attachments?: string[] | null
+          base_amount?: number
+          express_amount?: number
+          additional_amount?: number
+          discount_amount?: number
+          total_amount?: number
+          commission_rate?: number
+          commission_fee?: number
+          seller_amount?: number
+          delivery_date?: string
+          revision_count?: number
+          used_revisions?: number
+          status?: string
+          payment_status?: string
+          work_status?: string
+          paid_at?: string | null
+          started_at?: string | null
+          delivered_at?: string | null
+          completed_at?: string | null
+          cancelled_at?: string | null
+          cancellation_reason?: string | null
+          auto_complete_at?: string | null
+          buyer_satisfied?: boolean | null
+          seller_rating?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      favorites: {
+        Row: {
+          id: string
+          user_id: string
+          service_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          service_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          service_id?: string
+          created_at?: string
+        }
+      }
+      reviews: {
+        Row: {
+          id: string
+          order_id: string
+          buyer_id: string
+          seller_id: string
+          service_id: string
+          rating: number
+          communication_rating: number | null
+          quality_rating: number | null
+          delivery_rating: number | null
+          comment: string | null
+          tags: string[] | null
+          images: string[] | null
+          seller_reply: string | null
+          seller_reply_at: string | null
+          helpful_count: number
+          not_helpful_count: number
+          is_visible: boolean
+          is_featured: boolean
+          moderated: boolean
+          moderation_reason: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          order_id: string
+          buyer_id: string
+          seller_id: string
+          service_id: string
+          rating: number
+          communication_rating?: number | null
+          quality_rating?: number | null
+          delivery_rating?: number | null
+          comment?: string | null
+          tags?: string[] | null
+          images?: string[] | null
+          seller_reply?: string | null
+          seller_reply_at?: string | null
+          helpful_count?: number
+          not_helpful_count?: number
+          is_visible?: boolean
+          is_featured?: boolean
+          moderated?: boolean
+          moderation_reason?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          order_id?: string
+          buyer_id?: string
+          seller_id?: string
+          service_id?: string
+          rating?: number
+          communication_rating?: number | null
+          quality_rating?: number | null
+          delivery_rating?: number | null
+          comment?: string | null
+          tags?: string[] | null
+          images?: string[] | null
+          seller_reply?: string | null
+          seller_reply_at?: string | null
+          helpful_count?: number
+          not_helpful_count?: number
+          is_visible?: boolean
+          is_featured?: boolean
+          moderated?: boolean
+          moderation_reason?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
     }
     Views: {}
     Functions: {

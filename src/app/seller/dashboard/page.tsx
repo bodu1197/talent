@@ -101,7 +101,7 @@ export default function SellerDashboardPage() {
       const { data: reviews } = await supabase
         .from('reviews')
         .select('rating')
-        .eq('reviewee_id', user.id)
+        .eq('seller_id', user.id)
 
       const totalReviews = reviews?.length || 0
       const averageRating =
