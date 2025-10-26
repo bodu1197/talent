@@ -26,12 +26,10 @@ export default function LoginPage() {
 
       if (error) throw error
 
-      // 로그인 성공 - 홈으로 이동
-      router.push('/')
-      router.refresh()
+      // 로그인 성공 - 홈으로 강제 이동 (새로고침)
+      window.location.href = '/'
     } catch (error: any) {
       setError(error.message || '로그인 중 오류가 발생했습니다.')
-    } finally {
       setIsLoading(false)
     }
   }
