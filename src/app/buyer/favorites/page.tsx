@@ -43,6 +43,8 @@ export default function BuyerFavoritesPage() {
   }, [user])
 
   const fetchFavorites = async () => {
+    if (!user?.id) return
+
     setIsLoading(true)
     try {
       const { data, error } = await supabase
@@ -61,7 +63,7 @@ export default function BuyerFavoritesPage() {
             seller_id
           )
         `)
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false })
 
       if (error) throw error

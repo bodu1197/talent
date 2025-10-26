@@ -51,12 +51,14 @@ export default function SellerServicesPage() {
   }, [user, profile, activeTab])
 
   const fetchServices = async () => {
+    if (!user?.id) return
+
     setIsLoading(true)
     try {
       let query = supabase
         .from('services')
         .select('*')
-        .eq('seller_id', user?.id)
+        .eq('seller_id', user.id)
         .order('created_at', { ascending: false })
 
       if (activeTab !== 'all') {

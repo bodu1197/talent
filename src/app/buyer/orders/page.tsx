@@ -45,6 +45,8 @@ export default function BuyerOrdersPage() {
   }, [user, activeTab])
 
   const fetchOrders = async () => {
+    if (!user?.id) return
+
     setIsLoading(true)
     try {
       let query = supabase
@@ -54,7 +56,7 @@ export default function BuyerOrdersPage() {
           service:services(id, title, thumbnail_url),
           seller:users!seller_id(name)
         `)
-        .eq('buyer_id', user?.id)
+        .eq('buyer_id', user.id)
         .order('created_at', { ascending: false })
 
       if (activeTab !== 'all') {

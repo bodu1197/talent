@@ -64,13 +64,15 @@ export default function SellerDashboardPage() {
   }, [user, profile])
 
   const fetchDashboardData = async () => {
+    if (!user?.id) return
+
     setIsLoading(true)
     try {
       // 서비스 통계
       const { data: services } = await supabase
         .from('services')
         .select('id, status')
-        .eq('seller_id', user?.id)
+        .eq('seller_id', user.id)
 
       const totalServices = services?.length || 0
       const activeServices = services?.filter((s) => s.status === 'active').length || 0
@@ -79,7 +81,7 @@ export default function SellerDashboardPage() {
       const { data: orders } = await supabase
         .from('orders')
         .select('id, status, seller_amount, created_at')
-        .eq('seller_id', user?.id)
+        .eq('seller_id', user.id)
 
       const totalOrders = orders?.length || 0
       const inProgressOrders =
@@ -99,7 +101,7 @@ export default function SellerDashboardPage() {
       const { data: reviews } = await supabase
         .from('reviews')
         .select('rating')
-        .eq('reviewee_id', user?.id)
+        .eq('reviewee_id', user.id)
 
       const totalReviews = reviews?.length || 0
       const averageRating =
@@ -129,7 +131,7 @@ export default function SellerDashboardPage() {
           created_at,
           buyer:users!buyer_id(name)
         `)
-        .eq('seller_id', user?.id)
+        .eq('seller_id', user.id)
         .order('created_at', { ascending: false })
         .limit(5)
 
