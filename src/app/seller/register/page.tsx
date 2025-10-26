@@ -85,16 +85,18 @@ export default function SellerRegisterPage() {
         .map(s => s.trim())
         .filter(s => s.length > 0)
 
+      const updateData = {
+        business_name: formData.businessName,
+        introduction: formData.introduction,
+        skills: skillsArray,
+        bank_name: formData.bankName,
+        bank_account: formData.bankAccount,
+        account_holder: formData.accountHolder,
+      }
+
       const { error } = await supabase
         .from('seller_profiles')
-        .update({
-          business_name: formData.businessName,
-          introduction: formData.introduction,
-          skills: skillsArray,
-          bank_name: formData.bankName,
-          bank_account: formData.bankAccount,
-          account_holder: formData.accountHolder,
-        })
+        .update(updateData as any)
         .eq('user_id', user.id)
 
       if (error) throw error

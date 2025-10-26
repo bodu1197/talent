@@ -100,7 +100,7 @@ export default function SellerServicesPage() {
     try {
       const { error } = await supabase
         .from('services')
-        .update({ status: newStatus })
+        .update({ status: newStatus } as any)
         .eq('id', serviceId)
 
       if (error) throw error
