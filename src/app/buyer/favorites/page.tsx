@@ -70,7 +70,7 @@ export default function BuyerFavoritesPage() {
 
       // seller 정보 추가 조회
       const favoritesWithSeller = await Promise.all(
-        (data || []).map(async (fav) => {
+        (data || []).map(async (fav: any) => {
           if (fav.service) {
             const { data: sellerData } = await supabase
               .from('seller_profiles')
