@@ -98,9 +98,9 @@ export default function SellerServicesPage() {
     const newStatus = currentStatus === 'active' ? 'suspended' : 'active'
 
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('services')
-        .update({ status: newStatus } as any)
+        .update({ status: newStatus })
         .eq('id', serviceId)
 
       if (error) throw error

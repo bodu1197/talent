@@ -68,7 +68,7 @@ export default function RegisterPage() {
             name: formData.name,
             phone: formData.phone || null,
             user_type: 'buyer', // 기본값: 구매자
-          } as any)
+          })
 
         if (profileError) throw profileError
 

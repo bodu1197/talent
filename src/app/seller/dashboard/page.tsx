@@ -105,7 +105,7 @@ export default function SellerDashboardPage() {
 
       const totalReviews = reviews?.length || 0
       const averageRating =
-        totalReviews > 0 ? reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews : 0
+        totalReviews > 0 ? (reviews || []).reduce((sum, r) => sum + r.rating, 0) / totalReviews : 0
 
       setStats({
         totalServices,
@@ -135,7 +135,7 @@ export default function SellerDashboardPage() {
         .order('created_at', { ascending: false })
         .limit(5)
 
-      setRecentOrders(recentOrdersData || [])
+      setRecentOrders((recentOrdersData as any) || [])
     } catch (error) {
       console.error('대시보드 데이터 조회 실패:', error)
     } finally {

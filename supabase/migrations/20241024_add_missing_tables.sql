@@ -4,8 +4,12 @@
 -- 설명: seller_profiles, ai_services 테이블 생성
 -- =====================================================
 
+-- 기존 테이블 삭제 (충돌 방지)
+DROP TABLE IF EXISTS public.seller_profiles CASCADE;
+DROP TABLE IF EXISTS public.ai_services CASCADE;
+
 -- 1. seller_profiles 테이블 생성 (판매자 프로필)
-CREATE TABLE IF NOT EXISTS seller_profiles (
+CREATE TABLE public.seller_profiles (
   user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
   business_name VARCHAR(255),
   description TEXT,
@@ -37,7 +41,7 @@ COMMENT ON COLUMN seller_profiles.is_verified IS '인증 여부';
 -- =====================================================
 
 -- 2. ai_services 테이블 생성 (AI 서비스 추가 정보)
-CREATE TABLE IF NOT EXISTS ai_services (
+CREATE TABLE public.ai_services (
   service_id UUID PRIMARY KEY REFERENCES services(id) ON DELETE CASCADE,
   ai_tool VARCHAR(255) NOT NULL, -- 예: "ChatGPT", "Midjourney", "Stable Diffusion"
   version VARCHAR(50), -- 예: "GPT-4", "v5.2"

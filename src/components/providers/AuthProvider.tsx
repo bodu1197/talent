@@ -3,9 +3,18 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
-import type { Database } from '@/types/database'
 
-type UserProfile = Database['public']['Tables']['users']['Row']
+type UserProfile = {
+  id: string
+  email: string
+  name: string
+  phone?: string
+  user_type: 'buyer' | 'seller' | 'both' | 'admin'
+  profile_image?: string
+  bio?: string
+  created_at: string
+  updated_at: string
+}
 
 interface AuthContextType {
   user: User | null

@@ -49,7 +49,11 @@ export default function ProfilePage() {
     }
 
     try {
-      const updateData = {
+      const updateData: {
+        name: string
+        phone?: string
+        bio?: string
+      } = {
         name: formData.name,
         phone: formData.phone,
         bio: formData.bio,
@@ -98,7 +102,7 @@ export default function ProfilePage() {
       // 2. user_type을 'both'로 업데이트
       const { error: updateError } = await supabase
         .from('users')
-        .update({ user_type: 'both' } as any)
+        .update({ user_type: 'both' })
         .eq('id', user.id)
 
       if (updateError) throw updateError

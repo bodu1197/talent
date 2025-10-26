@@ -30,31 +30,6 @@ CREATE TABLE public.users (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- seller_profiles 테이블 (판매자 추가 정보)
-CREATE TABLE public.seller_profiles (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID UNIQUE NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
-    business_name TEXT,
-    business_number TEXT,
-    business_verified BOOLEAN DEFAULT FALSE,
-    bank_name TEXT,
-    bank_account TEXT,
-    account_holder TEXT,
-    introduction TEXT,
-    skills TEXT[],
-    portfolio_urls TEXT[],
-    response_time_hours INTEGER DEFAULT 24,
-    auto_accept_order BOOLEAN DEFAULT FALSE,
-    vacation_mode BOOLEAN DEFAULT FALSE,
-    vacation_message TEXT,
-    total_earnings BIGINT DEFAULT 0,
-    available_balance BIGINT DEFAULT 0,
-    is_verified BOOLEAN DEFAULT FALSE,
-    verified_at TIMESTAMPTZ,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
 -- admins 테이블 (관리자)
 CREATE TABLE public.admins (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -157,41 +132,6 @@ CREATE TABLE public.service_categories (
     PRIMARY KEY (service_id, category_id)
 );
 
--- ai_services 테이블 (AI 재능 추가 정보)
-CREATE TABLE public.ai_services (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    service_id UUID UNIQUE NOT NULL REFERENCES public.services(id) ON DELETE CASCADE,
-
-    -- AI 도구 정보
-    ai_tools TEXT[],
-    ai_model TEXT,
-    ai_version TEXT,
-
-    -- AI 특화 정보
-    generation_time_minutes INTEGER,
-    prompt_included BOOLEAN DEFAULT FALSE,
-    prompt_consultation BOOLEAN DEFAULT FALSE,
-    source_file_provided BOOLEAN DEFAULT FALSE,
-    commercial_use BOOLEAN DEFAULT TRUE,
-
-    -- 작업 범위
-    min_generations INTEGER DEFAULT 1,
-    max_generations INTEGER DEFAULT 10,
-
-    -- 전문가 레벨
-    expert_level TEXT CHECK (expert_level IN ('starter', 'professional', 'master')) DEFAULT 'starter',
-    certified_at TIMESTAMPTZ,
-    certification_score DECIMAL(5,2),
-    portfolio_quality_score DECIMAL(3,2),
-
-    -- 통계
-    avg_generation_count INTEGER DEFAULT 5,
-    success_rate DECIMAL(5,2) DEFAULT 100.00,
-
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
 -- ============================================
 -- 4. ORDERS 테이블
 -- ============================================
@@ -259,10 +199,6 @@ CREATE INDEX idx_users_email ON public.users(email);
 CREATE INDEX idx_users_type ON public.users(user_type);
 CREATE INDEX idx_users_active ON public.users(is_active, deleted_at);
 
--- Seller profiles 인덱스
-CREATE INDEX idx_seller_profiles_user ON public.seller_profiles(user_id);
-CREATE INDEX idx_seller_profiles_verified ON public.seller_profiles(is_verified, business_verified);
-
 -- Categories 인덱스
 CREATE INDEX idx_categories_parent ON public.categories(parent_id);
 CREATE INDEX idx_categories_level ON public.categories(level);
@@ -297,9 +233,6 @@ $$ LANGUAGE plpgsql;
 
 -- 각 테이블에 updated_at 트리거 적용
 CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON public.users
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at();
-
-CREATE TRIGGER update_seller_profiles_updated_at BEFORE UPDATE ON public.seller_profiles
     FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
 CREATE TRIGGER update_categories_updated_at BEFORE UPDATE ON public.categories
@@ -345,19 +278,21 @@ DECLARE
     final_slug TEXT;
     counter INTEGER := 0;
 BEGIN
-    -- 기본 슬러그 생성 (한글 처리 포함)
-    base_slug := LOWER(REGEXP_REPLACE(NEW.title, '[^a-zA-Z0-9가-힣]+', '-', 'g'));
-    base_slug := TRIM(BOTH '-' FROM base_slug);
+    IF (TG_OP = 'INSERT' AND NEW.slug IS NULL) OR (TG_OP = 'UPDATE' AND NEW.title IS DISTINCT FROM OLD.title) THEN
+        -- 기본 슬러그 생성 (한글 처리 포함)
+        base_slug := LOWER(REGEXP_REPLACE(NEW.title, '[^a-zA-Z0-9가-힣]+', '-', 'g'));
+        base_slug := TRIM(BOTH '-' FROM base_slug);
 
-    final_slug := base_slug;
+        final_slug := base_slug;
 
-    -- 중복 체크 및 고유 슬러그 생성
-    WHILE EXISTS (SELECT 1 FROM public.services WHERE slug = final_slug AND id != NEW.id) LOOP
-        counter := counter + 1;
-        final_slug := base_slug || '-' || counter;
-    END LOOP;
+        -- 중복 체크 및 고유 슬러그 생성
+        WHILE EXISTS (SELECT 1 FROM public.services WHERE slug = final_slug AND id != NEW.id) LOOP
+            counter := counter + 1;
+            final_slug := base_slug || '-' || counter;
+        END LOOP;
 
-    NEW.slug := final_slug;
+        NEW.slug := final_slug;
+    END IF;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -366,7 +301,6 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER generate_service_slug_trigger
     BEFORE INSERT OR UPDATE OF title ON public.services
     FOR EACH ROW
-    WHEN (NEW.slug IS NULL OR NEW.title != OLD.title)
     EXECUTE FUNCTION generate_service_slug();
 
 -- ============================================
@@ -437,6 +371,6 @@ INSERT INTO public.schema_migrations (version) VALUES ('001_initial_schema');
 DO $$
 BEGIN
     RAISE NOTICE '✅ 초기 스키마 생성 완료!';
-    RAISE NOTICE '생성된 테이블: users, seller_profiles, admins, categories, services, ai_services, orders';
+    RAISE NOTICE '생성된 테이블: users, admins, categories, services, orders';
     RAISE NOTICE '다음 단계: RLS 정책 설정 (002_rls_policies.sql)';
 END $$;

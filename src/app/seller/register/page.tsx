@@ -94,9 +94,9 @@ export default function SellerRegisterPage() {
         account_holder: formData.accountHolder,
       }
 
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('seller_profiles')
-        .update(updateData as any)
+        .update(updateData)
         .eq('user_id', user.id)
 
       if (error) throw error
