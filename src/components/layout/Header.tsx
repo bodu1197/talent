@@ -2,12 +2,34 @@
 
 import Link from 'next/link'
 import { useAuth } from '@/components/providers/AuthProvider'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase/client'
 
 export default function Header() {
   const { user, profile, signOut } = useAuth()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const supabase = createClient()
+
+  useEffect(() => {
+    async function checkAdmin() {
+      if (!user) {
+        setIsAdmin(false)
+        return
+      }
+
+      const { data } = await supabase
+        .from('admins')
+        .select('*')
+        .eq('user_id', user.id)
+        .single()
+
+      setIsAdmin(!!data)
+    }
+
+    checkAdmin()
+  }, [user, supabase])
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -85,6 +107,20 @@ export default function Header() {
                         <p className="font-semibold">{profile?.name || '사용자'}</p>
                         <p className="text-sm text-gray-500">{user?.email}</p>
                       </div>
+
+                      {isAdmin && (
+                        <>
+                          <Link
+                            href="/admin/dashboard"
+                            className="flex items-center gap-3 px-4 py-2 text-white bg-[#0f3460] hover:bg-[#1a4b7d] font-semibold"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            <i className="fas fa-shield-alt w-4"></i>
+                            관리자 페이지
+                          </Link>
+                          <div className="border-t border-gray-100 my-2"></div>
+                        </>
+                      )}
 
                       {(profile?.user_type === 'seller' || profile?.user_type === 'both') && (
                         <>
