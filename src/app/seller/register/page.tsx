@@ -40,11 +40,13 @@ export default function SellerRegisterPage() {
 
   // 판매자 프로필 로드
   const loadSellerProfile = async () => {
+    if (!user?.id) return
+
     try {
       const { data, error } = await supabase
         .from('seller_profiles')
         .select('*')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .single()
 
       if (error) throw error
@@ -70,6 +72,12 @@ export default function SellerRegisterPage() {
     setIsLoading(true)
     setMessage(null)
 
+    if (!user?.id) {
+      setMessage({ type: 'error', text: '사용자 정보를 찾을 수 없습니다.' })
+      setIsLoading(false)
+      return
+    }
+
     try {
       // skills를 배열로 변환
       const skillsArray = formData.skills
@@ -87,7 +95,7 @@ export default function SellerRegisterPage() {
           bank_account: formData.bankAccount,
           account_holder: formData.accountHolder,
         })
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
 
       if (error) throw error
 

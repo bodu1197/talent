@@ -222,38 +222,71 @@ export type Database = {
       }
       seller_profiles: {
         Row: {
+          id: string
           user_id: string
           business_name: string | null
-          description: string | null
-          rating: number
-          total_reviews: number
-          total_sales: number
-          response_time: string | null
+          business_number: string | null
+          business_verified: boolean
+          bank_name: string | null
+          bank_account: string | null
+          account_holder: string | null
+          introduction: string | null
+          skills: string[] | null
+          portfolio_urls: string[] | null
+          response_time_hours: number
+          auto_accept_order: boolean
+          vacation_mode: boolean
+          vacation_message: string | null
+          total_earnings: number
+          available_balance: number
           is_verified: boolean
+          verified_at: string | null
           created_at: string
           updated_at: string
         }
         Insert: {
+          id?: string
           user_id: string
           business_name?: string | null
-          description?: string | null
-          rating?: number
-          total_reviews?: number
-          total_sales?: number
-          response_time?: string | null
+          business_number?: string | null
+          business_verified?: boolean
+          bank_name?: string | null
+          bank_account?: string | null
+          account_holder?: string | null
+          introduction?: string | null
+          skills?: string[] | null
+          portfolio_urls?: string[] | null
+          response_time_hours?: number
+          auto_accept_order?: boolean
+          vacation_mode?: boolean
+          vacation_message?: string | null
+          total_earnings?: number
+          available_balance?: number
           is_verified?: boolean
+          verified_at?: string | null
           created_at?: string
           updated_at?: string
         }
         Update: {
+          id?: string
           user_id?: string
           business_name?: string | null
-          description?: string | null
-          rating?: number
-          total_reviews?: number
-          total_sales?: number
-          response_time?: string | null
+          business_number?: string | null
+          business_verified?: boolean
+          bank_name?: string | null
+          bank_account?: string | null
+          account_holder?: string | null
+          introduction?: string | null
+          skills?: string[] | null
+          portfolio_urls?: string[] | null
+          response_time_hours?: number
+          auto_accept_order?: boolean
+          vacation_mode?: boolean
+          vacation_message?: string | null
+          total_earnings?: number
+          available_balance?: number
           is_verified?: boolean
+          verified_at?: string | null
           created_at?: string
           updated_at?: string
         }
