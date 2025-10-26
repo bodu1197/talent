@@ -18,7 +18,7 @@ BEGIN
     );
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY INVOKER;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- 트리거 생성 (이미 존재하면 삭제 후 재생성)
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
