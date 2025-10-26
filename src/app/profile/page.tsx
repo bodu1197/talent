@@ -75,14 +75,20 @@ export default function ProfilePage() {
     }
   }
 
-  // 판매자 전환
-  const handleBecomeSeller = async () => {
-    if (!confirm('판매자로 전환하시겠습니까?\n서비스 등록 및 판매가 가능해집니다.')) {
+  // 사용자 타입 변경
+  const handleChangeUserType = async (newType: 'buyer' | 'seller' | 'both') => {
+    if (!user?.id) {
+      setMessage({ type: 'error', text: '사용자 정보를 찾을 수 없습니다.' })
       return
     }
 
-    if (!user?.id) {
-      setMessage({ type: 'error', text: '사용자 정보를 찾을 수 없습니다.' })
+    const typeLabels = {
+      buyer: '구매자',
+      seller: '판매자',
+      both: '구매자 + 판매자'
+    }
+
+    if (!confirm(`${typeLabels[newType]}로 전환하시겠습니까?`)) {
       return
     }
 
@@ -90,35 +96,47 @@ export default function ProfilePage() {
     setMessage(null)
 
     try {
-      // 1. seller_profiles 생성
-      const { error: sellerProfileError } = await supabase
-        .from('seller_profiles')
-        .insert({
-          user_id: user.id,
-        })
+      // 판매자 기능을 추가하는 경우 seller_profiles 생성
+      if ((newType === 'seller' || newType === 'both') && profile?.user_type === 'buyer') {
+        const { error: sellerProfileError } = await supabase
+          .from('seller_profiles')
+          .insert({
+            user_id: user.id,
+          })
 
-      if (sellerProfileError) throw sellerProfileError
+        // 이미 존재하는 경우 무시
+        if (sellerProfileError && !sellerProfileError.message.includes('duplicate')) {
+          throw sellerProfileError
+        }
+      }
 
-      // 2. user_type을 'both'로 업데이트
+      // user_type 업데이트
       const { error: updateError } = await supabase
         .from('users')
-        .update({ user_type: 'both' })
+        .update({ user_type: newType })
         .eq('id', user.id)
 
       if (updateError) throw updateError
 
       await refreshProfile()
-      setMessage({ type: 'success', text: '판매자 전환이 완료되었습니다! 이제 서비스를 등록할 수 있습니다.' })
+      setMessage({ type: 'success', text: `${typeLabels[newType]}로 전환이 완료되었습니다!` })
 
-      // 3초 후 판매자 등록 페이지로 이동
-      setTimeout(() => {
-        router.push('/seller/register')
-      }, 2000)
+      // 판매자로 전환하고 seller_profiles가 새로 생성된 경우 판매자 등록 페이지로 이동
+      if (newType === 'seller' && profile?.user_type === 'buyer') {
+        setTimeout(() => {
+          router.push('/seller/register')
+        }, 2000)
+      }
     } catch (error: any) {
-      setMessage({ type: 'error', text: error.message || '판매자 전환 중 오류가 발생했습니다.' })
+      setMessage({ type: 'error', text: error.message || '사용자 타입 전환 중 오류가 발생했습니다.' })
     } finally {
       setIsLoading(false)
     }
+  }
+
+  // 판매자 전환 (하위 호환성)
+  const handleBecomeSeller = async () => {
+    await handleChangeUserType('both')
   }
 
   if (!user || !profile) {
@@ -183,26 +201,53 @@ export default function ProfilePage() {
                     )}
                   </div>
 
-                  {/* 판매자 전환 버튼 (buyer인 경우만 표시) */}
-                  {profile.user_type === 'buyer' && (
-                    <button
-                      onClick={handleBecomeSeller}
-                      disabled={isLoading}
-                      className="w-full btn-ai py-3 disabled:opacity-50"
-                    >
-                      {isLoading ? (
-                        <span className="flex items-center justify-center">
-                          <span className="spinner mr-2" />
-                          처리 중...
-                        </span>
-                      ) : (
-                        <>
-                          <i className="fas fa-store mr-2"></i>
-                          판매자 되기
-                        </>
-                      )}
-                    </button>
-                  )}
+                  {/* 사용자 타입 전환 */}
+                  <div className="space-y-3">
+                    <div className="text-sm font-medium text-gray-700 mb-2">회원 유형 전환</div>
+
+                    {/* 구매자 전용 버튼 */}
+                    {profile.user_type !== 'buyer' && (
+                      <button
+                        onClick={() => handleChangeUserType('buyer')}
+                        disabled={isLoading}
+                        className="w-full px-4 py-2 border-2 border-blue-500 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors disabled:opacity-50"
+                      >
+                        <i className="fas fa-shopping-bag mr-2"></i>
+                        구매자 전용으로 전환
+                      </button>
+                    )}
+
+                    {/* 판매자 전용 버튼 */}
+                    {profile.user_type !== 'seller' && (
+                      <button
+                        onClick={() => handleChangeUserType('seller')}
+                        disabled={isLoading}
+                        className="w-full px-4 py-2 border-2 border-green-500 text-green-600 rounded-lg hover:bg-green-50 transition-colors disabled:opacity-50"
+                      >
+                        <i className="fas fa-store mr-2"></i>
+                        판매자 전용으로 전환
+                      </button>
+                    )}
+
+                    {/* 구매자+판매자 버튼 */}
+                    {profile.user_type !== 'both' && (
+                      <button
+                        onClick={() => handleChangeUserType('both')}
+                        disabled={isLoading}
+                        className="w-full px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors disabled:opacity-50"
+                      >
+                        <i className="fas fa-users mr-2"></i>
+                        구매자 + 판매자
+                      </button>
+                    )}
+
+                    {isLoading && (
+                      <div className="flex items-center justify-center text-sm text-gray-600">
+                        <span className="spinner mr-2" />
+                        처리 중...
+                      </div>
+                    )}
+                  </div>
 
                   {/* 판매자 관리 바로가기 */}
                   {(profile.user_type === 'seller' || profile.user_type === 'both') && (
