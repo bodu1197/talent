@@ -42,6 +42,12 @@ export default function ProfilePage() {
     setIsLoading(true)
     setMessage(null)
 
+    if (!user?.id) {
+      setMessage({ type: 'error', text: '사용자 정보를 찾을 수 없습니다.' })
+      setIsLoading(false)
+      return
+    }
+
     try {
       const { error } = await supabase
         .from('users')
@@ -50,7 +56,7 @@ export default function ProfilePage() {
           phone: formData.phone,
           bio: formData.bio,
         })
-        .eq('id', user?.id)
+        .eq('id', user.id)
 
       if (error) throw error
 
@@ -69,6 +75,11 @@ export default function ProfilePage() {
       return
     }
 
+    if (!user?.id) {
+      setMessage({ type: 'error', text: '사용자 정보를 찾을 수 없습니다.' })
+      return
+    }
+
     setIsLoading(true)
     setMessage(null)
 
@@ -77,7 +88,7 @@ export default function ProfilePage() {
       const { error: sellerProfileError } = await supabase
         .from('seller_profiles')
         .insert({
-          user_id: user?.id,
+          user_id: user.id,
         })
 
       if (sellerProfileError) throw sellerProfileError
@@ -88,7 +99,7 @@ export default function ProfilePage() {
         .update({
           user_type: 'both',
         })
-        .eq('id', user?.id)
+        .eq('id', user.id)
 
       if (updateError) throw updateError
 
