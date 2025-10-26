@@ -76,13 +76,13 @@ export default function BuyerFavoritesPage() {
               .from('seller_profiles')
               .select('business_name, is_verified')
               .eq('user_id', fav.service.seller_id)
-              .single()
+              .single() as { data: any }
 
             const { data: userData } = await supabase
               .from('users')
               .select('name')
               .eq('id', fav.service.seller_id)
-              .single()
+              .single() as { data: any }
 
             return {
               ...fav,
