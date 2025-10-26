@@ -116,23 +116,12 @@ export default function BuyerOrdersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container-1200">
+    <div className="py-8">
+      <div className="max-w-7xl mx-auto px-6">
         {/* 헤더 */}
-        <div className="mb-8 flex items-start justify-between gap-4 flex-wrap">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">구매 내역</h1>
-            <p className="text-gray-600">주문한 서비스의 진행 상황을 확인하세요.</p>
-          </div>
-          {(profile?.user_type === 'seller' || profile?.user_type === 'both') && (
-            <button
-              onClick={() => router.push('/seller/dashboard')}
-              className="px-6 py-3 border-2 border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors font-semibold whitespace-nowrap"
-            >
-              <i className="fas fa-store mr-2"></i>
-              판매자 페이지로
-            </button>
-          )}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2">구매 내역</h1>
+          <p className="text-gray-600">주문한 서비스의 진행 상황을 확인하세요.</p>
         </div>
 
         {/* 탭 메뉴 */}
