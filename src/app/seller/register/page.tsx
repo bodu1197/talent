@@ -14,7 +14,7 @@ export default function SellerRegisterPage() {
 
   const [formData, setFormData] = useState({
     businessName: '',
-    introduction: '',
+    description: '',
     skills: '',
     bankName: '',
     bankAccount: '',
@@ -54,7 +54,7 @@ export default function SellerRegisterPage() {
       if (data) {
         setFormData({
           businessName: data.business_name || '',
-          introduction: data.introduction || '',
+          description: data.description || '',
           skills: data.skills?.join(', ') || '',
           bankName: data.bank_name || '',
           bankAccount: data.bank_account || '',
@@ -87,7 +87,7 @@ export default function SellerRegisterPage() {
 
       const updateData = {
         business_name: formData.businessName,
-        introduction: formData.introduction,
+        description: formData.description,
         skills: skillsArray,
         bank_name: formData.bankName,
         bank_account: formData.bankAccount,
@@ -188,13 +188,13 @@ export default function SellerRegisterPage() {
 
               {/* 소개 */}
               <div>
-                <label htmlFor="introduction" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
                   자기소개 *
                 </label>
                 <textarea
-                  id="introduction"
-                  value={formData.introduction}
-                  onChange={(e) => setFormData({ ...formData, introduction: e.target.value })}
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   className="textarea"
                   rows={6}
                   placeholder="판매자로서의 경력, 전문 분야, 제공 가능한 서비스 등을 자유롭게 작성해주세요."
