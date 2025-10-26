@@ -44,7 +44,8 @@ export default function RegisterPage() {
     setIsLoading(true)
 
     try {
-      // 1. Supabase Auth 회원가입
+      // Supabase Auth 회원가입
+      // 트리거가 자동으로 users 테이블에 프로필 생성
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -59,20 +60,7 @@ export default function RegisterPage() {
       if (authError) throw authError
 
       if (authData.user) {
-        // 2. users 테이블에 프로필 정보 저장 (기본값: buyer)
-        const { error: profileError } = await supabase
-          .from('users')
-          .insert({
-            id: authData.user.id,
-            email: formData.email,
-            name: formData.name,
-            phone: formData.phone || null,
-            user_type: 'buyer', // 기본값: 구매자
-          })
-
-        if (profileError) throw profileError
-
-        // 회원가입 성공
+        // 회원가입 성공 - 트리거가 자동으로 users 테이블 프로필 생성
         router.push('/auth/login?registered=true')
       }
     } catch (error: any) {
