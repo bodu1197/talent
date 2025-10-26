@@ -60,6 +60,17 @@ export default function SellerDashboardPage() {
       return
     }
 
+    // DB에 현재 판매자 페이지 보는 중임을 저장
+    async function updateLastMode() {
+      if (user?.id) {
+        await supabase
+          .from('users')
+          .update({ last_mode: 'seller' })
+          .eq('id', user.id)
+      }
+    }
+    updateLastMode()
+
     fetchDashboardData()
   }, [user, profile])
 
@@ -168,9 +179,18 @@ export default function SellerDashboardPage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container-1200">
         {/* 헤더 */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">판매자 대시보드</h1>
-          <p className="text-gray-600">판매 현황과 통계를 한눈에 확인하세요.</p>
+        <div className="mb-8 flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <h1 className="text-3xl font-bold mb-2">판매자 대시보드</h1>
+            <p className="text-gray-600">판매 현황과 통계를 한눈에 확인하세요.</p>
+          </div>
+          <button
+            onClick={() => router.push('/buyer/orders')}
+            className="px-6 py-3 border-2 border-blue-500 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-semibold whitespace-nowrap"
+          >
+            <i className="fas fa-shopping-bag mr-2"></i>
+            구매자 페이지로
+          </button>
         </div>
 
         {isLoading ? (
