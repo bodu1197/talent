@@ -5,10 +5,13 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/providers/AuthProvider'
 
 export default function ProfilePage() {
-  const { user, profile } = useAuth()
+  const { user, profile, loading } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
+    // 로딩 중이면 대기
+    if (loading) return
+
     // 로그인 안 되어있으면 로그인 페이지로
     if (!user) {
       router.push('/auth/login')
@@ -32,7 +35,7 @@ export default function ProfilePage() {
         router.push('/buyer/orders')
       }
     }
-  }, [user, profile, router])
+  }, [user, profile, loading, router])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">

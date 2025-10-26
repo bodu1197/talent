@@ -6,18 +6,21 @@ import { useAuth } from '@/components/providers/AuthProvider'
 import BuyerSidebar from '@/components/buyer/BuyerSidebar'
 
 export default function BuyerLayout({ children }: { children: React.ReactNode }) {
-  const { user, profile } = useAuth()
+  const { user, profile, loading } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
+    // 로딩 중이면 대기
+    if (loading) return
+
     // 로그인 체크
     if (!user) {
       router.push('/auth/login')
       return
     }
-  }, [user, router])
+  }, [user, loading, router])
 
-  if (!user || !profile) {
+  if (loading || !user || !profile) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
