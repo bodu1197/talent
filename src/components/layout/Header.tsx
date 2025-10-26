@@ -122,50 +122,6 @@ export default function Header() {
                         </>
                       )}
 
-                      {(profile?.user_type === 'seller' || profile?.user_type === 'both') && (
-                        <>
-                          <Link
-                            href="/seller/dashboard"
-                            className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            <i className="fas fa-chart-line w-4"></i>
-                            판매자 대시보드
-                          </Link>
-                          <Link
-                            href="/seller/services"
-                            className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            <i className="fas fa-briefcase w-4"></i>
-                            내 서비스 관리
-                          </Link>
-                        </>
-                      )}
-
-                      {(profile?.user_type === 'buyer' || profile?.user_type === 'both') && (
-                        <>
-                          <Link
-                            href="/buyer/orders"
-                            className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            <i className="fas fa-shopping-bag w-4"></i>
-                            구매 내역
-                          </Link>
-                          <Link
-                            href="/buyer/favorites"
-                            className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            <i className="far fa-heart w-4"></i>
-                            찜한 서비스
-                          </Link>
-                        </>
-                      )}
-
-                      <div className="border-t border-gray-100 my-2"></div>
-
                       <Link
                         href="/profile"
                         className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
