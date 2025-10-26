@@ -71,6 +71,10 @@ CREATE TRIGGER update_seller_profiles_updated_at
   EXECUTE FUNCTION update_updated_at_column();
 
 -- Add column comments
+ALTER TABLE public.seller_profiles ADD COLUMN IF NOT EXISTS skills TEXT;
+ALTER TABLE public.seller_profiles ADD COLUMN IF NOT EXISTS bank_name VARCHAR(100);
+ALTER TABLE public.seller_profiles ADD COLUMN IF NOT EXISTS bank_account VARCHAR(100);
+ALTER TABLE public.seller_profiles ADD COLUMN IF NOT EXISTS account_holder VARCHAR(100);
 COMMENT ON TABLE seller_profiles IS 'Seller profile information';
 COMMENT ON COLUMN seller_profiles.skills IS 'Seller skills/tools (comma separated)';
 COMMENT ON COLUMN seller_profiles.bank_name IS 'Settlement account bank name';

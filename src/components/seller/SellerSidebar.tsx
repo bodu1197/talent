@@ -53,7 +53,7 @@ export default function SellerSidebar() {
   const router = useRouter()
 
   return (
-    <aside className="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 bg-white border-r border-gray-200 overflow-y-auto z-20">
+    <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 overflow-y-auto z-10 pt-16">
       {/* 모드 전환 버튼 */}
       <div className="p-4 border-b border-gray-200">
         <button
@@ -92,13 +92,6 @@ export default function SellerSidebar() {
         })}
       </nav>
 
-      {/* 하단 정보 */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-gray-50">
-        <div className="text-xs text-gray-600">
-          <p className="font-semibold mb-1">판매자 모드</p>
-          <p>서비스와 주문을 관리하세요</p>
-        </div>
-      </div>
     </aside>
   )
 }
