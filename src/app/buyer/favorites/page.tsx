@@ -89,7 +89,8 @@ export default function BuyerFavoritesPage() {
               service: {
                 ...fav.service,
                 seller: {
-                  ...sellerData,
+                  business_name: sellerData?.business_name || null,
+                  is_verified: sellerData?.is_verified || false,
                   name: userData?.name || '',
                 },
               },
