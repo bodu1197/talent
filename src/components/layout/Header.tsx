@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
 export default function Header() {
-  const { user, profile, signOut } = useAuth()
+  const { user, profile, loading, signOut } = useAuth()
   const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
@@ -67,7 +67,14 @@ export default function Header() {
 
           {/* 네비게이션 메뉴 */}
           <nav className="flex items-center space-x-2 sm:space-x-4">
-            {user ? (
+            {loading ? (
+              // 로딩 중
+              <div className="flex items-center space-x-2 sm:space-x-4">
+                <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
+                <div className="hidden sm:block w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
+                <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
+              </div>
+            ) : user ? (
               // 로그인 상태
               <>
                 {/* 알림 */}
