@@ -82,10 +82,10 @@ export default function HeroSection() {
           <div className="flex-1">
             <div className="mb-8">
               <h1
-                className="text-4xl font-bold text-gray-900 mb-4 transition-all duration-500"
+                className="text-4xl font-bold text-gray-900 mb-4 transition-all duration-500 min-h-[120px]"
                 dangerouslySetInnerHTML={{ __html: slide.title }}
               />
-              <p className="text-base text-gray-600">
+              <p className="text-base text-gray-600 min-h-[48px]">
                 {slide.subtitle}
               </p>
             </div>
@@ -125,8 +125,8 @@ export default function HeroSection() {
           </div>
 
           {/* 오른쪽: 그라데이션 카드 + 페이지네이션 */}
-          <div className="w-[480px] flex-shrink-0">
-            <div className={`relative bg-gradient-to-br ${slide.gradient} rounded-2xl p-8 text-white shadow-2xl transition-all duration-500`}>
+          <div className="w-[408px] flex-shrink-0">
+            <div className={`relative bg-gradient-to-br ${slide.gradient} rounded-2xl p-8 text-white shadow-2xl transition-all duration-500 h-[350px] flex flex-col justify-between`}>
               {/* 장식 요소 */}
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-lg rotate-12"></div>
 
