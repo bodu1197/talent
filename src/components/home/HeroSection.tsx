@@ -37,7 +37,7 @@ const slides: Slide[] = [
   },
   {
     id: 3,
-    title: '표시된 가격이 전부입니다,<br>숨은 비용 없습니다',
+    title: '표시된 가격이 전부입니다<br>숨은 비용 없습니다',
     subtitle: '구매 수수료 0원. 보이는 그대로 결제하세요.',
     gradient: 'from-purple-500 to-purple-600',
     icon: 'fa-shield-alt',
@@ -91,10 +91,10 @@ export default function HeroSection() {
           <div className="flex-1">
             <div className="mb-8">
               <h1
-                className={`text-4xl font-bold text-gray-900 mb-4 transition-opacity duration-500 min-h-[120px] ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+                className={`text-4xl font-bold text-gray-900 mb-4 transition-opacity duration-500 min-h-[120px] leading-[1.4] ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
                 dangerouslySetInnerHTML={{ __html: slide.title }}
               />
-              <p className={`text-base text-gray-600 min-h-[48px] transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+              <p className={`text-base text-gray-600 min-h-[48px] leading-[1.5] transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
                 {slide.subtitle}
               </p>
             </div>
