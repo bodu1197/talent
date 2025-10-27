@@ -89,29 +89,8 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                <div className="flex items-center mb-4">
-                  <div className="w-10 h-10 bg-[#0f3460] rounded-full mr-3"></div>
-                  <div>
-                    <div className="font-semibold">김**님</div>
-                    <div className="text-sm text-gray-500">2시간 전</div>
-                  </div>
-                </div>
-                <div className="flex mb-2">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <i key={star} className="fas fa-star text-yellow-400"></i>
-                  ))}
-                </div>
-                <p className="text-gray-700 mb-3">
-                  빠른 작업과 친절한 응대에 매우 만족합니다. 결과물도 기대 이상이었어요!
-                </p>
-                <div className="text-sm text-gray-500">
-                  로고 디자인 · 디자인 카테고리
-                </div>
-              </div>
-            ))}
+          <div className="text-center py-8 text-gray-500">
+            아직 등록된 후기가 없습니다
           </div>
         </div>
       </section>
