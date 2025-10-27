@@ -34,14 +34,7 @@ export default function SellerOrdersPage() {
   const [activeTab, setActiveTab] = useState<OrderStatus>('all')
 
   useEffect(() => {
-    if (user?.id) {
-      // DB에 현재 판매자 페이지 보는 중임을 저장
-      supabase.from('users').update({ last_mode: 'seller' }).eq('id', user.id)
-      fetchOrders()
-    }
-  }, [user, activeTab])
-
-  const fetchOrders = async () => {
+    const fetchOrders = async () => {
     if (!user?.id) return
 
     setIsLoading(true)
@@ -69,7 +62,14 @@ export default function SellerOrdersPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+    }
+
+    if (user?.id) {
+      // DB에 현재 판매자 페이지 보는 중임을 저장
+      supabase.from('users').update({ last_mode: 'seller' }).eq('id', user.id)
+      fetchOrders()
+    }
+  }, [user, activeTab, supabase])
 
   const getStatusBadge = (status: string) => {
     const badges: { [key: string]: { text: string; class: string } } = {

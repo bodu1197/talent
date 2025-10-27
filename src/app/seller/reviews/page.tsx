@@ -26,13 +26,7 @@ export default function SellerReviewsPage() {
   const [averageRating, setAverageRating] = useState(0)
 
   useEffect(() => {
-    if (user?.id) {
-      supabase.from('users').update({ last_mode: 'seller' }).eq('id', user.id)
-      fetchReviews()
-    }
-  }, [user])
-
-  const fetchReviews = async () => {
+    const fetchReviews = async () => {
     if (!user?.id) return
 
     setIsLoading(true)
@@ -59,7 +53,13 @@ export default function SellerReviewsPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+    }
+
+    if (user?.id) {
+      supabase.from('users').update({ last_mode: 'seller' }).eq('id', user.id)
+      fetchReviews()
+    }
+  }, [user, supabase])
 
   const renderStars = (rating: number) => {
     return (

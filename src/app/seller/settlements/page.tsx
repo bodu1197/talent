@@ -36,13 +36,7 @@ export default function SettlementsPage() {
   const [showRequestModal, setShowRequestModal] = useState(false)
 
   useEffect(() => {
-    if (user?.id) {
-      supabase.from('users').update({ last_mode: 'seller' }).eq('id', user.id)
-      fetchSettlementData()
-    }
-  }, [user])
-
-  const fetchSettlementData = async () => {
+    const fetchSettlementData = async () => {
     if (!user?.id) return
 
     setIsLoading(true)
@@ -93,7 +87,13 @@ export default function SettlementsPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+    }
+
+    if (user?.id) {
+      supabase.from('users').update({ last_mode: 'seller' }).eq('id', user.id)
+      fetchSettlementData()
+    }
+  }, [user, supabase])
 
   const getStatusBadge = (status: string) => {
     const badges: { [key: string]: { text: string; class: string } } = {

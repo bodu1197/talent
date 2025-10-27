@@ -60,21 +60,7 @@ export default function SellerDashboardPage() {
       return
     }
 
-    // DB에 현재 판매자 페이지 보는 중임을 저장
-    async function updateLastMode() {
-      if (user?.id) {
-        await supabase
-          .from('users')
-          .update({ last_mode: 'seller' })
-          .eq('id', user.id)
-      }
-    }
-    updateLastMode()
-
-    fetchDashboardData()
-  }, [user, profile])
-
-  const fetchDashboardData = async () => {
+    const fetchDashboardData = async () => {
     if (!user?.id) return
 
     setIsLoading(true)
@@ -152,7 +138,25 @@ export default function SellerDashboardPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+    }
+
+    if (!user) {
+      router.push('/auth/login')
+      return
+    }
+
+    if (profile?.user_type !== 'seller' && profile?.user_type !== 'both') {
+      router.push('/profile')
+      return
+    }
+
+    // DB에 현재 판매자 페이지 보는 중임을 저장
+    if (user?.id) {
+      supabase.from('users').update({ last_mode: 'seller' }).eq('id', user.id)
+    }
+
+    fetchDashboardData()
+  }, [user, profile, router, supabase])
 
   const getStatusBadge = (status: string) => {
     const badges: { [key: string]: { text: string; class: string } } = {

@@ -37,26 +37,7 @@ export default function BuyerOrdersPage() {
   const [activeTab, setActiveTab] = useState<OrderStatus>('all')
 
   useEffect(() => {
-    if (!user) {
-      router.push('/auth/login')
-      return
-    }
-
-    // DB에 현재 구매자 페이지 보는 중임을 저장
-    async function updateLastMode() {
-      if (user?.id) {
-        await supabase
-          .from('users')
-          .update({ last_mode: 'buyer' })
-          .eq('id', user.id)
-      }
-    }
-    updateLastMode()
-
-    fetchOrders()
-  }, [user, activeTab])
-
-  const fetchOrders = async () => {
+    const fetchOrders = async () => {
     if (!user?.id) return
 
     setIsLoading(true)
@@ -84,7 +65,19 @@ export default function BuyerOrdersPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+    }
+
+    if (!user) {
+      router.push('/auth/login')
+      return
+    }
+
+    // DB에 현재 구매자 페이지 보는 중임을 저장
+    if (user?.id) {
+      supabase.from('users').update({ last_mode: 'buyer' }).eq('id', user.id)
+      fetchOrders()
+    }
+  }, [user, activeTab, router, supabase])
 
   const getStatusBadge = (status: string) => {
     const badges: { [key: string]: { text: string; class: string } } = {

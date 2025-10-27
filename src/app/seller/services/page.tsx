@@ -37,20 +37,7 @@ export default function SellerServicesPage() {
   const [activeTab, setActiveTab] = useState<ServiceStatus>('all')
 
   useEffect(() => {
-    if (!user) {
-      router.push('/auth/login')
-      return
-    }
-
-    if (profile?.user_type !== 'seller' && profile?.user_type !== 'both') {
-      router.push('/profile')
-      return
-    }
-
-    fetchServices()
-  }, [user, profile, activeTab])
-
-  const fetchServices = async () => {
+    const fetchServices = async () => {
     if (!user?.id) return
 
     setIsLoading(true)
@@ -74,7 +61,20 @@ export default function SellerServicesPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+    }
+
+    if (!user) {
+      router.push('/auth/login')
+      return
+    }
+
+    if (profile?.user_type !== 'seller' && profile?.user_type !== 'both') {
+      router.push('/profile')
+      return
+    }
+
+    fetchServices()
+  }, [user, profile, activeTab, router, supabase])
 
   const handleDeleteService = async (serviceId: string, title: string) => {
     if (!confirm(`"${title}" 서비스를 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`)) {
