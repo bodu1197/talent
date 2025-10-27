@@ -135,30 +135,30 @@ export default function HeroSection() {
 
           {/* 오른쪽: 그라데이션 카드 + 페이지네이션 */}
           <div className="w-[347px] flex-shrink-0">
-            <div className={`relative bg-gradient-to-br ${slide.gradient} rounded-2xl p-8 text-white shadow-2xl transition-all duration-500 h-[298px] flex flex-col justify-between`}>
+            <div className={`relative bg-gradient-to-br ${slide.gradient} rounded-2xl p-6 text-white shadow-2xl transition-all duration-500 h-[298px] flex flex-col`}>
               {/* 장식 요소 */}
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-lg rotate-12"></div>
 
               {/* 아이콘 */}
-              <div className={`mb-6 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
-                  <i className={`fas ${slide.icon} text-3xl`}></i>
+              <div className={`mb-4 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+                <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
+                  <i className={`fas ${slide.icon} text-2xl`}></i>
                 </div>
               </div>
 
               {/* 내용 */}
-              <h3 className={`text-3xl font-bold mb-2 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+              <h3 className={`text-2xl font-bold mb-2 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
                 {slide.cardTitle}
               </h3>
-              <p className={`text-xl mb-4 text-white/90 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+              <p className={`text-lg mb-3 text-white/90 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
                 {slide.cardSubtitle}
               </p>
-              <p className={`text-white/80 leading-relaxed transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+              <p className={`text-sm text-white/80 leading-relaxed line-clamp-3 mb-6 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
                 {slide.cardDescription}
               </p>
 
               {/* 페이지네이션 도트 */}
-              <div className="flex gap-2 mt-8">
+              <div className="flex gap-2 mt-auto">
                 {slides.map((_, index) => (
                   <button
                     key={index}
