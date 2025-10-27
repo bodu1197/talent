@@ -133,60 +133,33 @@ export default function MegaMenu() {
             <div className="grid grid-cols-12 gap-8">
               {/* 왼쪽: 대분류 카테고리 */}
               <div className="col-span-3 border-r border-gray-200 pr-6">
-                
-                <ul className="space-y-0">
+                <div>
                   {FULL_CATEGORIES.map((category) => (
-                    <li key={category.id}>
+                    <div key={category.id} className="mb-1">
                       <Link
                         href={`/categories/${category.slug}`}
-                        className={`flex items-center justify-between px-3 py-0.5 rounded-lg transition-colors ${
+                        className={`flex items-center justify-between px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
                           activeCategory === category.id
-                            ? 'bg-blue-50 text-[#0f3460]'
-                            : 'hover:bg-gray-50'
+                            ? 'bg-gray-100 text-gray-800'
+                            : 'text-gray-700 hover:bg-gray-50'
                         }`}
                         onMouseEnter={() => handleCategoryHover(category.id)}
                         onClick={handleCategoryClick}
                       >
-                        <span className="flex items-center gap-2">
-                          <span className="text-lg" style={{ color: '#0f3460' }}>
-                            {category.icon === 'home' && <i className="fas fa-home"></i>}
-                            {category.icon === 'motorcycle' && <i className="fas fa-motorcycle"></i>}
-                            {category.icon === 'robot' && <i className="fas fa-robot"></i>}
-                            {category.icon === 'palette' && <i className="fas fa-palette"></i>}
-                            {category.icon === 'scissors' && <i className="fas fa-scissors"></i>}
-                            {category.icon === 'code' && <i className="fas fa-code"></i>}
-                            {category.icon === 'bullhorn' && <i className="fas fa-bullhorn"></i>}
-                            {category.icon === 'camera' && <i className="fas fa-camera"></i>}
-                            {category.icon === 'language' && <i className="fas fa-language"></i>}
-                            {category.icon === 'pen-fancy' && <i className="fas fa-pen-fancy"></i>}
-                            {category.icon === 'briefcase' && <i className="fas fa-briefcase"></i>}
-                            {category.icon === 'book' && <i className="fas fa-book"></i>}
-                            {category.icon === 'music' && <i className="fas fa-music"></i>}
-                            {category.icon === 'calendar' && <i className="fas fa-calendar"></i>}
-                            {category.icon === 'spa' && <i className="fas fa-spa"></i>}
-                            {category.icon === 'bullseye' && <i className="fas fa-bullseye"></i>}
-                            {category.icon === 'star' && <i className="fas fa-star"></i>}
-                            {category.icon === 'book-open' && <i className="fas fa-book-open"></i>}
-                            {category.icon === 'gavel' && <i className="fas fa-gavel"></i>}
-                            {category.icon === 'hammer' && <i className="fas fa-hammer"></i>}
-                            {category.icon === 'graduation-cap' && <i className="fas fa-graduation-cap"></i>}
-                            {category.icon === 'chart-line' && <i className="fas fa-chart-line"></i>}
-                            {!category.icon && <i className="fas fa-circle"></i>}
-                          </span>
-                          <span className={category.is_ai ? 'font-medium text-sm' : 'text-sm'}>
-                            {category.name}
-                          </span>
+                        <div className="flex items-center gap-3">
+                          {category.icon && (
+                            <i className={`fas fa-${category.icon} text-lg`}></i>
+                          )}
+                          <span>{category.name}</span>
                           {category.is_ai && (
                             <span className="text-xs bg-blue-100 text-[#0f3460] px-1.5 py-0.5 rounded">AI</span>
                           )}
-                        </span>
-                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
+                        </div>
+                        <i className="fas fa-chevron-right text-xs text-gray-400"></i>
                       </Link>
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
 
               {/* 오른쪽: 하위 카테고리 */}
