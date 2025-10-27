@@ -56,7 +56,7 @@ export default function SellerReviewsPage() {
     }
 
     if (user?.id) {
-      supabase.from('users').update({ last_mode: 'seller' }).eq('id', user.id)
+      supabase.from('sellers').update({ last_mode: 'seller' }).eq('id', user.id)
       fetchReviews()
     }
   }, [user, supabase])

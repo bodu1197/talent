@@ -23,9 +23,8 @@ export default function ProfilePage() {
     // 로딩이 끝났고 user가 있는데도 profile이 null인 경우만 처리
     // (profile fetch가 실패한 경우)
     if (!loading && user && !profile) {
-      console.error('Profile is null! User exists but profile not found in users table')
-      // profile이 null이면 구매자 페이지로 기본 이동
-      router.push('/buyer/orders')
+      console.error('Profile is null! User exists but profile not found')
+      router.push('/auth/login')
       return
     }
 
@@ -34,19 +33,34 @@ export default function ProfilePage() {
       return
     }
 
-    // user_type에 따라 리다이렉트
-    if (profile.user_type === 'buyer') {
-      // 구매자 전용 → 무조건 구매자 페이지
-      router.push('/buyer/orders')
-    } else if (profile.user_type === 'seller' || profile.user_type === 'both') {
-      // 판매자 또는 둘 다 → DB에 저장된 마지막 모드 확인
-      const lastMode = (profile as any).last_mode || 'buyer'
+    // last_mode를 확인하여 마지막 방문 페이지로 리다이렉트
+    let lastMode: 'buyer' | 'seller' | null = null
 
-      if (lastMode === 'seller') {
-        router.push('/seller/dashboard')
-      } else {
-        router.push('/buyer/orders')
-      }
+    // 구매자 프로필이 있으면 구매자의 last_mode 확인
+    if (profile.buyer) {
+      lastMode = profile.buyer.last_mode
+    }
+
+    // 판매자 프로필이 있고 판매자 last_mode가 'seller'면 우선
+    if (profile.seller && profile.seller.last_mode === 'seller') {
+      lastMode = 'seller'
+    }
+
+    // last_mode에 따라 리다이렉트
+    if (lastMode === 'seller' && profile.isSeller) {
+      router.push('/seller/dashboard')
+    } else if (lastMode === 'buyer' && profile.isBuyer) {
+      router.push('/buyer/orders')
+    } else if (profile.isSeller) {
+      // last_mode 없으면 판매자 페이지 우선
+      router.push('/seller/dashboard')
+    } else if (profile.isBuyer) {
+      // 구매자만 있으면 구매자 페이지로
+      router.push('/buyer/orders')
+    } else {
+      // 둘 다 아닌 경우 (오류)
+      console.error('User is neither buyer nor seller')
+      router.push('/auth/login')
     }
   }, [user, profile, loading])
 
