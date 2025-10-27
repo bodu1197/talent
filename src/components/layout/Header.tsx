@@ -58,6 +58,12 @@ export default function Header() {
             ) : user ? (
               // 로그인 상태
               <>
+                <Link
+                  href="/mypage/buyer/dashboard"
+                  className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm"
+                >
+                  마이페이지
+                </Link>
                 {isAdmin && (
                   <Link
                     href="/admin/dashboard"
