@@ -70,14 +70,6 @@ export default function Header() {
             {user ? (
               // 로그인 상태
               <>
-                <Link
-                  href="/services/new"
-                  className="hidden sm:flex items-center gap-2 px-4 py-2 text-[#0f3460] border border-[#0f3460] rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  <i className="fas fa-plus-circle"></i>
-                  <span>서비스 등록</span>
-                </Link>
-
                 {/* 알림 */}
                 <button className="relative p-2 text-gray-600 hover:text-gray-900">
                   <i className="far fa-bell text-xl"></i>

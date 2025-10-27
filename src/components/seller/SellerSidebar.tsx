@@ -18,6 +18,11 @@ const menuItems: MenuItem[] = [
     icon: 'fa-chart-line',
   },
   {
+    name: '서비스 등록',
+    path: '/services/new',
+    icon: 'fa-plus-circle',
+  },
+  {
     name: '서비스 관리',
     path: '/seller/services',
     icon: 'fa-briefcase',
