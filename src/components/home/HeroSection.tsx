@@ -17,43 +17,43 @@ interface Slide {
 const slides: Slide[] = [
   {
     id: 1,
-    title: '재능 거래, 이제 <span style="color: #ec4899; background: #fff; padding: 4px 12px; border-radius: 8px;">수수료 없이!</span><br>순수익 100%를 경험하세요',
-    subtitle: '톨파구는 판매자에게 어떠한 수수료도 부과하지 않습니다.',
+    title: '당신이 번 돈,<br><span style="color: #ec4899; background: #fff; padding: 4px 12px; border-radius: 8px;">한 푼도 떼지 않습니다</span>',
+    subtitle: '수수료 0%. 당신의 재능이 온전히 당신의 수익으로.',
     gradient: 'from-pink-500 to-pink-600',
     icon: 'fa-sack-dollar',
     cardTitle: '수수료 0% ✨',
     cardSubtitle: '판매자가 100% 가져갑니다',
-    cardDescription: '⭐ 플랫폼 수수료가 전혀 없습니다! 구매 수수료도 판매 수수료도 없습니다. 당신이 번 모든 수익을 100% 그대로 가져가세요.'
+    cardDescription: '당신이 번 돈, 한 푼도 떼지 않습니다. 다른 플랫폼의 15~20% 수수료는 이제 그만. 톨파구에서는 100% 당신의 것입니다.'
   },
   {
     id: 2,
-    title: '판매 기회가 균등하다,<br>누구나 공정하게 시작하세요',
-    subtitle: '모든 판매자에게 동등한 기회를 제공하는 플랫폼입니다.',
+    title: '첫날부터 공정하게,<br>모두에게 같은 기회를',
+    subtitle: '신규 판매자와 베테랑, 시작이 평등한 곳입니다.',
     gradient: 'from-indigo-500 to-indigo-600',
     icon: 'fa-balance-scale',
     cardTitle: '판매 기회 균등',
     cardSubtitle: '모든 판매자에게 공평한 기회',
-    cardDescription: '톨파구는 모든 판매자에게 동등한 노출 기회를 제공합니다. 신규 판매자도 공정하게 경쟁할 수 있습니다.'
+    cardDescription: '신규든 베테랑이든, 모두에게 같은 기회. 알고리즘도, 편애도 없습니다. 오직 실력으로 승부하세요.'
   },
   {
     id: 3,
-    title: '구매 수수료 없음,<br>상품 가격만 지불하세요',
-    subtitle: '타 플랫폼과 달리 구매 시 추가 수수료가 전혀 없습니다.',
+    title: '표시된 가격이 전부입니다,<br>숨은 비용 없습니다',
+    subtitle: '구매 수수료 0원. 보이는 그대로 결제하세요.',
     gradient: 'from-purple-500 to-purple-600',
     icon: 'fa-shield-alt',
     cardTitle: '구매 수수료 0원',
-    cardSubtitle: '상품 가격만 지불하세요',
-    cardDescription: '타 업체는 구매자에게도 수수료를 부과합니다. 톨파구는 구매 시 추가 수수료가 전혀 없습니다. 표시된 가격 그대로 결제하세요.'
+    cardSubtitle: '표시된 가격이 전부입니다',
+    cardDescription: '다른 곳처럼 결제 직전 수수료 추가? 없습니다. 보이는 가격이 최종 가격. 숨은 비용 없이 투명하게.'
   },
   {
     id: 4,
-    title: '광고비 지원 1,500만원,<br>판매 등록자의 성공을 응원합니다',
-    subtitle: '톨파구와 함께 더 빠르게 성장하세요.',
+    title: '시작하는 당신에게,<br>1,500만원 드립니다',
+    subtitle: '런칭 기념. 광고 크레딧으로 첫 고객을 만나세요.',
     gradient: 'from-blue-500 to-blue-600',
     icon: 'fa-bullhorn',
-    cardTitle: '광고비 지원',
-    cardSubtitle: '연 1,500만원 지원',
-    cardDescription: '판매 등록자에게 연간 최대 1,500만원의 광고비를 지원하여 더 많은 고객을 만날 수 있도록 돕습니다.'
+    cardTitle: '런칭 기념 1,500만원',
+    cardSubtitle: '시작하는 당신에게 드립니다',
+    cardDescription: '런칭 기념, 모든 전문가에게 최대 1,500만원 광고 크레딧 지원. 톨파구 내 광고로 첫 고객을 만나세요.'
   }
 ]
 
