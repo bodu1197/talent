@@ -17,43 +17,43 @@ interface Slide {
 const slides: Slide[] = [
   {
     id: 1,
-    title: '재능 거래, 이제',
-    subtitle: '수수료 0%로 시작하세요',
+    title: '재능 거래, 이제 <span style="color: #ec4899; background: #fff; padding: 4px 12px; border-radius: 8px;">수수료 없이!</span><br>순수익 100%를 경험하세요',
+    subtitle: '톨파구는 판매자에게 어떠한 수수료도 부과하지 않습니다.',
     gradient: 'from-pink-500 to-pink-600',
-    icon: 'fa-hand-holding-heart',
-    cardTitle: '수수료 0%',
-    cardSubtitle: '판매자의 이익을 100% 보장',
-    cardDescription: '타 플랫폼과 달리 수수료 걱정 없이 재능을 판매하세요'
+    icon: 'fa-sack-dollar',
+    cardTitle: '수수료 0% ✨',
+    cardSubtitle: '판매자가 100% 가져갑니다',
+    cardDescription: '⭐ 플랫폼 수수료가 전혀 없습니다! 구매 수수료도 판매 수수료도 없습니다. 당신이 번 모든 수익을 100% 그대로 가져가세요.'
   },
   {
     id: 2,
-    title: '모든 판매자에게',
-    subtitle: '동등한 판매 기회를',
+    title: '판매 기회가 균등하다,<br>누구나 공정하게 시작하세요',
+    subtitle: '모든 판매자에게 동등한 기회를 제공하는 플랫폼입니다.',
     gradient: 'from-indigo-500 to-indigo-600',
     icon: 'fa-balance-scale',
     cardTitle: '판매 기회 균등',
-    cardSubtitle: '모두에게 공정한 기회',
-    cardDescription: '신규 판매자도 베테랑과 동등한 노출 기회를 제공합니다'
+    cardSubtitle: '모든 판매자에게 공평한 기회',
+    cardDescription: '톨파구는 모든 판매자에게 동등한 노출 기회를 제공합니다. 신규 판매자도 공정하게 경쟁할 수 있습니다.'
   },
   {
     id: 3,
-    title: '구매자도 이득',
-    subtitle: '구매 수수료 0원',
+    title: '구매 수수료 없음,<br>상품 가격만 지불하세요',
+    subtitle: '타 플랫폼과 달리 구매 시 추가 수수료가 전혀 없습니다.',
     gradient: 'from-purple-500 to-purple-600',
-    icon: 'fa-gift',
+    icon: 'fa-shield-alt',
     cardTitle: '구매 수수료 0원',
-    cardSubtitle: '합리적인 가격으로 구매',
-    cardDescription: '추가 수수료 없이 표시된 가격 그대로 이용하세요'
+    cardSubtitle: '상품 가격만 지불하세요',
+    cardDescription: '타 업체는 구매자에게도 수수료를 부과합니다. 톨파구는 구매 시 추가 수수료가 전혀 없습니다. 표시된 가격 그대로 결제하세요.'
   },
   {
     id: 4,
-    title: '성장을 함께',
-    subtitle: '광고비 전액 지원',
+    title: '광고비 지원 1,500만원,<br>판매 등록자의 성공을 응원합니다',
+    subtitle: '톨파구와 함께 더 빠르게 성장하세요.',
     gradient: 'from-blue-500 to-blue-600',
-    icon: 'fa-rocket',
+    icon: 'fa-bullhorn',
     cardTitle: '광고비 지원',
-    cardSubtitle: '마케팅 걱정 없이',
-    cardDescription: '플랫폼에서 적극적으로 당신의 재능을 알려드립니다'
+    cardSubtitle: '연 1,500만원 지원',
+    cardDescription: '판매 등록자에게 연간 최대 1,500만원의 광고비를 지원하여 더 많은 고객을 만날 수 있도록 돕습니다.'
   }
 ]
 
@@ -81,11 +81,12 @@ export default function HeroSection() {
           {/* 왼쪽: 타이틀 + 검색 + 카테고리 */}
           <div className="flex-1">
             <div className="mb-8">
-              <h1 className="text-5xl font-bold text-gray-900 mb-4 transition-all duration-500">
-                {slide.title} <span className="text-[#0f3460]">{slide.subtitle}</span>
-              </h1>
-              <p className="text-xl text-gray-600">
-                돌파구에서 당신의 재능을 100% 수익으로 전환하세요
+              <h1
+                className="text-4xl font-bold text-gray-900 mb-4 transition-all duration-500"
+                dangerouslySetInnerHTML={{ __html: slide.title }}
+              />
+              <p className="text-base text-gray-600">
+                {slide.subtitle}
               </p>
             </div>
 

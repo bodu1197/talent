@@ -46,34 +46,6 @@ export default function Header() {
             <span className="text-xl font-bold sm:hidden">돌파구</span>
           </Link>
 
-          {/* 검색바 (데스크톱) */}
-          <div className="hidden lg:flex flex-1 max-w-xl mx-8">
-            <div className="relative w-full">
-              <input
-                id="search-desktop"
-                name="search"
-                type="text"
-                placeholder="찾으시는 재능을 검색해보세요"
-                className="w-full pl-4 pr-10 py-2.5 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460] focus:bg-white transition-all text-sm"
-                autoComplete="off"
-              />
-              <button
-                aria-label="검색"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#0f3460]"
-              >
-                <i className="fas fa-search"></i>
-              </button>
-            </div>
-          </div>
-
-          {/* 모바일 검색 버튼 */}
-          <button
-            aria-label="검색"
-            className="lg:hidden p-2 text-gray-600 hover:text-gray-900"
-          >
-            <i className="fas fa-search text-xl"></i>
-          </button>
-
           {/* 네비게이션 메뉴 */}
           <nav className="flex items-center space-x-2 sm:space-x-4">
             {loading ? (
