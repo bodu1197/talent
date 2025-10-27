@@ -21,13 +21,18 @@ export default function Header() {
         return
       }
 
-      const { data } = await supabase
-        .from('admins')
-        .select('*')
-        .eq('user_id', user.id)
-        .single()
+      try {
+        const { data, error } = await supabase
+          .from('admins')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle()
 
-      setIsAdmin(!!data)
+        setIsAdmin(!error && !!data)
+      } catch (error) {
+        console.error('Admin check error:', error)
+        setIsAdmin(false)
+      }
     }
 
     checkAdmin()
