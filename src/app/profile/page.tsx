@@ -24,11 +24,17 @@ export default function ProfilePage() {
 
     console.log('User:', user.email, 'Profile:', profile)
 
-    // profile이 로딩될 때까지 대기
-    if (!profile) {
+    // 로딩이 끝났고 user가 있는데도 profile이 null인 경우만 처리
+    // (profile fetch가 실패한 경우)
+    if (!loading && user && !profile) {
       console.error('Profile is null! User exists but profile not found in users table')
       // profile이 null이면 구매자 페이지로 기본 이동
       router.push('/buyer/orders')
+      return
+    }
+
+    // profile이 아직 로딩 중이면 대기
+    if (!profile) {
       return
     }
 
