@@ -86,64 +86,23 @@ export default function Header() {
             ) : user ? (
               // 로그인 상태
               <>
-                {/* 프로필 드롭다운 */}
-                <div className="relative">
-                  <button
-                    aria-label="프로필 메뉴"
-                    onClick={() => setIsMenuOpen(!isMenuOpen)}
-                    className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                {isAdmin && (
+                  <Link
+                    href="/admin/dashboard"
+                    className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm"
                   >
-                    <div className="w-8 h-8 bg-[#0f3460] rounded-full flex items-center justify-center text-white font-semibold">
-                      {profile?.name?.[0] || <i className="fas fa-user text-sm"></i>}
-                    </div>
-                    <i className="fas fa-chevron-down text-xs text-gray-500 hidden sm:inline"></i>
-                  </button>
-
-                  {/* 드롭다운 메뉴 */}
-                  {isMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 border border-gray-200">
-                      <div className="px-4 py-2 border-b border-gray-100">
-                        <p className="font-semibold">{profile?.name || '사용자'}</p>
-                        <p className="text-sm text-gray-500">{user?.email}</p>
-                      </div>
-
-                      {isAdmin && (
-                        <>
-                          <Link
-                            href="/admin/dashboard"
-                            className="flex items-center gap-3 px-4 py-2 text-white bg-[#0f3460] hover:bg-[#1a4b7d] font-semibold"
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            <i className="fas fa-shield-alt w-4"></i>
-                            관리자 페이지
-                          </Link>
-                          <div className="border-t border-gray-100 my-2"></div>
-                        </>
-                      )}
-
-                      <Link
-                        href="/buyer/orders"
-                        className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <i className="fas fa-user-circle w-4"></i>
-                        마이페이지
-                      </Link>
-
-                      <button
-                        onClick={async () => {
-                          setIsMenuOpen(false)
-                          await signOut()
-                          router.push('/auth/login')
-                        }}
-                        className="flex items-center gap-3 w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50"
-                      >
-                        <i className="fas fa-sign-out-alt w-4"></i>
-                        로그아웃
-                      </button>
-                    </div>
-                  )}
-                </div>
+                    관리자
+                  </Link>
+                )}
+                <button
+                  onClick={async () => {
+                    await signOut()
+                    router.push('/auth/login')
+                  }}
+                  className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm"
+                >
+                  로그아웃
+                </button>
               </>
             ) : (
               // 비로그인 상태

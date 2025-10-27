@@ -26,8 +26,8 @@ export default function LoginPage() {
 
       if (error) throw error
 
-      // 로그인 성공 - 프로필 페이지로 이동
-      router.push('/buyer/orders')
+      // 로그인 성공 - 메인 페이지로 이동
+      router.push('/')
     } catch (error: any) {
       console.error('로그인 실패:', error)
       setError(error.message || '로그인 중 오류가 발생했습니다.')

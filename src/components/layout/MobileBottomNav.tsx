@@ -16,7 +16,7 @@ export default function MobileBottomNav() {
     <>
       {/* 모바일 하단 네비게이션 - 모바일에서만 표시 */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 lg:hidden z-40">
-        <div className="grid grid-cols-5 h-16">
+        <div className="grid grid-cols-2 h-16">
           <Link
             href="/"
             className={`flex flex-col items-center justify-center space-y-1 ${
@@ -34,38 +34,6 @@ export default function MobileBottomNav() {
             <i className="fas fa-search text-xl"></i>
             <span className="text-xs">검색</span>
           </button>
-
-          <Link
-            href="/favorites"
-            className={`flex flex-col items-center justify-center space-y-1 ${
-              isActive('/favorites') ? 'text-[#0f3460]' : 'text-gray-500'
-            }`}
-          >
-            <i className="far fa-heart text-xl"></i>
-            <span className="text-xs">찜목록</span>
-          </Link>
-
-          <Link
-            href="/messages"
-            className={`flex flex-col items-center justify-center space-y-1 relative ${
-              isActive('/messages') ? 'text-[#0f3460]' : 'text-gray-500'
-            }`}
-          >
-            <i className="far fa-comment text-xl"></i>
-            <span className="text-xs">메시지</span>
-            {/* 알림 뱃지 */}
-            <span className="absolute top-2 right-6 w-2 h-2 bg-red-500 rounded-full"></span>
-          </Link>
-
-          <Link
-            href={user ? '/mypage' : '/auth/login'}
-            className={`flex flex-col items-center justify-center space-y-1 ${
-              isActive('/mypage') ? 'text-[#0f3460]' : 'text-gray-500'
-            }`}
-          >
-            <i className="far fa-user text-xl"></i>
-            <span className="text-xs">마이페이지</span>
-          </Link>
         </div>
       </nav>
 
