@@ -61,93 +61,83 @@ export default function SellerDashboardPage() {
     }
 
     const fetchDashboardData = async () => {
-    if (!user?.id) return
+      if (!user?.id) return
 
-    setIsLoading(true)
-    try {
-      // 서비스 통계
-      const { data: services } = await supabase
-        .from('services')
-        .select('id, status')
-        .eq('seller_id', user.id)
+      setIsLoading(true)
+      try {
+        // 서비스 통계
+        const { data: services } = await supabase
+          .from('services')
+          .select('id, status')
+          .eq('seller_id', user.id)
 
-      const totalServices = services?.length || 0
-      const activeServices = services?.filter((s) => s.status === 'active').length || 0
+        const totalServices = services?.length || 0
+        const activeServices = services?.filter((s) => s.status === 'active').length || 0
 
-      // 주문 통계
-      const { data: orders } = await supabase
-        .from('orders')
-        .select('id, status, seller_amount, created_at')
-        .eq('seller_id', user.id)
+        // 주문 통계
+        const { data: orders } = await supabase
+          .from('orders')
+          .select('id, status, seller_amount, created_at')
+          .eq('seller_id', user.id)
 
-      const totalOrders = orders?.length || 0
-      const inProgressOrders =
-        orders?.filter((o) => ['paid', 'in_progress', 'delivered'].includes(o.status)).length || 0
-      const completedOrders = orders?.filter((o) => o.status === 'completed').length || 0
-      const totalEarnings = orders?.reduce((sum, o) => sum + (o.seller_amount || 0), 0) || 0
+        const totalOrders = orders?.length || 0
+        const inProgressOrders =
+          orders?.filter((o) => ['paid', 'in_progress', 'delivered'].includes(o.status)).length || 0
+        const completedOrders = orders?.filter((o) => o.status === 'completed').length || 0
+        const totalEarnings = orders?.reduce((sum, o) => sum + (o.seller_amount || 0), 0) || 0
 
-      // 이번 달 수익
-      const thisMonth = new Date()
-      thisMonth.setDate(1)
-      const thisMonthEarnings =
-        orders
-          ?.filter((o) => new Date(o.created_at) >= thisMonth && o.status === 'completed')
-          .reduce((sum, o) => sum + (o.seller_amount || 0), 0) || 0
+        // 이번 달 수익
+        const thisMonth = new Date()
+        thisMonth.setDate(1)
+        const thisMonthEarnings =
+          orders
+            ?.filter((o) => new Date(o.created_at) >= thisMonth && o.status === 'completed')
+            .reduce((sum, o) => sum + (o.seller_amount || 0), 0) || 0
 
-      // 평점 및 리뷰
-      const { data: reviews } = await supabase
-        .from('reviews')
-        .select('rating')
-        .eq('seller_id', user.id)
+        // 평점 및 리뷰
+        const { data: reviews } = await supabase
+          .from('reviews')
+          .select('rating')
+          .eq('seller_id', user.id)
 
-      const totalReviews = reviews?.length || 0
-      const averageRating =
-        totalReviews > 0 ? (reviews || []).reduce((sum, r) => sum + r.rating, 0) / totalReviews : 0
+        const totalReviews = reviews?.length || 0
+        const averageRating =
+          totalReviews > 0 ? (reviews || []).reduce((sum, r) => sum + r.rating, 0) / totalReviews : 0
 
-      setStats({
-        totalServices,
-        activeServices,
-        totalOrders,
-        inProgressOrders,
-        completedOrders,
-        totalEarnings,
-        thisMonthEarnings,
-        averageRating,
-        totalReviews,
-      })
+        setStats({
+          totalServices,
+          activeServices,
+          totalOrders,
+          inProgressOrders,
+          completedOrders,
+          totalEarnings,
+          thisMonthEarnings,
+          averageRating,
+          totalReviews,
+        })
 
-      // 최근 주문
-      const { data: recentOrdersData } = await supabase
-        .from('orders')
-        .select(`
-          id,
-          order_number,
-          title,
-          total_amount,
-          status,
-          created_at,
-          buyer:users!buyer_id(name)
-        `)
-        .eq('seller_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(5)
+        // 최근 주문
+        const { data: recentOrdersData } = await supabase
+          .from('orders')
+          .select(`
+            id,
+            order_number,
+            title,
+            total_amount,
+            status,
+            created_at,
+            buyer:users!buyer_id(name)
+          `)
+          .eq('seller_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(5)
 
-      setRecentOrders((recentOrdersData as any) || [])
-    } catch (error) {
-      console.error('대시보드 데이터 조회 실패:', error)
-    } finally {
-      setIsLoading(false)
-    }
-    }
-
-    if (!user) {
-      router.push('/auth/login')
-      return
-    }
-
-    if (profile?.user_type !== 'seller' && profile?.user_type !== 'both') {
-      router.push('/profile')
-      return
+        setRecentOrders((recentOrdersData as any) || [])
+      } catch (error) {
+        console.error('대시보드 데이터 조회 실패:', error)
+      } finally {
+        setIsLoading(false)
+      }
     }
 
     // DB에 현재 판매자 페이지 보는 중임을 저장
