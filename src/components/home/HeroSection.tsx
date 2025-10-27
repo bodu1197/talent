@@ -101,7 +101,7 @@ export default function HeroSection() {
 
             {/* 검색창 */}
             <div className="mb-6">
-              <div className="relative">
+              <div className="relative max-w-[490px]">
                 <input
                   type="text"
                   placeholder="어떤 재능이 필요하신가요?"
@@ -134,7 +134,7 @@ export default function HeroSection() {
           </div>
 
           {/* 오른쪽: 그라데이션 카드 + 페이지네이션 */}
-          <div className="w-[347px] flex-shrink-0">
+          <div className="w-[382px] flex-shrink-0">
             <div className={`relative bg-gradient-to-br ${slide.gradient} rounded-2xl p-6 text-white shadow-2xl transition-all duration-500 h-[298px] flex flex-col`}>
               {/* 장식 요소 */}
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-lg rotate-12"></div>
