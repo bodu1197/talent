@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Sidebar from '@/components/mypage/Sidebar'
 import OrderCard from '@/components/mypage/OrderCard'
@@ -15,7 +15,7 @@ interface OrderFilter {
   endDate: string
 }
 
-export default function BuyerOrdersPage() {
+function BuyerOrdersContent() {
   const searchParams = useSearchParams()
   const statusFromUrl = (searchParams.get('status') as OrderStatus) || 'all'
 
@@ -319,5 +319,23 @@ export default function BuyerOrdersPage() {
         )}
       </main>
     </>
+  )
+}
+
+export default function BuyerOrdersPage() {
+  return (
+    <Suspense fallback={
+      <>
+        <Sidebar mode="buyer" />
+        <main className="flex-1 p-8">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 rounded w-48 mb-8"></div>
+            <div className="h-64 bg-gray-200 rounded"></div>
+          </div>
+        </main>
+      </>
+    }>
+      <BuyerOrdersContent />
+    </Suspense>
   )
 }
