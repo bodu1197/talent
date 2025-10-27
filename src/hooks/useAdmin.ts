@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/providers/AuthProvider'
 import { createClient } from '@/lib/supabase/client'
@@ -9,20 +9,27 @@ export function useAdmin() {
   const { user, loading: authLoading } = useAuth()
   const [isAdmin, setIsAdmin] = useState(false)
   const [adminData, setAdminData] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  const [checking, setChecking] = useState(true)
   const router = useRouter()
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
 
   useEffect(() => {
+    let mounted = true
+
     async function checkAdmin() {
-      // 로딩 시작은 바로
-      if (!user && !authLoading) {
-        setLoading(false)
-        router.push('/auth/login')
+      // 인증 로딩 중이면 대기
+      if (authLoading) {
         return
       }
 
-      if (authLoading || !user) {
+      // 로그인하지 않은 경우
+      if (!user) {
+        if (mounted) {
+          setIsAdmin(false)
+          setAdminData(null)
+          setChecking(false)
+          router.replace('/auth/login')
+        }
         return
       }
 
@@ -31,32 +38,45 @@ export function useAdmin() {
           .from('admins')
           .select('*')
           .eq('user_id', user.id)
-          .maybeSingle() // single() 대신 maybeSingle() 사용하여 에러 방지
+          .maybeSingle()
+
+        if (!mounted) return
 
         if (error || !data) {
-          // Not an admin, redirect to home
-          setLoading(false)
-          router.push('/')
+          // 관리자가 아닌 경우
+          setIsAdmin(false)
+          setAdminData(null)
+          setChecking(false)
+          router.replace('/')
           return
         }
 
+        // 관리자인 경우
         setIsAdmin(true)
         setAdminData(data)
-        setLoading(false)
+        setChecking(false)
       } catch (error) {
         console.error('Admin check error:', error)
-        setLoading(false)
-        router.push('/')
+        if (mounted) {
+          setIsAdmin(false)
+          setAdminData(null)
+          setChecking(false)
+          router.replace('/')
+        }
       }
     }
 
     checkAdmin()
+
+    return () => {
+      mounted = false
+    }
   }, [user, authLoading, router, supabase])
 
   return {
     isAdmin,
     adminData,
-    loading: authLoading || loading,
+    loading: authLoading || checking,
     user,
   }
 }

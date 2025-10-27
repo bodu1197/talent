@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/providers/AuthProvider'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
 export default function Header() {
@@ -12,9 +12,11 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
 
   useEffect(() => {
+    let mounted = true
+
     async function checkAdmin() {
       if (!user) {
         setIsAdmin(false)
@@ -28,14 +30,22 @@ export default function Header() {
           .eq('user_id', user.id)
           .maybeSingle()
 
-        setIsAdmin(!error && !!data)
+        if (mounted) {
+          setIsAdmin(!error && !!data)
+        }
       } catch (error) {
         console.error('Admin check error:', error)
-        setIsAdmin(false)
+        if (mounted) {
+          setIsAdmin(false)
+        }
       }
     }
 
     checkAdmin()
+
+    return () => {
+      mounted = false
+    }
   }, [user, supabase])
 
   return (

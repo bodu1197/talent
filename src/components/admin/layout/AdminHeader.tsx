@@ -1,27 +1,35 @@
 'use client'
 
 import { useAuth } from '@/components/providers/AuthProvider'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
 export default function AdminHeader() {
   const { user, signOut } = useAuth()
   const [notifications, setNotifications] = useState(0)
   const [showUserMenu, setShowUserMenu] = useState(false)
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
 
   useEffect(() => {
+    let mounted = true
+
     // Get unread notifications count
     async function fetchNotifications() {
       if (!user) return
 
-      const { count } = await supabase
-        .from('notifications')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', user.id)
-        .eq('is_read', false)
+      try {
+        const { count } = await supabase
+          .from('notifications')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', user.id)
+          .eq('is_read', false)
 
-      if (count) setNotifications(count)
+        if (mounted && count) {
+          setNotifications(count)
+        }
+      } catch (error) {
+        console.error('Notifications fetch error:', error)
+      }
     }
 
     fetchNotifications()
@@ -44,12 +52,13 @@ export default function AdminHeader() {
       .subscribe()
 
     return () => {
+      mounted = false
       supabase.removeChannel(channel)
     }
   }, [user, supabase])
 
   return (
-    <header className="h-16 bg-white border-b border-gray-200 fixed top-0 right-0 left-64 z-20 transition-all">
+    <header className="h-16 bg-white border-b border-gray-200 flex-shrink-0 z-20">
       <div className="h-full flex items-center justify-between px-6">
         {/* Search Bar */}
         <div className="flex-1 max-w-2xl">
@@ -105,7 +114,7 @@ export default function AdminHeader() {
                 ></div>
                 <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-20">
                   <a
-                    href="/buyer/orders"
+                    href="/mypage/settings"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >
                     <i className="fas fa-user w-5"></i> 프로필
