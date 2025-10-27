@@ -34,7 +34,7 @@ export default function SellerRegisterPage() {
       loadSellerProfile()
     } else {
       // 구매자인 경우 마이페이지로 이동
-      router.push('/profile')
+      router.push('/buyer/orders')
     }
   }, [user, profile, router])
 
@@ -325,7 +325,7 @@ export default function SellerRegisterPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => router.push('/profile')}
+                  onClick={() => router.push('/buyer/orders')}
                   className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   나중에 입력

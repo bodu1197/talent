@@ -22,7 +22,7 @@ export default function NewServiceLayout({ children }: { children: React.ReactNo
     // 판매자 권한 체크
     if (profile && profile.user_type !== 'seller' && profile.user_type !== 'both') {
       alert('판매자만 서비스를 등록할 수 있습니다.')
-      router.push('/profile')
+      router.push('/buyer/orders')
       return
     }
   }, [user, profile, loading, router])
