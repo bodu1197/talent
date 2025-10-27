@@ -17,7 +17,7 @@ interface Slide {
 const slides: Slide[] = [
   {
     id: 1,
-    title: '당신이 번 돈,<br><span style="color: #ec4899; background: #fff; padding: 4px 12px; border-radius: 8px;">한 푼도 떼지 않습니다</span>',
+    title: '당신이 번 돈,<br><span style="color: #ec4899; background: #fff; padding: 4px 12px 4px 0; border-radius: 8px;">한 푼도 떼지 않습니다</span>',
     subtitle: '수수료 0%. 당신의 재능이 온전히 당신의 수익으로.',
     gradient: 'from-pink-500 to-pink-600',
     icon: 'fa-sack-dollar',
