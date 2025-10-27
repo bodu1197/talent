@@ -156,7 +156,7 @@ export default function SellerDashboardPage() {
     }
 
     fetchDashboardData()
-  }, [user, profile, router, supabase])
+  }, [user, profile, supabase])
 
   const getStatusBadge = (status: string) => {
     const badges: { [key: string]: { text: string; class: string } } = {

@@ -74,7 +74,7 @@ export default function SellerServicesPage() {
     }
 
     fetchServices()
-  }, [user, profile, activeTab, router, supabase])
+  }, [user, profile, activeTab, supabase])
 
   const handleDeleteService = async (serviceId: string, title: string) => {
     if (!confirm(`"${title}" 서비스를 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`)) {

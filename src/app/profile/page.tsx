@@ -55,7 +55,7 @@ export default function ProfilePage() {
         router.push('/buyer/orders')
       }
     }
-  }, [user, profile, loading, router])
+  }, [user, profile, loading])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
