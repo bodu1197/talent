@@ -80,7 +80,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
   return (
     <>
       <Sidebar mode="buyer" />
-      <main className="flex-1 p-8">
+      <main className="flex-1 overflow-y-auto p-8">
         {/* 상단 네비게이션 */}
         <div className="mb-6">
           <Link

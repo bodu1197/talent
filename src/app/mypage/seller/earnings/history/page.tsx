@@ -12,7 +12,7 @@ export default function WithdrawHistoryPage() {
   return (
     <>
       <Sidebar mode="seller" />
-      <main className="flex-1 p-8">
+      <main className="flex-1 overflow-y-auto p-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">출금 내역</h1>
           <p className="text-gray-600">출금 이력을 확인하세요</p>

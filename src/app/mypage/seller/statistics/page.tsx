@@ -15,7 +15,7 @@ export default function SellerStatisticsPage() {
   return (
     <>
       <Sidebar mode="seller" />
-      <main className="flex-1 p-8">
+      <main className="flex-1 overflow-y-auto p-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">통계/분석</h1>
           <p className="text-gray-600">판매 통계를 확인하세요</p>

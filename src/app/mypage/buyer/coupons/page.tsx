@@ -28,7 +28,7 @@ export default function BuyerCouponsPage() {
   return (
     <>
       <Sidebar mode="buyer" />
-      <main className="flex-1 p-8">
+      <main className="flex-1 overflow-y-auto p-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">쿠폰/캐시</h1>
           <p className="text-gray-600">보유한 쿠폰과 캐시를 관리하세요</p>

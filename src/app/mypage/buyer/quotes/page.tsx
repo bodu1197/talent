@@ -28,7 +28,7 @@ export default function BuyerQuotesPage() {
   return (
     <>
       <Sidebar mode="buyer" />
-      <main className="flex-1 p-8">
+      <main className="flex-1 overflow-y-auto p-8">
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>

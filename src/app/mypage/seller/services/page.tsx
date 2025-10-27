@@ -79,7 +79,7 @@ export default function SellerServicesPage() {
   return (
     <>
       <Sidebar mode="seller" />
-      <main className="flex-1 p-8">
+      <main className="flex-1 overflow-y-auto p-8">
         {/* 페이지 헤더 */}
         <div className="mb-8">
           <div className="flex items-center justify-between">

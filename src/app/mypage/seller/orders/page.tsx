@@ -199,7 +199,7 @@ function SellerOrdersContent() {
   return (
     <>
       <Sidebar mode="seller" />
-      <main className="flex-1 p-8">
+      <main className="flex-1 overflow-y-auto p-8">
         {/* 페이지 헤더 */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">주문 관리</h1>
@@ -356,7 +356,7 @@ export default function SellerOrdersPage() {
     <Suspense fallback={
       <>
         <Sidebar mode="seller" />
-        <main className="flex-1 p-8">
+        <main className="flex-1 overflow-y-auto p-8">
           <div className="animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-48 mb-8"></div>
             <div className="h-64 bg-gray-200 rounded"></div>

@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/components/providers/AuthProvider";
-import Header from "@/components/layout/Header";
-import ConditionalMegaMenu from "@/components/layout/ConditionalMegaMenu";
-import Footer from "@/components/layout/Footer";
-import MobileBottomNav from "@/components/layout/MobileBottomNav";
+import ConditionalLayout from "@/components/layout/ConditionalLayout";
 
 export const metadata: Metadata = {
   title: "AI Talent Hub - 국내 최대 AI 재능 거래 플랫폼",
@@ -33,13 +30,9 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-gray-50 flex flex-col">
         <AuthProvider>
-          <Header />
-          <ConditionalMegaMenu />
-          <main className="flex-1 pb-16 lg:pb-0">
+          <ConditionalLayout>
             {children}
-          </main>
-          <Footer />
-          <MobileBottomNav />
+          </ConditionalLayout>
         </AuthProvider>
       </body>
     </html>

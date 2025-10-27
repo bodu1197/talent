@@ -49,7 +49,7 @@ export default function SellerDashboardPage() {
   return (
     <>
       <Sidebar mode="seller" />
-      <main className="flex-1 p-8">
+      <main className="flex-1 overflow-y-auto p-8">
         {/* 페이지 헤더 */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">판매 대시보드</h1>

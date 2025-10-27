@@ -11,7 +11,7 @@ export default function SettingsPage() {
   return (
     <>
       <Sidebar mode={profile?.user_type === 'seller' ? 'seller' : 'buyer'} />
-      <main className="flex-1 p-8">
+      <main className="flex-1 overflow-y-auto p-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">설정</h1>
           <p className="text-gray-600">계정 및 알림 설정을 관리하세요</p>

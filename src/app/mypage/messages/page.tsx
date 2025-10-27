@@ -132,7 +132,7 @@ function MessagesContent() {
 export default function MessagesPage() {
   return (
     <Suspense fallback={
-      <div className="flex-1 p-8">
+      <div className="flex-1 overflow-y-auto p-8">
         <div className="animate-pulse">
           <div className="h-8 bg-gray-200 rounded w-48 mb-8"></div>
           <div className="h-64 bg-gray-200 rounded"></div>

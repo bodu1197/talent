@@ -174,7 +174,7 @@ export default function Sidebar({ mode }: SidebarProps) {
   }
 
   return (
-    <aside className="w-64 flex-shrink-0 bg-white border-r border-gray-200">
+    <aside className="w-64 flex-shrink-0 bg-white border-r border-gray-200 overflow-y-auto">
       <div className="p-4">
         {/* 모드 전환 버튼 */}
         <div className="mb-6">
