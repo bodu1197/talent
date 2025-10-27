@@ -51,14 +51,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .single()
 
       if (error) {
+        // RLS 정책 에러 (세션 갱신 중일 수 있음) - 기존 profile 유지
         console.error('Profile fetch error:', error)
-        throw error
+        return
       }
 
       setProfile(data)
     } catch (error) {
+      // 네트워크 에러 등 - 기존 profile 유지하고 로그만 남김
       console.error('프로필 조회 실패:', error)
-      setProfile(null)
     }
   }
 
@@ -105,7 +106,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         if (session?.user) {
           await fetchProfile(session.user.id)
-        } else {
+        } else if (event === 'SIGNED_OUT') {
+          // 명시적인 로그아웃일 때만 profile null 설정
           setProfile(null)
         }
 
