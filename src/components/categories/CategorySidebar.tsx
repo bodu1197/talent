@@ -32,8 +32,23 @@ export default function CategorySidebar({ categories, currentCategoryId, categor
   return (
     <aside className="w-64 flex-shrink-0 hidden lg:block">
       <div className="bg-white rounded-lg border border-gray-200">
-        <div className="p-4 border-b border-gray-200">
-          <h2 className="font-semibold text-lg">카테고리</h2>
+        <div className="px-4 py-3 border-b border-gray-200">
+          {/* Breadcrumb */}
+          <nav className="flex items-center gap-1 text-xs">
+            <Link href="/" className="text-gray-500 hover:text-gray-700">홈</Link>
+            {categoryPath.map((cat, index) => (
+              <div key={cat.id} className="flex items-center gap-1">
+                <span className="text-gray-400">/</span>
+                {index === categoryPath.length - 1 ? (
+                  <span className="text-gray-900 font-medium">{cat.name}</span>
+                ) : (
+                  <Link href={`/categories/${cat.slug}`} className="text-gray-500 hover:text-gray-700">
+                    {cat.name}
+                  </Link>
+                )}
+              </div>
+            ))}
+          </nav>
         </div>
         <div className="py-2">
           {/* 전체 카테고리 트리 표시 */}
