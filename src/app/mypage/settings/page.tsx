@@ -59,7 +59,7 @@ export default function SettingsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">프로필 이미지</label>
                     <div className="flex items-center gap-4">
                       <div className="w-20 h-20 bg-[#0f3460] rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                        {profile?.full_name?.[0] || 'U'}
+                        {profile?.name?.[0] || 'U'}
                       </div>
                       <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm">
                         변경
@@ -71,7 +71,7 @@ export default function SettingsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">이름</label>
                     <input
                       type="text"
-                      defaultValue={profile?.full_name || ''}
+                      defaultValue={profile?.name || ''}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
                     />
                   </div>
