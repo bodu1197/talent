@@ -59,14 +59,23 @@ const slides: Slide[] = [
 
 export default function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [isTransitioning, setIsTransitioning] = useState(false)
 
   const changeSlide = (index: number) => {
-    setCurrentSlide(index)
+    setIsTransitioning(true)
+    setTimeout(() => {
+      setCurrentSlide(index)
+      setIsTransitioning(false)
+    }, 300)
   }
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length)
+      setIsTransitioning(true)
+      setTimeout(() => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length)
+        setIsTransitioning(false)
+      }, 300)
     }, 8000)
 
     return () => clearInterval(timer)
@@ -82,10 +91,10 @@ export default function HeroSection() {
           <div className="flex-1">
             <div className="mb-8">
               <h1
-                className="text-4xl font-bold text-gray-900 mb-4 transition-all duration-500 min-h-[120px]"
+                className={`text-4xl font-bold text-gray-900 mb-4 transition-opacity duration-500 min-h-[120px] ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
                 dangerouslySetInnerHTML={{ __html: slide.title }}
               />
-              <p className="text-base text-gray-600 min-h-[48px]">
+              <p className={`text-base text-gray-600 min-h-[48px] transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
                 {slide.subtitle}
               </p>
             </div>
@@ -131,20 +140,20 @@ export default function HeroSection() {
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-lg rotate-12"></div>
 
               {/* 아이콘 */}
-              <div className="mb-6">
+              <div className={`mb-6 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
                 <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
                   <i className={`fas ${slide.icon} text-3xl`}></i>
                 </div>
               </div>
 
               {/* 내용 */}
-              <h3 className="text-3xl font-bold mb-2 transition-all duration-500">
+              <h3 className={`text-3xl font-bold mb-2 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
                 {slide.cardTitle}
               </h3>
-              <p className="text-xl mb-4 text-white/90 transition-all duration-500">
+              <p className={`text-xl mb-4 text-white/90 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
                 {slide.cardSubtitle}
               </p>
-              <p className="text-white/80 leading-relaxed transition-all duration-500">
+              <p className={`text-white/80 leading-relaxed transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
                 {slide.cardDescription}
               </p>
 
