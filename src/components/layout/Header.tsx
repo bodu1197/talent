@@ -1,12 +1,14 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/providers/AuthProvider'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
 export default function Header() {
   const { user, profile, signOut } = useAuth()
+  const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
@@ -132,9 +134,10 @@ export default function Header() {
                       </Link>
 
                       <button
-                        onClick={() => {
+                        onClick={async () => {
                           setIsMenuOpen(false)
-                          signOut()
+                          await signOut()
+                          router.push('/auth/login')
                         }}
                         className="flex items-center gap-3 w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50"
                       >
