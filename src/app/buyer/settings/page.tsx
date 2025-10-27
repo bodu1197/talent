@@ -28,7 +28,7 @@ export default function BuyerSettingsPage() {
         bio: profile.bio || '',
       })
     }
-  }, [user, profile, supabase])
+  }, [user, profile])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

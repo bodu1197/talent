@@ -69,7 +69,7 @@ export default function SellerOrdersPage() {
       supabase.from('users').update({ last_mode: 'seller' }).eq('id', user.id)
       fetchOrders()
     }
-  }, [user, activeTab, supabase])
+  }, [user, activeTab])
 
   const getStatusBadge = (status: string) => {
     const badges: { [key: string]: { text: string; class: string } } = {

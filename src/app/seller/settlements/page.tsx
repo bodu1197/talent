@@ -93,7 +93,7 @@ export default function SettlementsPage() {
       supabase.from('users').update({ last_mode: 'seller' }).eq('id', user.id)
       fetchSettlementData()
     }
-  }, [user, supabase])
+  }, [user])
 
   const getStatusBadge = (status: string) => {
     const badges: { [key: string]: { text: string; class: string } } = {

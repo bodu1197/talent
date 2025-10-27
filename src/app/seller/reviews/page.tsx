@@ -59,7 +59,7 @@ export default function SellerReviewsPage() {
       supabase.from('users').update({ last_mode: 'seller' }).eq('id', user.id)
       fetchReviews()
     }
-  }, [user, supabase])
+  }, [user])
 
   const renderStars = (rating: number) => {
     return (
