@@ -58,7 +58,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <aside className="w-64 flex-shrink-0 hidden lg:block">
               <div className="bg-white rounded-lg border border-gray-200 p-4">
                 <h2 className="font-semibold text-lg mb-4">카테고리</h2>
-                <div className="space-y-1">
+                <div className="space-y-0.5">
                   {/* 전체 카테고리 트리 표시 */}
                   {FULL_CATEGORIES.map(category1 => (
                     <div key={category1.id}>
@@ -76,7 +76,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
                       {/* 2차 카테고리 (현재 경로에 1차가 포함되어 있으면 표시) */}
                       {pathIds.has(category1.id) && category1.children && (
-                        <div className="ml-3 mt-1 space-y-1">
+                        <div className="ml-3 mt-0.5 space-y-0.5">
                           {category1.children.map(category2 => (
                             <div key={category2.id}>
                               <a
@@ -92,7 +92,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
                               {/* 3차 카테고리 (현재 경로에 2차가 포함되어 있으면 표시) */}
                               {pathIds.has(category2.id) && category2.children && (
-                                <div className="ml-3 mt-1 space-y-1">
+                                <div className="ml-3 mt-0.5 space-y-0.5">
                                   {category2.children.map(category3 => (
                                     <a
                                       key={category3.id}
