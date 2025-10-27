@@ -18,17 +18,17 @@ export default function BuyerSettingsPage() {
 
   useEffect(() => {
     if (user?.id) {
-      supabase.from('users').update({ last_mode: 'buyer' }).eq('id', user.id)
+      supabase.from('buyers').update({ last_mode: 'buyer' }).eq('id', user.id)
     }
 
-    if (profile) {
+    if (profile?.buyer) {
       setFormData({
-        name: profile.name || '',
-        phone: profile.phone || '',
-        bio: profile.bio || '',
+        name: profile.buyer.name || '',
+        phone: profile.buyer.phone || '',
+        bio: profile.buyer.bio || '',
       })
     }
-  }, [user, profile])
+  }, [user, profile, supabase])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -37,7 +37,7 @@ export default function BuyerSettingsPage() {
 
     try {
       const { error } = await supabase
-        .from('users')
+        .from('buyers')
         .update({
           name: formData.name,
           phone: formData.phone,

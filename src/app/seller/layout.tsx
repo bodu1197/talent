@@ -20,7 +20,7 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
     }
 
     // 판매자 권한 체크
-    if (profile && profile.user_type !== 'seller' && profile.user_type !== 'both') {
+    if (profile && !profile.isSeller) {
       router.push('/profile')
       return
     }
@@ -37,7 +37,7 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
     )
   }
 
-  if (profile.user_type !== 'seller' && profile.user_type !== 'both') {
+  if (!profile.isSeller) {
     return null
   }
 
