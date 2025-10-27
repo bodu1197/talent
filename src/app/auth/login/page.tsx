@@ -26,8 +26,6 @@ export default function LoginPage() {
 
       if (error) throw error
 
-      console.log('로그인 성공:', data.user?.email)
-
       // 로그인 성공 - 프로필 페이지로 이동
       router.push('/profile')
     } catch (error: any) {

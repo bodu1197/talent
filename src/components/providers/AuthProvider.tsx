@@ -40,7 +40,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // 프로필 정보 가져오기
   const fetchProfile = async (userId: string) => {
-    console.log('Fetching profile for userId:', userId)
     try {
       const { data, error } = await supabase
         .from('users')
@@ -52,7 +51,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.error('Profile fetch error:', error)
         throw error
       }
-      console.log('Profile fetched successfully:', data)
       setProfile(data)
     } catch (error) {
       console.error('프로필 조회 실패:', error)
