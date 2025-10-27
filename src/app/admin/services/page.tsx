@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import DataTable from '@/components/admin/common/DataTable'
 import Badge from '@/components/admin/common/Badge'
@@ -8,7 +8,7 @@ import Modal from '@/components/admin/common/Modal'
 import type { AdminServiceFilter } from '@/types/admin'
 
 export default function AdminServicesPage() {
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
   const [services, setServices] = useState<any[]>([])
   const [categories, setCategories] = useState<any[]>([])
   const [loading, setLoading] = useState(true)

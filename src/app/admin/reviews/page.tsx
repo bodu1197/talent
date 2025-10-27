@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import DataTable from '@/components/admin/common/DataTable'
 import Badge from '@/components/admin/common/Badge'
@@ -8,7 +8,7 @@ import Modal from '@/components/admin/common/Modal'
 import type { AdminReviewFilter } from '@/types/admin'
 
 export default function AdminReviewsPage() {
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
   const [reviews, setReviews] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedReview, setSelectedReview] = useState<any | null>(null)

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import DataTable from '@/components/admin/common/DataTable'
 import Badge from '@/components/admin/common/Badge'
@@ -8,7 +8,7 @@ import Modal from '@/components/admin/common/Modal'
 import type { AdminOrderFilter } from '@/types/admin'
 
 export default function AdminOrdersPage() {
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
   const [orders, setOrders] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null)

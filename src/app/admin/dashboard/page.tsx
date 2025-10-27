@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import StatCard from '@/components/admin/common/StatCard'
 import Badge from '@/components/admin/common/Badge'
@@ -8,7 +8,7 @@ import type { DashboardStats } from '@/types/admin'
 import Link from 'next/link'
 
 export default function AdminDashboardPage() {
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
   const [stats, setStats] = useState<DashboardStats>({
     totalUsers: 0,
     newUsersToday: 0,
