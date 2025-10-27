@@ -65,7 +65,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                       {/* 1차 카테고리 */}
                       <a
                         href={`/categories/${category1.slug}`}
-                        className={`block px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                        className={`block px-3 py-1 text-sm font-medium rounded-lg transition-colors ${
                           category1.id === category.id
                             ? 'bg-[#0f3460] text-white'
                             : 'hover:bg-gray-50 hover:text-[#0f3460]'
@@ -81,7 +81,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                             <div key={category2.id}>
                               <a
                                 href={`/categories/${category2.slug}`}
-                                className={`block px-3 py-2 text-sm rounded-lg transition-colors ${
+                                className={`block px-3 py-1 text-sm rounded-lg transition-colors ${
                                   category2.id === category.id
                                     ? 'bg-[#0f3460] text-white'
                                     : 'hover:bg-gray-50 hover:text-[#0f3460]'
@@ -97,7 +97,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                                     <a
                                       key={category3.id}
                                       href={`/categories/${category3.slug}`}
-                                      className={`block px-3 py-1.5 text-xs rounded-lg transition-colors ${
+                                      className={`block px-3 py-0.5 text-xs rounded-lg transition-colors ${
                                         category3.id === category.id
                                           ? 'bg-[#0f3460] text-white'
                                           : 'hover:bg-gray-50 hover:text-[#0f3460]'
