@@ -65,25 +65,19 @@ export default function BuyerSettingsPage() {
     setMessage(null)
 
     try {
-      // seller_profiles 생성
-      const { error: sellerProfileError } = await supabase
-        .from('seller_profiles')
+      // sellers 테이블에 레코드 생성
+      const { error: sellerError } = await supabase
+        .from('sellers')
         .insert({
-          user_id: user?.id,
+          id: user?.id,
+          name: profile?.buyer?.name || '',
+          email: user?.email || '',
         })
 
       // 이미 존재하는 경우 무시
-      if (sellerProfileError && !sellerProfileError.message.includes('duplicate')) {
-        throw sellerProfileError
+      if (sellerError && !sellerError.message.includes('duplicate')) {
+        throw sellerError
       }
-
-      // user_type을 'both'로 업데이트
-      const { error: updateError } = await supabase
-        .from('users')
-        .update({ user_type: 'both' })
-        .eq('id', user?.id)
-
-      if (updateError) throw updateError
 
       await refreshProfile()
       setMessage({ type: 'success', text: '판매자 전환이 완료되었습니다!' })
@@ -194,7 +188,7 @@ export default function BuyerSettingsPage() {
         </div>
 
         {/* 판매자 전환 (buyer인 경우만) */}
-        {profile?.user_type === 'buyer' && (
+        {profile?.isBuyer && !profile?.isSeller && (
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h2 className="text-xl font-bold mb-4">판매자 전환</h2>
             <p className="text-gray-600 mb-4">
