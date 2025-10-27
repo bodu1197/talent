@@ -74,6 +74,7 @@ export default function MobileBottomNav() {
         <div className="fixed inset-0 bg-white z-50 lg:hidden">
           <div className="flex items-center p-4 border-b border-gray-200">
             <button
+              aria-label="뒤로가기"
               onClick={() => setShowSearch(false)}
               className="mr-4"
             >
@@ -86,7 +87,10 @@ export default function MobileBottomNav() {
                 className="w-full px-4 py-2 pr-10 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
                 autoFocus
               />
-              <button className="absolute right-3 top-1/2 -translate-y-1/2">
+              <button
+                aria-label="검색"
+                className="absolute right-3 top-1/2 -translate-y-1/2"
+              >
                 <i className="fas fa-search text-gray-500"></i>
               </button>
             </div>
@@ -114,13 +118,13 @@ export default function MobileBottomNav() {
               <ul className="space-y-3">
                 <li className="flex items-center justify-between">
                   <span className="text-gray-600">웹 개발</span>
-                  <button className="text-gray-400">
+                  <button aria-label="삭제" className="text-gray-400">
                     <i className="fas fa-times text-sm"></i>
                   </button>
                 </li>
                 <li className="flex items-center justify-between">
                   <span className="text-gray-600">로고 디자인</span>
-                  <button className="text-gray-400">
+                  <button aria-label="삭제" className="text-gray-400">
                     <i className="fas fa-times text-sm"></i>
                   </button>
                 </li>

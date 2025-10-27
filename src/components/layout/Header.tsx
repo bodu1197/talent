@@ -54,14 +54,20 @@ export default function Header() {
                 placeholder="찾으시는 재능을 검색해보세요"
                 className="w-full pl-4 pr-10 py-2.5 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460] focus:bg-white transition-all text-sm"
               />
-              <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#0f3460]">
+              <button
+                aria-label="검색"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#0f3460]"
+              >
                 <i className="fas fa-search"></i>
               </button>
             </div>
           </div>
 
           {/* 모바일 검색 버튼 */}
-          <button className="lg:hidden p-2 text-gray-600 hover:text-gray-900">
+          <button
+            aria-label="검색"
+            className="lg:hidden p-2 text-gray-600 hover:text-gray-900"
+          >
             <i className="fas fa-search text-xl"></i>
           </button>
 
@@ -78,13 +84,19 @@ export default function Header() {
               // 로그인 상태
               <>
                 {/* 알림 */}
-                <button className="relative p-2 text-gray-600 hover:text-gray-900">
+                <button
+                  aria-label="알림"
+                  className="relative p-2 text-gray-600 hover:text-gray-900"
+                >
                   <i className="far fa-bell text-xl"></i>
                   <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                 </button>
 
                 {/* 메시지 - 데스크톱만 */}
-                <button className="hidden sm:block relative p-2 text-gray-600 hover:text-gray-900">
+                <button
+                  aria-label="메시지"
+                  className="hidden sm:block relative p-2 text-gray-600 hover:text-gray-900"
+                >
                   <i className="far fa-comment text-xl"></i>
                   <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                 </button>
@@ -92,6 +104,7 @@ export default function Header() {
                 {/* 프로필 드롭다운 */}
                 <div className="relative">
                   <button
+                    aria-label="프로필 메뉴"
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                     className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
                   >
