@@ -15,10 +15,14 @@ export function useAdmin() {
 
   useEffect(() => {
     async function checkAdmin() {
-      if (authLoading) return
-
-      if (!user) {
+      // 로딩 시작은 바로
+      if (!user && !authLoading) {
+        setLoading(false)
         router.push('/auth/login')
+        return
+      }
+
+      if (authLoading || !user) {
         return
       }
 
@@ -27,21 +31,22 @@ export function useAdmin() {
           .from('admins')
           .select('*')
           .eq('user_id', user.id)
-          .single()
+          .maybeSingle() // single() 대신 maybeSingle() 사용하여 에러 방지
 
         if (error || !data) {
           // Not an admin, redirect to home
+          setLoading(false)
           router.push('/')
           return
         }
 
         setIsAdmin(true)
         setAdminData(data)
+        setLoading(false)
       } catch (error) {
         console.error('Admin check error:', error)
-        router.push('/')
-      } finally {
         setLoading(false)
+        router.push('/')
       }
     }
 
