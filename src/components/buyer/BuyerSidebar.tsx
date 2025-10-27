@@ -42,10 +42,23 @@ const menuItems: MenuItem[] = [
 export default function BuyerSidebar() {
   const pathname = usePathname()
   const router = useRouter()
-  const { profile } = useAuth()
+  const { profile, user } = useAuth()
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 overflow-y-auto z-10 pt-16">
+      {/* 프로필 섹션 */}
+      <div className="p-4 border-b border-gray-200">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white font-semibold text-lg">
+            {profile?.name?.[0] || <i className="fas fa-user text-sm"></i>}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold text-gray-900 truncate">{profile?.name || '사용자'}</p>
+            <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+          </div>
+        </div>
+      </div>
+
       {/* 모드 전환 버튼 */}
       {(profile?.user_type === 'seller' || profile?.user_type === 'both') && (
         <div className="p-4 border-b border-gray-200">
