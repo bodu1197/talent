@@ -23,25 +23,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   // 카테고리 경로 가져오기 (breadcrumb용)
   const categoryPath = getCategoryPath(category.id)
 
-  // 형제 카테고리 가져오기
-  const getSiblingCategories = (): CategoryItem[] => {
-    if (!category.parent_id) return []
-
-    // 전체 카테고리에서 부모 찾기
-    const findParent = (categories: CategoryItem[]): CategoryItem | null => {
-      for (const cat of categories) {
-        if (cat.id === category.parent_id) return cat
-        if (cat.children) {
-          const found = findParent(cat.children)
-          if (found) return found
-        }
-      }
-      return null
-    }
-
-    const parent = findParent(FULL_CATEGORIES)
-    return parent?.children || []
-  }
+  // 현재 카테고리 경로의 ID들을 Set으로 만들기
+  const pathIds = new Set(categoryPath.map(c => c.id))
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -76,34 +59,61 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               <div className="bg-white rounded-lg border border-gray-200 p-4">
                 <h2 className="font-semibold text-lg mb-4">카테고리</h2>
                 <div className="space-y-1">
-                  {/* 하위 카테고리 또는 형제 카테고리 표시 */}
-                  {category.children && category.children.length > 0 ? (
-                    // 하위 카테고리가 있는 경우 하위 카테고리 표시
-                    category.children.map(child => (
+                  {/* 전체 카테고리 트리 표시 */}
+                  {FULL_CATEGORIES.map(category1 => (
+                    <div key={category1.id}>
+                      {/* 1차 카테고리 */}
                       <a
-                        key={child.id}
-                        href={`/categories/${child.slug}`}
-                        className="block px-3 py-2 text-sm rounded-lg hover:bg-gray-50 hover:text-[#0f3460] transition-colors"
-                      >
-                        {child.name}
-                      </a>
-                    ))
-                  ) : (
-                    // 하위 카테고리가 없는 경우 (3차 카테고리) 형제 카테고리 표시
-                    getSiblingCategories().length > 0 && getSiblingCategories().map(sibling => (
-                      <a
-                        key={sibling.id}
-                        href={`/categories/${sibling.slug}`}
-                        className={`block px-3 py-2 text-sm rounded-lg transition-colors ${
-                          sibling.id === category.id
+                        href={`/categories/${category1.slug}`}
+                        className={`block px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                          category1.id === category.id
                             ? 'bg-[#0f3460] text-white'
                             : 'hover:bg-gray-50 hover:text-[#0f3460]'
                         }`}
                       >
-                        {sibling.name}
+                        {category1.name}
                       </a>
-                    ))
-                  )}
+
+                      {/* 2차 카테고리 (현재 경로에 1차가 포함되어 있으면 표시) */}
+                      {pathIds.has(category1.id) && category1.children && (
+                        <div className="ml-3 mt-1 space-y-1">
+                          {category1.children.map(category2 => (
+                            <div key={category2.id}>
+                              <a
+                                href={`/categories/${category2.slug}`}
+                                className={`block px-3 py-2 text-sm rounded-lg transition-colors ${
+                                  category2.id === category.id
+                                    ? 'bg-[#0f3460] text-white'
+                                    : 'hover:bg-gray-50 hover:text-[#0f3460]'
+                                }`}
+                              >
+                                {category2.name}
+                              </a>
+
+                              {/* 3차 카테고리 (현재 경로에 2차가 포함되어 있으면 표시) */}
+                              {pathIds.has(category2.id) && category2.children && (
+                                <div className="ml-3 mt-1 space-y-1">
+                                  {category2.children.map(category3 => (
+                                    <a
+                                      key={category3.id}
+                                      href={`/categories/${category3.slug}`}
+                                      className={`block px-3 py-1.5 text-xs rounded-lg transition-colors ${
+                                        category3.id === category.id
+                                          ? 'bg-[#0f3460] text-white'
+                                          : 'hover:bg-gray-50 hover:text-[#0f3460]'
+                                      }`}
+                                    >
+                                      {category3.name}
+                                    </a>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
             </aside>
