@@ -68,7 +68,7 @@ export default function SellerServicesPage() {
       return
     }
 
-    if (profile?.user_type !== 'seller' && profile?.user_type !== 'both') {
+    if (profile && profile.user_type !== 'seller' && profile.user_type !== 'both') {
       router.push('/profile')
       return
     }

@@ -149,12 +149,14 @@ export default function AdminUsersPage() {
       key: 'user_type',
       label: '유형',
       render: (user: any) => {
-        const types = {
-          buyer: { text: '구매자', variant: 'info' as const },
-          seller: { text: '판매자', variant: 'success' as const },
-          both: { text: '둘다', variant: 'warning' as const },
+        // TODO: 새로운 buyers/sellers 테이블 구조로 업데이트 필요
+        const userType = user.user_type || '-'
+        const types: Record<string, { text: string; variant: 'info' | 'success' | 'warning' | 'gray' }> = {
+          buyer: { text: '구매자', variant: 'info' },
+          seller: { text: '판매자', variant: 'success' },
+          both: { text: '둘다', variant: 'warning' },
         }
-        const type = types[user.user_type as keyof typeof types] || { text: user.user_type, variant: 'gray' as const }
+        const type = types[userType] || { text: userType, variant: 'gray' }
         return <Badge variant={type.variant}>{type.text}</Badge>
       },
     },

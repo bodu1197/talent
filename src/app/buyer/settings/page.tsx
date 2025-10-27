@@ -18,14 +18,14 @@ export default function BuyerSettingsPage() {
 
   useEffect(() => {
     if (user?.id) {
-      supabase.from('buyers').update({ last_mode: 'buyer' }).eq('id', user.id)
+      supabase.from('users').update({ last_mode: 'buyer' }).eq('id', user.id)
     }
 
-    if (profile?.buyer) {
+    if (profile) {
       setFormData({
-        name: profile.buyer.name || '',
-        phone: profile.buyer.phone || '',
-        bio: profile.buyer.bio || '',
+        name: profile.name || '',
+        phone: profile.phone || '',
+        bio: profile.bio || '',
       })
     }
   }, [user, profile, supabase])
@@ -37,7 +37,7 @@ export default function BuyerSettingsPage() {
 
     try {
       const { error } = await supabase
-        .from('buyers')
+        .from('users')
         .update({
           name: formData.name,
           phone: formData.phone,
@@ -65,19 +65,13 @@ export default function BuyerSettingsPage() {
     setMessage(null)
 
     try {
-      // sellers 테이블에 레코드 생성
-      const { error: sellerError } = await supabase
-        .from('sellers')
-        .insert({
-          id: user?.id,
-          name: profile?.buyer?.name || '',
-          email: user?.email || '',
-        })
+      // user_type을 'both'로 업데이트
+      const { error } = await supabase
+        .from('users')
+        .update({ user_type: 'both' })
+        .eq('id', user?.id)
 
-      // 이미 존재하는 경우 무시
-      if (sellerError && !sellerError.message.includes('duplicate')) {
-        throw sellerError
-      }
+      if (error) throw error
 
       await refreshProfile()
       setMessage({ type: 'success', text: '판매자 전환이 완료되었습니다!' })
@@ -188,7 +182,7 @@ export default function BuyerSettingsPage() {
         </div>
 
         {/* 판매자 전환 (buyer인 경우만) */}
-        {profile?.isBuyer && !profile?.isSeller && (
+        {profile?.user_type === 'buyer' && (
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h2 className="text-xl font-bold mb-4">판매자 전환</h2>
             <p className="text-gray-600 mb-4">

@@ -66,7 +66,7 @@ export default function SellerOrdersPage() {
 
     if (user?.id) {
       // DB에 현재 판매자 페이지 보는 중임을 저장
-      supabase.from('sellers').update({ last_mode: 'seller' }).eq('id', user.id)
+      supabase.from('users').update({ last_mode: 'seller' }).eq('id', user.id)
       fetchOrders()
     }
   }, [user, activeTab, supabase])

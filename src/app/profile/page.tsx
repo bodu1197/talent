@@ -34,27 +34,17 @@ export default function ProfilePage() {
     }
 
     // last_mode를 확인하여 마지막 방문 페이지로 리다이렉트
-    let lastMode: 'buyer' | 'seller' | null = null
-
-    // 구매자 프로필이 있으면 구매자의 last_mode 확인
-    if (profile.buyer) {
-      lastMode = profile.buyer.last_mode
-    }
-
-    // 판매자 프로필이 있고 판매자 last_mode가 'seller'면 우선
-    if (profile.seller && profile.seller.last_mode === 'seller') {
-      lastMode = 'seller'
-    }
+    const lastMode = profile.last_mode
 
     // last_mode에 따라 리다이렉트
-    if (lastMode === 'seller' && profile.isSeller) {
+    if (lastMode === 'seller' && (profile.user_type === 'seller' || profile.user_type === 'both')) {
       router.push('/seller/dashboard')
-    } else if (lastMode === 'buyer' && profile.isBuyer) {
+    } else if (lastMode === 'buyer') {
       router.push('/buyer/orders')
-    } else if (profile.isSeller) {
+    } else if (profile.user_type === 'seller' || profile.user_type === 'both') {
       // last_mode 없으면 판매자 페이지 우선
       router.push('/seller/dashboard')
-    } else if (profile.isBuyer) {
+    } else if (profile.user_type === 'buyer') {
       // 구매자만 있으면 구매자 페이지로
       router.push('/buyer/orders')
     } else {

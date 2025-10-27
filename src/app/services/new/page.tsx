@@ -93,7 +93,7 @@ export default function NewServicePage() {
       return
     }
 
-    if (profile.user_type === 'buyer') {
+    if (profile.user_type !== 'seller' && profile.user_type !== 'both') {
       alert('판매자 등록이 필요합니다')
       router.push('/seller/register')
       return

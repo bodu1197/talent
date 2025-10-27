@@ -55,7 +55,7 @@ export default function SellerDashboardPage() {
       return
     }
 
-    if (profile?.user_type !== 'seller' && profile?.user_type !== 'both') {
+    if (profile && profile.user_type !== 'seller' && profile.user_type !== 'both') {
       router.push('/profile')
       return
     }
@@ -142,7 +142,7 @@ export default function SellerDashboardPage() {
 
     // DB에 현재 판매자 페이지 보는 중임을 저장
     if (user?.id) {
-      supabase.from('sellers').update({ last_mode: 'seller' }).eq('id', user.id)
+      supabase.from('users').update({ last_mode: 'seller' }).eq('id', user.id)
     }
 
     fetchDashboardData()

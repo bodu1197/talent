@@ -12,7 +12,7 @@ export default function SellerStatisticsPage() {
 
   useEffect(() => {
     if (user?.id) {
-      supabase.from('sellers').update({ last_mode: 'seller' }).eq('id', user.id)
+      supabase.from('users').update({ last_mode: 'seller' }).eq('id', user.id)
       setIsLoading(false)
     }
   }, [user])
