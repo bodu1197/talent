@@ -192,10 +192,9 @@ export default function NewServicePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4 max-w-4xl">
-        {/* 진행 상태 표시 */}
-        <div className="mb-8">
+    <div className="w-full max-w-4xl mx-auto">
+      {/* 진행 상태 표시 */}
+      <div className="mb-8">
           <div className="flex items-center justify-between">
             {[1, 2, 3, 4].map((s) => (
               <div
@@ -647,7 +646,6 @@ export default function NewServicePage() {
             </div>
           </div>
         )}
-      </div>
     </div>
   )
 }
