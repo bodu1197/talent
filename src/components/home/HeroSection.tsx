@@ -135,7 +135,7 @@ export default function HeroSection() {
 
           {/* 오른쪽: 그라데이션 카드 + 페이지네이션 */}
           <div className="w-[347px] flex-shrink-0">
-            <div className={`relative bg-gradient-to-br ${slide.gradient} rounded-2xl p-8 text-white shadow-2xl transition-all duration-500 h-[350px] flex flex-col justify-between`}>
+            <div className={`relative bg-gradient-to-br ${slide.gradient} rounded-2xl p-8 text-white shadow-2xl transition-all duration-500 h-[298px] flex flex-col justify-between`}>
               {/* 장식 요소 */}
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-lg rotate-12"></div>
 
