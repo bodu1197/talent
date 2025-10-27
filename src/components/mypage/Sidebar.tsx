@@ -174,8 +174,19 @@ export default function Sidebar({ mode }: SidebarProps) {
   }
 
   return (
-    <aside className="w-64 flex-shrink-0 bg-white border-r border-gray-200 overflow-y-auto">
-      <div className="p-4">
+    <aside className="w-64 flex-shrink-0 bg-white border-r border-gray-200 overflow-y-auto flex flex-col">
+      <div className="p-4 flex-1">
+        {/* 홈으로 가기 버튼 */}
+        <div className="mb-4">
+          <Link
+            href="/"
+            className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-[#0f3460] text-white hover:bg-[#1a4b7d] rounded-lg transition-colors text-sm font-medium"
+          >
+            <i className="fas fa-home"></i>
+            <span>홈으로</span>
+          </Link>
+        </div>
+
         {/* 모드 전환 버튼 */}
         <div className="mb-6">
           <Link

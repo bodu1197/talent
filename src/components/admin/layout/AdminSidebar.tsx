@@ -81,7 +81,7 @@ export default function AdminSidebar() {
 
   return (
     <aside
-      className={`fixed left-0 top-0 h-full bg-[#0f3460] text-white transition-all duration-300 z-30 ${
+      className={`flex-shrink-0 h-full bg-[#0f3460] text-white transition-all duration-300 flex flex-col ${
         collapsed ? 'w-20' : 'w-64'
       }`}
     >
@@ -102,7 +102,7 @@ export default function AdminSidebar() {
       </div>
 
       {/* Menu Items */}
-      <nav className="flex-1 overflow-y-auto py-4">
+      <nav className="flex-1 overflow-y-auto py-4 min-h-0">
         {menuItems.map((item) => {
           const isActive = pathname === item.path || pathname.startsWith(item.path + '/')
 
