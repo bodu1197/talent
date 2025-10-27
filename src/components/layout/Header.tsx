@@ -86,24 +86,6 @@ export default function Header() {
             ) : user ? (
               // 로그인 상태
               <>
-                {/* 알림 */}
-                <button
-                  aria-label="알림"
-                  className="relative p-2 text-gray-600 hover:text-gray-900"
-                >
-                  <i className="far fa-bell text-xl"></i>
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                </button>
-
-                {/* 메시지 - 데스크톱만 */}
-                <button
-                  aria-label="메시지"
-                  className="hidden sm:block relative p-2 text-gray-600 hover:text-gray-900"
-                >
-                  <i className="far fa-comment text-xl"></i>
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                </button>
-
                 {/* 프로필 드롭다운 */}
                 <div className="relative">
                   <button
