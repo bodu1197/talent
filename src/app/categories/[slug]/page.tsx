@@ -125,20 +125,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 <CategoryFilter categoryId={category.id} isAI={category.is_ai || false} />
               </div>
 
-              {/* 정렬 및 서비스 그리드 */}
-              <div className="flex justify-between items-center mb-6">
-                <p className="text-gray-600">
-                  {category.name}
-                </p>
-                <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent">
-                  <option value="popular">인기순</option>
-                  <option value="latest">최신순</option>
-                  <option value="price_low">가격 낮은순</option>
-                  <option value="price_high">가격 높은순</option>
-                  <option value="rating">평점순</option>
-                </select>
-              </div>
-
+              {/* 서비스 그리드 */}
               <ServiceGrid categoryId={category.id} />
             </main>
           </div>
