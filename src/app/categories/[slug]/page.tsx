@@ -123,7 +123,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <main className="flex-1">
               <div className="flex justify-between items-center mb-6">
                 <p className="text-gray-600">
-                  <span className="font-semibold">1,234</span>개의 서비스
+                  {category.name}
                 </p>
                 <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent">
                   <option value="popular">인기순</option>
