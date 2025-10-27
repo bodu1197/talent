@@ -42,13 +42,15 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <SellerSidebar />
-      <main className="ml-64 min-h-screen pt-16">
-        <div className="container-1200 py-6">
-          {children}
+    <div className="min-h-screen bg-gray-50 pt-16">
+      <div className="container-1200">
+        <div className="flex gap-6 py-6">
+          <SellerSidebar />
+          <main className="flex-1 min-w-0">
+            {children}
+          </main>
         </div>
-      </main>
+      </div>
     </div>
   )
 }

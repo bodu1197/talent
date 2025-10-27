@@ -32,13 +32,15 @@ export default function BuyerLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <BuyerSidebar />
-      <main className="ml-64 min-h-screen pt-16">
-        <div className="container-1200 py-6">
-          {children}
+    <div className="min-h-screen bg-gray-50 pt-16">
+      <div className="container-1200">
+        <div className="flex gap-6 py-6">
+          <BuyerSidebar />
+          <main className="flex-1 min-w-0">
+            {children}
+          </main>
         </div>
-      </main>
+      </div>
     </div>
   )
 }

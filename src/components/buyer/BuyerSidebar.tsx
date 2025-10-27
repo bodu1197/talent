@@ -45,7 +45,7 @@ export default function BuyerSidebar() {
   const { profile, user } = useAuth()
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 overflow-y-auto z-10 pt-16">
+    <aside className="w-64 bg-white border border-gray-200 rounded-lg overflow-hidden sticky top-20 self-start">
       {/* 프로필 섹션 */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center gap-3">
