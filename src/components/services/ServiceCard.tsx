@@ -14,7 +14,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         {/* 프리미엄 배지 */}
         {service.is_featured && (
           <div className="absolute top-4 left-4 z-10">
-            <span className="badge badge-featured">⭐ PREMIUM</span>
+            <span className="badge badge-featured"><i className="fas fa-star"></i> PREMIUM</span>
           </div>
         )}
 
@@ -28,12 +28,12 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-[40px] opacity-50">
-                {service.ai_services?.[0]?.ai_tool === 'Midjourney' && '🎨'}
-                {service.ai_services?.[0]?.ai_tool === 'ChatGPT' && '✍️'}
-                {service.ai_services?.[0]?.ai_tool === 'Stable Diffusion' && '🖼️'}
-                {service.ai_services?.[0]?.ai_tool === 'ElevenLabs' && '🎙️'}
-                {!service.ai_services?.[0]?.ai_tool && '📦'}
+              <span className="text-[40px] opacity-50 text-gray-400">
+                {service.ai_services?.[0]?.ai_tool === 'Midjourney' && <i className="fas fa-palette"></i>}
+                {service.ai_services?.[0]?.ai_tool === 'ChatGPT' && <i className="fas fa-pen-fancy"></i>}
+                {service.ai_services?.[0]?.ai_tool === 'Stable Diffusion' && <i className="fas fa-image"></i>}
+                {service.ai_services?.[0]?.ai_tool === 'ElevenLabs' && <i className="fas fa-microphone"></i>}
+                {!service.ai_services?.[0]?.ai_tool && <i className="fas fa-box"></i>}
               </span>
             </div>
           )}
@@ -70,14 +70,16 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 
           {/* 평점 및 리뷰 */}
           <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
-            <span className="flex items-center">
-              ⭐ {service.rating.toFixed(1)}
+            <span className="flex items-center gap-1">
+              <i className="fas fa-star text-yellow-400"></i> {service.rating.toFixed(1)}
             </span>
             <span>({service.order_count})</span>
             {service.is_express_available && (
               <>
                 <span>•</span>
-                <span className="text-[#0f3460] font-medium">⚡ 익스프레스</span>
+                <span className="text-[#0f3460] font-medium flex items-center gap-1">
+                  <i className="fas fa-bolt"></i> 익스프레스
+                </span>
               </>
             )}
           </div>
