@@ -50,9 +50,12 @@ export default function Header() {
           <div className="hidden lg:flex flex-1 max-w-xl mx-8">
             <div className="relative w-full">
               <input
+                id="search-desktop"
+                name="search"
                 type="text"
                 placeholder="찾으시는 재능을 검색해보세요"
                 className="w-full pl-4 pr-10 py-2.5 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460] focus:bg-white transition-all text-sm"
+                autoComplete="off"
               />
               <button
                 aria-label="검색"

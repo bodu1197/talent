@@ -29,40 +29,48 @@ export default function ContactPage() {
               <div className="space-y-6">
                 {/* 이름 */}
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label htmlFor="contact-name" className="block text-sm font-medium mb-2">
                     이름 <span className="text-red-500">*</span>
                   </label>
                   <input
+                    id="contact-name"
+                    name="name"
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
                     placeholder="이름을 입력하세요"
+                    autoComplete="name"
                     required
                   />
                 </div>
 
                 {/* 이메일 */}
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label htmlFor="contact-email" className="block text-sm font-medium mb-2">
                     이메일 <span className="text-red-500">*</span>
                   </label>
                   <input
+                    id="contact-email"
+                    name="email"
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
                     placeholder="답변 받을 이메일을 입력하세요"
+                    autoComplete="email"
                     required
                   />
                 </div>
 
                 {/* 문의 유형 */}
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label htmlFor="contact-category" className="block text-sm font-medium mb-2">
                     문의 유형 <span className="text-red-500">*</span>
                   </label>
                   <select
+                    id="contact-category"
+                    name="category"
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
@@ -80,25 +88,30 @@ export default function ContactPage() {
 
                 {/* 제목 */}
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label htmlFor="contact-title" className="block text-sm font-medium mb-2">
                     제목 <span className="text-red-500">*</span>
                   </label>
                   <input
+                    id="contact-title"
+                    name="title"
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
                     placeholder="문의 제목을 입력하세요"
+                    autoComplete="off"
                     required
                   />
                 </div>
 
                 {/* 내용 */}
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label htmlFor="contact-content" className="block text-sm font-medium mb-2">
                     문의 내용 <span className="text-red-500">*</span>
                   </label>
                   <textarea
+                    id="contact-content"
+                    name="content"
                     value={formData.content}
                     onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460] h-48 resize-none"

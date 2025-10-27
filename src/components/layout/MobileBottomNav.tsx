@@ -82,9 +82,12 @@ export default function MobileBottomNav() {
             </button>
             <div className="flex-1 relative">
               <input
+                id="search-mobile"
+                name="search"
                 type="text"
                 placeholder="찾으시는 재능을 검색해보세요"
                 className="w-full px-4 py-2 pr-10 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
+                autoComplete="off"
                 autoFocus
               />
               <button

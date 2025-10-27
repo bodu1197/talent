@@ -12,11 +12,17 @@ export default function HelpPage() {
       <div className="max-w-2xl mx-auto mb-12">
         <div className="relative">
           <input
+            id="help-search"
+            name="help-search"
             type="text"
             placeholder="궁금하신 내용을 검색해보세요"
             className="w-full px-6 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
+            autoComplete="off"
           />
-          <button className="absolute right-4 top-1/2 -translate-y-1/2 text-[#0f3460]">
+          <button
+            aria-label="검색"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-[#0f3460]"
+          >
             <i className="fas fa-search text-xl"></i>
           </button>
         </div>
