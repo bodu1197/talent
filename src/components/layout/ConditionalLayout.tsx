@@ -23,7 +23,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
           <ConditionalMegaMenu />
         </>
       )}
-      <main className={hideLayout ? '' : 'flex-1 pt-[140px] lg:pt-[116px] pb-16 lg:pb-0'}>
+      <main className={hideLayout ? '' : 'flex-1 pt-[140px] lg:pt-[86px] pb-16 lg:pb-0'}>
         {children}
       </main>
       {!hideLayout && (
