@@ -1,9 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { use } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
+import { useAuth } from '@/components/providers/AuthProvider'
+import { getOrderById } from '@/lib/supabase/queries/orders'
+import { confirmOrder, requestRevision } from '@/lib/supabase/mutations/orders'
+import LoadingSpinner from '@/components/common/LoadingSpinner'
+import ErrorState from '@/components/common/ErrorState'
 
 interface PageProps {
   params: Promise<{
@@ -13,69 +18,112 @@ interface PageProps {
 
 export default function BuyerOrderDetailPage({ params }: PageProps) {
   const { id } = use(params)
+  const { user } = useAuth()
+  const [order, setOrder] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [showRevisionModal, setShowRevisionModal] = useState(false)
+  const [revisionDetails, setRevisionDetails] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
-  // TODO: 실제로는 API에서 주문 데이터를 가져와야 합니다
-  const order = {
-    id,
-    orderNumber: '12345',
-    title: '로고 디자인 작업',
-    thumbnailUrl: null,
-    sellerName: '디자인스튜디오',
-    sellerProfile: null,
-    status: 'delivered',
-    statusLabel: '도착 확인 대기',
-    price: 50000,
-    orderDate: '2025-01-27 14:30',
-    paymentDate: '2025-01-27 14:35',
-    expectedDeliveryDate: '2025-02-03',
-    deliveryDate: '2025-02-01 18:20',
-    daysLeft: 0,
-    requirements: '미니멀한 느낌의 로고를 원합니다. 파랑색 계열로 부탁드립니다. 회사명은 "테크노밸리"이고, IT 스타트업입니다.',
-    myNote: '가능하면 3가지 시안을 부탁드립니다.',
-    packageType: 'standard',
-    revisionCount: 2,
-    remainingRevisions: 1,
-    deliverables: [
-      {
-        id: '1',
-        fileName: 'logo_final_v1.ai',
-        fileSize: 2048576,
-        uploadedAt: '2025-02-01 18:20',
-        version: 1,
-        downloadUrl: '#'
-      },
-      {
-        id: '2',
-        fileName: 'logo_final_v1.png',
-        fileSize: 512000,
-        uploadedAt: '2025-02-01 18:20',
-        version: 1,
-        downloadUrl: '#'
-      }
-    ],
-    sellerMessage: '요청하신 미니멀한 느낌의 로고 디자인을 완성했습니다. AI 파일과 PNG 파일을 함께 보내드립니다. 확인 부탁드립니다!'
+  useEffect(() => {
+    if (user) {
+      loadOrder()
+    }
+  }, [user, id])
+
+  async function loadOrder() {
+    try {
+      setLoading(true)
+      setError(null)
+      const data = await getOrderById(id)
+      setOrder(data)
+    } catch (err: any) {
+      console.error('주문 조회 실패:', err)
+      setError(err.message || '주문 정보를 불러오는데 실패했습니다')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleConfirm = async () => {
+    try {
+      setSubmitting(true)
+      await confirmOrder(id)
+      setShowConfirmModal(false)
+      await loadOrder() // Reload to get updated status
+      alert('구매가 확정되었습니다')
+    } catch (err: any) {
+      console.error('구매 확정 실패:', err)
+      alert('구매 확정에 실패했습니다')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const handleRevisionRequest = async () => {
+    if (!revisionDetails.trim()) {
+      alert('수정 요청 사항을 입력해주세요')
+      return
+    }
+
+    try {
+      setSubmitting(true)
+      await requestRevision(id, revisionDetails)
+      setShowRevisionModal(false)
+      setRevisionDetails('')
+      await loadOrder() // Reload to get updated status
+      alert('수정 요청이 전송되었습니다')
+    } catch (err: any) {
+      console.error('수정 요청 실패:', err)
+      alert('수정 요청에 실패했습니다')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <>
+        <Sidebar mode="buyer" />
+        <main className="flex-1 overflow-y-auto p-8">
+          <LoadingSpinner message="주문 정보를 불러오는 중..." />
+        </main>
+      </>
+    )
+  }
+
+  if (error || !order) {
+    return (
+      <>
+        <Sidebar mode="buyer" />
+        <main className="flex-1 overflow-y-auto p-8">
+          <ErrorState message={error || '주문을 찾을 수 없습니다'} retry={loadOrder} />
+        </main>
+      </>
+    )
+  }
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'paid': return '결제완료'
+      case 'in_progress': return '진행중'
+      case 'delivered': return '도착 확인 대기'
+      case 'completed': return '완료'
+      case 'cancelled': return '취소/환불'
+      case 'refunded': return '환불완료'
+      default: return status
+    }
   }
 
   const statusHistory = [
-    { status: '주문 접수', date: '2025-01-27 14:30', actor: '시스템' },
-    { status: '결제 완료', date: '2025-01-27 14:35', actor: '구매자' },
-    { status: '작업 시작', date: '2025-01-27 15:00', actor: '판매자' },
-    { status: '작업 완료', date: '2025-02-01 18:20', actor: '판매자' }
-  ]
-
-  const handleConfirm = () => {
-    // TODO: API 호출하여 구매 확정
-    console.log('Purchase confirmed')
-    setShowConfirmModal(false)
-  }
-
-  const handleRevisionRequest = () => {
-    // TODO: API 호출하여 수정 요청
-    console.log('Revision requested')
-    setShowRevisionModal(false)
-  }
+    { status: '주문 접수', date: new Date(order.created_at).toLocaleString('ko-KR'), actor: '시스템' },
+    order.paid_at && { status: '결제 완료', date: new Date(order.paid_at).toLocaleString('ko-KR'), actor: '구매자' },
+    order.started_at && { status: '작업 시작', date: new Date(order.started_at).toLocaleString('ko-KR'), actor: '판매자' },
+    order.delivered_at && { status: '작업 완료', date: new Date(order.delivered_at).toLocaleString('ko-KR'), actor: '판매자' },
+    order.completed_at && { status: '구매 확정', date: new Date(order.completed_at).toLocaleString('ko-KR'), actor: '구매자' }
+  ].filter(Boolean)
 
   return (
     <>
@@ -97,7 +145,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
           <div className="flex items-start justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">주문 상세</h1>
-              <p className="text-gray-600">주문 번호: #{order.orderNumber}</p>
+              <p className="text-gray-600">주문 번호: #{order.order_number || id}</p>
             </div>
             <div className="flex items-center gap-3">
               <Link
@@ -148,30 +196,30 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
                   <div className="w-32 h-32 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center">
-                    {order.thumbnailUrl ? (
-                      <img src={order.thumbnailUrl} alt={order.title} className="w-full h-full object-cover rounded-lg" />
+                    {order.service?.thumbnail_url ? (
+                      <img src={order.service.thumbnail_url} alt={order.title || order.service.title} className="w-full h-full object-cover rounded-lg" />
                     ) : (
                       <i className="fas fa-image text-gray-400 text-3xl"></i>
                     )}
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg font-bold text-gray-900 mb-2">{order.title}</h3>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">{order.title || order.service?.title}</h3>
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div>
                         <span className="text-gray-600">패키지:</span>
-                        <span className="ml-2 font-medium">{order.packageType}</span>
+                        <span className="ml-2 font-medium">{order.package_type || 'standard'}</span>
                       </div>
                       <div>
                         <span className="text-gray-600">수정 횟수:</span>
-                        <span className="ml-2 font-medium">{order.revisionCount}회</span>
+                        <span className="ml-2 font-medium">{order.revision_count || 0}회</span>
                       </div>
                       <div>
                         <span className="text-gray-600">남은 수정:</span>
-                        <span className="ml-2 font-medium text-blue-600">{order.remainingRevisions}회</span>
+                        <span className="ml-2 font-medium text-blue-600">{order.remaining_revisions || 0}회</span>
                       </div>
                       <div>
                         <span className="text-gray-600">예상 완료일:</span>
-                        <span className="ml-2 font-medium">{order.expectedDeliveryDate}</span>
+                        <span className="ml-2 font-medium">{order.delivery_date ? new Date(order.delivery_date).toLocaleDateString('ko-KR') : '-'}</span>
                       </div>
                     </div>
                   </div>
@@ -183,15 +231,15 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4">내 요구사항</h2>
               <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                <p className="text-gray-700 whitespace-pre-wrap">{order.requirements}</p>
+                <p className="text-gray-700 whitespace-pre-wrap">{order.requirements || '요구사항이 없습니다'}</p>
               </div>
-              {order.myNote && (
+              {order.buyer_note && (
                 <div className="bg-blue-50 rounded-lg p-4">
                   <div className="flex items-start gap-2">
                     <i className="fas fa-info-circle text-blue-600 mt-1"></i>
                     <div>
                       <div className="font-medium text-blue-900 mb-1">추가 메모</div>
-                      <p className="text-blue-700">{order.myNote}</p>
+                      <p className="text-blue-700">{order.buyer_note}</p>
                     </div>
                   </div>
                 </div>
@@ -202,28 +250,28 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4">
                 납품 파일
-                {order.deliverables.length > 0 && (
+                {order.deliverables && order.deliverables.length > 0 && (
                   <span className="ml-2 text-sm font-normal text-gray-600">
                     ({order.deliverables.length}개)
                   </span>
                 )}
               </h2>
 
-              {order.sellerMessage && (
+              {order.seller_message && (
                 <div className="bg-green-50 rounded-lg p-4 mb-4">
                   <div className="flex items-start gap-2">
                     <i className="fas fa-user-circle text-green-600 mt-1"></i>
                     <div>
                       <div className="font-medium text-green-900 mb-1">판매자 메시지</div>
-                      <p className="text-green-700">{order.sellerMessage}</p>
+                      <p className="text-green-700">{order.seller_message}</p>
                     </div>
                   </div>
                 </div>
               )}
 
-              {order.deliverables.length > 0 ? (
+              {order.deliverables && order.deliverables.length > 0 ? (
                 <div className="space-y-3">
-                  {order.deliverables.map((file) => (
+                  {order.deliverables.map((file: any) => (
                     <div
                       key={file.id}
                       className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
@@ -231,14 +279,15 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                       <div className="flex items-center gap-3">
                         <i className="fas fa-file-alt text-blue-500 text-2xl"></i>
                         <div>
-                          <div className="font-medium text-gray-900">{file.fileName}</div>
+                          <div className="font-medium text-gray-900">{file.file_name || file.fileName}</div>
                           <div className="text-sm text-gray-600">
-                            {(file.fileSize / 1024 / 1024).toFixed(2)}MB • 버전 {file.version} • {file.uploadedAt}
+                            {file.file_size ? (file.file_size / 1024 / 1024).toFixed(2) : '0.00'}MB •
+                            {file.created_at ? new Date(file.created_at).toLocaleString('ko-KR') : ''}
                           </div>
                         </div>
                       </div>
                       <a
-                        href={file.downloadUrl}
+                        href={file.file_url || '#'}
                         download
                         className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors"
                       >
@@ -299,7 +348,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                     ? 'bg-green-100 text-green-700'
                     : 'bg-gray-100 text-gray-700'
                 }`}>
-                  {order.statusLabel}
+                  {getStatusLabel(order.status)}
                 </span>
               </div>
               {order.status === 'delivered' && (
@@ -317,10 +366,10 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
               <h3 className="font-bold text-gray-900 mb-4">판매자 정보</h3>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white font-bold">
-                  {order.sellerName[0]}
+                  {order.seller?.name?.[0] || 'S'}
                 </div>
                 <div>
-                  <div className="font-medium text-gray-900">{order.sellerName}</div>
+                  <div className="font-medium text-gray-900">{order.seller?.name || '판매자'}</div>
                   <div className="text-sm text-gray-600">판매자</div>
                 </div>
               </div>
@@ -333,7 +382,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                   메시지 보내기
                 </Link>
                 <Link
-                  href={`/seller/${order.sellerName}`}
+                  href={`/seller/${order.seller_id}`}
                   className="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-center block"
                 >
                   <i className="fas fa-user mr-2"></i>
@@ -348,17 +397,17 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">주문 금액</span>
-                  <span className="font-medium">{order.price.toLocaleString()}원</span>
+                  <span className="font-medium">{order.total_amount?.toLocaleString() || '0'}원</span>
                 </div>
                 <div className="flex items-center justify-between pt-3 border-t border-gray-200">
                   <span className="font-bold text-gray-900">결제 금액</span>
-                  <span className="font-bold text-[#0f3460] text-lg">{order.price.toLocaleString()}원</span>
+                  <span className="font-bold text-[#0f3460] text-lg">{order.total_amount?.toLocaleString() || '0'}원</span>
                 </div>
                 <div className="pt-3 border-t border-gray-200 text-sm text-gray-600">
-                  <div>주문일: {order.orderDate}</div>
-                  <div>결제일: {order.paymentDate}</div>
-                  {order.deliveryDate && (
-                    <div>납품일: {order.deliveryDate}</div>
+                  <div>주문일: {new Date(order.created_at).toLocaleString('ko-KR')}</div>
+                  {order.paid_at && <div>결제일: {new Date(order.paid_at).toLocaleString('ko-KR')}</div>}
+                  {order.delivered_at && (
+                    <div>납품일: {new Date(order.delivered_at).toLocaleString('ko-KR')}</div>
                   )}
                 </div>
               </div>
@@ -417,15 +466,17 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowConfirmModal(false)}
-                  className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                  disabled={submitting}
+                  className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
                 >
                   취소
                 </button>
                 <button
                   onClick={handleConfirm}
-                  className="flex-1 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                  disabled={submitting}
+                  className="flex-1 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium disabled:opacity-50"
                 >
-                  확정하기
+                  {submitting ? '처리 중...' : '확정하기'}
                 </button>
               </div>
             </div>
@@ -450,7 +501,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                 <div className="bg-blue-50 rounded-lg p-4">
                   <div className="flex items-center gap-2 text-blue-900 mb-2">
                     <i className="fas fa-info-circle"></i>
-                    <span className="font-medium">남은 수정 횟수: {order.remainingRevisions}회</span>
+                    <span className="font-medium">남은 수정 횟수: {order.remaining_revisions || 0}회</span>
                   </div>
                   <p className="text-sm text-blue-700">
                     수정 요청 시 판매자에게 알림이 전송됩니다.
@@ -463,6 +514,8 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                   </label>
                   <textarea
                     rows={6}
+                    value={revisionDetails}
+                    onChange={(e) => setRevisionDetails(e.target.value)}
                     placeholder="수정이 필요한 부분을 구체적으로 작성해주세요"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
                   ></textarea>
@@ -481,16 +534,22 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                 <div className="flex gap-3 pt-4">
                   <button
                     onClick={() => setShowRevisionModal(false)}
-                    className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                    disabled={submitting}
+                    className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
                   >
                     취소
                   </button>
                   <button
                     onClick={handleRevisionRequest}
-                    className="flex-1 px-6 py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors font-medium"
+                    disabled={submitting}
+                    className="flex-1 px-6 py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors font-medium disabled:opacity-50"
                   >
-                    <i className="fas fa-redo mr-2"></i>
-                    수정 요청하기
+                    {submitting ? '전송 중...' : (
+                      <>
+                        <i className="fas fa-redo mr-2"></i>
+                        수정 요청하기
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
