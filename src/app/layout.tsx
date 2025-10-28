@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "@fontsource/noto-sans-kr/300.css";
+import "@fontsource/noto-sans-kr/400.css";
+import "@fontsource/noto-sans-kr/500.css";
+import "@fontsource/noto-sans-kr/600.css";
+import "@fontsource/noto-sans-kr/700.css";
+import "@fontsource/noto-sans-kr/800.css";
+import "@fontsource/noto-sans-kr/900.css";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import ConditionalLayout from "@/components/layout/ConditionalLayout";
 
@@ -23,12 +30,8 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet"
-        />
       </head>
-      <body className="min-h-screen bg-gray-50">
+      <body className="min-h-screen bg-gray-50 overflow-x-hidden">
         <AuthProvider>
           <ConditionalLayout>
             {children}
