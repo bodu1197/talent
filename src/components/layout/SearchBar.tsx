@@ -29,6 +29,7 @@ export default function SearchBar() {
             <button
               type="submit"
               className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#0f3460] text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-[#1a4b7d] transition-colors"
+              aria-label="검색"
             >
               <i className="fas fa-search"></i>
             </button>

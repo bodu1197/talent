@@ -22,7 +22,10 @@ export default function Header() {
 
           {/* 모바일: 종 아이콘만 표시 */}
           <div className="lg:hidden">
-            <button className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-[#0f3460] transition-colors">
+            <button
+              className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-[#0f3460] transition-colors"
+              aria-label="알림"
+            >
               <i className="fas fa-bell text-xl"></i>
             </button>
           </div>

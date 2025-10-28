@@ -43,6 +43,7 @@ export default function MobileBottomNav() {
           <button
             onClick={() => setShowSearch(true)}
             className="flex flex-col items-center justify-center space-y-1 text-gray-500 transition-colors active:text-[#0f3460]"
+            aria-label="검색 열기"
           >
             <i className="fas fa-search text-xl"></i>
             <span className="text-xs font-medium">검색</span>
