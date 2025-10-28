@@ -37,12 +37,12 @@ const nextConfig = {
 
     return [
       {
-        // Apply to all routes including RSC requests
+        // Apply to all routes (includes query parameters automatically)
         source: '/:path*',
         headers: securityHeaders,
       },
       {
-        // Static files with caching (without query params)
+        // Static files with caching (includes query parameters automatically)
         source: '/_next/static/:path*',
         headers: [
           {
@@ -54,25 +54,6 @@ const nextConfig = {
             value: 'public, max-age=31536000, immutable',
           },
         ],
-      },
-      {
-        // Static files with query parameters (Vercel deployment URLs)
-        source: '/_next/static/:path*\\?:query*',
-        headers: [
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-      {
-        // RSC requests with query parameters
-        source: '/:path*\\?:query*',
-        headers: securityHeaders,
       },
     ]
   },
