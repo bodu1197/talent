@@ -18,6 +18,10 @@ const nextConfig = {
   async headers() {
     const securityHeaders = [
       {
+        key: 'Content-Type',
+        value: 'text/html; charset=utf-8',
+      },
+      {
         key: 'X-Content-Type-Options',
         value: 'nosniff',
       },
