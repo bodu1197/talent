@@ -14,7 +14,7 @@ export default function SearchBar() {
   }
 
   return (
-    <div className="bg-white border-b border-gray-200 lg:hidden sticky top-16 z-40">
+    <div className="bg-white border-b border-gray-200 lg:hidden fixed top-16 left-0 right-0 z-40">
       <div className="container-1200 px-4 py-4">
         {/* 검색창 */}
         <form onSubmit={handleSearch} className="mb-3">
