@@ -26,10 +26,6 @@ const nextConfig = {
         value: 'DENY',
       },
       {
-        key: 'X-XSS-Protection',
-        value: '1; mode=block',
-      },
-      {
         key: 'Referrer-Policy',
         value: 'strict-origin-when-cross-origin',
       },
@@ -54,6 +50,16 @@ const nextConfig = {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
           },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        // Images and media with cache busting
+        source: '/images/:path*',
+        headers: [
           {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
