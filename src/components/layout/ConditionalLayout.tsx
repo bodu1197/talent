@@ -13,9 +13,8 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
   // 마이페이지와 관리자 페이지에서는 헤더/푸터 숨기기
   const hideLayout = pathname?.startsWith('/mypage') || pathname?.startsWith('/admin')
 
-  // pathname을 key로 사용하여 pathname 변경 시 완전히 새로 렌더링
   return (
-    <div suppressHydrationWarning key={pathname}>
+    <>
       {!hideLayout && (
         <>
           <Header />
@@ -32,6 +31,6 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
           <MobileBottomNav />
         </>
       )}
-    </div>
+    </>
   )
 }
