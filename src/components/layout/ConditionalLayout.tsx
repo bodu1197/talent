@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation'
 import Header from './Header'
 import ConditionalMegaMenu from './ConditionalMegaMenu'
-import MobileSearchBar from './MobileSearchBar'
+import SearchBar from './SearchBar'
 import Footer from './Footer'
 import MobileBottomNav from './MobileBottomNav'
 
@@ -19,7 +19,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
       {!hideLayout && (
         <>
           <Header />
-          <MobileSearchBar />
+          <SearchBar />
           <ConditionalMegaMenu />
         </>
       )}

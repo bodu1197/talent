@@ -99,8 +99,8 @@ export default function HeroSection() {
               </p>
             </div>
 
-            {/* 검색창 */}
-            <div className="mb-4 lg:mb-6">
+            {/* 검색창 - PC에서만 표시 */}
+            <div className="mb-4 lg:mb-6 hidden lg:block">
               <div className="relative w-full lg:max-w-[490px]">
                 <input
                   type="text"
@@ -113,8 +113,8 @@ export default function HeroSection() {
               </div>
             </div>
 
-            {/* 인기 카테고리 */}
-            <div className="flex flex-wrap gap-2 sm:gap-3">
+            {/* 인기 카테고리 - PC에서만 표시 */}
+            <div className="flex-wrap gap-2 sm:gap-3 hidden lg:flex">
               <Link href="/categories/ai-services" className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-blue-50 text-[#0f3460] rounded-full font-medium hover:bg-blue-100 transition-colors flex items-center gap-2">
                 <i className="fas fa-robot text-sm sm:text-base"></i> <span className="hidden sm:inline">AI 서비스</span><span className="sm:hidden">AI</span>
               </Link>
