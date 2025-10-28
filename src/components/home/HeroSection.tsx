@@ -84,58 +84,58 @@ export default function HeroSection() {
   const slide = slides[currentSlide]
 
   return (
-    <section className="bg-white py-16">
-      <div className="container-1200">
-        <div className="flex items-center gap-12">
+    <section className="bg-white py-8 sm:py-12 lg:py-16">
+      <div className="container-1200 px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
           {/* 왼쪽: 타이틀 + 검색 + 카테고리 */}
-          <div className="flex-1">
-            <div className="mb-8">
+          <div className="flex-1 w-full">
+            <div className="mb-6 lg:mb-8">
               <h1
-                className={`text-4xl font-bold text-gray-900 mb-4 transition-opacity duration-500 min-h-[120px] leading-[1.4] ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+                className={`text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 lg:mb-4 transition-opacity duration-500 lg:min-h-[120px] leading-[1.4] ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
                 dangerouslySetInnerHTML={{ __html: slide.title }}
               />
-              <p className={`text-base text-gray-600 min-h-[48px] leading-[1.5] transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+              <p className={`text-sm sm:text-base text-gray-600 lg:min-h-[48px] leading-[1.5] transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
                 {slide.subtitle}
               </p>
             </div>
 
             {/* 검색창 */}
-            <div className="mb-6">
-              <div className="relative max-w-[490px]">
+            <div className="mb-4 lg:mb-6">
+              <div className="relative w-full lg:max-w-[490px]">
                 <input
                   type="text"
                   placeholder="어떤 재능이 필요하신가요?"
-                  className="w-full px-6 py-4 pr-12 border-2 border-gray-300 rounded-full focus:outline-none focus:border-[#0f3460] transition-colors text-gray-900"
+                  className="w-full px-4 sm:px-6 py-3 sm:py-4 pr-12 border-2 border-gray-300 rounded-full focus:outline-none focus:border-[#0f3460] transition-colors text-gray-900 text-sm sm:text-base"
                 />
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#0f3460] text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-[#1a4b7d] transition-colors">
-                  <i className="fas fa-search"></i>
+                <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#0f3460] text-white w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center hover:bg-[#1a4b7d] transition-colors">
+                  <i className="fas fa-search text-sm sm:text-base"></i>
                 </button>
               </div>
             </div>
 
             {/* 인기 카테고리 */}
-            <div className="flex flex-wrap gap-3">
-              <Link href="/categories/ai-services" className="px-4 py-2 bg-blue-50 text-[#0f3460] rounded-full font-medium hover:bg-blue-100 transition-colors flex items-center gap-2">
-                <i className="fas fa-robot"></i> AI 서비스
+            <div className="flex flex-wrap gap-2 sm:gap-3">
+              <Link href="/categories/ai-services" className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-blue-50 text-[#0f3460] rounded-full font-medium hover:bg-blue-100 transition-colors flex items-center gap-2">
+                <i className="fas fa-robot text-sm sm:text-base"></i> <span className="hidden sm:inline">AI 서비스</span><span className="sm:hidden">AI</span>
               </Link>
-              <Link href="/categories/it-programming" className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors">
-                IT/프로그래밍
+              <Link href="/categories/it-programming" className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors">
+                <span className="hidden sm:inline">IT/프로그래밍</span><span className="sm:hidden">IT</span>
               </Link>
-              <Link href="/categories/design" className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors">
+              <Link href="/categories/design" className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors">
                 디자인
               </Link>
-              <Link href="/categories/marketing" className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors">
+              <Link href="/categories/marketing" className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors">
                 마케팅
               </Link>
-              <Link href="/categories/writing" className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors">
+              <Link href="/categories/writing" className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors hidden sm:inline-flex">
                 글쓰기
               </Link>
             </div>
           </div>
 
           {/* 오른쪽: 그라데이션 카드 + 페이지네이션 */}
-          <div className="w-[382px] flex-shrink-0">
-            <div className={`relative bg-gradient-to-br ${slide.gradient} rounded-2xl p-6 text-white shadow-2xl transition-all duration-500 h-[298px] flex flex-col`}>
+          <div className="w-full lg:w-[382px] flex-shrink-0">
+            <div className={`relative bg-gradient-to-br ${slide.gradient} rounded-2xl p-5 sm:p-6 text-white shadow-2xl transition-all duration-500 h-[250px] sm:h-[298px] flex flex-col`}>
               {/* 장식 요소 */}
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-lg rotate-12"></div>
 

@@ -174,7 +174,7 @@ export default function Sidebar({ mode }: SidebarProps) {
   }
 
   return (
-    <aside className="w-64 flex-shrink-0 bg-white border-r border-gray-200 overflow-y-auto flex flex-col">
+    <aside className="hidden lg:flex w-64 flex-shrink-0 bg-white border-r border-gray-200 overflow-y-auto flex-col">
       <div className="p-4 flex-1">
         {/* 홈으로 가기 버튼 */}
         <div className="mb-4">
