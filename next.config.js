@@ -16,29 +16,33 @@ const nextConfig = {
     },
   },
   async headers() {
-    return [
+    const securityHeaders = [
       {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
-          },
-        ],
+        key: 'X-Content-Type-Options',
+        value: 'nosniff',
       },
       {
+        key: 'X-Frame-Options',
+        value: 'DENY',
+      },
+      {
+        key: 'X-XSS-Protection',
+        value: '1; mode=block',
+      },
+      {
+        key: 'Referrer-Policy',
+        value: 'strict-origin-when-cross-origin',
+      },
+    ]
+
+    return [
+      {
+        // Apply to all routes including RSC requests
+        source: '/:path*',
+        headers: securityHeaders,
+      },
+      {
+        // Static files with caching
         source: '/_next/static/:path*',
         headers: [
           {
@@ -50,6 +54,11 @@ const nextConfig = {
             value: 'public, max-age=31536000, immutable',
           },
         ],
+      },
+      {
+        // RSC requests with query parameters
+        source: '/:path*\\?:query*',
+        headers: securityHeaders,
       },
     ]
   },
