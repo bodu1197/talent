@@ -12,19 +12,24 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
   // 마이페이지와 관리자 페이지에서는 헤더/푸터 숨기기
   const hideLayout = pathname?.startsWith('/mypage') || pathname?.startsWith('/admin')
 
-  if (hideLayout) {
-    return <>{children}</>
-  }
-
+  // pathname을 key로 사용하여 pathname 변경 시 완전히 새로 렌더링
   return (
-    <>
-      <Header />
-      <ConditionalMegaMenu />
-      <main className="flex-1 pb-16 lg:pb-0">
+    <div key={pathname}>
+      {!hideLayout && (
+        <>
+          <Header />
+          <ConditionalMegaMenu />
+        </>
+      )}
+      <main className={hideLayout ? '' : 'flex-1 pb-16 lg:pb-0'}>
         {children}
       </main>
-      <Footer />
-      <MobileBottomNav />
-    </>
+      {!hideLayout && (
+        <>
+          <Footer />
+          <MobileBottomNav />
+        </>
+      )}
+    </div>
   )
 }

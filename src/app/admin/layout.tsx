@@ -1,25 +1,9 @@
 'use client'
 
-import { useAdmin } from '@/hooks/useAdmin'
-import AdminSidebar from '@/components/admin/layout/AdminSidebar'
-import AdminHeader from '@/components/admin/layout/AdminHeader'
+import AdminSidebar from '@/components/admin/Sidebar'
+import AdminHeader from '@/components/admin/Header'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const { loading, isAdmin } = useAdmin()
-
-  // 로딩 중이거나 관리자가 아닌 경우 로딩 화면 표시
-  // useAdmin hook에서 redirect 처리됨
-  if (loading || !isAdmin) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#0f3460]"></div>
-          <p className="mt-4 text-gray-600">관리자 권한 확인 중...</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="fixed inset-0 bg-gray-50 flex">
       <AdminSidebar />

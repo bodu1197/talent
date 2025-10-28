@@ -1,61 +1,14 @@
 'use client'
 
 import { useAuth } from '@/components/providers/AuthProvider'
-import { useState, useEffect, useMemo } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function AdminHeader() {
   const { user, signOut } = useAuth()
-  const [notifications, setNotifications] = useState(0)
   const [showUserMenu, setShowUserMenu] = useState(false)
-  const supabase = useMemo(() => createClient(), [])
-
-  useEffect(() => {
-    let mounted = true
-
-    // Get unread notifications count
-    async function fetchNotifications() {
-      if (!user) return
-
-      try {
-        const { count } = await supabase
-          .from('notifications')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', user.id)
-          .eq('is_read', false)
-
-        if (mounted && count) {
-          setNotifications(count)
-        }
-      } catch (error) {
-        console.error('Notifications fetch error:', error)
-      }
-    }
-
-    fetchNotifications()
-
-    // Subscribe to new notifications
-    const channel = supabase
-      .channel('admin-notifications')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'notifications',
-          filter: `user_id=eq.${user?.id}`,
-        },
-        () => {
-          fetchNotifications()
-        }
-      )
-      .subscribe()
-
-    return () => {
-      mounted = false
-      supabase.removeChannel(channel)
-    }
-  }, [user, supabase])
+  const router = useRouter()
 
   return (
     <header className="h-16 bg-white border-b border-gray-200 flex-shrink-0 z-20">
@@ -77,11 +30,6 @@ export default function AdminHeader() {
           {/* Notifications */}
           <button className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors">
             <i className="fas fa-bell text-gray-600 text-xl"></i>
-            {notifications > 0 && (
-              <span className="absolute top-0 right-0 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                {notifications > 9 ? '9+' : notifications}
-              </span>
-            )}
           </button>
 
           {/* Quick Actions */}
@@ -96,10 +44,10 @@ export default function AdminHeader() {
               className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <div className="w-8 h-8 bg-[#0f3460] rounded-full flex items-center justify-center text-white font-semibold">
-                {user?.email?.[0].toUpperCase()}
+                {user?.email?.[0]?.toUpperCase() || 'A'}
               </div>
               <div className="text-left hidden md:block">
-                <div className="text-sm font-semibold text-gray-700">{user?.email}</div>
+                <div className="text-sm font-semibold text-gray-700">{user?.email || '관리자'}</div>
                 <div className="text-xs text-gray-500">관리자</div>
               </div>
               <i className="fas fa-chevron-down text-gray-400 text-sm"></i>
@@ -113,21 +61,24 @@ export default function AdminHeader() {
                   onClick={() => setShowUserMenu(false)}
                 ></div>
                 <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-20">
-                  <a
+                  <Link
                     href="/mypage/settings"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >
                     <i className="fas fa-user w-5"></i> 프로필
-                  </a>
-                  <a
+                  </Link>
+                  <Link
                     href="/admin/settings"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >
                     <i className="fas fa-cog w-5"></i> 설정
-                  </a>
+                  </Link>
                   <hr className="my-2" />
                   <button
-                    onClick={() => signOut()}
+                    onClick={async () => {
+                      await signOut()
+                      router.push('/')
+                    }}
                     className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
                   >
                     <i className="fas fa-sign-out-alt w-5"></i> 로그아웃

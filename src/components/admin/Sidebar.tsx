@@ -4,75 +4,19 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
-interface MenuItem {
-  name: string
-  path: string
-  icon: string
-  badge?: number
-  children?: MenuItem[]
-}
-
-const menuItems: MenuItem[] = [
-  {
-    name: '대시보드',
-    path: '/admin/dashboard',
-    icon: 'fa-chart-line',
-  },
-  {
-    name: '사용자 관리',
-    path: '/admin/users',
-    icon: 'fa-users',
-  },
-  {
-    name: '서비스 관리',
-    path: '/admin/services',
-    icon: 'fa-briefcase',
-  },
-  {
-    name: '주문 관리',
-    path: '/admin/orders',
-    icon: 'fa-shopping-cart',
-  },
-  {
-    name: '정산 관리',
-    path: '/admin/settlements',
-    icon: 'fa-money-bill-wave',
-  },
-  {
-    name: '리뷰 관리',
-    path: '/admin/reviews',
-    icon: 'fa-star',
-  },
-  {
-    name: '신고 관리',
-    path: '/admin/reports',
-    icon: 'fa-flag',
-  },
-  {
-    name: '분쟁 관리',
-    path: '/admin/disputes',
-    icon: 'fa-gavel',
-  },
-  {
-    name: '카테고리 관리',
-    path: '/admin/categories',
-    icon: 'fa-folder-tree',
-  },
-  {
-    name: '통계 분석',
-    path: '/admin/statistics',
-    icon: 'fa-chart-pie',
-  },
-  {
-    name: '활동 로그',
-    path: '/admin/logs',
-    icon: 'fa-history',
-  },
-  {
-    name: '시스템 설정',
-    path: '/admin/settings',
-    icon: 'fa-cog',
-  },
+const menuItems = [
+  { name: '대시보드', path: '/admin/dashboard', icon: 'fa-chart-line' },
+  { name: '사용자 관리', path: '/admin/users', icon: 'fa-users' },
+  { name: '서비스 관리', path: '/admin/services', icon: 'fa-briefcase' },
+  { name: '주문 관리', path: '/admin/orders', icon: 'fa-shopping-cart' },
+  { name: '정산 관리', path: '/admin/settlements', icon: 'fa-money-bill-wave' },
+  { name: '리뷰 관리', path: '/admin/reviews', icon: 'fa-star' },
+  { name: '신고 관리', path: '/admin/reports', icon: 'fa-flag' },
+  { name: '분쟁 관리', path: '/admin/disputes', icon: 'fa-gavel' },
+  { name: '카테고리 관리', path: '/admin/categories', icon: 'fa-folder-tree' },
+  { name: '통계 분석', path: '/admin/statistics', icon: 'fa-chart-pie' },
+  { name: '활동 로그', path: '/admin/logs', icon: 'fa-history' },
+  { name: '시스템 설정', path: '/admin/settings', icon: 'fa-cog' },
 ]
 
 export default function AdminSidebar() {
@@ -80,11 +24,7 @@ export default function AdminSidebar() {
   const [collapsed, setCollapsed] = useState(false)
 
   return (
-    <aside
-      className={`flex-shrink-0 h-full bg-[#0f3460] text-white transition-all duration-300 flex flex-col ${
-        collapsed ? 'w-20' : 'w-64'
-      }`}
-    >
+    <aside className={`flex-shrink-0 h-full bg-[#0f3460] text-white transition-all duration-300 flex flex-col ${collapsed ? 'w-20' : 'w-64'}`}>
       {/* Logo */}
       <div className="h-16 flex items-center justify-between px-4 border-b border-white/10">
         {!collapsed && (
@@ -116,16 +56,7 @@ export default function AdminSidebar() {
               title={collapsed ? item.name : undefined}
             >
               <i className={`fas ${item.icon} ${collapsed ? 'text-lg' : 'w-5'}`}></i>
-              {!collapsed && (
-                <>
-                  <span className="flex-1">{item.name}</span>
-                  {item.badge && item.badge > 0 && (
-                    <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
-                      {item.badge}
-                    </span>
-                  )}
-                </>
-              )}
+              {!collapsed && <span className="flex-1">{item.name}</span>}
             </Link>
           )
         })}
