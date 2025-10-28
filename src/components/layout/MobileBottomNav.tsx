@@ -15,27 +15,65 @@ export default function MobileBottomNav() {
   return (
     <>
       {/* 모바일 하단 네비게이션 - 모바일에서만 표시 */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 lg:hidden z-40">
-        <div className="grid grid-cols-2 h-16">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 lg:hidden z-40 safe-area-bottom">
+        <div className="grid grid-cols-5 h-16">
+          {/* 홈 */}
           <Link
             href="/"
-            className={`flex flex-col items-center justify-center space-y-1 ${
+            className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
               isActive('/') ? 'text-[#0f3460]' : 'text-gray-500'
             }`}
           >
-            <i className={`fas fa-home text-xl`}></i>
-            <span className="text-xs">홈</span>
+            <i className="fas fa-home text-xl"></i>
+            <span className="text-xs font-medium">홈</span>
           </Link>
 
+          {/* 카테고리 */}
+          <Link
+            href="/categories"
+            className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
+              pathname.startsWith('/categories') ? 'text-[#0f3460]' : 'text-gray-500'
+            }`}
+          >
+            <i className="fas fa-th text-xl"></i>
+            <span className="text-xs font-medium">카테고리</span>
+          </Link>
+
+          {/* 검색 */}
           <button
             onClick={() => setShowSearch(true)}
-            className="flex flex-col items-center justify-center space-y-1 text-gray-500"
+            className="flex flex-col items-center justify-center space-y-1 text-gray-500 transition-colors active:text-[#0f3460]"
           >
             <i className="fas fa-search text-xl"></i>
-            <span className="text-xs">검색</span>
+            <span className="text-xs font-medium">검색</span>
           </button>
+
+          {/* 마이페이지 */}
+          <Link
+            href={user ? "/mypage/buyer/dashboard" : "/auth/login"}
+            className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
+              pathname.startsWith('/mypage') ? 'text-[#0f3460]' : 'text-gray-500'
+            }`}
+          >
+            <i className="fas fa-user text-xl"></i>
+            <span className="text-xs font-medium">MY</span>
+          </Link>
+
+          {/* 메뉴 */}
+          <Link
+            href="/menu"
+            className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
+              pathname === '/menu' ? 'text-[#0f3460]' : 'text-gray-500'
+            }`}
+          >
+            <i className="fas fa-bars text-xl"></i>
+            <span className="text-xs font-medium">메뉴</span>
+          </Link>
         </div>
       </nav>
+
+      {/* 하단 네비게이션 공간 확보 */}
+      <div className="h-16 lg:hidden"></div>
 
       {/* 모바일 검색 오버레이 */}
       {showSearch && (
