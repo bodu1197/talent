@@ -85,13 +85,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // 초기 세션 체크
     const checkSession = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession()
+        const { data: { session }, error } = await supabase.auth.getSession()
+
+        // LockManager 오류는 무시하고 계속 진행
+        if (error && !error.message?.includes('LockManager')) {
+          console.error('세션 체크 실패:', error)
+        }
+
         setUser(session?.user ?? null)
         if (session?.user) {
           await fetchProfile(session.user.id)
         }
-      } catch (error) {
-        console.error('세션 체크 실패:', error)
+      } catch (error: any) {
+        // LockManager 타임아웃 오류는 무시
+        if (!error?.message?.includes('LockManager') && !error?.isAcquireTimeout) {
+          console.error('세션 체크 실패:', error)
+        }
       } finally {
         setLoading(false)
       }

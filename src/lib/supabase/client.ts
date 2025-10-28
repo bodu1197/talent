@@ -9,6 +9,13 @@ export function createClient() {
         autoRefreshToken: true,
         persistSession: true,
         detectSessionInUrl: true,
+        flowType: 'pkce',
+        storageKey: 'sb-auth-token',
+      },
+      global: {
+        headers: {
+          'x-application-name': 'talent-hub',
+        },
       },
     }
   )

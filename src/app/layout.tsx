@@ -8,6 +8,7 @@ import "@fontsource/noto-sans-kr/700.css";
 import "@fontsource/noto-sans-kr/800.css";
 import "@fontsource/noto-sans-kr/900.css";
 import { AuthProvider } from "@/components/providers/AuthProvider";
+import { ErrorBoundary } from "@/components/providers/ErrorBoundary";
 import ConditionalLayout from "@/components/layout/ConditionalLayout";
 
 export const metadata: Metadata = {
@@ -33,11 +34,13 @@ export default function RootLayout({
       <head>
       </head>
       <body className="min-h-screen bg-gray-50 overflow-x-hidden">
-        <AuthProvider>
-          <ConditionalLayout>
-            {children}
-          </ConditionalLayout>
-        </AuthProvider>
+        <ErrorBoundary>
+          <AuthProvider>
+            <ConditionalLayout>
+              {children}
+            </ConditionalLayout>
+          </AuthProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );
