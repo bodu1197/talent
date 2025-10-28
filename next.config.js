@@ -37,12 +37,17 @@ const nextConfig = {
 
     return [
       {
-        // Apply to all routes (includes query parameters automatically)
-        source: '/:path*',
+        // Root path
+        source: '/',
         headers: securityHeaders,
       },
       {
-        // Static files with caching (includes query parameters automatically)
+        // All other routes including RSC requests
+        source: '/(.*)',
+        headers: securityHeaders,
+      },
+      {
+        // Static files with caching
         source: '/_next/static/:path*',
         headers: [
           {
