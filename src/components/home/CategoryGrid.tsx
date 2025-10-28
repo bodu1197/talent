@@ -40,7 +40,89 @@ export default function CategoryGrid() {
           {/* Removed h2 title "카테고리" as per instruction */}
         </div>
 
-        <div className="flex flex-wrap gap-x-3 sm:gap-x-6 md:gap-x-8 gap-y-3 sm:gap-y-4 items-center justify-between">
+        {/* 모바일: 2줄 가로 스크롤 */}
+        <div className="lg:hidden">
+          <div className="flex flex-col gap-3">
+            {/* 첫 번째 줄 */}
+            <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+              {topLevelCategories.slice(0, 11).map((category, index) => (
+                <Link
+                  key={category.id}
+                  href={`/categories/${category.slug}`}
+                  className="flex flex-col items-center group cursor-pointer flex-shrink-0"
+                >
+                  <div className={`text-3xl mb-1 h-12 w-12 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[index % brightColors.length]} group-hover:text-[#0f3460]`}>
+                    {category.icon === 'robot' && <i className="fas fa-robot"></i>}
+                    {category.icon === 'palette' && <i className="fas fa-palette"></i>}
+                    {category.icon === 'scissors' && <i className="fas fa-scissors"></i>}
+                    {category.icon === 'code' && <i className="fas fa-code"></i>}
+                    {category.icon === 'bullhorn' && <i className="fas fa-bullhorn"></i>}
+                    {category.icon === 'camera' && <i className="fas fa-camera"></i>}
+                    {category.icon === 'language' && <i className="fas fa-language"></i>}
+                    {category.icon === 'pen-fancy' && <i className="fas fa-pen-fancy"></i>}
+                    {category.icon === 'briefcase' && <i className="fas fa-briefcase"></i>}
+                    {category.icon === 'book' && <i className="fas fa-book"></i>}
+                    {category.icon === 'music' && <i className="fas fa-music"></i>}
+                    {category.icon === 'calendar' && <i className="fas fa-calendar"></i>}
+                    {category.icon === 'spa' && <i className="fas fa-spa"></i>}
+                    {category.icon === 'bullseye' && <i className="fas fa-bullseye"></i>}
+                    {category.icon === 'star' && <i className="fas fa-star"></i>}
+                    {category.icon === 'book-open' && <i className="fas fa-book-open"></i>}
+                    {category.icon === 'gavel' && <i className="fas fa-gavel"></i>}
+                    {category.icon === 'hammer' && <i className="fas fa-hammer"></i>}
+                    {category.icon === 'graduation-cap' && <i className="fas fa-graduation-cap"></i>}
+                    {category.icon === 'chart-line' && <i className="fas fa-chart-line"></i>}
+                    {category.icon === 'home' && <i className="fas fa-home"></i>}
+                    {category.icon === 'motorcycle' && <i className="fas fa-motorcycle"></i>}
+                    {!category.icon && <i className="fas fa-circle"></i>}
+                  </div>
+                  <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-xs text-center w-16">{category.name}</div>
+                </Link>
+              ))}
+            </div>
+
+            {/* 두 번째 줄 */}
+            <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+              {topLevelCategories.slice(11).map((category, index) => (
+                <Link
+                  key={category.id}
+                  href={`/categories/${category.slug}`}
+                  className="flex flex-col items-center group cursor-pointer flex-shrink-0"
+                >
+                  <div className={`text-3xl mb-1 h-12 w-12 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[(index + 11) % brightColors.length]} group-hover:text-[#0f3460]`}>
+                    {category.icon === 'robot' && <i className="fas fa-robot"></i>}
+                    {category.icon === 'palette' && <i className="fas fa-palette"></i>}
+                    {category.icon === 'scissors' && <i className="fas fa-scissors"></i>}
+                    {category.icon === 'code' && <i className="fas fa-code"></i>}
+                    {category.icon === 'bullhorn' && <i className="fas fa-bullhorn"></i>}
+                    {category.icon === 'camera' && <i className="fas fa-camera"></i>}
+                    {category.icon === 'language' && <i className="fas fa-language"></i>}
+                    {category.icon === 'pen-fancy' && <i className="fas fa-pen-fancy"></i>}
+                    {category.icon === 'briefcase' && <i className="fas fa-briefcase"></i>}
+                    {category.icon === 'book' && <i className="fas fa-book"></i>}
+                    {category.icon === 'music' && <i className="fas fa-music"></i>}
+                    {category.icon === 'calendar' && <i className="fas fa-calendar"></i>}
+                    {category.icon === 'spa' && <i className="fas fa-spa"></i>}
+                    {category.icon === 'bullseye' && <i className="fas fa-bullseye"></i>}
+                    {category.icon === 'star' && <i className="fas fa-star"></i>}
+                    {category.icon === 'book-open' && <i className="fas fa-book-open"></i>}
+                    {category.icon === 'gavel' && <i className="fas fa-gavel"></i>}
+                    {category.icon === 'hammer' && <i className="fas fa-hammer"></i>}
+                    {category.icon === 'graduation-cap' && <i className="fas fa-graduation-cap"></i>}
+                    {category.icon === 'chart-line' && <i className="fas fa-chart-line"></i>}
+                    {category.icon === 'home' && <i className="fas fa-home"></i>}
+                    {category.icon === 'motorcycle' && <i className="fas fa-motorcycle"></i>}
+                    {!category.icon && <i className="fas fa-circle"></i>}
+                  </div>
+                  <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-xs text-center w-16">{category.name}</div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* PC: 기존 레이아웃 유지 */}
+        <div className="hidden lg:flex flex-wrap gap-x-3 sm:gap-x-6 md:gap-x-8 gap-y-3 sm:gap-y-4 items-center justify-between">
           {categoriesInFirstRow.map((category, index) => (
             <Link
               key={category.id}
@@ -93,7 +175,7 @@ export default function CategoryGrid() {
         </div>
 
         {showAllCategories && remainingCategories.length > 0 && (
-          <div className="flex flex-wrap gap-x-8 gap-y-4 items-center mt-4"> {/* Increased gap-x and added justify-between */}
+          <div className="hidden lg:flex flex-wrap gap-x-8 gap-y-4 items-center mt-4">
             {remainingCategories.map((category, index) => (
               <Link
                 key={category.id}
