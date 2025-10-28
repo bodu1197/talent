@@ -15,7 +15,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
 
   // pathname을 key로 사용하여 pathname 변경 시 완전히 새로 렌더링
   return (
-    <div key={pathname}>
+    <div suppressHydrationWarning key={pathname}>
       {!hideLayout && (
         <>
           <Header />
