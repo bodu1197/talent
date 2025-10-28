@@ -42,7 +42,7 @@ export default function CategoryGrid() {
 
         {/* 모바일: 2줄 가로 스크롤 */}
         <div className="lg:hidden">
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-[2px]">
             {/* 첫 번째 줄 */}
             <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
               {topLevelCategories.slice(0, 11).map((category, index) => (
@@ -51,7 +51,7 @@ export default function CategoryGrid() {
                   href={`/categories/${category.slug}`}
                   className="flex flex-col items-center group cursor-pointer flex-shrink-0"
                 >
-                  <div className={`text-3xl mb-1 h-12 w-12 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[index % brightColors.length]} group-hover:text-[#0f3460]`}>
+                  <div className={`text-[27px] mb-1 h-11 w-11 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[index % brightColors.length]} group-hover:text-[#0f3460]`}>
                     {category.icon === 'robot' && <i className="fas fa-robot"></i>}
                     {category.icon === 'palette' && <i className="fas fa-palette"></i>}
                     {category.icon === 'scissors' && <i className="fas fa-scissors"></i>}
@@ -89,7 +89,7 @@ export default function CategoryGrid() {
                   href={`/categories/${category.slug}`}
                   className="flex flex-col items-center group cursor-pointer flex-shrink-0"
                 >
-                  <div className={`text-3xl mb-1 h-12 w-12 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[(index + 11) % brightColors.length]} group-hover:text-[#0f3460]`}>
+                  <div className={`text-[27px] mb-1 h-11 w-11 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[(index + 11) % brightColors.length]} group-hover:text-[#0f3460]`}>
                     {category.icon === 'robot' && <i className="fas fa-robot"></i>}
                     {category.icon === 'palette' && <i className="fas fa-palette"></i>}
                     {category.icon === 'scissors' && <i className="fas fa-scissors"></i>}
