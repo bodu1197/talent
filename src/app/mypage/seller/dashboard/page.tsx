@@ -1,49 +1,90 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import StatCard from '@/components/mypage/StatCard'
 import Link from 'next/link'
+import { useAuth } from '@/components/providers/AuthProvider'
+import { getSellerDashboardStats, getSellerRecentOrders } from '@/lib/supabase/queries/dashboard'
+import LoadingSpinner from '@/components/common/LoadingSpinner'
+import ErrorState from '@/components/common/ErrorState'
 
 export default function SellerDashboardPage() {
-  // TODO: 실제 데이터는 API에서 가져와야 합니다
-  const stats = {
-    todayRevenue: '350,000',
-    weeklyRevenue: '1,420,000',
-    monthlyRevenue: '5,800,000',
-    expertGrade: '골드'
+  const { user } = useAuth()
+  const [stats, setStats] = useState<any>(null)
+  const [recentOrders, setRecentOrders] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (user) {
+      loadDashboardData()
+    }
+  }, [user])
+
+  async function loadDashboardData() {
+    try {
+      setLoading(true)
+      setError(null)
+
+      const [statsData, ordersData] = await Promise.all([
+        getSellerDashboardStats(user!.id),
+        getSellerRecentOrders(user!.id, 5)
+      ])
+
+      setStats(statsData)
+      setRecentOrders(ordersData)
+    } catch (err: any) {
+      console.error('대시보드 데이터 로드 실패:', err)
+      setError(err.message || '대시보드 데이터를 불러오는데 실패했습니다')
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const alerts = [
-    { id: 1, type: 'new_order', message: '신규 주문 2건 - 확인 필요', count: 2, href: '/mypage/seller/orders?status=new' },
-    { id: 2, type: 'revision', message: '수정 요청 1건 - 대응 필요', count: 1, href: '/mypage/seller/orders?status=revision' },
-    { id: 3, type: 'review', message: '리뷰 답변 대기 3건', count: 3, href: '/mypage/seller/reviews' }
-  ]
+  if (loading) {
+    return (
+      <>
+        <Sidebar mode="seller" />
+        <main className="flex-1 overflow-y-auto p-8">
+          <LoadingSpinner message="대시보드를 불러오는 중..." />
+        </main>
+      </>
+    )
+  }
 
-  const recentOrders = [
-    {
-      id: '12345',
-      title: '로고 디자인',
-      buyerName: '홍길동',
-      status: 'new',
-      statusLabel: '신규 주문',
-      price: 50000,
-      createdAt: '2025-01-27 14:30'
-    },
-    {
-      id: '12344',
-      title: '영상 편집',
-      buyerName: '김철수',
-      status: 'in_progress',
-      statusLabel: '진행중',
-      price: 150000,
-      createdAt: '2025-01-26 10:15'
+  if (error) {
+    return (
+      <>
+        <Sidebar mode="seller" />
+        <main className="flex-1 overflow-y-auto p-8">
+          <ErrorState message={error} retry={loadDashboardData} />
+        </main>
+      </>
+    )
+  }
+
+  // Generate alerts based on real data
+  const alerts = []
+  if (stats?.newOrders > 0) {
+    alerts.push({
+      id: 1,
+      type: 'new_order',
+      message: `신규 주문 ${stats.newOrders}건 - 확인 필요`,
+      count: stats.newOrders,
+      href: '/mypage/seller/orders?status=paid'
+    })
+  }
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'paid': return '신규 주문'
+      case 'in_progress': return '진행중'
+      case 'delivered': return '완료 대기'
+      case 'completed': return '완료'
+      case 'cancelled': return '취소/환불'
+      default: return status
     }
-  ]
-
-  const orderStats = {
-    inProgress: 8,
-    delivered: 3,
-    completedThisMonth: 42
   }
 
   return (
@@ -59,53 +100,55 @@ export default function SellerDashboardPage() {
         {/* 통계 카드 */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatCard
-            title="오늘 매출"
-            value={`${stats.todayRevenue}원`}
-            icon="fa-won-sign"
+            title="신규 주문"
+            value={`${stats?.newOrders || 0}건`}
+            icon="fa-shopping-cart"
+            color="red"
+          />
+          <StatCard
+            title="진행중 주문"
+            value={`${stats?.inProgressOrders || 0}건`}
+            icon="fa-spinner"
+            color="yellow"
+          />
+          <StatCard
+            title="완료 대기"
+            value={`${stats?.deliveredOrders || 0}건`}
+            icon="fa-box-open"
             color="blue"
           />
           <StatCard
-            title="이번주 매출"
-            value={`${stats.weeklyRevenue}원`}
-            icon="fa-calendar-week"
-            color="green"
-          />
-          <StatCard
             title="이번달 매출"
-            value={`${stats.monthlyRevenue}원`}
-            icon="fa-calendar"
-            color="purple"
-          />
-          <StatCard
-            title="전문가 등급"
-            value={stats.expertGrade}
-            icon="fa-trophy"
-            color="yellow"
+            value={`${stats?.monthlyRevenue?.toLocaleString() || '0'}원`}
+            icon="fa-won-sign"
+            color="green"
           />
         </div>
 
         {/* 알림 */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <i className="fas fa-bell text-red-500"></i>
-            알림 (우선순위 높은 것)
-          </h2>
-          <div className="space-y-3">
-            {alerts.map((alert) => (
-              <Link
-                key={alert.id}
-                href={alert.href}
-                className="flex items-center justify-between p-4 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <i className="fas fa-exclamation-circle text-red-500"></i>
-                  <span className="text-gray-900 font-medium">{alert.message}</span>
-                </div>
-                <i className="fas fa-arrow-right text-gray-400"></i>
-              </Link>
-            ))}
+        {alerts.length > 0 && (
+          <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
+            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <i className="fas fa-bell text-red-500"></i>
+              알림 (우선순위 높은 것)
+            </h2>
+            <div className="space-y-3">
+              {alerts.map((alert) => (
+                <Link
+                  key={alert.id}
+                  href={alert.href}
+                  className="flex items-center justify-between p-4 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <i className="fas fa-exclamation-circle text-red-500"></i>
+                    <span className="text-gray-900 font-medium">{alert.message}</span>
+                  </div>
+                  <i className="fas fa-arrow-right text-gray-400"></i>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* 최근 7일 매출 */}
@@ -129,18 +172,27 @@ export default function SellerDashboardPage() {
               주문 현황
             </h2>
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-yellow-50 rounded-lg">
+              <Link
+                href="/mypage/seller/orders?status=in_progress"
+                className="flex items-center justify-between p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition-colors"
+              >
                 <span className="text-gray-700 font-medium">진행중</span>
-                <span className="text-2xl font-bold text-yellow-600">{orderStats.inProgress}건</span>
-              </div>
-              <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
+                <span className="text-2xl font-bold text-yellow-600">{stats?.inProgressOrders || 0}건</span>
+              </Link>
+              <Link
+                href="/mypage/seller/orders?status=delivered"
+                className="flex items-center justify-between p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+              >
                 <span className="text-gray-700 font-medium">완료 대기</span>
-                <span className="text-2xl font-bold text-blue-600">{orderStats.delivered}건</span>
-              </div>
-              <div className="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+                <span className="text-2xl font-bold text-blue-600">{stats?.deliveredOrders || 0}건</span>
+              </Link>
+              <Link
+                href="/mypage/seller/orders?status=completed"
+                className="flex items-center justify-between p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
+              >
                 <span className="text-gray-700 font-medium">이번달 완료</span>
-                <span className="text-2xl font-bold text-green-600">{orderStats.completedThisMonth}건</span>
-              </div>
+                <span className="text-2xl font-bold text-green-600">{stats?.monthlyRevenue ? Math.floor(stats.monthlyRevenue / 50000) : 0}건</span>
+              </Link>
             </div>
           </div>
         </div>
@@ -161,46 +213,52 @@ export default function SellerDashboardPage() {
           </div>
 
           <div className="space-y-4">
-            {recentOrders.map((order) => (
-              <div
-                key={order.id}
-                className="border border-gray-200 rounded-lg p-4 hover:border-[#0f3460] transition-colors"
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm text-gray-500">#{order.id}</span>
-                      <span className="text-base font-bold text-gray-900">{order.title}</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-sm text-gray-600">
-                      <span>{order.buyerName}</span>
-                      <span>•</span>
-                      <span className={`font-medium ${
-                        order.status === 'new' ? 'text-red-500' : 'text-yellow-600'
-                      }`}>
-                        {order.statusLabel}
-                      </span>
-                      <span>•</span>
-                      <span className="font-bold text-gray-900">{order.price.toLocaleString()}원</span>
+            {recentOrders.length > 0 ? (
+              recentOrders.map((order) => (
+                <div
+                  key={order.id}
+                  className="border border-gray-200 rounded-lg p-4 hover:border-[#0f3460] transition-colors"
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm text-gray-500">#{order.order_number || order.id.slice(0, 8)}</span>
+                        <span className="text-base font-bold text-gray-900">{order.title || order.service?.title}</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <span>{order.buyer?.name || '구매자'}</span>
+                        <span>•</span>
+                        <span className={`font-medium ${
+                          order.status === 'paid' ? 'text-red-500' : 'text-yellow-600'
+                        }`}>
+                          {getStatusLabel(order.status)}
+                        </span>
+                        <span>•</span>
+                        <span className="font-bold text-gray-900">{order.total_amount?.toLocaleString() || '0'}원</span>
+                      </div>
                     </div>
                   </div>
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href={`/mypage/seller/orders/${order.id}`}
+                      className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors text-sm font-medium"
+                    >
+                      {order.status === 'paid' ? '주문 확인' : '작업 상태 업데이트'}
+                    </Link>
+                    <Link
+                      href={`/mypage/messages?order=${order.id}`}
+                      className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                    >
+                      메시지 보내기
+                    </Link>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Link
-                    href={`/mypage/seller/orders/${order.id}`}
-                    className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors text-sm font-medium"
-                  >
-                    {order.status === 'new' ? '주문 확인' : '작업 상태 업데이트'}
-                  </Link>
-                  <Link
-                    href={`/mypage/messages?order=${order.id}`}
-                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
-                  >
-                    메시지 보내기
-                  </Link>
-                </div>
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                최근 주문이 없습니다
               </div>
-            ))}
+            )}
           </div>
         </div>
       </main>
