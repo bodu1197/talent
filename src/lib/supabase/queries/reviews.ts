@@ -46,12 +46,16 @@ export async function getPendingReviews(userId: string) {
       id,
       order_number,
       completed_at,
+      total_amount,
+      title,
+      service_id,
+      seller_id,
       service:services(id, title, thumbnail_url),
       seller:users!seller_id(id, name, profile_image)
     `)
     .eq('buyer_id', userId)
     .eq('status', 'completed')
-    .is('reviews.id', null)
+    .is('review_id', null)
     .order('completed_at', { ascending: false })
 
   if (error) throw error

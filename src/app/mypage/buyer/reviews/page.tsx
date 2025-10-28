@@ -1,63 +1,150 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
+import { useAuth } from '@/components/providers/AuthProvider'
+import { getPendingReviews, getBuyerReviews } from '@/lib/supabase/queries/reviews'
+import { createReview, updateReview, deleteReview } from '@/lib/supabase/mutations/reviews'
+import LoadingSpinner from '@/components/common/LoadingSpinner'
+import ErrorState from '@/components/common/ErrorState'
 
 function BuyerReviewsContent() {
+  const { user } = useAuth()
   const searchParams = useSearchParams()
   const tabFromUrl = searchParams.get('tab') || 'pending'
   const [activeTab, setActiveTab] = useState<'pending' | 'written'>(tabFromUrl as 'pending' | 'written')
   const [showWriteModal, setShowWriteModal] = useState(false)
-  const [selectedOrder, setSelectedOrder] = useState<string | null>(null)
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [selectedOrder, setSelectedOrder] = useState<any>(null)
+  const [selectedReview, setSelectedReview] = useState<any>(null)
   const [rating, setRating] = useState(5)
   const [reviewContent, setReviewContent] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  // TODO: 실제로는 API에서 데이터를 가져와야 합니다
-  const pendingReviews = [
-    {
-      id: '1',
-      orderNumber: '12345',
-      serviceName: '로고 디자인 작업',
-      sellerName: '디자인스튜디오',
-      thumbnailUrl: null,
-      completedAt: '2025-01-25',
-      price: 50000
-    },
-    {
-      id: '2',
-      orderNumber: '12344',
-      serviceName: '영상 편집',
-      sellerName: '비디오프로',
-      thumbnailUrl: null,
-      completedAt: '2025-01-23',
-      price: 150000
+  const [pendingReviews, setPendingReviews] = useState<any[]>([])
+  const [writtenReviews, setWrittenReviews] = useState<any[]>([])
+
+  useEffect(() => {
+    if (user) {
+      loadReviews()
     }
-  ]
+  }, [user])
 
-  const writtenReviews = [
-    {
-      id: '1',
-      orderNumber: '12343',
-      serviceName: '명함 디자인',
-      sellerName: '인쇄소A',
-      thumbnailUrl: null,
-      rating: 5,
-      content: '정말 만족스러운 작업이었습니다. 빠른 작업과 완벽한 결과물에 감사드립니다!',
-      createdAt: '2025-01-20',
-      price: 30000,
-      hasReply: true,
-      sellerReply: '좋은 평가 감사합니다!'
+  async function loadReviews() {
+    try {
+      setLoading(true)
+      setError(null)
+
+      const [pendingData, writtenData] = await Promise.all([
+        getPendingReviews(user!.id),
+        getBuyerReviews(user!.id)
+      ])
+
+      setPendingReviews(pendingData)
+      setWrittenReviews(writtenData)
+    } catch (err: any) {
+      console.error('리뷰 데이터 로드 실패:', err)
+      setError(err.message || '리뷰 데이터를 불러오는데 실패했습니다')
+    } finally {
+      setLoading(false)
     }
-  ]
+  }
 
-  const handleSubmitReview = () => {
-    // TODO: API 호출
-    console.log({ orderId: selectedOrder, rating, content: reviewContent })
-    setShowWriteModal(false)
-    setRating(5)
-    setReviewContent('')
+  const handleSubmitReview = async () => {
+    if (!reviewContent.trim()) {
+      alert('리뷰 내용을 입력해주세요')
+      return
+    }
+
+    try {
+      setSubmitting(true)
+      await createReview({
+        orderId: selectedOrder.id,
+        serviceId: selectedOrder.service_id,
+        sellerId: selectedOrder.seller_id,
+        buyerId: user!.id,
+        rating,
+        content: reviewContent
+      })
+
+      setShowWriteModal(false)
+      setSelectedOrder(null)
+      setRating(5)
+      setReviewContent('')
+      await loadReviews()
+      alert('리뷰가 등록되었습니다')
+    } catch (err: any) {
+      console.error('리뷰 등록 실패:', err)
+      alert('리뷰 등록에 실패했습니다')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const handleEditReview = async () => {
+    if (!reviewContent.trim()) {
+      alert('리뷰 내용을 입력해주세요')
+      return
+    }
+
+    try {
+      setSubmitting(true)
+      await updateReview(selectedReview.id, {
+        rating,
+        content: reviewContent
+      })
+
+      setShowEditModal(false)
+      setSelectedReview(null)
+      setRating(5)
+      setReviewContent('')
+      await loadReviews()
+      alert('리뷰가 수정되었습니다')
+    } catch (err: any) {
+      console.error('리뷰 수정 실패:', err)
+      alert('리뷰 수정에 실패했습니다')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const handleDeleteReview = async (reviewId: string) => {
+    if (!confirm('정말 이 리뷰를 삭제하시겠습니까?')) return
+
+    try {
+      await deleteReview(reviewId)
+      await loadReviews()
+      alert('리뷰가 삭제되었습니다')
+    } catch (err: any) {
+      console.error('리뷰 삭제 실패:', err)
+      alert('리뷰 삭제에 실패했습니다')
+    }
+  }
+
+  if (loading) {
+    return (
+      <>
+        <Sidebar mode="buyer" />
+        <main className="flex-1 overflow-y-auto p-8">
+          <LoadingSpinner message="리뷰 데이터를 불러오는 중..." />
+        </main>
+      </>
+    )
+  }
+
+  if (error) {
+    return (
+      <>
+        <Sidebar mode="buyer" />
+        <main className="flex-1 overflow-y-auto p-8">
+          <ErrorState message={error} retry={loadReviews} />
+        </main>
+      </>
+    )
   }
 
   return (
@@ -122,8 +209,8 @@ function BuyerReviewsContent() {
                 <div key={order.id} className="bg-white border border-gray-200 rounded-lg p-6">
                   <div className="flex gap-4">
                     <div className="w-24 h-24 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center">
-                      {order.thumbnailUrl ? (
-                        <img src={order.thumbnailUrl} alt={order.serviceName} className="w-full h-full object-cover rounded-lg" />
+                      {order.service?.thumbnail_url ? (
+                        <img src={order.service.thumbnail_url} alt={order.title || order.service.title} className="w-full h-full object-cover rounded-lg" />
                       ) : (
                         <i className="fas fa-image text-gray-400 text-2xl"></i>
                       )}
@@ -132,21 +219,23 @@ function BuyerReviewsContent() {
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <h3 className="text-lg font-bold text-gray-900 mb-1">{order.serviceName}</h3>
+                          <h3 className="text-lg font-bold text-gray-900 mb-1">{order.title || order.service?.title}</h3>
                           <div className="text-sm text-gray-600">
-                            판매자: {order.sellerName} • 주문번호 #{order.orderNumber}
+                            판매자: {order.seller?.name} • 주문번호 #{order.order_number || order.id.slice(0, 8)}
                           </div>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-4 mb-3">
-                        <span className="text-sm text-gray-600">완료일: {order.completedAt}</span>
-                        <span className="text-sm font-bold text-gray-900">{order.price.toLocaleString()}원</span>
+                        <span className="text-sm text-gray-600">
+                          완료일: {order.completed_at ? new Date(order.completed_at).toLocaleDateString('ko-KR') : '-'}
+                        </span>
+                        <span className="text-sm font-bold text-gray-900">{order.total_amount?.toLocaleString() || '0'}원</span>
                       </div>
 
                       <button
                         onClick={() => {
-                          setSelectedOrder(order.id)
+                          setSelectedOrder(order)
                           setShowWriteModal(true)
                         }}
                         className="px-6 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors text-sm font-medium"
@@ -175,8 +264,8 @@ function BuyerReviewsContent() {
                 <div key={review.id} className="bg-white border border-gray-200 rounded-lg p-6">
                   <div className="flex gap-4 mb-4">
                     <div className="w-24 h-24 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center">
-                      {review.thumbnailUrl ? (
-                        <img src={review.thumbnailUrl} alt={review.serviceName} className="w-full h-full object-cover rounded-lg" />
+                      {review.service?.thumbnail_url ? (
+                        <img src={review.service.thumbnail_url} alt={review.service.title} className="w-full h-full object-cover rounded-lg" />
                       ) : (
                         <i className="fas fa-image text-gray-400 text-2xl"></i>
                       )}
@@ -185,9 +274,9 @@ function BuyerReviewsContent() {
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <h3 className="text-lg font-bold text-gray-900 mb-1">{review.serviceName}</h3>
+                          <h3 className="text-lg font-bold text-gray-900 mb-1">{review.service?.title}</h3>
                           <div className="text-sm text-gray-600">
-                            판매자: {review.sellerName} • 주문번호 #{review.orderNumber}
+                            판매자: {review.seller?.name} • 주문번호 #{review.order?.order_number || review.order_id?.slice(0, 8)}
                           </div>
                         </div>
                         <div className="flex items-center gap-1">
@@ -198,29 +287,40 @@ function BuyerReviewsContent() {
                       </div>
 
                       <div className="text-sm text-gray-600 mb-3">
-                        작성일: {review.createdAt}
+                        작성일: {new Date(review.created_at).toLocaleDateString('ko-KR')}
                       </div>
 
                       <p className="text-gray-700 mb-4">{review.content}</p>
 
-                      {review.hasReply && review.sellerReply && (
-                        <div className="bg-gray-50 rounded-lg p-4">
+                      {review.seller_reply && (
+                        <div className="bg-gray-50 rounded-lg p-4 mb-4">
                           <div className="flex items-center gap-2 mb-2">
                             <i className="fas fa-reply text-[#0f3460]"></i>
                             <span className="text-sm font-medium text-gray-900">판매자 답변</span>
                           </div>
-                          <p className="text-gray-700">{review.sellerReply}</p>
+                          <p className="text-gray-700">{review.seller_reply}</p>
                         </div>
                       )}
                     </div>
                   </div>
 
                   <div className="flex gap-2">
-                    <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
+                    <button
+                      onClick={() => {
+                        setSelectedReview(review)
+                        setRating(review.rating)
+                        setReviewContent(review.content)
+                        setShowEditModal(true)
+                      }}
+                      className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                    >
                       <i className="fas fa-edit mr-2"></i>
                       수정
                     </button>
-                    <button className="px-4 py-2 border border-red-300 text-red-700 rounded-lg hover:bg-red-50 transition-colors text-sm font-medium">
+                    <button
+                      onClick={() => handleDeleteReview(review.id)}
+                      className="px-4 py-2 border border-red-300 text-red-700 rounded-lg hover:bg-red-50 transition-colors text-sm font-medium"
+                    >
                       <i className="fas fa-trash mr-2"></i>
                       삭제
                     </button>
@@ -299,17 +399,108 @@ function BuyerReviewsContent() {
 
                 <div className="flex gap-3 pt-4">
                   <button
-                    onClick={() => setShowWriteModal(false)}
-                    className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                    onClick={() => {
+                      setShowWriteModal(false)
+                      setRating(5)
+                      setReviewContent('')
+                    }}
+                    disabled={submitting}
+                    className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
                   >
                     취소
                   </button>
                   <button
                     onClick={handleSubmitReview}
-                    className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium"
+                    disabled={submitting}
+                    className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium disabled:opacity-50"
                   >
-                    <i className="fas fa-check mr-2"></i>
-                    리뷰 등록
+                    {submitting ? '등록 중...' : (
+                      <>
+                        <i className="fas fa-check mr-2"></i>
+                        리뷰 등록
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 리뷰 수정 모달 */}
+        {showEditModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg max-w-2xl w-full p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">리뷰 수정</h2>
+                <button
+                  onClick={() => {
+                    setShowEditModal(false)
+                    setRating(5)
+                    setReviewContent('')
+                  }}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <i className="fas fa-times text-2xl"></i>
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    평점 *
+                  </label>
+                  <div className="flex items-center gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => setRating(star)}
+                        className="transition-colors"
+                      >
+                        <i className={`fas fa-star text-3xl ${star <= rating ? 'text-yellow-400' : 'text-gray-300'}`}></i>
+                      </button>
+                    ))}
+                    <span className="ml-2 text-gray-600">{rating}점</span>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    리뷰 내용 *
+                  </label>
+                  <textarea
+                    value={reviewContent}
+                    onChange={(e) => setReviewContent(e.target.value)}
+                    rows={6}
+                    placeholder="서비스 이용 후기를 작성해주세요"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  ></textarea>
+                </div>
+
+                <div className="flex gap-3 pt-4">
+                  <button
+                    onClick={() => {
+                      setShowEditModal(false)
+                      setRating(5)
+                      setReviewContent('')
+                    }}
+                    disabled={submitting}
+                    className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+                  >
+                    취소
+                  </button>
+                  <button
+                    onClick={handleEditReview}
+                    disabled={submitting}
+                    className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium disabled:opacity-50"
+                  >
+                    {submitting ? '수정 중...' : (
+                      <>
+                        <i className="fas fa-check mr-2"></i>
+                        리뷰 수정
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
