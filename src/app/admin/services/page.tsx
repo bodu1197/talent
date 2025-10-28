@@ -1,11 +1,252 @@
 'use client'
 
+import { useState, useEffect } from 'react'
+import { getAdminServices, getAdminServicesCount } from '@/lib/supabase/queries/admin'
+import LoadingSpinner from '@/components/common/LoadingSpinner'
+import ErrorState from '@/components/common/ErrorState'
+import EmptyState from '@/components/common/EmptyState'
+
+type ServiceStatus = 'all' | 'active' | 'inactive' | 'pending'
+
 export default function AdminServicesPage() {
+  const [services, setServices] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [statusFilter, setStatusFilter] = useState<ServiceStatus>('all')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [statusCounts, setStatusCounts] = useState({
+    all: 0,
+    active: 0,
+    inactive: 0,
+    pending: 0
+  })
+
+  useEffect(() => {
+    loadServices()
+    loadStatusCounts()
+  }, [statusFilter])
+
+  async function loadServices() {
+    try {
+      setLoading(true)
+      setError(null)
+      const data = await getAdminServices({
+        status: statusFilter === 'all' ? undefined : statusFilter,
+        searchQuery
+      })
+      setServices(data)
+    } catch (err: any) {
+      console.error('서비스 조회 실패:', err)
+      setError(err.message || '서비스 목록을 불러오는데 실패했습니다')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function loadStatusCounts() {
+    try {
+      const [allCount, activeCount, inactiveCount, pendingCount] = await Promise.all([
+        getAdminServicesCount(),
+        getAdminServicesCount('active'),
+        getAdminServicesCount('inactive'),
+        getAdminServicesCount('pending')
+      ])
+
+      setStatusCounts({
+        all: allCount,
+        active: activeCount,
+        inactive: inactiveCount,
+        pending: pendingCount
+      })
+    } catch (err) {
+      console.error('상태별 카운트 조회 실패:', err)
+    }
+  }
+
+  const filteredServices = services.filter(service => {
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase()
+      return service.title?.toLowerCase().includes(query) || service.seller?.name?.toLowerCase().includes(query)
+    }
+    return true
+  })
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'active': return '활성'
+      case 'inactive': return '비활성'
+      case 'pending': return '검토중'
+      default: return status
+    }
+  }
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'active': return 'bg-green-100 text-green-700'
+      case 'inactive': return 'bg-gray-100 text-gray-700'
+      case 'pending': return 'bg-yellow-100 text-yellow-700'
+      default: return 'bg-gray-100 text-gray-700'
+    }
+  }
+
+  const tabs = [
+    { value: 'all' as ServiceStatus, label: '전체', count: statusCounts.all },
+    { value: 'active' as ServiceStatus, label: '활성', count: statusCounts.active },
+    { value: 'inactive' as ServiceStatus, label: '비활성', count: statusCounts.inactive },
+    { value: 'pending' as ServiceStatus, label: '검토중', count: statusCounts.pending }
+  ]
+
+  if (loading) {
+    return <LoadingSpinner message="서비스 목록을 불러오는 중..." />
+  }
+
+  if (error) {
+    return <ErrorState message={error} retry={loadServices} />
+  }
+
   return (
-    <div>
-      <h1 className="text-3xl font-bold text-gray-900 mb-6">서비스 관리</h1>
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900">서비스 관리</h1>
+        <p className="text-gray-600 mt-1">전체 서비스를 관리하세요</p>
+      </div>
+
+      {/* 탭 네비게이션 */}
+      <div className="bg-white rounded-lg border border-gray-200">
+        <div className="flex items-center overflow-x-auto">
+          {tabs.map((tab) => (
+            <button
+              key={tab.value}
+              onClick={() => setStatusFilter(tab.value)}
+              className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
+                statusFilter === tab.value
+                  ? 'border-[#0f3460] text-[#0f3460]'
+                  : 'border-transparent text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              {tab.label}
+              {tab.count > 0 && (
+                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
+                  statusFilter === tab.value
+                    ? 'bg-[#0f3460] text-white'
+                    : 'bg-gray-200 text-gray-600'
+                }`}>
+                  {tab.count}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* 검색 */}
       <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <p className="text-gray-600">서비스 관리 페이지입니다.</p>
+        <div className="flex gap-4">
+          <div className="flex-1">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="서비스명 또는 판매자명으로 검색"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+            />
+          </div>
+          <button
+            onClick={() => setSearchQuery('')}
+            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+          >
+            <i className="fas fa-redo-alt mr-2"></i>
+            초기화
+          </button>
+        </div>
+      </div>
+
+      {/* 결과 카운트 */}
+      <div className="text-sm text-gray-600">
+        총 <span className="font-bold text-gray-900">{filteredServices.length}</span>개의 서비스
+      </div>
+
+      {/* 서비스 목록 */}
+      <div className="bg-white rounded-lg border border-gray-200">
+        {filteredServices.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    서비스
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    판매자
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    가격
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    상태
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    등록일
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    통계
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {filteredServices.map((service) => (
+                  <tr key={service.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center">
+                        {service.thumbnail_url && (
+                          <img
+                            src={service.thumbnail_url}
+                            alt={service.title}
+                            className="w-10 h-10 rounded object-cover mr-3"
+                          />
+                        )}
+                        <div className="text-sm font-medium text-gray-900">{service.title}</div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{service.seller?.name}</div>
+                      <div className="text-xs text-gray-500">{service.seller?.email}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">
+                        {service.price?.toLocaleString()}원
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(service.status)}`}>
+                        {getStatusLabel(service.status)}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(service.created_at).toLocaleDateString('ko-KR')}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <div className="flex gap-2 text-xs">
+                        <span><i className="fas fa-eye"></i> {service.view_count || 0}</span>
+                        <span><i className="fas fa-heart text-red-500"></i> {service.favorite_count || 0}</span>
+                        <span><i className="fas fa-shopping-cart"></i> {service.order_count || 0}</span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="p-12">
+            <EmptyState
+              icon="fa-box"
+              title="서비스가 없습니다"
+              description="검색 조건에 맞는 서비스가 없습니다"
+            />
+          </div>
+        )}
       </div>
     </div>
   )

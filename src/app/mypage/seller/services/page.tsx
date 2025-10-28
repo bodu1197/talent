@@ -1,73 +1,77 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
+import { useAuth } from '@/components/providers/AuthProvider'
+import { getSellerServices, getSellerServicesCount } from '@/lib/supabase/queries/services'
+import LoadingSpinner from '@/components/common/LoadingSpinner'
+import ErrorState from '@/components/common/ErrorState'
+import EmptyState from '@/components/common/EmptyState'
 
 type ServiceStatus = 'all' | 'active' | 'inactive' | 'pending'
 
 export default function SellerServicesPage() {
+  const { user } = useAuth()
   const [statusFilter, setStatusFilter] = useState<ServiceStatus>('all')
   const [searchQuery, setSearchQuery] = useState('')
-
-  // TODO: 실제로는 API에서 데이터를 가져와야 합니다
-  const mockServices = [
-    {
-      id: '1',
-      title: '로고 디자인 작업',
-      thumbnailUrl: null,
-      status: 'active',
-      statusLabel: '활성',
-      price: 50000,
-      createdAt: '2024-12-01',
-      viewCount: 342,
-      favoriteCount: 28,
-      orderCount: 15,
-      rating: 4.8,
-      reviewCount: 12
-    },
-    {
-      id: '2',
-      title: '영상 편집 서비스',
-      thumbnailUrl: null,
-      status: 'active',
-      statusLabel: '활성',
-      price: 150000,
-      createdAt: '2024-11-15',
-      viewCount: 521,
-      favoriteCount: 45,
-      orderCount: 23,
-      rating: 4.9,
-      reviewCount: 18
-    },
-    {
-      id: '3',
-      title: '명함 디자인',
-      thumbnailUrl: null,
-      status: 'inactive',
-      statusLabel: '비활성',
-      price: 30000,
-      createdAt: '2024-10-20',
-      viewCount: 189,
-      favoriteCount: 12,
-      orderCount: 8,
-      rating: 4.5,
-      reviewCount: 6
-    }
-  ]
-
-  const filteredServices = mockServices.filter(service => {
-    if (statusFilter !== 'all' && service.status !== statusFilter) return false
-    if (searchQuery && !service.title.includes(searchQuery)) return false
-    return true
+  const [services, setServices] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [statusCounts, setStatusCounts] = useState({
+    all: 0,
+    active: 0,
+    inactive: 0,
+    pending: 0
   })
 
-  const statusCounts = {
-    all: mockServices.length,
-    active: mockServices.filter(s => s.status === 'active').length,
-    inactive: mockServices.filter(s => s.status === 'inactive').length,
-    pending: mockServices.filter(s => s.status === 'pending').length
+  useEffect(() => {
+    if (user) {
+      loadServices()
+      loadStatusCounts()
+    }
+  }, [user, statusFilter])
+
+  async function loadServices() {
+    try {
+      setLoading(true)
+      setError(null)
+      const data = await getSellerServices(user!.id, statusFilter === 'all' ? undefined : statusFilter)
+      setServices(data)
+    } catch (err: any) {
+      console.error('서비스 조회 실패:', err)
+      setError(err.message || '서비스 목록을 불러오는데 실패했습니다')
+    } finally {
+      setLoading(false)
+    }
   }
+
+  async function loadStatusCounts() {
+    try {
+      const [activeCount, inactiveCount, pendingCount] = await Promise.all([
+        getSellerServicesCount(user!.id, 'active'),
+        getSellerServicesCount(user!.id, 'inactive'),
+        getSellerServicesCount(user!.id, 'pending')
+      ])
+
+      setStatusCounts({
+        all: activeCount + inactiveCount + pendingCount,
+        active: activeCount,
+        inactive: inactiveCount,
+        pending: pendingCount
+      })
+    } catch (err) {
+      console.error('상태별 카운트 조회 실패:', err)
+    }
+  }
+
+  const filteredServices = services.filter(service => {
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase()
+      return service.title?.toLowerCase().includes(query)
+    }
+    return true
+  })
 
   const tabs = [
     { value: 'all', label: '전체', count: statusCounts.all },
@@ -75,6 +79,28 @@ export default function SellerServicesPage() {
     { value: 'inactive', label: '비활성', count: statusCounts.inactive },
     { value: 'pending', label: '검토중', count: statusCounts.pending }
   ]
+
+  if (loading) {
+    return (
+      <>
+        <Sidebar mode="seller" />
+        <main className="flex-1 overflow-y-auto p-8">
+          <LoadingSpinner message="서비스 목록을 불러오는 중..." />
+        </main>
+      </>
+    )
+  }
+
+  if (error) {
+    return (
+      <>
+        <Sidebar mode="seller" />
+        <main className="flex-1 overflow-y-auto p-8">
+          <ErrorState message={error} retry={loadServices} />
+        </main>
+      </>
+    )
+  }
 
   return (
     <>
@@ -104,7 +130,7 @@ export default function SellerServicesPage() {
               <span className="text-gray-600 text-sm">총 서비스</span>
               <i className="fas fa-shopping-bag text-blue-500"></i>
             </div>
-            <div className="text-2xl font-bold text-gray-900">{mockServices.length}개</div>
+            <div className="text-2xl font-bold text-gray-900">{services.length}개</div>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-2">
@@ -112,7 +138,7 @@ export default function SellerServicesPage() {
               <i className="fas fa-eye text-purple-500"></i>
             </div>
             <div className="text-2xl font-bold text-gray-900">
-              {mockServices.reduce((sum, s) => sum + s.viewCount, 0).toLocaleString()}
+              {services.reduce((sum, s) => sum + (s.view_count || 0), 0).toLocaleString()}
             </div>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -121,7 +147,7 @@ export default function SellerServicesPage() {
               <i className="fas fa-heart text-red-500"></i>
             </div>
             <div className="text-2xl font-bold text-gray-900">
-              {mockServices.reduce((sum, s) => sum + s.favoriteCount, 0)}
+              {services.reduce((sum, s) => sum + (s.favorite_count || 0), 0)}
             </div>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -130,7 +156,7 @@ export default function SellerServicesPage() {
               <i className="fas fa-shopping-cart text-green-500"></i>
             </div>
             <div className="text-2xl font-bold text-gray-900">
-              {mockServices.reduce((sum, s) => sum + s.orderCount, 0)}건
+              {services.reduce((sum, s) => sum + (s.order_count || 0), 0)}건
             </div>
           </div>
         </div>
@@ -193,95 +219,106 @@ export default function SellerServicesPage() {
         {/* 서비스 목록 */}
         <div className="space-y-4">
           {filteredServices.length > 0 ? (
-            filteredServices.map((service) => (
-              <div key={service.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:border-[#0f3460] transition-colors">
-                <div className="flex gap-4">
-                  {/* 썸네일 */}
-                  <div className="w-32 h-32 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
-                    {service.thumbnailUrl ? (
-                      <img src={service.thumbnailUrl} alt={service.title} className="w-full h-full object-cover" />
-                    ) : (
-                      <i className="fas fa-image text-gray-400 text-3xl"></i>
-                    )}
-                  </div>
+            filteredServices.map((service) => {
+              const getStatusLabel = (status: string) => {
+                switch (status) {
+                  case 'active': return '활성'
+                  case 'inactive': return '비활성'
+                  case 'pending': return '검토중'
+                  default: return status
+                }
+              }
 
-                  {/* 서비스 정보 */}
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h3 className="text-lg font-bold text-gray-900">{service.title}</h3>
-                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            service.status === 'active'
-                              ? 'bg-green-100 text-green-700'
-                              : service.status === 'inactive'
-                              ? 'bg-gray-100 text-gray-700'
-                              : 'bg-yellow-100 text-yellow-700'
-                          }`}>
-                            {service.statusLabel}
-                          </span>
-                        </div>
-                        <div className="text-sm text-gray-600 mb-3">
-                          등록일: {service.createdAt}
-                        </div>
-
-                        {/* 통계 */}
-                        <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
-                          <span><i className="fas fa-eye mr-1"></i>{service.viewCount.toLocaleString()}</span>
-                          <span><i className="fas fa-heart mr-1 text-red-500"></i>{service.favoriteCount}</span>
-                          <span><i className="fas fa-shopping-cart mr-1"></i>{service.orderCount}건</span>
-                          <span><i className="fas fa-star mr-1 text-yellow-500"></i>{service.rating} ({service.reviewCount})</span>
-                        </div>
-
-                        <div className="text-lg font-bold text-[#0f3460]">
-                          {service.price.toLocaleString()}원
-                        </div>
-                      </div>
+              return (
+                <div key={service.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:border-[#0f3460] transition-colors">
+                  <div className="flex gap-4">
+                    {/* 썸네일 */}
+                    <div className="w-32 h-32 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
+                      {service.thumbnail_url ? (
+                        <img src={service.thumbnail_url} alt={service.title} className="w-full h-full object-cover" />
+                      ) : (
+                        <i className="fas fa-image text-gray-400 text-3xl"></i>
+                      )}
                     </div>
 
-                    {/* 액션 버튼 */}
-                    <div className="flex items-center gap-2">
-                      <Link
-                        href={`/services/${service.id}`}
-                        className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
-                      >
-                        <i className="fas fa-eye mr-2"></i>
-                        미리보기
-                      </Link>
-                      <Link
-                        href={`/mypage/seller/services/${service.id}/edit`}
-                        className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors text-sm font-medium"
-                      >
-                        <i className="fas fa-edit mr-2"></i>
-                        수정
-                      </Link>
-                      <Link
-                        href={`/mypage/seller/services/statistics?id=${service.id}`}
-                        className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
-                      >
-                        <i className="fas fa-chart-bar mr-2"></i>
-                        통계
-                      </Link>
-                      {service.status === 'active' ? (
-                        <button className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors text-sm font-medium">
-                          <i className="fas fa-pause mr-2"></i>
-                          비활성화
+                    {/* 서비스 정보 */}
+                    <div className="flex-1">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="text-lg font-bold text-gray-900">{service.title}</h3>
+                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                              service.status === 'active'
+                                ? 'bg-green-100 text-green-700'
+                                : service.status === 'inactive'
+                                ? 'bg-gray-100 text-gray-700'
+                                : 'bg-yellow-100 text-yellow-700'
+                            }`}>
+                              {getStatusLabel(service.status)}
+                            </span>
+                          </div>
+                          <div className="text-sm text-gray-600 mb-3">
+                            등록일: {new Date(service.created_at).toLocaleDateString('ko-KR')}
+                          </div>
+
+                          {/* 통계 */}
+                          <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                            <span><i className="fas fa-eye mr-1"></i>{(service.view_count || 0).toLocaleString()}</span>
+                            <span><i className="fas fa-heart mr-1 text-red-500"></i>{service.favorite_count || 0}</span>
+                            <span><i className="fas fa-shopping-cart mr-1"></i>{service.order_count || 0}건</span>
+                            <span><i className="fas fa-star mr-1 text-yellow-500"></i>{service.rating || 0} ({service.review_count || 0})</span>
+                          </div>
+
+                          <div className="text-lg font-bold text-[#0f3460]">
+                            {service.price.toLocaleString()}원
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 액션 버튼 */}
+                      <div className="flex items-center gap-2">
+                        <Link
+                          href={`/services/${service.id}`}
+                          className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                        >
+                          <i className="fas fa-eye mr-2"></i>
+                          미리보기
+                        </Link>
+                        <Link
+                          href={`/mypage/seller/services/${service.id}/edit`}
+                          className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors text-sm font-medium"
+                        >
+                          <i className="fas fa-edit mr-2"></i>
+                          수정
+                        </Link>
+                        <Link
+                          href={`/mypage/seller/services/statistics?id=${service.id}`}
+                          className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                        >
+                          <i className="fas fa-chart-bar mr-2"></i>
+                          통계
+                        </Link>
+                        {service.status === 'active' ? (
+                          <button className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors text-sm font-medium">
+                            <i className="fas fa-pause mr-2"></i>
+                            비활성화
+                          </button>
+                        ) : (
+                          <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium">
+                            <i className="fas fa-play mr-2"></i>
+                            활성화
+                          </button>
+                        )}
+                        <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium">
+                          <i className="fas fa-trash mr-2"></i>
+                          삭제
                         </button>
-                      ) : (
-                        <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium">
-                          <i className="fas fa-play mr-2"></i>
-                          활성화
-                        </button>
-                      )}
-                      <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium">
-                        <i className="fas fa-trash mr-2"></i>
-                        삭제
-                      </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))
+              )
+            })
           ) : (
             <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
               <i className="fas fa-shopping-bag text-gray-300 text-5xl mb-4"></i>
