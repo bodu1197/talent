@@ -42,7 +42,7 @@ export default function CategoryGrid() {
 
         {/* 모바일: 2줄 가로 스크롤 */}
         <div className="lg:hidden">
-          <div className="flex flex-col gap-[2px]">
+          <div className="flex flex-col gap-0">
             {/* 첫 번째 줄 */}
             <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
               {topLevelCategories.slice(0, 11).map((category, index) => (
