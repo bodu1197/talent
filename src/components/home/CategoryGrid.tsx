@@ -76,7 +76,7 @@ export default function CategoryGrid() {
                     {category.icon === 'motorcycle' && <i className="fas fa-motorcycle"></i>}
                     {!category.icon && <i className="fas fa-circle"></i>}
                   </div>
-                  <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-xs text-center w-16 whitespace-nowrap overflow-hidden text-ellipsis">{category.name}</div>
+                  <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-xs text-center w-20 whitespace-nowrap">{category.name}</div>
                 </Link>
               ))}
             </div>
@@ -114,7 +114,7 @@ export default function CategoryGrid() {
                     {category.icon === 'motorcycle' && <i className="fas fa-motorcycle"></i>}
                     {!category.icon && <i className="fas fa-circle"></i>}
                   </div>
-                  <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-xs text-center w-16 whitespace-nowrap overflow-hidden text-ellipsis">{category.name}</div>
+                  <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-xs text-center w-20 whitespace-nowrap">{category.name}</div>
                 </Link>
               ))}
             </div>
