@@ -7,7 +7,7 @@ import TrendingServices from '@/components/home/TrendingServices'
 
 export default function HomePage() {
   return (
-    <div>
+    <div className="pb-20 lg:pb-0">
       <HeroSection />
       <CategoryGrid />
       <PremiumPlacements />

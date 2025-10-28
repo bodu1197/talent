@@ -15,8 +15,8 @@ export default function MobileBottomNav() {
   return (
     <>
       {/* 모바일 하단 네비게이션 - 모바일에서만 표시 */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 lg:hidden z-40 safe-area-bottom">
-        <div className="grid grid-cols-5 h-16">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 lg:hidden z-50 shadow-lg">
+        <div className="grid grid-cols-5 h-16 max-w-screen-sm mx-auto">
           {/* 홈 */}
           <Link
             href="/"
@@ -71,9 +71,6 @@ export default function MobileBottomNav() {
           </Link>
         </div>
       </nav>
-
-      {/* 하단 네비게이션 공간 확보 */}
-      <div className="h-16 lg:hidden"></div>
 
       {/* 모바일 검색 오버레이 */}
       {showSearch && (
