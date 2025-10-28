@@ -42,8 +42,22 @@ const nextConfig = {
         headers: securityHeaders,
       },
       {
-        // Static files with caching
+        // Static files with caching (without query params)
         source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        // Static files with query parameters (Vercel deployment URLs)
+        source: '/_next/static/:path*\\?:query*',
         headers: [
           {
             key: 'X-Content-Type-Options',
