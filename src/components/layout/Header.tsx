@@ -17,17 +17,23 @@ export default function Header() {
             <div className="w-8 h-8 bg-[#0f3460] rounded-lg flex items-center justify-center">
               <i className="fas fa-star text-white text-sm"></i>
             </div>
-            <span className="text-xl font-bold hidden sm:inline">돌파구</span>
-            <span className="text-xl font-bold sm:hidden">돌파구</span>
+            <span className="text-xl font-bold">돌파구</span>
           </Link>
 
-          {/* 네비게이션 메뉴 */}
-          <nav className="flex items-center space-x-2 sm:space-x-4">
+          {/* 모바일: 종 아이콘만 표시 */}
+          <div className="lg:hidden">
+            <button className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-[#0f3460] transition-colors">
+              <i className="fas fa-bell text-xl"></i>
+            </button>
+          </div>
+
+          {/* PC 버전: 네비게이션 메뉴 */}
+          <nav className="hidden lg:flex items-center space-x-4">
             {loading ? (
               // 로딩 중
-              <div className="flex items-center space-x-2 sm:space-x-4">
+              <div className="flex items-center space-x-4">
                 <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
-                <div className="hidden sm:block w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
+                <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
                 <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
               </div>
             ) : user ? (
