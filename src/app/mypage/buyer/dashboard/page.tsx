@@ -1,55 +1,109 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import StatCard from '@/components/mypage/StatCard'
 import Link from 'next/link'
+import { useAuth } from '@/components/providers/AuthProvider'
+import { getBuyerDashboardStats, getBuyerRecentOrders, getBuyerRecentFavorites, getBuyerBenefits } from '@/lib/supabase/queries/dashboard'
+import LoadingSpinner from '@/components/common/LoadingSpinner'
+import ErrorState from '@/components/common/ErrorState'
 
 export default function BuyerDashboardPage() {
-  // TODO: 실제 데이터는 API에서 가져와야 합니다
-  const stats = {
-    inProgressOrders: 2,
-    deliveredOrders: 1,
-    pendingReviews: 3,
-    monthlyPurchases: 5
+  const { user } = useAuth()
+  const [stats, setStats] = useState<any>(null)
+  const [recentOrders, setRecentOrders] = useState<any[]>([])
+  const [favorites, setFavorites] = useState<any[]>([])
+  const [benefits, setBenefits] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (user) {
+      loadDashboardData()
+    }
+  }, [user])
+
+  async function loadDashboardData() {
+    try {
+      setLoading(true)
+      setError(null)
+
+      const [statsData, ordersData, favoritesData, benefitsData] = await Promise.all([
+        getBuyerDashboardStats(user!.id),
+        getBuyerRecentOrders(user!.id, 5),
+        getBuyerRecentFavorites(user!.id, 5),
+        getBuyerBenefits(user!.id)
+      ])
+
+      setStats(statsData)
+      setRecentOrders(ordersData)
+      setFavorites(favoritesData)
+      setBenefits(benefitsData)
+    } catch (err: any) {
+      console.error('대시보드 데이터 로드 실패:', err)
+      setError(err.message || '대시보드 데이터를 불러오는데 실패했습니다')
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const alerts = [
-    { id: 1, type: 'delivered', message: '작업 완료 도착 1건 - 확인 필요', href: '/mypage/buyer/orders?status=delivered' },
-    { id: 2, type: 'review', message: '리뷰 작성 가능 3건', href: '/mypage/buyer/reviews?tab=pending' },
-    { id: 3, type: 'message', message: '새 메시지 2건', href: '/mypage/messages' }
-  ]
+  if (loading) {
+    return (
+      <>
+        <Sidebar mode="buyer" />
+        <main className="flex-1 overflow-y-auto p-8">
+          <LoadingSpinner message="대시보드를 불러오는 중..." />
+        </main>
+      </>
+    )
+  }
 
-  const inProgressOrders = [
-    {
-      id: '12345',
-      title: '로고 디자인',
-      sellerName: '디자인스튜디오',
-      status: 'in_progress',
-      statusLabel: '작업중',
-      daysLeft: 3,
-      price: 50000,
-      thumbnailUrl: null
-    },
-    {
-      id: '12344',
-      title: '영상 편집',
-      sellerName: '비디오프로',
-      status: 'delivered',
-      statusLabel: '도착 확인 대기',
-      daysLeft: null,
-      price: 150000,
-      thumbnailUrl: null
+  if (error) {
+    return (
+      <>
+        <Sidebar mode="buyer" />
+        <main className="flex-1 overflow-y-auto p-8">
+          <ErrorState message={error} retry={loadDashboardData} />
+        </main>
+      </>
+    )
+  }
+
+  // Generate alerts based on real data
+  const alerts = []
+  if (stats?.deliveredOrders > 0) {
+    alerts.push({
+      id: 1,
+      type: 'delivered',
+      message: `작업 완료 도착 ${stats.deliveredOrders}건 - 확인 필요`,
+      href: '/mypage/buyer/orders?status=delivered'
+    })
+  }
+  if (stats?.pendingReviews > 0) {
+    alerts.push({
+      id: 2,
+      type: 'review',
+      message: `리뷰 작성 가능 ${stats.pendingReviews}건`,
+      href: '/mypage/buyer/reviews?tab=pending'
+    })
+  }
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'paid': return '결제완료'
+      case 'in_progress': return '진행중'
+      case 'delivered': return '도착 확인 대기'
+      case 'completed': return '완료'
+      case 'cancelled': return '취소/환불'
+      default: return status
     }
-  ]
+  }
 
-  const favorites = [
-    { id: 1, title: '로고 제작', seller: '디자인A' },
-    { id: 2, title: '명함 디자인', seller: '인쇄소B' }
-  ]
-
-  const benefits = {
-    coupons: 3,
-    cash: 5000
+  const getDaysLeft = (deliveryDate: string | null) => {
+    if (!deliveryDate) return null
+    const days = Math.ceil((new Date(deliveryDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+    return days > 0 ? days : null
   }
 
   return (
@@ -66,52 +120,54 @@ export default function BuyerDashboardPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatCard
             title="진행중 주문"
-            value={`${stats.inProgressOrders}건`}
+            value={`${stats?.inProgressOrders || 0}건`}
             icon="fa-spinner"
             color="yellow"
           />
           <StatCard
             title="도착 확인 대기"
-            value={`${stats.deliveredOrders}건`}
+            value={`${stats?.deliveredOrders || 0}건`}
             icon="fa-box-open"
             color="blue"
           />
           <StatCard
             title="작성 가능 리뷰"
-            value={`${stats.pendingReviews}건`}
+            value={`${stats?.pendingReviews || 0}건`}
             icon="fa-star"
             color="purple"
           />
           <StatCard
             title="이번달 구매"
-            value={`${stats.monthlyPurchases}건`}
+            value={`${stats?.monthlyPurchases || 0}건`}
             icon="fa-shopping-cart"
             color="green"
           />
         </div>
 
         {/* 알림 */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <i className="fas fa-bell text-red-500"></i>
-            확인 필요
-          </h2>
-          <div className="space-y-3">
-            {alerts.map((alert) => (
-              <Link
-                key={alert.id}
-                href={alert.href}
-                className="flex items-center justify-between p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <i className="fas fa-info-circle text-blue-500"></i>
-                  <span className="text-gray-900 font-medium">{alert.message}</span>
-                </div>
-                <i className="fas fa-arrow-right text-gray-400"></i>
-              </Link>
-            ))}
+        {alerts.length > 0 && (
+          <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
+            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <i className="fas fa-bell text-red-500"></i>
+              확인 필요
+            </h2>
+            <div className="space-y-3">
+              {alerts.map((alert) => (
+                <Link
+                  key={alert.id}
+                  href={alert.href}
+                  className="flex items-center justify-between p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <i className="fas fa-info-circle text-blue-500"></i>
+                    <span className="text-gray-900 font-medium">{alert.message}</span>
+                  </div>
+                  <i className="fas fa-arrow-right text-gray-400"></i>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* 진행중인 주문 */}
         <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
@@ -129,67 +185,76 @@ export default function BuyerDashboardPage() {
           </div>
 
           <div className="space-y-4">
-            {inProgressOrders.map((order) => (
-              <div
-                key={order.id}
-                className="border border-gray-200 rounded-lg p-4 hover:border-[#0f3460] transition-colors"
-              >
-                <div className="flex gap-4">
-                  {/* 썸네일 */}
-                  <div className="w-24 h-24 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center">
-                    {order.thumbnailUrl ? (
-                      <img src={order.thumbnailUrl} alt={order.title} className="w-full h-full object-cover rounded-lg" />
-                    ) : (
-                      <i className="fas fa-image text-gray-400 text-2xl"></i>
-                    )}
-                  </div>
+            {recentOrders.length > 0 ? (
+              recentOrders.map((order) => {
+                const daysLeft = getDaysLeft(order.delivery_date)
+                return (
+                  <div
+                    key={order.id}
+                    className="border border-gray-200 rounded-lg p-4 hover:border-[#0f3460] transition-colors"
+                  >
+                    <div className="flex gap-4">
+                      {/* 썸네일 */}
+                      <div className="w-24 h-24 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center">
+                        {order.service?.thumbnail_url ? (
+                          <img src={order.service.thumbnail_url} alt={order.title || order.service.title} className="w-full h-full object-cover rounded-lg" />
+                        ) : (
+                          <i className="fas fa-image text-gray-400 text-2xl"></i>
+                        )}
+                      </div>
 
-                  {/* 정보 */}
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-sm text-gray-500">#{order.id}</span>
-                          <span className="text-base font-bold text-gray-900">{order.title}</span>
+                      {/* 정보 */}
+                      <div className="flex-1">
+                        <div className="flex items-start justify-between mb-2">
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-sm text-gray-500">#{order.order_number || order.id.slice(0, 8)}</span>
+                              <span className="text-base font-bold text-gray-900">{order.title || order.service?.title}</span>
+                            </div>
+                            <div className="text-sm text-gray-600 mb-2">
+                              판매자: {order.seller?.name || '판매자'}
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-sm text-gray-600 mb-2">
-                          판매자: {order.sellerName}
+
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            order.status === 'delivered'
+                              ? 'bg-red-100 text-red-700'
+                              : 'bg-yellow-100 text-yellow-700'
+                          }`}>
+                            {getStatusLabel(order.status)}
+                          </span>
+                          {daysLeft && (
+                            <span className="text-sm text-gray-600">D-{daysLeft}일</span>
+                          )}
+                          <span className="text-sm font-bold text-gray-900">{order.total_amount?.toLocaleString() || '0'}원</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <Link
+                            href={`/mypage/buyer/orders/${order.id}`}
+                            className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors text-sm font-medium"
+                          >
+                            {order.status === 'delivered' ? '확인하기' : '상세보기'}
+                          </Link>
+                          <Link
+                            href={`/mypage/messages?order=${order.id}`}
+                            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                          >
+                            메시지
+                          </Link>
                         </div>
                       </div>
                     </div>
-
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        order.status === 'delivered'
-                          ? 'bg-red-100 text-red-700'
-                          : 'bg-yellow-100 text-yellow-700'
-                      }`}>
-                        {order.statusLabel}
-                      </span>
-                      {order.daysLeft && (
-                        <span className="text-sm text-gray-600">D-{order.daysLeft}일</span>
-                      )}
-                      <span className="text-sm font-bold text-gray-900">{order.price.toLocaleString()}원</span>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <Link
-                        href={`/mypage/buyer/orders/${order.id}`}
-                        className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors text-sm font-medium"
-                      >
-                        {order.status === 'delivered' ? '확인하기' : '상세보기'}
-                      </Link>
-                      <Link
-                        href={`/mypage/messages?order=${order.id}`}
-                        className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
-                      >
-                        메시지
-                      </Link>
-                    </div>
                   </div>
-                </div>
+                )
+              })
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                진행중인 주문이 없습니다
               </div>
-            ))}
+            )}
           </div>
         </div>
 
@@ -209,15 +274,25 @@ export default function BuyerDashboardPage() {
               </Link>
             </div>
             <div className="space-y-3">
-              {favorites.map((item) => (
-                <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <div>
-                    <div className="font-medium text-gray-900">{item.title}</div>
-                    <div className="text-sm text-gray-600">{item.seller}</div>
-                  </div>
-                  <i className="fas fa-arrow-right text-gray-400"></i>
+              {favorites.length > 0 ? (
+                favorites.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={`/services/${item.service?.id}`}
+                    className="flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <div>
+                      <div className="font-medium text-gray-900">{item.service?.title}</div>
+                      <div className="text-sm text-gray-600">{item.service?.seller?.name}</div>
+                    </div>
+                    <i className="fas fa-arrow-right text-gray-400"></i>
+                  </Link>
+                ))
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  찜한 서비스가 없습니다
                 </div>
-              ))}
+              )}
             </div>
           </div>
 
@@ -236,7 +311,7 @@ export default function BuyerDashboardPage() {
                   <i className="fas fa-ticket text-purple-600 text-2xl"></i>
                   <div>
                     <div className="font-medium text-gray-900">쿠폰</div>
-                    <div className="text-2xl font-bold text-purple-600">{benefits.coupons}장</div>
+                    <div className="text-2xl font-bold text-purple-600">{benefits?.coupons || 0}장</div>
                   </div>
                 </div>
                 <i className="fas fa-arrow-right text-gray-400"></i>
@@ -250,7 +325,7 @@ export default function BuyerDashboardPage() {
                   <i className="fas fa-wallet text-blue-600 text-2xl"></i>
                   <div>
                     <div className="font-medium text-gray-900">캐시</div>
-                    <div className="text-2xl font-bold text-blue-600">{benefits.cash.toLocaleString()}원</div>
+                    <div className="text-2xl font-bold text-blue-600">{benefits?.cash?.toLocaleString() || '0'}원</div>
                   </div>
                 </div>
                 <i className="fas fa-arrow-right text-gray-400"></i>
