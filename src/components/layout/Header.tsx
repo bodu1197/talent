@@ -39,12 +39,6 @@ export default function Header() {
                 >
                   마이페이지
                 </Link>
-                <Link
-                  href="/admin/dashboard"
-                  className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm"
-                >
-                  관리자
-                </Link>
                 <button
                   onClick={async () => {
                     await signOut()
