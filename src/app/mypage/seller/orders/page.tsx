@@ -1,12 +1,17 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Sidebar from '@/components/mypage/Sidebar'
 import OrderCard from '@/components/mypage/OrderCard'
 import Link from 'next/link'
+import { useAuth } from '@/components/providers/AuthProvider'
+import { getSellerOrders, getSellerOrdersCount } from '@/lib/supabase/queries/orders'
+import LoadingSpinner from '@/components/common/LoadingSpinner'
+import ErrorState from '@/components/common/ErrorState'
+import EmptyState from '@/components/common/EmptyState'
 
-type OrderStatus = 'all' | 'new' | 'in_progress' | 'revision' | 'delivered' | 'completed' | 'cancelled'
+type OrderStatus = 'all' | 'paid' | 'in_progress' | 'delivered' | 'completed' | 'cancelled'
 
 interface OrderFilter {
   status: OrderStatus
@@ -18,8 +23,21 @@ interface OrderFilter {
 }
 
 function SellerOrdersContent() {
+  const { user } = useAuth()
   const searchParams = useSearchParams()
   const statusFromUrl = (searchParams.get('status') as OrderStatus) || 'all'
+
+  const [orders, setOrders] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [statusCounts, setStatusCounts] = useState({
+    all: 0,
+    paid: 0,
+    in_progress: 0,
+    delivered: 0,
+    completed: 0,
+    cancelled: 0
+  })
 
   const [filters, setFilters] = useState<OrderFilter>({
     status: statusFromUrl,
@@ -30,74 +48,69 @@ function SellerOrdersContent() {
     maxPrice: ''
   })
 
-  // TODO: 실제로는 API에서 데이터를 가져와야 합니다
-  const mockOrders = [
-    {
-      id: '1',
-      orderNumber: '12345',
-      title: '로고 디자인 작업',
-      thumbnailUrl: null,
-      buyerName: '홍길동',
-      status: 'new',
-      statusLabel: '신규 주문',
-      statusColor: 'red' as const,
-      price: 50000,
-      orderDate: '2025-01-27 14:30',
-      expectedDeliveryDate: '2025-02-03',
-      daysLeft: 7,
-      requirements: '미니멀한 느낌의 로고를 원합니다. 파랑색 계열로 부탁드립니다.'
-    },
-    {
-      id: '2',
-      orderNumber: '12344',
-      title: '영상 편집',
-      thumbnailUrl: null,
-      buyerName: '김철수',
-      status: 'in_progress',
-      statusLabel: '진행중',
-      statusColor: 'yellow' as const,
-      price: 150000,
-      orderDate: '2025-01-25 10:15',
-      expectedDeliveryDate: '2025-02-01',
-      daysLeft: 5
-    },
-    {
-      id: '3',
-      orderNumber: '12343',
-      title: '명함 디자인',
-      thumbnailUrl: null,
-      buyerName: '이영희',
-      status: 'delivered',
-      statusLabel: '완료 대기',
-      statusColor: 'blue' as const,
-      price: 30000,
-      orderDate: '2025-01-20 09:00',
-      expectedDeliveryDate: '2025-01-27',
-      daysLeft: 0
+  useEffect(() => {
+    if (user) {
+      loadOrders()
+      loadStatusCounts()
     }
-  ]
+  }, [user, filters.status])
 
-  const filteredOrders = mockOrders.filter(order => {
-    if (filters.status !== 'all' && order.status !== filters.status) return false
-    if (filters.searchQuery && !order.buyerName.includes(filters.searchQuery) && !order.orderNumber.includes(filters.searchQuery)) return false
+  async function loadOrders() {
+    try {
+      setLoading(true)
+      setError(null)
+      const data = await getSellerOrders(user!.id, filters.status === 'all' ? undefined : filters.status)
+      setOrders(data)
+    } catch (err: any) {
+      console.error('주문 조회 실패:', err)
+      setError(err.message || '주문 내역을 불러오는데 실패했습니다')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function loadStatusCounts() {
+    try {
+      const [paidCount, inProgressCount, deliveredCount, completedCount, cancelledCount] = await Promise.all([
+        getSellerOrdersCount(user!.id, 'paid'),
+        getSellerOrdersCount(user!.id, 'in_progress'),
+        getSellerOrdersCount(user!.id, 'delivered'),
+        getSellerOrdersCount(user!.id, 'completed'),
+        getSellerOrdersCount(user!.id, 'cancelled')
+      ])
+
+      setStatusCounts({
+        all: paidCount + inProgressCount + deliveredCount + completedCount + cancelledCount,
+        paid: paidCount,
+        in_progress: inProgressCount,
+        delivered: deliveredCount,
+        completed: completedCount,
+        cancelled: cancelledCount
+      })
+    } catch (err) {
+      console.error('상태별 카운트 조회 실패:', err)
+    }
+  }
+
+  const filteredOrders = orders.filter(order => {
+    if (filters.searchQuery) {
+      const query = filters.searchQuery.toLowerCase()
+      const matchesBuyerName = order.buyer?.name?.toLowerCase().includes(query)
+      const matchesOrderNumber = order.order_number?.toLowerCase().includes(query)
+      const matchesTitle = order.title?.toLowerCase().includes(query)
+      if (!matchesBuyerName && !matchesOrderNumber && !matchesTitle) return false
+    }
+
+    if (filters.minPrice && order.total_amount < parseInt(filters.minPrice)) return false
+    if (filters.maxPrice && order.total_amount > parseInt(filters.maxPrice)) return false
+
     return true
   })
 
-  const statusCounts = {
-    all: mockOrders.length,
-    new: mockOrders.filter(o => o.status === 'new').length,
-    in_progress: mockOrders.filter(o => o.status === 'in_progress').length,
-    revision: mockOrders.filter(o => o.status === 'revision').length,
-    delivered: mockOrders.filter(o => o.status === 'delivered').length,
-    completed: mockOrders.filter(o => o.status === 'completed').length,
-    cancelled: mockOrders.filter(o => o.status === 'cancelled').length
-  }
-
   const tabs = [
     { value: 'all', label: '전체', count: statusCounts.all },
-    { value: 'new', label: '신규 주문', count: statusCounts.new },
+    { value: 'paid', label: '신규 주문', count: statusCounts.paid },
     { value: 'in_progress', label: '진행중', count: statusCounts.in_progress },
-    { value: 'revision', label: '수정 요청', count: statusCounts.revision },
     { value: 'delivered', label: '완료 대기', count: statusCounts.delivered },
     { value: 'completed', label: '완료', count: statusCounts.completed },
     { value: 'cancelled', label: '취소/환불', count: statusCounts.cancelled }
@@ -114,8 +127,30 @@ function SellerOrdersContent() {
     })
   }
 
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'paid': return '결제완료'
+      case 'in_progress': return '진행중'
+      case 'delivered': return '완료 대기'
+      case 'completed': return '완료'
+      case 'cancelled': return '취소/환불'
+      case 'refunded': return '환불완료'
+      default: return status
+    }
+  }
+
+  const getStatusColor = (status: string): 'red' | 'yellow' | 'green' | 'gray' => {
+    switch (status) {
+      case 'paid': return 'red'
+      case 'in_progress': return 'yellow'
+      case 'delivered': return 'green'
+      case 'completed': return 'gray'
+      default: return 'gray'
+    }
+  }
+
   const getActionButtons = (order: any) => {
-    if (order.status === 'new') {
+    if (order.status === 'paid') {
       return (
         <>
           <Link
@@ -124,9 +159,6 @@ function SellerOrdersContent() {
           >
             주문 확인
           </Link>
-          <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium">
-            작업 시작
-          </button>
           <Link
             href={`/mypage/messages?order=${order.id}`}
             className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
@@ -146,9 +178,6 @@ function SellerOrdersContent() {
           >
             상세보기
           </Link>
-          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
-            납품하기
-          </button>
           <Link
             href={`/mypage/messages?order=${order.id}`}
             className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
@@ -192,6 +221,46 @@ function SellerOrdersContent() {
         >
           메시지
         </Link>
+      </>
+    )
+  }
+
+  const formatOrderData = (order: any) => {
+    return {
+      id: order.id,
+      orderNumber: order.order_number,
+      title: order.title || order.service?.title,
+      thumbnailUrl: order.service?.thumbnail_url,
+      buyerName: order.buyer?.name,
+      status: order.status,
+      statusLabel: getStatusLabel(order.status),
+      statusColor: getStatusColor(order.status),
+      price: order.total_amount,
+      orderDate: new Date(order.created_at).toLocaleString('ko-KR'),
+      expectedDeliveryDate: order.delivery_date ? new Date(order.delivery_date).toLocaleDateString('ko-KR') : '-',
+      daysLeft: order.delivery_date ? Math.ceil((new Date(order.delivery_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) : 0,
+      requirements: order.requirements
+    }
+  }
+
+  if (loading) {
+    return (
+      <>
+        <Sidebar mode="seller" />
+        <main className="flex-1 overflow-y-auto p-8">
+          <LoadingSpinner message="주문 내역을 불러오는 중..." />
+        </main>
+      </>
+    )
+  }
+
+  if (error) {
+    return (
+      <>
+        <Sidebar mode="seller" />
+        <main className="flex-1 overflow-y-auto p-8">
+          <ErrorState message={error} retry={loadOrders} />
+        </main>
       </>
     )
   }
@@ -319,16 +388,17 @@ function SellerOrdersContent() {
             filteredOrders.map((order) => (
               <OrderCard
                 key={order.id}
-                order={order}
+                order={formatOrderData(order)}
                 mode="seller"
                 actions={getActionButtons(order)}
               />
             ))
           ) : (
-            <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
-              <i className="fas fa-inbox text-gray-300 text-5xl mb-4"></i>
-              <p className="text-gray-600 text-lg">주문 내역이 없습니다</p>
-            </div>
+            <EmptyState
+              icon="fa-inbox"
+              title="주문 내역이 없습니다"
+              description="새로운 주문이 들어오면 여기에 표시됩니다"
+            />
           )}
         </div>
 
@@ -357,10 +427,7 @@ export default function SellerOrdersPage() {
       <>
         <Sidebar mode="seller" />
         <main className="flex-1 overflow-y-auto p-8">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-48 mb-8"></div>
-            <div className="h-64 bg-gray-200 rounded"></div>
-          </div>
+          <LoadingSpinner message="페이지 로딩 중..." />
         </main>
       </>
     }>
