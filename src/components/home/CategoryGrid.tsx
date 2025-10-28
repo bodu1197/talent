@@ -44,7 +44,7 @@ export default function CategoryGrid() {
         <div className="lg:hidden">
           <div className="flex flex-col gap-0">
             {/* 첫 번째 줄 */}
-            <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
               {topLevelCategories.slice(0, 11).map((category, index) => (
                 <Link
                   key={category.id}
@@ -76,13 +76,13 @@ export default function CategoryGrid() {
                     {category.icon === 'motorcycle' && <i className="fas fa-motorcycle"></i>}
                     {!category.icon && <i className="fas fa-circle"></i>}
                   </div>
-                  <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-xs text-center w-20 whitespace-nowrap">{category.name}</div>
+                  <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-xs text-center w-24 whitespace-nowrap">{category.name}</div>
                 </Link>
               ))}
             </div>
 
             {/* 두 번째 줄 */}
-            <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
               {topLevelCategories.slice(11).map((category, index) => (
                 <Link
                   key={category.id}
@@ -114,7 +114,7 @@ export default function CategoryGrid() {
                     {category.icon === 'motorcycle' && <i className="fas fa-motorcycle"></i>}
                     {!category.icon && <i className="fas fa-circle"></i>}
                   </div>
-                  <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-xs text-center w-20 whitespace-nowrap">{category.name}</div>
+                  <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-xs text-center w-24 whitespace-nowrap">{category.name}</div>
                 </Link>
               ))}
             </div>
