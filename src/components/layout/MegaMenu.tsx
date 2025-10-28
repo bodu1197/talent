@@ -63,7 +63,7 @@ export default function MegaMenu() {
   }
 
   return (
-    <div className="relative" ref={menuRef}>
+    <div className="relative hidden lg:block" ref={menuRef}>
       {/* 메인 카테고리 바 */}
       <div className="bg-white border-b border-gray-200">
         <div className="container-1200">
