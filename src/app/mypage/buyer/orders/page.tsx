@@ -1,12 +1,17 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Sidebar from '@/components/mypage/Sidebar'
 import OrderCard from '@/components/mypage/OrderCard'
 import Link from 'next/link'
+import { useAuth } from '@/components/providers/AuthProvider'
+import { getBuyerOrders, getBuyerOrdersCount } from '@/lib/supabase/queries/orders'
+import LoadingSpinner from '@/components/common/LoadingSpinner'
+import EmptyState from '@/components/common/EmptyState'
+import ErrorState from '@/components/common/ErrorState'
 
-type OrderStatus = 'all' | 'in_progress' | 'delivered' | 'completed' | 'cancelled'
+type OrderStatus = 'all' | 'paid' | 'in_progress' | 'delivered' | 'completed' | 'cancelled'
 
 interface OrderFilter {
   status: OrderStatus
@@ -16,8 +21,21 @@ interface OrderFilter {
 }
 
 function BuyerOrdersContent() {
+  const { user } = useAuth()
   const searchParams = useSearchParams()
   const statusFromUrl = (searchParams.get('status') as OrderStatus) || 'all'
+
+  const [orders, setOrders] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [statusCounts, setStatusCounts] = useState({
+    all: 0,
+    paid: 0,
+    in_progress: 0,
+    delivered: 0,
+    completed: 0,
+    cancelled: 0
+  })
 
   const [filters, setFilters] = useState<OrderFilter>({
     status: statusFromUrl,
@@ -26,69 +44,64 @@ function BuyerOrdersContent() {
     endDate: ''
   })
 
-  // TODO: 실제로는 API에서 데이터를 가져와야 합니다
-  const mockOrders = [
-    {
-      id: '1',
-      orderNumber: '12345',
-      title: '로고 디자인 작업',
-      thumbnailUrl: null,
-      sellerName: '디자인스튜디오',
-      status: 'delivered',
-      statusLabel: '도착 확인 대기',
-      statusColor: 'red' as const,
-      price: 50000,
-      orderDate: '2025-01-27 14:30',
-      expectedDeliveryDate: '2025-02-03',
-      daysLeft: 0,
-      requirements: '미니멀한 느낌의 로고를 원합니다.'
-    },
-    {
-      id: '2',
-      orderNumber: '12344',
-      title: '영상 편집',
-      thumbnailUrl: null,
-      sellerName: '비디오프로',
-      status: 'in_progress',
-      statusLabel: '진행중',
-      statusColor: 'yellow' as const,
-      price: 150000,
-      orderDate: '2025-01-25 10:15',
-      expectedDeliveryDate: '2025-02-01',
-      daysLeft: 5
-    },
-    {
-      id: '3',
-      orderNumber: '12343',
-      title: '명함 디자인',
-      thumbnailUrl: null,
-      sellerName: '인쇄소A',
-      status: 'completed',
-      statusLabel: '완료',
-      statusColor: 'green' as const,
-      price: 30000,
-      orderDate: '2025-01-20 09:00',
-      expectedDeliveryDate: '2025-01-27',
-      daysLeft: 0
+  useEffect(() => {
+    if (user) {
+      loadOrders()
+      loadStatusCounts()
     }
-  ]
+  }, [user, filters.status])
 
-  const filteredOrders = mockOrders.filter(order => {
-    if (filters.status !== 'all' && order.status !== filters.status) return false
-    if (filters.searchQuery && !order.sellerName.includes(filters.searchQuery) && !order.orderNumber.includes(filters.searchQuery)) return false
+  async function loadOrders() {
+    try {
+      setLoading(true)
+      setError(null)
+      const data = await getBuyerOrders(user!.id, filters.status === 'all' ? undefined : filters.status)
+      setOrders(data)
+    } catch (err: any) {
+      console.error('주문 조회 실패:', err)
+      setError(err.message || '주문 내역을 불러오는데 실패했습니다')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function loadStatusCounts() {
+    try {
+      const [paidCount, inProgressCount, deliveredCount, completedCount, cancelledCount] = await Promise.all([
+        getBuyerOrdersCount(user!.id, 'paid'),
+        getBuyerOrdersCount(user!.id, 'in_progress'),
+        getBuyerOrdersCount(user!.id, 'delivered'),
+        getBuyerOrdersCount(user!.id, 'completed'),
+        getBuyerOrdersCount(user!.id, 'cancelled')
+      ])
+
+      setStatusCounts({
+        all: paidCount + inProgressCount + deliveredCount + completedCount + cancelledCount,
+        paid: paidCount,
+        in_progress: inProgressCount,
+        delivered: deliveredCount,
+        completed: completedCount,
+        cancelled: cancelledCount
+      })
+    } catch (err) {
+      console.error('상태별 카운트 조회 실패:', err)
+    }
+  }
+
+  const filteredOrders = orders.filter(order => {
+    if (filters.searchQuery) {
+      const query = filters.searchQuery.toLowerCase()
+      const matchesSellerName = order.seller?.name?.toLowerCase().includes(query)
+      const matchesOrderNumber = order.order_number?.toLowerCase().includes(query)
+      const matchesTitle = order.title?.toLowerCase().includes(query)
+      if (!matchesSellerName && !matchesOrderNumber && !matchesTitle) return false
+    }
     return true
   })
 
-  const statusCounts = {
-    all: mockOrders.length,
-    in_progress: mockOrders.filter(o => o.status === 'in_progress').length,
-    delivered: mockOrders.filter(o => o.status === 'delivered').length,
-    completed: mockOrders.filter(o => o.status === 'completed').length,
-    cancelled: mockOrders.filter(o => o.status === 'cancelled').length
-  }
-
   const tabs = [
     { value: 'all', label: '전체', count: statusCounts.all },
+    { value: 'paid', label: '결제완료', count: statusCounts.paid },
     { value: 'in_progress', label: '진행중', count: statusCounts.in_progress },
     { value: 'delivered', label: '도착 확인 대기', count: statusCounts.delivered },
     { value: 'completed', label: '완료', count: statusCounts.completed },
@@ -102,6 +115,27 @@ function BuyerOrdersContent() {
       startDate: '',
       endDate: ''
     })
+  }
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'paid': return '결제완료'
+      case 'in_progress': return '진행중'
+      case 'delivered': return '도착 확인 대기'
+      case 'completed': return '완료'
+      case 'cancelled': return '취소/환불'
+      case 'refunded': return '환불완료'
+      default: return status
+    }
+  }
+
+  const getStatusColor = (status: string): 'red' | 'yellow' | 'green' | 'gray' => {
+    switch (status) {
+      case 'delivered': return 'red'
+      case 'in_progress': return 'yellow'
+      case 'completed': return 'green'
+      default: return 'gray'
+    }
   }
 
   const getActionButtons = (order: any) => {
@@ -180,6 +214,46 @@ function BuyerOrdersContent() {
         >
           상세보기
         </Link>
+      </>
+    )
+  }
+
+  const formatOrderData = (order: any) => {
+    return {
+      id: order.id,
+      orderNumber: order.order_number,
+      title: order.title || order.service?.title,
+      thumbnailUrl: order.service?.thumbnail_url,
+      sellerName: order.seller?.name,
+      status: order.status,
+      statusLabel: getStatusLabel(order.status),
+      statusColor: getStatusColor(order.status),
+      price: order.total_amount,
+      orderDate: new Date(order.created_at).toLocaleString('ko-KR'),
+      expectedDeliveryDate: order.delivery_date ? new Date(order.delivery_date).toLocaleDateString('ko-KR') : '-',
+      daysLeft: order.delivery_date ? Math.ceil((new Date(order.delivery_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) : 0,
+      requirements: order.requirements
+    }
+  }
+
+  if (loading) {
+    return (
+      <>
+        <Sidebar mode="buyer" />
+        <main className="flex-1 overflow-y-auto p-8">
+          <LoadingSpinner message="주문 내역을 불러오는 중..." />
+        </main>
+      </>
+    )
+  }
+
+  if (error) {
+    return (
+      <>
+        <Sidebar mode="buyer" />
+        <main className="flex-1 overflow-y-auto p-8">
+          <ErrorState message={error} retry={loadOrders} />
+        </main>
       </>
     )
   }
@@ -284,39 +358,23 @@ function BuyerOrdersContent() {
             filteredOrders.map((order) => (
               <OrderCard
                 key={order.id}
-                order={order}
+                order={formatOrderData(order)}
                 mode="buyer"
                 actions={getActionButtons(order)}
               />
             ))
           ) : (
-            <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
-              <i className="fas fa-inbox text-gray-300 text-5xl mb-4"></i>
-              <p className="text-gray-600 text-lg">주문 내역이 없습니다</p>
-              <Link
-                href="/"
-                className="inline-block mt-4 px-6 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium"
-              >
-                서비스 둘러보기
-              </Link>
-            </div>
+            <EmptyState
+              icon="fa-inbox"
+              title="주문 내역이 없습니다"
+              description="서비스를 구매하고 주문 내역을 확인해보세요"
+              action={{
+                label: '서비스 둘러보기',
+                href: '/'
+              }}
+            />
           )}
         </div>
-
-        {/* 페이지네이션 */}
-        {filteredOrders.length > 0 && (
-          <div className="mt-8 flex items-center justify-center gap-2">
-            <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
-              <i className="fas fa-chevron-left"></i>
-            </button>
-            <button className="px-4 py-2 bg-[#0f3460] text-white rounded-lg">1</button>
-            <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">2</button>
-            <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">3</button>
-            <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-              <i className="fas fa-chevron-right"></i>
-            </button>
-          </div>
-        )}
       </main>
     </>
   )
@@ -328,10 +386,7 @@ export default function BuyerOrdersPage() {
       <>
         <Sidebar mode="buyer" />
         <main className="flex-1 overflow-y-auto p-8">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-48 mb-8"></div>
-            <div className="h-64 bg-gray-200 rounded"></div>
-          </div>
+          <LoadingSpinner message="페이지 로딩 중..." />
         </main>
       </>
     }>
