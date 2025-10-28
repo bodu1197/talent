@@ -3,50 +3,10 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/providers/AuthProvider'
-import { useState, useEffect, useMemo } from 'react'
-import { createClient } from '@/lib/supabase/client'
 
 export default function Header() {
   const { user, profile, loading, signOut } = useAuth()
   const router = useRouter()
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [showMobileMenu, setShowMobileMenu] = useState(false)
-  const [isAdmin, setIsAdmin] = useState(false)
-  const supabase = useMemo(() => createClient(), [])
-
-  useEffect(() => {
-    let mounted = true
-
-    async function checkAdmin() {
-      if (!user) {
-        setIsAdmin(false)
-        return
-      }
-
-      try {
-        const { data, error } = await supabase
-          .from('admins')
-          .select('*')
-          .eq('user_id', user.id)
-          .maybeSingle()
-
-        if (mounted) {
-          setIsAdmin(!error && !!data)
-        }
-      } catch (error) {
-        console.error('Admin check error:', error)
-        if (mounted) {
-          setIsAdmin(false)
-        }
-      }
-    }
-
-    checkAdmin()
-
-    return () => {
-      mounted = false
-    }
-  }, [user, supabase])
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -79,14 +39,12 @@ export default function Header() {
                 >
                   마이페이지
                 </Link>
-                {isAdmin && (
-                  <Link
-                    href="/admin/dashboard"
-                    className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm"
-                  >
-                    관리자
-                  </Link>
-                )}
+                <Link
+                  href="/admin/dashboard"
+                  className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm"
+                >
+                  관리자
+                </Link>
                 <button
                   onClick={async () => {
                     await signOut()
