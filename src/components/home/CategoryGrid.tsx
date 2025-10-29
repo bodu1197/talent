@@ -44,12 +44,12 @@ export default function CategoryGrid() {
         <div className="lg:hidden">
           <div className="flex flex-col gap-0">
             {/* 첫 번째 줄 */}
-            <div className="flex gap-[-20px] overflow-x-auto pb-2 scrollbar-hide">
+            <div className="flex gap-0 overflow-x-auto pb-2 scrollbar-hide">
               {topLevelCategories.slice(0, 11).map((category, index) => (
                 <Link
                   key={category.id}
                   href={`/categories/${category.slug}`}
-                  className="flex flex-col items-center group cursor-pointer flex-shrink-0"
+                  className="flex flex-col items-center group cursor-pointer flex-shrink-0 w-16"
                 >
                   <div className={`text-[27px] mb-1 h-11 w-11 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[index % brightColors.length]} group-hover:text-[#0f3460]`}>
                     {category.icon === 'robot' && <i className="fas fa-robot"></i>}
@@ -76,18 +76,18 @@ export default function CategoryGrid() {
                     {category.icon === 'motorcycle' && <i className="fas fa-motorcycle"></i>}
                     {!category.icon && <i className="fas fa-circle"></i>}
                   </div>
-                  <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-xs text-center w-24 whitespace-nowrap">{category.name}</div>
+                  <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-xs text-center w-16 whitespace-nowrap px-0">{category.name}</div>
                 </Link>
               ))}
             </div>
 
             {/* 두 번째 줄 */}
-            <div className="flex gap-[-20px] overflow-x-auto pb-2 scrollbar-hide">
+            <div className="flex gap-0 overflow-x-auto pb-2 scrollbar-hide">
               {topLevelCategories.slice(11).map((category, index) => (
                 <Link
                   key={category.id}
                   href={`/categories/${category.slug}`}
-                  className="flex flex-col items-center group cursor-pointer flex-shrink-0"
+                  className="flex flex-col items-center group cursor-pointer flex-shrink-0 w-16"
                 >
                   <div className={`text-[27px] mb-1 h-11 w-11 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[(index + 11) % brightColors.length]} group-hover:text-[#0f3460]`}>
                     {category.icon === 'robot' && <i className="fas fa-robot"></i>}
@@ -114,7 +114,7 @@ export default function CategoryGrid() {
                     {category.icon === 'motorcycle' && <i className="fas fa-motorcycle"></i>}
                     {!category.icon && <i className="fas fa-circle"></i>}
                   </div>
-                  <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-xs text-center w-24 whitespace-nowrap">{category.name}</div>
+                  <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-xs text-center w-16 whitespace-nowrap px-0">{category.name}</div>
                 </Link>
               ))}
             </div>
