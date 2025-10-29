@@ -19,11 +19,11 @@ const showcaseItems: AIShowcaseItem[] = []
 
 export default function AITalentShowcase() {
   return (
-    <section className="py-6 lg:py-7 bg-white">
+    <section className="py-6 lg:py-7 bg-white -mt-5 lg:mt-0">
       <div className="container-1200">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-xl font-bold mb-2">AI 재능 쇼케이스</h2>
+            <h2 className="text-lg lg:text-xl font-bold mb-2">AI 재능 쇼케이스</h2>
             <p className="text-gray-600">AI 전문가들의 인기 서비스</p>
           </div>
           <button className="hidden md:block px-4 py-2 border border-[#0f3460] text-[#0f3460] rounded-lg hover:bg-gray-50 transition-colors">

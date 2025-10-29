@@ -18,7 +18,7 @@ export default function HomePage() {
         <div className="container-1200">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h2 className="text-xl font-bold mb-2">추천 서비스</h2>
+              <h2 className="text-lg lg:text-xl font-bold mb-2">추천 서비스</h2>
               <p className="text-gray-600">믿을 수 있는 검증된 전문가들의 서비스</p>
             </div>
             <button className="hidden md:block px-4 py-2 border border-[#0f3460] text-[#0f3460] rounded-lg hover:bg-gray-50 transition-colors">
@@ -33,7 +33,7 @@ export default function HomePage() {
       <section className="py-16 lg:py-7 bg-gray-100">
         <div className="container-1200">
           <div className="text-center mb-12">
-            <h2 className="text-xl font-bold mb-4">간단한 거래 프로세스</h2>
+            <h2 className="text-lg lg:text-xl font-bold mb-4">간단한 거래 프로세스</h2>
             <p className="text-gray-600">
               단 4단계로 완성되는 안전한 거래
             </p>
@@ -79,7 +79,7 @@ export default function HomePage() {
       <section className="py-16 lg:py-7 bg-gray-50">
         <div className="container-1200">
           <div className="text-center mb-12">
-            <h2 className="text-xl font-bold mb-4">실시간 구매 후기</h2>
+            <h2 className="text-lg lg:text-xl font-bold mb-4">실시간 구매 후기</h2>
             <p className="text-gray-600">
               실제 구매자들의 생생한 후기
             </p>
