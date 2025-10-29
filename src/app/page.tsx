@@ -41,7 +41,7 @@ export default function HomePage() {
 
           {/* 모바일: 가로 스크롤 */}
           <div className="md:hidden overflow-x-auto scrollbar-hide -mx-4 px-4">
-            <div className="flex gap-3 pb-2">
+            <div className="flex gap-3 pb-2 pr-[10px]">
               <div className="flex-shrink-0 w-[85%] bg-white rounded-lg p-4 shadow-sm flex items-center gap-3">
                 <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white shadow-lg flex-shrink-0">
                   <span className="text-xl font-bold">1</span>
