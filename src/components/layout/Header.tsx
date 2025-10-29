@@ -32,16 +32,15 @@ export default function Header() {
 
           {/* PC 버전: 네비게이션 메뉴 */}
           <nav className="hidden lg:flex items-center space-x-4">
-            {loading ? (
-              // 로딩 중
-              <div className="flex items-center space-x-4">
-                <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
-                <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
-                <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
-              </div>
-            ) : user ? (
+            {user ? (
               // 로그인 상태
               <>
+                <button
+                  className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-[#0f3460] transition-colors"
+                  aria-label="알림"
+                >
+                  <i className="fas fa-bell text-lg"></i>
+                </button>
                 <Link
                   href="/mypage/buyer/dashboard"
                   className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm"
