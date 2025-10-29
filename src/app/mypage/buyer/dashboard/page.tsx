@@ -11,7 +11,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
 
 export default function BuyerDashboardPage() {
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const [stats, setStats] = useState<any>(null)
   const [recentOrders, setRecentOrders] = useState<any[]>([])
   const [favorites, setFavorites] = useState<any[]>([])
@@ -20,10 +20,13 @@ export default function BuyerDashboardPage() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (user) {
+    if (!authLoading && user) {
       loadDashboardData()
+    } else if (!authLoading && !user) {
+      setLoading(false)
+      setError('로그인이 필요합니다')
     }
-  }, [user])
+  }, [user, authLoading])
 
   async function loadDashboardData() {
     try {

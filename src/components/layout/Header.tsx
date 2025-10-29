@@ -57,6 +57,13 @@ export default function Header() {
                   로그아웃
                 </button>
               </>
+            ) : loading ? (
+              // 로딩 중 - 스켈레톤 UI (깜빡임 방지)
+              <div className="flex items-center space-x-4">
+                <div className="w-20 h-8 bg-gray-200 rounded animate-pulse"></div>
+                <div className="w-16 h-8 bg-gray-200 rounded animate-pulse"></div>
+                <div className="w-20 h-8 bg-gray-200 rounded animate-pulse"></div>
+              </div>
             ) : (
               // 비로그인 상태
               <>

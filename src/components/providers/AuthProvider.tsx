@@ -82,6 +82,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   useEffect(() => {
+    let mounted = true
+
     // 초기 세션 체크
     const checkSession = async () => {
       try {
@@ -91,6 +93,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (error && !error.message?.includes('LockManager')) {
           console.error('세션 체크 실패:', error)
         }
+
+        if (!mounted) return
 
         setUser(session?.user ?? null)
         if (session?.user) {
@@ -102,7 +106,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           console.error('세션 체크 실패:', error)
         }
       } finally {
-        setLoading(false)
+        if (mounted) {
+          setLoading(false)
+        }
       }
     }
 
@@ -111,6 +117,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // 인증 상태 변화 구독
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        if (!mounted) return
+
+        console.log('Auth state changed:', event, session?.user?.id)
+
         setUser(session?.user ?? null)
 
         if (session?.user) {
@@ -119,12 +129,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           // 명시적인 로그아웃일 때만 profile null 설정
           setProfile(null)
         }
-
-        setLoading(false)
       }
     )
 
     return () => {
+      mounted = false
       subscription.unsubscribe()
     }
   }, [])
