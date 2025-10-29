@@ -83,12 +83,20 @@ export default function MegaMenu() {
               {/* 인기 카테고리 퀵링크 - AI와 IT는 고정, 나머지는 인기도 순 */}
               <div className="flex items-center gap-6 px-6">
                 {/* AI 서비스 (고정) */}
-                <Link href="/categories/ai-services" className="text-[#0f3460] font-medium hover:text-[#1a4b7d] flex items-center gap-1">
+                <Link
+                  href="/categories/ai-services"
+                  className="text-[#0f3460] font-medium hover:text-[#1a4b7d] flex items-center gap-1"
+                  onClick={handleCategoryClick}
+                >
                   <i className="fas fa-robot"></i> AI 서비스
                 </Link>
 
                 {/* IT/프로그래밍 (고정) */}
-                <Link href="/categories/it-programming" className="hover:text-gray-900">
+                <Link
+                  href="/categories/it-programming"
+                  className="hover:text-gray-900"
+                  onClick={handleCategoryClick}
+                >
                   IT/프로그래밍
                 </Link>
 
@@ -102,6 +110,7 @@ export default function MegaMenu() {
                       key={cat.id}
                       href={`/categories/${cat.slug}`}
                       className="hover:text-gray-900"
+                      onClick={handleCategoryClick}
                     >
                       {cat.name}
                     </Link>
