@@ -41,8 +41,8 @@ export default function HomePage() {
 
           {/* 모바일: 가로 스크롤 */}
           <div className="md:hidden overflow-x-auto scrollbar-hide -mx-4">
-            <div className="flex gap-3 pb-2 pl-4 pr-4">
-              <div className="flex-shrink-0 w-[85%] bg-white rounded-lg p-4 shadow-sm flex items-center gap-3">
+            <div className="flex gap-3 pb-2 pl-4 pr-4" style={{ width: 'calc(100% + 40px)' }}>
+              <div className="flex-shrink-0 w-[92%] bg-white rounded-lg p-4 shadow-sm flex items-center gap-3">
                 <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white shadow-lg flex-shrink-0">
                   <span className="text-xl font-bold">1</span>
                 </div>
@@ -52,7 +52,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="flex-shrink-0 w-[85%] bg-white rounded-lg p-4 shadow-sm flex items-center gap-3">
+              <div className="flex-shrink-0 w-[92%] bg-white rounded-lg p-4 shadow-sm flex items-center gap-3">
                 <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white shadow-lg flex-shrink-0">
                   <span className="text-xl font-bold">2</span>
                 </div>
@@ -62,7 +62,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="flex-shrink-0 w-[85%] bg-white rounded-lg p-4 shadow-sm flex items-center gap-3">
+              <div className="flex-shrink-0 w-[92%] bg-white rounded-lg p-4 shadow-sm flex items-center gap-3">
                 <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white shadow-lg flex-shrink-0">
                   <span className="text-xl font-bold">3</span>
                 </div>
@@ -72,7 +72,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="flex-shrink-0 w-[85%] bg-white rounded-lg p-4 shadow-sm flex items-center gap-3">
+              <div className="flex-shrink-0 w-[92%] bg-white rounded-lg p-4 shadow-sm flex items-center gap-3">
                 <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white shadow-lg flex-shrink-0">
                   <span className="text-xl font-bold">4</span>
                 </div>
