@@ -111,7 +111,7 @@ export default function AITalentShowcase() {
       <div className="container-1200">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-2xl font-bold mb-2">AI 재능 쇼케이스</h2>
+            <h2 className="text-xl font-bold mb-2">AI 재능 쇼케이스</h2>
             <p className="text-gray-600">AI 전문가들의 인기 서비스</p>
           </div>
           <div className="hidden md:flex items-center gap-2">
