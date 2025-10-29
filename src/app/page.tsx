@@ -14,7 +14,7 @@ export default function HomePage() {
           새로운 컴포넌트들로 대체되거나 재구성될 예정입니다. */}
 
       {/* 기존 '추천 서비스' 섹션 (ServiceGrid는 재사용 가능성 있음) */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 lg:py-7 bg-gray-50">
         <div className="container-1200">
           <div className="flex justify-between items-center mb-8">
             <div>
@@ -30,7 +30,7 @@ export default function HomePage() {
       </section>
 
       {/* 기존 '서비스 프로세스' 섹션 */}
-      <section className="py-16 bg-gray-100">
+      <section className="py-16 lg:py-7 bg-gray-100">
         <div className="container-1200">
           <div className="text-center mb-12">
             <h2 className="text-xl font-bold mb-4">간단한 거래 프로세스</h2>
@@ -76,7 +76,7 @@ export default function HomePage() {
       </section>
 
       {/* 기존 '실시간 리뷰' 섹션 */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 lg:py-7 bg-gray-50">
         <div className="container-1200">
           <div className="text-center mb-12">
             <h2 className="text-xl font-bold mb-4">실시간 구매 후기</h2>
@@ -92,7 +92,7 @@ export default function HomePage() {
       </section>
 
       {/* 기존 'CTA 섹션' */}
-      <section className="py-20 bg-[#0f3460] text-white">
+      <section className="py-20 lg:py-7 bg-[#0f3460] text-white">
         <div className="container-1200 text-center">
           <h2 className="text-2xl font-bold mb-4">
             지금 바로 시작하세요
