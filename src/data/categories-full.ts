@@ -1569,7 +1569,64 @@ export const FULL_CATEGORIES: CategoryItem[] = [
     ]
   },
 
-  // =============== 17. 세무/법무/노무 ===============
+  // =============== 17. 주문제작 ===============
+  {
+    id: 'custom-order',
+    name: '주문제작',
+    slug: 'custom-order',
+    icon: 'hammer',
+    service_count: 13,
+    description: '맞춤형 주문 제작 서비스',
+    children: [
+      {
+        id: 'print-promotional',
+        name: '인쇄·판촉물',
+        slug: 'print-promotional',
+        parent_id: 'custom-order',
+        children: [
+          { id: 'printing', name: '인쇄', slug: 'printing', parent_id: 'print-promotional', is_popular: true },
+          { id: '3d-printing', name: '3D프린팅', slug: '3d-printing', parent_id: 'print-promotional' },
+          { id: 'package-making', name: '패키지 제작', slug: 'package-making', parent_id: 'print-promotional' },
+          { id: 'store-goods-making', name: '가게용품 제작', slug: 'store-goods-making', parent_id: 'print-promotional' },
+          { id: 'souvenir-making', name: '기념품 제작', slug: 'souvenir-making', parent_id: 'print-promotional', is_popular: true },
+          { id: 'model-making', name: '모형 제작', slug: 'model-making', parent_id: 'print-promotional' },
+          { id: 'product-making', name: '제품 제작', slug: 'product-making', parent_id: 'print-promotional' },
+        ]
+      },
+      {
+        id: 'custom-goods',
+        name: '굿즈 제작',
+        slug: 'custom-goods',
+        parent_id: 'custom-order',
+        children: [
+          { id: 'tshirt-making', name: '티셔츠 제작', slug: 'tshirt-making', parent_id: 'custom-goods', is_popular: true },
+          { id: 'mug-making', name: '머그컵 제작', slug: 'mug-making', parent_id: 'custom-goods' },
+          { id: 'sticker-making', name: '스티커 제작', slug: 'sticker-making', parent_id: 'custom-goods' },
+        ]
+      },
+      {
+        id: 'printing-materials',
+        name: '인쇄물',
+        slug: 'printing-materials',
+        parent_id: 'custom-order',
+        children: [
+          { id: 'business-card-printing', name: '명함 인쇄', slug: 'business-card-printing', parent_id: 'printing-materials' },
+          { id: 'poster-printing', name: '포스터 인쇄', slug: 'poster-printing', parent_id: 'printing-materials' },
+        ]
+      },
+      {
+        id: 'custom-order-etc',
+        name: '기타',
+        slug: 'custom-order-etc',
+        parent_id: 'custom-order',
+        children: [
+          { id: 'other-custom-order', name: '기타 주문제작', slug: 'other-custom-order', parent_id: 'custom-order-etc' },
+        ]
+      }
+    ]
+  },
+
+  // =============== 18. 세무/법무/노무 ===============
   {
     id: 'tax-legal-labor',
     name: '세무/법무/노무',
@@ -1632,63 +1689,6 @@ export const FULL_CATEGORIES: CategoryItem[] = [
         parent_id: 'tax-legal-labor',
         children: [
           { id: 'other-consulting-customs', name: '기타 자문(관세사 등)', slug: 'other-consulting-customs', parent_id: 'tax-legal-labor-etc' },
-        ]
-      }
-    ]
-  },
-
-  // =============== 18. 주문제작 ===============
-  {
-    id: 'custom-order',
-    name: '주문제작',
-    slug: 'custom-order',
-    icon: 'hammer',
-    service_count: 13,
-    description: '맞춤형 주문 제작 서비스',
-    children: [
-      {
-        id: 'print-promotional',
-        name: '인쇄·판촉물',
-        slug: 'print-promotional',
-        parent_id: 'custom-order',
-        children: [
-          { id: 'printing', name: '인쇄', slug: 'printing', parent_id: 'print-promotional', is_popular: true },
-          { id: '3d-printing', name: '3D프린팅', slug: '3d-printing', parent_id: 'print-promotional' },
-          { id: 'package-making', name: '패키지 제작', slug: 'package-making', parent_id: 'print-promotional' },
-          { id: 'store-goods-making', name: '가게용품 제작', slug: 'store-goods-making', parent_id: 'print-promotional' },
-          { id: 'souvenir-making', name: '기념품 제작', slug: 'souvenir-making', parent_id: 'print-promotional', is_popular: true },
-          { id: 'model-making', name: '모형 제작', slug: 'model-making', parent_id: 'print-promotional' },
-          { id: 'product-making', name: '제품 제작', slug: 'product-making', parent_id: 'print-promotional' },
-        ]
-      },
-      {
-        id: 'custom-goods',
-        name: '굿즈 제작',
-        slug: 'custom-goods',
-        parent_id: 'custom-order',
-        children: [
-          { id: 'tshirt-making', name: '티셔츠 제작', slug: 'tshirt-making', parent_id: 'custom-goods', is_popular: true },
-          { id: 'mug-making', name: '머그컵 제작', slug: 'mug-making', parent_id: 'custom-goods' },
-          { id: 'sticker-making', name: '스티커 제작', slug: 'sticker-making', parent_id: 'custom-goods' },
-        ]
-      },
-      {
-        id: 'printing-materials',
-        name: '인쇄물',
-        slug: 'printing-materials',
-        parent_id: 'custom-order',
-        children: [
-          { id: 'business-card-printing', name: '명함 인쇄', slug: 'business-card-printing', parent_id: 'printing-materials' },
-          { id: 'poster-printing', name: '포스터 인쇄', slug: 'poster-printing', parent_id: 'printing-materials' },
-        ]
-      },
-      {
-        id: 'custom-order-etc',
-        name: '기타',
-        slug: 'custom-order-etc',
-        parent_id: 'custom-order',
-        children: [
-          { id: 'other-custom-order', name: '기타 주문제작', slug: 'other-custom-order', parent_id: 'custom-order-etc' },
         ]
       }
     ]
