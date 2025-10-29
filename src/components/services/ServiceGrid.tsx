@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import ServiceCard from './ServiceCard'
+import PlaceholderServiceCard from './PlaceholderServiceCard'
 import { Service } from '@/types'
 
 interface ServiceGridProps {
@@ -30,22 +31,17 @@ export default function ServiceGrid({ categoryId, sellerId, featured }: ServiceG
     )
   }
 
-  if (services.length === 0) {
-    return (
-      <div className="text-center py-16">
-        <div className="text-[40px] mb-4">
-          <i className="fas fa-search text-gray-400"></i>
-        </div>
-        <h3 className="text-xl font-semibold mb-2">서비스를 찾을 수 없습니다</h3>
-        <p className="text-gray-600">다른 필터를 선택해 보세요</p>
-      </div>
-    )
-  }
+  // 최소 12개의 카드를 표시하기 위해 플레이스홀더 추가
+  const MINIMUM_CARDS = 12
+  const placeholderCount = Math.max(0, MINIMUM_CARDS - services.length)
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {services.map(service => (
         <ServiceCard key={service.id} service={service} />
+      ))}
+      {Array.from({ length: placeholderCount }, (_, i) => (
+        <PlaceholderServiceCard key={`placeholder-${i}`} categoryId={categoryId} />
       ))}
     </div>
   )
