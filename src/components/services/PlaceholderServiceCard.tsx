@@ -23,27 +23,16 @@ export default function PlaceholderServiceCard({ categoryId }: PlaceholderServic
           </div>
 
           {/* 컨텐츠 */}
-          <div className="relative z-10 text-center px-4 py-3 text-white">
-            <div className="text-3xl mb-2">🚀</div>
-            <h3 className="font-bold text-base mb-1">첫 발을 내딛는</h3>
-            <h3 className="font-bold text-base mb-3">당신을 응원합니다</h3>
+          <div className="relative z-10 text-center px-3 py-4 text-white">
+            <h3 className="font-bold text-lg mb-4">첫 발을 내딛는<br />당신을 응원합니다</h3>
 
-            <div className="space-y-1 text-xs text-white/90 mb-3">
-              <div className="flex items-center justify-center gap-1.5">
-                <span className="text-yellow-300">✓</span>
-                <span>수수료 0%, 번 돈은 100% 당신 것</span>
-              </div>
-              <div className="flex items-center justify-center gap-1.5">
-                <span className="text-yellow-300">✓</span>
-                <span>광고비 1,500만원 무료 지원</span>
-              </div>
-              <div className="flex items-center justify-center gap-1.5">
-                <span className="text-yellow-300">✓</span>
-                <span>실력으로 승부하는 공평한 플랫폼</span>
-              </div>
+            <div className="space-y-1.5 text-xs text-white/90 mb-4">
+              <div>✓ 수수료 0%, 번 돈은 100% 당신 것</div>
+              <div>✓ 광고비 1,500만원 무료 지원</div>
+              <div>✓ 실력으로 승부하는 공평한 플랫폼</div>
             </div>
 
-            <div className="inline-block px-3 py-1.5 bg-white/20 rounded-full text-xs font-medium group-hover:bg-white/30 transition-colors">
+            <div className="inline-block px-4 py-2 bg-white/20 rounded-full text-xs font-medium group-hover:bg-white/30 transition-colors">
               지금 시작하기 →
             </div>
           </div>
