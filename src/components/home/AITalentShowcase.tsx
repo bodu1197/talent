@@ -15,74 +15,7 @@ interface AIShowcaseItem {
 }
 
 // 샘플 데이터 (나중에 실제 데이터로 교체)
-const showcaseItems: AIShowcaseItem[] = [
-  {
-    id: '1',
-    title: 'AI 프로필 사진 생성',
-    category: 'AI 이미지',
-    thumbnail: '/api/placeholder/400/300',
-    price: '50,000',
-    rating: 4.9,
-    reviews: 123,
-    seller: '전문가A',
-    slug: 'ai-profile-photo'
-  },
-  {
-    id: '2',
-    title: 'AI 숏폼 영상 제작',
-    category: 'AI 영상',
-    thumbnail: '/api/placeholder/400/300',
-    price: '150,000',
-    rating: 5.0,
-    reviews: 89,
-    seller: '전문가B',
-    slug: 'ai-short-form-video'
-  },
-  {
-    id: '3',
-    title: 'AI 블로그 포스팅',
-    category: 'AI 콘텐츠',
-    thumbnail: '/api/placeholder/400/300',
-    price: '30,000',
-    rating: 4.8,
-    reviews: 201,
-    seller: '전문가C',
-    slug: 'ai-blog-posting'
-  },
-  {
-    id: '4',
-    title: 'AI 로고 디자인',
-    category: 'AI 이미지',
-    thumbnail: '/api/placeholder/400/300',
-    price: '80,000',
-    rating: 4.9,
-    reviews: 156,
-    seller: '전문가D',
-    slug: 'ai-logo-design'
-  },
-  {
-    id: '5',
-    title: 'AI 음성 더빙',
-    category: 'AI 음향',
-    thumbnail: '/api/placeholder/400/300',
-    price: '70,000',
-    rating: 4.7,
-    reviews: 78,
-    seller: '전문가E',
-    slug: 'ai-voice-dubbing'
-  },
-  {
-    id: '6',
-    title: 'AI 마케팅 전략',
-    category: 'AI 마케팅',
-    thumbnail: '/api/placeholder/400/300',
-    price: '200,000',
-    rating: 5.0,
-    reviews: 45,
-    seller: '전문가F',
-    slug: 'ai-marketing-strategy'
-  }
-]
+const showcaseItems: AIShowcaseItem[] = []
 
 export default function AITalentShowcase() {
   return (
