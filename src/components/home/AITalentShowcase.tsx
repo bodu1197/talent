@@ -19,7 +19,7 @@ const showcaseItems: AIShowcaseItem[] = []
 
 export default function AITalentShowcase() {
   return (
-    <section className="py-16 lg:py-7 bg-white">
+    <section className="py-6 lg:py-7 bg-white">
       <div className="container-1200">
         <div className="flex items-center justify-between mb-8">
           <div>
