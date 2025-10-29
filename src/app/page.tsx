@@ -32,14 +32,60 @@ export default function HomePage() {
       {/* 기존 '서비스 프로세스' 섹션 */}
       <section className="py-6 lg:py-7 bg-gray-100 -mt-5 lg:mt-0">
         <div className="container-1200">
-          <div className="text-center mb-12">
+          <div className="text-center mb-6 lg:mb-12">
             <h2 className="text-lg lg:text-xl font-bold mb-4">간단한 거래 프로세스</h2>
             <p className="text-gray-600">
               단 4단계로 완성되는 안전한 거래
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* 모바일: 가로 스크롤 */}
+          <div className="md:hidden overflow-x-auto scrollbar-hide -mx-4 px-4">
+            <div className="flex gap-3 pb-2">
+              <div className="flex-shrink-0 w-[85%] bg-white rounded-lg p-4 shadow-sm flex items-center gap-3">
+                <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white shadow-lg flex-shrink-0">
+                  <span className="text-xl font-bold">1</span>
+                </div>
+                <div className="text-left">
+                  <h3 className="font-bold text-sm mb-1">서비스 검색</h3>
+                  <p className="text-xs text-gray-600">원하는 서비스를 검색하고 전문가를 찾아보세요</p>
+                </div>
+              </div>
+
+              <div className="flex-shrink-0 w-[85%] bg-white rounded-lg p-4 shadow-sm flex items-center gap-3">
+                <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white shadow-lg flex-shrink-0">
+                  <span className="text-xl font-bold">2</span>
+                </div>
+                <div className="text-left">
+                  <h3 className="font-bold text-sm mb-1">상담 및 견적</h3>
+                  <p className="text-xs text-gray-600">전문가와 상담하고 견적을 받아보세요</p>
+                </div>
+              </div>
+
+              <div className="flex-shrink-0 w-[85%] bg-white rounded-lg p-4 shadow-sm flex items-center gap-3">
+                <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white shadow-lg flex-shrink-0">
+                  <span className="text-xl font-bold">3</span>
+                </div>
+                <div className="text-left">
+                  <h3 className="font-bold text-sm mb-1">안전 결제</h3>
+                  <p className="text-xs text-gray-600">안전한 에스크로 시스템으로 결제하세요</p>
+                </div>
+              </div>
+
+              <div className="flex-shrink-0 w-[85%] bg-white rounded-lg p-4 shadow-sm flex items-center gap-3">
+                <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white shadow-lg flex-shrink-0">
+                  <span className="text-xl font-bold">4</span>
+                </div>
+                <div className="text-left">
+                  <h3 className="font-bold text-sm mb-1">작업 완료</h3>
+                  <p className="text-xs text-gray-600">만족스러운 결과물을 받고 리뷰를 남겨주세요</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* PC: 기존 그리드 레이아웃 */}
+          <div className="hidden md:grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="w-20 h-20 bg-[#0f3460] rounded-full flex items-center justify-center mx-auto mb-4 text-white shadow-lg">
                 <span className="text-2xl font-bold">1</span>
