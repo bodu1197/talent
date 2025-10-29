@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "@fontsource/noto-sans-kr/300.css";
 import "@fontsource/noto-sans-kr/400.css";
@@ -21,7 +21,11 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ko_KR",
   },
-  viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
