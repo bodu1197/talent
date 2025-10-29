@@ -44,7 +44,7 @@ export default function CategoryGrid() {
         <div className="lg:hidden">
           <div className="flex flex-col gap-0">
             {/* 첫 번째 줄 */}
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            <div className="flex gap-[1px] overflow-x-auto pb-2 scrollbar-hide">
               {topLevelCategories.slice(0, 11).map((category, index) => (
                 <Link
                   key={category.id}
@@ -82,7 +82,7 @@ export default function CategoryGrid() {
             </div>
 
             {/* 두 번째 줄 */}
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            <div className="flex gap-[1px] overflow-x-auto pb-2 scrollbar-hide">
               {topLevelCategories.slice(11).map((category, index) => (
                 <Link
                   key={category.id}
