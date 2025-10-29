@@ -1,18 +1,14 @@
 import ServiceGrid from '@/components/services/ServiceGrid'
 import HeroSection from '@/components/home/HeroSection'
 import AITalentShowcase from '@/components/home/AITalentShowcase'
-import PremiumPlacements from '@/components/home/PremiumPlacements'
 import CategoryGrid from '@/components/home/CategoryGrid'
-import TrendingServices from '@/components/home/TrendingServices'
 
 export default function HomePage() {
   return (
     <div className="pb-20 lg:pb-0">
       <HeroSection />
       <CategoryGrid />
-      <PremiumPlacements />
       <AITalentShowcase />
-      <TrendingServices />
 
       {/* 기존의 '추천 서비스', '서비스 프로세스', '실시간 구매 후기', 'CTA 섹션' 등은
           새로운 컴포넌트들로 대체되거나 재구성될 예정입니다. */}
