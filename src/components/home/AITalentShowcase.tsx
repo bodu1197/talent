@@ -1,6 +1,5 @@
 'use client'
 
-import { useState, useRef } from 'react'
 import Link from 'next/link'
 
 interface AIShowcaseItem {
@@ -86,26 +85,6 @@ const showcaseItems: AIShowcaseItem[] = [
 ]
 
 export default function AITalentShowcase() {
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const [canScrollLeft, setCanScrollLeft] = useState(false)
-  const [canScrollRight, setCanScrollRight] = useState(true)
-
-  const scroll = (direction: 'left' | 'right') => {
-    if (scrollRef.current) {
-      const scrollAmount = 400
-      const newScrollLeft = scrollRef.current.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount)
-      scrollRef.current.scrollTo({ left: newScrollLeft, behavior: 'smooth' })
-    }
-  }
-
-  const handleScroll = () => {
-    if (scrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current
-      setCanScrollLeft(scrollLeft > 0)
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10)
-    }
-  }
-
   return (
     <section className="py-16 lg:py-7 bg-white">
       <div className="container-1200">
@@ -114,82 +93,52 @@ export default function AITalentShowcase() {
             <h2 className="text-xl font-bold mb-2">AI 재능 쇼케이스</h2>
             <p className="text-gray-600">AI 전문가들의 인기 서비스</p>
           </div>
-          <div className="hidden md:flex items-center gap-2">
-            <button
-              onClick={() => scroll('left')}
-              disabled={!canScrollLeft}
-              className={`w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all ${
-                canScrollLeft
-                  ? 'border-[#0f3460] text-[#0f3460] hover:bg-[#0f3460] hover:text-white'
-                  : 'border-gray-300 text-gray-300 cursor-not-allowed'
-              }`}
-              aria-label="이전"
-            >
-              <i className="fas fa-chevron-left"></i>
-            </button>
-            <button
-              onClick={() => scroll('right')}
-              disabled={!canScrollRight}
-              className={`w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all ${
-                canScrollRight
-                  ? 'border-[#0f3460] text-[#0f3460] hover:bg-[#0f3460] hover:text-white'
-                  : 'border-gray-300 text-gray-300 cursor-not-allowed'
-              }`}
-              aria-label="다음"
-            >
-              <i className="fas fa-chevron-right"></i>
-            </button>
-          </div>
+          <button className="hidden md:block px-4 py-2 border border-[#0f3460] text-[#0f3460] rounded-lg hover:bg-gray-50 transition-colors">
+            전체보기
+          </button>
         </div>
 
-        <div
-          ref={scrollRef}
-          onScroll={handleScroll}
-          className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {showcaseItems.map((item) => (
             <Link
               key={item.id}
               href={`/categories/${item.slug}`}
-              className="group flex-shrink-0 w-[280px] md:w-[320px]"
+              className="card group cursor-pointer"
             >
-              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 group-hover:scale-[1.02]">
-                {/* 썸네일 */}
-                <div className="relative aspect-[4/3] bg-gray-100 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
-                    <span className="text-6xl opacity-20">
-                      <i className="fas fa-robot"></i>
-                    </span>
-                  </div>
-                  <div className="absolute top-3 left-3">
-                    <span className="px-3 py-1 bg-[#0f3460] text-white text-xs font-medium rounded-full">
-                      {item.category}
-                    </span>
-                  </div>
+              {/* 썸네일 */}
+              <div className="relative bg-gray-100 rounded-t-lg overflow-hidden h-48">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+                  <span className="text-6xl opacity-20">
+                    <i className="fas fa-robot"></i>
+                  </span>
+                </div>
+                <div className="absolute top-3 left-3">
+                  <span className="px-3 py-1 bg-[#0f3460] text-white text-xs font-medium rounded-full">
+                    {item.category}
+                  </span>
+                </div>
+              </div>
+
+              {/* 정보 */}
+              <div className="p-4">
+                <h3 className="font-bold text-lg mb-2 line-clamp-1 group-hover:text-[#0f3460] transition-colors">
+                  {item.title}
+                </h3>
+
+                <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
+                  <span className="flex items-center gap-1">
+                    <i className="fas fa-star text-yellow-400"></i>
+                    <span className="font-semibold">{item.rating}</span>
+                  </span>
+                  <span>({item.reviews})</span>
                 </div>
 
-                {/* 정보 */}
-                <div className="p-4">
-                  <h3 className="font-bold text-lg mb-2 line-clamp-1 group-hover:text-[#0f3460] transition-colors">
-                    {item.title}
-                  </h3>
-
-                  <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
-                    <span className="flex items-center gap-1">
-                      <i className="fas fa-star text-yellow-400"></i>
-                      <span className="font-semibold">{item.rating}</span>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-2xl font-bold text-gray-900">
+                      {item.price}
                     </span>
-                    <span>({item.reviews})</span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-2xl font-bold text-gray-900">
-                        {item.price}
-                      </span>
-                      <span className="text-gray-600 ml-1">원~</span>
-                    </div>
+                    <span className="text-gray-600 ml-1">원~</span>
                   </div>
                 </div>
               </div>
@@ -197,12 +146,6 @@ export default function AITalentShowcase() {
           ))}
         </div>
       </div>
-
-      <style jsx>{`
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
     </section>
   )
 }
