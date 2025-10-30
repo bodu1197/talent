@@ -6,6 +6,14 @@ export async function middleware(request: NextRequest) {
     request,
   })
 
+  // 보안 헤더를 먼저 설정
+  const setSecurityHeaders = (response: NextResponse) => {
+    response.headers.set('X-Content-Type-Options', 'nosniff')
+    response.headers.set('Content-Security-Policy', "frame-ancestors 'none'")
+    response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+    return response
+  }
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -22,6 +30,8 @@ export async function middleware(request: NextRequest) {
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options)
           )
+          // 쿠키 설정 후 보안 헤더 다시 적용
+          setSecurityHeaders(supabaseResponse)
         },
       },
     }
@@ -53,10 +63,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl)
   }
 
-  // 보안 헤더 추가
-  supabaseResponse.headers.set('X-Content-Type-Options', 'nosniff')
-  supabaseResponse.headers.set('Content-Security-Policy', "frame-ancestors 'none'")
-  supabaseResponse.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  // 보안 헤더 적용
+  setSecurityHeaders(supabaseResponse)
 
   // RSC 요청 확인 (_rsc 쿼리 파라미터)
   const isRSCRequest = request.nextUrl.searchParams.has('_rsc')
