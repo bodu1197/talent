@@ -17,8 +17,13 @@ interface Category {
 
 export default function NewServicePage() {
   const [activePackage, setActivePackage] = useState<PackageType>('basic')
-  const [categories, setCategories] = useState<Category[]>([])
+  const [level1Categories, setLevel1Categories] = useState<Category[]>([])
+  const [level2Categories, setLevel2Categories] = useState<Category[]>([])
+  const [level3Categories, setLevel3Categories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
+  const [selectedLevel1, setSelectedLevel1] = useState('')
+  const [selectedLevel2, setSelectedLevel2] = useState('')
+  const [selectedLevel3, setSelectedLevel3] = useState('')
   const [formData, setFormData] = useState({
     title: '',
     category: '',
@@ -30,8 +35,9 @@ export default function NewServicePage() {
     }
   })
 
+  // Load level 1 categories on mount
   useEffect(() => {
-    async function fetchCategories() {
+    async function fetchLevel1Categories() {
       try {
         const supabase = createClient()
         const { data, error } = await supabase
@@ -42,19 +48,93 @@ export default function NewServicePage() {
           .order('display_order', { ascending: true })
 
         if (error) {
-          console.error('카테고리 로딩 오류:', error)
+          console.error('1차 카테고리 로딩 오류:', error)
         } else {
-          setCategories(data || [])
+          setLevel1Categories(data || [])
         }
       } catch (error) {
-        console.error('카테고리 로딩 실패:', error)
+        console.error('1차 카테고리 로딩 실패:', error)
       } finally {
         setLoading(false)
       }
     }
 
-    fetchCategories()
+    fetchLevel1Categories()
   }, [])
+
+  // Load level 2 categories when level 1 is selected
+  useEffect(() => {
+    if (!selectedLevel1) {
+      setLevel2Categories([])
+      setSelectedLevel2('')
+      setLevel3Categories([])
+      setSelectedLevel3('')
+      return
+    }
+
+    async function fetchLevel2Categories() {
+      try {
+        const supabase = createClient()
+        const { data, error } = await supabase
+          .from('categories')
+          .select('id, name, slug, level, parent_id')
+          .eq('is_active', true)
+          .eq('parent_id', selectedLevel1)
+          .order('display_order', { ascending: true })
+
+        if (error) {
+          console.error('2차 카테고리 로딩 오류:', error)
+        } else {
+          setLevel2Categories(data || [])
+        }
+      } catch (error) {
+        console.error('2차 카테고리 로딩 실패:', error)
+      }
+    }
+
+    fetchLevel2Categories()
+  }, [selectedLevel1])
+
+  // Load level 3 categories when level 2 is selected
+  useEffect(() => {
+    if (!selectedLevel2) {
+      setLevel3Categories([])
+      setSelectedLevel3('')
+      return
+    }
+
+    async function fetchLevel3Categories() {
+      try {
+        const supabase = createClient()
+        const { data, error } = await supabase
+          .from('categories')
+          .select('id, name, slug, level, parent_id')
+          .eq('is_active', true)
+          .eq('parent_id', selectedLevel2)
+          .order('display_order', { ascending: true })
+
+        if (error) {
+          console.error('3차 카테고리 로딩 오류:', error)
+        } else {
+          setLevel3Categories(data || [])
+        }
+      } catch (error) {
+        console.error('3차 카테고리 로딩 실패:', error)
+      }
+    }
+
+    fetchLevel3Categories()
+  }, [selectedLevel2])
+
+  // Update final category when level 3 is selected
+  useEffect(() => {
+    if (selectedLevel3) {
+      setFormData({ ...formData, category: selectedLevel3 })
+    } else if (selectedLevel2 && level3Categories.length === 0) {
+      // If level 2 selected but no level 3 exists, use level 2
+      setFormData({ ...formData, category: selectedLevel2 })
+    }
+  }, [selectedLevel3, selectedLevel2, level3Categories])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -107,22 +187,69 @@ export default function NewServicePage() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   카테고리 *
                 </label>
-                <select
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-                  required
-                  disabled={loading}
-                >
-                  <option value="">
-                    {loading ? '카테고리 로딩 중...' : '카테고리 선택'}
-                  </option>
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.slug}>
-                      {category.name}
+                <div className="space-y-3">
+                  {/* 1차 카테고리 */}
+                  <select
+                    value={selectedLevel1}
+                    onChange={(e) => setSelectedLevel1(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    required
+                    disabled={loading}
+                  >
+                    <option value="">
+                      {loading ? '1차 카테고리 로딩 중...' : '1차 카테고리 선택'}
                     </option>
-                  ))}
-                </select>
+                    {level1Categories.map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+
+                  {/* 2차 카테고리 */}
+                  {selectedLevel1 && level2Categories.length > 0 && (
+                    <select
+                      value={selectedLevel2}
+                      onChange={(e) => setSelectedLevel2(e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      required
+                    >
+                      <option value="">2차 카테고리 선택</option>
+                      {level2Categories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+
+                  {/* 3차 카테고리 */}
+                  {selectedLevel2 && level3Categories.length > 0 && (
+                    <select
+                      value={selectedLevel3}
+                      onChange={(e) => setSelectedLevel3(e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      required
+                    >
+                      <option value="">3차 카테고리 선택</option>
+                      {level3Categories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+
+                  {/* 선택된 카테고리 경로 표시 */}
+                  {(selectedLevel1 || selectedLevel2 || selectedLevel3) && (
+                    <div className="text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded">
+                      <span className="font-medium">선택된 카테고리:</span>{' '}
+                      {level1Categories.find(c => c.id === selectedLevel1)?.name}
+                      {selectedLevel2 && ` > ${level2Categories.find(c => c.id === selectedLevel2)?.name}`}
+                      {selectedLevel3 && ` > ${level3Categories.find(c => c.id === selectedLevel3)?.name}`}
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div>
