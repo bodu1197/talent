@@ -27,7 +27,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
           {/* PC: 항상 일반 헤더 표시 */}
           <div className="hidden lg:block">
             <Header />
-            <SearchBar />
+            <SearchBar id="desktop-search" />
             <ConditionalMegaMenu />
           </div>
 
@@ -35,7 +35,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
           {isMainPage && (
             <div className="lg:hidden">
               <Header />
-              <SearchBar />
+              <SearchBar id="mobile-search" />
             </div>
           )}
 

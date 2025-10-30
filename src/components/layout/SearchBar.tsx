@@ -3,7 +3,11 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
-export default function SearchBar() {
+interface SearchBarProps {
+  id?: string
+}
+
+export default function SearchBar({ id = 'search' }: SearchBarProps) {
   const [searchQuery, setSearchQuery] = useState('')
 
   const handleSearch = (e: React.FormEvent) => {
@@ -21,7 +25,7 @@ export default function SearchBar() {
           <div className="relative w-full">
             <input
               type="text"
-              id="mobile-search"
+              id={id}
               name="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
