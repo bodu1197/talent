@@ -283,9 +283,9 @@ export default function SellerRegisterPage() {
                   <div className="flex items-start gap-3">
                     <i className="fas fa-info-circle text-blue-500 mt-1"></i>
                     <div>
-                      <p className="text-sm font-medium text-blue-900">본인 인증 안내</p>
+                      <p className="text-sm font-medium text-blue-900">신원 정보 입력</p>
                       <p className="text-sm text-blue-700 mt-1">
-                        실명 인증 시 휴대폰 본인인증이 함께 진행됩니다.
+                        정산 및 계좌 인증을 위해 실명과 휴대폰 번호를 입력해주세요.
                       </p>
                     </div>
                   </div>
