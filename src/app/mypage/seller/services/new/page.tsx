@@ -1,13 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 type PackageType = 'basic' | 'standard' | 'premium'
 
+interface Category {
+  id: string
+  name: string
+  slug: string
+  level: number
+  parent_id: string | null
+}
+
 export default function NewServicePage() {
   const [activePackage, setActivePackage] = useState<PackageType>('basic')
+  const [categories, setCategories] = useState<Category[]>([])
+  const [loading, setLoading] = useState(true)
   const [formData, setFormData] = useState({
     title: '',
     category: '',
@@ -18,6 +29,33 @@ export default function NewServicePage() {
       premium: { price: '', deliveryDays: '', revisionCount: '2', features: [''] }
     }
   })
+
+  const supabase = createClientComponentClient()
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const { data, error } = await supabase
+          .from('categories')
+          .select('id, name, slug, level, parent_id')
+          .eq('is_active', true)
+          .eq('level', 1)
+          .order('display_order', { ascending: true })
+
+        if (error) {
+          console.error('카테고리 로딩 오류:', error)
+        } else {
+          setCategories(data || [])
+        }
+      } catch (error) {
+        console.error('카테고리 로딩 실패:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchCategories()
+  }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -75,14 +113,16 @@ export default function NewServicePage() {
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
                   required
+                  disabled={loading}
                 >
-                  <option value="">카테고리 선택</option>
-                  <option value="design">디자인</option>
-                  <option value="video">영상/사진</option>
-                  <option value="writing">글쓰기/번역</option>
-                  <option value="marketing">마케팅</option>
-                  <option value="programming">IT/프로그래밍</option>
-                  <option value="business">비즈니스 컨설팅</option>
+                  <option value="">
+                    {loading ? '카테고리 로딩 중...' : '카테고리 선택'}
+                  </option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.slug}>
+                      {category.name}
+                    </option>
+                  ))}
                 </select>
               </div>
 

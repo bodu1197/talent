@@ -25,4 +25,3 @@ DROP FUNCTION IF EXISTS is_seller() CASCADE;
 
 COMMENT ON TABLE users IS '회원 기본 정보 테이블 (buyer/seller 정보는 seller_profiles 등 별도 테이블에서 관리)';
 COMMENT ON COLUMN users.user_type IS '회원 유형: buyer(구매자), seller(판매자), both(둘다), admin(관리자)';
-COMMENT ON COLUMN users.last_mode IS '마지막 방문 페이지 모드 (buyer/seller)';
