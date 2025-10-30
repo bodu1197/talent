@@ -104,10 +104,13 @@ export default function HeroSection() {
               <div className="relative w-full lg:max-w-[490px]">
                 <input
                   type="text"
+                  id="hero-search"
+                  name="search"
                   placeholder="어떤 재능이 필요하신가요?"
                   className="w-full px-4 sm:px-6 py-3 sm:py-4 pr-12 border-2 border-gray-300 rounded-full focus:outline-none focus:border-[#0f3460] transition-colors text-gray-900 text-sm sm:text-base"
                 />
                 <button
+                  type="button"
                   className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#0f3460] text-white w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center hover:bg-[#1a4b7d] transition-colors"
                   aria-label="검색"
                 >

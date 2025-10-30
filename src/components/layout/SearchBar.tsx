@@ -21,6 +21,8 @@ export default function SearchBar() {
           <div className="relative w-full">
             <input
               type="text"
+              id="mobile-search"
+              name="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="어떤 재능이 필요하신가요?"
