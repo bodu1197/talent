@@ -54,7 +54,15 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
       </main>
       {!hideLayout && (
         <>
-          <Footer />
+          {/* PC: 모든 페이지에서 풋터 표시, 모바일: 메인 페이지에서만 풋터 표시 */}
+          <div className="hidden lg:block">
+            <Footer />
+          </div>
+          {isMainPage && (
+            <div className="lg:hidden">
+              <Footer />
+            </div>
+          )}
           <MobileBottomNav />
         </>
       )}

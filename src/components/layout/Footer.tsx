@@ -1,116 +1,119 @@
+'use client'
+
 import Link from 'next/link'
+import { useState } from 'react'
+
+const footerCategories = [
+  {
+    title: '회사 소개',
+    items: [
+      { label: '회사 소개', href: '/about' },
+      { label: '이용약관', href: '/terms' },
+      { label: '개인정보처리방침', href: '/privacy' },
+      { label: '제휴 문의', href: '/contact' },
+    ],
+  },
+  {
+    title: '의뢰인 안내',
+    items: [
+      { label: '이용 가이드', href: '/buyer/guide' },
+      { label: '서비스 구매 방법', href: '/buyer/how-to-order' },
+      { label: '결제 안내', href: '/buyer/payment' },
+      { label: '환불 정책', href: '/buyer/refund' },
+    ],
+  },
+  {
+    title: '전문가 안내',
+    items: [
+      { label: '전문가 등록', href: '/expert/register' },
+      { label: '판매자 가이드', href: '/seller/guide' },
+      { label: '수수료 안내', href: '/seller/commission' },
+      { label: '정산 안내', href: '/seller/settlement' },
+    ],
+  },
+  {
+    title: '고객센터',
+    items: [
+      { label: '고객센터', href: '/help' },
+      { label: '자주 묻는 질문', href: '/help/faq' },
+      { label: '공지사항', href: '/help/notice' },
+      { label: '1:1 문의', href: '/help/contact' },
+    ],
+  },
+]
 
 export default function Footer() {
+  const [activeCategory, setActiveCategory] = useState<string | null>(null)
+
+  const toggleCategory = (title: string) => {
+    setActiveCategory(activeCategory === title ? null : title)
+  }
+
   return (
     <footer className="bg-white text-gray-600 border-t border-gray-200">
       <div className="container-1200 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* 회사 소개 */}
-          <div>
-            <h4 className="text-gray-900 font-semibold mb-4">회사 소개</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/about" className="hover:text-[#0f3460] transition-colors">
-                  회사 소개
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className="hover:text-[#0f3460] transition-colors">
-                  이용약관
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy" className="hover:text-[#0f3460] transition-colors">
-                  개인정보처리방침
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="hover:text-[#0f3460] transition-colors">
-                  제휴 문의
-                </Link>
-              </li>
-            </ul>
+        {/* 데스크톱: 기존 그리드 레이아웃 */}
+        <div className="hidden md:grid md:grid-cols-4 gap-8">
+          {footerCategories.map((category) => (
+            <div key={category.title}>
+              <h4 className="text-gray-900 font-semibold mb-4">{category.title}</h4>
+              <ul className="space-y-2 text-sm">
+                {category.items.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} className="hover:text-[#0f3460] transition-colors">
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* 모바일: 가로 스크롤 + 드롭다운 */}
+        <div className="md:hidden">
+          {/* 1차 카테고리 가로 스크롤 */}
+          <div className="overflow-x-auto scrollbar-hide -mx-4 px-4">
+            <div className="flex gap-4 min-w-max pb-4">
+              {footerCategories.map((category) => (
+                <button
+                  key={category.title}
+                  onClick={() => toggleCategory(category.title)}
+                  className={`px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-colors ${
+                    activeCategory === category.title
+                      ? 'bg-[#0f3460] text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {category.title}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* 의뢰인 안내 */}
-          <div>
-            <h4 className="text-gray-900 font-semibold mb-4">의뢰인 안내</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/buyer/guide" className="hover:text-[#0f3460] transition-colors">
-                  이용 가이드
-                </Link>
-              </li>
-              <li>
-                <Link href="/buyer/how-to-order" className="hover:text-[#0f3460] transition-colors">
-                  서비스 구매 방법
-                </Link>
-              </li>
-              <li>
-                <Link href="/buyer/payment" className="hover:text-[#0f3460] transition-colors">
-                  결제 안내
-                </Link>
-              </li>
-              <li>
-                <Link href="/buyer/refund" className="hover:text-[#0f3460] transition-colors">
-                  환불 정책
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* 전문가 안내 */}
-          <div>
-            <h4 className="text-gray-900 font-semibold mb-4">전문가 안내</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/expert/register" className="hover:text-[#0f3460] transition-colors">
-                  전문가 등록
-                </Link>
-              </li>
-              <li>
-                <Link href="/seller/guide" className="hover:text-[#0f3460] transition-colors">
-                  판매자 가이드
-                </Link>
-              </li>
-              <li>
-                <Link href="/seller/commission" className="hover:text-[#0f3460] transition-colors">
-                  수수료 안내
-                </Link>
-              </li>
-              <li>
-                <Link href="/seller/settlement" className="hover:text-[#0f3460] transition-colors">
-                  정산 안내
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* 고객센터 */}
-          <div>
-            <h4 className="text-gray-900 font-semibold mb-4">고객센터</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/help" className="hover:text-[#0f3460] transition-colors">
-                  고객센터
-                </Link>
-              </li>
-              <li>
-                <Link href="/help/faq" className="hover:text-[#0f3460] transition-colors">
-                  자주 묻는 질문
-                </Link>
-              </li>
-              <li>
-                <Link href="/help/notice" className="hover:text-[#0f3460] transition-colors">
-                  공지사항
-                </Link>
-              </li>
-              <li>
-                <Link href="/help/contact" className="hover:text-[#0f3460] transition-colors">
-                  1:1 문의
-                </Link>
-              </li>
-            </ul>
+          {/* 2차 메뉴 드롭다운 */}
+          <div className="mt-4">
+            {footerCategories.map((category) => (
+              <div
+                key={category.title}
+                className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                  activeCategory === category.title ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                }`}
+              >
+                <ul className="space-y-3 text-sm bg-gray-50 rounded-lg p-4">
+                  {category.items.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        className="block hover:text-[#0f3460] transition-colors py-1"
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
 
