@@ -33,9 +33,40 @@ export default function BuyerDashboardPage() {
       setLoading(true)
       setError(null)
 
+      // Get buyer_id first
+      const { createClient } = await import('@/lib/supabase/client')
+      const supabase = createClient()
+
+      let buyerId = null
+
+      const { data: buyer, error: buyerError } = await supabase
+        .from('buyers')
+        .select('id')
+        .eq('user_id', user!.id)
+        .maybeSingle()
+
+      if (buyer) {
+        buyerId = buyer.id
+      } else {
+        // If no buyer record, create one automatically
+        const { data: newBuyer, error: createError } = await supabase
+          .from('buyers')
+          .insert({ user_id: user!.id })
+          .select('id')
+          .single()
+
+        if (createError || !newBuyer) {
+          console.error('Failed to create buyer:', createError)
+          setError('구매자 정보를 불러오는데 실패했습니다')
+          setLoading(false)
+          return
+        }
+        buyerId = newBuyer.id
+      }
+
       const [statsData, ordersData, favoritesData, benefitsData] = await Promise.all([
-        getBuyerDashboardStats(user!.id),
-        getBuyerRecentOrders(user!.id, 5),
+        getBuyerDashboardStats(buyerId),
+        getBuyerRecentOrders(buyerId, 5),
         getBuyerRecentFavorites(user!.id, 5),
         getBuyerBenefits(user!.id)
       ])

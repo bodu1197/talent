@@ -31,9 +31,25 @@ export default function SellerDashboardPage() {
       setLoading(true)
       setError(null)
 
+      // Get seller_id first
+      const { createClient } = await import('@/lib/supabase/client')
+      const supabase = createClient()
+
+      const { data: seller, error: sellerError } = await supabase
+        .from('sellers')
+        .select('id')
+        .eq('user_id', user!.id)
+        .single()
+
+      if (sellerError || !seller) {
+        setError('판매자 등록이 필요합니다')
+        setLoading(false)
+        return
+      }
+
       const [statsData, ordersData] = await Promise.all([
-        getSellerDashboardStats(user!.id),
-        getSellerRecentOrders(user!.id, 5)
+        getSellerDashboardStats(seller.id),
+        getSellerRecentOrders(seller.id, 5)
       ])
 
       setStats(statsData)
