@@ -192,6 +192,7 @@ export default function SellerRegisterPage() {
         if (uploadError) {
           console.error('Profile upload error:', uploadError)
           alert('프로필 이미지 업로드에 실패했습니다.')
+          setLoading(false)
           return
         }
 
@@ -210,7 +211,7 @@ export default function SellerRegisterPage() {
           display_name: formData.displayName,
           profile_image: profileImageUrl,
           bio: formData.bio,
-          phone: formData.publicPhone,
+          phone: formData.phone,
           show_phone: formData.showPhone,
           kakao_id: formData.kakaoId,
           kakao_openchat: formData.kakaoOpenChat,
@@ -232,15 +233,17 @@ export default function SellerRegisterPage() {
       if (sellerError) {
         console.error('Seller insert error:', sellerError)
         alert('판매자 등록에 실패했습니다: ' + sellerError.message)
+        setLoading(false)
         return
       }
 
       alert('판매자 등록이 완료되었습니다! 승인 후 판매를 시작할 수 있습니다.')
-      router.push('/mypage/seller')
+      router.push('/mypage/seller/dashboard')
 
     } catch (error) {
       console.error('Seller registration error:', error)
       alert('판매자 등록 중 오류가 발생했습니다.')
+      setLoading(false)
     } finally {
       setLoading(false)
     }
