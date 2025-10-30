@@ -11,44 +11,37 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
   const router = useRouter()
   const pathname = usePathname()
   const [checking, setChecking] = useState(true)
-  const [isSeller, setIsSeller] = useState(false)
 
   useEffect(() => {
     async function checkSellerStatus() {
-      // 로그인 체크는 모든 페이지에서 필수
-      if (!authLoading && !user) {
-        // Not logged in - redirect to login
-        router.push('/login')
+      // authLoading이 끝날 때까지 대기
+      if (authLoading) return
+
+      // user가 없으면 상위 레이아웃에서 처리
+      if (!user) return
+
+      // Register 페이지는 seller 체크 생략
+      if (pathname === '/mypage/seller/register') {
+        setChecking(false)
         return
       }
 
-      // 로그인된 경우만 진행
-      if (!authLoading && user) {
-        // Register 페이지는 seller 체크 생략
-        if (pathname === '/mypage/seller/register') {
-          setChecking(false)
-          setIsSeller(true)
-          return
-        }
+      // 다른 페이지들은 seller 레코드 확인
+      const supabase = createClient()
 
-        // 다른 페이지들은 seller 레코드 확인
-        const supabase = createClient()
+      const { data: seller } = await supabase
+        .from('sellers')
+        .select('id, status')
+        .eq('user_id', user.id)
+        .maybeSingle()
 
-        const { data: seller } = await supabase
-          .from('sellers')
-          .select('id, status')
-          .eq('user_id', user.id)
-          .maybeSingle()
-
-        if (!seller) {
-          // No seller record - redirect to registration
-          router.push('/mypage/seller/register')
-          return
-        }
-
-        setIsSeller(true)
-        setChecking(false)
+      if (!seller) {
+        // No seller record - redirect to registration
+        router.push('/mypage/seller/register')
+        return
       }
+
+      setChecking(false)
     }
 
     checkSellerStatus()
@@ -60,10 +53,6 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
         <LoadingSpinner message="판매자 정보 확인 중..." />
       </div>
     )
-  }
-
-  if (!isSeller) {
-    return null
   }
 
   return <>{children}</>

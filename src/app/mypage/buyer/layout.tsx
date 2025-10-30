@@ -1,43 +1,34 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/providers/AuthProvider'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 
 export default function BuyerLayout({ children }: { children: React.ReactNode }) {
   const { user, loading: authLoading } = useAuth()
-  const router = useRouter()
   const [checking, setChecking] = useState(true)
 
   useEffect(() => {
     async function checkAuth() {
-      // 로그인 체크
-      if (!authLoading && !user) {
-        // Not logged in - redirect to login
-        router.push('/login')
-        return
-      }
+      // authLoading이 끝날 때까지 대기
+      if (authLoading) return
+
+      // user가 없으면 상위 레이아웃에서 처리
+      if (!user) return
 
       // 로그인된 경우
-      if (!authLoading && user) {
-        setChecking(false)
-      }
+      setChecking(false)
     }
 
     checkAuth()
-  }, [user, authLoading, router])
+  }, [user, authLoading])
 
   if (authLoading || checking) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <LoadingSpinner message="로그인 확인 중..." />
+        <LoadingSpinner message="구매자 정보 확인 중..." />
       </div>
     )
-  }
-
-  if (!user) {
-    return null
   }
 
   return <>{children}</>
