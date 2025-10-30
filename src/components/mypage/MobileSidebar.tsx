@@ -36,7 +36,7 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
     {
       icon: 'fa-heart',
       label: '찜한 서비스',
-      href: '/mypage/buyer/wishlist',
+      href: '/mypage/buyer/favorites',
     },
     {
       icon: 'fa-star',
