@@ -124,8 +124,8 @@ const nextConfig = {
         ],
       },
       {
-        // Icon and favicon files
-        source: '/icon:path*',
+        // Icon files
+        source: '/icon.svg',
         headers: [
           {
             key: 'X-Content-Type-Options',
@@ -138,8 +138,8 @@ const nextConfig = {
         ],
       },
       {
-        // SVG files
-        source: '/:path*.svg',
+        // Favicon
+        source: '/favicon.ico',
         headers: [
           {
             key: 'X-Content-Type-Options',
