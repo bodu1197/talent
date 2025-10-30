@@ -17,9 +17,7 @@ export default function PlaceholderServiceCard({ categoryId }: PlaceholderServic
         <div className="relative bg-gradient-to-br from-[#0f3460] to-[#1a4b7d] rounded-t-lg overflow-hidden h-48 flex items-center justify-center">
           {/* 배경 패턴 */}
           <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0" style={{
-              backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,.05) 10px, rgba(255,255,255,.05) 20px)'
-            }}></div>
+            <div className="absolute inset-0 pattern-diagonal-stripes"></div>
           </div>
 
           {/* 컨텐츠 */}
