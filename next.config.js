@@ -46,7 +46,7 @@ const nextConfig = {
         ],
       },
       {
-        // RSC requests (React Server Components)
+        // RSC requests (React Server Components) - root and simple paths
         source: '/:path*',
         has: [
           {
@@ -58,7 +58,24 @@ const nextConfig = {
           ...securityHeaders,
           {
             key: 'Cache-Control',
-            value: 'private, no-cache, no-store, must-revalidate',
+            value: 'private, no-cache, no-store, max-age=0',
+          },
+        ],
+      },
+      {
+        // RSC requests (React Server Components) - nested paths with segments
+        source: '/:segment1/:segment2*',
+        has: [
+          {
+            type: 'query',
+            key: '_rsc',
+          },
+        ],
+        headers: [
+          ...securityHeaders,
+          {
+            key: 'Cache-Control',
+            value: 'private, no-cache, no-store, max-age=0',
           },
         ],
       },
