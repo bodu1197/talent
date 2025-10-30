@@ -15,7 +15,7 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
     async function checkSeller() {
       if (loading || !user) return
 
-      // Register 페이지는 체크 안함
+      // Register 페이지는 seller 체크 생략
       if (pathname === '/mypage/seller/register') {
         setChecked(true)
         return
@@ -30,7 +30,7 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
         .maybeSingle()
 
       if (!seller) {
-        router.push('/mypage/seller/register')
+        router.replace('/mypage/seller/register')
         return
       }
 
@@ -40,7 +40,6 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
     checkSeller()
   }, [user, loading, pathname, router])
 
-  // 체크 완료될 때까지 렌더링 안함
   if (!checked) return null
 
   return <>{children}</>
