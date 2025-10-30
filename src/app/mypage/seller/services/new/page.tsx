@@ -163,10 +163,142 @@ export default function NewServicePage() {
     }
   }, [selectedLevel3, selectedLevel2, level3Categories])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: API 호출하여 서비스 등록
-    console.log('Service data:', formData)
+
+    if (!thumbnailFile) {
+      alert('썸네일 이미지를 선택해주세요.')
+      return
+    }
+
+    if (!formData.category) {
+      alert('카테고리를 선택해주세요.')
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      const supabase = createClient()
+
+      // 1. Get current user
+      const { data: { user }, error: userError } = await supabase.auth.getUser()
+      if (userError || !user) {
+        alert('로그인이 필요합니다.')
+        return
+      }
+
+      // 2. Get seller_id
+      const { data: seller, error: sellerError } = await supabase
+        .from('sellers')
+        .select('id')
+        .eq('user_id', user.id)
+        .single()
+
+      if (sellerError || !seller) {
+        alert('판매자 정보를 찾을 수 없습니다.')
+        return
+      }
+
+      // 3. Upload thumbnail
+      const fileExt = thumbnailFile.name.split('.').pop()
+      const fileName = `${user.id}-${Date.now()}.${fileExt}`
+      const filePath = `service-thumbnails/${fileName}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('services')
+        .upload(filePath, thumbnailFile)
+
+      if (uploadError) {
+        console.error('Thumbnail upload error:', uploadError)
+        alert('썸네일 업로드에 실패했습니다.')
+        return
+      }
+
+      // 4. Get thumbnail public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('services')
+        .getPublicUrl(filePath)
+
+      // 5. Create slug from title
+      const slug = formData.title
+        .toLowerCase()
+        .replace(/[^a-z0-9가-힣]/g, '-')
+        .replace(/-+/g, '-')
+        .substring(0, 100)
+
+      // 6. Insert service
+      const { data: service, error: serviceError } = await supabase
+        .from('services')
+        .insert({
+          seller_id: seller.id,
+          title: formData.title,
+          slug: `${slug}-${Date.now()}`,
+          description: formData.description,
+          price: parseInt(formData.packages.basic.price) || 0,
+          delivery_days: parseInt(formData.packages.basic.deliveryDays) || 7,
+          revision_count: formData.packages.basic.revisionCount === 'unlimited' ? 999 : parseInt(formData.packages.basic.revisionCount) || 0,
+          thumbnail_url: publicUrl,
+          status: 'draft'
+        })
+        .select()
+        .single()
+
+      if (serviceError) {
+        console.error('Service insert error:', serviceError)
+        alert('서비스 등록에 실패했습니다: ' + serviceError.message)
+        return
+      }
+
+      // 7. Insert service category
+      const { error: categoryError } = await supabase
+        .from('service_categories')
+        .insert({
+          service_id: service.id,
+          category_id: formData.category,
+          is_primary: true
+        })
+
+      if (categoryError) {
+        console.error('Category insert error:', categoryError)
+      }
+
+      // 8. Insert service packages
+      const packages = []
+      for (const [type, pkg] of Object.entries(formData.packages)) {
+        if (pkg.price && pkg.deliveryDays) {
+          packages.push({
+            service_id: service.id,
+            package_type: type,
+            name: type === 'basic' ? '베이직' : type === 'standard' ? '스탠다드' : '프리미엄',
+            description: pkg.features.filter(f => f).join(', '),
+            price: parseInt(pkg.price),
+            delivery_days: parseInt(pkg.deliveryDays),
+            revision_count: pkg.revisionCount === 'unlimited' ? 999 : parseInt(pkg.revisionCount),
+            features: pkg.features.filter(f => f)
+          })
+        }
+      }
+
+      if (packages.length > 0) {
+        const { error: packagesError } = await supabase
+          .from('service_packages')
+          .insert(packages)
+
+        if (packagesError) {
+          console.error('Packages insert error:', packagesError)
+        }
+      }
+
+      alert('서비스가 성공적으로 등록되었습니다!')
+      window.location.href = '/mypage/seller/services'
+
+    } catch (error) {
+      console.error('Service registration error:', error)
+      alert('서비스 등록 중 오류가 발생했습니다.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -531,10 +663,20 @@ export default function NewServicePage() {
             </Link>
             <button
               type="submit"
-              className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium"
+              disabled={loading}
+              className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
-              <i className="fas fa-check mr-2"></i>
-              서비스 등록
+              {loading ? (
+                <>
+                  <i className="fas fa-spinner fa-spin mr-2"></i>
+                  등록 중...
+                </>
+              ) : (
+                <>
+                  <i className="fas fa-check mr-2"></i>
+                  서비스 등록
+                </>
+              )}
             </button>
           </div>
         </form>
