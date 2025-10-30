@@ -226,10 +226,10 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
           </Link>
 
           <Link
-            href="/mypage/profile"
+            href="/mypage/settings"
             onClick={() => setIsOpen(false)}
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all mb-2 ${
-              pathname === '/mypage/profile'
+              pathname === '/mypage/settings'
                 ? 'bg-[#0f3460] text-white'
                 : 'text-gray-700 hover:bg-gray-100'
             }`}
