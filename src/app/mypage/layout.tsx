@@ -1,42 +1,22 @@
 'use client'
 
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/providers/AuthProvider'
-import LoadingSpinner from '@/components/common/LoadingSpinner'
 
 export default function MypageLayout({ children }: { children: ReactNode }) {
-  const { user, loading: authLoading } = useAuth()
+  const { user, loading } = useAuth()
   const router = useRouter()
-  const [checking, setChecking] = useState(true)
 
   useEffect(() => {
-    async function checkAuth() {
-      // 로그인 체크
-      if (!authLoading && !user) {
-        // Not logged in - redirect to login
-        router.push('/login')
-        return
-      }
-
-      // 로그인된 경우
-      if (!authLoading && user) {
-        setChecking(false)
-      }
+    // 로딩 끝났는데 user 없으면 로그인 페이지로
+    if (!loading && !user) {
+      router.push('/login')
     }
+  }, [user, loading, router])
 
-    checkAuth()
-  }, [user, authLoading, router])
-
-  if (authLoading || checking) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <LoadingSpinner message="로그인 확인 중..." />
-      </div>
-    )
-  }
-
-  if (!user) {
+  // 로딩 중이거나 user 없으면 아무것도 렌더링하지 않음
+  if (loading || !user) {
     return null
   }
 

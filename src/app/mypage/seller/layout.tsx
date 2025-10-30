@@ -4,56 +4,44 @@ import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useAuth } from '@/components/providers/AuthProvider'
 import { createClient } from '@/lib/supabase/client'
-import LoadingSpinner from '@/components/common/LoadingSpinner'
 
 export default function SellerLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading: authLoading } = useAuth()
+  const { user, loading } = useAuth()
   const router = useRouter()
   const pathname = usePathname()
-  const [checking, setChecking] = useState(true)
+  const [checked, setChecked] = useState(false)
 
   useEffect(() => {
-    async function checkSellerStatus() {
-      // authLoading이 끝날 때까지 대기
-      if (authLoading) return
+    async function checkSeller() {
+      if (loading || !user) return
 
-      // user가 없으면 상위 레이아웃에서 처리
-      if (!user) return
-
-      // Register 페이지는 seller 체크 생략
+      // Register 페이지는 체크 안함
       if (pathname === '/mypage/seller/register') {
-        setChecking(false)
+        setChecked(true)
         return
       }
 
-      // 다른 페이지들은 seller 레코드 확인
+      // Seller 확인
       const supabase = createClient()
-
       const { data: seller } = await supabase
         .from('sellers')
-        .select('id, status')
+        .select('id')
         .eq('user_id', user.id)
         .maybeSingle()
 
       if (!seller) {
-        // No seller record - redirect to registration
         router.push('/mypage/seller/register')
         return
       }
 
-      setChecking(false)
+      setChecked(true)
     }
 
-    checkSellerStatus()
-  }, [user, authLoading, pathname, router])
+    checkSeller()
+  }, [user, loading, pathname, router])
 
-  if (authLoading || checking) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <LoadingSpinner message="판매자 정보 확인 중..." />
-      </div>
-    )
-  }
+  // 체크 완료될 때까지 렌더링 안함
+  if (!checked) return null
 
   return <>{children}</>
 }
