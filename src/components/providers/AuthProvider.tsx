@@ -44,53 +44,84 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // 프로필 정보 가져오기 (users, buyers, sellers 테이블에서 조회)
   const fetchProfile = async (userId: string) => {
-    try {
-      console.log('🔍 [AuthProvider] Fetching profile for userId:', userId)
+    console.log('🔍 [AuthProvider] Fetching profile for userId:', userId)
 
-      // users 테이블에서 기본 정보 조회
-      const { data: userData, error: userError } = await supabase
+    // 5초 타임아웃 설정
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error('Query timeout after 5s')), 5000)
+    })
+
+    try {
+      // users 테이블에서 기본 정보 조회 (타임아웃 적용)
+      console.log('→ Querying users table...')
+      const userQuery = supabase
         .from('users')
         .select('*')
         .eq('id', userId)
         .single()
 
+      const { data: userData, error: userError } = await Promise.race([
+        userQuery,
+        timeoutPromise
+      ]) as any
+
       if (userError) {
         console.error('❌ [AuthProvider] User fetch error:', userError)
-        console.error('❌ Error details:', {
-          code: userError.code,
-          message: userError.message,
-          details: userError.details,
-          hint: userError.hint
+        // 에러 발생 시 기본 프로필 설정
+        setProfile({
+          id: userId,
+          email: '',
+          name: 'User',
+          email_verified: false,
+          is_active: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          is_buyer: true,
+          is_seller: false
         })
         return
       }
 
-      // buyers 테이블 확인
-      const { data: buyerData, error: buyerError } = await supabase
-        .from('buyers')
-        .select('id')
-        .eq('user_id', userId)
-        .single()
+      console.log('✅ Users table OK')
 
-      if (buyerError && buyerError.code !== 'PGRST116') {
-        console.error('⚠️ [AuthProvider] Buyer check error:', buyerError)
+      // buyers 테이블 확인
+      console.log('→ Checking buyers table...')
+      let isBuyer = false
+      try {
+        const buyerQuery = supabase
+          .from('buyers')
+          .select('id')
+          .eq('user_id', userId)
+          .maybeSingle()
+
+        const { data: buyerData } = await Promise.race([buyerQuery, timeoutPromise]) as any
+        isBuyer = !!buyerData
+        console.log('✅ Buyer check:', isBuyer)
+      } catch (err) {
+        console.error('⚠️ Buyer check timeout/error')
       }
 
       // sellers 테이블 확인
-      const { data: sellerData, error: sellerError } = await supabase
-        .from('sellers')
-        .select('id')
-        .eq('user_id', userId)
-        .single()
+      console.log('→ Checking sellers table...')
+      let isSeller = false
+      try {
+        const sellerQuery = supabase
+          .from('sellers')
+          .select('id')
+          .eq('user_id', userId)
+          .maybeSingle()
 
-      if (sellerError && sellerError.code !== 'PGRST116') {
-        console.error('⚠️ [AuthProvider] Seller check error:', sellerError)
+        const { data: sellerData } = await Promise.race([sellerQuery, timeoutPromise]) as any
+        isSeller = !!sellerData
+        console.log('✅ Seller check:', isSeller)
+      } catch (err) {
+        console.error('⚠️ Seller check timeout/error')
       }
 
       const profileData = {
         ...userData,
-        is_buyer: !!buyerData,
-        is_seller: !!sellerData
+        is_buyer: isBuyer,
+        is_seller: isSeller
       }
 
       console.log('✅ [AuthProvider] Profile loaded:', {
@@ -101,8 +132,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       })
       setProfile(profileData)
     } catch (error) {
-      // 네트워크 에러 등 - 기존 profile 유지하고 로그만 남김
-      console.error('❌ [AuthProvider] 프로필 조회 실패:', error)
+      console.error('❌ [AuthProvider] 프로필 조회 실패 (timeout or error):', error)
+      // 타임아웃이나 에러 시 fallback 프로필 설정
+      setProfile({
+        id: userId,
+        email: '',
+        name: 'User',
+        email_verified: false,
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        is_buyer: true,
+        is_seller: false
+      })
     }
   }
 
