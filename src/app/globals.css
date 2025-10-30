@@ -39,3 +39,21 @@ html, body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Mobile Font Size System (3 levels - excluding logo) */
+@media (max-width: 1024px) {
+  .text-mobile-lg {
+    font-size: 18px;
+    line-height: 1.4;
+  }
+
+  .text-mobile-md {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .text-mobile-sm {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}

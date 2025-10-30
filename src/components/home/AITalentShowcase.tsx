@@ -23,10 +23,10 @@ export default function AITalentShowcase() {
       <div className="container-1200">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-lg lg:text-xl font-bold mb-2">AI 재능 쇼케이스</h2>
-            <p className="text-gray-600">AI 전문가들의 인기 서비스</p>
+            <h2 className="text-mobile-lg lg:text-xl font-bold mb-2">AI 재능 쇼케이스</h2>
+            <p className="text-mobile-md text-gray-600">AI 전문가들의 인기 서비스</p>
           </div>
-          <button className="hidden md:block px-4 py-2 border border-[#0f3460] text-[#0f3460] rounded-lg hover:bg-gray-50 transition-colors">
+          <button className="hidden md:block px-4 py-2 border border-[#0f3460] text-[#0f3460] rounded-lg hover:bg-gray-50 transition-colors text-mobile-md lg:text-base">
             전체보기
           </button>
         </div>
@@ -46,7 +46,7 @@ export default function AITalentShowcase() {
                   </span>
                 </div>
                 <div className="absolute top-3 left-3">
-                  <span className="px-3 py-1 bg-[#0f3460] text-white text-xs font-medium rounded-full">
+                  <span className="px-3 py-1 bg-[#0f3460] text-white text-mobile-sm font-medium rounded-full">
                     {item.category}
                   </span>
                 </div>
@@ -54,11 +54,11 @@ export default function AITalentShowcase() {
 
               {/* 정보 */}
               <div className="p-4">
-                <h3 className="font-bold text-lg mb-2 line-clamp-1 group-hover:text-[#0f3460] transition-colors">
+                <h3 className="font-bold text-mobile-md lg:text-lg mb-2 line-clamp-1 group-hover:text-[#0f3460] transition-colors">
                   {item.title}
                 </h3>
 
-                <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
+                <div className="flex items-center gap-2 text-mobile-sm text-gray-600 mb-3">
                   <span className="flex items-center gap-1">
                     <i className="fas fa-star text-yellow-400"></i>
                     <span className="font-semibold">{item.rating}</span>
@@ -68,10 +68,10 @@ export default function AITalentShowcase() {
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-2xl font-bold text-gray-900">
+                    <span className="text-mobile-lg lg:text-2xl font-bold text-gray-900">
                       {item.price}
                     </span>
-                    <span className="text-gray-600 ml-1">원~</span>
+                    <span className="text-mobile-sm text-gray-600 ml-1">원~</span>
                   </div>
                 </div>
               </div>
@@ -92,15 +92,15 @@ export default function AITalentShowcase() {
 
                   {/* 컨텐츠 */}
                   <div className="relative z-10 text-center px-3 py-4 text-white">
-                    <h3 className="font-bold text-lg mb-4">공평한 판매기회 !</h3>
+                    <h3 className="font-bold text-mobile-md lg:text-lg mb-4">공평한 판매기회 !</h3>
 
-                    <div className="space-y-1.5 text-xs text-white/90 mb-4">
+                    <div className="space-y-1.5 text-mobile-sm text-white/90 mb-4">
                       <div>✓ 판매 수수료 0원</div>
                       <div>✓ 광고비 1,500만원 무료 지원</div>
                       <div>✓ 실력으로 승부하는 공평한 플랫폼</div>
                     </div>
 
-                    <div className="inline-block px-4 py-2 bg-white/20 rounded-full text-xs font-medium group-hover:bg-white/30 transition-colors">
+                    <div className="inline-block px-4 py-2 bg-white/20 rounded-full text-mobile-sm font-medium group-hover:bg-white/30 transition-colors">
                       지금 시작하기 →
                     </div>
                   </div>
@@ -108,13 +108,13 @@ export default function AITalentShowcase() {
 
                 {/* 하단 정보 영역 */}
                 <div className="p-4">
-                  <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
+                  <div className="flex items-center gap-2 text-mobile-sm text-gray-600 mb-2">
                     <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center">
                       <i className="fas fa-rocket text-xs text-gray-500"></i>
                     </div>
                     <span>여기가 당신의 자리입니다</span>
                   </div>
-                  <p className="font-bold text-[#0f3460] text-lg">이 자리를 선점하세요!</p>
+                  <p className="font-bold text-[#0f3460] text-mobile-md lg:text-lg">이 자리를 선점하세요!</p>
                 </div>
               </div>
             </Link>

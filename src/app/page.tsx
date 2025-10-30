@@ -18,8 +18,8 @@ export default function HomePage() {
         <div className="container-1200">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h2 className="text-lg lg:text-xl font-bold mb-2">추천 서비스</h2>
-              <p className="text-gray-600">믿을 수 있는 검증된 전문가들의 서비스</p>
+              <h2 className="text-mobile-lg lg:text-xl font-bold mb-2">추천 서비스</h2>
+              <p className="text-mobile-md text-gray-600">믿을 수 있는 검증된 전문가들의 서비스</p>
             </div>
             <button className="hidden md:block px-4 py-2 border border-[#0f3460] text-[#0f3460] rounded-lg hover:bg-gray-50 transition-colors">
               전체보기
@@ -33,8 +33,8 @@ export default function HomePage() {
       <section className="py-6 lg:py-7 bg-gray-100 -mt-5 lg:mt-0">
         <div className="container-1200">
           <div className="text-center mb-6 lg:mb-12">
-            <h2 className="text-lg lg:text-xl font-bold mb-4">간단한 거래 프로세스</h2>
-            <p className="text-gray-600">
+            <h2 className="text-mobile-lg lg:text-xl font-bold mb-4">간단한 거래 프로세스</h2>
+            <p className="text-mobile-md text-gray-600">
               단 4단계로 완성되는 안전한 거래
             </p>
           </div>
@@ -47,8 +47,8 @@ export default function HomePage() {
                   <span className="text-xl font-bold">1</span>
                 </div>
                 <div className="text-left">
-                  <h3 className="font-bold text-sm mb-1">서비스 검색</h3>
-                  <p className="text-xs text-gray-600">원하는 서비스를 검색하고 전문가를 찾아보세요</p>
+                  <h3 className="font-bold text-mobile-md mb-1">서비스 검색</h3>
+                  <p className="text-mobile-sm text-gray-600">원하는 서비스를 검색하고 전문가를 찾아보세요</p>
                 </div>
               </div>
 
@@ -57,8 +57,8 @@ export default function HomePage() {
                   <span className="text-xl font-bold">2</span>
                 </div>
                 <div className="text-left">
-                  <h3 className="font-bold text-sm mb-1">상담 및 견적</h3>
-                  <p className="text-xs text-gray-600">전문가와 상담하고 견적을 받아보세요</p>
+                  <h3 className="font-bold text-mobile-md mb-1">상담 및 견적</h3>
+                  <p className="text-mobile-sm text-gray-600">전문가와 상담하고 견적을 받아보세요</p>
                 </div>
               </div>
 
@@ -67,8 +67,8 @@ export default function HomePage() {
                   <span className="text-xl font-bold">3</span>
                 </div>
                 <div className="text-left">
-                  <h3 className="font-bold text-sm mb-1">안전 결제</h3>
-                  <p className="text-xs text-gray-600">안전한 에스크로 시스템으로 결제하세요</p>
+                  <h3 className="font-bold text-mobile-md mb-1">안전 결제</h3>
+                  <p className="text-mobile-sm text-gray-600">안전한 에스크로 시스템으로 결제하세요</p>
                 </div>
               </div>
 
@@ -77,8 +77,8 @@ export default function HomePage() {
                   <span className="text-xl font-bold">4</span>
                 </div>
                 <div className="text-left">
-                  <h3 className="font-bold text-sm mb-1">작업 완료</h3>
-                  <p className="text-xs text-gray-600">만족스러운 결과물을 받고 리뷰를 남겨주세요</p>
+                  <h3 className="font-bold text-mobile-md mb-1">작업 완료</h3>
+                  <p className="text-mobile-sm text-gray-600">만족스러운 결과물을 받고 리뷰를 남겨주세요</p>
                 </div>
               </div>
             </div>
@@ -125,13 +125,13 @@ export default function HomePage() {
       <section className="py-6 lg:py-7 bg-gray-50 -mt-5 lg:mt-0">
         <div className="container-1200">
           <div className="text-center mb-12">
-            <h2 className="text-lg lg:text-xl font-bold mb-4">실시간 구매 후기</h2>
-            <p className="text-gray-600">
+            <h2 className="text-mobile-lg lg:text-xl font-bold mb-4">실시간 구매 후기</h2>
+            <p className="text-mobile-md text-gray-600">
               실제 구매자들의 생생한 후기
             </p>
           </div>
 
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-mobile-md text-gray-500">
             아직 등록된 후기가 없습니다
           </div>
         </div>
@@ -140,17 +140,17 @@ export default function HomePage() {
       {/* 기존 'CTA 섹션' */}
       <section className="py-6 lg:py-7 bg-[#0f3460] text-white -mt-5 lg:mt-0">
         <div className="container-1200 text-center">
-          <h2 className="text-2xl font-bold mb-4">
+          <h2 className="text-mobile-lg lg:text-2xl font-bold mb-4">
             지금 바로 시작하세요
           </h2>
-          <p className="text-xl mb-8 opacity-90">
+          <p className="text-mobile-md lg:text-xl mb-8 opacity-90">
             당신의 재능을 필요로 하는 수많은 고객이 기다리고 있습니다
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-[#0f3460] hover:bg-gray-100 font-bold py-3 px-8 rounded-lg transition-colors">
+            <button className="bg-white text-[#0f3460] hover:bg-gray-100 font-bold py-3 px-8 rounded-lg transition-colors text-mobile-md lg:text-base">
               판매자 등록하기
             </button>
-            <button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#0f3460] font-bold py-3 px-8 rounded-lg transition-all">
+            <button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#0f3460] font-bold py-3 px-8 rounded-lg transition-all text-mobile-md lg:text-base">
               서비스 둘러보기
             </button>
           </div>
