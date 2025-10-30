@@ -29,63 +29,18 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 기존 '서비스 프로세스' 섹션 */}
-      <section className="py-8 bg-gray-100">
+      {/* 기존 '서비스 프로세스' 섹션 - PC만 표시 */}
+      <section className="hidden md:block py-8 bg-gray-100">
         <div className="container-1200">
-          <div className="text-center mb-6 lg:mb-12">
-            <h2 className="text-mobile-lg lg:text-xl font-bold mb-4">간단한 거래 프로세스</h2>
-            <p className="text-mobile-md text-gray-600">
+          <div className="text-center mb-12">
+            <h2 className="text-xl font-bold mb-4">간단한 거래 프로세스</h2>
+            <p className="text-gray-600">
               단 4단계로 완성되는 안전한 거래
             </p>
           </div>
 
-          {/* 모바일: 가로 스크롤 */}
-          <div className="md:hidden overflow-x-auto scrollbar-hide -mx-4 px-4">
-            <div className="flex gap-4 min-w-max pb-4">
-              <div className="flex-shrink-0 w-[280px] bg-white rounded-lg p-4 shadow-sm flex items-center gap-3">
-                <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white shadow-lg flex-shrink-0">
-                  <span className="text-xl font-bold">1</span>
-                </div>
-                <div className="text-left">
-                  <h3 className="font-bold text-mobile-md mb-1">서비스 검색</h3>
-                  <p className="text-mobile-sm text-gray-600">원하는 서비스를 검색하고 전문가를 찾아보세요</p>
-                </div>
-              </div>
-
-              <div className="flex-shrink-0 w-[280px] bg-white rounded-lg p-4 shadow-sm flex items-center gap-3">
-                <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white shadow-lg flex-shrink-0">
-                  <span className="text-xl font-bold">2</span>
-                </div>
-                <div className="text-left">
-                  <h3 className="font-bold text-mobile-md mb-1">상담 및 견적</h3>
-                  <p className="text-mobile-sm text-gray-600">전문가와 상담하고 견적을 받아보세요</p>
-                </div>
-              </div>
-
-              <div className="flex-shrink-0 w-[280px] bg-white rounded-lg p-4 shadow-sm flex items-center gap-3">
-                <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white shadow-lg flex-shrink-0">
-                  <span className="text-xl font-bold">3</span>
-                </div>
-                <div className="text-left">
-                  <h3 className="font-bold text-mobile-md mb-1">안전 결제</h3>
-                  <p className="text-mobile-sm text-gray-600">안전한 에스크로 시스템으로 결제하세요</p>
-                </div>
-              </div>
-
-              <div className="flex-shrink-0 w-[280px] bg-white rounded-lg p-4 shadow-sm flex items-center gap-3">
-                <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white shadow-lg flex-shrink-0">
-                  <span className="text-xl font-bold">4</span>
-                </div>
-                <div className="text-left">
-                  <h3 className="font-bold text-mobile-md mb-1">작업 완료</h3>
-                  <p className="text-mobile-sm text-gray-600">만족스러운 결과물을 받고 리뷰를 남겨주세요</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* PC: 기존 그리드 레이아웃 */}
-          <div className="hidden md:grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* PC: 그리드 레이아웃 */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="w-20 h-20 bg-[#0f3460] rounded-full flex items-center justify-center mx-auto mb-4 text-white shadow-lg">
                 <span className="text-2xl font-bold">1</span>
@@ -121,24 +76,24 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 기존 '실시간 리뷰' 섹션 */}
-      <section className="py-8 bg-gray-50">
+      {/* 기존 '실시간 리뷰' 섹션 - PC만 표시 */}
+      <section className="hidden md:block py-8 bg-gray-50">
         <div className="container-1200">
           <div className="text-center mb-8">
-            <h2 className="text-mobile-lg lg:text-xl font-bold mb-4">실시간 구매 후기</h2>
-            <p className="text-mobile-md text-gray-600">
+            <h2 className="text-xl font-bold mb-4">실시간 구매 후기</h2>
+            <p className="text-gray-600">
               실제 구매자들의 생생한 후기
             </p>
           </div>
 
-          <div className="text-center py-8 text-mobile-md text-gray-500">
+          <div className="text-center py-8 text-gray-500">
             아직 등록된 후기가 없습니다
           </div>
         </div>
       </section>
 
-      {/* 자동 스크롤 배너 섹션 */}
-      <section className="bg-gray-50 py-8 overflow-hidden">
+      {/* 자동 스크롤 배너 섹션 - PC만 표시 */}
+      <section className="hidden md:block bg-gray-50 py-8 overflow-hidden">
         <div className="h-[180px] flex items-center">
           <div className="animate-scroll flex gap-6 whitespace-nowrap">
             {/* 배너 아이템 - 2번 반복해서 무한 스크롤 효과 */}
@@ -146,26 +101,26 @@ export default function HomePage() {
               <div key={set} className="flex gap-6">
                 <div className="flex flex-col items-center justify-center gap-3 px-8 py-6 bg-gradient-to-r from-[#0f3460] to-[#1a4b7d] text-white rounded-lg h-[180px] min-w-[300px]">
                   <i className="fas fa-sack-dollar text-4xl"></i>
-                  <span className="text-mobile-lg font-bold text-center">수수료 0%</span>
-                  <span className="text-mobile-sm text-center">당신이 번 돈 100% 가져가세요</span>
+                  <span className="text-lg font-bold text-center">수수료 0%</span>
+                  <span className="text-sm text-center">당신이 번 돈 100% 가져가세요</span>
                 </div>
 
                 <div className="flex flex-col items-center justify-center gap-3 px-8 py-6 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-lg h-[180px] min-w-[300px]">
                   <i className="fas fa-bullhorn text-4xl"></i>
-                  <span className="text-mobile-lg font-bold text-center">광고비 1,500만원</span>
-                  <span className="text-mobile-sm text-center">런칭 기념 무료 지원</span>
+                  <span className="text-lg font-bold text-center">광고비 1,500만원</span>
+                  <span className="text-sm text-center">런칭 기념 무료 지원</span>
                 </div>
 
                 <div className="flex flex-col items-center justify-center gap-3 px-8 py-6 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg h-[180px] min-w-[300px]">
                   <i className="fas fa-balance-scale text-4xl"></i>
-                  <span className="text-mobile-lg font-bold text-center">공평한 기회</span>
-                  <span className="text-mobile-sm text-center">실력으로 승부하세요</span>
+                  <span className="text-lg font-bold text-center">공평한 기회</span>
+                  <span className="text-sm text-center">실력으로 승부하세요</span>
                 </div>
 
                 <div className="flex flex-col items-center justify-center gap-3 px-8 py-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg h-[180px] min-w-[300px]">
                   <i className="fas fa-shield-alt text-4xl"></i>
-                  <span className="text-mobile-lg font-bold text-center">구매 수수료 0원</span>
-                  <span className="text-mobile-sm text-center">숨은 비용 없음</span>
+                  <span className="text-lg font-bold text-center">구매 수수료 0원</span>
+                  <span className="text-sm text-center">숨은 비용 없음</span>
                 </div>
               </div>
             ))}
