@@ -14,7 +14,7 @@ export default function HomePage() {
           새로운 컴포넌트들로 대체되거나 재구성될 예정입니다. */}
 
       {/* 기존 '추천 서비스' 섹션 (ServiceGrid는 재사용 가능성 있음) */}
-      <section className="py-6 lg:py-7 bg-gray-50 -mt-5 lg:mt-0">
+      <section className="py-8 bg-gray-50">
         <div className="container-1200">
           <div className="flex justify-between items-center mb-8">
             <div>
@@ -30,7 +30,7 @@ export default function HomePage() {
       </section>
 
       {/* 기존 '서비스 프로세스' 섹션 */}
-      <section className="py-6 lg:py-7 bg-gray-100 -mt-5 lg:mt-0">
+      <section className="py-8 bg-gray-100">
         <div className="container-1200">
           <div className="text-center mb-6 lg:mb-12">
             <h2 className="text-mobile-lg lg:text-xl font-bold mb-4">간단한 거래 프로세스</h2>
@@ -122,9 +122,9 @@ export default function HomePage() {
       </section>
 
       {/* 기존 '실시간 리뷰' 섹션 */}
-      <section className="py-6 lg:py-7 bg-gray-50 -mt-5 lg:mt-0">
+      <section className="py-8 bg-gray-50">
         <div className="container-1200">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <h2 className="text-mobile-lg lg:text-xl font-bold mb-4">실시간 구매 후기</h2>
             <p className="text-mobile-md text-gray-600">
               실제 구매자들의 생생한 후기
@@ -138,30 +138,34 @@ export default function HomePage() {
       </section>
 
       {/* 자동 스크롤 배너 섹션 */}
-      <section className="bg-gray-50 -mt-5 lg:mt-0 overflow-hidden">
-        <div className="h-[90px] flex items-center">
-          <div className="animate-scroll flex gap-8 whitespace-nowrap">
+      <section className="bg-gray-50 py-8 overflow-hidden">
+        <div className="h-[180px] flex items-center">
+          <div className="animate-scroll flex gap-6 whitespace-nowrap">
             {/* 배너 아이템 - 2번 반복해서 무한 스크롤 효과 */}
             {[1, 2].map((set) => (
-              <div key={set} className="flex gap-8">
-                <div className="flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-[#0f3460] to-[#1a4b7d] text-white rounded-lg">
-                  <i className="fas fa-sack-dollar text-2xl"></i>
-                  <span className="text-mobile-md font-semibold">수수료 0% · 당신이 번 돈 100% 가져가세요</span>
+              <div key={set} className="flex gap-6">
+                <div className="flex flex-col items-center justify-center gap-3 px-8 py-6 bg-gradient-to-r from-[#0f3460] to-[#1a4b7d] text-white rounded-lg h-[180px] min-w-[300px]">
+                  <i className="fas fa-sack-dollar text-4xl"></i>
+                  <span className="text-mobile-lg font-bold text-center">수수료 0%</span>
+                  <span className="text-mobile-sm text-center">당신이 번 돈 100% 가져가세요</span>
                 </div>
 
-                <div className="flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-lg">
-                  <i className="fas fa-bullhorn text-2xl"></i>
-                  <span className="text-mobile-md font-semibold">런칭 기념 광고비 1,500만원 무료 지원</span>
+                <div className="flex flex-col items-center justify-center gap-3 px-8 py-6 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-lg h-[180px] min-w-[300px]">
+                  <i className="fas fa-bullhorn text-4xl"></i>
+                  <span className="text-mobile-lg font-bold text-center">광고비 1,500만원</span>
+                  <span className="text-mobile-sm text-center">런칭 기념 무료 지원</span>
                 </div>
 
-                <div className="flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg">
-                  <i className="fas fa-balance-scale text-2xl"></i>
-                  <span className="text-mobile-md font-semibold">공평한 기회 · 실력으로 승부하세요</span>
+                <div className="flex flex-col items-center justify-center gap-3 px-8 py-6 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg h-[180px] min-w-[300px]">
+                  <i className="fas fa-balance-scale text-4xl"></i>
+                  <span className="text-mobile-lg font-bold text-center">공평한 기회</span>
+                  <span className="text-mobile-sm text-center">실력으로 승부하세요</span>
                 </div>
 
-                <div className="flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg">
-                  <i className="fas fa-shield-alt text-2xl"></i>
-                  <span className="text-mobile-md font-semibold">구매 수수료 0원 · 숨은 비용 없음</span>
+                <div className="flex flex-col items-center justify-center gap-3 px-8 py-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg h-[180px] min-w-[300px]">
+                  <i className="fas fa-shield-alt text-4xl"></i>
+                  <span className="text-mobile-lg font-bold text-center">구매 수수료 0원</span>
+                  <span className="text-mobile-sm text-center">숨은 비용 없음</span>
                 </div>
               </div>
             ))}

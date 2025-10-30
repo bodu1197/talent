@@ -34,7 +34,7 @@ export default function CategoryGrid() {
 
 
   return (
-    <section className="py-6 lg:py-8 bg-white lg:-mt-10">
+    <section className="py-8 bg-white">
       <div className="container-1200">
         <div className="flex items-center justify-between mb-4">
           {/* Removed h2 title "카테고리" as per instruction */}
