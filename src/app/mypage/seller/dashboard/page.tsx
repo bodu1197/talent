@@ -31,18 +31,18 @@ export default function SellerDashboardPage() {
       setLoading(true)
       setError(null)
 
-      // Get seller_id first
+      // Get seller_id (layout already checked seller exists)
       const { createClient } = await import('@/lib/supabase/client')
       const supabase = createClient()
 
-      const { data: seller, error: sellerError } = await supabase
+      const { data: seller } = await supabase
         .from('sellers')
         .select('id')
         .eq('user_id', user!.id)
         .single()
 
-      if (sellerError || !seller) {
-        setError('판매자 등록이 필요합니다')
+      if (!seller) {
+        setError('판매자 정보를 불러오는데 실패했습니다')
         setLoading(false)
         return
       }
