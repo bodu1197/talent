@@ -58,10 +58,14 @@ export async function middleware(request: NextRequest) {
   supabaseResponse.headers.set('Content-Security-Policy', "frame-ancestors 'none'")
   supabaseResponse.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
 
-  // RSC 요청에 charset 추가
+  // RSC 요청 확인 (_rsc 쿼리 파라미터)
+  const isRSCRequest = request.nextUrl.searchParams.has('_rsc')
+
+  // RSC 요청에 캐시 및 charset 추가
   const contentType = supabaseResponse.headers.get('Content-Type')
-  if (contentType === 'text/x-component') {
+  if (contentType === 'text/x-component' || isRSCRequest) {
     supabaseResponse.headers.set('Content-Type', 'text/x-component; charset=utf-8')
+    supabaseResponse.headers.set('Cache-Control', 'private, no-cache, no-store, max-age=0')
   }
 
   // SVG 파일에 charset 추가
