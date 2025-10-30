@@ -1,11 +1,11 @@
 'use client'
 
-import { ReactNode, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/providers/AuthProvider'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 
-export default function MypageLayout({ children }: { children: ReactNode }) {
+export default function BuyerLayout({ children }: { children: React.ReactNode }) {
   const { user, loading: authLoading } = useAuth()
   const router = useRouter()
   const [checking, setChecking] = useState(true)
@@ -30,7 +30,7 @@ export default function MypageLayout({ children }: { children: ReactNode }) {
 
   if (authLoading || checking) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center">
         <LoadingSpinner message="로그인 확인 중..." />
       </div>
     )
@@ -40,9 +40,5 @@ export default function MypageLayout({ children }: { children: ReactNode }) {
     return null
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
-      {children}
-    </div>
-  )
+  return <>{children}</>
 }

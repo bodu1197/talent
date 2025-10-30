@@ -15,14 +15,23 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     async function checkSellerStatus() {
-      // Skip check for register page
-      if (pathname === '/mypage/seller/register') {
-        setChecking(false)
-        setIsSeller(true)
+      // 로그인 체크는 모든 페이지에서 필수
+      if (!authLoading && !user) {
+        // Not logged in - redirect to login
+        router.push('/login')
         return
       }
 
+      // 로그인된 경우만 진행
       if (!authLoading && user) {
+        // Register 페이지는 seller 체크 생략
+        if (pathname === '/mypage/seller/register') {
+          setChecking(false)
+          setIsSeller(true)
+          return
+        }
+
+        // 다른 페이지들은 seller 레코드 확인
         const supabase = createClient()
 
         const { data: seller } = await supabase
@@ -39,9 +48,6 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
 
         setIsSeller(true)
         setChecking(false)
-      } else if (!authLoading && !user) {
-        // Not logged in
-        router.push('/login')
       }
     }
 
