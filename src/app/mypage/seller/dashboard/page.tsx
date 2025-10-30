@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
+import MobileSidebar from '@/components/mypage/MobileSidebar'
 import StatCard from '@/components/mypage/StatCard'
 import Link from 'next/link'
 import { useAuth } from '@/components/providers/AuthProvider'
@@ -10,17 +11,20 @@ import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
 
 export default function SellerDashboardPage() {
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const [stats, setStats] = useState<any>(null)
   const [recentOrders, setRecentOrders] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (user) {
+    if (!authLoading && user) {
       loadDashboardData()
+    } else if (!authLoading && !user) {
+      setLoading(false)
+      setError('로그인이 필요합니다')
     }
-  }, [user])
+  }, [user, authLoading])
 
   async function loadDashboardData() {
     try {
@@ -45,8 +49,9 @@ export default function SellerDashboardPage() {
   if (loading) {
     return (
       <>
+        <MobileSidebar mode="seller" />
         <Sidebar mode="seller" />
-        <main className="flex-1 overflow-y-auto p-8">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           <LoadingSpinner message="대시보드를 불러오는 중..." />
         </main>
       </>
@@ -56,8 +61,9 @@ export default function SellerDashboardPage() {
   if (error) {
     return (
       <>
+        <MobileSidebar mode="seller" />
         <Sidebar mode="seller" />
-        <main className="flex-1 overflow-y-auto p-8">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           <ErrorState message={error} retry={loadDashboardData} />
         </main>
       </>
@@ -89,12 +95,13 @@ export default function SellerDashboardPage() {
 
   return (
     <>
+      <MobileSidebar mode="seller" />
       <Sidebar mode="seller" />
-      <main className="flex-1 overflow-y-auto p-8">
+      <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
         {/* 페이지 헤더 */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">판매 대시보드</h1>
-          <p className="text-gray-600">전체 판매 현황을 확인하세요</p>
+        <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">판매 대시보드</h1>
+          <p className="text-sm sm:text-base text-gray-600">전체 판매 현황을 확인하세요</p>
         </div>
 
         {/* 통계 카드 */}

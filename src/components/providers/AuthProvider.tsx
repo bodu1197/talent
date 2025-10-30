@@ -14,7 +14,6 @@ type UserProfile = {
   bio?: string
   email_verified: boolean
   is_active: boolean
-  last_mode: 'buyer' | 'seller'
   created_at: string
   updated_at: string
 }

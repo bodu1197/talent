@@ -15,26 +15,29 @@ CREATE TABLE IF NOT EXISTS category_visits (
 );
 
 -- 인덱스 생성
-CREATE INDEX idx_category_visits_user_id ON category_visits(user_id);
-CREATE INDEX idx_category_visits_last_visited ON category_visits(last_visited_at DESC);
-CREATE INDEX idx_category_visits_user_last_visited ON category_visits(user_id, last_visited_at DESC);
+CREATE INDEX IF NOT EXISTS idx_category_visits_user_id ON category_visits(user_id);
+CREATE INDEX IF NOT EXISTS idx_category_visits_last_visited ON category_visits(last_visited_at DESC);
+CREATE INDEX IF NOT EXISTS idx_category_visits_user_last_visited ON category_visits(user_id, last_visited_at DESC);
 
 -- RLS (Row Level Security) 활성화
 ALTER TABLE category_visits ENABLE ROW LEVEL SECURITY;
 
 -- RLS 정책: 사용자는 자신의 기록만 조회 가능
+DROP POLICY IF EXISTS "Users can view their own category visits" ON category_visits;
 CREATE POLICY "Users can view their own category visits"
   ON category_visits
   FOR SELECT
   USING (auth.uid() = user_id);
 
 -- RLS 정책: 사용자는 자신의 기록만 삽입 가능
+DROP POLICY IF EXISTS "Users can insert their own category visits" ON category_visits;
 CREATE POLICY "Users can insert their own category visits"
   ON category_visits
   FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
 -- RLS 정책: 사용자는 자신의 기록만 업데이트 가능
+DROP POLICY IF EXISTS "Users can update their own category visits" ON category_visits;
 CREATE POLICY "Users can update their own category visits"
   ON category_visits
   FOR UPDATE
@@ -50,6 +53,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS update_category_visits_updated_at ON category_visits;
 CREATE TRIGGER update_category_visits_updated_at
   BEFORE UPDATE ON category_visits
   FOR EACH ROW
