@@ -7,7 +7,7 @@ import { useAuth } from '@/components/providers/AuthProvider'
 import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
 
-type Step = 1 | 2 | 3 | 4 | 5
+type Step = 1 | 2 | 3 | 4
 
 interface SellerFormData {
   // 1단계: 신원 인증
@@ -33,14 +33,7 @@ interface SellerFormData {
   website: string
   preferredContact: string[]
 
-  // 4단계: 포트폴리오
-  portfolioImages: File[]
-  portfolioTitles: string[]
-  portfolioDescriptions: string[]
-  certificates: string
-  experience: string
-
-  // 5단계: 약관 동의
+  // 4단계: 약관 동의
   termsAgree: boolean
   commissionAgree: boolean
   refundAgree: boolean
@@ -72,11 +65,6 @@ export default function SellerRegisterPage() {
     whatsapp: '',
     website: '',
     preferredContact: [],
-    portfolioImages: [],
-    portfolioTitles: [],
-    portfolioDescriptions: [],
-    certificates: '',
-    experience: '',
     termsAgree: false,
     commissionAgree: false,
     refundAgree: false,
@@ -232,8 +220,8 @@ export default function SellerRegisterPage() {
         bank_name: formData.bankName,
         business_number: formData.isBusiness ? formData.businessNumber : null,
         is_business: formData.isBusiness,
-        certificates: formData.certificates || null,
-        experience: formData.experience || null,
+        certificates: null,
+        experience: null,
         status: 'pending_review'
       }
 
@@ -269,7 +257,7 @@ export default function SellerRegisterPage() {
   }
 
   const nextStep = () => {
-    if (currentStep < 5) {
+    if (currentStep < 4) {
       setCurrentStep((currentStep + 1) as Step)
     }
   }
@@ -296,11 +284,8 @@ export default function SellerRegisterPage() {
         result = true // 연락처는 선택사항
         break
       case 4:
-        result = true // 포트폴리오는 선택사항
-        break
-      case 5:
         result = formData.termsAgree && formData.commissionAgree && formData.refundAgree
-        console.log('✅ [Step 5 Validation]', { termsAgree: formData.termsAgree, commissionAgree: formData.commissionAgree, refundAgree: formData.refundAgree, result })
+        console.log('✅ [Step 4 Validation]', { termsAgree: formData.termsAgree, commissionAgree: formData.commissionAgree, refundAgree: formData.refundAgree, result })
         break
       default:
         result = false
@@ -332,14 +317,14 @@ export default function SellerRegisterPage() {
         {/* 진행 단계 표시 */}
         <div className="max-w-4xl mb-8">
           <div className="flex items-center justify-between">
-            {[1, 2, 3, 4, 5].map((step) => (
+            {[1, 2, 3, 4].map((step) => (
               <div key={step} className="flex items-center flex-1">
                 <div className={`flex items-center justify-center w-10 h-10 rounded-full font-bold ${
                   currentStep >= step ? 'bg-[#0f3460] text-white' : 'bg-gray-200 text-gray-500'
                 }`}>
                   {step}
                 </div>
-                {step < 5 && (
+                {step < 4 && (
                   <div className={`flex-1 h-1 mx-2 ${
                     currentStep > step ? 'bg-[#0f3460]' : 'bg-gray-200'
                   }`}></div>
@@ -351,8 +336,7 @@ export default function SellerRegisterPage() {
             <span className={currentStep === 1 ? 'text-[#0f3460] font-medium' : 'text-gray-500'}>신원인증</span>
             <span className={currentStep === 2 ? 'text-[#0f3460] font-medium' : 'text-gray-500'}>프로필</span>
             <span className={currentStep === 3 ? 'text-[#0f3460] font-medium' : 'text-gray-500'}>연락처</span>
-            <span className={currentStep === 4 ? 'text-[#0f3460] font-medium' : 'text-gray-500'}>포트폴리오</span>
-            <span className={currentStep === 5 ? 'text-[#0f3460] font-medium' : 'text-gray-500'}>약관동의</span>
+            <span className={currentStep === 4 ? 'text-[#0f3460] font-medium' : 'text-gray-500'}>약관동의</span>
           </div>
         </div>
 
@@ -685,44 +669,10 @@ export default function SellerRegisterPage() {
             </div>
           )}
 
-          {/* 4단계: 포트폴리오 */}
+          {/* 4단계: 약관 동의 */}
           {currentStep === 4 && (
             <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">4단계: 포트폴리오 (선택)</h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    자격증/수료증
-                  </label>
-                  <textarea
-                    value={formData.certificates}
-                    onChange={(e) => setFormData({ ...formData, certificates: e.target.value })}
-                    rows={4}
-                    placeholder="보유하신 자격증이나 수료증을 입력해주세요"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-                  ></textarea>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    경력 사항
-                  </label>
-                  <textarea
-                    value={formData.experience}
-                    onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
-                    rows={6}
-                    placeholder="관련 경력 사항을 입력해주세요"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-                  ></textarea>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* 5단계: 약관 동의 */}
-          {currentStep === 5 && (
-            <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">5단계: 운영 정책 동의</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">4단계: 운영 정책 동의</h2>
               <div className="space-y-4">
                 <div className="border rounded-lg p-4">
                   <label className="flex items-start gap-3">
@@ -794,7 +744,7 @@ export default function SellerRegisterPage() {
               </button>
             )}
 
-            {currentStep < 5 ? (
+            {currentStep < 4 ? (
               <button
                 type="button"
                 onClick={nextStep}
