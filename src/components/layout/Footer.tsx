@@ -70,19 +70,19 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* 모바일: 가로 스크롤 + 드롭다운 */}
+        {/* 모바일: 1줄 카테고리 + 드롭다운 */}
         <div className="md:hidden">
-          {/* 1차 카테고리 가로 스크롤 */}
-          <div className="overflow-x-auto scrollbar-hide -mx-4 px-4">
-            <div className="flex gap-4 min-w-max pb-4">
+          {/* 1차 카테고리 1줄 배치 */}
+          <div className="pb-4">
+            <div className="flex gap-2 justify-between">
               {footerCategories.map((category) => (
                 <button
                   key={category.title}
                   onClick={() => toggleCategory(category.title)}
-                  className={`px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-colors ${
+                  className={`flex-1 px-2 py-2 whitespace-nowrap text-xs font-medium transition-colors ${
                     activeCategory === category.title
-                      ? 'bg-[#0f3460] text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      ? 'text-[#0f3460] font-semibold'
+                      : 'text-gray-700'
                   }`}
                 >
                   {category.title}
