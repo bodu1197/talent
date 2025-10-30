@@ -55,7 +55,7 @@ export async function middleware(request: NextRequest) {
 
   // 보안 헤더 추가
   supabaseResponse.headers.set('X-Content-Type-Options', 'nosniff')
-  supabaseResponse.headers.set('X-Frame-Options', 'DENY')
+  supabaseResponse.headers.set('Content-Security-Policy', "frame-ancestors 'none'")
   supabaseResponse.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
 
   return supabaseResponse
