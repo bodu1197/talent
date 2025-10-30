@@ -44,26 +44,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // 프로필 정보 가져오기 (users, buyers, sellers 테이블에서 조회)
   const fetchProfile = async (userId: string) => {
-    console.log('🔍 [AuthProvider] Fetching profile for userId:', userId)
-
-    // 5초 타임아웃 설정
-    const timeoutPromise = new Promise<never>((_, reject) => {
-      setTimeout(() => reject(new Error('Query timeout after 5s')), 5000)
-    })
-
     try {
-      // users 테이블에서 기본 정보 조회 (타임아웃 적용)
-      console.log('→ Querying users table...')
-      const userQuery = supabase
+      // users 테이블에서 기본 정보 조회
+      const { data: userData, error: userError } = await supabase
         .from('users')
         .select('*')
         .eq('id', userId)
         .single()
-
-      const { data: userData, error: userError } = await Promise.race([
-        userQuery,
-        timeoutPromise
-      ]) as any
 
       if (userError) {
         console.error('❌ [AuthProvider] User fetch error:', userError)
@@ -82,41 +69,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return
       }
 
-      console.log('✅ Users table OK')
-
       // buyers 테이블 확인
-      console.log('→ Checking buyers table...')
       let isBuyer = false
-      try {
-        const buyerQuery = supabase
-          .from('buyers')
-          .select('id')
-          .eq('user_id', userId)
-          .maybeSingle()
-
-        const { data: buyerData } = await Promise.race([buyerQuery, timeoutPromise]) as any
-        isBuyer = !!buyerData
-        console.log('✅ Buyer check:', isBuyer)
-      } catch (err) {
-        console.error('⚠️ Buyer check timeout/error')
-      }
+      const { data: buyerData } = await supabase
+        .from('buyers')
+        .select('id')
+        .eq('user_id', userId)
+        .maybeSingle()
+      isBuyer = !!buyerData
 
       // sellers 테이블 확인
-      console.log('→ Checking sellers table...')
       let isSeller = false
-      try {
-        const sellerQuery = supabase
-          .from('sellers')
-          .select('id')
-          .eq('user_id', userId)
-          .maybeSingle()
-
-        const { data: sellerData } = await Promise.race([sellerQuery, timeoutPromise]) as any
-        isSeller = !!sellerData
-        console.log('✅ Seller check:', isSeller)
-      } catch (err) {
-        console.error('⚠️ Seller check timeout/error')
-      }
+      const { data: sellerData } = await supabase
+        .from('sellers')
+        .select('id')
+        .eq('user_id', userId)
+        .maybeSingle()
+      isSeller = !!sellerData
 
       const profileData = {
         ...userData,
@@ -124,16 +93,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         is_seller: isSeller
       }
 
-      console.log('✅ [AuthProvider] Profile loaded:', {
-        id: profileData.id,
-        is_buyer: profileData.is_buyer,
-        is_seller: profileData.is_seller,
-        email: profileData.email
-      })
       setProfile(profileData)
-    } catch (error) {
-      console.error('❌ [AuthProvider] 프로필 조회 실패 (timeout or error):', error)
-      // 타임아웃이나 에러 시 fallback 프로필 설정
+    } catch (error: any) {
+      console.error('❌ [AuthProvider] Profile fetch error:', error)
+
+      // 에러 시 fallback 프로필 설정
       setProfile({
         id: userId,
         email: '',
