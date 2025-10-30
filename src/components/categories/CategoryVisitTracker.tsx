@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useAuth } from '@/components/providers/AuthProvider'
 
 interface CategoryVisitTrackerProps {
   categoryId: string
@@ -15,7 +16,12 @@ export default function CategoryVisitTracker({
   categorySlug,
   isTopLevel
 }: CategoryVisitTrackerProps) {
+  const { user } = useAuth()
+
   useEffect(() => {
+    // 로그인하지 않은 사용자는 추적 안 함
+    if (!user) return
+
     // 1차 카테고리만 추적
     if (!isTopLevel) return
 
@@ -26,8 +32,6 @@ export default function CategoryVisitTracker({
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            // TODO: 실제 인증 토큰 추가
-            'x-user-id': 'guest'
           },
           body: JSON.stringify({
             categoryId,
@@ -41,7 +45,7 @@ export default function CategoryVisitTracker({
     }
 
     trackVisit()
-  }, [categoryId, categoryName, categorySlug, isTopLevel])
+  }, [user, categoryId, categoryName, categorySlug, isTopLevel])
 
   return null // UI 없음, 추적만 수행
 }

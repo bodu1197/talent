@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useAuth } from '@/components/providers/AuthProvider'
 
 interface CategoryVisit {
   categoryId: string
@@ -12,18 +13,20 @@ interface CategoryVisit {
 }
 
 export default function RecentCategories() {
+  const { user } = useAuth()
   const [recentCategories, setRecentCategories] = useState<CategoryVisit[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // 로그인하지 않은 사용자는 API 호출 안 함
+    if (!user) {
+      setLoading(false)
+      return
+    }
+
     const fetchRecentCategories = async () => {
       try {
-        const response = await fetch('/api/user/category-visits', {
-          headers: {
-            // TODO: 실제 인증 토큰 추가
-            'x-user-id': 'guest'
-          }
-        })
+        const response = await fetch('/api/user/category-visits')
 
         if (response.ok) {
           const data = await response.json()
@@ -37,7 +40,7 @@ export default function RecentCategories() {
     }
 
     fetchRecentCategories()
-  }, [])
+  }, [user])
 
   // 방문 기록이 없으면 섹션 숨김
   if (loading || recentCategories.length === 0) {
