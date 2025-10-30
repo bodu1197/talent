@@ -11,7 +11,10 @@ export async function GET(request: NextRequest) {
     if (!session) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
-        { status: 401 }
+        {
+          status: 401,
+          headers: { 'Content-Type': 'application/json; charset=utf-8' }
+        }
       )
     }
 
@@ -26,7 +29,10 @@ export async function GET(request: NextRequest) {
       console.error('Supabase error:', error)
       return NextResponse.json(
         { success: false, error: error.message },
-        { status: 500 }
+        {
+          status: 500,
+          headers: { 'Content-Type': 'application/json; charset=utf-8' }
+        }
       )
     }
 
@@ -39,15 +45,21 @@ export async function GET(request: NextRequest) {
       lastVisitedAt: item.last_visited_at
     }))
 
-    return NextResponse.json({
-      success: true,
-      data: formattedData
-    })
+    return NextResponse.json(
+      {
+        success: true,
+        data: formattedData
+      },
+      { headers: { 'Content-Type': 'application/json; charset=utf-8' } }
+    )
   } catch (error) {
     console.error('Failed to fetch category visits:', error)
     return NextResponse.json(
       { success: false, error: 'Failed to fetch category visits' },
-      { status: 500 }
+      {
+        status: 500,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' }
+      }
     )
   }
 }
@@ -62,7 +74,10 @@ export async function POST(request: NextRequest) {
     if (!session) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
-        { status: 401 }
+        {
+          status: 401,
+          headers: { 'Content-Type': 'application/json; charset=utf-8' }
+        }
       )
     }
 
@@ -72,7 +87,10 @@ export async function POST(request: NextRequest) {
     if (!categoryId || !categoryName) {
       return NextResponse.json(
         { success: false, error: 'Missing required fields' },
-        { status: 400 }
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json; charset=utf-8' }
+        }
       )
     }
 
@@ -120,21 +138,27 @@ export async function POST(request: NextRequest) {
       result = data
     }
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        categoryId: result.category_id,
-        categoryName: result.category_name,
-        categorySlug: result.category_slug,
-        visitCount: result.visit_count,
-        lastVisitedAt: result.last_visited_at
-      }
-    })
+    return NextResponse.json(
+      {
+        success: true,
+        data: {
+          categoryId: result.category_id,
+          categoryName: result.category_name,
+          categorySlug: result.category_slug,
+          visitCount: result.visit_count,
+          lastVisitedAt: result.last_visited_at
+        }
+      },
+      { headers: { 'Content-Type': 'application/json; charset=utf-8' } }
+    )
   } catch (error: any) {
     console.error('Failed to save category visit:', error)
     return NextResponse.json(
       { success: false, error: error.message || 'Failed to save category visit' },
-      { status: 500 }
+      {
+        status: 500,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' }
+      }
     )
   }
 }
