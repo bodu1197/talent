@@ -10,10 +10,23 @@ export default function Header() {
 
   // 사용자 타입에 따른 마이페이지 URL
   const getMypageUrl = () => {
-    if (!user) return '/auth/login'
+    console.log('🔗 [Header] getMypageUrl called:', {
+      hasUser: !!user,
+      userId: user?.id,
+      hasProfile: !!profile,
+      userType: profile?.user_type,
+      loading
+    })
+
+    if (!user) {
+      console.log('➡️ [Header] No user - redirecting to login')
+      return '/auth/login'
+    }
     if (profile?.user_type === 'seller' || profile?.user_type === 'both') {
+      console.log('➡️ [Header] Seller/Both - redirecting to seller dashboard')
       return '/mypage/seller/dashboard'
     }
+    console.log('➡️ [Header] Buyer/Default - redirecting to buyer dashboard')
     return '/mypage/buyer/dashboard'
   }
 
