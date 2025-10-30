@@ -8,6 +8,15 @@ export default function Header() {
   const { user, profile, loading, signOut } = useAuth()
   const router = useRouter()
 
+  // 사용자 타입에 따른 마이페이지 URL
+  const getMypageUrl = () => {
+    if (!user) return '/auth/login'
+    if (profile?.user_type === 'seller' || profile?.user_type === 'both') {
+      return '/mypage/seller/dashboard'
+    }
+    return '/mypage/buyer/dashboard'
+  }
+
   return (
     <header className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-50">
       <div className="container-1200">
@@ -31,7 +40,7 @@ export default function Header() {
                   <i className="fas fa-bell text-xl"></i>
                 </button>
                 <Link
-                  href="/mypage"
+                  href={getMypageUrl()}
                   className="flex items-center space-x-2"
                 >
                   <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
@@ -97,7 +106,7 @@ export default function Header() {
                   {/* 드롭다운 메뉴 */}
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all">
                     <Link
-                      href="/mypage"
+                      href={getMypageUrl()}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg"
                     >
                       <i className="fas fa-user-circle mr-2"></i>
