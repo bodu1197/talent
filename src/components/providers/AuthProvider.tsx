@@ -168,6 +168,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let mounted = true
+    let initialCheckComplete = false
 
     // 초기 세션 체크
     const checkSession = async () => {
@@ -206,6 +207,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (mounted) {
           console.log('✅ [AuthProvider] Loading complete. User:', !!session?.user)
           setLoading(false)
+          initialCheckComplete = true
         }
       }
     }
@@ -223,9 +225,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           email: session?.user?.email
         })
 
-        // INITIAL_SESSION은 checkSession에서 이미 처리하므로 스킵
-        if (event === 'INITIAL_SESSION') {
-          console.log('⏭️ [AuthProvider] Skipping INITIAL_SESSION - already handled by checkSession')
+        // 초기 체크가 완료되기 전의 모든 이벤트는 무시
+        if (!initialCheckComplete) {
+          console.log('⏭️ [AuthProvider] Skipping event during initial check:', event)
           return
         }
 
