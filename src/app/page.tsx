@@ -137,22 +137,34 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 기존 'CTA 섹션' */}
-      <section className="py-6 lg:py-7 bg-[#0f3460] text-white -mt-5 lg:mt-0">
-        <div className="container-1200 text-center">
-          <h2 className="text-mobile-lg lg:text-2xl font-bold mb-4">
-            지금 바로 시작하세요
-          </h2>
-          <p className="text-mobile-md lg:text-xl mb-8 opacity-90">
-            당신의 재능을 필요로 하는 수많은 고객이 기다리고 있습니다
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-[#0f3460] hover:bg-gray-100 font-bold py-3 px-8 rounded-lg transition-colors text-mobile-md lg:text-base">
-              판매자 등록하기
-            </button>
-            <button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#0f3460] font-bold py-3 px-8 rounded-lg transition-all text-mobile-md lg:text-base">
-              서비스 둘러보기
-            </button>
+      {/* 자동 스크롤 배너 섹션 */}
+      <section className="bg-gray-50 -mt-5 lg:mt-0 overflow-hidden">
+        <div className="h-[90px] flex items-center">
+          <div className="animate-scroll flex gap-8 whitespace-nowrap">
+            {/* 배너 아이템 - 2번 반복해서 무한 스크롤 효과 */}
+            {[1, 2].map((set) => (
+              <div key={set} className="flex gap-8">
+                <div className="flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-[#0f3460] to-[#1a4b7d] text-white rounded-lg">
+                  <i className="fas fa-sack-dollar text-2xl"></i>
+                  <span className="text-mobile-md font-semibold">수수료 0% · 당신이 번 돈 100% 가져가세요</span>
+                </div>
+
+                <div className="flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-lg">
+                  <i className="fas fa-bullhorn text-2xl"></i>
+                  <span className="text-mobile-md font-semibold">런칭 기념 광고비 1,500만원 무료 지원</span>
+                </div>
+
+                <div className="flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg">
+                  <i className="fas fa-balance-scale text-2xl"></i>
+                  <span className="text-mobile-md font-semibold">공평한 기회 · 실력으로 승부하세요</span>
+                </div>
+
+                <div className="flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg">
+                  <i className="fas fa-shield-alt text-2xl"></i>
+                  <span className="text-mobile-md font-semibold">구매 수수료 0원 · 숨은 비용 없음</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
