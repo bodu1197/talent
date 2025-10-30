@@ -205,6 +205,7 @@ export default function SellerRegisterPage() {
       console.log('💾 [DB 저장 시작]')
       const insertData = {
         user_id: user.id,
+        real_name: formData.realName,
         display_name: formData.displayName,
         profile_image: profileImageUrl || null,
         bio: formData.bio,

@@ -10,6 +10,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner'
 
 interface SellerProfile {
   id: string
+  real_name: string | null
   display_name: string
   profile_image: string | null
   bio: string
@@ -315,6 +316,19 @@ export default function SellerProfilePage() {
             <h2 className="text-xl font-bold text-gray-900 mb-6">연락처 정보</h2>
 
             <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  실명 (본인인증)
+                </label>
+                <input
+                  type="text"
+                  value={profile.real_name || ''}
+                  disabled
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500"
+                />
+                <p className="text-sm text-gray-500 mt-1">본인인증된 실명은 변경할 수 없습니다</p>
+              </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   전화번호 (본인인증)
