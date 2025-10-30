@@ -3,7 +3,7 @@ export interface User {
   id: string
   email: string
   name: string
-  user_type: 'buyer' | 'seller' | 'both'
+  user_type: 'buyer' | 'seller'
   phone?: string
   created_at: string
   updated_at: string

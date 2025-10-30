@@ -9,7 +9,7 @@ type UserProfile = {
   email: string
   name: string
   phone?: string
-  user_type: 'buyer' | 'seller' | 'both' | 'admin'
+  user_type: 'buyer' | 'seller'
   profile_image?: string
   bio?: string
   email_verified: boolean

@@ -22,8 +22,8 @@ export default function Header() {
       console.log('➡️ [Header] No user - redirecting to login')
       return '/auth/login'
     }
-    if (profile?.user_type === 'seller' || profile?.user_type === 'both') {
-      console.log('➡️ [Header] Seller/Both - redirecting to seller dashboard')
+    if (profile?.user_type === 'seller') {
+      console.log('➡️ [Header] Seller - redirecting to seller dashboard')
       return '/mypage/seller/dashboard'
     }
     console.log('➡️ [Header] Buyer/Default - redirecting to buyer dashboard')
