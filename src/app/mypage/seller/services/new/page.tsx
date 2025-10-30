@@ -24,6 +24,8 @@ export default function NewServicePage() {
   const [selectedLevel1, setSelectedLevel1] = useState('')
   const [selectedLevel2, setSelectedLevel2] = useState('')
   const [selectedLevel3, setSelectedLevel3] = useState('')
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
+  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     title: '',
     category: '',
@@ -34,6 +36,31 @@ export default function NewServicePage() {
       premium: { price: '', deliveryDays: '', revisionCount: '2', features: [''] }
     }
   })
+
+  const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert('파일 크기는 5MB를 초과할 수 없습니다.')
+        return
+      }
+      if (!file.type.startsWith('image/')) {
+        alert('이미지 파일만 업로드 가능합니다.')
+        return
+      }
+      setThumbnailFile(file)
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setThumbnailPreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const removeThumbnail = () => {
+    setThumbnailFile(null)
+    setThumbnailPreview(null)
+  }
 
   // Load level 1 categories on mount
   useEffect(() => {
@@ -169,6 +196,47 @@ export default function NewServicePage() {
             <h2 className="text-xl font-bold text-gray-900 mb-6">기본 정보</h2>
 
             <div className="space-y-4">
+              {/* 썸네일 이미지 - 최상단 */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  썸네일 이미지 *
+                </label>
+                <div className="space-y-3">
+                  {thumbnailPreview ? (
+                    <div className="relative">
+                      <img
+                        src={thumbnailPreview}
+                        alt="썸네일 미리보기"
+                        className="w-full h-64 object-cover rounded-lg border border-gray-300"
+                      />
+                      <button
+                        type="button"
+                        onClick={removeThumbnail}
+                        className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors text-sm"
+                      >
+                        <i className="fas fa-times mr-1"></i>
+                        삭제
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="block border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#0f3460] transition-colors cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleThumbnailChange}
+                        className="hidden"
+                        required
+                      />
+                      <i className="fas fa-cloud-upload-alt text-gray-400 text-4xl mb-3"></i>
+                      <p className="text-gray-600 font-medium">클릭하여 이미지 선택</p>
+                      <p className="text-sm text-gray-500 mt-2">권장 크기: 800x600px (최대 5MB)</p>
+                      <p className="text-xs text-gray-400 mt-1">JPG, PNG, GIF 형식 지원</p>
+                    </label>
+                  )}
+                </div>
+              </div>
+
+              {/* 서비스 제목 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   서비스 제목 *
@@ -264,17 +332,6 @@ export default function NewServicePage() {
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
                   required
                 ></textarea>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  썸네일 이미지 *
-                </label>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#0f3460] transition-colors cursor-pointer">
-                  <i className="fas fa-cloud-upload-alt text-gray-400 text-4xl mb-3"></i>
-                  <p className="text-gray-600">클릭하여 이미지 선택</p>
-                  <p className="text-sm text-gray-500 mt-2">권장 크기: 800x600px</p>
-                </div>
               </div>
             </div>
           </div>
