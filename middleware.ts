@@ -58,6 +58,17 @@ export async function middleware(request: NextRequest) {
   supabaseResponse.headers.set('Content-Security-Policy', "frame-ancestors 'none'")
   supabaseResponse.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
 
+  // RSC 요청에 charset 추가
+  const contentType = supabaseResponse.headers.get('Content-Type')
+  if (contentType === 'text/x-component') {
+    supabaseResponse.headers.set('Content-Type', 'text/x-component; charset=utf-8')
+  }
+
+  // SVG 파일에 charset 추가
+  if (contentType === 'image/svg+xml') {
+    supabaseResponse.headers.set('Content-Type', 'image/svg+xml; charset=utf-8')
+  }
+
   return supabaseResponse
 }
 
