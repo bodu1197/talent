@@ -136,7 +136,7 @@ export default function Footer() {
           <div className="flex items-center justify-center gap-3">
             <Link
               href="/terms"
-              className="text-mobile-sm text-gray-700 underline hover:text-[#0f3460] transition-colors focus:outline-none focus:ring-2 focus:ring-[#0f3460] focus:ring-offset-2 rounded"
+              className="text-mobile-sm text-gray-700 hover:text-[#0f3460] transition-colors focus:outline-none focus:ring-2 focus:ring-[#0f3460] focus:ring-offset-2 rounded"
               aria-label="이용약관"
             >
               이용약관
@@ -144,7 +144,7 @@ export default function Footer() {
             <span className="text-gray-300">|</span>
             <Link
               href="/privacy"
-              className="text-mobile-sm text-gray-700 underline hover:text-[#0f3460] transition-colors focus:outline-none focus:ring-2 focus:ring-[#0f3460] focus:ring-offset-2 rounded font-semibold"
+              className="text-mobile-sm text-gray-700 hover:text-[#0f3460] transition-colors focus:outline-none focus:ring-2 focus:ring-[#0f3460] focus:ring-offset-2 rounded font-semibold"
               aria-label="개인정보처리방침"
             >
               개인정보처리방침
