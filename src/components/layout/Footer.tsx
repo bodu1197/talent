@@ -96,7 +96,7 @@ export default function Footer() {
         {/* 2. 회사 정보 텍스트 */}
         <div className="px-5 pt-6">
           <p className="text-mobile-sm text-gray-500 text-center leading-relaxed">
-            (주)돌파구는 통신판매중개자이며, 통신판매의 당사자가 아닙니다.<br />
+            돌파구는 통신판매중개자이며, 통신판매의 당사자가 아닙니다.<br />
             상품, 상품정보, 거래에 관한 의무와 책임은 판매회원에게 있습니다.
           </p>
         </div>
@@ -109,7 +109,7 @@ export default function Footer() {
             aria-expanded={isBusinessInfoOpen}
             aria-label="사업자정보 토글"
           >
-            <span>(주) 돌파구 사업자정보</span>
+            <span>돌파구 사업자정보</span>
             <i className={`fas fa-chevron-${isBusinessInfoOpen ? 'up' : 'down'} text-mobile-sm text-gray-600 transition-transform`}></i>
           </button>
 
