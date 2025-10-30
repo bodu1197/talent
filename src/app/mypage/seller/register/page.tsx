@@ -52,6 +52,7 @@ export default function SellerRegisterPage() {
   const [currentStep, setCurrentStep] = useState<Step>(1)
   const [loading, setLoading] = useState(false)
   const [profilePreview, setProfilePreview] = useState<string | null>(null)
+  const [isVerified, setIsVerified] = useState(false)
 
   const [formData, setFormData] = useState<SellerFormData>({
     realName: '',
@@ -114,6 +115,56 @@ export default function SellerRegisterPage() {
         preferredContact: [...current, contact]
       })
     }
+  }
+
+  // NICE 본인인증 처리
+  const handleNiceVerification = () => {
+    // NICE 본인인증 팝업 열기
+    const width = 500
+    const height = 600
+    const left = (window.screen.width - width) / 2
+    const top = (window.screen.height - height) / 2
+
+    // 실제 환경에서는 /api/nice/request 엔드포인트로 인증 요청
+    // 여기서는 시뮬레이션
+    const popup = window.open(
+      '/api/nice/verify',
+      'niceVerification',
+      `width=${width},height=${height},left=${left},top=${top},scrollbars=yes`
+    )
+
+    // 팝업에서 메시지 받기 (본인인증 완료 시)
+    const handleMessage = (event: MessageEvent) => {
+      // 보안을 위해 origin 체크 필요
+      if (event.origin !== window.location.origin) return
+
+      if (event.data.type === 'NICE_VERIFICATION_SUCCESS') {
+        const { name, phone, birthDate, gender } = event.data.data
+
+        setFormData({
+          ...formData,
+          realName: name,
+          phone: phone
+        })
+        setIsVerified(true)
+
+        alert('본인인증이 완료되었습니다.')
+        window.removeEventListener('message', handleMessage)
+      } else if (event.data.type === 'NICE_VERIFICATION_FAILED') {
+        alert('본인인증에 실패했습니다. 다시 시도해주세요.')
+        window.removeEventListener('message', handleMessage)
+      }
+    }
+
+    window.addEventListener('message', handleMessage)
+
+    // 팝업이 닫혔는지 체크
+    const checkPopupClosed = setInterval(() => {
+      if (popup && popup.closed) {
+        clearInterval(checkPopupClosed)
+        window.removeEventListener('message', handleMessage)
+      }
+    }, 500)
   }
 
   const handleSubmit = async () => {
@@ -210,7 +261,7 @@ export default function SellerRegisterPage() {
   const canProceed = () => {
     switch (currentStep) {
       case 1:
-        return formData.realName && formData.phone && formData.accountNumber &&
+        return isVerified && formData.accountNumber &&
                formData.accountHolder && formData.bankName
       case 2:
         return formData.displayName && formData.bio.length >= 150
@@ -283,9 +334,9 @@ export default function SellerRegisterPage() {
                   <div className="flex items-start gap-3">
                     <i className="fas fa-info-circle text-blue-500 mt-1"></i>
                     <div>
-                      <p className="text-sm font-medium text-blue-900">신원 정보 입력</p>
+                      <p className="text-sm font-medium text-blue-900">본인인증 안내</p>
                       <p className="text-sm text-blue-700 mt-1">
-                        정산 및 계좌 인증을 위해 실명과 휴대폰 번호를 입력해주세요.
+                        NICE 평가정보를 통한 휴대폰 본인인증이 필요합니다. 인증 완료 시 실명과 휴대폰 번호가 자동으로 입력됩니다.
                       </p>
                     </div>
                   </div>
@@ -293,37 +344,46 @@ export default function SellerRegisterPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    실명 *
+                    본인인증 *
                   </label>
-                  <input
-                    type="text"
-                    value={formData.realName}
-                    onChange={(e) => setFormData({ ...formData, realName: e.target.value })}
-                    placeholder="홍길동"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-                    required
-                  />
-                  <p className="text-sm text-gray-500 mt-1">
-                    정산 및 세금 신고를 위해 실명이 필요합니다
-                  </p>
+                  <button
+                    type="button"
+                    onClick={handleNiceVerification}
+                    disabled={isVerified}
+                    className={`w-full px-6 py-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
+                      isVerified
+                        ? 'bg-green-100 text-green-800 cursor-not-allowed'
+                        : 'bg-[#0f3460] text-white hover:bg-[#1a4b7d]'
+                    }`}
+                  >
+                    <i className={`fas ${isVerified ? 'fa-check-circle' : 'fa-shield-alt'}`}></i>
+                    {isVerified ? '본인인증 완료' : 'NICE 휴대폰 본인인증'}
+                  </button>
+                  {!isVerified && (
+                    <p className="text-sm text-gray-500 mt-2">
+                      클릭하여 NICE 평가정보 본인인증을 진행해주세요
+                    </p>
+                  )}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    휴대폰 번호 *
-                  </label>
-                  <input
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="010-1234-5678"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-                    required
-                  />
-                  <p className="text-sm text-gray-500 mt-1">
-                    주문 알림 및 고객 문의를 위해 필요합니다
-                  </p>
-                </div>
+                {isVerified && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                      <i className="fas fa-check-circle text-green-600 mt-1"></i>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-green-900 mb-2">인증 완료</p>
+                        <div className="space-y-1">
+                          <p className="text-sm text-green-800">
+                            <span className="font-medium">이름:</span> {formData.realName}
+                          </p>
+                          <p className="text-sm text-green-800">
+                            <span className="font-medium">휴대폰:</span> {formData.phone}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 <div className="border-t pt-4 mt-6">
                   <h3 className="font-medium text-gray-900 mb-4">정산 계좌 정보</h3>
