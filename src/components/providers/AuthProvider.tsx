@@ -223,6 +223,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           email: session?.user?.email
         })
 
+        // INITIAL_SESSION은 checkSession에서 이미 처리하므로 스킵
+        if (event === 'INITIAL_SESSION') {
+          console.log('⏭️ [AuthProvider] Skipping INITIAL_SESSION - already handled by checkSession')
+          return
+        }
+
         setUser(session?.user ?? null)
 
         if (session?.user) {
