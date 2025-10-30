@@ -26,31 +26,26 @@ export default function SellerDashboardPage() {
           <StatCard
             title="신규 주문"
             value="0"
-            icon="📦"
-            change="+0%"
-            changeType="increase"
-            href="/mypage/seller/orders?status=paid"
+            icon="fa-box"
+            color="blue"
           />
           <StatCard
             title="진행중인 작업"
             value="0"
-            icon="⚙️"
-            change="+0%"
-            changeType="increase"
+            icon="fa-cog"
+            color="yellow"
           />
           <StatCard
             title="이번달 수익"
             value="₩0"
-            icon="💰"
-            change="+0%"
-            changeType="increase"
+            icon="fa-won-sign"
+            color="green"
           />
           <StatCard
             title="평균 평점"
             value="0.0"
-            icon="⭐"
-            change="+0.0"
-            changeType="increase"
+            icon="fa-star"
+            color="purple"
           />
         </div>
 

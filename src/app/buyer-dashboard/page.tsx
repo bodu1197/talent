@@ -26,32 +26,26 @@ export default function BuyerDashboardPage() {
           <StatCard
             title="진행중인 주문"
             value="0"
-            icon="📦"
-            change="+0%"
-            changeType="increase"
+            icon="fa-box"
+            color="blue"
           />
           <StatCard
             title="완료 대기"
             value="0"
-            icon="⏰"
-            change="+0%"
-            changeType="increase"
-            href="/mypage/buyer/orders?status=delivered"
+            icon="fa-clock"
+            color="yellow"
           />
           <StatCard
             title="작성 가능 리뷰"
             value="0"
-            icon="✍️"
-            change="+0"
-            changeType="neutral"
-            href="/mypage/buyer/reviews?tab=pending"
+            icon="fa-pen"
+            color="purple"
           />
           <StatCard
             title="보유 캐시"
             value="₩0"
-            icon="💰"
-            change="+0%"
-            changeType="increase"
+            icon="fa-won-sign"
+            color="green"
           />
         </div>
 
