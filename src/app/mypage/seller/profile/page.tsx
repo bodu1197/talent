@@ -25,8 +25,6 @@ interface SellerProfile {
   bank_name: string
   business_number: string | null
   is_business: boolean
-  certificates: string | null
-  experience: string | null
   status: string
 }
 
@@ -155,9 +153,7 @@ export default function SellerProfilePage() {
           account_holder: profile.account_holder,
           bank_name: profile.bank_name,
           business_number: profile.is_business ? profile.business_number : null,
-          is_business: profile.is_business,
-          certificates: profile.certificates,
-          experience: profile.experience
+          is_business: profile.is_business
         })
         .eq('id', profile.id)
 
@@ -495,39 +491,6 @@ export default function SellerProfilePage() {
                   />
                 </div>
               )}
-            </div>
-          </div>
-
-          {/* 포트폴리오 */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">포트폴리오</h2>
-
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  자격증/수료증
-                </label>
-                <textarea
-                  value={profile.certificates || ''}
-                  onChange={(e) => setProfile({ ...profile, certificates: e.target.value })}
-                  rows={4}
-                  placeholder="보유하신 자격증이나 수료증을 입력해주세요"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-                ></textarea>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  경력 사항
-                </label>
-                <textarea
-                  value={profile.experience || ''}
-                  onChange={(e) => setProfile({ ...profile, experience: e.target.value })}
-                  rows={6}
-                  placeholder="관련 경력 사항을 입력해주세요"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-                ></textarea>
-              </div>
             </div>
           </div>
 
