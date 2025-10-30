@@ -31,9 +31,13 @@ export default function RecentCategories() {
         if (response.ok) {
           const data = await response.json()
           setRecentCategories(data.data || [])
+        } else if (response.status === 401) {
+          // 인증 실패는 조용히 처리
+          setRecentCategories([])
         }
       } catch (error) {
-        console.error('Failed to fetch recent categories:', error)
+        // 에러 발생 시 조용히 처리
+        setRecentCategories([])
       } finally {
         setLoading(false)
       }

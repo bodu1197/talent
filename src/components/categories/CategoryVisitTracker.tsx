@@ -28,7 +28,7 @@ export default function CategoryVisitTracker({
     // 방문 기록 저장
     const trackVisit = async () => {
       try {
-        await fetch('/api/user/category-visits', {
+        const response = await fetch('/api/user/category-visits', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -39,8 +39,13 @@ export default function CategoryVisitTracker({
             categorySlug
           })
         })
+
+        // 401 에러는 조용히 무시
+        if (!response.ok && response.status !== 401) {
+          console.error('Failed to track category visit:', response.status)
+        }
       } catch (error) {
-        console.error('Failed to track category visit:', error)
+        // 네트워크 에러는 조용히 무시
       }
     }
 
