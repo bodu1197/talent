@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClient } from '@/lib/supabase/client'
 
 type PackageType = 'basic' | 'standard' | 'premium'
 
@@ -30,11 +30,10 @@ export default function NewServicePage() {
     }
   })
 
-  const supabase = createClientComponentClient()
-
   useEffect(() => {
     async function fetchCategories() {
       try {
+        const supabase = createClient()
         const { data, error } = await supabase
           .from('categories')
           .select('id, name, slug, level, parent_id')
