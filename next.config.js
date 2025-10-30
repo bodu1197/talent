@@ -62,8 +62,36 @@ const nextConfig = {
         headers: securityHeaders,
       },
       {
-        // Static files with caching
+        // Static files with caching (all _next/static resources including chunks)
         source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        // Static chunks specifically (CSS and JS with content hashes)
+        source: '/_next/static/chunks/:path*',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        // Static media files (fonts, etc)
+        source: '/_next/static/media/:path*',
         headers: [
           {
             key: 'X-Content-Type-Options',
