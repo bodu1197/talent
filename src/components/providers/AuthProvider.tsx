@@ -129,9 +129,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     // 초기 세션 체크
     const checkSession = async () => {
+      let session = null
       try {
         console.log('🔍 [AuthProvider] Checking session...')
-        const { data: { session }, error } = await supabase.auth.getSession()
+        const result = await supabase.auth.getSession()
+        session = result.data.session
+        const error = result.error
 
         // LockManager 오류는 무시하고 계속 진행
         if (error && !error.message?.includes('LockManager')) {
