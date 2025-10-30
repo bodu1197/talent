@@ -24,7 +24,7 @@ export default function SellerDashboardPage() {
       setLoading(false)
       setError('로그인이 필요합니다')
     }
-  }, [user, authLoading])
+  }, [user?.id, authLoading])
 
   async function loadDashboardData() {
     try {
