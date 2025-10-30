@@ -281,21 +281,31 @@ export default function SellerRegisterPage() {
   }
 
   const canProceed = () => {
+    let result = false
     switch (currentStep) {
       case 1:
-        return isVerified && formData.accountNumber &&
-               formData.accountHolder && formData.bankName
+        result = isVerified && !!formData.accountNumber &&
+               !!formData.accountHolder && !!formData.bankName
+        console.log('✅ [Step 1 Validation]', { isVerified, accountNumber: !!formData.accountNumber, accountHolder: !!formData.accountHolder, bankName: !!formData.bankName, result })
+        break
       case 2:
-        return formData.displayName && formData.bio.length >= 150
+        result = !!formData.displayName && formData.bio.length >= 50
+        console.log('✅ [Step 2 Validation]', { displayName: !!formData.displayName, bioLength: formData.bio.length, minRequired: 50, result })
+        break
       case 3:
-        return true // 연락처는 선택사항
+        result = true // 연락처는 선택사항
+        break
       case 4:
-        return true // 포트폴리오는 선택사항
+        result = true // 포트폴리오는 선택사항
+        break
       case 5:
-        return formData.termsAgree && formData.commissionAgree && formData.refundAgree
+        result = formData.termsAgree && formData.commissionAgree && formData.refundAgree
+        console.log('✅ [Step 5 Validation]', { termsAgree: formData.termsAgree, commissionAgree: formData.commissionAgree, refundAgree: formData.refundAgree, result })
+        break
       default:
-        return false
+        result = false
     }
+    return result
   }
 
   return (
@@ -554,7 +564,7 @@ export default function SellerRegisterPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    자기소개 * (150-300자)
+                    자기소개 * (최소 50자)
                   </label>
                   <textarea
                     value={formData.bio}
@@ -564,8 +574,8 @@ export default function SellerRegisterPage() {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
                     required
                   ></textarea>
-                  <p className="text-sm text-gray-500 mt-1">
-                    {formData.bio.length}/300자 {formData.bio.length < 150 && '(최소 150자)'}
+                  <p className={`text-sm mt-1 ${formData.bio.length < 50 ? 'text-red-600' : 'text-gray-500'}`}>
+                    {formData.bio.length}/300자 {formData.bio.length < 50 && `(최소 50자 - ${50 - formData.bio.length}자 더 입력)`}
                   </p>
                 </div>
               </div>
