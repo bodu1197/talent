@@ -173,6 +173,14 @@ export default function SellerRegisterPage() {
       return
     }
 
+    console.log('🚀 [등록 시작] User ID:', user.id)
+    console.log('📝 [등록 데이터]', {
+      displayName: formData.displayName,
+      phone: formData.phone,
+      accountNumber: formData.accountNumber,
+      bankName: formData.bankName
+    })
+
     setLoading(true)
 
     try {
@@ -181,6 +189,7 @@ export default function SellerRegisterPage() {
       // 1. 프로필 이미지 업로드
       let profileImageUrl = ''
       if (formData.profileImage) {
+        console.log('📸 [이미지 업로드 시작]')
         const fileExt = formData.profileImage.name.split('.').pop()
         const fileName = `${user.id}-profile.${fileExt}`
         const filePath = `seller-profiles/${fileName}`
@@ -190,8 +199,8 @@ export default function SellerRegisterPage() {
           .upload(filePath, formData.profileImage, { upsert: true })
 
         if (uploadError) {
-          console.error('Profile upload error:', uploadError)
-          alert('프로필 이미지 업로드에 실패했습니다.')
+          console.error('❌ [이미지 업로드 실패]', uploadError)
+          alert('프로필 이미지 업로드에 실패했습니다: ' + uploadError.message)
           setLoading(false)
           return
         }
@@ -201,50 +210,60 @@ export default function SellerRegisterPage() {
           .getPublicUrl(filePath)
 
         profileImageUrl = publicUrl
+        console.log('✅ [이미지 업로드 성공]', publicUrl)
       }
 
       // 2. sellers 테이블에 판매자 정보 등록
+      console.log('💾 [DB 저장 시작]')
+      const insertData = {
+        user_id: user.id,
+        display_name: formData.displayName,
+        profile_image: profileImageUrl || null,
+        bio: formData.bio,
+        phone: formData.phone,
+        show_phone: formData.showPhone,
+        kakao_id: formData.kakaoId || null,
+        kakao_openchat: formData.kakaoOpenChat || null,
+        whatsapp: formData.whatsapp || null,
+        website: formData.website || null,
+        preferred_contact: formData.preferredContact,
+        account_number: formData.accountNumber,
+        account_holder: formData.accountHolder,
+        bank_name: formData.bankName,
+        business_number: formData.isBusiness ? formData.businessNumber : null,
+        is_business: formData.isBusiness,
+        certificates: formData.certificates || null,
+        experience: formData.experience || null,
+        status: 'pending_review'
+      }
+
+      console.log('📤 [Insert Data]', insertData)
+
       const { data: seller, error: sellerError } = await supabase
         .from('sellers')
-        .insert({
-          user_id: user.id,
-          display_name: formData.displayName,
-          profile_image: profileImageUrl,
-          bio: formData.bio,
-          phone: formData.phone,
-          show_phone: formData.showPhone,
-          kakao_id: formData.kakaoId,
-          kakao_openchat: formData.kakaoOpenChat,
-          whatsapp: formData.whatsapp,
-          website: formData.website,
-          preferred_contact: formData.preferredContact,
-          account_number: formData.accountNumber,
-          account_holder: formData.accountHolder,
-          bank_name: formData.bankName,
-          business_number: formData.isBusiness ? formData.businessNumber : null,
-          is_business: formData.isBusiness,
-          certificates: formData.certificates,
-          experience: formData.experience,
-          status: 'pending_review' // 승인 대기 상태
-        })
+        .insert(insertData)
         .select()
         .single()
 
       if (sellerError) {
-        console.error('Seller insert error:', sellerError)
-        alert('판매자 등록에 실패했습니다: ' + sellerError.message)
+        console.error('❌ [DB 저장 실패]', sellerError)
+        alert(`판매자 등록에 실패했습니다.\n\n에러: ${sellerError.message}\n코드: ${sellerError.code}\n\n관리자에게 문의해주세요.`)
         setLoading(false)
         return
       }
 
+      console.log('✅ [등록 성공]', seller)
       alert('판매자 등록이 완료되었습니다! 승인 후 판매를 시작할 수 있습니다.')
+
+      console.log('🔄 [리다이렉트 시작]')
       router.push('/mypage/seller/dashboard')
 
-    } catch (error) {
-      console.error('Seller registration error:', error)
-      alert('판매자 등록 중 오류가 발생했습니다.')
+    } catch (error: any) {
+      console.error('❌ [예외 발생]', error)
+      alert(`판매자 등록 중 오류가 발생했습니다.\n\n${error.message || error}\n\n브라우저 콘솔을 확인해주세요.`)
       setLoading(false)
     } finally {
+      console.log('🏁 [등록 프로세스 종료]')
       setLoading(false)
     }
   }
