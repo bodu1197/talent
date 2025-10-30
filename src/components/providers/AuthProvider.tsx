@@ -132,15 +132,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let mounted = true
-    let initialCheckComplete = false
 
     // 초기 세션 체크
     const checkSession = async () => {
-      let session = null
       try {
-        const result = await supabase.auth.getSession()
-        session = result.data.session
-        const error = result.error
+        const { data: { session }, error } = await supabase.auth.getSession()
 
         // LockManager 오류는 무시하고 계속 진행
         if (error && !error.message?.includes('LockManager')) {
@@ -152,6 +148,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(session?.user ?? null)
         if (session?.user) {
           await fetchProfile(session.user.id)
+        } else {
+          setProfile(null)
         }
       } catch (error: any) {
         // LockManager 타임아웃 오류는 무시
@@ -161,7 +159,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } finally {
         if (mounted) {
           setLoading(false)
-          initialCheckComplete = true
         }
       }
     }
@@ -173,8 +170,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       async (event, session) => {
         if (!mounted) return
 
-        // 초기 체크가 완료되기 전의 모든 이벤트는 무시
-        if (!initialCheckComplete) {
+        // INITIAL_SESSION 이벤트는 무시 (초기 로드 시 중복 호출 방지)
+        if (event === 'INITIAL_SESSION') {
           return
         }
 
@@ -182,8 +179,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         if (session?.user) {
           await fetchProfile(session.user.id)
-        } else if (event === 'SIGNED_OUT') {
-          // 명시적인 로그아웃일 때만 profile null 설정
+        } else {
           setProfile(null)
         }
       }

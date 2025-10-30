@@ -10,28 +10,16 @@ export default function Header() {
 
   // 사용자 역할에 따른 마이페이지 URL
   const getMypageUrl = () => {
-    console.log('🔗 [Header] getMypageUrl called:', {
-      hasUser: !!user,
-      userId: user?.id,
-      hasProfile: !!profile,
-      isSeller: profile?.is_seller,
-      isBuyer: profile?.is_buyer,
-      loading
-    })
-
     if (!user) {
-      console.log('➡️ [Header] No user - redirecting to login')
       return '/auth/login'
     }
 
     // seller 활동이 있으면 seller dashboard로
     if (profile?.is_seller) {
-      console.log('➡️ [Header] Has seller activity - redirecting to seller dashboard')
       return '/mypage/seller/dashboard'
     }
 
     // 아니면 buyer dashboard로 (기본값)
-    console.log('➡️ [Header] Default - redirecting to buyer dashboard')
     return '/mypage/buyer/dashboard'
   }
 
