@@ -105,7 +105,7 @@ export default function Footer() {
         <div className="px-5 pt-4">
           <button
             onClick={() => setIsBusinessInfoOpen(!isBusinessInfoOpen)}
-            className="w-full flex items-center justify-between py-3 text-mobile-md font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0f3460] focus:ring-offset-2 rounded"
+            className="w-full flex items-center justify-between py-3 text-mobile-md font-semibold text-gray-800 focus:outline-none"
             aria-expanded={isBusinessInfoOpen}
             aria-label="사업자정보 토글"
           >
@@ -131,7 +131,7 @@ export default function Footer() {
         </div>
 
         {/* 4. 약관 링크 */}
-        <div className="px-5 pt-4 pb-6">
+        <div className="px-5 pt-4 pb-[44px]">
           <div className="flex items-center justify-center gap-3">
             <Link
               href="/terms"
