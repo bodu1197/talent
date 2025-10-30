@@ -35,9 +35,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <head>
-        <meta charSet="utf-8" />
-      </head>
       <body className="min-h-screen bg-gray-50 overflow-x-hidden">
         <ErrorBoundary>
           <AuthProvider>
