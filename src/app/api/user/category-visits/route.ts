@@ -1,21 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from 'next/headers'
 
 // GET: 사용자의 카테고리 방문 기록 조회
 export async function GET(request: NextRequest) {
   try {
-    // TODO: 실제 인증 구현 시 세션에서 userId 추출
-    const userId = request.headers.get('x-user-id') || '00000000-0000-0000-0000-000000000000'
+    const supabase = createRouteHandlerClient({ cookies })
+
+    const { data: { session } } = await supabase.auth.getSession()
+
+    if (!session) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
 
     const { data, error } = await supabase
       .from('category_visits')
       .select('*')
-      .eq('user_id', userId)
+      .eq('user_id', session.user.id)
       .order('last_visited_at', { ascending: false })
       .limit(10)
 
@@ -52,6 +56,17 @@ export async function GET(request: NextRequest) {
 // POST: 카테고리 방문 기록 저장
 export async function POST(request: NextRequest) {
   try {
+    const supabase = createRouteHandlerClient({ cookies })
+
+    const { data: { session } } = await supabase.auth.getSession()
+
+    if (!session) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
     const body = await request.json()
     const { categoryId, categoryName, categorySlug } = body
 
@@ -62,14 +77,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // TODO: 실제 인증 구현 시 세션에서 userId 추출
-    const userId = request.headers.get('x-user-id') || '00000000-0000-0000-0000-000000000000'
-
     // 기존 기록 확인
     const { data: existingVisit } = await supabase
       .from('category_visits')
       .select('*')
-      .eq('user_id', userId)
+      .eq('user_id', session.user.id)
       .eq('category_id', categoryId)
       .single()
 
@@ -83,7 +95,7 @@ export async function POST(request: NextRequest) {
           visit_count: existingVisit.visit_count + 1,
           last_visited_at: new Date().toISOString()
         })
-        .eq('user_id', userId)
+        .eq('user_id', session.user.id)
         .eq('category_id', categoryId)
         .select()
         .single()
@@ -95,7 +107,7 @@ export async function POST(request: NextRequest) {
       const { data, error } = await supabase
         .from('category_visits')
         .insert({
-          user_id: userId,
+          user_id: session.user.id,
           category_id: categoryId,
           category_name: categoryName,
           category_slug: categorySlug,
