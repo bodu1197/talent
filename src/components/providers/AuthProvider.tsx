@@ -66,18 +66,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       // buyers 테이블 확인
-      const { data: buyerData } = await supabase
+      const { data: buyerData, error: buyerError } = await supabase
         .from('buyers')
         .select('id')
         .eq('user_id', userId)
         .single()
 
+      if (buyerError && buyerError.code !== 'PGRST116') {
+        console.error('⚠️ [AuthProvider] Buyer check error:', buyerError)
+      }
+
       // sellers 테이블 확인
-      const { data: sellerData } = await supabase
+      const { data: sellerData, error: sellerError } = await supabase
         .from('sellers')
         .select('id')
         .eq('user_id', userId)
         .single()
+
+      if (sellerError && sellerError.code !== 'PGRST116') {
+        console.error('⚠️ [AuthProvider] Seller check error:', sellerError)
+      }
 
       const profileData = {
         ...userData,
