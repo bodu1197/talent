@@ -29,6 +29,7 @@ interface SellerFormData {
   showPhone: boolean
   kakaoId: string
   kakaoOpenChat: string
+  whatsapp: string
   website: string
   preferredContact: string[]
 
@@ -67,6 +68,7 @@ export default function SellerRegisterPage() {
     showPhone: false,
     kakaoId: '',
     kakaoOpenChat: '',
+    whatsapp: '',
     website: '',
     preferredContact: [],
     portfolioImages: [],
@@ -161,6 +163,7 @@ export default function SellerRegisterPage() {
           show_phone: formData.showPhone,
           kakao_id: formData.kakaoId,
           kakao_openchat: formData.kakaoOpenChat,
+          whatsapp: formData.whatsapp,
           website: formData.website,
           preferred_contact: formData.preferredContact,
           account_number: formData.accountNumber,
@@ -290,25 +293,36 @@ export default function SellerRegisterPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    실명 및 휴대폰 인증 *
+                    실명 *
                   </label>
-                  <button
-                    type="button"
-                    className="w-full px-4 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium"
-                  >
-                    <i className="fas fa-shield-alt mr-2"></i>
-                    휴대폰 본인인증 (PASS/NICE 인증)
-                  </button>
-                  <p className="text-sm text-gray-500 mt-2">
-                    인증 완료 시 실명과 휴대폰 번호가 자동으로 등록됩니다
+                  <input
+                    type="text"
+                    value={formData.realName}
+                    onChange={(e) => setFormData({ ...formData, realName: e.target.value })}
+                    placeholder="홍길동"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    required
+                  />
+                  <p className="text-sm text-gray-500 mt-1">
+                    정산 및 세금 신고를 위해 실명이 필요합니다
                   </p>
-                  {formData.realName && formData.phone && (
-                    <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                      <p className="text-sm text-green-800">
-                        ✓ 인증 완료: {formData.realName} ({formData.phone})
-                      </p>
-                    </div>
-                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    휴대폰 번호 *
+                  </label>
+                  <input
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="010-1234-5678"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    required
+                  />
+                  <p className="text-sm text-gray-500 mt-1">
+                    주문 알림 및 고객 문의를 위해 필요합니다
+                  </p>
                 </div>
 
                 <div className="border-t pt-4 mt-6">
@@ -530,6 +544,22 @@ export default function SellerRegisterPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
+                    WhatsApp
+                  </label>
+                  <input
+                    type="tel"
+                    value={formData.whatsapp}
+                    onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+                    placeholder="821012345678 (국가번호 포함, 하이픈 없이)"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  />
+                  <p className="text-sm text-gray-500 mt-1">
+                    클릭 시 바로 WhatsApp 채팅 연결됩니다 (예: 821012345678)
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     개인 웹사이트/블로그
                   </label>
                   <input
@@ -546,7 +576,7 @@ export default function SellerRegisterPage() {
                     선호하는 연락 수단 (복수 선택 가능)
                   </label>
                   <div className="space-y-2">
-                    {['플랫폼 메시지', '카카오톡', '이메일', '전화'].map((contact) => (
+                    {['플랫폼 메시지', '카카오톡', 'WhatsApp', '이메일', '전화'].map((contact) => (
                       <label key={contact} className="flex items-center gap-2">
                         <input
                           type="checkbox"
