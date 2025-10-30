@@ -51,7 +51,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-white text-gray-600 border-t border-gray-200">
-      <div className="container-1200 py-12">
+      <div className="container-1200 py-6 lg:py-12">
         {/* 데스크톱: 기존 그리드 레이아웃 */}
         <div className="hidden md:grid md:grid-cols-4 gap-8">
           {footerCategories.map((category) => (
@@ -73,7 +73,7 @@ export default function Footer() {
         {/* 모바일: 1줄 카테고리 + 드롭다운 */}
         <div className="md:hidden">
           {/* 1차 카테고리 1줄 배치 */}
-          <div className="pb-4">
+          <div className="pb-2">
             <div className="flex gap-2 justify-between">
               {footerCategories.map((category) => (
                 <button
@@ -92,7 +92,7 @@ export default function Footer() {
           </div>
 
           {/* 2차 메뉴 드롭다운 */}
-          <div className="mt-4">
+          <div className="mt-2">
             {footerCategories.map((category) => (
               <div
                 key={category.title}
@@ -118,11 +118,11 @@ export default function Footer() {
         </div>
 
         {/* 하단 정보 */}
-        <div className="border-t border-gray-200 mt-8 pt-8 text-sm text-center">
+        <div className="border-t border-gray-200 mt-4 pt-4 lg:mt-8 lg:pt-8 text-mobile-sm lg:text-sm text-center">
           <p className="mb-2 text-gray-600">
             사업자등록번호: 123-45-67890 | 대표: 홍길동 | 통신판매업신고: 2025-서울강남-00000
           </p>
-          <p className="mb-4 text-gray-600">
+          <p className="mb-2 lg:mb-4 text-gray-600">
             주소: 서울특별시 강남구 테헤란로 123 AI빌딩 5층 | 대표전화: 1234-5678
           </p>
           <p className="text-gray-500">

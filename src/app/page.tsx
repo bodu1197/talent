@@ -5,7 +5,7 @@ import CategoryGrid from '@/components/home/CategoryGrid'
 
 export default function HomePage() {
   return (
-    <div className="pb-20 lg:pb-0">
+    <div className="pb-0">
       <HeroSection />
       <CategoryGrid />
       <AITalentShowcase />
