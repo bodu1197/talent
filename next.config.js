@@ -63,10 +63,19 @@ const nextConfig = {
         source: '/images/:path*',
         headers: [
           {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
           },
         ],
+      },
+      {
+        // API routes
+        source: '/api/:path*',
+        headers: securityHeaders,
       },
     ]
   },
