@@ -2,11 +2,13 @@ import ServiceGrid from '@/components/services/ServiceGrid'
 import HeroSection from '@/components/home/HeroSection'
 import AITalentShowcase from '@/components/home/AITalentShowcase'
 import CategoryGrid from '@/components/home/CategoryGrid'
+import RecentCategories from '@/components/home/RecentCategories'
 
 export default function HomePage() {
   return (
     <div className="pb-0">
       <HeroSection />
+      <RecentCategories />
       <CategoryGrid />
       <AITalentShowcase />
 

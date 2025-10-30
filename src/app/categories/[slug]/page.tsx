@@ -3,6 +3,7 @@ import { getCategoryBySlug, getCategoryPath, FULL_CATEGORIES, CategoryItem } fro
 import ServiceGrid from '@/components/services/ServiceGrid'
 import CategoryFilter from '@/components/categories/CategoryFilter'
 import CategorySidebar from '@/components/categories/CategorySidebar'
+import CategoryVisitTracker from '@/components/categories/CategoryVisitTracker'
 import Link from 'next/link'
 
 interface CategoryPageProps {
@@ -24,8 +25,18 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   // 카테고리 경로 가져오기 (breadcrumb용)
   const categoryPath = getCategoryPath(category.id)
 
+  // 1차 카테고리 확인 (parent_id가 없으면 1차 카테고리)
+  const isTopLevelCategory = !category.parent_id
+
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* 카테고리 방문 추적 (1차 카테고리만) */}
+      <CategoryVisitTracker
+        categoryId={category.id}
+        categoryName={category.name}
+        categorySlug={category.slug}
+        isTopLevel={isTopLevelCategory}
+      />
       {/* 카테고리 네비 및 서비스 목록 */}
       <section className="py-8">
         <div className="container-1200">
