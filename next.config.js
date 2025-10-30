@@ -35,9 +35,15 @@ const nextConfig = {
 
     return [
       {
-        // Root path
+        // Root path with cache control
         source: '/',
-        headers: securityHeaders,
+        headers: [
+          ...securityHeaders,
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, s-maxage=60, stale-while-revalidate=120',
+          },
+        ],
       },
       {
         // RSC requests (React Server Components)
@@ -106,6 +112,34 @@ const nextConfig = {
       {
         // Images and media with cache busting
         source: '/images/:path*',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        // Icon and favicon files
+        source: '/icon:path*',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        // SVG files
+        source: '/:path*.svg',
         headers: [
           {
             key: 'X-Content-Type-Options',
