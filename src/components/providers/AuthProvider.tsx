@@ -9,13 +9,15 @@ type UserProfile = {
   email: string
   name: string
   phone?: string
-  user_type: 'buyer' | 'seller'
   profile_image?: string
   bio?: string
   email_verified: boolean
   is_active: boolean
   created_at: string
   updated_at: string
+  // 역할 확인
+  is_buyer: boolean
+  is_seller: boolean
 }
 
 interface AuthContextType {
@@ -40,35 +42,56 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
 
-  // 프로필 정보 가져오기 (users 테이블에서 조회)
+  // 프로필 정보 가져오기 (users, buyers, sellers 테이블에서 조회)
   const fetchProfile = async (userId: string) => {
     try {
       console.log('🔍 [AuthProvider] Fetching profile for userId:', userId)
 
-      const { data, error } = await supabase
+      // users 테이블에서 기본 정보 조회
+      const { data: userData, error: userError } = await supabase
         .from('users')
         .select('*')
         .eq('id', userId)
         .single()
 
-      if (error) {
-        // RLS 정책 에러 (세션 갱신 중일 수 있음) - 기존 profile 유지
-        console.error('❌ [AuthProvider] Profile fetch error:', error)
+      if (userError) {
+        console.error('❌ [AuthProvider] User fetch error:', userError)
         console.error('❌ Error details:', {
-          code: error.code,
-          message: error.message,
-          details: error.details,
-          hint: error.hint
+          code: userError.code,
+          message: userError.message,
+          details: userError.details,
+          hint: userError.hint
         })
         return
       }
 
+      // buyers 테이블 확인
+      const { data: buyerData } = await supabase
+        .from('buyers')
+        .select('id')
+        .eq('user_id', userId)
+        .single()
+
+      // sellers 테이블 확인
+      const { data: sellerData } = await supabase
+        .from('sellers')
+        .select('id')
+        .eq('user_id', userId)
+        .single()
+
+      const profileData = {
+        ...userData,
+        is_buyer: !!buyerData,
+        is_seller: !!sellerData
+      }
+
       console.log('✅ [AuthProvider] Profile loaded:', {
-        id: data.id,
-        user_type: data.user_type,
-        email: data.email
+        id: profileData.id,
+        is_buyer: profileData.is_buyer,
+        is_seller: profileData.is_seller,
+        email: profileData.email
       })
-      setProfile(data)
+      setProfile(profileData)
     } catch (error) {
       // 네트워크 에러 등 - 기존 profile 유지하고 로그만 남김
       console.error('❌ [AuthProvider] 프로필 조회 실패:', error)

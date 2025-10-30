@@ -3,8 +3,48 @@ export interface User {
   id: string
   email: string
   name: string
-  user_type: 'buyer' | 'seller'
   phone?: string
+  profile_image?: string
+  bio?: string
+  email_verified: boolean
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface Buyer {
+  id: string
+  user_id: string
+  total_orders: number
+  total_spent: number
+  points: number
+  coupon_count: number
+  last_order_at?: string
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface Seller {
+  id: string
+  user_id: string
+  business_name?: string
+  business_number?: string
+  business_registration_file?: string
+  bank_name?: string
+  account_number?: string
+  account_holder?: string
+  is_verified: boolean
+  verification_status: 'pending' | 'verified' | 'rejected'
+  verified_at?: string
+  rejection_reason?: string
+  total_sales: number
+  total_revenue: number
+  service_count: number
+  rating: number
+  review_count: number
+  last_sale_at?: string
+  is_active: boolean
   created_at: string
   updated_at: string
 }
