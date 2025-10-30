@@ -53,7 +53,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .single()
 
       if (userError) {
-        console.error('❌ [AuthProvider] User fetch error:', userError)
+        console.error('User fetch error:', userError)
         // 에러 발생 시 기본 프로필 설정
         setProfile({
           id: userId,
@@ -95,7 +95,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       setProfile(profileData)
     } catch (error: any) {
-      console.error('❌ [AuthProvider] Profile fetch error:', error)
+      console.error('Profile fetch error:', error)
 
       // 에러 시 fallback 프로필 설정
       setProfile({
@@ -138,38 +138,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const checkSession = async () => {
       let session = null
       try {
-        console.log('🔍 [AuthProvider] Checking session...')
         const result = await supabase.auth.getSession()
         session = result.data.session
         const error = result.error
 
         // LockManager 오류는 무시하고 계속 진행
         if (error && !error.message?.includes('LockManager')) {
-          console.error('❌ [AuthProvider] 세션 체크 실패:', error)
+          console.error('세션 체크 실패:', error)
         }
 
         if (!mounted) return
 
-        console.log('📝 [AuthProvider] Session status:', {
-          hasSession: !!session,
-          userId: session?.user?.id,
-          email: session?.user?.email
-        })
-
         setUser(session?.user ?? null)
         if (session?.user) {
           await fetchProfile(session.user.id)
-        } else {
-          console.log('⚠️ [AuthProvider] No session found - user not logged in')
         }
       } catch (error: any) {
         // LockManager 타임아웃 오류는 무시
         if (!error?.message?.includes('LockManager') && !error?.isAcquireTimeout) {
-          console.error('❌ [AuthProvider] 세션 체크 실패:', error)
+          console.error('세션 체크 실패:', error)
         }
       } finally {
         if (mounted) {
-          console.log('✅ [AuthProvider] Loading complete. User:', !!session?.user)
           setLoading(false)
           initialCheckComplete = true
         }
@@ -183,15 +173,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       async (event, session) => {
         if (!mounted) return
 
-        console.log('🔄 [AuthProvider] Auth state changed:', {
-          event,
-          userId: session?.user?.id,
-          email: session?.user?.email
-        })
-
         // 초기 체크가 완료되기 전의 모든 이벤트는 무시
         if (!initialCheckComplete) {
-          console.log('⏭️ [AuthProvider] Skipping event during initial check:', event)
           return
         }
 
@@ -201,7 +184,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           await fetchProfile(session.user.id)
         } else if (event === 'SIGNED_OUT') {
           // 명시적인 로그아웃일 때만 profile null 설정
-          console.log('👋 [AuthProvider] User signed out - clearing profile')
           setProfile(null)
         }
       }
