@@ -68,6 +68,11 @@ const sellerNavItems: NavItem[] = [
     badge: 0
   },
   {
+    label: '판매자 정보',
+    href: '/mypage/seller/profile',
+    icon: 'fa-id-card'
+  },
+  {
     label: '포트폴리오',
     href: '/mypage/seller/portfolio',
     icon: 'fa-folder-open'
