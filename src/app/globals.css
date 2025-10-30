@@ -26,6 +26,14 @@ html, body {
   );
 }
 
+/* Hero Section Highlight */
+.hero-highlight {
+  color: #ec4899;
+  background: #fff;
+  padding: 4px 12px 4px 0;
+  border-radius: 8px;
+}
+
 .container-1200 {
   max-width: 1200px;
   margin-left: auto;
