@@ -184,7 +184,7 @@ export default function Sidebar({ mode }: SidebarProps) {
       <div className="p-4 border-b border-gray-200">
         <Link
           href="/"
-          className="flex items-center justify-center gap-2 w-full px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors text-sm"
+          className="flex items-center justify-center gap-2 w-full px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors text-sm click-bounce btn-ripple"
         >
           <i className="fas fa-home"></i>
           <span>홈으로</span>
@@ -196,7 +196,7 @@ export default function Sidebar({ mode }: SidebarProps) {
         <div className="mb-4">
           <Link
             href="/mypage/settings"
-            className="flex items-center gap-3 w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200"
+            className="flex items-center gap-3 w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 card-interactive"
           >
             <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white">
               <i className="fas fa-user text-xl"></i>
@@ -213,7 +213,7 @@ export default function Sidebar({ mode }: SidebarProps) {
         <div className="mb-6">
           <Link
             href={mode === 'seller' ? '/mypage/buyer/dashboard' : '/mypage/seller/dashboard'}
-            className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-sm font-medium"
+            className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-sm font-medium click-pop btn-ripple"
           >
             <i className={`fas ${mode === 'seller' ? 'fa-shopping-cart' : 'fa-store'}`}></i>
             <span>{mode === 'seller' ? '구매자 페이지로' : '판매자 페이지로'}</span>
@@ -250,7 +250,7 @@ export default function Sidebar({ mode }: SidebarProps) {
                   <i className={`fas ${item.icon} text-base`}></i>
                   <span className="text-sm font-medium">{item.label}</span>
                   {item.badge !== undefined && item.badge > 0 && (
-                    <span className="ml-auto px-2 py-0.5 bg-red-500 text-white text-xs rounded-full">
+                    <span className="ml-auto px-2 py-0.5 bg-red-500 text-white text-xs rounded-full badge-pulse">
                       {item.badge}
                     </span>
                   )}

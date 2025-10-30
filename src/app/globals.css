@@ -75,3 +75,143 @@ html, body {
 .animate-scroll:hover {
   animation-play-state: paused;
 }
+
+/* Interactive Click Animations */
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes bounce-click {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-8px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Click effect classes */
+.click-pop {
+  transition: all 0.2s ease;
+}
+
+.click-pop:active {
+  animation: pop 0.3s ease;
+}
+
+.click-bounce {
+  transition: all 0.2s ease;
+}
+
+.click-bounce:active {
+  animation: bounce-click 0.4s ease;
+}
+
+.click-shake {
+  transition: all 0.2s ease;
+}
+
+.click-shake:active {
+  animation: shake 0.3s ease;
+}
+
+/* Button ripple effect */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+}
+
+.btn-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-ripple:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Card interactive effects */
+.card-interactive {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.card-interactive:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -10px rgba(15, 52, 96, 0.3);
+}
+
+.card-interactive:active {
+  transform: translateY(-2px) scale(0.98);
+  box-shadow: 0 8px 16px -8px rgba(15, 52, 96, 0.2);
+}
+
+/* Smooth transitions for all interactive elements */
+button, a, .interactive {
+  transition: all 0.2s ease;
+}
+
+button:active, a:active, .interactive:active {
+  transform: scale(0.96);
+}
+
+/* Pulse effect for badges */
+.badge-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}

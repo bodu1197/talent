@@ -160,7 +160,7 @@ export default function SellerDashboardPage() {
                 <Link
                   key={alert.id}
                   href={alert.href}
-                  className="flex items-center justify-between p-4 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"
+                  className="flex items-center justify-between p-4 bg-red-50 hover:bg-red-100 rounded-lg transition-colors card-interactive"
                 >
                   <div className="flex items-center gap-3">
                     <i className="fas fa-exclamation-circle text-red-500"></i>
@@ -197,21 +197,21 @@ export default function SellerDashboardPage() {
             <div className="space-y-4">
               <Link
                 href="/mypage/seller/orders?status=in_progress"
-                className="flex items-center justify-between p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition-colors"
+                className="flex items-center justify-between p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition-colors card-interactive"
               >
                 <span className="text-gray-700 font-medium">진행중</span>
                 <span className="text-2xl font-bold text-yellow-600">{stats?.inProgressOrders || 0}건</span>
               </Link>
               <Link
                 href="/mypage/seller/orders?status=delivered"
-                className="flex items-center justify-between p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                className="flex items-center justify-between p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors card-interactive"
               >
                 <span className="text-gray-700 font-medium">완료 대기</span>
                 <span className="text-2xl font-bold text-blue-600">{stats?.deliveredOrders || 0}건</span>
               </Link>
               <Link
                 href="/mypage/seller/orders?status=completed"
-                className="flex items-center justify-between p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
+                className="flex items-center justify-between p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors card-interactive"
               >
                 <span className="text-gray-700 font-medium">이번달 완료</span>
                 <span className="text-2xl font-bold text-green-600">{stats?.monthlyRevenue ? Math.floor(stats.monthlyRevenue / 50000) : 0}건</span>
@@ -240,7 +240,7 @@ export default function SellerDashboardPage() {
               recentOrders.map((order) => (
                 <div
                   key={order.id}
-                  className="border border-gray-200 rounded-lg p-4 hover:border-[#0f3460] transition-colors"
+                  className="border border-gray-200 rounded-lg p-4 hover:border-[#0f3460] transition-colors card-interactive"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div>
@@ -264,13 +264,13 @@ export default function SellerDashboardPage() {
                   <div className="flex items-center gap-2">
                     <Link
                       href={`/mypage/seller/orders/${order.id}`}
-                      className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors text-sm font-medium"
+                      className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors text-sm font-medium click-pop btn-ripple"
                     >
                       {order.status === 'paid' ? '주문 확인' : '작업 상태 업데이트'}
                     </Link>
                     <Link
                       href={`/mypage/messages?order=${order.id}`}
-                      className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                      className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium click-pop"
                     >
                       메시지 보내기
                     </Link>
