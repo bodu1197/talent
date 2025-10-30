@@ -40,7 +40,24 @@ const nextConfig = {
         headers: securityHeaders,
       },
       {
-        // All other routes including RSC requests
+        // RSC requests (React Server Components)
+        source: '/:path*',
+        has: [
+          {
+            type: 'query',
+            key: '_rsc',
+          },
+        ],
+        headers: [
+          ...securityHeaders,
+          {
+            key: 'Cache-Control',
+            value: 'private, no-cache, no-store, must-revalidate',
+          },
+        ],
+      },
+      {
+        // All other routes
         source: '/(.*)',
         headers: securityHeaders,
       },
