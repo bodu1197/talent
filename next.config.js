@@ -177,21 +177,22 @@ const nextConfig = {
   },
 }
 
-module.exports = withSentryConfig(
-  nextConfig,
-  {
-    // Sentry 빌드 설정
-    silent: true,
-    org: process.env.SENTRY_ORG,
-    project: process.env.SENTRY_PROJECT,
-  },
-  {
-    // Sentry 업로드 설정
-    widenClientFileUpload: true,
-    transpileClientSDK: true,
-    tunnelRoute: '/monitoring',
-    hideSourceMaps: true,
-    disableLogger: true,
-    automaticVercelMonitors: true,
-  }
-)
+module.exports = nextConfig
+// module.exports = withSentryConfig(
+//   nextConfig,
+//   {
+//     // Sentry 빌드 설정
+//     silent: true,
+//     org: process.env.SENTRY_ORG,
+//     project: process.env.SENTRY_PROJECT,
+//   },
+//   {
+//     // Sentry 업로드 설정
+//     widenClientFileUpload: true,
+//     transpileClientSDK: true,
+//     tunnelRoute: '/monitoring',
+//     hideSourceMaps: true,
+//     disableLogger: true,
+//     automaticVercelMonitors: true,
+//   }
+// )
