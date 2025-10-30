@@ -93,7 +93,7 @@ function MessagesContent() {
   if (loading) {
     return (
       <>
-        <Sidebar mode={profile?.user_type === 'seller' ? 'seller' : 'buyer'} />
+        <Sidebar mode={profile?.is_seller ? 'seller' : 'buyer'} />
         <main className="flex-1 overflow-y-auto p-8">
           <LoadingSpinner message="대화 목록을 불러오는 중..." />
         </main>
@@ -104,7 +104,7 @@ function MessagesContent() {
   if (error) {
     return (
       <>
-        <Sidebar mode={profile?.user_type === 'seller' ? 'seller' : 'buyer'} />
+        <Sidebar mode={profile?.is_seller ? 'seller' : 'buyer'} />
         <main className="flex-1 overflow-y-auto p-8">
           <ErrorState message={error} retry={loadConversations} />
         </main>
@@ -119,7 +119,7 @@ function MessagesContent() {
 
   return (
     <>
-      <Sidebar mode={profile?.user_type === 'seller' ? 'seller' : 'buyer'} />
+      <Sidebar mode={profile?.is_seller ? 'seller' : 'buyer'} />
       <main className="flex-1 flex flex-col h-screen">
         <div className="p-8 pb-0">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">메시지</h1>

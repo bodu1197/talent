@@ -10,7 +10,7 @@ export default function SettingsPage() {
 
   return (
     <>
-      <Sidebar mode={profile?.user_type === 'seller' ? 'seller' : 'buyer'} />
+      <Sidebar mode={profile?.is_seller ? 'seller' : 'buyer'} />
       <main className="flex-1 overflow-y-auto p-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">설정</h1>
