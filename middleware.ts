@@ -37,6 +37,10 @@ export async function middleware(request: NextRequest) {
           setSecurityHeaders(supabaseResponse)
         },
       },
+      auth: {
+        flowType: 'pkce',
+        storageKey: 'sb-auth-token',
+      },
     }
   )
 
