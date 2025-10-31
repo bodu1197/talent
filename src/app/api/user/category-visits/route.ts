@@ -1,23 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
+import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
 
 // GET: 사용자의 카테고리 방문 기록 조회
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          get(name: string) {
-            return request.cookies.get(name)?.value
-          },
-          set() {},
-          remove() {},
-        },
-      }
-    )
-
+    const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
@@ -77,22 +64,9 @@ export async function GET(request: NextRequest) {
 }
 
 // POST: 카테고리 방문 기록 저장
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          get(name: string) {
-            return request.cookies.get(name)?.value
-          },
-          set() {},
-          remove() {},
-        },
-      }
-    )
-
+    const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
