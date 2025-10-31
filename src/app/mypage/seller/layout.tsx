@@ -1,44 +1,37 @@
-'use client'
+import { redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
 
-import { useEffect } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
-import { useAuth } from '@/components/providers/AuthProvider'
-import { createClient } from '@/lib/supabase/client'
+// Server Component - 판매자 권한 서버에서 체크
+export default async function SellerLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createClient()
 
-// 간단한 클라이언트 체크 (한 번만)
-export default function SellerLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth()
-  const router = useRouter()
-  const pathname = usePathname()
+  // 사용자 정보 가져오기 (middleware에서 이미 인증 체크 완료)
+  const { data: { user } } = await supabase.auth.getUser()
 
-  useEffect(() => {
-    if (loading) return
+  if (!user) {
+    redirect('/auth/login')
+  }
 
-    // Register 페이지는 체크 생략
-    if (pathname === '/mypage/seller/register') return
+  // Register 페이지는 판매자 체크 생략 - pathname 체크를 위해 headers 사용
+  const { headers } = await import('next/headers')
+  const headersList = await headers()
+  const pathname = headersList.get('x-pathname') || ''
 
-    // 판매자 확인
-    async function checkSeller() {
-      if (!user) {
-        router.replace('/auth/login')
-        return
-      }
+  if (pathname === '/mypage/seller/register') {
+    return <>{children}</>
+  }
 
-      const supabase = createClient()
-      const { data: seller } = await supabase
-        .from('sellers')
-        .select('id')
-        .eq('user_id', user.id)
-        .maybeSingle()
+  // 판매자 확인
+  const { data: seller } = await supabase
+    .from('sellers')
+    .select('id')
+    .eq('user_id', user.id)
+    .maybeSingle()
 
-      if (!seller) {
-        router.replace('/mypage/seller/register')
-      }
-    }
+  // 판매자가 아니면 등록 페이지로
+  if (!seller) {
+    redirect('/mypage/seller/register')
+  }
 
-    checkSeller()
-  }, [user, loading, pathname, router])
-
-  // 항상 children 렌더링 (체크는 백그라운드에서)
   return <>{children}</>
 }

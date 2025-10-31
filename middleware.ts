@@ -60,18 +60,21 @@ export async function middleware(request: NextRequest) {
     console.log('[Middleware] Auth error:', authError)
   }
 
-  // 보호된 경로 설정 (mypage는 layout에서 체크하므로 제외)
-  const protectedPaths = ['/dashboard', '/profile/edit', '/messages', '/orders']
+  // 보호된 경로 설정 - mypage는 모두 인증 필요
+  const protectedPaths = ['/mypage', '/dashboard', '/profile/edit', '/messages', '/orders']
   const isProtectedPath = protectedPaths.some(path =>
     request.nextUrl.pathname.startsWith(path)
   )
 
-  // 인증이 필요한 페이지인데 로그인하지 않은 경우
+  // 인증이 필요한 페이지인데 로그인하지 않은 경우 - 즉시 리다이렉트
   if (isProtectedPath && !user) {
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = '/auth/login'
     redirectUrl.searchParams.set('redirect', request.nextUrl.pathname)
-    return NextResponse.redirect(redirectUrl)
+
+    const response = NextResponse.redirect(redirectUrl)
+    setSecurityHeaders(response)
+    return response
   }
 
   // 로그인한 사용자가 로그인/회원가입 페이지 접근 시 홈으로 리다이렉트
