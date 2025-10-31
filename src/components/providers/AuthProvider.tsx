@@ -142,7 +142,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const checkSession = async () => {
       console.log('[AuthProvider] checkSession started')
       try {
-        const { data: { session }, error } = await supabase.auth.getSession()
+        // 타임아웃 추가 (5초)
+        const sessionPromise = supabase.auth.getSession()
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('getSession timeout')), 5000)
+        )
+
+        const { data: { session }, error } = await Promise.race([
+          sessionPromise,
+          timeoutPromise
+        ]) as any
 
         // LockManager 오류는 무시하고 계속 진행
         if (error && !error.message?.includes('LockManager')) {
