@@ -210,8 +210,12 @@ export default function NewServicePage() {
         .upload(filePath, thumbnailFile)
 
       if (uploadError) {
-        console.error('Thumbnail upload error:', uploadError)
-        alert('썸네일 업로드에 실패했습니다.')
+        console.error('[Service] Thumbnail upload error:', uploadError)
+        if (uploadError.message.includes('Bucket not found')) {
+          alert('썸네일 업로드에 실패했습니다.\n\nSupabase Storage에서 "services" 버킷을 생성해주세요.\n\n1. Supabase 대시보드 접속\n2. Storage 메뉴 클릭\n3. "New bucket" 버튼 클릭\n4. 버킷 이름: services\n5. Public bucket 설정\n6. 저장 후 다시 시도')
+        } else {
+          alert(`썸네일 업로드에 실패했습니다.\n\n에러: ${uploadError.message}`)
+        }
         return
       }
 
