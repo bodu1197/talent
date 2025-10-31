@@ -13,7 +13,12 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
   const [checking, setChecking] = useState(true)
 
   useEffect(() => {
-    console.log('[Seller Layout] useEffect triggered - loading:', loading, 'user:', user?.id, 'pathname:', pathname)
+    console.log('[Seller Layout] useEffect triggered - loading:', loading, 'user:', user?.id, 'pathname:', pathname, 'checked:', checked, 'checking:', checking)
+
+    // 이미 체크 완료했으면 리턴
+    if (checked || !checking) {
+      return
+    }
 
     async function checkSeller() {
       if (loading) {
@@ -57,7 +62,7 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
     }
 
     checkSeller()
-  }, [loading, user?.id, pathname, router])
+  }, [loading, user, pathname, checked, checking])
 
   // Show loading state instead of returning null
   if (checking) {
