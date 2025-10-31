@@ -39,15 +39,24 @@ export default function BuyerDashboardPage() {
 
       let buyerId = null
 
+      console.log('[Dashboard] Loading buyer data for user:', user!.id)
+
       const { data: buyer, error: buyerError } = await supabase
         .from('buyers')
         .select('id')
         .eq('user_id', user!.id)
         .maybeSingle()
 
+      if (buyerError) {
+        console.error('[Dashboard] Buyer query error:', buyerError)
+        throw new Error('구매자 정보 조회 실패: ' + buyerError.message)
+      }
+
       if (buyer) {
         buyerId = buyer.id
+        console.log('[Dashboard] Found buyer:', buyerId)
       } else {
+        console.log('[Dashboard] No buyer found, creating new buyer')
         // If no buyer record, create one automatically
         const { data: newBuyer, error: createError } = await supabase
           .from('buyers')
@@ -55,14 +64,20 @@ export default function BuyerDashboardPage() {
           .select('id')
           .single()
 
-        if (createError || !newBuyer) {
-          console.error('Failed to create buyer:', createError)
-          setError('구매자 정보를 불러오는데 실패했습니다')
-          setLoading(false)
-          return
+        if (createError) {
+          console.error('[Dashboard] Failed to create buyer:', createError)
+          throw new Error('구매자 생성 실패: ' + createError.message)
         }
+
+        if (!newBuyer) {
+          throw new Error('구매자 생성 후 데이터 없음')
+        }
+
         buyerId = newBuyer.id
+        console.log('[Dashboard] Created new buyer:', buyerId)
       }
+
+      console.log('[Dashboard] Loading dashboard data for buyer:', buyerId)
 
       const [statsData, ordersData, favoritesData, benefitsData] = await Promise.all([
         getBuyerDashboardStats(buyerId),
@@ -71,12 +86,14 @@ export default function BuyerDashboardPage() {
         getBuyerBenefits(user!.id)
       ])
 
+      console.log('[Dashboard] Data loaded successfully')
+
       setStats(statsData)
       setRecentOrders(ordersData)
       setFavorites(favoritesData)
       setBenefits(benefitsData)
     } catch (err: any) {
-      console.error('대시보드 데이터 로드 실패:', err)
+      console.error('[Dashboard] Load error:', err)
       setError(err.message || '대시보드 데이터를 불러오는데 실패했습니다')
     } finally {
       setLoading(false)
