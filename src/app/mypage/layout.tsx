@@ -1,32 +1,36 @@
-'use client'
+import { ReactNode } from 'react'
+import { redirect } from 'next/navigation'
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 
-import { ReactNode, useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { useAuth } from '@/components/providers/AuthProvider'
+export default async function MypageLayout({ children }: { children: ReactNode }) {
+  const cookieStore = await cookies()
 
-export default function MypageLayout({ children }: { children: ReactNode }) {
-  const { user, loading } = useAuth()
-  const router = useRouter()
-
-  useEffect(() => {
-    console.log('[Mypage Layout] useEffect triggered - loading:', loading, 'user:', user?.id)
-
-    // 로딩 중이면 기다림
-    if (loading) {
-      console.log('[Mypage Layout] Auth still loading...')
-      return
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll()
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            cookieStore.set(name, value, options)
+          })
+        },
+      },
     }
+  )
 
-    // 로그인 체크
-    if (!user) {
-      console.log('[Mypage Layout] No user, redirecting to login')
-      router.replace('/auth/login')
-    } else {
-      console.log('[Mypage Layout] User authenticated:', user.id)
-    }
-  }, [loading, user, router])
+  // 서버에서 한 번에 체크
+  const { data: { user } } = await supabase.auth.getUser()
 
-  // 레이아웃은 항상 children을 렌더링 (로딩 체크는 각 페이지에서)
+  // 로그인 안되어 있으면 리다이렉트
+  if (!user) {
+    redirect('/auth/login')
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
       {children}

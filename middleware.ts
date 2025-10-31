@@ -6,6 +6,9 @@ export async function middleware(request: NextRequest) {
     request,
   })
 
+  // pathname을 헤더에 추가 (Server Component에서 사용)
+  supabaseResponse.headers.set('x-pathname', request.nextUrl.pathname)
+
   // 보안 헤더를 먼저 설정
   const setSecurityHeaders = (response: NextResponse) => {
     response.headers.set('X-Content-Type-Options', 'nosniff')
