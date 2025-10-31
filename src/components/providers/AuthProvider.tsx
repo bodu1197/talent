@@ -157,8 +157,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.log('[AuthProvider] Session check result:', { hasSession: !!session, userId: session?.user?.id })
 
         setUser(session?.user ?? null)
+
+        // 로딩 상태를 먼저 false로 설정 (UI 차단 방지)
+        console.log('[AuthProvider] Setting loading to false')
+        setLoading(false)
+
+        // 프로필은 백그라운드에서 로드
         if (session?.user) {
-          await fetchProfile(session.user.id)
+          fetchProfile(session.user.id).catch(err => {
+            console.error('[AuthProvider] Background profile fetch failed:', err)
+          })
         } else {
           setProfile(null)
         }
@@ -167,9 +175,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (!error?.message?.includes('LockManager') && !error?.isAcquireTimeout) {
           console.error('[AuthProvider] 세션 체크 실패:', error)
         }
-      } finally {
+        // 에러가 발생해도 로딩은 해제
         if (mounted) {
-          console.log('[AuthProvider] Setting loading to false')
+          console.log('[AuthProvider] Setting loading to false (error case)')
           setLoading(false)
         }
       }
