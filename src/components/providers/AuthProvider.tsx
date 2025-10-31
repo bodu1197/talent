@@ -44,6 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // 프로필 정보 가져오기 (users, buyers, sellers 테이블에서 조회)
   const fetchProfile = async (userId: string) => {
+    console.log('[AuthProvider] fetchProfile called for user:', userId)
     try {
       // users 테이블에서 기본 정보 조회
       const { data: userData, error: userError } = await supabase
@@ -53,7 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .single()
 
       if (userError) {
-        console.error('User fetch error:', userError)
+        console.error('[AuthProvider] User fetch error:', userError)
         // 에러 발생 시 기본 프로필 설정
         setProfile({
           id: userId,
@@ -66,6 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           is_buyer: true,
           is_seller: false
         })
+        console.log('[AuthProvider] Set fallback profile due to error')
         return
       }
 
@@ -93,9 +95,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         is_seller: isSeller
       }
 
+      console.log('[AuthProvider] Profile loaded successfully:', { isBuyer, isSeller })
       setProfile(profileData)
     } catch (error: any) {
-      console.error('Profile fetch error:', error)
+      console.error('[AuthProvider] Profile fetch error:', error)
 
       // 에러 시 fallback 프로필 설정
       setProfile({
@@ -109,6 +112,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         is_buyer: true,
         is_seller: false
       })
+      console.log('[AuthProvider] Set fallback profile due to exception')
     }
   }
 
@@ -131,19 +135,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   useEffect(() => {
+    console.log('[AuthProvider] useEffect mounted')
     let mounted = true
 
     // 초기 세션 체크
     const checkSession = async () => {
+      console.log('[AuthProvider] checkSession started')
       try {
         const { data: { session }, error } = await supabase.auth.getSession()
 
         // LockManager 오류는 무시하고 계속 진행
         if (error && !error.message?.includes('LockManager')) {
-          console.error('세션 체크 실패:', error)
+          console.error('[AuthProvider] 세션 체크 실패:', error)
         }
 
-        if (!mounted) return
+        if (!mounted) {
+          console.log('[AuthProvider] Component unmounted, aborting')
+          return
+        }
+
+        console.log('[AuthProvider] Session check result:', { hasSession: !!session, userId: session?.user?.id })
 
         setUser(session?.user ?? null)
         if (session?.user) {
@@ -154,10 +165,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } catch (error: any) {
         // LockManager 타임아웃 오류는 무시
         if (!error?.message?.includes('LockManager') && !error?.isAcquireTimeout) {
-          console.error('세션 체크 실패:', error)
+          console.error('[AuthProvider] 세션 체크 실패:', error)
         }
       } finally {
         if (mounted) {
+          console.log('[AuthProvider] Setting loading to false')
           setLoading(false)
         }
       }
