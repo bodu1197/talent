@@ -1,6 +1,47 @@
 @import "tailwindcss";
 @config "./tailwind.config.ts";
 
+@theme {
+  /* Brand Colors */
+  --color-brand-primary: #0f3460;
+  --color-brand-light: #1a4b7d;
+  --color-brand-dark: #0a2340;
+
+  /* Primary Color Scale */
+  --color-primary-50: #f0f9ff;
+  --color-primary-100: #e0f2fe;
+  --color-primary-200: #bae6fd;
+  --color-primary-300: #7dd3fc;
+  --color-primary-400: #38bdf8;
+  --color-primary-500: #0ea5e9;
+  --color-primary-600: #0f3460;
+  --color-primary-700: #0369a1;
+  --color-primary-800: #075985;
+  --color-primary-900: #0c4a6e;
+  --color-primary-950: #082f49;
+
+  /* Mobile Font Sizes */
+  --text-mobile-sm: 0.875rem;
+  --text-mobile-sm--line-height: 1.25rem;
+  --text-mobile-md: 1rem;
+  --text-mobile-md--line-height: 1.5rem;
+  --text-mobile-lg: 1.125rem;
+  --text-mobile-lg--line-height: 1.75rem;
+
+  /* Container Sizes */
+  --container-1200: 75rem;
+
+  /* Animations */
+  --animate-fade-in: fadeIn 0.5s ease-in-out;
+  --animate-slide-up: slideUp 0.3s ease-out;
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-scroll: scroll 30s linear infinite;
+  --animate-pop: pop 0.3s ease;
+  --animate-bounce-click: bounce-click 0.4s ease;
+  --animate-shake: shake 0.3s ease;
+}
+
 /* Custom Components and Styles */
 
 @layer components {
@@ -107,6 +148,15 @@
 }
 
 @layer components {
+  /* Container */
+  .container-1200 {
+    max-width: 75rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
   /* Flex Utilities */
   .flex-center {
     @apply flex items-center justify-center;

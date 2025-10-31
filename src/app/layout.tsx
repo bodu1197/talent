@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import "./globals.css";
 import "@fontsource/noto-sans-kr/300.css";
 import "@fontsource/noto-sans-kr/400.css";
