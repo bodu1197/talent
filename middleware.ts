@@ -51,13 +51,13 @@ export async function middleware(request: NextRequest) {
   // 인증이 필요한 페이지인데 로그인하지 않은 경우
   if (isProtectedPath && !user) {
     const redirectUrl = request.nextUrl.clone()
-    redirectUrl.pathname = '/login'
+    redirectUrl.pathname = '/auth/login'
     redirectUrl.searchParams.set('redirect', request.nextUrl.pathname)
     return NextResponse.redirect(redirectUrl)
   }
 
   // 로그인한 사용자가 로그인/회원가입 페이지 접근 시 홈으로 리다이렉트
-  if ((request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/signup') && user) {
+  if ((request.nextUrl.pathname === '/auth/login' || request.nextUrl.pathname === '/auth/register') && user) {
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = '/'
     return NextResponse.redirect(redirectUrl)

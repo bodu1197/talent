@@ -28,7 +28,7 @@ export default function MypageLayout({ children }: { children: ReactNode }) {
 
     if (!user) {
       console.log('[Mypage Layout] No user, redirecting to login')
-      router.replace('/login')
+      router.replace('/auth/login')
     } else {
       console.log('[Mypage Layout] User authenticated:', user.id)
       setCheckedAuth(true)
