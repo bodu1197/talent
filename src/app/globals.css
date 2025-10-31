@@ -29,8 +29,8 @@ html, body {
 
 /* Hero Section Highlight */
 .hero-highlight {
-  color: #ec4899;
-  background: #fff;
+  color: #111827;
+  background: transparent;
   padding: 4px 12px 4px 0;
   border-radius: 8px;
 }
