@@ -104,7 +104,21 @@ export default function SellerProfilePage() {
   }
 
   const handleSave = async () => {
-    if (!user || !profile) return
+    if (!user || !profile) {
+      alert('사용자 정보를 찾을 수 없습니다.')
+      return
+    }
+
+    // 필수 필드 검증
+    if (!profile.display_name || !profile.bio) {
+      alert('판매자명과 자기소개는 필수 항목입니다.')
+      return
+    }
+
+    if (!profile.bank_name || !profile.account_holder || !profile.account_number) {
+      alert('정산 정보(은행명, 예금주명, 계좌번호)는 필수 항목입니다.')
+      return
+    }
 
     setSaving(true)
 
@@ -115,7 +129,7 @@ export default function SellerProfilePage() {
       let profileImageUrl = profile.profile_image || ''
       if (newProfileImage) {
         const fileExt = newProfileImage.name.split('.').pop()
-        const fileName = `${user.id}-profile.${fileExt}`
+        const fileName = `${user.id}-${Date.now()}.${fileExt}`
         const filePath = `seller-profiles/${fileName}`
 
         const { error: uploadError } = await supabase.storage
@@ -124,9 +138,7 @@ export default function SellerProfilePage() {
 
         if (uploadError) {
           console.error('Profile upload error:', uploadError)
-          alert('프로필 이미지 업로드에 실패했습니다.')
-          setSaving(false)
-          return
+          throw new Error('프로필 이미지 업로드에 실패했습니다: ' + uploadError.message)
         }
 
         const { data: { publicUrl } } = supabase.storage
@@ -140,36 +152,36 @@ export default function SellerProfilePage() {
       const { error: updateError } = await supabase
         .from('sellers')
         .update({
-          display_name: profile.display_name,
+          display_name: profile.display_name.trim(),
           profile_image: profileImageUrl,
-          bio: profile.bio,
+          bio: profile.bio.trim(),
           phone: profile.phone,
           show_phone: profile.show_phone,
-          kakao_id: profile.kakao_id,
-          kakao_openchat: profile.kakao_openchat,
-          whatsapp: profile.whatsapp,
-          website: profile.website,
-          preferred_contact: profile.preferred_contact,
-          account_number: profile.account_number,
-          account_holder: profile.account_holder,
+          kakao_id: profile.kakao_id?.trim() || null,
+          kakao_openchat: profile.kakao_openchat?.trim() || null,
+          whatsapp: profile.whatsapp?.trim() || null,
+          website: profile.website?.trim() || null,
+          preferred_contact: profile.preferred_contact || [],
+          account_number: profile.account_number.trim(),
+          account_holder: profile.account_holder.trim(),
           bank_name: profile.bank_name,
-          business_number: profile.is_business ? profile.business_number : null,
-          is_business: profile.is_business
+          business_number: profile.is_business ? profile.business_number?.trim() : null,
+          is_business: profile.is_business,
+          updated_at: new Date().toISOString()
         })
         .eq('id', profile.id)
 
       if (updateError) {
         console.error('Update error:', updateError)
-        alert('프로필 업데이트에 실패했습니다: ' + updateError.message)
-        setSaving(false)
-        return
+        throw new Error('프로필 업데이트에 실패했습니다: ' + updateError.message)
       }
 
       alert('프로필이 성공적으로 업데이트되었습니다.')
-      loadProfile()
-    } catch (error) {
+      setNewProfileImage(null)
+      await loadProfile()
+    } catch (error: any) {
       console.error('Profile update error:', error)
-      alert('프로필 업데이트 중 오류가 발생했습니다.')
+      alert(error.message || '프로필 업데이트 중 오류가 발생했습니다.')
     } finally {
       setSaving(false)
     }
@@ -518,7 +530,7 @@ export default function SellerProfilePage() {
               {saving ? '저장 중...' : '변경사항 저장'}
             </button>
             <button
-              onClick={() => router.back()}
+              onClick={() => router.push('/mypage/seller/dashboard')}
               className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
             >
               취소
