@@ -13,12 +13,17 @@ interface CategoryVisit {
 }
 
 export default function RecentCategories() {
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const [recentCategories, setRecentCategories] = useState<CategoryVisit[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchRecentCategories = async () => {
+      // 인증 로딩 중이면 대기
+      if (authLoading) {
+        return
+      }
+
       // 로그인하지 않은 사용자는 API 호출 안 함
       if (!user) {
         setLoading(false)
@@ -44,7 +49,7 @@ export default function RecentCategories() {
     }
 
     fetchRecentCategories()
-  }, [user])
+  }, [user, authLoading])
 
   // 방문 기록이 없으면 섹션 숨김
   if (loading || recentCategories.length === 0) {
