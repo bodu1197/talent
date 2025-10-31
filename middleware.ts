@@ -46,7 +46,7 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   // 보호된 경로 설정
-  const protectedPaths = ['/dashboard', '/profile/edit', '/messages', '/orders']
+  const protectedPaths = ['/mypage', '/dashboard', '/profile/edit', '/messages', '/orders']
   const isProtectedPath = protectedPaths.some(path =>
     request.nextUrl.pathname.startsWith(path)
   )
