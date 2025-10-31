@@ -26,7 +26,13 @@ export default function LoginPage() {
 
       if (error) throw error
 
-      // 로그인 성공 - 메인 페이지로 이동
+      // 로그인 성공 - 쿠키 설정을 위해 잠시 대기 후 새로고침
+      await new Promise(resolve => setTimeout(resolve, 100))
+
+      // 서버 컴포넌트 새로고침하여 쿠키 동기화
+      router.refresh()
+
+      // 메인 페이지로 이동
       router.push('/')
     } catch (error: any) {
       console.error('로그인 실패:', error)
