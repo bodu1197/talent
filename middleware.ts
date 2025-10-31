@@ -60,8 +60,8 @@ export async function middleware(request: NextRequest) {
     console.log('[Middleware] Auth error:', authError)
   }
 
-  // 보호된 경로 설정
-  const protectedPaths = ['/mypage', '/dashboard', '/profile/edit', '/messages', '/orders']
+  // 보호된 경로 설정 (mypage는 layout에서 체크하므로 제외)
+  const protectedPaths = ['/dashboard', '/profile/edit', '/messages', '/orders']
   const isProtectedPath = protectedPaths.some(path =>
     request.nextUrl.pathname.startsWith(path)
   )
