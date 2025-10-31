@@ -25,7 +25,7 @@ export default function WithdrawPage() {
         </div>
 
         <div className="max-w-2xl">
-          <div className="bg-gradient-to-r from-[#0f3460] to-[#1a4b7d] rounded-lg p-6 mb-6 text-white">
+          <div className="bg-gradient-to-r from-brand-primary to-brand-light rounded-lg p-6 mb-6 text-white">
             <div className="text-sm opacity-90 mb-2">출금 가능 금액</div>
             <div className="text-4xl font-bold">{availableAmount.toLocaleString()}원</div>
           </div>

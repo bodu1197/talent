@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     h2 {
-      color: #0f3460;
+      color: rgb(15, 52, 96);
       margin-bottom: 20px;
       text-align: center;
     }
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
     button {
       width: 100%;
       padding: 12px;
-      background: #0f3460;
+      background: rgb(15, 52, 96);
       color: white;
       border: none;
       border-radius: 6px;

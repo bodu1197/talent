@@ -73,7 +73,7 @@ export default function BuyerCouponsPage() {
         </div>
 
         {/* 캐시 잔액 */}
-        <div className="bg-gradient-to-r from-[#0f3460] to-[#1a4b7d] rounded-lg p-8 mb-8 text-white">
+        <div className="bg-gradient-to-r from-brand-primary to-brand-light rounded-lg p-8 mb-8 text-white">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-sm opacity-90 mb-2">보유 캐시</div>

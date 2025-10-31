@@ -101,7 +101,7 @@ export default function HomePage() {
             {/* 배너 아이템 - 2번 반복해서 무한 스크롤 효과 */}
             {[1, 2].map((set) => (
               <div key={set} className="flex gap-6">
-                <div className="flex flex-col items-center justify-center gap-3 px-8 py-6 bg-gradient-to-r from-[#0f3460] to-[#1a4b7d] text-white rounded-lg h-[180px] min-w-[300px]">
+                <div className="flex flex-col items-center justify-center gap-3 px-8 py-6 bg-gradient-to-r from-brand-primary to-brand-light text-white rounded-lg h-[180px] min-w-[300px]">
                   <i className="fas fa-sack-dollar text-4xl"></i>
                   <span className="text-lg font-bold text-center">수수료 0%</span>
                   <span className="text-sm text-center">당신이 번 돈 100% 가져가세요</span>

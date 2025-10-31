@@ -98,7 +98,7 @@ export default function SellerGradePage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {grades.map((grade, i) => (
               <div key={i} className={`p-4 rounded-lg ${
-                grade.name === currentGrade.level ? 'ring-2 ring-[#0f3460]' : ''
+                grade.name === currentGrade.level ? 'ring-2 ring-brand-primary' : ''
               }`}>
                 <div className={`w-12 h-12 ${grade.color} rounded-full flex items-center justify-center text-white mb-3`}>
                   <i className="fas fa-trophy"></i>

@@ -82,7 +82,7 @@ export default function AITalentShowcase() {
           {Array.from({ length: Math.max(0, 12 - showcaseItems.length) }, (_, i) => (
             <Link key={`placeholder-${i}`} href="/expert/register?category=ai-services">
               <div className="card group cursor-pointer group-hover:scale-105 transition-transform duration-200">
-                <div className="relative bg-gradient-to-br from-[#0f3460] to-[#1a4b7d] rounded-t-lg overflow-hidden h-48 flex items-center justify-center">
+                <div className="relative bg-gradient-to-br from-brand-primary to-brand-light rounded-t-lg overflow-hidden h-48 flex items-center justify-center">
                   {/* 배경 패턴 */}
                   <div className="absolute inset-0 opacity-10">
                     <div className="absolute inset-0 pattern-diagonal-stripes"></div>
