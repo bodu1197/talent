@@ -18,13 +18,13 @@ export default function RecentCategories() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // 로그인하지 않은 사용자는 API 호출 안 함
-    if (!user) {
-      setLoading(false)
-      return
-    }
-
     const fetchRecentCategories = async () => {
+      // 로그인하지 않은 사용자는 API 호출 안 함
+      if (!user) {
+        setLoading(false)
+        return
+      }
+
       try {
         const response = await fetch('/api/user/category-visits')
 
