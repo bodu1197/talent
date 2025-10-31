@@ -31,6 +31,10 @@ export async function createClient() {
           }
         },
       },
+      auth: {
+        flowType: 'pkce',
+        storageKey: 'sb-auth-token',
+      },
     }
   )
 }
