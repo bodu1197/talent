@@ -108,21 +108,6 @@ export default function SellerProfilePage() {
           </button>
         </div>
 
-        {/* 상태 배지 */}
-        <div className="mb-6">
-          <span className={`inline-block px-4 py-2 rounded-full text-sm font-medium ${
-            profile.status === 'active' ? 'bg-green-100 text-green-800' :
-            profile.status === 'pending_review' ? 'bg-yellow-100 text-yellow-800' :
-            profile.status === 'suspended' ? 'bg-red-100 text-red-800' :
-            'bg-gray-100 text-gray-800'
-          }`}>
-            {profile.status === 'active' ? '✓ 활동중' :
-             profile.status === 'pending_review' ? '⏳ 검토중' :
-             profile.status === 'suspended' ? '⚠ 정지됨' :
-             profile.status}
-          </span>
-        </div>
-
         <div className="max-w-4xl space-y-6">
           {/* 프로필 정보 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
