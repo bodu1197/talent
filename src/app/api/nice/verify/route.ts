@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
       margin-top: 10px;
     }
     button:hover {
-      background: #1a4b7d;
+      background: rgb(26, 75, 125);
     }
     button.cancel {
       background: #e0e0e0;
