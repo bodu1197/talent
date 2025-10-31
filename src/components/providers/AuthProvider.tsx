@@ -135,58 +135,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   useEffect(() => {
-    console.log('[AuthProvider] useEffect mounted')
     let mounted = true
 
-    // 초기 세션 체크
+    // 초기 세션 체크 - 단순화
     const checkSession = async () => {
-      console.log('[AuthProvider] checkSession started')
       try {
-        // 타임아웃 추가 (5초)
-        const sessionPromise = supabase.auth.getSession()
-        const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('getSession timeout')), 5000)
-        )
+        const { data: { session } } = await supabase.auth.getSession()
 
-        const { data: { session }, error } = await Promise.race([
-          sessionPromise,
-          timeoutPromise
-        ]) as any
-
-        // LockManager 오류는 무시하고 계속 진행
-        if (error && !error.message?.includes('LockManager')) {
-          console.error('[AuthProvider] 세션 체크 실패:', error)
-        }
-
-        if (!mounted) {
-          console.log('[AuthProvider] Component unmounted, aborting')
-          return
-        }
-
-        console.log('[AuthProvider] Session check result:', { hasSession: !!session, userId: session?.user?.id })
+        if (!mounted) return
 
         setUser(session?.user ?? null)
-
-        // 로딩 상태를 먼저 false로 설정 (UI 차단 방지)
-        console.log('[AuthProvider] Setting loading to false')
         setLoading(false)
 
-        // 프로필은 백그라운드에서 로드
+        // 프로필은 필요할 때만 백그라운드에서 로드 (에러 무시)
         if (session?.user) {
-          fetchProfile(session.user.id).catch(err => {
-            console.error('[AuthProvider] Background profile fetch failed:', err)
+          fetchProfile(session.user.id).catch(() => {
+            // 프로필 로딩 실패해도 무시 (user만 있으면 됨)
           })
         } else {
           setProfile(null)
         }
-      } catch (error: any) {
-        // LockManager 타임아웃 오류는 무시
-        if (!error?.message?.includes('LockManager') && !error?.isAcquireTimeout) {
-          console.error('[AuthProvider] 세션 체크 실패:', error)
-        }
-        // 에러가 발생해도 로딩은 해제
+      } catch (error) {
+        // 에러 무시하고 loading만 false로
         if (mounted) {
-          console.log('[AuthProvider] Setting loading to false (error case)')
           setLoading(false)
         }
       }
@@ -198,16 +169,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (!mounted) return
-
-        // INITIAL_SESSION 이벤트는 무시 (초기 로드 시 중복 호출 방지)
-        if (event === 'INITIAL_SESSION') {
-          return
-        }
+        if (event === 'INITIAL_SESSION') return
 
         setUser(session?.user ?? null)
 
         if (session?.user) {
-          await fetchProfile(session.user.id)
+          fetchProfile(session.user.id).catch(() => {})
         } else {
           setProfile(null)
         }
