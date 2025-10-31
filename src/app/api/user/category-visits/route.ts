@@ -18,9 +18,9 @@ export async function GET(request: NextRequest) {
       }
     )
 
-    const { data: { session } } = await supabase.auth.getSession()
+    const { data: { user } } = await supabase.auth.getUser()
 
-    if (!session) {
+    if (!user) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         {
@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
     const { data, error } = await supabase
       .from('category_visits')
       .select('*')
-      .eq('user_id', session.user.id)
+      .eq('user_id', user.id)
       .order('last_visited_at', { ascending: false })
       .limit(10)
 
@@ -93,9 +93,9 @@ export async function POST(request: NextRequest) {
       }
     )
 
-    const { data: { session } } = await supabase.auth.getSession()
+    const { data: { user } } = await supabase.auth.getUser()
 
-    if (!session) {
+    if (!user) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         {
@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
     const { data: existingVisit } = await supabase
       .from('category_visits')
       .select('*')
-      .eq('user_id', session.user.id)
+      .eq('user_id', user.id)
       .eq('category_id', categoryId)
       .single()
 
@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
           visit_count: existingVisit.visit_count + 1,
           last_visited_at: new Date().toISOString()
         })
-        .eq('user_id', session.user.id)
+        .eq('user_id', user.id)
         .eq('category_id', categoryId)
         .select()
         .single()
@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
       const { data, error } = await supabase
         .from('category_visits')
         .insert({
-          user_id: session.user.id,
+          user_id: user.id,
           category_id: categoryId,
           category_name: categoryName,
           category_slug: categorySlug,
