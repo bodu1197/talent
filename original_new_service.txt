@@ -15,12 +15,7 @@ interface Category {
   parent_id: string | null
 }
 
-interface Props {
-  sellerId: string
-  categories: any[]
-}
-
-export default function NewServiceClient({ sellerId }: Props) {
+export default function NewServicePage() {
   const [activePackage, setActivePackage] = useState<PackageType>('basic')
   const [level1Categories, setLevel1Categories] = useState<Category[]>([])
   const [level2Categories, setLevel2Categories] = useState<Category[]>([])
@@ -669,7 +664,7 @@ export default function NewServiceClient({ sellerId }: Props) {
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>
