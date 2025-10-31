@@ -21,7 +21,7 @@ export default function MobileBottomNav() {
           <Link
             href="/"
             className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
-              isActive('/') ? 'text-[#0f3460]' : 'text-gray-500'
+              isActive('/') ? 'text-brand-primary' : 'text-gray-500'
             }`}
           >
             <i className="fas fa-home text-xl"></i>
@@ -32,7 +32,7 @@ export default function MobileBottomNav() {
           <Link
             href="/categories"
             className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
-              pathname.startsWith('/categories') ? 'text-[#0f3460]' : 'text-gray-500'
+              pathname.startsWith('/categories') ? 'text-brand-primary' : 'text-gray-500'
             }`}
           >
             <i className="fas fa-th text-xl"></i>
@@ -42,7 +42,7 @@ export default function MobileBottomNav() {
           {/* 검색 */}
           <button
             onClick={() => setShowSearch(true)}
-            className="flex flex-col items-center justify-center space-y-1 text-gray-500 transition-colors active:text-[#0f3460]"
+            className="flex flex-col items-center justify-center space-y-1 text-gray-500 transition-colors active:text-brand-primary"
             aria-label="검색 열기"
           >
             <i className="fas fa-search text-xl"></i>
@@ -53,7 +53,7 @@ export default function MobileBottomNav() {
           <Link
             href={user ? "/mypage/buyer/dashboard" : "/auth/login"}
             className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
-              pathname.startsWith('/mypage') ? 'text-[#0f3460]' : 'text-gray-500'
+              pathname.startsWith('/mypage') ? 'text-brand-primary' : 'text-gray-500'
             }`}
           >
             <i className="fas fa-user text-xl"></i>
@@ -64,7 +64,7 @@ export default function MobileBottomNav() {
           <Link
             href="/menu"
             className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
-              pathname === '/menu' ? 'text-[#0f3460]' : 'text-gray-500'
+              pathname === '/menu' ? 'text-brand-primary' : 'text-gray-500'
             }`}
           >
             <i className="fas fa-bars text-xl"></i>
@@ -90,7 +90,7 @@ export default function MobileBottomNav() {
                 name="search"
                 type="text"
                 placeholder="찾으시는 재능을 검색해보세요"
-                className="w-full px-4 py-2 pr-10 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
+                className="w-full px-4 py-2 pr-10 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
                 autoComplete="off"
                 autoFocus
               />
@@ -109,7 +109,7 @@ export default function MobileBottomNav() {
               {['로고 디자인', 'AI 이미지', '영상 편집', '번역', '블로그 작성', 'PPT 디자인'].map((keyword) => (
                 <button
                   key={keyword}
-                  className="px-3 py-1.5 bg-gray-100 rounded-full text-sm hover:bg-gray-200 hover:text-[#0f3460]"
+                  className="px-3 py-1.5 bg-gray-100 rounded-full text-sm hover:bg-gray-200 hover:text-brand-primary"
                   onClick={() => {
                     // 검색 실행
                     setShowSearch(false)

@@ -24,7 +24,7 @@ export default function AdminSidebar() {
   const [collapsed, setCollapsed] = useState(false)
 
   return (
-    <aside className={`flex-shrink-0 h-full bg-[#0f3460] text-white transition-all duration-300 flex flex-col ${collapsed ? 'w-20' : 'w-64'}`}>
+    <aside className={`flex-shrink-0 h-full bg-brand-primary text-white transition-all duration-300 flex flex-col ${collapsed ? 'w-20' : 'w-64'}`}>
       {/* Logo */}
       <div className="h-16 flex items-center justify-between px-4 border-b border-white/10">
         {!collapsed && (

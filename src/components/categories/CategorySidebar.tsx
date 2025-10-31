@@ -110,7 +110,7 @@ export default function CategorySidebar({ categories, currentCategoryId, categor
                               href={`/categories/${category3.slug}`}
                               className={`relative block px-4 py-2 text-xs transition-all duration-200 ${
                                 category3.id === currentCategoryId
-                                  ? 'text-gray-900 font-semibold bg-gray-100 before:absolute before:left-0 before:top-0 before:w-1 before:h-full before:bg-[#0f3460]'
+                                  ? 'text-gray-900 font-semibold bg-gray-100 before:absolute before:left-0 before:top-0 before:w-1 before:h-full before:bg-brand-primary'
                                   : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
                               }`}
                             >

@@ -41,12 +41,12 @@ export default function WithdrawPage() {
                   value={amount}
                   onChange={(e) => setAmount(parseInt(e.target.value) || 0)}
                   max={availableAmount}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   placeholder="출금할 금액을 입력하세요"
                 />
                 <button
                   onClick={() => setAmount(availableAmount)}
-                  className="mt-2 text-sm text-[#0f3460] hover:underline"
+                  className="mt-2 text-sm text-brand-primary hover:underline"
                 >
                   전액 출금
                 </button>
@@ -54,7 +54,7 @@ export default function WithdrawPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">은행 *</label>
-                <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent">
+                <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent">
                   <option>은행 선택</option>
                   <option>KB국민은행</option>
                   <option>신한은행</option>
@@ -67,7 +67,7 @@ export default function WithdrawPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">계좌번호 *</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   placeholder="'-' 없이 입력"
                 />
               </div>
@@ -76,7 +76,7 @@ export default function WithdrawPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">예금주 *</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 />
               </div>
             </div>
@@ -96,7 +96,7 @@ export default function WithdrawPage() {
             </div>
           </div>
 
-          <button className="w-full px-6 py-4 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium text-lg">
+          <button className="w-full px-6 py-4 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium text-lg">
             <i className="fas fa-money-bill-wave mr-2"></i>
             {amount.toLocaleString()}원 출금 신청
           </button>

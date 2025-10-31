@@ -51,7 +51,7 @@ export default function CategoryGrid() {
                   href={`/categories/${category.slug}`}
                   className="flex flex-col items-center group cursor-pointer flex-shrink-0 w-[76px]"
                 >
-                  <div className={`text-[27px] mb-1 h-11 w-11 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[index % brightColors.length]} group-hover:text-[#0f3460]`}>
+                  <div className={`text-[27px] mb-1 h-11 w-11 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[index % brightColors.length]} group-hover:text-brand-primary`}>
                     {category.icon === 'robot' && <i className="fas fa-robot"></i>}
                     {category.icon === 'palette' && <i className="fas fa-palette"></i>}
                     {category.icon === 'scissors' && <i className="fas fa-scissors"></i>}
@@ -76,7 +76,7 @@ export default function CategoryGrid() {
                     {category.icon === 'motorcycle' && <i className="fas fa-motorcycle"></i>}
                     {!category.icon && <i className="fas fa-circle"></i>}
                   </div>
-                  <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-mobile-sm text-center w-[76px] whitespace-nowrap px-0">{category.name}</div>
+                  <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-bold text-mobile-sm text-center w-[76px] whitespace-nowrap px-0">{category.name}</div>
                 </Link>
               ))}
             </div>
@@ -89,7 +89,7 @@ export default function CategoryGrid() {
                   href={`/categories/${category.slug}`}
                   className="flex flex-col items-center group cursor-pointer flex-shrink-0 w-[76px]"
                 >
-                  <div className={`text-[27px] mb-1 h-11 w-11 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[(index + 11) % brightColors.length]} group-hover:text-[#0f3460]`}>
+                  <div className={`text-[27px] mb-1 h-11 w-11 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[(index + 11) % brightColors.length]} group-hover:text-brand-primary`}>
                     {category.icon === 'robot' && <i className="fas fa-robot"></i>}
                     {category.icon === 'palette' && <i className="fas fa-palette"></i>}
                     {category.icon === 'scissors' && <i className="fas fa-scissors"></i>}
@@ -114,7 +114,7 @@ export default function CategoryGrid() {
                     {category.icon === 'motorcycle' && <i className="fas fa-motorcycle"></i>}
                     {!category.icon && <i className="fas fa-circle"></i>}
                   </div>
-                  <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-mobile-sm text-center w-[76px] whitespace-nowrap px-0">{category.name}</div>
+                  <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-bold text-mobile-sm text-center w-[76px] whitespace-nowrap px-0">{category.name}</div>
                 </Link>
               ))}
             </div>
@@ -129,7 +129,7 @@ export default function CategoryGrid() {
               href={`/categories/${category.slug}`}
               className="flex flex-col items-center group cursor-pointer"
             >
-              <div className={`text-2xl sm:text-3xl md:text-4xl mb-1 h-10 w-10 sm:h-11 sm:w-11 md:h-12 md:w-12 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[index % brightColors.length]} group-hover:text-[#0f3460]`}>
+              <div className={`text-2xl sm:text-3xl md:text-4xl mb-1 h-10 w-10 sm:h-11 sm:w-11 md:h-12 md:w-12 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[index % brightColors.length]} group-hover:text-brand-primary`}>
                 {category.icon === 'robot' && <i className="fas fa-robot"></i>}
                 {category.icon === 'palette' && <i className="fas fa-palette"></i>}
                 {category.icon === 'scissors' && <i className="fas fa-scissors"></i>}
@@ -154,14 +154,14 @@ export default function CategoryGrid() {
                 {category.icon === 'motorcycle' && <i className="fas fa-motorcycle"></i>}
                 {!category.icon && <i className="fas fa-circle"></i>}
               </div>
-              <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-xs sm:text-sm md:text-[15px] text-center">{category.name}</div>
+              <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-bold text-xs sm:text-sm md:text-[15px] text-center">{category.name}</div>
             </Link>
           ))}
 
           {hasMoreCategories && (
             <button
               onClick={() => setShowAllCategories(!showAllCategories)}
-              className="flex flex-col items-center justify-center h-16 w-16 sm:h-18 sm:w-18 md:h-20 md:w-20 bg-gray-100 text-gray-500 hover:bg-[#0f3460] hover:text-white transition-all duration-200 cursor-pointer rounded-lg"
+              className="flex flex-col items-center justify-center h-16 w-16 sm:h-18 sm:w-18 md:h-20 md:w-20 bg-gray-100 text-gray-500 hover:bg-brand-primary hover:text-white transition-all duration-200 cursor-pointer rounded-lg"
             >
               <div className="grid grid-cols-2 gap-1">
                 <i className={`fas ${showAllCategories ? 'fa-minus' : 'fa-th'} text-lg`}></i>
@@ -182,7 +182,7 @@ export default function CategoryGrid() {
                 href={`/categories/${category.slug}`}
                 className="flex flex-col items-center group cursor-pointer"
               >
-                <div className={`text-4xl mb-1 h-12 w-12 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[(index + initialVisibleCount) % brightColors.length]} group-hover:text-[#0f3460]`}>
+                <div className={`text-4xl mb-1 h-12 w-12 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[(index + initialVisibleCount) % brightColors.length]} group-hover:text-brand-primary`}>
                   {category.icon === 'robot' && <i className="fas fa-robot"></i>}
                   {category.icon === 'palette' && <i className="fas fa-palette"></i>}
                   {category.icon === 'scissors' && <i className="fas fa-scissors"></i>}
@@ -207,7 +207,7 @@ export default function CategoryGrid() {
                   {category.icon === 'motorcycle' && <i className="fas fa-motorcycle"></i>}
                   {!category.icon && <i className="fas fa-circle"></i>}
                 </div>
-                <div className="text-gray-700 group-hover:text-[#0f3460] transition-colors duration-200 font-bold text-[15px]">{category.name}</div>
+                <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-bold text-[15px]">{category.name}</div>
               </Link>
             ))}
           </div>

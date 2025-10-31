@@ -216,7 +216,7 @@ export default function BuyerDashboardPage() {
             </h2>
             <Link
               href="/mypage/buyer/orders"
-              className="text-sm text-[#0f3460] hover:underline flex items-center gap-1"
+              className="text-sm text-brand-primary hover:underline flex items-center gap-1"
             >
               전체 보기 <i className="fas fa-arrow-right text-xs"></i>
             </Link>
@@ -229,7 +229,7 @@ export default function BuyerDashboardPage() {
                 return (
                   <div
                     key={order.id}
-                    className="border border-gray-200 rounded-lg p-4 hover:border-[#0f3460] transition-colors"
+                    className="border border-gray-200 rounded-lg p-4 hover:border-brand-primary transition-colors"
                   >
                     <div className="flex gap-4">
                       {/* 썸네일 */}
@@ -272,7 +272,7 @@ export default function BuyerDashboardPage() {
                         <div className="flex items-center gap-2">
                           <Link
                             href={`/mypage/buyer/orders/${order.id}`}
-                            className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors text-sm font-medium"
+                            className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium"
                           >
                             {order.status === 'delivered' ? '확인하기' : '상세보기'}
                           </Link>
@@ -306,7 +306,7 @@ export default function BuyerDashboardPage() {
               </h2>
               <Link
                 href="/mypage/buyer/favorites"
-                className="text-sm text-[#0f3460] hover:underline"
+                className="text-sm text-brand-primary hover:underline"
               >
                 전체 보기
               </Link>

@@ -144,7 +144,7 @@ function BuyerOrdersContent() {
         <>
           <Link
             href={`/mypage/buyer/orders/${order.id}`}
-            className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors text-sm font-medium"
+            className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium"
           >
             <i className="fas fa-download mr-2"></i>
             다운로드
@@ -172,7 +172,7 @@ function BuyerOrdersContent() {
         <>
           <Link
             href={`/mypage/buyer/orders/${order.id}`}
-            className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors text-sm font-medium"
+            className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium"
           >
             상세보기
           </Link>
@@ -191,7 +191,7 @@ function BuyerOrdersContent() {
         <>
           <Link
             href={`/mypage/buyer/orders/${order.id}`}
-            className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors text-sm font-medium"
+            className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium"
           >
             상세보기
           </Link>
@@ -210,7 +210,7 @@ function BuyerOrdersContent() {
       <>
         <Link
           href={`/mypage/buyer/orders/${order.id}`}
-          className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors text-sm font-medium"
+          className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium"
         >
           상세보기
         </Link>
@@ -277,7 +277,7 @@ function BuyerOrdersContent() {
                 onClick={() => setFilters({ ...filters, status: tab.value as OrderStatus })}
                 className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
                   filters.status === tab.value
-                    ? 'border-[#0f3460] text-[#0f3460]'
+                    ? 'border-brand-primary text-brand-primary'
                     : 'border-transparent text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -285,7 +285,7 @@ function BuyerOrdersContent() {
                 {tab.count > 0 && (
                   <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
                     filters.status === tab.value
-                      ? 'bg-[#0f3460] text-white'
+                      ? 'bg-brand-primary text-white'
                       : 'bg-gray-200 text-gray-600'
                   }`}>
                     {tab.count}
@@ -309,7 +309,7 @@ function BuyerOrdersContent() {
                 value={filters.searchQuery}
                 onChange={(e) => setFilters({ ...filters, searchQuery: e.target.value })}
                 placeholder="검색어를 입력하세요"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               />
             </div>
 
@@ -320,7 +320,7 @@ function BuyerOrdersContent() {
                 type="date"
                 value={filters.startDate}
                 onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               />
             </div>
 
@@ -330,7 +330,7 @@ function BuyerOrdersContent() {
                 type="date"
                 value={filters.endDate}
                 onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               />
             </div>
 

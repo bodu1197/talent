@@ -5,7 +5,7 @@ export default function SellerCommissionPage() {
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="container-1200">
         <div className="mb-8">
-          <Link href="/" className="text-[#0f3460] hover:underline flex items-center gap-2">
+          <Link href="/" className="text-brand-primary hover:underline flex items-center gap-2">
             <i className="fas fa-arrow-left"></i>
             홈으로
           </Link>
@@ -17,7 +17,7 @@ export default function SellerCommissionPage() {
           <div className="prose max-w-none">
             <section className="mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">플랫폼 수수료</h2>
-              <div className="bg-[#0f3460] text-white rounded-lg p-6 text-center mb-4">
+              <div className="bg-brand-primary text-white rounded-lg p-6 text-center mb-4">
                 <div className="text-5xl font-bold mb-2">20%</div>
                 <p className="text-lg">거래 금액의 20%가 플랫폼 수수료로 부과됩니다</p>
               </div>
@@ -41,7 +41,7 @@ export default function SellerCommissionPage() {
                   <div className="border-t border-gray-300 pt-2 mt-2">
                     <div className="flex justify-between items-center">
                       <span className="font-bold text-gray-900">판매자 정산 금액</span>
-                      <span className="text-2xl font-bold text-[#0f3460]">80,000원</span>
+                      <span className="text-2xl font-bold text-brand-primary">80,000원</span>
                     </div>
                   </div>
                 </div>
@@ -58,7 +58,7 @@ export default function SellerCommissionPage() {
                   <div className="border-t border-gray-300 pt-2 mt-2">
                     <div className="flex justify-between items-center">
                       <span className="font-bold text-gray-900">판매자 정산 금액</span>
-                      <span className="text-2xl font-bold text-[#0f3460]">400,000원</span>
+                      <span className="text-2xl font-bold text-brand-primary">400,000원</span>
                     </div>
                   </div>
                 </div>

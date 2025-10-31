@@ -121,7 +121,7 @@ export default function AdminUsersPage() {
               onClick={() => setRoleFilter(tab.value)}
               className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
                 roleFilter === tab.value
-                  ? 'border-[#0f3460] text-[#0f3460]'
+                  ? 'border-brand-primary text-brand-primary'
                   : 'border-transparent text-gray-600 hover:text-gray-900'
               }`}
             >
@@ -129,7 +129,7 @@ export default function AdminUsersPage() {
               {tab.count > 0 && (
                 <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
                   roleFilter === tab.value
-                    ? 'bg-[#0f3460] text-white'
+                    ? 'bg-brand-primary text-white'
                     : 'bg-gray-200 text-gray-600'
                 }`}>
                   {tab.count}
@@ -149,7 +149,7 @@ export default function AdminUsersPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="이름 또는 이메일로 검색"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
             />
           </div>
           <button
@@ -204,7 +204,7 @@ export default function AdminUsersPage() {
                               alt={user.name}
                             />
                           ) : (
-                            <div className="h-10 w-10 rounded-full bg-[#0f3460] flex items-center justify-center text-white font-bold">
+                            <div className="h-10 w-10 rounded-full bg-brand-primary flex items-center justify-center text-white font-bold">
                               {user.name?.[0] || 'U'}
                             </div>
                           )}
@@ -226,7 +226,7 @@ export default function AdminUsersPage() {
                       {new Date(user.created_at).toLocaleDateString('ko-KR')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button className="text-[#0f3460] hover:text-[#1a4b7d] mr-3">
+                      <button className="text-brand-primary hover:text-brand-light mr-3">
                         상세보기
                       </button>
                       <button className="text-red-600 hover:text-red-900">

@@ -20,7 +20,7 @@ export default function AdminHeader() {
             <input
               type="text"
               placeholder="사용자, 서비스, 주문 검색..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
             />
           </div>
         </div>
@@ -43,7 +43,7 @@ export default function AdminHeader() {
               onClick={() => setShowUserMenu(!showUserMenu)}
               className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
-              <div className="w-8 h-8 bg-[#0f3460] rounded-full flex items-center justify-center text-white font-semibold">
+              <div className="w-8 h-8 bg-brand-primary rounded-full flex items-center justify-center text-white font-semibold">
                 {user?.email?.[0]?.toUpperCase() || 'A'}
               </div>
               <div className="text-left hidden md:block">

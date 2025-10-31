@@ -133,7 +133,7 @@ function MessagesContent() {
               <input
                 type="text"
                 placeholder="대화 검색"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               />
             </div>
 
@@ -192,7 +192,7 @@ function MessagesContent() {
                       <div key={msg.id} className={`flex ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}>
                         <div className={`max-w-md px-4 py-2 rounded-lg ${
                           msg.sender === 'me'
-                            ? 'bg-[#0f3460] text-white'
+                            ? 'bg-brand-primary text-white'
                             : 'bg-gray-100 text-gray-900'
                         }`}>
                           <div className="text-sm">{msg.content}</div>
@@ -218,12 +218,12 @@ function MessagesContent() {
                       onKeyPress={handleKeyPress}
                       placeholder="메시지를 입력하세요"
                       disabled={sendingMessage}
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     />
                     <button
                       onClick={handleSendMessage}
                       disabled={sendingMessage || !message.trim()}
-                      className="px-6 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
+                      className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
                     >
                       {sendingMessage ? '전송중...' : '전송'}
                     </button>

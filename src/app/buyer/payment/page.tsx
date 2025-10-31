@@ -5,7 +5,7 @@ export default function BuyerPaymentPage() {
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="container-1200">
         <div className="mb-8">
-          <Link href="/" className="text-[#0f3460] hover:underline flex items-center gap-2">
+          <Link href="/" className="text-brand-primary hover:underline flex items-center gap-2">
             <i className="fas fa-arrow-left"></i>
             홈으로
           </Link>
@@ -20,7 +20,7 @@ export default function BuyerPaymentPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-center gap-3 mb-2">
-                    <i className="fas fa-credit-card text-2xl text-[#0f3460]"></i>
+                    <i className="fas fa-credit-card text-2xl text-brand-primary"></i>
                     <h3 className="font-bold text-gray-900">신용카드</h3>
                   </div>
                   <p className="text-sm text-gray-600">국내 모든 신용카드 사용 가능</p>
@@ -28,7 +28,7 @@ export default function BuyerPaymentPage() {
 
                 <div className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-center gap-3 mb-2">
-                    <i className="fas fa-university text-2xl text-[#0f3460]"></i>
+                    <i className="fas fa-university text-2xl text-brand-primary"></i>
                     <h3 className="font-bold text-gray-900">계좌이체</h3>
                   </div>
                   <p className="text-sm text-gray-600">실시간 계좌이체 지원</p>
@@ -36,7 +36,7 @@ export default function BuyerPaymentPage() {
 
                 <div className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-center gap-3 mb-2">
-                    <i className="fas fa-mobile-alt text-2xl text-[#0f3460]"></i>
+                    <i className="fas fa-mobile-alt text-2xl text-brand-primary"></i>
                     <h3 className="font-bold text-gray-900">간편결제</h3>
                   </div>
                   <p className="text-sm text-gray-600">카카오페이, 네이버페이, 토스 등</p>
@@ -44,7 +44,7 @@ export default function BuyerPaymentPage() {
 
                 <div className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-center gap-3 mb-2">
-                    <i className="fas fa-wallet text-2xl text-[#0f3460]"></i>
+                    <i className="fas fa-wallet text-2xl text-brand-primary"></i>
                     <h3 className="font-bold text-gray-900">캐시</h3>
                   </div>
                   <p className="text-sm text-gray-600">충전된 캐시로 결제</p>

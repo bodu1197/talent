@@ -292,7 +292,7 @@ export default function SellerProfilePage() {
                   type="text"
                   value={profile.display_name}
                   onChange={(e) => setProfile({ ...profile, display_name: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 />
               </div>
 
@@ -304,7 +304,7 @@ export default function SellerProfilePage() {
                   value={profile.bio}
                   onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
                   rows={6}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 ></textarea>
                 <p className="text-sm text-gray-500 mt-1">{profile.bio.length}/300자</p>
               </div>
@@ -348,7 +348,7 @@ export default function SellerProfilePage() {
                     type="checkbox"
                     checked={profile.show_phone}
                     onChange={(e) => setProfile({ ...profile, show_phone: e.target.checked })}
-                    className="w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+                    className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
                   />
                   <span className="text-sm font-medium text-gray-700">전화번호 공개</span>
                 </label>
@@ -363,7 +363,7 @@ export default function SellerProfilePage() {
                   value={profile.kakao_id || ''}
                   onChange={(e) => setProfile({ ...profile, kakao_id: e.target.value })}
                   placeholder="kakaotalk_id"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 />
               </div>
 
@@ -376,7 +376,7 @@ export default function SellerProfilePage() {
                   value={profile.kakao_openchat || ''}
                   onChange={(e) => setProfile({ ...profile, kakao_openchat: e.target.value })}
                   placeholder="https://open.kakao.com/..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 />
               </div>
 
@@ -389,7 +389,7 @@ export default function SellerProfilePage() {
                   value={profile.whatsapp || ''}
                   onChange={(e) => setProfile({ ...profile, whatsapp: e.target.value })}
                   placeholder="821012345678"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 />
               </div>
 
@@ -402,7 +402,7 @@ export default function SellerProfilePage() {
                   value={profile.website || ''}
                   onChange={(e) => setProfile({ ...profile, website: e.target.value })}
                   placeholder="https://..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 />
               </div>
 
@@ -417,7 +417,7 @@ export default function SellerProfilePage() {
                         type="checkbox"
                         checked={profile.preferred_contact?.includes(contact) || false}
                         onChange={() => handlePreferredContactToggle(contact)}
-                        className="w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+                        className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
                       />
                       <span className="text-sm text-gray-700">{contact}</span>
                     </label>
@@ -440,7 +440,7 @@ export default function SellerProfilePage() {
                   <select
                     value={profile.bank_name}
                     onChange={(e) => setProfile({ ...profile, bank_name: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   >
                     <option value="">선택하세요</option>
                     <option value="KB국민은행">KB국민은행</option>
@@ -462,7 +462,7 @@ export default function SellerProfilePage() {
                     type="text"
                     value={profile.account_holder}
                     onChange={(e) => setProfile({ ...profile, account_holder: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   />
                 </div>
               </div>
@@ -475,7 +475,7 @@ export default function SellerProfilePage() {
                   type="text"
                   value={profile.account_number}
                   onChange={(e) => setProfile({ ...profile, account_number: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 />
               </div>
 
@@ -485,7 +485,7 @@ export default function SellerProfilePage() {
                     type="checkbox"
                     checked={profile.is_business}
                     onChange={(e) => setProfile({ ...profile, is_business: e.target.checked })}
-                    className="w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+                    className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
                   />
                   <span className="text-sm font-medium text-gray-700">사업자입니다</span>
                 </label>
@@ -501,7 +501,7 @@ export default function SellerProfilePage() {
                     value={profile.business_number || ''}
                     onChange={(e) => setProfile({ ...profile, business_number: e.target.value })}
                     placeholder="123-45-67890"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   />
                 </div>
               )}
@@ -513,7 +513,7 @@ export default function SellerProfilePage() {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {saving ? '저장 중...' : '변경사항 저장'}
             </button>

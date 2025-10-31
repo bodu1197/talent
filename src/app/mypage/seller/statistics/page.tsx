@@ -193,15 +193,15 @@ export default function SellerStatisticsPage() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">오늘</span>
-                <span className="text-lg font-bold text-[#0f3460]">{stats.todayOrders}</span>
+                <span className="text-lg font-bold text-brand-primary">{stats.todayOrders}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">이번 주</span>
-                <span className="text-lg font-bold text-[#0f3460]">{stats.weeklyOrders}</span>
+                <span className="text-lg font-bold text-brand-primary">{stats.weeklyOrders}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">이번 달</span>
-                <span className="text-lg font-bold text-[#0f3460]">{stats.monthlyOrders}</span>
+                <span className="text-lg font-bold text-brand-primary">{stats.monthlyOrders}</span>
               </div>
             </div>
           </div>
@@ -235,7 +235,7 @@ export default function SellerStatisticsPage() {
                     <div className="font-medium text-gray-900">{service.name}</div>
                     <div className="text-sm text-gray-600">조회 {service.views} • 주문 {service.orders}</div>
                   </div>
-                  <div className="text-lg font-bold text-[#0f3460]">
+                  <div className="text-lg font-bold text-brand-primary">
                     {service.views > 0 ? ((service.orders / service.views) * 100).toFixed(1) : '0.0'}%
                   </div>
                 </div>

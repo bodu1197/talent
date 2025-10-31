@@ -289,7 +289,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                       <a
                         href={file.file_url || '#'}
                         download
-                        className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors"
+                        className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors"
                       >
                         <i className="fas fa-download mr-2"></i>
                         다운로드
@@ -298,7 +298,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                   ))}
 
                   {order.status === 'delivered' && (
-                    <button className="w-full px-4 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium">
+                    <button className="w-full px-4 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium">
                       <i className="fas fa-download mr-2"></i>
                       전체 다운로드
                     </button>
@@ -320,7 +320,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                     key={index}
                     className="flex items-start gap-3 pb-3 border-b border-gray-200 last:border-0"
                   >
-                    <div className="w-8 h-8 bg-[#0f3460] rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-8 h-8 bg-brand-primary rounded-full flex items-center justify-center flex-shrink-0">
                       <i className="fas fa-check text-white text-sm"></i>
                     </div>
                     <div className="flex-1">
@@ -365,7 +365,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h3 className="font-bold text-gray-900 mb-4">판매자 정보</h3>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white font-bold">
+                <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center text-white font-bold">
                   {order.seller?.name?.[0] || 'S'}
                 </div>
                 <div>
@@ -376,7 +376,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
               <div className="space-y-2">
                 <Link
                   href={`/mypage/messages?order=${id}`}
-                  className="w-full px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium text-center block"
+                  className="w-full px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium text-center block"
                 >
                   <i className="fas fa-comment mr-2"></i>
                   메시지 보내기
@@ -401,7 +401,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                 </div>
                 <div className="flex items-center justify-between pt-3 border-t border-gray-200">
                   <span className="font-bold text-gray-900">결제 금액</span>
-                  <span className="font-bold text-[#0f3460] text-lg">{order.total_amount?.toLocaleString() || '0'}원</span>
+                  <span className="font-bold text-brand-primary text-lg">{order.total_amount?.toLocaleString() || '0'}원</span>
                 </div>
                 <div className="pt-3 border-t border-gray-200 text-sm text-gray-600">
                   <div>주문일: {new Date(order.created_at).toLocaleString('ko-KR')}</div>
@@ -517,7 +517,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                     value={revisionDetails}
                     onChange={(e) => setRevisionDetails(e.target.value)}
                     placeholder="수정이 필요한 부분을 구체적으로 작성해주세요"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   ></textarea>
                 </div>
 
@@ -525,7 +525,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     참고 파일 첨부 (선택)
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[#0f3460] transition-colors cursor-pointer">
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-brand-primary transition-colors cursor-pointer">
                     <i className="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
                     <p className="text-gray-600 text-sm">클릭하여 파일 선택</p>
                   </div>

@@ -5,7 +5,7 @@ export default function SellerGuidePage() {
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="container-1200">
         <div className="mb-8">
-          <Link href="/" className="text-[#0f3460] hover:underline flex items-center gap-2">
+          <Link href="/" className="text-brand-primary hover:underline flex items-center gap-2">
             <i className="fas fa-arrow-left"></i>
             홈으로
           </Link>
@@ -57,35 +57,35 @@ export default function SellerGuidePage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-4">주문 처리 프로세스</h2>
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
-                  <span className="bg-[#0f3460] text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">1</span>
+                  <span className="bg-brand-primary text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">1</span>
                   <div>
                     <h3 className="font-bold">주문 접수</h3>
                     <p className="text-sm text-gray-600">새 주문 알림을 받고 주문서를 확인합니다</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="bg-[#0f3460] text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">2</span>
+                  <span className="bg-brand-primary text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">2</span>
                   <div>
                     <h3 className="font-bold">구매자와 소통</h3>
                     <p className="text-sm text-gray-600">요구사항을 명확히 파악하고 작업 시작</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="bg-[#0f3460] text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">3</span>
+                  <span className="bg-brand-primary text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">3</span>
                   <div>
                     <h3 className="font-bold">작업 진행</h3>
                     <p className="text-sm text-gray-600">약속한 기간 내에 작업을 완료합니다</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="bg-[#0f3460] text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">4</span>
+                  <span className="bg-brand-primary text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">4</span>
                   <div>
                     <h3 className="font-bold">결과물 전달</h3>
                     <p className="text-sm text-gray-600">완성된 작업물을 전달하고 피드백 대기</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="bg-[#0f3460] text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">5</span>
+                  <span className="bg-brand-primary text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">5</span>
                   <div>
                     <h3 className="font-bold">수정 및 최종 확인</h3>
                     <p className="text-sm text-gray-600">필요 시 수정하고 최종 확인을 받습니다</p>

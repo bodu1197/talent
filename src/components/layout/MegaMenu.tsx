@@ -85,7 +85,7 @@ export default function MegaMenu() {
                 {/* AI 서비스 (고정) */}
                 <Link
                   href="/categories/ai-services"
-                  className="text-[#0f3460] font-medium hover:text-[#1a4b7d] flex items-center gap-1"
+                  className="text-brand-primary font-medium hover:text-brand-light flex items-center gap-1"
                   onClick={handleCategoryClick}
                 >
                   <i className="fas fa-robot"></i> AI 서비스
@@ -122,7 +122,7 @@ export default function MegaMenu() {
             {/* AI Hub 버튼 */}
             <Link
               href="/ai"
-              className="flex items-center gap-2 px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:shadow-lg transition-all font-medium text-sm mr-4"
+              className="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg hover:shadow-lg transition-all font-medium text-sm mr-4"
             >
               <i className="fas fa-robot"></i>
               <span>AI Hub</span>
@@ -161,7 +161,7 @@ export default function MegaMenu() {
                           )}
                           <span>{category.name}</span>
                           {category.is_ai && (
-                            <span className="text-xs bg-blue-100 text-[#0f3460] px-1.5 py-0.5 rounded">AI</span>
+                            <span className="text-xs bg-blue-100 text-brand-primary px-1.5 py-0.5 rounded">AI</span>
                           )}
                         </div>
                         <i className="fas fa-chevron-right text-xs text-gray-400"></i>
@@ -183,7 +183,7 @@ export default function MegaMenu() {
                           <h4 className="font-semibold text-sm">
                             <Link
                               href={`/categories/${subCategory.slug}`}
-                              className="hover:text-[#0f3460]"
+                              className="hover:text-brand-primary"
                               onClick={handleCategoryClick}
                             >
                               {subCategory.name}
@@ -195,7 +195,7 @@ export default function MegaMenu() {
                                 <li key={item.id}>
                                   <Link
                                     href={`/categories/${item.slug}`}
-                                    className="text-xs text-gray-600 hover:text-[#0f3460] flex items-center gap-1"
+                                    className="text-xs text-gray-600 hover:text-brand-primary flex items-center gap-1"
                                     onClick={handleCategoryClick}
                                   >
                                     {item.name}
@@ -220,7 +220,7 @@ export default function MegaMenu() {
                             sub.keywords?.map(keyword => (
                               <span
                                 key={keyword}
-                                className="px-3 py-1 bg-blue-50 text-[#0f3460] text-sm rounded-full"
+                                className="px-3 py-1 bg-blue-50 text-brand-primary text-sm rounded-full"
                               >
                                 {keyword}
                               </span>
@@ -247,7 +247,7 @@ export default function MegaMenu() {
                         <Link
                           key={item.id}
                           href={`/categories/${item.slug}`}
-                          className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg hover:bg-blue-50 hover:text-[#0f3460] transition-colors"
+                          className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg hover:bg-blue-50 hover:text-brand-primary transition-colors"
                           onClick={handleCategoryClick}
                         >
                           <span className="font-medium">{item.name}</span>

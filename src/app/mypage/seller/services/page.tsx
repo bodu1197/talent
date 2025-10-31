@@ -115,7 +115,7 @@ export default function SellerServicesPage() {
             </div>
             <Link
               href="/mypage/seller/services/new"
-              className="px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium"
+              className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium"
             >
               <i className="fas fa-plus mr-2"></i>
               서비스 등록
@@ -170,7 +170,7 @@ export default function SellerServicesPage() {
                 onClick={() => setStatusFilter(tab.value as ServiceStatus)}
                 className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
                   statusFilter === tab.value
-                    ? 'border-[#0f3460] text-[#0f3460]'
+                    ? 'border-brand-primary text-brand-primary'
                     : 'border-transparent text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -178,7 +178,7 @@ export default function SellerServicesPage() {
                 {tab.count > 0 && (
                   <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
                     statusFilter === tab.value
-                      ? 'bg-[#0f3460] text-white'
+                      ? 'bg-brand-primary text-white'
                       : 'bg-gray-200 text-gray-600'
                   }`}>
                     {tab.count}
@@ -198,7 +198,7 @@ export default function SellerServicesPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="서비스 제목으로 검색"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               />
             </div>
             <button
@@ -230,7 +230,7 @@ export default function SellerServicesPage() {
               }
 
               return (
-                <div key={service.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:border-[#0f3460] transition-colors">
+                <div key={service.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:border-brand-primary transition-colors">
                   <div className="flex gap-4">
                     {/* 썸네일 */}
                     <div className="w-32 h-32 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
@@ -269,7 +269,7 @@ export default function SellerServicesPage() {
                             <span><i className="fas fa-star mr-1 text-yellow-500"></i>{service.rating || 0} ({service.review_count || 0})</span>
                           </div>
 
-                          <div className="text-lg font-bold text-[#0f3460]">
+                          <div className="text-lg font-bold text-brand-primary">
                             {service.price.toLocaleString()}원
                           </div>
                         </div>
@@ -286,7 +286,7 @@ export default function SellerServicesPage() {
                         </Link>
                         <Link
                           href={`/mypage/seller/services/${service.id}/edit`}
-                          className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors text-sm font-medium"
+                          className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium"
                         >
                           <i className="fas fa-edit mr-2"></i>
                           수정
@@ -325,7 +325,7 @@ export default function SellerServicesPage() {
               <p className="text-gray-600 text-lg mb-4">등록된 서비스가 없습니다</p>
               <Link
                 href="/mypage/seller/services/new"
-                className="inline-block px-6 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium"
+                className="inline-block px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium"
               >
                 <i className="fas fa-plus mr-2"></i>
                 서비스 등록하기

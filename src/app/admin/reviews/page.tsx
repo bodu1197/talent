@@ -126,7 +126,7 @@ export default function AdminReviewsPage() {
               onClick={() => setRatingFilter(tab.value)}
               className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
                 ratingFilter === tab.value
-                  ? 'border-[#0f3460] text-[#0f3460]'
+                  ? 'border-brand-primary text-brand-primary'
                   : 'border-transparent text-gray-600 hover:text-gray-900'
               }`}
             >
@@ -134,7 +134,7 @@ export default function AdminReviewsPage() {
               {tab.count > 0 && (
                 <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
                   ratingFilter === tab.value
-                    ? 'bg-[#0f3460] text-white'
+                    ? 'bg-brand-primary text-white'
                     : 'bg-gray-200 text-gray-600'
                 }`}>
                   {tab.count}
@@ -154,7 +154,7 @@ export default function AdminReviewsPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="리뷰 내용, 구매자명, 판매자명으로 검색"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
             />
           </div>
           <button
@@ -179,7 +179,7 @@ export default function AdminReviewsPage() {
             <div key={review.id} className="bg-white border border-gray-200 rounded-lg p-6">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[#0f3460] rounded-full flex items-center justify-center text-white font-bold">
+                  <div className="w-10 h-10 bg-brand-primary rounded-full flex items-center justify-center text-white font-bold">
                     {(review.buyer?.name || '구매자')[0]}
                   </div>
                   <div>
@@ -207,7 +207,7 @@ export default function AdminReviewsPage() {
               {review.seller_reply && (
                 <div className="bg-gray-50 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <i className="fas fa-reply text-[#0f3460]"></i>
+                    <i className="fas fa-reply text-brand-primary"></i>
                     <span className="text-sm font-medium text-gray-900">판매자 답변</span>
                     {review.seller_reply_at && (
                       <span className="text-xs text-gray-500">

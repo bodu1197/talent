@@ -40,7 +40,7 @@ export default function CategoryFilter({ categoryId, isAI }: CategoryFilterProps
       </div>
 
       {/* 초기화 버튼 */}
-      <button className="ml-auto px-4 py-2 text-sm text-[#0f3460] border border-[#0f3460] rounded-lg hover:bg-gray-50 transition-colors">
+      <button className="ml-auto px-4 py-2 text-sm text-brand-primary border border-brand-primary rounded-lg hover:bg-gray-50 transition-colors">
         초기화
       </button>
     </div>

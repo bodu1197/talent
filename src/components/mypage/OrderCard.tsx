@@ -34,7 +34,7 @@ export default function OrderCard({ order, mode, actions }: OrderCardProps) {
   const userLabel = mode === 'seller' ? '구매자' : '판매자'
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 hover:border-[#0f3460] transition-colors">
+    <div className="bg-white border border-gray-200 rounded-lg p-6 hover:border-brand-primary transition-colors">
       <div className="flex gap-4">
         {/* 썸네일 */}
         <div className="w-24 h-24 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
@@ -58,7 +58,7 @@ export default function OrderCard({ order, mode, actions }: OrderCardProps) {
                 <span className="text-sm text-gray-500">#{order.orderNumber}</span>
                 <Link
                   href={`/mypage/${mode}/orders/${order.id}`}
-                  className="text-base font-bold text-gray-900 hover:text-[#0f3460]"
+                  className="text-base font-bold text-gray-900 hover:text-brand-primary"
                 >
                   {order.title}
                 </Link>

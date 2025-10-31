@@ -38,7 +38,7 @@ export default function ContactPage() {
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
                     placeholder="이름을 입력하세요"
                     autoComplete="name"
                     required
@@ -56,7 +56,7 @@ export default function ContactPage() {
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
                     placeholder="답변 받을 이메일을 입력하세요"
                     autoComplete="email"
                     required
@@ -73,7 +73,7 @@ export default function ContactPage() {
                     name="category"
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
                     required
                   >
                     <option value="">선택하세요</option>
@@ -97,7 +97,7 @@ export default function ContactPage() {
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
                     placeholder="문의 제목을 입력하세요"
                     autoComplete="off"
                     required
@@ -114,7 +114,7 @@ export default function ContactPage() {
                     name="content"
                     value={formData.content}
                     onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460] h-48 resize-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary h-48 resize-none"
                     placeholder="문의 내용을 상세히 입력해주세요"
                     required
                   />
@@ -123,7 +123,7 @@ export default function ContactPage() {
                 {/* 제출 버튼 */}
                 <button
                   type="submit"
-                  className="w-full py-4 bg-[#0f3460] text-white rounded-lg hover:bg-opacity-90 transition-colors font-semibold"
+                  className="w-full py-4 bg-brand-primary text-white rounded-lg hover:bg-opacity-90 transition-colors font-semibold"
                 >
                   문의하기
                 </button>
@@ -136,7 +136,7 @@ export default function ContactPage() {
             {/* 운영 시간 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h3 className="font-bold mb-4 flex items-center gap-2">
-                <i className="fas fa-clock text-[#0f3460]"></i>
+                <i className="fas fa-clock text-brand-primary"></i>
                 운영 시간
               </h3>
               <div className="space-y-2 text-sm text-gray-600">
@@ -159,17 +159,17 @@ export default function ContactPage() {
             {/* 연락처 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h3 className="font-bold mb-4 flex items-center gap-2">
-                <i className="fas fa-phone text-[#0f3460]"></i>
+                <i className="fas fa-phone text-brand-primary"></i>
                 연락처
               </h3>
               <div className="space-y-3 text-sm">
                 <div>
                   <p className="text-gray-600 mb-1">전화</p>
-                  <p className="font-semibold text-[#0f3460]">1234-5678</p>
+                  <p className="font-semibold text-brand-primary">1234-5678</p>
                 </div>
                 <div>
                   <p className="text-gray-600 mb-1">이메일</p>
-                  <p className="font-semibold text-[#0f3460]">support@example.com</p>
+                  <p className="font-semibold text-brand-primary">support@example.com</p>
                 </div>
               </div>
             </div>

@@ -39,7 +39,7 @@ export default function ForgotPasswordPage() {
           {/* 헤더 */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold mb-2">
-              <span className="text-[#0f3460]">비밀번호 찾기</span>
+              <span className="text-brand-primary">비밀번호 찾기</span>
             </h1>
             <p className="text-gray-600">가입하신 이메일 주소를 입력해주세요</p>
           </div>
@@ -56,7 +56,7 @@ export default function ForgotPasswordPage() {
               </div>
               <Link
                 href="/auth/login"
-                className="inline-block w-full py-3 px-4 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors"
+                className="inline-block w-full py-3 px-4 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors"
               >
                 로그인으로 돌아가기
               </Link>
@@ -80,7 +80,7 @@ export default function ForgotPasswordPage() {
                   autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   placeholder="email@example.com"
                   required
                   disabled={isLoading}
@@ -90,7 +90,7 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 px-4 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="w-full py-3 px-4 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <span className="flex items-center justify-center">
@@ -105,7 +105,7 @@ export default function ForgotPasswordPage() {
               <div className="text-center pt-4">
                 <Link
                   href="/auth/login"
-                  className="text-sm text-[#0f3460] hover:underline"
+                  className="text-sm text-brand-primary hover:underline"
                 >
                   로그인으로 돌아가기
                 </Link>
@@ -118,7 +118,7 @@ export default function ForgotPasswordPage() {
         <div className="text-center mt-6">
           <p className="text-gray-600">
             계정이 없으신가요?{' '}
-            <Link href="/auth/register" className="text-[#0f3460] hover:underline font-medium">
+            <Link href="/auth/register" className="text-brand-primary hover:underline font-medium">
               회원가입
             </Link>
           </p>

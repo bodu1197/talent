@@ -36,6 +36,11 @@ const config: Config = {
         'fade-in': 'fadeIn 0.5s ease-in-out',
         'slide-up': 'slideUp 0.3s ease-out',
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'scroll': 'scroll 30s linear infinite',
+        'pop': 'pop 0.3s ease',
+        'bounce-click': 'bounce-click 0.4s ease',
+        'shake': 'shake 0.3s ease',
       },
       keyframes: {
         fadeIn: {
@@ -45,6 +50,30 @@ const config: Config = {
         slideUp: {
           '0%': { transform: 'translateY(10px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-20px)' },
+        },
+        scroll: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        pop: {
+          '0%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(0.95)' },
+          '100%': { transform: 'scale(1)' },
+        },
+        'bounce-click': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '25%': { transform: 'translateY(-8px)' },
+          '50%': { transform: 'translateY(0)' },
+          '75%': { transform: 'translateY(-4px)' },
+        },
+        shake: {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '25%': { transform: 'translateX(-5px)' },
+          '75%': { transform: 'translateX(5px)' },
         },
       },
     },

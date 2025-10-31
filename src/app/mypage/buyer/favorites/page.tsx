@@ -139,7 +139,7 @@ export default function BuyerFavoritesPage() {
                       type="checkbox"
                       checked={selectedItems.size === favorites.length}
                       onChange={toggleSelectAll}
-                      className="w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+                      className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
                     />
                     <span className="text-sm text-gray-700">전체 선택</span>
                   </label>
@@ -175,7 +175,7 @@ export default function BuyerFavoritesPage() {
                 if (!service) return null
 
                 return (
-                  <div key={favorite.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-[#0f3460] transition-colors">
+                  <div key={favorite.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-brand-primary transition-colors">
                     {/* 썸네일 */}
                     <div className="relative">
                       <div className="aspect-[4/3] bg-gray-100 flex items-center justify-center">
@@ -190,7 +190,7 @@ export default function BuyerFavoritesPage() {
                           type="checkbox"
                           checked={selectedItems.has(service.id)}
                           onChange={() => toggleSelect(service.id)}
-                          className="w-5 h-5 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+                          className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
                         />
                       </div>
                       <button
@@ -205,7 +205,7 @@ export default function BuyerFavoritesPage() {
                     <div className="p-4">
                       <Link
                         href={`/services/${service.id}`}
-                        className="text-lg font-bold text-gray-900 hover:text-[#0f3460] line-clamp-2 mb-2 block"
+                        className="text-lg font-bold text-gray-900 hover:text-brand-primary line-clamp-2 mb-2 block"
                       >
                         {service.title}
                       </Link>
@@ -227,12 +227,12 @@ export default function BuyerFavoritesPage() {
                       </div>
 
                       <div className="flex items-center justify-between">
-                        <div className="text-lg font-bold text-[#0f3460]">
+                        <div className="text-lg font-bold text-brand-primary">
                           {service.price?.toLocaleString() || '0'}원
                         </div>
                         <Link
                           href={`/services/${service.id}`}
-                          className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors text-sm font-medium"
+                          className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium"
                         >
                           보기
                         </Link>

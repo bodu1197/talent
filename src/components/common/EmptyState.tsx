@@ -17,7 +17,7 @@ export default function EmptyState({ icon = 'fa-inbox', title, description, acti
       {action && (
         <a
           href={action.href}
-          className="inline-block px-6 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors"
+          className="inline-block px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors"
         >
           {action.label}
         </a>

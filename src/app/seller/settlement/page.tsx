@@ -5,7 +5,7 @@ export default function SellerSettlementPage() {
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="container-1200">
         <div className="mb-8">
-          <Link href="/" className="text-[#0f3460] hover:underline flex items-center gap-2">
+          <Link href="/" className="text-brand-primary hover:underline flex items-center gap-2">
             <i className="fas fa-arrow-left"></i>
             홈으로
           </Link>
@@ -18,23 +18,23 @@ export default function SellerSettlementPage() {
             <section className="mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">정산 프로세스</h2>
               <div className="space-y-4">
-                <div className="border-l-4 border-[#0f3460] pl-4">
+                <div className="border-l-4 border-brand-primary pl-4">
                   <h3 className="font-bold text-gray-900 mb-2">1. 판매 수익 발생</h3>
                   <p className="text-gray-700">구매자가 작업 최종 확인을 하면 정산 대상 금액으로 전환됩니다.</p>
                 </div>
-                <div className="border-l-4 border-[#0f3460] pl-4">
+                <div className="border-l-4 border-brand-primary pl-4">
                   <h3 className="font-bold text-gray-900 mb-2">2. 정산 대기 (7일)</h3>
                   <p className="text-gray-700">구매자 보호를 위한 7일 대기 기간이 적용됩니다.</p>
                 </div>
-                <div className="border-l-4 border-[#0f3460] pl-4">
+                <div className="border-l-4 border-brand-primary pl-4">
                   <h3 className="font-bold text-gray-900 mb-2">3. 정산 가능</h3>
                   <p className="text-gray-700">대기 기간 종료 후 출금 신청이 가능합니다.</p>
                 </div>
-                <div className="border-l-4 border-[#0f3460] pl-4">
+                <div className="border-l-4 border-brand-primary pl-4">
                   <h3 className="font-bold text-gray-900 mb-2">4. 출금 신청</h3>
                   <p className="text-gray-700">마이페이지에서 원하는 금액만큼 출금 신청합니다.</p>
                 </div>
-                <div className="border-l-4 border-[#0f3460] pl-4">
+                <div className="border-l-4 border-brand-primary pl-4">
                   <h3 className="font-bold text-gray-900 mb-2">5. 계좌 입금</h3>
                   <p className="text-gray-700">영업일 기준 2-3일 내 등록된 계좌로 입금됩니다.</p>
                 </div>

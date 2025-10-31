@@ -77,7 +77,7 @@ export default function RegisterPage() {
           {/* 헤더 */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold mb-2">
-              <span className="gradient-text-ai">AI Talent Hub</span>
+              <span className="gradient-text">AI Talent Hub</span>
             </h1>
             <p className="text-gray-600">AI 재능 거래 플랫폼에 오신 것을 환영합니다</p>
           </div>

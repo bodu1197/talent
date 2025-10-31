@@ -84,7 +84,7 @@ export default function SellerPortfolioPage() {
             </div>
             <Link
               href="/mypage/seller/portfolio/new"
-              className="px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium"
+              className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium"
             >
               <i className="fas fa-plus mr-2"></i>
               포트폴리오 등록
@@ -95,7 +95,7 @@ export default function SellerPortfolioPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {portfolio.length > 0 ? (
             portfolio.map((item) => (
-              <div key={item.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-[#0f3460] transition-colors">
+              <div key={item.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-brand-primary transition-colors">
                 <div className="aspect-[4/3] bg-gray-100 flex items-center justify-center">
                   {item.thumbnail_url ? (
                     <img src={item.thumbnail_url} alt={item.title} className="w-full h-full object-cover" />
@@ -134,7 +134,7 @@ export default function SellerPortfolioPage() {
               <p className="text-gray-500 mb-4">등록된 포트폴리오가 없습니다</p>
               <Link
                 href="/mypage/seller/portfolio/new"
-                className="inline-flex items-center px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium"
+                className="inline-flex items-center px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium"
               >
                 <i className="fas fa-plus mr-2"></i>
                 포트폴리오 등록

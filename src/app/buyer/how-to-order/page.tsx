@@ -5,7 +5,7 @@ export default function HowToOrderPage() {
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="container-1200">
         <div className="mb-8">
-          <Link href="/" className="text-[#0f3460] hover:underline flex items-center gap-2">
+          <Link href="/" className="text-brand-primary hover:underline flex items-center gap-2">
             <i className="fas fa-arrow-left"></i>
             홈으로
           </Link>
@@ -26,7 +26,7 @@ export default function HowToOrderPage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-6">상세 주문 가이드</h2>
 
               <div className="space-y-6">
-                <div className="border-l-4 border-[#0f3460] pl-4">
+                <div className="border-l-4 border-brand-primary pl-4">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">STEP 1. 회원가입 및 로그인</h3>
                   <p className="text-gray-700 mb-2">서비스 주문을 위해서는 회원가입이 필요합니다.</p>
                   <ul className="list-disc list-inside text-gray-600 space-y-1">
@@ -35,7 +35,7 @@ export default function HowToOrderPage() {
                   </ul>
                 </div>
 
-                <div className="border-l-4 border-[#0f3460] pl-4">
+                <div className="border-l-4 border-brand-primary pl-4">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">STEP 2. 원하는 서비스 찾기</h3>
                   <p className="text-gray-700 mb-2">여러 방법으로 필요한 서비스를 검색할 수 있습니다.</p>
                   <ul className="list-disc list-inside text-gray-600 space-y-1">
@@ -46,7 +46,7 @@ export default function HowToOrderPage() {
                   </ul>
                 </div>
 
-                <div className="border-l-4 border-[#0f3460] pl-4">
+                <div className="border-l-4 border-brand-primary pl-4">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">STEP 3. 서비스 상세 정보 확인</h3>
                   <p className="text-gray-700 mb-2">주문 전 반드시 확인해야 할 사항들:</p>
                   <ul className="list-disc list-inside text-gray-600 space-y-1">
@@ -58,7 +58,7 @@ export default function HowToOrderPage() {
                   </ul>
                 </div>
 
-                <div className="border-l-4 border-[#0f3460] pl-4">
+                <div className="border-l-4 border-brand-primary pl-4">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">STEP 4. 옵션 선택 및 주문서 작성</h3>
                   <p className="text-gray-700 mb-2">필요한 옵션을 선택하고 요구사항을 입력합니다.</p>
                   <ul className="list-disc list-inside text-gray-600 space-y-1">
@@ -69,7 +69,7 @@ export default function HowToOrderPage() {
                   </ul>
                 </div>
 
-                <div className="border-l-4 border-[#0f3460] pl-4">
+                <div className="border-l-4 border-brand-primary pl-4">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">STEP 5. 결제하기</h3>
                   <p className="text-gray-700 mb-2">안전한 결제 시스템으로 주문을 완료합니다.</p>
                   <ul className="list-disc list-inside text-gray-600 space-y-1">
@@ -80,7 +80,7 @@ export default function HowToOrderPage() {
                   </ul>
                 </div>
 
-                <div className="border-l-4 border-[#0f3460] pl-4">
+                <div className="border-l-4 border-brand-primary pl-4">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">STEP 6. 판매자와 소통</h3>
                   <p className="text-gray-700 mb-2">결제 완료 후 판매자와 메시지로 소통합니다.</p>
                   <ul className="list-disc list-inside text-gray-600 space-y-1">
@@ -90,7 +90,7 @@ export default function HowToOrderPage() {
                   </ul>
                 </div>
 
-                <div className="border-l-4 border-[#0f3460] pl-4">
+                <div className="border-l-4 border-brand-primary pl-4">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">STEP 7. 작업물 받기 및 확인</h3>
                   <p className="text-gray-700 mb-2">완성된 작업물을 받고 검수합니다.</p>
                   <ul className="list-disc list-inside text-gray-600 space-y-1">
@@ -101,7 +101,7 @@ export default function HowToOrderPage() {
                   </ul>
                 </div>
 
-                <div className="border-l-4 border-[#0f3460] pl-4">
+                <div className="border-l-4 border-brand-primary pl-4">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">STEP 8. 리뷰 작성</h3>
                   <p className="text-gray-700 mb-2">서비스 이용 후기를 남겨주세요.</p>
                   <ul className="list-disc list-inside text-gray-600 space-y-1">
@@ -133,7 +133,7 @@ export default function HowToOrderPage() {
               </p>
               <Link
                 href="/support"
-                className="inline-block px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors"
+                className="inline-block px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors"
               >
                 고객센터 바로가기
               </Link>

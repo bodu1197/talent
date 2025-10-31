@@ -79,7 +79,7 @@ export default function AdminDashboardPage() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Link href="/admin/users" className="bg-white rounded-lg border border-gray-200 p-6 hover:border-[#0f3460] transition-colors">
+        <Link href="/admin/users" className="bg-white rounded-lg border border-gray-200 p-6 hover:border-brand-primary transition-colors">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">전체 회원</p>
@@ -103,7 +103,7 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        <Link href="/admin/orders" className="bg-white rounded-lg border border-gray-200 p-6 hover:border-[#0f3460] transition-colors">
+        <Link href="/admin/orders" className="bg-white rounded-lg border border-gray-200 p-6 hover:border-brand-primary transition-colors">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">진행중 주문</p>
@@ -115,7 +115,7 @@ export default function AdminDashboardPage() {
           </div>
         </Link>
 
-        <Link href="/admin/reports" className="bg-white rounded-lg border border-gray-200 p-6 hover:border-[#0f3460] transition-colors">
+        <Link href="/admin/reports" className="bg-white rounded-lg border border-gray-200 p-6 hover:border-brand-primary transition-colors">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">대기중 신고</p>
@@ -149,7 +149,7 @@ export default function AdminDashboardPage() {
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-bold text-gray-900">최근 주문</h2>
-            <Link href="/admin/orders" className="text-sm text-[#0f3460] hover:underline">
+            <Link href="/admin/orders" className="text-sm text-brand-primary hover:underline">
               전체 보기 →
             </Link>
           </div>
@@ -159,7 +159,7 @@ export default function AdminDashboardPage() {
                 <Link
                   key={order.id}
                   href={`/admin/orders`}
-                  className="block p-3 border border-gray-200 rounded-lg hover:border-[#0f3460] transition-colors"
+                  className="block p-3 border border-gray-200 rounded-lg hover:border-brand-primary transition-colors"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-medium text-gray-900">
@@ -185,7 +185,7 @@ export default function AdminDashboardPage() {
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-bold text-gray-900">최근 가입 회원</h2>
-            <Link href="/admin/users" className="text-sm text-[#0f3460] hover:underline">
+            <Link href="/admin/users" className="text-sm text-brand-primary hover:underline">
               전체 보기 →
             </Link>
           </div>
@@ -195,7 +195,7 @@ export default function AdminDashboardPage() {
                 <Link
                   key={user.id}
                   href={`/admin/users`}
-                  className="block p-3 border border-gray-200 rounded-lg hover:border-[#0f3460] transition-colors"
+                  className="block p-3 border border-gray-200 rounded-lg hover:border-brand-primary transition-colors"
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-medium text-gray-900">{user.name}</span>

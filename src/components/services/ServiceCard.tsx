@@ -43,7 +43,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         <div className="p-4">
           {/* 판매자 정보 */}
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-8 h-8 rounded-full bg-[#0f3460] flex items-center justify-center text-white text-xs font-bold">
+            <div className="w-8 h-8 rounded-full bg-brand-primary flex items-center justify-center text-white text-xs font-bold">
               {service.seller?.business_name?.[0] || 'S'}
             </div>
             <span className="text-sm text-gray-600">{service.seller?.business_name}</span>
@@ -53,7 +53,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           </div>
 
           {/* 제목 */}
-          <h3 className="font-bold mb-2 line-clamp-2 group-hover:text-[#0f3460] transition-colors">
+          <h3 className="font-bold mb-2 line-clamp-2 group-hover:text-brand-primary transition-colors">
             {service.title}
           </h3>
 
@@ -61,7 +61,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           {service.ai_services && service.ai_services.length > 0 && (
             <div className="flex flex-wrap gap-1 mb-3">
               {service.ai_services.map(ai => (
-                <span key={ai.id} className="text-xs px-2 py-1 bg-blue-50 text-[#0f3460] rounded">
+                <span key={ai.id} className="text-xs px-2 py-1 bg-blue-50 text-brand-primary rounded">
                   {ai.ai_tool}
                 </span>
               ))}
@@ -77,7 +77,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             {service.is_express_available && (
               <>
                 <span>•</span>
-                <span className="text-[#0f3460] font-medium flex items-center gap-1">
+                <span className="text-brand-primary font-medium flex items-center gap-1">
                   <i className="fas fa-bolt"></i> 익스프레스
                 </span>
               </>

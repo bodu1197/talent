@@ -237,7 +237,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
               <div className="space-y-4">
                 {service.faqs.map((faq, index) => (
                   <details key={index} className="group">
-                    <summary className="flex items-center justify-between cursor-pointer py-3 hover:text-[#0f3460]">
+                    <summary className="flex items-center justify-between cursor-pointer py-3 hover:text-brand-primary">
                       <span className="font-medium">{faq.question}</span>
                       <i className="fas fa-chevron-down group-open:rotate-180 transition-transform"></i>
                     </summary>
@@ -307,7 +307,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   <div>
                     <div className="flex items-center gap-2">
                       <h3 className="font-bold">{service.seller.name}</h3>
-                      <span className="px-2 py-0.5 bg-[#0f3460] text-white text-xs rounded">
+                      <span className="px-2 py-0.5 bg-brand-primary text-white text-xs rounded">
                         {service.seller.level}
                       </span>
                     </div>
@@ -344,7 +344,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       key={pkg.name}
                       className={`flex-1 py-3 px-4 text-sm font-medium ${
                         pkg.recommended
-                          ? 'bg-[#0f3460] text-white'
+                          ? 'bg-brand-primary text-white'
                           : 'bg-gray-50 hover:bg-gray-100'
                       }`}
                     >
@@ -375,7 +375,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       ))}
                     </ul>
 
-                    <button className="w-full py-3 bg-[#0f3460] text-white rounded-lg font-medium hover:bg-[#1a4b7d] transition-colors">
+                    <button className="w-full py-3 bg-brand-primary text-white rounded-lg font-medium hover:bg-brand-light transition-colors">
                       구매하기
                     </button>
 
@@ -393,7 +393,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
               {/* 안전거래 배지 */}
               <div className="bg-blue-50 rounded-xl p-4 text-center">
-                <i className="fas fa-shield-alt text-2xl text-[#0f3460] mb-2"></i>
+                <i className="fas fa-shield-alt text-2xl text-brand-primary mb-2"></i>
                 <h4 className="font-bold mb-1">100% 안전거래</h4>
                 <p className="text-xs text-gray-600">
                   에스크로 결제 시스템으로<br/>

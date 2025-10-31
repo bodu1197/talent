@@ -73,7 +73,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   {/* 정렬 */}
                   <div className="flex items-center gap-2 flex-shrink-0">
                     <span className="font-medium text-sm">정렬:</span>
-                    <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent text-sm">
+                    <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm">
                       <option value="popular">인기순</option>
                       <option value="latest">최신순</option>
                       <option value="price_low">가격 낮은순</option>

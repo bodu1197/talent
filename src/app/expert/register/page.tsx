@@ -6,7 +6,7 @@ export default function ExpertRegisterPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="bg-[#0f3460] text-white">
+      <div className="bg-brand-primary text-white">
         <div className="container-1200 py-20">
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-block bg-yellow-400 text-gray-900 px-4 py-2 rounded-full text-sm font-bold mb-6">
@@ -40,7 +40,7 @@ export default function ExpertRegisterPage() {
 
           <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             <div className="bg-white border-2 border-gray-200 p-6 rounded-lg">
-              <div className="text-[#0f3460] font-bold text-lg mb-3 flex items-center gap-2">
+              <div className="text-brand-primary font-bold text-lg mb-3 flex items-center gap-2">
                 <i className="fas fa-money-bill-wave"></i> 수수료 스트레스
               </div>
               <div className="space-y-2 text-gray-700 text-sm">
@@ -51,7 +51,7 @@ export default function ExpertRegisterPage() {
             </div>
 
             <div className="bg-white border-2 border-gray-200 p-6 rounded-lg">
-              <div className="text-[#0f3460] font-bold text-lg mb-3 flex items-center gap-2">
+              <div className="text-brand-primary font-bold text-lg mb-3 flex items-center gap-2">
                 <i className="fas fa-chart-line"></i> 가격 부담의 악순환
               </div>
               <div className="space-y-2 text-gray-700 text-sm">
@@ -62,7 +62,7 @@ export default function ExpertRegisterPage() {
             </div>
 
             <div className="bg-white border-2 border-gray-200 p-6 rounded-lg">
-              <div className="text-[#0f3460] font-bold text-lg mb-3 flex items-center gap-2">
+              <div className="text-brand-primary font-bold text-lg mb-3 flex items-center gap-2">
                 <i className="fas fa-sad-tear"></i> 억울한 손실
               </div>
               <div className="space-y-2 text-gray-700 text-sm">
@@ -73,7 +73,7 @@ export default function ExpertRegisterPage() {
             </div>
 
             <div className="bg-white border-2 border-gray-200 p-6 rounded-lg">
-              <div className="text-[#0f3460] font-bold text-lg mb-3 flex items-center gap-2">
+              <div className="text-brand-primary font-bold text-lg mb-3 flex items-center gap-2">
                 <i className="fas fa-frown"></i> 가격 경쟁력 상실
               </div>
               <div className="space-y-2 text-gray-700 text-sm">
@@ -84,7 +84,7 @@ export default function ExpertRegisterPage() {
             </div>
           </div>
 
-          <div className="bg-[#0f3460] text-white p-8 rounded-lg mt-8 max-w-5xl mx-auto text-center">
+          <div className="bg-brand-primary text-white p-8 rounded-lg mt-8 max-w-5xl mx-auto text-center">
             <div className="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
               <i className="fas fa-sparkles"></i> 해결책은 간단합니다
             </div>
@@ -136,7 +136,7 @@ export default function ExpertRegisterPage() {
               </div>
             </div>
 
-            <div className="bg-[#0f3460] text-white p-8 rounded-lg">
+            <div className="bg-brand-primary text-white p-8 rounded-lg">
               <div className="text-yellow-400 font-bold text-sm mb-4 flex items-center gap-2">
                 <i className="fas fa-check-circle"></i> 우리 플랫폼 (수수료 0%)
               </div>
@@ -171,79 +171,79 @@ export default function ExpertRegisterPage() {
 
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-[#0f3460] rounded-lg flex items-center justify-center mb-4 text-white text-2xl">
+              <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white text-2xl">
                 <i className="fas fa-sack-dollar"></i>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">수수료 0원</h3>
               <p className="text-gray-600 text-sm leading-relaxed mb-3">
                 수수료 걱정 없이 합리적인 가격으로 서비스를 판매하세요.
               </p>
-              <div className="text-[#0f3460] font-bold text-sm">
+              <div className="text-brand-primary font-bold text-sm">
                 ✓ 가격 부담 없이 경쟁력 확보
               </div>
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-[#0f3460] rounded-lg flex items-center justify-center mb-4 text-white text-2xl">
+              <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white text-2xl">
                 <i className="fas fa-bolt"></i>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">빠른 정산</h3>
               <p className="text-gray-600 text-sm leading-relaxed mb-3">
                 작업 완료 후 즉시 출금 가능. 복잡한 절차 없이 당일 정산.
               </p>
-              <div className="text-[#0f3460] font-bold text-sm">
+              <div className="text-brand-primary font-bold text-sm">
                 ✓ 당일 출금 가능
               </div>
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-[#0f3460] rounded-lg flex items-center justify-center mb-4 text-white text-2xl">
+              <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white text-2xl">
                 <i className="fas fa-bullhorn"></i>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">적극적 마케팅</h3>
               <p className="text-gray-600 text-sm leading-relaxed mb-3">
                 SEO 최적화와 광고로 당신의 서비스를 활발히 홍보합니다.
               </p>
-              <div className="text-[#0f3460] font-bold text-sm">
+              <div className="text-brand-primary font-bold text-sm">
                 ✓ 무료 홍보 지원
               </div>
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-[#0f3460] rounded-lg flex items-center justify-center mb-4 text-white text-2xl">
+              <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white text-2xl">
                 <i className="fas fa-chart-line"></i>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">성장 지원</h3>
               <p className="text-gray-600 text-sm leading-relaxed mb-3">
                 판매 데이터 분석, 가격 전략 컨설팅까지 전문가의 성공을 돕습니다.
               </p>
-              <div className="text-[#0f3460] font-bold text-sm">
+              <div className="text-brand-primary font-bold text-sm">
                 ✓ 전담 매니저 배정
               </div>
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-[#0f3460] rounded-lg flex items-center justify-center mb-4 text-white text-2xl">
+              <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white text-2xl">
                 <i className="fas fa-clock"></i>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">3분 만에 시작</h3>
               <p className="text-gray-600 text-sm leading-relaxed mb-3">
                 복잡한 서류나 심사 없이 간단한 정보만으로 바로 시작.
               </p>
-              <div className="text-[#0f3460] font-bold text-sm">
+              <div className="text-brand-primary font-bold text-sm">
                 ✓ 즉시 승인
               </div>
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-[#0f3460] rounded-lg flex items-center justify-center mb-4 text-white text-2xl">
+              <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white text-2xl">
                 <i className="fas fa-check-circle"></i>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">안전한 거래</h3>
               <p className="text-gray-600 text-sm leading-relaxed mb-3">
                 에스크로 시스템으로 안전한 거래 보장. 분쟁 시 전문팀 중재.
               </p>
-              <div className="text-[#0f3460] font-bold text-sm">
+              <div className="text-brand-primary font-bold text-sm">
                 ✓ 100% 거래 보호
               </div>
             </div>
@@ -264,7 +264,7 @@ export default function ExpertRegisterPage() {
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <div className="bg-gray-50 p-6 rounded-lg">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white font-bold">
+                <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center text-white font-bold">
                   김
                 </div>
                 <div className="ml-3">
@@ -275,14 +275,14 @@ export default function ExpertRegisterPage() {
               <p className="text-gray-600 text-sm mb-3">
                 "수수료 때문에 가격을 10만원이나 더 받아야 했어요. 여기 옮기고 나서 가격을 3만원 낮췄는데도 제 수익은 더 높아졌어요! 주문은 3배로 늘었고요."
               </p>
-              <div className="bg-[#0f3460]/10 p-3 rounded text-sm text-[#0f3460] flex items-center gap-2">
+              <div className="bg-brand-primary/10 p-3 rounded text-sm text-brand-primary flex items-center gap-2">
                 <i className="fas fa-lightbulb"></i> 저렴한 가격으로 더 많이 벌어요
               </div>
             </div>
 
             <div className="bg-gray-50 p-6 rounded-lg">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white font-bold">
+                <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center text-white font-bold">
                   박
                 </div>
                 <div className="ml-3">
@@ -293,14 +293,14 @@ export default function ExpertRegisterPage() {
               <p className="text-gray-600 text-sm mb-3">
                 "매달 수수료 빠져나가는거 보면서 스트레스 받았어요. 여기는 수수료 걱정 없이 일할 수 있어서 정신 건강에 너무 좋아요. 일하는게 즐거워졌습니다!"
               </p>
-              <div className="bg-[#0f3460]/10 p-3 rounded text-sm text-[#0f3460] flex items-center gap-2">
+              <div className="bg-brand-primary/10 p-3 rounded text-sm text-brand-primary flex items-center gap-2">
                 <i className="fas fa-lightbulb"></i> 스트레스 없이 일에 집중해요
               </div>
             </div>
 
             <div className="bg-gray-50 p-6 rounded-lg">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white font-bold">
+                <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center text-white font-bold">
                   이
                 </div>
                 <div className="ml-3">
@@ -311,7 +311,7 @@ export default function ExpertRegisterPage() {
               <p className="text-gray-600 text-sm mb-3">
                 "다른 플랫폼에서는 수수료 포함해서 가격 책정하니까 경쟁자들보다 항상 비싸 보였어요. 여기서는 수수료가 없으니 가격 경쟁력이 생겼고, 주문이 밀려들어요!"
               </p>
-              <div className="bg-[#0f3460]/10 p-3 rounded text-sm text-[#0f3460] flex items-center gap-2">
+              <div className="bg-brand-primary/10 p-3 rounded text-sm text-brand-primary flex items-center gap-2">
                 <i className="fas fa-lightbulb"></i> 가격 경쟁력으로 시장 장악
               </div>
             </div>
@@ -320,7 +320,7 @@ export default function ExpertRegisterPage() {
       </div>
 
       {/* Stats */}
-      <div className="bg-[#0f3460] text-white py-16">
+      <div className="bg-brand-primary text-white py-16">
         <div className="container-1200">
           <div className="grid md:grid-cols-4 gap-8 text-center max-w-5xl mx-auto">
             <div>
@@ -355,7 +355,7 @@ export default function ExpertRegisterPage() {
 
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             <div className="text-center">
-              <div className="bg-[#0f3460] text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+              <div className="bg-brand-primary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
                 1
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">무료 회원가입</h3>
@@ -365,7 +365,7 @@ export default function ExpertRegisterPage() {
             </div>
 
             <div className="text-center">
-              <div className="bg-[#0f3460] text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+              <div className="bg-brand-primary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
                 2
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">서비스 등록</h3>
@@ -375,7 +375,7 @@ export default function ExpertRegisterPage() {
             </div>
 
             <div className="text-center">
-              <div className="bg-[#0f3460] text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+              <div className="bg-brand-primary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
                 3
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">수익 창출 시작</h3>

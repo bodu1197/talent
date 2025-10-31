@@ -32,7 +32,7 @@ export default function AIServicesPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* 히어로 섹션 */}
-      <section className="relative bg-[#0f3460] text-white py-20">
+      <section className="relative bg-brand-primary text-white py-20">
         <div className="container-1200">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-[40px] font-bold mb-6">
@@ -51,7 +51,7 @@ export default function AIServicesPage() {
                   e.preventDefault()
                   scrollToSection('categories')
                 }}
-                className="px-8 py-4 bg-white text-[#0f3460] rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+                className="px-8 py-4 bg-white text-brand-primary rounded-lg font-semibold hover:bg-blue-50 transition-colors"
               >
                 AI 서비스 둘러보기
               </Link>
@@ -61,7 +61,7 @@ export default function AIServicesPage() {
                   e.preventDefault()
                   scrollToSection('experts')
                 }}
-                className="px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-[#0f3460] transition-colors"
+                className="px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-brand-primary transition-colors"
               >
                 AI 전문가 만나기
               </Link>
@@ -78,8 +78,8 @@ export default function AIServicesPage() {
               onClick={() => scrollToSection('categories')}
               className={`pb-2 font-medium transition-colors ${
                 activeSection === 'categories'
-                  ? 'text-[#0f3460] border-b-2 border-[#0f3460]'
-                  : 'text-gray-600 hover:text-[#0f3460]'
+                  ? 'text-brand-primary border-b-2 border-brand-primary'
+                  : 'text-gray-600 hover:text-brand-primary'
               }`}
             >
               AI 카테고리
@@ -88,8 +88,8 @@ export default function AIServicesPage() {
               onClick={() => scrollToSection('cases')}
               className={`pb-2 font-medium transition-colors ${
                 activeSection === 'cases'
-                  ? 'text-[#0f3460] border-b-2 border-[#0f3460]'
-                  : 'text-gray-600 hover:text-[#0f3460]'
+                  ? 'text-brand-primary border-b-2 border-brand-primary'
+                  : 'text-gray-600 hover:text-brand-primary'
               }`}
             >
               AI 활용 사례
@@ -98,8 +98,8 @@ export default function AIServicesPage() {
               onClick={() => scrollToSection('experts')}
               className={`pb-2 font-medium transition-colors ${
                 activeSection === 'experts'
-                  ? 'text-[#0f3460] border-b-2 border-[#0f3460]'
-                  : 'text-gray-600 hover:text-[#0f3460]'
+                  ? 'text-brand-primary border-b-2 border-brand-primary'
+                  : 'text-gray-600 hover:text-brand-primary'
               }`}
             >
               인기 AI 전문가
@@ -121,14 +121,14 @@ export default function AIServicesPage() {
               <Link
                 key={category.id}
                 href={`/categories/${category.slug}`}
-                className="group bg-white rounded-xl p-6 border border-gray-200 hover:border-[#0f3460] hover:shadow-lg transition-all"
+                className="group bg-white rounded-xl p-6 border border-gray-200 hover:border-brand-primary hover:shadow-lg transition-all"
               >
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-[#0f3460] transition-colors">
-                    <i className="fas fa-robot text-[#0f3460] text-xl group-hover:text-white"></i>
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-brand-primary transition-colors">
+                    <i className="fas fa-robot text-brand-primary text-xl group-hover:text-white"></i>
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-lg mb-2 group-hover:text-[#0f3460]">
+                    <h3 className="font-semibold text-lg mb-2 group-hover:text-brand-primary">
                       {category.name}
                     </h3>
                     <p className="text-sm text-gray-600 mb-3">
@@ -155,7 +155,7 @@ export default function AIServicesPage() {
       </section>
 
       {/* 통계 섹션 */}
-      <section className="py-16 bg-[#0f3460] text-white">
+      <section className="py-16 bg-brand-primary text-white">
         <div className="container-1200">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">많은 분들이 이용한 AI 서비스</h2>
@@ -195,7 +195,7 @@ export default function AIServicesPage() {
                 <p className="text-gray-600 mb-4">
                   AI 모델로 예약 사이트 이미지를 하루 만에 제작, 촬영 비용 90% 절감
                 </p>
-                <Link href="/categories/ai-image-generation" className="text-[#0f3460] font-semibold hover:underline">
+                <Link href="/categories/ai-image-generation" className="text-brand-primary font-semibold hover:underline">
                   AI 이미지 생성 보기 →
                 </Link>
               </div>
@@ -210,7 +210,7 @@ export default function AIServicesPage() {
                 <p className="text-gray-600 mb-4">
                   AI 글쓰기로 블로그 상위 노출 달성, 업무 시간 70% 단축
                 </p>
-                <Link href="/categories/ai-writing" className="text-[#0f3460] font-semibold hover:underline">
+                <Link href="/categories/ai-writing" className="text-brand-primary font-semibold hover:underline">
                   AI 글쓰기 보기 →
                 </Link>
               </div>
@@ -225,7 +225,7 @@ export default function AIServicesPage() {
                 <p className="text-gray-600 mb-4">
                   AI 영상 생성으로 제품 소개 영상을 3일 만에 완성
                 </p>
-                <Link href="/categories/ai-video-generation" className="text-[#0f3460] font-semibold hover:underline">
+                <Link href="/categories/ai-video-generation" className="text-brand-primary font-semibold hover:underline">
                   AI 영상 생성 보기 →
                 </Link>
               </div>
@@ -244,7 +244,7 @@ export default function AIServicesPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="bg-white rounded-xl p-6 border border-gray-200 hover:border-[#0f3460] hover:shadow-lg transition-all">
+              <div key={i} className="bg-white rounded-xl p-6 border border-gray-200 hover:border-brand-primary hover:shadow-lg transition-all">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
                     AI
@@ -266,7 +266,7 @@ export default function AIServicesPage() {
                 <div className="text-sm text-gray-600 mb-4">
                   AI를 활용한 콘텐츠 제작 및 자동화 전문가입니다.
                 </div>
-                <Link href="/expert/ai-expert" className="block w-full text-center py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a5490] transition-colors">
+                <Link href="/expert/ai-expert" className="block w-full text-center py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors">
                   프로필 보기
                 </Link>
               </div>
@@ -285,40 +285,40 @@ export default function AIServicesPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl p-6 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-[#0f3460]/10 rounded-lg flex items-center justify-center mb-4">
-                <i className="fas fa-lightbulb text-[#0f3460] text-xl"></i>
+              <div className="w-12 h-12 bg-brand-primary/10 rounded-lg flex items-center justify-center mb-4">
+                <i className="fas fa-lightbulb text-brand-primary text-xl"></i>
               </div>
               <h3 className="font-bold text-lg mb-2">AI로 업무 자동화하기</h3>
               <p className="text-gray-600 text-sm mb-4">
                 반복적인 업무를 AI로 자동화하여 생산성을 높이는 방법
               </p>
-              <Link href="#" className="text-[#0f3460] text-sm font-semibold hover:underline">
+              <Link href="#" className="text-brand-primary text-sm font-semibold hover:underline">
                 자세히 보기 →
               </Link>
             </div>
 
             <div className="bg-white rounded-xl p-6 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-[#0f3460]/10 rounded-lg flex items-center justify-center mb-4">
-                <i className="fas fa-chart-line text-[#0f3460] text-xl"></i>
+              <div className="w-12 h-12 bg-brand-primary/10 rounded-lg flex items-center justify-center mb-4">
+                <i className="fas fa-chart-line text-brand-primary text-xl"></i>
               </div>
               <h3 className="font-bold text-lg mb-2">AI로 마케팅 효과 높이기</h3>
               <p className="text-gray-600 text-sm mb-4">
                 AI 기반 콘텐츠로 마케팅 ROI를 극대화하는 전략
               </p>
-              <Link href="#" className="text-[#0f3460] text-sm font-semibold hover:underline">
+              <Link href="#" className="text-brand-primary text-sm font-semibold hover:underline">
                 자세히 보기 →
               </Link>
             </div>
 
             <div className="bg-white rounded-xl p-6 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-[#0f3460]/10 rounded-lg flex items-center justify-center mb-4">
-                <i className="fas fa-magic text-[#0f3460] text-xl"></i>
+              <div className="w-12 h-12 bg-brand-primary/10 rounded-lg flex items-center justify-center mb-4">
+                <i className="fas fa-magic text-brand-primary text-xl"></i>
               </div>
               <h3 className="font-bold text-lg mb-2">AI 도구 완벽 활용법</h3>
               <p className="text-gray-600 text-sm mb-4">
                 ChatGPT, Midjourney 등 인기 AI 도구 사용 가이드
               </p>
-              <Link href="#" className="text-[#0f3460] text-sm font-semibold hover:underline">
+              <Link href="#" className="text-brand-primary text-sm font-semibold hover:underline">
                 자세히 보기 →
               </Link>
             </div>
@@ -327,7 +327,7 @@ export default function AIServicesPage() {
       </section>
 
       {/* CTA 섹션 */}
-      <section className="py-20 bg-[#0f3460] text-white">
+      <section className="py-20 bg-brand-primary text-white">
         <div className="container-1200 text-center">
           <h2 className="text-4xl font-bold mb-6">지금 바로 AI 서비스를 시작하세요</h2>
           <p className="text-xl mb-8 text-blue-100">
@@ -340,7 +340,7 @@ export default function AIServicesPage() {
                 placeholder="어떤 AI 서비스가 필요하신가요?"
                 className="flex-1 px-6 py-4 rounded-lg bg-white border-2 border-white text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-blue-300"
               />
-              <button className="px-8 py-4 bg-white text-[#0f3460] rounded-lg font-semibold hover:bg-blue-50 transition-colors border-2 border-white">
+              <button className="px-8 py-4 bg-white text-brand-primary rounded-lg font-semibold hover:bg-blue-50 transition-colors border-2 border-white">
                 검색
               </button>
             </div>

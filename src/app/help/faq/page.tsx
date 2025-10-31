@@ -80,7 +80,7 @@ export default function FAQPage() {
       <div className="max-w-4xl">
         {faqs.map((category, categoryIndex) => (
           <div key={categoryIndex} className="mb-12">
-            <h2 className="text-2xl font-semibold mb-6 text-[#0f3460]">{category.category}</h2>
+            <h2 className="text-2xl font-semibold mb-6 text-brand-primary">{category.category}</h2>
             <div className="space-y-4">
               {category.items.map((item, itemIndex) => {
                 const key = `${categoryIndex}-${itemIndex}`
@@ -93,7 +93,7 @@ export default function FAQPage() {
                       className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
                     >
                       <div className="flex items-start gap-3 text-left">
-                        <span className="text-[#0f3460] font-bold">Q.</span>
+                        <span className="text-brand-primary font-bold">Q.</span>
                         <span className="font-semibold">{item.question}</span>
                       </div>
                       <i className={`fas fa-chevron-down transition-transform ${isOpen ? 'rotate-180' : ''}`}></i>
@@ -115,10 +115,10 @@ export default function FAQPage() {
       </div>
 
       {/* 추가 문의 */}
-      <div className="mt-12 bg-[#0f3460] bg-opacity-5 rounded-lg p-8 text-center max-w-4xl">
+      <div className="mt-12 bg-brand-primary bg-opacity-5 rounded-lg p-8 text-center max-w-4xl">
         <h3 className="text-xl font-bold mb-4">원하는 답변을 찾지 못하셨나요?</h3>
         <p className="text-gray-600 mb-6">1:1 문의를 통해 직접 질문해주세요.</p>
-        <button className="px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-opacity-90 transition-colors">
+        <button className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-opacity-90 transition-colors">
           1:1 문의하기
         </button>
       </div>

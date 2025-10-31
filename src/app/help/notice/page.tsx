@@ -56,7 +56,7 @@ export default function NoticePage() {
                 <span
                   className={`px-3 py-1 rounded text-xs font-semibold ${
                     notice.category === '공지'
-                      ? 'bg-[#0f3460] text-white'
+                      ? 'bg-brand-primary text-white'
                       : notice.category === '이벤트'
                       ? 'bg-green-100 text-green-800'
                       : notice.category === '업데이트'
@@ -94,7 +94,7 @@ export default function NoticePage() {
           <button className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50">
             <i className="fas fa-chevron-left"></i>
           </button>
-          <button className="w-10 h-10 flex items-center justify-center bg-[#0f3460] text-white rounded">
+          <button className="w-10 h-10 flex items-center justify-center bg-brand-primary text-white rounded">
             1
           </button>
           <button className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50">

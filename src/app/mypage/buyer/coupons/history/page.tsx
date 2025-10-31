@@ -101,7 +101,7 @@ export default function CouponHistoryPage() {
             </Link>
             <Link
               href="/mypage/buyer/coupons/history"
-              className="flex-1 px-6 py-4 font-medium text-sm border-b-2 border-[#0f3460] text-[#0f3460] text-center"
+              className="flex-1 px-6 py-4 font-medium text-sm border-b-2 border-brand-primary text-brand-primary text-center"
             >
               사용 내역
             </Link>

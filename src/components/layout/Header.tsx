@@ -29,7 +29,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* 로고 */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-[#0f3460] rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
               <i className="fas fa-star text-white text-sm"></i>
             </div>
             <span className="text-xl font-bold">돌파구</span>
@@ -40,7 +40,7 @@ export default function Header() {
             {user ? (
               <>
                 <button
-                  className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-[#0f3460] transition-colors"
+                  className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-brand-primary transition-colors"
                   aria-label="알림"
                 >
                   <i className="fas fa-bell text-xl"></i>
@@ -65,7 +65,7 @@ export default function Header() {
             ) : !loading && (
               <Link
                 href="/auth/login"
-                className="px-3 py-1.5 bg-[#0f3460] text-white rounded-lg text-sm font-medium"
+                className="px-3 py-1.5 bg-brand-primary text-white rounded-lg text-sm font-medium"
               >
                 로그인
               </Link>
@@ -78,7 +78,7 @@ export default function Header() {
               // 로그인 상태
               <>
                 <button
-                  className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-[#0f3460] transition-colors"
+                  className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-brand-primary transition-colors"
                   aria-label="알림"
                 >
                   <i className="fas fa-bell text-lg"></i>
@@ -163,7 +163,7 @@ export default function Header() {
                 </Link>
                 <Link
                   href="/auth/register"
-                  className="px-3 py-1.5 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] hover:shadow-lg transition-all font-medium text-sm"
+                  className="px-3 py-1.5 bg-brand-primary text-white rounded-lg hover:bg-brand-light hover:shadow-lg transition-all font-medium text-sm"
                 >
                   회원가입
                 </Link>

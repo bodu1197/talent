@@ -56,7 +56,7 @@ export default function MenuPage() {
                   <p className="font-semibold text-lg">{user.email}</p>
                   <Link
                     href="/mypage/buyer/dashboard"
-                    className="text-sm text-[#0f3460] hover:underline"
+                    className="text-sm text-brand-primary hover:underline"
                   >
                     마이페이지로 이동
                   </Link>
@@ -77,13 +77,13 @@ export default function MenuPage() {
               <div className="flex gap-3 justify-center">
                 <Link
                   href="/auth/login"
-                  className="px-6 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors"
+                  className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors"
                 >
                   로그인
                 </Link>
                 <Link
                   href="/auth/register"
-                  className="px-6 py-2 border border-[#0f3460] text-[#0f3460] rounded-lg hover:bg-gray-50 transition-colors"
+                  className="px-6 py-2 border border-brand-primary text-brand-primary rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   회원가입
                 </Link>

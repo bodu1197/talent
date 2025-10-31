@@ -198,7 +198,7 @@ export default function Sidebar({ mode }: SidebarProps) {
             href="/mypage/settings"
             className="flex items-center gap-3 w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 card-interactive"
           >
-            <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white">
+            <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center text-white">
               <i className="fas fa-user text-xl"></i>
             </div>
             <div className="flex-1">
@@ -229,7 +229,7 @@ export default function Sidebar({ mode }: SidebarProps) {
               <div
                 className={`flex items-center justify-between px-4 py-2.5 rounded-lg cursor-pointer transition-colors ${
                   isActive(item.href)
-                    ? 'bg-[#0f3460] text-white'
+                    ? 'bg-brand-primary text-white'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 onClick={() => {
@@ -278,7 +278,7 @@ export default function Sidebar({ mode }: SidebarProps) {
                         href={child.href}
                         className={`flex items-center justify-between px-3 py-2 text-sm rounded transition-colors ${
                           isActive(child.href)
-                            ? 'text-[#0f3460] font-medium bg-blue-50'
+                            ? 'text-brand-primary font-medium bg-blue-50'
                             : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                         }`}
                       >

@@ -2,19 +2,11 @@
 @config "./tailwind.config.ts";
 
 /* Custom Components and Styles */
-@layer base {
-  :root {
-    --primary: 15 52 96;
-    --primary-dark: 10 35 64;
-    --secondary: 229 231 235;
-    --secondary-dark: 209 213 219;
-  }
-}
 
 @layer components {
   /* Button Styles */
   .btn-primary {
-    @apply bg-[#0f3460] text-white font-medium px-4 py-2 rounded-lg transition-colors hover:bg-[#0a2340];
+    @apply bg-brand-primary text-white font-medium px-4 py-2 rounded-lg transition-colors hover:bg-brand-dark;
   }
 
   .btn-secondary {
@@ -22,7 +14,7 @@
   }
 
   .btn-ai {
-    @apply bg-[#0f3460] text-white font-medium px-4 py-2 rounded-lg shadow-lg transition-all hover:shadow-xl hover:bg-[#0a2340];
+    @apply bg-brand-primary text-white font-medium px-4 py-2 rounded-lg shadow-lg transition-all hover:shadow-xl hover:bg-brand-dark;
   }
 
   /* Card Styles */
@@ -31,7 +23,7 @@
   }
 
   .card-ai {
-    @apply bg-blue-50 border border-[#0f3460]/20 rounded-xl shadow-sm overflow-hidden transition-all hover:shadow-lg;
+    @apply bg-blue-50 border border-brand-primary/20 rounded-xl shadow-sm overflow-hidden transition-all hover:shadow-lg;
   }
 
   /* Badge Styles */
@@ -40,7 +32,7 @@
   }
 
   .badge-ai {
-    @apply bg-blue-100 text-[#0f3460] border border-[#0f3460]/20;
+    @apply bg-blue-100 text-brand-primary border border-brand-primary/20;
   }
 
   .badge-featured {
@@ -49,25 +41,21 @@
 
   /* Form Elements */
   .input {
-    @apply w-full px-4 py-2 border border-gray-300 rounded-lg transition-all focus:outline-none focus:border-[#0f3460] focus:ring-2 focus:ring-[#0f3460]/10;
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg transition-all focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10;
   }
 
   .textarea {
-    @apply w-full px-4 py-2 border border-gray-300 rounded-lg resize-none transition-all focus:outline-none focus:border-[#0f3460] focus:ring-2 focus:ring-[#0f3460]/10;
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg resize-none transition-all focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10;
   }
 
   /* Text Styles */
   .gradient-text {
-    @apply text-[#0f3460] font-bold;
-  }
-
-  .gradient-text-ai {
-    @apply text-[#0f3460] font-bold;
+    @apply text-brand-primary font-bold;
   }
 
   /* Loading Spinner */
   .spinner {
-    @apply inline-block w-4 h-4 border-2 border-gray-200 border-t-[#0f3460] rounded-full animate-spin;
+    @apply inline-block w-4 h-4 border-2 border-gray-200 border-t-brand-primary rounded-full animate-spin;
   }
 
   .spinner-lg {
@@ -118,17 +106,46 @@
   }
 }
 
-@layer utilities {
-  /* Float Animation */
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
+@layer components {
+  /* Flex Utilities */
+  .flex-center {
+    @apply flex items-center justify-center;
   }
 
+  .flex-between {
+    @apply flex items-center justify-between;
+  }
+
+  .flex-gap-2 {
+    @apply flex items-center gap-2;
+  }
+
+  .flex-gap-4 {
+    @apply flex items-center gap-4;
+  }
+
+  /* Card Variations */
+  .card-white {
+    @apply bg-white rounded-xl shadow-sm p-6;
+  }
+
+  .card-hover {
+    @apply transition-all hover:shadow-lg;
+  }
+
+  /* Filter Button */
+  .btn-filter {
+    @apply px-3 py-1.5 text-sm bg-gray-100 rounded-full hover:bg-gray-200 transition-colors;
+  }
+
+  /* Badge Variations */
+  .badge-status {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+}
+
+@layer utilities {
+  /* Float Animation - using Tailwind animation */
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }

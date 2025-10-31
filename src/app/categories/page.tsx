@@ -58,7 +58,7 @@ export default function CategoriesPage() {
               className="bg-white rounded-xl p-4 lg:p-6 hover:shadow-lg transition-shadow duration-200 flex flex-col items-center text-center group"
             >
               <div className="w-12 h-12 lg:w-16 lg:h-16 bg-blue-50 rounded-full flex items-center justify-center mb-3 lg:mb-4 group-hover:bg-blue-100 transition-colors">
-                <i className={`${getIconClass(category.icon || '')} text-xl lg:text-2xl text-[#0f3460]`}></i>
+                <i className={`${getIconClass(category.icon || '')} text-xl lg:text-2xl text-brand-primary`}></i>
               </div>
               <h3 className="font-semibold text-sm lg:text-base text-gray-900 mb-1">
                 {category.name}

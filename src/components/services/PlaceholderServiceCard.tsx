@@ -44,7 +44,7 @@ export default function PlaceholderServiceCard({ categoryId }: PlaceholderServic
             </div>
             <span>여기가 당신의 자리입니다</span>
           </div>
-          <p className="font-bold text-[#0f3460] text-lg">이 자리를 선점하세요!</p>
+          <p className="font-bold text-brand-primary text-lg">이 자리를 선점하세요!</p>
         </div>
       </div>
     </Link>

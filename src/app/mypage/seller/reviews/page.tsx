@@ -168,7 +168,7 @@ export default function SellerReviewsPage() {
 
             <div className="flex flex-col items-center justify-center">
               <div className="text-center mb-4">
-                <div className="text-3xl font-bold text-[#0f3460] mb-1">{stats.replyRate.toFixed(0)}%</div>
+                <div className="text-3xl font-bold text-brand-primary mb-1">{stats.replyRate.toFixed(0)}%</div>
                 <div className="text-sm text-gray-600">답변율</div>
               </div>
               <div className="text-sm text-gray-500">
@@ -187,7 +187,7 @@ export default function SellerReviewsPage() {
                 onClick={() => setRatingFilter(tab.value)}
                 className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
                   ratingFilter === tab.value
-                    ? 'border-[#0f3460] text-[#0f3460]'
+                    ? 'border-brand-primary text-brand-primary'
                     : 'border-transparent text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -195,7 +195,7 @@ export default function SellerReviewsPage() {
                 {tab.count > 0 && (
                   <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
                     ratingFilter === tab.value
-                      ? 'bg-[#0f3460] text-white'
+                      ? 'bg-brand-primary text-white'
                       : 'bg-gray-200 text-gray-600'
                   }`}>
                     {tab.count}
@@ -218,7 +218,7 @@ export default function SellerReviewsPage() {
               <div key={review.id} className="bg-white border border-gray-200 rounded-lg p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white font-bold">
+                    <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center text-white font-bold">
                       {(review.buyer?.name || '구매자')[0]}
                     </div>
                     <div>
@@ -236,7 +236,7 @@ export default function SellerReviewsPage() {
                 <div className="mb-3">
                   <Link
                     href={`/services/${review.service_id}`}
-                    className="text-sm text-gray-600 hover:text-[#0f3460]"
+                    className="text-sm text-gray-600 hover:text-brand-primary"
                   >
                     {review.service?.title} • 주문번호 #{review.order?.order_number || review.order_id?.slice(0, 8)}
                   </Link>
@@ -247,7 +247,7 @@ export default function SellerReviewsPage() {
                 {review.seller_reply ? (
                   <div className="bg-gray-50 rounded-lg p-4 mb-3">
                     <div className="flex items-center gap-2 mb-2">
-                      <i className="fas fa-reply text-[#0f3460]"></i>
+                      <i className="fas fa-reply text-brand-primary"></i>
                       <span className="text-sm font-medium text-gray-900">판매자 답변</span>
                       {review.seller_reply_at && (
                         <span className="text-xs text-gray-500">• {new Date(review.seller_reply_at).toLocaleDateString('ko-KR')}</span>
@@ -261,7 +261,7 @@ export default function SellerReviewsPage() {
                       setSelectedReview(review)
                       setShowReplyModal(true)
                     }}
-                    className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors text-sm font-medium"
+                    className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium"
                   >
                     <i className="fas fa-reply mr-2"></i>
                     답변하기
@@ -302,7 +302,7 @@ export default function SellerReviewsPage() {
                     value={replyContent}
                     onChange={(e) => setReplyContent(e.target.value)}
                     placeholder="고객에게 감사의 말씀을 전하고, 긍정적인 답변을 작성해주세요"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   ></textarea>
                 </div>
 
@@ -334,7 +334,7 @@ export default function SellerReviewsPage() {
                   <button
                     onClick={handleReplySubmit}
                     disabled={submitting}
-                    className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium disabled:opacity-50"
+                    className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium disabled:opacity-50"
                   >
                     <i className="fas fa-check mr-2"></i>
                     {submitting ? '처리중...' : '답변 등록'}

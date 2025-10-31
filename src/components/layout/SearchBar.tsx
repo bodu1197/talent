@@ -30,11 +30,11 @@ export default function SearchBar({ id = 'search' }: SearchBarProps) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="어떤 재능이 필요하신가요?"
-              className="w-full px-6 py-3 pr-12 border-2 border-gray-300 rounded-full focus:outline-none focus:border-[#0f3460] transition-colors text-gray-900"
+              className="w-full px-6 py-3 pr-12 border-2 border-gray-300 rounded-full focus:outline-none focus:border-brand-primary transition-colors text-gray-900"
             />
             <button
               type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#0f3460] text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-[#1a4b7d] transition-colors"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-brand-primary text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-brand-light transition-colors"
               aria-label="검색"
             >
               <i className="fas fa-search"></i>
@@ -44,7 +44,7 @@ export default function SearchBar({ id = 'search' }: SearchBarProps) {
 
         {/* 인기 카테고리 */}
         <div className="flex flex-wrap gap-2">
-          <Link href="/categories/ai-services" className="px-3 py-1.5 text-sm bg-blue-50 text-[#0f3460] rounded-full font-medium hover:bg-blue-100 transition-colors flex items-center gap-2">
+          <Link href="/categories/ai-services" className="px-3 py-1.5 text-sm bg-blue-50 text-brand-primary rounded-full font-medium hover:bg-blue-100 transition-colors flex items-center gap-2">
             <i className="fas fa-robot text-sm"></i> <span>AI</span>
           </Link>
           <Link href="/categories/it-programming" className="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors">

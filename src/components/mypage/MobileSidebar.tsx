@@ -170,7 +170,7 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
         }`}
       >
         {/* 헤더 */}
-        <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-[#0f3460] text-white">
+        <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-brand-primary text-white">
           <div>
             <div className="font-bold text-lg">{getModeLabel()}</div>
             <div className="text-sm opacity-90">메뉴</div>
@@ -196,7 +196,7 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
                 onClick={() => setIsOpen(false)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all mb-2 ${
                   isActive
-                    ? 'bg-[#0f3460] text-white shadow-md'
+                    ? 'bg-brand-primary text-white shadow-md'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
               >
@@ -217,7 +217,7 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
             onClick={() => setIsOpen(false)}
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all mb-2 ${
               pathname.startsWith('/mypage/messages')
-                ? 'bg-[#0f3460] text-white'
+                ? 'bg-brand-primary text-white'
                 : 'text-gray-700 hover:bg-gray-100'
             }`}
           >
@@ -230,7 +230,7 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
             onClick={() => setIsOpen(false)}
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all mb-2 ${
               pathname === '/mypage/settings'
-                ? 'bg-[#0f3460] text-white'
+                ? 'bg-brand-primary text-white'
                 : 'text-gray-700 hover:bg-gray-100'
             }`}
           >

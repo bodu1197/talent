@@ -23,7 +23,7 @@ export default function SettingsPage() {
             <button
               onClick={() => setActiveTab('profile')}
               className={`w-full px-4 py-2 rounded-lg text-left transition-colors ${
-                activeTab === 'profile' ? 'bg-[#0f3460] text-white' : 'text-gray-700 hover:bg-gray-100'
+                activeTab === 'profile' ? 'bg-brand-primary text-white' : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
               <i className="fas fa-user mr-2"></i>
@@ -32,7 +32,7 @@ export default function SettingsPage() {
             <button
               onClick={() => setActiveTab('account')}
               className={`w-full px-4 py-2 rounded-lg text-left transition-colors mt-2 ${
-                activeTab === 'account' ? 'bg-[#0f3460] text-white' : 'text-gray-700 hover:bg-gray-100'
+                activeTab === 'account' ? 'bg-brand-primary text-white' : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
               <i className="fas fa-key mr-2"></i>
@@ -41,7 +41,7 @@ export default function SettingsPage() {
             <button
               onClick={() => setActiveTab('notifications')}
               className={`w-full px-4 py-2 rounded-lg text-left transition-colors mt-2 ${
-                activeTab === 'notifications' ? 'bg-[#0f3460] text-white' : 'text-gray-700 hover:bg-gray-100'
+                activeTab === 'notifications' ? 'bg-brand-primary text-white' : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
               <i className="fas fa-bell mr-2"></i>
@@ -58,7 +58,7 @@ export default function SettingsPage() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">프로필 이미지</label>
                     <div className="flex items-center gap-4">
-                      <div className="w-20 h-20 bg-[#0f3460] rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                      <div className="w-20 h-20 bg-brand-primary rounded-full flex items-center justify-center text-white text-2xl font-bold">
                         {profile?.name?.[0] || 'U'}
                       </div>
                       <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm">
@@ -72,7 +72,7 @@ export default function SettingsPage() {
                     <input
                       type="text"
                       defaultValue={profile?.name || ''}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     />
                   </div>
 
@@ -90,12 +90,12 @@ export default function SettingsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">자기소개</label>
                     <textarea
                       rows={4}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                       placeholder="자기소개를 입력하세요"
                     ></textarea>
                   </div>
 
-                  <button className="px-6 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium">
+                  <button className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium">
                     저장
                   </button>
                 </div>
@@ -110,7 +110,7 @@ export default function SettingsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">현재 비밀번호</label>
                     <input
                       type="password"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     />
                   </div>
 
@@ -118,7 +118,7 @@ export default function SettingsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">새 비밀번호</label>
                     <input
                       type="password"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     />
                   </div>
 
@@ -126,11 +126,11 @@ export default function SettingsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">비밀번호 확인</label>
                     <input
                       type="password"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     />
                   </div>
 
-                  <button className="px-6 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium">
+                  <button className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium">
                     비밀번호 변경
                   </button>
                 </div>
@@ -146,7 +146,7 @@ export default function SettingsPage() {
                       <div className="font-medium text-gray-900">주문 알림</div>
                       <div className="text-sm text-gray-600">새 주문이 들어오면 알림을 받습니다</div>
                     </div>
-                    <input type="checkbox" className="w-5 h-5 text-[#0f3460]" defaultChecked />
+                    <input type="checkbox" className="w-5 h-5 text-brand-primary" defaultChecked />
                   </label>
 
                   <label className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
@@ -154,7 +154,7 @@ export default function SettingsPage() {
                       <div className="font-medium text-gray-900">메시지 알림</div>
                       <div className="text-sm text-gray-600">새 메시지가 오면 알림을 받습니다</div>
                     </div>
-                    <input type="checkbox" className="w-5 h-5 text-[#0f3460]" defaultChecked />
+                    <input type="checkbox" className="w-5 h-5 text-brand-primary" defaultChecked />
                   </label>
 
                   <label className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
@@ -162,10 +162,10 @@ export default function SettingsPage() {
                       <div className="font-medium text-gray-900">리뷰 알림</div>
                       <div className="text-sm text-gray-600">새 리뷰가 등록되면 알림을 받습니다</div>
                     </div>
-                    <input type="checkbox" className="w-5 h-5 text-[#0f3460]" defaultChecked />
+                    <input type="checkbox" className="w-5 h-5 text-brand-primary" defaultChecked />
                   </label>
 
-                  <button className="px-6 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors font-medium">
+                  <button className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium">
                     저장
                   </button>
                 </div>

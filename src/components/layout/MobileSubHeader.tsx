@@ -14,7 +14,7 @@ export default function MobileSubHeader({ title }: MobileSubHeaderProps) {
       <div className="h-16 flex items-center px-4">
         <button
           onClick={() => router.back()}
-          className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-[#0f3460] transition-colors"
+          className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-brand-primary transition-colors"
           aria-label="뒤로가기"
         >
           <i className="fas fa-arrow-left text-xl"></i>

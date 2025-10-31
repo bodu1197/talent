@@ -229,7 +229,7 @@ export default function SellerDashboardPage() {
             </h2>
             <Link
               href="/mypage/seller/orders"
-              className="text-sm text-[#0f3460] hover:underline flex items-center gap-1"
+              className="text-sm text-brand-primary hover:underline flex items-center gap-1"
             >
               전체 보기 <i className="fas fa-arrow-right text-xs"></i>
             </Link>
@@ -240,7 +240,7 @@ export default function SellerDashboardPage() {
               recentOrders.map((order) => (
                 <div
                   key={order.id}
-                  className="border border-gray-200 rounded-lg p-4 hover:border-[#0f3460] transition-colors card-interactive"
+                  className="border border-gray-200 rounded-lg p-4 hover:border-brand-primary transition-colors card-interactive"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div>
@@ -264,7 +264,7 @@ export default function SellerDashboardPage() {
                   <div className="flex items-center gap-2">
                     <Link
                       href={`/mypage/seller/orders/${order.id}`}
-                      className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4b7d] transition-colors text-sm font-medium click-pop btn-ripple"
+                      className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium click-pop btn-ripple"
                     >
                       {order.status === 'paid' ? '주문 확인' : '작업 상태 업데이트'}
                     </Link>

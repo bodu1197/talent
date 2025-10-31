@@ -26,7 +26,7 @@ export default function AITalentShowcase() {
             <h2 className="text-mobile-lg lg:text-xl font-bold mb-2">AI 재능 쇼케이스</h2>
             <p className="text-mobile-md text-gray-600">AI 전문가들의 인기 서비스</p>
           </div>
-          <button className="hidden md:block px-4 py-2 border border-[#0f3460] text-[#0f3460] rounded-lg hover:bg-gray-50 transition-colors text-mobile-md lg:text-base">
+          <button className="hidden md:block px-4 py-2 border border-brand-primary text-brand-primary rounded-lg hover:bg-gray-50 transition-colors text-mobile-md lg:text-base">
             전체보기
           </button>
         </div>
@@ -46,7 +46,7 @@ export default function AITalentShowcase() {
                   </span>
                 </div>
                 <div className="absolute top-3 left-3">
-                  <span className="px-3 py-1 bg-[#0f3460] text-white text-mobile-sm font-medium rounded-full">
+                  <span className="px-3 py-1 bg-brand-primary text-white text-mobile-sm font-medium rounded-full">
                     {item.category}
                   </span>
                 </div>
@@ -54,7 +54,7 @@ export default function AITalentShowcase() {
 
               {/* 정보 */}
               <div className="p-4">
-                <h3 className="font-bold text-mobile-md lg:text-lg mb-2 line-clamp-1 group-hover:text-[#0f3460] transition-colors">
+                <h3 className="font-bold text-mobile-md lg:text-lg mb-2 line-clamp-1 group-hover:text-brand-primary transition-colors">
                   {item.title}
                 </h3>
 
@@ -112,7 +112,7 @@ export default function AITalentShowcase() {
                     </div>
                     <span>여기가 당신의 자리입니다</span>
                   </div>
-                  <p className="font-bold text-[#0f3460] text-mobile-md lg:text-lg">이 자리를 선점하세요!</p>
+                  <p className="font-bold text-brand-primary text-mobile-md lg:text-lg">이 자리를 선점하세요!</p>
                 </div>
               </div>
             </Link>

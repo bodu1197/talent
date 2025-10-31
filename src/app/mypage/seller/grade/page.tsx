@@ -83,7 +83,7 @@ export default function SellerGradePage() {
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
-                    className="bg-[#0f3460] h-2 rounded-full"
+                    className="bg-brand-primary h-2 rounded-full"
                     style={{ width: `${(req.current / req.required) * 100}%` }}
                   ></div>
                 </div>

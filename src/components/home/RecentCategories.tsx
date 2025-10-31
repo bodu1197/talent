@@ -66,7 +66,7 @@ export default function RecentCategories() {
               <Link
                 key={category.categoryId}
                 href={`/categories/${category.categorySlug}`}
-                className="px-4 py-2 bg-gray-100 text-gray-800 rounded-full text-mobile-md font-medium hover:bg-[#0f3460] hover:text-white transition-colors whitespace-nowrap"
+                className="px-4 py-2 bg-gray-100 text-gray-800 rounded-full text-mobile-md font-medium hover:bg-brand-primary hover:text-white transition-colors whitespace-nowrap"
               >
                 {category.categoryName}
               </Link>
@@ -80,7 +80,7 @@ export default function RecentCategories() {
             <Link
               key={category.categoryId}
               href={`/categories/${category.categorySlug}`}
-              className="px-5 py-2.5 bg-gray-100 text-gray-800 rounded-full text-base font-medium hover:bg-[#0f3460] hover:text-white transition-colors"
+              className="px-5 py-2.5 bg-gray-100 text-gray-800 rounded-full text-base font-medium hover:bg-brand-primary hover:text-white transition-colors"
             >
               {category.categoryName}
             </Link>
