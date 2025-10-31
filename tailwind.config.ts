@@ -28,6 +28,14 @@ const config: Config = {
           dark: '#0a2340',
         },
       },
+      fontSize: {
+        'mobile-sm': ['0.875rem', { lineHeight: '1.25rem' }],
+        'mobile-md': ['1rem', { lineHeight: '1.5rem' }],
+        'mobile-lg': ['1.125rem', { lineHeight: '1.75rem' }],
+      },
+      maxWidth: {
+        '1200': '75rem',
+      },
       fontFamily: {
         sans: ['Noto Sans KR', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', 'sans-serif'],
         noto: ['Noto Sans KR', 'sans-serif'],
