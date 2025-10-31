@@ -41,8 +41,8 @@ export async function middleware(request: NextRequest) {
   )
 
   // 세션 새로고침 - 세션이 만료되었는지 확인
-  const { 
-    data: { user }, 
+  const {
+    data: { user },
   } = await supabase.auth.getUser()
 
   // 보호된 경로 설정
