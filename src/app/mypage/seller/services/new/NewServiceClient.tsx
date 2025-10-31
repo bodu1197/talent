@@ -193,19 +193,9 @@ export default function NewServiceClient({ sellerId }: Props) {
         return
       }
 
-      // 2. Get seller_id
-      const { data: seller, error: sellerError } = await supabase
-        .from('sellers')
-        .select('id')
-        .eq('user_id', user.id)
-        .single()
+      console.log('Using seller_id from props:', sellerId)
 
-      if (sellerError || !seller) {
-        alert('판매자 정보를 찾을 수 없습니다.')
-        return
-      }
-
-      // 3. Upload thumbnail
+      // 2. Upload thumbnail
       const fileExt = thumbnailFile.name.split('.').pop()
       const fileName = `${user.id}-${Date.now()}.${fileExt}`
       const filePath = `service-thumbnails/${fileName}`
@@ -220,23 +210,23 @@ export default function NewServiceClient({ sellerId }: Props) {
         return
       }
 
-      // 4. Get thumbnail public URL
+      // 3. Get thumbnail public URL
       const { data: { publicUrl } } = supabase.storage
         .from('services')
         .getPublicUrl(filePath)
 
-      // 5. Create slug from title
+      // 4. Create slug from title
       const slug = formData.title
         .toLowerCase()
         .replace(/[^a-z0-9가-힣]/g, '-')
         .replace(/-+/g, '-')
         .substring(0, 100)
 
-      // 6. Insert service
+      // 5. Insert service
       const { data: service, error: serviceError } = await supabase
         .from('services')
         .insert({
-          seller_id: seller.id,
+          seller_id: sellerId,
           title: formData.title,
           slug: `${slug}-${Date.now()}`,
           description: formData.description,
@@ -255,7 +245,7 @@ export default function NewServiceClient({ sellerId }: Props) {
         return
       }
 
-      // 7. Insert service category
+      // 6. Insert service category
       const { error: categoryError } = await supabase
         .from('service_categories')
         .insert({
@@ -268,7 +258,7 @@ export default function NewServiceClient({ sellerId }: Props) {
         console.error('Category insert error:', categoryError)
       }
 
-      // 8. Insert service packages
+      // 7. Insert service packages
       const packages = []
       for (const [type, pkg] of Object.entries(formData.packages)) {
         if (pkg.price && pkg.deliveryDays) {
