@@ -18,16 +18,27 @@ export default function SellerDashboardPage() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!authLoading && user) {
-      loadDashboardData()
-    } else if (!authLoading && !user) {
+    console.log('[Seller Dashboard] useEffect triggered - authLoading:', authLoading, 'user:', user?.id)
+
+    if (authLoading) {
+      console.log('[Seller Dashboard] Auth still loading...')
+      return
+    }
+
+    if (!user) {
+      console.log('[Seller Dashboard] No user found')
       setLoading(false)
       setError('로그인이 필요합니다')
+      return
     }
-  }, [user?.id, authLoading])
+
+    console.log('[Seller Dashboard] Loading dashboard data...')
+    loadDashboardData()
+  }, [authLoading, user?.id])
 
   async function loadDashboardData() {
     try {
+      console.log('[Seller Dashboard] loadDashboardData called')
       setLoading(true)
       setError(null)
 
@@ -42,24 +53,35 @@ export default function SellerDashboardPage() {
         .single()
 
       if (!seller) {
+        console.error('[Seller Dashboard] No seller found')
         setError('판매자 정보를 불러오는데 실패했습니다')
         setLoading(false)
         return
       }
+
+      console.log('[Seller Dashboard] Loading stats for seller:', seller.id)
 
       const [statsData, ordersData] = await Promise.all([
         getSellerDashboardStats(seller.id),
         getSellerRecentOrders(seller.id, 5)
       ])
 
+      console.log('[Seller Dashboard] Data loaded successfully')
+
       setStats(statsData)
       setRecentOrders(ordersData)
     } catch (err: any) {
-      console.error('대시보드 데이터 로드 실패:', err)
+      console.error('[Seller Dashboard] 대시보드 데이터 로드 실패:', err)
       setError(err.message || '대시보드 데이터를 불러오는데 실패했습니다')
     } finally {
       setLoading(false)
     }
+  }
+
+  function retryLoad() {
+    console.log('[Seller Dashboard] Retry requested')
+    setError(null)
+    loadDashboardData()
   }
 
   if (loading) {
@@ -80,7 +102,7 @@ export default function SellerDashboardPage() {
         <MobileSidebar mode="seller" />
         <Sidebar mode="seller" />
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-          <ErrorState message={error} retry={loadDashboardData} />
+          <ErrorState message={error} retry={retryLoad} />
         </main>
       </>
     )
