@@ -47,7 +47,18 @@ export async function middleware(request: NextRequest) {
   // 세션 새로고침 - 세션이 만료되었는지 확인
   const {
     data: { user },
+    error: authError,
   } = await supabase.auth.getUser()
+
+  // 디버깅: 쿠키와 인증 상태 확인
+  if (request.nextUrl.pathname.startsWith('/mypage')) {
+    const allCookies = request.cookies.getAll()
+    console.log('[Middleware] Path:', request.nextUrl.pathname)
+    console.log('[Middleware] Cookies count:', allCookies.length)
+    console.log('[Middleware] Auth cookies:', allCookies.filter(c => c.name.includes('sb-')).map(c => c.name))
+    console.log('[Middleware] Has user:', !!user, 'User ID:', user?.id)
+    console.log('[Middleware] Auth error:', authError)
+  }
 
   // 보호된 경로 설정
   const protectedPaths = ['/mypage', '/dashboard', '/profile/edit', '/messages', '/orders']
