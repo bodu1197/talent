@@ -20,5 +20,5 @@ export default async function WithdrawPage() {
     redirect('/mypage/seller/register')
   }
 
-  return <WithdrawClient sellerId={seller.id} />
+  return <WithdrawClient />
 }

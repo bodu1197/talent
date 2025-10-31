@@ -23,5 +23,5 @@ export default async function WithdrawHistoryPage() {
 
   const withdrawHistory = await getWithdrawalHistory(seller.id, 20)
 
-  return <WithdrawHistoryClient initialHistory={withdrawHistory} />
+  return <WithdrawHistoryClient history={withdrawHistory} />
 }

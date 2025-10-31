@@ -26,5 +26,5 @@ export default async function SellerEarningsPage() {
     getEarningsTransactions(seller.id, 10)
   ])
 
-  return <SellerEarningsClient initialEarnings={earnings} initialTransactions={transactions} sellerId={seller.id} />
+  return <SellerEarningsClient earnings={earnings} transactions={transactions} />
 }
