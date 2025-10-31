@@ -20,16 +20,27 @@ export default function BuyerDashboardPage() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!authLoading && user) {
-      loadDashboardData()
-    } else if (!authLoading && !user) {
+    console.log('[Dashboard] useEffect triggered - authLoading:', authLoading, 'user:', user?.id)
+
+    if (authLoading) {
+      console.log('[Dashboard] Auth still loading...')
+      return
+    }
+
+    if (!user) {
+      console.log('[Dashboard] No user found')
       setLoading(false)
       setError('로그인이 필요합니다')
+      return
     }
-  }, [user?.id, authLoading])
+
+    console.log('[Dashboard] Loading dashboard data...')
+    loadDashboardData()
+  }, [authLoading, user?.id])
 
   async function loadDashboardData() {
     try {
+      console.log('[Dashboard] loadDashboardData called')
       setLoading(true)
       setError(null)
 
@@ -100,6 +111,12 @@ export default function BuyerDashboardPage() {
     }
   }
 
+  function retryLoad() {
+    console.log('[Dashboard] Retry requested')
+    setError(null)
+    loadDashboardData()
+  }
+
   if (loading) {
     return (
       <>
@@ -118,7 +135,7 @@ export default function BuyerDashboardPage() {
         <MobileSidebar mode="buyer" />
         <Sidebar mode="buyer" />
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-          <ErrorState message={error} retry={loadDashboardData} />
+          <ErrorState message={error} retry={retryLoad} />
         </main>
       </>
     )
