@@ -193,8 +193,6 @@ export default function NewServiceClient({ sellerId }: Props) {
         return
       }
 
-      console.log('Using seller_id from props:', sellerId)
-
       // 2. Upload thumbnail
       const fileExt = thumbnailFile.name.split('.').pop()
       const fileName = `${user.id}-${Date.now()}.${fileExt}`
