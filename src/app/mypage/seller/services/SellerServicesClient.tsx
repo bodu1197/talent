@@ -122,39 +122,61 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
         </div>
 
         {filteredServices.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="space-y-4">
             {filteredServices.map((service) => (
               <div key={service.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-[#0f3460] transition-colors">
-                <div className="aspect-video bg-gray-100 flex items-center justify-center">
-                  {service.thumbnail_url ? (
-                    <img src={service.thumbnail_url} alt={service.title} className="w-full h-full object-cover" />
-                  ) : (
-                    <i className="fas fa-image text-gray-400 text-4xl"></i>
-                  )}
-                </div>
-                <div className="p-4">
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="text-lg font-bold text-gray-900 flex-1">{service.title}</h3>
-                    {getStatusBadge(service.status)}
+                <div className="flex">
+                  {/* 왼쪽 썸네일 */}
+                  <div className="w-48 h-32 bg-gray-100 flex items-center justify-center flex-shrink-0">
+                    {service.thumbnail_url ? (
+                      <img src={service.thumbnail_url} alt={service.title} className="w-full h-full object-cover" />
+                    ) : (
+                      <i className="fas fa-image text-gray-400 text-3xl"></i>
+                    )}
                   </div>
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">{service.description}</p>
-                  <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
-                    <span>{service.base_price?.toLocaleString()}원~</span>
-                    <span><i className="fas fa-eye mr-1"></i>{service.view_count || 0}</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <Link
-                      href={`/mypage/seller/services/${service.id}/edit`}
-                      className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-center"
-                    >
-                      수정
-                    </Link>
-                    <Link
-                      href={`/mypage/seller/services/statistics?id=${service.id}`}
-                      className="flex-1 px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium text-center"
-                    >
-                      통계
-                    </Link>
+
+                  {/* 오른쪽 내용 */}
+                  <div className="flex-1 p-4 flex flex-col">
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="text-lg font-bold text-gray-900 flex-1">{service.title}</h3>
+                      {getStatusBadge(service.status)}
+                    </div>
+
+                    <p className="text-sm text-gray-600 mb-3 line-clamp-2 flex-1">{service.description}</p>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4 text-sm text-gray-600">
+                        <span className="font-medium text-gray-900">{service.price?.toLocaleString()}원~</span>
+                        <span><i className="fas fa-eye mr-1"></i>{service.view_count || 0}</span>
+                        <span><i className="fas fa-heart mr-1"></i>{service.favorite_count || 0}</span>
+                        <span><i className="fas fa-shopping-cart mr-1"></i>{service.order_count || 0}</span>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Link
+                          href={`/mypage/seller/services/${service.id}/edit`}
+                          className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                        >
+                          <i className="fas fa-edit mr-1"></i>
+                          수정
+                        </Link>
+                        <Link
+                          href={`/services/${service.id}`}
+                          target="_blank"
+                          className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                        >
+                          <i className="fas fa-eye mr-1"></i>
+                          보기
+                        </Link>
+                        <Link
+                          href={`/mypage/seller/services/statistics?id=${service.id}`}
+                          className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium"
+                        >
+                          <i className="fas fa-chart-bar mr-1"></i>
+                          통계
+                        </Link>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
