@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { getSellerServices, getSellerServicesCount } from '@/lib/supabase/queries/services'
 import SellerServicesClient from './SellerServicesClient'
 
 type ServiceStatus = 'all' | 'active' | 'inactive' | 'pending'
@@ -35,24 +34,38 @@ export default async function SellerServicesPage({
 
     const statusFilter = (searchParams.status as ServiceStatus) || 'all'
 
-    const [services, activeCount, inactiveCount, pendingCount] = await Promise.all([
-      getSellerServices(seller.id, statusFilter === 'all' ? undefined : statusFilter).catch(err => {
-        console.error('서비스 목록 조회 오류:', err)
-        console.error('오류 상세:', JSON.stringify(err, null, 2))
-        throw err
-      }),
-      getSellerServicesCount(seller.id, 'active').catch(err => {
-        console.error('Active count 오류:', err)
-        return 0
-      }),
-      getSellerServicesCount(seller.id, 'inactive').catch(err => {
-        console.error('Inactive count 오류:', err)
-        return 0
-      }),
-      getSellerServicesCount(seller.id, 'pending').catch(err => {
-        console.error('Pending count 오류:', err)
-        return 0
-      })
+    // 서버 컴포넌트에서 직접 조회
+    let servicesQuery = supabase
+      .from('services')
+      .select(`
+        *,
+        service_categories(
+          category:categories(id, name)
+        )
+      `)
+      .eq('seller_id', seller.id)
+      .order('created_at', { ascending: false })
+
+    if (statusFilter && statusFilter !== 'all') {
+      servicesQuery = servicesQuery.eq('status', statusFilter)
+    }
+
+    const { data: services, error: servicesError } = await servicesQuery
+
+    if (servicesError) {
+      console.error('서비스 목록 조회 오류:', servicesError)
+      throw servicesError
+    }
+
+    // Count 조회
+    const [
+      { count: activeCount },
+      { count: inactiveCount },
+      { count: pendingCount }
+    ] = await Promise.all([
+      supabase.from('services').select('*', { count: 'exact', head: true }).eq('seller_id', seller.id).eq('status', 'active'),
+      supabase.from('services').select('*', { count: 'exact', head: true }).eq('seller_id', seller.id).eq('status', 'inactive'),
+      supabase.from('services').select('*', { count: 'exact', head: true }).eq('seller_id', seller.id).eq('status', 'pending')
     ])
 
     const statusCounts = {
