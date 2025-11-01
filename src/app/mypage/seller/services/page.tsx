@@ -30,10 +30,10 @@ export default async function SellerServicesPage({
   const statusFilter = (searchParams.status as ServiceStatus) || 'all'
 
   const [services, activeCount, inactiveCount, pendingCount] = await Promise.all([
-    getSellerServices(user.id, statusFilter === 'all' ? undefined : statusFilter),
-    getSellerServicesCount(user.id, 'active'),
-    getSellerServicesCount(user.id, 'inactive'),
-    getSellerServicesCount(user.id, 'pending')
+    getSellerServices(seller.id, statusFilter === 'all' ? undefined : statusFilter),
+    getSellerServicesCount(seller.id, 'active'),
+    getSellerServicesCount(seller.id, 'inactive'),
+    getSellerServicesCount(seller.id, 'pending')
   ])
 
   const statusCounts = {
