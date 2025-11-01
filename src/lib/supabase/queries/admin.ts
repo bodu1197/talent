@@ -371,3 +371,109 @@ export async function getAdminReviews(filters?: {
   if (error) throw error
   return data
 }
+
+// 서비스 수정 요청 조회
+export async function getServiceRevisions(filters?: {
+  status?: 'pending' | 'approved' | 'rejected'
+  searchQuery?: string
+}) {
+  const supabase = createClient()
+
+  let query = supabase
+    .from('service_revisions')
+    .select(`
+      *,
+      service:services!service_id(
+        id,
+        title,
+        status,
+        seller_id
+      ),
+      seller:sellers!seller_id(
+        id,
+        business_name,
+        user_id
+      )
+    `)
+    .order('created_at', { ascending: false })
+
+  if (filters?.status) {
+    query = query.eq('status', filters.status)
+  }
+
+  const { data: revisions, error } = await query
+
+  if (error) throw error
+
+  // 사용자 정보를 별도로 조회
+  const userIds = [...new Set(revisions?.map((r: any) => r.seller?.user_id).filter(Boolean))] as string[]
+
+  if (userIds.length === 0) {
+    return revisions?.map((r: any) => ({
+      ...r,
+      seller: r.seller ? { ...r.seller, user: null } : null
+    })) || []
+  }
+
+  const { data: users } = await supabase
+    .from('users')
+    .select('id, name, email')
+    .in('id', userIds)
+
+  // 사용자 정보 병합
+  const usersMap = new Map(users?.map(u => [u.id, u]) || [])
+
+  return revisions?.map((revision: any) => ({
+    ...revision,
+    seller: revision.seller ? {
+      ...revision.seller,
+      user: usersMap.get(revision.seller.user_id) || null
+    } : null
+  })) || []
+}
+
+// 서비스 수정 요청 개수 조회
+export async function getServiceRevisionsCount(status?: 'pending' | 'approved' | 'rejected') {
+  const supabase = createClient()
+
+  let query = supabase
+    .from('service_revisions')
+    .select('*', { count: 'exact', head: true })
+
+  if (status) {
+    query = query.eq('status', status)
+  }
+
+  const { count, error } = await query
+
+  if (error) throw error
+  return count || 0
+}
+
+// 서비스 수정 요청 승인
+export async function approveServiceRevision(revisionId: string) {
+  const supabase = createClient()
+
+  // approve_service_revision 함수 호출
+  const { error } = await supabase.rpc('approve_service_revision', {
+    revision_id_param: revisionId
+  })
+
+  if (error) throw error
+}
+
+// 서비스 수정 요청 반려
+export async function rejectServiceRevision(revisionId: string, adminNote?: string) {
+  const supabase = createClient()
+
+  const { error } = await supabase
+    .from('service_revisions')
+    .update({
+      status: 'rejected',
+      reviewed_at: new Date().toISOString(),
+      admin_note: adminNote || '수정 요청이 반려되었습니다.'
+    })
+    .eq('id', revisionId)
+
+  if (error) throw error
+}

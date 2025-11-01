@@ -226,77 +226,133 @@ export default function EditServiceClient({ service, sellerId }: Props) {
         thumbnail_url = publicUrl
       }
 
-      // 3. Update service
-      const { error: serviceError } = await supabase
-        .from('services')
-        .update({
-          title: formData.title,
-          description: formData.description,
-          price: parseInt(formData.packages.basic.price) || 0,
-          delivery_days: parseInt(formData.packages.basic.deliveryDays) || 7,
-          revision_count: formData.packages.basic.revisionCount === 'unlimited' ? 999 : parseInt(formData.packages.basic.revisionCount) || 0,
-          thumbnail_url: thumbnail_url,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', service.id)
+      // 3. 서비스 상태에 따라 다르게 처리
+      if (service.status === 'active') {
+        // 활성화된 서비스는 수정본(revision) 생성
+        const { data: revision, error: revisionError } = await supabase
+          .from('service_revisions')
+          .insert({
+            service_id: service.id,
+            seller_id: sellerId,
+            title: formData.title,
+            description: formData.description,
+            price: parseInt(formData.packages.basic.price) || 0,
+            thumbnail_url: thumbnail_url,
+            status: 'pending',
+            revision_note: '서비스 정보 수정'
+          })
+          .select()
+          .single()
 
-      if (serviceError) {
-        console.error('Service update error:', serviceError)
-        alert('서비스 수정에 실패했습니다: ' + serviceError.message)
-        return
-      }
+        if (revisionError) {
+          console.error('Revision create error:', revisionError)
+          alert('수정본 생성에 실패했습니다: ' + revisionError.message)
+          return
+        }
 
-      // 4. Update category if changed
-      if (formData.category && formData.category !== service.service_categories?.[0]?.category_id) {
+        // 카테고리 추가
+        if (formData.category) {
+          await supabase
+            .from('service_revision_categories')
+            .insert({
+              revision_id: revision.id,
+              category_id: formData.category
+            })
+        }
+
+        // 패키지 추가
+        const revisionPackages = []
+        for (const [type, pkg] of Object.entries(formData.packages)) {
+          if (pkg.price && pkg.deliveryDays) {
+            revisionPackages.push({
+              revision_id: revision.id,
+              package_type: type,
+              price: parseInt(pkg.price),
+              delivery_days: parseInt(pkg.deliveryDays),
+              revision_count: pkg.revisionCount === 'unlimited' ? 999 : parseInt(pkg.revisionCount),
+              features: pkg.features.filter(f => f)
+            })
+          }
+        }
+
+        if (revisionPackages.length > 0) {
+          await supabase
+            .from('service_revision_packages')
+            .insert(revisionPackages)
+        }
+
+        alert('수정 요청이 제출되었습니다. 관리자 승인 후 반영됩니다.')
+      } else {
+        // pending, draft 상태 서비스는 직접 수정
+        const { error: serviceError } = await supabase
+          .from('services')
+          .update({
+            title: formData.title,
+            description: formData.description,
+            price: parseInt(formData.packages.basic.price) || 0,
+            delivery_days: parseInt(formData.packages.basic.deliveryDays) || 7,
+            revision_count: formData.packages.basic.revisionCount === 'unlimited' ? 999 : parseInt(formData.packages.basic.revisionCount) || 0,
+            thumbnail_url: thumbnail_url,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', service.id)
+
+        if (serviceError) {
+          console.error('Service update error:', serviceError)
+          alert('서비스 수정에 실패했습니다: ' + serviceError.message)
+          return
+        }
+
+        // 카테고리 업데이트
+        if (formData.category && formData.category !== service.service_categories?.[0]?.category_id) {
+          await supabase
+            .from('service_categories')
+            .delete()
+            .eq('service_id', service.id)
+
+          await supabase
+            .from('service_categories')
+            .insert({
+              service_id: service.id,
+              category_id: formData.category,
+              is_primary: true
+            })
+        }
+
+        // 패키지 업데이트
         await supabase
-          .from('service_categories')
+          .from('service_packages')
           .delete()
           .eq('service_id', service.id)
 
-        await supabase
-          .from('service_categories')
-          .insert({
-            service_id: service.id,
-            category_id: formData.category,
-            is_primary: true
-          })
-      }
-
-      // 5. Update service packages
-      // 기존 패키지 삭제
-      await supabase
-        .from('service_packages')
-        .delete()
-        .eq('service_id', service.id)
-
-      // 새 패키지 추가
-      const packages = []
-      for (const [type, pkg] of Object.entries(formData.packages)) {
-        if (pkg.price && pkg.deliveryDays) {
-          packages.push({
-            service_id: service.id,
-            package_type: type,
-            name: type === 'basic' ? '베이직' : type === 'standard' ? '스탠다드' : '프리미엄',
-            description: pkg.features.filter(f => f).join(', '),
-            price: parseInt(pkg.price),
-            delivery_days: parseInt(pkg.deliveryDays),
-            revision_count: pkg.revisionCount === 'unlimited' ? 999 : parseInt(pkg.revisionCount),
-            features: pkg.features.filter(f => f)
-          })
+        const packages = []
+        for (const [type, pkg] of Object.entries(formData.packages)) {
+          if (pkg.price && pkg.deliveryDays) {
+            packages.push({
+              service_id: service.id,
+              package_type: type,
+              name: type === 'basic' ? '베이직' : type === 'standard' ? '스탠다드' : '프리미엄',
+              description: pkg.features.filter(f => f).join(', '),
+              price: parseInt(pkg.price),
+              delivery_days: parseInt(pkg.deliveryDays),
+              revision_count: pkg.revisionCount === 'unlimited' ? 999 : parseInt(pkg.revisionCount),
+              features: pkg.features.filter(f => f)
+            })
+          }
         }
-      }
 
-      if (packages.length > 0) {
-        const { error: packagesError } = await supabase
-          .from('service_packages')
-          .insert(packages)
+        if (packages.length > 0) {
+          const { error: packagesError } = await supabase
+            .from('service_packages')
+            .insert(packages)
 
-        if (packagesError) {
-          console.error('Packages insert error:', packagesError)
+          if (packagesError) {
+            console.error('Packages insert error:', packagesError)
+          }
         }
-      }
 
-      alert('서비스가 성공적으로 수정되었습니다!')
+        alert('서비스가 성공적으로 수정되었습니다!')
+      }
       window.location.href = '/mypage/seller/services'
 
     } catch (error) {

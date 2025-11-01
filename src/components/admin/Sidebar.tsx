@@ -8,6 +8,7 @@ const menuItems = [
   { name: '대시보드', path: '/admin/dashboard', icon: 'fa-chart-line' },
   { name: '사용자 관리', path: '/admin/users', icon: 'fa-users' },
   { name: '서비스 관리', path: '/admin/services', icon: 'fa-briefcase' },
+  { name: '수정 요청 관리', path: '/admin/service-revisions', icon: 'fa-edit' },
   { name: '주문 관리', path: '/admin/orders', icon: 'fa-shopping-cart' },
   { name: '정산 관리', path: '/admin/settlements', icon: 'fa-money-bill-wave' },
   { name: '리뷰 관리', path: '/admin/reviews', icon: 'fa-star' },
