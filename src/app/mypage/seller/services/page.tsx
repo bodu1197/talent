@@ -69,10 +69,10 @@ export default async function SellerServicesPage({
     ])
 
     const statusCounts = {
-      all: activeCount + inactiveCount + pendingCount,
-      active: activeCount,
-      inactive: inactiveCount,
-      pending: pendingCount
+      all: (activeCount || 0) + (inactiveCount || 0) + (pendingCount || 0),
+      active: activeCount || 0,
+      inactive: inactiveCount || 0,
+      pending: pendingCount || 0
     }
 
     return <SellerServicesClient
