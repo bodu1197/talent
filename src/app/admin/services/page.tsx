@@ -37,7 +37,9 @@ export default function AdminServicesPage() {
       setServices(data)
     } catch (err: any) {
       console.error('서비스 조회 실패:', err)
-      setError(err.message || '서비스 목록을 불러오는데 실패했습니다')
+      console.error('오류 상세:', JSON.stringify(err, null, 2))
+      const errorMessage = err?.message || err?.error_description || err?.hint || '서비스 목록을 불러오는데 실패했습니다'
+      setError(`오류: ${errorMessage}\n\n상세: ${JSON.stringify(err, null, 2)}`)
     } finally {
       setLoading(false)
     }
