@@ -43,9 +43,11 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
       case 'inactive':
         return <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">비활성</span>
       case 'pending':
-        return <span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-medium">검토중</span>
+        return <span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-medium">승인대기</span>
+      case 'draft':
+        return <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">임시저장</span>
       default:
-        return null
+        return <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">{status}</span>
     }
   }
 

@@ -280,7 +280,11 @@ export async function getAdminServices(filters?: {
     .from('services')
     .select(`
       *,
-      seller:users!seller_id(id, name, email)
+      seller:sellers!seller_id(
+        id,
+        business_name,
+        user:users(id, name, email)
+      )
     `)
     .order('created_at', { ascending: false })
 

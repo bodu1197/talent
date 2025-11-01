@@ -63,10 +63,62 @@ export default function AdminServicesPage() {
     }
   }
 
+  async function handleApprove(serviceId: string) {
+    if (!confirm('이 서비스를 승인하시겠습니까?')) return
+
+    try {
+      const { createClient } = await import('@/lib/supabase/client')
+      const supabase = createClient()
+
+      const { error } = await supabase
+        .from('services')
+        .update({ status: 'active' })
+        .eq('id', serviceId)
+
+      if (error) throw error
+
+      alert('서비스가 승인되었습니다.')
+      loadServices()
+      loadStatusCounts()
+    } catch (err: any) {
+      console.error('승인 실패:', err)
+      alert('승인에 실패했습니다: ' + err.message)
+    }
+  }
+
+  async function handleReject(serviceId: string) {
+    const reason = prompt('반려 사유를 입력해주세요:')
+    if (!reason) return
+
+    try {
+      const { createClient } = await import('@/lib/supabase/client')
+      const supabase = createClient()
+
+      const { error } = await supabase
+        .from('services')
+        .update({
+          status: 'suspended',
+          // rejection_reason 필드가 있다면 추가
+        })
+        .eq('id', serviceId)
+
+      if (error) throw error
+
+      alert('서비스가 반려되었습니다.')
+      loadServices()
+      loadStatusCounts()
+    } catch (err: any) {
+      console.error('반려 실패:', err)
+      alert('반려에 실패했습니다: ' + err.message)
+    }
+  }
+
   const filteredServices = services.filter(service => {
     if (searchQuery) {
       const query = searchQuery.toLowerCase()
-      return service.title?.toLowerCase().includes(query) || service.seller?.name?.toLowerCase().includes(query)
+      return service.title?.toLowerCase().includes(query) ||
+             service.seller?.user?.name?.toLowerCase().includes(query) ||
+             service.seller?.business_name?.toLowerCase().includes(query)
     }
     return true
   })
@@ -192,6 +244,9 @@ export default function AdminServicesPage() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     통계
                   </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    작업
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -210,8 +265,8 @@ export default function AdminServicesPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{service.seller?.name}</div>
-                      <div className="text-xs text-gray-500">{service.seller?.email}</div>
+                      <div className="text-sm text-gray-900">{service.seller?.user?.name || service.seller?.business_name}</div>
+                      <div className="text-xs text-gray-500">{service.seller?.user?.email}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
@@ -232,6 +287,26 @@ export default function AdminServicesPage() {
                         <span><i className="fas fa-heart text-red-500"></i> {service.favorite_count || 0}</span>
                         <span><i className="fas fa-shopping-cart"></i> {service.order_count || 0}</span>
                       </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      {service.status === 'pending' ? (
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleApprove(service.id)}
+                            className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors font-medium"
+                          >
+                            승인
+                          </button>
+                          <button
+                            onClick={() => handleReject(service.id)}
+                            className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition-colors font-medium"
+                          >
+                            반려
+                          </button>
+                        </div>
+                      ) : (
+                        <span className="text-gray-400">-</span>
+                      )}
                     </td>
                   </tr>
                 ))}

@@ -31,7 +31,11 @@ export async function getServiceById(serviceId: string) {
     .from('services')
     .select(`
       *,
-      seller:users!seller_id(id, name, email, profile_image),
+      seller:sellers(
+        id,
+        business_name,
+        user:users(id, name, email, profile_image)
+      ),
       service_categories(
         category:categories(id, name, slug)
       ),

@@ -232,7 +232,7 @@ export default function NewServiceClient({ sellerId }: Props) {
           delivery_days: parseInt(formData.packages.basic.deliveryDays) || 7,
           revision_count: formData.packages.basic.revisionCount === 'unlimited' ? 999 : parseInt(formData.packages.basic.revisionCount) || 0,
           thumbnail_url: publicUrl,
-          status: 'draft'
+          status: 'pending'
         })
         .select()
         .single()
@@ -283,7 +283,7 @@ export default function NewServiceClient({ sellerId }: Props) {
         }
       }
 
-      alert('서비스가 성공적으로 등록되었습니다!')
+      alert('서비스가 성공적으로 등록되었습니다!\n관리자 승인 후 판매가 시작됩니다.')
       window.location.href = '/mypage/seller/services'
 
     } catch (error) {
