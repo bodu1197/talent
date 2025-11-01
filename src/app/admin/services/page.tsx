@@ -263,7 +263,15 @@ export default function AdminServicesPage() {
                             className="w-10 h-10 rounded object-cover mr-3"
                           />
                         )}
-                        <div className="text-sm font-medium text-gray-900">{service.title}</div>
+                        <a
+                          href={`/services/${service.id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm font-medium text-[#0f3460] hover:underline"
+                        >
+                          {service.title}
+                          <i className="fas fa-external-link-alt ml-2 text-xs"></i>
+                        </a>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">

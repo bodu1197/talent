@@ -19,7 +19,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       seller:sellers(
         id,
         business_name,
-        user:users(id, name, email, profile_image, created_at)
+        user_id
       ),
       service_categories(
         category:categories(id, name, slug)
@@ -36,6 +36,19 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
   if (!service) {
     notFound()
+  }
+
+  // seller의 user 정보를 별도로 조회
+  if (service?.seller?.user_id) {
+    const { data: userData } = await supabase
+      .from('users')
+      .select('id, name, email, profile_image, created_at')
+      .eq('id', service.seller.user_id)
+      .single()
+
+    if (userData) {
+      service.seller.user = userData
+    }
   }
 
   // 패키지 정렬: basic, standard, premium 순서

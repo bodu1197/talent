@@ -34,7 +34,7 @@ export async function getServiceById(serviceId: string) {
       seller:sellers(
         id,
         business_name,
-        user:users(id, name, email, profile_image)
+        user_id
       ),
       service_categories(
         category:categories(id, name, slug)
@@ -45,6 +45,20 @@ export async function getServiceById(serviceId: string) {
     .single()
 
   if (error) throw error
+
+  // seller의 user 정보를 별도로 조회
+  if (data?.seller?.user_id) {
+    const { data: userData } = await supabase
+      .from('users')
+      .select('id, name, email, profile_image')
+      .eq('id', data.seller.user_id)
+      .single()
+
+    if (userData) {
+      data.seller.user = userData
+    }
+  }
+
   return data
 }
 
