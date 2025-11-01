@@ -283,7 +283,7 @@ export async function getAdminServices(filters?: {
       seller:sellers!seller_id(
         id,
         business_name,
-        user:users(id, name, email)
+        user_id
       )
     `)
     .order('created_at', { ascending: false })
@@ -296,10 +296,31 @@ export async function getAdminServices(filters?: {
     query = query.or(`title.ilike.%${filters.searchQuery}%`)
   }
 
-  const { data, error } = await query
+  const { data: services, error } = await query
 
   if (error) throw error
-  return data
+
+  // seller의 user 정보를 별도로 조회
+  if (services && services.length > 0) {
+    const userIds = [...new Set(services.map(s => s.seller?.user_id).filter(Boolean))]
+
+    if (userIds.length > 0) {
+      const { data: users } = await supabase
+        .from('users')
+        .select('id, name, email')
+        .in('id', userIds)
+
+      // services에 user 정보 병합
+      const userMap = new Map(users?.map(u => [u.id, u]) || [])
+      services.forEach(service => {
+        if (service.seller?.user_id) {
+          service.seller.user = userMap.get(service.seller.user_id)
+        }
+      })
+    }
+  }
+
+  return services
 }
 
 // 관리자 서비스 상태별 카운트
