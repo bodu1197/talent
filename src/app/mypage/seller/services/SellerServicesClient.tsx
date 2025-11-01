@@ -39,15 +39,26 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'active':
-        return <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">활성</span>
+        return <span className="px-3 py-1.5 bg-green-100 text-green-700 rounded-full text-xs font-medium flex items-center gap-1">
+          <i className="fas fa-check-circle"></i>
+          활성
+        </span>
       case 'inactive':
-        return <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">비활성</span>
+        return <span className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">비활성</span>
       case 'pending':
-        return <span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-medium">승인대기</span>
+        return <span className="px-3 py-1.5 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium flex items-center gap-1">
+          <i className="fas fa-clock"></i>
+          검토중
+        </span>
+      case 'rejected':
+        return <span className="px-3 py-1.5 bg-red-100 text-red-700 rounded-full text-xs font-medium flex items-center gap-1">
+          <i className="fas fa-times-circle"></i>
+          반려됨
+        </span>
       case 'draft':
-        return <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">임시저장</span>
+        return <span className="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">임시저장</span>
       default:
-        return <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">{status}</span>
+        return <span className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">{status}</span>
     }
   }
 

@@ -12,7 +12,7 @@ export default function AdminServicesPage() {
   const [services, setServices] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [statusFilter, setStatusFilter] = useState<ServiceStatus>('all')
+  const [statusFilter, setStatusFilter] = useState<ServiceStatus>('pending')
   const [searchQuery, setSearchQuery] = useState('')
   const [statusCounts, setStatusCounts] = useState({
     all: 0,
