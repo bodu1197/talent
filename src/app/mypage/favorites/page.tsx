@@ -128,7 +128,8 @@ export default function FavoritesPage() {
     <>
       <MobileSidebar mode="buyer" />
       <Sidebar mode="buyer" />
-      <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+      <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-white">
+        <div className="max-w-7xl mx-auto">
         <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
           <div className="flex items-center gap-3 mb-2">
             <i className="fas fa-heart text-red-500 text-2xl"></i>
@@ -243,6 +244,7 @@ export default function FavoritesPage() {
             })}
           </div>
         )}
+        </div>
       </main>
     </>
   )
