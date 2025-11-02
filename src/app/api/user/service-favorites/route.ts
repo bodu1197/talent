@@ -133,7 +133,14 @@ export async function GET(request: NextRequest) {
       .select(`
         service_id,
         created_at,
-        service:services(*)
+        service:services(
+          *,
+          seller:sellers(
+            id,
+            business_name,
+            is_verified
+          )
+        )
       `)
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })

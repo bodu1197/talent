@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import ViewTracker from '@/components/services/ViewTracker'
+import FavoriteButton from '@/components/services/FavoriteButton'
 
 interface ServiceDetailProps {
   params: Promise<{
@@ -174,9 +175,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   </button>
 
                   <div className="flex gap-2 mt-3">
-                    <button className="flex-1 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-                      <i className="far fa-heart"></i> 찜하기
-                    </button>
+                    <FavoriteButton serviceId={id} />
                     <button className="flex-1 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
                       <i className="fas fa-share"></i> 공유
                     </button>

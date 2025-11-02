@@ -119,6 +119,13 @@ export default function Header() {
                       마이페이지
                     </Link>
                     <Link
+                      href="/mypage/favorites"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                    >
+                      <i className="fas fa-heart mr-2 text-red-500"></i>
+                      찜한 서비스
+                    </Link>
+                    <Link
                       href="/mypage/settings"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                     >
