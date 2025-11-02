@@ -297,20 +297,13 @@ export default function AdminServiceRevisionsPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       {revision.status === 'pending' ? (
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => handleApprove(revision.id)}
-                            className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors font-medium"
-                          >
-                            승인
-                          </button>
-                          <button
-                            onClick={() => handleReject(revision.id)}
-                            className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition-colors font-medium"
-                          >
-                            반려
-                          </button>
-                        </div>
+                        <a
+                          href={`/admin/services/revisions/${revision.id}`}
+                          className="px-4 py-2 bg-[#0f3460] text-white rounded hover:bg-[#1a4d8f] transition-colors font-medium inline-block"
+                        >
+                          <i className="fas fa-eye mr-2"></i>
+                          상세보기 및 승인/반려
+                        </a>
                       ) : (
                         <div className="text-xs text-gray-500">
                           {revision.reviewed_at && (
