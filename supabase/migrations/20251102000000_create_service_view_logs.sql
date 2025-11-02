@@ -41,9 +41,8 @@ CREATE POLICY "Admins can view all logs"
     FOR SELECT
     USING (
         EXISTS (
-            SELECT 1 FROM public.users
-            WHERE users.id = auth.uid()
-            AND users.role = 'admin'
+            SELECT 1 FROM public.admins
+            WHERE admins.user_id = auth.uid()
         )
     );
 

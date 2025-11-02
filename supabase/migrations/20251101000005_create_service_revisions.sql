@@ -89,9 +89,8 @@ CREATE POLICY "Admins can view all service revisions"
     FOR SELECT
     USING (
         EXISTS (
-            SELECT 1 FROM public.users
-            WHERE users.id = auth.uid()
-            AND users.role = 'admin'
+            SELECT 1 FROM public.admins
+            WHERE admins.user_id = auth.uid()
         )
     );
 
@@ -125,9 +124,8 @@ CREATE POLICY "Admins can update service revisions"
     FOR UPDATE
     USING (
         EXISTS (
-            SELECT 1 FROM public.users
-            WHERE users.id = auth.uid()
-            AND users.role = 'admin'
+            SELECT 1 FROM public.admins
+            WHERE admins.user_id = auth.uid()
         )
     );
 
@@ -141,9 +139,8 @@ CREATE POLICY "Service revision categories are viewable by revision viewers"
             WHERE service_revisions.id = revision_id
             AND (
                 EXISTS (
-                    SELECT 1 FROM public.users
-                    WHERE users.id = auth.uid()
-                    AND users.role = 'admin'
+                    SELECT 1 FROM public.admins
+                    WHERE admins.user_id = auth.uid()
                 )
                 OR EXISTS (
                     SELECT 1 FROM public.sellers
@@ -176,9 +173,8 @@ CREATE POLICY "Service revision packages are viewable by revision viewers"
             WHERE service_revisions.id = revision_id
             AND (
                 EXISTS (
-                    SELECT 1 FROM public.users
-                    WHERE users.id = auth.uid()
-                    AND users.role = 'admin'
+                    SELECT 1 FROM public.admins
+                    WHERE admins.user_id = auth.uid()
                 )
                 OR EXISTS (
                     SELECT 1 FROM public.sellers
