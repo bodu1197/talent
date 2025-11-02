@@ -53,7 +53,7 @@ END $$;
 CREATE TABLE IF NOT EXISTS public.service_revision_categories (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     revision_id UUID NOT NULL REFERENCES public.service_revisions(id) ON DELETE CASCADE,
-    category_id UUID NOT NULL REFERENCES public.categories(id) ON DELETE CASCADE,
+    category_id TEXT NOT NULL REFERENCES public.categories(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
