@@ -257,23 +257,33 @@ export default function AdminServicesPage() {
                       {new Date(service.created_at).toLocaleDateString('ko-KR')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {service.status === 'pending' ? (
+                      <div className="flex gap-2">
                         <a
                           href={`/admin/services/pending/${service.id}`}
-                          className="px-4 py-2 bg-[#0f3460] text-white rounded hover:bg-[#1a4d8f] transition-colors font-medium inline-block"
+                          className="px-3 py-1.5 bg-[#0f3460] text-white rounded hover:bg-[#1a4d8f] transition-colors font-medium inline-block text-xs"
                         >
-                          <i className="fas fa-eye mr-2"></i>
-                          상세보기 및 승인/반려
+                          <i className="fas fa-eye mr-1"></i>
+                          상세보기
                         </a>
-                      ) : (
-                        <div className="text-xs text-gray-500">
-                          {service.updated_at && (
-                            <div>
-                              검토일: {new Date(service.updated_at).toLocaleDateString('ko-KR')}
-                            </div>
-                          )}
-                        </div>
-                      )}
+                        {service.status === 'pending' && (
+                          <>
+                            <a
+                              href={`/admin/services/pending/${service.id}?action=approve`}
+                              className="px-3 py-1.5 bg-green-600 text-white rounded hover:bg-green-700 transition-colors font-medium inline-block text-xs"
+                            >
+                              <i className="fas fa-check mr-1"></i>
+                              승인
+                            </a>
+                            <a
+                              href={`/admin/services/pending/${service.id}?action=reject`}
+                              className="px-3 py-1.5 bg-red-600 text-white rounded hover:bg-red-700 transition-colors font-medium inline-block text-xs"
+                            >
+                              <i className="fas fa-times mr-1"></i>
+                              반려
+                            </a>
+                          </>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
