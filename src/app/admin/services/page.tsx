@@ -339,6 +339,13 @@ export default function AdminServicesPage() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         <div className="flex gap-2">
+                          <a
+                            href={`/admin/services/revisions/${revision.id}`}
+                            className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors font-medium"
+                          >
+                            <i className="fas fa-eye mr-1"></i>
+                            상세보기
+                          </a>
                           <button
                             onClick={() => handleApproveRevision(revision.id)}
                             className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors font-medium"

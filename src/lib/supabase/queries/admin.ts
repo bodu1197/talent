@@ -477,3 +477,61 @@ export async function rejectServiceRevision(revisionId: string, adminNote?: stri
 
   if (error) throw error
 }
+
+// 서비스 수정 요청 상세 조회
+export async function getServiceRevisionDetail(revisionId: string) {
+  const supabase = createClient()
+
+  // 수정 요청 정보
+  const { data: revision, error: revisionError } = await supabase
+    .from('service_revisions')
+    .select(`
+      *,
+      service:services!service_id(
+        *,
+        service_categories(category:categories(id, name)),
+        service_packages(*)
+      ),
+      seller:sellers!seller_id(
+        id,
+        business_name,
+        user_id
+      )
+    `)
+    .eq('id', revisionId)
+    .single()
+
+  if (revisionError) throw revisionError
+
+  // 수정 요청의 카테고리
+  const { data: revisionCategories } = await supabase
+    .from('service_revision_categories')
+    .select('category:categories(id, name)')
+    .eq('revision_id', revisionId)
+
+  // 수정 요청의 패키지
+  const { data: revisionPackages } = await supabase
+    .from('service_revision_packages')
+    .select('*')
+    .eq('revision_id', revisionId)
+    .order('package_type')
+
+  // seller user 정보
+  if (revision?.seller?.user_id) {
+    const { data: userData } = await supabase
+      .from('users')
+      .select('id, name, email')
+      .eq('id', revision.seller.user_id)
+      .single()
+
+    if (userData) {
+      revision.seller.user = userData
+    }
+  }
+
+  return {
+    ...revision,
+    revision_categories: revisionCategories,
+    revision_packages: revisionPackages
+  }
+}
