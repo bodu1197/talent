@@ -10,9 +10,10 @@ interface ServiceGridProps {
   categoryId?: string
   sellerId?: string
   featured?: boolean
+  columns?: 4 | 5  // 4열 (카테고리 페이지) 또는 5열 (메인 페이지)
 }
 
-export default function ServiceGrid({ categoryId, sellerId, featured }: ServiceGridProps) {
+export default function ServiceGrid({ categoryId, sellerId, featured, columns = 4 }: ServiceGridProps) {
   const [services, setServices] = useState<Service[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -83,8 +84,13 @@ export default function ServiceGrid({ categoryId, sellerId, featured }: ServiceG
   const MINIMUM_CARDS = 12
   const placeholderCount = Math.max(0, MINIMUM_CARDS - services.length)
 
+  // 컬럼 수에 따라 그리드 클래스 동적 설정
+  const gridClass = columns === 5
+    ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
+    : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className={gridClass}>
       {services.map(service => (
         <ServiceCard key={service.id} service={service} />
       ))}

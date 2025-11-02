@@ -25,7 +25,7 @@ export default function HomePage() {
               전체보기
             </button>
           </div>
-          <ServiceGrid featured={true} />
+          <ServiceGrid featured={true} columns={5} />
         </div>
       </section>
 
