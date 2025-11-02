@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import ServiceCard from './ServiceCard'
 import PlaceholderServiceCard from './PlaceholderServiceCard'
 import { Service } from '@/types'
+import { getServicesByCategory, getActiveServices } from '@/lib/supabase/queries/services'
 
 interface ServiceGridProps {
   categoryId?: string
@@ -14,11 +15,35 @@ interface ServiceGridProps {
 export default function ServiceGrid({ categoryId, sellerId, featured }: ServiceGridProps) {
   const [services, setServices] = useState<Service[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    // TODO: Supabase에서 실제 데이터 가져오기
-    setServices([])
-    setLoading(false)
+    async function fetchServices() {
+      try {
+        setLoading(true)
+        setError(null)
+
+        let data: Service[] = []
+
+        if (categoryId) {
+          // 카테고리별 서비스 조회
+          data = await getServicesByCategory(categoryId)
+        } else {
+          // 전체 서비스 조회
+          data = await getActiveServices(featured ? 8 : undefined)
+        }
+
+        setServices(data)
+      } catch (err) {
+        console.error('Failed to fetch services:', err)
+        setError('서비스를 불러오는데 실패했습니다.')
+        setServices([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchServices()
   }, [categoryId, sellerId, featured])
 
   if (loading) {
@@ -27,6 +52,29 @@ export default function ServiceGrid({ categoryId, sellerId, featured }: ServiceG
         {Array.from({ length: 8 }, (_, i) => (
           <div key={i} className="skeleton h-96 rounded-xl"></div>
         ))}
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-red-600 mb-4">{error}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="btn-primary"
+        >
+          다시 시도
+        </button>
+      </div>
+    )
+  }
+
+  if (services.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-500 text-lg">아직 등록된 서비스가 없습니다.</p>
+        <p className="text-gray-400 text-sm mt-2">첫 번째 서비스를 등록해보세요!</p>
       </div>
     )
   }
