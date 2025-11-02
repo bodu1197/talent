@@ -3,6 +3,7 @@ import HeroSection from '@/components/home/HeroSection'
 import AITalentShowcase from '@/components/home/AITalentShowcase'
 import CategoryGrid from '@/components/home/CategoryGrid'
 import RecentVisitedCategories from '@/components/home/RecentVisitedCategories'
+import RecentViewedServices from '@/components/home/RecentViewedServices'
 
 export default function HomePage() {
   return (
@@ -10,6 +11,7 @@ export default function HomePage() {
       <HeroSection />
       <CategoryGrid />
       <RecentVisitedCategories />
+      <RecentViewedServices />
       <AITalentShowcase />
 
       {/* 기존의 '추천 서비스', '서비스 프로세스', '실시간 구매 후기', 'CTA 섹션' 등은

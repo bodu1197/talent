@@ -1,25 +1,28 @@
 'use client'
 
 import { useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { useAuth } from '@/components/providers/AuthProvider'
 
 interface ViewTrackerProps {
   serviceId: string
 }
 
 export default function ViewTracker({ serviceId }: ViewTrackerProps) {
+  const { user } = useAuth()
+
   useEffect(() => {
+    // 로그인 사용자만 최근 본 서비스 기록
+    if (!user) return
+
     async function trackView() {
       try {
-        const supabase = createClient()
-
-        // 조회 로그 기록
-        await supabase
-          .from('service_view_logs')
-          .insert({
-            service_id: serviceId,
-            user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : null
-          })
+        await fetch('/api/user/service-views', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ serviceId })
+        })
       } catch (error) {
         // 에러가 발생해도 사용자 경험에 영향 없도록 조용히 처리
         console.error('View tracking error:', error)
@@ -27,7 +30,7 @@ export default function ViewTracker({ serviceId }: ViewTrackerProps) {
     }
 
     trackView()
-  }, [serviceId])
+  }, [serviceId, user])
 
   return null // UI를 렌더링하지 않음
 }
