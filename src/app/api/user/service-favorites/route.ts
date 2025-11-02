@@ -165,7 +165,7 @@ export async function GET(request: NextRequest) {
         delivery_days,
         revision_count,
         rating,
-        order_count,
+        orders_count,
         view_count,
         is_featured,
         status,
@@ -173,6 +173,7 @@ export async function GET(request: NextRequest) {
         seller:sellers(
           id,
           business_name,
+          display_name,
           is_verified
         )
       `)
@@ -190,6 +191,10 @@ export async function GET(request: NextRequest) {
     // Combine the data
     const data = favoriteIds.map(fav => {
       const service = services?.find(s => s.id === fav.service_id)
+      if (service) {
+        // orders_count를 order_count로 매핑
+        (service as any).order_count = (service as any).orders_count || 0
+      }
       return {
         service_id: fav.service_id,
         created_at: fav.created_at,
