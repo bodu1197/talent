@@ -13,8 +13,8 @@ export default function PlaceholderServiceCard({ categoryId }: PlaceholderServic
 
   return (
     <Link href={registerUrl}>
-      <div className="card group cursor-pointer group-hover:scale-105 transition-transform duration-200" style={{ width: '210px' }}>
-        <div className="relative bg-gradient-to-br from-brand-primary to-brand-light rounded-t-lg overflow-hidden flex items-center justify-center" style={{ width: '210px', height: '160px' }}>
+      <div className="card group cursor-pointer group-hover:scale-105 transition-transform duration-200 w-full">
+        <div className="relative bg-gradient-to-br from-brand-primary to-brand-light rounded-t-lg overflow-hidden flex items-center justify-center w-full" style={{ aspectRatio: '210/160' }}>
           {/* 배경 패턴 */}
           <div className="absolute inset-0 opacity-10">
             <div className="absolute inset-0 pattern-diagonal-stripes"></div>

@@ -10,7 +10,7 @@ interface ServiceCardProps {
 export default function ServiceCard({ service }: ServiceCardProps) {
   return (
     <Link href={`/services/${service.id}`} className="group">
-      <div className="card group-hover:scale-105 transition-transform duration-200" style={{ width: '210px' }}>
+      <div className="card group-hover:scale-105 transition-transform duration-200 w-full">
         {/* 프리미엄 배지 */}
         {service.is_featured && (
           <div className="absolute top-4 left-4 z-10">
@@ -19,13 +19,12 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         )}
 
         {/* 썸네일 */}
-        <div className="bg-gray-100 relative overflow-hidden" style={{ width: '210px', height: '160px' }}>
+        <div className="bg-gray-100 relative overflow-hidden w-full" style={{ aspectRatio: '210/160' }}>
           {service.thumbnail_url ? (
             <img
               src={service.thumbnail_url}
               alt={service.title}
               className="w-full h-full object-cover"
-              style={{ width: '210px', height: '160px' }}
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
