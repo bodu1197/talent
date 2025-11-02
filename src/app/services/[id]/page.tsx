@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import ViewTracker from '@/components/services/ViewTracker'
 
 interface ServiceDetailProps {
   params: Promise<{
@@ -61,6 +62,9 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* 조회수 추적 */}
+      <ViewTracker serviceId={id} />
+
       {/* 상단 네비게이션 */}
       <nav className="bg-white border-b sticky top-16 z-30">
         <div className="container mx-auto px-4">
