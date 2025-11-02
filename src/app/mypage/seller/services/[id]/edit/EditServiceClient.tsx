@@ -270,7 +270,7 @@ export default function EditServiceClient({ service, sellerId }: Props) {
               price: parseInt(pkg.price),
               delivery_days: parseInt(pkg.deliveryDays),
               revision_count: pkg.revisionCount === 'unlimited' ? 999 : parseInt(pkg.revisionCount),
-              features: pkg.features.filter(f => f)
+              features: pkg.features.filter((f: string) => f)
             })
           }
         }
@@ -336,7 +336,7 @@ export default function EditServiceClient({ service, sellerId }: Props) {
               price: parseInt(pkg.price),
               delivery_days: parseInt(pkg.deliveryDays),
               revision_count: pkg.revisionCount === 'unlimited' ? 999 : parseInt(pkg.revisionCount),
-              features: pkg.features.filter(f => f)
+              features: pkg.features.filter((f: string) => f)
             })
           }
         }
