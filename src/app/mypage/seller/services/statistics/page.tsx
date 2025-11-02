@@ -26,27 +26,105 @@ export default async function ServiceStatisticsPage({
 
   const serviceId = searchParams.id
 
-  // TODO: 실제로는 API에서 데이터를 가져와야 합니다
-  const stats = {
-    serviceName: '로고 디자인 작업',
-    period: '최근 30일',
-    viewCount: 342,
-    favoriteCount: 28,
-    orderCount: 15,
-    revenue: 750000,
-    avgRating: 4.8,
-    reviewCount: 12
+  if (!serviceId) {
+    redirect('/mypage/seller/services')
   }
 
-  const dailyViews = [
-    { date: '01/20', views: 12 },
-    { date: '01/21', views: 18 },
-    { date: '01/22', views: 15 },
-    { date: '01/23', views: 22 },
-    { date: '01/24', views: 19 },
-    { date: '01/25', views: 25 },
-    { date: '01/26', views: 20 }
-  ]
+  // 서비스 정보 조회
+  const { data: service } = await supabase
+    .from('services')
+    .select('id, title, view_count, favorite_count, order_count, seller_id')
+    .eq('id', serviceId)
+    .eq('seller_id', seller.id)
+    .single()
 
-  return <ServiceStatisticsClient stats={stats} dailyViews={dailyViews} serviceId={serviceId} />
+  if (!service) {
+    redirect('/mypage/seller/services')
+  }
+
+  // 주문 통계 (최근 30일)
+  const thirtyDaysAgo = new Date()
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+
+  const { data: orders } = await supabase
+    .from('orders')
+    .select('total_amount, created_at, status')
+    .eq('service_id', serviceId)
+    .gte('created_at', thirtyDaysAgo.toISOString())
+
+  // 매출 계산 (완료된 주문만)
+  const revenue = orders
+    ?.filter(o => o.status === 'completed')
+    .reduce((sum, order) => sum + (order.total_amount || 0), 0) || 0
+
+  // 리뷰 통계
+  const { data: reviews } = await supabase
+    .from('reviews')
+    .select('rating')
+    .eq('service_id', serviceId)
+
+  const avgRating = reviews && reviews.length > 0
+    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+    : 0
+
+  // 일별 조회수 (최근 7일)
+  const sevenDaysAgo = new Date()
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+
+  const { data: viewLogs } = await supabase
+    .from('service_view_logs')
+    .select('created_at')
+    .eq('service_id', serviceId)
+    .gte('created_at', sevenDaysAgo.toISOString())
+    .order('created_at', { ascending: true })
+
+  // 일별 조회수 집계
+  const dailyViewsMap = new Map<string, number>()
+  viewLogs?.forEach(log => {
+    const date = new Date(log.created_at)
+    const dateStr = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`
+    dailyViewsMap.set(dateStr, (dailyViewsMap.get(dateStr) || 0) + 1)
+  })
+
+  // 최근 7일 날짜 생성
+  const dailyViews = []
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date()
+    date.setDate(date.getDate() - i)
+    const dateStr = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`
+    dailyViews.push({
+      date: dateStr,
+      views: dailyViewsMap.get(dateStr) || 0
+    })
+  }
+
+  // 평점 분포 계산
+  const ratingDistribution = [0, 0, 0, 0, 0] // 1-5점
+  reviews?.forEach(review => {
+    if (review.rating >= 1 && review.rating <= 5) {
+      ratingDistribution[review.rating - 1]++
+    }
+  })
+
+  const ratingPercentages = ratingDistribution.map(count =>
+    reviews && reviews.length > 0 ? (count / reviews.length) * 100 : 0
+  )
+
+  const stats = {
+    serviceName: service.title,
+    period: '최근 30일',
+    viewCount: service.view_count || 0,
+    favoriteCount: service.favorite_count || 0,
+    orderCount: service.order_count || 0,
+    revenue: revenue,
+    avgRating: Math.round(avgRating * 10) / 10,
+    reviewCount: reviews?.length || 0
+  }
+
+  return <ServiceStatisticsClient
+    stats={stats}
+    dailyViews={dailyViews}
+    ratingPercentages={ratingPercentages}
+    serviceId={serviceId}
+  />
 }

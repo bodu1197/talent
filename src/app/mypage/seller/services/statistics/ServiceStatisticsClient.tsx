@@ -15,10 +15,11 @@ interface Props {
     reviewCount: number
   }
   dailyViews: Array<{ date: string; views: number }>
+  ratingPercentages: number[]
   serviceId?: string
 }
 
-export default function ServiceStatisticsClient({ stats, dailyViews, serviceId }: Props) {
+export default function ServiceStatisticsClient({ stats, dailyViews, ratingPercentages, serviceId }: Props) {
   return (
     <>
       <Sidebar mode="seller" />
@@ -47,11 +48,7 @@ export default function ServiceStatisticsClient({ stats, dailyViews, serviceId }
               <span className="text-gray-600 text-sm">조회수</span>
               <i className="fas fa-eye text-blue-500 text-xl"></i>
             </div>
-            <div className="text-3xl font-bold text-gray-900 mb-1">{stats.viewCount}</div>
-            <div className="text-sm text-green-600">
-              <i className="fas fa-arrow-up mr-1"></i>
-              12% 증가
-            </div>
+            <div className="text-3xl font-bold text-gray-900">{stats.viewCount}</div>
           </div>
 
           <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -59,11 +56,7 @@ export default function ServiceStatisticsClient({ stats, dailyViews, serviceId }
               <span className="text-gray-600 text-sm">찜</span>
               <i className="fas fa-heart text-red-500 text-xl"></i>
             </div>
-            <div className="text-3xl font-bold text-gray-900 mb-1">{stats.favoriteCount}</div>
-            <div className="text-sm text-green-600">
-              <i className="fas fa-arrow-up mr-1"></i>
-              8% 증가
-            </div>
+            <div className="text-3xl font-bold text-gray-900">{stats.favoriteCount}</div>
           </div>
 
           <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -71,11 +64,7 @@ export default function ServiceStatisticsClient({ stats, dailyViews, serviceId }
               <span className="text-gray-600 text-sm">주문 수</span>
               <i className="fas fa-shopping-cart text-green-500 text-xl"></i>
             </div>
-            <div className="text-3xl font-bold text-gray-900 mb-1">{stats.orderCount}</div>
-            <div className="text-sm text-green-600">
-              <i className="fas fa-arrow-up mr-1"></i>
-              15% 증가
-            </div>
+            <div className="text-3xl font-bold text-gray-900">{stats.orderCount}</div>
           </div>
 
           <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -83,11 +72,7 @@ export default function ServiceStatisticsClient({ stats, dailyViews, serviceId }
               <span className="text-gray-600 text-sm">매출</span>
               <i className="fas fa-sack-dollar text-purple-500 text-xl"></i>
             </div>
-            <div className="text-3xl font-bold text-gray-900 mb-1">{stats.revenue.toLocaleString()}원</div>
-            <div className="text-sm text-green-600">
-              <i className="fas fa-arrow-up mr-1"></i>
-              20% 증가
-            </div>
+            <div className="text-3xl font-bold text-gray-900">{stats.revenue.toLocaleString()}원</div>
           </div>
         </div>
 
@@ -128,18 +113,21 @@ export default function ServiceStatisticsClient({ stats, dailyViews, serviceId }
               </div>
             </div>
             <div className="space-y-2">
-              {[5, 4, 3, 2, 1].map((rating) => (
-                <div key={rating} className="flex items-center gap-3">
-                  <span className="text-sm text-gray-600 w-12">{rating}점</span>
-                  <div className="flex-1 bg-gray-100 rounded-full h-4 overflow-hidden">
-                    <div
-                      className="bg-yellow-400 h-full rounded-full"
-                      style={{ width: `${rating === 5 ? 80 : rating === 4 ? 15 : 5}%` }}
-                    ></div>
+              {[5, 4, 3, 2, 1].map((rating, index) => {
+                const percentage = ratingPercentages[rating - 1] || 0
+                return (
+                  <div key={rating} className="flex items-center gap-3">
+                    <span className="text-sm text-gray-600 w-12">{rating}점</span>
+                    <div className="flex-1 bg-gray-100 rounded-full h-4 overflow-hidden">
+                      <div
+                        className="bg-yellow-400 h-full rounded-full"
+                        style={{ width: `${percentage}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-sm text-gray-600 w-12 text-right">{percentage.toFixed(0)}%</span>
                   </div>
-                  <span className="text-sm text-gray-600 w-8 text-right">{rating === 5 ? 80 : rating === 4 ? 15 : 5}%</span>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         </div>
