@@ -1,5 +1,28 @@
 import { createClient } from '@/lib/supabase/client'
 
+// 재귀적으로 모든 하위 카테고리 ID 가져오기
+async function getAllDescendantCategories(supabase: any, parentId: string): Promise<string[]> {
+  const { data: children } = await supabase
+    .from('categories')
+    .select('id')
+    .eq('parent_id', parentId)
+
+  if (!children || children.length === 0) {
+    return []
+  }
+
+  const childIds = children.map((c: any) => c.id)
+  const descendants: string[] = [...childIds]
+
+  // 각 자식의 하위 카테고리도 재귀적으로 가져오기
+  for (const childId of childIds) {
+    const subDescendants = await getAllDescendantCategories(supabase, childId)
+    descendants.push(...subDescendants)
+  }
+
+  return descendants
+}
+
 export async function getSellerServices(userId: string, status?: string) {
   const supabase = createClient()
 
@@ -78,6 +101,26 @@ export async function getSellerServicesCount(userId: string, status: string) {
 export async function getServicesByCategory(categoryId: string) {
   const supabase = createClient()
 
+  // 1. 먼저 카테고리 정보 조회 (level 확인)
+  const { data: category } = await supabase
+    .from('categories')
+    .select('id, level')
+    .eq('id', categoryId)
+    .single()
+
+  if (!category) {
+    return []
+  }
+
+  let categoryIds = [categoryId]
+
+  // 2. 1차 또는 2차 카테고리인 경우, 모든 하위 카테고리 ID 가져오기
+  if (category.level === 1 || category.level === 2) {
+    const allDescendants = await getAllDescendantCategories(supabase, categoryId)
+    categoryIds = [categoryId, ...allDescendants]
+  }
+
+  // 3. 서비스 조회 (categoryIds 중 하나라도 일치하면)
   const { data, error } = await supabase
     .from('services')
     .select(`
@@ -92,7 +135,7 @@ export async function getServicesByCategory(categoryId: string) {
         category_id
       )
     `)
-    .eq('service_categories.category_id', categoryId)
+    .in('service_categories.category_id', categoryIds)
     .eq('status', 'active')  // 승인된 서비스만
     .order('created_at', { ascending: false })
 
