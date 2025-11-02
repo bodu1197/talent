@@ -638,7 +638,7 @@ export default function EditServiceClient({ service, sellerId }: Props) {
                   제공 내용 *
                 </label>
                 <div className="space-y-2">
-                  {formData.packages[activePackage].features.map((feature, index) => (
+                  {formData.packages[activePackage].features.map((feature: string, index: number) => (
                     <div key={index} className="flex gap-2">
                       <input
                         type="text"
