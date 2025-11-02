@@ -268,10 +268,11 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
         // 패키지 추가
         const revisionPackages = []
         for (const [type, pkg] of Object.entries(formData.packages)) {
-          if (pkg.price && pkg.deliveryDays) {
+          // type이 유효한 package_type인지 확인
+          if ((type === 'basic' || type === 'standard' || type === 'premium') && pkg.price && pkg.deliveryDays) {
             revisionPackages.push({
               revision_id: revision.id,
-              package_type: type,
+              package_type: type as 'basic' | 'standard' | 'premium',
               name: type === 'basic' ? '베이직' : type === 'standard' ? '스탠다드' : '프리미엄',
               description: pkg.features.filter((f: string) => f).join(', '),
               price: parseInt(pkg.price),
