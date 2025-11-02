@@ -132,42 +132,69 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const { data, error } = await supabase
+    // First, get the favorite IDs
+    const { data: favoriteIds, error: favError } = await supabase
       .from('service_favorites')
-      .select(`
-        service_id,
-        created_at,
-        service:services(
-          id,
-          title,
-          description,
-          thumbnail_url,
-          price,
-          delivery_days,
-          revision_count,
-          rating,
-          order_count,
-          view_count,
-          is_featured,
-          status,
-          created_at,
-          seller:sellers(
-            id,
-            business_name,
-            is_verified
-          )
-        )
-      `)
+      .select('service_id, created_at')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
 
-    if (error) {
-      console.error('Favorites fetch error:', error)
+    if (favError) {
+      console.error('Favorites fetch error:', favError)
       return NextResponse.json(
         { error: 'Failed to fetch favorites' },
         { status: 500 }
       )
     }
+
+    if (!favoriteIds || favoriteIds.length === 0) {
+      console.log(`[Favorites API] User ${user.id} has no favorites`)
+      return NextResponse.json({ data: [] }, { status: 200 })
+    }
+
+    // Then fetch the service details
+    const serviceIds = favoriteIds.map(f => f.service_id)
+    const { data: services, error: servicesError } = await supabase
+      .from('services')
+      .select(`
+        id,
+        title,
+        description,
+        thumbnail_url,
+        price,
+        delivery_days,
+        revision_count,
+        rating,
+        order_count,
+        view_count,
+        is_featured,
+        status,
+        created_at,
+        seller:sellers(
+          id,
+          business_name,
+          is_verified
+        )
+      `)
+      .in('id', serviceIds)
+
+    if (servicesError) {
+      console.error('Services fetch error:', servicesError)
+      return NextResponse.json(
+        { error: 'Failed to fetch service details' },
+        { status: 500 }
+      )
+    }
+
+    // Combine the data
+    const data = favoriteIds.map(fav => {
+      const service = services?.find(s => s.id === fav.service_id)
+      return {
+        service_id: fav.service_id,
+        created_at: fav.created_at,
+        service: service || null
+      }
+    }).filter(item => item.service !== null)
 
     console.log(`[Favorites API] User ${user.id} has ${data?.length || 0} favorites`)
     console.log('[Favorites API] Data:', JSON.stringify(data, null, 2))
