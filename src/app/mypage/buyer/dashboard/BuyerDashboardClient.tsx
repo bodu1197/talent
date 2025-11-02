@@ -216,7 +216,7 @@ export default function BuyerDashboardClient({ stats, recentOrders, favorites, b
                 최근 찜한 서비스
               </h2>
               <Link
-                href="/mypage/favorites"
+                href="/mypage/buyer/favorites"
                 className="text-sm text-[#0f3460] hover:underline"
               >
                 전체 보기

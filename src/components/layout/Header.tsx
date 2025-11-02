@@ -119,7 +119,7 @@ export default function Header() {
                       마이페이지
                     </Link>
                     <Link
-                      href="/mypage/favorites"
+                      href="/mypage/buyer/favorites"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                     >
                       <i className="fas fa-heart mr-2 text-red-500"></i>
