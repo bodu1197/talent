@@ -499,10 +499,21 @@ export async function getServiceRevisionDetail(revisionId: string) {
     .single()
 
   // 원본 서비스 카테고리
-  const { data: serviceCategories } = await supabase
+  const { data: serviceCategoryLinks } = await supabase
     .from('service_categories')
-    .select('category:categories(id, name)')
+    .select('category_id')
     .eq('service_id', revision.service_id)
+
+  let serviceCategories: any[] = []
+  if (serviceCategoryLinks && serviceCategoryLinks.length > 0) {
+    const categoryIds = serviceCategoryLinks.map(sc => sc.category_id)
+    const { data: cats } = await supabase
+      .from('categories')
+      .select('id, name')
+      .in('id', categoryIds)
+
+    serviceCategories = cats?.map(cat => ({ category: cat })) || []
+  }
 
   // 원본 서비스 패키지
   const { data: servicePackages } = await supabase
@@ -512,10 +523,21 @@ export async function getServiceRevisionDetail(revisionId: string) {
     .order('package_type')
 
   // 수정 요청의 카테고리
-  const { data: revisionCategories } = await supabase
+  const { data: revisionCategoryLinks } = await supabase
     .from('service_revision_categories')
-    .select('category:categories(id, name)')
+    .select('category_id')
     .eq('revision_id', revisionId)
+
+  let revisionCategories: any[] = []
+  if (revisionCategoryLinks && revisionCategoryLinks.length > 0) {
+    const categoryIds = revisionCategoryLinks.map(rc => rc.category_id)
+    const { data: cats } = await supabase
+      .from('categories')
+      .select('id, name')
+      .in('id', categoryIds)
+
+    revisionCategories = cats?.map(cat => ({ category: cat })) || []
+  }
 
   // 수정 요청의 패키지
   const { data: revisionPackages } = await supabase
