@@ -532,6 +532,7 @@ export async function getServiceRevisionDetail(revisionId: string) {
     .single()
 
   // seller user 정보
+  let sellerWithUser: any = seller
   if (seller?.user_id) {
     const { data: userData } = await supabase
       .from('users')
@@ -540,7 +541,7 @@ export async function getServiceRevisionDetail(revisionId: string) {
       .single()
 
     if (userData) {
-      seller.user = userData
+      sellerWithUser = { ...seller, user: userData }
     }
   }
 
@@ -551,7 +552,7 @@ export async function getServiceRevisionDetail(revisionId: string) {
       service_categories: serviceCategories,
       service_packages: servicePackages
     },
-    seller,
+    seller: sellerWithUser,
     revision_categories: revisionCategories,
     revision_packages: revisionPackages
   }
