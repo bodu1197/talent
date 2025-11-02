@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
 import EmptyState from '@/components/common/EmptyState'
+import { createClient } from '@/lib/supabase/client'
 
 type ServiceStatus = 'all' | 'active' | 'inactive' | 'pending'
 
@@ -20,8 +21,37 @@ interface Props {
 
 export default function SellerServicesClient({ initialServices, statusFilter, statusCounts }: Props) {
   const [searchQuery, setSearchQuery] = useState('')
+  const [services, setServices] = useState(initialServices)
 
-  const filteredServices = initialServices.filter(service => {
+  async function handleDismissRejection(revisionId: string) {
+    if (!confirm('이 반려 메시지를 삭제하시겠습니까?')) return
+
+    try {
+      const supabase = createClient()
+      const { error } = await supabase
+        .from('service_revisions')
+        .delete()
+        .eq('id', revisionId)
+
+      if (error) throw error
+
+      // UI 업데이트
+      setServices(services.map((service: any) => {
+        if (service.rejectedRevision?.id === revisionId) {
+          const { rejectedRevision, ...rest } = service
+          return rest
+        }
+        return service
+      }))
+
+      alert('반려 메시지가 삭제되었습니다.')
+    } catch (err: any) {
+      console.error('반려 메시지 삭제 실패:', err)
+      alert('삭제에 실패했습니다: ' + err.message)
+    }
+  }
+
+  const filteredServices = services.filter(service => {
     if (searchQuery) {
       const query = searchQuery.toLowerCase()
       return service.title?.toLowerCase().includes(query)
@@ -187,6 +217,33 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
                     </div>
                   </div>
                 </div>
+
+                {/* 반려 메시지 */}
+                {service.rejectedRevision && (
+                  <div className="mt-3 mx-4 mb-4 p-4 bg-red-50 border-l-4 border-red-500 rounded">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <i className="fas fa-exclamation-circle text-red-500"></i>
+                          <span className="font-bold text-red-800">수정 요청이 반려되었습니다</span>
+                          <span className="text-xs text-red-600">
+                            ({new Date(service.rejectedRevision.reviewed_at).toLocaleDateString('ko-KR')})
+                          </span>
+                        </div>
+                        <p className="text-sm text-red-700 whitespace-pre-wrap">
+                          {service.rejectedRevision.admin_note}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => handleDismissRejection(service.rejectedRevision.id)}
+                        className="ml-4 px-3 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors"
+                      >
+                        <i className="fas fa-times mr-1"></i>
+                        확인
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>

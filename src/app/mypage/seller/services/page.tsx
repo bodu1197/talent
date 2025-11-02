@@ -57,19 +57,35 @@ export default async function SellerServicesPage({
       throw servicesError
     }
 
-    // 각 서비스의 pending revision 조회
+    // 각 서비스의 pending/rejected revision 조회
     if (services && services.length > 0) {
       const serviceIds = services.map(s => s.id)
-      const { data: revisions } = await supabase
+
+      // pending revision 조회
+      const { data: pendingRevisions } = await supabase
         .from('service_revisions')
         .select('service_id, id, status')
         .in('service_id', serviceIds)
         .eq('status', 'pending')
 
-      // 서비스에 pending revision 정보 추가
+      // rejected revision 조회 (최신 것만)
+      const { data: rejectedRevisions } = await supabase
+        .from('service_revisions')
+        .select('service_id, id, status, admin_note, reviewed_at')
+        .in('service_id', serviceIds)
+        .eq('status', 'rejected')
+        .order('reviewed_at', { ascending: false })
+
+      // 서비스에 revision 정보 추가
       services.forEach((service: any) => {
-        const pendingRevision = revisions?.find(r => r.service_id === service.id)
+        const pendingRevision = pendingRevisions?.find(r => r.service_id === service.id)
         service.hasPendingRevision = !!pendingRevision
+
+        // 해당 서비스의 최신 rejected revision
+        const rejectedRevision = rejectedRevisions?.find(r => r.service_id === service.id)
+        if (rejectedRevision) {
+          service.rejectedRevision = rejectedRevision
+        }
       })
     }
 
