@@ -19,17 +19,22 @@ interface Props {
   service: any
   sellerId: string
   categories: any[]
+  categoryHierarchy?: {
+    level1: string | null
+    level2: string | null
+    level3: string | null
+  } | null
 }
 
-export default function EditServiceClient({ service, sellerId }: Props) {
+export default function EditServiceClient({ service, sellerId, categoryHierarchy }: Props) {
   const [activePackage, setActivePackage] = useState<PackageType>('basic')
   const [level1Categories, setLevel1Categories] = useState<Category[]>([])
   const [level2Categories, setLevel2Categories] = useState<Category[]>([])
   const [level3Categories, setLevel3Categories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
-  const [selectedLevel1, setSelectedLevel1] = useState('')
-  const [selectedLevel2, setSelectedLevel2] = useState('')
-  const [selectedLevel3, setSelectedLevel3] = useState('')
+  const [selectedLevel1, setSelectedLevel1] = useState(categoryHierarchy?.level1 || '')
+  const [selectedLevel2, setSelectedLevel2] = useState(categoryHierarchy?.level2 || '')
+  const [selectedLevel3, setSelectedLevel3] = useState(categoryHierarchy?.level3 || '')
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(service.thumbnail_url || null)
 
