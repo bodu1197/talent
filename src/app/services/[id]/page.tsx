@@ -84,32 +84,6 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* 왼쪽: 서비스 정보 */}
           <div className="lg:col-span-2 space-y-8">
-            {/* 이미지 갤러리 */}
-            <div className="bg-white rounded-xl overflow-hidden shadow-sm">
-              <div className="aspect-video relative bg-gray-100">
-                {service.thumbnail_url ? (
-                  <img
-                    src={service.thumbnail_url}
-                    alt={service.title}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                    <i className="fas fa-image text-[40px]"></i>
-                  </div>
-                )}
-              </div>
-              {service.portfolio_urls && service.portfolio_urls.length > 0 && (
-                <div className="grid grid-cols-4 gap-2 p-4">
-                  {service.portfolio_urls.slice(0, 4).map((url: string, i: number) => (
-                    <div key={i} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                      <img src={url} alt={`Portfolio ${i + 1}`} className="w-full h-full object-cover" />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
             {/* 서비스 설명 */}
             <div className="bg-white rounded-xl p-8 shadow-sm">
               <h1 className="text-2xl font-bold mb-6">{service.title}</h1>
@@ -140,6 +114,32 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
           {/* 오른쪽: 구매 옵션 */}
           <div className="lg:col-span-1">
             <div className="sticky top-32 space-y-6">
+              {/* 썸네일 이미지 */}
+              <div className="bg-white rounded-xl overflow-hidden shadow-sm">
+                <div className="aspect-video relative bg-gray-100">
+                  {service.thumbnail_url ? (
+                    <img
+                      src={service.thumbnail_url}
+                      alt={service.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                      <i className="fas fa-image text-[40px]"></i>
+                    </div>
+                  )}
+                </div>
+                {service.portfolio_urls && service.portfolio_urls.length > 0 && (
+                  <div className="grid grid-cols-2 gap-2 p-4">
+                    {service.portfolio_urls.slice(0, 4).map((url: string, i: number) => (
+                      <div key={i} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                        <img src={url} alt={`Portfolio ${i + 1}`} className="w-full h-full object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {/* 판매자 정보 */}
               <div className="bg-white rounded-xl p-6 shadow-sm">
                 <div className="flex items-center gap-4 mb-4">
