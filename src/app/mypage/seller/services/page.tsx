@@ -57,6 +57,22 @@ export default async function SellerServicesPage({
       throw servicesError
     }
 
+    // 각 서비스의 pending revision 조회
+    if (services && services.length > 0) {
+      const serviceIds = services.map(s => s.id)
+      const { data: revisions } = await supabase
+        .from('service_revisions')
+        .select('service_id, id, status')
+        .in('service_id', serviceIds)
+        .eq('status', 'pending')
+
+      // 서비스에 pending revision 정보 추가
+      services.forEach((service: any) => {
+        const pendingRevision = revisions?.find(r => r.service_id === service.id)
+        service.hasPendingRevision = !!pendingRevision
+      })
+    }
+
     // Count 조회
     const [
       { count: activeCount },

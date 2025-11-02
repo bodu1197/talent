@@ -139,7 +139,15 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
                   <div className="flex-1 p-4 flex flex-col">
                     <div className="flex items-start justify-between mb-2">
                       <h3 className="text-lg font-bold text-gray-900 flex-1">{service.title}</h3>
-                      {getStatusBadge(service.status)}
+                      <div className="flex gap-2">
+                        {getStatusBadge(service.status)}
+                        {service.hasPendingRevision && (
+                          <span className="px-3 py-1.5 bg-orange-100 text-orange-800 rounded-full text-xs font-medium flex items-center gap-1">
+                            <i className="fas fa-hourglass-half"></i>
+                            승인 대기중
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     <p className="text-sm text-gray-600 mb-3 line-clamp-2 flex-1">{service.description}</p>
