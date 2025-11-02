@@ -2,13 +2,14 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase/client'
 
 const menuItems = [
   { name: '대시보드', path: '/admin/dashboard', icon: 'fa-chart-line' },
   { name: '사용자 관리', path: '/admin/users', icon: 'fa-users' },
-  { name: '서비스 관리', path: '/admin/services', icon: 'fa-briefcase' },
-  { name: '수정 요청 관리', path: '/admin/service-revisions', icon: 'fa-edit' },
+  { name: '서비스 관리', path: '/admin/services', icon: 'fa-briefcase', badge: 'pendingServices' },
+  { name: '수정 요청 관리', path: '/admin/service-revisions', icon: 'fa-edit', badge: 'pendingRevisions' },
   { name: '주문 관리', path: '/admin/orders', icon: 'fa-shopping-cart' },
   { name: '정산 관리', path: '/admin/settlements', icon: 'fa-money-bill-wave' },
   { name: '리뷰 관리', path: '/admin/reviews', icon: 'fa-star' },
@@ -23,6 +24,43 @@ const menuItems = [
 export default function AdminSidebar() {
   const pathname = usePathname()
   const [collapsed, setCollapsed] = useState(false)
+  const [badgeCounts, setBadgeCounts] = useState({
+    pendingServices: 0,
+    pendingRevisions: 0
+  })
+
+  useEffect(() => {
+    loadPendingCounts()
+
+    // Refresh counts every 30 seconds
+    const interval = setInterval(loadPendingCounts, 30000)
+    return () => clearInterval(interval)
+  }, [])
+
+  async function loadPendingCounts() {
+    try {
+      const supabase = createClient()
+
+      // Count pending services
+      const { count: servicesCount } = await supabase
+        .from('services')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'pending')
+
+      // Count pending revisions
+      const { count: revisionsCount } = await supabase
+        .from('service_revisions')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'pending')
+
+      setBadgeCounts({
+        pendingServices: servicesCount || 0,
+        pendingRevisions: revisionsCount || 0
+      })
+    } catch (error) {
+      console.error('Failed to load pending counts:', error)
+    }
+  }
 
   return (
     <aside className={`flex-shrink-0 h-full bg-brand-primary text-white transition-all duration-300 flex flex-col ${collapsed ? 'w-20' : 'w-64'}`}>
@@ -46,18 +84,31 @@ export default function AdminSidebar() {
       <nav className="flex-1 overflow-y-auto py-4 min-h-0">
         {menuItems.map((item) => {
           const isActive = pathname === item.path || pathname.startsWith(item.path + '/')
+          const badgeCount = item.badge ? badgeCounts[item.badge as keyof typeof badgeCounts] : 0
 
           return (
             <Link
               key={item.path}
               href={item.path}
-              className={`flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors ${
+              className={`relative flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors ${
                 isActive ? 'bg-white/20 border-r-4 border-white' : ''
               }`}
               title={collapsed ? item.name : undefined}
             >
               <i className={`fas ${item.icon} ${collapsed ? 'text-lg' : 'w-5'}`}></i>
-              {!collapsed && <span className="flex-1">{item.name}</span>}
+              {!collapsed && (
+                <>
+                  <span className="flex-1">{item.name}</span>
+                  {badgeCount > 0 && (
+                    <span className="px-2 py-0.5 bg-red-500 text-white text-xs font-bold rounded-full min-w-[20px] text-center">
+                      {badgeCount > 99 ? '99+' : badgeCount}
+                    </span>
+                  )}
+                </>
+              )}
+              {collapsed && badgeCount > 0 && (
+                <span className="absolute right-1 top-1 w-2 h-2 bg-red-500 rounded-full"></span>
+              )}
             </Link>
           )
         })}

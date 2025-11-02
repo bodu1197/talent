@@ -60,6 +60,7 @@ export default async function PendingServiceDetailPage({
       .single()
 
     // seller user 정보
+    let sellerWithUser: any = seller
     if (seller?.user_id) {
       const { data: userData } = await supabase
         .from('users')
@@ -68,7 +69,7 @@ export default async function PendingServiceDetailPage({
         .single()
 
       if (userData) {
-        seller.user = userData
+        sellerWithUser = { ...seller, user: userData }
       }
     }
 
@@ -76,7 +77,7 @@ export default async function PendingServiceDetailPage({
       ...service,
       service_categories: serviceCategories,
       service_packages: servicePackages,
-      seller
+      seller: sellerWithUser
     }
 
     return <PendingServiceDetailClient service={serviceDetail} />
