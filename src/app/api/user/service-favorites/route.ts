@@ -173,16 +173,16 @@ export async function GET(request: NextRequest) {
         seller:sellers(
           id,
           business_name,
-          display_name,
           is_verified
         )
       `)
       .in('id', serviceIds)
 
     if (servicesError) {
-      console.error('Services fetch error:', servicesError)
+      console.error('[Favorites API] Services fetch error:', servicesError)
+      console.error('[Favorites API] Error details:', JSON.stringify(servicesError, null, 2))
       return NextResponse.json(
-        { error: 'Failed to fetch service details' },
+        { error: 'Failed to fetch service details', details: servicesError.message },
         { status: 500 }
       )
     }

@@ -35,8 +35,14 @@ export default function FavoritesPage() {
           console.log('Number of favorites:', data?.length || 0)
           setFavorites(data || [])
         } else {
-          const errorText = await response.text()
-          console.error('Failed to fetch favorites:', response.status, errorText)
+          try {
+            const errorJson = await response.json()
+            console.error('Failed to fetch favorites:', response.status, errorJson)
+            console.error('Error details:', errorJson.details)
+          } catch {
+            const errorText = await response.text()
+            console.error('Failed to fetch favorites:', response.status, errorText)
+          }
         }
       } catch (error) {
         console.error('Failed to fetch favorites:', error)
