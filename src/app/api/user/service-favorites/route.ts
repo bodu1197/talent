@@ -157,19 +157,7 @@ export async function GET(request: NextRequest) {
     const { data: services, error: servicesError } = await supabase
       .from('services')
       .select(`
-        id,
-        title,
-        description,
-        thumbnail_url,
-        price,
-        delivery_days,
-        revision_count,
-        rating,
-        orders_count,
-        view_count,
-        is_featured,
-        status,
-        created_at,
+        *,
         seller:sellers(
           id,
           business_name,
