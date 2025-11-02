@@ -506,13 +506,13 @@ export async function getServiceRevisionDetail(revisionId: string, supabaseClien
 
   let serviceCategories: any[] = []
   if (serviceCategoryLinks && serviceCategoryLinks.length > 0) {
-    const categoryIds = serviceCategoryLinks.map(sc => sc.category_id)
+    const categoryIds = serviceCategoryLinks.map((sc: any) => sc.category_id)
     const { data: cats } = await supabase
       .from('categories')
       .select('id, name')
       .in('id', categoryIds)
 
-    serviceCategories = cats?.map(cat => ({ category: cat })) || []
+    serviceCategories = cats?.map((cat: any) => ({ category: cat })) || []
   }
 
   // 원본 서비스 패키지
@@ -530,13 +530,13 @@ export async function getServiceRevisionDetail(revisionId: string, supabaseClien
 
   let revisionCategories: any[] = []
   if (revisionCategoryLinks && revisionCategoryLinks.length > 0) {
-    const categoryIds = revisionCategoryLinks.map(rc => rc.category_id)
+    const categoryIds = revisionCategoryLinks.map((rc: any) => rc.category_id)
     const { data: cats } = await supabase
       .from('categories')
       .select('id, name')
       .in('id', categoryIds)
 
-    revisionCategories = cats?.map(cat => ({ category: cat })) || []
+    revisionCategories = cats?.map((cat: any) => ({ category: cat })) || []
   }
 
   // 수정 요청의 패키지
