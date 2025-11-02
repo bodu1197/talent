@@ -28,7 +28,7 @@ export default async function RevisionDetailPage({
   }
 
   try {
-    const revision = await getServiceRevisionDetail(id)
+    const revision = await getServiceRevisionDetail(id, supabase)
     return <RevisionDetailClient revision={revision} />
   } catch (error: any) {
     return (

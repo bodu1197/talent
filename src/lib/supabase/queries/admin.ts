@@ -479,8 +479,8 @@ export async function rejectServiceRevision(revisionId: string, adminNote?: stri
 }
 
 // 서비스 수정 요청 상세 조회
-export async function getServiceRevisionDetail(revisionId: string) {
-  const supabase = createClient()
+export async function getServiceRevisionDetail(revisionId: string, supabaseClient?: any) {
+  const supabase = supabaseClient || createClient()
 
   // 수정 요청 정보
   const { data: revision, error: revisionError } = await supabase
