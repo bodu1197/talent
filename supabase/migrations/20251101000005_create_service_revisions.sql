@@ -1,8 +1,8 @@
 -- 서비스 수정본 관리 테이블
 CREATE TABLE IF NOT EXISTS public.service_revisions (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    service_id UUID NOT NULL REFERENCES public.services(id) ON DELETE CASCADE,
-    seller_id UUID NOT NULL REFERENCES public.sellers(id) ON DELETE CASCADE,
+    service_id UUID NOT NULL,
+    seller_id UUID NOT NULL,
 
     -- 서비스 정보 (수정될 내용)
     title VARCHAR(200) NOT NULL,
@@ -18,12 +18,36 @@ CREATE TABLE IF NOT EXISTS public.service_revisions (
     -- 메타데이터
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     reviewed_at TIMESTAMP WITH TIME ZONE,
-    reviewed_by UUID REFERENCES auth.users(id),
-
-    -- 인덱스
-    CONSTRAINT service_revisions_service_id_fkey FOREIGN KEY (service_id) REFERENCES public.services(id) ON DELETE CASCADE,
-    CONSTRAINT service_revisions_seller_id_fkey FOREIGN KEY (seller_id) REFERENCES public.sellers(id) ON DELETE CASCADE
+    reviewed_by UUID
 );
+
+-- Foreign keys (이미 존재하면 무시됨)
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'service_revisions_service_id_fkey'
+    ) THEN
+        ALTER TABLE public.service_revisions
+        ADD CONSTRAINT service_revisions_service_id_fkey
+        FOREIGN KEY (service_id) REFERENCES public.services(id) ON DELETE CASCADE;
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'service_revisions_seller_id_fkey'
+    ) THEN
+        ALTER TABLE public.service_revisions
+        ADD CONSTRAINT service_revisions_seller_id_fkey
+        FOREIGN KEY (seller_id) REFERENCES public.sellers(id) ON DELETE CASCADE;
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'service_revisions_reviewed_by_fkey'
+    ) THEN
+        ALTER TABLE public.service_revisions
+        ADD CONSTRAINT service_revisions_reviewed_by_fkey
+        FOREIGN KEY (reviewed_by) REFERENCES auth.users(id);
+    END IF;
+END $$;
 
 -- 카테고리 수정본
 CREATE TABLE IF NOT EXISTS public.service_revision_categories (
