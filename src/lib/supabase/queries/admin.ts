@@ -515,13 +515,6 @@ export async function getServiceRevisionDetail(revisionId: string, supabaseClien
     serviceCategories = cats?.map((cat: any) => ({ category: cat })) || []
   }
 
-  // 원본 서비스 패키지
-  const { data: servicePackages } = await supabase
-    .from('service_packages')
-    .select('*')
-    .eq('service_id', revision.service_id)
-    .order('package_type')
-
   // 수정 요청의 카테고리
   const { data: revisionCategoryLinks } = await supabase
     .from('service_revision_categories')
@@ -538,13 +531,6 @@ export async function getServiceRevisionDetail(revisionId: string, supabaseClien
 
     revisionCategories = cats?.map((cat: any) => ({ category: cat })) || []
   }
-
-  // 수정 요청의 패키지
-  const { data: revisionPackages } = await supabase
-    .from('service_revision_packages')
-    .select('*')
-    .eq('revision_id', revisionId)
-    .order('package_type')
 
   // 판매자 정보
   const { data: seller } = await supabase
@@ -571,11 +557,9 @@ export async function getServiceRevisionDetail(revisionId: string, supabaseClien
     ...revision,
     service: {
       ...service,
-      service_categories: serviceCategories,
-      service_packages: servicePackages
+      service_categories: serviceCategories
     },
     seller: sellerWithUser,
-    revision_categories: revisionCategories,
-    revision_packages: revisionPackages
+    revision_categories: revisionCategories
   }
 }

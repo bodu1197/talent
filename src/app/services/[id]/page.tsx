@@ -24,8 +24,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       ),
       service_categories(
         category:categories(id, name, slug)
-      ),
-      service_packages(*)
+      )
     `)
     .eq('id', id)
     .single()
@@ -51,12 +50,6 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       service.seller.user = userData
     }
   }
-
-  // 패키지 정렬: basic, standard, premium 순서
-  const sortedPackages = service.service_packages?.sort((a: any, b: any) => {
-    const order = { basic: 0, standard: 1, premium: 2 }
-    return (order[a.package_type as keyof typeof order] || 0) - (order[b.package_type as keyof typeof order] || 0)
-  }) || []
 
   const categories = service.service_categories?.map((sc: any) => sc.category) || []
 
@@ -166,65 +159,30 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                 </div>
               </div>
 
-              {/* 패키지 선택 */}
-              {sortedPackages.length > 0 && (
-                <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                  <div className="flex border-b">
-                    {sortedPackages.map((pkg: any) => (
-                      <button
-                        key={pkg.id}
-                        className={`flex-1 py-3 px-4 text-sm font-medium ${
-                          pkg.package_type === 'standard'
-                            ? 'bg-[#0f3460] text-white'
-                            : 'bg-gray-50 hover:bg-gray-100'
-                        }`}
-                      >
-                        {pkg.name}
-                        {pkg.package_type === 'standard' && (
-                          <span className="block text-xs mt-1">추천</span>
-                        )}
-                      </button>
-                    ))}
+              {/* 가격 정보 */}
+              <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div className="p-6">
+                  <div className="text-3xl font-bold mb-1">
+                    ₩{service.price?.toLocaleString() || 0}
+                  </div>
+                  <div className="text-sm text-gray-600 mb-6">
+                    {service.delivery_days || 0}일 이내 완료 · {service.revision_count === 999 ? '무제한' : `${service.revision_count || 0}회`} 수정
                   </div>
 
-                  {/* 첫 번째 패키지 또는 standard 패키지 표시 */}
-                  {(() => {
-                    const displayPkg = sortedPackages.find((p: any) => p.package_type === 'standard') || sortedPackages[0]
-                    return (
-                      <div className="p-6">
-                        <div className="text-3xl font-bold mb-1">
-                          ₩{displayPkg.price.toLocaleString()}
-                        </div>
-                        <div className="text-sm text-gray-600 mb-6">
-                          {displayPkg.delivery_days}일 이내 완료 · {displayPkg.revision_count === 999 ? '무제한' : `${displayPkg.revision_count}회`} 수정
-                        </div>
+                  <button className="w-full py-3 bg-[#0f3460] text-white rounded-lg font-medium hover:bg-[#1a4d8f] transition-colors">
+                    구매하기
+                  </button>
 
-                        <ul className="space-y-2 mb-6">
-                          {displayPkg.features?.map((feature: string, i: number) => (
-                            <li key={i} className="flex items-start gap-2 text-sm">
-                              <i className="fas fa-check text-green-500 mt-0.5"></i>
-                              <span>{feature}</span>
-                            </li>
-                          ))}
-                        </ul>
-
-                        <button className="w-full py-3 bg-[#0f3460] text-white rounded-lg font-medium hover:bg-[#1a4d8f] transition-colors">
-                          구매하기
-                        </button>
-
-                        <div className="flex gap-2 mt-3">
-                          <button className="flex-1 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-                            <i className="far fa-heart"></i> 찜하기
-                          </button>
-                          <button className="flex-1 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-                            <i className="fas fa-share"></i> 공유
-                          </button>
-                        </div>
-                      </div>
-                    )
-                  })()}
+                  <div className="flex gap-2 mt-3">
+                    <button className="flex-1 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                      <i className="far fa-heart"></i> 찜하기
+                    </button>
+                    <button className="flex-1 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                      <i className="fas fa-share"></i> 공유
+                    </button>
+                  </div>
                 </div>
-              )}
+              </div>
 
               {/* 안전거래 배지 */}
               <div className="bg-blue-50 rounded-xl p-4 text-center">

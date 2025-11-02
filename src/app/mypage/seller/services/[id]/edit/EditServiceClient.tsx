@@ -5,8 +5,6 @@ import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
-type PackageType = 'basic' | 'standard' | 'premium'
-
 interface Category {
   id: string
   name: string
@@ -27,7 +25,6 @@ interface Props {
 }
 
 export default function EditServiceClient({ service, sellerId, categoryHierarchy }: Props) {
-  const [activePackage, setActivePackage] = useState<PackageType>('basic')
   const [level1Categories, setLevel1Categories] = useState<Category[]>([])
   const [level2Categories, setLevel2Categories] = useState<Category[]>([])
   const [level3Categories, setLevel3Categories] = useState<Category[]>([])
@@ -38,31 +35,13 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(service.thumbnail_url || null)
 
-  // 서비스 패키지 데이터를 formData 형식으로 변환
-  const getPackageData = (packageType: string) => {
-    const pkg = service.service_packages?.find((p: any) => p.package_type === packageType)
-    if (pkg) {
-      return {
-        price: String(pkg.price || ''),
-        deliveryDays: String(pkg.delivery_days || ''),
-        revisionCount: pkg.revision_count === 999 ? 'unlimited' : String(pkg.revision_count || '0'),
-        features: pkg.features && pkg.features.length > 0 ? pkg.features : ['']
-      }
-    }
-    return packageType === 'basic'
-      ? { price: String(service.price || ''), deliveryDays: String(service.delivery_days || ''), revisionCount: service.revision_count === 999 ? 'unlimited' : String(service.revision_count || '0'), features: [''] }
-      : { price: '', deliveryDays: '', revisionCount: '0', features: [''] }
-  }
-
   const [formData, setFormData] = useState({
     title: service.title || '',
     category: service.service_categories?.[0]?.category_id || '',
     description: service.description || '',
-    packages: {
-      basic: getPackageData('basic'),
-      standard: getPackageData('standard'),
-      premium: getPackageData('premium')
-    }
+    price: String(service.price || ''),
+    deliveryDays: String(service.delivery_days || ''),
+    revisionCount: service.revision_count === 999 ? 'unlimited' : String(service.revision_count || '0')
   })
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -241,7 +220,9 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
             seller_id: sellerId,
             title: formData.title,
             description: formData.description,
-            price: parseInt(formData.packages.basic.price) || 0,
+            price: parseInt(formData.price) || 0,
+            delivery_days: parseInt(formData.deliveryDays) || 7,
+            revision_count: formData.revisionCount === 'unlimited' ? 999 : parseInt(formData.revisionCount) || 0,
             thumbnail_url: thumbnail_url,
             status: 'pending',
             revision_note: '서비스 정보 수정'
@@ -265,30 +246,6 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
             })
         }
 
-        // 패키지 추가
-        const revisionPackages = []
-        for (const [type, pkg] of Object.entries(formData.packages)) {
-          // type이 유효한 package_type인지 확인
-          if ((type === 'basic' || type === 'standard' || type === 'premium') && pkg.price && pkg.deliveryDays) {
-            revisionPackages.push({
-              revision_id: revision.id,
-              package_type: type as 'basic' | 'standard' | 'premium',
-              name: type === 'basic' ? '베이직' : type === 'standard' ? '스탠다드' : '프리미엄',
-              description: pkg.features.filter((f: string) => f).join(', '),
-              price: parseInt(pkg.price),
-              delivery_days: parseInt(pkg.deliveryDays),
-              revision_count: pkg.revisionCount === 'unlimited' ? 999 : parseInt(pkg.revisionCount),
-              features: pkg.features.filter((f: string) => f)
-            })
-          }
-        }
-
-        if (revisionPackages.length > 0) {
-          await supabase
-            .from('service_revision_packages')
-            .insert(revisionPackages)
-        }
-
         alert('수정 요청이 제출되었습니다. 관리자 승인 후 반영됩니다.')
       } else {
         // pending, draft 상태 서비스는 직접 수정
@@ -297,9 +254,9 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
           .update({
             title: formData.title,
             description: formData.description,
-            price: parseInt(formData.packages.basic.price) || 0,
-            delivery_days: parseInt(formData.packages.basic.deliveryDays) || 7,
-            revision_count: formData.packages.basic.revisionCount === 'unlimited' ? 999 : parseInt(formData.packages.basic.revisionCount) || 0,
+            price: parseInt(formData.price) || 0,
+            delivery_days: parseInt(formData.deliveryDays) || 7,
+            revision_count: formData.revisionCount === 'unlimited' ? 999 : parseInt(formData.revisionCount) || 0,
             thumbnail_url: thumbnail_url,
             updated_at: new Date().toISOString()
           })
@@ -325,38 +282,6 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
               category_id: formData.category,
               is_primary: true
             })
-        }
-
-        // 패키지 업데이트
-        await supabase
-          .from('service_packages')
-          .delete()
-          .eq('service_id', service.id)
-
-        const packages = []
-        for (const [type, pkg] of Object.entries(formData.packages)) {
-          if (pkg.price && pkg.deliveryDays) {
-            packages.push({
-              service_id: service.id,
-              package_type: type,
-              name: type === 'basic' ? '베이직' : type === 'standard' ? '스탠다드' : '프리미엄',
-              description: pkg.features.filter((f: string) => f).join(', '),
-              price: parseInt(pkg.price),
-              delivery_days: parseInt(pkg.deliveryDays),
-              revision_count: pkg.revisionCount === 'unlimited' ? 999 : parseInt(pkg.revisionCount),
-              features: pkg.features.filter((f: string) => f)
-            })
-          }
-        }
-
-        if (packages.length > 0) {
-          const { error: packagesError } = await supabase
-            .from('service_packages')
-            .insert(packages)
-
-          if (packagesError) {
-            console.error('Packages insert error:', packagesError)
-          }
         }
 
         alert('서비스가 성공적으로 수정되었습니다!')
@@ -538,33 +463,10 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
             </div>
           </div>
 
-          {/* 패키지 설정 */}
+          {/* 가격 및 작업 조건 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">패키지 설정</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-6">가격 및 작업 조건</h2>
 
-            {/* 패키지 탭 */}
-            <div className="flex gap-2 mb-6">
-              {[
-                { key: 'basic', label: '베이직' },
-                { key: 'standard', label: '스탠다드' },
-                { key: 'premium', label: '프리미엄' }
-              ].map((pkg) => (
-                <button
-                  key={pkg.key}
-                  type="button"
-                  onClick={() => setActivePackage(pkg.key as PackageType)}
-                  className={`flex-1 px-4 py-3 rounded-lg font-medium transition-colors ${
-                    activePackage === pkg.key
-                      ? 'bg-[#0f3460] text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {pkg.label}
-                </button>
-              ))}
-            </div>
-
-            {/* 패키지 내용 */}
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -573,17 +475,8 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                   </label>
                   <input
                     type="number"
-                    value={formData.packages[activePackage].price}
-                    onChange={(e) => setFormData({
-                      ...formData,
-                      packages: {
-                        ...formData.packages,
-                        [activePackage]: {
-                          ...formData.packages[activePackage],
-                          price: e.target.value
-                        }
-                      }
-                    })}
+                    value={formData.price}
+                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                     placeholder="50000"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
                     required
@@ -596,17 +489,8 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                   </label>
                   <input
                     type="number"
-                    value={formData.packages[activePackage].deliveryDays}
-                    onChange={(e) => setFormData({
-                      ...formData,
-                      packages: {
-                        ...formData.packages,
-                        [activePackage]: {
-                          ...formData.packages[activePackage],
-                          deliveryDays: e.target.value
-                        }
-                      }
-                    })}
+                    value={formData.deliveryDays}
+                    onChange={(e) => setFormData({ ...formData, deliveryDays: e.target.value })}
                     placeholder="7"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
                     required
@@ -619,17 +503,8 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                   수정 횟수 *
                 </label>
                 <select
-                  value={formData.packages[activePackage].revisionCount}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    packages: {
-                      ...formData.packages,
-                      [activePackage]: {
-                        ...formData.packages[activePackage],
-                        revisionCount: e.target.value
-                      }
-                    }
-                  })}
+                  value={formData.revisionCount}
+                  onChange={(e) => setFormData({ ...formData, revisionCount: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
                   required
                 >
@@ -639,58 +514,6 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                   <option value="3">3회</option>
                   <option value="unlimited">무제한</option>
                 </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  제공 내용 *
-                </label>
-                <div className="space-y-2">
-                  {formData.packages[activePackage].features.map((feature: string, index: number) => (
-                    <div key={index} className="flex gap-2">
-                      <input
-                        type="text"
-                        value={feature}
-                        onChange={(e) => {
-                          const newFeatures = [...formData.packages[activePackage].features]
-                          newFeatures[index] = e.target.value
-                          setFormData({
-                            ...formData,
-                            packages: {
-                              ...formData.packages,
-                              [activePackage]: {
-                                ...formData.packages[activePackage],
-                                features: newFeatures
-                              }
-                            }
-                          })
-                        }}
-                        placeholder="예: 로고 시안 3개"
-                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-                      />
-                      {index === formData.packages[activePackage].features.length - 1 && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setFormData({
-                              ...formData,
-                              packages: {
-                                ...formData.packages,
-                                [activePackage]: {
-                                  ...formData.packages[activePackage],
-                                  features: [...formData.packages[activePackage].features, '']
-                                }
-                              }
-                            })
-                          }}
-                          className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                        >
-                          <i className="fas fa-plus"></i>
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
           </div>

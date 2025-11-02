@@ -121,7 +121,6 @@ export interface Order {
   service_id: string
   buyer_id: string
   seller_id: string
-  package_type: 'basic' | 'standard' | 'premium' | 'custom'
   price: number
   quantity: number
   total_amount: number

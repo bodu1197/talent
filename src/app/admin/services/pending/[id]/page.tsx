@@ -45,13 +45,6 @@ export default async function PendingServiceDetailPage({
       .select('category:categories(id, name)')
       .eq('service_id', id)
 
-    // 패키지 조회
-    const { data: servicePackages } = await supabase
-      .from('service_packages')
-      .select('*')
-      .eq('service_id', id)
-      .order('package_type')
-
     // 판매자 정보
     const { data: seller } = await supabase
       .from('sellers')
@@ -76,7 +69,6 @@ export default async function PendingServiceDetailPage({
     const serviceDetail = {
       ...service,
       service_categories: serviceCategories,
-      service_packages: servicePackages,
       seller: sellerWithUser
     }
 

@@ -54,15 +54,6 @@ export default function PendingServiceDetailClient({ service }: Props) {
     }
   }
 
-  const getPackageLabel = (type: string) => {
-    switch (type) {
-      case 'basic': return '베이직'
-      case 'standard': return '스탠다드'
-      case 'premium': return '프리미엄'
-      default: return type
-    }
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-5xl mx-auto">
@@ -137,39 +128,19 @@ export default function PendingServiceDetailClient({ service }: Props) {
             </div>
           </div>
 
-          {/* 패키지 */}
-          <div>
-            <span className="text-sm text-gray-600 block mb-2">패키지</span>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {service.service_packages?.map((pkg: any) => (
-                <div key={pkg.id} className="border-2 border-gray-200 rounded-lg p-4 bg-gray-50">
-                  <div className="font-bold text-lg mb-3">{pkg.name}</div>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">가격:</span>
-                      <span className="font-bold">{pkg.price?.toLocaleString()}원</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">배송:</span>
-                      <span>{pkg.delivery_days}일</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">수정:</span>
-                      <span>{pkg.revision_count === 999 ? '무제한' : `${pkg.revision_count}회`}</span>
-                    </div>
-                    {pkg.features && pkg.features.length > 0 && (
-                      <div className="mt-3 pt-3 border-t">
-                        <span className="text-gray-600 block mb-2">포함사항:</span>
-                        <ul className="list-disc list-inside space-y-1">
-                          {pkg.features.map((f: string, i: number) => (
-                            <li key={i} className="text-xs">{f}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
+          {/* 가격 및 작업 정보 */}
+          <div className="grid grid-cols-3 gap-4 mt-4">
+            <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+              <span className="text-sm text-gray-600 block mb-1">가격</span>
+              <p className="text-xl font-bold">{service.price?.toLocaleString()}원</p>
+            </div>
+            <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+              <span className="text-sm text-gray-600 block mb-1">작업 기간</span>
+              <p className="text-xl font-bold">{service.delivery_days}일</p>
+            </div>
+            <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+              <span className="text-sm text-gray-600 block mb-1">수정 횟수</span>
+              <p className="text-xl font-bold">{service.revision_count === 999 ? '무제한' : `${service.revision_count}회`}</p>
             </div>
           </div>
         </div>

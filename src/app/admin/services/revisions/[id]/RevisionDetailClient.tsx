@@ -37,15 +37,6 @@ export default function RevisionDetailClient({ revision }: Props) {
     }
   }
 
-  const getPackageLabel = (type: string) => {
-    switch (type) {
-      case 'basic': return '베이직'
-      case 'standard': return '스탠다드'
-      case 'premium': return '프리미엄'
-      default: return type
-    }
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-7xl mx-auto">
@@ -128,30 +119,14 @@ export default function RevisionDetailClient({ revision }: Props) {
               </div>
             </div>
 
-            {/* 패키지 */}
-            <div>
-              <span className="text-sm text-gray-600 block mb-2">패키지</span>
-              <div className="space-y-3">
-                {revision.service?.service_packages?.map((pkg: any) => (
-                  <div key={pkg.id} className="border border-gray-200 rounded-lg p-3">
-                    <div className="font-medium mb-2">{pkg.name}</div>
-                    <div className="text-sm space-y-1">
-                      <div><span className="text-gray-600">가격:</span> {pkg.price?.toLocaleString()}원</div>
-                      <div><span className="text-gray-600">배송:</span> {pkg.delivery_days}일</div>
-                      <div><span className="text-gray-600">수정:</span> {pkg.revision_count === 999 ? '무제한' : `${pkg.revision_count}회`}</div>
-                      {pkg.features && pkg.features.length > 0 && (
-                        <div>
-                          <span className="text-gray-600">포함사항:</span>
-                          <ul className="list-disc list-inside mt-1">
-                            {pkg.features.map((f: string, i: number) => (
-                              <li key={i}>{f}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
+            {/* 가격 및 작업 정보 */}
+            <div className="space-y-3">
+              <div className="border border-gray-200 rounded-lg p-3">
+                <div className="text-sm space-y-1">
+                  <div><span className="text-gray-600">가격:</span> {revision.service?.price?.toLocaleString()}원</div>
+                  <div><span className="text-gray-600">작업 기간:</span> {revision.service?.delivery_days}일</div>
+                  <div><span className="text-gray-600">수정 횟수:</span> {revision.service?.revision_count === 999 ? '무제한' : `${revision.service?.revision_count}회`}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -199,30 +174,14 @@ export default function RevisionDetailClient({ revision }: Props) {
               </div>
             </div>
 
-            {/* 패키지 */}
-            <div>
-              <span className="text-sm text-gray-600 block mb-2">패키지</span>
-              <div className="space-y-3">
-                {revision.revision_packages?.map((pkg: any) => (
-                  <div key={pkg.id} className="border-2 border-orange-200 rounded-lg p-3 bg-orange-50">
-                    <div className="font-medium mb-2 text-orange-700">{pkg.name || getPackageLabel(pkg.package_type)}</div>
-                    <div className="text-sm space-y-1 text-orange-700">
-                      <div><span className="text-gray-600">가격:</span> {pkg.price?.toLocaleString()}원</div>
-                      <div><span className="text-gray-600">배송:</span> {pkg.delivery_days}일</div>
-                      <div><span className="text-gray-600">수정:</span> {pkg.revision_count === 999 ? '무제한' : `${pkg.revision_count}회`}</div>
-                      {pkg.features && (
-                        <div>
-                          <span className="text-gray-600">포함사항:</span>
-                          <ul className="list-disc list-inside mt-1">
-                            {(Array.isArray(pkg.features) ? pkg.features : JSON.parse(pkg.features || '[]')).map((f: string, i: number) => (
-                              <li key={i}>{f}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
+            {/* 가격 및 작업 정보 */}
+            <div className="space-y-3">
+              <div className="border-2 border-orange-200 rounded-lg p-3 bg-orange-50">
+                <div className="text-sm space-y-1 text-orange-700">
+                  <div><span className="text-gray-600">가격:</span> {revision.price?.toLocaleString()}원</div>
+                  <div><span className="text-gray-600">작업 기간:</span> {revision.delivery_days}일</div>
+                  <div><span className="text-gray-600">수정 횟수:</span> {revision.revision_count === 999 ? '무제한' : `${revision.revision_count}회`}</div>
+                </div>
               </div>
             </div>
           </div>
