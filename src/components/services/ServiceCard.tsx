@@ -71,9 +71,9 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           {/* 평점 및 리뷰 */}
           <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
             <span className="flex items-center gap-1">
-              <i className="fas fa-star text-yellow-400"></i> {service.rating.toFixed(1)}
+              <i className="fas fa-star text-yellow-400"></i> {(service.rating || 0).toFixed(1)}
             </span>
-            <span>({service.order_count})</span>
+            <span>({service.order_count || 0})</span>
             {service.is_express_available && (
               <>
                 <span>•</span>
@@ -88,7 +88,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           <div className="flex items-center justify-between">
             <div>
               <span className="text-2xl font-bold">
-                {service.price_min.toLocaleString()}
+                {(service.price_min || 0).toLocaleString()}
               </span>
               <span className="text-gray-600 ml-1">원~</span>
             </div>
