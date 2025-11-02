@@ -139,8 +139,6 @@ export async function GET(request: NextRequest) {
           description,
           thumbnail_url,
           price,
-          price_min,
-          price_max,
           delivery_days,
           revision_count,
           rating,

@@ -202,7 +202,7 @@ export default function RecentViewedServices() {
 
                   {/* 가격 */}
                   <p className="text-brand-primary font-bold text-sm">
-                    {(service.price_min || 0).toLocaleString()}원~
+                    {(service.price || 0).toLocaleString()}원
                   </p>
 
                   {/* 같은 카테고리 추천 표시 */}

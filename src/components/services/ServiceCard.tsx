@@ -88,9 +88,9 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           <div className="flex items-center justify-between">
             <div>
               <span className="text-2xl font-bold">
-                {(service.price_min || 0).toLocaleString()}
+                {(service.price || 0).toLocaleString()}
               </span>
-              <span className="text-gray-600 ml-1">원~</span>
+              <span className="text-gray-600 ml-1">원</span>
             </div>
             <button className="btn-primary px-4 py-2 opacity-0 group-hover:opacity-100 transition-opacity">
               상세보기
