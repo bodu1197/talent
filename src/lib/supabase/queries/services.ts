@@ -70,6 +70,7 @@ export async function getServiceById(serviceId: string) {
       seller:sellers(
         id,
         business_name,
+        display_name,
         user_id
       ),
       service_categories(
@@ -141,6 +142,7 @@ export async function getServicesByCategory(categoryId: string) {
       seller:sellers!inner(
         id,
         business_name,
+        display_name,
         user_id,
         is_verified
       ),
@@ -204,6 +206,7 @@ export async function getActiveServices(limit?: number) {
       seller:sellers!inner(
         id,
         business_name,
+        display_name,
         user_id,
         is_verified
       ),

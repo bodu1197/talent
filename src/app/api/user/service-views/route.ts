@@ -81,7 +81,18 @@ export async function GET(request: NextRequest) {
       .select(`
         service_id,
         viewed_at,
-        service:services(*)
+        service:services(
+          *,
+          seller:sellers(
+            id,
+            business_name,
+            display_name,
+            is_verified
+          ),
+          service_categories(
+            category:categories(id, name, slug)
+          )
+        )
       `)
       .eq('user_id', user.id)
       .order('viewed_at', { ascending: false })

@@ -53,6 +53,7 @@ export interface SellerProfile {
   id: string
   user_id: string
   business_name?: string
+  display_name?: string
   description?: string
   portfolio_url?: string
   rating: number
