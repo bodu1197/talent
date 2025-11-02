@@ -485,23 +485,31 @@ export async function getServiceRevisionDetail(revisionId: string) {
   // 수정 요청 정보
   const { data: revision, error: revisionError } = await supabase
     .from('service_revisions')
-    .select(`
-      *,
-      service:services!service_id(
-        *,
-        service_categories(category:categories(id, name)),
-        service_packages(*)
-      ),
-      seller:sellers!seller_id(
-        id,
-        business_name,
-        user_id
-      )
-    `)
+    .select('*')
     .eq('id', revisionId)
     .single()
 
   if (revisionError) throw revisionError
+
+  // 원본 서비스 정보
+  const { data: service } = await supabase
+    .from('services')
+    .select('*')
+    .eq('id', revision.service_id)
+    .single()
+
+  // 원본 서비스 카테고리
+  const { data: serviceCategories } = await supabase
+    .from('service_categories')
+    .select('category:categories(id, name)')
+    .eq('service_id', revision.service_id)
+
+  // 원본 서비스 패키지
+  const { data: servicePackages } = await supabase
+    .from('service_packages')
+    .select('*')
+    .eq('service_id', revision.service_id)
+    .order('package_type')
 
   // 수정 요청의 카테고리
   const { data: revisionCategories } = await supabase
@@ -516,21 +524,34 @@ export async function getServiceRevisionDetail(revisionId: string) {
     .eq('revision_id', revisionId)
     .order('package_type')
 
+  // 판매자 정보
+  const { data: seller } = await supabase
+    .from('sellers')
+    .select('id, business_name, user_id')
+    .eq('id', revision.seller_id)
+    .single()
+
   // seller user 정보
-  if (revision?.seller?.user_id) {
+  if (seller?.user_id) {
     const { data: userData } = await supabase
       .from('users')
       .select('id, name, email')
-      .eq('id', revision.seller.user_id)
+      .eq('id', seller.user_id)
       .single()
 
     if (userData) {
-      revision.seller.user = userData
+      seller.user = userData
     }
   }
 
   return {
     ...revision,
+    service: {
+      ...service,
+      service_categories: serviceCategories,
+      service_packages: servicePackages
+    },
+    seller,
     revision_categories: revisionCategories,
     revision_packages: revisionPackages
   }
