@@ -123,7 +123,7 @@ const buyerNavItems: NavItem[] = [
   },
   {
     label: '찜 목록',
-    href: '/mypage/buyer/favorites',
+    href: '/mypage/favorites',
     icon: 'fa-heart'
   },
   {
