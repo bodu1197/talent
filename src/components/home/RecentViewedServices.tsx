@@ -47,8 +47,8 @@ export default function RecentViewedServices() {
                 const categoryServices = await getServicesByCategory(categoryId)
 
                 // 최근 본 서비스 제외
-                const viewedIds = validViews.map(v => v.service_id)
-                const filtered = categoryServices.filter(s => !viewedIds.includes(s.id))
+                const viewedIds = validViews.map((v: ServiceView) => v.service_id)
+                const filtered = categoryServices.filter((s: Service) => !viewedIds.includes(s.id))
 
                 // 랜덤 셔플
                 const shuffled = filtered.sort(() => Math.random() - 0.5)
