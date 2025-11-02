@@ -2,12 +2,14 @@ import ServiceGrid from '@/components/services/ServiceGrid'
 import HeroSection from '@/components/home/HeroSection'
 import AITalentShowcase from '@/components/home/AITalentShowcase'
 import CategoryGrid from '@/components/home/CategoryGrid'
+import RecentVisitedCategories from '@/components/home/RecentVisitedCategories'
 
 export default function HomePage() {
   return (
     <div className="pb-0">
       <HeroSection />
       <CategoryGrid />
+      <RecentVisitedCategories />
       <AITalentShowcase />
 
       {/* 기존의 '추천 서비스', '서비스 프로세스', '실시간 구매 후기', 'CTA 섹션' 등은
