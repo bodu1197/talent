@@ -54,7 +54,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .single()
 
       if (userError) {
-        console.error('[AuthProvider] User fetch error:', userError)
+        console.error('[AuthProvider] User fetch error:', {
+          message: userError.message,
+          details: userError.details,
+          hint: userError.hint,
+          code: userError.code
+        })
         // 에러 발생 시 기본 프로필 설정
         setProfile({
           id: userId,
