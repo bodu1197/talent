@@ -77,7 +77,7 @@ END;
 $$;
 
 -- 3. is_buyer 함수 재생성
-CREATE OR REPLACE FUNCTION is_buyer(user_id_param UUID)
+CREATE OR REPLACE FUNCTION is_buyer(check_user_id UUID)
 RETURNS BOOLEAN
 LANGUAGE plpgsql
 SECURITY DEFINER
@@ -86,13 +86,13 @@ AS $$
 BEGIN
     RETURN EXISTS (
         SELECT 1 FROM public.buyers
-        WHERE user_id = user_id_param
+        WHERE user_id = check_user_id
     );
 END;
 $$;
 
 -- 4. is_seller 함수 재생성
-CREATE OR REPLACE FUNCTION is_seller(user_id_param UUID)
+CREATE OR REPLACE FUNCTION is_seller(check_user_id UUID)
 RETURNS BOOLEAN
 LANGUAGE plpgsql
 SECURITY DEFINER
@@ -101,13 +101,13 @@ AS $$
 BEGIN
     RETURN EXISTS (
         SELECT 1 FROM public.sellers
-        WHERE user_id = user_id_param
+        WHERE user_id = check_user_id
     );
 END;
 $$;
 
 -- 5. is_verified_seller 함수 재생성
-CREATE OR REPLACE FUNCTION is_verified_seller(user_id_param UUID)
+CREATE OR REPLACE FUNCTION is_verified_seller(check_user_id UUID)
 RETURNS BOOLEAN
 LANGUAGE plpgsql
 SECURITY DEFINER
@@ -116,7 +116,7 @@ AS $$
 BEGIN
     RETURN EXISTS (
         SELECT 1 FROM public.sellers
-        WHERE user_id = user_id_param
+        WHERE user_id = check_user_id
         AND is_verified = true
     );
 END;
