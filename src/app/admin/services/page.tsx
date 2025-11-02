@@ -5,9 +5,7 @@ import {
   getAdminServices,
   getAdminServicesCount,
   getServiceRevisions,
-  getServiceRevisionsCount,
-  approveServiceRevision,
-  rejectServiceRevision
+  getServiceRevisionsCount
 } from '@/lib/supabase/queries/admin'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
@@ -131,35 +129,6 @@ export default function AdminServicesPage() {
     } catch (err: any) {
       console.error('반려 실패:', err)
       alert('반려에 실패했습니다: ' + err.message)
-    }
-  }
-
-  async function handleApproveRevision(revisionId: string) {
-    if (!confirm('이 수정 요청을 승인하시겠습니까?')) return
-
-    try {
-      await approveServiceRevision(revisionId)
-      alert('수정 요청이 승인되었습니다.')
-      loadServices()
-      loadStatusCounts()
-    } catch (err: any) {
-      console.error('수정 승인 실패:', err)
-      alert('수정 승인에 실패했습니다: ' + err.message)
-    }
-  }
-
-  async function handleRejectRevision(revisionId: string) {
-    const reason = prompt('반려 사유를 입력해주세요:')
-    if (!reason) return
-
-    try {
-      await rejectServiceRevision(revisionId, reason)
-      alert('수정 요청이 반려되었습니다.')
-      loadServices()
-      loadStatusCounts()
-    } catch (err: any) {
-      console.error('수정 반려 실패:', err)
-      alert('수정 반려에 실패했습니다: ' + err.message)
     }
   }
 
@@ -338,27 +307,13 @@ export default function AdminServicesPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <div className="flex gap-2">
-                          <a
-                            href={`/admin/services/revisions/${revision.id}`}
-                            className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors font-medium"
-                          >
-                            <i className="fas fa-eye mr-1"></i>
-                            상세보기
-                          </a>
-                          <button
-                            onClick={() => handleApproveRevision(revision.id)}
-                            className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors font-medium"
-                          >
-                            승인
-                          </button>
-                          <button
-                            onClick={() => handleRejectRevision(revision.id)}
-                            className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition-colors font-medium"
-                          >
-                            반려
-                          </button>
-                        </div>
+                        <a
+                          href={`/admin/services/revisions/${revision.id}`}
+                          className="px-4 py-2 bg-[#0f3460] text-white rounded hover:bg-[#1a4d8f] transition-colors font-medium inline-block"
+                        >
+                          <i className="fas fa-eye mr-2"></i>
+                          상세보기 및 승인/반려
+                        </a>
                       </td>
                     </tr>
                   ))}
@@ -455,20 +410,13 @@ export default function AdminServicesPage() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         {service.status === 'pending' ? (
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => handleApprove(service.id)}
-                              className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors font-medium"
-                            >
-                              승인
-                            </button>
-                            <button
-                              onClick={() => handleReject(service.id)}
-                              className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition-colors font-medium"
-                            >
-                              반려
-                            </button>
-                          </div>
+                          <a
+                            href={`/admin/services/pending/${service.id}`}
+                            className="px-4 py-2 bg-[#0f3460] text-white rounded hover:bg-[#1a4d8f] transition-colors font-medium inline-block"
+                          >
+                            <i className="fas fa-eye mr-2"></i>
+                            상세보기 및 승인/반려
+                          </a>
                         ) : (
                           <span className="text-gray-400">-</span>
                         )}
