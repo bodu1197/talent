@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/components/providers/AuthProvider'
 import { Service } from '@/types'
+import Sidebar from '@/components/mypage/Sidebar'
+import MobileSidebar from '@/components/mypage/MobileSidebar'
 
 interface FavoriteItem {
   service_id: string
@@ -63,78 +65,89 @@ export default function FavoritesPage() {
 
   if (!user) {
     return (
-      <div className="container mx-auto px-4 py-12 mt-16">
-        <div className="max-w-md mx-auto text-center">
-          <i className="fas fa-lock text-6xl text-gray-300 mb-4"></i>
-          <h2 className="text-2xl font-bold mb-4">로그인이 필요합니다</h2>
-          <p className="text-gray-600 mb-6">찜한 서비스를 확인하려면 로그인해주세요.</p>
-          <Link
-            href="/login"
-            className="inline-block px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors"
-          >
-            로그인하기
-          </Link>
-        </div>
-      </div>
+      <>
+        <MobileSidebar mode="buyer" />
+        <Sidebar mode="buyer" />
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+          <div className="max-w-md mx-auto text-center pt-12 lg:pt-0">
+            <i className="fas fa-lock text-6xl text-gray-300 mb-4"></i>
+            <h2 className="text-2xl font-bold mb-4">로그인이 필요합니다</h2>
+            <p className="text-gray-600 mb-6">찜한 서비스를 확인하려면 로그인해주세요.</p>
+            <Link
+              href="/login"
+              className="inline-block px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors"
+            >
+              로그인하기
+            </Link>
+          </div>
+        </main>
+      </>
     )
   }
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8 mt-16">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold mb-2">찜한 서비스</h1>
-          <p className="text-gray-600">관심있는 서비스를 저장하고 관리하세요</p>
-        </div>
+      <>
+        <MobileSidebar mode="buyer" />
+        <Sidebar mode="buyer" />
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+          <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-2">찜한 서비스</h1>
+            <p className="text-sm sm:text-base text-gray-600">관심있는 서비스를 저장하고 관리하세요</p>
+          </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => (
-            <div key={i} className="animate-pulse">
-              <div className="bg-gray-200 rounded-lg" style={{ aspectRatio: '210/160' }}></div>
-              <div className="mt-2 space-y-2">
-                <div className="h-4 bg-gray-200 rounded"></div>
-                <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => (
+              <div key={i} className="animate-pulse">
+                <div className="bg-gray-200 rounded-lg" style={{ aspectRatio: '210/160' }}></div>
+                <div className="mt-2 space-y-2">
+                  <div className="h-4 bg-gray-200 rounded"></div>
+                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
+            ))}
+          </div>
+        </main>
+      </>
     )
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 mt-16">
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <i className="fas fa-heart text-red-500 text-2xl"></i>
-          <h1 className="text-2xl font-bold">찜한 서비스</h1>
-          {favorites.length > 0 && (
-            <span className="text-lg text-gray-500">({favorites.length}개)</span>
-          )}
+    <>
+      <MobileSidebar mode="buyer" />
+      <Sidebar mode="buyer" />
+      <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+        <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
+          <div className="flex items-center gap-3 mb-2">
+            <i className="fas fa-heart text-red-500 text-2xl"></i>
+            <h1 className="text-2xl sm:text-3xl font-bold">찜한 서비스</h1>
+            {favorites.length > 0 && (
+              <span className="text-lg text-gray-500">({favorites.length}개)</span>
+            )}
+          </div>
+          <p className="text-sm sm:text-base text-gray-600">관심있는 서비스를 저장하고 관리하세요</p>
         </div>
-        <p className="text-gray-600">관심있는 서비스를 저장하고 관리하세요</p>
-      </div>
 
-      {favorites.length === 0 ? (
-        <div className="text-center py-16">
-          <i className="far fa-heart text-6xl text-gray-300 mb-4"></i>
-          <h3 className="text-xl font-bold mb-2">찜한 서비스가 없습니다</h3>
-          <p className="text-gray-600 mb-6">마음에 드는 서비스를 찜해보세요</p>
-          <Link
-            href="/"
-            className="inline-block px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors"
-          >
-            서비스 둘러보기
-          </Link>
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {favorites.map((favorite) => {
-            const { service } = favorite
-            if (!service) return null
+        {favorites.length === 0 ? (
+          <div className="text-center py-16">
+            <i className="far fa-heart text-6xl text-gray-300 mb-4"></i>
+            <h3 className="text-xl font-bold mb-2">찜한 서비스가 없습니다</h3>
+            <p className="text-gray-600 mb-6">마음에 드는 서비스를 찜해보세요</p>
+            <Link
+              href="/"
+              className="inline-block px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors"
+            >
+              서비스 둘러보기
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {favorites.map((favorite) => {
+              const { service } = favorite
+              if (!service) return null
 
-            return (
-              <div key={service.id} className="group relative">
+              return (
+                <div key={service.id} className="group relative">
                 {/* 제거 버튼 */}
                 <button
                   onClick={() => handleRemoveFavorite(service.id)}
@@ -212,12 +225,13 @@ export default function FavoritesPage() {
                       </span>
                     </div>
                   </div>
-                </Link>
-              </div>
-            )
-          })}
-        </div>
-      )}
-    </div>
+                  </Link>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </main>
+    </>
   )
 }
