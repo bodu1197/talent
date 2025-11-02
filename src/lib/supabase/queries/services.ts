@@ -1,26 +1,39 @@
 import { createClient } from '@/lib/supabase/client'
 
-// 재귀적으로 모든 하위 카테고리 ID 가져오기
-async function getAllDescendantCategories(supabase: any, parentId: string): Promise<string[]> {
-  const { data: children } = await supabase
-    .from('categories')
-    .select('id')
-    .eq('parent_id', parentId)
+// 한 번의 쿼리로 모든 하위 카테고리 ID 가져오기 (최적화)
+async function getAllDescendantCategories(supabase: any, parentId: string, parentLevel: number): Promise<string[]> {
+  // level에 따라 필요한 모든 카테고리를 한 번에 조회
+  if (parentLevel === 1) {
+    // 1차 카테고리: 2차와 3차 모두 가져오기
+    const { data: level2 } = await supabase
+      .from('categories')
+      .select('id')
+      .eq('parent_id', parentId)
 
-  if (!children || children.length === 0) {
-    return []
+    if (!level2 || level2.length === 0) return []
+
+    const level2Ids = level2.map((c: any) => c.id)
+
+    // 3차 카테고리도 한 번에 가져오기
+    const { data: level3 } = await supabase
+      .from('categories')
+      .select('id')
+      .in('parent_id', level2Ids)
+
+    const level3Ids = level3?.map((c: any) => c.id) || []
+    return [...level2Ids, ...level3Ids]
+
+  } else if (parentLevel === 2) {
+    // 2차 카테고리: 3차만 가져오기
+    const { data: level3 } = await supabase
+      .from('categories')
+      .select('id')
+      .eq('parent_id', parentId)
+
+    return level3?.map((c: any) => c.id) || []
   }
 
-  const childIds = children.map((c: any) => c.id)
-  const descendants: string[] = [...childIds]
-
-  // 각 자식의 하위 카테고리도 재귀적으로 가져오기
-  for (const childId of childIds) {
-    const subDescendants = await getAllDescendantCategories(supabase, childId)
-    descendants.push(...subDescendants)
-  }
-
-  return descendants
+  return []
 }
 
 export async function getSellerServices(userId: string, status?: string) {
@@ -116,7 +129,7 @@ export async function getServicesByCategory(categoryId: string) {
 
   // 2. 1차 또는 2차 카테고리인 경우, 모든 하위 카테고리 ID 가져오기
   if (category.level === 1 || category.level === 2) {
-    const allDescendants = await getAllDescendantCategories(supabase, categoryId)
+    const allDescendants = await getAllDescendantCategories(supabase, categoryId, category.level)
     categoryIds = [categoryId, ...allDescendants]
   }
 
