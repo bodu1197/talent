@@ -85,6 +85,7 @@ export interface Service {
   title: string
   description: string
   thumbnail_url?: string
+  price?: number  // Legacy field (단일 가격)
   price_min: number
   price_max?: number
   delivery_days: number

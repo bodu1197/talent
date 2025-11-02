@@ -211,7 +211,7 @@ export default function FavoritesPage() {
 
                     {/* 가격 */}
                     <p className="text-[#0f3460] font-bold text-sm">
-                      {(service.price_min || 0).toLocaleString()}원~
+                      {(service.price || service.price_min || 0).toLocaleString()}원~
                     </p>
 
                     {/* 찜한 날짜 */}
