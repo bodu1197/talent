@@ -84,7 +84,7 @@ export default function ServiceGrid({ categoryId, sellerId, featured }: ServiceG
   const placeholderCount = Math.max(0, MINIMUM_CARDS - services.length)
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
       {services.map(service => (
         <ServiceCard key={service.id} service={service} />
       ))}
