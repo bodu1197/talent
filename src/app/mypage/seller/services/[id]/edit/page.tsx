@@ -26,8 +26,7 @@ export default async function EditServicePage({ params }: { params: Promise<{ id
     .from('services')
     .select(`
       *,
-      service_categories(category_id),
-      service_packages(*)
+      service_categories(category_id)
     `)
     .eq('id', id)
     .eq('seller_id', seller.id)

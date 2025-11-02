@@ -38,8 +38,7 @@ export async function getServiceById(serviceId: string) {
       ),
       service_categories(
         category:categories(id, name, slug)
-      ),
-      service_packages(*)
+      )
     `)
     .eq('id', serviceId)
     .single()
@@ -91,8 +90,7 @@ export async function getServicesByCategory(categoryId: string) {
       ),
       service_categories!inner(
         category_id
-      ),
-      service_packages(*)
+      )
     `)
     .eq('service_categories.category_id', categoryId)
     .eq('status', 'active')  // 승인된 서비스만
@@ -105,16 +103,10 @@ export async function getServicesByCategory(categoryId: string) {
 
   // 데이터 매핑 및 seller user 정보 추가
   if (data && data.length > 0) {
-    // 각 서비스에 대해 price_min, price_max 계산
+    // 각 서비스에 대해 price_min, price_max 설정 (단일 가격 사용)
     data.forEach(service => {
-      if (service.service_packages && service.service_packages.length > 0) {
-        const prices = service.service_packages.map((pkg: any) => pkg.price).filter(Boolean)
-        service.price_min = prices.length > 0 ? Math.min(...prices) : 0
-        service.price_max = prices.length > 0 ? Math.max(...prices) : undefined
-      } else {
-        service.price_min = service.price || 0
-        service.price_max = service.price || undefined
-      }
+      service.price_min = service.price || 0
+      service.price_max = service.price || undefined
 
       // order_count 매핑
       service.order_count = service.orders_count || 0
@@ -161,8 +153,7 @@ export async function getActiveServices(limit?: number) {
       ),
       service_categories(
         category:categories(id, name, slug)
-      ),
-      service_packages(*)
+      )
     `)
     .eq('status', 'active')  // 승인된 서비스만
     .order('created_at', { ascending: false })
@@ -178,17 +169,11 @@ export async function getActiveServices(limit?: number) {
     throw error
   }
 
-  // 데이터 매핑
+  // 데이터 매핑 (단일 가격 사용)
   if (data && data.length > 0) {
     data.forEach(service => {
-      if (service.service_packages && service.service_packages.length > 0) {
-        const prices = service.service_packages.map((pkg: any) => pkg.price).filter(Boolean)
-        service.price_min = prices.length > 0 ? Math.min(...prices) : 0
-        service.price_max = prices.length > 0 ? Math.max(...prices) : undefined
-      } else {
-        service.price_min = service.price || 0
-        service.price_max = service.price || undefined
-      }
+      service.price_min = service.price || 0
+      service.price_max = service.price || undefined
 
       // order_count 매핑
       service.order_count = service.orders_count || 0
