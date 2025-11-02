@@ -65,10 +65,10 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       {/* 조회수 추적 */}
       <ViewTracker serviceId={id} />
 
-      {/* 상단 네비게이션 */}
-      <nav className="bg-white border-b sticky top-16 z-30">
+      {/* 상단 네비게이션 (Breadcrumb) */}
+      <nav className="bg-white border-b mt-16">
         <div className="container-1200 px-4">
-          <div className="flex items-center gap-2 py-3 text-sm">
+          <div className="flex items-center gap-2 py-4 text-sm">
             <Link href="/" className="text-gray-500 hover:text-gray-700">홈</Link>
             {categories.map((cat: any, index: number) => (
               <div key={index} className="flex items-center gap-2">
