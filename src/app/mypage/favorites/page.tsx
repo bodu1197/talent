@@ -27,10 +27,15 @@ export default function FavoritesPage() {
 
       try {
         const response = await fetch('/api/user/service-favorites')
+        console.log('Favorites API response status:', response.status)
 
         if (response.ok) {
           const { data } = await response.json()
+          console.log('Favorites data:', data)
+          console.log('Number of favorites:', data?.length || 0)
           setFavorites(data || [])
+        } else {
+          console.error('Failed to fetch favorites:', response.status)
         }
       } catch (error) {
         console.error('Failed to fetch favorites:', error)

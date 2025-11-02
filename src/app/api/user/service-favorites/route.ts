@@ -25,6 +25,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    console.log(`[Favorites POST] User ${user.id} adding service ${serviceId}`)
+
     const { error } = await supabase
       .from('service_favorites')
       .insert({
@@ -35,6 +37,7 @@ export async function POST(request: NextRequest) {
     if (error) {
       // 이미 찜한 경우
       if (error.code === '23505') {
+        console.log(`[Favorites POST] Service ${serviceId} already favorited`)
         return NextResponse.json(
           { message: 'Already favorited' },
           { status: 200 }
@@ -48,6 +51,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    console.log(`[Favorites POST] Successfully added service ${serviceId} to favorites`)
     return NextResponse.json(
       { message: 'Added to favorites' },
       { status: 201 }
@@ -164,6 +168,9 @@ export async function GET(request: NextRequest) {
         { status: 500 }
       )
     }
+
+    console.log(`[Favorites API] User ${user.id} has ${data?.length || 0} favorites`)
+    console.log('[Favorites API] Data:', JSON.stringify(data, null, 2))
 
     return NextResponse.json({ data }, { status: 200 })
 
