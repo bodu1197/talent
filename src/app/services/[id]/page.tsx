@@ -96,12 +96,8 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   <span className="text-gray-500">({service.review_count || 0})</span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-600">
-                  <i className="fas fa-shopping-cart"></i>
-                  <span>{service.orders_count || 0}회 구매</span>
-                </div>
-                <div className="flex items-center gap-2 text-gray-600">
-                  <i className="fas fa-eye"></i>
-                  <span>{service.views || 0}</span>
+                  <i className="fas fa-heart text-red-400"></i>
+                  <span>{service.wishlist_count || 0}회 찜</span>
                 </div>
               </div>
 
