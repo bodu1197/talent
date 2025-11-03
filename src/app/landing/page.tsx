@@ -26,31 +26,43 @@ const experts = {
     { name: 'AI 전문가 김철수', specialty: 'AI 모델 개발', verified: true, avatar: 'https://i.pravatar.cc/150?img=12' },
     { name: 'AI 연구원 이영희', specialty: '자연어 처리', verified: true, avatar: 'https://i.pravatar.cc/150?img=45' },
     { name: '머신러닝 전문가 박지훈', specialty: '컴퓨터 비전', verified: true, avatar: 'https://i.pravatar.cc/150?img=33' },
+    { name: '데이터 과학자 최데이터', specialty: '데이터 분석', verified: true, avatar: 'https://i.pravatar.cc/150?img=8' },
+    { name: 'AI 컨설턴트 정혁신', specialty: 'AI 전략 기획', verified: true, avatar: 'https://i.pravatar.cc/150?img=52' },
   ],
   it: [
     { name: '풀스택 개발자 최민수', specialty: '웹 개발', verified: true, avatar: 'https://i.pravatar.cc/150?img=15' },
     { name: '백엔드 전문가 강수진', specialty: '서버 구축', verified: true, avatar: 'https://i.pravatar.cc/150?img=47' },
     { name: '앱 개발자 윤서연', specialty: '모바일 앱', verified: true, avatar: 'https://i.pravatar.cc/150?img=32' },
+    { name: '프론트엔드 개발자 이리액트', specialty: 'React/Vue', verified: true, avatar: 'https://i.pravatar.cc/150?img=60' },
+    { name: '데브옵스 엔지니어 박클라우드', specialty: 'AWS/Docker', verified: true, avatar: 'https://i.pravatar.cc/150?img=19' },
   ],
   design: [
     { name: '그래픽 디자이너 정현우', specialty: '브랜딩', verified: true, avatar: 'https://i.pravatar.cc/150?img=13' },
     { name: 'UI/UX 디자이너 김나영', specialty: 'UI/UX', verified: true, avatar: 'https://i.pravatar.cc/150?img=44' },
     { name: '일러스트레이터 이동현', specialty: '일러스트', verified: true, avatar: 'https://i.pravatar.cc/150?img=68' },
+    { name: '영상 디자이너 최모션', specialty: '모션 그래픽', verified: true, avatar: 'https://i.pravatar.cc/150?img=27' },
+    { name: '3D 디자이너 박입체', specialty: '3D 모델링', verified: true, avatar: 'https://i.pravatar.cc/150?img=54' },
   ],
   marketing: [
     { name: '마케팅 전문가 박소현', specialty: 'SEO', verified: true, avatar: 'https://i.pravatar.cc/150?img=41' },
     { name: 'SNS 마케터 김태영', specialty: 'SNS 마케팅', verified: true, avatar: 'https://i.pravatar.cc/150?img=17' },
     { name: '콘텐츠 마케터 이수진', specialty: '콘텐츠 제작', verified: true, avatar: 'https://i.pravatar.cc/150?img=48' },
+    { name: '퍼포먼스 마케터 정광고', specialty: '광고 운영', verified: true, avatar: 'https://i.pravatar.cc/150?img=31' },
+    { name: '브랜드 마케터 최브랜딩', specialty: '브랜딩 전략', verified: true, avatar: 'https://i.pravatar.cc/150?img=64' },
   ],
   life: [
     { name: '청소 전문가 조미래', specialty: '홈 클리닝', location: '서울 강남구', verified: true, avatar: 'https://i.pravatar.cc/150?img=43' },
     { name: '요리 강사 김맛나', specialty: '요리 레슨', location: '서울 마포구', verified: true, avatar: 'https://i.pravatar.cc/150?img=29' },
     { name: '펫시터 이멍멍', specialty: '반려동물 돌봄', location: '서울 송파구', verified: true, avatar: 'https://i.pravatar.cc/150?img=25' },
+    { name: '홈트레이너 박건강', specialty: '운동 지도', location: '서울 강남구', verified: true, avatar: 'https://i.pravatar.cc/150?img=18' },
+    { name: '외국어 강사 정잉글리시', specialty: '영어 회화', location: '서울 서초구', verified: true, avatar: 'https://i.pravatar.cc/150?img=38' },
   ],
   errand: [
     { name: '심부름 전문가 이빠름', specialty: '퀵 배송 / 서류 전달', location: '서울 전역', verified: true, avatar: 'https://i.pravatar.cc/150?img=59' },
     { name: '대리 운전 박안전', specialty: '대리 운전 / 차량 이동', location: '서울 · 경기', verified: true, avatar: 'https://i.pravatar.cc/150?img=14' },
     { name: '줄서기 대행 최기다림', specialty: '줄서기 / 대기 서비스', location: '서울 강남구', verified: true, avatar: 'https://i.pravatar.cc/150?img=56' },
+    { name: '이사 도우미 김용달', specialty: '짐 운반 / 이사', location: '서울 전역', verified: true, avatar: 'https://i.pravatar.cc/150?img=22' },
+    { name: '대행 전문가 정대리', specialty: '각종 대행 업무', location: '서울 · 경기', verified: true, avatar: 'https://i.pravatar.cc/150?img=66' },
   ],
 }
 
@@ -65,7 +77,7 @@ interface ExpertCardProps {
 }
 
 const ExpertCard = ({ expert }: ExpertCardProps) => (
-  <Link href="/categories" className="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-all hover:scale-105 cursor-pointer">
+  <Link href="/categories" className="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-all hover:scale-105 cursor-pointer min-w-[280px] md:min-w-0 flex-shrink-0">
     <div className="flex flex-col items-center text-center">
       {/* 프로필 사진 */}
       <div className="relative mb-4">
@@ -137,9 +149,11 @@ export default function LandingPage() {
             {/* AI 전문가 카드 */}
             <div className="mt-8">
               <h3 className="text-xl font-bold text-gray-900 mb-4">추천 AI 전문가</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="flex md:grid md:grid-cols-5 gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
                 {experts.ai.map((expert, index) => (
-                  <ExpertCard key={index} expert={expert} />
+                  <div key={index} className="snap-start">
+                    <ExpertCard expert={expert} />
+                  </div>
                 ))}
               </div>
             </div>
@@ -176,9 +190,11 @@ export default function LandingPage() {
             {/* IT 전문가 카드 */}
             <div className="mt-8">
               <h3 className="text-xl font-bold text-gray-900 mb-4">추천 IT 전문가</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="flex md:grid md:grid-cols-5 gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
                 {experts.it.map((expert, index) => (
-                  <ExpertCard key={index} expert={expert} />
+                  <div key={index} className="snap-start">
+                    <ExpertCard expert={expert} />
+                  </div>
                 ))}
               </div>
             </div>
@@ -215,9 +231,11 @@ export default function LandingPage() {
             {/* Design 전문가 카드 */}
             <div className="mt-8">
               <h3 className="text-xl font-bold text-gray-900 mb-4">추천 디자인 전문가</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="flex md:grid md:grid-cols-5 gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
                 {experts.design.map((expert, index) => (
-                  <ExpertCard key={index} expert={expert} />
+                  <div key={index} className="snap-start">
+                    <ExpertCard expert={expert} />
+                  </div>
                 ))}
               </div>
             </div>
@@ -254,9 +272,11 @@ export default function LandingPage() {
             {/* Marketing 전문가 카드 */}
             <div className="mt-8">
               <h3 className="text-xl font-bold text-gray-900 mb-4">추천 마케팅 전문가</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="flex md:grid md:grid-cols-5 gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
                 {experts.marketing.map((expert, index) => (
-                  <ExpertCard key={index} expert={expert} />
+                  <div key={index} className="snap-start">
+                    <ExpertCard expert={expert} />
+                  </div>
                 ))}
               </div>
             </div>
@@ -344,9 +364,11 @@ export default function LandingPage() {
                 <i className="fas fa-map-marker-alt text-purple-600 mr-2"></i>
                 내 주변 생활 서비스 전문가
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="flex md:grid md:grid-cols-5 gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
                 {experts.life.map((expert, index) => (
-                  <ExpertCard key={index} expert={expert} />
+                  <div key={index} className="snap-start">
+                    <ExpertCard expert={expert} />
+                  </div>
                 ))}
               </div>
             </div>
@@ -399,9 +421,11 @@ export default function LandingPage() {
                 <i className="fas fa-location-arrow text-red-600 mr-2 animate-pulse"></i>
                 실시간 추적 가능한 심부름 전문가
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="flex md:grid md:grid-cols-5 gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
                 {experts.errand.map((expert, index) => (
-                  <ExpertCard key={index} expert={expert} />
+                  <div key={index} className="snap-start">
+                    <ExpertCard expert={expert} />
+                  </div>
                 ))}
               </div>
             </div>
