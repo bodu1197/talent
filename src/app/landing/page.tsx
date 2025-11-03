@@ -130,7 +130,7 @@ export default function LandingPage() {
               <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
                 최신 인공지능 기술을 비즈니스에 접목하여 혁신을 가속화하세요. 데이터 분석부터 머신러닝 모델 개발, 자동화 챗봇 구축까지 최고의 AI 전문가들이 당신의 성공을 돕습니다.
               </p>
-              <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
+              <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
                 <FeatureItem>AI 기반 데이터 분석 및 예측 모델링</FeatureItem>
                 <FeatureItem>자연어 처리(NLP) 및 챗봇 개발</FeatureItem>
                 <FeatureItem>컴퓨터 비전 및 이미지 인식 솔루션</FeatureItem>
@@ -164,7 +164,7 @@ export default function LandingPage() {
               <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
                 웹사이트, 모바일 앱, 맞춤형 소프트웨어 개발까지. 검증된 실력의 IT 전문가들이 당신의 아이디어를 완벽한 결과물로 만들어 드립니다.
               </p>
-              <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
+              <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
                 <FeatureItem>최신 기술 스택을 활용한 웹/앱 개발</FeatureItem>
                 <FeatureItem>안정적인 서버 구축 및 유지보수</FeatureItem>
                 <FeatureItem>비즈니스 자동화를 위한 프로그램 제작</FeatureItem>
@@ -198,7 +198,7 @@ export default function LandingPage() {
               <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
                 로고, 웹사이트, 마케팅 자료까지. 당신의 비즈니스에 특별한 가치를 더할 디자인 전문가를 만나보세요. 시선을 사로잡는 디자인으로 고객의 마음을 움직입니다.
               </p>
-              <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
+              <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
                 <FeatureItem>로고 및 브랜딩 디자인</FeatureItem>
                 <FeatureItem>UI/UX 웹 및 모바일 디자인</FeatureItem>
                 <FeatureItem>상세페이지 및 광고 콘텐츠 제작</FeatureItem>
@@ -232,7 +232,7 @@ export default function LandingPage() {
               <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
                 디지털 마케팅, SEO, SNS 관리 등 각 분야 최고의 마케팅 전문가들이 매출 증대를 위한 맞춤형 전략을 제공합니다. 이제 비즈니스 성장에만 집중하세요.
               </p>
-              <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
+              <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
                 <FeatureItem>검색 엔진 최적화(SEO) 및 광고</FeatureItem>
                 <FeatureItem>소셜 미디어 채널 관리 및 콘텐츠 제작</FeatureItem>
                 <FeatureItem>블로그 및 인플루언서 마케팅</FeatureItem>
@@ -313,7 +313,7 @@ export default function LandingPage() {
                 <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
                   바쁜 일상 속 도움이 필요한 모든 순간, 생활 서비스 전문가가 해결해 드립니다. 청소, 심부름, 반려동물 돌봄, 개인 레슨 등 삶의 질을 높이는 다양한 서비스를 만나보세요.
                 </p>
-                <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
+                <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
                   <FeatureItem>전문적인 홈 클리닝 및 정리 정돈</FeatureItem>
                   <FeatureItem>맞춤형 취미 및 외국어 레슨</FeatureItem>
                   <FeatureItem>신뢰할 수 있는 펫시터 및 산책 서비스</FeatureItem>
@@ -363,7 +363,7 @@ export default function LandingPage() {
               <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
                 퀵 배송, 서류 전달, 대리 운전, 줄서기 대행까지. 시간이 부족한 당신을 위해 신뢰할 수 있는 심부름 전문가가 대신 처리해 드립니다.
               </p>
-              <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
+              <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
                 <FeatureItem>GPS 기반 실시간 위치 추적</FeatureItem>
                 <FeatureItem>빠른 퀵 배송 및 서류 전달</FeatureItem>
                 <FeatureItem>안전한 대리 운전 서비스</FeatureItem>
