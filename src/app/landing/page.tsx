@@ -129,7 +129,7 @@ export default function LandingPage() {
                 </div>
                 <div>
                   <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">AI Services</span>
-                  <h2 className="text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                  <h2 className="text-lg md:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
                     미래를 여는 기술, AI 전문가와 함께
                   </h2>
                 </div>
@@ -170,7 +170,7 @@ export default function LandingPage() {
                 </div>
                 <div>
                   <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">IT & Programming</span>
-                  <h2 className="text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                  <h2 className="text-lg md:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
                     아이디어를 현실로, 최고의 개발자 군단
                   </h2>
                 </div>
@@ -211,7 +211,7 @@ export default function LandingPage() {
                 </div>
                 <div>
                   <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Design</span>
-                  <h2 className="text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                  <h2 className="text-lg md:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
                     브랜드를 빛내는, 감각적인 디자인
                   </h2>
                 </div>
@@ -253,7 +253,7 @@ export default function LandingPage() {
                 </div>
                 <div>
                   <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Marketing</span>
-                  <h2 className="text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                  <h2 className="text-lg md:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
                     성공적인 비즈니스를 위한, 전략적 마케팅
                   </h2>
                 </div>
@@ -332,7 +332,7 @@ export default function LandingPage() {
                 </div>
                 <div>
                   <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Life Services</span>
-                  <h2 className="text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                  <h2 className="text-lg md:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
                     당신의 일상을 더 편리하고 풍요롭게
                   </h2>
                 </div>
@@ -386,7 +386,7 @@ export default function LandingPage() {
                 </div>
                 <div>
                   <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Errand Services</span>
-                  <h2 className="text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                  <h2 className="text-lg md:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
                     바쁜 당신을 위한, 믿을 수 있는 심부름 서비스
                   </h2>
                 </div>
