@@ -1,8 +1,5 @@
-'use client'
-
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useAuth } from '@/components/providers/AuthProvider'
+import { createClient } from '@/lib/supabase/server'
 import { Service } from '@/types'
 import { getServicesByCategory } from '@/lib/supabase/queries/services'
 
@@ -12,99 +9,85 @@ interface ServiceView {
   service: Service
 }
 
-export default function RecentViewedServices() {
-  const { user } = useAuth()
-  const [recentViews, setRecentViews] = useState<ServiceView[]>([])
-  const [relatedServices, setRelatedServices] = useState<Service[]>([])
-  const [loading, setLoading] = useState(true)
+export default async function RecentViewedServices() {
+  const supabase = await createClient()
 
-  useEffect(() => {
-    async function fetchData() {
-      if (!user) {
-        setLoading(false)
-        return
-      }
+  // 인증 확인
+  const { data: { user } } = await supabase.auth.getUser()
 
-      try {
-        // 최근 본 서비스 조회 (최대 10개)
-        const viewsResponse = await fetch('/api/user/service-views?limit=10')
-
-        if (viewsResponse.ok) {
-          const { data } = await viewsResponse.json()
-          const validViews = (data || []).filter((v: ServiceView) => v.service)
-          setRecentViews(validViews)
-
-          // 최근 본 서비스가 있으면 같은 카테고리의 서비스 가져오기
-          if (validViews.length > 0) {
-            const firstService = validViews[0].service
-            const categories = firstService.service_categories
-
-            if (categories && categories.length > 0) {
-              const categoryId = categories[0].category?.id || categories[0].category_id
-
-              if (categoryId) {
-                // 같은 카테고리의 서비스 조회
-                const categoryServices = await getServicesByCategory(categoryId)
-
-                // 최근 본 서비스 제외
-                const viewedIds = validViews.map((v: ServiceView) => v.service_id)
-                const filtered = categoryServices.filter((s: Service) => !viewedIds.includes(s.id))
-
-                // 랜덤 셔플
-                const shuffled = filtered.sort(() => Math.random() - 0.5)
-
-                // 최근 본 서비스 개수에 따라 필요한 만큼만 가져오기
-                const needed = Math.max(0, 10 - validViews.length)
-                setRelatedServices(shuffled.slice(0, needed))
-              }
-            }
-          }
-        }
-      } catch (error) {
-        console.error('Failed to fetch recent views:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [user])
-
-  // 로그인하지 않았거나 데이터 없으면 표시 안 함
-  if (!user || (recentViews.length === 0 && relatedServices.length === 0)) {
+  // 로그인하지 않았으면 표시 안 함
+  if (!user) {
     return null
   }
 
-  if (loading) {
-    return (
-      <section className="py-8 bg-white">
-        <div className="container-1200">
-          <div className="animate-pulse">
-            <div className="h-6 bg-gray-200 rounded w-48 mb-4"></div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => (
-                <div key={i} className="space-y-2">
-                  <div className="h-32 bg-gray-200 rounded"></div>
-                  <div className="h-4 bg-gray-200 rounded"></div>
-                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-    )
+  // 최근 본 서비스 조회 (최대 10개)
+  const { data: recentViews } = await supabase
+    .from('service_views')
+    .select(`
+      service_id,
+      viewed_at,
+      service:services(
+        *,
+        seller:sellers(
+          id,
+          business_name,
+          display_name,
+          is_verified
+        ),
+        service_categories(
+          category:categories(id, name, slug),
+          category_id
+        )
+      )
+    `)
+    .eq('user_id', user.id)
+    .order('viewed_at', { ascending: false })
+    .limit(10)
+
+  const validViews = (recentViews || []).filter((v: any) => v.service)
+
+  let relatedServices: Service[] = []
+
+  // 최근 본 서비스가 있으면 같은 카테고리의 서비스 가져오기
+  if (validViews.length > 0) {
+    const firstService: any = validViews[0].service
+    const categories = firstService.service_categories
+
+    if (categories && categories.length > 0) {
+      const categoryId = categories[0].category?.id || categories[0].category_id
+
+      if (categoryId) {
+        // 같은 카테고리의 서비스 조회
+        const categoryServices = await getServicesByCategory(categoryId)
+
+        // 최근 본 서비스 제외
+        const viewedIds = validViews.map((v: any) => v.service_id)
+        const filtered = categoryServices.filter((s: Service) => !viewedIds.includes(s.id))
+
+        // 랜덤 셔플
+        const shuffled = filtered.sort(() => Math.random() - 0.5)
+
+        // 최근 본 서비스 개수에 따라 필요한 만큼만 가져오기
+        const needed = Math.max(0, 10 - validViews.length)
+        relatedServices = shuffled.slice(0, needed)
+      }
+    }
+  }
+
+  // 데이터 없으면 표시 안 함
+  if (validViews.length === 0 && relatedServices.length === 0) {
+    return null
   }
 
   // 최근 본 서비스 + 같은 카테고리 서비스 합치기
   const allServices = [
-    ...recentViews.map((v, index) => ({
+    ...validViews.map((v: any, index: number) => ({
       service: v.service,
       isRecentView: true,
       viewIndex: index,
       viewed_at: v.viewed_at
     })),
-    ...relatedServices.map(s => ({
+    ...relatedServices.map((s: Service) => ({
       service: s,
       isRecentView: false,
       viewIndex: -1,
@@ -118,9 +101,9 @@ export default function RecentViewedServices() {
         <div className="flex items-center gap-3 mb-6">
           <i className="fas fa-eye text-brand-primary text-xl"></i>
           <h2 className="text-xl font-bold text-gray-900">최근 본 서비스</h2>
-          {recentViews.length > 0 && (
+          {validViews.length > 0 && (
             <span className="text-sm text-gray-500">
-              ({recentViews.length}개)
+              ({validViews.length}개)
               {relatedServices.length > 0 && ` + 추천 ${relatedServices.length}개`}
             </span>
           )}
@@ -175,7 +158,7 @@ export default function RecentViewedServices() {
                 <div className="mt-2">
                   {/* 판매자 */}
                   <div className="flex items-center gap-1 mb-1">
-                    <div className="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center text-white text-[8px] font-bold">
+                    <div className="w-4 h-4 rounded-full bg-[#0f3460] flex items-center justify-center text-white text-[8px] font-bold">
                       {service.seller?.display_name?.[0] || 'S'}
                     </div>
                     <span className="text-xs text-gray-600 truncate">
@@ -187,21 +170,20 @@ export default function RecentViewedServices() {
                   </div>
 
                   {/* 제목 */}
-                  <h3 className="font-medium text-sm line-clamp-2 group-hover:text-brand-primary transition-colors mb-1">
+                  <h3 className="font-medium text-sm line-clamp-2 group-hover:text-[#0f3460] transition-colors mb-1">
                     {service.title}
                   </h3>
 
-                  {/* 평점 및 주문 수 */}
+                  {/* 평점 */}
                   <div className="flex items-center gap-2 text-xs text-gray-600 mb-1">
                     <span className="flex items-center gap-1">
                       <i className="fas fa-star text-yellow-400"></i>
                       {(service.rating || 0).toFixed(1)}
                     </span>
-                    <span>({service.order_count || 0})</span>
                   </div>
 
                   {/* 가격 */}
-                  <p className="text-brand-primary font-bold text-sm">
+                  <p className="text-[#0f3460] font-bold text-sm">
                     {(service.price || 0).toLocaleString()}원
                   </p>
 
@@ -220,7 +202,7 @@ export default function RecentViewedServices() {
         </div>
 
         {/* 더보기 버튼 (최근 본 서비스가 많을 경우) */}
-        {recentViews.length > 10 && (
+        {validViews.length > 10 && (
           <div className="mt-6 text-center">
             <Link
               href="/mypage/buyer/history"

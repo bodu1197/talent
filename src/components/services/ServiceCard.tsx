@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 import { Service } from '@/types'
 
@@ -61,7 +59,6 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             <i className="fas fa-star text-yellow-400"></i>
             {(service.rating || 0).toFixed(1)}
           </span>
-          <span>({service.order_count || 0})</span>
         </div>
 
         {/* 가격 */}

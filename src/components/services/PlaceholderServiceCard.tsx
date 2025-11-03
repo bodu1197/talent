@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 
 interface PlaceholderServiceCardProps {
@@ -14,7 +12,7 @@ export default function PlaceholderServiceCard({ categoryId }: PlaceholderServic
   return (
     <Link href={registerUrl}>
       <div className="card group cursor-pointer group-hover:scale-105 transition-transform duration-200 w-full">
-        <div className="relative bg-gradient-to-br from-brand-primary to-brand-light rounded-t-lg overflow-hidden flex items-center justify-center w-full" style={{ aspectRatio: '210/160' }}>
+        <div className="relative bg-gradient-to-br from-[#0f3460] to-[#1a5490] rounded-t-lg overflow-hidden flex items-center justify-center w-full" style={{ aspectRatio: '210/160' }}>
           {/* 배경 패턴 */}
           <div className="absolute inset-0 opacity-10">
             <div className="absolute inset-0 pattern-diagonal-stripes"></div>
@@ -44,7 +42,7 @@ export default function PlaceholderServiceCard({ categoryId }: PlaceholderServic
             </div>
             <span>여기가 당신의 자리입니다</span>
           </div>
-          <p className="font-bold text-brand-primary text-lg">이 자리를 선점하세요!</p>
+          <p className="font-bold text-[#0f3460] text-lg">이 자리를 선점하세요!</p>
         </div>
       </div>
     </Link>

@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation'
 import { getCategoryBySlug, getCategoryPath, FULL_CATEGORIES, CategoryItem } from '@/data/categories-full'
-import ServiceGrid from '@/components/services/ServiceGrid'
+import { getServicesByCategory } from '@/lib/supabase/queries/services'
+import ServiceCard from '@/components/services/ServiceCard'
+import PlaceholderServiceCard from '@/components/services/PlaceholderServiceCard'
 import CategoryFilter from '@/components/categories/CategoryFilter'
 import CategorySidebar from '@/components/categories/CategorySidebar'
 import CategoryVisitTracker from '@/components/categories/CategoryVisitTracker'
@@ -27,6 +29,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   // 1차 카테고리 확인 (parent_id가 없으면 1차 카테고리)
   const isTopLevelCategory = !category.parent_id
+
+  // 서비스 조회 (서버에서 직접)
+  const services = await getServicesByCategory(category.id)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -88,7 +93,15 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               </div>
 
               {/* 서비스 그리드 */}
-              <ServiceGrid categoryId={category.id} />
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {services.map(service => (
+                  <ServiceCard key={service.id} service={service} />
+                ))}
+                {/* 플레이스홀더 카드 (최소 12개까지) */}
+                {Array.from({ length: Math.max(0, 12 - services.length) }, (_, i) => (
+                  <PlaceholderServiceCard key={`placeholder-${i}`} categoryId={category.id} />
+                ))}
+              </div>
             </main>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/client'
+import { createClient as createServerClient } from '@/lib/supabase/server'
 
 export interface RecentCategory {
   category_id: string
@@ -9,7 +10,69 @@ export interface RecentCategory {
 }
 
 /**
- * 최근 30일 내 방문한 카테고리 조회 (최대 10개)
+ * 최근 30일 내 방문한 카테고리 조회 (최대 10개) - 서버용
+ * 로그인 사용자만 가능
+ */
+export async function getRecentVisitedCategoriesServer(limit: number = 10): Promise<RecentCategory[]> {
+  const supabase = await createServerClient()
+
+  // 인증 확인
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return []
+
+  // 30일 전 날짜
+  const thirtyDaysAgo = new Date()
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+
+  // 최근 방문 기록 조회
+  const { data, error } = await supabase
+    .from('category_visits')
+    .select('category_id, category_name, category_slug, visited_at')
+    .eq('user_id', user.id)
+    .gte('visited_at', thirtyDaysAgo.toISOString())
+    .order('visited_at', { ascending: false })
+
+  if (error) {
+    console.error('Failed to fetch recent categories:', error)
+    return []
+  }
+
+  if (!data || data.length === 0) return []
+
+  // 카테고리별로 그룹화하고 방문 횟수 계산
+  const categoryMap = new Map<string, RecentCategory>()
+
+  data.forEach(visit => {
+    const existing = categoryMap.get(visit.category_id)
+
+    if (existing) {
+      // 이미 있으면 방문 횟수 증가, 최신 방문 시간 업데이트
+      existing.visit_count += 1
+      if (new Date(visit.visited_at) > new Date(existing.last_visited)) {
+        existing.last_visited = visit.visited_at
+      }
+    } else {
+      // 처음이면 추가
+      categoryMap.set(visit.category_id, {
+        category_id: visit.category_id,
+        category_name: visit.category_name,
+        category_slug: visit.category_slug,
+        last_visited: visit.visited_at,
+        visit_count: 1
+      })
+    }
+  })
+
+  // Map을 배열로 변환하고 최신 방문 순으로 정렬
+  const categories = Array.from(categoryMap.values())
+    .sort((a, b) => new Date(b.last_visited).getTime() - new Date(a.last_visited).getTime())
+    .slice(0, limit)
+
+  return categories
+}
+
+/**
+ * 최근 30일 내 방문한 카테고리 조회 (최대 10개) - 클라이언트용
  * 로그인 사용자만 가능
  */
 export async function getRecentVisitedCategories(limit: number = 10): Promise<RecentCategory[]> {
