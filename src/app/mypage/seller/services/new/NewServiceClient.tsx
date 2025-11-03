@@ -219,6 +219,12 @@ export default function NewServiceClient({ sellerId }: Props) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    // 템플릿 모드에서 썸네일을 생성하지 않은 경우 체크
+    if (uploadMode === 'template' && selectedTemplate && !thumbnailFile) {
+      alert('템플릿을 선택하셨습니다.\n"썸네일 생성하기" 버튼을 눌러 썸네일을 먼저 생성해주세요.')
+      return
+    }
+
     if (!thumbnailFile) {
       alert('썸네일 이미지를 선택해주세요.')
       return

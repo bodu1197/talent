@@ -260,6 +260,20 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
           <span>강하게</span>
         </div>
       </div>
+
+      {/* 중요 안내 */}
+      <div className="mt-6 p-4 bg-blue-50 border-2 border-blue-300 rounded-lg">
+        <div className="flex items-start gap-3">
+          <i className="fas fa-lightbulb text-blue-600 text-xl mt-0.5"></i>
+          <div>
+            <p className="font-bold text-blue-900 mb-1">중요!</p>
+            <p className="text-sm text-blue-800">
+              편집이 완료되면 반드시 아래 <strong>"썸네일 생성하기"</strong> 버튼을 눌러주세요.
+              버튼을 누르지 않으면 썸네일이 저장되지 않습니다.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
