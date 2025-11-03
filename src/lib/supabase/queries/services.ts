@@ -195,10 +195,32 @@ export async function getServicesByCategory(categoryId: string) {
   return data || []
 }
 
-// 전체 승인된 서비스 조회 (홈페이지용)
+// 전체 승인된 서비스 조회 (홈페이지용) - AI 카테고리 제외
 export async function getActiveServices(limit?: number) {
   const supabase = createClient()
 
+  // 1. AI 카테고리 ID 조회
+  const { data: aiCategory } = await supabase
+    .from('categories')
+    .select('id')
+    .eq('slug', 'ai-services')
+    .maybeSingle()
+
+  let excludeServiceIds: string[] = []
+
+  // 2. AI 카테고리 서비스 ID 조회
+  if (aiCategory) {
+    const { data: aiServiceLinks } = await supabase
+      .from('service_categories')
+      .select('service_id')
+      .eq('category_id', aiCategory.id)
+
+    if (aiServiceLinks && aiServiceLinks.length > 0) {
+      excludeServiceIds = aiServiceLinks.map(sc => sc.service_id)
+    }
+  }
+
+  // 3. AI 카테고리 제외한 서비스 조회
   let query = supabase
     .from('services')
     .select(`
@@ -215,7 +237,13 @@ export async function getActiveServices(limit?: number) {
       )
     `)
     .eq('status', 'active')  // 승인된 서비스만
-    .order('created_at', { ascending: false })
+
+  // AI 카테고리 서비스 제외
+  if (excludeServiceIds.length > 0) {
+    query = query.not('id', 'in', `(${excludeServiceIds.join(',')})`)
+  }
+
+  query = query.order('created_at', { ascending: false })
 
   if (limit) {
     query = query.limit(limit)
