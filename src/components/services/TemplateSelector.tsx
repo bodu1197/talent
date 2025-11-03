@@ -85,7 +85,7 @@ export default function TemplateSelector({ onSelect, selectedTemplateId }: Props
             <p className="font-medium mb-1">템플릿 사용 방법</p>
             <ul className="space-y-1 text-xs">
               <li>• 원하는 배경을 선택하세요</li>
-              <li>• 선택 후 텍스트를 입력하여 맞춤형 썸네일을 만들 수 있습니다</li>
+              <li>• 선택 후 텍스트를 입력하여 맞춤형 썸네일을 만들 수 있습니다 (최대 25자)</li>
               <li>• 최종 이미지는 652×488 픽셀로 자동 생성됩니다</li>
             </ul>
           </div>

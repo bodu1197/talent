@@ -1,6 +1,7 @@
 /**
  * 서비스 썸네일 배경 템플릿 생성 유틸리티
  * Canvas API를 사용하여 652x488px 그라디언트 배경 생성
+ * 텍스트 최대 25자 지원
  */
 
 export interface GradientTemplate {

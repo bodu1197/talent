@@ -93,8 +93,8 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
   }, [template, textStyle])
 
   const handleTextChange = (value: string) => {
-    // 최대 10자 제한
-    if (value.length <= 10) {
+    // 최대 25자 제한
+    if (value.length <= 25) {
       setTextStyle(prev => ({ ...prev, text: value }))
     }
   }
@@ -122,15 +122,15 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
           <i className="fas fa-text text-brand-primary"></i>
           텍스트 입력
           <span className="text-sm text-gray-500 font-normal">
-            ({textStyle.text.length}/10자)
+            ({textStyle.text.length}/25자)
           </span>
         </label>
         <input
           type="text"
           value={textStyle.text}
           onChange={(e) => handleTextChange(e.target.value)}
-          placeholder="최대 10자까지 입력 가능"
-          maxLength={10}
+          placeholder="최대 25자까지 입력 가능 (띄어쓰기 포함)"
+          maxLength={25}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-lg"
         />
       </div>
