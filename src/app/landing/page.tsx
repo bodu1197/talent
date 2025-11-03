@@ -20,6 +20,88 @@ const FeatureItem = ({ children }: FeatureItemProps) => (
   </li>
 )
 
+// 하드코딩된 전문가 데이터
+const experts = {
+  ai: [
+    { name: 'AI 전문가 김철수', rating: 4.9, reviews: 127, price: '500,000원~', specialty: 'AI 모델 개발', verified: true },
+    { name: 'AI 연구원 이영희', rating: 4.8, reviews: 89, price: '450,000원~', specialty: '자연어 처리', verified: true },
+    { name: '머신러닝 전문가 박지훈', rating: 5.0, reviews: 156, price: '600,000원~', specialty: '컴퓨터 비전', verified: true },
+  ],
+  it: [
+    { name: '풀스택 개발자 최민수', rating: 4.9, reviews: 234, price: '300,000원~', specialty: '웹 개발', verified: true },
+    { name: '백엔드 전문가 강수진', rating: 4.7, reviews: 178, price: '350,000원~', specialty: '서버 구축', verified: true },
+    { name: '앱 개발자 윤서연', rating: 4.8, reviews: 145, price: '400,000원~', specialty: '모바일 앱', verified: true },
+  ],
+  design: [
+    { name: '그래픽 디자이너 정현우', rating: 4.9, reviews: 312, price: '200,000원~', specialty: '브랜딩', verified: true },
+    { name: 'UI/UX 디자이너 김나영', rating: 5.0, reviews: 267, price: '250,000원~', specialty: 'UI/UX', verified: true },
+    { name: '일러스트레이터 이동현', rating: 4.8, reviews: 198, price: '180,000원~', specialty: '일러스트', verified: true },
+  ],
+  marketing: [
+    { name: '마케팅 전문가 박소현', rating: 4.8, reviews: 156, price: '400,000원~', specialty: 'SEO', verified: true },
+    { name: 'SNS 마케터 김태영', rating: 4.9, reviews: 203, price: '350,000원~', specialty: 'SNS 마케팅', verified: true },
+    { name: '콘텐츠 마케터 이수진', rating: 4.7, reviews: 134, price: '300,000원~', specialty: '콘텐츠 제작', verified: true },
+  ],
+  life: [
+    { name: '청소 전문가 조미래', rating: 4.9, reviews: 412, price: '50,000원~', specialty: '홈 클리닝', location: '서울 강남구', verified: true },
+    { name: '요리 강사 김맛나', rating: 5.0, reviews: 287, price: '80,000원~', specialty: '요리 레슨', location: '서울 마포구', verified: true },
+    { name: '펫시터 이멍멍', rating: 4.8, reviews: 356, price: '40,000원~', specialty: '반려동물 돌봄', location: '서울 송파구', verified: true },
+  ],
+}
+
+interface ExpertCardProps {
+  expert: {
+    name: string
+    rating: number
+    reviews: number
+    price: string
+    specialty: string
+    location?: string
+    verified: boolean
+  }
+}
+
+const ExpertCard = ({ expert }: ExpertCardProps) => (
+  <div className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
+    <div className="flex items-start justify-between mb-3">
+      <div className="flex-1">
+        <div className="flex items-center gap-2 mb-1">
+          <h4 className="font-bold text-gray-900">{expert.name}</h4>
+          {expert.verified && (
+            <svg className="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+          )}
+        </div>
+        <p className="text-sm text-gray-600 mb-2">{expert.specialty}</p>
+        {expert.location && (
+          <p className="text-xs text-gray-500 mb-2">
+            <i className="fas fa-map-marker-alt mr-1"></i>
+            {expert.location}
+          </p>
+        )}
+        <div className="flex items-center gap-2 mb-2">
+          <div className="flex items-center">
+            <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <span className="ml-1 text-sm font-semibold text-gray-900">{expert.rating}</span>
+          </div>
+          <span className="text-xs text-gray-500">({expert.reviews})</span>
+        </div>
+      </div>
+    </div>
+    <div className="border-t pt-3">
+      <div className="flex items-center justify-between">
+        <span className="text-lg font-bold text-[#0f3460]">{expert.price}</span>
+        <button className="text-sm text-blue-600 hover:text-blue-700 font-semibold">
+          프로필 보기 →
+        </button>
+      </div>
+    </div>
+  </div>
+)
+
 export default function LandingPage() {
   return (
     <div className="pb-0">
@@ -30,142 +112,209 @@ export default function LandingPage() {
       <section className="py-24 bg-white overflow-hidden">
         <div className="container-1200 space-y-24">
           {/* AI Services Section */}
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="order-2 md:order-1">
-              <span className="text-sm font-bold uppercase text-blue-600">AI Services</span>
-              <h2 className="mt-2 text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
-                미래를 여는 기술, AI 전문가와 함께
-              </h2>
-              <p className="mt-4 text-lg text-gray-600">
-                최신 인공지능 기술을 비즈니스에 접목하여 혁신을 가속화하세요. 데이터 분석부터 머신러닝 모델 개발, 자동화 챗봇 구축까지 최고의 AI 전문가들이 당신의 성공을 돕습니다.
-              </p>
-              <ul className="mt-6 space-y-4 text-lg">
-                <FeatureItem>AI 기반 데이터 분석 및 예측 모델링</FeatureItem>
-                <FeatureItem>자연어 처리(NLP) 및 챗봇 개발</FeatureItem>
-                <FeatureItem>컴퓨터 비전 및 이미지 인식 솔루션</FeatureItem>
-              </ul>
-              <Link href="/categories/ai-services" className="mt-8 inline-block bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors shadow-lg">
-                AI 서비스 둘러보기
-              </Link>
+          <div className="space-y-8">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div className="order-2 md:order-1">
+                <span className="text-sm font-bold uppercase text-blue-600">AI Services</span>
+                <h2 className="mt-2 text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
+                  미래를 여는 기술, AI 전문가와 함께
+                </h2>
+                <p className="mt-4 text-lg text-gray-600">
+                  최신 인공지능 기술을 비즈니스에 접목하여 혁신을 가속화하세요. 데이터 분석부터 머신러닝 모델 개발, 자동화 챗봇 구축까지 최고의 AI 전문가들이 당신의 성공을 돕습니다.
+                </p>
+                <ul className="mt-6 space-y-4 text-lg">
+                  <FeatureItem>AI 기반 데이터 분석 및 예측 모델링</FeatureItem>
+                  <FeatureItem>자연어 처리(NLP) 및 챗봇 개발</FeatureItem>
+                  <FeatureItem>컴퓨터 비전 및 이미지 인식 솔루션</FeatureItem>
+                </ul>
+                <Link href="/categories/ai-services" className="mt-8 inline-block bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors shadow-lg">
+                  AI 서비스 둘러보기
+                </Link>
+              </div>
+              <div className="order-1 md:order-2">
+                <img
+                  src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=800&auto=format&fit=crop"
+                  alt="AI Technology"
+                  className="rounded-2xl shadow-2xl object-cover w-full h-[500px]"
+                />
+              </div>
             </div>
-            <div className="order-1 md:order-2">
-              <img
-                src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=800&auto=format&fit=crop"
-                alt="AI Technology"
-                className="rounded-2xl shadow-2xl object-cover w-full h-[500px]"
-              />
+            {/* AI 전문가 카드 */}
+            <div className="mt-8">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">추천 AI 전문가</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {experts.ai.map((expert, index) => (
+                  <ExpertCard key={index} expert={expert} />
+                ))}
+              </div>
             </div>
           </div>
 
           {/* IT/Programming Section */}
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <img
-                src="https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=800&auto=format&fit=crop"
-                alt="IT and Programming"
-                className="rounded-2xl shadow-2xl object-cover w-full h-[500px]"
-              />
+          <div className="space-y-8">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div>
+                <img
+                  src="https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=800&auto=format&fit=crop"
+                  alt="IT and Programming"
+                  className="rounded-2xl shadow-2xl object-cover w-full h-[500px]"
+                />
+              </div>
+              <div>
+                <span className="text-sm font-bold uppercase text-green-600">IT & Programming</span>
+                <h2 className="mt-2 text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
+                  아이디어를 현실로, 최고의 개발자 군단
+                </h2>
+                <p className="mt-4 text-lg text-gray-600">
+                  웹사이트, 모바일 앱, 맞춤형 소프트웨어 개발까지. 검증된 실력의 IT 전문가들이 당신의 아이디어를 완벽한 결과물로 만들어 드립니다.
+                </p>
+                <ul className="mt-6 space-y-4 text-lg">
+                  <FeatureItem>최신 기술 스택을 활용한 웹/앱 개발</FeatureItem>
+                  <FeatureItem>안정적인 서버 구축 및 유지보수</FeatureItem>
+                  <FeatureItem>비즈니스 자동화를 위한 프로그램 제작</FeatureItem>
+                </ul>
+                <Link href="/categories/it-programming" className="mt-8 inline-block bg-green-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-green-700 transition-colors shadow-lg">
+                  개발자 찾기
+                </Link>
+              </div>
             </div>
-            <div>
-              <span className="text-sm font-bold uppercase text-green-600">IT & Programming</span>
-              <h2 className="mt-2 text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
-                아이디어를 현실로, 최고의 개발자 군단
-              </h2>
-              <p className="mt-4 text-lg text-gray-600">
-                웹사이트, 모바일 앱, 맞춤형 소프트웨어 개발까지. 검증된 실력의 IT 전문가들이 당신의 아이디어를 완벽한 결과물로 만들어 드립니다.
-              </p>
-              <ul className="mt-6 space-y-4 text-lg">
-                <FeatureItem>최신 기술 스택을 활용한 웹/앱 개발</FeatureItem>
-                <FeatureItem>안정적인 서버 구축 및 유지보수</FeatureItem>
-                <FeatureItem>비즈니스 자동화를 위한 프로그램 제작</FeatureItem>
-              </ul>
-              <Link href="/categories/it-programming" className="mt-8 inline-block bg-green-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-green-700 transition-colors shadow-lg">
-                개발자 찾기
-              </Link>
+            {/* IT 전문가 카드 */}
+            <div className="mt-8">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">추천 IT 전문가</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {experts.it.map((expert, index) => (
+                  <ExpertCard key={index} expert={expert} />
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Design Section */}
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="order-2 md:order-1">
-              <span className="text-sm font-bold uppercase text-orange-500">Design</span>
-              <h2 className="mt-2 text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
-                브랜드를 빛내는, 감각적인 디자인
-              </h2>
-              <p className="mt-4 text-lg text-gray-600">
-                로고, 웹사이트, 마케팅 자료까지. 당신의 비즈니스에 특별한 가치를 더할 디자인 전문가를 만나보세요. 시선을 사로잡는 디자인으로 고객의 마음을 움직입니다.
-              </p>
-              <ul className="mt-6 space-y-4 text-lg">
-                <FeatureItem>로고 및 브랜딩 디자인</FeatureItem>
-                <FeatureItem>UI/UX 웹 및 모바일 디자인</FeatureItem>
-                <FeatureItem>상세페이지 및 광고 콘텐츠 제작</FeatureItem>
-              </ul>
-              <Link href="/categories/design" className="mt-8 inline-block bg-orange-500 text-white font-semibold px-8 py-3 rounded-lg hover:bg-orange-600 transition-colors shadow-lg">
-                디자이너 포트폴리오 보기
-              </Link>
+          <div className="space-y-8">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div className="order-2 md:order-1">
+                <span className="text-sm font-bold uppercase text-orange-500">Design</span>
+                <h2 className="mt-2 text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
+                  브랜드를 빛내는, 감각적인 디자인
+                </h2>
+                <p className="mt-4 text-lg text-gray-600">
+                  로고, 웹사이트, 마케팅 자료까지. 당신의 비즈니스에 특별한 가치를 더할 디자인 전문가를 만나보세요. 시선을 사로잡는 디자인으로 고객의 마음을 움직입니다.
+                </p>
+                <ul className="mt-6 space-y-4 text-lg">
+                  <FeatureItem>로고 및 브랜딩 디자인</FeatureItem>
+                  <FeatureItem>UI/UX 웹 및 모바일 디자인</FeatureItem>
+                  <FeatureItem>상세페이지 및 광고 콘텐츠 제작</FeatureItem>
+                </ul>
+                <Link href="/categories/design" className="mt-8 inline-block bg-orange-500 text-white font-semibold px-8 py-3 rounded-lg hover:bg-orange-600 transition-colors shadow-lg">
+                  디자이너 포트폴리오 보기
+                </Link>
+              </div>
+              <div className="order-1 md:order-2">
+                <img
+                  src="https://images.unsplash.com/photo-1522199670076-2852f80289c3?q=80&w=800&auto=format&fit=crop"
+                  alt="Creative Design"
+                  className="rounded-2xl shadow-2xl object-cover w-full h-[500px]"
+                />
+              </div>
             </div>
-            <div className="order-1 md:order-2">
-              <img
-                src="https://images.unsplash.com/photo-1522199670076-2852f80289c3?q=80&w=800&auto=format&fit=crop"
-                alt="Creative Design"
-                className="rounded-2xl shadow-2xl object-cover w-full h-[500px]"
-              />
+            {/* Design 전문가 카드 */}
+            <div className="mt-8">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">추천 디자인 전문가</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {experts.design.map((expert, index) => (
+                  <ExpertCard key={index} expert={expert} />
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Marketing Section */}
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <img
-                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop"
-                alt="Digital Marketing"
-                className="rounded-2xl shadow-2xl object-cover w-full h-[500px]"
-              />
+          <div className="space-y-8">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div>
+                <img
+                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop"
+                  alt="Digital Marketing"
+                  className="rounded-2xl shadow-2xl object-cover w-full h-[500px]"
+                />
+              </div>
+              <div>
+                <span className="text-sm font-bold uppercase text-pink-500">Marketing</span>
+                <h2 className="mt-2 text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
+                  성공적인 비즈니스를 위한, 전략적 마케팅
+                </h2>
+                <p className="mt-4 text-lg text-gray-600">
+                  디지털 마케팅, SEO, SNS 관리 등 각 분야 최고의 마케팅 전문가들이 매출 증대를 위한 맞춤형 전략을 제공합니다. 이제 비즈니스 성장에만 집중하세요.
+                </p>
+                <ul className="mt-6 space-y-4 text-lg">
+                  <FeatureItem>검색 엔진 최적화(SEO) 및 광고</FeatureItem>
+                  <FeatureItem>소셜 미디어 채널 관리 및 콘텐츠 제작</FeatureItem>
+                  <FeatureItem>블로그 및 인플루언서 마케팅</FeatureItem>
+                </ul>
+                <Link href="/categories/marketing" className="mt-8 inline-block bg-pink-500 text-white font-semibold px-8 py-3 rounded-lg hover:bg-pink-600 transition-colors shadow-lg">
+                  마케팅 전문가와 상담하기
+                </Link>
+              </div>
             </div>
-            <div>
-              <span className="text-sm font-bold uppercase text-pink-500">Marketing</span>
-              <h2 className="mt-2 text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
-                성공적인 비즈니스를 위한, 전략적 마케팅
-              </h2>
-              <p className="mt-4 text-lg text-gray-600">
-                디지털 마케팅, SEO, SNS 관리 등 각 분야 최고의 마케팅 전문가들이 매출 증대를 위한 맞춤형 전략을 제공합니다. 이제 비즈니스 성장에만 집중하세요.
-              </p>
-              <ul className="mt-6 space-y-4 text-lg">
-                <FeatureItem>검색 엔진 최적화(SEO) 및 광고</FeatureItem>
-                <FeatureItem>소셜 미디어 채널 관리 및 콘텐츠 제작</FeatureItem>
-                <FeatureItem>블로그 및 인플루언서 마케팅</FeatureItem>
-              </ul>
-              <Link href="/categories/marketing" className="mt-8 inline-block bg-pink-500 text-white font-semibold px-8 py-3 rounded-lg hover:bg-pink-600 transition-colors shadow-lg">
-                마케팅 전문가와 상담하기
-              </Link>
+            {/* Marketing 전문가 카드 */}
+            <div className="mt-8">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">추천 마케팅 전문가</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {experts.marketing.map((expert, index) => (
+                  <ExpertCard key={index} expert={expert} />
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Life Services Section */}
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="order-2 md:order-1">
-              <span className="text-sm font-bold uppercase text-purple-600">Life Services</span>
-              <h2 className="mt-2 text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
-                당신의 일상을 더 편리하고 풍요롭게
-              </h2>
-              <p className="mt-4 text-lg text-gray-600">
-                바쁜 일상 속 도움이 필요한 모든 순간, 생활 서비스 전문가가 해결해 드립니다. 청소, 심부름, 반려동물 돌봄, 개인 레슨 등 삶의 질을 높이는 다양한 서비스를 만나보세요.
-              </p>
-              <ul className="mt-6 space-y-4 text-lg">
-                <FeatureItem>전문적인 홈 클리닝 및 정리 정돈</FeatureItem>
-                <FeatureItem>맞춤형 취미 및 외국어 레슨</FeatureItem>
-                <FeatureItem>신뢰할 수 있는 펫시터 및 산책 서비스</FeatureItem>
-              </ul>
-              <Link href="/categories/life" className="mt-8 inline-block bg-purple-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-purple-700 transition-colors shadow-lg">
-                생활 서비스 찾아보기
-              </Link>
+          <div className="space-y-8">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div className="order-2 md:order-1">
+                <span className="text-sm font-bold uppercase text-purple-600">Life Services</span>
+                <h2 className="mt-2 text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
+                  당신의 일상을 더 편리하고 풍요롭게
+                </h2>
+                <div className="mt-4 p-4 bg-purple-50 rounded-lg border-2 border-purple-200">
+                  <div className="flex items-center gap-3 mb-2">
+                    <svg className="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                    </svg>
+                    <h3 className="text-lg font-bold text-purple-900">내 주변 가까운 전문가 찾기</h3>
+                  </div>
+                  <p className="text-sm text-purple-800">위치 기반으로 가까운 생활 서비스 전문가를 찾아보세요. 빠르고 편리한 서비스를 경험하실 수 있습니다.</p>
+                </div>
+                <p className="mt-4 text-lg text-gray-600">
+                  바쁜 일상 속 도움이 필요한 모든 순간, 생활 서비스 전문가가 해결해 드립니다. 청소, 심부름, 반려동물 돌봄, 개인 레슨 등 삶의 질을 높이는 다양한 서비스를 만나보세요.
+                </p>
+                <ul className="mt-6 space-y-4 text-lg">
+                  <FeatureItem>전문적인 홈 클리닝 및 정리 정돈</FeatureItem>
+                  <FeatureItem>맞춤형 취미 및 외국어 레슨</FeatureItem>
+                  <FeatureItem>신뢰할 수 있는 펫시터 및 산책 서비스</FeatureItem>
+                </ul>
+                <Link href="/categories/life" className="mt-8 inline-block bg-purple-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-purple-700 transition-colors shadow-lg">
+                  생활 서비스 찾아보기
+                </Link>
+              </div>
+              <div className="order-1 md:order-2">
+                <img
+                  src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=800&auto=format&fit=crop"
+                  alt="Life Services"
+                  className="rounded-2xl shadow-2xl object-cover w-full h-[500px]"
+                />
+              </div>
             </div>
-            <div className="order-1 md:order-2">
-              <img
-                src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=800&auto=format&fit=crop"
-                alt="Life Services"
-                className="rounded-2xl shadow-2xl object-cover w-full h-[500px]"
-              />
+            {/* Life Services 전문가 카드 - 위치 정보 포함 */}
+            <div className="mt-8">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
+                <i className="fas fa-map-marker-alt text-purple-600 mr-2"></i>
+                내 주변 생활 서비스 전문가
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {experts.life.map((expert, index) => (
+                  <ExpertCard key={index} expert={expert} />
+                ))}
+              </div>
             </div>
           </div>
         </div>
