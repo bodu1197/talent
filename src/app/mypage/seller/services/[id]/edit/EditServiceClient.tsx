@@ -248,18 +248,25 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
 
         alert('수정 요청이 제출되었습니다. 관리자 승인 후 반영됩니다.')
       } else {
-        // pending, draft 상태 서비스는 직접 수정
+        // pending, draft, suspended 상태 서비스는 직접 수정
+        const updateData: any = {
+          title: formData.title,
+          description: formData.description,
+          price: parseInt(formData.price) || 0,
+          delivery_days: parseInt(formData.deliveryDays) || 7,
+          revision_count: formData.revisionCount === 'unlimited' ? 999 : parseInt(formData.revisionCount) || 0,
+          thumbnail_url: thumbnail_url,
+          updated_at: new Date().toISOString()
+        }
+
+        // suspended 상태였다면 pending으로 변경 (재승인 요청)
+        if (service.status === 'suspended') {
+          updateData.status = 'pending'
+        }
+
         const { error: serviceError } = await supabase
           .from('services')
-          .update({
-            title: formData.title,
-            description: formData.description,
-            price: parseInt(formData.price) || 0,
-            delivery_days: parseInt(formData.deliveryDays) || 7,
-            revision_count: formData.revisionCount === 'unlimited' ? 999 : parseInt(formData.revisionCount) || 0,
-            thumbnail_url: thumbnail_url,
-            updated_at: new Date().toISOString()
-          })
+          .update(updateData)
           .eq('id', service.id)
 
         if (serviceError) {
@@ -284,7 +291,11 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
             })
         }
 
-        alert('서비스가 성공적으로 수정되었습니다!')
+        if (service.status === 'suspended') {
+          alert('서비스가 성공적으로 수정되었습니다. 관리자 승인 후 다시 활성화됩니다.')
+        } else {
+          alert('서비스가 성공적으로 수정되었습니다!')
+        }
       }
       window.location.href = '/mypage/seller/services'
 

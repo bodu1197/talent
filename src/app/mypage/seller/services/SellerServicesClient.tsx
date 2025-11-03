@@ -22,6 +22,7 @@ interface Props {
 export default function SellerServicesClient({ initialServices, statusFilter, statusCounts }: Props) {
   const [searchQuery, setSearchQuery] = useState('')
   const [services, setServices] = useState(initialServices)
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null)
 
   async function handleDismissRejection(revisionId: string) {
     if (!confirm('이 반려 메시지를 삭제하시겠습니까?')) return
@@ -47,6 +48,74 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
       alert('반려 메시지가 삭제되었습니다.')
     } catch (err: any) {
       console.error('반려 메시지 삭제 실패:', err)
+      alert('삭제에 실패했습니다: ' + err.message)
+    }
+  }
+
+  async function handleToggleStatus(serviceId: string, currentStatus: string) {
+    const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
+    const message = newStatus === 'active'
+      ? '서비스를 활성화하시겠습니까? 고객에게 다시 노출됩니다.'
+      : '서비스를 일시정지하시겠습니까? 고객에게 노출되지 않습니다.'
+
+    if (!confirm(message)) return
+
+    try {
+      const supabase = createClient()
+      const { error } = await supabase
+        .from('services')
+        .update({ status: newStatus })
+        .eq('id', serviceId)
+
+      if (error) throw error
+
+      // UI 업데이트
+      setServices(services.map((service: any) =>
+        service.id === serviceId ? { ...service, status: newStatus } : service
+      ))
+
+      alert(newStatus === 'active' ? '서비스가 활성화되었습니다.' : '서비스가 일시정지되었습니다.')
+    } catch (err: any) {
+      console.error('상태 변경 실패:', err)
+      alert('상태 변경에 실패했습니다: ' + err.message)
+    }
+  }
+
+  async function handleDeleteService(serviceId: string, serviceTitle: string) {
+    if (!confirm(`"${serviceTitle}" 서비스를 삭제하시겠습니까?\n\n⚠️ 이 작업은 되돌릴 수 없습니다.\n- 진행 중인 주문이 있는 경우 삭제할 수 없습니다.\n- 모든 통계 데이터가 함께 삭제됩니다.`)) return
+
+    try {
+      const supabase = createClient()
+
+      // 1. 진행 중인 주문 확인
+      const { data: activeOrders, error: ordersError } = await supabase
+        .from('orders')
+        .select('id')
+        .eq('service_id', serviceId)
+        .in('status', ['paid', 'in_progress', 'delivered'])
+        .limit(1)
+
+      if (ordersError) throw ordersError
+
+      if (activeOrders && activeOrders.length > 0) {
+        alert('진행 중인 주문이 있어 삭제할 수 없습니다.\n모든 주문이 완료되거나 취소된 후 삭제할 수 있습니다.')
+        return
+      }
+
+      // 2. 서비스 삭제 (CASCADE로 관련 데이터도 함께 삭제됨)
+      const { error: deleteError } = await supabase
+        .from('services')
+        .delete()
+        .eq('id', serviceId)
+
+      if (deleteError) throw deleteError
+
+      // UI 업데이트
+      setServices(services.filter((service: any) => service.id !== serviceId))
+
+      alert('서비스가 성공적으로 삭제되었습니다.')
+    } catch (err: any) {
+      console.error('서비스 삭제 실패:', err)
       alert('삭제에 실패했습니다: ' + err.message)
     }
   }
@@ -213,6 +282,62 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
                           <i className="fas fa-chart-bar mr-1"></i>
                           통계
                         </Link>
+
+                        {/* 더보기 메뉴 */}
+                        <div className="relative">
+                          <button
+                            onClick={() => setOpenMenuId(openMenuId === service.id ? null : service.id)}
+                            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                          >
+                            <i className="fas fa-ellipsis-v"></i>
+                          </button>
+
+                          {openMenuId === service.id && (
+                            <>
+                              {/* 오버레이 */}
+                              <div
+                                className="fixed inset-0 z-10"
+                                onClick={() => setOpenMenuId(null)}
+                              />
+
+                              {/* 드롭다운 메뉴 */}
+                              <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-20 py-1">
+                                {/* 활성화/일시정지 - active 또는 inactive 상태일 때만 */}
+                                {(service.status === 'active' || service.status === 'inactive') && (
+                                  <button
+                                    onClick={() => {
+                                      handleToggleStatus(service.id, service.status)
+                                      setOpenMenuId(null)
+                                    }}
+                                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2 ${
+                                      service.status === 'active' ? 'text-yellow-700' : 'text-green-700'
+                                    }`}
+                                  >
+                                    <i className={`fas ${service.status === 'active' ? 'fa-pause' : 'fa-play'} w-4`}></i>
+                                    {service.status === 'active' ? '일시정지' : '활성화'}
+                                  </button>
+                                )}
+
+                                {/* 구분선 */}
+                                {(service.status === 'active' || service.status === 'inactive') && (
+                                  <div className="border-t border-gray-200 my-1"></div>
+                                )}
+
+                                {/* 삭제 */}
+                                <button
+                                  onClick={() => {
+                                    handleDeleteService(service.id, service.title)
+                                    setOpenMenuId(null)
+                                  }}
+                                  className="w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-red-50 flex items-center gap-2"
+                                >
+                                  <i className="fas fa-trash w-4"></i>
+                                  삭제
+                                </button>
+                              </div>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -54,14 +54,22 @@ export default function PendingServiceDetailClient({ service }: Props) {
     }
   }
 
+  const isResubmission = service.status === 'suspended'
+
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">신규 서비스 검토</h1>
-            <p className="text-gray-600">서비스 내용을 검토하고 승인 또는 반려하세요</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              {isResubmission ? '재신청 서비스 검토' : '신규 서비스 검토'}
+            </h1>
+            <p className="text-gray-600">
+              {isResubmission
+                ? '반려 후 재신청된 서비스입니다. 수정 내용을 검토하고 승인 또는 반려하세요'
+                : '서비스 내용을 검토하고 승인 또는 반려하세요'}
+            </p>
           </div>
           <button
             onClick={() => router.back()}
@@ -75,6 +83,17 @@ export default function PendingServiceDetailClient({ service }: Props) {
         {/* 서비스 정보 */}
         <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
           <h2 className="text-xl font-bold mb-4">등록 정보</h2>
+
+          {/* 재신청 알림 */}
+          {isResubmission && (
+            <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <div className="flex items-center gap-2 text-yellow-800">
+                <i className="fas fa-exclamation-triangle"></i>
+                <span className="font-medium">이 서비스는 이전에 반려되어 재신청된 서비스입니다.</span>
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
               <span className="text-sm text-gray-600">판매자</span>
@@ -82,9 +101,15 @@ export default function PendingServiceDetailClient({ service }: Props) {
               <p className="text-sm text-gray-500">{service.seller?.user?.email}</p>
             </div>
             <div>
-              <span className="text-sm text-gray-600">등록일</span>
+              <span className="text-sm text-gray-600">{isResubmission ? '최초 등록일' : '등록일'}</span>
               <p className="font-medium">{new Date(service.created_at).toLocaleDateString('ko-KR')}</p>
             </div>
+            {isResubmission && service.updated_at && (
+              <div>
+                <span className="text-sm text-gray-600">수정일</span>
+                <p className="font-medium">{new Date(service.updated_at).toLocaleDateString('ko-KR')}</p>
+              </div>
+            )}
           </div>
         </div>
 

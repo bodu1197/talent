@@ -27,12 +27,12 @@ export default async function PendingServiceDetailPage({
   }
 
   try {
-    // 서비스 정보 조회
+    // 서비스 정보 조회 (pending 또는 suspended 상태)
     const { data: service, error: serviceError } = await supabase
       .from('services')
       .select('*')
       .eq('id', id)
-      .eq('status', 'pending')
+      .in('status', ['pending', 'suspended'])
       .single()
 
     if (serviceError || !service) {
