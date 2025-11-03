@@ -123,7 +123,7 @@ export default async function HomePage() {
           <div className="flex justify-between items-center mb-8">
             <div>
               <h2 className="text-mobile-lg lg:text-xl font-bold mb-2">추천 서비스</h2>
-              <p className="text-mobile-md text-gray-600">믿을 수 있는 검증된 전문가들의 서비스 (AI 제외)</p>
+              <p className="text-mobile-md text-gray-600">믿을 수 있는 검증된 전문가들의 서비스</p>
             </div>
           </div>
 

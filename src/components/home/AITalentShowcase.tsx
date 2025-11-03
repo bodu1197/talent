@@ -29,7 +29,6 @@ export default function AITalentShowcase({ services = [] }: Props) {
             <h2 className="text-mobile-lg lg:text-xl font-bold mb-2">AI 재능 쇼케이스</h2>
             <p className="text-mobile-md text-gray-600">
               AI 전문가들의 인기 서비스
-              {services.length > 0 && ` (${services.length}개)`}
             </p>
           </div>
           <Link
