@@ -261,7 +261,46 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
 
+      {/* Fortune / Tarot Banner Section - 얇은 띠 형식 */}
+      <section className="py-12 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 overflow-hidden relative">
+        <div className="absolute inset-0 bg-black/10"></div>
+        {/* 반짝이는 별 장식 */}
+        <div className="absolute top-4 left-10 text-yellow-300 text-2xl animate-pulse">✨</div>
+        <div className="absolute top-8 right-20 text-yellow-300 text-xl animate-pulse" style={{animationDelay: '0.5s'}}>⭐</div>
+        <div className="absolute bottom-6 left-1/4 text-yellow-300 text-lg animate-pulse" style={{animationDelay: '1s'}}>✨</div>
+        <div className="absolute bottom-4 right-1/3 text-yellow-300 text-2xl animate-pulse" style={{animationDelay: '1.5s'}}>⭐</div>
+
+        <div className="container-1200 relative z-10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="text-5xl">🔮</div>
+              <div>
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-1">
+                  오늘의 운세가 궁금하신가요?
+                </h3>
+                <p className="text-white/90 text-base md:text-lg">
+                  타로, 사주, 운세 상담까지. 당신의 미래를 밝혀줄 전문가들이 기다립니다.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Link
+                href="/categories/fortune"
+                className="bg-white text-purple-600 font-bold px-8 py-4 rounded-full hover:bg-yellow-300 hover:text-purple-700 transition-all shadow-2xl hover:scale-105 whitespace-nowrap"
+              >
+                🌙 운세 보러가기
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Categories Section (계속) */}
+      <section className="py-24 bg-white overflow-hidden">
+        <div className="container-1200 space-y-24">
           {/* Life Services Section */}
           <div className="space-y-8">
             <div className="grid md:grid-cols-2 gap-12 items-center">
