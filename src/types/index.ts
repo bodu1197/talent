@@ -103,17 +103,6 @@ export interface Service {
   updated_at: string
   seller?: SellerProfile
   category?: Category
-  ai_services?: AIService[]
-}
-
-export interface AIService {
-  id: string
-  service_id: string
-  ai_tool: string
-  version?: string
-  features?: string[]
-  sample_prompts?: string[]
-  created_at: string
 }
 
 export interface Order {

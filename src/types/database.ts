@@ -232,44 +232,6 @@ export type Database = {
           },
         ]
       }
-      ai_services: {
-        Row: {
-          ai_tool: string
-          created_at: string | null
-          features: string[] | null
-          sample_prompts: string[] | null
-          service_id: string
-          updated_at: string | null
-          version: string | null
-        }
-        Insert: {
-          ai_tool: string
-          created_at?: string | null
-          features?: string[] | null
-          sample_prompts?: string[] | null
-          service_id: string
-          updated_at?: string | null
-          version?: string | null
-        }
-        Update: {
-          ai_tool?: string
-          created_at?: string | null
-          features?: string[] | null
-          sample_prompts?: string[] | null
-          service_id?: string
-          updated_at?: string | null
-          version?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "ai_services_service_id_fkey"
-            columns: ["service_id"]
-            isOneToOne: true
-            referencedRelation: "services"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       categories: {
         Row: {
           commission_rate: number | null

@@ -6,15 +6,22 @@ import CategoryGrid from '@/components/home/CategoryGrid'
 import RecentVisitedCategories from '@/components/home/RecentVisitedCategories'
 import RecentViewedServices from '@/components/home/RecentViewedServices'
 import { createClient } from '@/lib/supabase/server'
+import { logger } from '@/lib/logger'
 
 export default async function HomePage() {
   const supabase = await createClient()
 
   // 1. AI 카테고리 찾기 (is_ai = true인 모든 카테고리)
-  const { data: aiCategories } = await supabase
+  const { data: aiCategories, error: aiCategoryError } = await supabase
     .from('categories')
-    .select('id')
+    .select('id, name, slug')
     .eq('is_ai', true)
+
+  logger.dev('AI 카테고리 조회', {
+    count: aiCategories?.length || 0,
+    categories: aiCategories,
+    error: aiCategoryError
+  })
 
   let aiServices = []
   let aiServiceIds: string[] = []
@@ -23,16 +30,23 @@ export default async function HomePage() {
     const aiCategoryIds = aiCategories.map(cat => cat.id)
 
     // 2. AI 카테고리들에 속한 서비스 ID 목록 조회
-    const { data: serviceCategoryLinks } = await supabase
+    const { data: serviceCategoryLinks, error: linkError } = await supabase
       .from('service_categories')
-      .select('service_id')
+      .select('service_id, category_id')
       .in('category_id', aiCategoryIds)
+
+    logger.dev('AI 서비스 카테고리 링크 조회', {
+      categoryIds: aiCategoryIds,
+      linkCount: serviceCategoryLinks?.length || 0,
+      links: serviceCategoryLinks,
+      error: linkError
+    })
 
     if (serviceCategoryLinks && serviceCategoryLinks.length > 0) {
       aiServiceIds = serviceCategoryLinks.map(sc => sc.service_id)
 
       // 3. AI 카테고리 서비스 조회 (AI 재능 쇼케이스용 - 모든 AI 서비스 표시)
-      const { data } = await supabase
+      const { data, error: servicesError } = await supabase
         .from('services')
         .select(`
           *,
@@ -46,6 +60,13 @@ export default async function HomePage() {
         .in('id', aiServiceIds)
         .eq('status', 'active')
         .order('created_at', { ascending: false })
+
+      logger.dev('AI 서비스 조회 결과', {
+        serviceIds: aiServiceIds,
+        serviceCount: data?.length || 0,
+        services: data?.map(s => ({ id: s.id, title: s.title, status: s.status })),
+        error: servicesError
+      })
 
       if (data) {
         // orders_count를 order_count로 매핑
