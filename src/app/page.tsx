@@ -1,4 +1,5 @@
 import ServiceGrid from '@/components/services/ServiceGrid'
+import ServiceCard from '@/components/services/ServiceCard'
 import HeroSection from '@/components/home/HeroSection'
 import AITalentShowcase from '@/components/home/AITalentShowcase'
 import CategoryGrid from '@/components/home/CategoryGrid'
@@ -7,7 +8,6 @@ import RecentViewedServices from '@/components/home/RecentViewedServices'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function HomePage() {
-  // AI 카테고리 서비스 조회
   const supabase = await createClient()
 
   // 1. AI 카테고리 찾기 (slug로)
@@ -18,17 +18,19 @@ export default async function HomePage() {
     .maybeSingle()
 
   let aiServices = []
+  let aiServiceIds: string[] = []
 
   if (aiCategory) {
-    // 2. AI 카테고리에 속한 active 서비스 조회
+    // 2. AI 카테고리에 속한 서비스 ID 목록 조회
     const { data: serviceCategoryLinks } = await supabase
       .from('service_categories')
       .select('service_id')
       .eq('category_id', aiCategory.id)
 
     if (serviceCategoryLinks && serviceCategoryLinks.length > 0) {
-      const serviceIds = serviceCategoryLinks.map(sc => sc.service_id)
+      aiServiceIds = serviceCategoryLinks.map(sc => sc.service_id)
 
+      // 3. AI 카테고리 서비스 조회 (AI 재능 쇼케이스용)
       const { data } = await supabase
         .from('services')
         .select(`
@@ -40,7 +42,7 @@ export default async function HomePage() {
             is_verified
           )
         `)
-        .in('id', serviceIds)
+        .in('id', aiServiceIds)
         .eq('status', 'active')
         .order('created_at', { ascending: false })
         .limit(15)
@@ -55,6 +57,43 @@ export default async function HomePage() {
     }
   }
 
+  // 4. 추천 서비스 조회 (AI 카테고리 제외)
+  let recommendedQuery = supabase
+    .from('services')
+    .select(`
+      *,
+      seller:sellers(
+        id,
+        business_name,
+        display_name,
+        is_verified
+      )
+    `)
+    .eq('status', 'active')
+
+  // AI 서비스 제외
+  if (aiServiceIds.length > 0) {
+    recommendedQuery = recommendedQuery.not('id', 'in', `(${aiServiceIds.join(',')})`)
+  }
+
+  const { data: recommendedData } = await recommendedQuery
+    .order('created_at', { ascending: false })
+    .limit(15)
+
+  const recommendedServices = recommendedData?.map(service => ({
+    ...service,
+    order_count: service.orders_count || 0
+  })) || []
+
+  // 디버깅: 로그 출력
+  console.log('=== 메인 페이지 서비스 로딩 ===')
+  console.log('AI 카테고리 ID:', aiCategory?.id)
+  console.log('AI 서비스 ID 목록:', aiServiceIds)
+  console.log('AI 서비스 개수:', aiServices.length)
+  console.log('추천 서비스 개수:', recommendedServices.length)
+  console.log('AI 서비스 제목들:', aiServices.map(s => s.title))
+  console.log('추천 서비스 제목들:', recommendedServices.map(s => s.title))
+
   return (
     <div className="pb-0">
       <HeroSection />
@@ -66,19 +105,21 @@ export default async function HomePage() {
       {/* 기존의 '추천 서비스', '서비스 프로세스', '실시간 구매 후기', 'CTA 섹션' 등은
           새로운 컴포넌트들로 대체되거나 재구성될 예정입니다. */}
 
-      {/* 기존 '추천 서비스' 섹션 (ServiceGrid는 재사용 가능성 있음) */}
+      {/* 추천 서비스 섹션 - AI 카테고리 제외 */}
       <section className="py-8 bg-gray-50">
         <div className="container-1200">
           <div className="flex justify-between items-center mb-8">
             <div>
               <h2 className="text-mobile-lg lg:text-xl font-bold mb-2">추천 서비스</h2>
-              <p className="text-mobile-md text-gray-600">믿을 수 있는 검증된 전문가들의 서비스</p>
+              <p className="text-mobile-md text-gray-600">믿을 수 있는 검증된 전문가들의 서비스 (AI 제외)</p>
             </div>
-            <button className="hidden md:block px-4 py-2 border border-brand-primary text-brand-primary rounded-lg hover:bg-gray-50 transition-colors">
-              전체보기
-            </button>
           </div>
-          <ServiceGrid featured={true} columns={5} />
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {recommendedServices.map((service) => (
+              <ServiceCard key={service.id} service={service} />
+            ))}
+          </div>
         </div>
       </section>
 
