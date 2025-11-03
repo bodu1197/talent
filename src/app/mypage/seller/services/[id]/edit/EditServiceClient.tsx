@@ -38,6 +38,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
   const [selectedLevel3, setSelectedLevel3] = useState(categoryHierarchy?.level3 || '')
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(service.thumbnail_url || null)
+  const originalThumbnailUrl = service.thumbnail_url || null // 원본 이미지 URL 저장
 
   // 템플릿 관련 상태
   const [uploadMode, setUploadMode] = useState<'file' | 'template'>('file')
@@ -75,7 +76,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
 
   const removeThumbnail = () => {
     setThumbnailFile(null)
-    setThumbnailPreview(service.thumbnail_url || null) // 기존 이미지로 복원
+    setThumbnailPreview(originalThumbnailUrl) // 원본 이미지로 복원
     setSelectedTemplate(null)
     setTextStyle(null)
   }
@@ -399,7 +400,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                     onClick={() => {
                       setUploadMode('file')
                       setThumbnailFile(null)
-                      setThumbnailPreview(service.thumbnail_url || null)
+                      setThumbnailPreview(originalThumbnailUrl)
                       setSelectedTemplate(null)
                       setTextStyle(null)
                     }}
@@ -418,6 +419,8 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                       setUploadMode('template')
                       setThumbnailFile(null)
                       setThumbnailPreview(null)
+                      setSelectedTemplate(null)
+                      setTextStyle(null)
                     }}
                     className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
                       uploadMode === 'template'
@@ -446,7 +449,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                           className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors text-sm"
                         >
                           <i className="fas fa-times mr-1"></i>
-                          {service.thumbnail_url ? '원본으로 복원' : '삭제'}
+                          {thumbnailFile ? '취소' : (originalThumbnailUrl ? '원본으로 복원' : '삭제')}
                         </button>
                       </div>
                     ) : (
@@ -469,6 +472,22 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                 {/* 템플릿 모드 */}
                 {uploadMode === 'template' && (
                   <div className="space-y-6">
+                    {/* 기존 이미지 교체 안내 */}
+                    {originalThumbnailUrl && !thumbnailFile && (
+                      <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                        <div className="flex items-start gap-3">
+                          <i className="fas fa-info-circle text-amber-600 mt-0.5"></i>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-amber-900 mb-1">기존 이미지 교체</p>
+                            <p className="text-xs text-amber-700">
+                              템플릿으로 새 썸네일을 생성하면 기존 이미지가 삭제되고 새 이미지로 교체됩니다.
+                              기존 이미지를 유지하려면 "파일 업로드" 모드로 전환하세요.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
                     {thumbnailPreview && thumbnailFile ? (
                       <div className="relative">
                         <img
