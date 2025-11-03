@@ -124,6 +124,13 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
       const previewUrl = URL.createObjectURL(blob)
       setThumbnailPreview(previewUrl)
 
+      logger.info('템플릿 썸네일 생성 완료', {
+        fileName: file.name,
+        fileSize: file.size,
+        fileType: file.type,
+        hasFile: !!file
+      })
+
       alert('썸네일이 생성되었습니다!')
     } catch (error) {
       logger.error('썸네일 생성 오류:', error)
@@ -247,10 +254,19 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
         return
       }
 
+      logger.info('서비스 수정 제출 시작', {
+        uploadMode,
+        hasThumbnailFile: !!thumbnailFile,
+        thumbnailFileName: thumbnailFile?.name,
+        thumbnailPreview,
+        originalThumbnailUrl
+      })
+
       let thumbnail_url = service.thumbnail_url
 
       // 2. Upload new thumbnail if changed
       if (thumbnailFile) {
+        // 새 파일 업로드 (파일 업로드 또는 템플릿 생성)
         const fileExt = thumbnailFile.name.split('.').pop()
         const fileName = `${user.id}-${Date.now()}.${fileExt}`
         const filePath = `service-thumbnails/${fileName}`
@@ -270,6 +286,16 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
           .getPublicUrl(filePath)
 
         thumbnail_url = publicUrl
+
+        logger.info('새 썸네일 업로드 완료', {
+          mode: uploadMode,
+          newUrl: publicUrl,
+          oldUrl: service.thumbnail_url
+        })
+      } else if (!thumbnailPreview && originalThumbnailUrl) {
+        // 기존 이미지를 삭제했지만 새 이미지를 업로드하지 않은 경우
+        thumbnail_url = null
+        logger.info('썸네일 삭제됨', { oldUrl: originalThumbnailUrl })
       }
 
       // 3. 서비스 상태에 따라 다르게 처리
