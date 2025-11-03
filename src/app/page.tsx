@@ -4,15 +4,64 @@ import AITalentShowcase from '@/components/home/AITalentShowcase'
 import CategoryGrid from '@/components/home/CategoryGrid'
 import RecentVisitedCategories from '@/components/home/RecentVisitedCategories'
 import RecentViewedServices from '@/components/home/RecentViewedServices'
+import { createClient } from '@/lib/supabase/server'
 
-export default function HomePage() {
+export default async function HomePage() {
+  // AI 카테고리 서비스 조회
+  const supabase = await createClient()
+
+  // 1. AI 카테고리 찾기 (slug로)
+  const { data: aiCategory } = await supabase
+    .from('categories')
+    .select('id')
+    .eq('slug', 'ai-services')
+    .maybeSingle()
+
+  let aiServices = []
+
+  if (aiCategory) {
+    // 2. AI 카테고리에 속한 active 서비스 조회
+    const { data: serviceCategoryLinks } = await supabase
+      .from('service_categories')
+      .select('service_id')
+      .eq('category_id', aiCategory.id)
+
+    if (serviceCategoryLinks && serviceCategoryLinks.length > 0) {
+      const serviceIds = serviceCategoryLinks.map(sc => sc.service_id)
+
+      const { data } = await supabase
+        .from('services')
+        .select(`
+          *,
+          seller:sellers(
+            id,
+            business_name,
+            display_name,
+            is_verified
+          )
+        `)
+        .in('id', serviceIds)
+        .eq('status', 'active')
+        .order('created_at', { ascending: false })
+        .limit(15)
+
+      if (data) {
+        // orders_count를 order_count로 매핑
+        aiServices = data.map(service => ({
+          ...service,
+          order_count: service.orders_count || 0
+        }))
+      }
+    }
+  }
+
   return (
     <div className="pb-0">
       <HeroSection />
       <CategoryGrid />
       <RecentVisitedCategories />
       <RecentViewedServices />
-      <AITalentShowcase />
+      <AITalentShowcase services={aiServices} />
 
       {/* 기존의 '추천 서비스', '서비스 프로세스', '실시간 구매 후기', 'CTA 섹션' 등은
           새로운 컴포넌트들로 대체되거나 재구성될 예정입니다. */}

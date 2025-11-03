@@ -2,22 +2,27 @@
 
 import Link from 'next/link'
 
-interface AIShowcaseItem {
+interface Service {
   id: string
   title: string
-  category: string
-  thumbnail: string
-  price: string
-  rating: number
-  reviews: number
-  seller: string
-  slug: string
+  description?: string
+  price: number
+  thumbnail_url?: string
+  rating?: number
+  order_count?: number
+  seller?: {
+    id: string
+    display_name?: string
+    business_name?: string
+    is_verified: boolean
+  }
 }
 
-// 샘플 데이터 (나중에 실제 데이터로 교체)
-const showcaseItems: AIShowcaseItem[] = []
+interface Props {
+  services: Service[]
+}
 
-export default function AITalentShowcase() {
+export default function AITalentShowcase({ services = [] }: Props) {
   return (
     <section className="py-8 bg-white">
       <div className="container-1200">
@@ -26,60 +31,79 @@ export default function AITalentShowcase() {
             <h2 className="text-mobile-lg lg:text-xl font-bold mb-2">AI 재능 쇼케이스</h2>
             <p className="text-mobile-md text-gray-600">AI 전문가들의 인기 서비스</p>
           </div>
-          <button className="hidden md:block px-4 py-2 border border-brand-primary text-brand-primary rounded-lg hover:bg-gray-50 transition-colors text-mobile-md lg:text-base">
+          <Link
+            href="/categories/ai-services"
+            className="hidden md:block px-4 py-2 border border-brand-primary text-brand-primary rounded-lg hover:bg-gray-50 transition-colors text-mobile-md lg:text-base"
+          >
             전체보기
-          </button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {showcaseItems.map((item) => (
-            <Link
-              key={item.id}
-              href={`/categories/${item.slug}`}
-              className="card group cursor-pointer"
-            >
-              {/* 썸네일 */}
-              <div className="relative bg-gray-100 rounded-t-lg overflow-hidden h-48">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
-                  <span className="text-6xl opacity-20">
+          {/* 실제 AI 서비스 카드 */}
+          {services.map((service) => (
+            <Link key={service.id} href={`/services/${service.id}`} className="group relative">
+              <div className="bg-gray-100 rounded-lg overflow-hidden w-full relative" style={{ aspectRatio: '210/160' }}>
+                {service.thumbnail_url ? (
+                  <img
+                    src={service.thumbnail_url}
+                    alt={service.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                    <i className="fas fa-robot text-4xl text-gray-400"></i>
+                  </div>
+                )}
+
+                {/* AI 배지 */}
+                <div className="absolute top-2 left-2">
+                  <div className="px-2 py-1 bg-purple-500 text-white text-xs rounded shadow-lg flex items-center gap-1">
                     <i className="fas fa-robot"></i>
-                  </span>
-                </div>
-                <div className="absolute top-3 left-3">
-                  <span className="px-3 py-1 bg-brand-primary text-white text-mobile-sm font-medium rounded-full">
-                    {item.category}
-                  </span>
+                    AI
+                  </div>
                 </div>
               </div>
 
-              {/* 정보 */}
-              <div className="p-4">
-                <h3 className="font-bold text-mobile-md lg:text-lg mb-2 line-clamp-1 group-hover:text-brand-primary transition-colors">
-                  {item.title}
+              {/* 서비스 정보 */}
+              <div className="mt-2">
+                {/* 판매자 */}
+                <div className="flex items-center gap-1 mb-1">
+                  <div className="w-4 h-4 rounded-full bg-[#0f3460] flex items-center justify-center text-white text-[8px] font-bold">
+                    {service.seller?.display_name?.[0] || 'S'}
+                  </div>
+                  <span className="text-xs text-gray-600 truncate">
+                    {service.seller?.display_name}
+                  </span>
+                  {service.seller?.is_verified && (
+                    <i className="fas fa-check-circle text-[10px] text-blue-500"></i>
+                  )}
+                </div>
+
+                {/* 제목 */}
+                <h3 className="font-medium text-sm line-clamp-2 group-hover:text-[#0f3460] transition-colors mb-1">
+                  {service.title}
                 </h3>
 
-                <div className="flex items-center gap-2 text-mobile-sm text-gray-600 mb-3">
+                {/* 평점 및 주문 수 */}
+                <div className="flex items-center gap-2 text-xs text-gray-600 mb-1">
                   <span className="flex items-center gap-1">
                     <i className="fas fa-star text-yellow-400"></i>
-                    <span className="font-semibold">{item.rating}</span>
+                    {(service.rating || 0).toFixed(1)}
                   </span>
-                  <span>({item.reviews})</span>
+                  <span>({service.order_count || 0})</span>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="text-mobile-lg lg:text-2xl font-bold text-gray-900">
-                      {item.price}
-                    </span>
-                    <span className="text-mobile-sm text-gray-600 ml-1">원~</span>
-                  </div>
-                </div>
+                {/* 가격 */}
+                <p className="text-[#0f3460] font-bold text-sm">
+                  {(service.price || 0).toLocaleString()}원
+                </p>
               </div>
             </Link>
           ))}
 
           {/* 플레이스홀더 카드들 (15개까지 채우기) */}
-          {Array.from({ length: Math.max(0, 15 - showcaseItems.length) }, (_, i) => (
+          {Array.from({ length: Math.max(0, 15 - services.length) }, (_, i) => (
             <Link key={`placeholder-${i}`} href="/expert/register?category=ai-services" className="group relative">
               <div className="bg-gradient-to-br from-[#0f3460] to-[#1a5490] rounded-lg overflow-hidden w-full relative" style={{ aspectRatio: '210/160' }}>
                 {/* 배경 패턴 */}
