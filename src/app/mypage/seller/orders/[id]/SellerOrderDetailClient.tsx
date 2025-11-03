@@ -5,6 +5,7 @@ import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
 import { updateOrderStatus } from '@/lib/supabase/mutations/orders'
 import { useRouter } from 'next/navigation'
+import { logger } from '@/lib/logger'
 
 interface Props {
   order: any
@@ -30,7 +31,7 @@ export default function SellerOrderDetailClient({ order: initialOrder, orderId }
       router.refresh()
       alert('납품이 완료되었습니다')
     } catch (err: any) {
-      console.error('납품 실패:', err)
+      logger.error('납품 실패:', err)
       alert('납품에 실패했습니다: ' + err.message)
     } finally {
       setSubmitting(false)

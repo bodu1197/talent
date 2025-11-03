@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import ViewTracker from '@/components/services/ViewTracker'
 import FavoriteButton from '@/components/services/FavoriteButton'
+import { logger } from '@/lib/logger'
 
 interface ServiceDetailProps {
   params: Promise<{
@@ -31,7 +32,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
     .single()
 
   if (error) {
-    console.error('Service fetch error:', error)
+    logger.error('Service fetch error:', error)
     notFound()
   }
 

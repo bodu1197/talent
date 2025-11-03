@@ -5,6 +5,7 @@ import { getAdminServices, getAdminServicesCount } from '@/lib/supabase/queries/
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
 import EmptyState from '@/components/common/EmptyState'
+import { logger } from '@/lib/logger'
 
 type ServiceStatus = 'all' | 'pending' | 'approved' | 'rejected'
 
@@ -49,7 +50,7 @@ export default function AdminServicesPage() {
       })
       setServices(data)
     } catch (err: any) {
-      console.error('서비스 조회 실패:', err)
+      logger.error('서비스 조회 실패:', err)
       setError(err?.message || '서비스 목록을 불러오는데 실패했습니다')
     } finally {
       setLoading(false)
@@ -72,7 +73,7 @@ export default function AdminServicesPage() {
         rejected: rejectedCount
       })
     } catch (err) {
-      console.error('상태별 카운트 조회 실패:', err)
+      logger.error('상태별 카운트 조회 실패:', err)
     }
   }
 

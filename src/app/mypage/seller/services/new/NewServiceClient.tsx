@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { logger } from '@/lib/logger'
 
 interface Category {
   id: string
@@ -75,12 +76,12 @@ export default function NewServiceClient({ sellerId }: Props) {
           .order('display_order', { ascending: true })
 
         if (error) {
-          console.error('1차 카테고리 로딩 오류:', error)
+          logger.error('1차 카테고리 로딩 오류:', error)
         } else {
           setLevel1Categories(data || [])
         }
       } catch (error) {
-        console.error('1차 카테고리 로딩 실패:', error)
+        logger.error('1차 카테고리 로딩 실패:', error)
       } finally {
         setLoading(false)
       }
@@ -110,12 +111,12 @@ export default function NewServiceClient({ sellerId }: Props) {
           .order('display_order', { ascending: true })
 
         if (error) {
-          console.error('2차 카테고리 로딩 오류:', error)
+          logger.error('2차 카테고리 로딩 오류:', error)
         } else {
           setLevel2Categories(data || [])
         }
       } catch (error) {
-        console.error('2차 카테고리 로딩 실패:', error)
+        logger.error('2차 카테고리 로딩 실패:', error)
       }
     }
 
@@ -141,12 +142,12 @@ export default function NewServiceClient({ sellerId }: Props) {
           .order('display_order', { ascending: true })
 
         if (error) {
-          console.error('3차 카테고리 로딩 오류:', error)
+          logger.error('3차 카테고리 로딩 오류:', error)
         } else {
           setLevel3Categories(data || [])
         }
       } catch (error) {
-        console.error('3차 카테고리 로딩 실패:', error)
+        logger.error('3차 카테고리 로딩 실패:', error)
       }
     }
 
@@ -198,7 +199,7 @@ export default function NewServiceClient({ sellerId }: Props) {
         .upload(filePath, thumbnailFile)
 
       if (uploadError) {
-        console.error('Thumbnail upload error:', uploadError)
+        logger.error('Thumbnail upload error:', uploadError)
         alert('썸네일 업로드에 실패했습니다.')
         return
       }
@@ -233,7 +234,7 @@ export default function NewServiceClient({ sellerId }: Props) {
         .single()
 
       if (serviceError) {
-        console.error('Service insert error:', serviceError)
+        logger.error('Service insert error:', serviceError)
         alert('서비스 등록에 실패했습니다: ' + serviceError.message)
         return
       }
@@ -248,14 +249,14 @@ export default function NewServiceClient({ sellerId }: Props) {
         })
 
       if (categoryError) {
-        console.error('Category insert error:', categoryError)
+        logger.error('Category insert error:', categoryError)
       }
 
       alert('서비스가 성공적으로 등록되었습니다!\n관리자 승인 후 판매가 시작됩니다.')
       window.location.href = '/mypage/seller/services'
 
     } catch (error) {
-      console.error('Service registration error:', error)
+      logger.error('Service registration error:', error)
       alert('서비스 등록 중 오류가 발생했습니다.')
     } finally {
       setLoading(false)

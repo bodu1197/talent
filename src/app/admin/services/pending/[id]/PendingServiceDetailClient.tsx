@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { logger } from '@/lib/logger'
 
 interface Props {
   service: any
@@ -25,7 +26,7 @@ export default function PendingServiceDetailClient({ service }: Props) {
       alert('서비스가 승인되었습니다.')
       router.push('/admin/services?status=pending')
     } catch (err: any) {
-      console.error('승인 실패:', err)
+      logger.error('승인 실패:', err)
       alert('승인에 실패했습니다: ' + err.message)
     }
   }
@@ -49,7 +50,7 @@ export default function PendingServiceDetailClient({ service }: Props) {
       alert('서비스가 반려되었습니다.')
       router.push('/admin/services?status=pending')
     } catch (err: any) {
-      console.error('반려 실패:', err)
+      logger.error('반려 실패:', err)
       alert('반려에 실패했습니다: ' + err.message)
     }
   }

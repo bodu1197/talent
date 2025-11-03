@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/client'
+import { logger } from '@/lib/logger'
 
 // 한 번의 쿼리로 모든 하위 카테고리 ID 가져오기 (최적화)
 async function getAllDescendantCategories(supabase: any, parentId: string, parentLevel: number): Promise<string[]> {
@@ -155,7 +156,7 @@ export async function getServicesByCategory(categoryId: string) {
     .order('created_at', { ascending: false })
 
   if (error) {
-    console.error('Error fetching services by category:', error)
+    logger.error('Error fetching services by category:', error)
     throw error
   }
 
@@ -252,7 +253,7 @@ export async function getActiveServices(limit?: number) {
   const { data, error } = await query
 
   if (error) {
-    console.error('Error fetching active services:', error)
+    logger.error('Error fetching active services:', error)
     throw error
   }
 

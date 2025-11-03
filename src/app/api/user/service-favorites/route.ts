@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { logger } from '@/lib/logger'
 
 // POST: 찜하기
 export async function POST(request: NextRequest) {
@@ -25,7 +26,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.log(`[Favorites POST] User ${user.id} adding service ${serviceId}`)
+    logger.debug('Adding service to favorites', { userId: user.id, serviceId })
 
     const { error } = await supabase
       .from('service_favorites')
@@ -37,28 +38,28 @@ export async function POST(request: NextRequest) {
     if (error) {
       // 이미 찜한 경우
       if (error.code === '23505') {
-        console.log(`[Favorites POST] Service ${serviceId} already favorited`)
+        logger.debug('Service already favorited', { serviceId })
         return NextResponse.json(
           { message: 'Already favorited' },
           { status: 200 }
         )
       }
 
-      console.error('Favorite insert error:', error)
+      logger.error('Failed to insert favorite', error)
       return NextResponse.json(
         { error: 'Failed to add favorite' },
         { status: 500 }
       )
     }
 
-    console.log(`[Favorites POST] Successfully added service ${serviceId} to favorites`)
+    logger.info('Service added to favorites', { userId: user.id, serviceId })
     return NextResponse.json(
       { message: 'Added to favorites' },
       { status: 201 }
     )
 
   } catch (error) {
-    console.error('Favorite POST error:', error)
+    logger.error('Favorite POST error', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -97,20 +98,21 @@ export async function DELETE(request: NextRequest) {
       .eq('service_id', serviceId)
 
     if (error) {
-      console.error('Favorite delete error:', error)
+      logger.error('Failed to delete favorite', error)
       return NextResponse.json(
         { error: 'Failed to remove favorite' },
         { status: 500 }
       )
     }
 
+    logger.info('Service removed from favorites', { userId: user.id, serviceId })
     return NextResponse.json(
       { message: 'Removed from favorites' },
       { status: 200 }
     )
 
   } catch (error) {
-    console.error('Favorite DELETE error:', error)
+    logger.error('Favorite DELETE error', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -152,8 +154,7 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false })
 
     if (error) {
-      console.error('[Favorites API] Fetch error:', error)
-      console.error('[Favorites API] Error details:', JSON.stringify(error, null, 2))
+      logger.error('Failed to fetch favorites', error)
       return NextResponse.json(
         { error: 'Failed to fetch favorites', details: error.message },
         { status: 500 }
@@ -169,13 +170,11 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    console.log(`[Favorites API] User ${user.id} has ${data?.length || 0} favorites`)
-    console.log('[Favorites API] Data:', JSON.stringify(data, null, 2))
-
+    logger.debug('Favorites fetched', { userId: user.id, count: data?.length || 0 })
     return NextResponse.json({ data }, { status: 200 })
 
   } catch (error) {
-    console.error('Favorites GET error:', error)
+    logger.error('Favorites GET error', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

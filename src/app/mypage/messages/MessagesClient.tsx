@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import { getConversationMessages, getConversationDetail, sendMessage, markMessagesAsRead } from '@/lib/supabase/queries/messages'
+import { logger } from '@/lib/logger'
 
 interface Props {
   conversations: any[]
@@ -42,7 +43,7 @@ export default function MessagesClient({ conversations: initialConversations, us
       setMessages(messagesData)
       setConversationDetail(detailData)
     } catch (err: any) {
-      console.error('메시지 조회 실패:', err)
+      logger.error('메시지 조회 실패:', err)
     }
   }
 
@@ -55,7 +56,7 @@ export default function MessagesClient({ conversations: initialConversations, us
       setMessage('')
       await loadMessages(selectedChat)
     } catch (err: any) {
-      console.error('메시지 전송 실패:', err)
+      logger.error('메시지 전송 실패:', err)
       alert('메시지 전송에 실패했습니다')
     } finally {
       setSendingMessage(false)

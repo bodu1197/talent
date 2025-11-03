@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { logger } from '@/lib/logger'
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
@@ -25,7 +26,7 @@ export default function ForgotPasswordPage() {
 
       setSuccess(true)
     } catch (error: any) {
-      console.error('비밀번호 재설정 요청 실패:', error)
+      logger.error('비밀번호 재설정 요청 실패:', error)
       setError(error.message || '비밀번호 재설정 요청 중 오류가 발생했습니다.')
     } finally {
       setIsLoading(false)

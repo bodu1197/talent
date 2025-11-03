@@ -5,6 +5,7 @@ import { getAdminDashboardStats, getAdminRecentOrders, getAdminRecentUsers } fro
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
 import Link from 'next/link'
+import { logger } from '@/lib/logger'
 
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState<any>(null)
@@ -32,7 +33,7 @@ export default function AdminDashboardPage() {
       setRecentOrders(ordersData)
       setRecentUsers(usersData)
     } catch (err: any) {
-      console.error('대시보드 데이터 로드 실패:', err)
+      logger.error('대시보드 데이터 로드 실패:', err)
       setError(err.message || '대시보드 데이터를 불러오는데 실패했습니다')
     } finally {
       setLoading(false)

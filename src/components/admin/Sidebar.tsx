@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { logger } from '@/lib/logger'
 
 const menuItems = [
   { name: '대시보드', path: '/admin/dashboard', icon: 'fa-chart-line' },
@@ -58,7 +59,7 @@ export default function AdminSidebar() {
         pendingRevisions: revisionsCount || 0
       })
     } catch (error) {
-      console.error('Failed to load pending counts:', error)
+      logger.error('Failed to load pending counts:', error)
     }
   }
 

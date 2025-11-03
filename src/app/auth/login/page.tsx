@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { logger } from '@/lib/logger'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -35,7 +36,7 @@ export default function LoginPage() {
       // 메인 페이지로 이동
       router.push('/')
     } catch (error: any) {
-      console.error('로그인 실패:', error)
+      logger.error('로그인 실패:', error)
       setError(error.message || '로그인 중 오류가 발생했습니다.')
       setIsLoading(false)
     }

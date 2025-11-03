@@ -9,6 +9,7 @@ import { getOrderById } from '@/lib/supabase/queries/orders'
 import { confirmOrder, requestRevision } from '@/lib/supabase/mutations/orders'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
+import { logger } from '@/lib/logger'
 
 interface PageProps {
   params: Promise<{
@@ -40,7 +41,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
       const data = await getOrderById(id)
       setOrder(data)
     } catch (err: any) {
-      console.error('주문 조회 실패:', err)
+      logger.error('주문 조회 실패:', err)
       setError(err.message || '주문 정보를 불러오는데 실패했습니다')
     } finally {
       setLoading(false)
@@ -55,7 +56,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
       await loadOrder() // Reload to get updated status
       alert('구매가 확정되었습니다')
     } catch (err: any) {
-      console.error('구매 확정 실패:', err)
+      logger.error('구매 확정 실패:', err)
       alert('구매 확정에 실패했습니다')
     } finally {
       setSubmitting(false)
@@ -76,7 +77,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
       await loadOrder() // Reload to get updated status
       alert('수정 요청이 전송되었습니다')
     } catch (err: any) {
-      console.error('수정 요청 실패:', err)
+      logger.error('수정 요청 실패:', err)
       alert('수정 요청에 실패했습니다')
     } finally {
       setSubmitting(false)

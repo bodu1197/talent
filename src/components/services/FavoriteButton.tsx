@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/components/providers/AuthProvider'
 import { useRouter } from 'next/navigation'
+import { logger } from '@/lib/logger'
 
 interface FavoriteButtonProps {
   serviceId: string
@@ -28,7 +29,7 @@ export default function FavoriteButton({ serviceId, className = '' }: FavoriteBu
           setIsFavorited(favorited)
         }
       } catch (error) {
-        console.error('Failed to check favorite status:', error)
+        logger.error('Failed to check favorite status:', error)
       }
     }
 
@@ -75,7 +76,7 @@ export default function FavoriteButton({ serviceId, className = '' }: FavoriteBu
         }
       }
     } catch (error) {
-      console.error('Favorite toggle error:', error)
+      logger.error('Favorite toggle error:', error)
       alert('오류가 발생했습니다.')
     } finally {
       setLoading(false)

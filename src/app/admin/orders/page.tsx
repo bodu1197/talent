@@ -6,6 +6,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
 import EmptyState from '@/components/common/EmptyState'
 import Link from 'next/link'
+import { logger } from '@/lib/logger'
 
 type OrderStatus = 'all' | 'paid' | 'in_progress' | 'delivered' | 'completed' | 'cancelled'
 
@@ -39,7 +40,7 @@ export default function AdminOrdersPage() {
       })
       setOrders(data)
     } catch (err: any) {
-      console.error('주문 조회 실패:', err)
+      logger.error('주문 조회 실패:', err)
       setError(err.message || '주문 목록을 불러오는데 실패했습니다')
     } finally {
       setLoading(false)
@@ -66,7 +67,7 @@ export default function AdminOrdersPage() {
         cancelled: cancelledCount
       })
     } catch (err) {
-      console.error('상태별 카운트 조회 실패:', err)
+      logger.error('상태별 카운트 조회 실패:', err)
     }
   }
 

@@ -1,10 +1,9 @@
 import { createClient } from '@/lib/supabase/client'
+import { logger } from '@/lib/logger'
 
 export async function getBuyerDashboardStats(userId: string) {
   try {
     const supabase = createClient()
-
-    console.log('[getBuyerDashboardStats] Fetching stats for buyer:', userId)
 
     // Get counts for different order statuses
     const [inProgressResult, deliveredResult, completedResult] = await Promise.all([
@@ -26,9 +25,9 @@ export async function getBuyerDashboardStats(userId: string) {
         .gte('created_at', new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString())
     ])
 
-    if (inProgressResult.error) console.error('[getBuyerDashboardStats] inProgress error:', inProgressResult.error)
-    if (deliveredResult.error) console.error('[getBuyerDashboardStats] delivered error:', deliveredResult.error)
-    if (completedResult.error) console.error('[getBuyerDashboardStats] completed error:', completedResult.error)
+    if (inProgressResult.error) logger.error('[getBuyerDashboardStats] inProgress error:', inProgressResult.error)
+    if (deliveredResult.error) logger.error('[getBuyerDashboardStats] delivered error:', deliveredResult.error)
+    if (completedResult.error) logger.error('[getBuyerDashboardStats] completed error:', completedResult.error)
 
     // Get pending reviews count (completed orders without reviews)
     const { count: pendingReviewsCount, error: reviewError } = await supabase
@@ -38,7 +37,7 @@ export async function getBuyerDashboardStats(userId: string) {
       .eq('status', 'completed')
       .is('review_id', null)
 
-    if (reviewError) console.error('[getBuyerDashboardStats] review error:', reviewError)
+    if (reviewError) logger.error('[getBuyerDashboardStats] review error:', reviewError)
 
     const stats = {
       inProgressOrders: inProgressResult.count || 0,
@@ -47,11 +46,9 @@ export async function getBuyerDashboardStats(userId: string) {
       monthlyPurchases: completedResult.count || 0
     }
 
-    console.log('[getBuyerDashboardStats] Stats:', stats)
-
     return stats
   } catch (error) {
-    console.error('[getBuyerDashboardStats] Unexpected error:', error)
+    logger.error('[getBuyerDashboardStats] Unexpected error:', error)
     return {
       inProgressOrders: 0,
       deliveredOrders: 0,
@@ -64,8 +61,6 @@ export async function getBuyerDashboardStats(userId: string) {
 export async function getBuyerRecentOrders(userId: string, limit: number = 5) {
   try {
     const supabase = createClient()
-
-    console.log('[getBuyerRecentOrders] Fetching orders for buyer:', userId)
 
     const { data, error } = await supabase
       .from('orders')
@@ -80,14 +75,13 @@ export async function getBuyerRecentOrders(userId: string, limit: number = 5) {
       .limit(limit)
 
     if (error) {
-      console.error('[getBuyerRecentOrders] Error:', error)
+      logger.error('[getBuyerRecentOrders] Error:', error)
       return []
     }
 
-    console.log('[getBuyerRecentOrders] Found orders:', data?.length || 0)
     return data || []
   } catch (error) {
-    console.error('[getBuyerRecentOrders] Unexpected error:', error)
+    logger.error('[getBuyerRecentOrders] Unexpected error:', error)
     return []
   }
 }
@@ -95,8 +89,6 @@ export async function getBuyerRecentOrders(userId: string, limit: number = 5) {
 export async function getBuyerRecentFavorites(userId: string, limit: number = 5) {
   try {
     const supabase = createClient()
-
-    console.log('[getBuyerRecentFavorites] Fetching favorites for user:', userId)
 
     const { data, error } = await supabase
       .from('favorites')
@@ -112,14 +104,13 @@ export async function getBuyerRecentFavorites(userId: string, limit: number = 5)
       .limit(limit)
 
     if (error) {
-      console.error('[getBuyerRecentFavorites] Error:', error)
+      logger.error('[getBuyerRecentFavorites] Error:', error)
       return []
     }
 
-    console.log('[getBuyerRecentFavorites] Found favorites:', data?.length || 0)
     return data || []
   } catch (error) {
-    console.error('[getBuyerRecentFavorites] Unexpected error:', error)
+    logger.error('[getBuyerRecentFavorites] Unexpected error:', error)
     return []
   }
 }
@@ -127,8 +118,6 @@ export async function getBuyerRecentFavorites(userId: string, limit: number = 5)
 export async function getBuyerBenefits(userId: string) {
   try {
     const supabase = createClient()
-
-    console.log('[getBuyerBenefits] Fetching benefits for user:', userId)
 
     // Get coupons count
     const { count: couponsCount, error: couponError } = await supabase
@@ -138,7 +127,7 @@ export async function getBuyerBenefits(userId: string) {
       .eq('is_used', false)
       .gte('expires_at', new Date().toISOString())
 
-    if (couponError) console.error('[getBuyerBenefits] Coupon error:', couponError)
+    if (couponError) logger.error('[getBuyerBenefits] Coupon error:', couponError)
 
     // Get cash balance from user_wallets or users table
     const { data: walletData, error: walletError } = await supabase
@@ -147,18 +136,16 @@ export async function getBuyerBenefits(userId: string) {
       .eq('user_id', userId)
       .maybeSingle()
 
-    if (walletError) console.error('[getBuyerBenefits] Wallet error:', walletError)
+    if (walletError) logger.error('[getBuyerBenefits] Wallet error:', walletError)
 
     const benefits = {
       coupons: couponsCount || 0,
       cash: walletData?.balance || 0
     }
 
-    console.log('[getBuyerBenefits] Benefits:', benefits)
-
     return benefits
   } catch (error) {
-    console.error('[getBuyerBenefits] Unexpected error:', error)
+    logger.error('[getBuyerBenefits] Unexpected error:', error)
     return {
       coupons: 0,
       cash: 0

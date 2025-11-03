@@ -7,6 +7,7 @@ import { useAuth } from '@/components/providers/AuthProvider'
 import { getCouponUsageHistory, getWalletTransactions } from '@/lib/supabase/queries/coupons'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
+import { logger } from '@/lib/logger'
 
 export default function CouponHistoryPage() {
   const { user } = useAuth()
@@ -52,7 +53,7 @@ export default function CouponHistoryPage() {
 
       setHistory(combined)
     } catch (err: any) {
-      console.error('내역 로드 실패:', err)
+      logger.error('내역 로드 실패:', err)
       setError(err.message || '내역을 불러오는데 실패했습니다')
     } finally {
       setLoading(false)

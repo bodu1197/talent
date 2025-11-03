@@ -158,14 +158,6 @@ export default function SellerRegisterClient({ userId }: Props) {
   }
 
   const handleSubmit = async () => {
-    console.log('🚀 [등록 시작] User ID:', userId)
-    console.log('📝 [등록 데이터]', {
-      displayName: formData.displayName,
-      phone: formData.phone,
-      accountNumber: formData.accountNumber,
-      bankName: formData.bankName
-    })
-
     setLoading(true)
 
     try {
@@ -174,7 +166,6 @@ export default function SellerRegisterClient({ userId }: Props) {
       // 1. 프로필 이미지 업로드
       let profileImageUrl = ''
       if (formData.profileImage) {
-        console.log('📸 [이미지 업로드 시작]')
         const fileExt = formData.profileImage.name.split('.').pop()
         const fileName = `${userId}-profile.${fileExt}`
         const filePath = `seller-profiles/${fileName}`
@@ -184,7 +175,6 @@ export default function SellerRegisterClient({ userId }: Props) {
           .upload(filePath, formData.profileImage, { upsert: true })
 
         if (uploadError) {
-          console.error('❌ [이미지 업로드 실패]', uploadError)
           alert('프로필 이미지 업로드에 실패했습니다: ' + uploadError.message)
           setLoading(false)
           return
@@ -195,11 +185,9 @@ export default function SellerRegisterClient({ userId }: Props) {
           .getPublicUrl(filePath)
 
         profileImageUrl = publicUrl
-        console.log('✅ [이미지 업로드 성공]', publicUrl)
       }
 
       // 2. sellers 테이블에 판매자 정보 등록
-      console.log('💾 [DB 저장 시작]')
       const insertData = {
         user_id: userId,
         real_name: formData.realName,
@@ -223,8 +211,6 @@ export default function SellerRegisterClient({ userId }: Props) {
         status: 'pending_review'
       }
 
-      console.log('📤 [Insert Data]', insertData)
-
       const { data: seller, error: sellerError } = await supabase
         .from('sellers')
         .insert(insertData)
@@ -232,25 +218,20 @@ export default function SellerRegisterClient({ userId }: Props) {
         .single()
 
       if (sellerError) {
-        console.error('❌ [DB 저장 실패]', sellerError)
         alert(`판매자 등록에 실패했습니다.\n\n에러: ${sellerError.message}\n코드: ${sellerError.code}\n\n관리자에게 문의해주세요.`)
         setLoading(false)
         return
       }
 
-      console.log('✅ [등록 성공]', seller)
       alert('판매자 등록이 완료되었습니다! 승인 후 판매를 시작할 수 있습니다.')
 
-      console.log('🔄 [리다이렉트 시작]')
       router.push('/mypage/seller/dashboard')
       router.refresh()
 
     } catch (error: any) {
-      console.error('❌ [예외 발생]', error)
-      alert(`판매자 등록 중 오류가 발생했습니다.\n\n${error.message || error}\n\n브라우저 콘솔을 확인해주세요.`)
+      alert(`판매자 등록 중 오류가 발생했습니다.\n\n${error.message || error}`)
       setLoading(false)
     } finally {
-      console.log('🏁 [등록 프로세스 종료]')
       setLoading(false)
     }
   }
@@ -273,18 +254,15 @@ export default function SellerRegisterClient({ userId }: Props) {
       case 1:
         result = isVerified && !!formData.accountNumber &&
                !!formData.accountHolder && !!formData.bankName
-        console.log('✅ [Step 1 Validation]', { isVerified, accountNumber: !!formData.accountNumber, accountHolder: !!formData.accountHolder, bankName: !!formData.bankName, result })
         break
       case 2:
         result = !!formData.displayName && formData.bio.length >= 50
-        console.log('✅ [Step 2 Validation]', { displayName: !!formData.displayName, bioLength: formData.bio.length, minRequired: 50, result })
         break
       case 3:
         result = true // 연락처는 선택사항
         break
       case 4:
         result = formData.termsAgree && formData.commissionAgree && formData.refundAgree
-        console.log('✅ [Step 4 Validation]', { termsAgree: formData.termsAgree, commissionAgree: formData.commissionAgree, refundAgree: formData.refundAgree, result })
         break
       default:
         result = false

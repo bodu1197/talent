@@ -5,6 +5,7 @@ import Sidebar from '@/components/mypage/Sidebar'
 import { createReviewReply } from '@/lib/supabase/mutations/reviews'
 import EmptyState from '@/components/common/EmptyState'
 import { useRouter } from 'next/navigation'
+import { logger } from '@/lib/logger'
 
 type RatingFilter = 'all' | '5' | '4' | '3' | '2' | '1'
 
@@ -45,7 +46,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
       router.refresh()
       alert('답변이 등록되었습니다')
     } catch (err: any) {
-      console.error('답변 등록 실패:', err)
+      logger.error('답변 등록 실패:', err)
       alert('답변 등록에 실패했습니다: ' + err.message)
     } finally {
       setSubmitting(false)

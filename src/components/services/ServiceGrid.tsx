@@ -5,6 +5,7 @@ import ServiceCard from './ServiceCard'
 import PlaceholderServiceCard from './PlaceholderServiceCard'
 import { Service } from '@/types'
 import { getServicesByCategory, getActiveServices } from '@/lib/supabase/queries/services'
+import { logger } from '@/lib/logger'
 
 interface ServiceGridProps {
   categoryId?: string
@@ -36,7 +37,7 @@ export default function ServiceGrid({ categoryId, sellerId, featured, columns = 
 
         setServices(data)
       } catch (err) {
-        console.error('Failed to fetch services:', err)
+        logger.error('Failed to fetch services:', err)
         setError('서비스를 불러오는데 실패했습니다.')
         setServices([])
       } finally {

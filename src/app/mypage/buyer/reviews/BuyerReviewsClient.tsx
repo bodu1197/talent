@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Sidebar from '@/components/mypage/Sidebar'
 import { createReview, updateReview, deleteReview } from '@/lib/supabase/mutations/reviews'
 import { getPendingReviews, getBuyerReviews } from '@/lib/supabase/queries/reviews'
+import { logger } from '@/lib/logger'
 
 interface BuyerReviewsClientProps {
   initialPendingReviews: any[]
@@ -41,7 +42,7 @@ export default function BuyerReviewsClient({
       setPendingReviews(pendingData)
       setWrittenReviews(writtenData)
     } catch (err: any) {
-      console.error('리뷰 데이터 로드 실패:', err)
+      logger.error('리뷰 데이터 로드 실패:', err)
     }
   }
 
@@ -69,7 +70,7 @@ export default function BuyerReviewsClient({
       await loadReviews()
       alert('리뷰가 등록되었습니다')
     } catch (err: any) {
-      console.error('리뷰 등록 실패:', err)
+      logger.error('리뷰 등록 실패:', err)
       alert('리뷰 등록에 실패했습니다')
     } finally {
       setSubmitting(false)
@@ -96,7 +97,7 @@ export default function BuyerReviewsClient({
       await loadReviews()
       alert('리뷰가 수정되었습니다')
     } catch (err: any) {
-      console.error('리뷰 수정 실패:', err)
+      logger.error('리뷰 수정 실패:', err)
       alert('리뷰 수정에 실패했습니다')
     } finally {
       setSubmitting(false)
@@ -111,7 +112,7 @@ export default function BuyerReviewsClient({
       await loadReviews()
       alert('리뷰가 삭제되었습니다')
     } catch (err: any) {
-      console.error('리뷰 삭제 실패:', err)
+      logger.error('리뷰 삭제 실패:', err)
       alert('리뷰 삭제에 실패했습니다')
     }
   }

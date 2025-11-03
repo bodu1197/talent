@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import Sidebar from '@/components/mypage/Sidebar'
 import MobileSidebar from '@/components/mypage/MobileSidebar'
+import { logger } from '@/lib/logger'
 
 interface Props {
   profile: any
@@ -33,7 +34,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
       router.push('/mypage/seller/profile')
       router.refresh()
     } catch (error) {
-      console.error('Failed to save profile:', error)
+      logger.error('Failed to save profile:', error)
       alert('프로필 저장에 실패했습니다')
     } finally {
       setSaving(false)

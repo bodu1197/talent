@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
+import { logger } from '@/lib/logger'
 
 type UserProfile = {
   id: string
@@ -44,7 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // 프로필 정보 가져오기 (users, buyers, sellers 테이블에서 조회)
   const fetchProfile = async (userId: string) => {
-    console.log('[AuthProvider] fetchProfile called for user:', userId)
+    logger.debug('[AuthProvider] fetchProfile called for user:', { userId })
     try {
       // users 테이블에서 기본 정보 조회
       const { data: userData, error: userError } = await supabase
@@ -54,7 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .single()
 
       if (userError) {
-        console.error('[AuthProvider] User fetch error:', {
+        logger.error('[AuthProvider] User fetch error:', userError, {
           message: userError.message,
           details: userError.details,
           hint: userError.hint,
@@ -72,7 +73,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           is_buyer: true,
           is_seller: false
         })
-        console.log('[AuthProvider] Set fallback profile due to error')
+        logger.warn('[AuthProvider] Set fallback profile due to error')
         return
       }
 
@@ -100,10 +101,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         is_seller: isSeller
       }
 
-      console.log('[AuthProvider] Profile loaded successfully:', { isBuyer, isSeller })
+      logger.debug('[AuthProvider] Profile loaded successfully:', { isBuyer, isSeller })
       setProfile(profileData)
     } catch (error: any) {
-      console.error('[AuthProvider] Profile fetch error:', error)
+      logger.error('[AuthProvider] Profile fetch error:', error)
 
       // 에러 시 fallback 프로필 설정
       setProfile({
@@ -117,7 +118,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         is_buyer: true,
         is_seller: false
       })
-      console.log('[AuthProvider] Set fallback profile due to exception')
+      logger.warn('[AuthProvider] Set fallback profile due to exception')
     }
   }
 
@@ -135,7 +136,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(null)
       setProfile(null)
     } catch (error) {
-      console.error('로그아웃 실패:', error)
+      logger.error('로그아웃 실패:', error)
     }
   }
 

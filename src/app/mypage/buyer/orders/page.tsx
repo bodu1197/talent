@@ -10,6 +10,7 @@ import { getBuyerOrders, getBuyerOrdersCount } from '@/lib/supabase/queries/orde
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import EmptyState from '@/components/common/EmptyState'
 import ErrorState from '@/components/common/ErrorState'
+import { logger } from '@/lib/logger'
 
 type OrderStatus = 'all' | 'paid' | 'in_progress' | 'delivered' | 'completed' | 'cancelled'
 
@@ -58,7 +59,7 @@ function BuyerOrdersContent() {
       const data = await getBuyerOrders(user!.id, filters.status === 'all' ? undefined : filters.status)
       setOrders(data)
     } catch (err: any) {
-      console.error('주문 조회 실패:', err)
+      logger.error('주문 조회 실패:', err)
       setError(err.message || '주문 내역을 불러오는데 실패했습니다')
     } finally {
       setLoading(false)
@@ -84,7 +85,7 @@ function BuyerOrdersContent() {
         cancelled: cancelledCount
       })
     } catch (err) {
-      console.error('상태별 카운트 조회 실패:', err)
+      logger.error('상태별 카운트 조회 실패:', err)
     }
   }
 

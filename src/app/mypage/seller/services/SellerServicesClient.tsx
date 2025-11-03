@@ -5,6 +5,7 @@ import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
 import EmptyState from '@/components/common/EmptyState'
 import { createClient } from '@/lib/supabase/client'
+import { logger } from '@/lib/logger'
 
 type ServiceStatus = 'all' | 'active' | 'inactive' | 'pending'
 
@@ -46,7 +47,7 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
 
       alert('반려 메시지가 삭제되었습니다.')
     } catch (err: any) {
-      console.error('반려 메시지 삭제 실패:', err)
+      logger.error('반려 메시지 삭제 실패:', err)
       alert('삭제에 실패했습니다: ' + err.message)
     }
   }
@@ -75,7 +76,7 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
 
       alert(newStatus === 'active' ? '서비스가 활성화되었습니다.' : '서비스가 일시정지되었습니다.')
     } catch (err: any) {
-      console.error('상태 변경 실패:', err)
+      logger.error('상태 변경 실패:', err)
       alert('상태 변경에 실패했습니다: ' + err.message)
     }
   }
@@ -114,7 +115,7 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
 
       alert('서비스가 성공적으로 삭제되었습니다.')
     } catch (err: any) {
-      console.error('서비스 삭제 실패:', err)
+      logger.error('서비스 삭제 실패:', err)
       alert('삭제에 실패했습니다: ' + err.message)
     }
   }

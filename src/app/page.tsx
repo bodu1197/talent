@@ -86,16 +86,6 @@ export default async function HomePage() {
     order_count: service.orders_count || 0
   })) || []
 
-  // 디버깅: 로그 출력
-  console.log('=== 메인 페이지 서비스 로딩 ===')
-  console.log('AI 카테고리 개수:', aiCategories?.length || 0)
-  console.log('AI 카테고리 IDs:', aiCategories?.map(c => c.id))
-  console.log('AI 서비스 ID 목록:', aiServiceIds)
-  console.log('AI 서비스 개수:', aiServices.length)
-  console.log('추천 서비스 개수:', recommendedServices.length)
-  console.log('AI 서비스 제목들:', aiServices.map(s => s.title))
-  console.log('추천 서비스 제목들:', recommendedServices.map(s => s.title))
-
   return (
     <div className="pb-0">
       <HeroSection />

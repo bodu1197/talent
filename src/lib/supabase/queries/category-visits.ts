@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/client'
 import { createClient as createServerClient } from '@/lib/supabase/server'
+import { logger } from '@/lib/logger'
 
 export interface RecentCategory {
   category_id: string
@@ -33,7 +34,7 @@ export async function getRecentVisitedCategoriesServer(limit: number = 10): Prom
     .order('visited_at', { ascending: false })
 
   if (error) {
-    console.error('Failed to fetch recent categories:', error)
+    logger.error('Failed to fetch recent categories:', error)
     return []
   }
 
@@ -95,7 +96,7 @@ export async function getRecentVisitedCategories(limit: number = 10): Promise<Re
     .order('visited_at', { ascending: false })
 
   if (error) {
-    console.error('Failed to fetch recent categories:', error)
+    logger.error('Failed to fetch recent categories:', error)
     return []
   }
 

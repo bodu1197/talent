@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { logger } from '@/lib/logger'
 
 export async function POST(request: NextRequest) {
   try {
@@ -63,7 +64,7 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (error) {
-      console.error('Category visit insert error:', error)
+      logger.error('Category visit insert error:', error)
       return NextResponse.json(
         { error: 'Failed to track category visit' },
         { status: 500 }
@@ -77,7 +78,7 @@ export async function POST(request: NextRequest) {
     )
 
   } catch (error) {
-    console.error('Category visit API error:', error)
+    logger.error('Category visit API error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -113,7 +114,7 @@ export async function GET(request: NextRequest) {
       .limit(50)
 
     if (error) {
-      console.error('Category visits fetch error:', error)
+      logger.error('Category visits fetch error:', error)
       return NextResponse.json(
         { error: 'Failed to fetch category visits' },
         { status: 500 }
@@ -123,7 +124,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ data }, { status: 200 })
 
   } catch (error) {
-    console.error('Category visits GET error:', error)
+    logger.error('Category visits GET error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

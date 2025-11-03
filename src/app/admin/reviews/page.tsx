@@ -5,6 +5,7 @@ import { getAdminReviews } from '@/lib/supabase/queries/admin'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
 import EmptyState from '@/components/common/EmptyState'
+import { logger } from '@/lib/logger'
 
 type RatingFilter = 'all' | '5' | '4' | '3' | '2' | '1'
 
@@ -29,7 +30,7 @@ export default function AdminReviewsPage() {
       })
       setReviews(data)
     } catch (err: any) {
-      console.error('리뷰 조회 실패:', err)
+      logger.error('리뷰 조회 실패:', err)
       setError(err.message || '리뷰 목록을 불러오는데 실패했습니다')
     } finally {
       setLoading(false)

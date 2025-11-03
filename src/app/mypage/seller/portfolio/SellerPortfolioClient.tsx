@@ -5,6 +5,7 @@ import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
 import { deletePortfolioItem } from '@/lib/supabase/queries/earnings'
 import { useRouter } from 'next/navigation'
+import { logger } from '@/lib/logger'
 
 interface Props {
   portfolio: any[]
@@ -24,7 +25,7 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
       setPortfolio(portfolio.filter(item => item.id !== itemId))
       router.refresh()
     } catch (err: any) {
-      console.error('삭제 실패:', err)
+      logger.error('삭제 실패:', err)
       alert('삭제에 실패했습니다')
     } finally {
       setDeleting(null)

@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import { useAuth } from '@/components/providers/AuthProvider'
+import { logger } from '@/lib/logger'
 
 interface ViewTrackerProps {
   serviceId: string
@@ -25,7 +26,7 @@ export default function ViewTracker({ serviceId }: ViewTrackerProps) {
         })
       } catch (error) {
         // 에러가 발생해도 사용자 경험에 영향 없도록 조용히 처리
-        console.error('View tracking error:', error)
+        logger.error('View tracking error:', error)
       }
     }
 

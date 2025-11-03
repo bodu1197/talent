@@ -7,6 +7,7 @@ import { useAuth } from '@/components/providers/AuthProvider'
 import { getUserCoupons, getUserWallet } from '@/lib/supabase/queries/coupons'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
+import { logger } from '@/lib/logger'
 
 export default function BuyerCouponsPage() {
   const { user } = useAuth()
@@ -34,7 +35,7 @@ export default function BuyerCouponsPage() {
       setCoupons(couponsData)
       setWallet(walletData)
     } catch (err: any) {
-      console.error('쿠폰 데이터 로드 실패:', err)
+      logger.error('쿠폰 데이터 로드 실패:', err)
       setError(err.message || '쿠폰 데이터를 불러오는데 실패했습니다')
     } finally {
       setLoading(false)

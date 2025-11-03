@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { logger } from '@/lib/logger'
 
 // POST: 서비스 조회 기록 저장
 export async function POST(request: NextRequest) {
@@ -38,7 +39,7 @@ export async function POST(request: NextRequest) {
       })
 
     if (error) {
-      console.error('Service view insert error:', error)
+      logger.error('Service view insert error:', error)
       return NextResponse.json(
         { error: 'Failed to track service view' },
         { status: 500 }
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest) {
     )
 
   } catch (error) {
-    console.error('Service view API error:', error)
+    logger.error('Service view API error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -99,7 +100,7 @@ export async function GET(request: NextRequest) {
       .limit(limit)
 
     if (error) {
-      console.error('Service views fetch error:', error)
+      logger.error('Service views fetch error:', error)
       return NextResponse.json(
         { error: 'Failed to fetch service views' },
         { status: 500 }
@@ -109,7 +110,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ data }, { status: 200 })
 
   } catch (error) {
-    console.error('Service views GET error:', error)
+    logger.error('Service views GET error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

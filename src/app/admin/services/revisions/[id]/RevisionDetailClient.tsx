@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { approveServiceRevision, rejectServiceRevision } from '@/lib/supabase/queries/admin'
+import { logger } from '@/lib/logger'
 
 interface Props {
   revision: any
@@ -18,7 +19,7 @@ export default function RevisionDetailClient({ revision }: Props) {
       alert('수정 요청이 승인되었습니다.')
       router.push('/admin/services?status=revisions')
     } catch (err: any) {
-      console.error('수정 승인 실패:', err)
+      logger.error('수정 승인 실패:', err)
       alert('수정 승인에 실패했습니다: ' + err.message)
     }
   }
@@ -32,7 +33,7 @@ export default function RevisionDetailClient({ revision }: Props) {
       alert('수정 요청이 반려되었습니다.')
       router.push('/admin/services?status=revisions')
     } catch (err: any) {
-      console.error('수정 반려 실패:', err)
+      logger.error('수정 반려 실패:', err)
       alert('수정 반려에 실패했습니다: ' + err.message)
     }
   }

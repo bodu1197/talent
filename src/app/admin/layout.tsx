@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/client'
 import AdminSidebar from '@/components/admin/Sidebar'
 import AdminHeader from '@/components/admin/Header'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
+import { logger } from '@/lib/logger'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -36,14 +37,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         .single()
 
       if (error || !data) {
-        console.error('관리자 권한 확인 실패:', error)
+        logger.error('관리자 권한 확인 실패:', error)
         router.push('/')
         return
       }
 
       setIsAdmin(true)
     } catch (err) {
-      console.error('관리자 확인 중 오류:', err)
+      logger.error('관리자 확인 중 오류:', err)
       router.push('/')
     } finally {
       setChecking(false)

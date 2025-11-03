@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import { useAuth } from '@/components/providers/AuthProvider'
+import { logger } from '@/lib/logger'
 
 interface CategoryVisitTrackerProps {
   categoryId: string
@@ -42,7 +43,7 @@ export default function CategoryVisitTracker({
 
         // 401 에러는 조용히 무시
         if (!response.ok && response.status !== 401) {
-          console.error('Failed to track category visit:', response.status)
+          logger.error('Failed to track category visit:', response.status)
         }
       } catch (error) {
         // 네트워크 에러는 조용히 무시

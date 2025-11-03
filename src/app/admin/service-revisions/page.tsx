@@ -5,6 +5,7 @@ import { getServiceRevisions, getServiceRevisionsCount, approveServiceRevision, 
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
 import EmptyState from '@/components/common/EmptyState'
+import { logger } from '@/lib/logger'
 
 type RevisionStatus = 'all' | 'pending' | 'approved' | 'rejected'
 
@@ -36,7 +37,7 @@ export default function AdminServiceRevisionsPage() {
       })
       setRevisions(data)
     } catch (err: any) {
-      console.error('수정 요청 조회 실패:', err)
+      logger.error('수정 요청 조회 실패:', err)
       setError(err?.message || '수정 요청 목록을 불러오는데 실패했습니다')
     } finally {
       setLoading(false)
@@ -59,7 +60,7 @@ export default function AdminServiceRevisionsPage() {
         rejected: rejectedCount
       })
     } catch (err) {
-      console.error('상태별 카운트 조회 실패:', err)
+      logger.error('상태별 카운트 조회 실패:', err)
     }
   }
 
@@ -72,7 +73,7 @@ export default function AdminServiceRevisionsPage() {
       loadRevisions()
       loadStatusCounts()
     } catch (err: any) {
-      console.error('승인 실패:', err)
+      logger.error('승인 실패:', err)
       alert('승인에 실패했습니다: ' + err.message)
     }
   }
@@ -87,7 +88,7 @@ export default function AdminServiceRevisionsPage() {
       loadRevisions()
       loadStatusCounts()
     } catch (err: any) {
-      console.error('반려 실패:', err)
+      logger.error('반려 실패:', err)
       alert('반려에 실패했습니다: ' + err.message)
     }
   }

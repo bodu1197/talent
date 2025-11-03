@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import SellerServicesClient from './SellerServicesClient'
+import { logger } from '@/lib/logger'
 
 type ServiceStatus = 'all' | 'active' | 'inactive' | 'pending'
 
@@ -27,7 +28,7 @@ export default async function SellerServicesPage({
       .maybeSingle()
 
     if (sellerError) {
-      console.error('Seller 조회 오류:', sellerError)
+      logger.error('Seller 조회 오류:', sellerError)
       throw new Error(`Seller 조회 실패: ${sellerError.message}`)
     }
 
@@ -56,7 +57,7 @@ export default async function SellerServicesPage({
     const { data: services, error: servicesError } = await servicesQuery
 
     if (servicesError) {
-      console.error('서비스 목록 조회 오류:', servicesError)
+      logger.error('서비스 목록 조회 오류:', servicesError)
       throw servicesError
     }
 
@@ -116,8 +117,8 @@ export default async function SellerServicesPage({
       statusCounts={statusCounts}
     />
   } catch (error: any) {
-    console.error('SellerServicesPage 전체 오류:', error)
-    console.error('오류 상세:', JSON.stringify(error, null, 2))
+    logger.error('SellerServicesPage 전체 오류:', error)
+    logger.error('오류 상세:', JSON.stringify(error, null, 2))
 
     return (
       <div className="p-8">
