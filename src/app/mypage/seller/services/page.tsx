@@ -4,6 +4,9 @@ import SellerServicesClient from './SellerServicesClient'
 
 type ServiceStatus = 'all' | 'active' | 'inactive' | 'pending'
 
+// 인증이 필요한 페이지이므로 동적 렌더링 강제
+export const dynamic = 'force-dynamic'
+
 export default async function SellerServicesPage({
   searchParams,
 }: {
