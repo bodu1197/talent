@@ -74,9 +74,18 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
     }
   }
 
-  const removeThumbnail = () => {
+  // 새로 업로드한 파일 취소 (원본으로 복원)
+  const cancelNewThumbnail = () => {
     setThumbnailFile(null)
-    setThumbnailPreview(originalThumbnailUrl) // 원본 이미지로 복원
+    setThumbnailPreview(originalThumbnailUrl)
+    setSelectedTemplate(null)
+    setTextStyle(null)
+  }
+
+  // 기존 이미지 완전 삭제
+  const deleteThumbnail = () => {
+    setThumbnailFile(null)
+    setThumbnailPreview(null)
     setSelectedTemplate(null)
     setTextStyle(null)
   }
@@ -443,14 +452,28 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                           alt="썸네일 미리보기"
                           className="w-full h-64 object-cover rounded-lg border border-gray-300"
                         />
-                        <button
-                          type="button"
-                          onClick={removeThumbnail}
-                          className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors text-sm"
-                        >
-                          <i className="fas fa-times mr-1"></i>
-                          {thumbnailFile ? '취소' : (originalThumbnailUrl ? '원본으로 복원' : '삭제')}
-                        </button>
+                        <div className="absolute top-2 right-2 flex gap-2">
+                          {/* 새로 업로드한 파일인 경우 취소 버튼 */}
+                          {thumbnailFile && (
+                            <button
+                              type="button"
+                              onClick={cancelNewThumbnail}
+                              className="bg-gray-500 text-white px-3 py-1 rounded-lg hover:bg-gray-600 transition-colors text-sm"
+                            >
+                              <i className="fas fa-undo mr-1"></i>
+                              취소
+                            </button>
+                          )}
+                          {/* 기존 이미지 삭제 버튼 */}
+                          <button
+                            type="button"
+                            onClick={deleteThumbnail}
+                            className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors text-sm"
+                          >
+                            <i className="fas fa-trash mr-1"></i>
+                            삭제
+                          </button>
+                        </div>
                       </div>
                     ) : (
                       <label className="block border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#0f3460] transition-colors cursor-pointer">
@@ -464,6 +487,9 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                         <p className="text-gray-600 font-medium">클릭하여 이미지 선택</p>
                         <p className="text-sm text-gray-500 mt-2">권장 크기: 652×488px (최대 5MB)</p>
                         <p className="text-xs text-gray-400 mt-1">JPG, PNG, GIF 형식 지원</p>
+                        {originalThumbnailUrl && (
+                          <p className="text-xs text-red-500 mt-2">※ 기존 이미지가 삭제되었습니다. 새 이미지를 선택하세요.</p>
+                        )}
                       </label>
                     )}
                   </div>
