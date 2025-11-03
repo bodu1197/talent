@@ -5,6 +5,9 @@ import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { logger } from '@/lib/logger'
+import TemplateSelector from '@/components/services/TemplateSelector'
+import TextOverlayEditor from '@/components/services/TextOverlayEditor'
+import { type GradientTemplate, generateThumbnailWithText } from '@/lib/template-generator'
 
 interface Category {
   id: string
@@ -29,6 +32,12 @@ export default function NewServiceClient({ sellerId }: Props) {
   const [selectedLevel3, setSelectedLevel3] = useState('')
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null)
+
+  // 템플릿 관련 상태
+  const [uploadMode, setUploadMode] = useState<'file' | 'template'>('file')
+  const [selectedTemplate, setSelectedTemplate] = useState<GradientTemplate | null>(null)
+  const [textStyle, setTextStyle] = useState<any>(null)
+
   const [formData, setFormData] = useState({
     title: '',
     category: '',
@@ -61,6 +70,49 @@ export default function NewServiceClient({ sellerId }: Props) {
   const removeThumbnail = () => {
     setThumbnailFile(null)
     setThumbnailPreview(null)
+    setSelectedTemplate(null)
+    setTextStyle(null)
+  }
+
+  // 템플릿 기반 썸네일 생성
+  const generateTemplateThumbnail = async () => {
+    if (!selectedTemplate || !textStyle || !textStyle.text.trim()) {
+      alert('템플릿과 텍스트를 입력해주세요.')
+      return
+    }
+
+    try {
+      const blob = await generateThumbnailWithText(
+        selectedTemplate,
+        {
+          text: textStyle.text,
+          x: textStyle.x,
+          y: textStyle.y,
+          fontSize: textStyle.fontSize,
+          fontFamily: 'Noto Sans KR, sans-serif',
+          color: textStyle.color,
+          textAlign: textStyle.textAlign,
+          fontWeight: textStyle.fontWeight,
+          shadowBlur: textStyle.shadowBlur,
+          shadowColor: 'rgba(0,0,0,0.5)',
+        },
+        652,
+        488
+      )
+
+      // Blob을 File로 변환
+      const file = new File([blob], `thumbnail-${Date.now()}.jpg`, { type: 'image/jpeg' })
+      setThumbnailFile(file)
+
+      // 미리보기 URL 생성
+      const previewUrl = URL.createObjectURL(blob)
+      setThumbnailPreview(previewUrl)
+
+      alert('썸네일이 생성되었습니다!')
+    } catch (error) {
+      logger.error('썸네일 생성 오류:', error)
+      alert('썸네일 생성에 실패했습니다.')
+    }
   }
 
   // Load level 1 categories on mount
@@ -293,41 +345,137 @@ export default function NewServiceClient({ sellerId }: Props) {
               {/* 썸네일 이미지 - 최상단 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  썸네일 이미지 *
+                  썸네일 이미지 * <span className="text-xs text-gray-500">(권장: 652×488px)</span>
                 </label>
-                <div className="space-y-3">
-                  {thumbnailPreview ? (
-                    <div className="relative">
-                      <img
-                        src={thumbnailPreview}
-                        alt="썸네일 미리보기"
-                        className="w-full h-64 object-cover rounded-lg border border-gray-300"
-                      />
-                      <button
-                        type="button"
-                        onClick={removeThumbnail}
-                        className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors text-sm"
-                      >
-                        <i className="fas fa-times mr-1"></i>
-                        삭제
-                      </button>
-                    </div>
-                  ) : (
-                    <label className="block border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#0f3460] transition-colors cursor-pointer">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleThumbnailChange}
-                        className="hidden"
-                        required
-                      />
-                      <i className="fas fa-cloud-upload-alt text-gray-400 text-4xl mb-3"></i>
-                      <p className="text-gray-600 font-medium">클릭하여 이미지 선택</p>
-                      <p className="text-sm text-gray-500 mt-2">권장 크기: 800x600px (최대 5MB)</p>
-                      <p className="text-xs text-gray-400 mt-1">JPG, PNG, GIF 형식 지원</p>
-                    </label>
-                  )}
+
+                {/* 업로드 방식 선택 */}
+                <div className="flex gap-2 mb-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setUploadMode('file')
+                      removeThumbnail()
+                    }}
+                    className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
+                      uploadMode === 'file'
+                        ? 'bg-brand-primary text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    <i className="fas fa-upload mr-2"></i>
+                    파일 업로드
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setUploadMode('template')
+                      removeThumbnail()
+                    }}
+                    className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
+                      uploadMode === 'template'
+                        ? 'bg-brand-primary text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    <i className="fas fa-palette mr-2"></i>
+                    템플릿 사용
+                  </button>
                 </div>
+
+                {/* 파일 업로드 모드 */}
+                {uploadMode === 'file' && (
+                  <div className="space-y-3">
+                    {thumbnailPreview ? (
+                      <div className="relative">
+                        <img
+                          src={thumbnailPreview}
+                          alt="썸네일 미리보기"
+                          className="w-full h-64 object-cover rounded-lg border border-gray-300"
+                        />
+                        <button
+                          type="button"
+                          onClick={removeThumbnail}
+                          className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors text-sm"
+                        >
+                          <i className="fas fa-times mr-1"></i>
+                          삭제
+                        </button>
+                      </div>
+                    ) : (
+                      <label className="block border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#0f3460] transition-colors cursor-pointer">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleThumbnailChange}
+                          className="hidden"
+                        />
+                        <i className="fas fa-cloud-upload-alt text-gray-400 text-4xl mb-3"></i>
+                        <p className="text-gray-600 font-medium">클릭하여 이미지 선택</p>
+                        <p className="text-sm text-gray-500 mt-2">권장 크기: 652×488px (최대 5MB)</p>
+                        <p className="text-xs text-gray-400 mt-1">JPG, PNG, GIF 형식 지원</p>
+                      </label>
+                    )}
+                  </div>
+                )}
+
+                {/* 템플릿 모드 */}
+                {uploadMode === 'template' && (
+                  <div className="space-y-6">
+                    {thumbnailPreview ? (
+                      <div className="relative">
+                        <img
+                          src={thumbnailPreview}
+                          alt="생성된 썸네일"
+                          className="w-full rounded-lg border-2 border-green-500"
+                          style={{ aspectRatio: '652/488' }}
+                        />
+                        <button
+                          type="button"
+                          onClick={removeThumbnail}
+                          className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors text-sm"
+                        >
+                          <i className="fas fa-times mr-1"></i>
+                          다시 만들기
+                        </button>
+                        <div className="absolute top-2 left-2 bg-green-500 text-white px-3 py-1 rounded-lg text-sm">
+                          <i className="fas fa-check mr-1"></i>
+                          생성 완료
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        {/* 템플릿 선택 */}
+                        <TemplateSelector
+                          onSelect={setSelectedTemplate}
+                          selectedTemplateId={selectedTemplate?.id}
+                        />
+
+                        {/* 텍스트 편집 */}
+                        {selectedTemplate && (
+                          <div className="border-t pt-6">
+                            <TextOverlayEditor
+                              template={selectedTemplate}
+                              onTextChange={setTextStyle}
+                            />
+
+                            {/* 생성 버튼 */}
+                            <div className="mt-6">
+                              <button
+                                type="button"
+                                onClick={generateTemplateThumbnail}
+                                disabled={!textStyle?.text?.trim()}
+                                className="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+                              >
+                                <i className="fas fa-wand-magic-sparkles mr-2"></i>
+                                썸네일 생성하기 (652×488px)
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* 서비스 제목 */}
