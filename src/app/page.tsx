@@ -10,22 +10,23 @@ import { createClient } from '@/lib/supabase/server'
 export default async function HomePage() {
   const supabase = await createClient()
 
-  // 1. AI 카테고리 찾기 (slug로)
-  const { data: aiCategory } = await supabase
+  // 1. AI 카테고리 찾기 (is_ai = true인 모든 카테고리)
+  const { data: aiCategories } = await supabase
     .from('categories')
     .select('id')
-    .eq('slug', 'ai-services')
-    .maybeSingle()
+    .eq('is_ai', true)
 
   let aiServices = []
   let aiServiceIds: string[] = []
 
-  if (aiCategory) {
-    // 2. AI 카테고리에 속한 서비스 ID 목록 조회
+  if (aiCategories && aiCategories.length > 0) {
+    const aiCategoryIds = aiCategories.map(cat => cat.id)
+
+    // 2. AI 카테고리들에 속한 서비스 ID 목록 조회
     const { data: serviceCategoryLinks } = await supabase
       .from('service_categories')
       .select('service_id')
-      .eq('category_id', aiCategory.id)
+      .in('category_id', aiCategoryIds)
 
     if (serviceCategoryLinks && serviceCategoryLinks.length > 0) {
       aiServiceIds = serviceCategoryLinks.map(sc => sc.service_id)
@@ -87,7 +88,8 @@ export default async function HomePage() {
 
   // 디버깅: 로그 출력
   console.log('=== 메인 페이지 서비스 로딩 ===')
-  console.log('AI 카테고리 ID:', aiCategory?.id)
+  console.log('AI 카테고리 개수:', aiCategories?.length || 0)
+  console.log('AI 카테고리 IDs:', aiCategories?.map(c => c.id))
   console.log('AI 서비스 ID 목록:', aiServiceIds)
   console.log('AI 서비스 개수:', aiServices.length)
   console.log('추천 서비스 개수:', recommendedServices.length)
