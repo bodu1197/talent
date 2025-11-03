@@ -86,7 +86,7 @@ export default function FavoritesPage() {
             <h2 className="text-2xl font-bold mb-4">로그인이 필요합니다</h2>
             <p className="text-gray-600 mb-6">찜한 서비스를 확인하려면 로그인해주세요.</p>
             <Link
-              href="/login"
+              href="/auth/login"
               className="inline-block px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors"
             >
               로그인하기
