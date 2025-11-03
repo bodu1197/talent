@@ -85,13 +85,12 @@ export default function AITalentShowcase({ services = [] }: Props) {
                   {service.title}
                 </h3>
 
-                {/* 평점 및 주문 수 */}
+                {/* 평점 */}
                 <div className="flex items-center gap-2 text-xs text-gray-600 mb-1">
                   <span className="flex items-center gap-1">
                     <i className="fas fa-star text-yellow-400"></i>
                     {(service.rating || 0).toFixed(1)}
                   </span>
-                  <span>({service.order_count || 0})</span>
                 </div>
 
                 {/* 가격 */}
