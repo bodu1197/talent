@@ -132,63 +132,42 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // First, get the favorite IDs
-    const { data: favoriteIds, error: favError } = await supabase
+    // 한 번의 쿼리로 favorites와 services join
+    const { data, error } = await supabase
       .from('service_favorites')
-      .select('service_id, created_at')
+      .select(`
+        service_id,
+        created_at,
+        service:services!inner(
+          *,
+          seller:sellers(
+            id,
+            business_name,
+            display_name,
+            is_verified
+          )
+        )
+      `)
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
 
-    if (favError) {
-      console.error('Favorites fetch error:', favError)
+    if (error) {
+      console.error('[Favorites API] Fetch error:', error)
+      console.error('[Favorites API] Error details:', JSON.stringify(error, null, 2))
       return NextResponse.json(
-        { error: 'Failed to fetch favorites' },
+        { error: 'Failed to fetch favorites', details: error.message },
         { status: 500 }
       )
     }
 
-    if (!favoriteIds || favoriteIds.length === 0) {
-      console.log(`[Favorites API] User ${user.id} has no favorites`)
-      return NextResponse.json({ data: [] }, { status: 200 })
+    // orders_count를 order_count로 매핑
+    if (data && data.length > 0) {
+      data.forEach(item => {
+        if (item.service) {
+          (item.service as any).order_count = (item.service as any).orders_count || 0
+        }
+      })
     }
-
-    // Then fetch the service details
-    const serviceIds = favoriteIds.map(f => f.service_id)
-    const { data: services, error: servicesError } = await supabase
-      .from('services')
-      .select(`
-        *,
-        seller:sellers(
-          id,
-          business_name,
-          display_name,
-          is_verified
-        )
-      `)
-      .in('id', serviceIds)
-
-    if (servicesError) {
-      console.error('[Favorites API] Services fetch error:', servicesError)
-      console.error('[Favorites API] Error details:', JSON.stringify(servicesError, null, 2))
-      return NextResponse.json(
-        { error: 'Failed to fetch service details', details: servicesError.message },
-        { status: 500 }
-      )
-    }
-
-    // Combine the data
-    const data = favoriteIds.map(fav => {
-      const service = services?.find(s => s.id === fav.service_id)
-      if (service) {
-        // orders_count를 order_count로 매핑
-        (service as any).order_count = (service as any).orders_count || 0
-      }
-      return {
-        service_id: fav.service_id,
-        created_at: fav.created_at,
-        service: service || null
-      }
-    }).filter(item => item.service !== null)
 
     console.log(`[Favorites API] User ${user.id} has ${data?.length || 0} favorites`)
     console.log('[Favorites API] Data:', JSON.stringify(data, null, 2))
