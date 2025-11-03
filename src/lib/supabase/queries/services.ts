@@ -1,4 +1,5 @@
-import { createClient } from '@/lib/supabase/client'
+import { createClient as createBrowserClient } from '@/lib/supabase/client'
+import { createClient as createServerClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 
 // 한 번의 쿼리로 모든 하위 카테고리 ID 가져오기 (최적화)
@@ -38,7 +39,7 @@ async function getAllDescendantCategories(supabase: any, parentId: string, paren
 }
 
 export async function getSellerServices(userId: string, status?: string) {
-  const supabase = createClient()
+  const supabase = createBrowserClient()
 
   let query = supabase
     .from('services')
@@ -62,7 +63,7 @@ export async function getSellerServices(userId: string, status?: string) {
 }
 
 export async function getServiceById(serviceId: string) {
-  const supabase = createClient()
+  const supabase = createBrowserClient()
 
   const { data, error } = await supabase
     .from('services')
@@ -100,7 +101,7 @@ export async function getServiceById(serviceId: string) {
 }
 
 export async function getSellerServicesCount(userId: string, status: string) {
-  const supabase = createClient()
+  const supabase = createBrowserClient()
 
   const { count, error } = await supabase
     .from('services')
@@ -112,9 +113,9 @@ export async function getSellerServicesCount(userId: string, status: string) {
   return count || 0
 }
 
-// 카테고리별 승인된 서비스 조회
+// 카테고리별 승인된 서비스 조회 (서버 컴포넌트용)
 export async function getServicesByCategory(categoryId: string) {
-  const supabase = createClient()
+  const supabase = await createServerClient()
 
   // 1. 먼저 카테고리 정보 조회 (level 확인)
   const { data: category } = await supabase
@@ -198,7 +199,7 @@ export async function getServicesByCategory(categoryId: string) {
 
 // 전체 승인된 서비스 조회 (홈페이지용) - AI 카테고리 제외
 export async function getActiveServices(limit?: number) {
-  const supabase = createClient()
+  const supabase = await createServerClient()
 
   // 1. AI 카테고리 ID 조회
   const { data: aiCategory } = await supabase
