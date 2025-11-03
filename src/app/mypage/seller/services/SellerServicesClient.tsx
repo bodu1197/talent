@@ -22,7 +22,6 @@ interface Props {
 export default function SellerServicesClient({ initialServices, statusFilter, statusCounts }: Props) {
   const [searchQuery, setSearchQuery] = useState('')
   const [services, setServices] = useState(initialServices)
-  const [openMenuId, setOpenMenuId] = useState<string | null>(null)
 
   async function handleDismissRejection(revisionId: string) {
     if (!confirm('이 반려 메시지를 삭제하시겠습니까?')) return
@@ -259,7 +258,7 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
                         <span><i className="fas fa-shopping-cart mr-1"></i>{service.order_count || 0}</span>
                       </div>
 
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 flex-wrap">
                         <Link
                           href={`/mypage/seller/services/${service.id}/edit`}
                           className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
@@ -283,61 +282,29 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
                           통계
                         </Link>
 
-                        {/* 더보기 메뉴 */}
-                        <div className="relative">
+                        {/* 활성화/일시정지 버튼 - active 또는 inactive 상태일 때만 표시 */}
+                        {(service.status === 'active' || service.status === 'inactive') && (
                           <button
-                            onClick={() => setOpenMenuId(openMenuId === service.id ? null : service.id)}
-                            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                            onClick={() => handleToggleStatus(service.id, service.status)}
+                            className={`px-4 py-2 border rounded-lg transition-colors text-sm font-medium ${
+                              service.status === 'active'
+                                ? 'border-yellow-400 bg-yellow-50 text-yellow-700 hover:bg-yellow-100'
+                                : 'border-green-400 bg-green-50 text-green-700 hover:bg-green-100'
+                            }`}
                           >
-                            <i className="fas fa-ellipsis-v"></i>
+                            <i className={`fas ${service.status === 'active' ? 'fa-pause' : 'fa-play'} mr-1`}></i>
+                            {service.status === 'active' ? '일시정지' : '활성화'}
                           </button>
+                        )}
 
-                          {openMenuId === service.id && (
-                            <>
-                              {/* 오버레이 */}
-                              <div
-                                className="fixed inset-0 z-10"
-                                onClick={() => setOpenMenuId(null)}
-                              />
-
-                              {/* 드롭다운 메뉴 */}
-                              <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-20 py-1">
-                                {/* 활성화/일시정지 - active 또는 inactive 상태일 때만 */}
-                                {(service.status === 'active' || service.status === 'inactive') && (
-                                  <button
-                                    onClick={() => {
-                                      handleToggleStatus(service.id, service.status)
-                                      setOpenMenuId(null)
-                                    }}
-                                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2 ${
-                                      service.status === 'active' ? 'text-yellow-700' : 'text-green-700'
-                                    }`}
-                                  >
-                                    <i className={`fas ${service.status === 'active' ? 'fa-pause' : 'fa-play'} w-4`}></i>
-                                    {service.status === 'active' ? '일시정지' : '활성화'}
-                                  </button>
-                                )}
-
-                                {/* 구분선 */}
-                                {(service.status === 'active' || service.status === 'inactive') && (
-                                  <div className="border-t border-gray-200 my-1"></div>
-                                )}
-
-                                {/* 삭제 */}
-                                <button
-                                  onClick={() => {
-                                    handleDeleteService(service.id, service.title)
-                                    setOpenMenuId(null)
-                                  }}
-                                  className="w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-red-50 flex items-center gap-2"
-                                >
-                                  <i className="fas fa-trash w-4"></i>
-                                  삭제
-                                </button>
-                              </div>
-                            </>
-                          )}
-                        </div>
+                        {/* 삭제 버튼 */}
+                        <button
+                          onClick={() => handleDeleteService(service.id, service.title)}
+                          className="px-4 py-2 border border-red-300 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
+                        >
+                          <i className="fas fa-trash mr-1"></i>
+                          삭제
+                        </button>
                       </div>
                     </div>
                   </div>
