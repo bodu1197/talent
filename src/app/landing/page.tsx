@@ -47,6 +47,11 @@ const experts = {
     { name: '요리 강사 김맛나', specialty: '요리 레슨', location: '서울 마포구', verified: true, avatar: 'https://i.pravatar.cc/150?img=29' },
     { name: '펫시터 이멍멍', specialty: '반려동물 돌봄', location: '서울 송파구', verified: true, avatar: 'https://i.pravatar.cc/150?img=25' },
   ],
+  errand: [
+    { name: '심부름 전문가 이빠름', specialty: '퀵 배송 / 서류 전달', location: '서울 전역', verified: true, avatar: 'https://i.pravatar.cc/150?img=59' },
+    { name: '대리 운전 박안전', specialty: '대리 운전 / 차량 이동', location: '서울 · 경기', verified: true, avatar: 'https://i.pravatar.cc/150?img=14' },
+    { name: '줄서기 대행 최기다림', specialty: '줄서기 / 대기 서비스', location: '서울 강남구', verified: true, avatar: 'https://i.pravatar.cc/150?img=56' },
+  ],
 }
 
 interface ExpertCardProps {
@@ -60,7 +65,7 @@ interface ExpertCardProps {
 }
 
 const ExpertCard = ({ expert }: ExpertCardProps) => (
-  <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+  <Link href="/categories" className="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-all hover:scale-105 cursor-pointer">
     <div className="flex flex-col items-center text-center">
       {/* 프로필 사진 */}
       <div className="relative mb-4">
@@ -83,18 +88,13 @@ const ExpertCard = ({ expert }: ExpertCardProps) => (
       <p className="text-sm text-gray-600 mb-3">{expert.specialty}</p>
 
       {expert.location && (
-        <div className="flex items-center justify-center gap-1 text-xs text-gray-500 mb-4">
+        <div className="flex items-center justify-center gap-1 text-xs text-gray-500">
           <i className="fas fa-map-marker-alt"></i>
           <span>{expert.location}</span>
         </div>
       )}
-
-      {/* 프로필 보기 버튼 */}
-      <button className="w-full mt-2 px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#0a2340] transition-colors text-sm font-semibold">
-        프로필 보기
-      </button>
     </div>
-  </div>
+  </Link>
 )
 
 export default function LandingPage() {
@@ -307,6 +307,61 @@ export default function LandingPage() {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {experts.life.map((expert, index) => (
+                  <ExpertCard key={index} expert={expert} />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Errand Services Section - 실시간 위치 추적 강조 */}
+          <div className="space-y-8 mt-24">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div>
+                <img
+                  src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop"
+                  alt="Errand Services"
+                  className="rounded-2xl shadow-2xl object-cover w-full h-[500px]"
+                />
+              </div>
+              <div>
+                <span className="text-sm font-bold uppercase text-red-600">Errand Services</span>
+                <h2 className="mt-2 text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
+                  바쁜 당신을 위한, 믿을 수 있는 심부름 서비스
+                </h2>
+
+                {/* 실시간 위치 추적 강조 박스 */}
+                <div className="mt-4 p-4 bg-red-50 rounded-lg border-2 border-red-200">
+                  <div className="flex items-center gap-3 mb-2">
+                    <svg className="w-6 h-6 text-red-600 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                    </svg>
+                    <h3 className="text-lg font-bold text-red-900">전문가 위치 실시간 추적</h3>
+                  </div>
+                  <p className="text-sm text-red-800">심부름 전문가의 현재 위치를 실시간으로 확인하세요. GPS 추적으로 안심하고 서비스를 이용할 수 있습니다.</p>
+                </div>
+
+                <p className="mt-4 text-lg text-gray-600">
+                  퀵 배송, 서류 전달, 대리 운전, 줄서기 대행까지. 시간이 부족한 당신을 위해 신뢰할 수 있는 심부름 전문가가 대신 처리해 드립니다.
+                </p>
+                <ul className="mt-6 space-y-4 text-lg">
+                  <FeatureItem>GPS 기반 실시간 위치 추적</FeatureItem>
+                  <FeatureItem>빠른 퀵 배송 및 서류 전달</FeatureItem>
+                  <FeatureItem>안전한 대리 운전 서비스</FeatureItem>
+                </ul>
+                <Link href="/categories/errand" className="mt-8 inline-block bg-red-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-red-700 transition-colors shadow-lg">
+                  심부름 전문가 찾기
+                </Link>
+              </div>
+            </div>
+
+            {/* Errand Services 전문가 카드 - 위치 정보 포함 */}
+            <div className="mt-8">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
+                <i className="fas fa-location-arrow text-red-600 mr-2 animate-pulse"></i>
+                실시간 추적 가능한 심부름 전문가
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {experts.errand.map((expert, index) => (
                   <ExpertCard key={index} expert={expert} />
                 ))}
               </div>
