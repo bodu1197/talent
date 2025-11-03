@@ -139,10 +139,19 @@ export default function LandingPage() {
                 </Link>
               </div>
               <div className="order-1 md:order-2">
+                {/* 모바일: 아이콘 표시 */}
+                <div className="lg:hidden flex items-center justify-center py-8">
+                  <div className="w-32 h-32 bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl flex items-center justify-center shadow-lg">
+                    <svg className="w-20 h-20 text-[#0f3460]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                </div>
+                {/* PC: 이미지 표시 */}
                 <img
                   src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=800&auto=format&fit=crop"
                   alt="AI Technology"
-                  className="rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[250px] md:h-[500px]"
+                  className="hidden lg:block rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[500px]"
                 />
               </div>
             </div>
@@ -163,10 +172,19 @@ export default function LandingPage() {
           <div className="space-y-6 md:space-y-8">
             <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
               <div>
+                {/* 모바일: 아이콘 표시 */}
+                <div className="lg:hidden flex items-center justify-center py-8">
+                  <div className="w-32 h-32 bg-gradient-to-br from-green-50 to-green-100 rounded-3xl flex items-center justify-center shadow-lg">
+                    <svg className="w-20 h-20 text-[#0f3460]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
+                  </div>
+                </div>
+                {/* PC: 이미지 표시 */}
                 <img
                   src="https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=800&auto=format&fit=crop"
                   alt="IT and Programming"
-                  className="rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[250px] md:h-[500px]"
+                  className="hidden lg:block rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[500px]"
                 />
               </div>
               <div>
@@ -221,10 +239,19 @@ export default function LandingPage() {
                 </Link>
               </div>
               <div className="order-1 md:order-2">
+                {/* 모바일: 아이콘 표시 */}
+                <div className="lg:hidden flex items-center justify-center py-8">
+                  <div className="w-32 h-32 bg-gradient-to-br from-orange-50 to-orange-100 rounded-3xl flex items-center justify-center shadow-lg">
+                    <svg className="w-20 h-20 text-[#0f3460]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                    </svg>
+                  </div>
+                </div>
+                {/* PC: 이미지 표시 */}
                 <img
                   src="https://images.unsplash.com/photo-1522199670076-2852f80289c3?q=80&w=800&auto=format&fit=crop"
                   alt="Creative Design"
-                  className="rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[250px] md:h-[500px]"
+                  className="hidden lg:block rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[500px]"
                 />
               </div>
             </div>
@@ -245,10 +272,20 @@ export default function LandingPage() {
           <div className="space-y-6 md:space-y-8">
             <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
               <div>
+                {/* 모바일: 아이콘 표시 */}
+                <div className="lg:hidden flex items-center justify-center py-8">
+                  <div className="w-32 h-32 bg-gradient-to-br from-pink-50 to-pink-100 rounded-3xl flex items-center justify-center shadow-lg">
+                    <svg className="w-20 h-20 text-[#0f3460]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+                    </svg>
+                  </div>
+                </div>
+                {/* PC: 이미지 표시 */}
                 <img
                   src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop"
                   alt="Digital Marketing"
-                  className="rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[250px] md:h-[500px]"
+                  className="hidden lg:block rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[500px]"
                 />
               </div>
               <div>
@@ -350,10 +387,19 @@ export default function LandingPage() {
                 </Link>
               </div>
               <div className="order-1 md:order-2">
+                {/* 모바일: 아이콘 표시 */}
+                <div className="lg:hidden flex items-center justify-center py-8">
+                  <div className="w-32 h-32 bg-gradient-to-br from-purple-50 to-purple-100 rounded-3xl flex items-center justify-center shadow-lg">
+                    <svg className="w-20 h-20 text-[#0f3460]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                  </div>
+                </div>
+                {/* PC: 이미지 표시 */}
                 <img
                   src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=800&auto=format&fit=crop"
                   alt="Life Services"
-                  className="rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[250px] md:h-[500px]"
+                  className="hidden lg:block rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[500px]"
                 />
               </div>
             </div>
@@ -377,10 +423,19 @@ export default function LandingPage() {
           <div className="space-y-6 md:space-y-8">
             <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
               <div>
+                {/* 모바일: 아이콘 표시 */}
+                <div className="lg:hidden flex items-center justify-center py-8">
+                  <div className="w-32 h-32 bg-gradient-to-br from-red-50 to-red-100 rounded-3xl flex items-center justify-center shadow-lg">
+                    <svg className="w-20 h-20 text-[#0f3460]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                </div>
+                {/* PC: 이미지 표시 */}
                 <img
                   src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop"
                   alt="Errand Services"
-                  className="rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[250px] md:h-[500px]"
+                  className="hidden lg:block rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[500px]"
                 />
               </div>
               <div>
