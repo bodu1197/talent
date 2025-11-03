@@ -119,7 +119,7 @@ export async function generateThumbnailWithText(
   const canvas = createGradientBackground(template, width, height)
   const ctx = canvas.getContext('2d')!
 
-  // 2. 텍스트 그리기
+  // 2. 텍스트 그리기 설정
   ctx.font = `${textOptions.fontWeight} ${textOptions.fontSize}px ${textOptions.fontFamily}`
   ctx.fillStyle = textOptions.color
   ctx.textAlign = textOptions.textAlign
@@ -131,11 +131,59 @@ export async function generateThumbnailWithText(
     ctx.shadowColor = textOptions.shadowColor || 'rgba(0,0,0,0.5)'
   }
 
-  // 실제 위치 계산
-  const actualX = textOptions.x * width
-  const actualY = textOptions.y * height
+  // 좌우 여백 설정 (전체 너비의 10%)
+  const horizontalPadding = width * 0.1
+  const maxTextWidth = width - (horizontalPadding * 2)
 
-  ctx.fillText(textOptions.text, actualX, actualY)
+  // 텍스트를 2줄로 분할
+  const words = textOptions.text.split(' ')
+  const lines: string[] = []
+  let currentLine = ''
+
+  for (const word of words) {
+    const testLine = currentLine ? `${currentLine} ${word}` : word
+    const metrics = ctx.measureText(testLine)
+
+    if (metrics.width > maxTextWidth && currentLine) {
+      // 현재 줄이 너무 길면 줄바꿈
+      lines.push(currentLine)
+      currentLine = word
+    } else {
+      currentLine = testLine
+    }
+  }
+
+  if (currentLine) {
+    lines.push(currentLine)
+  }
+
+  // 최대 2줄까지만 표시
+  const displayLines = lines.slice(0, 2)
+
+  // 실제 위치 계산
+  let actualX = textOptions.x * width
+  let actualY = textOptions.y * height
+
+  // textAlign에 따라 X 좌표 조정 (여백 고려)
+  if (textOptions.textAlign === 'left') {
+    actualX = Math.max(actualX, horizontalPadding)
+  } else if (textOptions.textAlign === 'right') {
+    actualX = Math.min(actualX, width - horizontalPadding)
+  }
+
+  // 2줄일 경우 줄 간격 설정
+  const lineHeight = textOptions.fontSize * 1.3
+
+  if (displayLines.length === 2) {
+    // 2줄이면 중앙 기준으로 위아래 배치
+    actualY -= lineHeight / 2
+  }
+
+  // 각 줄 그리기
+  displayLines.forEach((line, index) => {
+    const y = actualY + (index * lineHeight)
+    ctx.fillText(line, actualX, y)
+  })
 
   // 3. Canvas를 Blob으로 변환
   return new Promise((resolve, reject) => {
