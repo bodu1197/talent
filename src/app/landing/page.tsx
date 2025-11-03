@@ -77,7 +77,7 @@ interface ExpertCardProps {
 }
 
 const ExpertCard = ({ expert }: ExpertCardProps) => (
-  <Link href="/categories" className="block bg-white rounded-lg shadow-md p-4 md:p-6 hover:shadow-lg transition-all hover:scale-105 cursor-pointer min-w-[240px] md:min-w-0 flex-shrink-0">
+  <Link href="/categories" className="block bg-white rounded-lg shadow-md p-4 md:p-6 hover:shadow-lg transition-all hover:scale-105 cursor-pointer min-w-[180px] md:min-w-0 flex-shrink-0">
     <div className="flex flex-col items-center text-center">
       {/* 프로필 사진 */}
       <div className="relative mb-3 md:mb-4">
