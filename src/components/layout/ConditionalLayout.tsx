@@ -14,8 +14,8 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
   // 마이페이지와 관리자 페이지에서는 헤더/푸터 숨기기
   const hideLayout = pathname?.startsWith('/mypage') || pathname?.startsWith('/admin')
 
-  // 메인 페이지 확인 (모바일에서 헤더/검색 표시)
-  const isMainPage = pathname === '/'
+  // 메인 페이지 확인 (모바일에서 헤더/검색 표시) - 랜딩 페이지도 포함
+  const isMainPage = pathname === '/' || pathname === '/landing'
 
   // 서브 페이지 확인 (모바일에서 뒤로가기 헤더 표시)
   const isSubPage = !hideLayout && !isMainPage
