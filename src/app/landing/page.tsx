@@ -116,7 +116,7 @@ export default function LandingPage() {
       <HeroWithCategories />
 
       {/* Featured Categories Section */}
-      <section className="py-12 md:py-24 bg-white overflow-hidden">
+      <section className="pt-0 pb-12 md:py-24 bg-white overflow-hidden">
         <div className="container-1200 space-y-12 md:space-y-24 px-4">
           {/* AI Services Section */}
           <div className="space-y-6 md:space-y-8">
