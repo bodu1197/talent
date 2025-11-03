@@ -120,40 +120,31 @@ export default function LandingPage() {
         <div className="container-1200 space-y-12 md:space-y-24 px-4">
           {/* AI Services Section */}
           <div className="space-y-6 md:space-y-8">
-            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
-              <div className="order-2 md:order-1">
-                <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">AI Services</span>
-                <h2 className="mt-2 text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                  미래를 여는 기술, AI 전문가와 함께
-                </h2>
-                <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
-                  최신 인공지능 기술을 비즈니스에 접목하여 혁신을 가속화하세요. 데이터 분석부터 머신러닝 모델 개발, 자동화 챗봇 구축까지 최고의 AI 전문가들이 당신의 성공을 돕습니다.
-                </p>
-                <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
-                  <FeatureItem>AI 기반 데이터 분석 및 예측 모델링</FeatureItem>
-                  <FeatureItem>자연어 처리(NLP) 및 챗봇 개발</FeatureItem>
-                  <FeatureItem>컴퓨터 비전 및 이미지 인식 솔루션</FeatureItem>
-                </ul>
-                <Link href="/categories/ai-services" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
-                  AI 서비스 둘러보기
-                </Link>
-              </div>
-              <div className="order-1 md:order-2">
-                {/* 모바일: 아이콘 표시 */}
-                <div className="lg:hidden flex items-center justify-center py-8">
-                  <div className="w-32 h-32 bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl flex items-center justify-center shadow-lg">
-                    <svg className="w-20 h-20 text-[#0f3460]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                  </div>
+            <div>
+              <div className="flex items-center gap-3 mb-3 md:mb-4">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-7 h-7 md:w-10 md:h-10 text-[#0f3460]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
                 </div>
-                {/* PC: 이미지 표시 */}
-                <img
-                  src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=800&auto=format&fit=crop"
-                  alt="AI Technology"
-                  className="hidden lg:block rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[500px]"
-                />
+                <div>
+                  <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">AI Services</span>
+                  <h2 className="text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                    미래를 여는 기술, AI 전문가와 함께
+                  </h2>
+                </div>
               </div>
+              <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
+                최신 인공지능 기술을 비즈니스에 접목하여 혁신을 가속화하세요. 데이터 분석부터 머신러닝 모델 개발, 자동화 챗봇 구축까지 최고의 AI 전문가들이 당신의 성공을 돕습니다.
+              </p>
+              <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
+                <FeatureItem>AI 기반 데이터 분석 및 예측 모델링</FeatureItem>
+                <FeatureItem>자연어 처리(NLP) 및 챗봇 개발</FeatureItem>
+                <FeatureItem>컴퓨터 비전 및 이미지 인식 솔루션</FeatureItem>
+              </ul>
+              <Link href="/categories/ai-services" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
+                AI 서비스 둘러보기
+              </Link>
             </div>
             {/* AI 전문가 카드 */}
             <div className="mt-6 md:mt-8">
@@ -170,40 +161,31 @@ export default function LandingPage() {
 
           {/* IT/Programming Section */}
           <div className="space-y-6 md:space-y-8">
-            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
-              <div>
-                {/* 모바일: 아이콘 표시 */}
-                <div className="lg:hidden flex items-center justify-center py-8">
-                  <div className="w-32 h-32 bg-gradient-to-br from-green-50 to-green-100 rounded-3xl flex items-center justify-center shadow-lg">
-                    <svg className="w-20 h-20 text-[#0f3460]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                    </svg>
-                  </div>
+            <div>
+              <div className="flex items-center gap-3 mb-3 md:mb-4">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-7 h-7 md:w-10 md:h-10 text-[#0f3460]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                  </svg>
                 </div>
-                {/* PC: 이미지 표시 */}
-                <img
-                  src="https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=800&auto=format&fit=crop"
-                  alt="IT and Programming"
-                  className="hidden lg:block rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[500px]"
-                />
+                <div>
+                  <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">IT & Programming</span>
+                  <h2 className="text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                    아이디어를 현실로, 최고의 개발자 군단
+                  </h2>
+                </div>
               </div>
-              <div>
-                <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">IT & Programming</span>
-                <h2 className="mt-2 text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                  아이디어를 현실로, 최고의 개발자 군단
-                </h2>
-                <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
-                  웹사이트, 모바일 앱, 맞춤형 소프트웨어 개발까지. 검증된 실력의 IT 전문가들이 당신의 아이디어를 완벽한 결과물로 만들어 드립니다.
-                </p>
-                <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
-                  <FeatureItem>최신 기술 스택을 활용한 웹/앱 개발</FeatureItem>
-                  <FeatureItem>안정적인 서버 구축 및 유지보수</FeatureItem>
-                  <FeatureItem>비즈니스 자동화를 위한 프로그램 제작</FeatureItem>
-                </ul>
-                <Link href="/categories/it-programming" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
-                  개발자 찾기
-                </Link>
-              </div>
+              <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
+                웹사이트, 모바일 앱, 맞춤형 소프트웨어 개발까지. 검증된 실력의 IT 전문가들이 당신의 아이디어를 완벽한 결과물로 만들어 드립니다.
+              </p>
+              <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
+                <FeatureItem>최신 기술 스택을 활용한 웹/앱 개발</FeatureItem>
+                <FeatureItem>안정적인 서버 구축 및 유지보수</FeatureItem>
+                <FeatureItem>비즈니스 자동화를 위한 프로그램 제작</FeatureItem>
+              </ul>
+              <Link href="/categories/it-programming" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
+                개발자 찾기
+              </Link>
             </div>
             {/* IT 전문가 카드 */}
             <div className="mt-6 md:mt-8">
@@ -220,40 +202,31 @@ export default function LandingPage() {
 
           {/* Design Section */}
           <div className="space-y-6 md:space-y-8">
-            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
-              <div className="order-2 md:order-1">
-                <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Design</span>
-                <h2 className="mt-2 text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                  브랜드를 빛내는, 감각적인 디자인
-                </h2>
-                <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
-                  로고, 웹사이트, 마케팅 자료까지. 당신의 비즈니스에 특별한 가치를 더할 디자인 전문가를 만나보세요. 시선을 사로잡는 디자인으로 고객의 마음을 움직입니다.
-                </p>
-                <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
-                  <FeatureItem>로고 및 브랜딩 디자인</FeatureItem>
-                  <FeatureItem>UI/UX 웹 및 모바일 디자인</FeatureItem>
-                  <FeatureItem>상세페이지 및 광고 콘텐츠 제작</FeatureItem>
-                </ul>
-                <Link href="/categories/design" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
-                  디자이너 포트폴리오 보기
-                </Link>
-              </div>
-              <div className="order-1 md:order-2">
-                {/* 모바일: 아이콘 표시 */}
-                <div className="lg:hidden flex items-center justify-center py-8">
-                  <div className="w-32 h-32 bg-gradient-to-br from-orange-50 to-orange-100 rounded-3xl flex items-center justify-center shadow-lg">
-                    <svg className="w-20 h-20 text-[#0f3460]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-                    </svg>
-                  </div>
+            <div>
+              <div className="flex items-center gap-3 mb-3 md:mb-4">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-7 h-7 md:w-10 md:h-10 text-[#0f3460]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                  </svg>
                 </div>
-                {/* PC: 이미지 표시 */}
-                <img
-                  src="https://images.unsplash.com/photo-1522199670076-2852f80289c3?q=80&w=800&auto=format&fit=crop"
-                  alt="Creative Design"
-                  className="hidden lg:block rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[500px]"
-                />
+                <div>
+                  <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Design</span>
+                  <h2 className="text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                    브랜드를 빛내는, 감각적인 디자인
+                  </h2>
+                </div>
               </div>
+              <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
+                로고, 웹사이트, 마케팅 자료까지. 당신의 비즈니스에 특별한 가치를 더할 디자인 전문가를 만나보세요. 시선을 사로잡는 디자인으로 고객의 마음을 움직입니다.
+              </p>
+              <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
+                <FeatureItem>로고 및 브랜딩 디자인</FeatureItem>
+                <FeatureItem>UI/UX 웹 및 모바일 디자인</FeatureItem>
+                <FeatureItem>상세페이지 및 광고 콘텐츠 제작</FeatureItem>
+              </ul>
+              <Link href="/categories/design" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
+                디자이너 포트폴리오 보기
+              </Link>
             </div>
             {/* Design 전문가 카드 */}
             <div className="mt-6 md:mt-8">
@@ -270,41 +243,32 @@ export default function LandingPage() {
 
           {/* Marketing Section */}
           <div className="space-y-6 md:space-y-8">
-            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
-              <div>
-                {/* 모바일: 아이콘 표시 */}
-                <div className="lg:hidden flex items-center justify-center py-8">
-                  <div className="w-32 h-32 bg-gradient-to-br from-pink-50 to-pink-100 rounded-3xl flex items-center justify-center shadow-lg">
-                    <svg className="w-20 h-20 text-[#0f3460]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
-                    </svg>
-                  </div>
+            <div>
+              <div className="flex items-center gap-3 mb-3 md:mb-4">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-7 h-7 md:w-10 md:h-10 text-[#0f3460]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+                  </svg>
                 </div>
-                {/* PC: 이미지 표시 */}
-                <img
-                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop"
-                  alt="Digital Marketing"
-                  className="hidden lg:block rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[500px]"
-                />
+                <div>
+                  <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Marketing</span>
+                  <h2 className="text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                    성공적인 비즈니스를 위한, 전략적 마케팅
+                  </h2>
+                </div>
               </div>
-              <div>
-                <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Marketing</span>
-                <h2 className="mt-2 text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                  성공적인 비즈니스를 위한, 전략적 마케팅
-                </h2>
-                <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
-                  디지털 마케팅, SEO, SNS 관리 등 각 분야 최고의 마케팅 전문가들이 매출 증대를 위한 맞춤형 전략을 제공합니다. 이제 비즈니스 성장에만 집중하세요.
-                </p>
-                <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
-                  <FeatureItem>검색 엔진 최적화(SEO) 및 광고</FeatureItem>
-                  <FeatureItem>소셜 미디어 채널 관리 및 콘텐츠 제작</FeatureItem>
-                  <FeatureItem>블로그 및 인플루언서 마케팅</FeatureItem>
-                </ul>
-                <Link href="/categories/marketing" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
-                  마케팅 전문가와 상담하기
-                </Link>
-              </div>
+              <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
+                디지털 마케팅, SEO, SNS 관리 등 각 분야 최고의 마케팅 전문가들이 매출 증대를 위한 맞춤형 전략을 제공합니다. 이제 비즈니스 성장에만 집중하세요.
+              </p>
+              <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
+                <FeatureItem>검색 엔진 최적화(SEO) 및 광고</FeatureItem>
+                <FeatureItem>소셜 미디어 채널 관리 및 콘텐츠 제작</FeatureItem>
+                <FeatureItem>블로그 및 인플루언서 마케팅</FeatureItem>
+              </ul>
+              <Link href="/categories/marketing" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
+                마케팅 전문가와 상담하기
+              </Link>
             </div>
             {/* Marketing 전문가 카드 */}
             <div className="mt-6 md:mt-8">
@@ -359,12 +323,20 @@ export default function LandingPage() {
         <div className="container-1200 space-y-12 md:space-y-24 px-4">
           {/* Life Services Section */}
           <div className="space-y-6 md:space-y-8">
-            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
-              <div className="order-2 md:order-1">
-                <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Life Services</span>
-                <h2 className="mt-2 text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                  당신의 일상을 더 편리하고 풍요롭게
-                </h2>
+            <div>
+              <div className="flex items-center gap-3 mb-3 md:mb-4">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-7 h-7 md:w-10 md:h-10 text-[#0f3460]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
+                </div>
+                <div>
+                  <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Life Services</span>
+                  <h2 className="text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                    당신의 일상을 더 편리하고 풍요롭게
+                  </h2>
+                </div>
+              </div>
                 <div className="mt-3 md:mt-4 p-3 md:p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
                   <div className="flex items-center gap-2 md:gap-3 mb-1.5 md:mb-2">
                     <svg className="w-5 h-5 md:w-6 md:h-6 text-[#0f3460] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -386,22 +358,6 @@ export default function LandingPage() {
                   생활 서비스 찾아보기
                 </Link>
               </div>
-              <div className="order-1 md:order-2">
-                {/* 모바일: 아이콘 표시 */}
-                <div className="lg:hidden flex items-center justify-center py-8">
-                  <div className="w-32 h-32 bg-gradient-to-br from-purple-50 to-purple-100 rounded-3xl flex items-center justify-center shadow-lg">
-                    <svg className="w-20 h-20 text-[#0f3460]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                    </svg>
-                  </div>
-                </div>
-                {/* PC: 이미지 표시 */}
-                <img
-                  src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=800&auto=format&fit=crop"
-                  alt="Life Services"
-                  className="hidden lg:block rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[500px]"
-                />
-              </div>
             </div>
             {/* Life Services 전문가 카드 - 위치 정보 포함 */}
             <div className="mt-6 md:mt-8">
@@ -421,28 +377,20 @@ export default function LandingPage() {
 
           {/* Errand Services Section - 실시간 위치 추적 강조 */}
           <div className="space-y-6 md:space-y-8">
-            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
-              <div>
-                {/* 모바일: 아이콘 표시 */}
-                <div className="lg:hidden flex items-center justify-center py-8">
-                  <div className="w-32 h-32 bg-gradient-to-br from-red-50 to-red-100 rounded-3xl flex items-center justify-center shadow-lg">
-                    <svg className="w-20 h-20 text-[#0f3460]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  </div>
+            <div>
+              <div className="flex items-center gap-3 mb-3 md:mb-4">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-red-50 to-red-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-7 h-7 md:w-10 md:h-10 text-[#0f3460]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
                 </div>
-                {/* PC: 이미지 표시 */}
-                <img
-                  src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop"
-                  alt="Errand Services"
-                  className="hidden lg:block rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[500px]"
-                />
+                <div>
+                  <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Errand Services</span>
+                  <h2 className="text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                    바쁜 당신을 위한, 믿을 수 있는 심부름 서비스
+                  </h2>
+                </div>
               </div>
-              <div>
-                <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Errand Services</span>
-                <h2 className="mt-2 text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                  바쁜 당신을 위한, 믿을 수 있는 심부름 서비스
-                </h2>
 
                 {/* 실시간 위치 추적 강조 박스 */}
                 <div className="mt-3 md:mt-4 p-3 md:p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
@@ -467,7 +415,6 @@ export default function LandingPage() {
                   심부름 전문가 찾기
                 </Link>
               </div>
-            </div>
 
             {/* Errand Services 전문가 카드 - 위치 정보 포함 */}
             <div className="mt-6 md:mt-8">
@@ -483,7 +430,6 @@ export default function LandingPage() {
                 ))}
               </div>
             </div>
-          </div>
         </div>
       </section>
 
