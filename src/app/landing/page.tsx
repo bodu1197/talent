@@ -12,11 +12,11 @@ interface FeatureItemProps {
 }
 
 const FeatureItem = ({ children }: FeatureItemProps) => (
-  <li className="flex items-start space-x-3">
-    <div className="flex-shrink-0 pt-1">
+  <li className="flex items-start space-x-2 md:space-x-3">
+    <div className="flex-shrink-0 pt-0.5 md:pt-1">
       <CheckIcon />
     </div>
-    <span className="text-gray-600">{children}</span>
+    <span className="text-gray-600 text-sm md:text-base">{children}</span>
   </li>
 )
 
@@ -77,18 +77,18 @@ interface ExpertCardProps {
 }
 
 const ExpertCard = ({ expert }: ExpertCardProps) => (
-  <Link href="/categories" className="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-all hover:scale-105 cursor-pointer min-w-[280px] md:min-w-0 flex-shrink-0">
+  <Link href="/categories" className="block bg-white rounded-lg shadow-md p-4 md:p-6 hover:shadow-lg transition-all hover:scale-105 cursor-pointer min-w-[240px] md:min-w-0 flex-shrink-0">
     <div className="flex flex-col items-center text-center">
       {/* 프로필 사진 */}
-      <div className="relative mb-4">
+      <div className="relative mb-3 md:mb-4">
         <img
           src={expert.avatar}
           alt={expert.name}
-          className="w-24 h-24 rounded-full object-cover border-4 border-gray-100"
+          className="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover border-3 md:border-4 border-gray-100"
         />
         {expert.verified && (
-          <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-1.5">
-            <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-1 md:p-1.5">
+            <svg className="w-3 h-3 md:w-4 md:h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
             </svg>
           </div>
@@ -96,13 +96,13 @@ const ExpertCard = ({ expert }: ExpertCardProps) => (
       </div>
 
       {/* 전문가 정보 */}
-      <h4 className="font-bold text-gray-900 text-lg mb-1">{expert.name}</h4>
-      <p className="text-sm text-gray-600 mb-3">{expert.specialty}</p>
+      <h4 className="font-bold text-gray-900 text-base md:text-lg mb-1 line-clamp-1">{expert.name}</h4>
+      <p className="text-xs md:text-sm text-gray-600 mb-2 md:mb-3 line-clamp-2">{expert.specialty}</p>
 
       {expert.location && (
         <div className="flex items-center justify-center gap-1 text-xs text-gray-500">
-          <i className="fas fa-map-marker-alt"></i>
-          <span>{expert.location}</span>
+          <i className="fas fa-map-marker-alt text-xs"></i>
+          <span className="line-clamp-1">{expert.location}</span>
         </div>
       )}
     </div>
@@ -116,25 +116,25 @@ export default function LandingPage() {
       <HeroWithCategories />
 
       {/* Featured Categories Section */}
-      <section className="py-24 bg-white overflow-hidden">
-        <div className="container-1200 space-y-24">
+      <section className="py-12 md:py-24 bg-white overflow-hidden">
+        <div className="container-1200 space-y-12 md:space-y-24 px-4">
           {/* AI Services Section */}
-          <div className="space-y-8">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6 md:space-y-8">
+            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
               <div className="order-2 md:order-1">
-                <span className="text-sm font-bold uppercase text-blue-600">AI Services</span>
-                <h2 className="mt-2 text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
+                <span className="text-xs md:text-sm font-bold uppercase text-blue-600">AI Services</span>
+                <h2 className="mt-2 text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
                   미래를 여는 기술, AI 전문가와 함께
                 </h2>
-                <p className="mt-4 text-lg text-gray-600">
+                <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
                   최신 인공지능 기술을 비즈니스에 접목하여 혁신을 가속화하세요. 데이터 분석부터 머신러닝 모델 개발, 자동화 챗봇 구축까지 최고의 AI 전문가들이 당신의 성공을 돕습니다.
                 </p>
-                <ul className="mt-6 space-y-4 text-lg">
+                <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
                   <FeatureItem>AI 기반 데이터 분석 및 예측 모델링</FeatureItem>
                   <FeatureItem>자연어 처리(NLP) 및 챗봇 개발</FeatureItem>
                   <FeatureItem>컴퓨터 비전 및 이미지 인식 솔루션</FeatureItem>
                 </ul>
-                <Link href="/categories/ai-services" className="mt-8 inline-block bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors shadow-lg">
+                <Link href="/categories/ai-services" className="mt-6 md:mt-8 inline-block bg-blue-600 text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-blue-700 transition-colors shadow-lg text-sm md:text-base">
                   AI 서비스 둘러보기
                 </Link>
               </div>
@@ -142,16 +142,16 @@ export default function LandingPage() {
                 <img
                   src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=800&auto=format&fit=crop"
                   alt="AI Technology"
-                  className="rounded-2xl shadow-2xl object-cover w-full h-[500px]"
+                  className="rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[250px] md:h-[500px]"
                 />
               </div>
             </div>
             {/* AI 전문가 카드 */}
-            <div className="mt-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">추천 AI 전문가</h3>
-              <div className="flex md:grid md:grid-cols-5 gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
+            <div className="mt-6 md:mt-8">
+              <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 md:mb-4 px-4 md:px-0">추천 AI 전문가</h3>
+              <div className="flex md:grid md:grid-cols-5 gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory px-4 md:px-0 -mx-4 md:mx-0">
                 {experts.ai.map((expert, index) => (
-                  <div key={index} className="snap-start">
+                  <div key={index} className="snap-start first:ml-4 md:first:ml-0 last:mr-4 md:last:mr-0">
                     <ExpertCard expert={expert} />
                   </div>
                 ))}
@@ -160,39 +160,39 @@ export default function LandingPage() {
           </div>
 
           {/* IT/Programming Section */}
-          <div className="space-y-8">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6 md:space-y-8">
+            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
               <div>
                 <img
                   src="https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=800&auto=format&fit=crop"
                   alt="IT and Programming"
-                  className="rounded-2xl shadow-2xl object-cover w-full h-[500px]"
+                  className="rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[250px] md:h-[500px]"
                 />
               </div>
               <div>
-                <span className="text-sm font-bold uppercase text-green-600">IT & Programming</span>
-                <h2 className="mt-2 text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
+                <span className="text-xs md:text-sm font-bold uppercase text-green-600">IT & Programming</span>
+                <h2 className="mt-2 text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
                   아이디어를 현실로, 최고의 개발자 군단
                 </h2>
-                <p className="mt-4 text-lg text-gray-600">
+                <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
                   웹사이트, 모바일 앱, 맞춤형 소프트웨어 개발까지. 검증된 실력의 IT 전문가들이 당신의 아이디어를 완벽한 결과물로 만들어 드립니다.
                 </p>
-                <ul className="mt-6 space-y-4 text-lg">
+                <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
                   <FeatureItem>최신 기술 스택을 활용한 웹/앱 개발</FeatureItem>
                   <FeatureItem>안정적인 서버 구축 및 유지보수</FeatureItem>
                   <FeatureItem>비즈니스 자동화를 위한 프로그램 제작</FeatureItem>
                 </ul>
-                <Link href="/categories/it-programming" className="mt-8 inline-block bg-green-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-green-700 transition-colors shadow-lg">
+                <Link href="/categories/it-programming" className="mt-6 md:mt-8 inline-block bg-green-600 text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-green-700 transition-colors shadow-lg text-sm md:text-base">
                   개발자 찾기
                 </Link>
               </div>
             </div>
             {/* IT 전문가 카드 */}
-            <div className="mt-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">추천 IT 전문가</h3>
-              <div className="flex md:grid md:grid-cols-5 gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
+            <div className="mt-6 md:mt-8">
+              <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 md:mb-4 px-4 md:px-0">추천 IT 전문가</h3>
+              <div className="flex md:grid md:grid-cols-5 gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory px-4 md:px-0 -mx-4 md:mx-0">
                 {experts.it.map((expert, index) => (
-                  <div key={index} className="snap-start">
+                  <div key={index} className="snap-start first:ml-4 md:first:ml-0 last:mr-4 md:last:mr-0">
                     <ExpertCard expert={expert} />
                   </div>
                 ))}
@@ -201,22 +201,22 @@ export default function LandingPage() {
           </div>
 
           {/* Design Section */}
-          <div className="space-y-8">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6 md:space-y-8">
+            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
               <div className="order-2 md:order-1">
-                <span className="text-sm font-bold uppercase text-orange-500">Design</span>
-                <h2 className="mt-2 text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
+                <span className="text-xs md:text-sm font-bold uppercase text-orange-500">Design</span>
+                <h2 className="mt-2 text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
                   브랜드를 빛내는, 감각적인 디자인
                 </h2>
-                <p className="mt-4 text-lg text-gray-600">
+                <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
                   로고, 웹사이트, 마케팅 자료까지. 당신의 비즈니스에 특별한 가치를 더할 디자인 전문가를 만나보세요. 시선을 사로잡는 디자인으로 고객의 마음을 움직입니다.
                 </p>
-                <ul className="mt-6 space-y-4 text-lg">
+                <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
                   <FeatureItem>로고 및 브랜딩 디자인</FeatureItem>
                   <FeatureItem>UI/UX 웹 및 모바일 디자인</FeatureItem>
                   <FeatureItem>상세페이지 및 광고 콘텐츠 제작</FeatureItem>
                 </ul>
-                <Link href="/categories/design" className="mt-8 inline-block bg-orange-500 text-white font-semibold px-8 py-3 rounded-lg hover:bg-orange-600 transition-colors shadow-lg">
+                <Link href="/categories/design" className="mt-6 md:mt-8 inline-block bg-orange-500 text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-orange-600 transition-colors shadow-lg text-sm md:text-base">
                   디자이너 포트폴리오 보기
                 </Link>
               </div>
@@ -224,16 +224,16 @@ export default function LandingPage() {
                 <img
                   src="https://images.unsplash.com/photo-1522199670076-2852f80289c3?q=80&w=800&auto=format&fit=crop"
                   alt="Creative Design"
-                  className="rounded-2xl shadow-2xl object-cover w-full h-[500px]"
+                  className="rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[250px] md:h-[500px]"
                 />
               </div>
             </div>
             {/* Design 전문가 카드 */}
-            <div className="mt-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">추천 디자인 전문가</h3>
-              <div className="flex md:grid md:grid-cols-5 gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
+            <div className="mt-6 md:mt-8">
+              <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 md:mb-4 px-4 md:px-0">추천 디자인 전문가</h3>
+              <div className="flex md:grid md:grid-cols-5 gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory px-4 md:px-0 -mx-4 md:mx-0">
                 {experts.design.map((expert, index) => (
-                  <div key={index} className="snap-start">
+                  <div key={index} className="snap-start first:ml-4 md:first:ml-0 last:mr-4 md:last:mr-0">
                     <ExpertCard expert={expert} />
                   </div>
                 ))}
@@ -242,39 +242,39 @@ export default function LandingPage() {
           </div>
 
           {/* Marketing Section */}
-          <div className="space-y-8">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6 md:space-y-8">
+            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
               <div>
                 <img
                   src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop"
                   alt="Digital Marketing"
-                  className="rounded-2xl shadow-2xl object-cover w-full h-[500px]"
+                  className="rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[250px] md:h-[500px]"
                 />
               </div>
               <div>
-                <span className="text-sm font-bold uppercase text-pink-500">Marketing</span>
-                <h2 className="mt-2 text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
+                <span className="text-xs md:text-sm font-bold uppercase text-pink-500">Marketing</span>
+                <h2 className="mt-2 text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
                   성공적인 비즈니스를 위한, 전략적 마케팅
                 </h2>
-                <p className="mt-4 text-lg text-gray-600">
+                <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
                   디지털 마케팅, SEO, SNS 관리 등 각 분야 최고의 마케팅 전문가들이 매출 증대를 위한 맞춤형 전략을 제공합니다. 이제 비즈니스 성장에만 집중하세요.
                 </p>
-                <ul className="mt-6 space-y-4 text-lg">
+                <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
                   <FeatureItem>검색 엔진 최적화(SEO) 및 광고</FeatureItem>
                   <FeatureItem>소셜 미디어 채널 관리 및 콘텐츠 제작</FeatureItem>
                   <FeatureItem>블로그 및 인플루언서 마케팅</FeatureItem>
                 </ul>
-                <Link href="/categories/marketing" className="mt-8 inline-block bg-pink-500 text-white font-semibold px-8 py-3 rounded-lg hover:bg-pink-600 transition-colors shadow-lg">
+                <Link href="/categories/marketing" className="mt-6 md:mt-8 inline-block bg-pink-500 text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-pink-600 transition-colors shadow-lg text-sm md:text-base">
                   마케팅 전문가와 상담하기
                 </Link>
               </div>
             </div>
             {/* Marketing 전문가 카드 */}
-            <div className="mt-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">추천 마케팅 전문가</h3>
-              <div className="flex md:grid md:grid-cols-5 gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
+            <div className="mt-6 md:mt-8">
+              <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 md:mb-4 px-4 md:px-0">추천 마케팅 전문가</h3>
+              <div className="flex md:grid md:grid-cols-5 gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory px-4 md:px-0 -mx-4 md:mx-0">
                 {experts.marketing.map((expert, index) => (
-                  <div key={index} className="snap-start">
+                  <div key={index} className="snap-start first:ml-4 md:first:ml-0 last:mr-4 md:last:mr-0">
                     <ExpertCard expert={expert} />
                   </div>
                 ))}
@@ -285,31 +285,31 @@ export default function LandingPage() {
       </section>
 
       {/* Fortune / Tarot Banner Section - 얇은 띠 형식 */}
-      <section className="py-12 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 overflow-hidden relative">
+      <section className="py-8 md:py-12 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 overflow-hidden relative">
         <div className="absolute inset-0 bg-black/10"></div>
         {/* 반짝이는 별 장식 */}
-        <div className="absolute top-4 left-10 text-yellow-300 text-2xl animate-pulse">✨</div>
-        <div className="absolute top-8 right-20 text-yellow-300 text-xl animate-pulse" style={{animationDelay: '0.5s'}}>⭐</div>
-        <div className="absolute bottom-6 left-1/4 text-yellow-300 text-lg animate-pulse" style={{animationDelay: '1s'}}>✨</div>
-        <div className="absolute bottom-4 right-1/3 text-yellow-300 text-2xl animate-pulse" style={{animationDelay: '1.5s'}}>⭐</div>
+        <div className="absolute top-2 left-4 md:top-4 md:left-10 text-yellow-300 text-lg md:text-2xl animate-pulse">✨</div>
+        <div className="absolute top-4 right-8 md:top-8 md:right-20 text-yellow-300 text-base md:text-xl animate-pulse" style={{animationDelay: '0.5s'}}>⭐</div>
+        <div className="absolute bottom-3 left-1/4 md:bottom-6 text-yellow-300 text-sm md:text-lg animate-pulse" style={{animationDelay: '1s'}}>✨</div>
+        <div className="absolute bottom-2 right-1/3 md:bottom-4 text-yellow-300 text-lg md:text-2xl animate-pulse" style={{animationDelay: '1.5s'}}>⭐</div>
 
-        <div className="container-1200 relative z-10">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <div className="text-5xl">🔮</div>
+        <div className="container-1200 relative z-10 px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
+            <div className="flex items-center gap-3 md:gap-4 text-center md:text-left">
+              <div className="text-3xl md:text-5xl flex-shrink-0">🔮</div>
               <div>
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-1">
+                <h3 className="text-lg md:text-3xl font-bold text-white mb-0.5 md:mb-1 leading-tight">
                   오늘의 운세가 궁금하신가요?
                 </h3>
-                <p className="text-white/90 text-base md:text-lg">
+                <p className="text-white/90 text-xs md:text-lg leading-snug">
                   타로, 사주, 운세 상담까지. 당신의 미래를 밝혀줄 전문가들이 기다립니다.
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 w-full md:w-auto">
               <Link
                 href="/categories/fortune"
-                className="bg-white text-purple-600 font-bold px-8 py-4 rounded-full hover:bg-yellow-300 hover:text-purple-700 transition-all shadow-2xl hover:scale-105 whitespace-nowrap"
+                className="bg-white text-purple-600 font-bold px-6 py-3 md:px-8 md:py-4 rounded-full hover:bg-yellow-300 hover:text-purple-700 transition-all shadow-2xl hover:scale-105 whitespace-nowrap text-sm md:text-base w-full md:w-auto text-center"
               >
                 🌙 운세 보러가기
               </Link>
@@ -319,34 +319,34 @@ export default function LandingPage() {
       </section>
 
       {/* Featured Categories Section (계속) */}
-      <section className="py-24 bg-white overflow-hidden">
-        <div className="container-1200 space-y-24">
+      <section className="py-12 md:py-24 bg-white overflow-hidden">
+        <div className="container-1200 space-y-12 md:space-y-24 px-4">
           {/* Life Services Section */}
-          <div className="space-y-8">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6 md:space-y-8">
+            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
               <div className="order-2 md:order-1">
-                <span className="text-sm font-bold uppercase text-purple-600">Life Services</span>
-                <h2 className="mt-2 text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
+                <span className="text-xs md:text-sm font-bold uppercase text-purple-600">Life Services</span>
+                <h2 className="mt-2 text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
                   당신의 일상을 더 편리하고 풍요롭게
                 </h2>
-                <div className="mt-4 p-4 bg-purple-50 rounded-lg border-2 border-purple-200">
-                  <div className="flex items-center gap-3 mb-2">
-                    <svg className="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                <div className="mt-3 md:mt-4 p-3 md:p-4 bg-purple-50 rounded-lg border-2 border-purple-200">
+                  <div className="flex items-center gap-2 md:gap-3 mb-1.5 md:mb-2">
+                    <svg className="w-5 h-5 md:w-6 md:h-6 text-purple-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                     </svg>
-                    <h3 className="text-lg font-bold text-purple-900">내 주변 가까운 전문가 찾기</h3>
+                    <h3 className="text-base md:text-lg font-bold text-purple-900">내 주변 가까운 전문가 찾기</h3>
                   </div>
-                  <p className="text-sm text-purple-800">위치 기반으로 가까운 생활 서비스 전문가를 찾아보세요. 빠르고 편리한 서비스를 경험하실 수 있습니다.</p>
+                  <p className="text-xs md:text-sm text-purple-800 leading-relaxed">위치 기반으로 가까운 생활 서비스 전문가를 찾아보세요. 빠르고 편리한 서비스를 경험하실 수 있습니다.</p>
                 </div>
-                <p className="mt-4 text-lg text-gray-600">
+                <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
                   바쁜 일상 속 도움이 필요한 모든 순간, 생활 서비스 전문가가 해결해 드립니다. 청소, 심부름, 반려동물 돌봄, 개인 레슨 등 삶의 질을 높이는 다양한 서비스를 만나보세요.
                 </p>
-                <ul className="mt-6 space-y-4 text-lg">
+                <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
                   <FeatureItem>전문적인 홈 클리닝 및 정리 정돈</FeatureItem>
                   <FeatureItem>맞춤형 취미 및 외국어 레슨</FeatureItem>
                   <FeatureItem>신뢰할 수 있는 펫시터 및 산책 서비스</FeatureItem>
                 </ul>
-                <Link href="/categories/life" className="mt-8 inline-block bg-purple-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-purple-700 transition-colors shadow-lg">
+                <Link href="/categories/life" className="mt-6 md:mt-8 inline-block bg-purple-600 text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-purple-700 transition-colors shadow-lg text-sm md:text-base">
                   생활 서비스 찾아보기
                 </Link>
               </div>
@@ -354,19 +354,19 @@ export default function LandingPage() {
                 <img
                   src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=800&auto=format&fit=crop"
                   alt="Life Services"
-                  className="rounded-2xl shadow-2xl object-cover w-full h-[500px]"
+                  className="rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[250px] md:h-[500px]"
                 />
               </div>
             </div>
             {/* Life Services 전문가 카드 - 위치 정보 포함 */}
-            <div className="mt-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
+            <div className="mt-6 md:mt-8">
+              <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 md:mb-4 px-4 md:px-0">
                 <i className="fas fa-map-marker-alt text-purple-600 mr-2"></i>
                 내 주변 생활 서비스 전문가
               </h3>
-              <div className="flex md:grid md:grid-cols-5 gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
+              <div className="flex md:grid md:grid-cols-5 gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory px-4 md:px-0 -mx-4 md:mx-0">
                 {experts.life.map((expert, index) => (
-                  <div key={index} className="snap-start">
+                  <div key={index} className="snap-start first:ml-4 md:first:ml-0 last:mr-4 md:last:mr-0">
                     <ExpertCard expert={expert} />
                   </div>
                 ))}
@@ -375,55 +375,55 @@ export default function LandingPage() {
           </div>
 
           {/* Errand Services Section - 실시간 위치 추적 강조 */}
-          <div className="space-y-8 mt-24">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6 md:space-y-8">
+            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
               <div>
                 <img
                   src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop"
                   alt="Errand Services"
-                  className="rounded-2xl shadow-2xl object-cover w-full h-[500px]"
+                  className="rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl object-cover w-full h-[250px] md:h-[500px]"
                 />
               </div>
               <div>
-                <span className="text-sm font-bold uppercase text-red-600">Errand Services</span>
-                <h2 className="mt-2 text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
+                <span className="text-xs md:text-sm font-bold uppercase text-red-600">Errand Services</span>
+                <h2 className="mt-2 text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight leading-tight">
                   바쁜 당신을 위한, 믿을 수 있는 심부름 서비스
                 </h2>
 
                 {/* 실시간 위치 추적 강조 박스 */}
-                <div className="mt-4 p-4 bg-red-50 rounded-lg border-2 border-red-200">
-                  <div className="flex items-center gap-3 mb-2">
-                    <svg className="w-6 h-6 text-red-600 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                <div className="mt-3 md:mt-4 p-3 md:p-4 bg-red-50 rounded-lg border-2 border-red-200">
+                  <div className="flex items-center gap-2 md:gap-3 mb-1.5 md:mb-2">
+                    <svg className="w-5 h-5 md:w-6 md:h-6 text-red-600 animate-pulse flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                     </svg>
-                    <h3 className="text-lg font-bold text-red-900">전문가 위치 실시간 추적</h3>
+                    <h3 className="text-base md:text-lg font-bold text-red-900">전문가 위치 실시간 추적</h3>
                   </div>
-                  <p className="text-sm text-red-800">심부름 전문가의 현재 위치를 실시간으로 확인하세요. GPS 추적으로 안심하고 서비스를 이용할 수 있습니다.</p>
+                  <p className="text-xs md:text-sm text-red-800 leading-relaxed">심부름 전문가의 현재 위치를 실시간으로 확인하세요. GPS 추적으로 안심하고 서비스를 이용할 수 있습니다.</p>
                 </div>
 
-                <p className="mt-4 text-lg text-gray-600">
+                <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
                   퀵 배송, 서류 전달, 대리 운전, 줄서기 대행까지. 시간이 부족한 당신을 위해 신뢰할 수 있는 심부름 전문가가 대신 처리해 드립니다.
                 </p>
-                <ul className="mt-6 space-y-4 text-lg">
+                <ul className="mt-4 md:mt-6 space-y-2 md:space-y-4 text-sm md:text-lg">
                   <FeatureItem>GPS 기반 실시간 위치 추적</FeatureItem>
                   <FeatureItem>빠른 퀵 배송 및 서류 전달</FeatureItem>
                   <FeatureItem>안전한 대리 운전 서비스</FeatureItem>
                 </ul>
-                <Link href="/categories/errand" className="mt-8 inline-block bg-red-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-red-700 transition-colors shadow-lg">
+                <Link href="/categories/errand" className="mt-6 md:mt-8 inline-block bg-red-600 text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-red-700 transition-colors shadow-lg text-sm md:text-base">
                   심부름 전문가 찾기
                 </Link>
               </div>
             </div>
 
             {/* Errand Services 전문가 카드 - 위치 정보 포함 */}
-            <div className="mt-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
+            <div className="mt-6 md:mt-8">
+              <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 md:mb-4 px-4 md:px-0">
                 <i className="fas fa-location-arrow text-red-600 mr-2 animate-pulse"></i>
                 실시간 추적 가능한 심부름 전문가
               </h3>
-              <div className="flex md:grid md:grid-cols-5 gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
+              <div className="flex md:grid md:grid-cols-5 gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory px-4 md:px-0 -mx-4 md:mx-0">
                 {experts.errand.map((expert, index) => (
-                  <div key={index} className="snap-start">
+                  <div key={index} className="snap-start first:ml-4 md:first:ml-0 last:mr-4 md:last:mr-0">
                     <ExpertCard expert={expert} />
                   </div>
                 ))}
