@@ -21,13 +21,18 @@ interface Props {
 }
 
 export default function AITalentShowcase({ services = [] }: Props) {
+  // 서비스가 없으면 섹션 자체를 표시하지 않음
+  if (services.length === 0) {
+    return null
+  }
+
   return (
     <section className="py-8 bg-white">
       <div className="container-1200">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h2 className="text-mobile-lg lg:text-xl font-bold mb-2">AI 재능 쇼케이스</h2>
-            <p className="text-mobile-md text-gray-600">AI 전문가들의 인기 서비스</p>
+            <p className="text-mobile-md text-gray-600">AI 전문가들의 모든 서비스 ({services.length}개)</p>
           </div>
           <Link
             href="/categories/ai-services"
@@ -99,8 +104,8 @@ export default function AITalentShowcase({ services = [] }: Props) {
             </Link>
           ))}
 
-          {/* 플레이스홀더 카드들 (15개까지 채우기) */}
-          {Array.from({ length: Math.max(0, 15 - services.length) }, (_, i) => (
+          {/* 플레이스홀더 카드들 (서비스가 10개 미만일 때만 10개까지 채우기) */}
+          {services.length < 10 && Array.from({ length: Math.max(0, 10 - services.length) }, (_, i) => (
             <Link key={`placeholder-${i}`} href="/expert/register?category=ai-services" className="group relative">
               <div className="bg-gradient-to-br from-[#0f3460] to-[#1a5490] rounded-lg overflow-hidden w-full relative" style={{ aspectRatio: '210/160' }}>
                 {/* 배경 패턴 */}

@@ -31,7 +31,7 @@ export default async function HomePage() {
     if (serviceCategoryLinks && serviceCategoryLinks.length > 0) {
       aiServiceIds = serviceCategoryLinks.map(sc => sc.service_id)
 
-      // 3. AI 카테고리 서비스 조회 (AI 재능 쇼케이스용)
+      // 3. AI 카테고리 서비스 조회 (AI 재능 쇼케이스용 - 모든 AI 서비스 표시)
       const { data } = await supabase
         .from('services')
         .select(`
@@ -46,7 +46,6 @@ export default async function HomePage() {
         .in('id', aiServiceIds)
         .eq('status', 'active')
         .order('created_at', { ascending: false })
-        .limit(15)
 
       if (data) {
         // orders_count를 order_count로 매핑
