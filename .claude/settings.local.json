@@ -8,7 +8,8 @@
       "Bash(git commit -m \"$(cat <<''EOF''\nfix: AI 재능 쇼케이스 섹션이 사라지는 문제 해결\n\nAI 서비스가 없을 때 섹션 전체가 숨겨지는 문제 수정\n\n변경사항:\n- 서비스가 없어도 섹션은 항상 표시\n- 플레이스홀더 카드로 최소 10개 채우기\n- 서비스가 있을 때만 개수 표시\n\n로직:\n- AI 서비스 0개: 플레이스홀더 10개 표시\n- AI 서비스 1-9개: 실제 서비스 + 플레이스홀더로 10개 채움\n- AI 서비스 10개 이상: 모든 실제 서비스만 표시\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(git commit:*)",
       "Bash(git push)",
-      "Bash(node scripts/update-categories-rest.js:*)"
+      "Bash(node scripts/update-categories-rest.js:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []
