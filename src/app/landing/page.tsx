@@ -1,4 +1,6 @@
 import HeroWithCategories from '@/components/common/HeroWithCategories'
+import AITalentShowcase from '@/components/home/AITalentShowcase'
+import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 
 const CheckIcon = () => (
@@ -109,57 +111,62 @@ const ExpertCard = ({ expert }: ExpertCardProps) => (
   </Link>
 )
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  // AI 서비스 데이터 가져오기
+  const supabase = await createClient()
+  const { data: aiCategories } = await supabase
+    .from('categories')
+    .select('id')
+    .eq('slug', 'ai-services')
+    .eq('is_active', true)
+    .single()
+
+  let aiServices = []
+  if (aiCategories) {
+    const { data } = await supabase
+      .from('services')
+      .select(`
+        id,
+        title,
+        description,
+        price,
+        thumbnail_url,
+        rating,
+        seller:profiles!services_seller_id_fkey (
+          id,
+          display_name,
+          business_name,
+          is_verified
+        )
+      `)
+      .eq('status', 'active')
+      .in('id',
+        supabase
+          .from('service_categories')
+          .select('service_id')
+          .in('category_id',
+            supabase
+              .from('categories')
+              .select('slug')
+              .or(`slug.eq.ai-services,parent_id.eq.${aiCategories.id}`)
+          )
+      )
+      .order('created_at', { ascending: false })
+
+    aiServices = data || []
+  }
+
   return (
     <div className="pb-0">
       {/* 히어로 섹션 + 카테고리 (공통) */}
       <HeroWithCategories />
 
+      {/* AI 재능 쇼케이스 */}
+      <AITalentShowcase services={aiServices} />
+
       {/* Featured Categories Section */}
       <section className="pt-0 pb-12 md:py-24 bg-white overflow-hidden">
         <div className="container-1200 space-y-12 md:space-y-24 px-4">
-          {/* AI Services Section */}
-          <div className="space-y-6 md:space-y-8">
-            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
-              <div className="order-2 md:order-1">
-                <div className="mb-3 md:mb-4">
-                  <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">AI Services</span>
-                  <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                    미래를 여는 기술, AI 전문가와 함께
-                  </h2>
-                </div>
-                <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
-                  최신 인공지능 기술을 비즈니스에 접목하여 혁신을 가속화하세요. 데이터 분석부터 머신러닝 모델 개발, 자동화 챗봇 구축까지 최고의 AI 전문가들이 당신의 성공을 돕습니다.
-                </p>
-                <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
-                  <FeatureItem>AI 기반 데이터 분석 및 예측 모델링</FeatureItem>
-                  <FeatureItem>자연어 처리(NLP) 및 챗봇 개발</FeatureItem>
-                  <FeatureItem>컴퓨터 비전 및 이미지 인식 솔루션</FeatureItem>
-                </ul>
-                <Link href="/categories/ai-services" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
-                  AI 서비스 둘러보기
-                </Link>
-              </div>
-              <div className="order-1 md:order-2 hidden md:block">
-                <img
-                  src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=800&auto=format&fit=crop"
-                  alt="AI Technology"
-                  className="rounded-2xl shadow-2xl object-cover w-full h-[320px] lg:h-[400px]"
-                />
-              </div>
-            </div>
-            {/* AI 전문가 카드 */}
-            <div className="mt-6 md:mt-8">
-              <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 md:mb-4 px-4 md:px-0">추천 AI 전문가</h3>
-              <div className="flex md:grid md:grid-cols-5 gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory px-4 md:px-0 -mx-4 md:mx-0">
-                {experts.ai.map((expert, index) => (
-                  <div key={index} className="snap-start first:ml-4 md:first:ml-0 last:mr-4 md:last:mr-0">
-                    <ExpertCard expert={expert} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
 
           {/* IT/Programming Section */}
           <div className="space-y-6 md:space-y-8">

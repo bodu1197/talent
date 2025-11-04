@@ -12,7 +12,9 @@
       "Bash(curl:*)",
       "Bash(node scripts/check-errands.js:*)",
       "Bash(node scripts/delete-quick-service.js:*)",
-      "Bash(node scripts/check-all-categories.js:*)"
+      "Bash(node scripts/check-all-categories.js:*)",
+      "Bash(node scripts/get-ai-categories.js:*)",
+      "Bash(node scripts/check-table-structure.js:*)"
     ],
     "deny": [],
     "ask": []
