@@ -169,15 +169,6 @@ export default function AIServicesShowcase() {
       </div>
 
       <div className="container-1200 px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
-            AI 서비스
-          </h2>
-          <p className="text-lg text-gray-600">
-            미래를 여는 기술
-          </p>
-        </div>
-
         <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory md:grid md:grid-cols-2 xl:grid-cols-3 md:gap-9 md:overflow-visible md:pb-0 md:snap-none hide-scrollbar">
           {cardData.map((data, index) => (
             <div key={data.id} className="w-[85vw] max-w-sm flex-shrink-0 md:w-auto snap-center">
