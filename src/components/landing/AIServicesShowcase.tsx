@@ -154,9 +154,17 @@ const Card: React.FC<CardProps> = ({ data, animationDelay }) => {
 export default function AIServicesShowcase() {
   return (
     <section className="pt-0 pb-12 md:py-24 bg-white overflow-hidden">
-      <div className="container-1200">
+      <div className="container-1200 px-4">
+        {/* 제목 */}
+        <div className="mb-6 md:mb-8">
+          <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">AI Services</span>
+          <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
+            미래를 여는 기술, AI 전문가
+          </h2>
+        </div>
+
         {/* 모바일: 가로 스크롤 */}
-        <div className="flex gap-4 overflow-x-auto px-4 pb-4 snap-x snap-mandatory md:hidden hide-scrollbar">
+        <div className="flex gap-4 overflow-x-auto -mx-4 px-4 pb-4 snap-x snap-mandatory md:hidden hide-scrollbar">
           {cardData.map((data, index) => (
             <div key={data.id} className="w-[85vw] max-w-sm flex-shrink-0 snap-center">
               <Card data={data} animationDelay={`${index * 100}ms`} />
@@ -165,7 +173,7 @@ export default function AIServicesShowcase() {
         </div>
 
         {/* 데스크톱: 그리드 */}
-        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-4">
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {cardData.map((data, index) => (
             <Card key={data.id} data={data} animationDelay={`${index * 100}ms`} />
           ))}
