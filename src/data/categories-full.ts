@@ -25,34 +25,55 @@ export const FULL_CATEGORIES: CategoryItem[] = [
     description: '일상 생활 편의 서비스',
     children: [
       {
-        id: 'home-service',
-        name: '가정 서비스',
-        slug: 'home-service',
+        id: 'home-cleaning',
+        name: '청소/정리',
+        slug: 'home-cleaning',
         parent_id: 'life-service',
         children: [
-          { id: 'cleaning-service', name: '청소 서비스', slug: 'cleaning-service', parent_id: 'home-service', is_popular: true },
-          { id: 'housekeeping', name: '파출부/가사도우미', slug: 'housekeeping', parent_id: 'home-service', is_popular: true },
-          { id: 'organizing-consulting', name: '정리정돈/수납 컨설팅', slug: 'organizing-consulting', parent_id: 'home-service' },
-          { id: 'appliance-install', name: '가전 설치/수리', slug: 'appliance-install', parent_id: 'home-service' },
-          { id: 'aircon-cleaning', name: '에어컨 청소', slug: 'aircon-cleaning', parent_id: 'home-service' },
-          { id: 'pest-control', name: '해충방제/방역', slug: 'pest-control', parent_id: 'home-service' },
-          { id: 'disinfection-service', name: '소독 서비스', slug: 'disinfection-service', parent_id: 'home-service' },
-          { id: 'repair-service', name: '일반 수리 서비스', slug: 'repair-service', parent_id: 'home-service' },
-          { id: 'moving-service', name: '이사 서비스', slug: 'moving-service', parent_id: 'home-service', is_popular: true },
+          { id: 'general-cleaning', name: '일반 청소', slug: 'general-cleaning', parent_id: 'home-cleaning', is_popular: true },
+          { id: 'deep-cleaning', name: '입주/이사 청소', slug: 'deep-cleaning', parent_id: 'home-cleaning', is_popular: true },
+          { id: 'aircon-cleaning', name: '에어컨 청소', slug: 'aircon-cleaning', parent_id: 'home-cleaning' },
+          { id: 'window-cleaning', name: '유리창 청소', slug: 'window-cleaning', parent_id: 'home-cleaning' },
+          { id: 'organizing-service', name: '정리정돈/수납', slug: 'organizing-service', parent_id: 'home-cleaning' },
         ]
       },
       {
-        id: 'daily-service',
-        name: '일상 서비스',
-        slug: 'daily-service',
+        id: 'home-management',
+        name: '가사/관리',
+        slug: 'home-management',
         parent_id: 'life-service',
         children: [
-          { id: 'laundry-service', name: '세탁 서비스', slug: 'laundry-service', parent_id: 'daily-service' },
-          { id: 'pet-care', name: '반려동물 케어', slug: 'pet-care', parent_id: 'daily-service', is_popular: true },
-          { id: 'pet-walking', name: '반려동물 산책 대행', slug: 'pet-walking', parent_id: 'daily-service' },
-          { id: 'pet-grooming', name: '반려동물 미용', slug: 'pet-grooming', parent_id: 'daily-service' },
-          { id: 'babysitter', name: '베이비시터', slug: 'babysitter', parent_id: 'daily-service', is_popular: true },
-          { id: 'senior-care', name: '시니어 케어/간병', slug: 'senior-care', parent_id: 'daily-service' },
+          { id: 'housekeeping', name: '가사도우미', slug: 'housekeeping', parent_id: 'home-management', is_popular: true },
+          { id: 'laundry-service', name: '세탁 서비스', slug: 'laundry-service', parent_id: 'home-management' },
+          { id: 'meal-prep', name: '반찬/식사 준비', slug: 'meal-prep', parent_id: 'home-management' },
+          { id: 'home-repair', name: '집수리/시설관리', slug: 'home-repair', parent_id: 'home-management' },
+          { id: 'pest-control', name: '해충방제', slug: 'pest-control', parent_id: 'home-management' },
+        ]
+      },
+      {
+        id: 'care-service',
+        name: '돌봄 서비스',
+        slug: 'care-service',
+        parent_id: 'life-service',
+        children: [
+          { id: 'babysitter', name: '아이 돌봄', slug: 'babysitter', parent_id: 'care-service', is_popular: true },
+          { id: 'senior-care', name: '어르신 돌봄', slug: 'senior-care', parent_id: 'care-service', is_popular: true },
+          { id: 'pet-sitting', name: '반려동물 돌봄', slug: 'pet-sitting', parent_id: 'care-service', is_popular: true },
+          { id: 'pet-walking', name: '반려동물 산책', slug: 'pet-walking', parent_id: 'care-service' },
+          { id: 'pet-grooming', name: '반려동물 미용', slug: 'pet-grooming', parent_id: 'care-service' },
+        ]
+      },
+      {
+        id: 'moving-install',
+        name: '이사/설치',
+        slug: 'moving-install',
+        parent_id: 'life-service',
+        children: [
+          { id: 'moving-service', name: '이사 서비스', slug: 'moving-service', parent_id: 'moving-install', is_popular: true },
+          { id: 'packing-service', name: '포장 서비스', slug: 'packing-service', parent_id: 'moving-install' },
+          { id: 'furniture-assembly', name: '가구 조립', slug: 'furniture-assembly', parent_id: 'moving-install' },
+          { id: 'appliance-install', name: '가전 설치', slug: 'appliance-install', parent_id: 'moving-install' },
+          { id: 'disposal-service', name: '폐기물 처리', slug: 'disposal-service', parent_id: 'moving-install' },
         ]
       },
       {
@@ -61,34 +82,23 @@ export const FULL_CATEGORIES: CategoryItem[] = [
         slug: 'vehicle-service',
         parent_id: 'life-service',
         children: [
-          { id: 'car-wash', name: '세차 서비스', slug: 'car-wash', parent_id: 'vehicle-service' },
-          { id: 'car-maintenance', name: '차량 정비 예약 대행', slug: 'car-maintenance', parent_id: 'vehicle-service' },
-          { id: 'designated-driver', name: '대리 운전', slug: 'designated-driver', parent_id: 'vehicle-service' },
-          { id: 'chauffeur-service', name: '운전 기사', slug: 'chauffeur-service', parent_id: 'vehicle-service' },
+          { id: 'designated-driver', name: '대리운전', slug: 'designated-driver', parent_id: 'vehicle-service', is_popular: true },
+          { id: 'car-wash', name: '세차', slug: 'car-wash', parent_id: 'vehicle-service' },
+          { id: 'car-detailing', name: '차량 코팅/광택', slug: 'car-detailing', parent_id: 'vehicle-service' },
+          { id: 'car-maintenance', name: '차량 정비 예약', slug: 'car-maintenance', parent_id: 'vehicle-service' },
         ]
       },
       {
-        id: 'booking-agency',
-        name: '예약/대행 서비스',
-        slug: 'booking-agency',
+        id: 'life-agency',
+        name: '생활 대행',
+        slug: 'life-agency',
         parent_id: 'life-service',
         children: [
-          { id: 'queue-waiting', name: '줄서기 대행', slug: 'queue-waiting', parent_id: 'booking-agency' },
-          { id: 'restaurant-booking', name: '레스토랑 예약 대행', slug: 'restaurant-booking', parent_id: 'booking-agency' },
-          { id: 'hospital-booking', name: '병원 예약/동행', slug: 'hospital-booking', parent_id: 'booking-agency' },
-          { id: 'government-office', name: '관공서 업무 대행', slug: 'government-office', parent_id: 'booking-agency' },
-          { id: 'interpretation-companion', name: '통역 동행', slug: 'interpretation-companion', parent_id: 'booking-agency' },
-        ]
-      },
-      {
-        id: 'rental-service',
-        name: '렌탈 서비스',
-        slug: 'rental-service',
-        parent_id: 'life-service',
-        children: [
-          { id: 'appliance-rental', name: '가전 렌탈', slug: 'appliance-rental', parent_id: 'rental-service' },
-          { id: 'living-goods-rental', name: '생활용품 렌탈', slug: 'living-goods-rental', parent_id: 'rental-service' },
-          { id: 'party-equipment-rental', name: '파티/이벤트 용품 렌탈', slug: 'party-equipment-rental', parent_id: 'rental-service' },
+          { id: 'queue-waiting', name: '줄서기 대행', slug: 'queue-waiting', parent_id: 'life-agency' },
+          { id: 'reservation-service', name: '예약 대행', slug: 'reservation-service', parent_id: 'life-agency' },
+          { id: 'hospital-companion', name: '병원 동행', slug: 'hospital-companion', parent_id: 'life-agency' },
+          { id: 'government-office', name: '관공서 업무', slug: 'government-office', parent_id: 'life-agency' },
+          { id: 'document-service', name: '서류 작성/발급', slug: 'document-service', parent_id: 'life-agency' },
         ]
       }
     ]
