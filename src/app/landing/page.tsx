@@ -1,6 +1,4 @@
 import HeroWithCategories from '@/components/common/HeroWithCategories'
-import AITalentShowcase from '@/components/home/AITalentShowcase'
-import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 
 const CheckIcon = () => (
@@ -111,69 +109,11 @@ const ExpertCard = ({ expert }: ExpertCardProps) => (
   </Link>
 )
 
-export default async function LandingPage() {
-  // AI 서비스 데이터 가져오기
-  const supabase = await createClient()
-  const { data: aiCategories } = await supabase
-    .from('categories')
-    .select('id')
-    .eq('slug', 'ai-services')
-    .eq('is_active', true)
-    .single()
-
-  let aiServices: any[] = []
-  if (aiCategories) {
-    // 1. AI 카테고리의 모든 하위 카테고리 slug 가져오기
-    const { data: aiCategorySlugs } = await supabase
-      .from('categories')
-      .select('slug')
-      .or(`slug.eq.ai-services,parent_id.eq.${aiCategories.id}`)
-
-    if (aiCategorySlugs && aiCategorySlugs.length > 0) {
-      const slugs = aiCategorySlugs.map(c => c.slug)
-
-      // 2. 해당 카테고리들의 서비스 ID 가져오기
-      const { data: serviceCategories } = await supabase
-        .from('service_categories')
-        .select('service_id')
-        .in('category_id', slugs)
-
-      if (serviceCategories && serviceCategories.length > 0) {
-        const serviceIds = serviceCategories.map(sc => sc.service_id)
-
-        // 3. 서비스 정보 가져오기
-        const { data } = await supabase
-          .from('services')
-          .select(`
-            id,
-            title,
-            description,
-            price,
-            thumbnail_url,
-            rating,
-            seller:profiles!services_seller_id_fkey (
-              id,
-              display_name,
-              business_name,
-              is_verified
-            )
-          `)
-          .eq('status', 'active')
-          .in('id', serviceIds)
-          .order('created_at', { ascending: false })
-
-        aiServices = data || []
-      }
-    }
-  }
-
+export default function LandingPage() {
   return (
     <div className="pb-0">
       {/* 히어로 섹션 + 카테고리 (공통) */}
       <HeroWithCategories />
-
-      {/* AI 재능 쇼케이스 */}
-      <AITalentShowcase services={aiServices} />
 
       {/* Featured Categories Section */}
       <section className="pt-0 pb-12 md:py-24 bg-white overflow-hidden">
