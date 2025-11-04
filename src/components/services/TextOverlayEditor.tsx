@@ -91,30 +91,35 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
       const horizontalPadding = width * 0.1
       const maxTextWidth = width - (horizontalPadding * 2)
 
-      // 텍스트를 2줄로 분할
-      const words = textStyle.text.split(' ')
+      // 텍스트를 줄바꿈(\n)으로 먼저 분할
+      const manualLines = textStyle.text.split('\n')
       const lines: string[] = []
-      let currentLine = ''
 
-      for (const word of words) {
-        const testLine = currentLine ? `${currentLine} ${word}` : word
-        const metrics = ctx.measureText(testLine)
+      // 각 수동 줄바꿈된 줄에 대해 자동 줄바꿈 처리
+      for (const manualLine of manualLines) {
+        const words = manualLine.split(' ')
+        let currentLine = ''
 
-        if (metrics.width > maxTextWidth && currentLine) {
-          // 현재 줄이 너무 길면 줄바꿈
+        for (const word of words) {
+          const testLine = currentLine ? `${currentLine} ${word}` : word
+          const metrics = ctx.measureText(testLine)
+
+          if (metrics.width > maxTextWidth && currentLine) {
+            // 현재 줄이 너무 길면 줄바꿈
+            lines.push(currentLine)
+            currentLine = word
+          } else {
+            currentLine = testLine
+          }
+        }
+
+        if (currentLine) {
           lines.push(currentLine)
-          currentLine = word
-        } else {
-          currentLine = testLine
         }
       }
 
-      if (currentLine) {
-        lines.push(currentLine)
-      }
-
-      // 최대 2줄까지만 표시
-      const displayLines = lines.slice(0, 2)
+      // 최대 3줄까지 표시
+      const displayLines = lines.slice(0, 3)
 
       // 실제 위치 계산
       let actualX = textStyle.x * width
@@ -127,12 +132,13 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
         actualX = Math.min(actualX, width - horizontalPadding)
       }
 
-      // 2줄일 경우 줄 간격 설정
+      // 줄 간격 설정
       const lineHeight = textStyle.fontSize * 1.3
 
-      if (displayLines.length === 2) {
-        // 2줄이면 중앙 기준으로 위아래 배치
-        actualY -= lineHeight / 2
+      // 여러 줄일 경우 중앙 정렬
+      if (displayLines.length > 1) {
+        // 전체 텍스트 블록의 중앙을 기준으로 배치
+        actualY -= (lineHeight * (displayLines.length - 1)) / 2
       }
 
       // 각 줄 그리기
@@ -176,14 +182,18 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
             ({textStyle.text.length}/25자)
           </span>
         </label>
-        <input
-          type="text"
+        <textarea
           value={textStyle.text}
           onChange={(e) => handleTextChange(e.target.value)}
-          placeholder="최대 25자까지 입력 가능 (띄어쓰기 포함)"
+          placeholder="최대 25자까지 입력 가능 (Enter로 줄바꿈 가능)"
           maxLength={25}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-lg"
+          rows={3}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-lg resize-none"
         />
+        <p className="text-xs text-gray-500">
+          <i className="fas fa-info-circle mr-1"></i>
+          Enter 키를 눌러 줄바꿈을 할 수 있습니다. (최대 3줄)
+        </p>
       </div>
 
       {/* 위치 프리셋 */}
