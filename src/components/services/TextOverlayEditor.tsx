@@ -185,15 +185,27 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
         <textarea
           value={textStyle.text}
           onChange={(e) => handleTextChange(e.target.value)}
-          placeholder="최대 25자까지 입력 가능 (Enter로 줄바꿈 가능)"
+          onKeyDown={(e) => {
+            // Enter 키 누를 때 form submit 방지
+            if (e.key === 'Enter') {
+              e.stopPropagation()
+            }
+          }}
+          placeholder="예시:&#10;AI 서비스&#10;전문가"
           maxLength={25}
           rows={3}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-lg resize-none"
         />
-        <p className="text-xs text-gray-500">
-          <i className="fas fa-info-circle mr-1"></i>
-          Enter 키를 눌러 줄바꿈을 할 수 있습니다. (최대 3줄)
-        </p>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+          <p className="text-sm text-blue-900 font-medium mb-1">
+            <i className="fas fa-keyboard mr-1"></i>
+            줄바꿈 방법
+          </p>
+          <p className="text-xs text-blue-800">
+            <strong>키보드 Enter 키</strong>를 누르면 다음 줄로 이동합니다.<br/>
+            예: "AI 서비스" 입력 후 <kbd className="px-1.5 py-0.5 bg-white border border-blue-300 rounded text-xs">Enter</kbd> 누르고 "전문가" 입력
+          </p>
+        </div>
       </div>
 
       {/* 위치 프리셋 */}
