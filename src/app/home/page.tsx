@@ -99,7 +99,7 @@ async function AIServicesSection() {
   const { data: aiCategories } = await supabase
     .from('categories')
     .select('id')
-    .eq('is_ai_category', true)
+    .eq('is_ai', true)
 
   let services = []
 
