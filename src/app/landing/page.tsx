@@ -124,7 +124,7 @@ export default function LandingPage() {
               <div className="order-2 md:order-1">
                 <div className="mb-3 md:mb-4">
                   <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">AI Services</span>
-                  <h2 className="text-lg md:text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                  <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
                     미래를 여는 기술, AI 전문가와 함께
                   </h2>
                 </div>
@@ -167,7 +167,7 @@ export default function LandingPage() {
               <div className="order-2 md:order-1">
                 <div className="mb-3 md:mb-4">
                   <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">IT & Programming</span>
-                  <h2 className="text-lg md:text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                  <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
                     아이디어를 현실로, 최고의 개발자 군단
                   </h2>
                 </div>
@@ -217,7 +217,7 @@ export default function LandingPage() {
               <div>
                 <div className="mb-3 md:mb-4">
                   <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Design</span>
-                  <h2 className="text-lg md:text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                  <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
                     브랜드를 빛내는, 감각적인 디자인
                   </h2>
                 </div>
@@ -253,7 +253,7 @@ export default function LandingPage() {
               <div className="order-2 md:order-1">
                 <div className="mb-3 md:mb-4">
                   <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Marketing</span>
-                  <h2 className="text-lg md:text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                  <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
                     성공적인 비즈니스를 위한, 전략적 마케팅
                   </h2>
                 </div>
@@ -341,7 +341,7 @@ export default function LandingPage() {
               <div>
                 <div className="mb-3 md:mb-4">
                   <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Life Services</span>
-                  <h2 className="text-lg md:text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                  <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
                     당신의 일상을 더 편리하고 풍요롭게
                   </h2>
                 </div>
@@ -393,7 +393,7 @@ export default function LandingPage() {
               <div className="order-2 md:order-1">
                 <div className="mb-3 md:mb-4">
                   <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Errand Services</span>
-                  <h2 className="text-lg md:text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                  <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
                     바쁜 당신을 위한, 믿을 수 있는 심부름 서비스
                   </h2>
                 </div>
@@ -423,7 +423,7 @@ export default function LandingPage() {
               </div>
               <div className="order-1 md:order-2 hidden md:block">
                 <img
-                  src="https://images.unsplash.com/photo-1586864387634-22c1dd092900?q=80&w=800&auto=format&fit=crop"
+                  src="https://images.unsplash.com/photo-1565793298595-6a879b1d9492?q=80&w=800&auto=format&fit=crop"
                   alt="Errand Services"
                   className="rounded-2xl shadow-2xl object-cover w-full h-[320px] lg:h-[400px]"
                 />
