@@ -86,7 +86,7 @@ export default function Header() {
 
                 {/* 사용자 정보 드롭다운 */}
                 <div className="relative group">
-                  <button className="flex items-center space-x-2 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">
+                  <button className="flex items-center space-x-2 px-2 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">
                     {/* 프로필 이미지 */}
                     <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
                       {profile?.profile_image ? (
@@ -99,11 +99,6 @@ export default function Header() {
                         <i className="fas fa-user text-gray-600"></i>
                       )}
                     </div>
-
-                    {/* 사용자 이름 */}
-                    <span className="text-sm font-medium text-gray-700">
-                      {profile?.name || user.email?.split('@')[0] || '사용자'}
-                    </span>
 
                     {/* 드롭다운 아이콘 */}
                     <i className="fas fa-chevron-down text-xs text-gray-400"></i>
