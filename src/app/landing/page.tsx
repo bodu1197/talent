@@ -144,7 +144,7 @@ export default function LandingPage() {
                 <img
                   src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=800&auto=format&fit=crop"
                   alt="AI Technology"
-                  className="rounded-2xl shadow-2xl object-cover w-full h-[400px] lg:h-[500px]"
+                  className="rounded-2xl shadow-2xl object-cover w-full h-[320px] lg:h-[400px]"
                 />
               </div>
             </div>
@@ -187,7 +187,7 @@ export default function LandingPage() {
                 <img
                   src="https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=800&auto=format&fit=crop"
                   alt="IT and Programming"
-                  className="rounded-2xl shadow-2xl object-cover w-full h-[400px] lg:h-[500px]"
+                  className="rounded-2xl shadow-2xl object-cover w-full h-[320px] lg:h-[400px]"
                 />
               </div>
             </div>
@@ -211,7 +211,7 @@ export default function LandingPage() {
                 <img
                   src="https://images.unsplash.com/photo-1522199670076-2852f80289c3?q=80&w=800&auto=format&fit=crop"
                   alt="Creative Design"
-                  className="rounded-2xl shadow-2xl object-cover w-full h-[400px] lg:h-[500px]"
+                  className="rounded-2xl shadow-2xl object-cover w-full h-[320px] lg:h-[400px]"
                 />
               </div>
               <div>
@@ -273,7 +273,7 @@ export default function LandingPage() {
                 <img
                   src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop"
                   alt="Digital Marketing"
-                  className="rounded-2xl shadow-2xl object-cover w-full h-[400px] lg:h-[500px]"
+                  className="rounded-2xl shadow-2xl object-cover w-full h-[320px] lg:h-[400px]"
                 />
               </div>
             </div>
