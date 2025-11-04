@@ -19,7 +19,7 @@ const slides: Slide[] = [
     id: 1,
     title: '당신이 번 돈,<br><span class="hero-highlight">한 푼도 떼지 않습니다</span>',
     subtitle: '수수료 0%. 당신의 재능이 온전히 당신의 수익으로.',
-    gradient: '',
+    gradient: 'from-pink-500 to-pink-600',
     icon: 'fa-sack-dollar',
     cardTitle: '수수료 0% ✨',
     cardSubtitle: '판매자가 100% 가져갑니다',
@@ -29,7 +29,7 @@ const slides: Slide[] = [
     id: 2,
     title: '첫날부터 공정하게,<br>모두에게 같은 기회를',
     subtitle: '신규 판매자와 베테랑, 시작이 평등한 곳입니다.',
-    gradient: '',
+    gradient: 'from-indigo-500 to-indigo-600',
     icon: 'fa-balance-scale',
     cardTitle: '판매 기회 균등',
     cardSubtitle: '모든 판매자에게 공평한 기회',
@@ -39,7 +39,7 @@ const slides: Slide[] = [
     id: 3,
     title: '표시된 가격이 전부입니다<br>숨은 비용 없습니다',
     subtitle: '구매 수수료 0원. 보이는 그대로 결제하세요.',
-    gradient: '',
+    gradient: 'from-purple-500 to-purple-600',
     icon: 'fa-shield-alt',
     cardTitle: '구매 수수료 0원',
     cardSubtitle: '표시된 가격이 전부입니다',
@@ -49,7 +49,7 @@ const slides: Slide[] = [
     id: 4,
     title: '시작하는 당신에게,<br>1,500만원 드립니다',
     subtitle: '런칭 기념. 광고 크레딧으로 첫 고객을 만나세요.',
-    gradient: '',
+    gradient: 'from-blue-500 to-blue-600',
     icon: 'fa-bullhorn',
     cardTitle: '런칭 기념 1,500만원',
     cardSubtitle: '시작하는 당신에게 드립니다',
@@ -141,7 +141,7 @@ export default function HeroSection() {
 
           {/* 오른쪽: 카드 + 페이지네이션 */}
           <div className="w-full lg:w-[382px] flex-shrink-0">
-            <div className="relative bg-[#0f3460] rounded-2xl p-5 sm:p-6 text-white shadow-2xl transition-all duration-500 h-[250px] sm:h-[298px] flex flex-col">
+            <div className={`relative bg-gradient-to-br ${slide.gradient} rounded-2xl p-5 sm:p-6 text-white shadow-2xl transition-all duration-500 h-[250px] sm:h-[298px] flex flex-col`}>
               {/* 장식 요소 */}
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-lg rotate-12"></div>
 
