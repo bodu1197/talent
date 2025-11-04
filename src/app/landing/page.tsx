@@ -121,7 +121,7 @@ export default async function LandingPage() {
     .eq('is_active', true)
     .single()
 
-  let aiServices = []
+  let aiServices: any[] = []
   if (aiCategories) {
     const { data } = await supabase
       .from('services')
