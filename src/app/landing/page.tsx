@@ -1,4 +1,5 @@
 import HeroWithCategories from '@/components/common/HeroWithCategories'
+import AIServicesShowcase from '@/components/landing/AIServicesShowcase'
 import Link from 'next/link'
 
 const CheckIcon = () => (
@@ -114,6 +115,9 @@ export default function LandingPage() {
     <div className="pb-0">
       {/* 히어로 섹션 + 카테고리 (공통) */}
       <HeroWithCategories />
+
+      {/* AI 서비스 쇼케이스 */}
+      <AIServicesShowcase />
 
       {/* Featured Categories Section */}
       <section className="pt-0 pb-12 md:py-24 bg-white overflow-hidden">
