@@ -11,7 +11,8 @@
       "Bash(node scripts/update-categories-rest.js:*)",
       "Bash(curl:*)",
       "Bash(node scripts/check-errands.js:*)",
-      "Bash(node scripts/delete-quick-service.js:*)"
+      "Bash(node scripts/delete-quick-service.js:*)",
+      "Bash(node scripts/check-all-categories.js:*)"
     ],
     "deny": [],
     "ask": []

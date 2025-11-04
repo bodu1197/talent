@@ -81,7 +81,7 @@ export const FULL_CATEGORIES: CategoryItem[] = [
     name: '심부름',
     slug: 'errands',
     icon: 'motorcycle',
-    service_count: 13,
+    service_count: 6,
     popularity_score: 75,
     description: '빠른 배달 및 심부름 서비스',
     children: [
@@ -91,26 +91,12 @@ export const FULL_CATEGORIES: CategoryItem[] = [
         slug: 'delivery-service',
         parent_id: 'errands',
         children: [
-          { id: 'quick-delivery', name: '퀵 서비스', slug: 'quick-delivery', parent_id: 'delivery-service', is_popular: true },
-          { id: 'document-delivery', name: '서류 배달', slug: 'document-delivery', parent_id: 'delivery-service' },
-          { id: 'package-delivery', name: '택배 대행', slug: 'package-delivery', parent_id: 'delivery-service', is_popular: true },
-          { id: 'food-delivery', name: '음식 배달 대행', slug: 'food-delivery', parent_id: 'delivery-service' },
-          { id: 'medicine-delivery', name: '약 배달', slug: 'medicine-delivery', parent_id: 'delivery-service' },
           { id: 'flower-delivery', name: '꽃 배달', slug: 'flower-delivery', parent_id: 'delivery-service' },
+          { id: 'document-delivery', name: '서류 배달', slug: 'document-delivery', parent_id: 'delivery-service' },
           { id: 'gift-delivery', name: '선물 배달', slug: 'gift-delivery', parent_id: 'delivery-service' },
-        ]
-      },
-      {
-        id: 'errand-service',
-        name: '심부름 대행',
-        slug: 'errand-service',
-        parent_id: 'errands',
-        children: [
-          { id: 'shopping-errands', name: '장보기 대행', slug: 'shopping-errands', parent_id: 'errand-service', is_popular: true },
-          { id: 'pickup-service', name: '픽업 서비스', slug: 'pickup-service', parent_id: 'errand-service' },
-          { id: 'secondhand-trade', name: '중고 거래 대행', slug: 'secondhand-trade', parent_id: 'errand-service' },
-          { id: 'return-exchange', name: '반품/교환 대행', slug: 'return-exchange', parent_id: 'errand-service' },
-          { id: 'postal-service', name: '우편 업무 대행', slug: 'postal-service', parent_id: 'errand-service' },
+          { id: 'food-delivery', name: '음식 배달 대행', slug: 'food-delivery', parent_id: 'delivery-service' },
+          { id: 'parcel-delivery', name: '택배 대행', slug: 'parcel-delivery', parent_id: 'delivery-service', is_popular: true },
+          { id: 'grocery-shopping', name: '장보기', slug: 'grocery-shopping', parent_id: 'delivery-service', is_popular: true },
         ]
       }
     ]
