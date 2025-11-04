@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { FULL_CATEGORIES } from '@/data/categories-full'
+import { getTopLevelCategories } from '@/lib/categories'
 import CategoryGridClient from './CategoryGridClient'
 
 function CategoryIcon({ icon }: { icon?: string }) {
@@ -25,13 +25,14 @@ function CategoryIcon({ icon }: { icon?: string }) {
   if (icon === 'chart-line') return <i className="fas fa-chart-line"></i>
   if (icon === 'home') return <i className="fas fa-home"></i>
   if (icon === 'motorcycle') return <i className="fas fa-motorcycle"></i>
+  if (icon === 'running') return <i className="fas fa-running"></i>
 
   return <i className="fas fa-circle"></i>
 }
 
-export default function CategoryGrid() {
-  // Filter to get only top-level categories
-  const topLevelCategories = FULL_CATEGORIES.filter(cat => cat.parent_id === undefined)
+export default async function CategoryGrid() {
+  // 데이터베이스에서 1단계 카테고리 가져오기
+  const topLevelCategories = await getTopLevelCategories()
 
   const initialVisibleCount = 11
   const categoriesInFirstRow = topLevelCategories.slice(0, initialVisibleCount)

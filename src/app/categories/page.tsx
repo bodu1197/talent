@@ -1,14 +1,14 @@
 import Link from 'next/link'
-import { FULL_CATEGORIES } from '@/data/categories-full'
+import { getTopLevelCategories } from '@/lib/categories'
 
 export const metadata = {
   title: '전체 카테고리 - AI Talent Hub',
   description: 'AI 재능 거래 플랫폼의 모든 카테고리를 둘러보세요',
 }
 
-export default function CategoriesPage() {
-  // Get only top-level categories
-  const topLevelCategories = FULL_CATEGORIES.filter(cat => cat.parent_id === undefined)
+export default async function CategoriesPage() {
+  // Get only top-level categories from database
+  const topLevelCategories = await getTopLevelCategories()
 
   const getIconClass = (iconName: string) => {
     const iconMap: Record<string, string> = {

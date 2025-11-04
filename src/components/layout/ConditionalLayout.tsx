@@ -2,13 +2,17 @@
 
 import { usePathname } from 'next/navigation'
 import Header from './Header'
-import ConditionalMegaMenu from './ConditionalMegaMenu'
 import SearchBar from './SearchBar'
 import Footer from './Footer'
 import MobileBottomNav from './MobileBottomNav'
 import MobileSubHeader from './MobileSubHeader'
 
-export default function ConditionalLayout({ children }: { children: React.ReactNode }) {
+interface ConditionalLayoutProps {
+  children: React.ReactNode
+  megaMenu: React.ReactNode
+}
+
+export default function ConditionalLayout({ children, megaMenu }: ConditionalLayoutProps) {
   const pathname = usePathname()
 
   // 마이페이지와 관리자 페이지에서는 헤더/푸터 숨기기
@@ -28,7 +32,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
           <div className="hidden lg:block">
             <Header />
             <SearchBar id="desktop-search" />
-            <ConditionalMegaMenu />
+            {megaMenu}
           </div>
 
           {/* 모바일: 메인 페이지일 때만 헤더/검색 표시 */}

@@ -2,8 +2,13 @@
 
 import { usePathname } from 'next/navigation'
 import MegaMenu from './MegaMenu'
+import { CategoryItem } from '@/lib/categories'
 
-export default function ConditionalMegaMenu() {
+interface ConditionalMegaMenuProps {
+  categories: CategoryItem[]
+}
+
+export default function ConditionalMegaMenu({ categories }: ConditionalMegaMenuProps) {
   const pathname = usePathname()
 
   // 전문가 등록 페이지에서는 MegaMenu를 표시하지 않음
@@ -11,5 +16,5 @@ export default function ConditionalMegaMenu() {
     return null
   }
 
-  return <MegaMenu />
+  return <MegaMenu categories={categories} />
 }

@@ -11,6 +11,7 @@ import "@fontsource/noto-sans-kr/900.css";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { ErrorBoundary } from "@/components/providers/ErrorBoundary";
 import ConditionalLayout from "@/components/layout/ConditionalLayout";
+import ConditionalMegaMenuWrapper from "@/components/layout/ConditionalMegaMenuWrapper";
 
 export const metadata: Metadata = {
   title: "AI Talent Hub - 국내 최대 AI 재능 거래 플랫폼",
@@ -48,7 +49,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-gray-50 overflow-x-hidden">
         <ErrorBoundary>
           <AuthProvider>
-            <ConditionalLayout>
+            <ConditionalLayout megaMenu={<ConditionalMegaMenuWrapper />}>
               {children}
             </ConditionalLayout>
           </AuthProvider>

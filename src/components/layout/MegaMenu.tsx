@@ -2,10 +2,13 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { FULL_CATEGORIES } from '@/data/categories-full'
-import { CategoryItem } from '@/data/categories-full'
+import { CategoryItem } from '@/lib/categories'
 
-export default function MegaMenu() {
+interface MegaMenuProps {
+  categories: CategoryItem[]
+}
+
+export default function MegaMenu({ categories }: MegaMenuProps) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const [isOpen, setIsOpen] = useState(false)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -58,7 +61,7 @@ export default function MegaMenu() {
   // 현재 활성 카테고리의 하위 카테고리 가져오기
   const getActiveSubCategories = (): CategoryItem['children'] => {
     if (!activeCategory) return []
-    const category = FULL_CATEGORIES.find(cat => cat.id === activeCategory)
+    const category = categories.find(cat => cat.id === activeCategory)
     return category?.children || []
   }
 
@@ -100,10 +103,10 @@ export default function MegaMenu() {
                   IT/프로그래밍
                 </Link>
 
-                {/* 인기도 순으로 상위 4개 표시 (AI, IT 제외) */}
-                {FULL_CATEGORIES
-                  .filter(cat => cat.id !== 'ai-services' && cat.id !== 'it-programming' && cat.popularity_score)
-                  .sort((a, b) => (b.popularity_score || 0) - (a.popularity_score || 0))
+                {/* 서비스 수 순으로 상위 4개 표시 (AI, IT 제외) */}
+                {categories
+                  .filter(cat => cat.id !== 'ai-services' && cat.id !== 'it-programming')
+                  .sort((a, b) => (b.service_count || 0) - (a.service_count || 0))
                   .slice(0, 4)
                   .map(cat => (
                     <Link
@@ -143,7 +146,7 @@ export default function MegaMenu() {
               {/* 왼쪽: 대분류 카테고리 */}
               <div className="col-span-3 border-r border-gray-200 pr-6 max-h-[600px] overflow-y-auto scrollbar-hide">
                 <div>
-                  {FULL_CATEGORIES.map((category) => (
+                  {categories.map((category) => (
                     <div key={category.id} className="mb-1">
                       <Link
                         href={`/categories/${category.slug}`}
@@ -199,9 +202,6 @@ export default function MegaMenu() {
                                     onClick={handleCategoryClick}
                                   >
                                     {item.name}
-                                    {item.is_popular && (
-                                      <span className="text-xs text-red-500">HOT</span>
-                                    )}
                                   </Link>
                                 </li>
                               ))}
@@ -212,23 +212,6 @@ export default function MegaMenu() {
                     </div>
 
                     {/* AI 카테고리인 경우 키워드 표시 */}
-                    {FULL_CATEGORIES.find(cat => cat.id === activeCategory)?.is_ai && (
-                      <div className="mt-6 pt-6 border-t border-gray-200">
-                        <h4 className="text-sm font-semibold text-gray-700 mb-2">인기 AI 툴</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {getActiveSubCategories()?.map(sub =>
-                            sub.keywords?.map(keyword => (
-                              <span
-                                key={keyword}
-                                className="px-3 py-1 bg-blue-50 text-brand-primary text-sm rounded-full"
-                              >
-                                {keyword}
-                              </span>
-                            ))
-                          )}
-                        </div>
-                      </div>
-                    )}
                   </>
                 )}
 
@@ -239,9 +222,9 @@ export default function MegaMenu() {
                       <i className="fas fa-fire text-red-500"></i> 인기 카테고리
                     </h3>
                     <div className="grid grid-cols-4 gap-4">
-                      {FULL_CATEGORIES.flatMap(cat =>
+                      {categories.flatMap(cat =>
                         cat.children?.flatMap(sub =>
-                          sub.children?.filter(item => item.is_popular) || []
+                          sub.children || []
                         ) || []
                       ).slice(0, 16).map((item) => (
                         <Link
@@ -251,7 +234,6 @@ export default function MegaMenu() {
                           onClick={handleCategoryClick}
                         >
                           <span className="font-medium">{item.name}</span>
-                          <span className="text-xs text-red-500">HOT</span>
                         </Link>
                       ))}
                     </div>

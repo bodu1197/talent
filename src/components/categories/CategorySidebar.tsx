@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { CategoryItem } from '@/data/categories-full'
+import { CategoryItem } from '@/lib/categories'
 
 interface CategorySidebarProps {
   categories: CategoryItem[]

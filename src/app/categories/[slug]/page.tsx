@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { getCategoryBySlug, getCategoryPath, FULL_CATEGORIES, CategoryItem } from '@/data/categories-full'
+import { getCategoryBySlug as getCategory, getCategoryPath, getAllCategoriesTree, getAllCategoriesForBuild } from '@/lib/categories'
 import { getServicesByCategory } from '@/lib/supabase/queries/services'
 import ServiceCard from '@/components/services/ServiceCard'
 import PlaceholderServiceCard from '@/components/services/PlaceholderServiceCard'
@@ -18,14 +18,17 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params
 
   // 카테고리 찾기
-  const category = getCategoryBySlug(slug)
+  const category = await getCategory(slug)
 
   if (!category) {
     notFound()
   }
 
   // 카테고리 경로 가져오기 (breadcrumb용)
-  const categoryPath = getCategoryPath(category.id)
+  const categoryPath = await getCategoryPath(category.id)
+
+  // 전체 카테고리 트리 가져오기 (사이드바용)
+  const allCategories = await getAllCategoriesTree()
 
   // 1차 카테고리 확인 (parent_id가 없으면 1차 카테고리)
   const isTopLevelCategory = !category.parent_id
@@ -48,7 +51,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           <div className="flex gap-8">
             {/* 왼쪽 카테고리 네비게이션 */}
             <CategorySidebar
-              categories={FULL_CATEGORIES}
+              categories={allCategories}
               currentCategoryId={category.id}
               categoryPath={categoryPath}
             />
@@ -112,17 +115,18 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
 // 정적 경로 생성
 export async function generateStaticParams() {
+  const allCategories = await getAllCategoriesForBuild()
   const paths: { slug: string }[] = []
 
-  const addPaths = (categories: typeof FULL_CATEGORIES) => {
+  const addPaths = (categories: typeof allCategories) => {
     categories.forEach(category => {
       paths.push({ slug: category.slug })
       if (category.children) {
-        addPaths(category.children as any)
+        addPaths(category.children)
       }
     })
   }
 
-  addPaths(FULL_CATEGORIES)
+  addPaths(allCategories)
   return paths
 }
