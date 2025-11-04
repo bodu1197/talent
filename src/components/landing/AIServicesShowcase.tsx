@@ -153,42 +153,13 @@ const Card: React.FC<CardProps> = ({ data, animationDelay }) => {
 
 export default function AIServicesShowcase() {
   return (
-    <section className="relative isolate bg-white py-16 md:py-24 overflow-hidden">
-      {/* Background gradient shapes */}
-      <div
-        className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
-        aria-hidden="true"
-      >
-        <div
-          className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-10 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
-          style={{
-            clipPath:
-              'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-          }}
-        />
-      </div>
-
+    <section className="pt-0 pb-12 md:py-24 bg-white">
       <div className="container-1200 px-4">
-        <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory md:grid md:grid-cols-2 xl:grid-cols-3 md:gap-9 md:overflow-visible md:pb-0 md:snap-none hide-scrollbar">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {cardData.map((data, index) => (
-            <div key={data.id} className="w-[85vw] max-w-sm flex-shrink-0 md:w-auto snap-center">
-              <Card data={data} animationDelay={`${index * 100}ms`} />
-            </div>
+            <Card key={data.id} data={data} animationDelay={`${index * 100}ms`} />
           ))}
         </div>
-      </div>
-
-      <div
-        className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
-        aria-hidden="true"
-      >
-        <div
-          className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-10 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
-          style={{
-            clipPath:
-              'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-          }}
-        />
       </div>
     </section>
   )
