@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Link from 'next/link'
 import { Palette, Video, Code2, Megaphone, Wand2, TrendingUp } from 'lucide-react'
 
 interface CardData {
@@ -10,6 +11,7 @@ interface CardData {
   listItems: string[]
   description: string
   theme: 'purple' | 'indigo' | 'blue' | 'green' | 'pink' | 'teal'
+  link: string
 }
 
 const cardData: CardData[] = [
@@ -20,6 +22,7 @@ const cardData: CardData[] = [
     listItems: ['AI 실사 · 모델', 'AI 캐릭터', 'AI 광고소재 디자인'],
     description: 'AI로 다양한 시안을, 더 빠르게!',
     theme: 'purple',
+    link: '/categories/ai-design',
   },
   {
     id: 2,
@@ -28,6 +31,7 @@ const cardData: CardData[] = [
     listItems: ['AI 광고 영상', 'AI 채팅 사진', 'AI 더빙 · 내레이션'],
     description: '상상만 했던 영상, AI로 실현',
     theme: 'indigo',
+    link: '/categories/ai-video-photo-audio',
   },
   {
     id: 3,
@@ -36,6 +40,7 @@ const cardData: CardData[] = [
     listItems: ['AI 시스템 서비스', 'AI 자동화 프로그램', 'AI 모델링 최적화'],
     description: '업무 자동화부터 LLM 챗봇 도입까지',
     theme: 'blue',
+    link: '/categories/ai-development-automation',
   },
   {
     id: 4,
@@ -44,6 +49,7 @@ const cardData: CardData[] = [
     listItems: ['AI 마케팅 콘텐츠', 'AI SEO · GEO', 'AI 프린트 생성'],
     description: '압도적인 글쓰기, 정확한 노출, AI답게',
     theme: 'green',
+    link: '/categories/ai-marketing-writing',
   },
   {
     id: 5,
@@ -52,6 +58,7 @@ const cardData: CardData[] = [
     listItems: ['디자인 프롬프트', '글쓰기 프롬프트', '영상 프롬프트'],
     description: '원하는 결과물, 더 정확하게!',
     theme: 'pink',
+    link: '/categories/ai-prompt-new',
   },
   {
     id: 6,
@@ -60,6 +67,7 @@ const cardData: CardData[] = [
     listItems: ['AI 수익화', 'AI 컨설팅', 'AI 교육'],
     description: 'AI로 N잡러부터 사업화까지',
     theme: 'teal',
+    link: '/categories/ai-utilization-monetization',
   },
 ]
 
@@ -114,40 +122,42 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ data, animationDelay }) => {
-  const { title, icon: Icon, listItems, description, theme } = data
+  const { title, icon: Icon, listItems, description, theme, link } = data
   const currentTheme = THEMES[theme]
 
   return (
-    <div
-      className={`group relative bg-white bg-opacity-60 backdrop-blur-sm p-7 rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] border shadow-lg hover:shadow-2xl hover:-translate-y-3 ${currentTheme.beforeBg} ${currentTheme.afterBg} ${currentTheme.borderColor}`}
-      style={{ animationDelay }}
-    >
-      {/* Background Hover Effect */}
-      <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-95 transition-opacity duration-400" />
+    <Link href={link}>
+      <div
+        className={`group relative bg-white bg-opacity-60 backdrop-blur-sm p-7 rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] border shadow-lg hover:shadow-2xl hover:-translate-y-3 ${currentTheme.beforeBg} ${currentTheme.afterBg} ${currentTheme.borderColor}`}
+        style={{ animationDelay }}
+      >
+        {/* Background Hover Effect */}
+        <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-95 transition-opacity duration-400" />
 
-      {/* Top Border Hover Effect */}
-      <div className="absolute top-0 left-0 right-0 h-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+        {/* Top Border Hover Effect */}
+        <div className="absolute top-0 left-0 right-0 h-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
 
-      <div className="relative z-10 flex flex-col">
-        <header className="flex items-center gap-4 mb-4">
-          <Icon className={`w-12 h-12 flex-shrink-0 transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-120 group-hover:rotate-12 ${currentTheme.bulletColor}`} />
-          <h3 className="text-2xl font-extrabold text-gray-900 leading-tight">{title}</h3>
-        </header>
+        <div className="relative z-10 flex flex-col">
+          <header className="flex items-center gap-4 mb-4">
+            <Icon className={`w-12 h-12 flex-shrink-0 transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-120 group-hover:rotate-12 ${currentTheme.bulletColor}`} />
+            <h3 className="text-2xl font-extrabold text-gray-900 leading-tight">{title}</h3>
+          </header>
 
-        <ul className="list-none mb-4 space-y-1">
-          {listItems.map((item, index) => (
-            <li key={index} className="text-gray-600 pl-6 relative text-base group-hover:text-gray-900 transition-colors duration-300">
-              <span className={`absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-current ${currentTheme.bulletColor}`} />
-              {item}
-            </li>
-          ))}
-        </ul>
+          <ul className="list-none mb-4 space-y-1">
+            {listItems.map((item, index) => (
+              <li key={index} className="text-gray-600 pl-6 relative text-base group-hover:text-gray-900 transition-colors duration-300">
+                <span className={`absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-current ${currentTheme.bulletColor}`} />
+                {item}
+              </li>
+            ))}
+          </ul>
 
-        <p className="text-gray-500 text-sm font-semibold pt-4 border-t border-gray-900/10">
-          {description}
-        </p>
+          <p className="text-gray-500 text-sm font-semibold pt-4 border-t border-gray-900/10">
+            {description}
+          </p>
+        </div>
       </div>
-    </div>
+    </Link>
   )
 }
 
