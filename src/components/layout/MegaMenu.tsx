@@ -141,7 +141,7 @@ export default function MegaMenu() {
           <div className="container-1200 py-6">
             <div className="grid grid-cols-12 gap-8">
               {/* 왼쪽: 대분류 카테고리 */}
-              <div className="col-span-3 border-r border-gray-200 pr-6">
+              <div className="col-span-3 border-r border-gray-200 pr-6 max-h-[600px] overflow-y-auto scrollbar-hide">
                 <div>
                   {FULL_CATEGORIES.map((category) => (
                     <div key={category.id} className="mb-1">
