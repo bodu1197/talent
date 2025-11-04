@@ -21,7 +21,7 @@ const slides: Slide[] = [
     subtitle: '수수료 0%. 당신의 재능이 온전히 당신의 수익으로.',
     gradient: 'from-pink-500 to-pink-600',
     icon: 'fa-sack-dollar',
-    cardTitle: '수수료 0% ✨',
+    cardTitle: '수수료 0%',
     cardSubtitle: '판매자가 100% 가져갑니다',
     cardDescription: '당신이 번 돈, 한 푼도 떼지 않습니다. 다른 플랫폼의 15~20% 수수료는 이제 그만. 톨파구에서는 100% 당신의 것입니다.'
   },
