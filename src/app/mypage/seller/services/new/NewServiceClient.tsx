@@ -44,7 +44,8 @@ export default function NewServiceClient({ sellerId }: Props) {
     description: '',
     price: '',
     deliveryDays: '',
-    revisionCount: '0'
+    revisionCount: '0',
+    taxInvoiceAvailable: false
   })
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -286,6 +287,7 @@ export default function NewServiceClient({ sellerId }: Props) {
           delivery_days: parseInt(formData.deliveryDays) || 7,
           revision_count: formData.revisionCount === 'unlimited' ? 999 : parseInt(formData.revisionCount) || 0,
           thumbnail_url: publicUrl,
+          tax_invoice_available: formData.taxInvoiceAvailable,
           status: 'pending'
         })
         .select()
@@ -649,6 +651,19 @@ export default function NewServiceClient({ sellerId }: Props) {
                   <input type="checkbox" className="w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]" />
                   <span className="text-sm text-gray-700">빠른 작업 가능 (24시간 이내 시작)</span>
                 </label>
+              </div>
+
+              <div>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.taxInvoiceAvailable}
+                    onChange={(e) => setFormData({ ...formData, taxInvoiceAvailable: e.target.checked })}
+                    className="w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+                  />
+                  <span className="text-sm text-gray-700">세금계산서 발행 가능</span>
+                </label>
+                <p className="text-xs text-gray-500 mt-1 ml-6">체크 시 구매자에게 세금계산서 발행이 가능함을 표시합니다.</p>
               </div>
 
               <div>
