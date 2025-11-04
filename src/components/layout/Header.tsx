@@ -111,7 +111,7 @@ export default function Header() {
                   className="w-10 h-10 bg-white rounded-lg border border-gray-900 flex items-center justify-center text-gray-900 hover:bg-gray-100 transition-colors"
                   aria-label="찜한 서비스"
                 >
-                  <i className="fa-solid fa-heart text-lg"></i>
+                  <i className="fas fa-heart text-lg"></i>
                 </Link>
 
                 {/* 채팅 */}
@@ -119,7 +119,7 @@ export default function Header() {
                   className="w-10 h-10 bg-white rounded-lg border border-gray-900 flex items-center justify-center text-gray-900 hover:bg-gray-100 transition-colors"
                   aria-label="채팅"
                 >
-                  <i className="fa-solid fa-comments text-lg"></i>
+                  <i className="fas fa-comments text-lg"></i>
                 </button>
 
                 {/* 알림 */}
@@ -127,7 +127,7 @@ export default function Header() {
                   className="w-10 h-10 bg-white rounded-lg border border-gray-900 flex items-center justify-center text-gray-900 hover:bg-gray-100 transition-colors"
                   aria-label="알림"
                 >
-                  <i className="fa-solid fa-bell text-lg"></i>
+                  <i className="fas fa-bell text-lg"></i>
                 </button>
 
                 {/* 사용자 정보 드롭다운 */}
