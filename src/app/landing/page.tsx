@@ -330,36 +330,45 @@ export default function LandingPage() {
         <div className="container-1200 space-y-12 md:space-y-24 px-4">
           {/* Life Services Section */}
           <div className="space-y-6 md:space-y-8">
-            <div>
-              <div className="mb-3 md:mb-4">
-                <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Life Services</span>
-                <h2 className="text-lg md:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                  당신의 일상을 더 편리하고 풍요롭게
-                </h2>
+            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
+              <div className="hidden md:block">
+                <img
+                  src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=800&auto=format&fit=crop"
+                  alt="Life Services"
+                  className="rounded-2xl shadow-2xl object-cover w-full h-[320px] lg:h-[400px]"
+                />
               </div>
-
-              {/* 내 주변 전문가 찾기 강조 박스 */}
-              <div className="mt-3 md:mt-4 p-3 md:p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
-                <div className="flex items-center gap-2 md:gap-3 mb-1.5 md:mb-2">
-                  <svg className="w-5 h-5 md:w-6 md:h-6 text-[#0f3460] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                  </svg>
-                  <h3 className="text-base md:text-lg font-bold text-gray-900">내 주변 가까운 전문가 찾기</h3>
+              <div>
+                <div className="mb-3 md:mb-4">
+                  <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Life Services</span>
+                  <h2 className="text-lg md:text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                    당신의 일상을 더 편리하고 풍요롭게
+                  </h2>
                 </div>
-                <p className="text-xs md:text-sm text-gray-700 leading-relaxed">위치 기반으로 가까운 생활 서비스 전문가를 찾아보세요. 빠르고 편리한 서비스를 경험하실 수 있습니다.</p>
-              </div>
 
-              <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
-                바쁜 일상 속 도움이 필요한 모든 순간, 생활 서비스 전문가가 해결해 드립니다. 청소, 심부름, 반려동물 돌봄, 개인 레슨 등 삶의 질을 높이는 다양한 서비스를 만나보세요.
-              </p>
-              <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
-                <FeatureItem>전문적인 홈 클리닝 및 정리 정돈</FeatureItem>
-                <FeatureItem>맞춤형 취미 및 외국어 레슨</FeatureItem>
-                <FeatureItem>신뢰할 수 있는 펫시터 및 산책 서비스</FeatureItem>
-              </ul>
-              <Link href="/categories/life" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
-                생활 서비스 찾아보기
-              </Link>
+                {/* 내 주변 전문가 찾기 강조 박스 */}
+                <div className="mt-3 md:mt-4 p-3 md:p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
+                  <div className="flex items-center gap-2 md:gap-3 mb-1.5 md:mb-2">
+                    <svg className="w-5 h-5 md:w-6 md:h-6 text-[#0f3460] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                    </svg>
+                    <h3 className="text-base md:text-lg font-bold text-gray-900">내 주변 가까운 전문가 찾기</h3>
+                  </div>
+                  <p className="text-xs md:text-sm text-gray-700 leading-relaxed">위치 기반으로 가까운 생활 서비스 전문가를 찾아보세요. 빠르고 편리한 서비스를 경험하실 수 있습니다.</p>
+                </div>
+
+                <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
+                  바쁜 일상 속 도움이 필요한 모든 순간, 생활 서비스 전문가가 해결해 드립니다. 청소, 심부름, 반려동물 돌봄, 개인 레슨 등 삶의 질을 높이는 다양한 서비스를 만나보세요.
+                </p>
+                <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
+                  <FeatureItem>전문적인 홈 클리닝 및 정리 정돈</FeatureItem>
+                  <FeatureItem>맞춤형 취미 및 외국어 레슨</FeatureItem>
+                  <FeatureItem>신뢰할 수 있는 펫시터 및 산책 서비스</FeatureItem>
+                </ul>
+                <Link href="/categories/life" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
+                  생활 서비스 찾아보기
+                </Link>
+              </div>
             </div>
 
             {/* Life Services 전문가 카드 - 위치 정보 포함 */}
@@ -380,36 +389,45 @@ export default function LandingPage() {
 
           {/* Errand Services Section - 실시간 위치 추적 강조 */}
           <div className="space-y-6 md:space-y-8">
-            <div>
-              <div className="mb-3 md:mb-4">
-                <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Errand Services</span>
-                <h2 className="text-lg md:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                  바쁜 당신을 위한, 믿을 수 있는 심부름 서비스
-                </h2>
-              </div>
-
-              {/* 실시간 위치 추적 강조 박스 */}
-              <div className="mt-3 md:mt-4 p-3 md:p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
-                <div className="flex items-center gap-2 md:gap-3 mb-1.5 md:mb-2">
-                  <svg className="w-5 h-5 md:w-6 md:h-6 text-[#0f3460] animate-pulse flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                  </svg>
-                  <h3 className="text-base md:text-lg font-bold text-gray-900">전문가 위치 실시간 추적</h3>
+            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
+              <div className="order-2 md:order-1">
+                <div className="mb-3 md:mb-4">
+                  <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Errand Services</span>
+                  <h2 className="text-lg md:text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                    바쁜 당신을 위한, 믿을 수 있는 심부름 서비스
+                  </h2>
                 </div>
-                <p className="text-xs md:text-sm text-gray-700 leading-relaxed">심부름 전문가의 현재 위치를 실시간으로 확인하세요. GPS 추적으로 안심하고 서비스를 이용할 수 있습니다.</p>
-              </div>
 
-              <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
-                퀵 배송, 서류 전달, 대리 운전, 줄서기 대행까지. 시간이 부족한 당신을 위해 신뢰할 수 있는 심부름 전문가가 대신 처리해 드립니다.
-              </p>
-              <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
-                <FeatureItem>GPS 기반 실시간 위치 추적</FeatureItem>
-                <FeatureItem>빠른 퀵 배송 및 서류 전달</FeatureItem>
-                <FeatureItem>안전한 대리 운전 서비스</FeatureItem>
-              </ul>
-              <Link href="/categories/errand" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
-                심부름 전문가 찾기
-              </Link>
+                {/* 실시간 위치 추적 강조 박스 */}
+                <div className="mt-3 md:mt-4 p-3 md:p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
+                  <div className="flex items-center gap-2 md:gap-3 mb-1.5 md:mb-2">
+                    <svg className="w-5 h-5 md:w-6 md:h-6 text-[#0f3460] animate-pulse flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                    </svg>
+                    <h3 className="text-base md:text-lg font-bold text-gray-900">전문가 위치 실시간 추적</h3>
+                  </div>
+                  <p className="text-xs md:text-sm text-gray-700 leading-relaxed">심부름 전문가의 현재 위치를 실시간으로 확인하세요. GPS 추적으로 안심하고 서비스를 이용할 수 있습니다.</p>
+                </div>
+
+                <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
+                  퀵 배송, 서류 전달, 대리 운전, 줄서기 대행까지. 시간이 부족한 당신을 위해 신뢰할 수 있는 심부름 전문가가 대신 처리해 드립니다.
+                </p>
+                <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
+                  <FeatureItem>GPS 기반 실시간 위치 추적</FeatureItem>
+                  <FeatureItem>빠른 퀵 배송 및 서류 전달</FeatureItem>
+                  <FeatureItem>안전한 대리 운전 서비스</FeatureItem>
+                </ul>
+                <Link href="/categories/errand" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
+                  심부름 전문가 찾기
+                </Link>
+              </div>
+              <div className="order-1 md:order-2 hidden md:block">
+                <img
+                  src="https://images.unsplash.com/photo-1586864387634-22c1dd092900?q=80&w=800&auto=format&fit=crop"
+                  alt="Errand Services"
+                  className="rounded-2xl shadow-2xl object-cover w-full h-[320px] lg:h-[400px]"
+                />
+              </div>
             </div>
 
             {/* Errand Services 전문가 카드 - 위치 정보 포함 */}
