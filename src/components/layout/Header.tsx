@@ -73,7 +73,7 @@ export default function Header() {
           </div>
 
           {/* PC 버전: 네비게이션 메뉴 */}
-          <nav className="hidden lg:flex items-center space-x-2">
+          <nav className="hidden lg:flex items-center space-x-4">
             {user ? (
               // 로그인 상태
               <>
