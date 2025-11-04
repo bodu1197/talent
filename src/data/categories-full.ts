@@ -20,7 +20,7 @@ export const FULL_CATEGORIES: CategoryItem[] = [
     name: '생활 서비스',
     slug: 'life-service',
     icon: 'home',
-    service_count: 35,
+    service_count: 16,
     popularity_score: 88,
     description: '일상 생활 편의 서비스',
     children: [
@@ -33,8 +33,6 @@ export const FULL_CATEGORIES: CategoryItem[] = [
           { id: 'deep-cleaning', name: '입주/이사 청소', slug: 'deep-cleaning', parent_id: 'professional-cleaning', is_popular: true },
           { id: 'office-cleaning', name: '사무실/상가 청소', slug: 'office-cleaning', parent_id: 'professional-cleaning' },
           { id: 'aircon-cleaning', name: '에어컨 세척', slug: 'aircon-cleaning', parent_id: 'professional-cleaning', is_popular: true },
-          { id: 'window-cleaning', name: '유리창 청소 (고층/외벽)', slug: 'window-cleaning', parent_id: 'professional-cleaning' },
-          { id: 'pest-control', name: '해충방제/소독', slug: 'pest-control', parent_id: 'professional-cleaning' },
         ]
       },
       {
@@ -50,16 +48,16 @@ export const FULL_CATEGORIES: CategoryItem[] = [
         ]
       },
       {
-        id: 'repair-service',
-        name: '전문 수리/시설',
-        slug: 'repair-service',
+        id: 'home-repair',
+        name: '집수리',
+        slug: 'home-repair',
         parent_id: 'life-service',
         children: [
-          { id: 'home-repair', name: '집수리 (도배/장판/타일)', slug: 'home-repair', parent_id: 'repair-service' },
-          { id: 'electrical-work', name: '전기/조명 공사', slug: 'electrical-work', parent_id: 'repair-service' },
-          { id: 'plumbing', name: '수도/배관 수리', slug: 'plumbing', parent_id: 'repair-service' },
-          { id: 'appliance-repair', name: '가전 수리', slug: 'appliance-repair', parent_id: 'repair-service' },
-          { id: 'locksmith', name: '자물쇠/도어락', slug: 'locksmith', parent_id: 'repair-service' },
+          { id: 'wallpaper-flooring', name: '도배/장판/타일', slug: 'wallpaper-flooring', parent_id: 'home-repair', is_popular: true },
+          { id: 'plumbing', name: '수도/배관 수리', slug: 'plumbing', parent_id: 'home-repair' },
+          { id: 'screen-repair', name: '방충망 교체/수리', slug: 'screen-repair', parent_id: 'home-repair' },
+          { id: 'kitchen-bathroom', name: '싱크대/욕실 수리', slug: 'kitchen-bathroom', parent_id: 'home-repair' },
+          { id: 'interior-remodeling', name: '인테리어/리모델링', slug: 'interior-remodeling', parent_id: 'home-repair' },
         ]
       },
       {
@@ -71,33 +69,7 @@ export const FULL_CATEGORIES: CategoryItem[] = [
           { id: 'moving-full', name: '포장이사', slug: 'moving-full', parent_id: 'moving-service', is_popular: true },
           { id: 'moving-half', name: '반포장이사', slug: 'moving-half', parent_id: 'moving-service', is_popular: true },
           { id: 'small-moving', name: '소형/원룸 이사', slug: 'small-moving', parent_id: 'moving-service' },
-          { id: 'office-moving', name: '사무실 이사', slug: 'office-moving', parent_id: 'moving-service' },
           { id: 'disposal-service', name: '폐기물/대형쓰레기 처리', slug: 'disposal-service', parent_id: 'moving-service' },
-        ]
-      },
-      {
-        id: 'vehicle-service',
-        name: '차량 관리',
-        slug: 'vehicle-service',
-        parent_id: 'life-service',
-        children: [
-          { id: 'designated-driver', name: '대리운전', slug: 'designated-driver', parent_id: 'vehicle-service', is_popular: true },
-          { id: 'car-wash-detail', name: '세차/광택/코팅', slug: 'car-wash-detail', parent_id: 'vehicle-service' },
-          { id: 'car-maintenance', name: '차량 정비 예약 대행', slug: 'car-maintenance', parent_id: 'vehicle-service' },
-          { id: 'car-transfer', name: '자동차 탁송', slug: 'car-transfer', parent_id: 'vehicle-service' },
-        ]
-      },
-      {
-        id: 'life-agency',
-        name: '생활 대행',
-        slug: 'life-agency',
-        parent_id: 'life-service',
-        children: [
-          { id: 'queue-waiting', name: '줄서기 대행', slug: 'queue-waiting', parent_id: 'life-agency' },
-          { id: 'reservation-agency', name: '예약 대행 (병원/식당)', slug: 'reservation-agency', parent_id: 'life-agency' },
-          { id: 'government-office', name: '관공서 업무 대행', slug: 'government-office', parent_id: 'life-agency' },
-          { id: 'document-service', name: '서류 작성/발급 대행', slug: 'document-service', parent_id: 'life-agency' },
-          { id: 'hospital-companion', name: '병원 동행/통역', slug: 'hospital-companion', parent_id: 'life-agency' },
         ]
       }
     ]
