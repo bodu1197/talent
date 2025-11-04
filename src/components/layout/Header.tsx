@@ -80,7 +80,7 @@ export default function Header() {
                 {/* 주문 관리 드롭다운 */}
                 <div className="relative group">
                   <button
-                    className="px-3 py-2 flex items-center justify-center text-white hover:text-gray-300 transition-colors"
+                    className="px-3 py-2 bg-white rounded-lg border border-gray-900 flex items-center justify-center text-gray-900 hover:bg-gray-100 transition-colors"
                     aria-label="주문 관리"
                   >
                     <span className="text-sm font-medium">주문관리</span>
@@ -108,7 +108,7 @@ export default function Header() {
                 {/* 찜한 서비스 */}
                 <Link
                   href="/mypage/buyer/favorites"
-                  className="w-10 h-10 flex items-center justify-center text-white hover:text-gray-300 transition-colors"
+                  className="w-10 h-10 bg-white rounded-lg border border-gray-900 flex items-center justify-center text-gray-900 hover:bg-gray-100 transition-colors"
                   aria-label="찜한 서비스"
                 >
                   <i className="fa-solid fa-heart text-lg"></i>
@@ -116,7 +116,7 @@ export default function Header() {
 
                 {/* 채팅 */}
                 <button
-                  className="w-10 h-10 flex items-center justify-center text-white hover:text-gray-300 transition-colors"
+                  className="w-10 h-10 bg-white rounded-lg border border-gray-900 flex items-center justify-center text-gray-900 hover:bg-gray-100 transition-colors"
                   aria-label="채팅"
                 >
                   <i className="fa-solid fa-comments text-lg"></i>
@@ -124,7 +124,7 @@ export default function Header() {
 
                 {/* 알림 */}
                 <button
-                  className="w-10 h-10 flex items-center justify-center text-white hover:text-gray-300 transition-colors"
+                  className="w-10 h-10 bg-white rounded-lg border border-gray-900 flex items-center justify-center text-gray-900 hover:bg-gray-100 transition-colors"
                   aria-label="알림"
                 >
                   <i className="fa-solid fa-bell text-lg"></i>
