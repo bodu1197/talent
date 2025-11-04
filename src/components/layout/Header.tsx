@@ -105,6 +105,15 @@ export default function Header() {
                   </div>
                 </div>
 
+                {/* 찜한 서비스 */}
+                <Link
+                  href="/mypage/buyer/favorites"
+                  className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-red-500 transition-colors"
+                  aria-label="찜한 서비스"
+                >
+                  <i className="fas fa-heart text-lg"></i>
+                </Link>
+
                 {/* 채팅 */}
                 <button
                   className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-brand-primary transition-colors"
