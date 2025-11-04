@@ -108,26 +108,26 @@ export default function Header() {
                 {/* 찜한 서비스 */}
                 <Link
                   href="/mypage/buyer/favorites"
-                  className="text-gray-700 hover:text-red-500 transition-colors"
+                  className="text-gray-900 hover:text-red-500 transition-colors"
                   aria-label="찜한 서비스"
                 >
-                  <i className="fas fa-heart text-xl"></i>
+                  <i className="far fa-heart text-xl"></i>
                 </Link>
 
                 {/* 채팅 */}
                 <button
-                  className="text-gray-700 hover:text-brand-primary transition-colors"
+                  className="text-gray-900 hover:text-brand-primary transition-colors"
                   aria-label="채팅"
                 >
-                  <i className="fas fa-comments text-xl"></i>
+                  <i className="far fa-comments text-xl"></i>
                 </button>
 
                 {/* 알림 */}
                 <button
-                  className="text-gray-700 hover:text-brand-primary transition-colors"
+                  className="text-gray-900 hover:text-brand-primary transition-colors"
                   aria-label="알림"
                 >
-                  <i className="fas fa-bell text-xl"></i>
+                  <i className="far fa-bell text-xl"></i>
                 </button>
 
                 {/* 사용자 정보 드롭다운 */}
