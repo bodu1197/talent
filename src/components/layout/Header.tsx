@@ -80,7 +80,7 @@ export default function Header() {
                 {/* 주문 관리 드롭다운 */}
                 <div className="relative group">
                   <button
-                    className="px-3 py-2 bg-white rounded-lg border border-gray-900 flex items-center justify-center text-gray-900 hover:bg-gray-100 transition-colors"
+                    className="px-3 py-2 text-gray-700 hover:text-brand-primary transition-colors"
                     aria-label="주문 관리"
                   >
                     <span className="text-sm font-medium">주문관리</span>
@@ -108,26 +108,26 @@ export default function Header() {
                 {/* 찜한 서비스 */}
                 <Link
                   href="/mypage/buyer/favorites"
-                  className="w-10 h-10 bg-white rounded-lg border border-gray-900 flex items-center justify-center text-gray-900 hover:bg-gray-100 transition-colors"
+                  className="text-gray-700 hover:text-red-500 transition-colors"
                   aria-label="찜한 서비스"
                 >
-                  <i className="fas fa-heart text-lg"></i>
+                  <i className="fas fa-heart text-xl"></i>
                 </Link>
 
                 {/* 채팅 */}
                 <button
-                  className="w-10 h-10 bg-white rounded-lg border border-gray-900 flex items-center justify-center text-gray-900 hover:bg-gray-100 transition-colors"
+                  className="text-gray-700 hover:text-brand-primary transition-colors"
                   aria-label="채팅"
                 >
-                  <i className="fas fa-comments text-lg"></i>
+                  <i className="fas fa-comments text-xl"></i>
                 </button>
 
                 {/* 알림 */}
                 <button
-                  className="w-10 h-10 bg-white rounded-lg border border-gray-900 flex items-center justify-center text-gray-900 hover:bg-gray-100 transition-colors"
+                  className="text-gray-700 hover:text-brand-primary transition-colors"
                   aria-label="알림"
                 >
-                  <i className="fas fa-bell text-lg"></i>
+                  <i className="fas fa-bell text-xl"></i>
                 </button>
 
                 {/* 사용자 정보 드롭다운 */}
