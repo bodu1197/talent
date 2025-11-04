@@ -4,8 +4,30 @@ import { createClient } from '@/lib/supabase/server'
 export default async function RecommendedServices() {
   const supabase = await createClient()
 
-  // AI 카테고리 제외하고 추천 서비스 조회 (한 번의 쿼리로 최적화)
-  const { data: recommendedData } = await supabase
+  // 1. AI 카테고리 찾기
+  const { data: aiCategories } = await supabase
+    .from('categories')
+    .select('id')
+    .eq('is_ai', true)
+
+  let aiServiceIds: string[] = []
+
+  if (aiCategories && aiCategories.length > 0) {
+    const aiCategoryIds = aiCategories.map(cat => cat.id)
+
+    // 2. AI 카테고리의 서비스 ID 조회
+    const { data: serviceCategoryLinks } = await supabase
+      .from('service_categories')
+      .select('service_id')
+      .in('category_id', aiCategoryIds)
+
+    if (serviceCategoryLinks && serviceCategoryLinks.length > 0) {
+      aiServiceIds = serviceCategoryLinks.map(sc => sc.service_id)
+    }
+  }
+
+  // 3. 추천 서비스 조회 (AI 카테고리 제외)
+  let recommendedQuery = supabase
     .from('services')
     .select(`
       *,
@@ -17,6 +39,13 @@ export default async function RecommendedServices() {
       )
     `)
     .eq('status', 'active')
+
+  // AI 서비스 제외
+  if (aiServiceIds.length > 0) {
+    recommendedQuery = recommendedQuery.not('id', 'in', `(${aiServiceIds.join(',')})`)
+  }
+
+  const { data: recommendedData } = await recommendedQuery
     .order('created_at', { ascending: false })
     .limit(15)
 
