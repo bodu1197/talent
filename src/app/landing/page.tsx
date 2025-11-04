@@ -537,6 +537,68 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* 서비스 프로세스 섹션 - PC만 표시 */}
+      <section className="hidden md:block py-8 bg-gray-100">
+        <div className="container-1200">
+          <div className="text-center mb-12">
+            <h2 className="text-xl font-bold mb-4">간단한 거래 프로세스</h2>
+            <p className="text-gray-600">
+              단 4단계로 완성되는 안전한 거래
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="w-20 h-20 bg-[#0f3460] rounded-full flex items-center justify-center mx-auto mb-4 text-white shadow-lg">
+                <span className="text-2xl font-bold">1</span>
+              </div>
+              <h3 className="font-bold mb-2">서비스 검색</h3>
+              <p className="text-sm text-gray-600">원하는 서비스를 검색하고 전문가를 찾아보세요</p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-20 h-20 bg-[#0f3460] rounded-full flex items-center justify-center mx-auto mb-4 text-white shadow-lg">
+                <span className="text-2xl font-bold">2</span>
+              </div>
+              <h3 className="font-bold mb-2">상담 및 견적</h3>
+              <p className="text-sm text-gray-600">전문가와 상담하고 견적을 받아보세요</p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-20 h-20 bg-[#0f3460] rounded-full flex items-center justify-center mx-auto mb-4 text-white shadow-lg">
+                <span className="text-2xl font-bold">3</span>
+              </div>
+              <h3 className="font-bold mb-2">안전 결제</h3>
+              <p className="text-sm text-gray-600">안전한 에스크로 시스템으로 결제하세요</p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-20 h-20 bg-[#0f3460] rounded-full flex items-center justify-center mx-auto mb-4 text-white shadow-lg">
+                <span className="text-2xl font-bold">4</span>
+              </div>
+              <h3 className="font-bold mb-2">작업 완료</h3>
+              <p className="text-sm text-gray-600">만족스러운 결과물을 받고 리뷰를 남겨주세요</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 실시간 리뷰 섹션 - PC만 표시 */}
+      <section className="hidden md:block py-8 bg-gray-50">
+        <div className="container-1200">
+          <div className="text-center mb-8">
+            <h2 className="text-xl font-bold mb-4">실시간 구매 후기</h2>
+            <p className="text-gray-600">
+              실제 구매자들의 생생한 후기
+            </p>
+          </div>
+
+          <div className="text-center py-8 text-gray-500">
+            아직 등록된 후기가 없습니다
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
