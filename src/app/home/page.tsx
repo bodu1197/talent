@@ -95,31 +95,50 @@ async function AIServicesSection() {
   const { createClient } = await import('@/lib/supabase/server')
   const supabase = await createClient()
 
-  // AI 카테고리의 서비스 조회를 한 번의 쿼리로 최적화
-  const { data: aiServices } = await supabase
-    .from('services')
-    .select(`
-      *,
-      seller:sellers(
-        id,
-        business_name,
-        display_name,
-        is_verified
-      ),
-      service_categories!inner(
-        category:categories!inner(
-          is_ai_category
-        )
-      )
-    `)
-    .eq('status', 'active')
-    .eq('service_categories.category.is_ai_category', true)
-    .order('created_at', { ascending: false })
+  // 1. AI 카테고리 찾기
+  const { data: aiCategories } = await supabase
+    .from('categories')
+    .select('id')
+    .eq('is_ai_category', true)
 
-  const services = aiServices?.map(service => ({
-    ...service,
-    order_count: service.orders_count || 0
-  })) || []
+  let services = []
+
+  if (aiCategories && aiCategories.length > 0) {
+    const aiCategoryIds = aiCategories.map(cat => cat.id)
+
+    // 2. AI 카테고리의 서비스 ID 조회
+    const { data: serviceCategoryLinks } = await supabase
+      .from('service_categories')
+      .select('service_id')
+      .in('category_id', aiCategoryIds)
+
+    if (serviceCategoryLinks && serviceCategoryLinks.length > 0) {
+      const aiServiceIds = serviceCategoryLinks.map(sc => sc.service_id)
+
+      // 3. AI 서비스 조회
+      const { data: aiServices } = await supabase
+        .from('services')
+        .select(`
+          *,
+          seller:sellers(
+            id,
+            business_name,
+            display_name,
+            is_verified
+          )
+        `)
+        .in('id', aiServiceIds)
+        .eq('status', 'active')
+        .order('created_at', { ascending: false })
+
+      if (aiServices) {
+        services = aiServices.map(service => ({
+          ...service,
+          order_count: service.orders_count || 0
+        }))
+      }
+    }
+  }
 
   return <AITalentShowcase services={services} />
 }
