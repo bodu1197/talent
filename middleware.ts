@@ -61,7 +61,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // 보호된 경로 설정 - mypage는 모두 인증 필요
-  const protectedPaths = ['/mypage', '/dashboard', '/profile/edit', '/messages', '/orders']
+  const protectedPaths = ['/mypage', '/home', '/profile/edit', '/messages', '/orders']
   const isProtectedPath = protectedPaths.some(path =>
     request.nextUrl.pathname.startsWith(path)
   )

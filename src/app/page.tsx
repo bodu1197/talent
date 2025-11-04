@@ -9,7 +9,7 @@ export default async function HomePage() {
 
   // 로그인 여부에 따라 리다이렉트
   if (user) {
-    redirect('/dashboard')
+    redirect('/home')
   } else {
     redirect('/landing')
   }
