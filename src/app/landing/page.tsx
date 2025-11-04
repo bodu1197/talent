@@ -120,24 +120,33 @@ export default function LandingPage() {
         <div className="container-1200 space-y-12 md:space-y-24 px-4">
           {/* AI Services Section */}
           <div className="space-y-6 md:space-y-8">
-            <div>
-              <div className="mb-3 md:mb-4">
-                <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">AI Services</span>
-                <h2 className="text-lg md:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                  미래를 여는 기술, AI 전문가와 함께
-                </h2>
+            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
+              <div className="order-2 md:order-1">
+                <div className="mb-3 md:mb-4">
+                  <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">AI Services</span>
+                  <h2 className="text-lg md:text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                    미래를 여는 기술, AI 전문가와 함께
+                  </h2>
+                </div>
+                <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
+                  최신 인공지능 기술을 비즈니스에 접목하여 혁신을 가속화하세요. 데이터 분석부터 머신러닝 모델 개발, 자동화 챗봇 구축까지 최고의 AI 전문가들이 당신의 성공을 돕습니다.
+                </p>
+                <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
+                  <FeatureItem>AI 기반 데이터 분석 및 예측 모델링</FeatureItem>
+                  <FeatureItem>자연어 처리(NLP) 및 챗봇 개발</FeatureItem>
+                  <FeatureItem>컴퓨터 비전 및 이미지 인식 솔루션</FeatureItem>
+                </ul>
+                <Link href="/categories/ai-services" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
+                  AI 서비스 둘러보기
+                </Link>
               </div>
-              <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
-                최신 인공지능 기술을 비즈니스에 접목하여 혁신을 가속화하세요. 데이터 분석부터 머신러닝 모델 개발, 자동화 챗봇 구축까지 최고의 AI 전문가들이 당신의 성공을 돕습니다.
-              </p>
-              <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
-                <FeatureItem>AI 기반 데이터 분석 및 예측 모델링</FeatureItem>
-                <FeatureItem>자연어 처리(NLP) 및 챗봇 개발</FeatureItem>
-                <FeatureItem>컴퓨터 비전 및 이미지 인식 솔루션</FeatureItem>
-              </ul>
-              <Link href="/categories/ai-services" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
-                AI 서비스 둘러보기
-              </Link>
+              <div className="order-1 md:order-2 hidden md:block">
+                <img
+                  src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=800&auto=format&fit=crop"
+                  alt="AI Technology"
+                  className="rounded-2xl shadow-2xl object-cover w-full h-[400px] lg:h-[500px]"
+                />
+              </div>
             </div>
             {/* AI 전문가 카드 */}
             <div className="mt-6 md:mt-8">
@@ -154,24 +163,33 @@ export default function LandingPage() {
 
           {/* IT/Programming Section */}
           <div className="space-y-6 md:space-y-8">
-            <div>
-              <div className="mb-3 md:mb-4">
-                <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">IT & Programming</span>
-                <h2 className="text-lg md:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                  아이디어를 현실로, 최고의 개발자 군단
-                </h2>
+            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
+              <div className="order-2 md:order-1">
+                <div className="mb-3 md:mb-4">
+                  <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">IT & Programming</span>
+                  <h2 className="text-lg md:text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                    아이디어를 현실로, 최고의 개발자 군단
+                  </h2>
+                </div>
+                <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
+                  웹사이트, 모바일 앱, 맞춤형 소프트웨어 개발까지. 검증된 실력의 IT 전문가들이 당신의 아이디어를 완벽한 결과물로 만들어 드립니다.
+                </p>
+                <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
+                  <FeatureItem>최신 기술 스택을 활용한 웹/앱 개발</FeatureItem>
+                  <FeatureItem>안정적인 서버 구축 및 유지보수</FeatureItem>
+                  <FeatureItem>비즈니스 자동화를 위한 프로그램 제작</FeatureItem>
+                </ul>
+                <Link href="/categories/it-programming" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
+                  개발자 찾기
+                </Link>
               </div>
-              <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
-                웹사이트, 모바일 앱, 맞춤형 소프트웨어 개발까지. 검증된 실력의 IT 전문가들이 당신의 아이디어를 완벽한 결과물로 만들어 드립니다.
-              </p>
-              <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
-                <FeatureItem>최신 기술 스택을 활용한 웹/앱 개발</FeatureItem>
-                <FeatureItem>안정적인 서버 구축 및 유지보수</FeatureItem>
-                <FeatureItem>비즈니스 자동화를 위한 프로그램 제작</FeatureItem>
-              </ul>
-              <Link href="/categories/it-programming" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
-                개발자 찾기
-              </Link>
+              <div className="order-1 md:order-2 hidden md:block">
+                <img
+                  src="https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=800&auto=format&fit=crop"
+                  alt="IT and Programming"
+                  className="rounded-2xl shadow-2xl object-cover w-full h-[400px] lg:h-[500px]"
+                />
+              </div>
             </div>
             {/* IT 전문가 카드 */}
             <div className="mt-6 md:mt-8">
@@ -188,24 +206,33 @@ export default function LandingPage() {
 
           {/* Design Section */}
           <div className="space-y-6 md:space-y-8">
-            <div>
-              <div className="mb-3 md:mb-4">
-                <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Design</span>
-                <h2 className="text-lg md:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                  브랜드를 빛내는, 감각적인 디자인
-                </h2>
+            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
+              <div className="hidden md:block">
+                <img
+                  src="https://images.unsplash.com/photo-1522199670076-2852f80289c3?q=80&w=800&auto=format&fit=crop"
+                  alt="Creative Design"
+                  className="rounded-2xl shadow-2xl object-cover w-full h-[400px] lg:h-[500px]"
+                />
               </div>
-              <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
-                로고, 웹사이트, 마케팅 자료까지. 당신의 비즈니스에 특별한 가치를 더할 디자인 전문가를 만나보세요. 시선을 사로잡는 디자인으로 고객의 마음을 움직입니다.
-              </p>
-              <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
-                <FeatureItem>로고 및 브랜딩 디자인</FeatureItem>
-                <FeatureItem>UI/UX 웹 및 모바일 디자인</FeatureItem>
-                <FeatureItem>상세페이지 및 광고 콘텐츠 제작</FeatureItem>
-              </ul>
-              <Link href="/categories/design" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
-                디자이너 포트폴리오 보기
-              </Link>
+              <div>
+                <div className="mb-3 md:mb-4">
+                  <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Design</span>
+                  <h2 className="text-lg md:text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                    브랜드를 빛내는, 감각적인 디자인
+                  </h2>
+                </div>
+                <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
+                  로고, 웹사이트, 마케팅 자료까지. 당신의 비즈니스에 특별한 가치를 더할 디자인 전문가를 만나보세요. 시선을 사로잡는 디자인으로 고객의 마음을 움직입니다.
+                </p>
+                <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
+                  <FeatureItem>로고 및 브랜딩 디자인</FeatureItem>
+                  <FeatureItem>UI/UX 웹 및 모바일 디자인</FeatureItem>
+                  <FeatureItem>상세페이지 및 광고 콘텐츠 제작</FeatureItem>
+                </ul>
+                <Link href="/categories/design" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
+                  디자이너 포트폴리오 보기
+                </Link>
+              </div>
             </div>
             {/* Design 전문가 카드 */}
             <div className="mt-6 md:mt-8">
@@ -222,24 +249,33 @@ export default function LandingPage() {
 
           {/* Marketing Section */}
           <div className="space-y-6 md:space-y-8">
-            <div>
-              <div className="mb-3 md:mb-4">
-                <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Marketing</span>
-                <h2 className="text-lg md:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                  성공적인 비즈니스를 위한, 전략적 마케팅
-                </h2>
+            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
+              <div className="order-2 md:order-1">
+                <div className="mb-3 md:mb-4">
+                  <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Marketing</span>
+                  <h2 className="text-lg md:text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                    성공적인 비즈니스를 위한, 전략적 마케팅
+                  </h2>
+                </div>
+                <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
+                  디지털 마케팅, SEO, SNS 관리 등 각 분야 최고의 마케팅 전문가들이 매출 증대를 위한 맞춤형 전략을 제공합니다. 이제 비즈니스 성장에만 집중하세요.
+                </p>
+                <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
+                  <FeatureItem>검색 엔진 최적화(SEO) 및 광고</FeatureItem>
+                  <FeatureItem>소셜 미디어 채널 관리 및 콘텐츠 제작</FeatureItem>
+                  <FeatureItem>블로그 및 인플루언서 마케팅</FeatureItem>
+                </ul>
+                <Link href="/categories/marketing" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
+                  마케팅 전문가와 상담하기
+                </Link>
               </div>
-              <p className="mt-3 md:mt-4 text-sm md:text-lg text-gray-600 leading-relaxed">
-                디지털 마케팅, SEO, SNS 관리 등 각 분야 최고의 마케팅 전문가들이 매출 증대를 위한 맞춤형 전략을 제공합니다. 이제 비즈니스 성장에만 집중하세요.
-              </p>
-              <ul className="mt-4 md:mt-6 space-y-1 md:space-y-2 text-sm md:text-lg">
-                <FeatureItem>검색 엔진 최적화(SEO) 및 광고</FeatureItem>
-                <FeatureItem>소셜 미디어 채널 관리 및 콘텐츠 제작</FeatureItem>
-                <FeatureItem>블로그 및 인플루언서 마케팅</FeatureItem>
-              </ul>
-              <Link href="/categories/marketing" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
-                마케팅 전문가와 상담하기
-              </Link>
+              <div className="order-1 md:order-2 hidden md:block">
+                <img
+                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop"
+                  alt="Digital Marketing"
+                  className="rounded-2xl shadow-2xl object-cover w-full h-[400px] lg:h-[500px]"
+                />
+              </div>
             </div>
             {/* Marketing 전문가 카드 */}
             <div className="mt-6 md:mt-8">
