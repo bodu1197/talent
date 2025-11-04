@@ -73,10 +73,47 @@ export default function Header() {
           </div>
 
           {/* PC 버전: 네비게이션 메뉴 */}
-          <nav className="hidden lg:flex items-center space-x-4">
+          <nav className="hidden lg:flex items-center space-x-2">
             {user ? (
               // 로그인 상태
               <>
+                {/* 주문 관리 드롭다운 */}
+                <div className="relative group">
+                  <button
+                    className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-brand-primary transition-colors"
+                    aria-label="주문 관리"
+                  >
+                    <i className="fas fa-clipboard-list text-lg"></i>
+                  </button>
+
+                  {/* 드롭다운 메뉴 */}
+                  <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all">
+                    <Link
+                      href="/mypage/buyer/orders"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg"
+                    >
+                      <i className="fas fa-shopping-cart mr-2"></i>
+                      구매 관리
+                    </Link>
+                    <Link
+                      href="/mypage/seller/orders"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-b-lg"
+                    >
+                      <i className="fas fa-box mr-2"></i>
+                      판매 관리
+                    </Link>
+                  </div>
+                </div>
+
+                {/* 채팅 */}
+                <button
+                  className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-brand-primary transition-colors"
+                  aria-label="채팅"
+                >
+                  <i className="fas fa-comments text-lg"></i>
+                </button>
+
+                {/* 알림 */}
                 <button
                   className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-brand-primary transition-colors"
                   aria-label="알림"
