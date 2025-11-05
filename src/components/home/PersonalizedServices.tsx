@@ -3,6 +3,10 @@ import ServiceCard from '@/components/services/ServiceCard'
 import PlaceholderServiceCard from '@/components/services/PlaceholderServiceCard'
 import { getPersonalizedServicesByInterest } from '@/lib/supabase/queries/personalized-services'
 
+// 매번 새로운 랜덤 순서를 위해 캐시 무효화
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function PersonalizedServices() {
   // 회원의 관심 카테고리 기반 서비스 조회
   const personalizedCategories = await getPersonalizedServicesByInterest()

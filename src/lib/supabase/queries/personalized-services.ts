@@ -97,7 +97,8 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
 
         const serviceIds = serviceCategoryLinks.map(link => link.service_id)
 
-        // 서비스 상세 정보 조회 (판매자 정보 포함) - 랜덤으로 섞기
+        // 서비스 상세 정보 조회 (판매자 정보 포함) - 랜덤 정렬
+        // PostgreSQL의 RANDOM() 함수 사용
         const { data: services, error: servicesError } = await supabase
           .from('services')
           .select(`
@@ -111,11 +112,18 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
           `)
           .in('id', serviceIds)
           .eq('status', 'active')
+          .limit(1000) // 충분히 큰 수
 
-        // 랜덤으로 섞기
-        const shuffledServices = services ? services.sort(() => Math.random() - 0.5) : []
+        console.log('[PERSONALIZED] Services found for', category.category_name, ':', services?.length || 0, 'Error:', servicesError)
 
-        console.log('[PERSONALIZED] Services found for', category.category_name, ':', shuffledServices.length, 'Error:', servicesError)
+        // JavaScript에서 Fisher-Yates 셔플 알고리즘으로 랜덤 섞기
+        const shuffledServices = services ? [...services] : []
+        for (let i = shuffledServices.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffledServices[i], shuffledServices[j]] = [shuffledServices[j], shuffledServices[i]]
+        }
+
+        console.log('[PERSONALIZED] Shuffled services for', category.category_name, ':', shuffledServices.length)
 
         return {
           category_id: category.category_id,
