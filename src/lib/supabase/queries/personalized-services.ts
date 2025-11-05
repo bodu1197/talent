@@ -21,6 +21,8 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
   if (!user) return []
 
   try {
+    console.log('[PERSONALIZED] Starting - User ID:', user.id)
+
     // 1. 최근 방문한 모든 카테고리 조회 (방문 횟수 순)
     const { data: topCategories, error: categoryError } = await supabase
       .rpc('get_recent_category_visits', {
@@ -29,9 +31,10 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
         p_limit: 10  // 최대 10개 카테고리까지
       })
 
-    console.log('[PERSONALIZED] User ID:', user.id)
+    console.log('[PERSONALIZED] RPC called')
     console.log('[PERSONALIZED] RPC Error:', categoryError)
-    console.log('[PERSONALIZED] Top Categories:', topCategories)
+    console.log('[PERSONALIZED] Top Categories:', JSON.stringify(topCategories))
+    console.log('[PERSONALIZED] Top Categories length:', topCategories?.length)
 
     if (categoryError || !topCategories || topCategories.length === 0) {
       logger.warn('No visited categories found for personalized recommendations', {
