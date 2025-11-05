@@ -125,11 +125,12 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
       })
     )
 
-    // 서비스가 있는 카테고리만 반환
-    const result = categoriesWithServices.filter(cat => cat.services.length > 0)
-    console.log('[PERSONALIZED] Final result count:', result.length)
-    console.log('[PERSONALIZED] Categories with services:', result.map(c => `${c.category_name} (${c.services.length})`).join(', '))
-    return result
+    // 모든 방문 카테고리 반환 (서비스 개수 무관, 플레이스홀더로 채움)
+    console.log('[PERSONALIZED] Final result count:', categoriesWithServices.length)
+    categoriesWithServices.forEach(c => {
+      console.log(`[PERSONALIZED] - ${c.category_name}: ${c.services.length} services`)
+    })
+    return categoriesWithServices
 
   } catch (error) {
     logger.error('Failed to fetch personalized services:', error)
