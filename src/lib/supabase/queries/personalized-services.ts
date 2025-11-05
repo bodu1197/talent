@@ -74,31 +74,36 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
           }
         }
 
-        // 이 카테고리와 모든 하위 카테고리의 ID 수집
-        let categoryIds = [categoryInfo.id]
+        // 이 카테고리와 모든 하위 카테고리의 ID 수집 (재귀적으로)
+        const categoryIds = [categoryInfo.id]
 
-        // 하위 카테고리 조회 (재귀적으로)
-        const { data: childCategories } = await supabase
-          .from('categories')
-          .select('id')
-          .eq('parent_id', categoryInfo.id)
-
-        if (childCategories && childCategories.length > 0) {
-          const childIds = childCategories.map(c => c.id)
-          categoryIds = [...categoryIds, ...childIds]
-
-          // 손자 카테고리도 조회
-          const { data: grandChildCategories } = await supabase
+        // 재귀 함수로 모든 하위 카테고리 ID 수집
+        async function getAllDescendantIds(parentId: string): Promise<string[]> {
+          const { data: children } = await supabase
             .from('categories')
             .select('id')
-            .in('parent_id', childIds)
+            .eq('parent_id', parentId)
 
-          if (grandChildCategories && grandChildCategories.length > 0) {
-            categoryIds = [...categoryIds, ...grandChildCategories.map(c => c.id)]
+          if (!children || children.length === 0) {
+            return []
           }
 
-          console.log('[PERSONALIZED]', category.category_name, '- Total categories (with descendants):', categoryIds.length)
+          const childIds = children.map(c => c.id)
+          const descendantIds = [...childIds]
+
+          // 각 자식의 하위 카테고리도 재귀적으로 조회
+          for (const childId of childIds) {
+            const grandChildren = await getAllDescendantIds(childId)
+            descendantIds.push(...grandChildren)
+          }
+
+          return descendantIds
         }
+
+        const descendants = await getAllDescendantIds(categoryInfo.id)
+        categoryIds.push(...descendants)
+
+        console.log('[PERSONALIZED]', category.category_name, '- Total categories (with all descendants):', categoryIds.length)
 
         // 카테고리와 하위 카테고리의 모든 서비스 조회
         const { data: serviceCategoryLinks, error: linkError } = await supabase
