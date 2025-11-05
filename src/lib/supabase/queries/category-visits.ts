@@ -69,6 +69,12 @@ export async function getRecentVisitedCategoriesServer(limit: number = 10): Prom
     .sort((a, b) => new Date(b.last_visited).getTime() - new Date(a.last_visited).getTime())
     .slice(0, limit)
 
+  logger.debug('Recent visited categories (Server):', {
+    totalVisits: data.length,
+    uniqueCategories: categories.length,
+    categories: categories.map(c => ({ name: c.category_name, count: c.visit_count }))
+  })
+
   return categories
 }
 

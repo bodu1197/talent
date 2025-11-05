@@ -24,7 +24,9 @@
       "Bash(node scripts/reorder-all-3rd-categories.js:*)",
       "Bash(node scripts/apply-2nd-reorder.js:*)",
       "Bash(node scripts/apply-3rd-reorder.js:*)",
-      "Bash(node scripts/check-2nd-order.js:*)"
+      "Bash(node scripts/check-2nd-order.js:*)",
+      "Bash(node scripts/check-1st-order.js:*)",
+      "Bash(node scripts/apply-1st-reorder.js:*)"
     ],
     "deny": [],
     "ask": []
