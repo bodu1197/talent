@@ -6,8 +6,14 @@ export default async function PersonalizedServices() {
   // 회원의 관심 카테고리 기반 서비스 조회
   const personalizedCategories = await getPersonalizedServicesByInterest()
 
+  console.log('[SERVER] PersonalizedServices - Categories count:', personalizedCategories.length)
+  personalizedCategories.forEach(cat => {
+    console.log(`[SERVER] - ${cat.category_name}: ${cat.services.length} services`)
+  })
+
   // 방문 기록이 없거나 서비스가 없으면 표시 안 함
   if (personalizedCategories.length === 0) {
+    console.log('[SERVER] PersonalizedServices - Returning null (no categories)')
     return null
   }
 
