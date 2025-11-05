@@ -74,42 +74,14 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
           }
         }
 
-        // 이 카테고리와 모든 하위 카테고리의 ID 수집 (재귀적으로)
-        const categoryIds = [categoryInfo.id]
+        // 이 카테고리의 서비스만 조회 (하위 카테고리 포함 안 함)
+        console.log('[PERSONALIZED]', category.category_name, '- Category ID:', categoryInfo.id)
 
-        // 재귀 함수로 모든 하위 카테고리 ID 수집
-        async function getAllDescendantIds(parentId: string): Promise<string[]> {
-          const { data: children } = await supabase
-            .from('categories')
-            .select('id')
-            .eq('parent_id', parentId)
-
-          if (!children || children.length === 0) {
-            return []
-          }
-
-          const childIds = children.map(c => c.id)
-          const descendantIds = [...childIds]
-
-          // 각 자식의 하위 카테고리도 재귀적으로 조회
-          for (const childId of childIds) {
-            const grandChildren = await getAllDescendantIds(childId)
-            descendantIds.push(...grandChildren)
-          }
-
-          return descendantIds
-        }
-
-        const descendants = await getAllDescendantIds(categoryInfo.id)
-        categoryIds.push(...descendants)
-
-        console.log('[PERSONALIZED]', category.category_name, '- Total categories (with all descendants):', categoryIds.length)
-
-        // 카테고리와 하위 카테고리의 모든 서비스 조회
+        // 해당 카테고리의 서비스만 조회
         const { data: serviceCategoryLinks, error: linkError } = await supabase
           .from('service_categories')
           .select('service_id')
-          .in('category_id', categoryIds)
+          .eq('category_id', categoryInfo.id)
 
         console.log('[PERSONALIZED] Service links for', category.category_name, ':', serviceCategoryLinks?.length || 0, 'Error:', linkError)
 
