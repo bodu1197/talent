@@ -40,6 +40,11 @@ export async function getRecentVisitedCategoriesServer(limit: number = 10): Prom
 
   if (!data || data.length === 0) return []
 
+  logger.debug('[SERVER] Raw category visits:', {
+    total: data.length,
+    first10: data.slice(0, 10).map(d => `${d.category_name} (${d.category_id})`)
+  })
+
   // 카테고리별로 그룹화하고 방문 횟수 계산
   const categoryMap = new Map<string, RecentCategory>()
 
@@ -69,10 +74,11 @@ export async function getRecentVisitedCategoriesServer(limit: number = 10): Prom
     .sort((a, b) => new Date(b.last_visited).getTime() - new Date(a.last_visited).getTime())
     .slice(0, limit)
 
-  logger.debug('Recent visited categories (Server):', {
+  logger.debug('[SERVER] Processed categories:', {
     totalVisits: data.length,
     uniqueCategories: categories.length,
-    categories: categories.map(c => ({ name: c.category_name, count: c.visit_count }))
+    mapSize: categoryMap.size,
+    result: categories.map(c => ({ id: c.category_id, name: c.category_name, count: c.visit_count }))
   })
 
   return categories

@@ -1,14 +1,26 @@
 import Link from 'next/link'
 import { getRecentVisitedCategoriesServer } from '@/lib/supabase/queries/category-visits'
+import { logger } from '@/lib/logger'
 
 export default async function RecentVisitedCategories() {
   // 최근 방문한 카테고리 조회 (서버에서 직접)
   const allCategories = await getRecentVisitedCategoriesServer(10)
 
+  logger.debug('[COMPONENT] Received categories:', {
+    count: allCategories.length,
+    list: allCategories.map(c => `${c.category_name} (${c.category_id})`)
+  })
+
   // 추가 중복 제거 (혹시 모를 경우를 대비)
   const uniqueCategories = Array.from(
     new Map(allCategories.map(cat => [cat.category_id, cat])).values()
   )
+
+  logger.debug('[COMPONENT] After deduplication:', {
+    before: allCategories.length,
+    after: uniqueCategories.length,
+    removed: allCategories.length - uniqueCategories.length
+  })
 
   // 로그인하지 않았거나 방문 기록이 없으면 표시 안 함
   if (uniqueCategories.length === 0) {
