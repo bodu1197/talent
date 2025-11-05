@@ -29,19 +29,52 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
         p_limit: 10  // 최대 10개 카테고리까지
       })
 
+    console.log('[PERSONALIZED] User ID:', user.id)
+    console.log('[PERSONALIZED] RPC Error:', categoryError)
+    console.log('[PERSONALIZED] Top Categories:', topCategories)
+
     if (categoryError || !topCategories || topCategories.length === 0) {
-      logger.info('No visited categories found for personalized recommendations')
+      logger.warn('No visited categories found for personalized recommendations', {
+        error: categoryError,
+        hasData: !!topCategories,
+        dataLength: topCategories?.length
+      })
       return []
     }
 
     // 2. 각 카테고리별로 서비스 조회
     const categoriesWithServices = await Promise.all(
       topCategories.map(async (category: any) => {
+        console.log('[PERSONALIZED] Processing category:', category.category_name, category.category_id)
+
         // 카테고리 ID로 서비스 조회
-        const { data: serviceCategoryLinks } = await supabase
+        // category_visits.category_id는 TEXT, service_categories.category_id는 UUID
+        // Supabase 클라이언트에서 자동으로 타입 변환이 안 되므로
+        // 먼저 categories 테이블에서 UUID를 가져와야 함
+
+        const { data: categoryInfo } = await supabase
+          .from('categories')
+          .select('id')
+          .eq('slug', category.category_slug)
+          .single()
+
+        if (!categoryInfo) {
+          console.log('[PERSONALIZED] Category not found:', category.category_slug)
+          return {
+            category_id: category.category_id,
+            category_name: category.category_name,
+            category_slug: category.category_slug,
+            visit_count: category.visit_count,
+            services: []
+          }
+        }
+
+        const { data: serviceCategoryLinks, error: linkError } = await supabase
           .from('service_categories')
           .select('service_id')
-          .eq('category_id', category.category_id)
+          .eq('category_id', categoryInfo.id)
+
+        console.log('[PERSONALIZED] Service links found:', serviceCategoryLinks?.length || 0, 'Error:', linkError)
 
         if (!serviceCategoryLinks || serviceCategoryLinks.length === 0) {
           return {
