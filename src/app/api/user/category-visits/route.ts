@@ -73,16 +73,27 @@ export async function POST(request: NextRequest) {
     }
 
     if (error) {
+      console.error('[API] Category visit error:', error)
       logger.error('Category visit upsert error:', error)
       return NextResponse.json(
-        { error: 'Failed to track category visit' },
+        { error: 'Failed to track category visit', details: error },
         { status: 500 }
       )
     }
 
+    console.log('[API] Category visit saved:', {
+      id: data?.id,
+      categoryName,
+      isUpdate: !!existing
+    })
+
     // 5. 성공
     return NextResponse.json(
-      { message: 'Category visit tracked successfully', data },
+      {
+        message: 'Category visit tracked successfully',
+        data,
+        isUpdate: !!existing
+      },
       { status: 200 }
     )
 
