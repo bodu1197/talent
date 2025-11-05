@@ -97,7 +97,7 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
 
         const serviceIds = serviceCategoryLinks.map(link => link.service_id)
 
-        // 서비스 상세 정보 조회 (판매자 정보 포함) - 모든 서비스
+        // 서비스 상세 정보 조회 (판매자 정보 포함) - 랜덤으로 섞기
         const { data: services, error: servicesError } = await supabase
           .from('services')
           .select(`
@@ -111,16 +111,18 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
           `)
           .in('id', serviceIds)
           .eq('status', 'active')
-          .order('orders_count', { ascending: false })
 
-        console.log('[PERSONALIZED] Services found for', category.category_name, ':', services?.length || 0, 'Error:', servicesError)
+        // 랜덤으로 섞기
+        const shuffledServices = services ? services.sort(() => Math.random() - 0.5) : []
+
+        console.log('[PERSONALIZED] Services found for', category.category_name, ':', shuffledServices.length, 'Error:', servicesError)
 
         return {
           category_id: category.category_id,
           category_name: category.category_name,
           category_slug: category.category_slug,
           visit_count: category.visit_count,
-          services: services || []
+          services: shuffledServices
         }
       })
     )
