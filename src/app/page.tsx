@@ -8,6 +8,10 @@ import RecentViewedServices from '@/components/home/RecentViewedServices'
 import RecommendedServices from '@/components/home/RecommendedServices'
 import PersonalizedServices from '@/components/home/PersonalizedServices'
 
+// 랜덤 정렬을 위해 매번 새로 렌더링
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function HomePage() {
   const supabase = await createClient()
 
