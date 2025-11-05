@@ -23,12 +23,12 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
   try {
     console.log('[PERSONALIZED] Starting - User ID:', user.id)
 
-    // 1. 최근 방문한 모든 카테고리 조회 (방문 횟수 순)
+    // 1. 최근 방문한 카테고리 조회 (방문 횟수 우선, 최근 방문 순)
     const { data: topCategories, error: categoryError } = await supabase
       .rpc('get_recent_category_visits', {
         p_user_id: user.id,
         p_days: 30,
-        p_limit: 10  // 최대 10개 카테고리까지
+        p_limit: 3  // 상위 3개만
       })
 
     console.log('[PERSONALIZED] RPC called')
