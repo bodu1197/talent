@@ -3,12 +3,19 @@ import { getRecentVisitedCategoriesServer } from '@/lib/supabase/queries/categor
 
 export default async function RecentVisitedCategories() {
   // 최근 방문한 카테고리 조회 (서버에서 직접)
-  const categories = await getRecentVisitedCategoriesServer(10)
+  const allCategories = await getRecentVisitedCategoriesServer(10)
+
+  // 추가 중복 제거 (혹시 모를 경우를 대비)
+  const uniqueCategories = Array.from(
+    new Map(allCategories.map(cat => [cat.category_id, cat])).values()
+  )
 
   // 로그인하지 않았거나 방문 기록이 없으면 표시 안 함
-  if (categories.length === 0) {
+  if (uniqueCategories.length === 0) {
     return null
   }
+
+  const categories = uniqueCategories
 
   return (
     <section className="py-6 bg-gray-50 border-b border-gray-200">
