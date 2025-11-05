@@ -25,8 +25,7 @@ export async function getRecentVisitedCategoriesServer(limit: number = 10): Prom
   const thirtyDaysAgo = new Date()
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 
-  // SQL에서 직접 그룹화하여 중복 제거
-  // RPC 함수 사용 또는 직접 쿼리
+  // RPC 함수 사용 (최적화된 쿼리)
   const { data: rawData, error: rawError } = await supabase.rpc('get_recent_category_visits', {
     p_user_id: user.id,
     p_days: 30,
@@ -35,6 +34,7 @@ export async function getRecentVisitedCategoriesServer(limit: number = 10): Prom
 
   // RPC가 없으면 일반 쿼리로 폴백
   if (rawError || !rawData) {
+    logger.warn('RPC function not available, falling back to manual query', { error: rawError })
     const { data, error } = await supabase
       .from('category_visits')
       .select('category_id, category_name, category_slug, visited_at')

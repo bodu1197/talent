@@ -28,53 +28,35 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 4. 중복 체크: 오늘 이미 방문했는지 확인
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-    const tomorrow = new Date(today)
-    tomorrow.setDate(tomorrow.getDate() + 1)
-
-    const { data: existingVisit } = await supabase
-      .from('category_visits')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('category_id', categoryId)
-      .gte('visited_at', today.toISOString())
-      .lt('visited_at', tomorrow.toISOString())
-      .maybeSingle()
-
-    // 5. 이미 오늘 방문한 경우 성공 응답 (중복 방지)
-    if (existingVisit) {
-      return NextResponse.json(
-        { message: 'Already visited today', success: true },
-        { status: 200 }
-      )
-    }
-
-    // 6. 카테고리 방문 기록 삽입
+    // 4. UPSERT: 같은 날 같은 카테고리 방문 시 visited_at만 업데이트
+    // 복합 유니크 인덱스 (user_id, category_id, visited_date)를 활용
     const { data, error } = await supabase
       .from('category_visits')
-      .insert({
+      .upsert({
         user_id: user.id,
         category_id: categoryId,
         category_name: categoryName,
-        category_slug: categorySlug
+        category_slug: categorySlug,
+        visited_at: new Date().toISOString()
+      }, {
+        onConflict: 'user_id,category_id,visited_date',
+        ignoreDuplicates: false
       })
       .select()
       .single()
 
     if (error) {
-      logger.error('Category visit insert error:', error)
+      logger.error('Category visit upsert error:', error)
       return NextResponse.json(
         { error: 'Failed to track category visit' },
         { status: 500 }
       )
     }
 
-    // 7. 성공
+    // 5. 성공
     return NextResponse.json(
       { message: 'Category visit tracked successfully', data },
-      { status: 201 }
+      { status: 200 }
     )
 
   } catch (error) {
