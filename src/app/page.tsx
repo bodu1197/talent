@@ -90,10 +90,16 @@ async function AIServicesSection() {
         `)
         .in('id', aiServiceIds)
         .eq('status', 'active')
-        .order('created_at', { ascending: false })
 
       if (aiServices) {
-        services = aiServices.map(service => ({
+        // Fisher-Yates 셔플로 공평한 랜덤
+        const shuffled = [...aiServices]
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+        }
+
+        services = shuffled.map(service => ({
           ...service,
           order_count: service.orders_count || 0
         }))

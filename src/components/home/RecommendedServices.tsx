@@ -46,13 +46,22 @@ export default async function RecommendedServices() {
   }
 
   const { data: recommendedData } = await recommendedQuery
-    .order('created_at', { ascending: false })
-    .limit(15)
+    .limit(1000) // 충분히 많이 가져오기
 
-  const recommendedServices = recommendedData?.map(service => ({
+  // Fisher-Yates 셔플로 공평한 랜덤
+  let shuffled = recommendedData ? [...recommendedData] : []
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+
+  // 상위 15개만 선택
+  shuffled = shuffled.slice(0, 15)
+
+  const recommendedServices = shuffled.map(service => ({
     ...service,
     order_count: service.orders_count || 0
-  })) || []
+  }))
 
   return (
     <section className="py-8 bg-gray-50">
