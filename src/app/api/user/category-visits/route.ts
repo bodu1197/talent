@@ -6,8 +6,12 @@ export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()
 
+    console.log('[API] Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL?.slice(0, 30))
+
     // 1. 인증 확인 (로그인 사용자만)
     const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    console.log('[API] User ID:', user?.id)
 
     if (authError || !user) {
       return NextResponse.json(
