@@ -74,11 +74,37 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
           }
         }
 
-        // 방문한 모든 카테고리의 서비스 조회
+        // 이 카테고리와 모든 하위 카테고리의 ID 수집
+        let categoryIds = [categoryInfo.id]
+
+        // 하위 카테고리 조회 (재귀적으로)
+        const { data: childCategories } = await supabase
+          .from('categories')
+          .select('id')
+          .eq('parent_id', categoryInfo.id)
+
+        if (childCategories && childCategories.length > 0) {
+          const childIds = childCategories.map(c => c.id)
+          categoryIds = [...categoryIds, ...childIds]
+
+          // 손자 카테고리도 조회
+          const { data: grandChildCategories } = await supabase
+            .from('categories')
+            .select('id')
+            .in('parent_id', childIds)
+
+          if (grandChildCategories && grandChildCategories.length > 0) {
+            categoryIds = [...categoryIds, ...grandChildCategories.map(c => c.id)]
+          }
+
+          console.log('[PERSONALIZED]', category.category_name, '- Total categories (with descendants):', categoryIds.length)
+        }
+
+        // 카테고리와 하위 카테고리의 모든 서비스 조회
         const { data: serviceCategoryLinks, error: linkError } = await supabase
           .from('service_categories')
           .select('service_id')
-          .eq('category_id', categoryInfo.id)
+          .in('category_id', categoryIds)
 
         console.log('[PERSONALIZED] Service links for', category.category_name, ':', serviceCategoryLinks?.length || 0, 'Error:', linkError)
 
