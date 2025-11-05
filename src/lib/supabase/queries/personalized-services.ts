@@ -74,6 +74,44 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
           }
         }
 
+        // 3차 카테고리(최하위)인지 확인 - parent_id가 있는 카테고리의 자식
+        const { data: fullCategoryInfo } = await supabase
+          .from('categories')
+          .select('id, parent_id, level')
+          .eq('slug', category.category_slug)
+          .single()
+
+        // 3차 카테고리(level 3)만 표시
+        // level이 없으면 parent_id의 parent_id가 있는지 확인
+        let is3rdLevel = false
+
+        if (fullCategoryInfo?.level === 3) {
+          is3rdLevel = true
+        } else if (fullCategoryInfo?.parent_id) {
+          // parent의 parent가 있으면 3차 카테고리
+          const { data: parentInfo } = await supabase
+            .from('categories')
+            .select('parent_id')
+            .eq('id', fullCategoryInfo.parent_id)
+            .single()
+
+          is3rdLevel = !!parentInfo?.parent_id
+        }
+
+        console.log('[PERSONALIZED]', category.category_name, 'is 3rd level:', is3rdLevel)
+
+        if (!is3rdLevel) {
+          console.log('[PERSONALIZED] Skipping non-3rd-level category:', category.category_name)
+          return {
+            category_id: category.category_id,
+            category_name: category.category_name,
+            category_slug: category.category_slug,
+            visit_count: category.visit_count,
+            services: []
+          }
+        }
+
+        // 3차 카테고리의 서비스만 조회
         const { data: serviceCategoryLinks, error: linkError } = await supabase
           .from('service_categories')
           .select('service_id')
