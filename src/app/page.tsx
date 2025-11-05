@@ -6,6 +6,7 @@ import AITalentShowcase from '@/components/home/AITalentShowcase'
 import RecentVisitedCategories from '@/components/home/RecentVisitedCategories'
 import RecentViewedServices from '@/components/home/RecentViewedServices'
 import RecommendedServices from '@/components/home/RecommendedServices'
+import PersonalizedServices from '@/components/home/PersonalizedServices'
 
 export default async function HomePage() {
   const supabase = await createClient()
@@ -36,6 +37,11 @@ export default async function HomePage() {
       {/* 추천 서비스 섹션 (Suspense로 감싸기) */}
       <Suspense fallback={<RecommendedSkeleton />}>
         <RecommendedServices />
+      </Suspense>
+
+      {/* 회원 맞춤 관심 카테고리 서비스 (Suspense로 감싸기) */}
+      <Suspense fallback={<PersonalizedSkeleton />}>
+        <PersonalizedServices />
       </Suspense>
     </div>
   )
@@ -124,6 +130,31 @@ function RecommendedSkeleton() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {[...Array(15)].map((_, i) => (
             <div key={i} className="bg-gray-100 rounded-lg h-64 animate-pulse"></div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function PersonalizedSkeleton() {
+  return (
+    <section className="py-8 bg-white">
+      <div className="container-1200">
+        <div className="mb-6">
+          <div className="h-8 bg-gray-200 rounded w-64 mb-2 animate-pulse"></div>
+          <div className="h-5 bg-gray-200 rounded w-80 animate-pulse"></div>
+        </div>
+        <div className="space-y-10">
+          {[...Array(3)].map((_, i) => (
+            <div key={i}>
+              <div className="h-6 bg-gray-200 rounded w-40 mb-4 animate-pulse"></div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {[...Array(5)].map((_, j) => (
+                  <div key={j} className="bg-gray-100 rounded-lg h-64 animate-pulse"></div>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </div>
