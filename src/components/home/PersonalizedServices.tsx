@@ -53,11 +53,17 @@ export default async function PersonalizedServices() {
               </div>
 
               {/* 서비스 카드 그리드 */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {category.services.map((service) => (
-                  <ServiceCard key={service.id} service={service} />
-                ))}
-              </div>
+              {category.services.length > 0 ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                  {category.services.map((service) => (
+                    <ServiceCard key={service.id} service={service} />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  이 카테고리에는 아직 서비스가 없습니다
+                </div>
+              )}
             </div>
           ))}
         </div>

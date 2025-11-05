@@ -30,20 +30,17 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   // 전체 카테고리 트리 가져오기 (사이드바용)
   const allCategories = await getAllCategoriesTree()
 
-  // 1차 카테고리 확인 (parent_id가 없으면 1차 카테고리)
-  const isTopLevelCategory = !category.parent_id
-
   // 서비스 조회 (서버에서 직접)
   const services = await getServicesByCategory(category.id)
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* 카테고리 방문 추적 (1차 카테고리만) */}
+      {/* 카테고리 방문 추적 (모든 카테고리) */}
       <CategoryVisitTracker
         categoryId={category.id}
         categoryName={category.name}
         categorySlug={category.slug}
-        isTopLevel={isTopLevelCategory}
+        isTopLevel={true}
       />
       {/* 카테고리 네비 및 서비스 목록 */}
       <section className="py-8">
