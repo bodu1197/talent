@@ -28,22 +28,49 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 4. UPSERT: 같은 날 같은 카테고리 방문 시 visited_at만 업데이트
-    // 복합 유니크 인덱스 (user_id, category_id, visited_date)를 활용
-    const { data, error } = await supabase
+    // 4. 오늘 이미 방문했는지 확인
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const todayStr = today.toISOString().split('T')[0] // YYYY-MM-DD
+
+    const { data: existing } = await supabase
       .from('category_visits')
-      .upsert({
-        user_id: user.id,
-        category_id: categoryId,
-        category_name: categoryName,
-        category_slug: categorySlug,
-        visited_at: new Date().toISOString()
-      }, {
-        onConflict: 'user_id,category_id,visited_date',
-        ignoreDuplicates: false
-      })
-      .select()
-      .single()
+      .select('id, visited_at')
+      .eq('user_id', user.id)
+      .eq('category_id', categoryId)
+      .gte('visited_at', today.toISOString())
+      .maybeSingle()
+
+    let data, error
+
+    if (existing) {
+      // 오늘 이미 방문했으면 visited_at만 업데이트
+      const result = await supabase
+        .from('category_visits')
+        .update({ visited_at: new Date().toISOString() })
+        .eq('id', existing.id)
+        .select()
+        .single()
+
+      data = result.data
+      error = result.error
+    } else {
+      // 처음 방문이면 새로 삽입
+      const result = await supabase
+        .from('category_visits')
+        .insert({
+          user_id: user.id,
+          category_id: categoryId,
+          category_name: categoryName,
+          category_slug: categorySlug,
+          visited_at: new Date().toISOString()
+        })
+        .select()
+        .single()
+
+      data = result.data
+      error = result.error
+    }
 
     if (error) {
       logger.error('Category visit upsert error:', error)
