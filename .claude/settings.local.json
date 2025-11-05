@@ -14,7 +14,17 @@
       "Bash(node scripts/delete-quick-service.js:*)",
       "Bash(node scripts/check-all-categories.js:*)",
       "Bash(node scripts/get-ai-categories.js:*)",
-      "Bash(node scripts/check-table-structure.js:*)"
+      "Bash(node scripts/check-table-structure.js:*)",
+      "Bash(node -e:*)",
+      "Bash(node scripts/check-remaining-categories.js:*)",
+      "Bash(node scripts/check-3rd-level-categories.js:*)",
+      "Bash(node scripts/count-reorder.js:*)",
+      "Bash(docs/3rd-categories-current.txt)",
+      "Bash(node scripts/extract-all-3rd-categories.js:*)",
+      "Bash(node scripts/reorder-all-3rd-categories.js:*)",
+      "Bash(node scripts/apply-2nd-reorder.js:*)",
+      "Bash(node scripts/apply-3rd-reorder.js:*)",
+      "Bash(node scripts/check-2nd-order.js:*)"
     ],
     "deny": [],
     "ask": []

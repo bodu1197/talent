@@ -9,9 +9,9 @@ const supabase = createClient(
 (async () => {
   const { data: categories, error } = await supabase
     .from('categories')
-    .select('id, name, slug, parent_id, level, is_active')
+    .select('id, name, slug, parent_id, level, is_active, display_order')
     .order('level')
-    .order('name');
+    .order('display_order');
 
   if (error) {
     console.error('Error:', error);

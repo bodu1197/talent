@@ -23,9 +23,9 @@ export async function getAllCategoriesTree(): Promise<CategoryItem[]> {
 
   const { data: categories, error } = await supabase
     .from('categories')
-    .select('id, name, slug, icon, description, parent_id, level, service_count, is_ai, is_active')
+    .select('id, name, slug, icon, description, parent_id, level, service_count, is_ai, is_active, display_order')
     .eq('is_active', true)
-    .order('name')
+    .order('display_order')
 
   if (error || !categories) {
     console.error('Failed to fetch categories:', error)
@@ -75,7 +75,7 @@ export async function getCategoryBySlug(slug: string): Promise<CategoryItem | nu
 
   const { data: category, error } = await supabase
     .from('categories')
-    .select('id, name, slug, icon, description, parent_id, level, service_count, is_ai, is_active')
+    .select('id, name, slug, icon, description, parent_id, level, service_count, is_ai, is_active, display_order')
     .eq('slug', slug)
     .eq('is_active', true)
     .single()
@@ -87,10 +87,10 @@ export async function getCategoryBySlug(slug: string): Promise<CategoryItem | nu
   // 하위 카테고리 가져오기
   const { data: children } = await supabase
     .from('categories')
-    .select('id, name, slug, icon, description, parent_id, level, service_count, is_ai, is_active')
+    .select('id, name, slug, icon, description, parent_id, level, service_count, is_ai, is_active, display_order')
     .eq('parent_id', category.id)
     .eq('is_active', true)
-    .order('name')
+    .order('display_order')
 
   return {
     ...category,
@@ -140,9 +140,9 @@ export async function getAllCategoriesForBuild(): Promise<CategoryItem[]> {
 
   const { data: categories, error } = await supabase
     .from('categories')
-    .select('id, name, slug, icon, description, parent_id, level, service_count, is_ai, is_active')
+    .select('id, name, slug, icon, description, parent_id, level, service_count, is_ai, is_active, display_order')
     .eq('is_active', true)
-    .order('name')
+    .order('display_order')
 
   if (error || !categories) {
     console.error('Failed to fetch categories for build:', error)
