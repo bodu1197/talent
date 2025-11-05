@@ -84,8 +84,8 @@ export default async function PersonalizedServices() {
                 {category.services.map((service) => (
                   <ServiceCard key={service.id} service={service} />
                 ))}
-                {/* 플레이스홀더 카드 (최소 20개까지) */}
-                {Array.from({ length: Math.max(0, 20 - category.services.length) }, (_, i) => (
+                {/* 플레이스홀더 카드 (최소 10개까지) */}
+                {Array.from({ length: Math.max(0, 10 - category.services.length) }, (_, i) => (
                   <PlaceholderServiceCard key={`placeholder-${i}`} categoryId={category.category_id} />
                 ))}
               </div>
