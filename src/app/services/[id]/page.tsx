@@ -80,9 +80,9 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       </nav>
 
       <div className="container-1200 px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* 왼쪽: 서비스 정보 */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="flex-1 space-y-8">
             {/* 서비스 설명 */}
             <div className="bg-white rounded-xl p-8 shadow-sm">
               <h1 className="text-2xl font-bold mb-6">{service.title}</h1>
@@ -164,7 +164,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
           </div>
 
           {/* 오른쪽: 구매 옵션 */}
-          <div className="lg:col-span-1">
+          <div className="w-full lg:w-[350px] flex-shrink-0">
             <div className="sticky top-32 space-y-6">
               {/* 썸네일 이미지 */}
               <div className="bg-white rounded-xl overflow-hidden shadow-sm">
