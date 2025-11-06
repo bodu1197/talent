@@ -1,3 +1,17 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import { logger } from '@/lib/logger'
+
+interface Category {
+  id: string
+  name: string
+  slug: string
+  level: number
+  parent_id: string | null
+}
+
 interface Props {
   formData: any
   setFormData: (data: any) => void
@@ -5,91 +19,221 @@ interface Props {
 }
 
 export default function Step1BasicInfo({ formData, setFormData, categories }: Props) {
-  // 레벨 1, 2, 3 카테고리 필터링
-  const level1 = categories.filter(c => c.level === 1)
-  const level2 = categories.filter(c => c.level === 2)
-  const level3 = categories.filter(c => c.level === 3)
+  const [level1Categories, setLevel1Categories] = useState<Category[]>([])
+  const [level2Categories, setLevel2Categories] = useState<Category[]>([])
+  const [level3Categories, setLevel3Categories] = useState<Category[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedLevel1, setSelectedLevel1] = useState('')
+  const [selectedLevel2, setSelectedLevel2] = useState('')
+  const [selectedLevel3, setSelectedLevel3] = useState('')
+
+  // Load level 1 categories on mount
+  useEffect(() => {
+    async function fetchLevel1Categories() {
+      try {
+        const supabase = createClient()
+        const { data, error } = await supabase
+          .from('categories')
+          .select('id, name, slug, level, parent_id')
+          .eq('is_active', true)
+          .eq('level', 1)
+          .order('display_order', { ascending: true })
+
+        if (error) {
+          logger.error('1차 카테고리 로딩 오류:', error)
+        } else {
+          setLevel1Categories(data || [])
+        }
+      } catch (error) {
+        logger.error('1차 카테고리 로딩 실패:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchLevel1Categories()
+  }, [])
+
+  // Load level 2 categories when level 1 is selected
+  useEffect(() => {
+    if (!selectedLevel1) {
+      setLevel2Categories([])
+      setSelectedLevel2('')
+      setLevel3Categories([])
+      setSelectedLevel3('')
+      return
+    }
+
+    async function fetchLevel2Categories() {
+      try {
+        const supabase = createClient()
+        const { data, error } = await supabase
+          .from('categories')
+          .select('id, name, slug, level, parent_id')
+          .eq('is_active', true)
+          .eq('parent_id', selectedLevel1)
+          .order('display_order', { ascending: true })
+
+        if (error) {
+          logger.error('2차 카테고리 로딩 오류:', error)
+        } else {
+          setLevel2Categories(data || [])
+        }
+      } catch (error) {
+        logger.error('2차 카테고리 로딩 실패:', error)
+      }
+    }
+
+    fetchLevel2Categories()
+  }, [selectedLevel1])
+
+  // Load level 3 categories when level 2 is selected
+  useEffect(() => {
+    if (!selectedLevel2) {
+      setLevel3Categories([])
+      setSelectedLevel3('')
+      return
+    }
+
+    async function fetchLevel3Categories() {
+      try {
+        const supabase = createClient()
+        const { data, error } = await supabase
+          .from('categories')
+          .select('id, name, slug, level, parent_id')
+          .eq('is_active', true)
+          .eq('parent_id', selectedLevel2)
+          .order('display_order', { ascending: true })
+
+        if (error) {
+          logger.error('3차 카테고리 로딩 오류:', error)
+        } else {
+          setLevel3Categories(data || [])
+        }
+      } catch (error) {
+        logger.error('3차 카테고리 로딩 실패:', error)
+      }
+    }
+
+    fetchLevel3Categories()
+  }, [selectedLevel2])
+
+  // Update final category when level 3 is selected
+  useEffect(() => {
+    if (selectedLevel3) {
+      setFormData({ ...formData, category_ids: [selectedLevel3] })
+    } else if (selectedLevel2 && level3Categories.length === 0) {
+      // If level 2 selected but no level 3 exists, use level 2
+      setFormData({ ...formData, category_ids: [selectedLevel2] })
+    }
+  }, [selectedLevel3, selectedLevel2, level3Categories])
 
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">기본 정보</h2>
 
+      {/* 카테고리 선택 - 맨 처음으로 이동 */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          카테고리 *
+        </label>
+        <div className="space-y-3">
+          {/* 1차 카테고리 */}
+          <select
+            value={selectedLevel1}
+            onChange={(e) => setSelectedLevel1(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+            required
+            disabled={loading}
+          >
+            <option value="">
+              {loading ? '1차 카테고리 로딩 중...' : '1차 카테고리 선택'}
+            </option>
+            {level1Categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+
+          {/* 2차 카테고리 */}
+          {selectedLevel1 && level2Categories.length > 0 && (
+            <select
+              value={selectedLevel2}
+              onChange={(e) => setSelectedLevel2(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+              required
+            >
+              <option value="">2차 카테고리 선택</option>
+              {level2Categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          )}
+
+          {/* 3차 카테고리 */}
+          {selectedLevel2 && level3Categories.length > 0 && (
+            <select
+              value={selectedLevel3}
+              onChange={(e) => setSelectedLevel3(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+              required
+            >
+              <option value="">3차 카테고리 선택</option>
+              {level3Categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          )}
+
+          {/* 선택된 카테고리 경로 표시 */}
+          {(selectedLevel1 || selectedLevel2 || selectedLevel3) && (
+            <div className="text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded">
+              <i className="fas fa-folder-tree mr-2"></i>
+              선택된 경로:{' '}
+              {selectedLevel1 && (
+                <span className="font-medium">
+                  {level1Categories.find(c => c.id === selectedLevel1)?.name}
+                </span>
+              )}
+              {selectedLevel2 && (
+                <>
+                  {' > '}
+                  <span className="font-medium">
+                    {level2Categories.find(c => c.id === selectedLevel2)?.name}
+                  </span>
+                </>
+              )}
+              {selectedLevel3 && (
+                <>
+                  {' > '}
+                  <span className="font-medium">
+                    {level3Categories.find(c => c.id === selectedLevel3)?.name}
+                  </span>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* 서비스 제목 */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          서비스 제목 <span className="text-red-500">*</span>
+          서비스 제목 *
         </label>
         <input
           type="text"
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-          placeholder="서비스 제목을 입력하세요"
+          placeholder="예: 전문 로고 디자인 작업"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
           required
         />
-      </div>
-
-      {/* 카테고리 선택 */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          카테고리 <span className="text-red-500">*</span>
-        </label>
-        <select
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-          onChange={(e) => {
-            if (e.target.value && !formData.category_ids.includes(e.target.value)) {
-              setFormData({
-                ...formData,
-                category_ids: [...formData.category_ids, e.target.value]
-              })
-            }
-          }}
-        >
-          <option value="">카테고리를 선택하세요</option>
-          {level1.map(cat => (
-            <optgroup key={cat.id} label={cat.name}>
-              {level2.filter(c => c.parent_id === cat.id).map(child => (
-                <>
-                  <option key={child.id} value={child.id}>
-                    └ {child.name}
-                  </option>
-                  {level3.filter(c => c.parent_id === child.id).map(grandchild => (
-                    <option key={grandchild.id} value={grandchild.id}>
-                      &nbsp;&nbsp;&nbsp;└ {grandchild.name}
-                    </option>
-                  ))}
-                </>
-              ))}
-            </optgroup>
-          ))}
-        </select>
-
-        {/* 선택된 카테고리 표시 */}
-        {formData.category_ids.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {formData.category_ids.map((catId: string) => {
-              const cat = categories.find(c => c.id === catId)
-              return (
-                <span
-                  key={catId}
-                  className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm"
-                >
-                  {cat?.name}
-                  <button
-                    type="button"
-                    onClick={() => setFormData({
-                      ...formData,
-                      category_ids: formData.category_ids.filter((id: string) => id !== catId)
-                    })}
-                    className="hover:text-blue-900"
-                  >
-                    <i className="fas fa-times"></i>
-                  </button>
-                </span>
-              )
-            })}
-          </div>
-        )}
       </div>
     </div>
   )
