@@ -283,7 +283,7 @@ export default function NewServiceClient({ sellerId }: Props) {
           title: formData.title,
           slug: `${slug}-${Date.now()}`,
           description: formData.description,
-          price: parseInt(formData.price) || 0,
+          price: Math.max(1000, parseInt(formData.price) || 1000),
           delivery_days: Math.max(1, parseInt(formData.deliveryDays) || 7),
           revision_count: formData.revisionCount === 'unlimited' ? 999 : Math.max(0, parseInt(formData.revisionCount) || 0),
           thumbnail_url: publicUrl,
@@ -597,8 +597,18 @@ export default function NewServiceClient({ sellerId }: Props) {
                   </label>
                   <input
                     type="number"
+                    min="1000"
+                    max="10000000"
                     value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^0-9]/g, '')
+                      setFormData({ ...formData, price: value })
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === '-' || e.key === '+' || e.key === 'e' || e.key === 'E') {
+                        e.preventDefault()
+                      }
+                    }}
                     placeholder="50000"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
                     required
@@ -611,8 +621,18 @@ export default function NewServiceClient({ sellerId }: Props) {
                   </label>
                   <input
                     type="number"
+                    min="1"
+                    max="365"
                     value={formData.deliveryDays}
-                    onChange={(e) => setFormData({ ...formData, deliveryDays: e.target.value })}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^0-9]/g, '')
+                      setFormData({ ...formData, deliveryDays: value })
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === '-' || e.key === '+' || e.key === 'e' || e.key === 'E') {
+                        e.preventDefault()
+                      }
+                    }}
                     placeholder="7"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
                     required
