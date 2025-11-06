@@ -235,8 +235,8 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
               {/* 가격 정보 */}
               <div className="bg-white rounded-xl shadow-sm overflow-hidden">
                 <div className="p-6">
-                  <div className="text-3xl font-bold mb-1">
-                    ₩{service.price?.toLocaleString() || 0}
+                  <div className="text-2xl font-bold mb-1">
+                    {service.price?.toLocaleString() || 0}원
                   </div>
                   <div className="text-sm text-gray-600 mb-6">
                     {service.delivery_days || 0}일 이내 완료 · {service.revision_count === 999 ? '무제한' : `${service.revision_count || 0}회`} 수정
