@@ -5,6 +5,13 @@ import { logger } from '@/lib/logger'
 
 export async function POST(request: NextRequest) {
   try {
+    // 환경 변수 디버깅
+    logger.info('Environment check:', {
+      hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+      hasUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+      nodeEnv: process.env.NODE_ENV
+    })
+
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
