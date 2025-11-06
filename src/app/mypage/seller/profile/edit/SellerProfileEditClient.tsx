@@ -148,6 +148,22 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
                 />
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  연락 가능 시간
+                </label>
+                <input
+                  type="text"
+                  value={profile.contact_hours || ''}
+                  onChange={(e) => setProfile({ ...profile, contact_hours: e.target.value })}
+                  placeholder="예: 평일 09:00-18:00, 주말 10:00-17:00"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                />
+                <p className="mt-1 text-sm text-gray-500">
+                  구매자가 연락 가능한 시간대를 입력해주세요
+                </p>
+              </div>
             </div>
           </div>
 
@@ -219,6 +235,21 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                   />
                 </div>
               )}
+
+              <div>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={profile.tax_invoice_available || false}
+                    onChange={(e) => setProfile({ ...profile, tax_invoice_available: e.target.checked })}
+                    className="w-4 h-4 text-[#0f3460] rounded"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">세금계산서 발행 가능</span>
+                </label>
+                <p className="mt-1 ml-6 text-sm text-gray-500">
+                  사업자인 경우 체크하시면 구매자에게 세금계산서 발행 가능 여부가 표시됩니다
+                </p>
+              </div>
             </div>
           </div>
 

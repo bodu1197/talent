@@ -24,6 +24,8 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         business_name,
         display_name,
         profile_image,
+        contact_hours,
+        tax_invoice_available,
         user_id
       ),
       service_categories(
@@ -153,7 +155,30 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   </div>
                 </div>
 
-                <div className="flex gap-2 mt-4">
+                {/* 연락 가능 시간 */}
+                {service.seller?.contact_hours && (
+                  <div className="mb-3 pb-3 border-b border-gray-200">
+                    <div className="flex items-start gap-2 text-sm">
+                      <i className="fas fa-clock text-gray-400 mt-0.5"></i>
+                      <div>
+                        <span className="text-gray-600">연락 가능 시간</span>
+                        <p className="text-gray-900 mt-1">{service.seller.contact_hours}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 세금계산서 발행 여부 */}
+                {service.seller?.tax_invoice_available && (
+                  <div className="mb-3 pb-3 border-b border-gray-200">
+                    <div className="flex items-center gap-2 text-sm">
+                      <i className="fas fa-file-invoice text-green-600"></i>
+                      <span className="text-green-600 font-medium">세금계산서 발행 가능</span>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex gap-2">
                   <button className="flex-1 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
                     <i className="far fa-comment"></i> 문의
                   </button>

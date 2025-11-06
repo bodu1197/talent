@@ -17,6 +17,8 @@ interface SellerProfile {
   whatsapp: string | null
   website: string | null
   preferred_contact: string[]
+  contact_hours: string | null
+  tax_invoice_available: boolean
   account_number: string
   account_holder: string
   bank_name: string
@@ -167,6 +169,15 @@ export default function SellerProfileClient({ profile }: Props) {
                   </div>
                 </div>
               )}
+
+              {profile.contact_hours && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    연락 가능 시간
+                  </label>
+                  <p className="text-gray-900">{profile.contact_hours}</p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -205,6 +216,25 @@ export default function SellerProfileClient({ profile }: Props) {
                   {profile.is_business && profile.business_number && (
                     <span className="ml-2 text-sm text-gray-600">
                       ({profile.business_number})
+                    </span>
+                  )}
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  세금계산서 발행
+                </label>
+                <p className="text-gray-900">
+                  {profile.tax_invoice_available ? (
+                    <span className="text-green-600">
+                      <i className="fas fa-check-circle mr-1"></i>
+                      발행 가능
+                    </span>
+                  ) : (
+                    <span className="text-gray-500">
+                      <i className="fas fa-times-circle mr-1"></i>
+                      발행 불가
                     </span>
                   )}
                 </p>
