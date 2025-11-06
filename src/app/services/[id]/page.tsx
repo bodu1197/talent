@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import ViewTracker from '@/components/services/ViewTracker'
 import FavoriteButton from '@/components/services/FavoriteButton'
 import { logger } from '@/lib/logger'
+import { getCategoryPath } from '@/lib/categories'
 
 interface ServiceDetailProps {
   params: Promise<{
@@ -59,6 +60,13 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
   const categories = service.service_categories?.map((sc: any) => sc.category) || []
 
+  // 카테고리 경로 가져오기 (1차 > 2차 > 3차)
+  let categoryPath: any[] = []
+  if (categories.length > 0) {
+    // 첫 번째 카테고리의 전체 경로를 가져옴
+    categoryPath = await getCategoryPath(categories[0].id)
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 조회수 추적 */}
@@ -69,10 +77,15 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         <div className="container-1200 px-4">
           <div className="flex items-center gap-2 py-4 text-sm">
             <Link href="/" className="text-gray-500 hover:text-gray-700">홈</Link>
-            {categories.map((cat: any, index: number) => (
-              <div key={index} className="flex items-center gap-2">
+            {categoryPath.map((cat: any, index: number) => (
+              <div key={cat.id} className="flex items-center gap-2">
                 <span className="text-gray-400">/</span>
-                <Link href="#" className="text-gray-500 hover:text-gray-700">{cat.name}</Link>
+                <Link
+                  href={`/categories/${cat.slug}`}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  {cat.name}
+                </Link>
               </div>
             ))}
           </div>
