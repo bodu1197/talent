@@ -127,25 +127,33 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                         {/* 연락 가능 시간 */}
                         {service.seller?.contact_hours && (
                           <div className="flex items-center gap-1.5 text-gray-600 whitespace-nowrap">
-                            <i className="fas fa-clock text-gray-400"></i>
+                            <span className="font-medium text-gray-700">연락 가능 시간:</span>
                             <span>{service.seller.contact_hours}</span>
                           </div>
                         )}
 
+                        {/* 평균 응답 시간 (추후 개발) */}
+                        <div className="flex items-center gap-1.5 text-gray-600 whitespace-nowrap">
+                          <span className="font-medium text-gray-700">평균 응답 시간:</span>
+                          <span>00분 이내</span>
+                        </div>
+
                         {/* 세금계산서 발행 여부 */}
-                        {service.seller?.tax_invoice_available && (
-                          <div className="flex items-center gap-1.5 whitespace-nowrap">
-                            <i className="fas fa-file-invoice text-green-600"></i>
-                            <span className="text-green-600 font-medium">세금계산서</span>
-                          </div>
-                        )}
+                        <div className="flex items-center gap-1.5 whitespace-nowrap">
+                          <span className="font-medium text-gray-700">세금계산서 발행 여부:</span>
+                          {service.seller?.tax_invoice_available ? (
+                            <span className="text-green-600 font-medium">가능</span>
+                          ) : (
+                            <span className="text-gray-500">불가</span>
+                          )}
+                        </div>
                       </div>
                     </div>
 
                     {/* 버튼 */}
                     <div className="flex gap-2 flex-shrink-0">
-                      <button className="px-4 py-1.5 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm whitespace-nowrap">
-                        <i className="far fa-comment mr-1"></i> 문의
+                      <button className="px-4 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm whitespace-nowrap">
+                        <i className="far fa-comment mr-1"></i> 문의하기
                       </button>
                       <button className="px-4 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm whitespace-nowrap">
                         <i className="far fa-user mr-1"></i> 프로필
