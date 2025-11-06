@@ -45,7 +45,8 @@ export default function NewServiceClient({ sellerId }: Props) {
     price: '',
     deliveryDays: '',
     revisionCount: '0',
-    taxInvoiceAvailable: false
+    taxInvoiceAvailable: false,
+    searchKeywords: ''
   })
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -287,6 +288,7 @@ export default function NewServiceClient({ sellerId }: Props) {
           delivery_days: Math.max(1, parseInt(formData.deliveryDays) || 7),
           revision_count: formData.revisionCount === 'unlimited' ? 999 : Math.max(0, parseInt(formData.revisionCount) || 0),
           thumbnail_url: publicUrl,
+          search_keywords: formData.searchKeywords || null,
           status: 'pending'
         })
         .select()
@@ -581,6 +583,28 @@ export default function NewServiceClient({ sellerId }: Props) {
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
                   required
                 ></textarea>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  검색 키워드
+                </label>
+                <input
+                  type="text"
+                  maxLength={20}
+                  value={formData.searchKeywords}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[\s\W_]/g, '')
+                    setFormData({ ...formData, searchKeywords: value })
+                  }}
+                  placeholder="로고디자인브랜딩CI"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                />
+                <div className="mt-2 text-sm text-gray-600 space-y-1">
+                  <p>• 검색 키워드는 서비스 설명에 노출되지 않지만, 서비스 제목, 서비스 타입과 함께 검색 대상 단어로 사용됩니다.</p>
+                  <p>• 띄어쓰기 없이 20글자까지 입력할 수 있으며, 특수문자 및 이모지는 입력할 수 없습니다.</p>
+                  <p>• 서비스와 연관된 짧은 단어를 여러 개 입력하는 것이 검색 노출 향상에 도움이 됩니다. (다만, 동일 키워드 중복 입력은 검색 결과와 무관합니다.)</p>
+                </div>
               </div>
             </div>
           </div>
