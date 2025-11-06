@@ -32,9 +32,19 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(arrayBuffer)
 
     // SERVICE_ROLE_KEY로 Supabase Admin Client 생성 (RLS 우회)
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+    if (!serviceRoleKey) {
+      logger.error('SUPABASE_SERVICE_ROLE_KEY is not defined in environment variables')
+      return NextResponse.json({
+        error: 'Server configuration error',
+        details: 'SUPABASE_SERVICE_ROLE_KEY is missing'
+      }, { status: 500 })
+    }
+
     const supabaseAdmin = createAdminClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
+      serviceRoleKey
     )
 
     // Supabase Storage에 업로드 (Admin Client 사용)
