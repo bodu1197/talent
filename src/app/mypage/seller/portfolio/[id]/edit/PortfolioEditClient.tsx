@@ -16,6 +16,7 @@ interface Portfolio {
   thumbnail_url: string | null
   image_urls: string[]
   project_url: string | null
+  youtube_url: string | null
   tags: string[]
   view_count: number
   created_at: string
@@ -46,6 +47,7 @@ export default function PortfolioEditClient({ portfolio, sellerId, categories }:
     thumbnail_url: portfolio.thumbnail_url || '',
     image_urls: portfolio.image_urls || [],
     project_url: portfolio.project_url || '',
+    youtube_url: portfolio.youtube_url || '',
     tags: portfolio.tags || []
   })
   const [tagInput, setTagInput] = useState('')
@@ -55,6 +57,21 @@ export default function PortfolioEditClient({ portfolio, sellerId, categories }:
     portfolio.thumbnail_url,
     ...(portfolio.image_urls || [])
   ].filter(Boolean) as string[])
+  const [youtubeVideoId, setYoutubeVideoId] = useState(() => {
+    if (portfolio.youtube_url) {
+      const patterns = [
+        /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
+        /youtube\.com\/embed\/([^&\n?#]+)/,
+        /youtube\.com\/v\/([^&\n?#]+)/
+      ]
+      for (const pattern of patterns) {
+        const match = portfolio.youtube_url.match(pattern)
+        if (match) return match[1]
+      }
+    }
+    return ''
+  })
+  const [fetchingYoutubeThumbnail, setFetchingYoutubeThumbnail] = useState(false)
 
   // 카테고리 계층 구조 생성
   const categoryTree = useMemo(() => {
@@ -67,6 +84,75 @@ export default function PortfolioEditClient({ portfolio, sellerId, categories }:
       }))
     }))
   }, [categories])
+
+  // YouTube URL에서 비디오 ID 추출
+  const extractYoutubeVideoId = (url: string): string | null => {
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
+      /youtube\.com\/embed\/([^&\n?#]+)/,
+      /youtube\.com\/v\/([^&\n?#]+)/
+    ]
+
+    for (const pattern of patterns) {
+      const match = url.match(pattern)
+      if (match) return match[1]
+    }
+    return null
+  }
+
+  // YouTube URL 입력 핸들러
+  const handleYoutubeUrlChange = async (url: string) => {
+    setFormData({ ...formData, youtube_url: url })
+
+    if (!url) {
+      setYoutubeVideoId('')
+      return
+    }
+
+    const videoId = extractYoutubeVideoId(url)
+    if (videoId) {
+      setYoutubeVideoId(videoId)
+
+      // YouTube 썸네일 자동 다운로드
+      try {
+        setFetchingYoutubeThumbnail(true)
+
+        // YouTube 썸네일 URL (maxresdefault가 없으면 hqdefault 사용)
+        const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+
+        // 썸네일 이미지를 Blob으로 가져오기
+        const response = await fetch(thumbnailUrl)
+        if (!response.ok) {
+          // maxresdefault가 없으면 hqdefault 시도
+          const fallbackUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+          const fallbackResponse = await fetch(fallbackUrl)
+          const blob = await fallbackResponse.blob()
+
+          // Blob을 File로 변환
+          const file = new File([blob], `youtube-${videoId}.jpg`, { type: 'image/jpeg' })
+
+          // 기존 이미지 파일 배열에 추가
+          setImageFiles(prev => [file, ...prev])
+
+          // 미리보기 생성
+          const preview = URL.createObjectURL(blob)
+          setImagePreviews(prev => [preview, ...prev])
+        } else {
+          const blob = await response.blob()
+          const file = new File([blob], `youtube-${videoId}.jpg`, { type: 'image/jpeg' })
+          setImageFiles(prev => [file, ...prev])
+          const preview = URL.createObjectURL(blob)
+          setImagePreviews(prev => [preview, ...prev])
+        }
+      } catch (error) {
+        logger.error('Failed to fetch YouTube thumbnail:', error)
+      } finally {
+        setFetchingYoutubeThumbnail(false)
+      }
+    } else {
+      setYoutubeVideoId('')
+    }
+  }
 
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -333,6 +419,46 @@ export default function PortfolioEditClient({ portfolio, sellerId, categories }:
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
                 placeholder="https://example.com"
               />
+            </div>
+
+            {/* YouTube URL */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                YouTube 영상 URL <span className="text-gray-500 text-xs">(영상이 포트폴리오에 삽입됩니다)</span>
+              </label>
+              <input
+                type="url"
+                value={formData.youtube_url}
+                onChange={(e) => handleYoutubeUrlChange(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                placeholder="https://www.youtube.com/watch?v=..."
+                disabled={fetchingYoutubeThumbnail}
+              />
+              {fetchingYoutubeThumbnail && (
+                <p className="mt-2 text-sm text-gray-600">
+                  <i className="fas fa-spinner fa-spin mr-2"></i>
+                  YouTube 썸네일을 가져오는 중...
+                </p>
+              )}
+              {youtubeVideoId && (
+                <div className="mt-4 bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <p className="text-sm text-gray-700 mb-2">
+                    <i className="fab fa-youtube text-red-600 mr-2"></i>
+                    YouTube 영상 미리보기
+                  </p>
+                  <div className="aspect-video bg-black rounded-lg overflow-hidden">
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      src={`https://www.youtube.com/embed/${youtubeVideoId}`}
+                      title="YouTube video preview"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* 태그 */}

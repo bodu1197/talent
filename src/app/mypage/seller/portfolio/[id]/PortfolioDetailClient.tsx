@@ -15,6 +15,7 @@ interface Portfolio {
   thumbnail_url: string | null
   image_urls: string[]
   project_url: string | null
+  youtube_url: string | null
   tags: string[]
   view_count: number
   created_at: string
@@ -36,6 +37,23 @@ export default function PortfolioDetailClient({ portfolio, sellerId }: Props) {
     portfolio.thumbnail_url,
     ...(portfolio.image_urls || [])
   ].filter(Boolean) as string[]
+
+  // YouTube 비디오 ID 추출
+  const getYoutubeVideoId = (url: string | null): string | null => {
+    if (!url) return null
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
+      /youtube\.com\/embed\/([^&\n?#]+)/,
+      /youtube\.com\/v\/([^&\n?#]+)/
+    ]
+    for (const pattern of patterns) {
+      const match = url.match(pattern)
+      if (match) return match[1]
+    }
+    return null
+  }
+
+  const youtubeVideoId = getYoutubeVideoId(portfolio.youtube_url)
 
   const handleDelete = async () => {
     if (!confirm('정말 삭제하시겠습니까?')) return
@@ -140,6 +158,27 @@ export default function PortfolioDetailClient({ portfolio, sellerId }: Props) {
                     </div>
                   </div>
                 )}
+              </div>
+            </div>
+          )}
+
+          {/* YouTube 영상 */}
+          {youtubeVideoId && (
+            <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                <i className="fab fa-youtube text-red-600 mr-2"></i>
+                프로젝트 영상
+              </h2>
+              <div className="aspect-video bg-black rounded-lg overflow-hidden">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={`https://www.youtube.com/embed/${youtubeVideoId}`}
+                  title={portfolio.title}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
               </div>
             </div>
           )}
