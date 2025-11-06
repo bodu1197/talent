@@ -6,6 +6,9 @@ import FavoriteButton from '@/components/services/FavoriteButton'
 import { logger } from '@/lib/logger'
 import { getCategoryPath } from '@/lib/categories'
 
+// 동적 렌더링 강제 (찜 개수 실시간 반영)
+export const dynamic = 'force-dynamic'
+
 interface ServiceDetailProps {
   params: Promise<{
     id: string

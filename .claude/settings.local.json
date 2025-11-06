@@ -29,7 +29,8 @@
       "Bash(node scripts/apply-1st-reorder.js:*)",
       "Bash(npx supabase db push:*)",
       "Bash(cat:*)",
-      "Bash(npx supabase db:*)"
+      "Bash(npx supabase db:*)",
+      "Bash(node scripts/check-wishlist-count.js:*)"
     ],
     "deny": [],
     "ask": []
