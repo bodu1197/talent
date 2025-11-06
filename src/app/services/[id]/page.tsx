@@ -74,8 +74,8 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
       {/* 상단 네비게이션 (Breadcrumb) */}
       <nav className="bg-white border-b mt-16">
-        <div className="container-1200 px-4">
-          <div className="flex items-center gap-2 py-4 text-sm">
+        <div className="container-1200 px-4 py-4">
+          <div className="flex items-center gap-2 text-sm">
             <Link href="/" className="text-gray-500 hover:text-gray-700">홈</Link>
             {categoryPath.map((cat: any, index: number) => (
               <div key={cat.id} className="flex items-center gap-2">
@@ -92,7 +92,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         </div>
       </nav>
 
-      <div className="container-1200 px-4 py-8">
+      <div className="container-1200 px-4 pt-8 pb-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* 왼쪽: 서비스 정보 */}
           <div className="flex-1 space-y-8">
