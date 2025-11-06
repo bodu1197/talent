@@ -104,7 +104,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
               <h1 className="text-2xl font-bold mb-6">{service.title}</h1>
 
               {/* 통계 */}
-              <div className="flex items-center gap-6 py-3 mb-6 text-sm">
+              <div className="flex items-center gap-6 py-3 mb-6 text-sm relative z-10">
                 <div className="flex items-center gap-2">
                   {/* 별점 5개 표시 */}
                   {[1, 2, 3, 4, 5].map((star) => (
