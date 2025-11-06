@@ -180,6 +180,25 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   </div>
                 </div>
               </div>
+
+              {/* 탭 메뉴 */}
+              <div className="flex gap-4 mt-6 border-b border-gray-200">
+                <a href="#portfolio" className="pb-3 px-2 text-sm hover:text-[#0f3460] hover:border-b-2 hover:border-[#0f3460] transition-colors">
+                  포트폴리오
+                </a>
+                <a href="#description" className="pb-3 px-2 text-sm hover:text-[#0f3460] hover:border-b-2 hover:border-[#0f3460] transition-colors">
+                  서비스 설명
+                </a>
+                <a href="#price" className="pb-3 px-2 text-sm hover:text-[#0f3460] hover:border-b-2 hover:border-[#0f3460] transition-colors">
+                  가격 정보
+                </a>
+                <a href="#expert" className="pb-3 px-2 text-sm hover:text-[#0f3460] hover:border-b-2 hover:border-[#0f3460] transition-colors">
+                  전문가 정보
+                </a>
+                <a href="#reviews" className="pb-3 px-2 text-sm hover:text-[#0f3460] hover:border-b-2 hover:border-[#0f3460] transition-colors">
+                  리뷰
+                </a>
+              </div>
             </div>
 
             {/* 오른쪽: 썸네일 (배경색 영역 내부, 상단만 포함) */}
@@ -208,11 +227,25 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       <div className="container-1200 px-4 pb-8 pt-5">
         <div className="flex flex-col lg:flex-row gap-5">
           {/* 왼쪽: 서비스 설명 */}
-          <div className="flex-1">
-            <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="flex-1 space-y-8">
+            {/* 서비스 설명 */}
+            <div id="description" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
+              <h2 className="text-xl font-bold mb-4">서비스 설명</h2>
               <div className="prose prose-lg max-w-none whitespace-pre-wrap">
                 {service.description}
               </div>
+            </div>
+
+            {/* 전문가 정보 */}
+            <div id="expert" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
+              <h2 className="text-xl font-bold mb-4">전문가 정보</h2>
+              <p className="text-gray-600">전문가 정보가 여기에 표시됩니다.</p>
+            </div>
+
+            {/* 리뷰 */}
+            <div id="reviews" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
+              <h2 className="text-xl font-bold mb-4">리뷰</h2>
+              <p className="text-gray-600">리뷰가 여기에 표시됩니다.</p>
             </div>
           </div>
 
@@ -221,7 +254,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             <div className="sticky top-12 space-y-6">
               {/* 포트폴리오 이미지 */}
               {service.portfolio_urls && service.portfolio_urls.length > 0 && (
-                <div className="bg-white rounded-xl shadow-sm p-4">
+                <div id="portfolio" className="bg-white rounded-xl shadow-sm p-4 scroll-mt-20">
                   <div className="grid grid-cols-2 gap-2">
                     {service.portfolio_urls.slice(0, 4).map((url: string, i: number) => (
                       <div key={i} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
@@ -233,7 +266,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
               )}
 
               {/* 가격 정보 */}
-              <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+              <div id="price" className="bg-white rounded-xl shadow-sm overflow-hidden scroll-mt-20">
                 <div className="p-6">
                   <div className="text-2xl font-bold mb-1">
                     {service.price?.toLocaleString() || 0}원
