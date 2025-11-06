@@ -594,7 +594,8 @@ export default function NewServiceClient({ sellerId }: Props) {
                   maxLength={20}
                   value={formData.searchKeywords}
                   onChange={(e) => {
-                    const value = e.target.value.replace(/[\s\W_]/g, '')
+                    // 한글, 영문, 숫자만 허용 (띄어쓰기, 특수문자, 이모지 제거)
+                    const value = e.target.value.replace(/[^\w가-힣]/g, '')
                     setFormData({ ...formData, searchKeywords: value })
                   }}
                   placeholder="로고디자인브랜딩CI"
