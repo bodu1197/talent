@@ -211,7 +211,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
           </div>
 
           {/* 오른쪽: 포트폴리오, 가격, 안전거래 */}
-          <div className="w-full lg:w-[350px] flex-shrink-0 lg:-mt-[20px]">
+          <div className="w-full lg:w-[350px] flex-shrink-0">
             <div className="sticky top-12 space-y-6">
               {/* 포트폴리오 이미지 */}
               {service.portfolio_urls && service.portfolio_urls.length > 0 && (
