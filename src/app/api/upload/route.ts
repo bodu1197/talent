@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
 
 export async function POST(request: NextRequest) {
@@ -30,8 +31,14 @@ export async function POST(request: NextRequest) {
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
 
-    // Supabase Storage에 업로드
-    const { data, error } = await supabase.storage
+    // SERVICE_ROLE_KEY로 Supabase Admin Client 생성 (RLS 우회)
+    const supabaseAdmin = createAdminClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+
+    // Supabase Storage에 업로드 (Admin Client 사용)
+    const { data, error } = await supabaseAdmin.storage
       .from('portfolio')
       .upload(filePath, buffer, {
         contentType: file.type,
@@ -51,7 +58,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 공개 URL 생성
-    const { data: urlData } = supabase.storage
+    const { data: urlData } = supabaseAdmin.storage
       .from('portfolio')
       .getPublicUrl(filePath)
 

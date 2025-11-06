@@ -36,7 +36,13 @@
       "Bash(node scripts/check-portfolio-table-structure.js:*)",
       "Bash(node scripts/create-bucket-mgmt-api.js:*)",
       "Bash(node scripts/create-portfolio-bucket-final.js:*)",
-      "Bash(node scripts/check-storage-policies.js:*)"
+      "Bash(node scripts/check-storage-policies.js:*)",
+      "Bash(node scripts/apply-storage-policies.js:*)",
+      "Bash(supabase --version:*)",
+      "Bash(supabase db execute:*)",
+      "Bash(psql:*)",
+      "WebFetch(domain:supabase.com)",
+      "Bash(node scripts/execute-policies-final.js:*)"
     ],
     "deny": [],
     "ask": []
