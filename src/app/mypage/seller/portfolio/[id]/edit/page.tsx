@@ -1,12 +1,12 @@
 import { redirect, notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import PortfolioDetailClient from './PortfolioDetailClient'
+import PortfolioEditClient from './PortfolioEditClient'
 
 interface Props {
   params: Promise<{ id: string }>
 }
 
-export default async function PortfolioDetailPage({ params }: Props) {
+export default async function PortfolioEditPage({ params }: Props) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -42,5 +42,17 @@ export default async function PortfolioDetailPage({ params }: Props) {
     redirect('/mypage/seller/portfolio')
   }
 
-  return <PortfolioDetailClient portfolio={portfolio} sellerId={seller.id} />
+  // 카테고리 목록 가져오기
+  const { data: categories } = await supabase
+    .from('categories')
+    .select('id, name, slug, parent_id')
+    .order('display_order', { ascending: true })
+
+  return (
+    <PortfolioEditClient
+      portfolio={portfolio}
+      sellerId={seller.id}
+      categories={categories || []}
+    />
+  )
 }

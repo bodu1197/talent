@@ -5,7 +5,7 @@ import { logger } from '@/lib/logger'
 // DELETE: 포트폴리오 삭제
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = await createClient()
@@ -15,7 +15,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const portfolioId = params.id
+    const { id: portfolioId } = await params
 
     // 포트폴리오 조회 및 소유권 확인
     const { data: portfolio } = await supabase
@@ -58,14 +58,82 @@ export async function DELETE(
   }
 }
 
-// GET: 포트폴리오 상세 조회
-export async function GET(
+// PUT: 포트폴리오 수정
+export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = await createClient()
-    const portfolioId = params.id
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const { id: portfolioId } = await params
+    const body = await request.json()
+
+    // 포트폴리오 조회 및 소유권 확인
+    const { data: portfolio } = await supabase
+      .from('seller_portfolio')
+      .select('seller_id')
+      .eq('id', portfolioId)
+      .single()
+
+    if (!portfolio) {
+      return NextResponse.json({ error: 'Portfolio not found' }, { status: 404 })
+    }
+
+    // seller 소유권 확인
+    const { data: seller } = await supabase
+      .from('sellers')
+      .select('id')
+      .eq('id', portfolio.seller_id)
+      .eq('user_id', user.id)
+      .single()
+
+    if (!seller) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+    }
+
+    // 포트폴리오 업데이트
+    const { data: updatedPortfolio, error } = await supabase
+      .from('seller_portfolio')
+      .update({
+        title: body.title,
+        description: body.description,
+        category_id: body.category_id || null,
+        thumbnail_url: body.thumbnail_url || null,
+        image_urls: body.image_urls || [],
+        project_url: body.project_url || null,
+        tags: body.tags || [],
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', portfolioId)
+      .select()
+      .single()
+
+    if (error) {
+      logger.error('Portfolio update error:', error)
+      return NextResponse.json({ error: 'Failed to update portfolio', details: error.message }, { status: 500 })
+    }
+
+    return NextResponse.json({ data: updatedPortfolio }, { status: 200 })
+  } catch (error) {
+    logger.error('Portfolio PUT error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}
+
+// GET: 포트폴리오 상세 조회
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const supabase = await createClient()
+    const { id: portfolioId } = await params
 
     const { data: portfolio, error } = await supabase
       .from('seller_portfolio')
