@@ -30,7 +30,12 @@
       "Bash(npx supabase db push:*)",
       "Bash(cat:*)",
       "Bash(npx supabase db:*)",
-      "Bash(node scripts/check-wishlist-count.js:*)"
+      "Bash(node scripts/check-wishlist-count.js:*)",
+      "Bash(node scripts/check-portfolio-setup.js:*)",
+      "Bash(node scripts/create-portfolio-bucket.js:*)",
+      "Bash(node scripts/check-portfolio-table-structure.js:*)",
+      "Bash(node scripts/create-bucket-mgmt-api.js:*)",
+      "Bash(node scripts/create-portfolio-bucket-final.js:*)"
     ],
     "deny": [],
     "ask": []

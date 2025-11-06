@@ -51,11 +51,12 @@ export default function PortfolioNewClient({ sellerId, categories }: Props) {
     const files = Array.from(e.target.files || [])
     if (files.length === 0) return
 
-    setImageFiles(files)
+    // 기존 파일에 새 파일 추가 (누적)
+    setImageFiles(prev => [...prev, ...files])
 
-    // 미리보기 생성
+    // 미리보기 생성 (기존 미리보기에 새 미리보기 추가)
     const previews = files.map(file => URL.createObjectURL(file))
-    setImagePreviews(previews)
+    setImagePreviews(prev => [...prev, ...previews])
   }
 
   // 이미지 삭제
