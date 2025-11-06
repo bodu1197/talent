@@ -197,36 +197,6 @@ export default function PortfolioNewClient({ sellerId, categories }: Props) {
               />
             </div>
 
-            {/* 카테고리 */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                카테고리
-              </label>
-              <select
-                value={formData.category_id}
-                onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-              >
-                <option value="">카테고리를 선택하세요</option>
-                {categoryTree.map((parent) => (
-                  <optgroup key={parent.id} label={parent.name}>
-                    {parent.children.map((child) => (
-                      <>
-                        <option key={child.id} value={child.id}>
-                          └ {child.name}
-                        </option>
-                        {child.children.map((grandchild) => (
-                          <option key={grandchild.id} value={grandchild.id}>
-                            &nbsp;&nbsp;&nbsp;└ {grandchild.name}
-                          </option>
-                        ))}
-                      </>
-                    ))}
-                  </optgroup>
-                ))}
-              </select>
-            </div>
-
             {/* 설명 */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
