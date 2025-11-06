@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import Sidebar from '@/components/mypage/Sidebar'
+import { createClient } from '@/lib/supabase/client'
 import { logger } from '@/lib/logger'
 
 interface Category {
@@ -82,33 +83,33 @@ export default function PortfolioNewClient({ sellerId, categories }: Props) {
       let thumbnail_url = formData.thumbnail_url
       let image_urls = formData.image_urls
 
-      // 이미지 파일 업로드
+      // 이미지 파일 업로드 (클라이언트에서 직접 Supabase Storage에 업로드)
       if (imageFiles.length > 0) {
+        const supabase = createClient()
         const uploadedUrls: string[] = []
 
-        for (const file of imageFiles) {
-          const formData = new FormData()
-          formData.append('file', file)
-          formData.append('folder', 'portfolio')
+        for (let i = 0; i < imageFiles.length; i++) {
+          const file = imageFiles[i]
+          const fileExt = file.name.split('.').pop()
+          const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`
+          const filePath = `portfolio/${fileName}`
 
-          const uploadResponse = await fetch('/api/upload', {
-            method: 'POST',
-            body: formData
-          })
+          // Supabase Storage에 직접 업로드
+          const { error: uploadError } = await supabase.storage
+            .from('portfolio')
+            .upload(filePath, file, { upsert: false })
 
-          const uploadResult = await uploadResponse.json()
-
-          if (!uploadResponse.ok) {
-            logger.error('Image upload failed:', {
-              status: uploadResponse.status,
-              error: uploadResult.error,
-              details: uploadResult.details
-            })
-            throw new Error(`이미지 업로드 실패: ${uploadResult.details || uploadResult.error}`)
+          if (uploadError) {
+            logger.error('Image upload failed:', uploadError)
+            throw new Error(`이미지 업로드 실패: ${uploadError.message}`)
           }
 
-          const { url } = uploadResult
-          uploadedUrls.push(url)
+          // 공개 URL 가져오기
+          const { data: { publicUrl } } = supabase.storage
+            .from('portfolio')
+            .getPublicUrl(filePath)
+
+          uploadedUrls.push(publicUrl)
         }
 
         // 첫 번째 이미지를 썸네일로, 나머지를 포트폴리오 이미지로
