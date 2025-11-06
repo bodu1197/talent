@@ -96,7 +96,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       </nav>
 
       {/* 제목 및 판매자 프로필 영역 - 전체 가로 배경 */}
-      <div className="w-full bg-[#faf8f5]">
+      <div className="w-full bg-red-500">
         <div className="container-1200 px-4 py-8">
           <div className="flex flex-col lg:flex-row gap-5">
             {/* 왼쪽: 제목 및 판매자 정보 */}
