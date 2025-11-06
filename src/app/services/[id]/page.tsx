@@ -95,16 +95,16 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         </div>
       </nav>
 
-      <div className="container-1200 px-4 pb-8">
-        <div className="flex flex-col lg:flex-row gap-5">
-          {/* 왼쪽: 서비스 정보 */}
-          <div className="flex-1 space-y-8 pt-8">
-            {/* 서비스 설명 */}
-            <div className="bg-white rounded-xl shadow-sm">
+      {/* 제목 및 판매자 프로필 영역 - 전체 가로 배경 */}
+      <div className="w-full bg-[#faf8f5]">
+        <div className="container-1200 px-4 py-8">
+          <div className="flex flex-col lg:flex-row gap-5">
+            {/* 왼쪽: 제목 및 판매자 정보 */}
+            <div className="flex-1">
               <h1 className="text-2xl font-bold mb-6">{service.title}</h1>
 
               {/* 통계 */}
-              <div className="flex items-center gap-6 py-4 border-y border-gray-200 mb-6">
+              <div className="flex items-center gap-6 py-4 border-y border-gray-300 mb-6">
                 <div className="flex items-center gap-2">
                   <i className="fas fa-star text-yellow-400"></i>
                   <span className="font-bold">{service.rating || 0}</span>
@@ -117,7 +117,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
               </div>
 
               {/* 판매자 정보 카드 */}
-              <div className="bg-white border-2 border-[#0f3460] rounded-lg p-3 mb-6 h-[70px] flex items-center">
+              <div className="bg-white border-2 border-[#0f3460] rounded-lg p-3 h-[70px] flex items-center">
                 <div className="flex items-center gap-3 w-full">
                   {/* 프로필 이미지 */}
                   <div className="w-[54px] h-[54px] bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
@@ -174,15 +174,10 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   </div>
                 </div>
               </div>
-
-              <div className="prose prose-lg max-w-none whitespace-pre-wrap">
-                {service.description}
-              </div>
             </div>
-          </div>
 
-          {/* 오른쪽: 구매 옵션 */}
-          <div className="w-full lg:w-[350px] flex-shrink-0 lg:-mt-[20px]">
+            {/* 오른쪽: 썸네일 (베이지 배경 영역 내) */}
+            <div className="w-full lg:w-[350px] flex-shrink-0 lg:-mt-[20px]">
             <div className="sticky top-12 space-y-6">
               {/* 썸네일 이미지 */}
               <div className="bg-white rounded-xl overflow-hidden shadow-sm">
@@ -243,6 +238,15 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 서비스 설명 영역 */}
+      <div className="container-1200 px-4 pb-8">
+        <div className="bg-white rounded-xl shadow-sm p-6 mt-5">
+          <div className="prose prose-lg max-w-none whitespace-pre-wrap">
+            {service.description}
           </div>
         </div>
       </div>
