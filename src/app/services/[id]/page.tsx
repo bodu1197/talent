@@ -101,57 +101,55 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
               </div>
 
               {/* 판매자 정보 카드 */}
-              <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6">
-                <div className="flex flex-col sm:flex-row items-start gap-4">
+              <div className="bg-white border-2 border-[#0f3460] rounded-lg p-4 mb-6 h-[70px] flex items-center">
+                <div className="flex items-center gap-4 w-full">
                   {/* 프로필 이미지 */}
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
+                  <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
                     {service.seller?.profile_image ? (
                       <img src={service.seller.profile_image} alt={service.seller.business_name} className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-400">
-                        <i className="fas fa-user text-2xl"></i>
+                        <i className="fas fa-user text-lg"></i>
                       </div>
                     )}
                   </div>
 
                   {/* 정보 영역 */}
-                  <div className="flex-1 w-full">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
-                      {/* 판매자명 및 정보 */}
-                      <div className="flex-1">
-                        <h3 className="font-bold text-base sm:text-lg mb-2">
-                          {service.seller?.business_name}
-                          {service.seller?.display_name && ` (${service.seller.display_name})`}
-                        </h3>
+                  <div className="flex-1 flex items-center justify-between gap-4 min-w-0">
+                    {/* 판매자명 및 정보 */}
+                    <div className="flex items-center gap-4 min-w-0 flex-1">
+                      <h3 className="font-bold text-base whitespace-nowrap">
+                        {service.seller?.business_name}
+                        {service.seller?.display_name && ` (${service.seller.display_name})`}
+                      </h3>
 
-                        <div className="flex flex-wrap items-center gap-3 text-sm">
-                          {/* 연락 가능 시간 */}
-                          {service.seller?.contact_hours && (
-                            <div className="flex items-center gap-1.5 text-gray-600">
-                              <i className="fas fa-clock text-gray-400"></i>
-                              <span>{service.seller.contact_hours}</span>
-                            </div>
-                          )}
+                      <div className="flex items-center gap-3 text-sm">
+                        {/* 연락 가능 시간 */}
+                        {service.seller?.contact_hours && (
+                          <div className="flex items-center gap-1.5 text-gray-600 whitespace-nowrap">
+                            <i className="fas fa-clock text-gray-400"></i>
+                            <span>{service.seller.contact_hours}</span>
+                          </div>
+                        )}
 
-                          {/* 세금계산서 발행 여부 */}
-                          {service.seller?.tax_invoice_available && (
-                            <div className="flex items-center gap-1.5">
-                              <i className="fas fa-file-invoice text-green-600"></i>
-                              <span className="text-green-600 font-medium">세금계산서 발행</span>
-                            </div>
-                          )}
-                        </div>
+                        {/* 세금계산서 발행 여부 */}
+                        {service.seller?.tax_invoice_available && (
+                          <div className="flex items-center gap-1.5 whitespace-nowrap">
+                            <i className="fas fa-file-invoice text-green-600"></i>
+                            <span className="text-green-600 font-medium">세금계산서</span>
+                          </div>
+                        )}
                       </div>
+                    </div>
 
-                      {/* 버튼 */}
-                      <div className="flex gap-2">
-                        <button className="px-3 sm:px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-xs sm:text-sm whitespace-nowrap">
-                          <i className="far fa-comment mr-1"></i> 문의
-                        </button>
-                        <button className="px-3 sm:px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs sm:text-sm whitespace-nowrap">
-                          <i className="far fa-user mr-1"></i> 프로필
-                        </button>
-                      </div>
+                    {/* 버튼 */}
+                    <div className="flex gap-2 flex-shrink-0">
+                      <button className="px-4 py-1.5 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm whitespace-nowrap">
+                        <i className="far fa-comment mr-1"></i> 문의
+                      </button>
+                      <button className="px-4 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm whitespace-nowrap">
+                        <i className="far fa-user mr-1"></i> 프로필
+                      </button>
                     </div>
                   </div>
                 </div>
