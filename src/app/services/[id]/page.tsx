@@ -96,11 +96,11 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       </nav>
 
       {/* 제목 및 판매자 프로필 영역 - 전체 가로 배경 */}
-      <div className="w-full overflow-hidden" style={{ background: 'linear-gradient(to bottom, #ecfdf5 0%, #a7f3d0 50%, #ecfdf5 100%)' }}>
-        <div className="container-1200 px-4">
-          <div className="flex flex-col lg:flex-row gap-5" style={{ paddingTop: '10px', paddingBottom: '10px', minHeight: '280px', maxHeight: '280px' }}>
+      <div className="w-full" style={{ background: 'linear-gradient(to bottom, #ecfdf5 0%, #a7f3d0 50%, #ecfdf5 100%)' }}>
+        <div className="container-1200 px-4 py-8">
+          <div className="flex flex-col lg:flex-row gap-5">
             {/* 왼쪽: 제목, 통계, 판매자 카드 */}
-            <div className="flex-1 overflow-hidden">
+            <div className="flex-1">
               <h1 className="text-2xl font-bold mb-6">{service.title}</h1>
 
               {/* 통계 */}
