@@ -52,6 +52,20 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // wishlist_count 업데이트
+    const { data: service } = await supabase
+      .from('services')
+      .select('wishlist_count')
+      .eq('id', serviceId)
+      .single()
+
+    if (service) {
+      await supabase
+        .from('services')
+        .update({ wishlist_count: (service.wishlist_count || 0) + 1 })
+        .eq('id', serviceId)
+    }
+
     logger.info('Service added to favorites', { userId: user.id, serviceId })
     return NextResponse.json(
       { message: 'Added to favorites' },
@@ -103,6 +117,20 @@ export async function DELETE(request: NextRequest) {
         { error: 'Failed to remove favorite' },
         { status: 500 }
       )
+    }
+
+    // wishlist_count 업데이트
+    const { data: service } = await supabase
+      .from('services')
+      .select('wishlist_count')
+      .eq('id', serviceId)
+      .single()
+
+    if (service && service.wishlist_count > 0) {
+      await supabase
+        .from('services')
+        .update({ wishlist_count: service.wishlist_count - 1 })
+        .eq('id', serviceId)
     }
 
     logger.info('Service removed from favorites', { userId: user.id, serviceId })

@@ -56,6 +56,8 @@ export default function FavoriteButton({ serviceId, className = '' }: FavoriteBu
 
         if (response.ok) {
           setIsFavorited(false)
+          // 페이지 새로고침하여 찜 개수 업데이트
+          router.refresh()
         } else {
           alert('찜 취소에 실패했습니다.')
         }
@@ -71,6 +73,8 @@ export default function FavoriteButton({ serviceId, className = '' }: FavoriteBu
 
         if (response.ok) {
           setIsFavorited(true)
+          // 페이지 새로고침하여 찜 개수 업데이트
+          router.refresh()
         } else {
           alert('찜하기에 실패했습니다.')
         }
