@@ -22,6 +22,8 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       seller:sellers(
         id,
         business_name,
+        display_name,
+        profile_image,
         user_id
       ),
       service_categories(
@@ -135,8 +137,8 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
               <div className="bg-white rounded-xl p-6 shadow-sm">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-16 h-16 bg-gray-200 rounded-full overflow-hidden">
-                    {service.seller?.user?.profile_image ? (
-                      <img src={service.seller.user.profile_image} alt={service.seller.user.name} className="w-full h-full object-cover" />
+                    {service.seller?.profile_image ? (
+                      <img src={service.seller.profile_image} alt={service.seller.business_name} className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-400">
                         <i className="fas fa-user text-2xl"></i>
@@ -144,10 +146,10 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                     )}
                   </div>
                   <div>
-                    <h3 className="font-bold">{service.seller?.business_name || service.seller?.user?.name}</h3>
-                    <div className="text-sm text-gray-600">
-                      {service.seller?.user?.created_at && new Date(service.seller.user.created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long' })} 가입
-                    </div>
+                    <h3 className="font-bold">
+                      판매자 {service.seller?.business_name}
+                      {service.seller?.display_name && ` (${service.seller.display_name})`}
+                    </h3>
                   </div>
                 </div>
 
