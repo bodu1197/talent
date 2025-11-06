@@ -20,6 +20,7 @@ interface Props {
 export default function PortfolioNewClient({ sellerId, categories }: Props) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -30,6 +31,8 @@ export default function PortfolioNewClient({ sellerId, categories }: Props) {
     tags: [] as string[]
   })
   const [tagInput, setTagInput] = useState('')
+  const [imageFiles, setImageFiles] = useState<File[]>([])
+  const [imagePreviews, setImagePreviews] = useState<string[]>([])
 
   // 카테고리 계층 구조 생성
   const categoryTree = useMemo(() => {
@@ -43,6 +46,26 @@ export default function PortfolioNewClient({ sellerId, categories }: Props) {
     }))
   }, [categories])
 
+  // 이미지 파일 선택 핸들러
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    if (files.length === 0) return
+
+    setImageFiles(files)
+
+    // 미리보기 생성
+    const previews = files.map(file => URL.createObjectURL(file))
+    setImagePreviews(previews)
+  }
+
+  // 이미지 삭제
+  const handleRemoveImage = (index: number) => {
+    const newFiles = imageFiles.filter((_, i) => i !== index)
+    const newPreviews = imagePreviews.filter((_, i) => i !== index)
+    setImageFiles(newFiles)
+    setImagePreviews(newPreviews)
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -53,12 +76,47 @@ export default function PortfolioNewClient({ sellerId, categories }: Props) {
 
     try {
       setLoading(true)
+      setUploading(true)
+
+      let thumbnail_url = formData.thumbnail_url
+      let image_urls = formData.image_urls
+
+      // 이미지 파일 업로드
+      if (imageFiles.length > 0) {
+        const uploadedUrls: string[] = []
+
+        for (const file of imageFiles) {
+          const formData = new FormData()
+          formData.append('file', file)
+          formData.append('folder', 'portfolio')
+
+          const uploadResponse = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+          })
+
+          if (!uploadResponse.ok) {
+            throw new Error('이미지 업로드 실패')
+          }
+
+          const { url } = await uploadResponse.json()
+          uploadedUrls.push(url)
+        }
+
+        // 첫 번째 이미지를 썸네일로, 나머지를 포트폴리오 이미지로
+        thumbnail_url = uploadedUrls[0]
+        image_urls = uploadedUrls.slice(1)
+      }
+
+      setUploading(false)
 
       const response = await fetch('/api/seller/portfolio', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
+          thumbnail_url,
+          image_urls,
           seller_id: sellerId
         })
       })
@@ -75,6 +133,7 @@ export default function PortfolioNewClient({ sellerId, categories }: Props) {
       alert('등록에 실패했습니다')
     } finally {
       setLoading(false)
+      setUploading(false)
     }
   }
 
@@ -166,18 +225,43 @@ export default function PortfolioNewClient({ sellerId, categories }: Props) {
               />
             </div>
 
-            {/* 썸네일 URL */}
+            {/* 이미지 업로드 */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                썸네일 이미지 URL
+                이미지 업로드 <span className="text-gray-500 text-xs">(첫 이미지가 썸네일이 됩니다)</span>
               </label>
               <input
-                type="url"
-                value={formData.thumbnail_url}
-                onChange={(e) => setFormData({ ...formData, thumbnail_url: e.target.value })}
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleImageChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-                placeholder="https://example.com/image.jpg"
               />
+              {imagePreviews.length > 0 && (
+                <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {imagePreviews.map((preview, index) => (
+                    <div key={index} className="relative">
+                      <img
+                        src={preview}
+                        alt={`Preview ${index + 1}`}
+                        className="w-full h-32 object-cover rounded-lg"
+                      />
+                      {index === 0 && (
+                        <span className="absolute top-2 left-2 bg-[#0f3460] text-white text-xs px-2 py-1 rounded">
+                          썸네일
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImage(index)}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                      >
+                        <i className="fas fa-times text-xs"></i>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* 프로젝트 URL */}
@@ -251,7 +335,7 @@ export default function PortfolioNewClient({ sellerId, categories }: Props) {
                 disabled={loading}
                 className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
-                {loading ? '등록 중...' : '등록하기'}
+                {uploading ? '이미지 업로드 중...' : loading ? '등록 중...' : '등록하기'}
               </button>
             </div>
           </form>
