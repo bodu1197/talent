@@ -122,8 +122,16 @@ export default function PortfolioNewClient({ sellerId, categories }: Props) {
         })
       })
 
+      const result = await response.json()
+
       if (!response.ok) {
-        throw new Error('등록 실패')
+        logger.error('Portfolio creation failed:', {
+          status: response.status,
+          error: result.error,
+          details: result.details
+        })
+        alert(`등록 실패: ${result.details || result.error || '알 수 없는 오류'}`)
+        return
       }
 
       alert('포트폴리오가 등록되었습니다')
@@ -131,7 +139,7 @@ export default function PortfolioNewClient({ sellerId, categories }: Props) {
       router.refresh()
     } catch (error) {
       logger.error('Portfolio creation error:', error)
-      alert('등록에 실패했습니다')
+      alert('등록에 실패했습니다: ' + (error instanceof Error ? error.message : '알 수 없는 오류'))
     } finally {
       setLoading(false)
       setUploading(false)

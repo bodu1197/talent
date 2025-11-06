@@ -38,18 +38,26 @@ export async function POST(request: NextRequest) {
         seller_id,
         title,
         description,
-        category_id,
-        thumbnail_url,
+        category_id: category_id || null,
+        thumbnail_url: thumbnail_url || null,
         image_urls: image_urls || [],
-        project_url,
+        project_url: project_url || null,
         tags: tags || []
       })
       .select()
       .single()
 
     if (error) {
-      logger.error('Portfolio creation error:', error)
-      return NextResponse.json({ error: 'Failed to create portfolio' }, { status: 500 })
+      logger.error('Portfolio creation error:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code
+      })
+      return NextResponse.json({
+        error: 'Failed to create portfolio',
+        details: error.message
+      }, { status: 500 })
     }
 
     return NextResponse.json({ data }, { status: 201 })
