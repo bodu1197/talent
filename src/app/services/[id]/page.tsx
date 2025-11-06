@@ -15,6 +15,24 @@ interface ServiceDetailProps {
   }>
 }
 
+// YouTube 비디오 ID 추출 함수
+function getYoutubeVideoId(url: string | null): string | null {
+  if (!url) return null
+
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
+    /youtube\.com\/embed\/([^&\n?#]+)/,
+    /youtube\.com\/v\/([^&\n?#]+)/
+  ]
+
+  for (const pattern of patterns) {
+    const match = url.match(pattern)
+    if (match) return match[1]
+  }
+
+  return null
+}
+
 export default async function ServiceDetailPage({ params }: ServiceDetailProps) {
   const { id } = await params
   const supabase = await createClient()
@@ -47,6 +65,13 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
   if (!service) {
     notFound()
   }
+
+  // 이 서비스와 연결된 포트폴리오 조회
+  const { data: portfolios } = await supabase
+    .from('seller_portfolio')
+    .select('*')
+    .eq('service_id', id)
+    .order('created_at', { ascending: false })
 
   // seller의 user 정보를 별도로 조회
   if (service?.seller?.user_id) {
@@ -228,6 +253,91 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         <div className="flex flex-col lg:flex-row gap-5">
           {/* 왼쪽: 서비스 설명 */}
           <div className="flex-1 space-y-8">
+            {/* 포트폴리오 */}
+            {portfolios && portfolios.length > 0 && (
+              <div id="portfolio" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
+                <h2 className="text-xl font-bold mb-6">포트폴리오</h2>
+                <div className="space-y-8">
+                  {portfolios.map((portfolio: any) => {
+                    const youtubeVideoId = getYoutubeVideoId(portfolio.youtube_url)
+
+                    return (
+                      <div key={portfolio.id} className="border-b border-gray-200 last:border-b-0 pb-8 last:pb-0">
+                        {/* 포트폴리오 제목 */}
+                        <h3 className="text-lg font-bold mb-3">{portfolio.title}</h3>
+
+                        {/* 포트폴리오 설명 */}
+                        {portfolio.description && (
+                          <p className="text-gray-700 mb-4 whitespace-pre-wrap">{portfolio.description}</p>
+                        )}
+
+                        {/* YouTube 영상 */}
+                        {youtubeVideoId && (
+                          <div className="mb-4">
+                            <div className="aspect-video bg-black rounded-lg overflow-hidden">
+                              <iframe
+                                width="100%"
+                                height="100%"
+                                src={`https://www.youtube.com/embed/${youtubeVideoId}`}
+                                title={portfolio.title}
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                              ></iframe>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 포트폴리오 이미지 */}
+                        {portfolio.image_urls && portfolio.image_urls.length > 0 && (
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+                            {portfolio.image_urls.map((url: string, idx: number) => (
+                              <div key={idx} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                                <img
+                                  src={url}
+                                  alt={`${portfolio.title} - ${idx + 1}`}
+                                  className="w-full h-full object-cover hover:scale-105 transition-transform cursor-pointer"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* 프로젝트 URL */}
+                        {portfolio.project_url && (
+                          <div className="mb-4">
+                            <a
+                              href={portfolio.project_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 text-[#0f3460] hover:underline"
+                            >
+                              <i className="fas fa-external-link-alt"></i>
+                              <span>프로젝트 보기</span>
+                            </a>
+                          </div>
+                        )}
+
+                        {/* 태그 */}
+                        {portfolio.tags && portfolio.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-2">
+                            {portfolio.tags.map((tag: string) => (
+                              <span
+                                key={tag}
+                                className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
+                              >
+                                #{tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* 서비스 설명 */}
             <div id="description" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
               <h2 className="text-xl font-bold mb-4">서비스 설명</h2>
@@ -249,22 +359,9 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             </div>
           </div>
 
-          {/* 오른쪽: 포트폴리오, 가격, 안전거래 */}
+          {/* 오른쪽: 가격, 안전거래 */}
           <div className="w-full lg:w-[350px] flex-shrink-0">
             <div className="sticky top-12 space-y-6">
-              {/* 포트폴리오 이미지 */}
-              {service.portfolio_urls && service.portfolio_urls.length > 0 && (
-                <div id="portfolio" className="bg-white rounded-xl shadow-sm p-4 scroll-mt-20">
-                  <div className="grid grid-cols-2 gap-2">
-                    {service.portfolio_urls.slice(0, 4).map((url: string, i: number) => (
-                      <div key={i} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                        <img src={url} alt={`Portfolio ${i + 1}`} className="w-full h-full object-cover" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
               {/* 가격 정보 */}
               <div id="price" className="bg-white rounded-xl shadow-sm overflow-hidden scroll-mt-20">
                 <div className="p-6">

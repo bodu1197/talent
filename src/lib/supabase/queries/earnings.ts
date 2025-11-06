@@ -116,7 +116,10 @@ export async function getSellerPortfolio(sellerId: string) {
 
   const { data, error } = await supabase
     .from('seller_portfolio')
-    .select('*')
+    .select(`
+      *,
+      service:services(id, title, thumbnail_url)
+    `)
     .eq('seller_id', sellerId)
     .order('created_at', { ascending: false })
 

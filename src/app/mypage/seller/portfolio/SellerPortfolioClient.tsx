@@ -57,17 +57,40 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
             portfolio.map((item) => (
               <div key={item.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-[#0f3460] transition-colors">
                 <Link href={`/mypage/seller/portfolio/${item.id}`} className="block">
-                  <div className="aspect-[4/3] bg-gray-100 flex items-center justify-center">
+                  <div className="aspect-[4/3] bg-gray-100 flex items-center justify-center relative">
                     {item.thumbnail_url ? (
                       <img src={item.thumbnail_url} alt={item.title} className="w-full h-full object-cover" />
                     ) : (
                       <i className="fas fa-image text-gray-400 text-4xl"></i>
+                    )}
+                    {item.service && (
+                      <div className="absolute top-2 right-2 bg-[#0f3460] text-white text-xs px-2 py-1 rounded-md flex items-center gap-1">
+                        <i className="fas fa-link"></i>
+                        <span>서비스 연동</span>
+                      </div>
                     )}
                   </div>
                 </Link>
                 <div className="p-4">
                   <h3 className="text-lg font-bold text-gray-900 mb-2">{item.title}</h3>
                   <p className="text-sm text-gray-600 mb-3 line-clamp-2">{item.description}</p>
+                  {item.service && (
+                    <div className="mb-3 p-2 bg-blue-50 border border-blue-200 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <i className="fas fa-briefcase text-[#0f3460] text-sm"></i>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs text-gray-600">연동된 서비스</p>
+                          <Link
+                            href={`/services/${item.service.id}`}
+                            className="text-sm font-medium text-[#0f3460] hover:underline truncate block"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {item.service.title}
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   <div className="flex items-center justify-between text-sm text-gray-600">
                     <span><i className="fas fa-eye mr-1"></i>{item.view_count || 0}</span>
                     <span>{new Date(item.created_at).toLocaleDateString('ko-KR')}</span>
