@@ -591,19 +591,19 @@ export default function NewServiceClient({ sellerId }: Props) {
                 </label>
                 <input
                   type="text"
-                  maxLength={20}
+                  maxLength={100}
                   value={formData.searchKeywords}
                   onChange={(e) => {
-                    // 한글, 영문, 숫자만 허용 (띄어쓰기, 특수문자, 이모지 제거)
-                    const value = e.target.value.replace(/[^\w가-힣]/g, '')
+                    // 한글, 영문, 숫자, 띄어쓰기만 허용 (특수문자, 이모지 제거)
+                    const value = e.target.value.replace(/[^\w가-힣\s]/g, '')
                     setFormData({ ...formData, searchKeywords: value })
                   }}
-                  placeholder="로고디자인브랜딩CI"
+                  placeholder="로고 디자인 브랜딩 CI 기업"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
                 />
                 <div className="mt-2 text-sm text-gray-600 space-y-1">
                   <p>• 검색 키워드는 서비스 설명에 노출되지 않지만, 서비스 제목, 서비스 타입과 함께 검색 대상 단어로 사용됩니다.</p>
-                  <p>• 띄어쓰기 없이 20글자까지 입력할 수 있으며, 특수문자 및 이모지는 입력할 수 없습니다.</p>
+                  <p>• 띄어쓰기로 구분하여 여러 키워드를 입력할 수 있으며, 최대 100글자까지 입력 가능합니다. 특수문자 및 이모지는 입력할 수 없습니다.</p>
                   <p>• 서비스와 연관된 짧은 단어를 여러 개 입력하는 것이 검색 노출 향상에 도움이 됩니다. (다만, 동일 키워드 중복 입력은 검색 결과와 무관합니다.)</p>
                 </div>
               </div>

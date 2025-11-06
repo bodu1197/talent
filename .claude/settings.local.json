@@ -26,7 +26,10 @@
       "Bash(node scripts/apply-3rd-reorder.js:*)",
       "Bash(node scripts/check-2nd-order.js:*)",
       "Bash(node scripts/check-1st-order.js:*)",
-      "Bash(node scripts/apply-1st-reorder.js:*)"
+      "Bash(node scripts/apply-1st-reorder.js:*)",
+      "Bash(npx supabase db push:*)",
+      "Bash(cat:*)",
+      "Bash(npx supabase db:*)"
     ],
     "deny": [],
     "ask": []
