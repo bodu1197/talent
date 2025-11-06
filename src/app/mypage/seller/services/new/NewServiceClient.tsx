@@ -284,8 +284,8 @@ export default function NewServiceClient({ sellerId }: Props) {
           slug: `${slug}-${Date.now()}`,
           description: formData.description,
           price: parseInt(formData.price) || 0,
-          delivery_days: parseInt(formData.deliveryDays) || 7,
-          revision_count: formData.revisionCount === 'unlimited' ? 999 : parseInt(formData.revisionCount) || 0,
+          delivery_days: Math.max(1, parseInt(formData.deliveryDays) || 7),
+          revision_count: formData.revisionCount === 'unlimited' ? 999 : Math.max(0, parseInt(formData.revisionCount) || 0),
           thumbnail_url: publicUrl,
           status: 'pending'
         })
