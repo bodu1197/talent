@@ -65,9 +65,9 @@ export default function NewServiceClientV2({ sellerId, categories }: Props) {
   })
 
   const steps = [
-    { number: 1, title: '기본정보 & 이미지' },
+    { number: 1, title: '기본정보' },
     { number: 2, title: '가격설정' },
-    { number: 3, title: '서비스 설명 & 포트폴리오' }
+    { number: 3, title: '포트폴리오' }
   ]
 
   const handleNext = () => {
@@ -240,6 +240,12 @@ export default function NewServiceClientV2({ sellerId, categories }: Props) {
                   categories={categories}
                 />
                 <div className="border-t border-gray-200 pt-8">
+                  <Step3Description
+                    formData={formData}
+                    setFormData={setFormData}
+                  />
+                </div>
+                <div className="border-t border-gray-200 pt-8">
                   <Step4Images
                     formData={formData}
                     setFormData={setFormData}
@@ -254,18 +260,10 @@ export default function NewServiceClientV2({ sellerId, categories }: Props) {
               />
             )}
             {currentStep === 3 && (
-              <div className="space-y-8">
-                <Step3Description
-                  formData={formData}
-                  setFormData={setFormData}
-                />
-                <div className="border-t border-gray-200 pt-8">
-                  <Step5Requirements
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-                </div>
-              </div>
+              <Step5Requirements
+                formData={formData}
+                setFormData={setFormData}
+              />
             )}
           </div>
 
