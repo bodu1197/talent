@@ -104,10 +104,16 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
               <h1 className="text-2xl font-bold mb-6">{service.title}</h1>
 
               {/* 통계 */}
-              <div className="flex items-center gap-6 py-4 border-y border-gray-300 mb-6">
+              <div className="flex items-center gap-6 py-3 border-y border-gray-300 mb-6 text-sm">
                 <div className="flex items-center gap-2">
-                  <i className="fas fa-star text-yellow-400"></i>
-                  <span className="font-bold">{service.rating || 0}</span>
+                  {/* 별점 5개 표시 */}
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <i
+                      key={star}
+                      className={`fas fa-star ${star <= Math.round(service.rating || 0) ? 'text-yellow-400' : 'text-gray-300'}`}
+                    ></i>
+                  ))}
+                  <span className="font-bold ml-1">{service.rating || 0}</span>
                   <span className="text-gray-500">({service.review_count || 0})</span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-600">
