@@ -1,27 +1,47 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import Sidebar from '@/components/mypage/Sidebar'
 import { logger } from '@/lib/logger'
 
-interface Props {
-  sellerId: string
+interface Category {
+  id: string
+  name: string
+  slug: string
+  parent_id: string | null
 }
 
-export default function PortfolioNewClient({ sellerId }: Props) {
+interface Props {
+  sellerId: string
+  categories: Category[]
+}
+
+export default function PortfolioNewClient({ sellerId, categories }: Props) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    category: '',
+    category_id: '',
     thumbnail_url: '',
     image_urls: [] as string[],
     project_url: '',
     tags: [] as string[]
   })
   const [tagInput, setTagInput] = useState('')
+
+  // 카테고리 계층 구조 생성
+  const categoryTree = useMemo(() => {
+    const topLevel = categories.filter(c => !c.parent_id)
+    return topLevel.map(parent => ({
+      ...parent,
+      children: categories.filter(c => c.parent_id === parent.id).map(child => ({
+        ...child,
+        children: categories.filter(c => c.parent_id === child.id)
+      }))
+    }))
+  }, [categories])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -106,13 +126,29 @@ export default function PortfolioNewClient({ sellerId }: Props) {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 카테고리
               </label>
-              <input
-                type="text"
-                value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              <select
+                value={formData.category_id}
+                onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-                placeholder="예: 웹 디자인, 로고 디자인 등"
-              />
+              >
+                <option value="">카테고리를 선택하세요</option>
+                {categoryTree.map((parent) => (
+                  <optgroup key={parent.id} label={parent.name}>
+                    {parent.children.map((child) => (
+                      <>
+                        <option key={child.id} value={child.id}>
+                          └ {child.name}
+                        </option>
+                        {child.children.map((grandchild) => (
+                          <option key={grandchild.id} value={grandchild.id}>
+                            &nbsp;&nbsp;&nbsp;└ {grandchild.name}
+                          </option>
+                        ))}
+                      </>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
             </div>
 
             {/* 설명 */}
