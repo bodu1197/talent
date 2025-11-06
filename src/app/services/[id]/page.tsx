@@ -96,7 +96,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       </nav>
 
       {/* 제목 및 판매자 프로필 영역 - 전체 가로 배경 */}
-      <div className="w-full overflow-hidden" style={{ background: 'linear-gradient(to bottom, #bbf7d0 0%, #86efac 50%, #bbf7d0 100%)' }}>
+      <div className="w-full overflow-hidden" style={{ background: 'linear-gradient(to bottom, #d1fae5 0%, #6ee7b7 50%, #d1fae5 100%)' }}>
         <div className="container-1200 px-4">
           <div className="flex flex-col lg:flex-row gap-5" style={{ paddingTop: '10px', paddingBottom: '10px', minHeight: '280px', maxHeight: '280px' }}>
             {/* 왼쪽: 제목, 통계, 판매자 카드 */}
@@ -199,8 +199,8 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       </div>
 
       {/* 메인 컨텐츠 영역 */}
-      <div className="container-1200 px-4 pb-8">
-        <div className="flex flex-col lg:flex-row gap-5 lg:-mt-5">
+      <div className="container-1200 px-4 pb-8 pt-5">
+        <div className="flex flex-col lg:flex-row gap-5">
           {/* 왼쪽: 서비스 설명 */}
           <div className="flex-1">
             <div className="bg-white rounded-xl shadow-sm p-6">
