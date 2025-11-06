@@ -1,0 +1,129 @@
+interface Props {
+  formData: any
+  setFormData: (data: any) => void
+}
+
+export default function Step2Pricing({ formData, setFormData }: Props) {
+  const formatPrice = (value: string) => {
+    const number = value.replace(/[^\d]/g, '')
+    return number.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  }
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^\d]/g, '')
+    setFormData({ ...formData, price: value })
+  }
+
+  return (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">가격 설정</h2>
+
+      {/* 서비스 가격 */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          서비스 가격 <span className="text-red-500">*</span>
+        </label>
+        <div className="relative">
+          <input
+            type="text"
+            value={formatPrice(formData.price)}
+            onChange={handlePriceChange}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+            placeholder="0"
+            required
+          />
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">원</span>
+        </div>
+        <p className="mt-2 text-sm text-gray-500">
+          최소 금액: 5,000원
+        </p>
+      </div>
+
+      {/* 작업 기간 */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          작업 기간 <span className="text-red-500">*</span>
+        </label>
+        <div className="relative">
+          <input
+            type="number"
+            value={formData.delivery_days}
+            onChange={(e) => setFormData({ ...formData, delivery_days: e.target.value })}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+            placeholder="7"
+            min="1"
+            max="365"
+            required
+          />
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">일</span>
+        </div>
+        <p className="mt-2 text-sm text-gray-500">
+          작업을 완료하는 데 필요한 평균 기간을 입력하세요 (1~365일)
+        </p>
+      </div>
+
+      {/* 수정 횟수 */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          수정 횟수
+        </label>
+        <select
+          value={formData.revision_count}
+          onChange={(e) => setFormData({ ...formData, revision_count: e.target.value })}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+        >
+          <option value="0">수정 불가</option>
+          <option value="1">1회</option>
+          <option value="2">2회</option>
+          <option value="3">3회</option>
+          <option value="5">5회</option>
+          <option value="-1">무제한</option>
+        </select>
+        <p className="mt-2 text-sm text-gray-500">
+          고객이 작업물을 받은 후 수정 요청할 수 있는 횟수
+        </p>
+      </div>
+
+      {/* 세금계산서 발행 가능 여부 */}
+      <div>
+        <label className="flex items-center gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={formData.tax_invoice_available}
+            onChange={(e) => setFormData({ ...formData, tax_invoice_available: e.target.checked })}
+            className="w-5 h-5 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+          />
+          <div>
+            <span className="text-sm font-medium text-gray-700">세금계산서 발행 가능</span>
+            <p className="text-sm text-gray-500">사업자인 경우 체크하세요</p>
+          </div>
+        </label>
+      </div>
+
+      {/* 가격 미리보기 */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
+        <h3 className="text-lg font-bold text-gray-900 mb-4">가격 요약</h3>
+        <div className="space-y-3">
+          <div className="flex justify-between">
+            <span className="text-gray-700">서비스 금액</span>
+            <span className="font-bold text-gray-900">
+              {formatPrice(formData.price || '0')}원
+            </span>
+          </div>
+          <div className="flex justify-between text-sm text-gray-600">
+            <span>수수료 (10%)</span>
+            <span>
+              -{formatPrice(Math.floor((parseInt(formData.price || '0') * 0.1)).toString())}원
+            </span>
+          </div>
+          <div className="border-t border-blue-300 pt-3 flex justify-between">
+            <span className="font-bold text-gray-900">예상 수익</span>
+            <span className="font-bold text-[#0f3460] text-lg">
+              {formatPrice(Math.floor((parseInt(formData.price || '0') * 0.9)).toString())}원
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

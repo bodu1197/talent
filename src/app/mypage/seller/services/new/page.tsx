@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import NewServiceClient from './NewServiceClient'
+import NewServiceClientV2 from './NewServiceClientV2'
 
 export default async function NewServicePage() {
   const supabase = await createClient()
@@ -27,5 +27,5 @@ export default async function NewServicePage() {
     .order('level', { ascending: true })
     .order('name', { ascending: true })
 
-  return <NewServiceClient sellerId={seller.id} categories={categories || []} />
+  return <NewServiceClientV2 sellerId={seller.id} categories={categories || []} />
 }

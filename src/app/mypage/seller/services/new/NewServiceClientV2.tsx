@@ -1,0 +1,300 @@
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Sidebar from '@/components/mypage/Sidebar'
+import { createClient } from '@/lib/supabase/client'
+import { logger } from '@/lib/logger'
+
+// 단계별 컴포넌트
+import Step1BasicInfo from './steps/Step1BasicInfo'
+import Step2Pricing from './steps/Step2Pricing'
+import Step3Description from './steps/Step3Description'
+import Step4Images from './steps/Step4Images'
+import Step5Requirements from './steps/Step5Requirements'
+
+interface Category {
+  id: string
+  name: string
+  slug: string
+  level: number
+  parent_id: string | null
+}
+
+interface Props {
+  sellerId: string
+  categories: Category[]
+}
+
+export default function NewServiceClientV2({ sellerId, categories }: Props) {
+  const router = useRouter()
+  const [currentStep, setCurrentStep] = useState(1)
+  const [loading, setLoading] = useState(false)
+
+  // 전체 폼 데이터
+  const [formData, setFormData] = useState({
+    // Step 1: 기본정보
+    title: '',
+    category_ids: [] as string[],
+
+    // Step 2: 가격설정
+    price: '',
+    delivery_days: '',
+    revision_count: '0',
+
+    // Step 3: 서비스 설명
+    description: '',
+
+    // Step 4: 이미지
+    thumbnail_url: '',
+    thumbnail_file: null as File | null,
+
+    // Step 5: 요청사항
+    requirements: [] as { question: string; required: boolean }[],
+
+    // 포트폴리오 (선택사항)
+    create_portfolio: false,
+    portfolio_data: {
+      title: '',
+      description: '',
+      youtube_url: '',
+      project_url: '',
+      tags: [] as string[],
+      images: [] as File[]
+    }
+  })
+
+  const steps = [
+    { number: 1, title: '기본정보' },
+    { number: 2, title: '가격설정' },
+    { number: 3, title: '서비스 설명' },
+    { number: 4, title: '이미지' },
+    { number: 5, title: '요청사항' }
+  ]
+
+  const handleNext = () => {
+    if (currentStep < 5) {
+      setCurrentStep(currentStep + 1)
+    }
+  }
+
+  const handlePrev = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1)
+    }
+  }
+
+  const handleSubmit = async () => {
+    try {
+      setLoading(true)
+
+      const supabase = createClient()
+
+      // 1. 썸네일 업로드
+      let thumbnail_url = ''
+      if (formData.thumbnail_file) {
+        const fileExt = formData.thumbnail_file.name.split('.').pop()
+        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`
+        const filePath = `services/${fileName}`
+
+        const { error: uploadError } = await supabase.storage
+          .from('services')
+          .upload(filePath, formData.thumbnail_file)
+
+        if (uploadError) throw uploadError
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('services')
+          .getPublicUrl(filePath)
+
+        thumbnail_url = publicUrl
+      }
+
+      // 2. 서비스 생성
+      const { data: service, error: serviceError } = await supabase
+        .from('services')
+        .insert({
+          seller_id: sellerId,
+          title: formData.title,
+          description: formData.description,
+          thumbnail_url,
+          price: parseInt(formData.price),
+          delivery_days: parseInt(formData.delivery_days),
+          status: 'pending'
+        })
+        .select()
+        .single()
+
+      if (serviceError) throw serviceError
+
+      // 3. 카테고리 연결
+      if (formData.category_ids.length > 0) {
+        const categoryInserts = formData.category_ids.map(cat_id => ({
+          service_id: service.id,
+          category_id: cat_id
+        }))
+
+        await supabase
+          .from('service_categories')
+          .insert(categoryInserts)
+      }
+
+      // 4. 포트폴리오 생성 (선택사항)
+      if (formData.create_portfolio && formData.portfolio_data.title) {
+        // 포트폴리오 이미지 업로드
+        const portfolioImageUrls: string[] = []
+        for (const file of formData.portfolio_data.images) {
+          const fileExt = file.name.split('.').pop()
+          const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`
+          const filePath = `portfolio/${fileName}`
+
+          const { error: uploadError } = await supabase.storage
+            .from('portfolio')
+            .upload(filePath, file)
+
+          if (!uploadError) {
+            const { data: { publicUrl } } = supabase.storage
+              .from('portfolio')
+              .getPublicUrl(filePath)
+            portfolioImageUrls.push(publicUrl)
+          }
+        }
+
+        await supabase
+          .from('seller_portfolio')
+          .insert({
+            seller_id: sellerId,
+            service_id: service.id,
+            title: formData.portfolio_data.title,
+            description: formData.portfolio_data.description,
+            thumbnail_url: portfolioImageUrls[0] || thumbnail_url,
+            image_urls: portfolioImageUrls.slice(1),
+            youtube_url: formData.portfolio_data.youtube_url || null,
+            project_url: formData.portfolio_data.project_url || null,
+            tags: formData.portfolio_data.tags
+          })
+      }
+
+      alert('서비스가 등록되었습니다. 승인 후 공개됩니다.')
+      router.push('/mypage/seller/services')
+      router.refresh()
+    } catch (error) {
+      logger.error('Service creation error:', error)
+      alert('서비스 등록에 실패했습니다.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <>
+      <Sidebar mode="seller" />
+      <main className="flex-1 overflow-y-auto p-8">
+        <div className="max-w-4xl mx-auto">
+          {/* 헤더 */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">서비스 등록</h1>
+            <p className="text-gray-600">새로운 서비스를 등록하세요</p>
+          </div>
+
+          {/* 진행 단계 표시 */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between">
+              {steps.map((step, index) => (
+                <div key={step.number} className="flex items-center flex-1">
+                  <div className="flex flex-col items-center flex-1">
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-colors ${
+                        currentStep >= step.number
+                          ? 'bg-[#0f3460] text-white'
+                          : 'bg-gray-200 text-gray-600'
+                      }`}
+                    >
+                      {step.number}
+                    </div>
+                    <span
+                      className={`text-sm mt-2 font-medium ${
+                        currentStep >= step.number ? 'text-[#0f3460]' : 'text-gray-500'
+                      }`}
+                    >
+                      {step.title}
+                    </span>
+                  </div>
+                  {index < steps.length - 1 && (
+                    <div
+                      className={`h-1 flex-1 mx-2 transition-colors ${
+                        currentStep > step.number ? 'bg-[#0f3460]' : 'bg-gray-200'
+                      }`}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 단계별 컨텐츠 */}
+          <div className="bg-white rounded-lg border border-gray-200 p-8">
+            {currentStep === 1 && (
+              <Step1BasicInfo
+                formData={formData}
+                setFormData={setFormData}
+                categories={categories}
+              />
+            )}
+            {currentStep === 2 && (
+              <Step2Pricing
+                formData={formData}
+                setFormData={setFormData}
+              />
+            )}
+            {currentStep === 3 && (
+              <Step3Description
+                formData={formData}
+                setFormData={setFormData}
+              />
+            )}
+            {currentStep === 4 && (
+              <Step4Images
+                formData={formData}
+                setFormData={setFormData}
+              />
+            )}
+            {currentStep === 5 && (
+              <Step5Requirements
+                formData={formData}
+                setFormData={setFormData}
+              />
+            )}
+          </div>
+
+          {/* 네비게이션 버튼 */}
+          <div className="flex justify-between mt-8">
+            <button
+              onClick={handlePrev}
+              disabled={currentStep === 1}
+              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              이전
+            </button>
+            {currentStep < 5 ? (
+              <button
+                onClick={handleNext}
+                className="px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+              >
+                다음
+              </button>
+            ) : (
+              <button
+                onClick={handleSubmit}
+                disabled={loading}
+                className="px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
+              >
+                {loading ? '등록 중...' : '서비스 등록'}
+              </button>
+            )}
+          </div>
+        </div>
+      </main>
+    </>
+  )
+}
