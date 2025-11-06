@@ -84,22 +84,6 @@ export default function Step2Pricing({ formData, setFormData }: Props) {
         </p>
       </div>
 
-      {/* 세금계산서 발행 가능 여부 */}
-      <div>
-        <label className="flex items-center gap-3 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={formData.tax_invoice_available}
-            onChange={(e) => setFormData({ ...formData, tax_invoice_available: e.target.checked })}
-            className="w-5 h-5 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
-          />
-          <div>
-            <span className="text-sm font-medium text-gray-700">세금계산서 발행 가능</span>
-            <p className="text-sm text-gray-500">사업자인 경우 체크하세요</p>
-          </div>
-        </label>
-      </div>
-
       {/* 가격 미리보기 */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
         <h3 className="text-lg font-bold text-gray-900 mb-4">가격 요약</h3>
@@ -111,15 +95,15 @@ export default function Step2Pricing({ formData, setFormData }: Props) {
             </span>
           </div>
           <div className="flex justify-between text-sm text-gray-600">
-            <span>수수료 (10%)</span>
+            <span>운영자 커피값</span>
             <span>
-              -{formatPrice(Math.floor((parseInt(formData.price || '0') * 0.1)).toString())}원
+              -1,000원
             </span>
           </div>
           <div className="border-t border-blue-300 pt-3 flex justify-between">
             <span className="font-bold text-gray-900">예상 수익</span>
             <span className="font-bold text-[#0f3460] text-lg">
-              {formatPrice(Math.floor((parseInt(formData.price || '0') * 0.9)).toString())}원
+              {formatPrice(Math.max(0, parseInt(formData.price || '0') - 1000).toString())}원
             </span>
           </div>
         </div>

@@ -6,9 +6,10 @@ import { logger } from '@/lib/logger'
 interface Props {
   formData: any
   setFormData: (data: any) => void
+  showOnlyRequirements?: boolean
 }
 
-export default function Step5Requirements({ formData, setFormData }: Props) {
+export default function Step5Requirements({ formData, setFormData, showOnlyRequirements = false }: Props) {
   const [newQuestion, setNewQuestion] = useState('')
   const [newQuestionRequired, setNewQuestionRequired] = useState(false)
   const [tagInput, setTagInput] = useState('')
@@ -162,9 +163,11 @@ export default function Step5Requirements({ formData, setFormData }: Props) {
 
   return (
     <div className="space-y-8">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">요청사항 및 포트폴리오</h2>
+      {!showOnlyRequirements && <h2 className="text-2xl font-bold text-gray-900 mb-6">포트폴리오 등록</h2>}
+      {showOnlyRequirements && <h2 className="text-2xl font-bold text-gray-900 mb-6">고객 요청사항</h2>}
 
-      {/* 요청사항 섹션 */}
+      {/* 요청사항 섹션 - showOnlyRequirements가 true일 때만 표시 */}
+      {showOnlyRequirements && (
       <div className="pb-8 border-b border-gray-200">
         <h3 className="text-xl font-bold text-gray-900 mb-4">
           고객 요청사항 <span className="text-gray-500 text-xs font-normal">(선택사항)</span>
@@ -230,8 +233,10 @@ export default function Step5Requirements({ formData, setFormData }: Props) {
           </div>
         </div>
       </div>
+      )}
 
-      {/* 포트폴리오 섹션 */}
+      {/* 포트폴리오 섹션 - showOnlyRequirements가 false일 때만 표시 */}
+      {!showOnlyRequirements && (
       <div>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-bold text-gray-900">
@@ -263,11 +268,11 @@ export default function Step5Requirements({ formData, setFormData }: Props) {
             </p>
           </div>
         ) : (
-          <div className="space-y-6 border border-gray-200 rounded-lg p-6 bg-gray-50">
+          <div className="space-y-6 border border-gray-200 rounded-lg p-6 bg-white">
             {/* 포트폴리오 제목 */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                포트폴리오 제목
+                제목 <span className="text-gray-500 text-xs">(비어있으면 서비스 제목 사용)</span>
               </label>
               <input
                 type="text"
@@ -277,14 +282,14 @@ export default function Step5Requirements({ formData, setFormData }: Props) {
                   portfolio_data: { ...formData.portfolio_data, title: e.target.value }
                 })}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-                placeholder="포트폴리오 제목 (비어있으면 서비스 제목 사용)"
+                placeholder="포트폴리오 제목을 입력하세요"
               />
             </div>
 
-            {/* 포트폴리오 설명 */}
+            {/* 설명 */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                포트폴리오 설명
+                설명 <span className="text-red-500">*</span>
               </label>
               <textarea
                 value={formData.portfolio_data.description}
@@ -292,48 +297,48 @@ export default function Step5Requirements({ formData, setFormData }: Props) {
                   ...formData,
                   portfolio_data: { ...formData.portfolio_data, description: e.target.value }
                 })}
-                rows={4}
+                rows={6}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-                placeholder="프로젝트에 대한 설명을 입력하세요"
+                placeholder="프로젝트에 대한 자세한 설명을 입력하세요"
+                required={formData.create_portfolio}
               />
             </div>
 
-            {/* YouTube URL */}
+            {/* 이미지 업로드 */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                YouTube 영상 URL
+                이미지 업로드 <span className="text-gray-500 text-xs">(첫 이미지가 썸네일이 됩니다)</span>
               </label>
               <input
-                type="url"
-                value={formData.portfolio_data.youtube_url}
-                onChange={(e) => handleYoutubeUrlChange(e.target.value)}
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handlePortfolioImageChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-                placeholder="https://www.youtube.com/watch?v=..."
-                disabled={fetchingThumbnail}
               />
-              {fetchingThumbnail && (
-                <p className="mt-2 text-sm text-gray-600">
-                  <i className="fas fa-spinner fa-spin mr-2"></i>
-                  YouTube 썸네일을 가져오는 중...
-                </p>
-              )}
-              {youtubeVideoId && (
-                <div className="mt-4 bg-white border border-gray-200 rounded-lg p-4">
-                  <p className="text-sm text-gray-700 mb-2">
-                    <i className="fab fa-youtube text-red-600 mr-2"></i>
-                    YouTube 영상 미리보기
-                  </p>
-                  <div className="aspect-video bg-black rounded-lg overflow-hidden">
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      src={`https://www.youtube.com/embed/${youtubeVideoId}`}
-                      title="YouTube video preview"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
-                  </div>
+              {formData.portfolio_data.images.length > 0 && (
+                <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {formData.portfolio_data.images.map((file: File, index: number) => (
+                    <div key={index} className="relative">
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt={`Preview ${index + 1}`}
+                        className="w-full h-32 object-cover rounded-lg"
+                      />
+                      {index === 0 && (
+                        <span className="absolute top-2 left-2 bg-[#0f3460] text-white text-xs px-2 py-1 rounded">
+                          썸네일
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => removePortfolioImage(index)}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                      >
+                        <i className="fas fa-times text-xs"></i>
+                      </button>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -355,41 +360,42 @@ export default function Step5Requirements({ formData, setFormData }: Props) {
               />
             </div>
 
-            {/* 포트폴리오 이미지 */}
+            {/* YouTube URL */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                포트폴리오 이미지
+                YouTube 영상 URL <span className="text-gray-500 text-xs">(영상이 포트폴리오에 삽입됩니다)</span>
               </label>
               <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={handlePortfolioImageChange}
+                type="url"
+                value={formData.portfolio_data.youtube_url}
+                onChange={(e) => handleYoutubeUrlChange(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                placeholder="https://www.youtube.com/watch?v=..."
+                disabled={fetchingThumbnail}
               />
-              {formData.portfolio_data.images.length > 0 && (
-                <div className="mt-4 grid grid-cols-3 gap-4">
-                  {formData.portfolio_data.images.map((file: File, index: number) => (
-                    <div key={index} className="relative">
-                      <img
-                        src={URL.createObjectURL(file)}
-                        alt={`Portfolio ${index + 1}`}
-                        className="w-full h-32 object-cover rounded-lg"
-                      />
-                      {index === 0 && (
-                        <span className="absolute top-2 left-2 bg-[#0f3460] text-white text-xs px-2 py-1 rounded">
-                          썸네일
-                        </span>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => removePortfolioImage(index)}
-                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
-                      >
-                        <i className="fas fa-times text-xs"></i>
-                      </button>
-                    </div>
-                  ))}
+              {fetchingThumbnail && (
+                <p className="mt-2 text-sm text-gray-600">
+                  <i className="fas fa-spinner fa-spin mr-2"></i>
+                  YouTube 썸네일을 가져오는 중...
+                </p>
+              )}
+              {youtubeVideoId && (
+                <div className="mt-4 bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <p className="text-sm text-gray-700 mb-2">
+                    <i className="fab fa-youtube text-red-600 mr-2"></i>
+                    YouTube 영상 미리보기
+                  </p>
+                  <div className="aspect-video bg-black rounded-lg overflow-hidden">
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      src={`https://www.youtube.com/embed/${youtubeVideoId}`}
+                      title="YouTube video preview"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
                 </div>
               )}
             </div>
@@ -439,6 +445,7 @@ export default function Step5Requirements({ formData, setFormData }: Props) {
           </div>
         )}
       </div>
+      )}
     </div>
   )
 }

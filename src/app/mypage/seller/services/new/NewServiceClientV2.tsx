@@ -65,15 +65,13 @@ export default function NewServiceClientV2({ sellerId, categories }: Props) {
   })
 
   const steps = [
-    { number: 1, title: '기본정보' },
+    { number: 1, title: '기본정보 & 이미지' },
     { number: 2, title: '가격설정' },
-    { number: 3, title: '서비스 설명' },
-    { number: 4, title: '이미지' },
-    { number: 5, title: '요청사항' }
+    { number: 3, title: '서비스 설명 & 포트폴리오' }
   ]
 
   const handleNext = () => {
-    if (currentStep < 5) {
+    if (currentStep < 3) {
       setCurrentStep(currentStep + 1)
     }
   }
@@ -235,11 +233,19 @@ export default function NewServiceClientV2({ sellerId, categories }: Props) {
           {/* 단계별 컨텐츠 */}
           <div className="bg-white rounded-lg border border-gray-200 p-8">
             {currentStep === 1 && (
-              <Step1BasicInfo
-                formData={formData}
-                setFormData={setFormData}
-                categories={categories}
-              />
+              <div className="space-y-8">
+                <Step1BasicInfo
+                  formData={formData}
+                  setFormData={setFormData}
+                  categories={categories}
+                />
+                <div className="border-t border-gray-200 pt-8">
+                  <Step4Images
+                    formData={formData}
+                    setFormData={setFormData}
+                  />
+                </div>
+              </div>
             )}
             {currentStep === 2 && (
               <Step2Pricing
@@ -248,22 +254,18 @@ export default function NewServiceClientV2({ sellerId, categories }: Props) {
               />
             )}
             {currentStep === 3 && (
-              <Step3Description
-                formData={formData}
-                setFormData={setFormData}
-              />
-            )}
-            {currentStep === 4 && (
-              <Step4Images
-                formData={formData}
-                setFormData={setFormData}
-              />
-            )}
-            {currentStep === 5 && (
-              <Step5Requirements
-                formData={formData}
-                setFormData={setFormData}
-              />
+              <div className="space-y-8">
+                <Step3Description
+                  formData={formData}
+                  setFormData={setFormData}
+                />
+                <div className="border-t border-gray-200 pt-8">
+                  <Step5Requirements
+                    formData={formData}
+                    setFormData={setFormData}
+                  />
+                </div>
+              </div>
             )}
           </div>
 
@@ -276,7 +278,7 @@ export default function NewServiceClientV2({ sellerId, categories }: Props) {
             >
               이전
             </button>
-            {currentStep < 5 ? (
+            {currentStep < 3 ? (
               <button
                 onClick={handleNext}
                 className="px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
