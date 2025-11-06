@@ -174,7 +174,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             <div className="sticky top-32 space-y-6">
               {/* 썸네일 이미지 */}
               <div className="bg-white rounded-xl overflow-hidden shadow-sm">
-                <div className="aspect-video relative bg-gray-100">
+                <div className="h-[260px] relative bg-gray-100">
                   {service.thumbnail_url ? (
                     <img
                       src={service.thumbnail_url}
