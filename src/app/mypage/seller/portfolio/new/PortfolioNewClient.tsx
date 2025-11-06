@@ -13,12 +13,19 @@ interface Category {
   parent_id: string | null
 }
 
+interface Service {
+  id: string
+  title: string
+  status: string
+}
+
 interface Props {
   sellerId: string
   categories: Category[]
+  services: Service[]
 }
 
-export default function PortfolioNewClient({ sellerId, categories }: Props) {
+export default function PortfolioNewClient({ sellerId, categories, services }: Props) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -30,6 +37,7 @@ export default function PortfolioNewClient({ sellerId, categories }: Props) {
     image_urls: [] as string[],
     project_url: '',
     youtube_url: '',
+    service_id: '',
     tags: [] as string[]
   })
   const [tagInput, setTagInput] = useState('')
@@ -268,6 +276,27 @@ export default function PortfolioNewClient({ sellerId, categories }: Props) {
                 required
               />
             </div>
+
+            {/* 연동 서비스 선택 */}
+            {services.length > 0 && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  연동 서비스 <span className="text-gray-500 text-xs">(선택사항 - 서비스와 연결하면 서비스 상세 페이지에 표시됩니다)</span>
+                </label>
+                <select
+                  value={formData.service_id}
+                  onChange={(e) => setFormData({ ...formData, service_id: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                >
+                  <option value="">선택 안 함</option>
+                  {services.map((service) => (
+                    <option key={service.id} value={service.id}>
+                      {service.title} {service.status === 'pending' && '(승인 대기중)'}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             {/* 설명 */}
             <div>

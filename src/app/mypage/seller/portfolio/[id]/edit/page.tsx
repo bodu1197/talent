@@ -48,11 +48,20 @@ export default async function PortfolioEditPage({ params }: Props) {
     .select('id, name, slug, parent_id')
     .order('display_order', { ascending: true })
 
+  // 판매자의 서비스 목록 가져오기
+  const { data: services } = await supabase
+    .from('services')
+    .select('id, title, status')
+    .eq('seller_id', user.id)
+    .in('status', ['active', 'pending'])
+    .order('created_at', { ascending: false })
+
   return (
     <PortfolioEditClient
       portfolio={portfolio}
       sellerId={seller.id}
       categories={categories || []}
+      services={services || []}
     />
   )
 }

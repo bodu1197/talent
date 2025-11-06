@@ -108,6 +108,7 @@ export async function PUT(
         image_urls: body.image_urls || [],
         project_url: body.project_url || null,
         youtube_url: body.youtube_url || null,
+        service_id: body.service_id || null,
         tags: body.tags || [],
         updated_at: new Date().toISOString()
       })

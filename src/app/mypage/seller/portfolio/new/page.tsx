@@ -26,5 +26,13 @@ export default async function PortfolioNewPage() {
     .select('id, name, slug, parent_id')
     .order('display_order', { ascending: true })
 
-  return <PortfolioNewClient sellerId={seller.id} categories={categories || []} />
+  // 판매자의 서비스 목록 가져오기
+  const { data: services } = await supabase
+    .from('services')
+    .select('id, title, status')
+    .eq('seller_id', user.id)
+    .in('status', ['active', 'pending'])
+    .order('created_at', { ascending: false })
+
+  return <PortfolioNewClient sellerId={seller.id} categories={categories || []} services={services || []} />
 }
