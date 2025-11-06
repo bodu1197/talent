@@ -96,11 +96,18 @@ export default function PortfolioNewClient({ sellerId, categories }: Props) {
             body: formData
           })
 
+          const uploadResult = await uploadResponse.json()
+
           if (!uploadResponse.ok) {
-            throw new Error('이미지 업로드 실패')
+            logger.error('Image upload failed:', {
+              status: uploadResponse.status,
+              error: uploadResult.error,
+              details: uploadResult.details
+            })
+            throw new Error(`이미지 업로드 실패: ${uploadResult.details || uploadResult.error}`)
           }
 
-          const { url } = await uploadResponse.json()
+          const { url } = uploadResult
           uploadedUrls.push(url)
         }
 

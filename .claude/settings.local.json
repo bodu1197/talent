@@ -35,7 +35,8 @@
       "Bash(node scripts/create-portfolio-bucket.js:*)",
       "Bash(node scripts/check-portfolio-table-structure.js:*)",
       "Bash(node scripts/create-bucket-mgmt-api.js:*)",
-      "Bash(node scripts/create-portfolio-bucket-final.js:*)"
+      "Bash(node scripts/create-portfolio-bucket-final.js:*)",
+      "Bash(node scripts/check-storage-policies.js:*)"
     ],
     "deny": [],
     "ask": []
