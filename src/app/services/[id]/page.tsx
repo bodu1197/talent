@@ -110,7 +110,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   {[1, 2, 3, 4, 5].map((star) => (
                     <i
                       key={star}
-                      className={`fas fa-star ${star <= Math.round(service.rating || 0) ? 'text-yellow-400' : 'text-gray-300'}`}
+                      className={`fas fa-star ${star <= Math.round(service.rating || 0) ? 'text-green-500' : 'text-gray-300'}`}
                     ></i>
                   ))}
                   <span className="font-bold ml-1">{service.rating || 0}</span>
@@ -118,7 +118,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                 </div>
                 <div className="flex items-center gap-2 text-gray-600">
                   <i className="fas fa-heart text-red-400"></i>
-                  <span>{service.wishlist_count || 0}회 찜</span>
+                  <span className="font-bold">{service.wishlist_count || 0}</span>
                 </div>
               </div>
 
