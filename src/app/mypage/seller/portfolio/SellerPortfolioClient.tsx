@@ -56,13 +56,15 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
           {portfolio.length > 0 ? (
             portfolio.map((item) => (
               <div key={item.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-[#0f3460] transition-colors">
-                <div className="aspect-[4/3] bg-gray-100 flex items-center justify-center">
-                  {item.thumbnail_url ? (
-                    <img src={item.thumbnail_url} alt={item.title} className="w-full h-full object-cover" />
-                  ) : (
-                    <i className="fas fa-image text-gray-400 text-4xl"></i>
-                  )}
-                </div>
+                <Link href={`/mypage/seller/portfolio/${item.id}`} className="block">
+                  <div className="aspect-[4/3] bg-gray-100 flex items-center justify-center">
+                    {item.thumbnail_url ? (
+                      <img src={item.thumbnail_url} alt={item.title} className="w-full h-full object-cover" />
+                    ) : (
+                      <i className="fas fa-image text-gray-400 text-4xl"></i>
+                    )}
+                  </div>
+                </Link>
                 <div className="p-4">
                   <h3 className="text-lg font-bold text-gray-900 mb-2">{item.title}</h3>
                   <p className="text-sm text-gray-600 mb-3 line-clamp-2">{item.description}</p>
