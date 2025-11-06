@@ -92,10 +92,10 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         </div>
       </nav>
 
-      <div className="container-1200 px-4 pt-8 pb-8">
+      <div className="container-1200 px-4 pb-8">
         <div className="flex flex-col lg:flex-row gap-5">
           {/* 왼쪽: 서비스 정보 */}
-          <div className="flex-1 space-y-8">
+          <div className="flex-1 space-y-8 pt-8">
             {/* 서비스 설명 */}
             <div className="bg-white rounded-xl shadow-sm">
               <h1 className="text-2xl font-bold mb-6">{service.title}</h1>
