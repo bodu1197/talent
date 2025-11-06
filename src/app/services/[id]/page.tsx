@@ -101,64 +101,60 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
               </div>
 
               {/* 판매자 정보 카드 */}
-              <div className="bg-white border-2 border-[#0f3460] rounded-lg p-4 mb-6 h-[70px] flex items-center">
-                <div className="flex items-center gap-4 w-full">
+              <div className="bg-white border-2 border-[#0f3460] rounded-lg p-3 mb-6 h-[70px] flex items-center">
+                <div className="flex items-center gap-3 w-full">
                   {/* 프로필 이미지 */}
-                  <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
+                  <div className="w-[54px] h-[54px] bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
                     {service.seller?.profile_image ? (
                       <img src={service.seller.profile_image} alt={service.seller.business_name} className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-400">
-                        <i className="fas fa-user text-lg"></i>
+                        <i className="fas fa-user text-xl"></i>
                       </div>
                     )}
                   </div>
 
                   {/* 정보 영역 */}
-                  <div className="flex-1 flex items-center justify-between gap-4 min-w-0">
-                    {/* 판매자명 및 정보 */}
-                    <div className="flex items-center gap-4 min-w-0 flex-1">
-                      <h3 className="font-bold text-base whitespace-nowrap">
-                        {service.seller?.business_name}
-                        {service.seller?.display_name && ` (${service.seller.display_name})`}
-                      </h3>
+                  <div className="flex-1 flex flex-col justify-center gap-1 min-w-0">
+                    {/* 판매자명 */}
+                    <h3 className="font-bold text-sm leading-tight truncate">
+                      {service.seller?.business_name}
+                      {service.seller?.display_name && ` ${service.seller.display_name}`}
+                    </h3>
 
-                      <div className="flex items-center gap-3 text-sm">
-                        {/* 연락 가능 시간 */}
-                        {service.seller?.contact_hours && (
-                          <div className="flex items-center gap-1.5 text-gray-600 whitespace-nowrap">
-                            <span className="font-medium text-gray-700">연락 가능 시간:</span>
-                            <span>{service.seller.contact_hours}</span>
-                          </div>
+                    {/* 정보 한 줄 */}
+                    <div className="flex items-center gap-3 text-xs text-gray-600">
+                      {/* 연락 가능 시간 */}
+                      {service.seller?.contact_hours && (
+                        <span className="whitespace-nowrap">
+                          연락: {service.seller.contact_hours}
+                        </span>
+                      )}
+
+                      {/* 평균 응답 시간 */}
+                      <span className="whitespace-nowrap">
+                        응답: 00분
+                      </span>
+
+                      {/* 세금계산서 */}
+                      <span className="whitespace-nowrap">
+                        세금계산서: {service.seller?.tax_invoice_available ? (
+                          <span className="text-green-600 font-medium">가능</span>
+                        ) : (
+                          <span className="text-gray-500">불가</span>
                         )}
-
-                        {/* 평균 응답 시간 (추후 개발) */}
-                        <div className="flex items-center gap-1.5 text-gray-600 whitespace-nowrap">
-                          <span className="font-medium text-gray-700">평균 응답 시간:</span>
-                          <span>00분 이내</span>
-                        </div>
-
-                        {/* 세금계산서 발행 여부 */}
-                        <div className="flex items-center gap-1.5 whitespace-nowrap">
-                          <span className="font-medium text-gray-700">세금계산서 발행 여부:</span>
-                          {service.seller?.tax_invoice_available ? (
-                            <span className="text-green-600 font-medium">가능</span>
-                          ) : (
-                            <span className="text-gray-500">불가</span>
-                          )}
-                        </div>
-                      </div>
+                      </span>
                     </div>
+                  </div>
 
-                    {/* 버튼 */}
-                    <div className="flex gap-2 flex-shrink-0">
-                      <button className="px-4 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm whitespace-nowrap">
-                        <i className="far fa-comment mr-1"></i> 문의하기
-                      </button>
-                      <button className="px-4 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm whitespace-nowrap">
-                        <i className="far fa-user mr-1"></i> 프로필
-                      </button>
-                    </div>
+                  {/* 버튼 */}
+                  <div className="flex gap-2 flex-shrink-0">
+                    <button className="px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs whitespace-nowrap">
+                      <i className="far fa-comment mr-1"></i> 문의
+                    </button>
+                    <button className="px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs whitespace-nowrap">
+                      <i className="far fa-user mr-1"></i> 프로필
+                    </button>
                   </div>
                 </div>
               </div>
