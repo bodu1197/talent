@@ -179,7 +179,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
           </div>
 
           {/* 오른쪽: 구매 옵션 */}
-          <div className="w-full lg:w-[350px] flex-shrink-0">
+          <div className="w-full lg:w-[350px] flex-shrink-0 lg:-mt-[60px]">
             <div className="sticky top-12 space-y-6">
               {/* 썸네일 이미지 */}
               <div className="bg-white rounded-xl overflow-hidden shadow-sm">
