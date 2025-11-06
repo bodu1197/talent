@@ -115,13 +115,13 @@ export async function getSellerPortfolio(sellerId: string) {
   const supabase = createClient()
 
   const { data, error } = await supabase
-    .from('portfolio_items')
+    .from('seller_portfolio')
     .select('*')
     .eq('seller_id', sellerId)
     .order('created_at', { ascending: false })
 
   if (error) throw error
-  return data
+  return data || []
 }
 
 // 포트폴리오 아이템 생성

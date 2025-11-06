@@ -21,7 +21,7 @@ export default async function SellerPortfolioPage() {
     redirect('/mypage/seller/register')
   }
 
-  const portfolio = await getSellerPortfolio(user.id)
+  const portfolio = await getSellerPortfolio(seller.id)
 
   return <SellerPortfolioClient portfolio={portfolio} />
 }
