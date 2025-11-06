@@ -184,7 +184,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
             {/* 오른쪽: 썸네일 (배경색 영역 내부, 상단만 포함) */}
             <div className="w-full lg:w-[350px] flex-shrink-0">
-              <div className="h-[280px] bg-white rounded-xl overflow-hidden shadow-sm">
+              <div className="bg-white rounded-xl overflow-hidden shadow-sm">
                 <div className="h-[260px] relative bg-gray-100">
                   {service.thumbnail_url ? (
                     <img
