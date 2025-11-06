@@ -28,7 +28,10 @@ export default function Step4Images({ formData, setFormData }: Props) {
         alert('이미지 파일만 업로드 가능합니다.')
         return
       }
+      // formData 업데이트
       setFormData({ ...formData, thumbnail_file: file })
+
+      // 미리보기 생성
       const reader = new FileReader()
       reader.onloadend = () => {
         setThumbnailPreview(reader.result as string)

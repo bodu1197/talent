@@ -71,6 +71,38 @@ export default function NewServiceClientV2({ sellerId, categories }: Props) {
   ]
 
   const handleNext = () => {
+    // Step 1 validation: 카테고리, 제목, 설명, 썸네일 필수
+    if (currentStep === 1) {
+      if (!formData.category_ids || formData.category_ids.length === 0) {
+        alert('카테고리를 선택해주세요.')
+        return
+      }
+      if (!formData.title || formData.title.trim() === '') {
+        alert('서비스 제목을 입력해주세요.')
+        return
+      }
+      if (!formData.description || formData.description.trim() === '') {
+        alert('서비스 설명을 입력해주세요.')
+        return
+      }
+      if (!formData.thumbnail_file) {
+        alert('서비스 썸네일을 업로드하거나 생성해주세요.')
+        return
+      }
+    }
+
+    // Step 2 validation: 가격, 작업기간 필수
+    if (currentStep === 2) {
+      if (!formData.price || parseInt(formData.price) < 5000) {
+        alert('서비스 가격을 5,000원 이상으로 입력해주세요.')
+        return
+      }
+      if (!formData.delivery_days || parseInt(formData.delivery_days) < 1) {
+        alert('작업 기간을 1일 이상으로 입력해주세요.')
+        return
+      }
+    }
+
     if (currentStep < 3) {
       setCurrentStep(currentStep + 1)
     }
