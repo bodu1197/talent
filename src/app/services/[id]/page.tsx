@@ -178,64 +178,65 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
             {/* 오른쪽: 썸네일 (베이지 배경 영역 내) */}
             <div className="w-full lg:w-[350px] flex-shrink-0 lg:-mt-[20px]">
-            <div className="sticky top-12 space-y-6">
-              {/* 썸네일 이미지 */}
-              <div className="bg-white rounded-xl overflow-hidden shadow-sm">
-                <div className="h-[260px] relative bg-gray-100">
-                  {service.thumbnail_url ? (
-                    <img
-                      src={service.thumbnail_url}
-                      alt={service.title}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                      <i className="fas fa-image text-[40px]"></i>
+              <div className="sticky top-12 space-y-6">
+                {/* 썸네일 이미지 */}
+                <div className="bg-white rounded-xl overflow-hidden shadow-sm">
+                  <div className="h-[260px] relative bg-gray-100">
+                    {service.thumbnail_url ? (
+                      <img
+                        src={service.thumbnail_url}
+                        alt={service.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                        <i className="fas fa-image text-[40px]"></i>
+                      </div>
+                    )}
+                  </div>
+                  {service.portfolio_urls && service.portfolio_urls.length > 0 && (
+                    <div className="grid grid-cols-2 gap-2 p-4">
+                      {service.portfolio_urls.slice(0, 4).map((url: string, i: number) => (
+                        <div key={i} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                          <img src={url} alt={`Portfolio ${i + 1}`} className="w-full h-full object-cover" />
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>
-                {service.portfolio_urls && service.portfolio_urls.length > 0 && (
-                  <div className="grid grid-cols-2 gap-2 p-4">
-                    {service.portfolio_urls.slice(0, 4).map((url: string, i: number) => (
-                      <div key={i} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                        <img src={url} alt={`Portfolio ${i + 1}`} className="w-full h-full object-cover" />
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
 
-              {/* 가격 정보 */}
-              <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                <div className="p-6">
-                  <div className="text-3xl font-bold mb-1">
-                    ₩{service.price?.toLocaleString() || 0}
-                  </div>
-                  <div className="text-sm text-gray-600 mb-6">
-                    {service.delivery_days || 0}일 이내 완료 · {service.revision_count === 999 ? '무제한' : `${service.revision_count || 0}회`} 수정
-                  </div>
+                {/* 가격 정보 */}
+                <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                  <div className="p-6">
+                    <div className="text-3xl font-bold mb-1">
+                      ₩{service.price?.toLocaleString() || 0}
+                    </div>
+                    <div className="text-sm text-gray-600 mb-6">
+                      {service.delivery_days || 0}일 이내 완료 · {service.revision_count === 999 ? '무제한' : `${service.revision_count || 0}회`} 수정
+                    </div>
 
-                  <button className="w-full py-3 bg-[#0f3460] text-white rounded-lg font-medium hover:bg-[#1a4d8f] transition-colors">
-                    구매하기
-                  </button>
-
-                  <div className="flex gap-2 mt-3">
-                    <FavoriteButton serviceId={id} />
-                    <button className="flex-1 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-                      <i className="fas fa-share"></i> 공유
+                    <button className="w-full py-3 bg-[#0f3460] text-white rounded-lg font-medium hover:bg-[#1a4d8f] transition-colors">
+                      구매하기
                     </button>
+
+                    <div className="flex gap-2 mt-3">
+                      <FavoriteButton serviceId={id} />
+                      <button className="flex-1 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <i className="fas fa-share"></i> 공유
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* 안전거래 배지 */}
-              <div className="bg-blue-50 rounded-xl p-4 text-center">
-                <i className="fas fa-shield-alt text-2xl text-[#0f3460] mb-2"></i>
-                <h4 className="font-bold mb-1">100% 안전거래</h4>
-                <p className="text-xs text-gray-600">
-                  에스크로 결제 시스템으로<br/>
-                  안전하게 거래하세요
-                </p>
+                {/* 안전거래 배지 */}
+                <div className="bg-blue-50 rounded-xl p-4 text-center">
+                  <i className="fas fa-shield-alt text-2xl text-[#0f3460] mb-2"></i>
+                  <h4 className="font-bold mb-1">100% 안전거래</h4>
+                  <p className="text-xs text-gray-600">
+                    에스크로 결제 시스템으로<br/>
+                    안전하게 거래하세요
+                  </p>
+                </div>
               </div>
             </div>
           </div>
