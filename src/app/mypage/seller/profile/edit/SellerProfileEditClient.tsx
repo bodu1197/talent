@@ -153,15 +153,48 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   연락 가능 시간
                 </label>
-                <input
-                  type="text"
-                  value={profile.contact_hours || ''}
-                  onChange={(e) => setProfile({ ...profile, contact_hours: e.target.value })}
-                  placeholder="예: 평일 09:00-18:00, 주말 10:00-17:00"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-                />
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">시작 시간</label>
+                    <select
+                      value={profile.contact_hours?.split('-')[0] || '09:00'}
+                      onChange={(e) => {
+                        const endTime = profile.contact_hours?.split('-')[1] || '18:00'
+                        setProfile({ ...profile, contact_hours: `${e.target.value}-${endTime}` })
+                      }}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    >
+                      {Array.from({ length: 24 }, (_, i) => {
+                        const hour = i.toString().padStart(2, '0')
+                        return [
+                          <option key={`${hour}:00`} value={`${hour}:00`}>{`${hour}:00`}</option>,
+                          <option key={`${hour}:30`} value={`${hour}:30`}>{`${hour}:30`}</option>
+                        ]
+                      })}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">종료 시간</label>
+                    <select
+                      value={profile.contact_hours?.split('-')[1] || '18:00'}
+                      onChange={(e) => {
+                        const startTime = profile.contact_hours?.split('-')[0] || '09:00'
+                        setProfile({ ...profile, contact_hours: `${startTime}-${e.target.value}` })
+                      }}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    >
+                      {Array.from({ length: 24 }, (_, i) => {
+                        const hour = i.toString().padStart(2, '0')
+                        return [
+                          <option key={`${hour}:00`} value={`${hour}:00`}>{`${hour}:00`}</option>,
+                          <option key={`${hour}:30`} value={`${hour}:30`}>{`${hour}:30`}</option>
+                        ]
+                      })}
+                    </select>
+                  </div>
+                </div>
                 <p className="mt-1 text-sm text-gray-500">
-                  구매자가 연락 가능한 시간대를 입력해주세요
+                  구매자가 연락 가능한 시간대를 선택해주세요
                 </p>
               </div>
             </div>
