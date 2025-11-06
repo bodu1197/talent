@@ -104,7 +104,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
               <h1 className="text-2xl font-bold mb-6">{service.title}</h1>
 
               {/* 통계 */}
-              <div className="flex items-center gap-6 py-3 border-y border-gray-300 mb-6 text-sm">
+              <div className="flex items-center gap-6 py-3 mb-6 text-sm">
                 <div className="flex items-center gap-2">
                   {/* 별점 5개 표시 */}
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -123,7 +123,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
               </div>
 
               {/* 판매자 정보 카드 */}
-              <div className="bg-white border-2 border-[#0f3460] rounded-lg p-3 h-[70px] flex items-center">
+              <div className="bg-white rounded-lg p-3 h-[70px] flex items-center">
                 <div className="flex items-center gap-3 w-full">
                   {/* 프로필 이미지 */}
                   <div className="w-[54px] h-[54px] bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
