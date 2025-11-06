@@ -287,7 +287,6 @@ export default function NewServiceClient({ sellerId }: Props) {
           delivery_days: parseInt(formData.deliveryDays) || 7,
           revision_count: formData.revisionCount === 'unlimited' ? 999 : parseInt(formData.revisionCount) || 0,
           thumbnail_url: publicUrl,
-          tax_invoice_available: formData.taxInvoiceAvailable,
           status: 'pending'
         })
         .select()
