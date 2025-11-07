@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createServiceClient } from '@supabase/supabase-js'
 
 // 프로필 업데이트 API
 export async function PATCH(request: NextRequest) {
   try {
+    // 먼저 일반 클라이언트로 사용자 인증 확인
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -18,8 +20,13 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 })
     }
 
+    // Service Role 클라이언트 생성 (RLS 우회)
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+    const serviceClient = createServiceClient(supabaseUrl, supabaseServiceKey)
+
     // 서버 측에서 업데이트 (Service Role 사용으로 RLS 우회)
-    const { data, error } = await supabase
+    const { data, error } = await serviceClient
       .from('users')
       .update({
         name,
