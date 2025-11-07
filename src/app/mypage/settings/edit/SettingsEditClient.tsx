@@ -107,8 +107,21 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
       console.log('Name:', name)
       console.log('Bio:', bio)
 
-      // 업데이트할 데이터만 전송
+      // 먼저 현재 사용자의 role 정보 가져오기
+      const { data: currentUserData, error: fetchError } = await supabase
+        .from('users')
+        .select('role, email, phone, bio, status, email_verified, is_active, created_at')
+        .eq('id', user.id)
+        .single()
+
+      if (fetchError) {
+        console.error('Fetch current user error:', fetchError)
+        throw fetchError
+      }
+
+      // 업데이트할 데이터 (기존 필수 필드 포함)
       const updateData: any = {
+        ...currentUserData,
         name,
         profile_image: profileImage || null,
         updated_at: new Date().toISOString()
