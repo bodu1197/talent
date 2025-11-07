@@ -108,7 +108,7 @@ export async function PUT(
         image_urls: body.image_urls || [],
         project_url: body.project_url || null,
         youtube_url: body.youtube_url || null,
-        service_id: body.service_id || null,
+        service_id: null, // 기존 필드는 null로 설정
         tags: body.tags || [],
         updated_at: new Date().toISOString()
       })
@@ -119,6 +119,30 @@ export async function PUT(
     if (error) {
       logger.error('Portfolio update error:', error)
       return NextResponse.json({ error: 'Failed to update portfolio', details: error.message }, { status: 500 })
+    }
+
+    // 서비스 연결 업데이트 (다중)
+    // 1. 기존 연결 모두 삭제
+    await supabase
+      .from('portfolio_services')
+      .delete()
+      .eq('portfolio_id', portfolioId)
+
+    // 2. 새로운 연결 추가
+    if (body.service_ids && Array.isArray(body.service_ids) && body.service_ids.length > 0) {
+      const portfolioServiceLinks = body.service_ids.map((service_id: string) => ({
+        portfolio_id: portfolioId,
+        service_id
+      }))
+
+      const { error: linkError } = await supabase
+        .from('portfolio_services')
+        .insert(portfolioServiceLinks)
+
+      if (linkError) {
+        logger.error('Portfolio-service link error:', linkError)
+        // 연결 실패해도 포트폴리오는 업데이트되었으므로 경고만 로그
+      }
     }
 
     return NextResponse.json({ data: updatedPortfolio }, { status: 200 })
