@@ -40,6 +40,9 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
   const { id } = await params
   const supabase = await createClient()
 
+  // 현재 로그인한 사용자 확인
+  const { data: { user } } = await supabase.auth.getUser()
+
   const { data: service, error } = await supabase
     .from('services')
     .select(`
@@ -473,7 +476,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                     구매하기
                   </button>
 
-                  {service.seller?.id && (
+                  {service.seller?.id && user && service.seller.user_id !== user.id && (
                     <ContactSellerButton sellerId={service.seller.id} serviceId={id} />
                   )}
 

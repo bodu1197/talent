@@ -40,8 +40,8 @@ export default function ContactSellerButton({ sellerId, serviceId }: Props) {
 
       const { room_id } = await response.json()
 
-      // 채팅 페이지로 이동
-      router.push(`/mypage/messages?room=${room_id}`)
+      // 일대일 채팅 페이지로 이동
+      router.push(`/chat/${room_id}`)
     } catch (error) {
       console.error('Contact seller error:', error)
       alert('문의 시작에 실패했습니다. 다시 시도해주세요.')

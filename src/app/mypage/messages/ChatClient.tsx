@@ -127,6 +127,16 @@ export default function ChatClient({ userId, isSeller }: Props) {
     loadRooms()
   }, [])
 
+  // 채팅방 목록이 로드된 후 URL의 room 파라미터 확인
+  useEffect(() => {
+    if (roomIdFromUrl && rooms.length > 0) {
+      const roomExists = rooms.find(r => r.id === roomIdFromUrl)
+      if (roomExists) {
+        setSelectedRoomId(roomIdFromUrl)
+      }
+    }
+  }, [rooms, roomIdFromUrl])
+
   // 선택된 채팅방의 메시지 로드
   useEffect(() => {
     if (selectedRoomId) {
