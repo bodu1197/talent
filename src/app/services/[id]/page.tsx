@@ -49,7 +49,11 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         profile_image,
         contact_hours,
         tax_invoice_available,
-        user_id
+        user_id,
+        bio,
+        phone,
+        email,
+        created_at
       ),
       service_categories(
         category:categories(id, name, slug)
@@ -122,6 +126,45 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
     if (userData) {
       service.seller.user = userData
+    }
+  }
+
+  // seller의 통계 정보 조회
+  let sellerStats = {
+    totalOrders: 0,
+    satisfactionRate: 0,
+    avgResponseTime: '10분 이내'
+  }
+
+  if (service?.seller?.id) {
+    // 총 거래 건수 (완료된 주문)
+    const { count: orderCount } = await supabase
+      .from('orders')
+      .select('*', { count: 'exact', head: true })
+      .eq('seller_id', service.seller.id)
+      .eq('status', 'completed')
+
+    sellerStats.totalOrders = orderCount || 0
+
+    // 만족도 계산 (평균 평점)
+    // 먼저 판매자의 모든 서비스 ID 조회
+    const { data: sellerServices } = await supabase
+      .from('services')
+      .select('id')
+      .eq('seller_id', service.seller.id)
+
+    if (sellerServices && sellerServices.length > 0) {
+      const serviceIds = sellerServices.map(s => s.id)
+
+      const { data: reviews } = await supabase
+        .from('service_reviews')
+        .select('rating')
+        .in('service_id', serviceIds)
+
+      if (reviews && reviews.length > 0) {
+        const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+        sellerStats.satisfactionRate = Math.round((avgRating / 5) * 100)
+      }
     }
   }
 
@@ -310,8 +353,104 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
             {/* 전문가 정보 */}
             <div id="expert" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
-              <h2 className="text-xl font-bold mb-4">전문가 정보</h2>
-              <p className="text-gray-600">전문가 정보가 여기에 표시됩니다.</p>
+              <h2 className="text-xl font-bold mb-6">전문가 정보</h2>
+
+              {/* 전문가 카드 */}
+              <div className="border border-gray-200 rounded-lg p-6">
+                {/* 상단 알림 배너 (응답 시간) */}
+                <div className="mb-4 bg-green-50 border border-green-200 rounded-lg px-4 py-2 flex items-center justify-between">
+                  <span className="text-sm text-green-700">
+                    ⚡ 첫 문의 응답이 평균 {sellerStats.avgResponseTime} 빠르게요.
+                  </span>
+                  <button className="text-green-700 hover:text-green-800">
+                    <i className="fas fa-times text-sm"></i>
+                  </button>
+                </div>
+
+                {/* 전문가 기본 정보 */}
+                <div className="flex items-start justify-between mb-6">
+                  <div className="flex items-start gap-4">
+                    {/* 프로필 이미지 */}
+                    <div className="w-16 h-16 rounded-full bg-[#0f3460] flex items-center justify-center text-white text-2xl font-bold flex-shrink-0">
+                      {service.seller?.profile_image ? (
+                        <img
+                          src={service.seller.profile_image}
+                          alt={service.seller.display_name || service.seller.business_name}
+                          className="w-full h-full rounded-full object-cover"
+                        />
+                      ) : (
+                        <span>{(service.seller?.display_name || service.seller?.business_name || 'U')[0]}</span>
+                      )}
+                    </div>
+
+                    {/* 이름 및 영업 시간 */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-lg font-bold text-gray-900">
+                          {service.seller?.business_name || service.seller?.display_name}
+                        </h3>
+                        <span className="text-yellow-500">
+                          <i className="fas fa-crown"></i>
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-600 mb-1">
+                        영업 가능 시간: {service.seller?.contact_hours || '9시 - 18시'}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        평균 응답 시간: {sellerStats.avgResponseTime}
+                      </p>
+                      <div className="mt-2 flex gap-2">
+                        <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
+                          결제 전 전화상담 제공
+                        </span>
+                        <button className="text-xs px-2 py-1 border border-gray-300 text-gray-700 rounded hover:bg-gray-50">
+                          연락처 보기
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 문의하기 버튼 */}
+                  <Link
+                    href="/mypage/messages"
+                    className="px-6 py-2 border border-[#0f3460] text-[#0f3460] rounded-lg hover:bg-[#0f3460] hover:text-white transition-colors font-medium"
+                  >
+                    문의하기
+                  </Link>
+                </div>
+
+                {/* 통계 정보 */}
+                <div className="grid grid-cols-4 gap-4 py-4 border-t border-gray-200">
+                  <div className="text-center">
+                    <div className="text-sm text-gray-600 mb-1">총 거래 건수</div>
+                    <div className="text-lg font-bold text-gray-900">{sellerStats.totalOrders}건</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-sm text-gray-600 mb-1">만족도</div>
+                    <div className="text-lg font-bold text-gray-900">{sellerStats.satisfactionRate}%</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-sm text-gray-600 mb-1">회원구분</div>
+                    <div className="text-lg font-bold text-gray-900">기업회원</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-sm text-gray-600 mb-1">세금계산서</div>
+                    <div className="text-lg font-bold text-gray-900">
+                      {service.seller?.tax_invoice_available ? '발행 가능' : '미발행'}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 전문가 소개 */}
+                {service.seller?.bio && (
+                  <div className="mt-6 pt-6 border-t border-gray-200">
+                    <h4 className="font-bold text-gray-900 mb-3">전문가 소개</h4>
+                    <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
+                      {service.seller.bio}
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* 리뷰 */}
