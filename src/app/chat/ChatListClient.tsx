@@ -41,6 +41,10 @@ interface Message {
   message: string
   is_read: boolean
   created_at: string
+  file_url?: string
+  file_name?: string
+  file_size?: number
+  file_type?: string
 }
 
 interface Props {
@@ -59,6 +63,8 @@ export default function ChatListClient({ userId, sellerId }: Props) {
   const [newMessage, setNewMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [activeTab, setActiveTab] = useState<'all' | 'unread' | 'deal' | 'favorite'>('all')
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [isUploading, setIsUploading] = useState(false)
   const supabase = createClient()
 
   // 채팅방 목록 로드
@@ -79,22 +85,86 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     }
   }
 
+  // 파일 선택 처리
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      // 파일 크기 제한 (10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        alert('파일 크기는 10MB 이하만 가능합니다.')
+        return
+      }
+      setSelectedFile(file)
+    }
+  }
+
+  // 파일 업로드
+  const uploadFile = async (file: File): Promise<string | null> => {
+    try {
+      setIsUploading(true)
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`
+      const filePath = `chat-files/${fileName}`
+
+      const { data, error } = await supabase.storage
+        .from('uploads')
+        .upload(filePath, file)
+
+      if (error) {
+        console.error('File upload error:', error)
+        return null
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('uploads')
+        .getPublicUrl(filePath)
+
+      return publicUrl
+    } catch (error) {
+      console.error('Upload error:', error)
+      return null
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
   // 메시지 전송
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!newMessage.trim() || !selectedRoomId || isLoading) return
+    if ((!newMessage.trim() && !selectedFile) || !selectedRoomId || isLoading) return
 
     const messageText = newMessage.trim()
+    const fileToUpload = selectedFile
     setIsLoading(true)
     setNewMessage('') // 입력창 즉시 비우기
+    setSelectedFile(null) // 파일 선택 초기화
 
     try {
+      let fileUrl = null
+      let fileName = null
+      let fileSize = null
+      let fileType = null
+
+      // 파일이 있으면 업로드
+      if (fileToUpload) {
+        fileUrl = await uploadFile(fileToUpload)
+        if (fileUrl) {
+          fileName = fileToUpload.name
+          fileSize = fileToUpload.size
+          fileType = fileToUpload.type
+        }
+      }
+
       const response = await fetch('/api/chat/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           room_id: selectedRoomId,
-          message: messageText
+          message: messageText || (fileUrl ? '파일을 전송했습니다.' : ''),
+          file_url: fileUrl,
+          file_name: fileName,
+          file_size: fileSize,
+          file_type: fileType
         })
       })
 
@@ -105,11 +175,13 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         const errorData = await response.json()
         alert(`메시지 전송 실패: ${errorData.error || '알 수 없는 오류'}`)
         setNewMessage(messageText) // 실패 시 메시지 복원
+        setSelectedFile(fileToUpload) // 실패 시 파일 복원
       }
     } catch (error) {
       console.error('Send message error:', error)
       alert('메시지 전송 중 오류가 발생했습니다.')
       setNewMessage(messageText) // 실패 시 메시지 복원
+      setSelectedFile(fileToUpload) // 실패 시 파일 복원
     } finally {
       setIsLoading(false)
     }
@@ -360,6 +432,25 @@ export default function ChatListClient({ userId, sellerId }: Props) {
                             : 'bg-white text-gray-900 border border-gray-200'
                         }`}
                       >
+                        {message.file_url && (
+                          <a
+                            href={message.file_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 mb-2 p-2 bg-white/50 rounded-lg hover:bg-white/70 transition-colors"
+                          >
+                            <i className="fas fa-file text-blue-500"></i>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium truncate">{message.file_name || '첨부파일'}</p>
+                              {message.file_size && (
+                                <p className="text-xs text-gray-500">
+                                  {(message.file_size / 1024).toFixed(1)} KB
+                                </p>
+                              )}
+                            </div>
+                            <i className="fas fa-download text-gray-400"></i>
+                          </a>
+                        )}
                         <p className="whitespace-pre-wrap break-words">{message.message}</p>
                       </div>
                       <span className="text-xs text-gray-400 whitespace-nowrap">
@@ -378,6 +469,24 @@ export default function ChatListClient({ userId, sellerId }: Props) {
             {/* 입력 영역 */}
             <div className="px-6 py-4 bg-white border-t border-gray-200">
               <form onSubmit={sendMessage} className="space-y-3">
+                {/* 선택된 파일 표시 */}
+                {selectedFile && (
+                  <div className="flex items-center gap-2 p-2 bg-blue-50 border border-blue-200 rounded-lg">
+                    <i className="fas fa-file text-blue-500"></i>
+                    <span className="flex-1 text-sm truncate">{selectedFile.name}</span>
+                    <span className="text-xs text-gray-500">
+                      {(selectedFile.size / 1024).toFixed(1)} KB
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedFile(null)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <i className="fas fa-times"></i>
+                    </button>
+                  </div>
+                )}
+
                 <div className="relative">
                   <textarea
                     value={newMessage}
@@ -391,15 +500,21 @@ export default function ChatListClient({ userId, sellerId }: Props) {
                     placeholder="메시지를 입력하세요. (Enter: 줄바꿈 / Ctrl+Enter: 전송)"
                     className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                     rows={3}
-                    disabled={isLoading}
+                    disabled={isLoading || isUploading}
                   />
-                  <button
-                    type="button"
-                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
-                    aria-label="파일 첨부"
+                  <input
+                    type="file"
+                    id="file-input"
+                    className="hidden"
+                    onChange={handleFileSelect}
+                    disabled={isLoading || isUploading}
+                  />
+                  <label
+                    htmlFor="file-input"
+                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 cursor-pointer"
                   >
                     <i className="fas fa-paperclip text-lg"></i>
-                  </button>
+                  </label>
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -414,22 +529,23 @@ export default function ChatListClient({ userId, sellerId }: Props) {
                       type="button"
                       className="px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
                     >
-                      인천 결제 요청
+                      결제 요청
                     </button>
-                    <button
-                      type="button"
-                      className="px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                    <label
+                      htmlFor="file-input"
+                      className="px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer inline-flex items-center gap-2"
                     >
-                      일정 등록
-                    </button>
+                      <i className="fas fa-paperclip"></i>
+                      파일 첨부
+                    </label>
                   </div>
 
                   <button
                     type="submit"
-                    disabled={!newMessage.trim() || isLoading}
+                    disabled={(!newMessage.trim() && !selectedFile) || isLoading || isUploading}
                     className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
-                    {isLoading ? '전송 중...' : '전송'}
+                    {isUploading ? '업로드 중...' : isLoading ? '전송 중...' : '전송'}
                   </button>
                 </div>
               </form>

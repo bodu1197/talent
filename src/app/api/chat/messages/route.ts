@@ -28,7 +28,11 @@ export async function GET(request: NextRequest) {
         sender_id,
         message,
         is_read,
-        created_at
+        created_at,
+        file_url,
+        file_name,
+        file_size,
+        file_type
       `)
       .eq('room_id', room_id)
       .order('created_at', { ascending: true })
@@ -64,27 +68,41 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { room_id, message } = body
+    const { room_id, message, file_url, file_name, file_size, file_type } = body
 
-    if (!room_id || !message) {
-      return NextResponse.json({ error: 'room_id and message are required' }, { status: 400 })
+    if (!room_id || (!message && !file_url)) {
+      return NextResponse.json({ error: 'room_id and (message or file) are required' }, { status: 400 })
     }
 
     // 메시지 전송
+    const insertData: any = {
+      room_id,
+      sender_id: user.id,
+      message
+    }
+
+    // 파일 정보가 있으면 추가
+    if (file_url) {
+      insertData.file_url = file_url
+      insertData.file_name = file_name
+      insertData.file_size = file_size
+      insertData.file_type = file_type
+    }
+
     const { data: newMessage, error } = await supabase
       .from('chat_messages')
-      .insert({
-        room_id,
-        sender_id: user.id,
-        message
-      })
+      .insert(insertData)
       .select(`
         id,
         room_id,
         sender_id,
         message,
         is_read,
-        created_at
+        created_at,
+        file_url,
+        file_name,
+        file_size,
+        file_type
       `)
       .single()
 
