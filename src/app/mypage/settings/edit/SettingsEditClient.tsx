@@ -42,16 +42,44 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
         return
       }
 
-      const { error } = await supabase
+      console.log('Saving profile for user:', user.id)
+      console.log('Name:', name)
+      console.log('Bio:', bio)
+
+      // 먼저 현재 사용자 데이터 가져오기
+      const { data: currentUser, error: fetchError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', user.id)
+        .single()
+
+      if (fetchError) {
+        console.error('Fetch error:', fetchError)
+        throw fetchError
+      }
+
+      // 기존 데이터와 병합하여 업데이트
+      const { data, error } = await supabase
         .from('users')
         .update({
+          ...currentUser,
           name,
-          bio
+          updated_at: new Date().toISOString()
         })
         .eq('id', user.id)
+        .select()
 
-      if (error) throw error
+      if (error) {
+        console.error('Supabase error details:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        })
+        throw error
+      }
 
+      console.log('Profile updated successfully:', data)
       alert('프로필이 저장되었습니다.')
       router.push('/mypage/settings')
     } catch (error) {
