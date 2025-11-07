@@ -164,12 +164,13 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     : null
 
   return (
-    <div className="flex h-screen bg-white pt-16">
-      {/* 왼쪽: 채팅방 목록 */}
-      <div className="w-80 border-r border-gray-200 flex flex-col">
+    <div className="flex justify-center h-screen bg-gray-50 pt-16">
+      <div className="flex w-full max-w-[1400px] bg-white shadow-lg">
+        {/* 왼쪽: 채팅방 목록 */}
+        <div className="w-80 border-r border-gray-200 flex flex-col">
         {/* 헤더 */}
         <div className="px-4 py-4 border-b border-gray-200">
-          <h1 className="text-2xl font-bold mb-4">kmong</h1>
+          <h1 className="text-2xl font-bold mb-4">채팅</h1>
 
           {/* 탭 */}
           <div className="flex gap-2">
@@ -441,6 +442,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
             </div>
           </div>
         )}
+      </div>
       </div>
     </div>
   )
