@@ -123,8 +123,26 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
 
       if (!response.ok) {
         console.error('=== PROFILE UPDATE ERROR ===')
-        console.error('Error:', result)
-        alert(`프로필 저장 중 오류가 발생했습니다.\n\nMessage: ${result.error || 'Unknown'}\nCode: ${result.code || 'N/A'}`)
+        console.error('Status:', response.status)
+        console.error('Response:', result)
+        console.error('Error Message:', result.error)
+        console.error('Error Details:', result.details)
+
+        // 더 자세한 오류 메시지
+        let errorMessage = '프로필 저장 중 오류가 발생했습니다.\n\n'
+
+        if (response.status === 500 && result.details && result.details.includes('SUPABASE_SERVICE_ROLE_KEY')) {
+          errorMessage += '서버 설정 오류: 관리자에게 문의해주세요.\n'
+          errorMessage += '(환경 변수가 설정되지 않았습니다)'
+        } else {
+          errorMessage += `오류: ${result.error || '알 수 없는 오류'}\n`
+          errorMessage += `코드: ${result.code || 'N/A'}\n`
+          if (result.details) {
+            errorMessage += `상세: ${result.details}`
+          }
+        }
+
+        alert(errorMessage)
         return
       }
 

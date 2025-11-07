@@ -24,14 +24,23 @@ export async function PATCH(request: NextRequest) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
+    console.log('Environment check:', {
+      hasUrl: !!supabaseUrl,
+      hasServiceKey: !!supabaseServiceKey,
+      urlLength: supabaseUrl?.length,
+      keyLength: supabaseServiceKey?.length,
+      nodeEnv: process.env.NODE_ENV
+    })
+
     if (!supabaseUrl || !supabaseServiceKey) {
       console.error('Missing environment variables:', {
         hasUrl: !!supabaseUrl,
-        hasServiceKey: !!supabaseServiceKey
+        hasServiceKey: !!supabaseServiceKey,
+        availableKeys: Object.keys(process.env).filter(key => key.includes('SUPABASE'))
       })
       return NextResponse.json({
         error: 'Server configuration error',
-        details: 'Missing required environment variables'
+        details: `Missing required environment variables: ${!supabaseUrl ? 'NEXT_PUBLIC_SUPABASE_URL' : ''} ${!supabaseServiceKey ? 'SUPABASE_SERVICE_ROLE_KEY' : ''}`
       }, { status: 500 })
     }
 
