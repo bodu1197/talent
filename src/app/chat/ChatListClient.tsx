@@ -160,11 +160,11 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           room_id: selectedRoomId,
-          message: messageText || (fileUrl ? '파일을 전송했습니다.' : ''),
-          file_url: fileUrl,
-          file_name: fileName,
-          file_size: fileSize,
-          file_type: fileType
+          message: messageText || '',
+          file_url: fileUrl || null,
+          file_name: fileName || null,
+          file_size: fileSize || null,
+          file_type: fileType || null
         })
       })
 

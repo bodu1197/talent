@@ -70,15 +70,20 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { room_id, message, file_url, file_name, file_size, file_type } = body
 
-    if (!room_id || (!message && !file_url)) {
-      return NextResponse.json({ error: 'room_id and (message or file) are required' }, { status: 400 })
+    if (!room_id) {
+      return NextResponse.json({ error: 'room_id is required' }, { status: 400 })
+    }
+
+    // 메시지나 파일 중 하나는 있어야 함
+    if (!message && !file_url) {
+      return NextResponse.json({ error: 'message or file is required' }, { status: 400 })
     }
 
     // 메시지 전송
     const insertData: any = {
       room_id,
       sender_id: user.id,
-      message
+      message: message || ''
     }
 
     // 파일 정보가 있으면 추가
