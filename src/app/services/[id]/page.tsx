@@ -359,7 +359,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                 {/* 상단 알림 배너 (응답 시간) */}
                 <div className="mb-4 bg-green-50 border border-green-200 rounded-lg px-4 py-2 flex items-center justify-between">
                   <span className="text-sm text-green-700">
-                    ⚡ 첫 문의 응답이 평균 {sellerStats.avgResponseTime} 빠르게요.
+                    ⚡ 첫 문의 응답이 평균 {sellerStats.avgResponseTime}로 빠릅니다.
                   </span>
                   <button className="text-green-700 hover:text-green-800">
                     <i className="fas fa-times text-sm"></i>
