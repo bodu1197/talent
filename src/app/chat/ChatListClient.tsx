@@ -168,7 +168,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
       <div className="container-1200 py-6">
         <div className="flex h-[calc(100vh-120px)] bg-white shadow-lg rounded-lg overflow-hidden">
         {/* 왼쪽: 채팅방 목록 */}
-        <div className="w-80 border-r border-gray-200 flex flex-col">
+        <div className="w-[350px] border-r border-gray-200 flex flex-col flex-shrink-0">
         {/* 헤더 */}
         <div className="px-4 py-4 border-b border-gray-200">
           <h1 className="text-2xl font-bold mb-4">채팅</h1>
