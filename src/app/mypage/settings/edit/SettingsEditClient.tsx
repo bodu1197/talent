@@ -107,10 +107,24 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
       console.log('Name:', name)
       console.log('Bio:', bio)
 
-      // 업데이트할 데이터 (필요한 필드만)
+      // 먼저 현재 사용자 정보 가져오기 (user_type 포함)
+      const { data: currentUser, error: fetchError } = await supabase
+        .from('users')
+        .select('user_type')
+        .eq('id', user.id)
+        .single()
+
+      if (fetchError) {
+        console.error('Failed to fetch current user:', fetchError)
+        alert('사용자 정보를 불러오는데 실패했습니다.')
+        return
+      }
+
+      // 업데이트할 데이터 (user_type 포함)
       const updateData: any = {
         name,
         profile_image: profileImage || null,
+        user_type: currentUser?.user_type || 'buyer',
         updated_at: new Date().toISOString()
       }
 
