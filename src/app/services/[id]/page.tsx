@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import ViewTracker from '@/components/services/ViewTracker'
 import FavoriteButton from '@/components/services/FavoriteButton'
 import PortfolioGrid from '@/components/services/PortfolioGrid'
+import ExpertResponseBanner from '@/components/services/ExpertResponseBanner'
 import { logger } from '@/lib/logger'
 import { getCategoryPath } from '@/lib/categories'
 
@@ -357,14 +358,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
               {/* 전문가 카드 */}
               <div className="border border-gray-200 rounded-lg p-6">
                 {/* 상단 알림 배너 (응답 시간) */}
-                <div className="mb-4 bg-green-50 border border-green-200 rounded-lg px-4 py-2 flex items-center justify-between">
-                  <span className="text-sm text-green-700">
-                    ⚡ 첫 문의 응답이 평균 {sellerStats.avgResponseTime}로 빠릅니다.
-                  </span>
-                  <button className="text-green-700 hover:text-green-800">
-                    <i className="fas fa-times text-sm"></i>
-                  </button>
-                </div>
+                <ExpertResponseBanner avgResponseTime={sellerStats.avgResponseTime} />
 
                 {/* 전문가 기본 정보 */}
                 <div className="flex items-start justify-between mb-6">
