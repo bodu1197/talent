@@ -214,9 +214,20 @@ export default function ChatListClient({ userId, sellerId }: Props) {
           filter: `room_id=eq.${selectedRoomId}`
         },
         (payload) => {
-          const newMsg = payload.new as any
-          // 모든 새 메시지를 실시간으로 표시 (내가 보낸 것, 상대방이 보낸 것 모두)
-          setMessages(prev => [...prev, newMsg])
+          const newMsg = payload.new as Message
+          // 모든 새 메시지를 실시간으로 표시 (파일 필드 포함)
+          setMessages(prev => [...prev, {
+            id: newMsg.id,
+            room_id: newMsg.room_id,
+            sender_id: newMsg.sender_id,
+            message: newMsg.message,
+            is_read: newMsg.is_read,
+            created_at: newMsg.created_at,
+            file_url: newMsg.file_url,
+            file_name: newMsg.file_name,
+            file_size: newMsg.file_size,
+            file_type: newMsg.file_type
+          }])
           loadRooms() // 채팅방 목록의 마지막 메시지 업데이트
         }
       )
