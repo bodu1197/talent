@@ -444,25 +444,51 @@ export default function ChatListClient({ userId, sellerId }: Props) {
                         }`}
                       >
                         {message.file_url && (
-                          <a
-                            href={message.file_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 mb-2 p-2 bg-white/50 rounded-lg hover:bg-white/70 transition-colors"
-                          >
-                            <i className="fas fa-file text-blue-500"></i>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium truncate">{message.file_name || '첨부파일'}</p>
-                              {message.file_size && (
-                                <p className="text-xs text-gray-500">
-                                  {(message.file_size / 1024).toFixed(1)} KB
+                          <>
+                            {message.file_type?.startsWith('image/') ? (
+                              // 이미지 파일인 경우
+                              <a
+                                href={message.file_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block mb-2"
+                              >
+                                <img
+                                  src={message.file_url}
+                                  alt={message.file_name || '이미지'}
+                                  className="max-w-full max-h-64 rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                                  loading="lazy"
+                                />
+                                <p className="text-xs text-gray-500 mt-1">
+                                  {message.file_name}
+                                  {message.file_size && ` • ${(message.file_size / 1024).toFixed(1)} KB`}
                                 </p>
-                              )}
-                            </div>
-                            <i className="fas fa-download text-gray-400"></i>
-                          </a>
+                              </a>
+                            ) : (
+                              // 일반 파일인 경우
+                              <a
+                                href={message.file_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 mb-2 p-2 bg-white/50 rounded-lg hover:bg-white/70 transition-colors"
+                              >
+                                <i className="fas fa-file text-blue-500"></i>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-medium truncate">{message.file_name || '첨부파일'}</p>
+                                  {message.file_size && (
+                                    <p className="text-xs text-gray-500">
+                                      {(message.file_size / 1024).toFixed(1)} KB
+                                    </p>
+                                  )}
+                                </div>
+                                <i className="fas fa-download text-gray-400"></i>
+                              </a>
+                            )}
+                          </>
                         )}
-                        <p className="whitespace-pre-wrap break-words">{message.message}</p>
+                        {message.message && (
+                          <p className="whitespace-pre-wrap break-words">{message.message}</p>
+                        )}
                       </div>
                       <span className="text-xs text-gray-400 whitespace-nowrap">
                         {new Date(message.created_at).toLocaleTimeString('ko-KR', {
