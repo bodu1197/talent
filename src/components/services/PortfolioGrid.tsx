@@ -47,7 +47,8 @@ export default function PortfolioGrid({ portfolios }: Props) {
           <button
             key={portfolio.id}
             onClick={() => setSelectedPortfolio(portfolio)}
-            className="group relative aspect-square bg-gray-100 rounded-lg overflow-hidden hover:ring-2 hover:ring-[#0f3460] transition-all"
+            className="group relative bg-gray-100 rounded-lg overflow-hidden hover:ring-2 hover:ring-[#0f3460] transition-all"
+            style={{ aspectRatio: '35/26' }}
           >
             {portfolio.thumbnail_url ? (
               <img
