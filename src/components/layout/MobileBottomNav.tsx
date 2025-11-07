@@ -12,6 +12,8 @@ export default function MobileBottomNav() {
   const [showSearch, setShowSearch] = useState(false)
   const { unreadCount } = useChatUnreadCount()
 
+  console.log('[MobileBottomNav] Rendering with unreadCount:', unreadCount)
+
   const isActive = (path: string) => pathname === path
 
   return (
