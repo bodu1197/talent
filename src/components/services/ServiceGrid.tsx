@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import ServiceCard from './ServiceCard'
-import PlaceholderServiceCard from './PlaceholderServiceCard'
 import { Service } from '@/types'
 import { getServicesByCategory, getActiveServices } from '@/lib/supabase/queries/services'
 import { logger } from '@/lib/logger'
@@ -81,10 +80,6 @@ export default function ServiceGrid({ categoryId, sellerId, featured, columns = 
     )
   }
 
-  // 최소 12개의 카드를 표시하기 위해 플레이스홀더 추가
-  const MINIMUM_CARDS = 12
-  const placeholderCount = Math.max(0, MINIMUM_CARDS - services.length)
-
   // 컬럼 수에 따라 그리드 클래스 동적 설정
   const gridClass = columns === 5
     ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
@@ -94,9 +89,6 @@ export default function ServiceGrid({ categoryId, sellerId, featured, columns = 
     <div className={gridClass}>
       {services.map(service => (
         <ServiceCard key={service.id} service={service} />
-      ))}
-      {Array.from({ length: placeholderCount }, (_, i) => (
-        <PlaceholderServiceCard key={`placeholder-${i}`} categoryId={categoryId} />
       ))}
     </div>
   )

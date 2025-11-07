@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import ServiceCard from '@/components/services/ServiceCard'
-import PlaceholderServiceCard from '@/components/services/PlaceholderServiceCard'
 import { getPersonalizedServicesByInterest } from '@/lib/supabase/queries/personalized-services'
 
 export default async function PersonalizedServices() {
@@ -83,10 +82,6 @@ export default async function PersonalizedServices() {
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                 {category.services.map((service) => (
                   <ServiceCard key={service.id} service={service} />
-                ))}
-                {/* 플레이스홀더 카드 (최소 10개까지) */}
-                {Array.from({ length: Math.max(0, 10 - category.services.length) }, (_, i) => (
-                  <PlaceholderServiceCard key={`placeholder-${i}`} categoryId={category.category_id} />
                 ))}
               </div>
             </div>

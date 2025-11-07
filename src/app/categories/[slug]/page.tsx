@@ -2,7 +2,6 @@ import { notFound } from 'next/navigation'
 import { getCategoryBySlug as getCategory, getCategoryPath, getAllCategoriesTree, getAllCategoriesForBuild } from '@/lib/categories'
 import { getServicesByCategory } from '@/lib/supabase/queries/services'
 import ServiceCard from '@/components/services/ServiceCard'
-import PlaceholderServiceCard from '@/components/services/PlaceholderServiceCard'
 import CategoryFilter from '@/components/categories/CategoryFilter'
 import CategorySidebar from '@/components/categories/CategorySidebar'
 import CategoryVisitTracker from '@/components/categories/CategoryVisitTracker'
@@ -96,10 +95,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {services.map(service => (
                   <ServiceCard key={service.id} service={service} />
-                ))}
-                {/* 플레이스홀더 카드 (최소 12개까지) */}
-                {Array.from({ length: Math.max(0, 12 - services.length) }, (_, i) => (
-                  <PlaceholderServiceCard key={`placeholder-${i}`} categoryId={category.id} />
                 ))}
               </div>
             </main>
