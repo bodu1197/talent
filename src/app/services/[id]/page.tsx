@@ -68,38 +68,49 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
   }
 
   // 이 서비스와 연결된 포트폴리오 조회 (portfolio_services 중간 테이블 사용)
-  const { data: portfolioLinks } = await supabase
-    .from('portfolio_services')
-    .select(`
-      portfolio:seller_portfolio(
-        id,
-        title,
-        thumbnail_url,
-        description,
-        youtube_url,
-        project_url,
-        image_urls,
-        tags,
-        created_at
-      )
-    `)
-    .eq('service_id', id)
-    .order('created_at', { ascending: false })
+  let linkedPortfolios: Array<{
+    id: string
+    title: string
+    thumbnail_url: string | null
+    description: string
+    youtube_url: string | null
+    project_url: string | null
+    image_urls: string[]
+    tags: string[]
+    created_at: string
+  }> = []
 
-  // portfolios 데이터 구조 평탄화 및 타입 안전성 확보
-  const linkedPortfolios = (portfolioLinks || [])
-    .map((link: any) => link.portfolio)
-    .filter((p: any) => p !== null) as Array<{
-      id: string
-      title: string
-      thumbnail_url: string | null
-      description: string
-      youtube_url: string | null
-      project_url: string | null
-      image_urls: string[]
-      tags: string[]
-      created_at: string
-    }>
+  try {
+    const { data: portfolioLinks, error: portfolioError } = await supabase
+      .from('portfolio_services')
+      .select(`
+        portfolio:seller_portfolio(
+          id,
+          title,
+          thumbnail_url,
+          description,
+          youtube_url,
+          project_url,
+          image_urls,
+          tags,
+          created_at
+        )
+      `)
+      .eq('service_id', id)
+      .order('created_at', { ascending: false })
+
+    if (portfolioError) {
+      logger.error('Portfolio links fetch error:', portfolioError)
+    } else if (portfolioLinks) {
+      // portfolios 데이터 구조 평탄화
+      linkedPortfolios = portfolioLinks
+        .map((link: any) => link.portfolio)
+        .filter((p: any) => p !== null && p !== undefined && typeof p === 'object')
+    }
+  } catch (error) {
+    logger.error('Portfolio fetch exception:', error)
+    // 에러가 있어도 페이지는 계속 렌더링 (포트폴리오만 없는 상태로)
+  }
 
   // seller의 user 정보를 별도로 조회
   if (service?.seller?.user_id) {
