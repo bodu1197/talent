@@ -17,11 +17,28 @@ interface Portfolio {
 
 interface Props {
   portfolios: Portfolio[]
-  getYoutubeVideoId: (url: string | null) => string | null
 }
 
-export default function PortfolioGrid({ portfolios, getYoutubeVideoId }: Props) {
+export default function PortfolioGrid({ portfolios }: Props) {
   const [selectedPortfolio, setSelectedPortfolio] = useState<Portfolio | null>(null)
+
+  // YouTube URL에서 비디오 ID 추출
+  const getYoutubeVideoId = (url: string | null): string | null => {
+    if (!url) return null
+
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
+      /youtube\.com\/embed\/([^&\n?#]+)/,
+      /youtube\.com\/v\/([^&\n?#]+)/
+    ]
+
+    for (const pattern of patterns) {
+      const match = url.match(pattern)
+      if (match) return match[1]
+    }
+
+    return null
+  }
 
   return (
     <>
@@ -63,7 +80,6 @@ export default function PortfolioGrid({ portfolios, getYoutubeVideoId }: Props) 
         <PortfolioModal
           portfolio={selectedPortfolio}
           onClose={() => setSelectedPortfolio(null)}
-          getYoutubeVideoId={getYoutubeVideoId}
         />
       )}
     </>

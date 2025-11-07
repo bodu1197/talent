@@ -296,10 +296,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             {linkedPortfolios && linkedPortfolios.length > 0 && (
               <div id="portfolio" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
                 <h2 className="text-xl font-bold mb-6">포트폴리오 ({linkedPortfolios.length})</h2>
-                <PortfolioGrid
-                  portfolios={linkedPortfolios}
-                  getYoutubeVideoId={getYoutubeVideoId}
-                />
+                <PortfolioGrid portfolios={linkedPortfolios} />
               </div>
             )}
 

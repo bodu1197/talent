@@ -17,10 +17,9 @@ interface Portfolio {
 interface Props {
   portfolio: Portfolio
   onClose: () => void
-  getYoutubeVideoId: (url: string | null) => string | null
 }
 
-export default function PortfolioModal({ portfolio, onClose, getYoutubeVideoId }: Props) {
+export default function PortfolioModal({ portfolio, onClose }: Props) {
   // ESC 키로 모달 닫기
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -34,6 +33,24 @@ export default function PortfolioModal({ portfolio, onClose, getYoutubeVideoId }
       document.body.style.overflow = 'auto'
     }
   }, [onClose])
+
+  // YouTube URL에서 비디오 ID 추출
+  const getYoutubeVideoId = (url: string | null): string | null => {
+    if (!url) return null
+
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
+      /youtube\.com\/embed\/([^&\n?#]+)/,
+      /youtube\.com\/v\/([^&\n?#]+)/
+    ]
+
+    for (const pattern of patterns) {
+      const match = url.match(pattern)
+      if (match) return match[1]
+    }
+
+    return null
+  }
 
   const youtubeVideoId = getYoutubeVideoId(portfolio.youtube_url)
 
