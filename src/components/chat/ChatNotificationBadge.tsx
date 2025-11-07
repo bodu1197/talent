@@ -82,6 +82,18 @@ export default function ChatNotificationBadge() {
           }
         }
       )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async (payload) => {
+          // 메시지가 읽음 처리되면 배지 갱신
+          await fetchUnreadCount()
+        }
+      )
       .subscribe()
 
     return () => {
