@@ -4,11 +4,13 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/components/providers/AuthProvider'
+import { useChatUnreadCount } from '@/hooks/useChatUnreadCount'
 
 export default function MobileBottomNav() {
   const pathname = usePathname()
   const { user } = useAuth()
   const [showSearch, setShowSearch] = useState(false)
+  const { unreadCount } = useChatUnreadCount()
 
   const isActive = (path: string) => pathname === path
 
@@ -21,54 +23,61 @@ export default function MobileBottomNav() {
           <Link
             href="/"
             className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
-              isActive('/') ? 'text-brand-primary' : 'text-gray-500'
+              isActive('/') ? 'text-[#0f3460]' : 'text-gray-500'
             }`}
           >
             <i className="fas fa-home text-xl"></i>
             <span className="text-xs font-medium">홈</span>
           </Link>
 
-          {/* 카테고리 */}
-          <Link
-            href="/categories"
-            className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
-              pathname.startsWith('/categories') ? 'text-brand-primary' : 'text-gray-500'
-            }`}
-          >
-            <i className="fas fa-th text-xl"></i>
-            <span className="text-xs font-medium">카테고리</span>
-          </Link>
-
           {/* 검색 */}
           <button
             onClick={() => setShowSearch(true)}
-            className="flex flex-col items-center justify-center space-y-1 text-gray-500 transition-colors active:text-brand-primary"
+            className="flex flex-col items-center justify-center space-y-1 text-gray-500 transition-colors active:text-[#0f3460]"
             aria-label="검색 열기"
           >
             <i className="fas fa-search text-xl"></i>
             <span className="text-xs font-medium">검색</span>
           </button>
 
+          {/* 찜목록 */}
+          <Link
+            href={user ? "/mypage/buyer/favorites" : "/auth/login"}
+            className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
+              pathname === '/mypage/buyer/favorites' ? 'text-[#0f3460]' : 'text-gray-500'
+            }`}
+          >
+            <i className="fas fa-heart text-xl"></i>
+            <span className="text-xs font-medium">찜목록</span>
+          </Link>
+
+          {/* 메시지 */}
+          <Link
+            href={user ? "/chat" : "/auth/login"}
+            className={`relative flex flex-col items-center justify-center space-y-1 transition-colors ${
+              pathname.startsWith('/chat') ? 'text-[#0f3460]' : 'text-gray-500'
+            }`}
+          >
+            <div className="relative">
+              <i className="far fa-comments text-xl"></i>
+              {unreadCount > 0 && (
+                <span className="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+              )}
+            </div>
+            <span className="text-xs font-medium">메시지</span>
+          </Link>
+
           {/* 마이페이지 */}
           <Link
             href={user ? "/mypage/buyer/dashboard" : "/auth/login"}
             className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
-              pathname.startsWith('/mypage') ? 'text-brand-primary' : 'text-gray-500'
+              pathname.startsWith('/mypage') ? 'text-[#0f3460]' : 'text-gray-500'
             }`}
           >
             <i className="fas fa-user text-xl"></i>
-            <span className="text-xs font-medium">MY</span>
-          </Link>
-
-          {/* 메뉴 */}
-          <Link
-            href="/menu"
-            className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
-              pathname === '/menu' ? 'text-brand-primary' : 'text-gray-500'
-            }`}
-          >
-            <i className="fas fa-bars text-xl"></i>
-            <span className="text-xs font-medium">메뉴</span>
+            <span className="text-xs font-medium">마이페이지</span>
           </Link>
         </div>
       </nav>
