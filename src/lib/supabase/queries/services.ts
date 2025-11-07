@@ -136,7 +136,19 @@ export async function getServicesByCategory(categoryId: string) {
     categoryIds = [categoryId, ...allDescendants]
   }
 
-  // 3. 서비스 조회 (categoryIds 중 하나라도 일치하면)
+  // 3. 먼저 해당 카테고리의 service_id 목록 가져오기
+  const { data: serviceLinks } = await supabase
+    .from('service_categories')
+    .select('service_id')
+    .in('category_id', categoryIds)
+
+  const serviceIds = serviceLinks?.map(sl => sl.service_id) || []
+
+  if (serviceIds.length === 0) {
+    return []
+  }
+
+  // 4. 서비스 조회
   const { data, error } = await supabase
     .from('services')
     .select(`
@@ -148,11 +160,11 @@ export async function getServicesByCategory(categoryId: string) {
         user_id,
         is_verified
       ),
-      service_categories!inner(
-        category_id
+      service_categories(
+        category:categories(id, name, slug)
       )
     `)
-    .in('service_categories.category_id', categoryIds)
+    .in('id', serviceIds)
     .eq('status', 'active')  // 승인된 서비스만
     .order('created_at', { ascending: false })
 

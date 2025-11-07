@@ -27,7 +27,6 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
     const { data: topCategories, error: categoryError } = await supabase
       .rpc('get_recent_category_visits', {
         p_user_id: user.id,
-        p_days: 30,
         p_limit: 3  // 상위 3개만
       })
 
