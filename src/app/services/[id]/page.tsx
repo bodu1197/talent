@@ -52,7 +52,6 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         user_id,
         bio,
         phone,
-        email,
         created_at
       ),
       service_categories(
