@@ -177,7 +177,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
           <div className="flex gap-2">
             <button
               onClick={() => setActiveTab('all')}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
                 activeTab === 'all'
                   ? 'bg-black text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-100'
@@ -187,7 +187,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
             </button>
             <button
               onClick={() => setActiveTab('unread')}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
                 activeTab === 'unread'
                   ? 'bg-black text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-100'
@@ -197,7 +197,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
             </button>
             <button
               onClick={() => setActiveTab('deal')}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
                 activeTab === 'deal'
                   ? 'bg-black text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-100'
@@ -207,7 +207,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
             </button>
             <button
               onClick={() => setActiveTab('favorite')}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
                 activeTab === 'favorite'
                   ? 'bg-black text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-100'
