@@ -18,6 +18,8 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
   // 프로필 정보
   const [name, setName] = useState(profile?.name || '')
   const [bio, setBio] = useState('')
+  const [profileImage, setProfileImage] = useState(profile?.profile_image || '')
+  const [uploading, setUploading] = useState(false)
 
   // 비밀번호 변경
   const [currentPassword, setCurrentPassword] = useState('')
@@ -30,6 +32,65 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
   const [reviewNotification, setReviewNotification] = useState(true)
 
   const supabase = createClient()
+
+  // 프로필 이미지 업로드
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // 파일 크기 체크 (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('파일 크기는 5MB 이하만 가능합니다.')
+      return
+    }
+
+    // 이미지 파일 체크
+    if (!file.type.startsWith('image/')) {
+      alert('이미지 파일만 업로드 가능합니다.')
+      return
+    }
+
+    try {
+      setUploading(true)
+
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        alert('로그인이 필요합니다.')
+        return
+      }
+
+      // 파일 확장자 추출
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${user.id}_${Date.now()}.${fileExt}`
+      const filePath = `profiles/${fileName}`
+
+      // Supabase Storage에 업로드
+      const { data, error: uploadError } = await supabase.storage
+        .from('profiles')
+        .upload(filePath, file, {
+          upsert: true
+        })
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError)
+        throw uploadError
+      }
+
+      // Public URL 가져오기
+      const { data: { publicUrl } } = supabase.storage
+        .from('profiles')
+        .getPublicUrl(filePath)
+
+      console.log('Image uploaded successfully:', publicUrl)
+      setProfileImage(publicUrl)
+      alert('프로필 이미지가 업로드되었습니다.')
+    } catch (error) {
+      console.error('Image upload error:', error)
+      alert('이미지 업로드 중 오류가 발생했습니다.')
+    } finally {
+      setUploading(false)
+    }
+  }
 
   // 프로필 저장
   const handleSaveProfile = async () => {
@@ -64,6 +125,7 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
         .update({
           ...currentUser,
           name,
+          profile_image: profileImage,
           updated_at: new Date().toISOString()
         })
         .eq('id', user.id)
@@ -223,12 +285,36 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">프로필 이미지</label>
                     <div className="flex items-center gap-4">
-                      <div className="w-20 h-20 bg-[#0f3460] rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                        {profile?.name?.[0] || 'U'}
+                      {profileImage ? (
+                        <img
+                          src={profileImage}
+                          alt="프로필 이미지"
+                          className="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
+                        />
+                      ) : (
+                        <div className="w-20 h-20 bg-[#0f3460] rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                          {name?.[0] || profile?.name?.[0] || 'U'}
+                        </div>
+                      )}
+                      <div>
+                        <input
+                          type="file"
+                          id="profile-image-upload"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          disabled={uploading}
+                          className="hidden"
+                        />
+                        <label
+                          htmlFor="profile-image-upload"
+                          className={`inline-block px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm cursor-pointer ${
+                            uploading ? 'opacity-50 cursor-not-allowed' : ''
+                          }`}
+                        >
+                          {uploading ? '업로드 중...' : '변경'}
+                        </label>
+                        <p className="text-xs text-gray-500 mt-1">JPG, PNG (최대 5MB)</p>
                       </div>
-                      <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm">
-                        변경
-                      </button>
                     </div>
                   </div>
 

@@ -12,7 +12,10 @@ export default async function SellerProfileEditPage() {
 
   const { data: seller, error } = await supabase
     .from('sellers')
-    .select('*')
+    .select(`
+      *,
+      users!inner(profile_image)
+    `)
     .eq('user_id', user.id)
     .maybeSingle()
 
@@ -20,5 +23,11 @@ export default async function SellerProfileEditPage() {
     redirect('/mypage/seller/register')
   }
 
-  return <SellerProfileEditClient profile={seller} />
+  // users.profile_image를 seller.profile_image로 병합
+  const profileWithImage = {
+    ...seller,
+    profile_image: seller.users?.profile_image || seller.profile_image
+  }
+
+  return <SellerProfileEditClient profile={profileWithImage} />
 }
