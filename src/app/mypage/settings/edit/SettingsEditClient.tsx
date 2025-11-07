@@ -105,49 +105,30 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
 
       console.log('Saving profile for user:', user.id)
       console.log('Name:', name)
-      console.log('Bio:', bio)
+      console.log('Profile image:', profileImage)
 
-      // 먼저 현재 사용자 정보 가져오기 (user_type 포함)
-      const { data: currentUser, error: fetchError } = await supabase
-        .from('users')
-        .select('user_type')
-        .eq('id', user.id)
-        .single()
+      // API를 통해 프로필 업데이트 (RLS 우회)
+      const response = await fetch('/api/users/profile', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          profile_image: profileImage
+        })
+      })
 
-      if (fetchError) {
-        console.error('Failed to fetch current user:', fetchError)
-        alert('사용자 정보를 불러오는데 실패했습니다.')
+      const result = await response.json()
+
+      if (!response.ok) {
+        console.error('=== PROFILE UPDATE ERROR ===')
+        console.error('Error:', result)
+        alert(`프로필 저장 중 오류가 발생했습니다.\n\nMessage: ${result.error || 'Unknown'}\nCode: ${result.code || 'N/A'}`)
         return
       }
 
-      // 업데이트할 데이터 (user_type 포함)
-      const updateData: any = {
-        name,
-        profile_image: profileImage || null,
-        user_type: currentUser?.user_type || 'buyer',
-        updated_at: new Date().toISOString()
-      }
-
-      console.log('Update data:', updateData)
-
-      const { data, error } = await supabase
-        .from('users')
-        .update(updateData)
-        .eq('id', user.id)
-        .select()
-
-      if (error) {
-        console.error('=== PROFILE UPDATE ERROR ===')
-        console.error('Error object:', error)
-        console.error('Error message:', error.message)
-        console.error('Error code:', error.code)
-        console.error('Error details:', error.details)
-        console.error('Error hint:', error.hint)
-        alert(`프로필 저장 중 오류가 발생했습니다.\n\nMessage: ${error.message || 'Unknown'}\nCode: ${error.code || 'N/A'}\nDetails: ${error.details || 'N/A'}\nHint: ${error.hint || 'N/A'}`)
-        throw error
-      }
-
-      console.log('Profile updated successfully:', data)
+      console.log('Profile updated successfully:', result)
       alert('프로필이 저장되었습니다.')
       router.push('/mypage/settings')
     } catch (error: any) {
