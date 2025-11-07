@@ -30,7 +30,7 @@ export default async function PortfolioNewPage() {
   const { data: services } = await supabase
     .from('services')
     .select('id, title, status')
-    .eq('seller_id', user.id)
+    .eq('seller_id', seller.id)
     .in('status', ['active', 'pending'])
     .order('created_at', { ascending: false })
 
