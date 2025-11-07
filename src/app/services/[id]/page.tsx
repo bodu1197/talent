@@ -353,11 +353,12 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             </div>
 
             {/* 전문가 정보 */}
-            <div id="expert" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
-              <h2 className="text-xl font-bold mb-6">전문가 정보</h2>
+            {service.seller && (
+              <div id="expert" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
+                <h2 className="text-xl font-bold mb-6">전문가 정보</h2>
 
-              {/* 전문가 카드 */}
-              <div className="border border-gray-200 rounded-lg p-6">
+                {/* 전문가 카드 */}
+                <div className="border border-gray-200 rounded-lg p-6">
                 {/* 상단 알림 배너 (응답 시간) */}
                 <ExpertResponseBanner avgResponseTime={sellerStats.avgResponseTime} />
 
@@ -445,7 +446,8 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   </div>
                 )}
               </div>
-            </div>
+              </div>
+            )}
 
             {/* 리뷰 */}
             <div id="reviews" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
@@ -471,7 +473,9 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                     구매하기
                   </button>
 
-                  <ContactSellerButton sellerId={service.seller.id} serviceId={id} />
+                  {service.seller?.id && (
+                    <ContactSellerButton sellerId={service.seller.id} serviceId={id} />
+                  )}
 
                   <div className="flex gap-2 mt-3">
                     <FavoriteButton serviceId={id} />
