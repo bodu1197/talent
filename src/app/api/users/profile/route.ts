@@ -20,31 +20,9 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 })
     }
 
-    // Service Role Key 확인
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-
-    console.log('Environment check:', {
-      hasUrl: !!supabaseUrl,
-      hasServiceKey: !!supabaseServiceKey,
-      urlLength: supabaseUrl?.length,
-      keyLength: supabaseServiceKey?.length,
-      nodeEnv: process.env.NODE_ENV
-    })
-
-    if (!supabaseUrl || !supabaseServiceKey) {
-      console.error('Missing environment variables:', {
-        hasUrl: !!supabaseUrl,
-        hasServiceKey: !!supabaseServiceKey,
-        availableKeys: Object.keys(process.env).filter(key => key.includes('SUPABASE'))
-      })
-      return NextResponse.json({
-        error: 'Server configuration error',
-        details: `Missing required environment variables: ${!supabaseUrl ? 'NEXT_PUBLIC_SUPABASE_URL' : ''} ${!supabaseServiceKey ? 'SUPABASE_SERVICE_ROLE_KEY' : ''}`
-      }, { status: 500 })
-    }
-
-    // Service Role 클라이언트 직접 생성 (서버리스 환경 대응)
+    // Service Role 클라이언트 생성 (RLS 우회)
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
     const serviceClient = createServiceClient(supabaseUrl, supabaseServiceKey)
 
     // 서버 측에서 업데이트 (Service Role 사용으로 RLS 우회)
