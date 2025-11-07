@@ -84,29 +84,32 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     e.preventDefault()
     if (!newMessage.trim() || !selectedRoomId || isLoading) return
 
+    const messageText = newMessage.trim()
     setIsLoading(true)
+    setNewMessage('') // 입력창 즉시 비우기
+
     try {
       const response = await fetch('/api/chat/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           room_id: selectedRoomId,
-          message: newMessage.trim()
+          message: messageText
         })
       })
 
       if (response.ok) {
-        const data = await response.json()
-        setMessages([...messages, data.message])
-        setNewMessage('')
-        loadRooms() // 채팅방 목록 갱신
+        // 실시간 구독이 메시지를 자동으로 추가하므로 여기서는 추가하지 않음
+        loadRooms() // 채팅방 목록의 마지막 메시지 갱신
       } else {
         const errorData = await response.json()
         alert(`메시지 전송 실패: ${errorData.error || '알 수 없는 오류'}`)
+        setNewMessage(messageText) // 실패 시 메시지 복원
       }
     } catch (error) {
       console.error('Send message error:', error)
       alert('메시지 전송 중 오류가 발생했습니다.')
+      setNewMessage(messageText) // 실패 시 메시지 복원
     } finally {
       setIsLoading(false)
     }
@@ -140,10 +143,9 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         },
         (payload) => {
           const newMsg = payload.new as any
-          if (newMsg.sender_id !== userId) {
-            loadMessages(selectedRoomId)
-            loadRooms()
-          }
+          // 모든 새 메시지를 실시간으로 표시 (내가 보낸 것, 상대방이 보낸 것 모두)
+          setMessages(prev => [...prev, newMsg])
+          loadRooms() // 채팅방 목록의 마지막 메시지 업데이트
         }
       )
       .subscribe()
