@@ -107,27 +107,18 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
       console.log('Name:', name)
       console.log('Bio:', bio)
 
-      // 먼저 현재 사용자 데이터 가져오기
-      const { data: currentUser, error: fetchError } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', user.id)
-        .single()
-
-      if (fetchError) {
-        console.error('Fetch error:', fetchError)
-        throw fetchError
+      // 업데이트할 데이터만 전송
+      const updateData: any = {
+        name,
+        profile_image: profileImage || null,
+        updated_at: new Date().toISOString()
       }
 
-      // 기존 데이터와 병합하여 업데이트
+      console.log('Update data:', updateData)
+
       const { data, error } = await supabase
         .from('users')
-        .update({
-          ...currentUser,
-          name,
-          profile_image: profileImage,
-          updated_at: new Date().toISOString()
-        })
+        .update(updateData)
         .eq('id', user.id)
         .select()
 
@@ -138,15 +129,18 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
           hint: error.hint,
           code: error.code
         })
+        alert(`프로필 저장 중 오류가 발생했습니다.\n${error.message}`)
         throw error
       }
 
       console.log('Profile updated successfully:', data)
       alert('프로필이 저장되었습니다.')
       router.push('/mypage/settings')
-    } catch (error) {
+    } catch (error: any) {
       console.error('Profile save error:', error)
-      alert('프로필 저장 중 오류가 발생했습니다.')
+      if (!error.message) {
+        alert('프로필 저장 중 알 수 없는 오류가 발생했습니다.')
+      }
     } finally {
       setIsLoading(false)
     }
