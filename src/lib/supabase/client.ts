@@ -1,31 +1,9 @@
-import { createBrowserClient } from '@supabase/ssr'
-import type { SupabaseClient } from '@supabase/supabase-js'
+import { SupabaseManager } from './singleton'
 
-let client: SupabaseClient | null = null
-
+/**
+ * 브라우저 클라이언트 생성 (클라이언트 컴포넌트용)
+ * 싱글톤 패턴으로 한 번만 생성되어 재사용됩니다
+ */
 export function createClient() {
-  if (client) {
-    return client
-  }
-
-  client = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      auth: {
-        autoRefreshToken: true,
-        persistSession: true,
-        detectSessionInUrl: true,
-        flowType: 'pkce',
-        storageKey: 'sb-auth-token',
-      },
-      global: {
-        headers: {
-          'x-application-name': 'talent-hub',
-        },
-      },
-    }
-  )
-
-  return client
+  return SupabaseManager.getBrowserClient()
 }

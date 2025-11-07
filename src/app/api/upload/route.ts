@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { createClient as createAdminClient } from '@supabase/supabase-js'
+import { SupabaseManager } from '@/lib/supabase/singleton'
 import { logger } from '@/lib/logger'
 
 export async function POST(request: NextRequest) {
@@ -38,21 +38,17 @@ export async function POST(request: NextRequest) {
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
 
-    // SERVICE_ROLE_KEY로 Supabase Admin Client 생성 (RLS 우회)
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-
-    if (!serviceRoleKey) {
-      logger.error('SUPABASE_SERVICE_ROLE_KEY is not defined in environment variables')
+    // Service Role 클라이언트 가져오기 (싱글톤 패턴, RLS 우회)
+    let supabaseAdmin
+    try {
+      supabaseAdmin = SupabaseManager.getServiceRoleClient()
+    } catch (error) {
+      logger.error('Failed to get Service Role client:', error)
       return NextResponse.json({
         error: 'Server configuration error',
-        details: 'SUPABASE_SERVICE_ROLE_KEY is missing'
+        details: 'Service Role configuration is missing'
       }, { status: 500 })
     }
-
-    const supabaseAdmin = createAdminClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      serviceRoleKey
-    )
 
     // Supabase Storage에 업로드 (Admin Client 사용)
     const { data, error } = await supabaseAdmin.storage
