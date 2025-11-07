@@ -28,10 +28,7 @@ export async function GET(request: NextRequest) {
         seller_id,
         service_id,
         last_message_at,
-        created_at,
-        buyer:users!chat_rooms_buyer_id_fkey(id, name, email, profile_image),
-        seller:sellers!chat_rooms_seller_id_fkey(id, business_name, display_name, profile_image),
-        service:services(id, title, thumbnail_url)
+        created_at
       `)
       .order('last_message_at', { ascending: false })
 
@@ -50,9 +47,34 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    // 각 채팅방의 마지막 메시지와 읽지 않은 메시지 수 조회
+    // 각 채팅방의 마지막 메시지, 읽지 않은 메시지 수, 그리고 관련 정보 조회
     const roomsWithMessages = await Promise.all(
       (rooms || []).map(async (room) => {
+        // 구매자 정보
+        const { data: buyer } = await supabase
+          .from('users')
+          .select('id, name, profile_image')
+          .eq('id', room.buyer_id)
+          .single()
+
+        // 판매자 정보
+        const { data: seller } = await supabase
+          .from('sellers')
+          .select('id, business_name, display_name, profile_image')
+          .eq('id', room.seller_id)
+          .single()
+
+        // 서비스 정보
+        let service = null
+        if (room.service_id) {
+          const { data: serviceData } = await supabase
+            .from('services')
+            .select('id, title')
+            .eq('id', room.service_id)
+            .single()
+          service = serviceData
+        }
+
         // 마지막 메시지
         const { data: lastMessage } = await supabase
           .from('chat_messages')
@@ -72,6 +94,9 @@ export async function GET(request: NextRequest) {
 
         return {
           ...room,
+          buyer,
+          seller,
+          service,
           lastMessage,
           unreadCount: unreadCount || 0
         }
