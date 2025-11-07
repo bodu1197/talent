@@ -17,7 +17,9 @@
       "Bash(node scripts/check-active-services.js:*)",
       "Bash(node scripts/check-sellers-table.js:*)",
       "Bash(git log:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(find:*)",
+      "Bash(node scripts/check-users-schema.js:*)"
     ],
     "deny": [],
     "ask": []
