@@ -123,11 +123,13 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
         .select()
 
       if (error) {
-        console.error('Supabase error FULL:', error)
-        console.error('Error as JSON:', JSON.stringify(error, null, 2))
-        console.error('Error keys:', Object.keys(error))
-        console.error('Error values:', Object.values(error))
-        alert(`프로필 저장 중 오류가 발생했습니다.\nError: ${error.message || 'Unknown error'}\nCode: ${error.code || 'N/A'}`)
+        console.error('=== PROFILE UPDATE ERROR ===')
+        console.error('Error object:', error)
+        console.error('Error message:', error.message)
+        console.error('Error code:', error.code)
+        console.error('Error details:', error.details)
+        console.error('Error hint:', error.hint)
+        alert(`프로필 저장 중 오류가 발생했습니다.\n\nMessage: ${error.message || 'Unknown'}\nCode: ${error.code || 'N/A'}\nDetails: ${error.details || 'N/A'}\nHint: ${error.hint || 'N/A'}`)
         throw error
       }
 
