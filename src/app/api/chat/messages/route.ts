@@ -28,8 +28,7 @@ export async function GET(request: NextRequest) {
         sender_id,
         message,
         is_read,
-        created_at,
-        sender:users!chat_messages_sender_id_fkey(id, name, profile_image)
+        created_at
       `)
       .eq('room_id', room_id)
       .order('created_at', { ascending: true })
@@ -85,8 +84,7 @@ export async function POST(request: NextRequest) {
         sender_id,
         message,
         is_read,
-        created_at,
-        sender:users!chat_messages_sender_id_fkey(id, name, profile_image)
+        created_at
       `)
       .single()
 
