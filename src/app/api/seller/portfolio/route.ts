@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { seller_id, title, description, category_id, thumbnail_url, image_urls, project_url, youtube_url, service_id, tags } = body
+    const { seller_id, title, description, category_id, thumbnail_url, image_urls, project_url, youtube_url, service_ids, tags } = body
 
     if (!seller_id || !title || !description) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
         image_urls: image_urls || [],
         project_url: project_url || null,
         youtube_url: youtube_url || null,
-        service_id: service_id || null,
+        service_id: null, // 기존 필드는 null로 설정
         tags: tags || []
       })
       .select()
@@ -60,6 +60,23 @@ export async function POST(request: NextRequest) {
         error: 'Failed to create portfolio',
         details: error.message
       }, { status: 500 })
+    }
+
+    // 서비스 연결 (다중)
+    if (service_ids && Array.isArray(service_ids) && service_ids.length > 0) {
+      const portfolioServiceLinks = service_ids.map(service_id => ({
+        portfolio_id: data.id,
+        service_id
+      }))
+
+      const { error: linkError } = await supabase
+        .from('portfolio_services')
+        .insert(portfolioServiceLinks)
+
+      if (linkError) {
+        logger.error('Portfolio-service link error:', linkError)
+        // 연결 실패해도 포트폴리오는 생성되었으므로 경고만 로그
+      }
     }
 
     return NextResponse.json({ data }, { status: 201 })

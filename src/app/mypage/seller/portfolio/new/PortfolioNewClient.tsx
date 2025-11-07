@@ -37,7 +37,7 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
     image_urls: [] as string[],
     project_url: '',
     youtube_url: '',
-    service_id: '',
+    service_ids: [] as string[], // 다중 선택으로 변경
     tags: [] as string[]
   })
   const [tagInput, setTagInput] = useState('')
@@ -277,24 +277,51 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
               />
             </div>
 
-            {/* 연동 서비스 선택 */}
+            {/* 연동 서비스 선택 (다중 선택) */}
             {services.length > 0 && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  연동 서비스 <span className="text-gray-500 text-xs">(선택사항 - 서비스와 연결하면 서비스 상세 페이지에 표시됩니다)</span>
+                  연동 서비스 <span className="text-gray-500 text-xs">(다중 선택 가능 - 선택한 서비스의 상세 페이지에 이 포트폴리오가 표시됩니다)</span>
                 </label>
-                <select
-                  value={formData.service_id}
-                  onChange={(e) => setFormData({ ...formData, service_id: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-                >
-                  <option value="">선택 안 함</option>
+                <div className="border border-gray-300 rounded-lg p-4 space-y-3 max-h-64 overflow-y-auto">
                   {services.map((service) => (
-                    <option key={service.id} value={service.id}>
-                      {service.title} {service.status === 'pending' && '(승인 대기중)'}
-                    </option>
+                    <label
+                      key={service.id}
+                      className="flex items-start gap-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={formData.service_ids.includes(service.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setFormData({
+                              ...formData,
+                              service_ids: [...formData.service_ids, service.id]
+                            })
+                          } else {
+                            setFormData({
+                              ...formData,
+                              service_ids: formData.service_ids.filter(id => id !== service.id)
+                            })
+                          }
+                        }}
+                        className="mt-1 w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+                      />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">{service.title}</p>
+                        {service.status === 'pending' && (
+                          <p className="text-xs text-gray-500 mt-1">승인 대기중</p>
+                        )}
+                      </div>
+                    </label>
                   ))}
-                </select>
+                </div>
+                {formData.service_ids.length > 0 && (
+                  <p className="mt-2 text-sm text-gray-600">
+                    <i className="fas fa-check-circle text-green-600 mr-1"></i>
+                    {formData.service_ids.length}개의 서비스에 연결됩니다
+                  </p>
+                )}
               </div>
             )}
 

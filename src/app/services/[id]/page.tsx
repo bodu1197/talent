@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import ViewTracker from '@/components/services/ViewTracker'
 import FavoriteButton from '@/components/services/FavoriteButton'
+import PortfolioGrid from '@/components/services/PortfolioGrid'
 import { logger } from '@/lib/logger'
 import { getCategoryPath } from '@/lib/categories'
 
@@ -66,12 +67,39 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
     notFound()
   }
 
-  // 이 서비스와 연결된 포트폴리오 조회
-  const { data: portfolios } = await supabase
-    .from('seller_portfolio')
-    .select('*')
+  // 이 서비스와 연결된 포트폴리오 조회 (portfolio_services 중간 테이블 사용)
+  const { data: portfolioLinks } = await supabase
+    .from('portfolio_services')
+    .select(`
+      portfolio:seller_portfolio(
+        id,
+        title,
+        thumbnail_url,
+        description,
+        youtube_url,
+        project_url,
+        image_urls,
+        tags,
+        created_at
+      )
+    `)
     .eq('service_id', id)
     .order('created_at', { ascending: false })
+
+  // portfolios 데이터 구조 평탄화 및 타입 안전성 확보
+  const linkedPortfolios = (portfolioLinks || [])
+    .map((link: any) => link.portfolio)
+    .filter((p: any) => p !== null) as Array<{
+      id: string
+      title: string
+      thumbnail_url: string | null
+      description: string
+      youtube_url: string | null
+      project_url: string | null
+      image_urls: string[]
+      tags: string[]
+      created_at: string
+    }>
 
   // seller의 user 정보를 별도로 조회
   if (service?.seller?.user_id) {
@@ -254,87 +282,13 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
           {/* 왼쪽: 서비스 설명 */}
           <div className="flex-1 space-y-8">
             {/* 포트폴리오 */}
-            {portfolios && portfolios.length > 0 && (
+            {linkedPortfolios && linkedPortfolios.length > 0 && (
               <div id="portfolio" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
-                <h2 className="text-xl font-bold mb-6">포트폴리오</h2>
-                <div className="space-y-8">
-                  {portfolios.map((portfolio: any) => {
-                    const youtubeVideoId = getYoutubeVideoId(portfolio.youtube_url)
-
-                    return (
-                      <div key={portfolio.id} className="border-b border-gray-200 last:border-b-0 pb-8 last:pb-0">
-                        {/* 포트폴리오 제목 */}
-                        <h3 className="text-lg font-bold mb-3">{portfolio.title}</h3>
-
-                        {/* 포트폴리오 설명 */}
-                        {portfolio.description && (
-                          <p className="text-gray-700 mb-4 whitespace-pre-wrap">{portfolio.description}</p>
-                        )}
-
-                        {/* YouTube 영상 */}
-                        {youtubeVideoId && (
-                          <div className="mb-4">
-                            <div className="aspect-video bg-black rounded-lg overflow-hidden">
-                              <iframe
-                                width="100%"
-                                height="100%"
-                                src={`https://www.youtube.com/embed/${youtubeVideoId}`}
-                                title={portfolio.title}
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                              ></iframe>
-                            </div>
-                          </div>
-                        )}
-
-                        {/* 포트폴리오 이미지 */}
-                        {portfolio.image_urls && portfolio.image_urls.length > 0 && (
-                          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
-                            {portfolio.image_urls.map((url: string, idx: number) => (
-                              <div key={idx} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                                <img
-                                  src={url}
-                                  alt={`${portfolio.title} - ${idx + 1}`}
-                                  className="w-full h-full object-cover hover:scale-105 transition-transform cursor-pointer"
-                                />
-                              </div>
-                            ))}
-                          </div>
-                        )}
-
-                        {/* 프로젝트 URL */}
-                        {portfolio.project_url && (
-                          <div className="mb-4">
-                            <a
-                              href={portfolio.project_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 text-[#0f3460] hover:underline"
-                            >
-                              <i className="fas fa-external-link-alt"></i>
-                              <span>프로젝트 보기</span>
-                            </a>
-                          </div>
-                        )}
-
-                        {/* 태그 */}
-                        {portfolio.tags && portfolio.tags.length > 0 && (
-                          <div className="flex flex-wrap gap-2">
-                            {portfolio.tags.map((tag: string) => (
-                              <span
-                                key={tag}
-                                className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
-                              >
-                                #{tag}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    )
-                  })}
-                </div>
+                <h2 className="text-xl font-bold mb-6">포트폴리오 ({linkedPortfolios.length})</h2>
+                <PortfolioGrid
+                  portfolios={linkedPortfolios}
+                  getYoutubeVideoId={getYoutubeVideoId}
+                />
               </div>
             )}
 
