@@ -100,59 +100,6 @@ export default function AITalentShowcase({ services = [] }: Props) {
               </div>
             </Link>
           ))}
-
-          {/* 플레이스홀더 카드들 (최소 10개 표시) */}
-          {Array.from({ length: Math.max(0, 10 - services.length) }, (_, i) => (
-            <Link key={`placeholder-${i}`} href="/expert/register?category=ai-services" className="group relative">
-              <div className="bg-gradient-to-br from-[#0f3460] to-[#1a5490] rounded-lg overflow-hidden w-full relative" style={{ aspectRatio: '210/160' }}>
-                {/* 배경 패턴 */}
-                <div className="absolute inset-0 opacity-10">
-                  <div className="absolute inset-0 pattern-diagonal-stripes"></div>
-                </div>
-
-                {/* 컨텐츠 */}
-                <div className="relative z-10 h-full flex flex-col items-center justify-center px-2 py-3 text-white text-center">
-                  <h3 className="font-bold text-xs mb-2">공평한 판매기회!</h3>
-
-                  <div className="space-y-0.5 text-[10px] text-white/90 mb-2">
-                    <div>✓ 판매 수수료 0원</div>
-                    <div>✓ 광고비 1,500만원 무료</div>
-                    <div>✓ 공평한 플랫폼</div>
-                  </div>
-
-                  <div className="inline-block px-2 py-1 bg-white/20 rounded-full text-[10px] font-medium group-hover:bg-white/30 transition-colors">
-                    지금 시작 →
-                  </div>
-                </div>
-              </div>
-
-              {/* 하단 정보 */}
-              <div className="mt-2">
-                <div className="flex items-center gap-1 mb-1">
-                  <div className="w-4 h-4 rounded-full bg-gray-200 flex items-center justify-center">
-                    <i className="fas fa-rocket text-[8px] text-gray-500"></i>
-                  </div>
-                  <span className="text-xs text-gray-600 truncate">여기가 당신의 자리</span>
-                </div>
-
-                <h3 className="font-medium text-sm line-clamp-2 group-hover:text-[#0f3460] transition-colors mb-1">
-                  이 자리를 선점하세요!
-                </h3>
-
-                <div className="flex items-center gap-2 text-xs text-gray-600 mb-1">
-                  <span className="flex items-center gap-1">
-                    <i className="fas fa-star text-yellow-400"></i>
-                    5.0
-                  </span>
-                  <span>(0)</span>
-                </div>
-
-                <p className="text-[#0f3460] font-bold text-sm">
-                  무료
-                </p>
-              </div>
-            </Link>
-          ))}
         </div>
       </div>
     </section>
