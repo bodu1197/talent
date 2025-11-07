@@ -71,8 +71,21 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
           <i className="fas fa-times text-gray-700"></i>
         </button>
 
-        {/* 썸네일 이미지 */}
-        {portfolio.thumbnail_url && (
+        {/* YouTube 영상 (우선 표시) */}
+        {youtubeVideoId ? (
+          <div className="w-full aspect-video bg-black overflow-hidden">
+            <iframe
+              width="100%"
+              height="100%"
+              src={`https://www.youtube.com/embed/${youtubeVideoId}`}
+              title={portfolio.title}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        ) : portfolio.thumbnail_url ? (
+          // YouTube가 없을 때만 썸네일 표시
           <div className="w-full aspect-video bg-gray-100 overflow-hidden">
             <img
               src={portfolio.thumbnail_url}
@@ -80,7 +93,7 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
               className="w-full h-full object-cover"
             />
           </div>
-        )}
+        ) : null}
 
         {/* 내용 */}
         <div className="p-8">
@@ -91,27 +104,6 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
           <div className="prose prose-lg max-w-none mb-6 whitespace-pre-wrap text-gray-700">
             {portfolio.description}
           </div>
-
-          {/* YouTube 영상 */}
-          {youtubeVideoId && (
-            <div className="mb-6">
-              <h3 className="text-lg font-bold mb-3">
-                <i className="fab fa-youtube text-red-600 mr-2"></i>
-                YouTube 영상
-              </h3>
-              <div className="aspect-video bg-black rounded-lg overflow-hidden">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src={`https://www.youtube.com/embed/${youtubeVideoId}`}
-                  title="YouTube video"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
-              </div>
-            </div>
-          )}
 
           {/* 추가 이미지 */}
           {portfolio.image_urls && portfolio.image_urls.length > 0 && (
