@@ -16,7 +16,8 @@
       "Bash(powershell -Command \"Write-Host ''Y'' | npx supabase db push --include-all\")",
       "Bash(node scripts/check-active-services.js:*)",
       "Bash(node scripts/check-sellers-table.js:*)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(dir:*)"
     ],
     "deny": [],
     "ask": []

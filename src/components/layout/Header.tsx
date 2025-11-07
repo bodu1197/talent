@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/providers/AuthProvider'
+import ChatNotificationBadge from '@/components/chat/ChatNotificationBadge'
 
 export default function Header() {
   const { user, profile, loading, signOut } = useAuth()
@@ -115,12 +116,7 @@ export default function Header() {
                 </Link>
 
                 {/* 채팅 */}
-                <button
-                  className="text-gray-900 hover:text-brand-primary transition-colors"
-                  aria-label="채팅"
-                >
-                  <i className="far fa-comments text-xl"></i>
-                </button>
+                <ChatNotificationBadge />
 
                 {/* 알림 */}
                 <button
