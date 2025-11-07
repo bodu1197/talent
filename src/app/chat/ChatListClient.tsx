@@ -164,8 +164,9 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     : null
 
   return (
-    <div className="flex justify-center h-screen bg-gray-50 pt-16">
-      <div className="flex w-full max-w-[1400px] bg-white shadow-lg">
+    <div className="min-h-screen bg-gray-50 pt-16">
+      <div className="container mx-auto px-4 py-6 max-w-[1400px]">
+        <div className="flex h-[calc(100vh-120px)] bg-white shadow-lg rounded-lg overflow-hidden">
         {/* 왼쪽: 채팅방 목록 */}
         <div className="w-80 border-r border-gray-200 flex flex-col">
         {/* 헤더 */}
@@ -442,6 +443,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
             </div>
           </div>
         )}
+        </div>
       </div>
       </div>
     </div>
