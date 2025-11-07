@@ -79,9 +79,14 @@ export default function DirectChatClient({ roomId, userId, otherUser, service }:
         setMessages([...messages, data.message])
         setNewMessage('')
         scrollToBottom()
+      } else {
+        const errorData = await response.json()
+        console.error('Send message failed:', response.status, errorData)
+        alert(`메시지 전송 실패: ${errorData.error || '알 수 없는 오류'}`)
       }
     } catch (error) {
       console.error('Send message error:', error)
+      alert('메시지 전송 중 오류가 발생했습니다.')
     } finally {
       setIsLoading(false)
     }
@@ -135,6 +140,7 @@ export default function DirectChatClient({ roomId, userId, otherUser, service }:
               <button
                 onClick={() => router.back()}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="뒤로가기"
               >
                 <i className="fas fa-arrow-left text-gray-700"></i>
               </button>
