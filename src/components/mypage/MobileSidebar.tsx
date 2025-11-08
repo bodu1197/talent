@@ -67,6 +67,11 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
       href: '/mypage/seller/earnings',
     },
     {
+      icon: 'fa-chart-bar',
+      label: '통계/분석',
+      href: '/mypage/seller/statistics',
+    },
+    {
       icon: 'fa-folder',
       label: '포트폴리오',
       href: '/mypage/seller/portfolio',
