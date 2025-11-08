@@ -3,6 +3,8 @@
 import { useEffect, useState, useRef } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import Sidebar from '@/components/mypage/Sidebar'
+import MobileSidebar from '@/components/mypage/MobileSidebar'
 
 interface ChatRoom {
   id: string
@@ -177,12 +179,15 @@ export default function ChatClient({ userId, isSeller }: Props) {
   const selectedRoom = rooms.find(r => r.id === selectedRoomId)
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-16">
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold mb-6">메시지</h1>
+    <>
+      <Sidebar mode={isSeller ? 'seller' : 'buyer'} />
+      <MobileSidebar mode={isSeller ? 'seller' : 'buyer'} />
+      <main className="flex-1 min-h-screen bg-gray-50">
+        <div className="container mx-auto px-4 py-8">
+          <h1 className="text-2xl font-bold mb-6">메시지</h1>
 
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden" style={{ height: 'calc(100vh - 180px)' }}>
-          <div className="flex h-full">
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden" style={{ height: 'calc(100vh - 180px)' }}>
+            <div className="flex h-full">
             {/* 채팅방 목록 */}
             <div className="w-80 border-r border-gray-200 overflow-y-auto">
               {rooms.length === 0 ? (
@@ -349,9 +354,10 @@ export default function ChatClient({ userId, isSeller }: Props) {
                 </div>
               )}
             </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </main>
+    </>
   )
 }

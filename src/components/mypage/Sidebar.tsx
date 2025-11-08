@@ -61,12 +61,6 @@ const sellerNavItems: NavItem[] = [
     badge: 0
   },
   {
-    label: '메시지',
-    href: '/mypage/messages',
-    icon: 'fa-comment',
-    badge: 0
-  },
-  {
     label: '판매자 정보',
     href: '/mypage/seller/profile',
     icon: 'fa-id-card'
@@ -134,12 +128,6 @@ const buyerNavItems: NavItem[] = [
       { label: '캐시 충전', href: '/mypage/buyer/coupons/charge', icon: '' },
       { label: '사용 내역', href: '/mypage/buyer/coupons/history', icon: '' }
     ]
-  },
-  {
-    label: '메시지',
-    href: '/mypage/messages',
-    icon: 'fa-comment',
-    badge: 0
   },
   {
     label: '견적 요청 내역',
