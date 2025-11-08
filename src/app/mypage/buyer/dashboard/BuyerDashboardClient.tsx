@@ -3,6 +3,7 @@
 import Sidebar from '@/components/mypage/Sidebar'
 import MobileSidebar from '@/components/mypage/MobileSidebar'
 import StatCard from '@/components/mypage/StatCard'
+import Header from '@/components/layout/Header'
 import Link from 'next/link'
 
 type Stats = any
@@ -56,14 +57,17 @@ export default function BuyerDashboardClient({ stats, recentOrders, favorites, b
 
   return (
     <>
-      <MobileSidebar mode="buyer" />
-      <Sidebar mode="buyer" />
-      <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-        {/* 페이지 헤더 */}
-        <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">구매 대시보드</h1>
-          <p className="text-sm sm:text-base text-gray-600">주문 현황을 확인하세요</p>
-        </div>
+      <Header />
+      <div className="flex min-h-screen bg-gray-50 pt-16">
+        <MobileSidebar mode="buyer" />
+        <Sidebar mode="buyer" />
+        <main className="flex-1 overflow-y-auto">
+          <div className="max-w-[1200px] mx-auto p-4 sm:p-6 lg:p-8">
+            {/* 페이지 헤더 */}
+            <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">구매 대시보드</h1>
+              <p className="text-sm sm:text-base text-gray-600">주문 현황을 확인하세요</p>
+            </div>
 
         {/* 통계 카드 */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -282,7 +286,9 @@ export default function BuyerDashboardClient({ stats, recentOrders, favorites, b
             </div>
           </div>
         </div>
-      </main>
+          </div>
+        </main>
+      </div>
     </>
   )
 }
