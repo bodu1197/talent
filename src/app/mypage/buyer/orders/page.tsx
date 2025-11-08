@@ -3,6 +3,9 @@
 import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Sidebar from '@/components/mypage/Sidebar'
+import MobileSidebar from '@/components/mypage/MobileSidebar'
+import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import OrderCard from '@/components/mypage/OrderCard'
 import Link from 'next/link'
 import { useAuth } from '@/components/providers/AuthProvider'
@@ -240,10 +243,17 @@ function BuyerOrdersContent() {
   if (loading) {
     return (
       <>
-        <Sidebar mode="buyer" />
-        <main className="flex-1 overflow-y-auto p-8">
-          <LoadingSpinner message="주문 내역을 불러오는 중..." />
-        </main>
+        <Header />
+        <div className="flex min-h-screen bg-gray-50 pt-16">
+          <MobileSidebar mode="buyer" />
+          <Sidebar mode="buyer" />
+          <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
+            <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
+              <LoadingSpinner message="주문 내역을 불러오는 중..." />
+            </div>
+            <Footer />
+          </main>
+        </div>
       </>
     )
   }
@@ -251,18 +261,29 @@ function BuyerOrdersContent() {
   if (error) {
     return (
       <>
-        <Sidebar mode="buyer" />
-        <main className="flex-1 overflow-y-auto p-8">
-          <ErrorState message={error} retry={loadOrders} />
-        </main>
+        <Header />
+        <div className="flex min-h-screen bg-gray-50 pt-16">
+          <MobileSidebar mode="buyer" />
+          <Sidebar mode="buyer" />
+          <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
+            <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
+              <ErrorState message={error} retry={loadOrders} />
+            </div>
+            <Footer />
+          </main>
+        </div>
       </>
     )
   }
 
   return (
     <>
-      <Sidebar mode="buyer" />
-      <main className="flex-1 overflow-y-auto p-8">
+      <Header />
+      <div className="flex min-h-screen bg-gray-50 pt-16">
+        <MobileSidebar mode="buyer" />
+        <Sidebar mode="buyer" />
+        <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
+          <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
         {/* 페이지 헤더 */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">주문 내역</h1>
@@ -376,7 +397,10 @@ function BuyerOrdersContent() {
             />
           )}
         </div>
-      </main>
+          </div>
+          <Footer />
+        </main>
+      </div>
     </>
   )
 }
@@ -385,10 +409,17 @@ export default function BuyerOrdersPage() {
   return (
     <Suspense fallback={
       <>
-        <Sidebar mode="buyer" />
-        <main className="flex-1 overflow-y-auto p-8">
-          <LoadingSpinner message="페이지 로딩 중..." />
-        </main>
+        <Header />
+        <div className="flex min-h-screen bg-gray-50 pt-16">
+          <MobileSidebar mode="buyer" />
+          <Sidebar mode="buyer" />
+          <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
+            <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
+              <LoadingSpinner message="페이지 로딩 중..." />
+            </div>
+            <Footer />
+          </main>
+        </div>
       </>
     }>
       <BuyerOrdersContent />
