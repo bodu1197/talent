@@ -1,7 +1,7 @@
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/server'
 
 export async function getBuyerOrders(userId: string, status?: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   let query = supabase
     .from('orders')
@@ -24,7 +24,7 @@ export async function getBuyerOrders(userId: string, status?: string) {
 }
 
 export async function getSellerOrders(userId: string, status?: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   let query = supabase
     .from('orders')
@@ -47,7 +47,7 @@ export async function getSellerOrders(userId: string, status?: string) {
 }
 
 export async function getOrderById(orderId: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('orders')
@@ -65,7 +65,7 @@ export async function getOrderById(orderId: string) {
 }
 
 export async function getBuyerOrdersCount(userId: string, status: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { count, error } = await supabase
     .from('orders')
@@ -78,7 +78,7 @@ export async function getBuyerOrdersCount(userId: string, status: string) {
 }
 
 export async function getSellerOrdersCount(userId: string, status: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { count, error } = await supabase
     .from('orders')

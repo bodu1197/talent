@@ -1,9 +1,9 @@
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 
 export async function getBuyerDashboardStats(userId: string) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Get counts for different order statuses
     const [inProgressResult, deliveredResult, completedResult] = await Promise.all([
@@ -60,7 +60,7 @@ export async function getBuyerDashboardStats(userId: string) {
 
 export async function getBuyerRecentOrders(userId: string, limit: number = 5) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { data, error } = await supabase
       .from('orders')
@@ -88,7 +88,7 @@ export async function getBuyerRecentOrders(userId: string, limit: number = 5) {
 
 export async function getBuyerRecentFavorites(userId: string, limit: number = 5) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { data, error } = await supabase
       .from('favorites')
@@ -117,7 +117,7 @@ export async function getBuyerRecentFavorites(userId: string, limit: number = 5)
 
 export async function getBuyerBenefits(userId: string) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Get coupons count
     const { count: couponsCount, error: couponError } = await supabase
@@ -154,7 +154,7 @@ export async function getBuyerBenefits(userId: string) {
 }
 
 export async function getSellerDashboardStats(userId: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   // Get counts for different order statuses
   const [newOrdersResult, inProgressResult, deliveredResult, completedResult] = await Promise.all([
@@ -193,7 +193,7 @@ export async function getSellerDashboardStats(userId: string) {
 }
 
 export async function getSellerRecentOrders(userId: string, limit: number = 5) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('orders')

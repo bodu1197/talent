@@ -1,7 +1,7 @@
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/server'
 
 export async function getBuyerReviews(userId: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('reviews')
@@ -19,7 +19,7 @@ export async function getBuyerReviews(userId: string) {
 }
 
 export async function getSellerReviews(userId: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('reviews')
@@ -37,7 +37,7 @@ export async function getSellerReviews(userId: string) {
 }
 
 export async function getPendingReviews(userId: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   // 완료된 주문 중 리뷰가 없는 것들
   const { data, error } = await supabase

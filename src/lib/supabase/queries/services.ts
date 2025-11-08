@@ -39,7 +39,7 @@ async function getAllDescendantCategories(supabase: any, parentId: string, paren
 }
 
 export async function getSellerServices(userId: string, status?: string) {
-  const supabase = createBrowserClient()
+  const supabase = await createServerClient()
 
   let query = supabase
     .from('services')
@@ -63,7 +63,7 @@ export async function getSellerServices(userId: string, status?: string) {
 }
 
 export async function getServiceById(serviceId: string) {
-  const supabase = createBrowserClient()
+  const supabase = await createServerClient()
 
   const { data, error } = await supabase
     .from('services')
@@ -101,7 +101,7 @@ export async function getServiceById(serviceId: string) {
 }
 
 export async function getSellerServicesCount(userId: string, status: string) {
-  const supabase = createBrowserClient()
+  const supabase = await createServerClient()
 
   const { count, error } = await supabase
     .from('services')

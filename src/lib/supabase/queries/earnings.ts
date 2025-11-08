@@ -1,8 +1,8 @@
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/server'
 
 // 판매자 수익 현황 조회
 export async function getSellerEarnings(sellerId: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('seller_earnings')
@@ -36,7 +36,7 @@ export async function getSellerEarnings(sellerId: string) {
 
 // 수익 거래 내역 조회
 export async function getEarningsTransactions(sellerId: string, limit: number = 20) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('earnings_transactions')
@@ -54,7 +54,7 @@ export async function getEarningsTransactions(sellerId: string, limit: number = 
 
 // 출금 요청 내역 조회
 export async function getWithdrawalHistory(sellerId: string, limit: number = 20) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('withdrawal_requests')
@@ -75,7 +75,7 @@ export async function createWithdrawalRequest(
   accountNumber: string,
   accountHolder: string
 ) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   // 출금 가능 금액 확인
   const earnings = await getSellerEarnings(sellerId)
@@ -112,7 +112,7 @@ export async function createWithdrawalRequest(
 
 // 판매자 포트폴리오 조회
 export async function getSellerPortfolio(sellerId: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('seller_portfolio')
@@ -135,7 +135,7 @@ export async function createPortfolioItem(
   thumbnailUrl?: string,
   images?: string[]
 ) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('portfolio_items')
@@ -165,7 +165,7 @@ export async function updatePortfolioItem(
     is_visible?: boolean
   }
 ) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('portfolio_items')
@@ -180,7 +180,7 @@ export async function updatePortfolioItem(
 
 // 포트폴리오 아이템 삭제
 export async function deletePortfolioItem(itemId: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from('portfolio_items')
@@ -192,7 +192,7 @@ export async function deletePortfolioItem(itemId: string) {
 
 // 포트폴리오 조회수 증가
 export async function incrementPortfolioViewCount(itemId: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error } = await supabase.rpc('increment_portfolio_views', {
     portfolio_id: itemId
