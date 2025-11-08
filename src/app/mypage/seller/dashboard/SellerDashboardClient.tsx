@@ -2,6 +2,8 @@
 
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import Sidebar from '@/components/mypage/Sidebar'
+import MobileSidebar from '@/components/mypage/MobileSidebar'
 
 type Stats = {
   newOrders: number
@@ -34,7 +36,10 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
     <>
       <Header />
       <div className="min-h-screen bg-gray-50 pt-16">
-        <div className="container-1200 py-8">
+        <div className="flex container-1200">
+          <MobileSidebar mode="seller" />
+          <Sidebar mode="seller" />
+          <main className="flex-1 overflow-y-auto py-8">
           {/* 페이지 헤더 */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900">판매 대시보드</h1>
@@ -147,6 +152,7 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
               )}
             </div>
           </div>
+          </main>
         </div>
       </div>
       <Footer />
