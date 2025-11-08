@@ -31,9 +31,9 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
         <MobileSidebar mode="buyer" />
         <Sidebar mode="buyer" />
 
-        <main className="flex-1 overflow-y-auto w-full">
+        <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
 
-          <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8">
+          <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>

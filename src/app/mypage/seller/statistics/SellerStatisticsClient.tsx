@@ -38,9 +38,9 @@ export default function SellerStatisticsClient({ stats, topServices }: Props) {
 
         <Sidebar mode="seller" />
 
-        <main className="flex-1 overflow-y-auto w-full">
+        <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
 
-          <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8">
+          <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
         <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">통계/분석</h1>
           <p className="text-sm sm:text-base text-gray-600">판매 통계를 확인하세요</p>

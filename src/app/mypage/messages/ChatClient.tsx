@@ -186,8 +186,8 @@ export default function ChatClient({ userId, isSeller }: Props) {
       <div className="flex min-h-screen bg-gray-50 pt-16">
         <MobileSidebar mode={isSeller ? 'seller' : 'buyer'} />
         <Sidebar mode={isSeller ? 'seller' : 'buyer'} />
-        <main className="flex-1 overflow-y-auto w-full">
-          <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8">
+        <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
+          <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
             <h1 className="text-2xl font-bold mb-6">메시지</h1>
 
             <div className="bg-white rounded-lg shadow-sm overflow-hidden" style={{ height: 'calc(100vh - 250px)' }}>

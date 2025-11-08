@@ -21,9 +21,9 @@ export default function WithdrawClient() {
         <MobileSidebar mode="seller" />
         <Sidebar mode="seller" />
 
-        <main className="flex-1 overflow-y-auto w-full">
+        <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
 
-          <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8">
+          <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
         <div className="mb-6">
           <Link href="/mypage/seller/earnings" className="text-gray-600 hover:text-gray-900 flex items-center gap-2">
             <i className="fas fa-arrow-left"></i>

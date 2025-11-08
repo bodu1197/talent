@@ -311,9 +311,9 @@ export default function PortfolioEditClient({ portfolio, sellerId, categories, s
         <MobileSidebar mode="seller" />
         <Sidebar mode="seller" />
 
-        <main className="flex-1 overflow-y-auto w-full">
+        <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
 
-          <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8">
+          <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
         <div className="max-w-3xl">
           <div className="mb-8">
             <Link

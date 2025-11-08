@@ -47,9 +47,9 @@ export default function SellerProfileClient({ profile }: Props) {
 
         <Sidebar mode="seller" />
 
-        <main className="flex-1 overflow-y-auto w-full">
+        <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
 
-          <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8">
+          <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
         {/* 페이지 헤더 */}
         <div className="mb-6 lg:mb-8 pt-12 lg:pt-0 flex items-center justify-between">
           <div>

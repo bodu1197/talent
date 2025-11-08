@@ -30,9 +30,9 @@ export default function CouponHistoryClient({ history }: CouponHistoryClientProp
         <MobileSidebar mode="buyer" />
         <Sidebar mode="buyer" />
 
-        <main className="flex-1 overflow-y-auto w-full">
+        <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
 
-          <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8">
+          <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">사용 내역</h1>
           <p className="text-gray-600">쿠폰 및 캐시 사용 내역을 확인하세요</p>
