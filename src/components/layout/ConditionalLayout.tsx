@@ -59,7 +59,9 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
               ? 'flex-1 pt-[140px] lg:pt-[86px] pb-16 lg:pb-0'
               : 'flex-1 pt-16 lg:pt-[86px] pb-16 lg:pb-0'
       }>
-        {children}
+        <div className="container-1200 h-full">
+          {children}
+        </div>
       </main>
       {!hideLayout && (
         <>

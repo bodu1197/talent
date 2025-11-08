@@ -55,7 +55,7 @@ export default function BuyerDashboardClient({ stats, recentOrders, favorites, b
   }
 
   return (
-    <div className="flex bg-gray-50 container-1500">
+    <div className="flex bg-gray-50">
       <MobileSidebar mode="buyer" />
       <Sidebar mode="buyer" />
       <main className="flex-1 overflow-y-auto">
