@@ -32,7 +32,8 @@
       "Bash([ -f nul ])",
       "Bash(node verify_headers.js:*)",
       "Bash(node fix_headers.js:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(git revert:*)"
     ],
     "deny": [],
     "ask": []
