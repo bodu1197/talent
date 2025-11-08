@@ -34,6 +34,19 @@ type Props = {
 }
 
 export default function SellerDashboardClient({ stats, recentOrders }: Props) {
+  // 테스트용 - Header와 Footer만 렌더링
+  return (
+    <>
+      <Header />
+      <div style={{ minHeight: '80vh', backgroundColor: '#f3f4f6', padding: '20px', textAlign: 'center' }}>
+        <h1>테스트: Body 영역 제거됨</h1>
+        <p>Header와 Footer의 정렬 상태를 확인하세요</p>
+      </div>
+      <Footer />
+    </>
+  )
+
+  // 원래 코드 (임시 비활성화)
   // Generate alerts based on real data
   const alerts = []
   if (stats?.newOrders > 0) {
@@ -60,16 +73,10 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
   return (
     <>
       <Header />
-      <div className="min-h-screen flex bg-gray-50 pt-16">
-        <MobileSidebar mode="seller" />
-        <Sidebar mode="seller" />
-        <main className="flex-1 overflow-y-auto">
-          <div className="container-1200 py-4 sm:py-6 lg:py-8">
-            {/* 페이지 헤더 */}
-            <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">판매 대시보드</h1>
-              <p className="text-sm sm:text-base text-gray-600">전체 판매 현황을 확인하세요</p>
-            </div>
+      {/* Body 영역 임시 제거 - 테스트용 */}
+      <div style={{ height: '500px', backgroundColor: '#f3f4f6' }}>
+        <p>테스트: Body 영역 제거</p>
+      </div>
 
         {/* 통계 카드 */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
