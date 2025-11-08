@@ -35,11 +35,11 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gray-50 pt-16">
-        <div className="flex container-1200">
-          <MobileSidebar mode="seller" />
-          <Sidebar mode="seller" />
-          <main className="flex-1 overflow-y-auto py-8">
+      <div className="flex min-h-screen bg-gray-50 pt-16">
+        <MobileSidebar mode="seller" />
+        <Sidebar mode="seller" />
+        <main className="flex-1 overflow-y-auto">
+          <div className="container-1200 py-8">
           {/* 페이지 헤더 */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900">판매 대시보드</h1>
@@ -152,8 +152,8 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
               )}
             </div>
           </div>
-          </main>
-        </div>
+          </div>
+        </main>
       </div>
       <Footer />
     </>

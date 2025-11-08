@@ -59,11 +59,11 @@ export default function BuyerDashboardClient({ stats, recentOrders, favorites, b
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gray-50 pt-16">
-        <div className="flex container-1200">
-          <MobileSidebar mode="buyer" />
-          <Sidebar mode="buyer" />
-          <main className="flex-1 overflow-y-auto px-4 py-4 sm:py-6 lg:py-8">
+      <div className="flex min-h-screen bg-gray-50 pt-16">
+        <MobileSidebar mode="buyer" />
+        <Sidebar mode="buyer" />
+        <main className="flex-1 overflow-y-auto">
+          <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8">
             {/* 페이지 헤더 */}
             <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
               <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">구매 대시보드</h1>
@@ -287,8 +287,8 @@ export default function BuyerDashboardClient({ stats, recentOrders, favorites, b
             </div>
           </div>
         </div>
-          </main>
-        </div>
+          </div>
+        </main>
       </div>
       <Footer />
     </>
