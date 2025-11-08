@@ -30,17 +30,124 @@ type Props = {
 }
 
 export default function SellerDashboardClient({ stats, recentOrders }: Props) {
-  // 테스트용 - Header와 Footer만 렌더링
   return (
     <>
       <Header />
-      <div style={{ minHeight: 'calc(100vh - 64px)', backgroundColor: '#f3f4f6', padding: '20px', textAlign: 'center', paddingTop: '80px' }}>
-        <h1>테스트: Body 영역 제거됨</h1>
-        <p>Header와 Footer의 정렬 상태를 확인하세요</p>
-        <p>Footer의 폭을 확인하세요</p>
-      </div>
-      <div style={{ width: '100%', backgroundColor: 'red' }}>
-        <p style={{ color: 'white', textAlign: 'center' }}>Footer 컨테이너 (빨간 배경) - 전체 너비 확인</p>
+      <div className="min-h-screen bg-gray-50 pt-16">
+        <div className="container-1200 py-8">
+          {/* 페이지 헤더 */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900">판매 대시보드</h1>
+            <p className="text-gray-600 mt-2">판매 현황을 한눈에 확인하세요</p>
+          </div>
+
+          {/* 통계 카드 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600">신규 주문</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats.newOrders}건</p>
+                </div>
+                <i className="fas fa-shopping-cart text-3xl text-blue-500"></i>
+              </div>
+            </div>
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600">진행중</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats.inProgressOrders}건</p>
+                </div>
+                <i className="fas fa-spinner text-3xl text-yellow-500"></i>
+              </div>
+            </div>
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600">완료된 주문</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats.deliveredOrders}건</p>
+                </div>
+                <i className="fas fa-check-circle text-3xl text-green-500"></i>
+              </div>
+            </div>
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600">이번달 수익</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats.monthlyRevenue.toLocaleString()}원</p>
+                </div>
+                <i className="fas fa-won-sign text-3xl text-purple-500"></i>
+              </div>
+            </div>
+          </div>
+
+          {/* 최근 주문 */}
+          <div className="bg-white rounded-lg shadow">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">최근 주문</h2>
+            </div>
+            <div className="p-6">
+              {recentOrders.length > 0 ? (
+                <div className="overflow-x-auto">
+                  <table className="min-w-full">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          주문번호
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          서비스
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          구매자
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          상태
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          금액
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {recentOrders.map((order) => (
+                        <tr key={order.id}>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            #{order.order_number || order.id.slice(0, 8)}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {order.service?.title || order.title || '-'}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {order.buyer?.name || '-'}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              order.status === 'completed'
+                                ? 'bg-green-100 text-green-800'
+                                : order.status === 'in_progress'
+                                ? 'bg-yellow-100 text-yellow-800'
+                                : 'bg-gray-100 text-gray-800'
+                            }`}>
+                              {order.status === 'in_progress' ? '진행중' :
+                               order.status === 'completed' ? '완료' :
+                               order.status === 'paid' ? '결제완료' : order.status}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {(order.total_amount || 0).toLocaleString()}원
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p className="text-gray-500 text-center py-8">최근 주문이 없습니다</p>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
       <Footer />
     </>
