@@ -31,7 +31,7 @@ type Props = {
 
 export default function SellerDashboardClient({ stats, recentOrders }: Props) {
   return (
-    <div className="flex bg-gray-50 bg-red-100">
+    <div className="flex bg-gray-50 fixed inset-0 top-[86px] bg-red-100">
       <MobileSidebar mode="seller" />
       <Sidebar mode="seller" />
       <main className="flex-1 overflow-y-auto bg-red-300">
