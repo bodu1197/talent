@@ -6,6 +6,8 @@ import { useAuth } from '@/components/providers/AuthProvider'
 import { Service } from '@/types'
 import Sidebar from '@/components/mypage/Sidebar'
 import MobileSidebar from '@/components/mypage/MobileSidebar'
+import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 
 interface FavoriteItem {
   service_id: string
@@ -66,21 +68,27 @@ export default function FavoritesPage() {
   if (!user) {
     return (
       <>
-        <MobileSidebar mode="buyer" />
-        <Sidebar mode="buyer" />
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-          <div className="max-w-md mx-auto text-center pt-12 lg:pt-0">
-            <i className="fas fa-lock text-6xl text-gray-300 mb-4"></i>
-            <h2 className="text-2xl font-bold mb-4">로그인이 필요합니다</h2>
-            <p className="text-gray-600 mb-6">찜한 서비스를 확인하려면 로그인해주세요.</p>
-            <Link
-              href="/auth/login"
-              className="inline-block px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors"
-            >
-              로그인하기
-            </Link>
-          </div>
-        </main>
+        <Header />
+        <div className="flex min-h-screen bg-gray-50 pt-16">
+          <MobileSidebar mode="buyer" />
+          <Sidebar mode="buyer" />
+          <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
+            <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
+              <div className="max-w-md mx-auto text-center pt-12 lg:pt-0">
+                <i className="fas fa-lock text-6xl text-gray-300 mb-4"></i>
+                <h2 className="text-2xl font-bold mb-4">로그인이 필요합니다</h2>
+                <p className="text-gray-600 mb-6">찜한 서비스를 확인하려면 로그인해주세요.</p>
+                <Link
+                  href="/auth/login"
+                  className="inline-block px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors"
+                >
+                  로그인하기
+                </Link>
+              </div>
+            </div>
+            <Footer />
+          </main>
+        </div>
       </>
     )
   }
@@ -88,36 +96,44 @@ export default function FavoritesPage() {
   if (loading) {
     return (
       <>
-        <MobileSidebar mode="buyer" />
-        <Sidebar mode="buyer" />
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-          <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
-            <h1 className="text-2xl sm:text-3xl font-bold mb-2">찜한 서비스</h1>
-            <p className="text-sm sm:text-base text-gray-600">관심있는 서비스를 저장하고 관리하세요</p>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-gray-200 rounded-lg" style={{ aspectRatio: '210/160' }}></div>
-                <div className="mt-2 space-y-2">
-                  <div className="h-4 bg-gray-200 rounded"></div>
-                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-                </div>
+        <Header />
+        <div className="flex min-h-screen bg-gray-50 pt-16">
+          <MobileSidebar mode="buyer" />
+          <Sidebar mode="buyer" />
+          <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
+            <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
+              <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
+                <h1 className="text-2xl sm:text-3xl font-bold mb-2">찜한 서비스</h1>
+                <p className="text-sm sm:text-base text-gray-600">관심있는 서비스를 저장하고 관리하세요</p>
               </div>
-            ))}
-          </div>
-        </main>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => (
+                  <div key={i} className="animate-pulse">
+                    <div className="bg-gray-200 rounded-lg" style={{ aspectRatio: '210/160' }}></div>
+                    <div className="mt-2 space-y-2">
+                      <div className="h-4 bg-gray-200 rounded"></div>
+                      <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <Footer />
+          </main>
+        </div>
       </>
     )
   }
 
   return (
     <>
-      <MobileSidebar mode="buyer" />
-      <Sidebar mode="buyer" />
-      <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-white">
-        <div className="max-w-7xl mx-auto">
+      <Header />
+      <div className="flex min-h-screen bg-gray-50 pt-16">
+        <MobileSidebar mode="buyer" />
+        <Sidebar mode="buyer" />
+        <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
+          <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
         <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
           <div className="flex items-center gap-3 mb-2">
             <i className="fas fa-heart text-red-500 text-2xl"></i>
@@ -232,8 +248,10 @@ export default function FavoritesPage() {
             })}
           </div>
         )}
-        </div>
-      </main>
+          </div>
+          <Footer />
+        </main>
+      </div>
     </>
   )
 }

@@ -341,13 +341,20 @@ export default function BuyerOrdersClient(props: BuyerOrdersClientProps) {
   return (
     <Suspense fallback={
       <>
-        <Sidebar mode="buyer" />
-        <main className="flex-1 overflow-y-auto p-8">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-48 mb-8"></div>
-            <div className="h-64 bg-gray-200 rounded"></div>
-          </div>
-        </main>
+        <Header />
+        <div className="flex min-h-screen bg-gray-50 pt-16">
+          <MobileSidebar mode="buyer" />
+          <Sidebar mode="buyer" />
+          <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
+            <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
+              <div className="animate-pulse">
+                <div className="h-8 bg-gray-200 rounded w-48 mb-8"></div>
+                <div className="h-64 bg-gray-200 rounded"></div>
+              </div>
+            </div>
+            <Footer />
+          </main>
+        </div>
       </>
     }>
       <BuyerOrdersContent {...props} />

@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react'
 import { use } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
+import MobileSidebar from '@/components/mypage/MobileSidebar'
+import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import Link from 'next/link'
 import { useAuth } from '@/components/providers/AuthProvider'
 import { getOrderById } from '@/lib/supabase/queries/orders'
@@ -87,10 +90,17 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
   if (loading) {
     return (
       <>
-        <Sidebar mode="buyer" />
-        <main className="flex-1 overflow-y-auto p-8">
-          <LoadingSpinner message="주문 정보를 불러오는 중..." />
-        </main>
+        <Header />
+        <div className="flex min-h-screen bg-gray-50 pt-16">
+          <MobileSidebar mode="buyer" />
+          <Sidebar mode="buyer" />
+          <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
+            <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
+              <LoadingSpinner message="주문 정보를 불러오는 중..." />
+            </div>
+            <Footer />
+          </main>
+        </div>
       </>
     )
   }
@@ -98,10 +108,17 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
   if (error || !order) {
     return (
       <>
-        <Sidebar mode="buyer" />
-        <main className="flex-1 overflow-y-auto p-8">
-          <ErrorState message={error || '주문을 찾을 수 없습니다'} retry={loadOrder} />
-        </main>
+        <Header />
+        <div className="flex min-h-screen bg-gray-50 pt-16">
+          <MobileSidebar mode="buyer" />
+          <Sidebar mode="buyer" />
+          <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
+            <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
+              <ErrorState message={error || '주문을 찾을 수 없습니다'} retry={loadOrder} />
+            </div>
+            <Footer />
+          </main>
+        </div>
       </>
     )
   }
@@ -128,8 +145,12 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
 
   return (
     <>
-      <Sidebar mode="buyer" />
-      <main className="flex-1 overflow-y-auto p-8">
+      <Header />
+      <div className="flex min-h-screen bg-gray-50 pt-16">
+        <MobileSidebar mode="buyer" />
+        <Sidebar mode="buyer" />
+        <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
+          <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
         {/* 상단 네비게이션 */}
         <div className="mb-6">
           <Link
@@ -557,7 +578,10 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
             </div>
           </div>
         )}
-      </main>
+          </div>
+          <Footer />
+        </main>
+      </div>
     </>
   )
 }
