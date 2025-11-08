@@ -1,7 +1,5 @@
 'use client'
 
-import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
 import { useState } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import MobileSidebar from '@/components/mypage/MobileSidebar'
@@ -69,18 +67,12 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
   }
 
   return (
-    <>
-
-      <Header />
-
-      <div className="flex min-h-screen bg-gray-50 pt-16">
-
+    <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
+      <div className="flex w-full max-w-[1200px]">
         <MobileSidebar mode="seller" />
         <Sidebar mode="seller" />
-
-        <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
-
-          <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
+        <main className="flex-1 overflow-y-auto">
+          <div className="py-8 px-4">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">받은 리뷰</h1>
           <p className="text-gray-600">고객들이 남긴 리뷰를 확인하고 답변하세요</p>
@@ -249,10 +241,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
         )}
           </div>
         </main>
-
       </div>
-      <Footer />
-
-      </>
+    </div>
   )
 }
