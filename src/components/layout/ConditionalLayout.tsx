@@ -54,7 +54,7 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
         hideLayout
           ? ''
           : isMypagePage
-            ? 'flex-1 pt-16 lg:pt-[86px] pb-16 lg:pb-0'
+            ? 'flex-1 pt-16 lg:pt-[86px] pb-16 lg:pb-0 w-full max-w-none'
             : isMainPage
               ? 'flex-1 pt-[140px] lg:pt-[86px] pb-16 lg:pb-0'
               : 'flex-1 pt-16 lg:pt-[86px] pb-16 lg:pb-0'

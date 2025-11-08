@@ -31,11 +31,11 @@ type Props = {
 
 export default function SellerDashboardClient({ stats, recentOrders }: Props) {
   return (
-    <div className="flex bg-gray-50">
+    <div className="flex bg-gray-50 bg-red-100">
       <MobileSidebar mode="seller" />
       <Sidebar mode="seller" />
-      <main className="flex-1 overflow-y-auto">
-        <div className="py-8 px-4">
+      <main className="flex-1 overflow-y-auto bg-red-300">
+        <div className="py-8 px-4 bg-red-500">
           {/* 페이지 헤더 */}
           <div className="mb-6">
             <h1 className="text-xl font-bold text-gray-900">판매 대시보드</h1>
