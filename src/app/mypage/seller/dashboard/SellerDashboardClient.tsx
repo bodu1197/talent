@@ -236,9 +236,9 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
           </div>
         </div>
           </div>
-          <Footer />
         </main>
       </div>
+      <Footer />
     </>
   )
 }

@@ -579,9 +579,9 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
           </div>
         )}
           </div>
-          <Footer />
         </main>
       </div>
+      <Footer />
     </>
   )
 }

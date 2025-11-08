@@ -360,10 +360,10 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
           />
         )}
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

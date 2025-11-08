@@ -56,9 +56,9 @@ export default function BuyerCouponsPage() {
             <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
               <LoadingSpinner message="쿠폰 정보를 불러오는 중..." />
             </div>
-            <Footer />
           </main>
         </div>
+        <Footer />
       </>
     )
   }
@@ -74,9 +74,9 @@ export default function BuyerCouponsPage() {
             <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
               <ErrorState message={error} retry={loadCouponsData} />
             </div>
-            <Footer />
           </main>
         </div>
+        <Footer />
       </>
     )
   }
@@ -170,9 +170,9 @@ export default function BuyerCouponsPage() {
           )}
         </div>
           </div>
-          <Footer />
         </main>
       </div>
+      <Footer />
     </>
   )
 }

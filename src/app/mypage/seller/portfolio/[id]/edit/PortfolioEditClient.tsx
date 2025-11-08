@@ -594,10 +594,10 @@ export default function PortfolioEditClient({ portfolio, sellerId, categories, s
           </form>
         </div>
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

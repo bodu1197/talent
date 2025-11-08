@@ -316,10 +316,10 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
           </div>
         </form>
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

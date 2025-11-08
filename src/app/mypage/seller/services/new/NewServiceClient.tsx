@@ -766,10 +766,10 @@ export default function NewServiceClient({ sellerId }: Props) {
           </div>
         </form>
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

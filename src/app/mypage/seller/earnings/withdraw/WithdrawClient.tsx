@@ -114,10 +114,10 @@ export default function WithdrawClient() {
           </button>
         </div>
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

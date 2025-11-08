@@ -361,9 +361,9 @@ export default function ChatClient({ userId, isSeller }: Props) {
             </div>
           </div>
           </div>
-          <Footer />
         </main>
       </div>
+      <Footer />
     </>
   )
 }

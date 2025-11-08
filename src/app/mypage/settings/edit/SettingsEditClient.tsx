@@ -475,10 +475,10 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
           </div>
         </div>
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

@@ -815,10 +815,10 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
           </div>
         </form>
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

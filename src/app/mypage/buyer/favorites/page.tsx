@@ -86,9 +86,9 @@ export default function FavoritesPage() {
                 </Link>
               </div>
             </div>
-            <Footer />
           </main>
         </div>
+        <Footer />
       </>
     )
   }
@@ -119,9 +119,9 @@ export default function FavoritesPage() {
                 ))}
               </div>
             </div>
-            <Footer />
           </main>
         </div>
+        <Footer />
       </>
     )
   }
@@ -249,9 +249,9 @@ export default function FavoritesPage() {
           </div>
         )}
           </div>
-          <Footer />
         </main>
       </div>
+      <Footer />
     </>
   )
 }

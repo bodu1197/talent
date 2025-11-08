@@ -251,9 +251,9 @@ function BuyerOrdersContent() {
             <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
               <LoadingSpinner message="주문 내역을 불러오는 중..." />
             </div>
-            <Footer />
           </main>
         </div>
+        <Footer />
       </>
     )
   }
@@ -269,9 +269,9 @@ function BuyerOrdersContent() {
             <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
               <ErrorState message={error} retry={loadOrders} />
             </div>
-            <Footer />
           </main>
         </div>
+        <Footer />
       </>
     )
   }
@@ -398,9 +398,9 @@ function BuyerOrdersContent() {
           )}
         </div>
           </div>
-          <Footer />
         </main>
       </div>
+      <Footer />
     </>
   )
 }
@@ -417,9 +417,9 @@ export default function BuyerOrdersPage() {
             <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
               <LoadingSpinner message="페이지 로딩 중..." />
             </div>
-            <Footer />
           </main>
         </div>
+        <Footer />
       </>
     }>
       <BuyerOrdersContent />

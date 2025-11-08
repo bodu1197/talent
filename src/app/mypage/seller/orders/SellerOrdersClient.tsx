@@ -356,10 +356,10 @@ export default function SellerOrdersClient({ initialOrders, initialStatus, statu
           </div>
         )}
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

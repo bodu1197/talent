@@ -74,9 +74,9 @@ export default function CouponHistoryPage() {
             <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
               <LoadingSpinner message="사용 내역을 불러오는 중..." />
             </div>
-            <Footer />
           </main>
         </div>
+        <Footer />
       </>
     )
   }
@@ -92,9 +92,9 @@ export default function CouponHistoryPage() {
             <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
               <ErrorState message={error} retry={loadHistory} />
             </div>
-            <Footer />
           </main>
         </div>
+        <Footer />
       </>
     )
   }
@@ -177,9 +177,9 @@ export default function CouponHistoryPage() {
           )}
         </div>
           </div>
-          <Footer />
         </main>
       </div>
+      <Footer />
     </>
   )
 }

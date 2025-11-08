@@ -126,10 +126,10 @@ export default function SellerStatisticsClient({ stats, topServices }: Props) {
           )}
         </div>
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

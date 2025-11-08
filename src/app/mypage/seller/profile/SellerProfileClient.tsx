@@ -254,10 +254,10 @@ export default function SellerProfileClient({ profile }: Props) {
           </div>
         </div>
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

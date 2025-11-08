@@ -766,10 +766,10 @@ export default function SellerRegisterClient({ userId }: Props) {
           </div>
         </div>
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

@@ -163,10 +163,10 @@ export default function ServiceStatisticsClient({ stats, dailyViews, ratingPerce
           </div>
         </div>
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

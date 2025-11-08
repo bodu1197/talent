@@ -288,9 +288,9 @@ export default function BuyerDashboardClient({ stats, recentOrders, favorites, b
           </div>
         </div>
           </div>
-          <Footer />
         </main>
       </div>
+      <Footer />
     </>
   )
 }

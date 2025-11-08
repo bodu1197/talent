@@ -92,10 +92,10 @@ export default function WithdrawHistoryClient({ history }: WithdrawHistoryClient
           </table>
         </div>
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

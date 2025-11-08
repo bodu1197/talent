@@ -508,10 +508,10 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
           </form>
         </div>
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

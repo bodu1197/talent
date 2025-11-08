@@ -122,10 +122,10 @@ export default function SellerGradeClient() {
           </div>
         </div>
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

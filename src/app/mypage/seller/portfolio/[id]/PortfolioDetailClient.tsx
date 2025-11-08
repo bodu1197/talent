@@ -237,10 +237,10 @@ export default function PortfolioDetailClient({ portfolio, sellerId }: Props) {
           )}
         </div>
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

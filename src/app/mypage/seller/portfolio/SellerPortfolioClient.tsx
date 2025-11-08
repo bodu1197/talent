@@ -140,10 +140,10 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
           )}
         </div>
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

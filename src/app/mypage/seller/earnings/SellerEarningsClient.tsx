@@ -126,10 +126,10 @@ export default function SellerEarningsClient({ earnings, transactions }: SellerE
           </table>
         </div>
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

@@ -373,10 +373,10 @@ export default function SellerOrderDetailClient({ order: initialOrder, orderId }
           </div>
         )}
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )

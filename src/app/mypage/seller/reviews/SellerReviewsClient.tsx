@@ -248,10 +248,10 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
           </div>
         )}
           </div>
-          <Footer />
         </main>
 
       </div>
+      <Footer />
 
       </>
   )
