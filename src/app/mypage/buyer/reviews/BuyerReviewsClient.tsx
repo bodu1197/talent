@@ -5,8 +5,8 @@ import { useSearchParams } from 'next/navigation'
 import Sidebar from '@/components/mypage/Sidebar'
 import MobileSidebar from '@/components/mypage/MobileSidebar'
 import { createReview, updateReview, deleteReview } from '@/lib/supabase/mutations/reviews'
-import { getPendingReviews, getBuyerReviews } from '@/lib/supabase/queries/reviews'
 import { logger } from '@/lib/logger'
+import { useRouter } from 'next/navigation'
 
 interface BuyerReviewsClientProps {
   initialPendingReviews: any[]
@@ -19,6 +19,7 @@ export default function BuyerReviewsClient({
   initialWrittenReviews,
   userId
 }: BuyerReviewsClientProps) {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const tabFromUrl = searchParams.get('tab') || 'pending'
   const [activeTab, setActiveTab] = useState<'pending' | 'written'>(tabFromUrl as 'pending' | 'written')
@@ -33,18 +34,8 @@ export default function BuyerReviewsClient({
   const [pendingReviews, setPendingReviews] = useState(initialPendingReviews)
   const [writtenReviews, setWrittenReviews] = useState(initialWrittenReviews)
 
-  async function loadReviews() {
-    try {
-      const [pendingData, writtenData] = await Promise.all([
-        getPendingReviews(userId),
-        getBuyerReviews(userId)
-      ])
-
-      setPendingReviews(pendingData)
-      setWrittenReviews(writtenData)
-    } catch (err: any) {
-      logger.error('리뷰 데이터 로드 실패:', err)
-    }
+  function refreshData() {
+    router.refresh()
   }
 
   const handleSubmitReview = async () => {
@@ -68,7 +59,7 @@ export default function BuyerReviewsClient({
       setSelectedOrder(null)
       setRating(5)
       setReviewContent('')
-      await loadReviews()
+      refreshData()
       alert('리뷰가 등록되었습니다')
     } catch (err: any) {
       logger.error('리뷰 등록 실패:', err)
@@ -95,7 +86,7 @@ export default function BuyerReviewsClient({
       setSelectedReview(null)
       setRating(5)
       setReviewContent('')
-      await loadReviews()
+      refreshData()
       alert('리뷰가 수정되었습니다')
     } catch (err: any) {
       logger.error('리뷰 수정 실패:', err)
@@ -110,7 +101,7 @@ export default function BuyerReviewsClient({
 
     try {
       await deleteReview(reviewId)
-      await loadReviews()
+      refreshData()
       alert('리뷰가 삭제되었습니다')
     } catch (err: any) {
       logger.error('리뷰 삭제 실패:', err)
