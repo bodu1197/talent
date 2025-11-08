@@ -1,5 +1,6 @@
 'use client'
 
+import Header from '@/components/layout/Header'
 import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
 
@@ -31,8 +32,16 @@ export default function SellerEarningsClient({ earnings, transactions }: SellerE
 
   return (
     <>
-      <Sidebar mode="seller" />
-      <main className="flex-1 overflow-y-auto p-8">
+
+      <Header />
+
+      <div className="flex min-h-screen bg-gray-50 pt-16">
+
+        <Sidebar mode="seller" />
+
+        <main className="flex-1 overflow-y-auto w-full">
+
+          <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">수익 관리</h1>
           <p className="text-gray-600">판매 수익을 관리하세요</p>
@@ -113,7 +122,12 @@ export default function SellerEarningsClient({ earnings, transactions }: SellerE
             </tbody>
           </table>
         </div>
-      </main>
-    </>
+          </div>
+
+        </main>
+
+      </div>
+
+      </>
   )
 }

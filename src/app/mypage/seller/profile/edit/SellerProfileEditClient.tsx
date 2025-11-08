@@ -1,5 +1,6 @@
 'use client'
 
+import Header from '@/components/layout/Header'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
@@ -43,9 +44,18 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
 
   return (
     <>
-      <MobileSidebar mode="seller" />
-      <Sidebar mode="seller" />
-      <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+
+      <Header />
+
+      <div className="flex min-h-screen bg-gray-50 pt-16">
+
+        <MobileSidebar mode="seller" />
+
+        <Sidebar mode="seller" />
+
+        <main className="flex-1 overflow-y-auto w-full">
+
+          <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8">
         <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">판매자 정보 수정</h1>
           <p className="text-sm sm:text-base text-gray-600">판매자 프로필 및 정산 정보를 수정하세요</p>
@@ -304,7 +314,12 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
             </button>
           </div>
         </form>
-      </main>
-    </>
+          </div>
+
+        </main>
+
+      </div>
+
+      </>
   )
 }

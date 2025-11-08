@@ -1,5 +1,6 @@
 'use client'
 
+import Header from '@/components/layout/Header'
 import { useState } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
@@ -163,8 +164,16 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
 
   return (
     <>
-      <Sidebar mode="seller" />
-      <main className="flex-1 overflow-y-auto p-8">
+
+      <Header />
+
+      <div className="flex min-h-screen bg-gray-50 pt-16">
+
+        <Sidebar mode="seller" />
+
+        <main className="flex-1 overflow-y-auto w-full">
+
+          <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8">
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">서비스 관리</h1>
@@ -347,7 +356,12 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
             description="첫 서비스를 등록해보세요"
           />
         )}
-      </main>
-    </>
+          </div>
+
+        </main>
+
+      </div>
+
+      </>
   )
 }

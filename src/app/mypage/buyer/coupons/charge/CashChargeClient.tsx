@@ -1,5 +1,6 @@
 'use client'
 
+import Header from '@/components/layout/Header'
 import { useState } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
@@ -11,8 +12,16 @@ export default function CashChargeClient() {
 
   return (
     <>
-      <Sidebar mode="buyer" />
-      <main className="flex-1 overflow-y-auto p-8">
+
+      <Header />
+
+      <div className="flex min-h-screen bg-gray-50 pt-16">
+
+        <Sidebar mode="buyer" />
+
+        <main className="flex-1 overflow-y-auto w-full">
+
+          <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8">
         <div className="mb-6">
           <Link href="/mypage/buyer/coupons" className="text-gray-600 hover:text-gray-900 flex items-center gap-2">
             <i className="fas fa-arrow-left"></i>
@@ -82,7 +91,12 @@ export default function CashChargeClient() {
             {amount.toLocaleString()}원 충전하기
           </button>
         </div>
-      </main>
-    </>
+          </div>
+
+        </main>
+
+      </div>
+
+      </>
   )
 }

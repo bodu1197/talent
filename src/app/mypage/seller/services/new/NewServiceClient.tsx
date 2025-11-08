@@ -1,5 +1,6 @@
 'use client'
 
+import Header from '@/components/layout/Header'
 import { useState, useEffect } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
@@ -326,8 +327,16 @@ export default function NewServiceClient({ sellerId }: Props) {
 
   return (
     <>
-      <Sidebar mode="seller" />
-      <main className="flex-1 overflow-y-auto p-8">
+
+      <Header />
+
+      <div className="flex min-h-screen bg-gray-50 pt-16">
+
+        <Sidebar mode="seller" />
+
+        <main className="flex-1 overflow-y-auto w-full">
+
+          <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8">
         {/* 상단 네비게이션 */}
         <div className="mb-6">
           <Link
@@ -753,7 +762,12 @@ export default function NewServiceClient({ sellerId }: Props) {
             </button>
           </div>
         </form>
-      </main>
-    </>
+          </div>
+
+        </main>
+
+      </div>
+
+      </>
   )
 }

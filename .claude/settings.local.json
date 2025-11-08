@@ -29,7 +29,9 @@
       "Bash(del /F nul 2)",
       "Bash(NUL)",
       "Bash(node scripts/fix-service-categories-rls.js:*)",
-      "Bash([ -f nul ])"
+      "Bash([ -f nul ])",
+      "Bash(node verify_headers.js:*)",
+      "Bash(node fix_headers.js:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,5 +1,6 @@
 'use client'
 
+import Header from '@/components/layout/Header'
 import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Sidebar from '@/components/mypage/Sidebar'
@@ -119,8 +120,16 @@ export default function BuyerReviewsClient({
 
   return (
     <>
-      <Sidebar mode="buyer" />
-      <main className="flex-1 overflow-y-auto p-8">
+
+      <Header />
+
+      <div className="flex min-h-screen bg-gray-50 pt-16">
+
+        <Sidebar mode="buyer" />
+
+        <main className="flex-1 overflow-y-auto w-full">
+
+          <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8">
         {/* 페이지 헤더 */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">리뷰 관리</h1>
@@ -477,7 +486,12 @@ export default function BuyerReviewsClient({
             </div>
           </div>
         )}
-      </main>
-    </>
+          </div>
+
+        </main>
+
+      </div>
+
+      </>
   )
 }

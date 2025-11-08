@@ -1,5 +1,6 @@
 'use client'
 
+import Header from '@/components/layout/Header'
 import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
 
@@ -20,8 +21,16 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
 
   return (
     <>
-      <Sidebar mode="buyer" />
-      <main className="flex-1 overflow-y-auto p-8">
+
+      <Header />
+
+      <div className="flex min-h-screen bg-gray-50 pt-16">
+
+        <Sidebar mode="buyer" />
+
+        <main className="flex-1 overflow-y-auto w-full">
+
+          <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8">
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
@@ -87,7 +96,12 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
             </div>
           )}
         </div>
-      </main>
-    </>
+          </div>
+
+        </main>
+
+      </div>
+
+      </>
   )
 }

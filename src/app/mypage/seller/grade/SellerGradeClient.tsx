@@ -1,5 +1,6 @@
 'use client'
 
+import Header from '@/components/layout/Header'
 import Sidebar from '@/components/mypage/Sidebar'
 
 export default function SellerGradeClient() {
@@ -30,8 +31,16 @@ export default function SellerGradeClient() {
 
   return (
     <>
-      <Sidebar mode="seller" />
-      <main className="flex-1 overflow-y-auto p-8">
+
+      <Header />
+
+      <div className="flex min-h-screen bg-gray-50 pt-16">
+
+        <Sidebar mode="seller" />
+
+        <main className="flex-1 overflow-y-auto w-full">
+
+          <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">전문가 등급</h1>
           <p className="text-gray-600">내 등급과 혜택을 확인하세요</p>
@@ -109,7 +118,12 @@ export default function SellerGradeClient() {
             ))}
           </div>
         </div>
-      </main>
-    </>
+          </div>
+
+        </main>
+
+      </div>
+
+      </>
   )
 }

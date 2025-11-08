@@ -1,5 +1,6 @@
 'use client'
 
+import Header from '@/components/layout/Header'
 import Sidebar from '@/components/mypage/Sidebar'
 
 interface WithdrawHistoryClientProps {
@@ -31,8 +32,16 @@ export default function WithdrawHistoryClient({ history }: WithdrawHistoryClient
 
   return (
     <>
-      <Sidebar mode="seller" />
-      <main className="flex-1 overflow-y-auto p-8">
+
+      <Header />
+
+      <div className="flex min-h-screen bg-gray-50 pt-16">
+
+        <Sidebar mode="seller" />
+
+        <main className="flex-1 overflow-y-auto w-full">
+
+          <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">출금 내역</h1>
           <p className="text-gray-600">출금 이력을 확인하세요</p>
@@ -79,7 +88,12 @@ export default function WithdrawHistoryClient({ history }: WithdrawHistoryClient
             </tbody>
           </table>
         </div>
-      </main>
-    </>
+          </div>
+
+        </main>
+
+      </div>
+
+      </>
   )
 }

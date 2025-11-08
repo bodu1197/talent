@@ -1,5 +1,6 @@
 'use client'
 
+import Header from '@/components/layout/Header'
 import { useState, useEffect } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import { getConversationMessages, getConversationDetail, sendMessage, markMessagesAsRead } from '@/lib/supabase/queries/messages'
@@ -77,8 +78,11 @@ export default function MessagesClient({ conversations: initialConversations, us
 
   return (
     <>
-      <Sidebar mode={isSeller ? 'seller' : 'buyer'} />
-      <main className="flex-1 flex flex-col h-screen">
+      <Header />
+      <div className="flex min-h-screen bg-gray-50 pt-16">
+        <Sidebar mode={isSeller ? 'seller' : 'buyer'} />
+        <main className="flex-1 flex flex-col h-screen w-full">
+          <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8 flex flex-col h-full">
         <div className="p-8 pb-0">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">메시지</h1>
           <p className="text-gray-600 mb-6">거래 상대와 소통하세요</p>
@@ -198,7 +202,12 @@ export default function MessagesClient({ conversations: initialConversations, us
             )}
           </div>
         </div>
-      </main>
-    </>
+          </div>
+
+        </main>
+
+      </div>
+
+      </>
   )
 }
