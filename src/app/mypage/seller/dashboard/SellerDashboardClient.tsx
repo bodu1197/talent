@@ -35,49 +35,49 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
       <MobileSidebar mode="seller" />
       <Sidebar mode="seller" />
       <main className="flex-1 overflow-y-auto">
-        <div className="py-8">
+        <div className="py-8 max-w-[1200px] mx-auto px-4">
           {/* 페이지 헤더 */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">판매 대시보드</h1>
-            <p className="text-gray-600 mt-2">판매 현황을 한눈에 확인하세요</p>
+          <div className="mb-6">
+            <h1 className="text-xl font-bold text-gray-900">판매 대시보드</h1>
+            <p className="text-gray-600 mt-1 text-sm">판매 현황을 한눈에 확인하세요</p>
           </div>
 
           {/* 통계 카드 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white rounded-lg shadow p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div className="bg-white rounded-lg shadow p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">신규 주문</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.newOrders}건</p>
+                  <p className="text-xs text-gray-600">신규 주문</p>
+                  <p className="text-lg font-bold text-gray-900">{stats.newOrders}건</p>
                 </div>
-                <i className="fas fa-shopping-cart text-3xl text-blue-500"></i>
+                <i className="fas fa-shopping-cart text-2xl text-blue-500"></i>
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-lg shadow p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">진행중</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.inProgressOrders}건</p>
+                  <p className="text-xs text-gray-600">진행중</p>
+                  <p className="text-lg font-bold text-gray-900">{stats.inProgressOrders}건</p>
                 </div>
-                <i className="fas fa-spinner text-3xl text-yellow-500"></i>
+                <i className="fas fa-spinner text-2xl text-yellow-500"></i>
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-lg shadow p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">완료된 주문</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.deliveredOrders}건</p>
+                  <p className="text-xs text-gray-600">완료된 주문</p>
+                  <p className="text-lg font-bold text-gray-900">{stats.deliveredOrders}건</p>
                 </div>
-                <i className="fas fa-check-circle text-3xl text-green-500"></i>
+                <i className="fas fa-check-circle text-2xl text-green-500"></i>
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-lg shadow p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">이번달 수익</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.monthlyRevenue.toLocaleString()}원</p>
+                  <p className="text-xs text-gray-600">이번달 수익</p>
+                  <p className="text-lg font-bold text-gray-900">{stats.monthlyRevenue.toLocaleString()}원</p>
                 </div>
-                <i className="fas fa-won-sign text-3xl text-purple-500"></i>
+                <i className="fas fa-won-sign text-2xl text-purple-500"></i>
               </div>
             </div>
           </div>
@@ -85,7 +85,7 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
           {/* 최근 주문 */}
           <div className="bg-white rounded-lg shadow">
             <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">최근 주문</h2>
+              <h2 className="text-base font-semibold text-gray-900">최근 주문</h2>
             </div>
             <div className="p-6">
               {recentOrders.length > 0 ? (
