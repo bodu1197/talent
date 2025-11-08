@@ -95,7 +95,7 @@ export default function BuyerCouponsPage() {
         </div>
 
         {/* 캐시 잔액 */}
-        <div className="bg-[#0f3460] rounded-lg p-8 mb-8 text-white">
+        <div className="bg-gradient-to-r from-brand-primary to-brand-light rounded-lg p-8 mb-8 text-white">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-sm opacity-90 mb-2">보유 캐시</div>
@@ -103,7 +103,7 @@ export default function BuyerCouponsPage() {
             </div>
             <Link
               href="/mypage/buyer/coupons/charge"
-              className="px-6 py-3 bg-white text-[#0f3460] rounded-lg hover:bg-gray-100 transition-colors font-medium"
+              className="px-6 py-3 bg-white text-brand-primary rounded-lg hover:bg-gray-100 transition-colors font-medium"
             >
               <i className="fas fa-plus mr-2"></i>
               충전하기
@@ -116,7 +116,7 @@ export default function BuyerCouponsPage() {
           <div className="flex items-center">
             <Link
               href="/mypage/buyer/coupons"
-              className="flex-1 px-6 py-4 font-medium text-sm border-b-2 border-[#0f3460] text-[#0f3460] text-center"
+              className="flex-1 px-6 py-4 font-medium text-sm border-b-2 border-brand-primary text-brand-primary text-center"
             >
               보유 쿠폰 ({coupons.length})
             </Link>
@@ -149,7 +149,7 @@ export default function BuyerCouponsPage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl font-bold text-[#0f3460] mb-2">
+                      <div className="text-2xl font-bold text-brand-primary mb-2">
                         {coupon.discount_type === 'fixed'
                           ? `${coupon.discount_value.toLocaleString()}원`
                           : `${coupon.discount_value}%`}
