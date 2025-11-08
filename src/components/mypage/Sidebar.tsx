@@ -41,8 +41,7 @@ const sellerNavItems: NavItem[] = [
     icon: 'fa-shopping-bag',
     children: [
       { label: '내 서비스', href: '/mypage/seller/services', icon: '' },
-      { label: '서비스 등록', href: '/mypage/seller/services/new', icon: '' },
-      { label: '통계', href: '/mypage/seller/services/statistics', icon: '' }
+      { label: '서비스 등록', href: '/mypage/seller/services/new', icon: '' }
     ]
   },
   {
