@@ -26,17 +26,31 @@ export default async function SellerStatisticsPage() {
   weekAgo.setDate(weekAgo.getDate() - 7)
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
 
-  // Get views statistics
+  // Get seller's service IDs first
+  const { data: sellerServices } = await supabase
+    .from('services')
+    .select('id')
+    .eq('seller_id', seller.id)
+
+  const serviceIds = sellerServices?.map(s => s.id) || []
+
+  // Get views statistics - join with services to filter by seller
   const [todayViewsResult, weeklyViewsResult, monthlyViewsResult] = await Promise.all([
-    supabase.from('service_views').select('*', { count: 'exact', head: true })
-      .eq('seller_id', seller.id)
-      .gte('created_at', today.toISOString()),
-    supabase.from('service_views').select('*', { count: 'exact', head: true })
-      .eq('seller_id', seller.id)
-      .gte('created_at', weekAgo.toISOString()),
-    supabase.from('service_views').select('*', { count: 'exact', head: true })
-      .eq('seller_id', seller.id)
-      .gte('created_at', monthStart.toISOString())
+    serviceIds.length > 0
+      ? supabase.from('service_views').select('*', { count: 'exact', head: true })
+          .in('service_id', serviceIds)
+          .gte('viewed_at', today.toISOString())
+      : { count: 0 },
+    serviceIds.length > 0
+      ? supabase.from('service_views').select('*', { count: 'exact', head: true })
+          .in('service_id', serviceIds)
+          .gte('viewed_at', weekAgo.toISOString())
+      : { count: 0 },
+    serviceIds.length > 0
+      ? supabase.from('service_views').select('*', { count: 'exact', head: true })
+          .in('service_id', serviceIds)
+          .gte('viewed_at', monthStart.toISOString())
+      : { count: 0 }
   ])
 
   // Get orders statistics
@@ -72,10 +86,10 @@ export default async function SellerStatisticsPage() {
   if (services) {
     const servicesWithStats = await Promise.all(
       services.map(async (service: any) => {
-        const [{ count: viewCount }, { count: orderCount }] = await Promise.all([
+        const [viewsResult, ordersResult] = await Promise.all([
           supabase.from('service_views').select('*', { count: 'exact', head: true })
             .eq('service_id', service.id)
-            .gte('created_at', monthStart.toISOString()),
+            .gte('viewed_at', monthStart.toISOString()),
           supabase.from('orders').select('*', { count: 'exact', head: true })
             .eq('service_id', service.id)
             .gte('created_at', monthStart.toISOString())
@@ -84,8 +98,8 @@ export default async function SellerStatisticsPage() {
         return {
           id: service.id,
           name: service.title,
-          views: viewCount || 0,
-          orders: orderCount || 0
+          views: viewsResult.count || 0,
+          orders: ordersResult.count || 0
         }
       })
     )
