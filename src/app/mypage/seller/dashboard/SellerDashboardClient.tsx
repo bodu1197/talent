@@ -58,9 +58,9 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
   }
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <div className="flex min-h-screen bg-gray-50 pt-16">
+      <div className="flex flex-1 bg-gray-50 pt-16">
         <MobileSidebar mode="seller" />
         <Sidebar mode="seller" />
         <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
@@ -239,6 +239,6 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
         </main>
       </div>
       <Footer />
-    </>
+    </div>
   )
 }
