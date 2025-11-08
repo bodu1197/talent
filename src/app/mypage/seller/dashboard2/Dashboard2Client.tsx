@@ -31,7 +31,7 @@ type Props = {
 
 export default function Dashboard2Client({ stats, recentOrders }: Props) {
   return (
-    <div className="min-h-screen bg-gray-50 fixed inset-0 flex justify-center items-start">
+    <div className="min-h-screen bg-gray-50 flex justify-center items-start pt-16 lg:pt-[86px]">
       <div className="flex w-full max-w-[1200px] bg-red-100">
         <MobileSidebar mode="seller" />
         <Sidebar mode="seller" />
