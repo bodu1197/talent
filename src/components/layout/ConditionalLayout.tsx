@@ -15,8 +15,8 @@ interface ConditionalLayoutProps {
 export default function ConditionalLayout({ children, megaMenu }: ConditionalLayoutProps) {
   const pathname = usePathname()
 
-  // 관리자 페이지에서만 헤더/푸터 숨기기
-  const hideLayout = pathname?.startsWith('/admin')
+  // 관리자 페이지와 dashboard2에서 헤더/푸터 숨기기
+  const hideLayout = pathname?.startsWith('/admin') || pathname?.startsWith('/mypage/seller/dashboard2')
 
   // 메인 페이지 확인 (모바일에서 헤더/검색 표시) - 랜딩 페이지도 포함
   const isMainPage = pathname === '/' || pathname === '/landing'
