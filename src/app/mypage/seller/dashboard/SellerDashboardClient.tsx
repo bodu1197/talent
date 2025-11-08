@@ -35,7 +35,7 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
       <MobileSidebar mode="seller" />
       <Sidebar mode="seller" />
       <main className="flex-1 overflow-y-auto">
-        <div className="py-8 max-w-[1200px] mx-auto px-4">
+        <div className="py-8 max-w-[1600px] mx-auto px-8">
           {/* 페이지 헤더 */}
           <div className="mb-6">
             <h1 className="text-xl font-bold text-gray-900">판매 대시보드</h1>
@@ -43,7 +43,7 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
           </div>
 
           {/* 통계 카드 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
             <div className="bg-white rounded-lg shadow p-4">
               <div className="flex items-center justify-between">
                 <div>
