@@ -39,7 +39,8 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
         <p>Header와 Footer의 정렬 상태를 확인하세요</p>
         <p>Footer의 폭을 확인하세요</p>
       </div>
-      <div style={{ width: '100%' }}>
+      <div style={{ width: '100%', backgroundColor: 'red' }}>
+        <p style={{ color: 'white', textAlign: 'center' }}>Footer 컨테이너 (빨간 배경)</p>
         <Footer />
       </div>
     </div>
