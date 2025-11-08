@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { getSellerEarnings, getEarningsTransactions } from '@/lib/supabase/queries/earnings'
 import SellerEarningsClient from './SellerEarningsClient'
 
 export default async function SellerEarningsPage() {
@@ -21,10 +20,45 @@ export default async function SellerEarningsPage() {
     redirect('/mypage/seller/register')
   }
 
-  const [earnings, transactions] = await Promise.all([
-    getSellerEarnings(seller.id),
-    getEarningsTransactions(seller.id, 10)
-  ])
+  // Get or create seller earnings
+  let { data: earnings, error: earningsError } = await supabase
+    .from('seller_earnings')
+    .select('*')
+    .eq('seller_id', seller.id)
+    .maybeSingle()
 
-  return <SellerEarningsClient earnings={earnings} transactions={transactions} />
+  // If no earnings record exists, create one
+  if (!earnings) {
+    const { data: newEarnings } = await supabase
+      .from('seller_earnings')
+      .insert({
+        seller_id: seller.id,
+        available_balance: 0,
+        pending_balance: 0,
+        total_withdrawn: 0,
+        total_earned: 0
+      })
+      .select()
+      .maybeSingle()
+
+    earnings = newEarnings || {
+      available_balance: 0,
+      pending_balance: 0,
+      total_withdrawn: 0,
+      total_earned: 0
+    }
+  }
+
+  // Get earnings transactions
+  const { data: transactions } = await supabase
+    .from('earnings_transactions')
+    .select(`
+      *,
+      order:orders(id, order_number, title)
+    `)
+    .eq('seller_id', seller.id)
+    .order('transaction_date', { ascending: false })
+    .limit(10)
+
+  return <SellerEarningsClient earnings={earnings} transactions={transactions || []} />
 }
