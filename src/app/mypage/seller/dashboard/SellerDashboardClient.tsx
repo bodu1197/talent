@@ -58,15 +58,14 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
   }
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <Header />
-      <div className="min-h-screen bg-gray-50 pt-16">
-        <section className="py-8">
-          <div className="container-1200">
-            <div className="flex gap-8">
-              <MobileSidebar mode="seller" />
-              <Sidebar mode="seller" />
-              <main className="flex-1">
+      <div className="flex-1 pt-16">
+        <div className="container-1200 py-8">
+          <div className="flex gap-8">
+            <MobileSidebar mode="seller" />
+            <Sidebar mode="seller" />
+            <main className="flex-1">
             {/* 페이지 헤더 */}
             <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
               <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">판매 대시보드</h1>
@@ -240,9 +239,8 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
             </main>
           </div>
         </div>
-      </section>
+      </div>
+      <Footer />
     </div>
-    <Footer />
-    </>
   )
 }
