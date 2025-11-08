@@ -234,6 +234,8 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
                 최근 주문이 없습니다
               </div>
             )}
+          </div>
+        </div>
             </div>
           </main>
         </div>
