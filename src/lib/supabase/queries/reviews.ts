@@ -14,8 +14,11 @@ export async function getBuyerReviews(userId: string) {
     .eq('buyer_id', userId)
     .order('created_at', { ascending: false })
 
-  if (error) throw error
-  return data
+  if (error) {
+    console.error('[getBuyerReviews] Error:', error)
+    return []
+  }
+  return data || []
 }
 
 export async function getSellerReviews(userId: string) {
@@ -58,6 +61,9 @@ export async function getPendingReviews(userId: string) {
     .is('review_id', null)
     .order('completed_at', { ascending: false })
 
-  if (error) throw error
-  return data
+  if (error) {
+    console.error('[getPendingReviews] Error:', error)
+    return []
+  }
+  return data || []
 }
