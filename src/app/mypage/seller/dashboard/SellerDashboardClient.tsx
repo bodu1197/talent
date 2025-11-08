@@ -61,11 +61,11 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
     <div className="min-h-screen flex flex-col">
       <Header />
       <div className="flex-1 bg-gray-50 pt-16">
-        <div className="flex h-full">
-          <MobileSidebar mode="seller" />
-          <Sidebar mode="seller" />
-          <main className="flex-1 overflow-y-auto">
-            <div className="container-1200 py-4 sm:py-6 lg:py-8">
+        <div className="container-1200">
+          <div className="flex gap-8">
+            <MobileSidebar mode="seller" />
+            <Sidebar mode="seller" />
+            <main className="flex-1 overflow-y-auto py-4 sm:py-6 lg:py-8">
             {/* 페이지 헤더 */}
             <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
               <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">판매 대시보드</h1>
@@ -236,8 +236,8 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
             )}
           </div>
         </div>
-            </div>
-          </main>
+            </main>
+          </div>
         </div>
       </div>
       <Footer />
