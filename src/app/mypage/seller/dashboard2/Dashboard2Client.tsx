@@ -31,11 +31,12 @@ type Props = {
 
 export default function Dashboard2Client({ stats, recentOrders }: Props) {
   return (
-    <div className="flex bg-gray-50 min-h-screen w-full">
-      <MobileSidebar mode="seller" />
-      <Sidebar mode="seller" />
-      <main className="flex-1 overflow-y-auto">
-        <div className="py-8 px-8">
+    <div className="min-h-screen bg-gray-50 flex justify-center">
+      <div className="flex w-full max-w-[1200px]">
+        <MobileSidebar mode="seller" />
+        <Sidebar mode="seller" />
+        <main className="flex-1 overflow-y-auto">
+          <div className="py-8 px-8">
           {/* 페이지 헤더 */}
           <div className="mb-6">
             <h1 className="text-xl font-bold text-gray-900">판매 대시보드 2 (헤더/푸터 없음)</h1>
@@ -150,6 +151,7 @@ export default function Dashboard2Client({ stats, recentOrders }: Props) {
           </div>
           </div>
         </main>
+      </div>
     </div>
   )
 }
