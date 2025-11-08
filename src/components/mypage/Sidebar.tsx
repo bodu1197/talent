@@ -167,17 +167,6 @@ export default function Sidebar({ mode }: SidebarProps) {
 
   return (
     <aside className="hidden lg:flex w-64 flex-shrink-0 bg-white border-r border-gray-200 overflow-y-auto flex-col">
-      {/* 상단 홈 버튼 */}
-      <div className="p-4 border-b border-gray-200">
-        <Link
-          href="/"
-          className="flex items-center justify-center gap-2 w-full px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors text-sm click-bounce btn-ripple"
-        >
-          <i className="fas fa-home"></i>
-          <span>홈으로</span>
-        </Link>
-      </div>
-
       <div className="p-4 flex-1">
         {/* 회원 정보 카드 */}
         <div className="mb-4">
