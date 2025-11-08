@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import Sidebar from '@/components/mypage/Sidebar'
+import MobileSidebar from '@/components/mypage/MobileSidebar'
 import Link from 'next/link'
 
 type Step = 1 | 2 | 3 | 4
@@ -279,6 +280,7 @@ export default function SellerRegisterClient({ userId }: Props) {
 
       <div className="flex min-h-screen bg-gray-50 pt-16">
 
+        <MobileSidebar mode="buyer" />
         <Sidebar mode="buyer" />
 
         <main className="flex-1 overflow-y-auto w-full">

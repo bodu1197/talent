@@ -4,6 +4,7 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { useState, useEffect } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
+import MobileSidebar from '@/components/mypage/MobileSidebar'
 import { getConversationMessages, getConversationDetail, sendMessage, markMessagesAsRead } from '@/lib/supabase/queries/messages'
 import { logger } from '@/lib/logger'
 
@@ -81,6 +82,7 @@ export default function MessagesClient({ conversations: initialConversations, us
     <>
       <Header />
       <div className="flex min-h-screen bg-gray-50 pt-16">
+        <MobileSidebar mode={isSeller ? 'seller' : 'buyer'} />
         <Sidebar mode={isSeller ? 'seller' : 'buyer'} />
         <main className="flex-1 flex flex-col h-screen w-full">
           <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8 flex flex-col h-full">

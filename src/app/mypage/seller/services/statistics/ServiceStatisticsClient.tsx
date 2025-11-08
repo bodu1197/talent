@@ -3,6 +3,7 @@
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import Sidebar from '@/components/mypage/Sidebar'
+import MobileSidebar from '@/components/mypage/MobileSidebar'
 import Link from 'next/link'
 
 interface Props {
@@ -29,6 +30,7 @@ export default function ServiceStatisticsClient({ stats, dailyViews, ratingPerce
 
       <div className="flex min-h-screen bg-gray-50 pt-16">
 
+        <MobileSidebar mode="seller" />
         <Sidebar mode="seller" />
 
         <main className="flex-1 overflow-y-auto w-full">

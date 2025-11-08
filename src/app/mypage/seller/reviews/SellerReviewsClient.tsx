@@ -4,6 +4,7 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { useState } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
+import MobileSidebar from '@/components/mypage/MobileSidebar'
 import { createReviewReply } from '@/lib/supabase/mutations/reviews'
 import EmptyState from '@/components/common/EmptyState'
 import { useRouter } from 'next/navigation'
@@ -74,6 +75,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
 
       <div className="flex min-h-screen bg-gray-50 pt-16">
 
+        <MobileSidebar mode="seller" />
         <Sidebar mode="seller" />
 
         <main className="flex-1 overflow-y-auto w-full">

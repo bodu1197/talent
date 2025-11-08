@@ -5,6 +5,7 @@ import Footer from '@/components/layout/Footer'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Sidebar from '@/components/mypage/Sidebar'
+import MobileSidebar from '@/components/mypage/MobileSidebar'
 
 interface Props {
   profile: any
@@ -19,6 +20,7 @@ export default function SettingsClient({ profile, isSeller }: Props) {
     <>
       <Header />
       <div className="flex min-h-screen bg-gray-50 pt-16">
+        <MobileSidebar mode={isSeller ? 'seller' : 'buyer'} />
         <Sidebar mode={isSeller ? 'seller' : 'buyer'} />
         <main className="flex-1 overflow-y-auto w-full">
           <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8">

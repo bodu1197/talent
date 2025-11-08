@@ -4,6 +4,7 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { useState, useEffect } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
+import MobileSidebar from '@/components/mypage/MobileSidebar'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { logger } from '@/lib/logger'
@@ -333,6 +334,7 @@ export default function NewServiceClient({ sellerId }: Props) {
 
       <div className="flex min-h-screen bg-gray-50 pt-16">
 
+        <MobileSidebar mode="seller" />
         <Sidebar mode="seller" />
 
         <main className="flex-1 overflow-y-auto w-full">

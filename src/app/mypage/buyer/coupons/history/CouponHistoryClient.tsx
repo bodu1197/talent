@@ -3,6 +3,7 @@
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import Sidebar from '@/components/mypage/Sidebar'
+import MobileSidebar from '@/components/mypage/MobileSidebar'
 import Link from 'next/link'
 
 interface HistoryItem {
@@ -26,6 +27,7 @@ export default function CouponHistoryClient({ history }: CouponHistoryClientProp
 
       <div className="flex min-h-screen bg-gray-50 pt-16">
 
+        <MobileSidebar mode="buyer" />
         <Sidebar mode="buyer" />
 
         <main className="flex-1 overflow-y-auto w-full">

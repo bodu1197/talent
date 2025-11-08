@@ -4,6 +4,7 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { useState } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
+import MobileSidebar from '@/components/mypage/MobileSidebar'
 import OrderCard from '@/components/mypage/OrderCard'
 import Link from 'next/link'
 import EmptyState from '@/components/common/EmptyState'
@@ -201,6 +202,7 @@ export default function SellerOrdersClient({ initialOrders, initialStatus, statu
 
       <div className="flex min-h-screen bg-gray-50 pt-16">
 
+        <MobileSidebar mode="seller" />
         <Sidebar mode="seller" />
 
         <main className="flex-1 overflow-y-auto w-full">

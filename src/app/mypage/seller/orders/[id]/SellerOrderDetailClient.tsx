@@ -4,6 +4,7 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { useState } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
+import MobileSidebar from '@/components/mypage/MobileSidebar'
 import Link from 'next/link'
 import { updateOrderStatus } from '@/lib/supabase/mutations/orders'
 import { useRouter } from 'next/navigation'
@@ -77,6 +78,7 @@ export default function SellerOrderDetailClient({ order: initialOrder, orderId }
 
       <div className="flex min-h-screen bg-gray-50 pt-16">
 
+        <MobileSidebar mode="seller" />
         <Sidebar mode="seller" />
 
         <main className="flex-1 overflow-y-auto w-full">

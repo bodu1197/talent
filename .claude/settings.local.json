@@ -31,7 +31,8 @@
       "Bash(node scripts/fix-service-categories-rls.js:*)",
       "Bash([ -f nul ])",
       "Bash(node verify_headers.js:*)",
-      "Bash(node fix_headers.js:*)"
+      "Bash(node fix_headers.js:*)",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": []

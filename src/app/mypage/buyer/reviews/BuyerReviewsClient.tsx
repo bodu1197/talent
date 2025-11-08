@@ -5,6 +5,7 @@ import Footer from '@/components/layout/Footer'
 import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Sidebar from '@/components/mypage/Sidebar'
+import MobileSidebar from '@/components/mypage/MobileSidebar'
 import { createReview, updateReview, deleteReview } from '@/lib/supabase/mutations/reviews'
 import { getPendingReviews, getBuyerReviews } from '@/lib/supabase/queries/reviews'
 import { logger } from '@/lib/logger'
@@ -126,6 +127,7 @@ export default function BuyerReviewsClient({
 
       <div className="flex min-h-screen bg-gray-50 pt-16">
 
+        <MobileSidebar mode="buyer" />
         <Sidebar mode="buyer" />
 
         <main className="flex-1 overflow-y-auto w-full">
