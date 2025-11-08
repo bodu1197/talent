@@ -1,6 +1,7 @@
 'use client'
 
 import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import { useState, useEffect } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import { getConversationMessages, getConversationDetail, sendMessage, markMessagesAsRead } from '@/lib/supabase/queries/messages'
@@ -203,7 +204,7 @@ export default function MessagesClient({ conversations: initialConversations, us
           </div>
         </div>
           </div>
-
+          <Footer />
         </main>
 
       </div>

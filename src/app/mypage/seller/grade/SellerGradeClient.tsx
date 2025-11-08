@@ -1,6 +1,7 @@
 'use client'
 
 import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import Sidebar from '@/components/mypage/Sidebar'
 
 export default function SellerGradeClient() {
@@ -119,7 +120,7 @@ export default function SellerGradeClient() {
           </div>
         </div>
           </div>
-
+          <Footer />
         </main>
 
       </div>

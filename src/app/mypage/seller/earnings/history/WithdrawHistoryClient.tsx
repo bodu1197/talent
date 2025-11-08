@@ -1,6 +1,7 @@
 'use client'
 
 import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import Sidebar from '@/components/mypage/Sidebar'
 
 interface WithdrawHistoryClientProps {
@@ -89,7 +90,7 @@ export default function WithdrawHistoryClient({ history }: WithdrawHistoryClient
           </table>
         </div>
           </div>
-
+          <Footer />
         </main>
 
       </div>

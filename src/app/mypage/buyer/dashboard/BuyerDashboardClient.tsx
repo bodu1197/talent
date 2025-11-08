@@ -4,6 +4,7 @@ import Sidebar from '@/components/mypage/Sidebar'
 import MobileSidebar from '@/components/mypage/MobileSidebar'
 import StatCard from '@/components/mypage/StatCard'
 import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import Link from 'next/link'
 
 type Stats = any
@@ -287,6 +288,7 @@ export default function BuyerDashboardClient({ stats, recentOrders, favorites, b
           </div>
         </div>
           </div>
+          <Footer />
         </main>
       </div>
     </>

@@ -1,6 +1,7 @@
 'use client'
 
 import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import Sidebar from '@/components/mypage/Sidebar'
 import MobileSidebar from '@/components/mypage/MobileSidebar'
 
@@ -125,7 +126,7 @@ export default function SellerStatisticsClient({ stats, topServices }: Props) {
           )}
         </div>
           </div>
-
+          <Footer />
         </main>
 
       </div>

@@ -4,6 +4,7 @@ import Sidebar from '@/components/mypage/Sidebar'
 import MobileSidebar from '@/components/mypage/MobileSidebar'
 import StatCard from '@/components/mypage/StatCard'
 import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import Link from 'next/link'
 
 type Stats = {
@@ -235,6 +236,7 @@ export default function SellerDashboardClient({ stats, recentOrders }: Props) {
           </div>
         </div>
           </div>
+          <Footer />
         </main>
       </div>
     </>

@@ -1,6 +1,7 @@
 'use client'
 
 import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import { useState } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import OrderCard from '@/components/mypage/OrderCard'
@@ -353,7 +354,7 @@ export default function SellerOrdersClient({ initialOrders, initialStatus, statu
           </div>
         )}
           </div>
-
+          <Footer />
         </main>
 
       </div>

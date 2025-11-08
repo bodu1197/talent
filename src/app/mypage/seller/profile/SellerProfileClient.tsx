@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import Sidebar from '@/components/mypage/Sidebar'
 import MobileSidebar from '@/components/mypage/MobileSidebar'
 
@@ -253,7 +254,7 @@ export default function SellerProfileClient({ profile }: Props) {
           </div>
         </div>
           </div>
-
+          <Footer />
         </main>
 
       </div>

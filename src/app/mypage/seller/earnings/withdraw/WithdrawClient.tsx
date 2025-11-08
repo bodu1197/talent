@@ -1,6 +1,7 @@
 'use client'
 
 import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import { useState } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
@@ -111,7 +112,7 @@ export default function WithdrawClient() {
           </button>
         </div>
           </div>
-
+          <Footer />
         </main>
 
       </div>

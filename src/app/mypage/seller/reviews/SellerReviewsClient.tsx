@@ -1,6 +1,7 @@
 'use client'
 
 import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import { useState } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import { createReviewReply } from '@/lib/supabase/mutations/reviews'
@@ -245,7 +246,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
           </div>
         )}
           </div>
-
+          <Footer />
         </main>
 
       </div>

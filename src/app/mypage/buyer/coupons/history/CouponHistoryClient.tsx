@@ -1,6 +1,7 @@
 'use client'
 
 import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
 
@@ -100,7 +101,7 @@ export default function CouponHistoryClient({ history }: CouponHistoryClientProp
           )}
         </div>
           </div>
-
+          <Footer />
         </main>
 
       </div>

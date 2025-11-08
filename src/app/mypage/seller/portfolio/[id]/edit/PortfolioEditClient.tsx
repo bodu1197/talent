@@ -1,6 +1,7 @@
 'use client'
 
 import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import Sidebar from '@/components/mypage/Sidebar'
@@ -591,7 +592,7 @@ export default function PortfolioEditClient({ portfolio, sellerId, categories, s
           </form>
         </div>
           </div>
-
+          <Footer />
         </main>
 
       </div>

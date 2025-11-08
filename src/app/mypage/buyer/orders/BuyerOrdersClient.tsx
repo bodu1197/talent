@@ -3,6 +3,7 @@
 import { useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import Sidebar from '@/components/mypage/Sidebar'
 import OrderCard from '@/components/mypage/OrderCard'
 import Link from 'next/link'
@@ -325,7 +326,7 @@ function BuyerOrdersContent({ initialOrders, statusCounts }: BuyerOrdersClientPr
           )}
         </div>
           </div>
-
+          <Footer />
         </main>
 
       </div>

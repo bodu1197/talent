@@ -1,6 +1,7 @@
 'use client'
 
 import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import { useState, useEffect } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import Link from 'next/link'
@@ -812,7 +813,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
           </div>
         </form>
           </div>
-
+          <Footer />
         </main>
 
       </div>

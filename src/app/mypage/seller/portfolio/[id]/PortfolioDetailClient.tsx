@@ -1,6 +1,7 @@
 'use client'
 
 import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Sidebar from '@/components/mypage/Sidebar'
@@ -234,7 +235,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId }: Props) {
           )}
         </div>
           </div>
-
+          <Footer />
         </main>
 
       </div>
