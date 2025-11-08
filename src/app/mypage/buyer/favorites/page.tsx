@@ -6,8 +6,6 @@ import { useAuth } from '@/components/providers/AuthProvider'
 import { Service } from '@/types'
 import Sidebar from '@/components/mypage/Sidebar'
 import MobileSidebar from '@/components/mypage/MobileSidebar'
-import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
 
 interface FavoriteItem {
   service_id: string
@@ -67,14 +65,13 @@ export default function FavoritesPage() {
 
   if (!user) {
     return (
-      <>
-        <Header />
-        <div className="flex min-h-screen bg-gray-50 pt-16">
+      <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
+        <div className="flex w-full max-w-[1200px]">
           <MobileSidebar mode="buyer" />
           <Sidebar mode="buyer" />
-          <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
-            <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
-              <div className="max-w-md mx-auto text-center pt-12 lg:pt-0">
+          <main className="flex-1 overflow-y-auto">
+            <div className="py-8 px-4">
+              <div className="max-w-md mx-auto text-center">
                 <i className="fas fa-lock text-6xl text-gray-300 mb-4"></i>
                 <h2 className="text-2xl font-bold mb-4">로그인이 필요합니다</h2>
                 <p className="text-gray-600 mb-6">찜한 서비스를 확인하려면 로그인해주세요.</p>
@@ -88,21 +85,19 @@ export default function FavoritesPage() {
             </div>
           </main>
         </div>
-        <Footer />
-      </>
+      </div>
     )
   }
 
   if (loading) {
     return (
-      <>
-        <Header />
-        <div className="flex min-h-screen bg-gray-50 pt-16">
+      <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
+        <div className="flex w-full max-w-[1200px]">
           <MobileSidebar mode="buyer" />
           <Sidebar mode="buyer" />
-          <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
-            <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
-              <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
+          <main className="flex-1 overflow-y-auto">
+            <div className="py-8 px-4">
+              <div className="mb-6 lg:mb-8">
                 <h1 className="text-2xl sm:text-3xl font-bold mb-2">찜한 서비스</h1>
                 <p className="text-sm sm:text-base text-gray-600">관심있는 서비스를 저장하고 관리하세요</p>
               </div>
@@ -121,19 +116,17 @@ export default function FavoritesPage() {
             </div>
           </main>
         </div>
-        <Footer />
-      </>
+      </div>
     )
   }
 
   return (
-    <>
-      <Header />
-      <div className="flex min-h-screen bg-gray-50 pt-16">
+    <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
+      <div className="flex w-full max-w-[1200px]">
         <MobileSidebar mode="buyer" />
         <Sidebar mode="buyer" />
-        <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
-          <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
+        <main className="flex-1 overflow-y-auto">
+          <div className="py-8 px-4">
         <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
           <div className="flex items-center gap-3 mb-2">
             <i className="fas fa-heart text-red-500 text-2xl"></i>
@@ -251,7 +244,6 @@ export default function FavoritesPage() {
           </div>
         </main>
       </div>
-      <Footer />
-    </>
+    </div>
   )
 }
