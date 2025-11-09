@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
         if (otherUserSeller) {
           otherUser = {
             id: otherUserId,
-            name: otherUserSeller.display_name || otherUserSeller.business_name,
+            name: otherUserSeller.display_name || otherUserSeller.business_name || '판매자',
             profile_image: otherUserSeller.profile_image,
             seller_id: otherUserSeller.id
           }
@@ -67,7 +67,11 @@ export async function GET(request: NextRequest) {
             .eq('id', otherUserId)
             .single()
 
-          otherUser = userData
+          otherUser = {
+            id: otherUserId,
+            name: userData?.name || '사용자',
+            profile_image: userData?.profile_image || null
+          }
         }
 
         // 서비스 정보
