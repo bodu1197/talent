@@ -99,6 +99,7 @@ export async function POST(request: NextRequest) {
         total_amount: amount,
         commission_rate: 0, // 수수료율 (추후 설정 가능)
         commission_fee: 0,
+        seller_amount: amount, // 판매자 받을 금액 (수수료 제외 전)
         title: title,
         description: description || service.title,
         delivery_days: delivery_days || service.delivery_days,
