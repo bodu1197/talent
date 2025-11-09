@@ -6,7 +6,6 @@ import Sidebar from '@/components/mypage/Sidebar'
 import MobileSidebar from '@/components/mypage/MobileSidebar'
 import Link from 'next/link'
 import { useAuth } from '@/components/providers/AuthProvider'
-import { getOrderById } from '@/lib/supabase/queries/orders'
 import { confirmOrder, requestRevision } from '@/lib/supabase/mutations/orders'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
@@ -39,8 +38,17 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
     try {
       setLoading(true)
       setError(null)
-      const data = await getOrderById(id)
-      setOrder(data)
+
+      // API를 통해 주문 조회
+      const response = await fetch(`/api/orders/${id}`)
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || '주문을 찾을 수 없습니다')
+      }
+
+      const { order } = await response.json()
+      setOrder(order)
     } catch (err: any) {
       logger.error('주문 조회 실패:', err)
       setError(err.message || '주문 정보를 불러오는데 실패했습니다')
