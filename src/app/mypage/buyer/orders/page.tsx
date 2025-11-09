@@ -7,7 +7,6 @@ import MobileSidebar from '@/components/mypage/MobileSidebar'
 import OrderCard from '@/components/mypage/OrderCard'
 import Link from 'next/link'
 import { useAuth } from '@/components/providers/AuthProvider'
-import { getBuyerOrders, getBuyerOrdersCount } from '@/lib/supabase/queries/orders'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import EmptyState from '@/components/common/EmptyState'
 import ErrorState from '@/components/common/ErrorState'
@@ -57,8 +56,17 @@ function BuyerOrdersContent() {
     try {
       setLoading(true)
       setError(null)
-      const data = await getBuyerOrders(user!.id, filters.status === 'all' ? undefined : filters.status)
-      setOrders(data)
+
+      const statusParam = filters.status === 'all' ? '' : `?status=${filters.status}`
+      const response = await fetch(`/api/orders/buyer${statusParam}`)
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || '주문 목록을 불러올 수 없습니다')
+      }
+
+      const { orders } = await response.json()
+      setOrders(orders)
     } catch (err: any) {
       logger.error('주문 조회 실패:', err)
       setError(err.message || '주문 내역을 불러오는데 실패했습니다')
@@ -69,22 +77,14 @@ function BuyerOrdersContent() {
 
   async function loadStatusCounts() {
     try {
-      const [paidCount, inProgressCount, deliveredCount, completedCount, cancelledCount] = await Promise.all([
-        getBuyerOrdersCount(user!.id, 'paid'),
-        getBuyerOrdersCount(user!.id, 'in_progress'),
-        getBuyerOrdersCount(user!.id, 'delivered'),
-        getBuyerOrdersCount(user!.id, 'completed'),
-        getBuyerOrdersCount(user!.id, 'cancelled')
-      ])
+      const response = await fetch('/api/orders/buyer/count')
 
-      setStatusCounts({
-        all: paidCount + inProgressCount + deliveredCount + completedCount + cancelledCount,
-        paid: paidCount,
-        in_progress: inProgressCount,
-        delivered: deliveredCount,
-        completed: completedCount,
-        cancelled: cancelledCount
-      })
+      if (!response.ok) {
+        throw new Error('카운트 조회 실패')
+      }
+
+      const { counts } = await response.json()
+      setStatusCounts(counts)
     } catch (err) {
       logger.error('상태별 카운트 조회 실패:', err)
     }
