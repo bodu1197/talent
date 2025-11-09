@@ -30,7 +30,7 @@ export default async function DirectChatPage({ params }: ChatPageProps) {
     .single()
 
   if (error || !room) {
-    redirect('/mypage/messages')
+    redirect('/chat')
   }
 
   // 사용자가 이 채팅방의 참여자인지 확인
@@ -44,7 +44,7 @@ export default async function DirectChatPage({ params }: ChatPageProps) {
   const isSeller = sellerData?.user_id === user.id
 
   if (!isBuyer && !isSeller) {
-    redirect('/mypage/messages')
+    redirect('/chat')
   }
 
   // 상대방 정보 조회

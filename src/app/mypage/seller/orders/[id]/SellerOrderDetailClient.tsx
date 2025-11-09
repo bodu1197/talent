@@ -104,7 +104,7 @@ export default function SellerOrderDetailClient({ order: initialOrder, orderId }
             </div>
             <div className="flex items-center gap-3">
               <Link
-                href={`/mypage/messages?order=${orderId}`}
+                href={`/chat?order=${orderId}`}
                 className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
               >
                 <i className="fas fa-comment mr-2"></i>
@@ -269,7 +269,7 @@ export default function SellerOrderDetailClient({ order: initialOrder, orderId }
                 </div>
               </div>
               <Link
-                href={`/mypage/messages?order=${orderId}`}
+                href={`/chat?order=${orderId}`}
                 className="w-full px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium text-center block"
               >
                 <i className="fas fa-comment mr-2"></i>

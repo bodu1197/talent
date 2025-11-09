@@ -410,7 +410,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
                   {/* 문의하기 버튼 */}
                   <Link
-                    href="/mypage/messages"
+                    href="/chat"
                     className="px-6 py-2 border border-[#0f3460] text-[#0f3460] rounded-lg hover:bg-[#0f3460] hover:text-white transition-colors font-medium"
                   >
                     문의하기

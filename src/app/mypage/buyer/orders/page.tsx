@@ -160,7 +160,7 @@ function BuyerOrdersContent() {
             수정 요청
           </button>
           <Link
-            href={`/mypage/messages?order=${order.id}`}
+            href={`/chat?order=${order.id}`}
             className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
           >
             메시지
@@ -179,7 +179,7 @@ function BuyerOrdersContent() {
             상세보기
           </Link>
           <Link
-            href={`/mypage/messages?order=${order.id}`}
+            href={`/chat?order=${order.id}`}
             className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
           >
             메시지

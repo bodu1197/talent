@@ -218,10 +218,10 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
         {/* 하단 공통 메뉴 */}
         <div className="mt-auto p-4 border-t border-gray-200">
           <Link
-            href="/mypage/messages"
+            href="/chat"
             onClick={() => setIsOpen(false)}
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all mb-2 ${
-              pathname.startsWith('/mypage/messages')
+              pathname.startsWith('/chat')
                 ? 'bg-brand-primary text-white'
                 : 'text-gray-700 hover:bg-gray-100'
             }`}

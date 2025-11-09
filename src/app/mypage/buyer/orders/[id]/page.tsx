@@ -164,7 +164,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
             </div>
             <div className="flex items-center gap-3">
               <Link
-                href={`/mypage/messages?order=${id}`}
+                href={`/chat?order=${id}`}
                 className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
               >
                 <i className="fas fa-comment mr-2"></i>
@@ -390,7 +390,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
               </div>
               <div className="space-y-2">
                 <Link
-                  href={`/mypage/messages?order=${id}`}
+                  href={`/chat?order=${id}`}
                   className="w-full px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium text-center block"
                 >
                   <i className="fas fa-comment mr-2"></i>
