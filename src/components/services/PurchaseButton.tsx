@@ -56,7 +56,10 @@ export default function PurchaseButton({
 
       if (!prepareResponse.ok) {
         const error = await prepareResponse.json()
-        throw new Error(error.error || '결제 준비 실패')
+        const errorMsg = error.details
+          ? `${error.error}: ${error.details} (${error.code})`
+          : error.error || '결제 준비 실패'
+        throw new Error(errorMsg)
       }
 
       const { order_id } = await prepareResponse.json()

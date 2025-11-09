@@ -107,7 +107,11 @@ export async function POST(request: NextRequest) {
 
     if (orderError) {
       console.error('Order creation error:', orderError)
-      return NextResponse.json({ error: '주문 생성 실패' }, { status: 500 })
+      return NextResponse.json({
+        error: '주문 생성 실패',
+        details: orderError.message,
+        code: orderError.code
+      }, { status: 500 })
     }
 
     return NextResponse.json({
