@@ -479,6 +479,11 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       serviceId={id}
                       currentUserId={user.id}
                       sellerUserId={service.seller.user_id}
+                      serviceTitle={service.title}
+                      servicePrice={service.price || 0}
+                      deliveryDays={service.delivery_days || 7}
+                      revisionCount={service.revision_count || 0}
+                      serviceDescription={service.description}
                     />
                   )}
 
