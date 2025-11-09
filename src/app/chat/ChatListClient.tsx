@@ -696,23 +696,10 @@ export default function ChatListClient({ userId, sellerId }: Props) {
                       }
                     }}
                     placeholder="메시지를 입력하세요. (Enter: 줄바꿈 / Ctrl+Enter: 전송)"
-                    className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                     rows={3}
                     disabled={isLoading || isUploading}
                   />
-                  <input
-                    type="file"
-                    id="file-input"
-                    className="hidden"
-                    onChange={handleFileSelect}
-                    disabled={isLoading || isUploading}
-                  />
-                  <label
-                    htmlFor="file-input"
-                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 cursor-pointer"
-                  >
-                    <i className="fas fa-paperclip text-lg"></i>
-                  </label>
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -729,21 +716,14 @@ export default function ChatListClient({ userId, sellerId }: Props) {
                     >
                       결제 요청
                     </button>
-                    <label
-                      htmlFor="file-input"
-                      className="px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer inline-flex items-center gap-2"
-                    >
-                      <i className="fas fa-paperclip"></i>
-                      파일 첨부
-                    </label>
                   </div>
 
                   <button
                     type="submit"
-                    disabled={(!newMessage.trim() && !selectedFile) || isLoading || isUploading}
-                    className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    disabled={!newMessage.trim() || isLoading}
+                    className="px-6 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#0a2540] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
-                    {isUploading ? '업로드 중...' : isLoading ? '전송 중...' : '전송'}
+                    {isLoading ? '전송 중...' : '전송'}
                   </button>
                 </div>
               </form>
