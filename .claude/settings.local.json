@@ -13,7 +13,11 @@
       "Bash(npx supabase:*)",
       "Bash(npm run dev:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(node scripts/debug-chat-issue.js:*)",
+      "Bash(node -e:*)",
+      "Bash(node scripts/apply-favorite-migration.js:*)"
     ],
     "deny": [],
     "ask": []

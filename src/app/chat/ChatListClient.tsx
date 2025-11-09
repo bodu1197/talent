@@ -119,6 +119,33 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     }
   }
 
+  // 즐겨찾기 토글
+  const toggleFavorite = async (roomId: string, e: React.MouseEvent) => {
+    e.stopPropagation() // 채팅방 선택 이벤트 방지
+
+    try {
+      const response = await fetch('/api/chat/favorites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ room_id: roomId })
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        // 로컬 상태 업데이트
+        setRooms(prevRooms =>
+          prevRooms.map(room =>
+            room.id === roomId
+              ? { ...room, is_favorite: data.is_favorite }
+              : room
+          )
+        )
+      }
+    } catch (error) {
+      console.error('[ChatListClient] Toggle favorite error:', error)
+    }
+  }
+
   // 읽지 않은 메시지를 읽음 처리
   const markMessagesAsRead = async (roomId: string) => {
     try {
@@ -393,7 +420,19 @@ export default function ChatListClient({ userId, sellerId }: Props) {
                       {/* 정보 */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-1">
-                          <h3 className="font-semibold text-sm truncate">{otherUserName}</h3>
+                          <div className="flex items-center gap-2 min-w-0">
+                            <h3 className="font-semibold text-sm truncate">{otherUserName}</h3>
+                            <button
+                              onClick={(e) => toggleFavorite(room.id, e)}
+                              className="flex-shrink-0 text-lg transition-colors"
+                            >
+                              {room.is_favorite ? (
+                                <i className="fas fa-star text-yellow-400"></i>
+                              ) : (
+                                <i className="far fa-star text-gray-400"></i>
+                              )}
+                            </button>
+                          </div>
                           {room.lastMessage && (
                             <span className="text-xs text-gray-500 ml-2 flex-shrink-0">
                               {new Date(room.lastMessage.created_at).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })}
@@ -458,9 +497,12 @@ export default function ChatListClient({ userId, sellerId }: Props) {
               거래 중
             </button>
             <button
-              onClick={() => alert('즐겨찾기 기능은 준비 중입니다')}
-              className="px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap bg-white text-gray-400 cursor-not-allowed"
-              disabled
+              onClick={() => setActiveTab('favorite')}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
+                activeTab === 'favorite'
+                  ? 'bg-black text-white'
+                  : 'bg-white text-gray-700 hover:bg-gray-100'
+              }`}
             >
               즐겨찾기
             </button>
@@ -530,7 +572,19 @@ export default function ChatListClient({ userId, sellerId }: Props) {
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
-                        <h3 className="font-medium text-sm truncate">{displayName}</h3>
+                        <div className="flex items-center gap-2 min-w-0">
+                          <h3 className="font-medium text-sm truncate">{displayName}</h3>
+                          <button
+                            onClick={(e) => toggleFavorite(room.id, e)}
+                            className="flex-shrink-0 text-base transition-colors"
+                          >
+                            {room.is_favorite ? (
+                              <i className="fas fa-star text-yellow-400"></i>
+                            ) : (
+                              <i className="far fa-star text-gray-400"></i>
+                            )}
+                          </button>
+                        </div>
                         <span className="text-xs text-gray-400">
                           {room.last_message_at
                             ? new Date(room.last_message_at).toLocaleDateString('ko-KR', {

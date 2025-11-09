@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
     const roomIds = rooms.map(r => r.id)
 
     // 병렬로 모든 데이터 가져오기
-    const [sellersData, usersData, servicesData, messagesData, unreadData] = await Promise.all([
+    const [sellersData, usersData, servicesData, messagesData, unreadData, favoritesData] = await Promise.all([
       // 판매자 정보
       supabase
         .from('sellers')
@@ -81,7 +81,14 @@ export async function GET(request: NextRequest) {
         .select('room_id, id')
         .in('room_id', roomIds)
         .eq('is_read', false)
-        .neq('sender_id', user.id)
+        .neq('sender_id', user.id),
+
+      // 즐겨찾기 정보
+      supabase
+        .from('chat_favorites')
+        .select('room_id')
+        .eq('user_id', user.id)
+        .in('room_id', roomIds)
     ])
 
     // 데이터 맵 생성
@@ -108,6 +115,9 @@ export async function GET(request: NextRequest) {
       })
       logger.info('[Chat Rooms API] Unread count map:', Object.fromEntries(unreadCountMap))
     }
+
+    // 즐겨찾기 맵 생성
+    const favoritesSet = new Set((favoritesData.data || []).map(f => f.room_id))
 
     // 데이터 조합
     const roomsWithMessages = rooms.map(room => {
@@ -143,7 +153,8 @@ export async function GET(request: NextRequest) {
         seller_id: seller?.id || null,
         service: room.service_id ? servicesMap.get(room.service_id) || null : null,
         lastMessage: lastMessageMap.get(room.id) || null,
-        unreadCount: unreadCountMap.get(room.id) || 0
+        unreadCount: unreadCountMap.get(room.id) || 0,
+        is_favorite: favoritesSet.has(room.id)
       }
     })
 
