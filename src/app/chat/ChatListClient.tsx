@@ -71,10 +71,18 @@ export default function ChatListClient({ userId, sellerId }: Props) {
 
   // 채팅방 목록 로드
   const loadRooms = async () => {
-    const response = await fetch('/api/chat/rooms')
-    if (response.ok) {
-      const data = await response.json()
-      setRooms(data.rooms || [])
+    try {
+      const response = await fetch('/api/chat/rooms')
+      if (response.ok) {
+        const data = await response.json()
+        console.log('[ChatListClient] Loaded rooms:', data.rooms)
+        setRooms(data.rooms || [])
+      } else {
+        const error = await response.json()
+        console.error('[ChatListClient] Failed to load rooms:', error)
+      }
+    } catch (error) {
+      console.error('[ChatListClient] Load rooms error:', error)
     }
   }
 
@@ -90,8 +98,8 @@ export default function ChatListClient({ userId, sellerId }: Props) {
 
       if (response.ok) {
         const data = await response.json()
+        setSelectedRoomId(data.room.id) // 먼저 방 선택
         await loadRooms() // 채팅방 목록 새로고침
-        setSelectedRoomId(data.room.id)
         router.push(`/chat?room=${data.room.id}`) // URL 업데이트
       } else {
         const error = await response.json()
