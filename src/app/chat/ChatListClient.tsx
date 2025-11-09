@@ -7,21 +7,17 @@ import { useChatUnreadCount } from '@/hooks/useChatUnreadCount'
 
 interface ChatRoom {
   id: string
-  buyer_id: string
-  seller_id: string
+  user1_id: string
+  user2_id: string
   service_id: string | null
   last_message_at: string
   created_at: string
-  buyer?: {
+  seller_id: string | null // 현재 사용자가 판매자인 경우
+  otherUser?: {
     id: string
     name: string
     profile_image: string | null
-  }
-  seller?: {
-    id: string
-    business_name: string
-    display_name: string | null
-    profile_image: string | null
+    seller_id?: string
   }
   service?: {
     id: string
@@ -313,11 +309,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
 
   const selectedRoom = rooms.find(r => r.id === selectedRoomId)
   const isSeller = selectedRoom ? selectedRoom.seller_id === sellerId : false
-  const otherUser = selectedRoom
-    ? isSeller
-      ? selectedRoom.buyer
-      : selectedRoom.seller
-    : null
+  const otherUser = selectedRoom?.otherUser || null
 
   return (
     <div className="min-h-screen bg-gray-50 pt-16">
@@ -366,11 +358,8 @@ export default function ChatListClient({ userId, sellerId }: Props) {
                 return true
               })
               .map(room => {
-                const isSeller = room.seller_id === sellerId
-                const otherUser = isSeller ? room.buyer : room.seller
-                const otherUserName = isSeller
-                  ? room.buyer?.name || '구매자'
-                  : room.seller?.display_name || room.seller?.business_name || '판매자'
+                const otherUser = room.otherUser
+                const otherUserName = room.otherUser?.name || '사용자'
 
                 return (
                   <button
@@ -499,11 +488,8 @@ export default function ChatListClient({ userId, sellerId }: Props) {
             </div>
           ) : (
             rooms.map((room) => {
-              const isRoomSeller = room.seller_id === sellerId
-              const other = isRoomSeller ? room.buyer : room.seller
-              const displayName = isRoomSeller
-                ? (room.buyer?.name || '구매자')
-                : (room.seller?.display_name || room.seller?.business_name || '판매자')
+              const other = room.otherUser
+              const displayName = room.otherUser?.name || '사용자'
 
               return (
                 <button
@@ -585,9 +571,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
                   </div>
                   <div>
                     <h2 className="font-bold">
-                      {isSeller
-                        ? selectedRoom.buyer?.name || '구매자'
-                        : selectedRoom.seller?.display_name || selectedRoom.seller?.business_name || '판매자'}
+                      {otherUser?.name || '사용자'}
                     </h2>
                     {selectedRoom.service && (
                       <p className="text-sm text-gray-500">{selectedRoom.service.title}</p>

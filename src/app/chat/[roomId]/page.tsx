@@ -22,8 +22,8 @@ export default async function DirectChatPage({ params }: ChatPageProps) {
     .from('chat_rooms')
     .select(`
       id,
-      buyer_id,
-      seller_id,
+      user1_id,
+      user2_id,
       service_id
     `)
     .eq('id', roomId)
@@ -34,47 +34,51 @@ export default async function DirectChatPage({ params }: ChatPageProps) {
   }
 
   // 사용자가 이 채팅방의 참여자인지 확인
-  const { data: sellerData } = await supabase
-    .from('sellers')
-    .select('user_id')
-    .eq('id', room.seller_id)
-    .single()
-
-  const isBuyer = room.buyer_id === user.id
-  const isSeller = sellerData?.user_id === user.id
-
-  if (!isBuyer && !isSeller) {
+  if (room.user1_id !== user.id && room.user2_id !== user.id) {
     redirect('/chat')
   }
+
+  // 상대방 ID 확인
+  const otherUserId = room.user1_id === user.id ? room.user2_id : room.user1_id
+
+  // 현재 사용자가 판매자인지 확인
+  const { data: currentUserSeller } = await supabase
+    .from('sellers')
+    .select('id')
+    .eq('user_id', user.id)
+    .maybeSingle()
+
+  const isSeller = !!currentUserSeller
+
+  // 상대방이 판매자인지 확인
+  const { data: otherUserSeller } = await supabase
+    .from('sellers')
+    .select('id, business_name, display_name, profile_image')
+    .eq('user_id', otherUserId)
+    .maybeSingle()
 
   // 상대방 정보 조회
   let otherUser: { id: string; name: string; profile_image: string | null }
 
-  if (isBuyer) {
-    // 구매자인 경우 판매자 정보 가져오기
-    const { data: seller } = await supabase
-      .from('sellers')
-      .select('id, business_name, display_name, profile_image')
-      .eq('id', room.seller_id)
-      .single()
-
+  if (otherUserSeller) {
+    // 상대방이 판매자인 경우
     otherUser = {
-      id: room.seller_id,
-      name: seller?.display_name || seller?.business_name || '판매자',
-      profile_image: seller?.profile_image || null
+      id: otherUserId,
+      name: otherUserSeller.display_name || otherUserSeller.business_name || '판매자',
+      profile_image: otherUserSeller.profile_image || null
     }
   } else {
-    // 판매자인 경우 구매자 정보 가져오기
-    const { data: buyer } = await supabase
+    // 상대방이 일반 사용자인 경우
+    const { data: otherUserData } = await supabase
       .from('users')
       .select('id, name, profile_image')
-      .eq('id', room.buyer_id)
+      .eq('id', otherUserId)
       .single()
 
     otherUser = {
-      id: room.buyer_id,
-      name: buyer?.name || '구매자',
-      profile_image: buyer?.profile_image || null
+      id: otherUserId,
+      name: otherUserData?.name || '사용자',
+      profile_image: otherUserData?.profile_image || null
     }
   }
 

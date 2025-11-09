@@ -12,6 +12,13 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // 현재 사용자가 판매자인지 확인
+    const { data: seller } = await supabase
+      .from('sellers')
+      .select('id')
+      .eq('user_id', user.id)
+      .maybeSingle()
+
     // 채팅방 목록 조회 (user1_id 또는 user2_id로 참여한 채팅방)
     const { data: rooms, error } = await supabase
       .from('chat_rooms')
@@ -34,15 +41,34 @@ export async function GET(request: NextRequest) {
     // 각 채팅방의 마지막 메시지, 읽지 않은 메시지 수, 그리고 관련 정보 조회
     const roomsWithMessages = await Promise.all(
       (rooms || []).map(async (room) => {
-        // 상대방 ID 확인 (현재 사용자가 아닌 다른 사용자)
+        // 상대방 user_id 확인
         const otherUserId = room.user1_id === user.id ? room.user2_id : room.user1_id
 
-        // 상대방 정보
-        const { data: otherUser } = await supabase
-          .from('users')
-          .select('id, name, profile_image')
-          .eq('id', otherUserId)
-          .single()
+        // 상대방이 판매자인지 확인
+        const { data: otherUserSeller } = await supabase
+          .from('sellers')
+          .select('id, business_name, display_name, profile_image, user_id')
+          .eq('user_id', otherUserId)
+          .maybeSingle()
+
+        // 상대방 정보 조회 (판매자가 아니면 일반 사용자)
+        let otherUser
+        if (otherUserSeller) {
+          otherUser = {
+            id: otherUserId,
+            name: otherUserSeller.display_name || otherUserSeller.business_name,
+            profile_image: otherUserSeller.profile_image,
+            seller_id: otherUserSeller.id
+          }
+        } else {
+          const { data: userData } = await supabase
+            .from('users')
+            .select('id, name, profile_image')
+            .eq('id', otherUserId)
+            .single()
+
+          otherUser = userData
+        }
 
         // 서비스 정보
         let service = null
@@ -75,6 +101,7 @@ export async function GET(request: NextRequest) {
         return {
           ...room,
           otherUser,
+          seller_id: seller?.id || null, // 현재 사용자가 판매자이면 seller_id 포함
           service,
           lastMessage,
           unreadCount: unreadCount || 0
@@ -128,13 +155,21 @@ export async function POST(request: NextRequest) {
     const user1_id = user.id < otherUserId ? user.id : otherUserId
     const user2_id = user.id < otherUserId ? otherUserId : user.id
 
-    // 기존 채팅방 확인
-    const { data: existingRoom } = await supabase
+    // 기존 채팅방 확인 (user1_id, user2_id, service_id로 확인)
+    let query = supabase
       .from('chat_rooms')
       .select('id')
       .eq('user1_id', user1_id)
       .eq('user2_id', user2_id)
-      .maybeSingle()
+
+    // service_id가 있으면 일치하는 채팅방, 없으면 service_id가 null인 채팅방 찾기
+    if (service_id) {
+      query = query.eq('service_id', service_id)
+    } else {
+      query = query.is('service_id', null)
+    }
+
+    const { data: existingRoom } = await query.maybeSingle()
 
     if (existingRoom) {
       return NextResponse.json({ room_id: existingRoom.id })
