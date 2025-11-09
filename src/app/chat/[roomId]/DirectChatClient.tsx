@@ -70,6 +70,21 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const supabase = createClient()
 
+  // 읽지 않은 메시지를 읽음 처리
+  const markMessagesAsRead = async () => {
+    try {
+      await fetch('/api/chat/messages/mark-read', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ room_id: roomId })
+      })
+    } catch (error) {
+      console.error('Mark messages as read error:', error)
+    }
+  }
+
   // 메시지 목록 로드
   const loadMessages = async () => {
     const response = await fetch(`/api/chat/messages?room_id=${roomId}`)
@@ -77,6 +92,8 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
       const data = await response.json()
       setMessages(data.messages || [])
       scrollToBottom()
+      // 메시지 로드 후 읽음 처리
+      await markMessagesAsRead()
     }
   }
 
@@ -164,10 +181,12 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
           table: 'chat_messages',
           filter: `room_id=eq.${roomId}`
         },
-        (payload) => {
+        async (payload) => {
           const newMsg = payload.new as any
           if (newMsg.sender_id !== userId) {
-            loadMessages()
+            await loadMessages()
+            // 새 메시지가 오면 즉시 읽음 처리
+            await markMessagesAsRead()
           }
         }
       )
