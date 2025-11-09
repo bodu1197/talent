@@ -6,16 +6,45 @@ import { createClient } from '@/lib/supabase/client'
 export function useChatUnreadCount() {
   const [unreadCount, setUnreadCount] = useState(0)
   const [userId, setUserId] = useState<string | null>(null)
+  const [hasPermission, setHasPermission] = useState(false)
   const supabase = useMemo(() => createClient(), [])
 
-  // 알림음 재생
-  const playNotificationSound = useCallback(() => {
+  // 알림 권한 요청
+  const requestNotificationPermission = useCallback(async () => {
+    try {
+      if ('Notification' in window && Notification.permission === 'default') {
+        const permission = await Notification.requestPermission()
+        setHasPermission(permission === 'granted')
+      } else if ('Notification' in window) {
+        setHasPermission(Notification.permission === 'granted')
+      }
+    } catch (error) {
+      console.error('Failed to request notification permission:', error)
+    }
+  }, [])
+
+  // 알림음 재생 (모바일 대응 개선)
+  const playNotificationSound = useCallback(async () => {
     try {
       const audio = new Audio('/sounds/notification.mp3')
       audio.volume = 0.5
-      audio.play().catch(err => {
-        console.log('Notification sound play failed:', err)
-      })
+
+      // 모바일에서 자동 재생을 위한 처리
+      const playPromise = audio.play()
+
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            console.log('[useChatUnreadCount] Notification sound played successfully')
+          })
+          .catch(error => {
+            console.log('[useChatUnreadCount] Autoplay prevented, trying user interaction:', error)
+            // 사용자 인터랙션 후 재생 시도
+            document.addEventListener('click', () => {
+              audio.play().catch(e => console.log('Still failed:', e))
+            }, { once: true })
+          })
+      }
     } catch (error) {
       console.error('Notification sound error:', error)
     }
@@ -36,18 +65,19 @@ export function useChatUnreadCount() {
   }, [])
 
   useEffect(() => {
-    // 현재 사용자 확인
+    // 현재 사용자 확인 및 알림 권한 요청
     const initUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       console.log('[useChatUnreadCount] User:', user?.id)
       if (user) {
         setUserId(user.id)
         fetchUnreadCount()
+        requestNotificationPermission() // 알림 권한 요청
       }
     }
 
     initUser()
-  }, [supabase, fetchUnreadCount])
+  }, [supabase, fetchUnreadCount, requestNotificationPermission])
 
   // 실시간 메시지 구독
   useEffect(() => {
@@ -65,7 +95,7 @@ export function useChatUnreadCount() {
 
     // Realtime 구독 - 새 메시지가 오면 즉시 갱신
     const channel = supabase
-      .channel('chat_notifications_mobile')
+      .channel(`chat_notifications_${userId}`)
       .on(
         'postgres_changes',
         {
@@ -82,7 +112,15 @@ export function useChatUnreadCount() {
             console.log('[useChatUnreadCount] Message from other user, fetching unread count and playing sound')
             await fetchUnreadCount()
             // 알림음 재생 (PC와 모바일 모두)
-            playNotificationSound()
+            await playNotificationSound()
+
+            // 브라우저 알림 표시 (권한이 있는 경우)
+            if (hasPermission && 'Notification' in window) {
+              new Notification('새 메시지', {
+                body: '새로운 채팅 메시지가 도착했습니다.',
+                icon: '/favicon.ico'
+              })
+            }
           }
         }
       )
@@ -91,11 +129,13 @@ export function useChatUnreadCount() {
         {
           event: 'UPDATE',
           schema: 'public',
-          table: 'chat_messages'
+          table: 'chat_messages',
+          filter: `is_read=eq.true`
         },
         async (payload) => {
-          console.log('[useChatUnreadCount] Message updated, fetching unread count')
-          // 메시지가 읽음 처리되면 배지 갱신
+          const updatedMessage = payload.new as any
+          console.log('[useChatUnreadCount] Message marked as read:', updatedMessage.id)
+          // 메시지가 읽음 처리되면 즉시 배지 갱신
           await fetchUnreadCount()
         }
       )
@@ -108,7 +148,8 @@ export function useChatUnreadCount() {
       clearInterval(interval)
       supabase.removeChannel(channel)
     }
-  }, [userId, supabase, fetchUnreadCount, playNotificationSound])
+  }, [userId, supabase, fetchUnreadCount, playNotificationSound, hasPermission])
 
-  return { unreadCount, userId }
+  // 수동으로 카운트를 새로고침할 수 있는 함수 반환
+  return { unreadCount, userId, refreshCount: fetchUnreadCount }
 }

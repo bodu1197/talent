@@ -6,7 +6,14 @@
       "Bash(curl:*)",
       "WebFetch(domain:developers.portone.io)",
       "WebSearch",
-      "Bash(check_sellers_columns.sql)"
+      "Bash(check_sellers_columns.sql)",
+      "Bash(node scripts/migrate-with-pg.js:*)",
+      "Bash(npx supabase migration:*)",
+      "Bash(npx supabase db push:*)",
+      "Bash(npx supabase:*)",
+      "Bash(npm run dev:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []

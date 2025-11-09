@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
+import { registerServiceWorker } from '@/lib/serviceWorker'
 
 type UserProfile = {
   id: string
@@ -142,6 +143,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let mounted = true
+
+    // Service Worker 등록
+    registerServiceWorker()
 
     // 초기 세션 체크 - 단순화
     const checkSession = async () => {

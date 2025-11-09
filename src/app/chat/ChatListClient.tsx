@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { useChatUnreadCount } from '@/hooks/useChatUnreadCount'
 
 interface ChatRoom {
   id: string
@@ -68,6 +69,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
   const [isUploading, setIsUploading] = useState(false)
   const [isCreatingRoom, setIsCreatingRoom] = useState(false)
   const supabase = createClient()
+  const { refreshCount } = useChatUnreadCount() // unread count 훅 사용
 
   // 채팅방 목록 로드
   const loadRooms = async () => {
@@ -126,6 +128,11 @@ export default function ChatListClient({ userId, sellerId }: Props) {
       })
       const data = await response.json()
       console.log('[ChatListClient] Mark-read response:', data)
+
+      // 읽음 처리 후 unread count 새로고침
+      if (data.success) {
+        await refreshCount()
+      }
     } catch (error) {
       console.error('[ChatListClient] Mark messages as read error:', error)
     }
