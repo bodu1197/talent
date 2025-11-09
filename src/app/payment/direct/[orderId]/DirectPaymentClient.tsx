@@ -63,13 +63,20 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
 
     try {
       // PortOne 결제창 호출
+      // 채널 키가 없으면 에러 메시지 표시
+      if (!process.env.NEXT_PUBLIC_PORTONE_CHANNEL_KEY) {
+        alert('결제 채널이 설정되지 않았습니다.\n\nPortOne 콘솔에서 채널을 생성하고 환경변수에 NEXT_PUBLIC_PORTONE_CHANNEL_KEY를 추가해주세요.')
+        setIsProcessing(false)
+        return
+      }
+
       const response = await PortOne.requestPayment({
         storeId: process.env.NEXT_PUBLIC_PORTONE_STORE_ID!,
         paymentId: order.merchant_uid,
         orderName: order.title,
         totalAmount: order.amount,
         currency: 'CURRENCY_KRW',
-        channelKey: process.env.NEXT_PUBLIC_PORTONE_CHANNEL_KEY || 'channel-key-billingapi-test',
+        channelKey: process.env.NEXT_PUBLIC_PORTONE_CHANNEL_KEY,
         payMethod: 'CARD',
         customer: {
           fullName: buyer?.name || '구매자',

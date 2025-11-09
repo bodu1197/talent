@@ -3,7 +3,9 @@
     "allow": [
       "Bash(wait)",
       "Bash(npm install:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "WebFetch(domain:developers.portone.io)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": []
