@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
       .from('orders')
       .insert({
         buyer_id: user.id,
-        seller_id: seller_id,
+        seller_id: seller.user_id, // users.id를 참조 (sellers.id가 아님)
         service_id: service_id,
         amount: amount,
         base_amount: amount,
