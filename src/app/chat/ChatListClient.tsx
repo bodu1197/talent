@@ -451,22 +451,16 @@ export default function ChatListClient({ userId, sellerId }: Props) {
               안 읽음
             </button>
             <button
-              onClick={() => setActiveTab('deal')}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
-                activeTab === 'deal'
-                  ? 'bg-black text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
+              onClick={() => alert('거래 중 필터는 준비 중입니다')}
+              className="px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap bg-white text-gray-400 cursor-not-allowed"
+              disabled
             >
               거래 중
             </button>
             <button
-              onClick={() => setActiveTab('favorite')}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
-                activeTab === 'favorite'
-                  ? 'bg-black text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
+              onClick={() => alert('즐겨찾기 기능은 준비 중입니다')}
+              className="px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap bg-white text-gray-400 cursor-not-allowed"
+              disabled
             >
               즐겨찾기
             </button>

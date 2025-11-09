@@ -102,9 +102,11 @@ export async function GET(request: NextRequest) {
     // 읽지 않은 메시지 수 맵 생성
     const unreadCountMap = new Map()
     if (unreadData.data) {
+      logger.info(`[Chat Rooms API] Total unread messages: ${unreadData.data.length}`)
       unreadData.data.forEach(msg => {
         unreadCountMap.set(msg.room_id, (unreadCountMap.get(msg.room_id) || 0) + 1)
       })
+      logger.info('[Chat Rooms API] Unread count map:', Object.fromEntries(unreadCountMap))
     }
 
     // 데이터 조합
