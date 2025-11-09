@@ -5,7 +5,8 @@
       "Bash(npm install:*)",
       "Bash(curl:*)",
       "WebFetch(domain:developers.portone.io)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(check_sellers_columns.sql)"
     ],
     "deny": [],
     "ask": []

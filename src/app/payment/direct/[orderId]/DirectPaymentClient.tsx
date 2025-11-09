@@ -44,6 +44,7 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
   const router = useRouter()
   const [isProcessing, setIsProcessing] = useState(false)
   const [agreedToTerms, setAgreedToTerms] = useState(false)
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'bank'>('card')
 
   const handlePayment = async () => {
     if (!agreedToTerms) {
@@ -62,15 +63,40 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
     setIsProcessing(true)
 
     try {
-      // PortOne 결제창 호출
-      // 채널 키가 없으면 에러 메시지 표시
+      // 무통장 입금 선택 시
+      if (paymentMethod === 'bank') {
+        router.push(`/payment/bank-transfer/${order.id}`)
+        return
+      }
+
+      // 카드 결제 (PortOne 건너뛰고 바로 결제 완료 처리)
+      // 테스트용: 실제 결제 없이 바로 paid 상태로 변경
+      const verifyResponse = await fetch('/api/payments/mock-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          order_id: order.id
+        })
+      })
+
+      if (!verifyResponse.ok) {
+        const error = await verifyResponse.json()
+        throw new Error(error.error || '결제 처리 실패')
+      }
+
+      // 성공
+      alert('결제가 완료되었습니다! (테스트 모드)')
+      router.push(`/mypage/buyer/orders/${order.id}`)
+      return
+
+      // 실제 PortOne 결제 (나중에 사용)
+      /*
       if (!process.env.NEXT_PUBLIC_PORTONE_CHANNEL_KEY) {
-        alert('결제 채널이 설정되지 않았습니다.\n\nPortOne 콘솔에서 채널을 생성하고 환경변수에 NEXT_PUBLIC_PORTONE_CHANNEL_KEY를 추가해주세요.')
+        alert('결제 채널이 설정되지 않았습니다.')
         setIsProcessing(false)
         return
       }
 
-      const response = await PortOne.requestPayment({
         storeId: process.env.NEXT_PUBLIC_PORTONE_STORE_ID!,
         paymentId: order.merchant_uid,
         orderName: order.title,
@@ -91,14 +117,12 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
         }
       })
 
-      // 결제 실패
       if (response?.code != null) {
         alert(`결제 실패: ${response.message}`)
         setIsProcessing(false)
         return
       }
 
-      // 결제 검증
       const verifyResponse = await fetch('/api/payments/verify-direct', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -113,9 +137,9 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
         throw new Error(error.error || '결제 검증 실패')
       }
 
-      // 성공 페이지로 이동
       alert('결제가 완료되었습니다!')
       router.push(`/mypage/buyer/orders/${order.id}`)
+      */
     } catch (error) {
       console.error('Payment error:', error)
       alert(error instanceof Error ? error.message : '결제 중 오류가 발생했습니다')
@@ -182,6 +206,45 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
                 </span>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* 결제 수단 선택 */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-4">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">결제 수단 선택</h2>
+
+          <div className="grid grid-cols-2 gap-4">
+            <button
+              type="button"
+              onClick={() => setPaymentMethod('card')}
+              className={`p-4 rounded-lg border-2 transition-all ${
+                paymentMethod === 'card'
+                  ? 'border-[#0f3460] bg-blue-50'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex flex-col items-center gap-2">
+                <i className="fas fa-credit-card text-2xl text-[#0f3460]"></i>
+                <span className="font-medium">카드 결제</span>
+                <span className="text-xs text-gray-500">PortOne 결제창</span>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setPaymentMethod('bank')}
+              className={`p-4 rounded-lg border-2 transition-all ${
+                paymentMethod === 'bank'
+                  ? 'border-[#0f3460] bg-blue-50'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex flex-col items-center gap-2">
+                <i className="fas fa-university text-2xl text-[#0f3460]"></i>
+                <span className="font-medium">무통장 입금</span>
+                <span className="text-xs text-gray-500">계좌 이체</span>
+              </div>
+            </button>
           </div>
         </div>
 
