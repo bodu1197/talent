@@ -95,6 +95,7 @@ export async function POST(request: NextRequest) {
         seller_id: seller_id,
         service_id: service_id,
         amount: amount,
+        base_amount: amount, // base_amount도 같은 값으로 설정
         title: title,
         description: description || service.title,
         delivery_days: delivery_days || service.delivery_days,
