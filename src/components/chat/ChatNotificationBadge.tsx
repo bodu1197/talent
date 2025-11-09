@@ -69,14 +69,18 @@ export default function ChatNotificationBadge() {
         },
         async (payload) => {
           const newMessage = payload.new as any
+          console.log('[ChatNotificationBadge] New message received:', newMessage.id, 'from:', newMessage.sender_id, 'my id:', userId)
 
           // 내가 보낸 메시지가 아닌 경우에만 알림
           if (newMessage.sender_id !== userId) {
+            console.log('[ChatNotificationBadge] Playing notification sound and updating count')
             // 읽지 않은 메시지 수 즉시 갱신
             await fetchUnreadCount()
 
             // 알림음 재생 (PC와 모바일 모두)
             playNotificationSound()
+          } else {
+            console.log('[ChatNotificationBadge] Ignoring message from self')
           }
         }
       )
@@ -92,9 +96,12 @@ export default function ChatNotificationBadge() {
           await fetchUnreadCount()
         }
       )
-      .subscribe()
+      .subscribe((status) => {
+        console.log('[ChatNotificationBadge] Realtime subscription status:', status)
+      })
 
     return () => {
+      console.log('[ChatNotificationBadge] Cleaning up realtime subscription')
       clearInterval(interval)
       supabase.removeChannel(channel)
     }

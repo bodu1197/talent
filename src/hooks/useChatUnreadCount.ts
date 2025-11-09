@@ -99,9 +99,12 @@ export function useChatUnreadCount() {
           await fetchUnreadCount()
         }
       )
-      .subscribe()
+      .subscribe((status) => {
+        console.log('[useChatUnreadCount] Realtime subscription status:', status)
+      })
 
     return () => {
+      console.log('[useChatUnreadCount] Cleaning up realtime subscription')
       clearInterval(interval)
       supabase.removeChannel(channel)
     }
