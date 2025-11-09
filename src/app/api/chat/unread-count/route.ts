@@ -11,33 +11,13 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // 사용자가 판매자인지 확인
-    const { data: seller } = await supabase
-      .from('sellers')
+    // 사용자가 참여한 모든 채팅방 ID 조회 (user1_id 또는 user2_id로 참여)
+    const { data: rooms } = await supabase
+      .from('chat_rooms')
       .select('id')
-      .eq('user_id', user.id)
-      .maybeSingle()
+      .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`)
 
-    // 사용자가 참여한 모든 채팅방 ID 조회
-    let roomIds: string[] = []
-
-    if (seller) {
-      // 판매자인 경우
-      const { data: sellerRooms } = await supabase
-        .from('chat_rooms')
-        .select('id')
-        .eq('seller_id', seller.id)
-
-      roomIds = sellerRooms?.map(room => room.id) || []
-    } else {
-      // 구매자인 경우
-      const { data: buyerRooms } = await supabase
-        .from('chat_rooms')
-        .select('id')
-        .eq('buyer_id', user.id)
-
-      roomIds = buyerRooms?.map(room => room.id) || []
-    }
+    const roomIds = rooms?.map(room => room.id) || []
 
     if (roomIds.length === 0) {
       return NextResponse.json({ unreadCount: 0 })
