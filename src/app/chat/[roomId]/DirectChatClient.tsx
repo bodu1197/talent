@@ -31,6 +31,27 @@ interface Service {
   thumbnail_url: string | null
 }
 
+interface PaymentRequest {
+  id: string
+  room_id: string
+  seller_id: string
+  buyer_id: string
+  service_id: string | null
+  amount: number
+  title: string
+  description: string | null
+  delivery_days: number
+  revision_count: number
+  status: 'pending' | 'accepted' | 'rejected' | 'expired' | 'paid'
+  buyer_response: string | null
+  responded_at: string | null
+  order_id: string | null
+  paid_at: string | null
+  expires_at: string
+  created_at: string
+  updated_at: string
+}
+
 interface Props {
   roomId: string
   userId: string
@@ -42,6 +63,7 @@ interface Props {
 export default function DirectChatClient({ roomId, userId, isSeller, otherUser, service }: Props) {
   const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
+  const [paymentRequests, setPaymentRequests] = useState<PaymentRequest[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [showPaymentRequestModal, setShowPaymentRequestModal] = useState(false)
@@ -55,6 +77,15 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
       const data = await response.json()
       setMessages(data.messages || [])
       scrollToBottom()
+    }
+  }
+
+  // 결제 요청 목록 로드
+  const loadPaymentRequests = async () => {
+    const response = await fetch(`/api/payment-requests?room_id=${roomId}`)
+    if (response.ok) {
+      const data = await response.json()
+      setPaymentRequests(data.payment_requests || [])
     }
   }
 
@@ -100,12 +131,28 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
     }, 100)
   }
 
+  // 메시지와 결제 요청을 시간순으로 정렬한 타임라인 생성
+  const getTimeline = () => {
+    const timeline: Array<{ type: 'message' | 'payment'; data: Message | PaymentRequest; timestamp: string }> = []
+
+    messages.forEach(msg => {
+      timeline.push({ type: 'message', data: msg, timestamp: msg.created_at })
+    })
+
+    paymentRequests.forEach(req => {
+      timeline.push({ type: 'payment', data: req, timestamp: req.created_at })
+    })
+
+    return timeline.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
+  }
+
   // 초기 로드
   useEffect(() => {
     loadMessages()
+    loadPaymentRequests()
   }, [])
 
-  // 실시간 메시지 구독
+  // 실시간 메시지 및 결제 요청 구독
   useEffect(() => {
     const channel = supabase
       .channel(`room:${roomId}`)
@@ -122,6 +169,18 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
           if (newMsg.sender_id !== userId) {
             loadMessages()
           }
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'payment_requests',
+          filter: `room_id=eq.${roomId}`
+        },
+        () => {
+          loadPaymentRequests()
         }
       )
       .subscribe()
@@ -208,61 +267,75 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
             </div>
           )}
 
-          {/* 메시지 목록 */}
+          {/* 메시지 및 결제 요청 타임라인 */}
           <div className="space-y-4">
-            {messages.length === 0 ? (
+            {getTimeline().length === 0 ? (
               <div className="text-center py-12 text-gray-500">
                 <i className="fas fa-comments text-4xl mb-3"></i>
                 <p>아직 메시지가 없습니다</p>
                 <p className="text-sm mt-1">첫 메시지를 보내보세요!</p>
               </div>
             ) : (
-              messages.map((message) => {
-                const isMine = message.sender_id === userId
-                return (
-                  <div
-                    key={message.id}
-                    className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}
-                  >
-                    <div className="flex items-end gap-2 max-w-md">
-                      {!isMine && (
-                        <div className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
-                          {otherUser.profile_image ? (
-                            <img
-                              src={otherUser.profile_image}
-                              alt={otherUser.name}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
-                              <i className="fas fa-user"></i>
-                            </div>
-                          )}
-                        </div>
-                      )}
+              getTimeline().map((item, index) => {
+                if (item.type === 'message') {
+                  const message = item.data as Message
+                  const isMine = message.sender_id === userId
+                  return (
+                    <div
+                      key={`msg-${message.id}`}
+                      className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}
+                    >
+                      <div className="flex items-end gap-2 max-w-md">
+                        {!isMine && (
+                          <div className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+                            {otherUser.profile_image ? (
+                              <img
+                                src={otherUser.profile_image}
+                                alt={otherUser.name}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                                <i className="fas fa-user"></i>
+                              </div>
+                            )}
+                          </div>
+                        )}
 
-                      <div
-                        className={`px-4 py-2 rounded-2xl ${
-                          isMine
-                            ? 'bg-[#0f3460] text-white rounded-br-sm'
-                            : 'bg-white border border-gray-200 rounded-bl-sm'
-                        }`}
-                      >
-                        <p className="whitespace-pre-wrap break-words">{message.message}</p>
-                        <p
-                          className={`text-xs mt-1 ${
-                            isMine ? 'text-blue-100' : 'text-gray-500'
+                        <div
+                          className={`px-4 py-2 rounded-2xl ${
+                            isMine
+                              ? 'bg-[#0f3460] text-white rounded-br-sm'
+                              : 'bg-white border border-gray-200 rounded-bl-sm'
                           }`}
                         >
-                          {new Date(message.created_at).toLocaleTimeString('ko-KR', {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
-                        </p>
+                          <p className="whitespace-pre-wrap break-words">{message.message}</p>
+                          <p
+                            className={`text-xs mt-1 ${
+                              isMine ? 'text-blue-100' : 'text-gray-500'
+                            }`}
+                          >
+                            {new Date(message.created_at).toLocaleTimeString('ko-KR', {
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )
+                  )
+                } else {
+                  const paymentRequest = item.data as PaymentRequest
+                  return (
+                    <PaymentRequestCard
+                      key={`pay-${paymentRequest.id}`}
+                      paymentRequest={paymentRequest}
+                      userId={userId}
+                      isSeller={isSeller}
+                      onUpdate={loadPaymentRequests}
+                    />
+                  )
+                }
               })
             )}
             <div ref={messagesEndRef} />
@@ -321,6 +394,198 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
           onClose={() => setShowPaymentRequestModal(false)}
         />
       )}
+    </div>
+  )
+}
+
+// 결제 요청 카드 컴포넌트
+function PaymentRequestCard({
+  paymentRequest,
+  userId,
+  isSeller,
+  onUpdate
+}: {
+  paymentRequest: PaymentRequest
+  userId: string
+  isSeller: boolean
+  onUpdate: () => void
+}) {
+  const [isProcessing, setIsProcessing] = useState(false)
+  const isExpired = new Date(paymentRequest.expires_at) < new Date()
+  const isPending = paymentRequest.status === 'pending' && !isExpired
+  const canRespond = !isSeller && isPending
+
+  const handleResponse = async (action: 'accept' | 'reject', reason?: string) => {
+    if (isProcessing) return
+
+    setIsProcessing(true)
+    try {
+      const response = await fetch(`/api/payment-requests/${paymentRequest.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action,
+          buyer_response: reason
+        })
+      })
+
+      if (response.ok) {
+        if (action === 'accept') {
+          // TODO: 결제 페이지로 이동
+          alert('결제 페이지로 이동합니다')
+        } else {
+          alert('결제 요청을 거부했습니다')
+        }
+        onUpdate()
+      } else {
+        const error = await response.json()
+        alert(`처리 실패: ${error.error || '알 수 없는 오류'}`)
+      }
+    } catch (error) {
+      console.error('Response error:', error)
+      alert('처리 중 오류가 발생했습니다')
+    } finally {
+      setIsProcessing(false)
+    }
+  }
+
+  const getStatusBadge = () => {
+    if (isExpired && paymentRequest.status === 'pending') {
+      return <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">만료됨</span>
+    }
+
+    switch (paymentRequest.status) {
+      case 'pending':
+        return <span className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-medium">대기 중</span>
+      case 'accepted':
+        return <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">수락됨</span>
+      case 'rejected':
+        return <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">거부됨</span>
+      case 'paid':
+        return <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">결제완료</span>
+      default:
+        return null
+    }
+  }
+
+  return (
+    <div className="flex justify-center">
+      <div className="bg-gradient-to-br from-green-50 to-blue-50 border-2 border-green-200 rounded-xl p-5 max-w-md w-full shadow-sm">
+        {/* 헤더 */}
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center">
+              <i className="fas fa-file-invoice-dollar text-white text-lg"></i>
+            </div>
+            <div>
+              <h3 className="font-bold text-gray-900">결제 요청</h3>
+              <p className="text-xs text-gray-500">
+                {new Date(paymentRequest.created_at).toLocaleDateString('ko-KR', {
+                  month: 'short',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
+              </p>
+            </div>
+          </div>
+          {getStatusBadge()}
+        </div>
+
+        {/* 내용 */}
+        <div className="bg-white rounded-lg p-4 mb-4">
+          <h4 className="font-bold text-lg text-gray-900 mb-2">{paymentRequest.title}</h4>
+
+          {paymentRequest.description && (
+            <p className="text-sm text-gray-600 mb-3 whitespace-pre-wrap">{paymentRequest.description}</p>
+          )}
+
+          <div className="flex items-baseline gap-2 mb-3">
+            <span className="text-2xl font-bold text-green-600">
+              {paymentRequest.amount.toLocaleString()}원
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <div className="flex items-center gap-2 text-gray-600">
+              <i className="fas fa-clock text-gray-400"></i>
+              <span>작업 기간: {paymentRequest.delivery_days}일</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-600">
+              <i className="fas fa-redo text-gray-400"></i>
+              <span>수정: {paymentRequest.revision_count}회</span>
+            </div>
+          </div>
+
+          {isPending && (
+            <div className="mt-3 pt-3 border-t border-gray-200">
+              <p className="text-xs text-gray-500">
+                <i className="fas fa-hourglass-half mr-1"></i>
+                {new Date(paymentRequest.expires_at).toLocaleDateString('ko-KR', {
+                  month: 'short',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
+                까지 유효
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* 액션 버튼 (구매자만) */}
+        {canRespond && (
+          <div className="flex gap-2">
+            <button
+              onClick={() => {
+                const reason = prompt('거부 사유를 입력해주세요 (선택사항):')
+                if (reason !== null) {
+                  handleResponse('reject', reason || undefined)
+                }
+              }}
+              disabled={isProcessing}
+              className="flex-1 px-4 py-2.5 bg-white border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+            >
+              거부
+            </button>
+            <button
+              onClick={() => handleResponse('accept')}
+              disabled={isProcessing}
+              className="flex-1 px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium disabled:opacity-50"
+            >
+              {isProcessing ? (
+                <>
+                  <i className="fas fa-spinner fa-spin mr-2"></i>
+                  처리 중...
+                </>
+              ) : (
+                <>
+                  <i className="fas fa-check mr-2"></i>
+                  수락 및 결제
+                </>
+              )}
+            </button>
+          </div>
+        )}
+
+        {/* 판매자 안내 */}
+        {isSeller && isPending && (
+          <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+            <p className="text-xs text-blue-700">
+              <i className="fas fa-info-circle mr-1"></i>
+              구매자의 응답을 기다리고 있습니다
+            </p>
+          </div>
+        )}
+
+        {/* 거부 사유 표시 */}
+        {paymentRequest.status === 'rejected' && paymentRequest.buyer_response && (
+          <div className="bg-red-50 rounded-lg p-3 border border-red-200">
+            <p className="text-xs font-medium text-red-900 mb-1">거부 사유:</p>
+            <p className="text-xs text-red-700">{paymentRequest.buyer_response}</p>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
