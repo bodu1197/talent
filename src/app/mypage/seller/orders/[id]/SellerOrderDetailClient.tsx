@@ -428,7 +428,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
             </div>
           </div>
         )}
-          </div>
+        </div>
         </main>
       </div>
   )
