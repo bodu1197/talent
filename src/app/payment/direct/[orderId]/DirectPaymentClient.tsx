@@ -69,7 +69,7 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
         orderName: order.title,
         totalAmount: order.amount,
         currency: 'CURRENCY_KRW',
-        channelKey: 'channel-key-test',
+        channelKey: process.env.NEXT_PUBLIC_PORTONE_CHANNEL_KEY || 'channel-key-billingapi-test',
         payMethod: 'CARD',
         customer: {
           fullName: buyer?.name || '구매자',

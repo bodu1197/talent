@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(wait)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []
