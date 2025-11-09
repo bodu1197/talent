@@ -314,7 +314,106 @@ export default function ChatListClient({ userId, sellerId }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-16">
-      <div className="container-1200 py-6">
+      {/* 모바일: 전체 화면 채팅방 목록 */}
+      <div className="lg:hidden min-h-screen bg-white">
+        {/* 헤더 */}
+        <div className="px-4 py-4 border-b border-gray-200">
+          <h1 className="text-2xl font-bold mb-4">채팅</h1>
+
+          {/* 탭 */}
+          <div className="flex gap-2 overflow-x-auto">
+            <button
+              onClick={() => setActiveTab('all')}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
+                activeTab === 'all'
+                  ? 'bg-[#0f3460] text-white'
+                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
+              }`}
+            >
+              전체
+            </button>
+            <button
+              onClick={() => setActiveTab('unread')}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
+                activeTab === 'unread'
+                  ? 'bg-[#0f3460] text-white'
+                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
+              }`}
+            >
+              안 읽음
+            </button>
+          </div>
+        </div>
+
+        {/* 채팅방 목록 */}
+        <div className="overflow-y-auto pb-20">
+          {rooms.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 text-gray-500">
+              <i className="far fa-comments text-4xl mb-4"></i>
+              <p>채팅 내역이 없습니다</p>
+            </div>
+          ) : (
+            rooms
+              .filter(room => {
+                if (activeTab === 'unread') return (room.unreadCount || 0) > 0
+                return true
+              })
+              .map(room => {
+                const isSeller = room.seller_id === sellerId
+                const otherUser = isSeller ? room.buyer : room.seller
+                const otherUserName = isSeller
+                  ? room.buyer?.name || '구매자'
+                  : room.seller?.display_name || room.seller?.business_name || '판매자'
+
+                return (
+                  <button
+                    key={room.id}
+                    onClick={() => router.push(`/chat/${room.id}`)}
+                    className="w-full px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors text-left"
+                  >
+                    <div className="flex items-center gap-3">
+                      {/* 프로필 이미지 */}
+                      <div className="w-12 h-12 rounded-full bg-gray-200 flex-shrink-0 overflow-hidden">
+                        {otherUser?.profile_image ? (
+                          <img src={otherUser.profile_image} alt={otherUserName} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-400">
+                            <i className="fas fa-user"></i>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 정보 */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-1">
+                          <h3 className="font-semibold text-sm truncate">{otherUserName}</h3>
+                          {room.lastMessage && (
+                            <span className="text-xs text-gray-500 ml-2 flex-shrink-0">
+                              {new Date(room.lastMessage.created_at).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })}
+                            </span>
+                          )}
+                        </div>
+                        {room.lastMessage && (
+                          <p className="text-sm text-gray-600 truncate">{room.lastMessage.message}</p>
+                        )}
+                      </div>
+
+                      {/* 안읽음 배지 */}
+                      {(room.unreadCount || 0) > 0 && (
+                        <div className="flex-shrink-0 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                          {room.unreadCount}
+                        </div>
+                      )}
+                    </div>
+                  </button>
+                )
+              })
+          )}
+        </div>
+      </div>
+
+      {/* PC: 기존 레이아웃 */}
+      <div className="hidden lg:block container-1200 py-6">
         <div className="flex h-[calc(100vh-120px)] bg-white shadow-lg rounded-lg overflow-hidden">
         {/* 왼쪽: 채팅방 목록 */}
         <div className="w-[350px] border-r border-gray-200 flex flex-col flex-shrink-0">
