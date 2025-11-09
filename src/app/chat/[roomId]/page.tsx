@@ -94,6 +94,7 @@ export default async function DirectChatPage({ params }: ChatPageProps) {
     <DirectChatClient
       roomId={roomId}
       userId={user.id}
+      isSeller={isSeller}
       otherUser={otherUser}
       service={service}
     />
