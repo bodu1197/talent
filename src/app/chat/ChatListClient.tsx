@@ -13,6 +13,8 @@ interface ChatRoom {
   last_message_at: string
   created_at: string
   seller_id: string | null // 현재 사용자가 판매자인 경우
+  is_favorite?: boolean
+  has_active_order?: boolean
   otherUser?: {
     id: string
     name: string
@@ -74,6 +76,12 @@ export default function ChatListClient({ userId, sellerId }: Props) {
       if (response.ok) {
         const data = await response.json()
         console.log('[ChatListClient] Loaded rooms:', data.rooms)
+
+        // 디버깅: 읽지 않은 메시지 수 확인
+        data.rooms?.forEach((room: ChatRoom) => {
+          console.log(`[ChatListClient] Room ${room.id.substring(0, 8)}: unreadCount=${room.unreadCount}`)
+        })
+
         setRooms(data.rooms || [])
       } else {
         const error = await response.json()
@@ -354,7 +362,10 @@ export default function ChatListClient({ userId, sellerId }: Props) {
           ) : (
             rooms
               .filter(room => {
+                if (activeTab === 'all') return true
                 if (activeTab === 'unread') return (room.unreadCount || 0) > 0
+                if (activeTab === 'deal') return room.has_active_order === true
+                if (activeTab === 'favorite') return room.is_favorite === true
                 return true
               })
               .map(room => {
