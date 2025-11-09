@@ -431,12 +431,12 @@ function PaymentRequestCard({
 
       if (response.ok) {
         if (action === 'accept') {
-          // TODO: 결제 페이지로 이동
-          alert('결제 페이지로 이동합니다')
+          // 결제 페이지로 이동
+          window.location.href = `/payment/${paymentRequest.id}`
         } else {
           alert('결제 요청을 거부했습니다')
+          onUpdate()
         }
-        onUpdate()
       } else {
         const error = await response.json()
         alert(`처리 실패: ${error.error || '알 수 없는 오류'}`)

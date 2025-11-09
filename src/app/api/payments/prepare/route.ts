@@ -1,0 +1,81 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
+
+export async function POST(request: NextRequest) {
+  try {
+    const supabase = await createClient()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 })
+    }
+
+    const body = await request.json()
+    const { payment_request_id, amount, title } = body
+
+    if (!payment_request_id || !amount || !title) {
+      return NextResponse.json({ error: '필수 정보가 누락되었습니다' }, { status: 400 })
+    }
+
+    // 결제 요청 확인
+    const { data: paymentRequest, error: prError } = await supabase
+      .from('payment_requests')
+      .select('*')
+      .eq('id', payment_request_id)
+      .single()
+
+    if (prError || !paymentRequest) {
+      return NextResponse.json({ error: '결제 요청을 찾을 수 없습니다' }, { status: 404 })
+    }
+
+    // 구매자 확인
+    if (paymentRequest.buyer_id !== user.id) {
+      return NextResponse.json({ error: '구매자만 결제할 수 있습니다' }, { status: 403 })
+    }
+
+    // 수락된 상태 확인
+    if (paymentRequest.status !== 'accepted') {
+      return NextResponse.json({ error: '수락된 결제 요청만 결제할 수 있습니다' }, { status: 400 })
+    }
+
+    // 금액 확인
+    if (paymentRequest.amount !== amount) {
+      return NextResponse.json({ error: '결제 금액이 일치하지 않습니다' }, { status: 400 })
+    }
+
+    // 주문 생성
+    const merchantUid = `order_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
+
+    const { data: order, error: orderError } = await supabase
+      .from('orders')
+      .insert({
+        buyer_id: paymentRequest.buyer_id,
+        seller_id: paymentRequest.seller_id,
+        service_id: paymentRequest.service_id,
+        amount: paymentRequest.amount,
+        title: paymentRequest.title,
+        description: paymentRequest.description,
+        delivery_days: paymentRequest.delivery_days,
+        revision_count: paymentRequest.revision_count,
+        status: 'pending_payment',
+        merchant_uid: merchantUid,
+        payment_request_id: paymentRequest.id
+      })
+      .select()
+      .single()
+
+    if (orderError) {
+      console.error('Order creation error:', orderError)
+      return NextResponse.json({ error: '주문 생성 실패' }, { status: 500 })
+    }
+
+    return NextResponse.json({
+      order_id: order.id,
+      merchant_uid: merchantUid,
+      amount: paymentRequest.amount
+    })
+  } catch (error) {
+    console.error('Payment prepare error:', error)
+    return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
+  }
+}

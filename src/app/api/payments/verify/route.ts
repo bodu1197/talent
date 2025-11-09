@@ -1,0 +1,110 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
+
+export async function POST(request: NextRequest) {
+  try {
+    const supabase = await createClient()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 })
+    }
+
+    const body = await request.json()
+    const { payment_id, order_id, payment_request_id } = body
+
+    if (!payment_id || !order_id) {
+      return NextResponse.json({ error: '필수 정보가 누락되었습니다' }, { status: 400 })
+    }
+
+    // 주문 정보 조회
+    const { data: order, error: orderError } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('id', order_id)
+      .single()
+
+    if (orderError || !order) {
+      return NextResponse.json({ error: '주문을 찾을 수 없습니다' }, { status: 404 })
+    }
+
+    // 구매자 확인
+    if (order.buyer_id !== user.id) {
+      return NextResponse.json({ error: '구매자만 결제 검증을 할 수 있습니다' }, { status: 403 })
+    }
+
+    // 이미 결제된 주문인지 확인
+    if (order.status === 'paid' || order.status === 'in_progress') {
+      return NextResponse.json({ error: '이미 결제된 주문입니다' }, { status: 400 })
+    }
+
+    // TODO: 실제 환경에서는 PortOne API를 통해 결제 정보를 검증해야 합니다
+    // const portOneResponse = await fetch(`https://api.portone.io/payments/${payment_id}`, {
+    //   headers: {
+    //     'Authorization': `PortOne ${process.env.PORTONE_API_SECRET}`
+    //   }
+    // })
+    // const paymentData = await portOneResponse.json()
+    // if (paymentData.amount !== order.amount) {
+    //   throw new Error('결제 금액이 일치하지 않습니다')
+    // }
+
+    // 결제 기록 생성
+    const { data: payment, error: paymentError } = await supabase
+      .from('payments')
+      .insert({
+        order_id: order.id,
+        amount: order.amount,
+        payment_method: 'card', // PortOne에서 받은 정보로 설정
+        payment_id: payment_id,
+        status: 'completed',
+        paid_at: new Date().toISOString()
+      })
+      .select()
+      .single()
+
+    if (paymentError) {
+      console.error('Payment record error:', paymentError)
+      return NextResponse.json({ error: '결제 기록 생성 실패' }, { status: 500 })
+    }
+
+    // 주문 상태 업데이트
+    const { error: updateOrderError } = await supabase
+      .from('orders')
+      .update({
+        status: 'in_progress',
+        payment_id: payment.id,
+        paid_at: new Date().toISOString()
+      })
+      .eq('id', order.id)
+
+    if (updateOrderError) {
+      console.error('Order update error:', updateOrderError)
+      return NextResponse.json({ error: '주문 상태 업데이트 실패' }, { status: 500 })
+    }
+
+    // 결제 요청 상태 업데이트
+    if (payment_request_id) {
+      await supabase
+        .from('payment_requests')
+        .update({
+          status: 'paid',
+          order_id: order.id,
+          paid_at: new Date().toISOString()
+        })
+        .eq('id', payment_request_id)
+    }
+
+    return NextResponse.json({
+      success: true,
+      order: {
+        id: order.id,
+        status: 'in_progress',
+        payment_id: payment.id
+      }
+    })
+  } catch (error) {
+    console.error('Payment verify error:', error)
+    return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
+  }
+}
