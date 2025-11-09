@@ -339,7 +339,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       <div className="container-1200 px-4 pb-8 pt-5">
         <div className="flex flex-col lg:flex-row gap-5">
           {/* 왼쪽: 서비스 설명 */}
-          <div className="flex-1 space-y-8">
+          <div className="flex-1 min-w-0 space-y-8">
             {/* 포트폴리오 */}
             {linkedPortfolios && linkedPortfolios.length > 0 && (
               <div id="portfolio" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
@@ -349,9 +349,9 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             )}
 
             {/* 서비스 설명 */}
-            <div id="description" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
+            <div id="description" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20 overflow-hidden">
               <h2 className="text-xl font-bold mb-4">서비스 설명</h2>
-              <div className="prose prose-lg max-w-none whitespace-pre-wrap">
+              <div className="prose prose-lg max-w-none whitespace-pre-wrap break-words overflow-wrap-anywhere" style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
                 {service.description}
               </div>
             </div>
@@ -444,7 +444,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                 {service.seller?.bio && (
                   <div className="mt-6 pt-6 border-t border-gray-200">
                     <h4 className="font-bold text-gray-900 mb-3">전문가 소개</h4>
-                    <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
+                    <p className="text-gray-700 whitespace-pre-wrap leading-relaxed break-words overflow-wrap-anywhere">
                       {service.seller.bio}
                     </p>
                   </div>
