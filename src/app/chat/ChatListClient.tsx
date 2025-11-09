@@ -113,12 +113,31 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     }
   }
 
+  // 읽지 않은 메시지를 읽음 처리
+  const markMessagesAsRead = async (roomId: string) => {
+    try {
+      await fetch('/api/chat/messages/mark-read', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ room_id: roomId })
+      })
+    } catch (error) {
+      console.error('Mark messages as read error:', error)
+    }
+  }
+
   // 메시지 목록 로드
   const loadMessages = async (roomId: string) => {
     const response = await fetch(`/api/chat/messages?room_id=${roomId}`)
     if (response.ok) {
       const data = await response.json()
       setMessages(data.messages || [])
+      // 메시지 로드 후 읽음 처리
+      await markMessagesAsRead(roomId)
+      // 채팅방 목록도 새로고침하여 배지 업데이트
+      await loadRooms()
     }
   }
 
