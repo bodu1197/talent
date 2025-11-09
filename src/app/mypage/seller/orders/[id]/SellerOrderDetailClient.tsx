@@ -368,6 +368,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
             </div>
           </div>
         </div>
+        </div>
 
         {/* 납품 모달 */}
         {showDeliveryModal && (
