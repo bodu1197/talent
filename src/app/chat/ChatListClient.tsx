@@ -56,6 +56,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const initialRoomId = searchParams.get('room')
+  const orderId = searchParams.get('order')
 
   const [rooms, setRooms] = useState<ChatRoom[]>([])
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(initialRoomId)
@@ -65,6 +66,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
   const [activeTab, setActiveTab] = useState<'all' | 'unread' | 'deal' | 'favorite'>('all')
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [isUploading, setIsUploading] = useState(false)
+  const [isCreatingRoom, setIsCreatingRoom] = useState(false)
   const supabase = createClient()
 
   // 채팅방 목록 로드
@@ -73,6 +75,33 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     if (response.ok) {
       const data = await response.json()
       setRooms(data.rooms || [])
+    }
+  }
+
+  // 주문으로부터 채팅방 생성 또는 찾기
+  const createRoomFromOrder = async (orderId: string) => {
+    try {
+      setIsCreatingRoom(true)
+      const response = await fetch('/api/chat/rooms/create-from-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order_id: orderId })
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        await loadRooms() // 채팅방 목록 새로고침
+        setSelectedRoomId(data.room.id)
+        router.push(`/chat?room=${data.room.id}`) // URL 업데이트
+      } else {
+        const error = await response.json()
+        alert(error.error || '채팅방 생성에 실패했습니다')
+      }
+    } catch (error) {
+      console.error('Create room from order error:', error)
+      alert('채팅방 생성 중 오류가 발생했습니다')
+    } finally {
+      setIsCreatingRoom(false)
     }
   }
 
@@ -191,6 +220,13 @@ export default function ChatListClient({ userId, sellerId }: Props) {
   useEffect(() => {
     loadRooms()
   }, [])
+
+  // 주문 ID로 채팅방 생성
+  useEffect(() => {
+    if (orderId && !isCreatingRoom) {
+      createRoomFromOrder(orderId)
+    }
+  }, [orderId])
 
   // 선택된 채팅방의 메시지 로드
   useEffect(() => {
@@ -315,7 +351,12 @@ export default function ChatListClient({ userId, sellerId }: Props) {
 
         {/* 채팅방 목록 */}
         <div className="flex-1 overflow-y-auto">
-          {rooms.length === 0 ? (
+          {isCreatingRoom ? (
+            <div className="p-8 text-center text-gray-500">
+              <i className="fas fa-spinner fa-spin text-4xl mb-3"></i>
+              <p>채팅방을 생성하는 중...</p>
+            </div>
+          ) : rooms.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
               <i className="fas fa-comments text-4xl mb-3"></i>
               <p>채팅방이 없습니다</p>

@@ -123,6 +123,29 @@ export async function POST(request: NextRequest) {
       }, { status: 500 })
     }
 
+    // 채팅방 자동 생성 (이미 존재하면 무시)
+    try {
+      const { data: existingRoom } = await supabase
+        .from('chat_rooms')
+        .select('id')
+        .eq('buyer_id', user.id)
+        .eq('seller_id', seller_id)
+        .maybeSingle()
+
+      if (!existingRoom) {
+        await supabase
+          .from('chat_rooms')
+          .insert({
+            buyer_id: user.id,
+            seller_id: seller_id, // sellers.id 사용
+            service_id: service_id
+          })
+      }
+    } catch (chatError) {
+      // 채팅방 생성 실패는 주문 생성을 막지 않음
+      console.error('Chat room creation error:', chatError)
+    }
+
     return NextResponse.json({
       order_id: order.id,
       merchant_uid: merchantUid,
