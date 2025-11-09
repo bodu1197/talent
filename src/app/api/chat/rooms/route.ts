@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
       .maybeSingle()
 
     if (existingRoom) {
-      return NextResponse.json({ room_id: existingRoom.id })
+      return NextResponse.json({ room: existingRoom })
     }
 
     // 새 채팅방 생성
@@ -155,7 +155,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    return NextResponse.json({ room_id: newRoom.id })
+    return NextResponse.json({ room: newRoom })
   } catch (error) {
     logger.error('Chat room creation API error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
