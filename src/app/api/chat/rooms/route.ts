@@ -38,80 +38,112 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    // 각 채팅방의 마지막 메시지, 읽지 않은 메시지 수, 그리고 관련 정보 조회
-    const roomsWithMessages = await Promise.all(
-      (rooms || []).map(async (room) => {
-        // 상대방 user_id 확인
-        const otherUserId = room.user1_id === user.id ? room.user2_id : room.user1_id
+    if (!rooms || rooms.length === 0) {
+      return NextResponse.json({ rooms: [] })
+    }
 
-        // 상대방이 판매자인지 확인
-        const { data: otherUserSeller } = await supabase
-          .from('sellers')
-          .select('id, business_name, display_name, profile_image, user_id')
-          .eq('user_id', otherUserId)
-          .maybeSingle()
+    // 모든 필요한 ID 수집
+    const otherUserIds = rooms.map(room =>
+      room.user1_id === user.id ? room.user2_id : room.user1_id
+    )
+    const serviceIds = rooms.map(r => r.service_id).filter(Boolean)
+    const roomIds = rooms.map(r => r.id)
 
-        // 상대방 정보 조회 (판매자가 아니면 일반 사용자)
-        let otherUser
-        if (otherUserSeller) {
-          otherUser = {
-            id: otherUserId,
-            name: otherUserSeller.display_name || otherUserSeller.business_name || '판매자',
-            profile_image: otherUserSeller.profile_image,
-            seller_id: otherUserSeller.id
-          }
-        } else {
-          const { data: userData } = await supabase
-            .from('users')
-            .select('id, name, profile_image')
-            .eq('id', otherUserId)
-            .single()
+    // 병렬로 모든 데이터 가져오기
+    const [sellersData, usersData, servicesData, messagesData, unreadData] = await Promise.all([
+      // 판매자 정보
+      supabase
+        .from('sellers')
+        .select('id, user_id, business_name, display_name, profile_image')
+        .in('user_id', otherUserIds),
 
-          otherUser = {
-            id: otherUserId,
-            name: userData?.name || '사용자',
-            profile_image: userData?.profile_image || null
-          }
-        }
+      // 사용자 정보
+      supabase
+        .from('users')
+        .select('id, name, profile_image')
+        .in('id', otherUserIds),
 
-        // 서비스 정보
-        let service = null
-        if (room.service_id) {
-          const { data: serviceData } = await supabase
-            .from('services')
-            .select('id, title')
-            .eq('id', room.service_id)
-            .single()
-          service = serviceData
-        }
+      // 서비스 정보
+      serviceIds.length > 0
+        ? supabase.from('services').select('id, title').in('id', serviceIds)
+        : Promise.resolve({ data: [] }),
 
-        // 마지막 메시지
-        const { data: lastMessage } = await supabase
-          .from('chat_messages')
-          .select('message, created_at, sender_id')
-          .eq('room_id', room.id)
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .maybeSingle()
+      // 각 채팅방의 마지막 메시지 (서브쿼리 대신 모든 메시지 가져와서 클라이언트에서 필터링)
+      supabase
+        .from('chat_messages')
+        .select('room_id, message, created_at, sender_id')
+        .in('room_id', roomIds)
+        .order('created_at', { ascending: false }),
 
-        // 읽지 않은 메시지 수
-        const { count: unreadCount } = await supabase
-          .from('chat_messages')
-          .select('*', { count: 'exact', head: true })
-          .eq('room_id', room.id)
-          .eq('is_read', false)
-          .neq('sender_id', user.id)
+      // 읽지 않은 메시지 수
+      supabase
+        .from('chat_messages')
+        .select('room_id, id')
+        .in('room_id', roomIds)
+        .eq('is_read', false)
+        .neq('sender_id', user.id)
+    ])
 
-        return {
-          ...room,
-          otherUser,
-          seller_id: seller?.id || null, // 현재 사용자가 판매자이면 seller_id 포함
-          service,
-          lastMessage,
-          unreadCount: unreadCount || 0
+    // 데이터 맵 생성
+    const sellersMap = new Map((sellersData.data || []).map(s => [s.user_id, s]))
+    const usersMap = new Map((usersData.data || []).map(u => [u.id, u]))
+    const servicesMap = new Map((servicesData.data || []).map(s => [s.id, s]))
+
+    // 마지막 메시지 맵 생성 (각 room의 첫 번째 메시지)
+    const lastMessageMap = new Map()
+    if (messagesData.data) {
+      messagesData.data.forEach(msg => {
+        if (!lastMessageMap.has(msg.room_id)) {
+          lastMessageMap.set(msg.room_id, msg)
         }
       })
-    )
+    }
+
+    // 읽지 않은 메시지 수 맵 생성
+    const unreadCountMap = new Map()
+    if (unreadData.data) {
+      unreadData.data.forEach(msg => {
+        unreadCountMap.set(msg.room_id, (unreadCountMap.get(msg.room_id) || 0) + 1)
+      })
+    }
+
+    // 데이터 조합
+    const roomsWithMessages = rooms.map(room => {
+      const otherUserId = room.user1_id === user.id ? room.user2_id : room.user1_id
+      const sellerInfo = sellersMap.get(otherUserId)
+      const userInfo = usersMap.get(otherUserId)
+
+      let otherUser
+      if (sellerInfo) {
+        otherUser = {
+          id: otherUserId,
+          name: sellerInfo.display_name || sellerInfo.business_name || '판매자',
+          profile_image: sellerInfo.profile_image,
+          seller_id: sellerInfo.id
+        }
+      } else if (userInfo) {
+        otherUser = {
+          id: otherUserId,
+          name: userInfo.name || '사용자',
+          profile_image: userInfo.profile_image || null
+        }
+      } else {
+        otherUser = {
+          id: otherUserId,
+          name: '사용자',
+          profile_image: null
+        }
+      }
+
+      return {
+        ...room,
+        otherUser,
+        seller_id: seller?.id || null,
+        service: room.service_id ? servicesMap.get(room.service_id) || null : null,
+        lastMessage: lastMessageMap.get(room.id) || null,
+        unreadCount: unreadCountMap.get(room.id) || 0
+      }
+    })
 
     return NextResponse.json({ rooms: roomsWithMessages })
   } catch (error) {
