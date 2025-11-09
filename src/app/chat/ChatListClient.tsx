@@ -472,6 +472,8 @@ export default function ChatListClient({ userId, sellerId }: Props) {
           <div className="relative">
             <input
               type="text"
+              id="chat-search"
+              name="chat-search"
               placeholder="검색해 보세요."
               className="w-full px-4 py-2 pr-10 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
             />
@@ -492,7 +494,15 @@ export default function ChatListClient({ userId, sellerId }: Props) {
               <p>채팅방이 없습니다</p>
             </div>
           ) : (
-            rooms.map((room) => {
+            rooms
+              .filter(room => {
+                if (activeTab === 'all') return true
+                if (activeTab === 'unread') return (room.unreadCount || 0) > 0
+                if (activeTab === 'deal') return room.has_active_order === true
+                if (activeTab === 'favorite') return room.is_favorite === true
+                return true
+              })
+              .map((room) => {
               const other = room.otherUser
               const displayName = room.otherUser?.name || '사용자'
 
