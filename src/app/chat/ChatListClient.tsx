@@ -716,14 +716,28 @@ export default function ChatListClient({ userId, sellerId }: Props) {
                     >
                       결제 요청
                     </button>
+                    <input
+                      type="file"
+                      id="file-input"
+                      className="hidden"
+                      onChange={handleFileSelect}
+                      disabled={isLoading || isUploading}
+                    />
+                    <label
+                      htmlFor="file-input"
+                      className="px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer inline-flex items-center gap-2"
+                    >
+                      <i className="fas fa-paperclip"></i>
+                      파일 첨부
+                    </label>
                   </div>
 
                   <button
                     type="submit"
-                    disabled={!newMessage.trim() || isLoading}
+                    disabled={(!newMessage.trim() && !selectedFile) || isLoading || isUploading}
                     className="px-6 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#0a2540] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
-                    {isLoading ? '전송 중...' : '전송'}
+                    {isUploading ? '업로드 중...' : isLoading ? '전송 중...' : '전송'}
                   </button>
                 </div>
               </form>
