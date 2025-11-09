@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
     const roomIds = rooms.map(r => r.id)
 
     // 병렬로 모든 데이터 가져오기
-    const [sellersData, usersData, servicesData, messagesData, unreadData, favoritesData] = await Promise.all([
+    const [sellersData, usersData, servicesData, messagesData, unreadData, favoritesData, ordersData] = await Promise.all([
       // 판매자 정보
       supabase
         .from('sellers')
@@ -88,7 +88,16 @@ export async function GET(request: NextRequest) {
         .from('chat_favorites')
         .select('room_id')
         .eq('user_id', user.id)
-        .in('room_id', roomIds)
+        .in('room_id', roomIds),
+
+      // 진행 중인 주문 정보 (완료/취소/환불되지 않은 주문)
+      serviceIds.length > 0
+        ? supabase
+            .from('orders')
+            .select('buyer_id, seller_id, service_id, status')
+            .in('service_id', serviceIds)
+            .not('status', 'in', '("completed","cancelled","refunded")')
+        : Promise.resolve({ data: [] })
     ])
 
     // 데이터 맵 생성
@@ -119,6 +128,15 @@ export async function GET(request: NextRequest) {
     // 즐겨찾기 맵 생성
     const favoritesSet = new Set((favoritesData.data || []).map(f => f.room_id))
 
+    // 진행 중인 주문 맵 생성 (service_id + buyer_id + seller_id 조합으로 매칭)
+    const activeOrdersMap = new Map()
+    if (ordersData.data) {
+      ordersData.data.forEach(order => {
+        const key = `${order.service_id}-${order.buyer_id}-${order.seller_id}`
+        activeOrdersMap.set(key, true)
+      })
+    }
+
     // 데이터 조합
     const roomsWithMessages = rooms.map(room => {
       const otherUserId = room.user1_id === user.id ? room.user2_id : room.user1_id
@@ -147,6 +165,17 @@ export async function GET(request: NextRequest) {
         }
       }
 
+      // 진행 중인 주문이 있는지 확인
+      // user1_id와 user2_id 중 어느 쪽이 buyer인지 확인해야 함
+      let hasActiveOrder = false
+      if (room.service_id) {
+        // 현재 사용자가 buyer인 경우
+        const key1 = `${room.service_id}-${user.id}-${otherUserId}`
+        // 현재 사용자가 seller인 경우
+        const key2 = `${room.service_id}-${otherUserId}-${user.id}`
+        hasActiveOrder = activeOrdersMap.has(key1) || activeOrdersMap.has(key2)
+      }
+
       return {
         ...room,
         otherUser,
@@ -154,7 +183,8 @@ export async function GET(request: NextRequest) {
         service: room.service_id ? servicesMap.get(room.service_id) || null : null,
         lastMessage: lastMessageMap.get(room.id) || null,
         unreadCount: unreadCountMap.get(room.id) || 0,
-        is_favorite: favoritesSet.has(room.id)
+        is_favorite: favoritesSet.has(room.id),
+        has_active_order: hasActiveOrder
       }
     })
 
