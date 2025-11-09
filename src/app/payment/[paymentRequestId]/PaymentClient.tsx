@@ -53,13 +53,21 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
 
     if (isProcessing) return
 
+    // 클라이언트 사이드 금액 검증
+    if (paymentRequest.amount < 1000 || paymentRequest.amount > 100000000) {
+      alert('유효하지 않은 결제 금액입니다')
+      return
+    }
+
     setIsProcessing(true)
 
     try {
       // 1. 결제 준비 (주문 ID 생성)
       const prepareResponse = await fetch('/api/payments/prepare', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           payment_request_id: paymentRequest.id,
           amount: paymentRequest.amount,

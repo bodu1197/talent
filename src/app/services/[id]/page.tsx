@@ -6,6 +6,7 @@ import FavoriteButton from '@/components/services/FavoriteButton'
 import PortfolioGrid from '@/components/services/PortfolioGrid'
 import ExpertResponseBanner from '@/components/services/ExpertResponseBanner'
 import ContactSellerButton from '@/components/services/ContactSellerButton'
+import PurchaseButton from '@/components/services/PurchaseButton'
 import { logger } from '@/lib/logger'
 import { getCategoryPath } from '@/lib/categories'
 
@@ -472,9 +473,14 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                     {service.delivery_days || 0}일 이내 완료 · {service.revision_count === 999 ? '무제한' : `${service.revision_count || 0}회`} 수정
                   </div>
 
-                  <button className="w-full py-3 bg-[#0f3460] text-white rounded-lg font-medium hover:bg-[#1a4d8f] transition-colors mb-3">
-                    구매하기
-                  </button>
+                  {service.seller?.id && user && (
+                    <PurchaseButton
+                      sellerId={service.seller.id}
+                      serviceId={id}
+                      currentUserId={user.id}
+                      sellerUserId={service.seller.user_id}
+                    />
+                  )}
 
                   {service.seller?.id && user && service.seller.user_id !== user.id && (
                     <ContactSellerButton sellerId={service.seller.id} serviceId={id} />

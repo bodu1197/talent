@@ -1,6 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
+// Rate Limiting을 위한 간단한 인메모리 캐시
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
+
+function checkRateLimit(userId: string, maxRequests = 5, windowMs = 60000): boolean {
+  const now = Date.now()
+  const userLimit = rateLimitMap.get(userId)
+
+  if (!userLimit || userLimit.resetAt < now) {
+    rateLimitMap.set(userId, { count: 1, resetAt: now + windowMs })
+    return true
+  }
+
+  if (userLimit.count >= maxRequests) {
+    return false
+  }
+
+  userLimit.count++
+  return true
+}
+
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()
@@ -10,11 +30,23 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 })
     }
 
+    // Rate Limiting 체크 (검증은 더 엄격하게)
+    if (!checkRateLimit(user.id, 5)) {
+      return NextResponse.json({ error: '너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.' }, { status: 429 })
+    }
+
     const body = await request.json()
     const { payment_id, order_id, payment_request_id } = body
 
+    // 입력 검증
     if (!payment_id || !order_id) {
       return NextResponse.json({ error: '필수 정보가 누락되었습니다' }, { status: 400 })
+    }
+
+    // UUID 형식 검증
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    if (!uuidRegex.test(order_id)) {
+      return NextResponse.json({ error: '유효하지 않은 주문 ID입니다' }, { status: 400 })
     }
 
     // 주문 정보 조회
