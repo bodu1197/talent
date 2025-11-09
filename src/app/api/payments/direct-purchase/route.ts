@@ -88,6 +88,9 @@ export async function POST(request: NextRequest) {
     // 주문 생성 (pending_payment 상태)
     const merchantUid = `order_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
 
+    // 납품 예정일 계산 (형식적, 실제로는 판매자 작업 완료 선언이 중요)
+    const deliveryDate = new Date(Date.now() + (delivery_days || service.delivery_days || 7) * 24 * 60 * 60 * 1000)
+
     const { data: order, error: orderError } = await supabase
       .from('orders')
       .insert({
@@ -104,6 +107,7 @@ export async function POST(request: NextRequest) {
         description: description || service.title,
         delivery_days: delivery_days || service.delivery_days,
         revision_count: revision_count || service.revision_count,
+        delivery_date: deliveryDate.toISOString(),
         status: 'pending_payment',
         merchant_uid: merchantUid
       })
