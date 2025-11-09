@@ -49,8 +49,8 @@ export default function ServiceStatisticsClient({ stats, dailyViews, ratingPerce
 
         {/* 페이지 헤더 */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">서비스 통계</h1>
-          <p className="text-gray-600">{stats.serviceName} - {stats.period}</p>
+          <h1 className="text-xl font-bold text-gray-900">서비스 통계</h1>
+          <p className="text-gray-600 mt-1 text-sm">{stats.serviceName} - {stats.period}</p>
         </div>
 
         {/* 주요 지표 */}

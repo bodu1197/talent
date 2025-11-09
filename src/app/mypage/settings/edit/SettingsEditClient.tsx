@@ -243,8 +243,8 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
           <div className="py-8 px-4">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">설정 수정</h1>
-            <p className="text-gray-600">계정 및 알림 설정을 수정하세요</p>
+            <h1 className="text-xl font-bold text-gray-900">설정 수정</h1>
+            <p className="text-gray-600 mt-1 text-sm">계정 및 알림 설정을 수정하세요</p>
           </div>
           <button
             onClick={() => router.push('/mypage/settings')}

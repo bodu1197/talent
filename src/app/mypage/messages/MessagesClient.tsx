@@ -87,8 +87,8 @@ export default function MessagesClient({ conversations: initialConversations, us
         <main className="flex-1 flex flex-col h-screen w-full">
           <div className="container-1200 px-4 py-4 sm:py-6 lg:py-8 flex flex-col h-full">
         <div className="p-8 pb-0">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">메시지</h1>
-          <p className="text-gray-600 mb-6">거래 상대와 소통하세요</p>
+          <h1 className="text-xl font-bold text-gray-900">메시지</h1>
+          <p className="text-gray-600 mt-1 text-sm mb-6">거래 상대와 소통하세요</p>
         </div>
 
         <div className="flex-1 flex gap-6 px-8 pb-8 overflow-hidden">

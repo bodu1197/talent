@@ -44,8 +44,8 @@ export default function SellerProfileClient({ profile }: Props) {
         {/* 페이지 헤더 */}
         <div className="mb-6 lg:mb-8 pt-12 lg:pt-0 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">판매자 정보</h1>
-            <p className="text-sm sm:text-base text-gray-600">판매자 프로필 및 정산 정보를 확인하세요</p>
+            <h1 className="text-xl font-bold text-gray-900">판매자 정보</h1>
+            <p className="text-gray-600 mt-1 text-sm">판매자 프로필 및 정산 정보를 확인하세요</p>
           </div>
           <button
             onClick={() => router.push('/mypage/seller/profile/edit')}

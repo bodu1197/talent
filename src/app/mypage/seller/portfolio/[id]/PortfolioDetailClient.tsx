@@ -126,8 +126,8 @@ export default function PortfolioDetailClient({ portfolio, sellerId }: Props) {
               </div>
             </div>
 
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">{portfolio.title}</h1>
-            <div className="flex items-center gap-4 text-sm text-gray-600">
+            <h1 className="text-xl font-bold text-gray-900">{portfolio.title}</h1>
+            <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
               <span><i className="fas fa-eye mr-1"></i>{portfolio.view_count || 0} 조회</span>
               <span><i className="fas fa-calendar mr-1"></i>{new Date(portfolio.created_at).toLocaleDateString('ko-KR')}</span>
             </div>

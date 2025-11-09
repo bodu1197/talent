@@ -202,8 +202,8 @@ export default function SellerOrdersClient({ initialOrders, initialStatus, statu
           <div className="py-8 px-4">
         {/* 페이지 헤더 */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">주문 관리</h1>
-          <p className="text-gray-600">전체 주문 내역을 관리하세요</p>
+          <h1 className="text-xl font-bold text-gray-900">주문 관리</h1>
+          <p className="text-gray-600 mt-1 text-sm">전체 주문 내역을 관리하세요</p>
         </div>
 
         {/* 탭 네비게이션 */}

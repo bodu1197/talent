@@ -171,8 +171,8 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
           <div className="py-8 px-4">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">서비스 관리</h1>
-            <p className="text-gray-600">내 서비스를 관리하세요</p>
+            <h1 className="text-xl font-bold text-gray-900">서비스 관리</h1>
+            <p className="text-gray-600 mt-1 text-sm">내 서비스를 관리하세요</p>
           </div>
           <Link
             href="/mypage/seller/services/new"

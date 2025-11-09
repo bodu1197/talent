@@ -38,8 +38,8 @@ export default function SellerEarningsClient({ earnings, transactions }: SellerE
         <main className="flex-1 overflow-y-auto">
           <div className="py-8 px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">수익 관리</h1>
-          <p className="text-gray-600">판매 수익을 관리하세요</p>
+          <h1 className="text-xl font-bold text-gray-900">수익 관리</h1>
+          <p className="text-gray-600 mt-1 text-sm">판매 수익을 관리하세요</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">

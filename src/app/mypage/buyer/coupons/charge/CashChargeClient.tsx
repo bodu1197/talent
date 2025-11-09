@@ -25,8 +25,8 @@ export default function CashChargeClient() {
         </div>
 
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">캐시 충전</h1>
-          <p className="text-gray-600">원하는 금액을 충전하세요</p>
+          <h1 className="text-xl font-bold text-gray-900">캐시 충전</h1>
+          <p className="text-gray-600 mt-1 text-sm">원하는 금액을 충전하세요</p>
         </div>
 
         <div className="max-w-2xl">

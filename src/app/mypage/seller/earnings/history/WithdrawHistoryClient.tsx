@@ -39,8 +39,8 @@ export default function WithdrawHistoryClient({ history }: WithdrawHistoryClient
         <main className="flex-1 overflow-y-auto">
           <div className="py-8 px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">출금 내역</h1>
-          <p className="text-gray-600">출금 이력을 확인하세요</p>
+          <h1 className="text-xl font-bold text-gray-900">출금 내역</h1>
+          <p className="text-gray-600 mt-1 text-sm">출금 이력을 확인하세요</p>
         </div>
 
         <div className="bg-white rounded-lg border border-gray-200">

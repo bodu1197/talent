@@ -49,8 +49,8 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
         <main className="flex-1 overflow-y-auto">
           <div className="py-8 px-4">
         <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">판매자 정보 수정</h1>
-          <p className="text-sm sm:text-base text-gray-600">판매자 프로필 및 정산 정보를 수정하세요</p>
+          <h1 className="text-xl font-bold text-gray-900">판매자 정보 수정</h1>
+          <p className="text-gray-600 mt-1 text-sm">판매자 프로필 및 정산 정보를 수정하세요</p>
         </div>
 
         <form onSubmit={handleSubmit} className="max-w-4xl space-y-6">

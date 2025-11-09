@@ -99,8 +99,8 @@ export default function SellerOrderDetailClient({ order: initialOrder, orderId }
         <div className="mb-8">
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">주문 상세</h1>
-              <p className="text-gray-600">주문 번호: #{initialOrder.order_number || initialOrder.id.slice(0, 8)}</p>
+              <h1 className="text-xl font-bold text-gray-900">주문 상세</h1>
+              <p className="text-gray-600 mt-1 text-sm">주문 번호: #{initialOrder.order_number || initialOrder.id.slice(0, 8)}</p>
             </div>
             <div className="flex items-center gap-3">
               <Link

@@ -37,8 +37,8 @@ export default function SellerGradeClient() {
         <main className="flex-1 overflow-y-auto">
           <div className="py-8 px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">전문가 등급</h1>
-          <p className="text-gray-600">내 등급과 혜택을 확인하세요</p>
+          <h1 className="text-xl font-bold text-gray-900">전문가 등급</h1>
+          <p className="text-gray-600 mt-1 text-sm">내 등급과 혜택을 확인하세요</p>
         </div>
 
         {/* 현재 등급 */}

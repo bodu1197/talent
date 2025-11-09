@@ -315,8 +315,8 @@ export default function PortfolioEditClient({ portfolio, sellerId, categories, s
               <i className="fas fa-arrow-left mr-2"></i>
               포트폴리오 상세
             </Link>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">포트폴리오 수정</h1>
-            <p className="text-gray-600">작업물 정보를 수정하세요</p>
+            <h1 className="text-xl font-bold text-gray-900">포트폴리오 수정</h1>
+            <p className="text-gray-600 mt-1 text-sm">작업물 정보를 수정하세요</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">

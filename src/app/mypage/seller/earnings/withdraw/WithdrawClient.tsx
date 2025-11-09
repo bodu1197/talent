@@ -24,8 +24,8 @@ export default function WithdrawClient() {
         </div>
 
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">출금 신청</h1>
-          <p className="text-gray-600">수익금을 출금하세요</p>
+          <h1 className="text-xl font-bold text-gray-900">출금 신청</h1>
+          <p className="text-gray-600 mt-1 text-sm">수익금을 출금하세요</p>
         </div>
 
         <div className="max-w-2xl">

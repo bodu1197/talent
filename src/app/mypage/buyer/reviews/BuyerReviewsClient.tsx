@@ -118,8 +118,8 @@ export default function BuyerReviewsClient({
           <div className="py-8 px-4">
         {/* 페이지 헤더 */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">리뷰 관리</h1>
-          <p className="text-gray-600">서비스 리뷰를 작성하고 관리하세요</p>
+          <h1 className="text-xl font-bold text-gray-900">리뷰 관리</h1>
+          <p className="text-gray-600 mt-1 text-sm">서비스 리뷰를 작성하고 관리하세요</p>
         </div>
 
         {/* 탭 네비게이션 */}

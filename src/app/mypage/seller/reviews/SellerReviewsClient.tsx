@@ -74,8 +74,8 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
         <main className="flex-1 overflow-y-auto">
           <div className="py-8 px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">받은 리뷰</h1>
-          <p className="text-gray-600">고객들이 남긴 리뷰를 확인하고 답변하세요</p>
+          <h1 className="text-xl font-bold text-gray-900">받은 리뷰</h1>
+          <p className="text-gray-600 mt-1 text-sm">고객들이 남긴 리뷰를 확인하고 답변하세요</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">

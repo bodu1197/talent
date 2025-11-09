@@ -345,8 +345,8 @@ export default function NewServiceClient({ sellerId }: Props) {
 
         {/* 페이지 헤더 */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">서비스 등록</h1>
-          <p className="text-gray-600">새로운 서비스를 등록하세요</p>
+          <h1 className="text-xl font-bold text-gray-900">서비스 등록</h1>
+          <p className="text-gray-600 mt-1 text-sm">새로운 서비스를 등록하세요</p>
         </div>
 
         <form onSubmit={handleSubmit} className="max-w-4xl">

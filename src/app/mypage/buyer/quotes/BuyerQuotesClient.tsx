@@ -29,8 +29,8 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">견적 요청 내역</h1>
-              <p className="text-gray-600">맞춤 견적 요청을 관리하세요</p>
+              <h1 className="text-xl font-bold text-gray-900">견적 요청 내역</h1>
+              <p className="text-gray-600 mt-1 text-sm">맞춤 견적 요청을 관리하세요</p>
             </div>
             <Link
               href="/quotes/new"

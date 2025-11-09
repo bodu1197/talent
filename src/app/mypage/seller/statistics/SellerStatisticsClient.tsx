@@ -33,8 +33,8 @@ export default function SellerStatisticsClient({ stats, topServices }: Props) {
         <main className="flex-1 overflow-y-auto">
           <div className="py-8 px-4">
         <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">통계/분석</h1>
-          <p className="text-sm sm:text-base text-gray-600">판매 통계를 확인하세요</p>
+          <h1 className="text-xl font-bold text-gray-900">통계/분석</h1>
+          <p className="text-gray-600 mt-1 text-sm">판매 통계를 확인하세요</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

@@ -63,8 +63,8 @@ export default function BuyerDashboardClient({ stats, recentOrders, favorites, b
           <div className="py-8 px-4">
           {/* 페이지 헤더 */}
           <div className="mb-6 lg:mb-8">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">구매 대시보드</h1>
-            <p className="text-sm sm:text-base text-gray-600">주문 현황을 확인하세요</p>
+            <h1 className="text-xl font-bold text-gray-900">구매 대시보드</h1>
+            <p className="text-gray-600 mt-1 text-sm">주문 현황을 확인하세요</p>
           </div>
 
         {/* 통계 카드 */}

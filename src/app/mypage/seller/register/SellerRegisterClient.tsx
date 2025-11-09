@@ -299,8 +299,8 @@ export default function SellerRegisterClient({ userId }: Props) {
 
         {/* 페이지 헤더 */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">판매자 등록</h1>
-          <p className="text-gray-600">재능을 판매하기 위해 판매자 정보를 입력해주세요</p>
+          <h1 className="text-xl font-bold text-gray-900">판매자 등록</h1>
+          <p className="text-gray-600 mt-1 text-sm">재능을 판매하기 위해 판매자 정보를 입력해주세요</p>
         </div>
 
         {/* 진행 단계 표시 */}
