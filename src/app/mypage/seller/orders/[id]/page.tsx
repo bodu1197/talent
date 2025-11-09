@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { getOrderById } from '@/lib/supabase/queries/orders'
 import SellerOrderDetailClient from './SellerOrderDetailClient'
 
 interface PageProps {
@@ -28,11 +27,5 @@ export default async function SellerOrderDetailPage({ params }: PageProps) {
     redirect('/mypage/seller/register')
   }
 
-  const order = await getOrderById(id)
-
-  if (!order) {
-    redirect('/mypage/seller/orders')
-  }
-
-  return <SellerOrderDetailClient order={order} orderId={id} />
+  return <SellerOrderDetailClient orderId={id} />
 }
