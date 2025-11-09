@@ -8,6 +8,19 @@ export function useChatUnreadCount() {
   const [userId, setUserId] = useState<string | null>(null)
   const supabase = useMemo(() => createClient(), [])
 
+  // 알림음 재생
+  const playNotificationSound = useCallback(() => {
+    try {
+      const audio = new Audio('/sounds/notification.mp3')
+      audio.volume = 0.5
+      audio.play().catch(err => {
+        console.log('Notification sound play failed:', err)
+      })
+    } catch (error) {
+      console.error('Notification sound error:', error)
+    }
+  }, [])
+
   // 읽지 않은 메시지 수 조회
   const fetchUnreadCount = useCallback(async () => {
     try {
@@ -66,8 +79,10 @@ export function useChatUnreadCount() {
 
           // 내가 보낸 메시지가 아닌 경우에만 알림
           if (newMessage.sender_id !== userId) {
-            console.log('[useChatUnreadCount] Message from other user, fetching unread count')
+            console.log('[useChatUnreadCount] Message from other user, fetching unread count and playing sound')
             await fetchUnreadCount()
+            // 알림음 재생 (PC와 모바일 모두)
+            playNotificationSound()
           }
         }
       )
@@ -90,7 +105,7 @@ export function useChatUnreadCount() {
       clearInterval(interval)
       supabase.removeChannel(channel)
     }
-  }, [userId, supabase, fetchUnreadCount])
+  }, [userId, supabase, fetchUnreadCount, playNotificationSound])
 
   return { unreadCount, userId }
 }

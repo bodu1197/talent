@@ -75,10 +75,8 @@ export default function ChatNotificationBadge() {
             // 읽지 않은 메시지 수 즉시 갱신
             await fetchUnreadCount()
 
-            // 모바일에서 알림음 재생
-            if (window.matchMedia('(max-width: 1024px)').matches) {
-              playNotificationSound()
-            }
+            // 알림음 재생 (PC와 모바일 모두)
+            playNotificationSound()
           }
         }
       )
