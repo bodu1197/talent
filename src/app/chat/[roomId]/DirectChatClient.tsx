@@ -73,15 +73,18 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
   // 읽지 않은 메시지를 읽음 처리
   const markMessagesAsRead = async () => {
     try {
-      await fetch('/api/chat/messages/mark-read', {
+      console.log('[DirectChatClient] Marking messages as read for room:', roomId)
+      const response = await fetch('/api/chat/messages/mark-read', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ room_id: roomId })
       })
+      const data = await response.json()
+      console.log('[DirectChatClient] Mark-read response:', data)
     } catch (error) {
-      console.error('Mark messages as read error:', error)
+      console.error('[DirectChatClient] Mark messages as read error:', error)
     }
   }
 
