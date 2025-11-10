@@ -46,6 +46,35 @@ export default async function RecentViewedServices() {
 
   const validViews = (recentViews || []).filter((v: any) => v.service)
 
+  // 최근 본 서비스들의 별점 계산
+  if (validViews.length > 0) {
+    const serviceIds = validViews.map((v: any) => v.service_id)
+    const { data: reviewStats } = await supabase
+      .from('reviews')
+      .select('service_id, rating')
+      .in('service_id', serviceIds)
+      .eq('is_visible', true)
+
+    // 서비스별 평균 별점 계산
+    const ratingMap = new Map<string, { sum: number, count: number }>()
+    reviewStats?.forEach((review: any) => {
+      const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 }
+      ratingMap.set(review.service_id, {
+        sum: current.sum + review.rating,
+        count: current.count + 1
+      })
+    })
+
+    // 각 서비스에 별점 추가
+    validViews.forEach((view: any) => {
+      if (view.service) {
+        const stats = ratingMap.get(view.service_id)
+        view.service.rating = stats && stats.count > 0 ? stats.sum / stats.count : 0
+        view.service.review_count = stats?.count || 0
+      }
+    })
+  }
+
   let relatedServices: Service[] = []
 
   // 최근 본 서비스가 있으면 같은 카테고리의 서비스 가져오기
