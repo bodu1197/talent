@@ -44,14 +44,14 @@ CREATE POLICY "payment_requests_update"
 DROP POLICY IF EXISTS "payments_select" ON payments;
 
 -- SELECT 정책 (auth.uid() 최적화)
+-- payments 테이블은 order_id만 있으므로 orders 테이블과 조인하여 확인
 CREATE POLICY "payments_select"
   ON payments FOR SELECT
   USING (
-    buyer_id = (SELECT auth.uid())
-    OR EXISTS (
+    EXISTS (
       SELECT 1 FROM orders
       WHERE orders.id = payments.order_id
-        AND orders.seller_id = (SELECT auth.uid())
+        AND (orders.buyer_id = (SELECT auth.uid()) OR orders.seller_id = (SELECT auth.uid()))
     )
   );
 
