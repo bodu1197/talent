@@ -27,6 +27,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
   const [showRevisionModal, setShowRevisionModal] = useState(false)
   const [revisionDetails, setRevisionDetails] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [creatingChat, setCreatingChat] = useState(false)
 
   useEffect(() => {
     if (user) {
@@ -90,6 +91,30 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
       alert('수정 요청에 실패했습니다')
     } finally {
       setSubmitting(false)
+    }
+  }
+
+  const handleCreateChat = async () => {
+    try {
+      setCreatingChat(true)
+      const response = await fetch('/api/chat/rooms/create-from-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order_id: id })
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || '채팅방 생성에 실패했습니다')
+      }
+
+      const data = await response.json()
+      window.location.href = `/chat/${data.room.id}`
+    } catch (err: any) {
+      logger.error('채팅방 생성 실패:', err)
+      alert(err.message || '채팅방 생성 중 오류가 발생했습니다')
+    } finally {
+      setCreatingChat(false)
     }
   }
 
@@ -171,13 +196,14 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
               <p className="text-gray-600">주문 번호: #{order.order_number || id}</p>
             </div>
             <div className="flex items-center gap-3">
-              <Link
-                href={`/chat?order=${id}`}
-                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+              <button
+                onClick={handleCreateChat}
+                disabled={creatingChat}
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
               >
                 <i className="fas fa-comment mr-2"></i>
-                메시지
-              </Link>
+                {creatingChat ? '로딩 중...' : '메시지'}
+              </button>
               {order.status === 'delivered' && (
                 <>
                   <button
@@ -397,13 +423,14 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                 </div>
               </div>
               <div className="space-y-2">
-                <Link
-                  href={`/chat?order=${id}`}
-                  className="w-full px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium text-center block"
+                <button
+                  onClick={handleCreateChat}
+                  disabled={creatingChat}
+                  className="w-full px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium disabled:opacity-50"
                 >
                   <i className="fas fa-comment mr-2"></i>
-                  메시지 보내기
-                </Link>
+                  {creatingChat ? '로딩 중...' : '메시지 보내기'}
+                </button>
                 <Link
                   href={`/seller/${order.seller_id}`}
                   className="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-center block"

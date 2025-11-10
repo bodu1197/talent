@@ -34,23 +34,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '권한이 없습니다' }, { status: 403 })
     }
 
-    // 판매자의 sellers.id 찾기 (orders.seller_id는 users.id를 참조)
-    const { data: seller, error: sellerError } = await supabase
-      .from('sellers')
-      .select('id')
-      .eq('user_id', order.seller_id)
-      .single()
+    // user1_id와 user2_id 정렬 (user1_id <= user2_id)
+    const user1_id = order.buyer_id < order.seller_id ? order.buyer_id : order.seller_id
+    const user2_id = order.buyer_id < order.seller_id ? order.seller_id : order.buyer_id
 
-    if (sellerError || !seller) {
-      return NextResponse.json({ error: '판매자 정보를 찾을 수 없습니다' }, { status: 404 })
-    }
-
-    // 기존 채팅방 확인
+    // 기존 채팅방 확인 (user1_id, user2_id, service_id로 확인)
     const { data: existingRoom } = await supabase
       .from('chat_rooms')
       .select('id')
-      .eq('buyer_id', order.buyer_id)
-      .eq('seller_id', seller.id)
+      .eq('user1_id', user1_id)
+      .eq('user2_id', user2_id)
+      .eq('service_id', order.service_id)
       .maybeSingle()
 
     if (existingRoom) {
@@ -64,8 +58,8 @@ export async function POST(request: NextRequest) {
     const { data: newRoom, error: roomError } = await supabase
       .from('chat_rooms')
       .insert({
-        buyer_id: order.buyer_id,
-        seller_id: seller.id,
+        user1_id,
+        user2_id,
         service_id: order.service_id
       })
       .select('id')
