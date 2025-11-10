@@ -198,6 +198,12 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
     categoryPath = await getCategoryPath(categories[0].id)
   }
 
+  // 실제 리뷰 데이터로 평균 별점 계산
+  const averageRating = serviceReviews && serviceReviews.length > 0
+    ? (serviceReviews.reduce((sum, r) => sum + r.rating, 0) / serviceReviews.length).toFixed(1)
+    : '0.0'
+  const reviewCount = serviceReviews?.length || 0
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 조회수 추적 */}
@@ -238,11 +244,11 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   {[1, 2, 3, 4, 5].map((star) => (
                     <i
                       key={star}
-                      className={`fas fa-star ${star <= Math.round(service.rating || 5) ? 'text-green-500' : 'text-gray-300'}`}
+                      className={`fas fa-star ${star <= Math.round(parseFloat(averageRating)) ? 'text-yellow-400' : 'text-gray-300'}`}
                     ></i>
                   ))}
-                  <span className="font-bold ml-1">{service.rating || 0}</span>
-                  <span className="text-gray-500">({service.review_count || 0})</span>
+                  <span className="font-bold ml-1">{averageRating}</span>
+                  <span className="text-gray-500">({reviewCount})</span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-600">
                   <i className="fas fa-heart text-red-400"></i>
