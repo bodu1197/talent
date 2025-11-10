@@ -36,6 +36,13 @@ export default async function BuyerDashboardPage() {
     buyer = newBuyer
   }
 
+  // 판매자 정보 확인 (판매자로 등록되어 있는지 체크)
+  const { data: seller } = await supabase
+    .from('sellers')
+    .select('id, display_name, profile_image')
+    .eq('user_id', user.id)
+    .maybeSingle()
+
   // 대시보드 데이터 서버에서 로드
   const [stats, recentOrders, favorites, benefits] = await Promise.all([
     getBuyerDashboardStats(buyer.id),
@@ -45,5 +52,5 @@ export default async function BuyerDashboardPage() {
   ])
 
   // 클라이언트 컴포넌트에 데이터 전달
-  return <BuyerDashboardClient stats={stats} recentOrders={recentOrders} favorites={favorites} benefits={benefits} />
+  return <BuyerDashboardClient stats={stats} recentOrders={recentOrders} favorites={favorites} benefits={benefits} sellerData={seller} />
 }

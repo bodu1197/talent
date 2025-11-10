@@ -15,9 +15,14 @@ type Props = {
   recentOrders: Order[]
   favorites: Favorite[]
   benefits: Benefits
+  sellerData?: {
+    id: string
+    display_name: string
+    profile_image?: string | null
+  } | null
 }
 
-export default function BuyerDashboardClient({ stats, recentOrders, favorites, benefits }: Props) {
+export default function BuyerDashboardClient({ stats, recentOrders, favorites, benefits, sellerData }: Props) {
   // Generate alerts based on real data
   const alerts = []
   if (stats?.deliveredOrders > 0) {
@@ -58,7 +63,7 @@ export default function BuyerDashboardClient({ stats, recentOrders, favorites, b
     <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
       <div className="flex w-full max-w-[1200px]">
         <MobileSidebar mode="buyer" />
-        <Sidebar mode="buyer" />
+        <Sidebar mode="buyer" sellerData={sellerData} />
         <main className="flex-1 overflow-y-auto">
           <div className="py-8 px-4">
           {/* 페이지 헤더 */}

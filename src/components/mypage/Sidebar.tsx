@@ -174,8 +174,8 @@ export default function Sidebar({ mode, sellerData }: SidebarProps) {
       <div className="p-4 flex-1">
         {/* 프로필 정보 카드 */}
         <div className="mb-4">
-          {mode === 'seller' && sellerData ? (
-            // 판매자 모드: 전문가 프로필 표시
+          {sellerData ? (
+            // 판매자로 등록된 경우: 전문가 프로필 표시 (구매자/판매자 모드 모두)
             <Link
               href="/mypage/seller/profile"
               className="flex items-center gap-3 w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 card-interactive"
@@ -198,7 +198,7 @@ export default function Sidebar({ mode, sellerData }: SidebarProps) {
               <i className="fas fa-chevron-right text-gray-400 text-sm"></i>
             </Link>
           ) : (
-            // 구매자 모드: 기본 회원 정보 표시
+            // 판매자로 등록되지 않은 경우: 기본 회원 정보 표시
             <Link
               href="/mypage/settings"
               className="flex items-center gap-3 w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 card-interactive"
