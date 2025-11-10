@@ -147,9 +147,28 @@ const buyerNavItems: NavItem[] = [
 
 export default function Sidebar({ mode, sellerData }: SidebarProps) {
   const pathname = usePathname()
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
-
   const navItems = mode === 'seller' ? sellerNavItems : buyerNavItems
+
+  // Initialize with currently active parent items expanded
+  const getInitialExpandedItems = () => {
+    const expanded = new Set<string>()
+    navItems.forEach(item => {
+      if (item.children) {
+        // Check if any child is active
+        const hasActiveChild = item.children.some(child => {
+          if (child.href === pathname) return true
+          if (pathname.startsWith(child.href) && child.href !== '/mypage') return true
+          return false
+        })
+        if (hasActiveChild) {
+          expanded.add(item.href)
+        }
+      }
+    })
+    return expanded
+  }
+
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(getInitialExpandedItems)
 
   const toggleExpand = (href: string) => {
     setExpandedItems(prev => {
