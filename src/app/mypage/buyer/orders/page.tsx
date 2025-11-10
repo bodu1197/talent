@@ -90,6 +90,60 @@ function BuyerOrdersContent() {
     }
   }
 
+  async function handleConfirmOrder(orderId: string) {
+    if (!confirm('구매를 확정하시겠습니까?\n확정 후에는 취소할 수 없습니다.')) {
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/orders/${orderId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'completed' })
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || '구매 확정에 실패했습니다')
+      }
+
+      alert('구매가 확정되었습니다.')
+      loadOrders()
+      loadStatusCounts()
+    } catch (err: any) {
+      logger.error('구매 확정 실패:', err)
+      alert(err.message || '구매 확정에 실패했습니다')
+    }
+  }
+
+  async function handleRequestRevision(orderId: string) {
+    const reason = prompt('수정 요청 사유를 입력해주세요:')
+
+    if (!reason || reason.trim() === '') {
+      alert('수정 요청 사유를 입력해주세요')
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/orders/${orderId}/revision`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason })
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || '수정 요청에 실패했습니다')
+      }
+
+      alert('수정 요청이 전송되었습니다.')
+      loadOrders()
+    } catch (err: any) {
+      logger.error('수정 요청 실패:', err)
+      alert(err.message || '수정 요청에 실패했습니다')
+    }
+  }
+
   const filteredOrders = orders.filter(order => {
     if (filters.searchQuery) {
       const query = filters.searchQuery.toLowerCase()
@@ -151,11 +205,17 @@ function BuyerOrdersContent() {
             <i className="fas fa-download mr-2"></i>
             다운로드
           </Link>
-          <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium">
+          <button
+            onClick={() => handleConfirmOrder(order.id)}
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+          >
             <i className="fas fa-check mr-2"></i>
             구매 확정
           </button>
-          <button className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors text-sm font-medium">
+          <button
+            onClick={() => handleRequestRevision(order.id)}
+            className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors text-sm font-medium"
+          >
             <i className="fas fa-redo mr-2"></i>
             수정 요청
           </button>
