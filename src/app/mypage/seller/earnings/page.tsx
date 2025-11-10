@@ -21,18 +21,20 @@ export default async function SellerEarningsPage() {
   }
 
   // Calculate earnings from actual orders
+  // Note: orders.seller_id references users.id, not sellers.id
+
   // Get completed orders (available balance)
   const { data: completedOrders } = await supabase
     .from('orders')
     .select('total_amount, created_at')
-    .eq('seller_id', seller.id)
+    .eq('seller_id', user.id)
     .eq('status', 'completed')
 
   // Get delivered orders (pending balance - waiting for buyer confirmation)
   const { data: deliveredOrders } = await supabase
     .from('orders')
     .select('total_amount, created_at')
-    .eq('seller_id', seller.id)
+    .eq('seller_id', user.id)
     .eq('status', 'delivered')
 
   // Get withdrawal history
@@ -47,10 +49,10 @@ export default async function SellerEarningsPage() {
   const totalPending = deliveredOrders?.reduce((sum, order) => sum + (order.total_amount || 0), 0) || 0
   const totalWithdrawn = withdrawals?.filter(w => w.status === 'completed').reduce((sum, w) => sum + (w.amount || 0), 0) || 0
 
-  // Commission: 20% platform fee
-  const availableBalance = Math.floor(totalCompleted * 0.8) - totalWithdrawn
-  const pendingBalance = Math.floor(totalPending * 0.8)
-  const totalEarned = Math.floor(totalCompleted * 0.8)
+  // No commission - 100% to seller
+  const availableBalance = totalCompleted - totalWithdrawn
+  const pendingBalance = totalPending
+  const totalEarned = totalCompleted
 
   const earnings = {
     available_balance: availableBalance,
@@ -71,7 +73,7 @@ export default async function SellerEarningsPage() {
       updated_at,
       service:services(id, title)
     `)
-    .eq('seller_id', seller.id)
+    .eq('seller_id', user.id)
     .in('status', ['completed', 'delivered'])
     .order('updated_at', { ascending: false })
     .limit(10)

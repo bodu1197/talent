@@ -17,7 +17,7 @@ export default async function SellerDashboardPage() {
   // 판매자 정보 가져오기
   const { data: seller } = await supabase
     .from('sellers')
-    .select('id, display_name, profile_image')
+    .select('id, display_name, profile_image, user_id')
     .eq('user_id', user.id)
     .maybeSingle()
 
@@ -26,9 +26,10 @@ export default async function SellerDashboardPage() {
   }
 
   // 대시보드 데이터 서버에서 로드
+  // Note: orders.seller_id references users.id, not sellers.id
   const [stats, recentOrders] = await Promise.all([
-    getSellerDashboardStats(seller.id),
-    getSellerRecentOrders(seller.id, 5)
+    getSellerDashboardStats(user.id),
+    getSellerRecentOrders(user.id, 5)
   ])
 
   // 클라이언트 컴포넌트에 데이터 전달

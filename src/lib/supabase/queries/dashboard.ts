@@ -153,35 +153,36 @@ export async function getBuyerBenefits(userId: string) {
   }
 }
 
-export async function getSellerDashboardStats(userId: string) {
+export async function getSellerDashboardStats(sellerUserId: string) {
   const supabase = await createClient()
 
   // Get counts for different order statuses
+  // Note: orders.seller_id actually references users.id (not sellers.id)
   const [newOrdersResult, inProgressResult, deliveredResult, completedResult] = await Promise.all([
     supabase
       .from('orders')
       .select('*', { count: 'exact', head: true })
-      .eq('seller_id', userId)
+      .eq('seller_id', sellerUserId)
       .eq('status', 'paid'),
     supabase
       .from('orders')
       .select('*', { count: 'exact', head: true })
-      .eq('seller_id', userId)
+      .eq('seller_id', sellerUserId)
       .eq('status', 'in_progress'),
     supabase
       .from('orders')
       .select('*', { count: 'exact', head: true })
-      .eq('seller_id', userId)
+      .eq('seller_id', sellerUserId)
       .eq('status', 'delivered'),
     supabase
       .from('orders')
       .select('total_amount', { count: 'exact' })
-      .eq('seller_id', userId)
+      .eq('seller_id', sellerUserId)
       .eq('status', 'completed')
       .gte('created_at', new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString())
   ])
 
-  // Calculate monthly revenue
+  // Calculate monthly revenue (no commission - 100% to seller)
   const monthlyRevenue = completedResult.data?.reduce((sum, order) => sum + (order.total_amount || 0), 0) || 0
 
   return {
@@ -192,9 +193,10 @@ export async function getSellerDashboardStats(userId: string) {
   }
 }
 
-export async function getSellerRecentOrders(userId: string, limit: number = 5) {
+export async function getSellerRecentOrders(sellerUserId: string, limit: number = 5) {
   const supabase = await createClient()
 
+  // Note: orders.seller_id actually references users.id (not sellers.id)
   const { data, error } = await supabase
     .from('orders')
     .select(`
@@ -202,7 +204,7 @@ export async function getSellerRecentOrders(userId: string, limit: number = 5) {
       service:services(id, title, thumbnail_url),
       buyer:users!buyer_id(id, name, profile_image)
     `)
-    .eq('seller_id', userId)
+    .eq('seller_id', sellerUserId)
     .in('status', ['paid', 'in_progress', 'delivered'])
     .order('created_at', { ascending: false })
     .limit(limit)

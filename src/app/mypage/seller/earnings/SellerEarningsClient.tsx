@@ -102,8 +102,7 @@ export default function SellerEarningsClient({ earnings, transactions, sellerDat
                       #{tx.order_number || tx.id.slice(0, 8)}
                     </td>
                     <td className="px-6 py-4 text-sm font-medium text-right text-green-600">
-                      +{Math.floor((tx.total_amount || 0) * 0.8).toLocaleString()}원
-                      <span className="text-xs text-gray-500 ml-1">(수수료 20% 제외)</span>
+                      +{(tx.total_amount || 0).toLocaleString()}원
                     </td>
                     <td className="px-6 py-4 text-center">
                       <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusClass(tx.status)}`}>
