@@ -471,29 +471,10 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
             {/* 리뷰 */}
             <div id="reviews" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
-              <div className="flex items-center justify-between mb-6">
+              <div className="mb-6">
                 <h2 className="text-xl font-bold">
                   리뷰 ({serviceReviews?.length || 0})
                 </h2>
-                {serviceReviews && serviceReviews.length > 0 && (
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-1">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <i
-                          key={star}
-                          className={`fas fa-star ${
-                            star <= Math.round(serviceReviews.reduce((sum, r) => sum + r.rating, 0) / serviceReviews.length)
-                              ? 'text-yellow-400'
-                              : 'text-gray-300'
-                          }`}
-                        ></i>
-                      ))}
-                    </div>
-                    <span className="font-bold text-lg">
-                      {(serviceReviews.reduce((sum, r) => sum + r.rating, 0) / serviceReviews.length).toFixed(1)}
-                    </span>
-                  </div>
-                )}
               </div>
 
               {serviceReviews && serviceReviews.length > 0 ? (
