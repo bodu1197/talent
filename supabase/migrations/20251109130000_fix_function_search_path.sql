@@ -1,6 +1,8 @@
 -- Fix search_path for chat-related functions
 
 -- 1. mark_room_messages_as_read 함수 수정
+DROP FUNCTION IF EXISTS public.mark_room_messages_as_read(UUID, UUID);
+
 CREATE OR REPLACE FUNCTION public.mark_room_messages_as_read(p_room_id UUID, p_user_id UUID)
 RETURNS void
 LANGUAGE plpgsql
@@ -17,6 +19,8 @@ END;
 $$;
 
 -- 2. get_unread_room_count 함수 수정
+DROP FUNCTION IF EXISTS public.get_unread_room_count(UUID);
+
 CREATE OR REPLACE FUNCTION public.get_unread_room_count(p_user_id UUID)
 RETURNS INTEGER
 LANGUAGE plpgsql
