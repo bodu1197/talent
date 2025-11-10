@@ -7,6 +7,7 @@ type Stats = {
   newOrders: number
   inProgressOrders: number
   deliveredOrders: number
+  completedOrders: number
   monthlyRevenue: number
 }
 
@@ -72,7 +73,7 @@ export default function SellerDashboardClient({ stats, recentOrders, sellerData 
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-gray-600">완료된 주문</p>
-                  <p className="text-lg font-bold text-gray-900">{stats.deliveredOrders}건</p>
+                  <p className="text-lg font-bold text-gray-900">{stats.completedOrders}건</p>
                 </div>
                 <i className="fas fa-check-circle text-2xl text-green-500"></i>
               </div>

@@ -158,7 +158,7 @@ export async function getSellerDashboardStats(sellerUserId: string) {
 
   // Get counts for different order statuses
   // Note: orders.seller_id actually references users.id (not sellers.id)
-  const [newOrdersResult, inProgressResult, deliveredResult, completedResult] = await Promise.all([
+  const [newOrdersResult, inProgressResult, deliveredResult, completedResult, monthlyCompletedResult] = await Promise.all([
     supabase
       .from('orders')
       .select('*', { count: 'exact', head: true })
@@ -176,6 +176,11 @@ export async function getSellerDashboardStats(sellerUserId: string) {
       .eq('status', 'delivered'),
     supabase
       .from('orders')
+      .select('*', { count: 'exact', head: true })
+      .eq('seller_id', sellerUserId)
+      .eq('status', 'completed'),
+    supabase
+      .from('orders')
       .select('total_amount', { count: 'exact' })
       .eq('seller_id', sellerUserId)
       .eq('status', 'completed')
@@ -183,12 +188,13 @@ export async function getSellerDashboardStats(sellerUserId: string) {
   ])
 
   // Calculate monthly revenue (no commission - 100% to seller)
-  const monthlyRevenue = completedResult.data?.reduce((sum, order) => sum + (order.total_amount || 0), 0) || 0
+  const monthlyRevenue = monthlyCompletedResult.data?.reduce((sum, order) => sum + (order.total_amount || 0), 0) || 0
 
   return {
     newOrders: newOrdersResult.count || 0,
     inProgressOrders: inProgressResult.count || 0,
     deliveredOrders: deliveredResult.count || 0,
+    completedOrders: completedResult.count || 0,
     monthlyRevenue
   }
 }
