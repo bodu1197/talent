@@ -2,6 +2,10 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import SellerOrderDetailClient from './SellerOrderDetailClient'
 
+// 페이지를 dynamic으로 설정 (캐싱 비활성화)
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 interface PageProps {
   params: Promise<{
     id: string

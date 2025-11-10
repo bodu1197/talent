@@ -3,6 +3,10 @@ import { createClient } from '@/lib/supabase/server'
 import { getSellerOrders, getSellerOrdersCount } from '@/lib/supabase/queries/orders'
 import SellerOrdersClient from './SellerOrdersClient'
 
+// 페이지를 dynamic으로 설정 (캐싱 비활성화)
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 type OrderStatus = 'all' | 'paid' | 'in_progress' | 'delivered' | 'completed' | 'cancelled'
 
 export default async function SellerOrdersPage({
