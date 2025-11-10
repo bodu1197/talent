@@ -1,7 +1,5 @@
 'use client'
 
-import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
@@ -274,18 +272,12 @@ export default function SellerRegisterClient({ userId }: Props) {
   }
 
   return (
-    <>
-
-      <Header />
-
-      <div className="flex min-h-screen bg-gray-50 pt-16">
-
+    <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
+      <div className="flex w-full max-w-[1200px]">
         <MobileSidebar mode="buyer" />
         <Sidebar mode="buyer" />
-
-        <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
-
-          <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
+        <main className="flex-1 overflow-y-auto">
+          <div className="py-8 px-4">
         {/* 상단 네비게이션 */}
         <div className="mb-6">
           <Link
@@ -767,10 +759,7 @@ export default function SellerRegisterClient({ userId }: Props) {
         </div>
           </div>
         </main>
-
       </div>
-      <Footer />
-
-      </>
+    </div>
   )
 }
