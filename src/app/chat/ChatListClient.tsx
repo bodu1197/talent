@@ -195,11 +195,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
       })
       const data = await response.json()
       console.log('[ChatListClient] Mark-read response:', data)
-
-      // 읽음 처리 후 unread count 새로고침
-      if (data.success) {
-        await refreshCount()
-      }
+      // refreshCount 호출 제거 - DB 재조회 방지
     } catch (error) {
       console.error('[ChatListClient] Mark messages as read error:', error)
     }
@@ -213,8 +209,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
       setMessages(data.messages || [])
       // 메시지 로드 후 읽음 처리
       await markMessagesAsRead(roomId)
-      // 채팅방 목록도 새로고침하여 배지 업데이트
-      await loadRooms()
+      // loadRooms 호출 제거 - DB 재조회 방지
     }
   }
 
@@ -303,7 +298,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
 
       if (response.ok) {
         // 실시간 구독이 메시지를 자동으로 추가하므로 여기서는 추가하지 않음
-        loadRooms() // 채팅방 목록의 마지막 메시지 갱신
+        // loadRooms() 제거 - DB 재조회 방지, 실시간 구독으로 자동 업데이트
       } else {
         const errorData = await response.json()
         alert(`메시지 전송 실패: ${errorData.error || '알 수 없는 오류'}`)
@@ -368,7 +363,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
             file_size: newMsg.file_size,
             file_type: newMsg.file_type
           }])
-          loadRooms() // 채팅방 목록의 마지막 메시지 업데이트
+          // loadRooms() 제거 - DB 재조회 방지
         }
       )
       .subscribe()
