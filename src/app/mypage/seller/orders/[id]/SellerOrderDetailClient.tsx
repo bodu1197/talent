@@ -49,6 +49,24 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
     }
   }
 
+  async function handleAcceptOrder() {
+    if (!confirm('주문을 접수하시겠습니까?\n접수 후 작업을 시작할 수 있습니다.')) {
+      return
+    }
+
+    try {
+      setSubmitting(true)
+      await updateOrderStatus(orderId, 'in_progress')
+      await loadOrder() // 주문 정보 새로고침
+      alert('주문이 접수되었습니다. 구매자에게 작업 시작 알림이 전송되었습니다.')
+    } catch (err: any) {
+      logger.error('주문 접수 실패:', err)
+      alert('주문 접수에 실패했습니다: ' + err.message)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   async function handleDelivery() {
     if (!deliveryMessage.trim()) {
       alert('전달 메시지를 입력해주세요')
@@ -356,6 +374,38 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h3 className="font-bold text-gray-900 mb-4">빠른 액션</h3>
               <div className="space-y-2">
+                {/* 결제 완료 상태일 때: 접수 버튼 표시 */}
+                {order.status === 'paid' && (
+                  <button
+                    onClick={handleAcceptOrder}
+                    disabled={submitting}
+                    className="w-full px-4 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {submitting ? (
+                      <>
+                        <i className="fas fa-spinner fa-spin mr-2"></i>
+                        처리 중...
+                      </>
+                    ) : (
+                      <>
+                        <i className="fas fa-check-circle mr-2"></i>
+                        주문 접수하기
+                      </>
+                    )}
+                  </button>
+                )}
+
+                {/* 진행 중 상태일 때: 납품 버튼 표시 */}
+                {order.status === 'in_progress' && (
+                  <button
+                    onClick={() => setShowDeliveryModal(true)}
+                    className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-bold text-lg"
+                  >
+                    <i className="fas fa-upload mr-2"></i>
+                    납품하기
+                  </button>
+                )}
+
                 <button className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
                   <i className="fas fa-ban mr-2"></i>
                   취소 요청
