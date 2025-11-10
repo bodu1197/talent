@@ -44,9 +44,10 @@ export default async function BuyerDashboardPage() {
     .maybeSingle()
 
   // 대시보드 데이터 서버에서 로드
+  // Note: orders.buyer_id references users.id, not buyers.id
   const [stats, recentOrders, favorites, benefits] = await Promise.all([
-    getBuyerDashboardStats(buyer.id),
-    getBuyerRecentOrders(buyer.id, 5),
+    getBuyerDashboardStats(user.id),
+    getBuyerRecentOrders(user.id, 5),
     getBuyerRecentFavorites(user.id, 5),
     getBuyerBenefits(user.id)
   ])
