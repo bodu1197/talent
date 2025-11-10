@@ -134,6 +134,22 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
     }
   }
 
+  // 이 서비스에 대한 리뷰 조회
+  const { data: serviceReviews } = await supabase
+    .from('reviews')
+    .select(`
+      id,
+      rating,
+      comment,
+      created_at,
+      buyer:users!buyer_id(id, name, profile_image),
+      seller_reply,
+      seller_reply_at
+    `)
+    .eq('service_id', id)
+    .eq('is_visible', true)
+    .order('created_at', { ascending: false })
+
   // seller의 통계 정보 조회
   let sellerStats = {
     totalOrders: 0,
@@ -162,7 +178,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       const serviceIds = sellerServices.map(s => s.id)
 
       const { data: reviews } = await supabase
-        .from('service_reviews')
+        .from('reviews')
         .select('rating')
         .in('service_id', serviceIds)
 
@@ -455,8 +471,100 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
             {/* 리뷰 */}
             <div id="reviews" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
-              <h2 className="text-xl font-bold mb-4">리뷰</h2>
-              <p className="text-gray-600">리뷰가 여기에 표시됩니다.</p>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold">
+                  리뷰 ({serviceReviews?.length || 0})
+                </h2>
+                {serviceReviews && serviceReviews.length > 0 && (
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <i
+                          key={star}
+                          className={`fas fa-star ${
+                            star <= Math.round(serviceReviews.reduce((sum, r) => sum + r.rating, 0) / serviceReviews.length)
+                              ? 'text-yellow-400'
+                              : 'text-gray-300'
+                          }`}
+                        ></i>
+                      ))}
+                    </div>
+                    <span className="font-bold text-lg">
+                      {(serviceReviews.reduce((sum, r) => sum + r.rating, 0) / serviceReviews.length).toFixed(1)}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {serviceReviews && serviceReviews.length > 0 ? (
+                <div className="space-y-6">
+                  {serviceReviews.map((review: any) => (
+                    <div key={review.id} className="border-b border-gray-200 pb-6 last:border-0">
+                      {/* 리뷰 헤더 */}
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          {/* 프로필 이미지 */}
+                          <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                            {review.buyer?.profile_image ? (
+                              <img
+                                src={review.buyer.profile_image}
+                                alt={review.buyer.name}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <i className="fas fa-user text-gray-400"></i>
+                            )}
+                          </div>
+                          <div>
+                            <div className="font-medium text-gray-900">
+                              {review.buyer?.name || '익명'}
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              {new Date(review.created_at).toLocaleDateString('ko-KR')}
+                            </div>
+                          </div>
+                        </div>
+                        {/* 별점 */}
+                        <div className="flex items-center gap-1">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <i
+                              key={star}
+                              className={`fas fa-star text-sm ${
+                                star <= review.rating ? 'text-yellow-400' : 'text-gray-300'
+                              }`}
+                            ></i>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* 리뷰 내용 */}
+                      <p className="text-gray-700 mb-4 whitespace-pre-wrap">
+                        {review.comment}
+                      </p>
+
+                      {/* 판매자 답변 */}
+                      {review.seller_reply && (
+                        <div className="bg-gray-50 rounded-lg p-4 ml-8">
+                          <div className="flex items-center gap-2 mb-2">
+                            <i className="fas fa-reply text-[#0f3460]"></i>
+                            <span className="text-sm font-medium text-gray-900">판매자 답변</span>
+                            <span className="text-xs text-gray-500">
+                              {new Date(review.seller_reply_at).toLocaleDateString('ko-KR')}
+                            </span>
+                          </div>
+                          <p className="text-gray-700 whitespace-pre-wrap">{review.seller_reply}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <i className="fas fa-star text-gray-300 text-5xl mb-4"></i>
+                  <p className="text-gray-600">아직 작성된 리뷰가 없습니다</p>
+                  <p className="text-sm text-gray-500 mt-2">첫 번째 리뷰를 작성해보세요!</p>
+                </div>
+              )}
             </div>
           </div>
 

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Sidebar from '@/components/mypage/Sidebar'
 import MobileSidebar from '@/components/mypage/MobileSidebar'
-import { createReview, updateReview, deleteReview } from '@/lib/supabase/mutations/reviews'
+import { createReview } from '@/lib/supabase/mutations/reviews'
 import { logger } from '@/lib/logger'
 import { useRouter } from 'next/navigation'
 
@@ -24,9 +24,7 @@ export default function BuyerReviewsClient({
   const tabFromUrl = searchParams.get('tab') || 'pending'
   const [activeTab, setActiveTab] = useState<'pending' | 'written'>(tabFromUrl as 'pending' | 'written')
   const [showWriteModal, setShowWriteModal] = useState(false)
-  const [showEditModal, setShowEditModal] = useState(false)
   const [selectedOrder, setSelectedOrder] = useState<any>(null)
-  const [selectedReview, setSelectedReview] = useState<any>(null)
   const [rating, setRating] = useState(5)
   const [reviewContent, setReviewContent] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -69,45 +67,6 @@ export default function BuyerReviewsClient({
     }
   }
 
-  const handleEditReview = async () => {
-    if (!reviewContent.trim()) {
-      alert('리뷰 내용을 입력해주세요')
-      return
-    }
-
-    try {
-      setSubmitting(true)
-      await updateReview(selectedReview.id, {
-        rating,
-        content: reviewContent
-      })
-
-      setShowEditModal(false)
-      setSelectedReview(null)
-      setRating(5)
-      setReviewContent('')
-      refreshData()
-      alert('리뷰가 수정되었습니다')
-    } catch (err: any) {
-      logger.error('리뷰 수정 실패:', err)
-      alert('리뷰 수정에 실패했습니다')
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
-  const handleDeleteReview = async (reviewId: string) => {
-    if (!confirm('정말 이 리뷰를 삭제하시겠습니까?')) return
-
-    try {
-      await deleteReview(reviewId)
-      refreshData()
-      alert('리뷰가 삭제되었습니다')
-    } catch (err: any) {
-      logger.error('리뷰 삭제 실패:', err)
-      alert('리뷰 삭제에 실패했습니다')
-    }
-  }
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
@@ -269,26 +228,11 @@ export default function BuyerReviewsClient({
                     </div>
                   </div>
 
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => {
-                        setSelectedReview(review)
-                        setRating(review.rating)
-                        setReviewContent(review.comment)
-                        setShowEditModal(true)
-                      }}
-                      className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
-                    >
-                      <i className="fas fa-edit mr-2"></i>
-                      수정
-                    </button>
-                    <button
-                      onClick={() => handleDeleteReview(review.id)}
-                      className="px-4 py-2 border border-red-300 text-red-700 rounded-lg hover:bg-red-50 transition-colors text-sm font-medium"
-                    >
-                      <i className="fas fa-trash mr-2"></i>
-                      삭제
-                    </button>
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <p className="text-sm text-blue-800">
+                      <i className="fas fa-info-circle mr-2"></i>
+                      작성된 리뷰는 수정 및 삭제가 불가능합니다
+                    </p>
                   </div>
                 </div>
               ))
@@ -392,86 +336,6 @@ export default function BuyerReviewsClient({
           </div>
         )}
 
-        {/* 리뷰 수정 모달 */}
-        {showEditModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-2xl w-full p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">리뷰 수정</h2>
-                <button
-                  onClick={() => {
-                    setShowEditModal(false)
-                    setRating(5)
-                    setReviewContent('')
-                  }}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <i className="fas fa-times text-2xl"></i>
-                </button>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    평점 *
-                  </label>
-                  <div className="flex items-center gap-2">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <button
-                        key={star}
-                        type="button"
-                        onClick={() => setRating(star)}
-                        className="transition-colors"
-                      >
-                        <i className={`fas fa-star text-3xl ${star <= rating ? 'text-yellow-400' : 'text-gray-300'}`}></i>
-                      </button>
-                    ))}
-                    <span className="ml-2 text-gray-600">{rating}점</span>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    리뷰 내용 *
-                  </label>
-                  <textarea
-                    value={reviewContent}
-                    onChange={(e) => setReviewContent(e.target.value)}
-                    rows={6}
-                    placeholder="서비스 이용 후기를 작성해주세요"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
-                  ></textarea>
-                </div>
-
-                <div className="flex gap-3 pt-4">
-                  <button
-                    onClick={() => {
-                      setShowEditModal(false)
-                      setRating(5)
-                      setReviewContent('')
-                    }}
-                    disabled={submitting}
-                    className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
-                  >
-                    취소
-                  </button>
-                  <button
-                    onClick={handleEditReview}
-                    disabled={submitting}
-                    className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50"
-                  >
-                    {submitting ? '수정 중...' : (
-                      <>
-                        <i className="fas fa-check mr-2"></i>
-                        리뷰 수정
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
           </div>
         </main>
       </div>
