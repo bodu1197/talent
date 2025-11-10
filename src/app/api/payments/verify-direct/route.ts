@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { notifyPaymentReceived } from '@/lib/notifications'
 
 // Rate Limiting
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
@@ -115,6 +116,9 @@ export async function POST(request: NextRequest) {
       console.error('Order update error:', updateOrderError)
       return NextResponse.json({ error: '주문 상태 업데이트 실패' }, { status: 500 })
     }
+
+    // 판매자에게 결제 완료 알림 전송
+    await notifyPaymentReceived(order.seller_id, order.id, order.amount)
 
     return NextResponse.json({
       success: true,

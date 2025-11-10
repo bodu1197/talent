@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { notifyPaymentReceived } from '@/lib/notifications'
 
 // Rate Limiting을 위한 간단한 인메모리 캐시
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
@@ -126,6 +127,9 @@ export async function POST(request: NextRequest) {
         })
         .eq('id', payment_request_id)
     }
+
+    // 판매자에게 결제 완료 알림 전송
+    await notifyPaymentReceived(order.seller_id, order.id, order.amount)
 
     return NextResponse.json({
       success: true,

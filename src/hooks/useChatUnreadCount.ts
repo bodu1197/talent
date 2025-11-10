@@ -131,10 +131,9 @@ export function useChatUnreadCount() {
         },
         async (payload) => {
           const updatedMessage = payload.new as any
-          const oldMessage = payload.old as any
 
-          // is_read가 false에서 true로 변경된 경우만 처리
-          if (oldMessage?.is_read === false && updatedMessage?.is_read === true) {
+          // is_read가 true로 변경된 경우만 처리 (recipient_id가 현재 사용자가 아닌 경우)
+          if (updatedMessage?.is_read === true && updatedMessage?.sender_id !== userId) {
             console.log('[useChatUnreadCount] Message marked as read:', updatedMessage.id)
             // 메시지가 읽음 처리되면 즉시 배지 갱신
             await fetchUnreadCount()
