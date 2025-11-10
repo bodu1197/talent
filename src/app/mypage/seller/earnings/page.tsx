@@ -44,6 +44,14 @@ export default async function SellerEarningsPage() {
     .eq('seller_id', seller.id)
     .order('created_at', { ascending: false })
 
+  // Check for pending withdrawal request
+  const { data: pendingWithdrawal } = await supabase
+    .from('withdrawal_requests')
+    .select('id, amount, status, created_at')
+    .eq('seller_id', seller.id)
+    .eq('status', 'pending')
+    .maybeSingle()
+
   // Calculate balances
   const totalCompleted = completedOrders?.reduce((sum, order) => sum + (order.total_amount || 0), 0) || 0
   const totalPending = deliveredOrders?.reduce((sum, order) => sum + (order.total_amount || 0), 0) || 0
@@ -58,7 +66,8 @@ export default async function SellerEarningsPage() {
     available_balance: availableBalance,
     pending_balance: pendingBalance,
     total_withdrawn: totalWithdrawn,
-    total_earned: totalEarned
+    total_earned: totalEarned,
+    pending_withdrawal: pendingWithdrawal
   }
 
   // Get recent completed orders as transactions

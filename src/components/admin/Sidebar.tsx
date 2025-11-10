@@ -13,6 +13,7 @@ const menuItems = [
   { name: '수정 요청 관리', path: '/admin/service-revisions', icon: 'fa-edit', badge: 'pendingRevisions' },
   { name: '주문 관리', path: '/admin/orders', icon: 'fa-shopping-cart' },
   { name: '정산 관리', path: '/admin/settlements', icon: 'fa-money-bill-wave' },
+  { name: '출금 관리', path: '/admin/withdrawals', icon: 'fa-wallet', badge: 'pendingWithdrawals' },
   { name: '리뷰 관리', path: '/admin/reviews', icon: 'fa-star' },
   { name: '신고 관리', path: '/admin/reports', icon: 'fa-flag' },
   { name: '분쟁 관리', path: '/admin/disputes', icon: 'fa-gavel' },
@@ -27,7 +28,8 @@ export default function AdminSidebar() {
   const [collapsed, setCollapsed] = useState(false)
   const [badgeCounts, setBadgeCounts] = useState({
     pendingServices: 0,
-    pendingRevisions: 0
+    pendingRevisions: 0,
+    pendingWithdrawals: 0
   })
 
   useEffect(() => {
@@ -54,9 +56,16 @@ export default function AdminSidebar() {
         .select('*', { count: 'exact', head: true })
         .eq('status', 'pending')
 
+      // Count pending withdrawals
+      const { count: withdrawalsCount } = await supabase
+        .from('withdrawal_requests')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'pending')
+
       setBadgeCounts({
         pendingServices: servicesCount || 0,
-        pendingRevisions: revisionsCount || 0
+        pendingRevisions: revisionsCount || 0,
+        pendingWithdrawals: withdrawalsCount || 0
       })
     } catch (error) {
       logger.error('Failed to load pending counts:', error)

@@ -6,7 +6,18 @@ import MobileSidebar from '@/components/mypage/MobileSidebar'
 import { createClient } from '@/lib/supabase/client'
 
 interface SellerEarningsClientProps {
-  earnings: any
+  earnings: {
+    available_balance: number
+    pending_balance: number
+    total_withdrawn: number
+    total_earned: number
+    pending_withdrawal?: {
+      id: string
+      amount: number
+      status: string
+      created_at: string
+    } | null
+  }
   transactions: any[]
   sellerData: {
     id: string
@@ -20,6 +31,7 @@ interface SellerEarningsClientProps {
 
 export default function SellerEarningsClient({ earnings, transactions, sellerData }: SellerEarningsClientProps) {
   const [loading, setLoading] = useState(false)
+  const hasPendingWithdrawal = !!earnings.pending_withdrawal
 
   const handleWithdrawRequest = async () => {
     const amount = earnings.available_balance
@@ -64,6 +76,36 @@ export default function SellerEarningsClient({ earnings, transactions, sellerDat
     } catch (error: any) {
       console.error('Withdrawal request error:', error)
       alert('출금 신청에 실패했습니다.\n' + error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleCancelWithdrawal = async () => {
+    if (!earnings.pending_withdrawal) return
+
+    if (!confirm('출금 신청을 취소하시겠습니까?')) {
+      return
+    }
+
+    setLoading(true)
+    try {
+      const supabase = createClient()
+
+      const { error } = await supabase
+        .from('withdrawal_requests')
+        .delete()
+        .eq('id', earnings.pending_withdrawal.id)
+
+      if (error) {
+        throw error
+      }
+
+      alert('출금 신청이 취소되었습니다.')
+      window.location.reload()
+    } catch (error: any) {
+      console.error('Withdrawal cancel error:', error)
+      alert('출금 신청 취소에 실패했습니다.\n' + error.message)
     } finally {
       setLoading(false)
     }
@@ -118,16 +160,37 @@ export default function SellerEarningsClient({ earnings, transactions, sellerDat
         </div>
 
         <div className="mb-6 flex gap-4">
-          <button
-            onClick={handleWithdrawRequest}
-            disabled={earnings.available_balance <= 0 || loading}
-            className="px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
-          >
-            <i className="fas fa-money-bill-wave mr-2"></i>
-            {loading ? '처리 중...' : '출금 신청'}
-          </button>
-          {earnings.available_balance <= 0 && (
-            <p className="text-sm text-gray-500 self-center">출금 가능 금액이 없습니다</p>
+          {!hasPendingWithdrawal ? (
+            <>
+              <button
+                onClick={handleWithdrawRequest}
+                disabled={earnings.available_balance <= 0 || loading}
+                className="px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                <i className="fas fa-money-bill-wave mr-2"></i>
+                {loading ? '처리 중...' : '출금 신청'}
+              </button>
+              {earnings.available_balance <= 0 && (
+                <p className="text-sm text-gray-500 self-center">출금 가능 금액이 없습니다</p>
+              )}
+            </>
+          ) : (
+            <>
+              <button
+                onClick={handleCancelWithdrawal}
+                disabled={loading}
+                className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                <i className="fas fa-times mr-2"></i>
+                {loading ? '처리 중...' : '출금 신청 취소'}
+              </button>
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-3 flex items-center gap-2">
+                <i className="fas fa-clock text-yellow-600"></i>
+                <p className="text-sm text-yellow-800">
+                  출금 신청 대기 중 ({earnings.pending_withdrawal?.amount?.toLocaleString()}원)
+                </p>
+              </div>
+            </>
           )}
         </div>
 
