@@ -58,10 +58,33 @@ export default async function RecommendedServices() {
   // 상위 15개만 선택
   shuffled = shuffled.slice(0, 15)
 
-  const recommendedServices = shuffled.map(service => ({
-    ...service,
-    order_count: service.orders_count || 0
-  }))
+  // 평균 별점 계산
+  const serviceIds = shuffled.map(s => s.id)
+  const { data: reviewStats } = await supabase
+    .from('reviews')
+    .select('service_id, rating')
+    .in('service_id', serviceIds)
+    .eq('is_visible', true)
+
+  // 서비스별 평균 별점 계산
+  const ratingMap = new Map<string, { sum: number, count: number }>()
+  reviewStats?.forEach((review: any) => {
+    const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 }
+    ratingMap.set(review.service_id, {
+      sum: current.sum + review.rating,
+      count: current.count + 1
+    })
+  })
+
+  const recommendedServices = shuffled.map(service => {
+    const stats = ratingMap.get(service.id)
+    return {
+      ...service,
+      order_count: service.orders_count || 0,
+      rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
+      review_count: stats?.count || 0
+    }
+  })
 
   return (
     <section className="py-8 bg-gray-50">

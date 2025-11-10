@@ -124,6 +124,34 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
 
         console.log('[PERSONALIZED] Shuffled services for', category.category_name, ':', shuffledServices.length)
 
+        // 평균 별점 계산
+        if (shuffledServices.length > 0) {
+          const serviceIdsForRating = shuffledServices.map(s => s.id)
+          const { data: reviewStats } = await supabase
+            .from('reviews')
+            .select('service_id, rating')
+            .in('service_id', serviceIdsForRating)
+            .eq('is_visible', true)
+
+          // 서비스별 평균 별점 계산
+          const ratingMap = new Map<string, { sum: number, count: number }>()
+          reviewStats?.forEach((review: any) => {
+            const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 }
+            ratingMap.set(review.service_id, {
+              sum: current.sum + review.rating,
+              count: current.count + 1
+            })
+          })
+
+          // 각 서비스에 별점 추가
+          shuffledServices.forEach(service => {
+            const stats = ratingMap.get(service.id)
+            service.rating = stats && stats.count > 0 ? stats.sum / stats.count : 0
+            service.review_count = stats?.count || 0
+            service.order_count = service.orders_count || 0
+          })
+        }
+
         return {
           category_id: category.category_id,
           category_name: category.category_name,
