@@ -18,7 +18,7 @@ interface Withdrawal {
     id: string
     display_name: string
     user_id: string
-  }
+  } | null
 }
 
 export default function AdminWithdrawalsPage() {
@@ -47,7 +47,7 @@ export default function AdminWithdrawalsPage() {
           created_at,
           requested_at,
           completed_at,
-          seller:sellers(
+          seller:sellers!withdrawal_requests_seller_id_fkey(
             id,
             display_name,
             user_id
@@ -57,7 +57,7 @@ export default function AdminWithdrawalsPage() {
 
       if (error) throw error
 
-      setWithdrawals(data || [])
+      setWithdrawals((data || []) as Withdrawal[])
     } catch (error) {
       logger.error('Failed to load withdrawals:', error)
       alert('출금 내역을 불러오는데 실패했습니다.')
