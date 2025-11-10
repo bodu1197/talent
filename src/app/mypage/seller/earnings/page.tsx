@@ -12,7 +12,7 @@ export default async function SellerEarningsPage() {
 
   const { data: seller } = await supabase
     .from('sellers')
-    .select('id')
+    .select('id, display_name, profile_image')
     .eq('user_id', user.id)
     .maybeSingle()
 
@@ -20,45 +20,61 @@ export default async function SellerEarningsPage() {
     redirect('/mypage/seller/register')
   }
 
-  // Get or create seller earnings
-  let { data: earnings, error: earningsError } = await supabase
-    .from('seller_earnings')
-    .select('*')
+  // Calculate earnings from actual orders
+  // Get completed orders (available balance)
+  const { data: completedOrders } = await supabase
+    .from('orders')
+    .select('total_amount, created_at')
     .eq('seller_id', seller.id)
-    .maybeSingle()
+    .eq('status', 'completed')
 
-  // If no earnings record exists, create one
-  if (!earnings) {
-    const { data: newEarnings } = await supabase
-      .from('seller_earnings')
-      .insert({
-        seller_id: seller.id,
-        available_balance: 0,
-        pending_balance: 0,
-        total_withdrawn: 0,
-        total_earned: 0
-      })
-      .select()
-      .maybeSingle()
+  // Get delivered orders (pending balance - waiting for buyer confirmation)
+  const { data: deliveredOrders } = await supabase
+    .from('orders')
+    .select('total_amount, created_at')
+    .eq('seller_id', seller.id)
+    .eq('status', 'delivered')
 
-    earnings = newEarnings || {
-      available_balance: 0,
-      pending_balance: 0,
-      total_withdrawn: 0,
-      total_earned: 0
-    }
+  // Get withdrawal history
+  const { data: withdrawals } = await supabase
+    .from('withdrawal_requests')
+    .select('amount, status, created_at')
+    .eq('seller_id', seller.id)
+    .order('created_at', { ascending: false })
+
+  // Calculate balances
+  const totalCompleted = completedOrders?.reduce((sum, order) => sum + (order.total_amount || 0), 0) || 0
+  const totalPending = deliveredOrders?.reduce((sum, order) => sum + (order.total_amount || 0), 0) || 0
+  const totalWithdrawn = withdrawals?.filter(w => w.status === 'completed').reduce((sum, w) => sum + (w.amount || 0), 0) || 0
+
+  // Commission: 20% platform fee
+  const availableBalance = Math.floor(totalCompleted * 0.8) - totalWithdrawn
+  const pendingBalance = Math.floor(totalPending * 0.8)
+  const totalEarned = Math.floor(totalCompleted * 0.8)
+
+  const earnings = {
+    available_balance: availableBalance,
+    pending_balance: pendingBalance,
+    total_withdrawn: totalWithdrawn,
+    total_earned: totalEarned
   }
 
-  // Get earnings transactions
+  // Get recent completed orders as transactions
   const { data: transactions } = await supabase
-    .from('earnings_transactions')
+    .from('orders')
     .select(`
-      *,
-      order:orders(id, order_number, title)
+      id,
+      order_number,
+      total_amount,
+      status,
+      created_at,
+      updated_at,
+      service:services(id, title)
     `)
     .eq('seller_id', seller.id)
-    .order('transaction_date', { ascending: false })
+    .in('status', ['completed', 'delivered'])
+    .order('updated_at', { ascending: false })
     .limit(10)
 
-  return <SellerEarningsClient earnings={earnings} transactions={transactions || []} />
+  return <SellerEarningsClient earnings={earnings} transactions={transactions || []} sellerData={seller} />
 }

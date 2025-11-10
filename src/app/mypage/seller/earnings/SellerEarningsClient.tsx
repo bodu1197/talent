@@ -7,14 +7,18 @@ import Link from 'next/link'
 interface SellerEarningsClientProps {
   earnings: any
   transactions: any[]
+  sellerData: {
+    id: string
+    display_name: string
+    profile_image?: string | null
+  }
 }
 
-export default function SellerEarningsClient({ earnings, transactions }: SellerEarningsClientProps) {
+export default function SellerEarningsClient({ earnings, transactions, sellerData }: SellerEarningsClientProps) {
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'available': return '출금가능'
-      case 'pending': return '대기중'
-      case 'completed': return '완료'
+      case 'delivered': return '정산 대기'
+      case 'completed': return '정산 완료'
       case 'cancelled': return '취소'
       default: return status
     }
@@ -22,9 +26,8 @@ export default function SellerEarningsClient({ earnings, transactions }: SellerE
 
   const getStatusClass = (status: string) => {
     switch (status) {
-      case 'available': return 'bg-green-100 text-green-700'
-      case 'pending': return 'bg-yellow-100 text-yellow-700'
-      case 'completed': return 'bg-gray-100 text-gray-700'
+      case 'delivered': return 'bg-yellow-100 text-yellow-700'
+      case 'completed': return 'bg-green-100 text-green-700'
       case 'cancelled': return 'bg-red-100 text-red-700'
       default: return 'bg-gray-100 text-gray-700'
     }
@@ -34,7 +37,7 @@ export default function SellerEarningsClient({ earnings, transactions }: SellerE
     <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
       <div className="flex w-full max-w-[1200px]">
         <MobileSidebar mode="seller" />
-        <Sidebar mode="seller" />
+        <Sidebar mode="seller" sellerData={sellerData} />
         <main className="flex-1 overflow-y-auto">
           <div className="py-8 px-4">
         <div className="mb-8">
@@ -90,14 +93,17 @@ export default function SellerEarningsClient({ earnings, transactions }: SellerE
                 transactions.map((tx) => (
                   <tr key={tx.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 text-sm text-gray-600">
-                      {new Date(tx.transaction_date).toLocaleDateString('ko-KR')}
+                      {new Date(tx.updated_at || tx.created_at).toLocaleDateString('ko-KR')}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">
-                      {tx.type === 'sale' ? '판매' : tx.type === 'withdraw' ? '출금' : tx.type === 'refund' ? '환불' : '조정'}
+                      {tx.service?.title || '판매 수익'}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{tx.order_number || '-'}</td>
-                    <td className={`px-6 py-4 text-sm font-medium text-right ${tx.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                      {tx.amount > 0 ? '+' : ''}{tx.amount.toLocaleString()}원
+                    <td className="px-6 py-4 text-sm text-gray-600">
+                      #{tx.order_number || tx.id.slice(0, 8)}
+                    </td>
+                    <td className="px-6 py-4 text-sm font-medium text-right text-green-600">
+                      +{Math.floor((tx.total_amount || 0) * 0.8).toLocaleString()}원
+                      <span className="text-xs text-gray-500 ml-1">(수수료 20% 제외)</span>
                     </td>
                     <td className="px-6 py-4 text-center">
                       <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusClass(tx.status)}`}>
