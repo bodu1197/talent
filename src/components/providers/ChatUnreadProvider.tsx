@@ -7,6 +7,7 @@ interface ChatUnreadContextType {
   unreadCount: number
   userId: string | null
   refreshCount: () => Promise<void>
+  decrementCount: (amount: number) => void
 }
 
 const ChatUnreadContext = createContext<ChatUnreadContextType | undefined>(undefined)
@@ -61,7 +62,13 @@ export function ChatUnreadProvider({ children }: { children: ReactNode }) {
   const fetchUnreadCount = useCallback(async () => {
     try {
       console.log('[ChatUnreadProvider] 🔍 Fetching unread count from API...')
-      const response = await fetch('/api/chat/unread-count')
+      const response = await fetch('/api/chat/unread-count', {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache'
+        }
+      })
       console.log('[ChatUnreadProvider] API response status:', response.status)
       if (response.ok) {
         const data = await response.json()
@@ -183,10 +190,20 @@ export function ChatUnreadProvider({ children }: { children: ReactNode }) {
     }
   }, [userId, myRoomIds, supabase, playNotificationSound, hasPermission])
 
+  // 카운트 감소 함수
+  const decrementCount = useCallback((amount: number) => {
+    setUnreadCount(prev => {
+      const newCount = Math.max(0, prev - amount)
+      console.log('[ChatUnreadProvider] 📉 Decrementing count:', prev, '→', newCount, '(amount:', amount, ')')
+      return newCount
+    })
+  }, [])
+
   const value = {
     unreadCount,
     userId,
-    refreshCount: fetchUnreadCount
+    refreshCount: fetchUnreadCount,
+    decrementCount
   }
 
   console.log('[ChatUnreadProvider] 🔄 Provider rendering, unreadCount:', unreadCount, 'userId:', userId)

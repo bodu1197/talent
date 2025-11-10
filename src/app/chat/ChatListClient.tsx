@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { useChatUnreadCount } from '@/hooks/useChatUnreadCount'
+import { useChatUnreadCount } from '@/components/providers/ChatUnreadProvider'
 
 interface ChatRoom {
   id: string
@@ -67,7 +67,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
   const [isUploading, setIsUploading] = useState(false)
   const [isCreatingRoom, setIsCreatingRoom] = useState(false)
   const supabase = createClient()
-  const { refreshCount } = useChatUnreadCount() // unread count 훅 사용
+  const { decrementCount } = useChatUnreadCount() // unread count 훅 사용
 
   // 채팅방 목록 로드
   const loadRooms = async () => {
@@ -152,6 +152,8 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     const currentRoom = rooms.find(r => r.id === roomId)
     const unreadInThisRoom = currentRoom?.unreadCount || 0
 
+    console.log('[ChatListClient] 📍 Selecting room:', roomId, 'unread:', unreadInThisRoom)
+
     // 즉시 UI 업데이트 (배지 제거)
     setRooms(prevRooms =>
       prevRooms.map(room =>
@@ -160,6 +162,12 @@ export default function ChatListClient({ userId, sellerId }: Props) {
           : room
       )
     )
+
+    // 전역 카운트도 즉시 감소 (헤더 배지 업데이트)
+    if (unreadInThisRoom > 0) {
+      console.log('[ChatListClient] 📉 Decrementing global count by:', unreadInThisRoom)
+      decrementCount(unreadInThisRoom)
+    }
 
     // 모바일에서는 채팅방 페이지로 이동
     if (window.innerWidth < 768) {
@@ -176,7 +184,6 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ room_id: roomId })
       })
-      // refreshCount는 호출하지 않음 - DB 재조회 방지
     } catch (error) {
       console.error('[ChatListClient] Mark as read error:', error)
     }
