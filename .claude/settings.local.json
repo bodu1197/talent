@@ -17,7 +17,8 @@
       "Bash(git push:*)",
       "Bash(node scripts/debug-chat-issue.js:*)",
       "Bash(node -e:*)",
-      "Bash(node scripts/apply-favorite-migration.js:*)"
+      "Bash(node scripts/apply-favorite-migration.js:*)",
+      "Bash(taskkill:*)"
     ],
     "deny": [],
     "ask": []

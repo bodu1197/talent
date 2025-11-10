@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
-// GET /api/orders/[orderId] - 주문 상세 조회
+// GET /api/orders/[id] - 주문 상세 조회
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ orderId: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { orderId } = await params
+    const { id } = await params
     const supabase = await createClient()
 
     // 사용자 인증 확인
@@ -26,7 +26,7 @@ export async function GET(
         buyer:users!buyer_id(id, name, email, profile_image),
         seller:users!seller_id(id, name, email, profile_image)
       `)
-      .eq('id', orderId)
+      .eq('id', id)
       .single()
 
     if (error) {
