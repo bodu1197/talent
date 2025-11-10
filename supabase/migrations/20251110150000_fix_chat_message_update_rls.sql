@@ -2,21 +2,26 @@
 
 DROP POLICY IF EXISTS "Users can update messages in their chat rooms" ON chat_messages;
 
--- 새로운 UPDATE 정책: 자신의 메시지 수정 또는 받은 메시지의 is_read 업데이트 허용
-CREATE POLICY "Users can update messages in their chat rooms"
+-- 자신의 메시지를 수정하는 정책
+CREATE POLICY "Users can update their own messages"
   ON chat_messages FOR UPDATE
   USING (
-    EXISTS (
+    sender_id = (SELECT auth.uid())
+    AND EXISTS (
       SELECT 1 FROM chat_rooms
       WHERE chat_rooms.id = chat_messages.room_id
         AND (chat_rooms.user1_id = (SELECT auth.uid()) OR chat_rooms.user2_id = (SELECT auth.uid()))
     )
-  )
-  WITH CHECK (
-    -- sender_id는 절대 변경 불가
-    sender_id = (
-      SELECT sender_id FROM chat_messages AS old_msg
-      WHERE old_msg.id = chat_messages.id
+  );
+
+-- 받은 메시지의 is_read를 업데이트하는 정책 (sender_id와 room_id는 변경 불가)
+CREATE POLICY "Users can mark received messages as read"
+  ON chat_messages FOR UPDATE
+  USING (
+    sender_id != (SELECT auth.uid())
+    AND EXISTS (
+      SELECT 1 FROM chat_rooms
+      WHERE chat_rooms.id = chat_messages.room_id
+        AND (chat_rooms.user1_id = (SELECT auth.uid()) OR chat_rooms.user2_id = (SELECT auth.uid()))
     )
-    -- 추가 조건 없음 - 채팅방 멤버라면 is_read 업데이트 가능
   );
