@@ -48,6 +48,16 @@ export default function SellerEarningsClient({ earnings, transactions, sellerDat
     try {
       const supabase = createClient()
 
+      console.log('Seller data:', sellerData)
+      console.log('Withdrawal request data:', {
+        seller_id: sellerData.id,
+        amount: amount,
+        bank_name: sellerData.bank_name,
+        account_number: sellerData.account_number,
+        account_holder: sellerData.account_holder,
+        status: 'pending'
+      })
+
       const { error } = await supabase
         .from('withdrawal_requests')
         .insert({
@@ -60,7 +70,10 @@ export default function SellerEarningsClient({ earnings, transactions, sellerDat
           requested_at: new Date().toISOString()
         })
 
-      if (error) throw error
+      if (error) {
+        console.error('Withdrawal insert error:', error)
+        throw error
+      }
 
       alert('출금 신청이 완료되었습니다.\n영업일 기준 1-3일 내 처리됩니다.')
       setShowWithdrawModal(false)
