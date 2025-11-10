@@ -122,24 +122,8 @@ export function useChatUnreadCount() {
           }
         }
       )
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'chat_messages'
-        },
-        async (payload) => {
-          const updatedMessage = payload.new as any
-
-          // is_read가 true로 변경된 경우만 처리 (recipient_id가 현재 사용자가 아닌 경우)
-          if (updatedMessage?.is_read === true && updatedMessage?.sender_id !== userId) {
-            console.log('[useChatUnreadCount] Message marked as read:', updatedMessage.id)
-            // 메시지가 읽음 처리되면 즉시 배지 갱신
-            await fetchUnreadCount()
-          }
-        }
-      )
+      // UPDATE 이벤트는 제거 - 불필요한 배지 갱신 방지
+      // 채팅방 클릭 시 handleSelectRoom에서 직접 처리함
       .subscribe((status) => {
         console.log('[useChatUnreadCount] Realtime subscription status:', status)
       })
