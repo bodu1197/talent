@@ -151,10 +151,22 @@ export function useChatUnreadCount() {
     }
   }, [userId, supabase, fetchUnreadCount, playNotificationSound, hasPermission])
 
-  // 수동으로 카운트를 제거하는 함수
-  const clearCount = useCallback(() => {
-    setUnreadCount(0)
-  }, [])
+  // 수동으로 카운트를 제거하는 함수 (모든 메시지를 읽음 처리)
+  const clearCount = useCallback(async () => {
+    try {
+      setUnreadCount(0) // 즉시 UI 업데이트
+      const response = await fetch('/api/chat/messages/mark-all-read', {
+        method: 'POST'
+      })
+      if (response.ok) {
+        console.log('[useChatUnreadCount] All messages marked as read')
+      }
+    } catch (error) {
+      console.error('Failed to mark all messages as read:', error)
+      // 실패하면 다시 카운트 갱신
+      await fetchUnreadCount()
+    }
+  }, [fetchUnreadCount])
 
   // 수동으로 카운트를 새로고침할 수 있는 함수 반환
   return { unreadCount, userId, refreshCount: fetchUnreadCount, clearCount }
