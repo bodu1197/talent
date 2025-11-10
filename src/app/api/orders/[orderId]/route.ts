@@ -39,6 +39,19 @@ export async function GET(
       return NextResponse.json({ error: '권한이 없습니다' }, { status: 403 })
     }
 
+    // Supabase 관계 조회가 배열로 반환되는 경우 처리
+    if (Array.isArray(order.seller) && order.seller.length > 0) {
+      order.seller = order.seller[0]
+    }
+    if (Array.isArray(order.buyer) && order.buyer.length > 0) {
+      order.buyer = order.buyer[0]
+    }
+    if (Array.isArray(order.service) && order.service.length > 0) {
+      order.service = order.service[0]
+    }
+
+    console.log('[Order API] Returning order with seller:', order.seller)
+
     return NextResponse.json({ order })
   } catch (error) {
     console.error('Order API error:', error)

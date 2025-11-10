@@ -49,6 +49,8 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
       }
 
       const { order } = await response.json()
+      console.log('[Order Detail] Loaded order:', order)
+      console.log('[Order Detail] Seller info:', order.seller)
       setOrder(order)
     } catch (err: any) {
       logger.error('주문 조회 실패:', err)
