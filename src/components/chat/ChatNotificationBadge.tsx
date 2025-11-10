@@ -4,13 +4,18 @@ import Link from 'next/link'
 import { useChatUnreadCount } from '@/hooks/useChatUnreadCount'
 
 export default function ChatNotificationBadge() {
-  const { unreadCount, userId } = useChatUnreadCount()
+  const { unreadCount, userId, clearCount } = useChatUnreadCount()
 
   if (!userId) return null
+
+  const handleClick = () => {
+    clearCount()
+  }
 
   return (
     <Link
       href="/chat"
+      onClick={handleClick}
       className="relative text-gray-900 hover:text-[#0f3460] transition-colors"
       aria-label="채팅"
     >

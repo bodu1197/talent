@@ -151,6 +151,11 @@ export function useChatUnreadCount() {
     }
   }, [userId, supabase, fetchUnreadCount, playNotificationSound, hasPermission])
 
+  // 수동으로 카운트를 제거하는 함수
+  const clearCount = useCallback(() => {
+    setUnreadCount(0)
+  }, [])
+
   // 수동으로 카운트를 새로고침할 수 있는 함수 반환
-  return { unreadCount, userId, refreshCount: fetchUnreadCount }
+  return { unreadCount, userId, refreshCount: fetchUnreadCount, clearCount }
 }
