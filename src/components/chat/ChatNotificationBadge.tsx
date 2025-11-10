@@ -1,21 +1,25 @@
 'use client'
 
 import Link from 'next/link'
-import { useChatUnreadCount } from '@/hooks/useChatUnreadCount'
+import { useChatUnreadCount } from '@/components/providers/ChatUnreadProvider'
+import { useEffect } from 'react'
 
 export default function ChatNotificationBadge() {
-  const { unreadCount, userId, clearCount } = useChatUnreadCount()
+  const { unreadCount, userId } = useChatUnreadCount()
 
-  if (!userId) return null
+  useEffect(() => {
+    console.log('[ChatNotificationBadge] 🔄 Component rendered with unreadCount:', unreadCount)
+  }, [unreadCount])
 
-  const handleClick = () => {
-    clearCount()
+  if (!userId) {
+    return null
   }
+
+  console.log('[ChatNotificationBadge] 📊 Rendering badge, unreadCount:', unreadCount)
 
   return (
     <Link
       href="/chat"
-      onClick={handleClick}
       className="relative text-gray-900 hover:text-[#0f3460] transition-colors"
       aria-label="채팅"
     >

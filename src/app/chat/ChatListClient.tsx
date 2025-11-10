@@ -334,7 +334,67 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     }
   }, [selectedRoomId])
 
-  // 실시간 메시지 구독
+  // 채팅방 목록의 unreadCount 실시간 업데이트
+  useEffect(() => {
+    console.log('[ChatListClient] Setting up global message subscription for user:', userId)
+
+    const channel = supabase
+      .channel(`chat_list_updates_${userId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async (payload) => {
+          const newMsg = payload.new as Message
+          console.log('[ChatListClient] ====== NEW MESSAGE EVENT ======')
+          console.log('[ChatListClient] Message ID:', newMsg.id)
+          console.log('[ChatListClient] Room ID:', newMsg.room_id)
+          console.log('[ChatListClient] Sender:', newMsg.sender_id)
+          console.log('[ChatListClient] Current User:', userId)
+
+          // 내가 보낸 메시지가 아닌 경우에만 unreadCount 증가
+          if (newMsg.sender_id !== userId) {
+            console.log('[ChatListClient] ✅ Message from other user - updating room unreadCount')
+
+            // 해당 채팅방의 unreadCount 증가
+            setRooms(prevRooms => {
+              const updatedRooms = prevRooms.map(room => {
+                if (room.id === newMsg.room_id) {
+                  const newUnreadCount = (room.unreadCount || 0) + 1
+                  console.log(`[ChatListClient] Room ${room.id.substring(0, 8)} unreadCount: ${room.unreadCount || 0} → ${newUnreadCount}`)
+                  return {
+                    ...room,
+                    unreadCount: newUnreadCount,
+                    last_message_at: newMsg.created_at
+                  }
+                }
+                return room
+              })
+
+              // last_message_at 기준으로 재정렬
+              return updatedRooms.sort((a, b) =>
+                new Date(b.last_message_at).getTime() - new Date(a.last_message_at).getTime()
+              )
+            })
+          } else {
+            console.log('[ChatListClient] ⏭️ Message from myself - ignoring')
+          }
+        }
+      )
+      .subscribe((status) => {
+        console.log('[ChatListClient] ====== SUBSCRIPTION STATUS:', status, '======')
+      })
+
+    return () => {
+      console.log('[ChatListClient] Cleaning up global message subscription')
+      supabase.removeChannel(channel)
+    }
+  }, [userId, supabase])
+
+  // 실시간 메시지 구독 (선택된 채팅방)
   useEffect(() => {
     if (!selectedRoomId) return
 

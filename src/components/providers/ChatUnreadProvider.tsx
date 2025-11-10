@@ -1,9 +1,17 @@
 'use client'
 
-import { useEffect, useState, useCallback, useMemo } from 'react'
+import { createContext, useContext, useEffect, useState, useCallback, useMemo, ReactNode } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
-export function useChatUnreadCount() {
+interface ChatUnreadContextType {
+  unreadCount: number
+  userId: string | null
+  refreshCount: () => Promise<void>
+}
+
+const ChatUnreadContext = createContext<ChatUnreadContextType | undefined>(undefined)
+
+export function ChatUnreadProvider({ children }: { children: ReactNode }) {
   const [unreadCount, setUnreadCount] = useState(0)
   const [userId, setUserId] = useState<string | null>(null)
   const [hasPermission, setHasPermission] = useState(false)
@@ -24,7 +32,7 @@ export function useChatUnreadCount() {
     }
   }, [])
 
-  // 알림음 재생 (Web Audio API 사용)
+  // 알림음 재생
   const playNotificationSound = useCallback(async () => {
     try {
       const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
@@ -34,7 +42,7 @@ export function useChatUnreadCount() {
       oscillator.connect(gainNode)
       gainNode.connect(audioContext.destination)
 
-      oscillator.frequency.value = 800 // 800Hz
+      oscillator.frequency.value = 800
       oscillator.type = 'sine'
 
       gainNode.gain.setValueAtTime(0.3, audioContext.currentTime)
@@ -43,7 +51,7 @@ export function useChatUnreadCount() {
       oscillator.start(audioContext.currentTime)
       oscillator.stop(audioContext.currentTime + 0.3)
 
-      console.log('[useChatUnreadCount] Notification sound played successfully')
+      console.log('[ChatUnreadProvider] Notification sound played')
     } catch (error) {
       console.error('Notification sound error:', error)
     }
@@ -55,7 +63,7 @@ export function useChatUnreadCount() {
       const response = await fetch('/api/chat/unread-count')
       if (response.ok) {
         const data = await response.json()
-        console.log('[useChatUnreadCount] Fetched unread count:', data.unreadCount)
+        console.log('[ChatUnreadProvider] Fetched unread count:', data.unreadCount)
         setUnreadCount(data.unreadCount || 0)
       }
     } catch (error) {
@@ -74,22 +82,22 @@ export function useChatUnreadCount() {
         .or(`user1_id.eq.${userId},user2_id.eq.${userId}`)
 
       const roomIds = rooms?.map(r => r.id) || []
-      console.log('[useChatUnreadCount] My room IDs:', roomIds)
+      console.log('[ChatUnreadProvider] My room IDs:', roomIds)
       setMyRoomIds(roomIds)
     } catch (error) {
-      console.error('[useChatUnreadCount] Failed to fetch rooms:', error)
+      console.error('[ChatUnreadProvider] Failed to fetch rooms:', error)
     }
   }, [userId, supabase])
 
+  // 초기화
   useEffect(() => {
-    // 현재 사용자 확인 및 알림 권한 요청
     const initUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
-      console.log('[useChatUnreadCount] User:', user?.id)
+      console.log('[ChatUnreadProvider] User:', user?.id)
       if (user) {
         setUserId(user.id)
         fetchUnreadCount()
-        requestNotificationPermission() // 알림 권한 요청
+        requestNotificationPermission()
       }
     }
 
@@ -106,14 +114,14 @@ export function useChatUnreadCount() {
   // 실시간 메시지 구독
   useEffect(() => {
     if (!userId || myRoomIds.length === 0) {
-      console.log('[useChatUnreadCount] No userId or rooms, skipping subscription')
+      console.log('[ChatUnreadProvider] No userId or rooms, skipping subscription')
       return
     }
 
-    console.log('[useChatUnreadCount] Setting up realtime subscription for user:', userId)
-    console.log('[useChatUnreadCount] Monitoring rooms:', myRoomIds)
+    console.log('[ChatUnreadProvider] 🔔 Setting up realtime subscription')
+    console.log('[ChatUnreadProvider] User ID:', userId)
+    console.log('[ChatUnreadProvider] Monitoring rooms:', myRoomIds)
 
-    // Realtime 구독 - 새 메시지가 오면 즉시 갱신
     const channel = supabase
       .channel(`chat_notifications_${userId}`)
       .on(
@@ -125,27 +133,28 @@ export function useChatUnreadCount() {
         },
         async (payload) => {
           const newMessage = payload.new as any
-          console.log('[useChatUnreadCount] ====== REALTIME EVENT RECEIVED ======')
-          console.log('[useChatUnreadCount] Message ID:', newMessage.id)
-          console.log('[useChatUnreadCount] Room ID:', newMessage.room_id)
-          console.log('[useChatUnreadCount] Sender:', newMessage.sender_id)
-          console.log('[useChatUnreadCount] Current User:', userId)
-          console.log('[useChatUnreadCount] Is my room?', myRoomIds.includes(newMessage.room_id))
-          console.log('[useChatUnreadCount] Is from other user?', newMessage.sender_id !== userId)
+          console.log('[ChatUnreadProvider] ====== 🔔 REALTIME EVENT ======')
+          console.log('[ChatUnreadProvider] Message ID:', newMessage.id)
+          console.log('[ChatUnreadProvider] Room ID:', newMessage.room_id)
+          console.log('[ChatUnreadProvider] Sender:', newMessage.sender_id)
+          console.log('[ChatUnreadProvider] Current User:', userId)
+          console.log('[ChatUnreadProvider] Is my room?', myRoomIds.includes(newMessage.room_id))
+          console.log('[ChatUnreadProvider] Is from other user?', newMessage.sender_id !== userId)
 
           // 내 채팅방이면서 내가 보낸 메시지가 아닌 경우에만 알림
           if (myRoomIds.includes(newMessage.room_id) && newMessage.sender_id !== userId) {
-            console.log('[useChatUnreadCount] ✅ Message from other user in my room - incrementing count')
-            // DB 조회 대신 카운트 증가
+            console.log('[ChatUnreadProvider] ✅ INCREMENTING COUNT!')
+
             setUnreadCount(prev => {
-              console.log('[useChatUnreadCount] Count: prev =', prev, '→ new =', prev + 1)
-              return prev + 1
+              const newCount = prev + 1
+              console.log('[ChatUnreadProvider] 📊 Count updated:', prev, '→', newCount)
+              return newCount
             })
 
-            // 알림음 재생 (PC와 모바일 모두)
+            // 알림음 재생
             await playNotificationSound()
 
-            // 브라우저 알림 표시 (권한이 있는 경우)
+            // 브라우저 알림
             if (hasPermission && 'Notification' in window) {
               new Notification('새 메시지', {
                 body: '새로운 채팅 메시지가 도착했습니다.',
@@ -153,53 +162,40 @@ export function useChatUnreadCount() {
               })
             }
           } else {
-            console.log('[useChatUnreadCount] ⏭️ Ignoring message - either from myself or not my room')
+            console.log('[ChatUnreadProvider] ⏭️ Ignoring message')
           }
         }
       )
-      // UPDATE 이벤트는 제거 - 불필요한 배지 갱신 방지
-      // 채팅방 클릭 시 handleSelectRoom에서 직접 처리함
       .subscribe((status) => {
-        console.log('[useChatUnreadCount] ====== REALTIME SUBSCRIPTION STATUS:', status, '======')
+        console.log('[ChatUnreadProvider] ====== SUBSCRIPTION STATUS:', status, '======')
         if (status === 'SUBSCRIBED') {
-          console.log('[useChatUnreadCount] ✅ Successfully subscribed to realtime updates')
-        } else if (status === 'CHANNEL_ERROR') {
-          console.error('[useChatUnreadCount] ❌ Realtime subscription error')
-        } else if (status === 'TIMED_OUT') {
-          console.error('[useChatUnreadCount] ⏱️ Realtime subscription timed out')
+          console.log('[ChatUnreadProvider] ✅ Successfully subscribed to realtime updates')
         }
       })
 
     return () => {
-      console.log('[useChatUnreadCount] Cleaning up realtime subscription')
+      console.log('[ChatUnreadProvider] Cleaning up subscription')
       supabase.removeChannel(channel)
     }
   }, [userId, myRoomIds, supabase, playNotificationSound, hasPermission])
 
-  // 수동으로 카운트를 제거하는 함수 (모든 메시지를 읽음 처리)
-  const clearCount = useCallback(async () => {
-    try {
-      setUnreadCount(0) // 즉시 UI 업데이트
-      console.log('[useChatUnreadCount] Calling mark-all-read API...')
-      const response = await fetch('/api/chat/messages/mark-all-read', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      console.log('[useChatUnreadCount] mark-all-read response status:', response.status)
-      if (response.ok) {
-        const data = await response.json()
-        console.log('[useChatUnreadCount] All messages marked as read, count:', data.count)
-      } else {
-        const errorData = await response.json()
-        console.error('[useChatUnreadCount] Failed to mark messages as read:', response.status, errorData)
-      }
-    } catch (error) {
-      console.error('[useChatUnreadCount] Error calling mark-all-read:', error)
-    }
-  }, [])
+  const value = {
+    unreadCount,
+    userId,
+    refreshCount: fetchUnreadCount
+  }
 
-  // 수동으로 카운트를 새로고침할 수 있는 함수 반환
-  return { unreadCount, userId, refreshCount: fetchUnreadCount, clearCount }
+  return (
+    <ChatUnreadContext.Provider value={value}>
+      {children}
+    </ChatUnreadContext.Provider>
+  )
+}
+
+export function useChatUnreadCount() {
+  const context = useContext(ChatUnreadContext)
+  if (context === undefined) {
+    throw new Error('useChatUnreadCount must be used within ChatUnreadProvider')
+  }
+  return context
 }
