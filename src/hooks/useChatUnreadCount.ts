@@ -86,11 +86,6 @@ export function useChatUnreadCount() {
 
     console.log('[useChatUnreadCount] Setting up realtime subscription for user:', userId)
 
-    // 30초마다 읽지 않은 메시지 수 갱신
-    const interval = setInterval(() => {
-      fetchUnreadCount()
-    }, 30000)
-
     // Realtime 구독 - 새 메시지가 오면 즉시 갱신
     const channel = supabase
       .channel(`chat_notifications_${userId}`)
@@ -107,8 +102,10 @@ export function useChatUnreadCount() {
 
           // 내가 보낸 메시지가 아닌 경우에만 알림
           if (newMessage.sender_id !== userId) {
-            console.log('[useChatUnreadCount] Message from other user, fetching unread count and playing sound')
-            await fetchUnreadCount()
+            console.log('[useChatUnreadCount] Message from other user, incrementing count and playing sound')
+            // DB 조회 대신 카운트 증가
+            setUnreadCount(prev => prev + 1)
+
             // 알림음 재생 (PC와 모바일 모두)
             await playNotificationSound()
 
@@ -130,7 +127,6 @@ export function useChatUnreadCount() {
 
     return () => {
       console.log('[useChatUnreadCount] Cleaning up realtime subscription')
-      clearInterval(interval)
       supabase.removeChannel(channel)
     }
   }, [userId, supabase, fetchUnreadCount, playNotificationSound, hasPermission])
@@ -144,13 +140,13 @@ export function useChatUnreadCount() {
       })
       if (response.ok) {
         console.log('[useChatUnreadCount] All messages marked as read')
+      } else {
+        console.error('[useChatUnreadCount] Failed to mark messages as read')
       }
     } catch (error) {
       console.error('Failed to mark all messages as read:', error)
-      // 실패하면 다시 카운트 갱신
-      await fetchUnreadCount()
     }
-  }, [fetchUnreadCount])
+  }, [])
 
   // 수동으로 카운트를 새로고침할 수 있는 함수 반환
   return { unreadCount, userId, refreshCount: fetchUnreadCount, clearCount }

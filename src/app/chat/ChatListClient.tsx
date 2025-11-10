@@ -148,6 +148,10 @@ export default function ChatListClient({ userId, sellerId }: Props) {
 
   // 채팅방 선택 시 메시지 읽음 처리
   const handleSelectRoom = async (roomId: string) => {
+    // 현재 방의 unreadCount를 확인
+    const currentRoom = rooms.find(r => r.id === roomId)
+    const unreadInThisRoom = currentRoom?.unreadCount || 0
+
     // 즉시 UI 업데이트 (배지 제거)
     setRooms(prevRooms =>
       prevRooms.map(room =>
@@ -172,8 +176,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ room_id: roomId })
       })
-      // 전체 배지 카운트도 갱신
-      refreshCount()
+      // refreshCount는 호출하지 않음 - DB 재조회 방지
     } catch (error) {
       console.error('[ChatListClient] Mark as read error:', error)
     }
