@@ -4,15 +4,13 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/components/providers/AuthProvider'
-import { useChatUnreadCount } from '@/hooks/useChatUnreadCount'
+import { useChatUnreadCount } from '@/components/providers/ChatUnreadProvider'
 
 export default function MobileBottomNav() {
   const pathname = usePathname()
   const { user } = useAuth()
   const [showSearch, setShowSearch] = useState(false)
   const { unreadCount } = useChatUnreadCount()
-
-  console.log('[MobileBottomNav] Rendering with unreadCount:', unreadCount)
 
   const isActive = (path: string) => pathname === path
 
