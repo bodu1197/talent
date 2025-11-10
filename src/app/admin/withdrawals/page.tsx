@@ -57,7 +57,13 @@ export default function AdminWithdrawalsPage() {
 
       if (error) throw error
 
-      setWithdrawals((data || []) as Withdrawal[])
+      // Transform data to match Withdrawal type (seller is returned as array by Supabase)
+      const transformedData = (data || []).map(item => ({
+        ...item,
+        seller: Array.isArray(item.seller) ? item.seller[0] : item.seller
+      })) as Withdrawal[]
+
+      setWithdrawals(transformedData)
     } catch (error) {
       logger.error('Failed to load withdrawals:', error)
       alert('출금 내역을 불러오는데 실패했습니다.')
