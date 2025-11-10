@@ -23,28 +23,26 @@ export function useChatUnreadCount() {
     }
   }, [])
 
-  // 알림음 재생 (모바일 대응 개선)
+  // 알림음 재생 (Web Audio API 사용)
   const playNotificationSound = useCallback(async () => {
     try {
-      const audio = new Audio('/sounds/notification.mp3')
-      audio.volume = 0.5
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+      const oscillator = audioContext.createOscillator()
+      const gainNode = audioContext.createGain()
 
-      // 모바일에서 자동 재생을 위한 처리
-      const playPromise = audio.play()
+      oscillator.connect(gainNode)
+      gainNode.connect(audioContext.destination)
 
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            console.log('[useChatUnreadCount] Notification sound played successfully')
-          })
-          .catch(error => {
-            console.log('[useChatUnreadCount] Autoplay prevented, trying user interaction:', error)
-            // 사용자 인터랙션 후 재생 시도
-            document.addEventListener('click', () => {
-              audio.play().catch(e => console.log('Still failed:', e))
-            }, { once: true })
-          })
-      }
+      oscillator.frequency.value = 800 // 800Hz
+      oscillator.type = 'sine'
+
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime)
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3)
+
+      oscillator.start(audioContext.currentTime)
+      oscillator.stop(audioContext.currentTime + 0.3)
+
+      console.log('[useChatUnreadCount] Notification sound played successfully')
     } catch (error) {
       console.error('Notification sound error:', error)
     }
@@ -129,14 +127,18 @@ export function useChatUnreadCount() {
         {
           event: 'UPDATE',
           schema: 'public',
-          table: 'chat_messages',
-          filter: `is_read=eq.true`
+          table: 'chat_messages'
         },
         async (payload) => {
           const updatedMessage = payload.new as any
-          console.log('[useChatUnreadCount] Message marked as read:', updatedMessage.id)
-          // 메시지가 읽음 처리되면 즉시 배지 갱신
-          await fetchUnreadCount()
+          const oldMessage = payload.old as any
+
+          // is_read가 false에서 true로 변경된 경우만 처리
+          if (oldMessage?.is_read === false && updatedMessage?.is_read === true) {
+            console.log('[useChatUnreadCount] Message marked as read:', updatedMessage.id)
+            // 메시지가 읽음 처리되면 즉시 배지 갱신
+            await fetchUnreadCount()
+          }
         }
       )
       .subscribe((status) => {
