@@ -71,10 +71,12 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
       </main>
       {!hideLayout && (
         <>
-          {/* PC: 모든 페이지에서 풋터 표시, 모바일: 메인 페이지에서만 풋터 표시 */}
-          <div className="hidden lg:block">
-            <Footer />
-          </div>
+          {/* PC: mypage 제외한 모든 페이지에서 풋터 표시, 모바일: 메인 페이지에서만 풋터 표시 */}
+          {!isMypagePage && (
+            <div className="hidden lg:block">
+              <Footer />
+            </div>
+          )}
           {isMainPage && (
             <div className="lg:hidden">
               <Footer />
