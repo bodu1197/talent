@@ -25,9 +25,14 @@ interface Category {
 interface Props {
   sellerId: string
   categories: Category[]
+  sellerData: {
+    id: string
+    display_name: string
+    profile_image?: string | null
+  }
 }
 
-export default function NewServiceClientV2({ sellerId, categories }: Props) {
+export default function NewServiceClientV2({ sellerId, categories, sellerData }: Props) {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
   const [loading, setLoading] = useState(false)
@@ -221,7 +226,7 @@ export default function NewServiceClientV2({ sellerId, categories }: Props) {
     <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
       <div className="flex w-full max-w-[1200px]">
         <MobileSidebar mode="seller" />
-        <Sidebar mode="seller" />
+        <Sidebar mode="seller" sellerData={sellerData} />
         <main className="flex-1 overflow-y-auto">
           <div className="py-8 px-4">
             {/* 헤더 */}

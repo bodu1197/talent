@@ -17,7 +17,7 @@ export default async function SellerDashboardPage() {
   // 판매자 정보 가져오기
   const { data: seller } = await supabase
     .from('sellers')
-    .select('id')
+    .select('id, display_name, profile_image')
     .eq('user_id', user.id)
     .maybeSingle()
 
@@ -32,5 +32,5 @@ export default async function SellerDashboardPage() {
   ])
 
   // 클라이언트 컴포넌트에 데이터 전달
-  return <SellerDashboardClient stats={stats} recentOrders={recentOrders} />
+  return <SellerDashboardClient stats={stats} recentOrders={recentOrders} sellerData={seller} />
 }

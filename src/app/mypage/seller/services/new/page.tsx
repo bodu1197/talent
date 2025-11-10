@@ -12,7 +12,7 @@ export default async function NewServicePage() {
 
   const { data: seller } = await supabase
     .from('sellers')
-    .select('id')
+    .select('id, display_name, profile_image')
     .eq('user_id', user.id)
     .maybeSingle()
 
@@ -27,5 +27,5 @@ export default async function NewServicePage() {
     .order('level', { ascending: true })
     .order('name', { ascending: true })
 
-  return <NewServiceClientV2 sellerId={seller.id} categories={categories || []} />
+  return <NewServiceClientV2 sellerId={seller.id} categories={categories || []} sellerData={seller} />
 }

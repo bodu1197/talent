@@ -27,14 +27,19 @@ type Order = {
 type Props = {
   stats: Stats
   recentOrders: Order[]
+  sellerData: {
+    id: string
+    display_name: string
+    profile_image?: string | null
+  }
 }
 
-export default function SellerDashboardClient({ stats, recentOrders }: Props) {
+export default function SellerDashboardClient({ stats, recentOrders, sellerData }: Props) {
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
       <div className="flex w-full max-w-[1200px]">
         <MobileSidebar mode="seller" />
-        <Sidebar mode="seller" />
+        <Sidebar mode="seller" sellerData={sellerData} />
         <main className="flex-1 overflow-y-auto">
           <div className="py-8 px-4">
           {/* 페이지 헤더 */}
