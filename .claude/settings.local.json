@@ -23,7 +23,8 @@
       "Bash(del \"C:\\Users\\ohyus\\talent\\supabase\\migrations\\20251110170000_add_reviews_content_column.sql\")",
       "Bash(node scripts/check-order-statuses.js:*)",
       "Bash(node scripts/check-seller-id-issue.js:*)",
-      "Bash(node scripts/check-withdrawal-fk.js:*)"
+      "Bash(node scripts/check-withdrawal-fk.js:*)",
+      "Bash(node scripts/add-withdrawal-columns.js:*)"
     ],
     "deny": [],
     "ask": []
