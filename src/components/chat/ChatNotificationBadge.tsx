@@ -2,20 +2,13 @@
 
 import Link from 'next/link'
 import { useChatUnreadCount } from '@/components/providers/ChatUnreadProvider'
-import { useEffect } from 'react'
 
 export default function ChatNotificationBadge() {
   const { unreadCount, userId } = useChatUnreadCount()
 
-  useEffect(() => {
-    console.log('[ChatNotificationBadge] 🔄 Component rendered with unreadCount:', unreadCount)
-  }, [unreadCount])
-
   if (!userId) {
     return null
   }
-
-  console.log('[ChatNotificationBadge] 📊 Rendering badge, unreadCount:', unreadCount)
 
   return (
     <Link

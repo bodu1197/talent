@@ -61,7 +61,6 @@ export function ChatUnreadProvider({ children }: { children: ReactNode }) {
   // 읽지 않은 메시지 수 조회
   const fetchUnreadCount = useCallback(async () => {
     try {
-      console.log('[ChatUnreadProvider] 🔍 Fetching unread count from API...')
       const response = await fetch('/api/chat/unread-count', {
         cache: 'no-store',
         headers: {
@@ -69,16 +68,12 @@ export function ChatUnreadProvider({ children }: { children: ReactNode }) {
           'Pragma': 'no-cache'
         }
       })
-      console.log('[ChatUnreadProvider] API response status:', response.status)
       if (response.ok) {
         const data = await response.json()
-        console.log('[ChatUnreadProvider] ✅ Fetched unread count:', data.unreadCount)
         setUnreadCount(data.unreadCount || 0)
-      } else {
-        console.error('[ChatUnreadProvider] ❌ API error:', response.status)
       }
     } catch (error) {
-      console.error('[ChatUnreadProvider] ❌ Failed to fetch unread count:', error)
+      console.error('[ChatUnreadProvider] Failed to fetch unread count:', error)
     }
   }, [])
 
@@ -199,14 +194,12 @@ export function ChatUnreadProvider({ children }: { children: ReactNode }) {
     })
   }, [])
 
-  const value = {
+  const value = useMemo(() => ({
     unreadCount,
     userId,
     refreshCount: fetchUnreadCount,
     decrementCount
-  }
-
-  console.log('[ChatUnreadProvider] 🔄 Provider rendering, unreadCount:', unreadCount, 'userId:', userId)
+  }), [unreadCount, userId, fetchUnreadCount, decrementCount])
 
   return (
     <ChatUnreadContext.Provider value={value}>
