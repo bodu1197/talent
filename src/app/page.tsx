@@ -93,6 +93,24 @@ async function AIServicesSection() {
         .eq('status', 'active')
 
       if (aiServices) {
+        // 평균 별점 계산
+        const serviceIds = aiServices.map(s => s.id)
+        const { data: reviewStats } = await supabase
+          .from('reviews')
+          .select('service_id, rating')
+          .in('service_id', serviceIds)
+          .eq('is_visible', true)
+
+        // 서비스별 평균 별점 계산
+        const ratingMap = new Map<string, { sum: number, count: number }>()
+        reviewStats?.forEach((review: any) => {
+          const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 }
+          ratingMap.set(review.service_id, {
+            sum: current.sum + review.rating,
+            count: current.count + 1
+          })
+        })
+
         // Fisher-Yates 셔플로 공평한 랜덤
         const shuffled = [...aiServices]
         for (let i = shuffled.length - 1; i > 0; i--) {
@@ -100,10 +118,15 @@ async function AIServicesSection() {
           [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
         }
 
-        services = shuffled.map(service => ({
-          ...service,
-          order_count: service.orders_count || 0
-        }))
+        services = shuffled.map(service => {
+          const stats = ratingMap.get(service.id)
+          return {
+            ...service,
+            order_count: service.orders_count || 0,
+            rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
+            review_count: stats?.count || 0
+          }
+        })
       }
     }
   }
