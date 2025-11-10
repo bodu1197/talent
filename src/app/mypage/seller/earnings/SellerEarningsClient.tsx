@@ -34,6 +34,15 @@ export default function SellerEarningsClient({ earnings, transactions, sellerDat
   const hasPendingWithdrawal = !!earnings.pending_withdrawal
 
   const handleWithdrawRequest = async () => {
+    // Prevent multiple clicks
+    if (loading) return
+
+    // Check if there's already a pending withdrawal
+    if (hasPendingWithdrawal) {
+      alert('이미 출금 신청이 진행 중입니다.')
+      return
+    }
+
     const amount = earnings.available_balance
 
     if (amount <= 0) {
@@ -53,6 +62,20 @@ export default function SellerEarningsClient({ earnings, transactions, sellerDat
     setLoading(true)
     try {
       const supabase = createClient()
+
+      // Double-check for pending withdrawal before inserting
+      const { data: existingPending } = await supabase
+        .from('withdrawal_requests')
+        .select('id')
+        .eq('seller_id', sellerData.id)
+        .eq('status', 'pending')
+        .maybeSingle()
+
+      if (existingPending) {
+        alert('이미 출금 신청이 진행 중입니다.')
+        window.location.reload()
+        return
+      }
 
       const { error } = await supabase
         .from('withdrawal_requests')

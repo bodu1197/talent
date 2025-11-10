@@ -24,7 +24,8 @@
       "Bash(node scripts/check-order-statuses.js:*)",
       "Bash(node scripts/check-seller-id-issue.js:*)",
       "Bash(node scripts/check-withdrawal-fk.js:*)",
-      "Bash(node scripts/add-withdrawal-columns.js:*)"
+      "Bash(node scripts/add-withdrawal-columns.js:*)",
+      "Bash(node scripts/add-withdrawal-unique-constraint.js:*)"
     ],
     "deny": [],
     "ask": []
