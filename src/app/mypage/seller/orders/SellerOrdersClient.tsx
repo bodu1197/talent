@@ -1,11 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import MobileSidebar from '@/components/mypage/MobileSidebar'
 import OrderCard from '@/components/mypage/OrderCard'
 import Link from 'next/link'
 import EmptyState from '@/components/common/EmptyState'
+import LoadingSpinner from '@/components/common/LoadingSpinner'
+import ErrorState from '@/components/common/ErrorState'
+import { logger } from '@/lib/logger'
 
 type OrderStatus = 'all' | 'paid' | 'in_progress' | 'delivered' | 'completed' | 'cancelled'
 
@@ -18,29 +21,70 @@ interface OrderFilter {
   maxPrice: string
 }
 
-interface Props {
-  initialOrders: any[]
-  initialStatus: OrderStatus
-  statusCounts: {
-    all: number
-    paid: number
-    in_progress: number
-    delivered: number
-    completed: number
-    cancelled: number
-  }
-}
+export default function SellerOrdersClient() {
+  const [orders, setOrders] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [statusCounts, setStatusCounts] = useState({
+    all: 0,
+    paid: 0,
+    in_progress: 0,
+    delivered: 0,
+    completed: 0,
+    cancelled: 0
+  })
 
-export default function SellerOrdersClient({ initialOrders, initialStatus, statusCounts }: Props) {
-  const [orders] = useState(initialOrders)
   const [filters, setFilters] = useState<OrderFilter>({
-    status: initialStatus,
+    status: 'all',
     searchQuery: '',
     startDate: '',
     endDate: '',
     minPrice: '',
     maxPrice: ''
   })
+
+  useEffect(() => {
+    loadOrders()
+    loadStatusCounts()
+  }, [filters.status])
+
+  async function loadOrders() {
+    try {
+      setLoading(true)
+      setError(null)
+
+      const statusParam = filters.status === 'all' ? '' : `?status=${filters.status}`
+      const response = await fetch(`/api/orders/seller${statusParam}`)
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || '주문 목록을 불러올 수 없습니다')
+      }
+
+      const { orders } = await response.json()
+      setOrders(orders)
+    } catch (err: any) {
+      logger.error('주문 조회 실패:', err)
+      setError(err.message || '주문 내역을 불러오는데 실패했습니다')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function loadStatusCounts() {
+    try {
+      const response = await fetch('/api/orders/seller/count')
+
+      if (!response.ok) {
+        throw new Error('카운트 조회 실패')
+      }
+
+      const { counts } = await response.json()
+      setStatusCounts(counts)
+    } catch (err) {
+      logger.error('상태별 카운트 조회 실패:', err)
+    }
+  }
 
   const filteredOrders = orders.filter(order => {
     if (filters.searchQuery) {
@@ -193,6 +237,38 @@ export default function SellerOrdersClient({ initialOrders, initialStatus, statu
     }
   }
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
+        <div className="flex w-full max-w-[1200px]">
+          <MobileSidebar mode="seller" />
+          <Sidebar mode="seller" />
+          <main className="flex-1 overflow-y-auto">
+            <div className="py-8 px-4">
+              <LoadingSpinner message="주문 내역을 불러오는 중..." />
+            </div>
+          </main>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
+        <div className="flex w-full max-w-[1200px]">
+          <MobileSidebar mode="seller" />
+          <Sidebar mode="seller" />
+          <main className="flex-1 overflow-y-auto">
+            <div className="py-8 px-4">
+              <ErrorState message={error} retry={loadOrders} />
+            </div>
+          </main>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
       <div className="flex w-full max-w-[1200px]">
@@ -210,9 +286,9 @@ export default function SellerOrdersClient({ initialOrders, initialStatus, statu
         <div className="bg-white rounded-lg border border-gray-200 mb-6">
           <div className="flex items-center overflow-x-auto">
             {tabs.map((tab) => (
-              <Link
+              <button
                 key={tab.value}
-                href={`/mypage/seller/orders?status=${tab.value}`}
+                onClick={() => setFilters({ ...filters, status: tab.value as OrderStatus })}
                 className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
                   filters.status === tab.value
                     ? 'border-[#0f3460] text-[#0f3460]'
@@ -229,7 +305,7 @@ export default function SellerOrdersClient({ initialOrders, initialStatus, statu
                     {tab.count}
                   </span>
                 )}
-              </Link>
+              </button>
             ))}
           </div>
         </div>
