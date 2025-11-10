@@ -135,16 +135,23 @@ export function useChatUnreadCount() {
   const clearCount = useCallback(async () => {
     try {
       setUnreadCount(0) // 즉시 UI 업데이트
+      console.log('[useChatUnreadCount] Calling mark-all-read API...')
       const response = await fetch('/api/chat/messages/mark-all-read', {
-        method: 'POST'
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       })
+      console.log('[useChatUnreadCount] mark-all-read response status:', response.status)
       if (response.ok) {
-        console.log('[useChatUnreadCount] All messages marked as read')
+        const data = await response.json()
+        console.log('[useChatUnreadCount] All messages marked as read, count:', data.count)
       } else {
-        console.error('[useChatUnreadCount] Failed to mark messages as read')
+        const errorData = await response.json()
+        console.error('[useChatUnreadCount] Failed to mark messages as read:', response.status, errorData)
       }
     } catch (error) {
-      console.error('Failed to mark all messages as read:', error)
+      console.error('[useChatUnreadCount] Error calling mark-all-read:', error)
     }
   }, [])
 
