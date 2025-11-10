@@ -1,8 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import MobileSidebar from '@/components/mypage/MobileSidebar'
-import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
 
 interface SellerEarningsClientProps {
   earnings: any
@@ -11,10 +12,67 @@ interface SellerEarningsClientProps {
     id: string
     display_name: string
     profile_image?: string | null
+    bank_name: string
+    account_number: string
+    account_holder: string
   }
 }
 
 export default function SellerEarningsClient({ earnings, transactions, sellerData }: SellerEarningsClientProps) {
+  const [loading, setLoading] = useState(false)
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false)
+  const [withdrawAmount, setWithdrawAmount] = useState('')
+
+  const handleWithdrawRequest = async () => {
+    if (!withdrawAmount || parseInt(withdrawAmount) <= 0) {
+      alert('출금 금액을 입력해주세요.')
+      return
+    }
+
+    const amount = parseInt(withdrawAmount)
+    if (amount > earnings.available_balance) {
+      alert('출금 가능 금액을 초과했습니다.')
+      return
+    }
+
+    if (amount < 10000) {
+      alert('최소 출금 금액은 10,000원입니다.')
+      return
+    }
+
+    if (!confirm(`${amount.toLocaleString()}원을 출금 신청하시겠습니까?\n\n입금 계좌: ${sellerData.bank_name} ${sellerData.account_number}\n예금주: ${sellerData.account_holder}`)) {
+      return
+    }
+
+    setLoading(true)
+    try {
+      const supabase = createClient()
+
+      const { error } = await supabase
+        .from('withdrawal_requests')
+        .insert({
+          seller_id: sellerData.id,
+          amount: amount,
+          bank_name: sellerData.bank_name,
+          account_number: sellerData.account_number,
+          account_holder: sellerData.account_holder,
+          status: 'pending',
+          requested_at: new Date().toISOString()
+        })
+
+      if (error) throw error
+
+      alert('출금 신청이 완료되었습니다.\n영업일 기준 1-3일 내 처리됩니다.')
+      setShowWithdrawModal(false)
+      setWithdrawAmount('')
+      window.location.reload()
+    } catch (error: any) {
+      console.error('Withdrawal request error:', error)
+      alert('출금 신청에 실패했습니다.\n' + error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
   const getStatusLabel = (status: string) => {
     switch (status) {
       case 'delivered': return '정산 대기'
@@ -64,15 +122,77 @@ export default function SellerEarningsClient({ earnings, transactions, sellerDat
           </div>
         </div>
 
-        <div className="mb-6">
-          <Link
-            href="/mypage/seller/earnings/withdraw"
-            className="px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium inline-block"
+        <div className="mb-6 flex gap-4">
+          <button
+            onClick={() => setShowWithdrawModal(true)}
+            disabled={earnings.available_balance <= 0}
+            className="px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             <i className="fas fa-money-bill-wave mr-2"></i>
             출금 신청
-          </Link>
+          </button>
+          {earnings.available_balance <= 0 && (
+            <p className="text-sm text-gray-500 self-center">출금 가능 금액이 없습니다</p>
+          )}
         </div>
+
+        {/* 출금 신청 모달 */}
+        {showWithdrawModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">출금 신청</h3>
+
+              <div className="mb-4">
+                <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                  <p className="text-sm text-gray-600 mb-2">출금 가능 금액</p>
+                  <p className="text-2xl font-bold text-[#0f3460]">{earnings.available_balance.toLocaleString()}원</p>
+                </div>
+
+                <div className="bg-blue-50 p-4 rounded-lg mb-4">
+                  <p className="text-sm text-gray-700 font-medium mb-2">입금 계좌 정보</p>
+                  <p className="text-sm text-gray-600">은행: {sellerData.bank_name}</p>
+                  <p className="text-sm text-gray-600">계좌번호: {sellerData.account_number}</p>
+                  <p className="text-sm text-gray-600">예금주: {sellerData.account_holder}</p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    출금 금액 (최소 10,000원)
+                  </label>
+                  <input
+                    type="number"
+                    value={withdrawAmount}
+                    onChange={(e) => setWithdrawAmount(e.target.value)}
+                    placeholder="출금 금액을 입력하세요"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    min="10000"
+                    max={earnings.available_balance}
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    setShowWithdrawModal(false)
+                    setWithdrawAmount('')
+                  }}
+                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  disabled={loading}
+                >
+                  취소
+                </button>
+                <button
+                  onClick={handleWithdrawRequest}
+                  disabled={loading}
+                  className="flex-1 px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors disabled:bg-gray-400"
+                >
+                  {loading ? '처리 중...' : '출금 신청'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="bg-white rounded-lg border border-gray-200">
           <div className="p-4 border-b border-gray-200">

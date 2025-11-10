@@ -12,7 +12,7 @@ export default async function SellerEarningsPage() {
 
   const { data: seller } = await supabase
     .from('sellers')
-    .select('id, display_name, profile_image')
+    .select('id, display_name, profile_image, bank_name, account_number, account_holder')
     .eq('user_id', user.id)
     .maybeSingle()
 

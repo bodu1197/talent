@@ -54,7 +54,6 @@ const sellerNavItems: NavItem[] = [
     icon: 'fa-sack-dollar',
     children: [
       { label: '정산 내역', href: '/mypage/seller/earnings', icon: '' },
-      { label: '출금 신청', href: '/mypage/seller/earnings/withdraw', icon: '' },
       { label: '출금 내역', href: '/mypage/seller/earnings/history', icon: '' }
     ]
   },
