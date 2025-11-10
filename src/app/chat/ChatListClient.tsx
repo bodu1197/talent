@@ -146,6 +146,39 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     }
   }
 
+  // 채팅방 선택 시 메시지 읽음 처리
+  const handleSelectRoom = async (roomId: string) => {
+    // 즉시 UI 업데이트 (배지 제거)
+    setRooms(prevRooms =>
+      prevRooms.map(room =>
+        room.id === roomId
+          ? { ...room, unreadCount: 0 }
+          : room
+      )
+    )
+
+    // 모바일에서는 채팅방 페이지로 이동
+    if (window.innerWidth < 768) {
+      router.push(`/chat/${roomId}`)
+    } else {
+      // PC에서는 현재 화면에서 선택
+      setSelectedRoomId(roomId)
+    }
+
+    // 백그라운드에서 읽음 처리
+    try {
+      await fetch('/api/chat/messages/mark-read', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ room_id: roomId })
+      })
+      // 전체 배지 카운트도 갱신
+      refreshCount()
+    } catch (error) {
+      console.error('[ChatListClient] Mark as read error:', error)
+    }
+  }
+
   // 읽지 않은 메시지를 읽음 처리
   const markMessagesAsRead = async (roomId: string) => {
     try {
@@ -402,7 +435,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
                 return (
                   <button
                     key={room.id}
-                    onClick={() => router.push(`/chat/${room.id}`)}
+                    onClick={() => handleSelectRoom(room.id)}
                     className="w-full px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors text-left"
                   >
                     <div className="flex items-center gap-3">
@@ -554,7 +587,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
               return (
                 <button
                   key={room.id}
-                  onClick={() => setSelectedRoomId(room.id)}
+                  onClick={() => handleSelectRoom(room.id)}
                   className={`w-full p-4 border-b border-gray-100 hover:bg-gray-50 text-left transition-colors ${
                     selectedRoomId === room.id ? 'bg-gray-50 border-l-4 border-l-green-500' : ''
                   }`}
