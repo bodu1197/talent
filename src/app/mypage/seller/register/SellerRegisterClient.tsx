@@ -257,7 +257,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                !!formData.accountHolder && !!formData.bankName
         break
       case 2:
-        result = !!formData.displayName && formData.bio.length >= 50
+        result = !!formData.displayName && formData.bio.length >= 50 && !!formData.profileImage
         break
       case 3:
         result = true // 연락처는 선택사항
@@ -475,7 +475,7 @@ export default function SellerRegisterClient({ userId }: Props) {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    프로필 사진
+                    프로필 사진 *
                   </label>
                   <div className="space-y-3">
                     {profilePreview ? (
@@ -535,12 +535,13 @@ export default function SellerRegisterClient({ userId }: Props) {
                     value={formData.bio}
                     onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                     rows={6}
+                    maxLength={300}
                     placeholder="자신의 전문 분야, 경력, 강점 등을 소개해주세요"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
                     required
                   ></textarea>
                   <p className={`text-sm mt-1 ${formData.bio.length < 50 ? 'text-red-600' : 'text-gray-500'}`}>
-                    {formData.bio.length}/300자 {formData.bio.length < 50 && `(최소 50자 - ${50 - formData.bio.length}자 더 입력)`}
+                    {formData.bio.length}/50자
                   </p>
                 </div>
               </div>
