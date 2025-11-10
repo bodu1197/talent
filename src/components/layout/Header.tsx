@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/providers/AuthProvider'
 import ChatNotificationBadge from '@/components/chat/ChatNotificationBadge'
+import NotificationBell from '@/components/notifications/NotificationBell'
 
 export default function Header() {
   const { user, profile, loading, signOut } = useAuth()
@@ -40,12 +41,7 @@ export default function Header() {
           <div className="lg:hidden flex items-center space-x-2">
             {user ? (
               <>
-                <button
-                  className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-brand-primary transition-colors"
-                  aria-label="알림"
-                >
-                  <i className="fas fa-bell text-xl"></i>
-                </button>
+                <NotificationBell />
                 <Link
                   href={getMypageUrl()}
                   className="flex items-center space-x-2"
@@ -119,12 +115,7 @@ export default function Header() {
                 <ChatNotificationBadge />
 
                 {/* 알림 */}
-                <button
-                  className="text-gray-900 hover:text-brand-primary transition-colors"
-                  aria-label="알림"
-                >
-                  <i className="far fa-bell text-xl"></i>
-                </button>
+                <NotificationBell />
 
                 {/* 사용자 정보 드롭다운 */}
                 <div className="relative group">
