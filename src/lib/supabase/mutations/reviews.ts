@@ -18,7 +18,7 @@ export async function createReview(data: {
       seller_id: data.sellerId,
       buyer_id: data.buyerId,
       rating: data.rating,
-      content: data.content
+      comment: data.content
     })
     .select()
     .single()
@@ -44,7 +44,7 @@ export async function updateReview(reviewId: string, data: {
     .from('reviews')
     .update({
       rating: data.rating,
-      content: data.content,
+      comment: data.content,
       updated_at: new Date().toISOString()
     })
     .eq('id', reviewId)

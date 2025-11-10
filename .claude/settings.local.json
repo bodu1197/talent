@@ -18,7 +18,9 @@
       "Bash(node scripts/debug-chat-issue.js:*)",
       "Bash(node -e:*)",
       "Bash(node scripts/apply-favorite-migration.js:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(node scripts/check-reviews-schema.js:*)",
+      "Bash(del \"C:\\Users\\ohyus\\talent\\supabase\\migrations\\20251110170000_add_reviews_content_column.sql\")"
     ],
     "deny": [],
     "ask": []

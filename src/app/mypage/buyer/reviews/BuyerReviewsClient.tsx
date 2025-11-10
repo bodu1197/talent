@@ -255,7 +255,7 @@ export default function BuyerReviewsClient({
                         작성일: {new Date(review.created_at).toLocaleDateString('ko-KR')}
                       </div>
 
-                      <p className="text-gray-700 mb-4">{review.content}</p>
+                      <p className="text-gray-700 mb-4">{review.comment}</p>
 
                       {review.seller_reply && (
                         <div className="bg-gray-50 rounded-lg p-4 mb-4">
@@ -274,7 +274,7 @@ export default function BuyerReviewsClient({
                       onClick={() => {
                         setSelectedReview(review)
                         setRating(review.rating)
-                        setReviewContent(review.content)
+                        setReviewContent(review.comment)
                         setShowEditModal(true)
                       }}
                       className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
