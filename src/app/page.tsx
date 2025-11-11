@@ -7,6 +7,7 @@ import RecentVisitedCategories from '@/components/home/RecentVisitedCategories'
 import RecentViewedServices from '@/components/home/RecentViewedServices'
 import RecommendedServices from '@/components/home/RecommendedServices'
 import PersonalizedServices from '@/components/home/PersonalizedServices'
+import { Service } from '@/types'
 
 // 캐싱 최적화: 60초마다 재생성
 export const revalidate = 60
@@ -63,7 +64,7 @@ async function AIServicesSection({ aiCategoryIds }: { aiCategoryIds: string[] })
   const { createClient } = await import('@/lib/supabase/server')
   const supabase = await createClient()
 
-  let services: any[] = []
+  let services: Service[] = []
 
   if (aiCategoryIds.length > 0) {
     // AI 카테고리의 서비스 조회 (JOIN으로 한 번에)
@@ -116,14 +117,14 @@ async function AIServicesSection({ aiCategoryIds }: { aiCategoryIds: string[] })
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
       }
 
-      services = shuffled.slice(0, 20).map(service => {
+      services = shuffled.slice(0, 20).map((service): Service => {
         const stats = ratingMap.get(service.id)
         return {
           ...service,
           order_count: service.orders_count || 0,
           rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
           review_count: stats?.count || 0
-        }
+        } as Service
       })
     }
   }

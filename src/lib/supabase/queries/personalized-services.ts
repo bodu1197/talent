@@ -1,12 +1,13 @@
 import { createClient as createServerClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { Service } from '@/types'
 
 export interface PersonalizedCategory {
   category_id: string
   category_name: string
   category_slug: string
   visit_count: number
-  services: any[]
+  services: Service[]
 }
 
 /**
@@ -34,7 +35,12 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
 
     // 2. 각 카테고리별로 서비스 조회 (병렬 처리)
     const categoriesWithServices = await Promise.all(
-      topCategories.map(async (category: any) => {
+      topCategories.map(async (category: {
+        category_id: string
+        category_name: string
+        category_slug: string
+        visit_count: number
+      }) => {
         // 카테고리 UUID 조회
         const { data: categoryInfo } = await supabase
           .from('categories')
@@ -95,7 +101,7 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
 
           // 서비스별 평균 별점 계산
           const ratingMap = new Map<string, { sum: number, count: number }>()
-          reviewStats?.forEach((review: any) => {
+          reviewStats?.forEach((review: { service_id: string; rating: number }) => {
             const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 }
             ratingMap.set(review.service_id, {
               sum: current.sum + review.rating,
@@ -104,7 +110,7 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
           })
 
           // 각 서비스에 별점 추가
-          topServices.forEach((service: any) => {
+          topServices.forEach((service: Service) => {
             const stats = ratingMap.get(service.id)
             service.rating = stats && stats.count > 0 ? stats.sum / stats.count : 0
             service.review_count = stats?.count || 0

@@ -1,5 +1,6 @@
 import ServiceCard from '@/components/services/ServiceCard'
 import { createClient } from '@/lib/supabase/server'
+import { Service } from '@/types'
 
 interface RecommendedServicesProps {
   aiCategoryIds: string[]
@@ -70,7 +71,7 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
 
   // 서비스별 평균 별점 계산
   const ratingMap = new Map<string, { sum: number, count: number }>()
-  reviewStats?.forEach((review: any) => {
+  reviewStats?.forEach((review: { service_id: string; rating: number }) => {
     const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 }
     ratingMap.set(review.service_id, {
       sum: current.sum + review.rating,
@@ -78,14 +79,14 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
     })
   })
 
-  const recommendedServices: any[] = shuffled.map(service => {
+  const recommendedServices: Service[] = shuffled.map((service): Service => {
     const stats = ratingMap.get(service.id)
     return {
       ...service,
       order_count: service.orders_count || 0,
       rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
       review_count: stats?.count || 0
-    }
+    } as Service
   })
 
   return (
@@ -99,7 +100,7 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {recommendedServices.map((service: any) => (
+          {recommendedServices.map((service) => (
             <ServiceCard key={service.id} service={service} />
           ))}
         </div>

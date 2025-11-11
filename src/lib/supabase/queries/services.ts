@@ -1,9 +1,14 @@
 import { createClient as createBrowserClient } from '@/lib/supabase/client'
 import { createClient as createServerClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { Service } from '@/types'
 
 // 한 번의 쿼리로 모든 하위 카테고리 ID 가져오기 (최적화)
-async function getAllDescendantCategories(supabase: any, parentId: string, parentLevel: number): Promise<string[]> {
+async function getAllDescendantCategories(
+  supabase: ReturnType<typeof createBrowserClient> | Awaited<ReturnType<typeof createServerClient>>,
+  parentId: string,
+  parentLevel: number
+): Promise<string[]> {
   // level에 따라 필요한 모든 카테고리를 한 번에 조회
   if (parentLevel === 1) {
     // 1차 카테고리: 2차와 3차 모두 가져오기
@@ -14,7 +19,7 @@ async function getAllDescendantCategories(supabase: any, parentId: string, paren
 
     if (!level2 || level2.length === 0) return []
 
-    const level2Ids = level2.map((c: any) => c.id)
+    const level2Ids = level2.map((c: { id: string }) => c.id)
 
     // 3차 카테고리도 한 번에 가져오기
     const { data: level3 } = await supabase
@@ -22,7 +27,7 @@ async function getAllDescendantCategories(supabase: any, parentId: string, paren
       .select('id')
       .in('parent_id', level2Ids)
 
-    const level3Ids = level3?.map((c: any) => c.id) || []
+    const level3Ids = level3?.map((c: { id: string }) => c.id) || []
     return [...level2Ids, ...level3Ids]
 
   } else if (parentLevel === 2) {
@@ -32,7 +37,7 @@ async function getAllDescendantCategories(supabase: any, parentId: string, paren
       .select('id')
       .eq('parent_id', parentId)
 
-    return level3?.map((c: any) => c.id) || []
+    return level3?.map((c: { id: string }) => c.id) || []
   }
 
   return []
@@ -189,7 +194,7 @@ export async function getServicesByCategory(categoryId: string, limit: number = 
 
     // 서비스별 평균 별점 계산
     const ratingMap = new Map<string, { sum: number, count: number }>()
-    reviewStats?.forEach((review: any) => {
+    reviewStats?.forEach((review: { service_id: string; rating: number }) => {
       const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 }
       ratingMap.set(review.service_id, {
         sum: current.sum + review.rating,
@@ -314,7 +319,7 @@ export async function getActiveServices(limit?: number) {
 
     // 서비스별 평균 별점 계산
     const ratingMap = new Map<string, { sum: number, count: number }>()
-    reviewStats?.forEach((review: any) => {
+    reviewStats?.forEach((review: { service_id: string; rating: number }) => {
       const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 }
       ratingMap.set(review.service_id, {
         sum: current.sum + review.rating,
