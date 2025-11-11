@@ -8,10 +8,8 @@ import RecentViewedServices from '@/components/home/RecentViewedServices'
 import RecommendedServices from '@/components/home/RecommendedServices'
 import PersonalizedServices from '@/components/home/PersonalizedServices'
 
-// 랜덤 정렬을 위해 매번 새로 렌더링
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
-export const fetchCache = 'force-no-store'
+// 캐싱 최적화: 60초마다 재생성
+export const revalidate = 60
 
 export default async function HomePage() {
   const supabase = await createClient()
@@ -23,6 +21,14 @@ export default async function HomePage() {
   if (!user) {
     redirect('/landing')
   }
+
+  // AI 카테고리 한 번만 조회 (중복 제거)
+  const { data: aiCategories } = await supabase
+    .from('categories')
+    .select('id')
+    .eq('is_ai', true)
+
+  const aiCategoryIds = aiCategories?.map(cat => cat.id) || []
 
   // 로그인 사용자는 메인 페이지 표시
   return (
@@ -36,12 +42,12 @@ export default async function HomePage() {
 
       {/* AI 재능 쇼케이스 (Suspense로 감싸기) */}
       <Suspense fallback={<AIShowcaseSkeleton />}>
-        <AIServicesSection />
+        <AIServicesSection aiCategoryIds={aiCategoryIds} />
       </Suspense>
 
       {/* 추천 서비스 섹션 (Suspense로 감싸기) */}
       <Suspense fallback={<RecommendedSkeleton />}>
-        <RecommendedServices />
+        <RecommendedServices aiCategoryIds={aiCategoryIds} />
       </Suspense>
 
       {/* 회원 맞춤 관심 카테고리 서비스 (Suspense로 감싸기) */}
@@ -53,81 +59,72 @@ export default async function HomePage() {
 }
 
 // AI 서비스 섹션 (서버 컴포넌트)
-async function AIServicesSection() {
+async function AIServicesSection({ aiCategoryIds }: { aiCategoryIds: string[] }) {
   const { createClient } = await import('@/lib/supabase/server')
   const supabase = await createClient()
 
-  // 1. AI 카테고리 찾기
-  const { data: aiCategories } = await supabase
-    .from('categories')
-    .select('id')
-    .eq('is_ai', true)
-
   let services = []
 
-  if (aiCategories && aiCategories.length > 0) {
-    const aiCategoryIds = aiCategories.map(cat => cat.id)
+  if (aiCategoryIds.length > 0) {
+    // AI 카테고리의 서비스 조회 (JOIN으로 한 번에)
+    const { data: aiServices } = await supabase
+      .from('services')
+      .select(`
+        id,
+        title,
+        description,
+        price,
+        thumbnail_url,
+        orders_count,
+        status,
+        seller:sellers(
+          id,
+          business_name,
+          display_name,
+          is_verified
+        ),
+        service_categories!inner(category_id)
+      `)
+      .in('service_categories.category_id', aiCategoryIds)
+      .eq('status', 'active')
+      .order('created_at', { ascending: false })
+      .limit(50) // 최적화: 1000 -> 50
 
-    // 2. AI 카테고리의 서비스 ID 조회
-    const { data: serviceCategoryLinks } = await supabase
-      .from('service_categories')
-      .select('service_id')
-      .in('category_id', aiCategoryIds)
+    if (aiServices && aiServices.length > 0) {
+      // 리뷰 통계 한 번에 조회
+      const serviceIds = aiServices.map(s => s.id)
+      const { data: reviewStats } = await supabase
+        .from('reviews')
+        .select('service_id, rating')
+        .in('service_id', serviceIds)
+        .eq('is_visible', true)
 
-    if (serviceCategoryLinks && serviceCategoryLinks.length > 0) {
-      const aiServiceIds = serviceCategoryLinks.map(sc => sc.service_id)
-
-      // 3. AI 서비스 조회
-      const { data: aiServices } = await supabase
-        .from('services')
-        .select(`
-          *,
-          seller:sellers(
-            id,
-            business_name,
-            display_name,
-            is_verified
-          )
-        `)
-        .in('id', aiServiceIds)
-        .eq('status', 'active')
-
-      if (aiServices) {
-        // 평균 별점 계산
-        const serviceIds = aiServices.map(s => s.id)
-        const { data: reviewStats } = await supabase
-          .from('reviews')
-          .select('service_id, rating')
-          .in('service_id', serviceIds)
-          .eq('is_visible', true)
-
-        // 서비스별 평균 별점 계산
-        const ratingMap = new Map<string, { sum: number, count: number }>()
-        reviewStats?.forEach((review: any) => {
-          const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 }
-          ratingMap.set(review.service_id, {
-            sum: current.sum + review.rating,
-            count: current.count + 1
-          })
+      // 서비스별 평균 별점 계산
+      const ratingMap = new Map<string, { sum: number, count: number }>()
+      reviewStats?.forEach((review: any) => {
+        const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 }
+        ratingMap.set(review.service_id, {
+          sum: current.sum + review.rating,
+          count: current.count + 1
         })
+      })
 
-        // Fisher-Yates 셔플로 공평한 랜덤
-        const shuffled = [...aiServices]
-        for (let i = shuffled.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-        }
-
-        services = shuffled.map(service => {
-          const stats = ratingMap.get(service.id)
-          return {
-            ...service,
-            order_count: service.orders_count || 0,
-            rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
-            review_count: stats?.count || 0
-          }
-        })
+      // 클라이언트 랜덤 (서버 캐싱 활용)
+      const shuffled = [...aiServices]
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
       }
+
+      services = shuffled.slice(0, 20).map(service => {
+        const stats = ratingMap.get(service.id)
+        return {
+          ...service,
+          order_count: service.orders_count || 0,
+          rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
+          review_count: stats?.count || 0
+        }
+      })
     }
   }
 

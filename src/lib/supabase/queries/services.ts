@@ -114,7 +114,7 @@ export async function getSellerServicesCount(userId: string, status: string) {
 }
 
 // 카테고리별 승인된 서비스 조회 (서버 컴포넌트용)
-export async function getServicesByCategory(categoryId: string) {
+export async function getServicesByCategory(categoryId: string, limit: number = 100) {
   const supabase = await createServerClient()
 
   // 1. 먼저 카테고리 정보 조회 (level 확인)
@@ -148,7 +148,7 @@ export async function getServicesByCategory(categoryId: string) {
     return []
   }
 
-  // 4. 서비스 조회
+  // 4. 서비스 조회 (limit 적용)
   const { data, error } = await supabase
     .from('services')
     .select(`
@@ -167,6 +167,7 @@ export async function getServicesByCategory(categoryId: string) {
     .in('id', serviceIds)
     .eq('status', 'active')  // 승인된 서비스만
     .order('created_at', { ascending: false })
+    .limit(limit)
 
   if (error) {
     logger.error('Error fetching services by category:', error)

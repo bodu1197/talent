@@ -20,14 +20,18 @@ export default async function RecentViewedServices() {
     return null
   }
 
-  // 최근 본 서비스 조회 (최대 10개)
+  // 최근 본 서비스 조회 (최대 10개, 필요한 필드만)
   const { data: recentViews } = await supabase
     .from('service_views')
     .select(`
       service_id,
       viewed_at,
       service:services(
-        *,
+        id,
+        title,
+        price,
+        thumbnail_url,
+        orders_count,
         seller:sellers(
           id,
           business_name,
@@ -35,8 +39,8 @@ export default async function RecentViewedServices() {
           is_verified
         ),
         service_categories(
-          category:categories(id, name, slug),
-          category_id
+          category_id,
+          category:categories(id, name, slug)
         )
       )
     `)
@@ -86,19 +90,22 @@ export default async function RecentViewedServices() {
       const categoryId = categories[0].category?.id || categories[0].category_id
 
       if (categoryId) {
-        // 같은 카테고리의 서비스 조회
-        const categoryServices = await getServicesByCategory(categoryId)
-
-        // 최근 본 서비스 제외
-        const viewedIds = validViews.map((v: any) => v.service_id)
-        const filtered = categoryServices.filter((s: Service) => !viewedIds.includes(s.id))
-
-        // 랜덤 셔플
-        const shuffled = filtered.sort(() => Math.random() - 0.5)
-
-        // 최근 본 서비스 개수에 따라 필요한 만큼만 가져오기
+        // 필요한 개수만 계산
         const needed = Math.max(0, 10 - validViews.length)
-        relatedServices = shuffled.slice(0, needed)
+
+        if (needed > 0) {
+          // 같은 카테고리의 서비스 조회 (최적화: 필요한 개수 + 여유분만)
+          const categoryServices = await getServicesByCategory(categoryId, needed * 2)
+
+          // 최근 본 서비스 제외
+          const viewedIds = validViews.map((v: any) => v.service_id)
+          const filtered = categoryServices.filter((s: Service) => !viewedIds.includes(s.id))
+
+          // 랜덤 셔플
+          const shuffled = filtered.sort(() => Math.random() - 0.5)
+
+          relatedServices = shuffled.slice(0, needed)
+        }
       }
     }
   }

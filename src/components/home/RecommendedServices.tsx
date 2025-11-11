@@ -1,21 +1,17 @@
 import ServiceCard from '@/components/services/ServiceCard'
 import { createClient } from '@/lib/supabase/server'
 
-export default async function RecommendedServices() {
-  const supabase = await createClient()
+interface RecommendedServicesProps {
+  aiCategoryIds: string[]
+}
 
-  // 1. AI 카테고리 찾기
-  const { data: aiCategories } = await supabase
-    .from('categories')
-    .select('id')
-    .eq('is_ai', true)
+export default async function RecommendedServices({ aiCategoryIds }: RecommendedServicesProps) {
+  const supabase = await createClient()
 
   let aiServiceIds: string[] = []
 
-  if (aiCategories && aiCategories.length > 0) {
-    const aiCategoryIds = aiCategories.map(cat => cat.id)
-
-    // 2. AI 카테고리의 서비스 ID 조회
+  // AI 서비스 ID 조회 (AI 카테고리가 있을 경우만)
+  if (aiCategoryIds.length > 0) {
     const { data: serviceCategoryLinks } = await supabase
       .from('service_categories')
       .select('service_id')
@@ -26,11 +22,16 @@ export default async function RecommendedServices() {
     }
   }
 
-  // 3. 추천 서비스 조회 (AI 카테고리 제외)
+  // 추천 서비스 조회 (AI 카테고리 제외) - 최적화: 50개만
   let recommendedQuery = supabase
     .from('services')
     .select(`
-      *,
+      id,
+      title,
+      description,
+      price,
+      thumbnail_url,
+      orders_count,
       seller:sellers(
         id,
         business_name,
@@ -39,6 +40,8 @@ export default async function RecommendedServices() {
       )
     `)
     .eq('status', 'active')
+    .order('created_at', { ascending: false })
+    .limit(50) // 최적화: 1000 -> 50
 
   // AI 서비스 제외
   if (aiServiceIds.length > 0) {
@@ -46,9 +49,8 @@ export default async function RecommendedServices() {
   }
 
   const { data: recommendedData } = await recommendedQuery
-    .limit(1000) // 충분히 많이 가져오기
 
-  // Fisher-Yates 셔플로 공평한 랜덤
+  // 랜덤 셔플
   let shuffled = recommendedData ? [...recommendedData] : []
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -58,7 +60,7 @@ export default async function RecommendedServices() {
   // 상위 15개만 선택
   shuffled = shuffled.slice(0, 15)
 
-  // 평균 별점 계산
+  // 리뷰 통계 조회 (15개만)
   const serviceIds = shuffled.map(s => s.id)
   const { data: reviewStats } = await supabase
     .from('reviews')
