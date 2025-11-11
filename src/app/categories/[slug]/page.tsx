@@ -27,8 +27,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound()
   }
 
-  // category.id가 UUID인지 확인
-  if (!category.id || category.id === slug) {
+  // category.id가 유효한지 확인
+  if (!category.id) {
     console.error('[CategoryPage] category.id is invalid:', category.id, 'slug:', slug)
     notFound()
   }
