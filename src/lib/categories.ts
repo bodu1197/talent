@@ -150,14 +150,17 @@ export async function getCategoryPath(categoryId: string, useAuth: boolean = tru
   }
 
   // PostgreSQL 재귀 CTE로 모든 부모 카테고리를 한 번에 조회
+  // Note: categoryId must be a valid UUID string
   const { data, error } = await supabase.rpc('get_category_path', {
     p_category_id: categoryId
-  })
+  }).returns<CategoryItem[]>()
 
   if (error) {
-    logger.error('Failed to fetch category path:', error)
+    // Fallback: RPC 함수 없거나 타입 에러 시 기존 방식 사용
+    if (error.code !== '42883' && error.code !== '22P02') {
+      logger.error('Failed to fetch category path:', error)
+    }
 
-    // Fallback: RPC 함수 없으면 기존 방식 사용
     const path: CategoryItem[] = []
     let currentId: string | null | undefined = categoryId
 
