@@ -1,17 +1,19 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { generateRandomNickname, generateProfileImage } from '@/lib/utils/nickname-generator'
 
 export default function RegisterPage() {
+  const [randomNickname, setRandomNickname] = useState('')
+  const [profileImage, setProfileImage] = useState('')
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     passwordConfirm: '',
-    name: '',
-    phone: '',
     agreeTerms: false,
     agreePrivacy: false,
     agreeMarketing: false,
@@ -20,6 +22,17 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const supabase = createClient()
+
+  // 컴포넌트 마운트 시 랜덤 닉네임 생성
+  useEffect(() => {
+    generateNewNickname()
+  }, [])
+
+  const generateNewNickname = () => {
+    const nickname = generateRandomNickname()
+    setRandomNickname(nickname)
+    setProfileImage(generateProfileImage(nickname))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -51,8 +64,8 @@ export default function RegisterPage() {
         password: formData.password,
         options: {
           data: {
-            name: formData.name,
-            phone: formData.phone,
+            name: randomNickname,
+            profile_image: profileImage,
           },
         },
       })
@@ -144,37 +157,29 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* 이름 */}
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                이름 *
+            {/* 랜덤 닉네임 및 프로필 이미지 */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                프로필 정보 (자동 생성)
               </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                autoComplete="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="input"
-                placeholder="홍길동"
-                required
-              />
-            </div>
-
-            {/* 전화번호 */}
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                전화번호 <span className="text-xs text-gray-500">(선택)</span>
-              </label>
-              <input
-                id="phone"
-                type="tel"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="input"
-                placeholder="010-1234-5678"
-              />
+              <div className="flex items-center gap-4">
+                <img
+                  src={profileImage}
+                  alt="프로필 이미지"
+                  className="w-16 h-16 rounded-full bg-white border-2 border-gray-200"
+                />
+                <div className="flex-1">
+                  <p className="text-lg font-semibold text-gray-900">{randomNickname}</p>
+                  <p className="text-xs text-gray-500">회원가입 후 마이페이지에서 변경 가능합니다</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={generateNewNickname}
+                  className="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  🔄 새로고침
+                </button>
+              </div>
             </div>
 
             {/* 회원 유형 선택 제거 - 기본값: 구매자 */}
