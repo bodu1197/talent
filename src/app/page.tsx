@@ -124,7 +124,7 @@ async function AIServicesSection({ aiCategoryIds }: { aiCategoryIds: string[] })
           order_count: service.orders_count || 0,
           rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
           review_count: stats?.count || 0
-        } as Service
+        } as unknown as Service
       })
     }
   }

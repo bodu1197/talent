@@ -86,7 +86,7 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
       order_count: service.orders_count || 0,
       rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
       review_count: stats?.count || 0
-    } as Service
+    } as unknown as Service
   })
 
   return (
