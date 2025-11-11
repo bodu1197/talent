@@ -9,6 +9,8 @@ import { generateRandomNickname, generateProfileImage } from '@/lib/utils/nickna
 export default function RegisterPage() {
   const [randomNickname, setRandomNickname] = useState('')
   const [profileImage, setProfileImage] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false)
 
   const [formData, setFormData] = useState({
     email: '',
@@ -22,6 +24,19 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const supabase = createClient()
+
+  // 비밀번호 조건 검사
+  const passwordValidation = {
+    minLength: formData.password.length >= 8,
+    hasLetter: /[a-zA-Z]/.test(formData.password),
+    hasNumber: /\d/.test(formData.password),
+    hasSpecial: /[!@#$%^&*(),.?":{}|<>]/.test(formData.password),
+  }
+
+  const isPasswordValid = passwordValidation.minLength &&
+                          passwordValidation.hasLetter &&
+                          passwordValidation.hasNumber &&
+                          passwordValidation.hasSpecial
 
   // 컴포넌트 마운트 시 랜덤 닉네임 생성
   useEffect(() => {
@@ -39,13 +54,13 @@ export default function RegisterPage() {
     setError(null)
 
     // 유효성 검사
-    if (formData.password !== formData.passwordConfirm) {
-      setError('비밀번호가 일치하지 않습니다.')
+    if (!isPasswordValid) {
+      setError('비밀번호 조건을 모두 충족해주세요.')
       return
     }
 
-    if (formData.password.length < 8) {
-      setError('비밀번호는 8자 이상이어야 합니다.')
+    if (formData.password !== formData.passwordConfirm) {
+      setError('비밀번호가 일치하지 않습니다.')
       return
     }
 
@@ -124,19 +139,58 @@ export default function RegisterPage() {
             {/* 비밀번호 */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                비밀번호 * <span className="text-xs text-gray-500">(8자 이상)</span>
+                비밀번호 *
               </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="input"
-                placeholder="••••••••"
-                required
-              />
+              <div className="relative">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  className="input pr-10"
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+              {/* 비밀번호 조건 표시 */}
+              {formData.password && (
+                <div className="mt-2 space-y-1">
+                  <div className={`flex items-center gap-2 text-xs ${passwordValidation.minLength ? 'text-green-600' : 'text-gray-500'}`}>
+                    <span>{passwordValidation.minLength ? '✓' : '○'}</span>
+                    <span>8자 이상</span>
+                  </div>
+                  <div className={`flex items-center gap-2 text-xs ${passwordValidation.hasLetter ? 'text-green-600' : 'text-gray-500'}`}>
+                    <span>{passwordValidation.hasLetter ? '✓' : '○'}</span>
+                    <span>영문 포함</span>
+                  </div>
+                  <div className={`flex items-center gap-2 text-xs ${passwordValidation.hasNumber ? 'text-green-600' : 'text-gray-500'}`}>
+                    <span>{passwordValidation.hasNumber ? '✓' : '○'}</span>
+                    <span>숫자 포함</span>
+                  </div>
+                  <div className={`flex items-center gap-2 text-xs ${passwordValidation.hasSpecial ? 'text-green-600' : 'text-gray-500'}`}>
+                    <span>{passwordValidation.hasSpecial ? '✓' : '○'}</span>
+                    <span>특수문자 포함 (!@#$%^&* 등)</span>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* 비밀번호 확인 */}
@@ -144,17 +198,42 @@ export default function RegisterPage() {
               <label htmlFor="passwordConfirm" className="block text-sm font-medium text-gray-700 mb-1">
                 비밀번호 확인 *
               </label>
-              <input
-                id="passwordConfirm"
-                name="passwordConfirm"
-                type="password"
-                autoComplete="new-password"
-                value={formData.passwordConfirm}
-                onChange={(e) => setFormData({ ...formData, passwordConfirm: e.target.value })}
-                className="input"
-                placeholder="••••••••"
-                required
-              />
+              <div className="relative">
+                <input
+                  id="passwordConfirm"
+                  name="passwordConfirm"
+                  type={showPasswordConfirm ? "text" : "password"}
+                  autoComplete="new-password"
+                  value={formData.passwordConfirm}
+                  onChange={(e) => setFormData({ ...formData, passwordConfirm: e.target.value })}
+                  className="input pr-10"
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPasswordConfirm ? (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+              {/* 비밀번호 일치 여부 표시 */}
+              {formData.passwordConfirm && (
+                <div className={`mt-2 flex items-center gap-2 text-xs ${formData.password === formData.passwordConfirm ? 'text-green-600' : 'text-red-600'}`}>
+                  <span>{formData.password === formData.passwordConfirm ? '✓' : '✗'}</span>
+                  <span>{formData.password === formData.passwordConfirm ? '비밀번호가 일치합니다' : '비밀번호가 일치하지 않습니다'}</span>
+                </div>
+              )}
             </div>
 
             {/* 랜덤 닉네임 및 프로필 이미지 */}
