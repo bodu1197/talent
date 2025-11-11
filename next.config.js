@@ -2,6 +2,7 @@ const { withSentryConfig } = require('@sentry/nextjs')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  poweredByHeader: false, // Remove X-Powered-By header
   images: {
     remotePatterns: [
       {
