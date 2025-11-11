@@ -3,6 +3,7 @@ import { getCategoryBySlug as getCategory, getCategoryPath, getCachedCategoriesT
 import { getServicesByCategory } from '@/lib/supabase/queries/services'
 import ServiceCard from '@/components/services/ServiceCard'
 import CategoryFilter from '@/components/categories/CategoryFilter'
+import CategorySort from '@/components/categories/CategorySort'
 import CategorySidebar from '@/components/categories/CategorySidebar'
 import CategoryVisitTracker from '@/components/categories/CategoryVisitTracker'
 import Link from 'next/link'
@@ -123,22 +124,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                   </nav>
 
                   {/* 정렬 */}
-                  <form method="get" className="flex items-center gap-2 flex-shrink-0">
-                    <span className="font-medium text-sm">정렬:</span>
-                    <select
-                      name="sort"
-                      defaultValue={sort}
-                      onChange={(e) => e.target.form?.submit()}
-                      className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm"
-                    >
-                      <option value="popular">인기순</option>
-                      <option value="latest">최신순</option>
-                      <option value="price_low">가격 낮은순</option>
-                      <option value="price_high">가격 높은순</option>
-                      <option value="rating">평점순</option>
-                    </select>
-                    <input type="hidden" name="price" value={price || ''} />
-                  </form>
+                  <CategorySort currentSort={sort} currentPrice={price} />
                 </div>
 
                 {/* 필터 영역 */}
