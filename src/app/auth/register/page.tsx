@@ -65,29 +65,30 @@ export default function RegisterPage() {
       setEmailCheckMessage('이메일 확인 중...')
 
       try {
-        // users 테이블에서 이메일 중복 체크
-        // auth.users 대신 public.users 테이블에서 확인
-        const { data, error } = await supabase
-          .from('users')
-          .select('email')
-          .eq('email', email)
-          .single()
+        // API를 통해 서버에서 이메일 중복 체크
+        const response = await fetch('/api/auth/check-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        })
 
-        if (error) {
-          // PGRST116 에러는 결과가 없음을 의미 (사용 가능)
-          if (error.code === 'PGRST116') {
-            setEmailCheckStatus('available')
-            setEmailCheckMessage('사용 가능한 이메일입니다')
-          } else {
-            // 다른 에러는 무시하고 idle 상태로
-            logger.error('이메일 중복 체크 오류:', error)
-            setEmailCheckStatus('idle')
-            setEmailCheckMessage('')
-          }
-        } else if (data) {
-          // 이메일이 존재함
+        const data = await response.json()
+
+        if (!response.ok) {
+          logger.error('이메일 중복 체크 오류:', data.error)
+          setEmailCheckStatus('idle')
+          setEmailCheckMessage('')
+          return
+        }
+
+        if (data.available) {
+          setEmailCheckStatus('available')
+          setEmailCheckMessage(data.message)
+        } else {
           setEmailCheckStatus('taken')
-          setEmailCheckMessage('이미 사용 중인 이메일입니다')
+          setEmailCheckMessage(data.message)
         }
       } catch (err) {
         logger.error('이메일 중복 체크 오류:', err)
@@ -102,7 +103,7 @@ export default function RegisterPage() {
     }, 500)
 
     return () => clearTimeout(timeoutId)
-  }, [formData.email, supabase])
+  }, [formData.email])
 
   const generateNewNickname = () => {
     const nickname = generateRandomNickname()
