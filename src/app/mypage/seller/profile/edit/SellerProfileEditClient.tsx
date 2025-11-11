@@ -157,8 +157,9 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                 </label>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs text-gray-600 mb-1">시작 시간</label>
+                    <label htmlFor="contact-start-time" className="block text-xs text-gray-600 mb-1">시작 시간</label>
                     <select
+                      id="contact-start-time"
                       value={profile.contact_hours?.split('-')[0] || '09:00'}
                       onChange={(e) => {
                         const endTime = profile.contact_hours?.split('-')[1] || '18:00'
@@ -176,8 +177,9 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-600 mb-1">종료 시간</label>
+                    <label htmlFor="contact-end-time" className="block text-xs text-gray-600 mb-1">종료 시간</label>
                     <select
+                      id="contact-end-time"
                       value={profile.contact_hours?.split('-')[1] || '18:00'}
                       onChange={(e) => {
                         const startTime = profile.contact_hours?.split('-')[0] || '09:00'

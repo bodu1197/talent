@@ -28,7 +28,9 @@
       "Bash(node scripts/add-withdrawal-unique-constraint.js:*)",
       "Bash(node scripts/apply-category-path-migration.js:*)",
       "WebFetch(domain:talent-zeta.vercel.app)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(test:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []

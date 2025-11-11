@@ -64,10 +64,11 @@ export default function Step2Pricing({ formData, setFormData }: Props) {
 
       {/* 수정 횟수 */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="revisionCount" className="block text-sm font-medium text-gray-700 mb-2">
           수정 횟수
         </label>
         <select
+          id="revisionCount"
           value={formData.revision_count}
           onChange={(e) => setFormData({ ...formData, revision_count: e.target.value })}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"

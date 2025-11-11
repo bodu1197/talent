@@ -26,6 +26,7 @@ export default function CategorySort({ currentSort: _currentSort, currentPrice: 
         value={currentSort}
         onChange={(e) => handleSortChange(e.target.value)}
         className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm"
+        aria-label="서비스 정렬 방식 선택"
       >
         <option value="popular">인기순</option>
         <option value="latest">최신순</option>

@@ -518,6 +518,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
                     required
                     disabled={loading}
+                    aria-label="1차 카테고리"
                   >
                     <option value="">
                       {loading ? '1차 카테고리 로딩 중...' : '1차 카테고리 선택'}
@@ -536,6 +537,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                       onChange={(e) => setSelectedLevel2(e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
                       required
+                      aria-label="2차 카테고리"
                     >
                       <option value="">2차 카테고리 선택</option>
                       {level2Categories.map((category) => (
@@ -553,6 +555,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                       onChange={(e) => setSelectedLevel3(e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
                       required
+                      aria-label="3차 카테고리"
                     >
                       <option value="">3차 카테고리 선택</option>
                       {level3Categories.map((category) => (
@@ -670,10 +673,11 @@ export default function NewServiceClient({ sellerId }: Props) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="revisionCount" className="block text-sm font-medium text-gray-700 mb-2">
                   수정 횟수 *
                 </label>
                 <select
+                  id="revisionCount"
                   value={formData.revisionCount}
                   onChange={(e) => setFormData({ ...formData, revisionCount: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"

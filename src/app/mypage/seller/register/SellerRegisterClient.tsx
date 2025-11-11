@@ -387,10 +387,11 @@ export default function SellerRegisterClient({ userId }: Props) {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label htmlFor="bankName" className="block text-sm font-medium text-gray-700 mb-2">
                         은행명 *
                       </label>
                       <select
+                        id="bankName"
                         value={formData.bankName}
                         onChange={(e) => setFormData({ ...formData, bankName: e.target.value })}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
