@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { getCategoryBySlug as getCategory, getCategoryPath, getCachedCategoriesTree, getAllCategoriesForBuild } from '@/lib/categories'
 import { getServicesByCategory } from '@/lib/supabase/queries/services'
-import ServiceCard from '@/components/services/ServiceCard'
+import ServiceGrid from '@/components/categories/ServiceGrid'
 import CategoryFilter from '@/components/categories/CategoryFilter'
 import CategorySort from '@/components/categories/CategorySort'
 import CategorySidebar from '@/components/categories/CategorySidebar'
@@ -15,15 +15,10 @@ interface CategoryPageProps {
   params: Promise<{
     slug: string
   }>
-  searchParams: Promise<{
-    sort?: string
-    price?: string
-  }>
 }
 
-export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
+export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params
-  const { sort = 'popular', price } = await searchParams
 
   // 카테고리 찾기
   const category = await getCategory(slug)
@@ -33,53 +28,11 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   }
 
   // 병렬 처리로 성능 향상
-  const [categoryPath, allCategories, allServices] = await Promise.all([
+  const [categoryPath, allCategories, services] = await Promise.all([
     getCategoryPath(category.id),
     getCachedCategoriesTree(),
     getServicesByCategory(category.id, 100) // 최대 100개
   ])
-
-  // 정렬 적용
-  let services = [...allServices]
-  switch (sort) {
-    case 'latest':
-      // created_at 기준 이미 정렬되어 있음
-      break
-    case 'price_low':
-      services.sort((a, b) => (a.price || 0) - (b.price || 0))
-      break
-    case 'price_high':
-      services.sort((a, b) => (b.price || 0) - (a.price || 0))
-      break
-    case 'rating':
-      services.sort((a, b) => (b.rating || 0) - (a.rating || 0))
-      break
-    case 'popular':
-    default:
-      services.sort((a, b) => (b.orders_count || 0) - (a.orders_count || 0))
-      break
-  }
-
-  // 가격 필터 적용
-  if (price) {
-    services = services.filter(service => {
-      const servicePrice = service.price || 0
-      switch (price) {
-        case 'under-50000':
-          return servicePrice < 50000
-        case '50000-100000':
-          return servicePrice >= 50000 && servicePrice < 100000
-        case '100000-300000':
-          return servicePrice >= 100000 && servicePrice < 300000
-        case '300000-500000':
-          return servicePrice >= 300000 && servicePrice < 500000
-        case 'over-500000':
-          return servicePrice >= 500000
-        default:
-          return true
-      }
-    })
-  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -124,7 +77,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                   </nav>
 
                   {/* 정렬 */}
-                  <CategorySort currentSort={sort} currentPrice={price} />
+                  <CategorySort currentSort="popular" currentPrice="" />
                 </div>
 
                 {/* 필터 영역 */}
@@ -133,9 +86,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
 
               {/* 서비스 그리드 */}
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {services.map(service => (
-                  <ServiceCard key={service.id} service={service} />
-                ))}
+                <ServiceGrid initialServices={services} />
               </div>
             </main>
           </div>

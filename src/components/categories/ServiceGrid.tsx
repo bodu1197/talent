@@ -1,0 +1,90 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
+import ServiceCard from '@/components/services/ServiceCard'
+
+interface Service {
+  id: string
+  title: string
+  price?: number
+  rating?: number
+  orders_count?: number
+  [key: string]: any
+}
+
+interface ServiceGridProps {
+  initialServices: Service[]
+}
+
+export default function ServiceGrid({ initialServices }: ServiceGridProps) {
+  const searchParams = useSearchParams()
+  const sort = searchParams.get('sort') || 'popular'
+  const price = searchParams.get('price')
+
+  const [services, setServices] = useState<Service[]>(initialServices)
+
+  useEffect(() => {
+    let filtered = [...initialServices]
+
+    // 가격 필터 적용
+    if (price) {
+      filtered = filtered.filter(service => {
+        const servicePrice = service.price || 0
+        switch (price) {
+          case 'under-50000':
+            return servicePrice < 50000
+          case '50000-100000':
+            return servicePrice >= 50000 && servicePrice < 100000
+          case '100000-300000':
+            return servicePrice >= 100000 && servicePrice < 300000
+          case '300000-500000':
+            return servicePrice >= 300000 && servicePrice < 500000
+          case 'over-500000':
+            return servicePrice >= 500000
+          default:
+            return true
+        }
+      })
+    }
+
+    // 정렬 적용
+    switch (sort) {
+      case 'latest':
+        // 이미 created_at 기준 정렬됨
+        break
+      case 'price_low':
+        filtered.sort((a, b) => (a.price || 0) - (b.price || 0))
+        break
+      case 'price_high':
+        filtered.sort((a, b) => (b.price || 0) - (a.price || 0))
+        break
+      case 'rating':
+        filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0))
+        break
+      case 'popular':
+      default:
+        filtered.sort((a, b) => (b.orders_count || 0) - (a.orders_count || 0))
+        break
+    }
+
+    setServices(filtered)
+  }, [sort, price, initialServices])
+
+  if (services.length === 0) {
+    return (
+      <div className="col-span-full text-center py-12">
+        <i className="fas fa-inbox text-4xl text-gray-300 mb-4"></i>
+        <p className="text-gray-500">해당 조건의 서비스가 없습니다.</p>
+      </div>
+    )
+  }
+
+  return (
+    <>
+      {services.map(service => (
+        <ServiceCard key={service.id} service={service} />
+      ))}
+    </>
+  )
+}

@@ -3,13 +3,14 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 
 interface CategorySortProps {
-  currentSort: string
+  currentSort?: string
   currentPrice?: string
 }
 
-export default function CategorySort({ currentSort, currentPrice }: CategorySortProps) {
+export default function CategorySort({ currentSort: _currentSort, currentPrice: _currentPrice }: CategorySortProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const currentSort = searchParams.get('sort') || 'popular'
 
   const handleSortChange = (newSort: string) => {
     const params = new URLSearchParams(searchParams)
