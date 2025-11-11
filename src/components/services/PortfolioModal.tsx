@@ -67,8 +67,9 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-10 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-colors"
+          aria-label="포트폴리오 닫기"
         >
-          <i className="fas fa-times text-gray-700"></i>
+          <i className="fas fa-times text-gray-700" aria-hidden="true"></i>
         </button>
 
         {/* YouTube 영상 (우선 표시) */}

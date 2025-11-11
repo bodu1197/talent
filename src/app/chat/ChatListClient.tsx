@@ -523,11 +523,12 @@ export default function ChatListClient({ userId, sellerId }: Props) {
                             <button
                               onClick={(e) => toggleFavorite(room.id, e)}
                               className="flex-shrink-0 text-lg transition-colors"
+                              aria-label={room.is_favorite ? '즐겨찾기 해제' : '즐겨찾기 추가'}
                             >
                               {room.is_favorite ? (
-                                <i className="fas fa-star text-yellow-400"></i>
+                                <i className="fas fa-star text-yellow-400" aria-hidden="true"></i>
                               ) : (
-                                <i className="far fa-star text-gray-400"></i>
+                                <i className="far fa-star text-gray-400" aria-hidden="true"></i>
                               )}
                             </button>
                           </div>
@@ -678,11 +679,12 @@ export default function ChatListClient({ userId, sellerId }: Props) {
                           <button
                             onClick={(e) => toggleFavorite(room.id, e)}
                             className="flex-shrink-0 text-base transition-colors"
+                            aria-label={room.is_favorite ? '즐겨찾기 해제' : '즐겨찾기 추가'}
                           >
                             {room.is_favorite ? (
-                              <i className="fas fa-star text-yellow-400"></i>
+                              <i className="fas fa-star text-yellow-400" aria-hidden="true"></i>
                             ) : (
-                              <i className="far fa-star text-gray-400"></i>
+                              <i className="far fa-star text-gray-400" aria-hidden="true"></i>
                             )}
                           </button>
                         </div>
@@ -849,8 +851,9 @@ export default function ChatListClient({ userId, sellerId }: Props) {
                       type="button"
                       onClick={() => setSelectedFile(null)}
                       className="text-red-500 hover:text-red-700"
+                      aria-label="첨부파일 삭제"
                     >
-                      <i className="fas fa-times"></i>
+                      <i className="fas fa-times" aria-hidden="true"></i>
                     </button>
                   </div>
                 )}

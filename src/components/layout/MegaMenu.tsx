@@ -76,8 +76,11 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
               <button
                 className="flex items-center gap-2 px-4 py-3 hover:bg-gray-50 font-medium border-r border-gray-200 cursor-pointer"
                 onClick={() => setIsOpen(!isOpen)}
+                aria-label="전체 카테고리 메뉴"
+                aria-expanded={isOpen}
+                aria-haspopup="true"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
                 <span>전체 카테고리</span>

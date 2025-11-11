@@ -76,12 +76,14 @@ export default function CategoryGridClient({
           <button
             onClick={() => setShowAllCategories(!showAllCategories)}
             className="flex flex-col items-center justify-center h-16 w-16 sm:h-18 sm:w-18 md:h-20 md:w-20 bg-gray-100 text-gray-500 hover:bg-brand-primary hover:text-white transition-all duration-200 cursor-pointer rounded-lg"
+            aria-label={showAllCategories ? '카테고리 간략히 보기' : '모든 카테고리 보기'}
+            aria-expanded={showAllCategories}
           >
             <div className="grid grid-cols-2 gap-1">
-              <i className={`fas ${showAllCategories ? 'fa-minus' : 'fa-th'} text-lg`}></i>
-              <i className={`fas ${showAllCategories ? 'fa-minus' : 'fa-th'} text-lg`}></i>
-              <i className={`fas ${showAllCategories ? 'fa-minus' : 'fa-th'} text-lg`}></i>
-              <i className={`fas ${showAllCategories ? 'fa-minus' : 'fa-th'} text-lg`}></i>
+              <i className={`fas ${showAllCategories ? 'fa-minus' : 'fa-th'} text-lg`} aria-hidden="true"></i>
+              <i className={`fas ${showAllCategories ? 'fa-minus' : 'fa-th'} text-lg`} aria-hidden="true"></i>
+              <i className={`fas ${showAllCategories ? 'fa-minus' : 'fa-th'} text-lg`} aria-hidden="true"></i>
+              <i className={`fas ${showAllCategories ? 'fa-minus' : 'fa-th'} text-lg`} aria-hidden="true"></i>
             </div>
             <span className="text-xs font-medium mt-1">{showAllCategories ? '간략히 보기' : '전체 보기'}</span>
           </button>
