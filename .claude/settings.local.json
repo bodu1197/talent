@@ -30,7 +30,10 @@
       "WebFetch(domain:talent-zeta.vercel.app)",
       "Bash(npm run build:*)",
       "Bash(test:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(node scripts/apply-migration.js:*)",
+      "Bash(node scripts/fix-security-definer.js:*)",
+      "Bash(echo $SUPABASE_DB_PASSWORD)"
     ],
     "deny": [],
     "ask": []

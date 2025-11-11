@@ -1,5 +1,7 @@
--- 카테고리 경로 조회 함수 (재귀 CTE로 최적화)
--- N+1 쿼리 문제 해결: 여러 번의 쿼리 대신 한 번의 쿼리로 전체 경로 조회
+-- Fix get_category_path function to have SET search_path
+-- This resolves the function_search_path_mutable warning
+
+DROP FUNCTION IF EXISTS get_category_path(UUID);
 
 CREATE OR REPLACE FUNCTION get_category_path(p_category_id UUID)
 RETURNS TABLE (
@@ -67,10 +69,12 @@ BEGIN
     cp.is_ai,
     cp.is_active
   FROM category_path cp
-  ORDER BY cp.level ASC;  -- 1차 -> 2차 -> 3차 순서로 정렬
+  ORDER BY cp.level ASC;
 END;
 $$;
 
--- 함수 실행 권한 부여
-GRANT EXECUTE ON FUNCTION get_category_path(UUID) TO authenticated;
-GRANT EXECUTE ON FUNCTION get_category_path(UUID) TO anon;
+-- Grant execute permissions
+GRANT EXECUTE ON FUNCTION get_category_path(UUID) TO authenticated, anon;
+
+-- Add comment
+COMMENT ON FUNCTION get_category_path IS 'Get category path from child to root. SECURITY DEFINER with search_path set for security.';
