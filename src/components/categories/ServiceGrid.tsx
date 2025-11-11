@@ -4,17 +4,8 @@ import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import ServiceCard from '@/components/services/ServiceCard'
 
-interface Service {
-  id: string
-  title: string
-  price?: number
-  rating?: number
-  orders_count?: number
-  [key: string]: any
-}
-
 interface ServiceGridProps {
-  initialServices: Service[]
+  initialServices: any[]
 }
 
 export default function ServiceGrid({ initialServices }: ServiceGridProps) {
@@ -22,7 +13,7 @@ export default function ServiceGrid({ initialServices }: ServiceGridProps) {
   const sort = searchParams.get('sort') || 'popular'
   const price = searchParams.get('price')
 
-  const [services, setServices] = useState<Service[]>(initialServices)
+  const [services, setServices] = useState<any[]>(initialServices)
 
   useEffect(() => {
     let filtered = [...initialServices]
