@@ -1,7 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createClientDirect } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
-import { unstable_cache } from 'next/cache'
 
 export interface CategoryItem {
   id: string
@@ -19,8 +18,9 @@ export interface CategoryItem {
 
 /**
  * 데이터베이스에서 모든 카테고리를 가져와서 트리 구조로 변환
+ * React cache로 요청 중복 제거
  */
-async function buildCategoryTree(): Promise<CategoryItem[]> {
+export async function getAllCategoriesTree(): Promise<CategoryItem[]> {
   const supabase = await createClient()
 
   const { data: categories, error } = await supabase
@@ -62,20 +62,9 @@ async function buildCategoryTree(): Promise<CategoryItem[]> {
 }
 
 /**
- * 캐싱된 카테고리 트리 (5분 캐시)
- */
-export const getCachedCategoriesTree = unstable_cache(
-  async () => buildCategoryTree(),
-  ['categories-tree'],
-  { revalidate: 300 }
-)
-
-/**
  * 호환성을 위한 별칭
  */
-export async function getAllCategoriesTree(): Promise<CategoryItem[]> {
-  return getCachedCategoriesTree()
-}
+export const getCachedCategoriesTree = getAllCategoriesTree
 
 /**
  * 1단계 카테고리만 가져오기 (메인 페이지용)
