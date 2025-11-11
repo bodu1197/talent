@@ -15,6 +15,8 @@ export default function RegisterPage() {
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false)
   const [registerAttempts, setRegisterAttempts] = useState(0)
   const [lockoutUntil, setLockoutUntil] = useState<number | null>(null)
+  const [emailCheckStatus, setEmailCheckStatus] = useState<'idle' | 'checking' | 'available' | 'taken'>('idle')
+  const [emailCheckMessage, setEmailCheckMessage] = useState<string>('')
 
   const [formData, setFormData] = useState({
     email: '',
@@ -47,6 +49,61 @@ export default function RegisterPage() {
     generateNewNickname()
   }, [])
 
+  // 이메일 중복 체크 (debounce 적용)
+  useEffect(() => {
+    const checkEmailAvailability = async () => {
+      const email = formData.email.trim()
+
+      // 이메일이 비어있거나 유효하지 않으면 체크하지 않음
+      if (!email || !email.includes('@')) {
+        setEmailCheckStatus('idle')
+        setEmailCheckMessage('')
+        return
+      }
+
+      setEmailCheckStatus('checking')
+      setEmailCheckMessage('이메일 확인 중...')
+
+      try {
+        // users 테이블에서 이메일 중복 체크
+        // auth.users 대신 public.users 테이블에서 확인
+        const { data, error } = await supabase
+          .from('users')
+          .select('email')
+          .eq('email', email)
+          .single()
+
+        if (error) {
+          // PGRST116 에러는 결과가 없음을 의미 (사용 가능)
+          if (error.code === 'PGRST116') {
+            setEmailCheckStatus('available')
+            setEmailCheckMessage('사용 가능한 이메일입니다')
+          } else {
+            // 다른 에러는 무시하고 idle 상태로
+            logger.error('이메일 중복 체크 오류:', error)
+            setEmailCheckStatus('idle')
+            setEmailCheckMessage('')
+          }
+        } else if (data) {
+          // 이메일이 존재함
+          setEmailCheckStatus('taken')
+          setEmailCheckMessage('이미 사용 중인 이메일입니다')
+        }
+      } catch (err) {
+        logger.error('이메일 중복 체크 오류:', err)
+        setEmailCheckStatus('idle')
+        setEmailCheckMessage('')
+      }
+    }
+
+    // Debounce: 500ms 후에 체크
+    const timeoutId = setTimeout(() => {
+      checkEmailAvailability()
+    }, 500)
+
+    return () => clearTimeout(timeoutId)
+  }, [formData.email, supabase])
+
   const generateNewNickname = () => {
     const nickname = generateRandomNickname()
     setRandomNickname(nickname)
@@ -64,6 +121,17 @@ export default function RegisterPage() {
     }
 
     setError(null)
+
+    // 이메일 중복 체크
+    if (emailCheckStatus === 'taken') {
+      setError('이미 사용 중인 이메일입니다. 다른 이메일을 사용해주세요.')
+      return
+    }
+
+    if (emailCheckStatus === 'checking') {
+      setError('이메일 확인 중입니다. 잠시만 기다려주세요.')
+      return
+    }
 
     // 유효성 검사
     if (!isPasswordValid) {
@@ -234,17 +302,53 @@ export default function RegisterPage() {
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                 이메일 *
               </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="input"
-                placeholder="your@email.com"
-                required
-              />
+              <div className="relative">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className={`input pr-10 ${
+                    emailCheckStatus === 'taken' ? 'border-red-500 focus:ring-red-500' :
+                    emailCheckStatus === 'available' ? 'border-green-500 focus:ring-green-500' : ''
+                  }`}
+                  placeholder="your@email.com"
+                  required
+                />
+                {emailCheckStatus === 'checking' && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <svg className="animate-spin h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                  </div>
+                )}
+                {emailCheckStatus === 'available' && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                )}
+                {emailCheckStatus === 'taken' && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-red-600">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+              {emailCheckMessage && (
+                <p className={`mt-1 text-xs ${
+                  emailCheckStatus === 'taken' ? 'text-red-600' :
+                  emailCheckStatus === 'available' ? 'text-green-600' :
+                  'text-gray-500'
+                }`}>
+                  {emailCheckMessage}
+                </p>
+              )}
             </div>
 
             {/* 비밀번호 */}
