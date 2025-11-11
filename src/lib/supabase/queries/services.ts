@@ -114,8 +114,11 @@ export async function getSellerServicesCount(userId: string, status: string) {
 }
 
 // 카테고리별 승인된 서비스 조회 (서버 컴포넌트용)
-export async function getServicesByCategory(categoryId: string, limit: number = 100) {
-  const supabase = await createServerClient()
+// useAuth=true이면 인증된 클라이언트 사용 (기본값), false면 anon 클라이언트 사용 (캐싱 가능)
+export async function getServicesByCategory(categoryId: string, limit: number = 100, useAuth: boolean = true) {
+  const supabase = useAuth
+    ? await createServerClient()
+    : createBrowserClient()
 
   // 1. 먼저 카테고리 정보 조회 (level 확인)
   const { data: category } = await supabase

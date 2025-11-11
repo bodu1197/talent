@@ -20,18 +20,18 @@ interface CategoryPageProps {
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params
 
-  // 카테고리 찾기
-  const category = await getCategory(slug)
+  // 카테고리 찾기 (인증 불필요, 캐싱 가능)
+  const category = await getCategory(slug, false)
 
   if (!category) {
     notFound()
   }
 
-  // 병렬 처리로 성능 향상
+  // 병렬 처리로 성능 향상 (모두 인증 불필요, 캐싱 가능)
   const [categoryPath, allCategories, services] = await Promise.all([
-    getCategoryPath(category.id),
-    getCachedCategoriesTree(),
-    getServicesByCategory(category.id, 100) // 최대 100개
+    getCategoryPath(category.id, false),
+    getCachedCategoriesTree(false),
+    getServicesByCategory(category.id, 100, false) // 최대 100개, 인증 불필요
   ])
 
   return (

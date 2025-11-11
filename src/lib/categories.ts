@@ -19,9 +19,15 @@ export interface CategoryItem {
 /**
  * 데이터베이스에서 모든 카테고리를 가져와서 트리 구조로 변환
  * React cache로 요청 중복 제거
+ * useAuth=false이면 anon 클라이언트 사용 (캐싱 가능)
  */
-export async function getAllCategoriesTree(): Promise<CategoryItem[]> {
-  const supabase = await createClient()
+export async function getAllCategoriesTree(useAuth: boolean = true): Promise<CategoryItem[]> {
+  const supabase = useAuth
+    ? await createClient()
+    : createClientDirect(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      )
 
   const { data: categories, error } = await supabase
     .from('categories')
@@ -76,9 +82,15 @@ export async function getTopLevelCategories(): Promise<CategoryItem[]> {
 
 /**
  * 특정 slug의 카테고리와 그 하위 카테고리 가져오기
+ * useAuth=false이면 anon 클라이언트 사용 (캐싱 가능)
  */
-export async function getCategoryBySlug(slug: string): Promise<CategoryItem | null> {
-  const supabase = await createClient()
+export async function getCategoryBySlug(slug: string, useAuth: boolean = true): Promise<CategoryItem | null> {
+  const supabase = useAuth
+    ? await createClient()
+    : createClientDirect(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      )
 
   const { data: category, error } = await supabase
     .from('categories')
@@ -107,9 +119,15 @@ export async function getCategoryBySlug(slug: string): Promise<CategoryItem | nu
 
 /**
  * 카테고리 경로 가져오기 (breadcrumb용) - 최적화: 재귀 CTE로 한 번에 조회
+ * useAuth=false이면 anon 클라이언트 사용 (캐싱 가능)
  */
-export async function getCategoryPath(categoryId: string): Promise<CategoryItem[]> {
-  const supabase = await createClient()
+export async function getCategoryPath(categoryId: string, useAuth: boolean = true): Promise<CategoryItem[]> {
+  const supabase = useAuth
+    ? await createClient()
+    : createClientDirect(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      )
 
   // PostgreSQL 재귀 CTE로 모든 부모 카테고리를 한 번에 조회
   const { data, error } = await supabase.rpc('get_category_path', {
