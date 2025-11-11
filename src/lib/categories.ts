@@ -22,12 +22,18 @@ export interface CategoryItem {
  * useAuth=false이면 anon 클라이언트 사용 (캐싱 가능)
  */
 export async function getAllCategoriesTree(useAuth: boolean = true): Promise<CategoryItem[]> {
-  const supabase = useAuth
-    ? await createClient()
-    : createClientDirect(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      )
+  let supabase
+  if (useAuth) {
+    supabase = await createClient()
+  } else {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    if (!url || !key) {
+      supabase = await createClient()
+    } else {
+      supabase = createClientDirect(url, key)
+    }
+  }
 
   const { data: categories, error } = await supabase
     .from('categories')
@@ -85,12 +91,20 @@ export async function getTopLevelCategories(): Promise<CategoryItem[]> {
  * useAuth=false이면 anon 클라이언트 사용 (캐싱 가능)
  */
 export async function getCategoryBySlug(slug: string, useAuth: boolean = true): Promise<CategoryItem | null> {
-  const supabase = useAuth
-    ? await createClient()
-    : createClientDirect(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      )
+  let supabase
+  if (useAuth) {
+    supabase = await createClient()
+  } else {
+    // 환경 변수 확인
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    if (!url || !key) {
+      // Fallback to auth client if env vars missing
+      supabase = await createClient()
+    } else {
+      supabase = createClientDirect(url, key)
+    }
+  }
 
   const { data: category, error } = await supabase
     .from('categories')
@@ -122,12 +136,18 @@ export async function getCategoryBySlug(slug: string, useAuth: boolean = true): 
  * useAuth=false이면 anon 클라이언트 사용 (캐싱 가능)
  */
 export async function getCategoryPath(categoryId: string, useAuth: boolean = true): Promise<CategoryItem[]> {
-  const supabase = useAuth
-    ? await createClient()
-    : createClientDirect(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      )
+  let supabase
+  if (useAuth) {
+    supabase = await createClient()
+  } else {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    if (!url || !key) {
+      supabase = await createClient()
+    } else {
+      supabase = createClientDirect(url, key)
+    }
+  }
 
   // PostgreSQL 재귀 CTE로 모든 부모 카테고리를 한 번에 조회
   const { data, error } = await supabase.rpc('get_category_path', {

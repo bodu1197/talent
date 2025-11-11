@@ -27,6 +27,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound()
   }
 
+  // category.id가 UUID인지 확인
+  if (!category.id || category.id === slug) {
+    console.error('[CategoryPage] category.id is invalid:', category.id, 'slug:', slug)
+    notFound()
+  }
+
   // 병렬 처리로 성능 향상 (모두 인증 불필요, 캐싱 가능)
   const [categoryPath, allCategories, services] = await Promise.all([
     getCategoryPath(category.id, false),
