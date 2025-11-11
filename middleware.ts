@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { logger } from '@/lib/logger'
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -9,11 +10,20 @@ export async function middleware(request: NextRequest) {
   // pathname을 헤더에 추가 (Server Component에서 사용)
   supabaseResponse.headers.set('x-pathname', request.nextUrl.pathname)
 
-  // 보안 헤더를 먼저 설정
+  // 보안 헤더 강화
   const setSecurityHeaders = (response: NextResponse) => {
     response.headers.set('X-Content-Type-Options', 'nosniff')
-    response.headers.set('Content-Security-Policy', "frame-ancestors 'none'")
+    response.headers.set('X-Frame-Options', 'DENY')
+    response.headers.set('X-XSS-Protection', '1; mode=block')
+    response.headers.set('Content-Security-Policy', "default-src 'self'; frame-ancestors 'none'; upgrade-insecure-requests")
     response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+    response.headers.set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()')
+
+    // HTTPS 전용 (프로덕션에서만)
+    if (process.env.NODE_ENV === 'production') {
+      response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
+    }
+
     return response
   }
 
@@ -50,14 +60,18 @@ export async function middleware(request: NextRequest) {
     error: authError,
   } = await supabase.auth.getUser()
 
-  // 디버깅: 쿠키와 인증 상태 확인
-  if (request.nextUrl.pathname.startsWith('/mypage')) {
-    const allCookies = request.cookies.getAll()
-    console.log('[Middleware] Path:', request.nextUrl.pathname)
-    console.log('[Middleware] Cookies count:', allCookies.length)
-    console.log('[Middleware] Auth cookies:', allCookies.filter(c => c.name.includes('sb-')).map(c => c.name))
-    console.log('[Middleware] Has user:', !!user, 'User ID:', user?.id)
-    console.log('[Middleware] Auth error:', authError)
+  // 디버깅: 쿠키와 인증 상태 확인 (개발 환경에서만)
+  if (process.env.NODE_ENV === 'development' && request.nextUrl.pathname.startsWith('/mypage')) {
+    logger.debug('[Middleware] Auth check', {
+      path: request.nextUrl.pathname,
+      hasUser: !!user,
+      userId: user?.id,
+      cookieCount: request.cookies.getAll().length,
+    })
+
+    if (authError) {
+      logger.error('[Middleware] Auth error:', authError)
+    }
   }
 
   // 보호된 경로 설정 - mypage는 모두 인증 필요

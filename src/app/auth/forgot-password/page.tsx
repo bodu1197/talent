@@ -4,30 +4,58 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { logger } from '@/lib/logger'
+import { getSecureRedirectUrl, RATE_LIMIT_CONFIG } from '@/lib/auth/config'
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [resetAttempts, setResetAttempts] = useState(0)
+  const [lockoutUntil, setLockoutUntil] = useState<number | null>(null)
   const supabase = createClient()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Rate Limiting 체크
+    if (lockoutUntil && Date.now() < lockoutUntil) {
+      const remainingSeconds = Math.ceil((lockoutUntil - Date.now()) / 1000)
+      setError(`너무 많은 시도가 있었습니다. ${remainingSeconds}초 후 다시 시도해주세요.`)
+      return
+    }
+
     setError(null)
     setIsLoading(true)
 
     try {
+      // OAuth 리다이렉트 URL 검증 (CRITICAL 보안)
+      const redirectUrl = getSecureRedirectUrl(window.location.origin, '/auth/reset-password')
+
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/reset-password`,
+        redirectTo: redirectUrl,
       })
 
       if (error) throw error
 
+      // 성공 시 시도 횟수 초기화
+      setResetAttempts(0)
+      setLockoutUntil(null)
       setSuccess(true)
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('비밀번호 재설정 요청 실패:', error)
-      setError(error.message || '비밀번호 재설정 요청 중 오류가 발생했습니다.')
+
+      const newAttempts = resetAttempts + 1
+      setResetAttempts(newAttempts)
+
+      // Rate Limiting 적용
+      if (newAttempts >= RATE_LIMIT_CONFIG.FORGOT_PASSWORD.MAX_ATTEMPTS) {
+        setLockoutUntil(Date.now() + RATE_LIMIT_CONFIG.FORGOT_PASSWORD.LOCKOUT_DURATION)
+        setError('너무 많은 시도가 있었습니다. 10분 후 다시 시도해주세요.')
+      } else {
+        const message = error instanceof Error ? error.message : '비밀번호 재설정 요청 중 오류가 발생했습니다.'
+        setError(message)
+      }
     } finally {
       setIsLoading(false)
     }

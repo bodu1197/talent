@@ -32,9 +32,17 @@ export class SupabaseManager {
    */
   static getBrowserClient(): SupabaseClient {
     if (!this.browserClient) {
+      // 환경 변수 검증
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+      const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+      if (!url || !key) {
+        throw new Error('Missing Supabase environment variables. Please check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.')
+      }
+
       this.browserClient = createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        url,
+        key,
         this.commonConfig
       )
     }
@@ -47,13 +55,21 @@ export class SupabaseManager {
    * 주의: 이 메서드는 서버 환경에서만 사용해야 합니다
    */
   static async getServerClient(): Promise<SupabaseClient> {
+    // 환경 변수 검증
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+    if (!url || !key) {
+      throw new Error('Missing Supabase environment variables. Please check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.')
+    }
+
     // 동적 import를 사용하여 서버 전용 모듈 로드
     const { cookies } = await import('next/headers')
     const cookieStore = await cookies()
 
     return createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      url,
+      key,
       {
         cookies: {
           get(name: string) {

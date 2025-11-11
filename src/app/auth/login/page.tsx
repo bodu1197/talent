@@ -5,17 +5,29 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { logger } from '@/lib/logger'
+import { getSecureRedirectUrl, RATE_LIMIT_CONFIG } from '@/lib/auth/config'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [loginAttempts, setLoginAttempts] = useState(0)
+  const [lockoutUntil, setLockoutUntil] = useState<number | null>(null)
+  const [rememberMe, setRememberMe] = useState(false)
   const router = useRouter()
   const supabase = createClient()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Rate Limiting 체크
+    if (lockoutUntil && Date.now() < lockoutUntil) {
+      const remainingSeconds = Math.ceil((lockoutUntil - Date.now()) / 1000)
+      setError(`너무 많은 로그인 시도가 있었습니다. ${remainingSeconds}초 후 다시 시도해주세요.`)
+      return
+    }
+
     setError(null)
     setIsLoading(true)
 
@@ -27,7 +39,11 @@ export default function LoginPage() {
 
       if (error) throw error
 
-      // 로그인 성공 - 쿠키 설정을 위해 잠시 대기 후 새로고침
+      // 로그인 성공 - 시도 횟수 초기화
+      setLoginAttempts(0)
+      setLockoutUntil(null)
+
+      // 쿠키 설정을 위해 잠시 대기 후 새로고침
       await new Promise(resolve => setTimeout(resolve, 100))
 
       // 서버 컴포넌트 새로고침하여 쿠키 동기화
@@ -35,9 +51,21 @@ export default function LoginPage() {
 
       // 메인 페이지로 이동
       router.push('/')
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('로그인 실패:', error)
-      setError(error.message || '로그인 중 오류가 발생했습니다.')
+
+      const newAttempts = loginAttempts + 1
+      setLoginAttempts(newAttempts)
+
+      // Rate Limiting 적용
+      if (newAttempts >= RATE_LIMIT_CONFIG.LOGIN.MAX_ATTEMPTS) {
+        setLockoutUntil(Date.now() + RATE_LIMIT_CONFIG.LOGIN.LOCKOUT_DURATION)
+        setError(`너무 많은 로그인 시도가 있었습니다. 5분 후 다시 시도해주세요.`)
+      } else {
+        const message = error instanceof Error ? error.message : '로그인 중 오류가 발생했습니다.'
+        setError(message)
+      }
+
       setIsLoading(false)
     }
   }
@@ -48,16 +76,21 @@ export default function LoginPage() {
       setIsLoading(true)
       setError(null)
 
+      // OAuth 리다이렉트 URL 검증 (CRITICAL 보안)
+      const redirectUrl = getSecureRedirectUrl(window.location.origin, '/auth/callback')
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: provider,
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: redirectUrl,
         }
       })
 
       if (error) throw error
-    } catch (error: any) {
-      setError(error.message || 'SNS 로그인 중 오류가 발생했습니다.')
+    } catch (error: unknown) {
+      logger.error('SNS 로그인 실패:', error)
+      const message = error instanceof Error ? error.message : 'SNS 로그인 중 오류가 발생했습니다.'
+      setError(message)
       setIsLoading(false)
     }
   }
@@ -170,7 +203,12 @@ export default function LoginPage() {
 
             <div className="flex items-center justify-between">
               <label className="flex items-center">
-                <input type="checkbox" className="mr-2" />
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                />
                 <span className="text-sm text-gray-600">로그인 상태 유지</span>
               </label>
               <Link href="/auth/forgot-password" className="text-sm text-primary-600 hover:text-primary-700">

@@ -1,26 +1,51 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { parseOAuthState } from '@/lib/auth/config'
+import { logger } from '@/lib/logger'
 
-export default function CallbackCompletePage() {
+function CallbackCompleteContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
+  const [isProcessing, setIsProcessing] = useState(false)
 
   useEffect(() => {
+    if (isProcessing) return // 중복 실행 방지
+
     const updateUserProfile = async () => {
+      setIsProcessing(true)
+
       try {
-        // localStorage에서 임시 저장된 닉네임과 프로필 이미지 가져오기
-        const nickname = localStorage.getItem('temp_nickname')
-        const profileImage = localStorage.getItem('temp_profile_image')
+        // state 파라미터에서 데이터 추출 (안전한 방법)
+        const stateParam = searchParams.get('state')
+        let nickname: string | null = null
+        let profileImage: string | null = null
+
+        if (stateParam) {
+          try {
+            const stateData = parseOAuthState<{
+              nickname: string
+              profileImage: string
+            }>(stateParam)
+            nickname = stateData.nickname
+            profileImage = stateData.profileImage
+          } catch (error) {
+            logger.warn('Invalid or expired state parameter:', error)
+            // state가 유효하지 않아도 로그인은 성공했으므로 계속 진행
+          }
+        }
 
         // 현재 사용자 정보 가져오기
-        const { data: { user } } = await supabase.auth.getUser()
+        const { data: { user }, error: userError } = await supabase.auth.getUser()
+
+        if (userError) throw userError
 
         if (user && nickname) {
           // users 테이블 업데이트
-          await supabase
+          const { error: updateError } = await supabase
             .from('users')
             .update({
               name: nickname,
@@ -28,22 +53,23 @@ export default function CallbackCompletePage() {
             })
             .eq('id', user.id)
 
-          // localStorage 정리
-          localStorage.removeItem('temp_nickname')
-          localStorage.removeItem('temp_profile_image')
+          if (updateError) {
+            logger.error('Failed to update user profile:', updateError)
+            // 업데이트 실패해도 로그인은 성공했으므로 계속 진행
+          }
         }
 
         // 홈으로 리다이렉트
         router.push('/')
-      } catch (error) {
-        console.error('Profile update error:', error)
+      } catch (error: unknown) {
+        logger.error('Profile update error:', error)
         // 에러가 있어도 홈으로 리다이렉트
         router.push('/')
       }
     }
 
     updateUserProfile()
-  }, [router, supabase])
+  }, [router, supabase, searchParams, isProcessing])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -52,5 +78,20 @@ export default function CallbackCompletePage() {
         <p className="text-gray-600">로그인 중...</p>
       </div>
     </div>
+  )
+}
+
+export default function CallbackCompletePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="spinner mb-4"></div>
+          <p className="text-gray-600">로그인 중...</p>
+        </div>
+      </div>
+    }>
+      <CallbackCompleteContent />
+    </Suspense>
   )
 }

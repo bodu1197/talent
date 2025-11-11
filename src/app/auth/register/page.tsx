@@ -5,12 +5,16 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { generateRandomNickname, generateProfileImage } from '@/lib/utils/nickname-generator'
+import { getSecureRedirectUrl, createOAuthState, RATE_LIMIT_CONFIG } from '@/lib/auth/config'
+import { logger } from '@/lib/logger'
 
 export default function RegisterPage() {
   const [randomNickname, setRandomNickname] = useState('')
   const [profileImage, setProfileImage] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false)
+  const [registerAttempts, setRegisterAttempts] = useState(0)
+  const [lockoutUntil, setLockoutUntil] = useState<number | null>(null)
 
   const [formData, setFormData] = useState({
     email: '',
@@ -51,6 +55,14 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Rate Limiting 체크
+    if (lockoutUntil && Date.now() < lockoutUntil) {
+      const remainingSeconds = Math.ceil((lockoutUntil - Date.now()) / 1000)
+      setError(`너무 많은 시도가 있었습니다. ${remainingSeconds}초 후 다시 시도해주세요.`)
+      return
+    }
+
     setError(null)
 
     // 유효성 검사
@@ -88,11 +100,27 @@ export default function RegisterPage() {
       if (authError) throw authError
 
       if (authData.user) {
-        // 회원가입 성공 - 트리거가 자동으로 users 테이블 프로필 생성
+        // 회원가입 성공 - 시도 횟수 초기화
+        setRegisterAttempts(0)
+        setLockoutUntil(null)
+
+        // 트리거가 자동으로 users 테이블 프로필 생성
         router.push('/auth/login?registered=true')
       }
-    } catch (error: any) {
-      setError(error.message || '회원가입 중 오류가 발생했습니다.')
+    } catch (error: unknown) {
+      logger.error('회원가입 실패:', error)
+
+      const newAttempts = registerAttempts + 1
+      setRegisterAttempts(newAttempts)
+
+      // Rate Limiting 적용
+      if (newAttempts >= RATE_LIMIT_CONFIG.REGISTER.MAX_ATTEMPTS) {
+        setLockoutUntil(Date.now() + RATE_LIMIT_CONFIG.REGISTER.LOCKOUT_DURATION)
+        setError('너무 많은 시도가 있었습니다. 10분 후 다시 시도해주세요.')
+      } else {
+        const message = error instanceof Error ? error.message : '회원가입 중 오류가 발생했습니다.'
+        setError(message)
+      }
     } finally {
       setIsLoading(false)
     }
@@ -104,20 +132,27 @@ export default function RegisterPage() {
       setIsLoading(true)
       setError(null)
 
-      // 닉네임과 프로필 이미지를 localStorage에 임시 저장 (callback에서 사용)
-      localStorage.setItem('temp_nickname', randomNickname)
-      localStorage.setItem('temp_profile_image', profileImage)
+      // OAuth 리다이렉트 URL 검증 (CRITICAL 보안)
+      const redirectUrl = getSecureRedirectUrl(window.location.origin, '/auth/callback')
+
+      // state 파라미터로 안전하게 전달 (localStorage 대신)
+      const state = createOAuthState({
+        nickname: randomNickname,
+        profileImage: profileImage,
+      })
 
       const { error } = await supabase.auth.signInWithOAuth({
         provider: provider,
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${redirectUrl}?state=${encodeURIComponent(state)}`,
         }
       })
 
       if (error) throw error
-    } catch (error: any) {
-      setError(error.message || 'SNS 로그인 중 오류가 발생했습니다.')
+    } catch (error: unknown) {
+      logger.error('SNS 로그인 실패:', error)
+      const message = error instanceof Error ? error.message : 'SNS 로그인 중 오류가 발생했습니다.'
+      setError(message)
       setIsLoading(false)
     }
   }
