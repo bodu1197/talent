@@ -19,10 +19,10 @@ export async function middleware(request: NextRequest) {
     // CSP 설정 - Next.js와 Supabase를 위한 적절한 권한 설정
     const cspHeader = `
       default-src 'self';
-      script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live;
-      style-src 'self' 'unsafe-inline';
+      script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live https://cdnjs.cloudflare.com;
+      style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;
       img-src 'self' blob: data: https:;
-      font-src 'self' data:;
+      font-src 'self' data: https://cdnjs.cloudflare.com;
       connect-src 'self' https://*.supabase.co wss://*.supabase.co https://vercel.live;
       frame-src 'self' https://vercel.live;
       frame-ancestors 'none';
