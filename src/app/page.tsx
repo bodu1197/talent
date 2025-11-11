@@ -63,7 +63,7 @@ async function AIServicesSection({ aiCategoryIds }: { aiCategoryIds: string[] })
   const { createClient } = await import('@/lib/supabase/server')
   const supabase = await createClient()
 
-  let services = []
+  let services: any[] = []
 
   if (aiCategoryIds.length > 0) {
     // AI 카테고리의 서비스 조회 (JOIN으로 한 번에)
