@@ -9,6 +9,7 @@
 DROP POLICY IF EXISTS "Sellers can create withdrawal requests" ON withdrawal_requests;
 DROP POLICY IF EXISTS "Sellers can view own withdrawal requests" ON withdrawal_requests;
 DROP POLICY IF EXISTS "Sellers can update own pending withdrawals" ON withdrawal_requests;
+DROP POLICY IF EXISTS "View own or all withdrawal requests" ON withdrawal_requests;
 
 -- Optimized: Wrap auth.uid() in (SELECT auth.uid())
 CREATE POLICY "Sellers can create withdrawal requests"
