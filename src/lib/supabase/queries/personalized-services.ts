@@ -104,7 +104,7 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
           })
 
           // 각 서비스에 별점 추가
-          topServices.forEach(service => {
+          topServices.forEach((service: any) => {
             const stats = ratingMap.get(service.id)
             service.rating = stats && stats.count > 0 ? stats.sum / stats.count : 0
             service.review_count = stats?.count || 0
