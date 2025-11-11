@@ -2,6 +2,9 @@
 -- This prevents security vulnerabilities from mutable search_path
 
 -- 1. Fix mark_room_messages_as_read function
+-- Drop existing function first to allow return type change
+DROP FUNCTION IF EXISTS mark_room_messages_as_read(UUID, UUID);
+
 CREATE OR REPLACE FUNCTION mark_room_messages_as_read(p_room_id UUID, p_user_id UUID)
 RETURNS INTEGER AS $$
 DECLARE
@@ -22,6 +25,9 @@ SECURITY DEFINER
 SET search_path = public;
 
 -- 2. Fix get_unread_room_count function
+-- Drop existing function first to allow return type change
+DROP FUNCTION IF EXISTS get_unread_room_count(UUID);
+
 CREATE OR REPLACE FUNCTION get_unread_room_count(p_user_id UUID)
 RETURNS INTEGER AS $$
 DECLARE
@@ -40,6 +46,10 @@ END;
 $$ LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public;
+
+-- Grant execute permissions
+GRANT EXECUTE ON FUNCTION mark_room_messages_as_read(UUID, UUID) TO authenticated;
+GRANT EXECUTE ON FUNCTION get_unread_room_count(UUID) TO authenticated;
 
 -- Add comments
 COMMENT ON FUNCTION mark_room_messages_as_read IS 'Mark all unread messages in a room as read. SECURITY DEFINER with search_path set for security.';
