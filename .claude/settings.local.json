@@ -25,7 +25,8 @@
       "Bash(node scripts/check-seller-id-issue.js:*)",
       "Bash(node scripts/check-withdrawal-fk.js:*)",
       "Bash(node scripts/add-withdrawal-columns.js:*)",
-      "Bash(node scripts/add-withdrawal-unique-constraint.js:*)"
+      "Bash(node scripts/add-withdrawal-unique-constraint.js:*)",
+      "Bash(node scripts/apply-category-path-migration.js:*)"
     ],
     "deny": [],
     "ask": []

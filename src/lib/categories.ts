@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createClientDirect } from '@supabase/supabase-js'
+import { logger } from '@/lib/logger'
+import { unstable_cache } from 'next/cache'
 
 export interface CategoryItem {
   id: string
@@ -18,7 +20,7 @@ export interface CategoryItem {
 /**
  * 데이터베이스에서 모든 카테고리를 가져와서 트리 구조로 변환
  */
-export async function getAllCategoriesTree(): Promise<CategoryItem[]> {
+async function buildCategoryTree(): Promise<CategoryItem[]> {
   const supabase = await createClient()
 
   const { data: categories, error } = await supabase
@@ -28,7 +30,7 @@ export async function getAllCategoriesTree(): Promise<CategoryItem[]> {
     .order('display_order')
 
   if (error || !categories) {
-    console.error('Failed to fetch categories:', error)
+    logger.error('Failed to fetch categories:', error)
     return []
   }
 
@@ -57,6 +59,22 @@ export async function getAllCategoriesTree(): Promise<CategoryItem[]> {
   })
 
   return rootCategories
+}
+
+/**
+ * 캐싱된 카테고리 트리 (5분 캐시)
+ */
+export const getCachedCategoriesTree = unstable_cache(
+  async () => buildCategoryTree(),
+  ['categories-tree'],
+  { revalidate: 300 }
+)
+
+/**
+ * 호환성을 위한 별칭
+ */
+export async function getAllCategoriesTree(): Promise<CategoryItem[]> {
+  return getCachedCategoriesTree()
 }
 
 /**
@@ -99,28 +117,41 @@ export async function getCategoryBySlug(slug: string): Promise<CategoryItem | nu
 }
 
 /**
- * 카테고리 경로 가져오기 (breadcrumb용)
+ * 카테고리 경로 가져오기 (breadcrumb용) - 최적화: 재귀 CTE로 한 번에 조회
  */
 export async function getCategoryPath(categoryId: string): Promise<CategoryItem[]> {
   const supabase = await createClient()
-  const path: CategoryItem[] = []
-  let currentId: string | null | undefined = categoryId
 
-  while (currentId) {
-    const { data } = await supabase
-      .from('categories')
-      .select('id, name, slug, icon, description, parent_id, level, service_count, is_ai, is_active')
-      .eq('id', currentId)
-      .single()
+  // PostgreSQL 재귀 CTE로 모든 부모 카테고리를 한 번에 조회
+  const { data, error } = await supabase.rpc('get_category_path', {
+    p_category_id: categoryId
+  })
 
-    if (!data) break
+  if (error) {
+    logger.error('Failed to fetch category path:', error)
 
-    const category: CategoryItem = data
-    path.unshift(category)
-    currentId = category.parent_id
+    // Fallback: RPC 함수 없으면 기존 방식 사용
+    const path: CategoryItem[] = []
+    let currentId: string | null | undefined = categoryId
+
+    while (currentId) {
+      const { data: catData } = await supabase
+        .from('categories')
+        .select('id, name, slug, icon, description, parent_id, level, service_count, is_ai, is_active')
+        .eq('id', currentId)
+        .single()
+
+      if (!catData) break
+
+      const category: CategoryItem = catData
+      path.unshift(category)
+      currentId = category.parent_id
+    }
+
+    return path
   }
 
-  return path
+  return (data || []) as CategoryItem[]
 }
 
 /**
@@ -132,7 +163,7 @@ export async function getAllCategoriesForBuild(): Promise<CategoryItem[]> {
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   if (!supabaseUrl || !supabaseKey) {
-    console.error('Missing Supabase environment variables')
+    logger.error('Missing Supabase environment variables')
     return []
   }
 
@@ -145,7 +176,7 @@ export async function getAllCategoriesForBuild(): Promise<CategoryItem[]> {
     .order('display_order')
 
   if (error || !categories) {
-    console.error('Failed to fetch categories for build:', error)
+    logger.error('Failed to fetch categories for build:', error)
     return []
   }
 

@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { getCategoryBySlug as getCategory, getCategoryPath, getAllCategoriesTree, getAllCategoriesForBuild } from '@/lib/categories'
+import { getCategoryBySlug as getCategory, getCategoryPath, getCachedCategoriesTree, getAllCategoriesForBuild } from '@/lib/categories'
 import { getServicesByCategory } from '@/lib/supabase/queries/services'
 import ServiceCard from '@/components/services/ServiceCard'
 import CategoryFilter from '@/components/categories/CategoryFilter'
@@ -7,14 +7,22 @@ import CategorySidebar from '@/components/categories/CategorySidebar'
 import CategoryVisitTracker from '@/components/categories/CategoryVisitTracker'
 import Link from 'next/link'
 
+// ISR 캐싱: 5분마다 재생성
+export const revalidate = 300
+
 interface CategoryPageProps {
   params: Promise<{
     slug: string
   }>
+  searchParams: Promise<{
+    sort?: string
+    price?: string
+  }>
 }
 
-export default async function CategoryPage({ params }: CategoryPageProps) {
+export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
   const { slug } = await params
+  const { sort = 'popular', price } = await searchParams
 
   // 카테고리 찾기
   const category = await getCategory(slug)
@@ -23,14 +31,54 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound()
   }
 
-  // 카테고리 경로 가져오기 (breadcrumb용)
-  const categoryPath = await getCategoryPath(category.id)
+  // 병렬 처리로 성능 향상
+  const [categoryPath, allCategories, allServices] = await Promise.all([
+    getCategoryPath(category.id),
+    getCachedCategoriesTree(),
+    getServicesByCategory(category.id, 100) // 최대 100개
+  ])
 
-  // 전체 카테고리 트리 가져오기 (사이드바용)
-  const allCategories = await getAllCategoriesTree()
+  // 정렬 적용
+  let services = [...allServices]
+  switch (sort) {
+    case 'latest':
+      // created_at 기준 이미 정렬되어 있음
+      break
+    case 'price_low':
+      services.sort((a, b) => (a.price || 0) - (b.price || 0))
+      break
+    case 'price_high':
+      services.sort((a, b) => (b.price || 0) - (a.price || 0))
+      break
+    case 'rating':
+      services.sort((a, b) => (b.rating || 0) - (a.rating || 0))
+      break
+    case 'popular':
+    default:
+      services.sort((a, b) => (b.orders_count || 0) - (a.orders_count || 0))
+      break
+  }
 
-  // 서비스 조회 (서버에서 직접)
-  const services = await getServicesByCategory(category.id)
+  // 가격 필터 적용
+  if (price) {
+    services = services.filter(service => {
+      const servicePrice = service.price || 0
+      switch (price) {
+        case 'under-50000':
+          return servicePrice < 50000
+        case '50000-100000':
+          return servicePrice >= 50000 && servicePrice < 100000
+        case '100000-300000':
+          return servicePrice >= 100000 && servicePrice < 300000
+        case '300000-500000':
+          return servicePrice >= 300000 && servicePrice < 500000
+        case 'over-500000':
+          return servicePrice >= 500000
+        default:
+          return true
+      }
+    })
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -75,16 +123,22 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   </nav>
 
                   {/* 정렬 */}
-                  <div className="flex items-center gap-2 flex-shrink-0">
+                  <form method="get" className="flex items-center gap-2 flex-shrink-0">
                     <span className="font-medium text-sm">정렬:</span>
-                    <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm">
+                    <select
+                      name="sort"
+                      defaultValue={sort}
+                      onChange={(e) => e.target.form?.submit()}
+                      className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm"
+                    >
                       <option value="popular">인기순</option>
                       <option value="latest">최신순</option>
                       <option value="price_low">가격 낮은순</option>
                       <option value="price_high">가격 높은순</option>
                       <option value="rating">평점순</option>
                     </select>
-                  </div>
+                    <input type="hidden" name="price" value={price || ''} />
+                  </form>
                 </div>
 
                 {/* 필터 영역 */}
