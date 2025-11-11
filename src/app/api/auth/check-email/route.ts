@@ -15,23 +15,26 @@ export async function POST(request: Request) {
 
     const supabase = await createClient()
 
-    // users 테이블에서 이메일 확인
-    const { data: userData, error: queryError, count } = await supabase
-      .from('users')
-      .select('id, email', { count: 'exact' })
-      .eq('email', email)
-      .limit(1)
+    // RPC 함수를 사용하여 auth.users에서 직접 확인
+    // SECURITY DEFINER로 RLS 우회
+    const { data: emailExists, error: rpcError } = await supabase
+      .rpc('check_email_exists', { check_email: email })
 
-    logger.debug('[Email Check API] Query result:', {
+    logger.debug('[Email Check API] RPC result:', {
       email,
-      hasData: !!userData,
-      dataLength: userData?.length,
-      count,
-      error: queryError
+      exists: emailExists,
+      error: rpcError
     })
 
-    // 에러가 있거나, 데이터가 존재하거나, count가 1 이상이면 이미 존재
-    if (userData && userData.length > 0) {
+    if (rpcError) {
+      logger.error('[Email Check API] RPC Error:', rpcError)
+      return NextResponse.json(
+        { error: 'Failed to check email' },
+        { status: 500 }
+      )
+    }
+
+    if (emailExists) {
       logger.debug('[Email Check API] Email taken:', email)
       return NextResponse.json({
         available: false,
