@@ -117,7 +117,7 @@ async function AIServicesSection({ aiCategoryIds }: { aiCategoryIds: string[] })
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
       }
 
-      services = shuffled.slice(0, 20).map((service): Service => {
+      services = shuffled.slice(0, 20).map((service) => {
         const stats = ratingMap.get(service.id)
         return {
           ...service,

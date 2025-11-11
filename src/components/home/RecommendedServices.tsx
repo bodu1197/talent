@@ -79,7 +79,7 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
     })
   })
 
-  const recommendedServices: Service[] = shuffled.map((service): Service => {
+  const recommendedServices: Service[] = shuffled.map((service) => {
     const stats = ratingMap.get(service.id)
     return {
       ...service,
