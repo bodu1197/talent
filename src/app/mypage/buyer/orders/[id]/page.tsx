@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { use } from 'react'
-import Sidebar from '@/components/mypage/Sidebar'
-import MobileSidebar from '@/components/mypage/MobileSidebar'
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import Link from 'next/link'
 import { useAuth } from '@/components/providers/AuthProvider'
 import { confirmOrder, requestRevision } from '@/lib/supabase/mutations/orders'
@@ -120,33 +119,21 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-        <div className="flex w-full max-w-[1200px]">
-          <MobileSidebar mode="buyer" />
-          <Sidebar mode="buyer" />
-          <main className="flex-1 overflow-y-auto">
-            <div className="py-8 px-4">
-              <LoadingSpinner message="주문 정보를 불러오는 중..." />
-            </div>
-          </main>
+      <MypageLayoutWrapper mode="buyer">
+        <div className="py-8 px-4">
+          <LoadingSpinner message="주문 정보를 불러오는 중..." />
         </div>
-      </div>
+      </MypageLayoutWrapper>
     )
   }
 
   if (error || !order) {
     return (
-      <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-        <div className="flex w-full max-w-[1200px]">
-          <MobileSidebar mode="buyer" />
-          <Sidebar mode="buyer" />
-          <main className="flex-1 overflow-y-auto">
-            <div className="py-8 px-4">
-              <ErrorState message={error || '주문을 찾을 수 없습니다'} retry={loadOrder} />
-            </div>
-          </main>
+      <MypageLayoutWrapper mode="buyer">
+        <div className="py-8 px-4">
+          <ErrorState message={error || '주문을 찾을 수 없습니다'} retry={loadOrder} />
         </div>
-      </div>
+      </MypageLayoutWrapper>
     )
   }
 
@@ -171,12 +158,8 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
   ].filter(Boolean)
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-      <div className="flex w-full max-w-[1200px]">
-        <MobileSidebar mode="buyer" />
-        <Sidebar mode="buyer" />
-        <main className="flex-1 overflow-y-auto">
-          <div className="py-8 px-4">
+    <MypageLayoutWrapper mode="buyer">
+      <div className="py-8 px-4">
         {/* 상단 네비게이션 */}
         <div className="mb-6">
           <Link
@@ -606,9 +589,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
             </div>
           </div>
         )}
-          </div>
-        </main>
       </div>
-    </div>
+    </MypageLayoutWrapper>
   )
 }

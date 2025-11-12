@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Sidebar from '@/components/mypage/Sidebar'
-import MobileSidebar from '@/components/mypage/MobileSidebar'
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import { createReviewReply } from '@/lib/supabase/mutations/reviews'
 import EmptyState from '@/components/common/EmptyState'
 import { useRouter } from 'next/navigation'
@@ -68,12 +67,8 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-      <div className="flex w-full max-w-[1200px]">
-        <MobileSidebar mode="seller" />
-        <Sidebar mode="seller" />
-        <main className="flex-1 overflow-y-auto">
-          <div className="py-8 px-4">
+    <MypageLayoutWrapper mode="seller">
+      <div className="py-8 px-4">
         <div className="mb-8">
           <h1 className="text-xl font-bold text-gray-900">받은 리뷰</h1>
           <p className="text-gray-600 mt-1 text-sm">고객들이 남긴 리뷰를 확인하고 답변하세요</p>
@@ -240,9 +235,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
             </div>
           </div>
         )}
-          </div>
-        </main>
       </div>
-    </div>
+    </MypageLayoutWrapper>
   )
 }

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 
 interface WithdrawClientProps {
   sellerData: {
@@ -81,8 +82,8 @@ export default function WithdrawClient({ sellerData, availableBalance, pendingWi
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container-1200">
+    <MypageLayoutWrapper mode="seller" sellerData={{ display_name: sellerData.display_name, profile_image: null }}>
+      <div className="py-8 px-4">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-2xl font-bold mb-6">출금 신청</h1>
 
@@ -165,6 +166,6 @@ export default function WithdrawClient({ sellerData, availableBalance, pendingWi
           </form>
         </div>
       </div>
-    </div>
+    </MypageLayoutWrapper>
   )
 }

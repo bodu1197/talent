@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Sidebar from '@/components/mypage/Sidebar'
-import MobileSidebar from '@/components/mypage/MobileSidebar'
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import { createClient } from '@/lib/supabase/client'
 import { Order } from '@/types/common'
 
@@ -153,12 +152,8 @@ export default function SellerEarningsClient({ earnings, transactions, sellerDat
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-      <div className="flex w-full max-w-[1200px]">
-        <MobileSidebar mode="seller" />
-        <Sidebar mode="seller" sellerData={sellerData} />
-        <main className="flex-1 overflow-y-auto">
-          <div className="py-8 px-4">
+    <MypageLayoutWrapper mode="seller" sellerData={sellerData}>
+      <div className="py-8 px-4">
         <div className="mb-8">
           <h1 className="text-xl font-bold text-gray-900">수익 관리</h1>
           <p className="text-gray-600 mt-1 text-sm">판매 수익을 관리하세요</p>
@@ -266,9 +261,7 @@ export default function SellerEarningsClient({ earnings, transactions, sellerDat
             </tbody>
           </table>
         </div>
-          </div>
-        </main>
       </div>
-    </div>
+    </MypageLayoutWrapper>
   )
 }

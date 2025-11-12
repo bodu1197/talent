@@ -1,7 +1,6 @@
 'use client'
 
-import Sidebar from '@/components/mypage/Sidebar'
-import MobileSidebar from '@/components/mypage/MobileSidebar'
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 
 type Stats = {
   newOrders: number
@@ -37,12 +36,8 @@ type Props = {
 
 export default function SellerDashboardClient({ stats, recentOrders, sellerData }: Props) {
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-      <div className="flex w-full max-w-[1200px]">
-        <MobileSidebar mode="seller" />
-        <Sidebar mode="seller" sellerData={sellerData} />
-        <main className="flex-1 overflow-y-auto">
-          <div className="py-8 px-4">
+    <MypageLayoutWrapper mode="seller" sellerData={sellerData}>
+      <div className="py-8 px-4">
           {/* 페이지 헤더 */}
           <div className="mb-6">
             <h1 className="text-xl font-bold text-gray-900">판매 대시보드</h1>
@@ -155,9 +150,7 @@ export default function SellerDashboardClient({ stats, recentOrders, sellerData 
               )}
             </div>
           </div>
-          </div>
-        </main>
       </div>
-    </div>
+    </MypageLayoutWrapper>
   )
 }

@@ -1,9 +1,6 @@
 'use client'
 
-import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
-import Sidebar from '@/components/mypage/Sidebar'
-import MobileSidebar from '@/components/mypage/MobileSidebar'
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import Link from 'next/link'
 
 interface Props {
@@ -24,18 +21,8 @@ interface Props {
 
 export default function ServiceStatisticsClient({ stats, dailyViews, ratingPercentages, serviceId }: Props) {
   return (
-    <>
-
-      <Header />
-
-      <div className="flex min-h-screen bg-gray-50 pt-16">
-
-        <MobileSidebar mode="seller" />
-        <Sidebar mode="seller" />
-
-        <main className="flex-1 overflow-y-auto w-full flex flex-col items-center">
-
-          <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8">
+    <MypageLayoutWrapper mode="seller">
+      <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8 mx-auto">
         {/* 상단 네비게이션 */}
         <div className="mb-6">
           <Link
@@ -162,12 +149,7 @@ export default function ServiceStatisticsClient({ stats, dailyViews, ratingPerce
             </div>
           </div>
         </div>
-          </div>
-        </main>
-
       </div>
-      <Footer />
-
-      </>
+    </MypageLayoutWrapper>
   )
 }

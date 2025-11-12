@@ -1,7 +1,6 @@
 'use client'
 
-import Sidebar from '@/components/mypage/Sidebar'
-import MobileSidebar from '@/components/mypage/MobileSidebar'
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 
 interface StatisticsData {
   todayViews: number
@@ -26,12 +25,8 @@ interface Props {
 
 export default function SellerStatisticsClient({ stats, topServices }: Props) {
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-      <div className="flex w-full max-w-[1200px]">
-        <MobileSidebar mode="seller" />
-        <Sidebar mode="seller" />
-        <main className="flex-1 overflow-y-auto">
-          <div className="py-8 px-4">
+    <MypageLayoutWrapper mode="seller">
+      <div className="py-8 px-4">
         <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
           <h1 className="text-xl font-bold text-gray-900">통계/분석</h1>
           <p className="text-gray-600 mt-1 text-sm">판매 통계를 확인하세요</p>
@@ -116,9 +111,7 @@ export default function SellerStatisticsClient({ stats, topServices }: Props) {
             </div>
           )}
         </div>
-          </div>
-        </main>
       </div>
-    </div>
+    </MypageLayoutWrapper>
   )
 }

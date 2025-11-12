@@ -1,7 +1,6 @@
 'use client'
 
-import Sidebar from '@/components/mypage/Sidebar'
-import MobileSidebar from '@/components/mypage/MobileSidebar'
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import Link from 'next/link'
 import { Quote } from '@/types/common'
 
@@ -21,12 +20,8 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-      <div className="flex w-full max-w-[1200px]">
-        <MobileSidebar mode="buyer" />
-        <Sidebar mode="buyer" />
-        <main className="flex-1 overflow-y-auto">
-          <div className="py-8 px-4">
+    <MypageLayoutWrapper mode="buyer">
+      <div className="py-8 px-4">
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
@@ -92,9 +87,7 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
             </div>
           )}
         </div>
-          </div>
-        </main>
       </div>
-    </div>
+    </MypageLayoutWrapper>
   )
 }

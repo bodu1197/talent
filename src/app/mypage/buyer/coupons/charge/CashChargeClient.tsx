@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Sidebar from '@/components/mypage/Sidebar'
-import MobileSidebar from '@/components/mypage/MobileSidebar'
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import Link from 'next/link'
 
 export default function CashChargeClient() {
@@ -11,12 +10,8 @@ export default function CashChargeClient() {
   const presetAmounts = [10000, 30000, 50000, 100000, 300000, 500000]
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-      <div className="flex w-full max-w-[1200px]">
-        <MobileSidebar mode="buyer" />
-        <Sidebar mode="buyer" />
-        <main className="flex-1 overflow-y-auto">
-          <div className="py-8 px-4">
+    <MypageLayoutWrapper mode="buyer">
+      <div className="py-8 px-4">
         <div className="mb-6">
           <Link href="/mypage/buyer/coupons" className="text-gray-600 hover:text-gray-900 flex items-center gap-2">
             <i className="fas fa-arrow-left"></i>
@@ -86,9 +81,7 @@ export default function CashChargeClient() {
             {amount.toLocaleString()}원 충전하기
           </button>
         </div>
-          </div>
-        </main>
       </div>
-    </div>
+    </MypageLayoutWrapper>
   )
 }

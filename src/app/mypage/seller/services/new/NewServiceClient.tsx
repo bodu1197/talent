@@ -1,8 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Sidebar from '@/components/mypage/Sidebar'
-import MobileSidebar from '@/components/mypage/MobileSidebar'
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { logger } from '@/lib/logger'
@@ -326,12 +325,8 @@ export default function NewServiceClient({ sellerId }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-      <div className="flex w-full max-w-[1200px]">
-        <MobileSidebar mode="seller" />
-        <Sidebar mode="seller" />
-        <main className="flex-1 overflow-y-auto">
-          <div className="py-8 px-4">
+    <MypageLayoutWrapper mode="seller">
+      <div className="py-8 px-4">
         {/* 상단 네비게이션 */}
         <div className="mb-6">
           <Link
@@ -761,9 +756,7 @@ export default function NewServiceClient({ sellerId }: Props) {
             </button>
           </div>
         </form>
-          </div>
-        </main>
       </div>
-    </div>
+    </MypageLayoutWrapper>
   )
 }

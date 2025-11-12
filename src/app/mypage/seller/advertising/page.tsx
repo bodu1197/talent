@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { getTotalCredits, startAdvertisingSubscription } from '@/lib/advertising';
 import type { AdvertisingDashboard } from '@/types/advertising';
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 
 export default function AdvertisingPage() {
   const [loading, setLoading] = useState(true);
@@ -113,14 +114,17 @@ export default function AdvertisingPage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="text-center">로딩 중...</div>
-      </div>
+      <MypageLayoutWrapper mode="seller">
+        <div className="container mx-auto p-6">
+          <div className="text-center">로딩 중...</div>
+        </div>
+      </MypageLayoutWrapper>
     );
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl">
+    <MypageLayoutWrapper mode="seller">
+      <div className="container mx-auto p-6 max-w-6xl">
       <h1 className="text-3xl font-bold mb-8">광고 관리</h1>
 
       {/* 크레딧 정보 */}
@@ -266,6 +270,7 @@ export default function AdvertisingPage() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </MypageLayoutWrapper>
   );
 }

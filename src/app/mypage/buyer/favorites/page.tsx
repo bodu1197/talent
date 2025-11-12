@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/components/providers/AuthProvider'
 import { Service } from '@/types'
-import Sidebar from '@/components/mypage/Sidebar'
-import MobileSidebar from '@/components/mypage/MobileSidebar'
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 
 interface FavoriteItem {
   service_id: string
@@ -65,12 +64,8 @@ export default function FavoritesPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-        <div className="flex w-full max-w-[1200px]">
-          <MobileSidebar mode="buyer" />
-          <Sidebar mode="buyer" />
-          <main className="flex-1 overflow-y-auto">
-            <div className="py-8 px-4">
+      <MypageLayoutWrapper mode="buyer">
+        <div className="py-8 px-4">
               <div className="max-w-md mx-auto text-center">
                 <i className="fas fa-lock text-6xl text-gray-300 mb-4"></i>
                 <h2 className="text-2xl font-bold mb-4">로그인이 필요합니다</h2>
@@ -82,21 +77,15 @@ export default function FavoritesPage() {
                   로그인하기
                 </Link>
               </div>
-            </div>
-          </main>
         </div>
-      </div>
+      </MypageLayoutWrapper>
     )
   }
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-        <div className="flex w-full max-w-[1200px]">
-          <MobileSidebar mode="buyer" />
-          <Sidebar mode="buyer" />
-          <main className="flex-1 overflow-y-auto">
-            <div className="py-8 px-4">
+      <MypageLayoutWrapper mode="buyer">
+        <div className="py-8 px-4">
               <div className="mb-6 lg:mb-8">
                 <h1 className="text-2xl sm:text-3xl font-bold mb-2">찜한 서비스</h1>
                 <p className="text-sm sm:text-base text-gray-600">관심있는 서비스를 저장하고 관리하세요</p>
@@ -113,20 +102,14 @@ export default function FavoritesPage() {
                   </div>
                 ))}
               </div>
-            </div>
-          </main>
         </div>
-      </div>
+      </MypageLayoutWrapper>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-      <div className="flex w-full max-w-[1200px]">
-        <MobileSidebar mode="buyer" />
-        <Sidebar mode="buyer" />
-        <main className="flex-1 overflow-y-auto">
-          <div className="py-8 px-4">
+    <MypageLayoutWrapper mode="buyer">
+      <div className="py-8 px-4">
         <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
           <div className="flex items-center gap-3 mb-2">
             <i className="fas fa-heart text-red-500 text-2xl"></i>
@@ -241,9 +224,7 @@ export default function FavoritesPage() {
             })}
           </div>
         )}
-          </div>
-        </main>
       </div>
-    </div>
+    </MypageLayoutWrapper>
   )
 }

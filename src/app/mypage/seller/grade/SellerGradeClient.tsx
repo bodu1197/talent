@@ -1,7 +1,6 @@
 'use client'
 
-import Sidebar from '@/components/mypage/Sidebar'
-import MobileSidebar from '@/components/mypage/MobileSidebar'
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 
 export default function SellerGradeClient() {
   const currentGrade = {
@@ -30,12 +29,8 @@ export default function SellerGradeClient() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-      <div className="flex w-full max-w-[1200px]">
-        <MobileSidebar mode="seller" />
-        <Sidebar mode="seller" />
-        <main className="flex-1 overflow-y-auto">
-          <div className="py-8 px-4">
+    <MypageLayoutWrapper mode="seller">
+      <div className="py-8 px-4">
         <div className="mb-8">
           <h1 className="text-xl font-bold text-gray-900">전문가 등급</h1>
           <p className="text-gray-600 mt-1 text-sm">내 등급과 혜택을 확인하세요</p>
@@ -113,9 +108,7 @@ export default function SellerGradeClient() {
             ))}
           </div>
         </div>
-          </div>
-        </main>
       </div>
-    </div>
+    </MypageLayoutWrapper>
   )
 }

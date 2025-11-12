@@ -1,8 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import Sidebar from '@/components/mypage/Sidebar'
-import MobileSidebar from '@/components/mypage/MobileSidebar'
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 
 interface SellerProfile {
   id: string
@@ -35,12 +34,8 @@ export default function SellerProfileClient({ profile }: Props) {
   const router = useRouter()
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-      <div className="flex w-full max-w-[1200px]">
-        <MobileSidebar mode="seller" />
-        <Sidebar mode="seller" />
-        <main className="flex-1 overflow-y-auto">
-          <div className="py-8 px-4">
+    <MypageLayoutWrapper mode="seller">
+      <div className="py-8 px-4">
         {/* 페이지 헤더 */}
         <div className="mb-6 lg:mb-8 pt-12 lg:pt-0 flex items-center justify-between">
           <div>
@@ -244,9 +239,7 @@ export default function SellerProfileClient({ profile }: Props) {
             </div>
           </div>
         </div>
-          </div>
-        </main>
       </div>
-    </div>
+    </MypageLayoutWrapper>
   )
 }

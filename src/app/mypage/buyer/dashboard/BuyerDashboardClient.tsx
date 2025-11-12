@@ -1,7 +1,6 @@
 'use client'
 
-import Sidebar from '@/components/mypage/Sidebar'
-import MobileSidebar from '@/components/mypage/MobileSidebar'
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import StatCard from '@/components/mypage/StatCard'
 import Link from 'next/link'
 
@@ -60,12 +59,8 @@ export default function BuyerDashboardClient({ stats, recentOrders, favorites, b
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-      <div className="flex w-full max-w-[1200px]">
-        <MobileSidebar mode="buyer" />
-        <Sidebar mode="buyer" sellerData={sellerData} />
-        <main className="flex-1 overflow-y-auto">
-          <div className="py-8 px-4">
+    <MypageLayoutWrapper mode="buyer" sellerData={sellerData}>
+      <div className="py-8 px-4">
           {/* 페이지 헤더 */}
           <div className="mb-6 lg:mb-8">
             <h1 className="text-xl font-bold text-gray-900">구매 대시보드</h1>
@@ -289,9 +284,7 @@ export default function BuyerDashboardClient({ stats, recentOrders, favorites, b
             </div>
           </div>
         </div>
-          </div>
-        </main>
       </div>
-    </div>
+    </MypageLayoutWrapper>
   )
 }

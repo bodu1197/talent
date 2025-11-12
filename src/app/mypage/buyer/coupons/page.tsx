@@ -1,8 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Sidebar from '@/components/mypage/Sidebar'
-import MobileSidebar from '@/components/mypage/MobileSidebar'
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import Link from 'next/link'
 import { useAuth } from '@/components/providers/AuthProvider'
 import { getUserCoupons, getUserWallet } from '@/lib/supabase/queries/coupons'
@@ -45,43 +44,27 @@ export default function BuyerCouponsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-        <div className="flex w-full max-w-[1200px]">
-          <MobileSidebar mode="buyer" />
-          <Sidebar mode="buyer" />
-          <main className="flex-1 overflow-y-auto">
-            <div className="py-8 px-4">
-              <LoadingSpinner message="쿠폰 정보를 불러오는 중..." />
-            </div>
-          </main>
+      <MypageLayoutWrapper mode="buyer">
+        <div className="py-8 px-4">
+          <LoadingSpinner message="쿠폰 정보를 불러오는 중..." />
         </div>
-      </div>
+      </MypageLayoutWrapper>
     )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-        <div className="flex w-full max-w-[1200px]">
-          <MobileSidebar mode="buyer" />
-          <Sidebar mode="buyer" />
-          <main className="flex-1 overflow-y-auto">
-            <div className="py-8 px-4">
-              <ErrorState message={error} retry={loadCouponsData} />
-            </div>
-          </main>
+      <MypageLayoutWrapper mode="buyer">
+        <div className="py-8 px-4">
+          <ErrorState message={error} retry={loadCouponsData} />
         </div>
-      </div>
+      </MypageLayoutWrapper>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-      <div className="flex w-full max-w-[1200px]">
-        <MobileSidebar mode="buyer" />
-        <Sidebar mode="buyer" />
-        <main className="flex-1 overflow-y-auto">
-          <div className="py-8 px-4">
+    <MypageLayoutWrapper mode="buyer">
+      <div className="py-8 px-4">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">쿠폰/캐시</h1>
           <p className="text-gray-600">보유한 쿠폰과 캐시를 관리하세요</p>
@@ -162,9 +145,7 @@ export default function BuyerCouponsPage() {
             </div>
           )}
         </div>
-          </div>
-        </main>
       </div>
-    </div>
+    </MypageLayoutWrapper>
   )
 }
