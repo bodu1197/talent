@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
 // Rate Limiting
+// ⚠️ 개선 필요: In-memory 방식은 Vercel 서버리스 환경에서 각 요청이 새 인스턴스를 사용하므로 효과가 제한적입니다.
+// 프로덕션 환경에서는 Redis (Upstash 등) 기반 Rate Limiting 사용을 권장합니다.
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
 
 function checkRateLimit(userId: string, maxRequests = 10, windowMs = 60000): boolean {
@@ -86,6 +88,8 @@ export async function POST(request: NextRequest) {
     }
 
     // 주문 생성 (pending_payment 상태)
+    // ⚠️ Race Condition 가능: 동시 요청 시 중복 주문 생성 가능
+    // 개선 방안: DB에 유니크 제약 조건 추가 또는 트랜잭션 처리
     const merchantUid = `order_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
 
     // 납품 예정일 계산 (형식적, 실제로는 판매자 작업 완료 선언이 중요)
@@ -115,11 +119,15 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (orderError) {
-      console.error('Order creation error:', orderError)
+      // 보안: 서버 로그에만 상세 정보 기록, 클라이언트에는 일반 메시지만 반환
+      console.error('Order creation error:', {
+        message: orderError.message,
+        code: orderError.code,
+        details: orderError.details,
+        hint: orderError.hint
+      })
       return NextResponse.json({
-        error: '주문 생성 실패',
-        details: orderError.message,
-        code: orderError.code
+        error: '주문 생성 실패'
       }, { status: 500 })
     }
 

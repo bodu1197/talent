@@ -3,6 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import { notifyPaymentReceived } from '@/lib/notifications'
 
 // Rate Limiting을 위한 간단한 인메모리 캐시
+// ⚠️ 개선 필요: In-memory 방식은 Vercel 서버리스 환경에서 효과가 제한적입니다.
+// 프로덕션에서는 Redis (Upstash 등) 사용을 권장합니다.
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
 
 function checkRateLimit(userId: string, maxRequests = 5, windowMs = 60000): boolean {
