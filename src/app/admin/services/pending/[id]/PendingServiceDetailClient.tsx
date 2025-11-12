@@ -3,9 +3,12 @@
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { logger } from '@/lib/logger'
+import { Service, ServiceCategory } from '@/types/common'
 
 interface Props {
-  service: any
+  service: Service & {
+    service_categories?: ServiceCategory[]
+  }
 }
 
 export default function PendingServiceDetailClient({ service }: Props) {
@@ -27,7 +30,7 @@ export default function PendingServiceDetailClient({ service }: Props) {
       router.push('/admin/services?status=pending')
     } catch (err: unknown) {
       logger.error('승인 실패:', err)
-      alert('승인에 실패했습니다: ' + err.message)
+      alert('승인에 실패했습니다: ' + (err instanceof Error ? err.message : '알 수 없는 오류'))
     }
   }
 
@@ -51,7 +54,7 @@ export default function PendingServiceDetailClient({ service }: Props) {
       router.push('/admin/services?status=pending')
     } catch (err: unknown) {
       logger.error('반려 실패:', err)
-      alert('반려에 실패했습니다: ' + err.message)
+      alert('반려에 실패했습니다: ' + (err instanceof Error ? err.message : '알 수 없는 오류'))
     }
   }
 
@@ -146,7 +149,7 @@ export default function PendingServiceDetailClient({ service }: Props) {
           <div className="mb-4">
             <span className="text-sm text-gray-600 block mb-1">카테고리</span>
             <div className="flex flex-wrap gap-2">
-              {service.service_categories?.map((sc: any, idx: number) => (
+              {service.service_categories?.map((sc, idx) => (
                 <span key={idx} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
                   {sc.category?.name}
                 </span>

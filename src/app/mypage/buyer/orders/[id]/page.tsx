@@ -52,7 +52,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
       setOrder(order)
     } catch (err: unknown) {
       logger.error('주문 조회 실패:', err)
-      setError(err.message || '주문 정보를 불러오는데 실패했습니다')
+      setError(err instanceof Error ? err.message : '주문 정보를 불러오는데 실패했습니다')
     } finally {
       setLoading(false)
     }
@@ -112,7 +112,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
       window.location.href = `/chat/${data.room.id}`
     } catch (err: unknown) {
       logger.error('채팅방 생성 실패:', err)
-      alert(err.message || '채팅방 생성 중 오류가 발생했습니다')
+      alert(err instanceof Error ? err.message : '채팅방 생성 중 오류가 발생했습니다')
     } finally {
       setCreatingChat(false)
     }

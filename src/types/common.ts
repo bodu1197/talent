@@ -12,6 +12,7 @@ export interface User {
 export interface Seller {
   id: string
   user_id: string
+  name?: string
   business_name: string | null
   business_number: string | null
   account_holder: string | null
@@ -49,7 +50,10 @@ export interface Service {
   thumbnail_url: string | null
   min_price: number
   max_price: number
-  status: 'draft' | 'pending' | 'active' | 'rejected'
+  price?: number
+  delivery_days?: number
+  revision_count?: number
+  status: 'draft' | 'pending' | 'active' | 'rejected' | 'suspended'
   rejection_reason: string | null
   view_count: number
   favorite_count: number
@@ -82,7 +86,10 @@ export interface Order {
   seller_id: string
   service_id: string
   package_id: string | null
-  status: 'pending_payment' | 'payment_completed' | 'in_progress' | 'in_review' | 'completed' | 'cancelled' | 'refunded'
+  title?: string
+  order_number?: string
+  order_id?: string
+  status: 'pending_payment' | 'payment_completed' | 'in_progress' | 'in_review' | 'completed' | 'cancelled' | 'refunded' | 'paid' | 'delivered'
   total_amount: number
   platform_fee: number
   seller_amount: number
@@ -100,6 +107,14 @@ export interface Order {
   seller?: Seller
   service?: Service
   package?: ServicePackage
+  review?: Review | null
+  // Review data embedded in order for buyer reviews page
+  rating?: number
+  comment?: string
+  seller_reply?: string | null
+  order?: {
+    order_number?: string
+  }
 }
 
 export interface Deliverable {
@@ -119,11 +134,16 @@ export interface Review {
   content: string
   is_visible: boolean
   moderated: boolean
+  reply?: string | null
+  replied_at?: string | null
   created_at: string
   updated_at: string
   buyer?: User
   seller?: Seller
   service?: Service
+  order?: {
+    order_number?: string
+  }
 }
 
 export interface Quote {
@@ -136,6 +156,8 @@ export interface Quote {
   budget: number
   delivery_deadline: string
   status: 'pending' | 'quoted' | 'accepted' | 'rejected' | 'expired'
+  response_count?: number
+  category?: Category
   created_at: string
   updated_at: string
   buyer?: User
@@ -184,6 +206,47 @@ export interface RevisionCategory {
   revision_id: string
   category_id: string
   category?: Category
+}
+
+// Withdrawal types
+export interface WithdrawalRequest {
+  id: string
+  seller_id: string
+  amount: number
+  status: 'pending' | 'processing' | 'completed' | 'rejected' | 'cancelled'
+  bank_name: string
+  account_number: string
+  account_holder: string
+  requested_at: string
+  processed_at: string | null
+  rejected_reason: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface Transaction {
+  id: string
+  seller_id: string
+  order_id: string
+  type: 'earning' | 'withdrawal' | 'refund'
+  amount: number
+  balance: number
+  description: string
+  created_at: string
+}
+
+export interface Portfolio {
+  id: string
+  seller_id: string
+  title: string
+  description: string
+  image_url: string
+  thumbnail_url?: string | null
+  project_url: string | null
+  display_order: number
+  view_count?: number
+  created_at: string
+  updated_at: string
 }
 
 // Error type for catch blocks

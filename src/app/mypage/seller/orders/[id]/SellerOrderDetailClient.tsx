@@ -43,7 +43,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
       setOrder(order)
     } catch (err: unknown) {
       logger.error('주문 조회 실패:', err)
-      setError(err.message || '주문 정보를 불러오는데 실패했습니다')
+      setError(err instanceof Error ? err.message : '주문 정보를 불러오는데 실패했습니다')
     } finally {
       setLoading(false)
     }

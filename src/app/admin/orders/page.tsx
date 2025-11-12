@@ -41,7 +41,7 @@ export default function AdminOrdersPage() {
       setOrders(data)
     } catch (err: unknown) {
       logger.error('주문 조회 실패:', err)
-      setError(err.message || '주문 목록을 불러오는데 실패했습니다')
+      setError(err instanceof Error ? err.message : '주문 목록을 불러오는데 실패했습니다')
     } finally {
       setLoading(false)
     }

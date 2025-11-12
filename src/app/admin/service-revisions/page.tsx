@@ -38,7 +38,7 @@ export default function AdminServiceRevisionsPage() {
       setRevisions(data)
     } catch (err: unknown) {
       logger.error('수정 요청 조회 실패:', err)
-      setError(err?.message || '수정 요청 목록을 불러오는데 실패했습니다')
+      setError(err instanceof Error ? err.message : '수정 요청 목록을 불러오는데 실패했습니다')
     } finally {
       setLoading(false)
     }
@@ -74,7 +74,7 @@ export default function AdminServiceRevisionsPage() {
       loadStatusCounts()
     } catch (err: unknown) {
       logger.error('승인 실패:', err)
-      alert('승인에 실패했습니다: ' + err.message)
+      alert('승인에 실패했습니다: ' + (err instanceof Error ? err.message : '알 수 없는 오류'))
     }
   }
 
@@ -89,7 +89,7 @@ export default function AdminServiceRevisionsPage() {
       loadStatusCounts()
     } catch (err: unknown) {
       logger.error('반려 실패:', err)
-      alert('반려에 실패했습니다: ' + err.message)
+      alert('반려에 실패했습니다: ' + (err instanceof Error ? err.message : '알 수 없는 오류'))
     }
   }
 

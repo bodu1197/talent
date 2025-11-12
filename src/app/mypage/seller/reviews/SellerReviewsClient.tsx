@@ -7,18 +7,19 @@ import { createReviewReply } from '@/lib/supabase/mutations/reviews'
 import EmptyState from '@/components/common/EmptyState'
 import { useRouter } from 'next/navigation'
 import { logger } from '@/lib/logger'
+import { Review } from '@/types/common'
 
 type RatingFilter = 'all' | '5' | '4' | '3' | '2' | '1'
 
 interface Props {
-  reviews: any[]
+  reviews: Review[]
 }
 
 export default function SellerReviewsClient({ reviews: initialReviews }: Props) {
   const router = useRouter()
   const [ratingFilter, setRatingFilter] = useState<RatingFilter>('all')
   const [showReplyModal, setShowReplyModal] = useState(false)
-  const [selectedReview, setSelectedReview] = useState<any>(null)
+  const [selectedReview, setSelectedReview] = useState<Review | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [replyContent, setReplyContent] = useState('')
 
@@ -48,7 +49,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
       alert('답변이 등록되었습니다')
     } catch (err: unknown) {
       logger.error('답변 등록 실패:', err)
-      alert('답변 등록에 실패했습니다: ' + err.message)
+      alert('답변 등록에 실패했습니다: ' + (err instanceof Error ? err.message : '알 수 없는 오류'))
     } finally {
       setSubmitting(false)
     }

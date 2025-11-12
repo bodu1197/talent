@@ -52,16 +52,16 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
                     <div className="flex items-center gap-2 mb-2">
                       <h3 className="text-lg font-bold text-gray-900">{quote.title}</h3>
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        quote.response_count > 0 ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                        (quote.response_count || 0) > 0 ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
                       }`}>
-                        {quote.response_count > 0 ? '답변 도착' : getStatusLabel(quote.status)}
+                        {(quote.response_count || 0) > 0 ? '답변 도착' : getStatusLabel(quote.status)}
                       </span>
                     </div>
                     <div className="text-sm text-gray-600">
                       {quote.category?.name || '기타'} • {new Date(quote.created_at).toLocaleDateString('ko-KR')}
                     </div>
                   </div>
-                  {quote.response_count > 0 && (
+                  {(quote.response_count || 0) > 0 && (
                     <div className="text-right">
                       <div className="text-2xl font-bold text-[#0f3460]">{quote.response_count}</div>
                       <div className="text-sm text-gray-600">답변</div>

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Sidebar from '@/components/mypage/Sidebar'
 import MobileSidebar from '@/components/mypage/MobileSidebar'
 import { createClient } from '@/lib/supabase/client'
+import { Order } from '@/types/common'
 
 interface SellerEarningsClientProps {
   earnings: {
@@ -18,7 +19,7 @@ interface SellerEarningsClientProps {
       created_at: string
     } | null
   }
-  transactions: any[]
+  transactions: Order[]
   sellerData: {
     id: string
     display_name: string
@@ -96,9 +97,9 @@ export default function SellerEarningsClient({ earnings, transactions, sellerDat
 
       alert('출금 신청이 완료되었습니다.\n영업일 기준 1-3일 내 처리됩니다.')
       window.location.reload()
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Withdrawal request error:', error)
-      alert('출금 신청에 실패했습니다.\n' + error.message)
+      alert('출금 신청에 실패했습니다.\n' + (error instanceof Error ? error.message : '알 수 없는 오류'))
     } finally {
       setLoading(false)
     }
@@ -126,9 +127,9 @@ export default function SellerEarningsClient({ earnings, transactions, sellerDat
 
       alert('출금 신청이 취소되었습니다.')
       window.location.reload()
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Withdrawal cancel error:', error)
-      alert('출금 신청 취소에 실패했습니다.\n' + error.message)
+      alert('출금 신청 취소에 실패했습니다.\n' + (error instanceof Error ? error.message : '알 수 없는 오류'))
     } finally {
       setLoading(false)
     }

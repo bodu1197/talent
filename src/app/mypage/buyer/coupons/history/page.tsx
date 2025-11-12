@@ -55,7 +55,7 @@ export default function CouponHistoryPage() {
       setHistory(combined)
     } catch (err: unknown) {
       logger.error('내역 로드 실패:', err)
-      setError(err.message || '내역을 불러오는데 실패했습니다')
+      setError(err instanceof Error ? err.message : '내역을 불러오는데 실패했습니다')
     } finally {
       setLoading(false)
     }

@@ -206,7 +206,7 @@ export default function BuyerReviewsClient({
                         </div>
                         <div className="flex items-center gap-1">
                           {[1, 2, 3, 4, 5].map((star) => (
-                            <i key={star} className={`fas fa-star ${star <= review.rating ? 'text-yellow-400' : 'text-gray-300'}`}></i>
+                            <i key={star} className={`fas fa-star ${star <= (review.rating || 0) ? 'text-yellow-400' : 'text-gray-300'}`}></i>
                           ))}
                         </div>
                       </div>
@@ -215,7 +215,7 @@ export default function BuyerReviewsClient({
                         작성일: {new Date(review.created_at).toLocaleDateString('ko-KR')}
                       </div>
 
-                      <p className="text-gray-700 mb-4">{review.comment}</p>
+                      <p className="text-gray-700 mb-4">{review.comment || ''}</p>
 
                       {review.seller_reply && (
                         <div className="bg-gray-50 rounded-lg p-4 mb-4">

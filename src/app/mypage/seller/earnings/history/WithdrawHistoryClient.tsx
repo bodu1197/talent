@@ -2,9 +2,10 @@
 
 import Sidebar from '@/components/mypage/Sidebar'
 import MobileSidebar from '@/components/mypage/MobileSidebar'
+import { WithdrawalRequest } from '@/types/common'
 
 interface WithdrawHistoryClientProps {
-  history: any[]
+  history: WithdrawalRequest[]
 }
 
 export default function WithdrawHistoryClient({ history }: WithdrawHistoryClientProps) {

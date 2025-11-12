@@ -20,7 +20,7 @@ export default function RevisionDetailClient({ revision }: Props) {
       router.push('/admin/services?status=revisions')
     } catch (err: unknown) {
       logger.error('수정 승인 실패:', err)
-      alert('수정 승인에 실패했습니다: ' + err.message)
+      alert('수정 승인에 실패했습니다: ' + (err instanceof Error ? err.message : '알 수 없는 오류'))
     }
   }
 
@@ -34,7 +34,7 @@ export default function RevisionDetailClient({ revision }: Props) {
       router.push('/admin/services?status=revisions')
     } catch (err: unknown) {
       logger.error('수정 반려 실패:', err)
-      alert('수정 반려에 실패했습니다: ' + err.message)
+      alert('수정 반려에 실패했습니다: ' + (err instanceof Error ? err.message : '알 수 없는 오류'))
     }
   }
 

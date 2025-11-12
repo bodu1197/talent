@@ -69,7 +69,7 @@ function BuyerOrdersContent() {
       setOrders(orders)
     } catch (err: unknown) {
       logger.error('주문 조회 실패:', err)
-      setError(err.message || '주문 내역을 불러오는데 실패했습니다')
+      setError(err instanceof Error ? err.message : '주문 내역을 불러오는데 실패했습니다')
     } finally {
       setLoading(false)
     }
@@ -112,7 +112,7 @@ function BuyerOrdersContent() {
       loadStatusCounts()
     } catch (err: unknown) {
       logger.error('구매 확정 실패:', err)
-      alert(err.message || '구매 확정에 실패했습니다')
+      alert(err instanceof Error ? err.message : '구매 확정에 실패했습니다')
     }
   }
 
@@ -140,7 +140,7 @@ function BuyerOrdersContent() {
       loadOrders()
     } catch (err: unknown) {
       logger.error('수정 요청 실패:', err)
-      alert(err.message || '수정 요청에 실패했습니다')
+      alert(err instanceof Error ? err.message : '수정 요청에 실패했습니다')
     }
   }
 

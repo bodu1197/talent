@@ -7,9 +7,17 @@ import Link from 'next/link'
 import { deletePortfolioItem } from '@/lib/supabase/queries/earnings'
 import { useRouter } from 'next/navigation'
 import { logger } from '@/lib/logger'
+import { Portfolio } from '@/types/common'
+
+interface PortfolioWithService extends Portfolio {
+  service?: {
+    id: string
+    title: string
+  } | null
+}
 
 interface Props {
-  portfolio: any[]
+  portfolio: PortfolioWithService[]
 }
 
 export default function SellerPortfolioClient({ portfolio: initialPortfolio }: Props) {
