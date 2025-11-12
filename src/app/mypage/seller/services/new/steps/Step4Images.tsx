@@ -110,8 +110,8 @@ export default function Step4Images({ formData, setFormData }: Props) {
             }}
             className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
               uploadMode === 'file'
-                ? 'bg-[#0f3460] text-white border-[#0f3460]'
-                : 'bg-white text-gray-700 border-gray-300 hover:border-[#0f3460]'
+                ? 'bg-brand-primary text-white border-brand-primary'
+                : 'bg-white text-gray-700 border-gray-300 hover:border-brand-primary'
             }`}
           >
             <i className="fas fa-upload mr-2"></i>
@@ -127,8 +127,8 @@ export default function Step4Images({ formData, setFormData }: Props) {
             }}
             className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
               uploadMode === 'template'
-                ? 'bg-[#0f3460] text-white border-[#0f3460]'
-                : 'bg-white text-gray-700 border-gray-300 hover:border-[#0f3460]'
+                ? 'bg-brand-primary text-white border-brand-primary'
+                : 'bg-white text-gray-700 border-gray-300 hover:border-brand-primary'
             }`}
           >
             <i className="fas fa-wand-magic-sparkles mr-2"></i>
@@ -156,7 +156,7 @@ export default function Step4Images({ formData, setFormData }: Props) {
                 </button>
               </div>
             ) : (
-              <label className="block border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#0f3460] transition-colors cursor-pointer">
+              <label className="block border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-brand-primary transition-colors cursor-pointer">
                 <input
                   type="file"
                   accept="image/*"

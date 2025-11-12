@@ -77,7 +77,7 @@ export default function FavoritesPage() {
                 <p className="text-gray-600 mb-6">찜한 서비스를 확인하려면 로그인해주세요.</p>
                 <Link
                   href="/auth/login"
-                  className="inline-block px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors"
+                  className="inline-block px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors"
                 >
                   로그인하기
                 </Link>
@@ -145,7 +145,7 @@ export default function FavoritesPage() {
             <p className="text-gray-600 mb-6">마음에 드는 서비스를 찜해보세요</p>
             <Link
               href="/"
-              className="inline-block px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors"
+              className="inline-block px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors"
             >
               서비스 둘러보기
             </Link>
@@ -194,7 +194,7 @@ export default function FavoritesPage() {
                     <div className="mt-2">
                       {/* 판매자 */}
                       <div className="flex items-center gap-1 mb-1">
-                        <div className="w-4 h-4 rounded-full bg-[#0f3460] flex items-center justify-center text-white text-[8px] font-bold">
+                        <div className="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center text-white text-[8px] font-bold">
                           {service.seller?.display_name?.[0] || 'S'}
                         </div>
                         <span className="text-xs text-gray-600 truncate">
@@ -206,7 +206,7 @@ export default function FavoritesPage() {
                       </div>
 
                       {/* 제목 */}
-                      <h3 className="font-medium text-sm line-clamp-2 group-hover:text-[#0f3460] transition-colors mb-1">
+                      <h3 className="font-medium text-sm line-clamp-2 group-hover:text-brand-primary transition-colors mb-1">
                         {service.title}
                       </h3>
 
@@ -220,7 +220,7 @@ export default function FavoritesPage() {
                       </div>
 
                       {/* 가격 */}
-                      <p className="text-[#0f3460] font-bold text-sm">
+                      <p className="text-brand-primary font-bold text-sm">
                         {(service.price || 0).toLocaleString()}원
                       </p>
 

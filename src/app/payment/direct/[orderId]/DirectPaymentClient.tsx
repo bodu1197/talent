@@ -201,7 +201,7 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
             <div className="pt-4 border-t border-gray-200">
               <div className="flex justify-between items-center">
                 <span className="text-lg font-bold text-gray-900">총 결제금액</span>
-                <span className="text-2xl font-bold text-[#0f3460]">
+                <span className="text-2xl font-bold text-brand-primary">
                   {order.amount.toLocaleString()}원
                 </span>
               </div>
@@ -219,12 +219,12 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
               onClick={() => setPaymentMethod('card')}
               className={`p-4 rounded-lg border-2 transition-all ${
                 paymentMethod === 'card'
-                  ? 'border-[#0f3460] bg-blue-50'
+                  ? 'border-brand-primary bg-blue-50'
                   : 'border-gray-200 hover:border-gray-300'
               }`}
             >
               <div className="flex flex-col items-center gap-2">
-                <i className="fas fa-credit-card text-2xl text-[#0f3460]"></i>
+                <i className="fas fa-credit-card text-2xl text-brand-primary"></i>
                 <span className="font-medium">카드 결제</span>
                 <span className="text-xs text-gray-500">PortOne 결제창</span>
               </div>
@@ -235,12 +235,12 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
               onClick={() => setPaymentMethod('bank')}
               className={`p-4 rounded-lg border-2 transition-all ${
                 paymentMethod === 'bank'
-                  ? 'border-[#0f3460] bg-blue-50'
+                  ? 'border-brand-primary bg-blue-50'
                   : 'border-gray-200 hover:border-gray-300'
               }`}
             >
               <div className="flex flex-col items-center gap-2">
-                <i className="fas fa-university text-2xl text-[#0f3460]"></i>
+                <i className="fas fa-university text-2xl text-brand-primary"></i>
                 <span className="font-medium">무통장 입금</span>
                 <span className="text-xs text-gray-500">계좌 이체</span>
               </div>
@@ -292,7 +292,7 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
               type="checkbox"
               checked={agreedToTerms}
               onChange={(e) => setAgreedToTerms(e.target.checked)}
-              className="w-5 h-5 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+              className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
             />
             <span className="text-sm text-gray-900">
               위 구매 조건을 확인하였으며, 이에 동의합니다
@@ -304,7 +304,7 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
         <button
           onClick={handlePayment}
           disabled={!agreedToTerms || isProcessing}
-          className="w-full py-4 bg-[#0f3460] text-white rounded-lg font-bold text-lg hover:bg-[#1a4d8f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-4 bg-brand-primary text-white rounded-lg font-bold text-lg hover:bg-[#1a4d8f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isProcessing ? (
             <>

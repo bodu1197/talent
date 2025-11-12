@@ -167,7 +167,7 @@ export default function SellerEarningsClient({ earnings, transactions, sellerDat
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="text-sm text-gray-600 mb-2">출금 가능 금액</div>
-            <div className="text-2xl font-bold text-[#0f3460]">{earnings?.available_balance?.toLocaleString() || '0'}원</div>
+            <div className="text-2xl font-bold text-brand-primary">{earnings?.available_balance?.toLocaleString() || '0'}원</div>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="text-sm text-gray-600 mb-2">정산 대기중</div>
@@ -189,7 +189,7 @@ export default function SellerEarningsClient({ earnings, transactions, sellerDat
               <button
                 onClick={handleWithdrawRequest}
                 disabled={earnings.available_balance <= 0 || loading}
-                className="px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 <i className="fas fa-money-bill-wave mr-2"></i>
                 {loading ? '처리 중...' : '출금 신청'}

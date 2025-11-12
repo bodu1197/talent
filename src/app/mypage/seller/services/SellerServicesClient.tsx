@@ -176,7 +176,7 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
           </div>
           <Link
             href="/mypage/seller/services/new"
-            className="px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+            className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
           >
             <i className="fas fa-plus mr-2"></i>
             새 서비스 등록
@@ -191,7 +191,7 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
                 href={`/mypage/seller/services?status=${tab.value}`}
                 className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
                   statusFilter === tab.value
-                    ? 'border-[#0f3460] text-[#0f3460]'
+                    ? 'border-brand-primary text-brand-primary'
                     : 'border-transparent text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -199,7 +199,7 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
                 {tab.count > 0 && (
                   <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
                     statusFilter === tab.value
-                      ? 'bg-[#0f3460] text-white'
+                      ? 'bg-brand-primary text-white'
                       : 'bg-gray-200 text-gray-600'
                   }`}>
                     {tab.count}
@@ -216,7 +216,7 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="서비스 검색..."
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
           />
         </div>
 
@@ -227,7 +227,7 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
         {filteredServices.length > 0 ? (
           <div className="space-y-4">
             {filteredServices.map((service) => (
-              <div key={service.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-[#0f3460] transition-colors">
+              <div key={service.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-brand-primary transition-colors">
                 <div className="flex">
                   {/* 왼쪽 썸네일 */}
                   <div className="w-48 h-32 bg-gray-100 flex items-center justify-center flex-shrink-0">
@@ -281,7 +281,7 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
                         </Link>
                         <Link
                           href={`/mypage/seller/services/statistics?id=${service.id}`}
-                          className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium"
+                          className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium"
                         >
                           <i className="fas fa-chart-bar mr-1"></i>
                           통계

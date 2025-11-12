@@ -69,7 +69,7 @@ export default function BankTransferClient({ order }: Props) {
         {/* 입금 정보 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-4">
           <div className="flex items-center gap-2 mb-4">
-            <i className="fas fa-university text-2xl text-[#0f3460]"></i>
+            <i className="fas fa-university text-2xl text-brand-primary"></i>
             <h2 className="text-lg font-bold text-gray-900">입금 계좌 정보</h2>
           </div>
 
@@ -102,7 +102,7 @@ export default function BankTransferClient({ order }: Props) {
 
               <div className="pt-4 border-t border-blue-300">
                 <span className="text-sm text-gray-600 block mb-1">입금 금액</span>
-                <span className="text-2xl font-bold text-[#0f3460]">
+                <span className="text-2xl font-bold text-brand-primary">
                   {order.amount.toLocaleString()}원
                 </span>
               </div>
@@ -153,7 +153,7 @@ export default function BankTransferClient({ order }: Props) {
         {/* 버튼 */}
         <button
           onClick={handleConfirmTransfer}
-          className="w-full py-4 bg-[#0f3460] text-white rounded-lg font-bold text-lg hover:bg-[#1a4d8f] transition-colors"
+          className="w-full py-4 bg-brand-primary text-white rounded-lg font-bold text-lg hover:bg-[#1a4d8f] transition-colors"
         >
           입금 완료 확인 요청
         </button>

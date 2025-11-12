@@ -49,7 +49,7 @@ export default function SellerProfileClient({ profile }: Props) {
           </div>
           <button
             onClick={() => router.push('/mypage/seller/profile/edit')}
-            className="px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+            className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
           >
             <i className="fas fa-edit mr-2"></i>
             수정
@@ -131,7 +131,7 @@ export default function SellerProfileClient({ profile }: Props) {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     카카오톡 오픈채팅
                   </label>
-                  <a href={profile.kakao_openchat} target="_blank" rel="noopener noreferrer" className="text-[#0f3460] hover:underline">
+                  <a href={profile.kakao_openchat} target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">
                     {profile.kakao_openchat}
                   </a>
                 </div>
@@ -151,7 +151,7 @@ export default function SellerProfileClient({ profile }: Props) {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     웹사이트
                   </label>
-                  <a href={profile.website} target="_blank" rel="noopener noreferrer" className="text-[#0f3460] hover:underline">
+                  <a href={profile.website} target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">
                     {profile.website}
                   </a>
                 </div>

@@ -230,7 +230,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       </nav>
 
       {/* 제목 및 판매자 프로필 영역 - 전체 가로 배경 */}
-      <div className="w-full" style={{ background: 'radial-gradient(ellipse at center, #a7f3d0 0%, #d1fae5 50%, #ecfdf5 100%)' }}>
+      <div className="w-full bg-emerald-50">
         <div className="container-1200 px-4 py-8">
           <div className="flex flex-col lg:flex-row gap-5">
             {/* 왼쪽: 제목, 통계, 판매자 카드 */}
@@ -317,19 +317,19 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
               {/* 탭 메뉴 */}
               <div className="flex gap-4 mt-6 border-b border-gray-200">
-                <a href="#portfolio" className="pb-3 px-2 text-sm hover:text-[#0f3460] hover:border-b-2 hover:border-[#0f3460] transition-colors">
+                <a href="#portfolio" className="pb-3 px-2 text-sm hover:text-brand-primary hover:border-b-2 hover:border-brand-primary transition-colors">
                   포트폴리오
                 </a>
-                <a href="#description" className="pb-3 px-2 text-sm hover:text-[#0f3460] hover:border-b-2 hover:border-[#0f3460] transition-colors">
+                <a href="#description" className="pb-3 px-2 text-sm hover:text-brand-primary hover:border-b-2 hover:border-brand-primary transition-colors">
                   서비스 설명
                 </a>
-                <a href="#price" className="pb-3 px-2 text-sm hover:text-[#0f3460] hover:border-b-2 hover:border-[#0f3460] transition-colors">
+                <a href="#price" className="pb-3 px-2 text-sm hover:text-brand-primary hover:border-b-2 hover:border-brand-primary transition-colors">
                   가격 정보
                 </a>
-                <a href="#expert" className="pb-3 px-2 text-sm hover:text-[#0f3460] hover:border-b-2 hover:border-[#0f3460] transition-colors">
+                <a href="#expert" className="pb-3 px-2 text-sm hover:text-brand-primary hover:border-b-2 hover:border-brand-primary transition-colors">
                   전문가 정보
                 </a>
-                <a href="#reviews" className="pb-3 px-2 text-sm hover:text-[#0f3460] hover:border-b-2 hover:border-[#0f3460] transition-colors">
+                <a href="#reviews" className="pb-3 px-2 text-sm hover:text-brand-primary hover:border-b-2 hover:border-brand-primary transition-colors">
                   리뷰
                 </a>
               </div>
@@ -392,7 +392,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                 <div className="flex items-start justify-between mb-6">
                   <div className="flex items-start gap-4">
                     {/* 프로필 이미지 */}
-                    <div className="w-16 h-16 rounded-full bg-[#0f3460] flex items-center justify-center text-white text-2xl font-bold flex-shrink-0">
+                    <div className="w-16 h-16 rounded-full bg-brand-primary flex items-center justify-center text-white text-2xl font-bold flex-shrink-0">
                       {service.seller?.profile_image ? (
                         <img
                           src={service.seller.profile_image}
@@ -434,7 +434,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   {/* 문의하기 버튼 */}
                   <Link
                     href="/chat"
-                    className="px-6 py-2 border border-[#0f3460] text-[#0f3460] rounded-lg hover:bg-[#0f3460] hover:text-white transition-colors font-medium"
+                    className="px-6 py-2 border border-brand-primary text-brand-primary rounded-lg hover:bg-brand-primary hover:text-white transition-colors font-medium"
                   >
                     문의하기
                   </Link>
@@ -552,7 +552,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       {review.seller_reply && (
                         <div className="bg-gray-50 rounded-lg p-4 ml-8">
                           <div className="flex items-center gap-2 mb-2">
-                            <i className="fas fa-reply text-[#0f3460]"></i>
+                            <i className="fas fa-reply text-brand-primary"></i>
                             <span className="text-sm font-medium text-gray-900">판매자 답변</span>
                             <span className="text-xs text-gray-500">
                               {new Date(review.seller_reply_at).toLocaleDateString('ko-KR')}
@@ -616,7 +616,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
               {/* 안전거래 배지 */}
               <div className="bg-blue-50 rounded-xl p-4 text-center">
-                <i className="fas fa-shield-alt text-2xl text-[#0f3460] mb-2"></i>
+                <i className="fas fa-shield-alt text-2xl text-brand-primary mb-2"></i>
                 <h4 className="font-bold mb-1">100% 안전거래</h4>
                 <p className="text-xs text-gray-600">
                   에스크로 결제 시스템으로<br/>

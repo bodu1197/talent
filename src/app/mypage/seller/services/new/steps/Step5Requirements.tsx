@@ -209,7 +209,7 @@ export default function Step5Requirements({ formData, setFormData, showOnlyRequi
             value={newQuestion}
             onChange={(e) => setNewQuestion(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addRequirement())}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
             placeholder="예: 선호하는 색상을 알려주세요"
           />
           <div className="flex items-center justify-between">
@@ -218,7 +218,7 @@ export default function Step5Requirements({ formData, setFormData, showOnlyRequi
                 type="checkbox"
                 checked={newQuestionRequired}
                 onChange={(e) => setNewQuestionRequired(e.target.checked)}
-                className="w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+                className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
               />
               <span className="text-sm text-gray-700">필수 항목으로 설정</span>
             </label>
@@ -250,7 +250,7 @@ export default function Step5Requirements({ formData, setFormData, showOnlyRequi
                 ...formData,
                 create_portfolio: e.target.checked
               })}
-              className="w-5 h-5 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+              className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
             />
             <span className="text-sm font-medium text-gray-700">포트폴리오 함께 등록하기</span>
           </label>
@@ -281,7 +281,7 @@ export default function Step5Requirements({ formData, setFormData, showOnlyRequi
                   ...formData,
                   portfolio_data: { ...formData.portfolio_data, title: e.target.value }
                 })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 placeholder="포트폴리오 제목을 입력하세요"
               />
             </div>
@@ -298,7 +298,7 @@ export default function Step5Requirements({ formData, setFormData, showOnlyRequi
                   portfolio_data: { ...formData.portfolio_data, description: e.target.value }
                 })}
                 rows={6}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 placeholder="프로젝트에 대한 자세한 설명을 입력하세요"
                 required={formData.create_portfolio}
               />
@@ -314,7 +314,7 @@ export default function Step5Requirements({ formData, setFormData, showOnlyRequi
                 accept="image/*"
                 multiple
                 onChange={handlePortfolioImageChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               />
               {formData.portfolio_data.images.length > 0 && (
                 <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -326,7 +326,7 @@ export default function Step5Requirements({ formData, setFormData, showOnlyRequi
                         className="w-full h-32 object-cover rounded-lg"
                       />
                       {index === 0 && (
-                        <span className="absolute top-2 left-2 bg-[#0f3460] text-white text-xs px-2 py-1 rounded">
+                        <span className="absolute top-2 left-2 bg-brand-primary text-white text-xs px-2 py-1 rounded">
                           썸네일
                         </span>
                       )}
@@ -355,7 +355,7 @@ export default function Step5Requirements({ formData, setFormData, showOnlyRequi
                   ...formData,
                   portfolio_data: { ...formData.portfolio_data, project_url: e.target.value }
                 })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 placeholder="https://example.com"
               />
             </div>
@@ -369,7 +369,7 @@ export default function Step5Requirements({ formData, setFormData, showOnlyRequi
                 type="url"
                 value={formData.portfolio_data.youtube_url}
                 onChange={(e) => handleYoutubeUrlChange(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 placeholder="https://www.youtube.com/watch?v=..."
                 disabled={fetchingThumbnail}
               />
@@ -411,7 +411,7 @@ export default function Step5Requirements({ formData, setFormData, showOnlyRequi
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   placeholder="태그 입력 후 Enter"
                 />
                 <button

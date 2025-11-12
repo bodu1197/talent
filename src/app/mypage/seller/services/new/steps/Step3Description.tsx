@@ -17,7 +17,7 @@ export default function Step3Description({ formData, setFormData }: Props) {
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           rows={12}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent resize-none"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent resize-none"
           placeholder="서비스에 대한 자세한 설명을 입력하세요.
 
 예시:
@@ -82,7 +82,7 @@ export default function Step3Description({ formData, setFormData }: Props) {
                 ...formData,
                 features: { ...formData.features, commercial_use: e.target.checked }
               })}
-              className="w-5 h-5 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+              className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
             />
             <label className="text-sm text-gray-700">상업적 이용 가능</label>
           </div>
@@ -94,7 +94,7 @@ export default function Step3Description({ formData, setFormData }: Props) {
                 ...formData,
                 features: { ...formData.features, source_files: e.target.checked }
               })}
-              className="w-5 h-5 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+              className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
             />
             <label className="text-sm text-gray-700">원본 파일 제공</label>
           </div>
@@ -106,7 +106,7 @@ export default function Step3Description({ formData, setFormData }: Props) {
                 ...formData,
                 features: { ...formData.features, express_delivery: e.target.checked }
               })}
-              className="w-5 h-5 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+              className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
             />
             <label className="text-sm text-gray-700">급행 작업 가능 (추가 비용)</label>
           </div>

@@ -131,7 +131,7 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
                 href={portfolio.project_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-[#0f3460] font-medium"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-brand-primary font-medium"
               >
                 <i className="fas fa-external-link-alt"></i>
                 <span>프로젝트 보기</span>

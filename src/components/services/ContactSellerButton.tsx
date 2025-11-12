@@ -54,7 +54,7 @@ export default function ContactSellerButton({ sellerId, serviceId }: Props) {
     <button
       onClick={handleContact}
       disabled={isLoading}
-      className="w-full py-3 bg-white border-2 border-[#0f3460] text-[#0f3460] rounded-lg font-medium hover:bg-[#0f3460] hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      className="w-full py-3 bg-white border-2 border-brand-primary text-brand-primary rounded-lg font-medium hover:bg-brand-primary hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {isLoading ? (
         <span>

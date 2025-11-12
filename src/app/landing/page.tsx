@@ -128,7 +128,7 @@ const ExpertCard = ({ expert }: ExpertCardProps) => (
           className="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover border-3 md:border-4 border-gray-100"
         />
         {expert.verified && (
-          <div className="absolute -bottom-1 -right-1 bg-[#0f3460] rounded-full p-1 md:p-1.5">
+          <div className="absolute -bottom-1 -right-1 bg-brand-primary rounded-full p-1 md:p-1.5">
             <svg className="w-3 h-3 md:w-4 md:h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
             </svg>
@@ -174,7 +174,7 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
               <div className="order-2 md:order-1">
                 <div className="mb-3 md:mb-4">
-                  <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">IT & Programming</span>
+                  <span className="text-xs md:text-sm font-bold uppercase text-brand-primary">IT & Programming</span>
                   <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
                     아이디어를 현실로, 최고의 개발자 군단
                   </h2>
@@ -187,7 +187,7 @@ export default function LandingPage() {
                   <FeatureItem>안정적인 서버 구축 및 유지보수</FeatureItem>
                   <FeatureItem>비즈니스 자동화를 위한 프로그램 제작</FeatureItem>
                 </ul>
-                <Link href="/categories/it-programming" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
+                <Link href="/categories/it-programming" className="mt-6 md:mt-8 inline-block bg-brand-primary text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
                   개발자 찾기
                 </Link>
               </div>
@@ -224,7 +224,7 @@ export default function LandingPage() {
               </div>
               <div>
                 <div className="mb-3 md:mb-4">
-                  <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Design</span>
+                  <span className="text-xs md:text-sm font-bold uppercase text-brand-primary">Design</span>
                   <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
                     브랜드를 빛내는, 감각적인 디자인
                   </h2>
@@ -237,7 +237,7 @@ export default function LandingPage() {
                   <FeatureItem>UI/UX 웹 및 모바일 디자인</FeatureItem>
                   <FeatureItem>상세페이지 및 광고 콘텐츠 제작</FeatureItem>
                 </ul>
-                <Link href="/categories/design" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
+                <Link href="/categories/design" className="mt-6 md:mt-8 inline-block bg-brand-primary text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
                   디자이너 포트폴리오 보기
                 </Link>
               </div>
@@ -260,7 +260,7 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
               <div className="order-2 md:order-1">
                 <div className="mb-3 md:mb-4">
-                  <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Marketing</span>
+                  <span className="text-xs md:text-sm font-bold uppercase text-brand-primary">Marketing</span>
                   <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
                     성공적인 비즈니스를 위한, 전략적 마케팅
                   </h2>
@@ -273,7 +273,7 @@ export default function LandingPage() {
                   <FeatureItem>소셜 미디어 채널 관리 및 콘텐츠 제작</FeatureItem>
                   <FeatureItem>블로그 및 인플루언서 마케팅</FeatureItem>
                 </ul>
-                <Link href="/categories/marketing" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
+                <Link href="/categories/marketing" className="mt-6 md:mt-8 inline-block bg-brand-primary text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
                   마케팅 전문가와 상담하기
                 </Link>
               </div>
@@ -301,7 +301,7 @@ export default function LandingPage() {
       </section>
 
       {/* Fortune / Tarot Banner Section - 얇은 띠 형식 */}
-      <section className="py-8 md:py-12 bg-[#0f3460] overflow-hidden relative">
+      <section className="py-8 md:py-12 bg-brand-primary overflow-hidden relative">
         {/* 반짝이는 별 장식 */}
         <div className="absolute top-2 left-4 md:top-4 md:left-10 text-yellow-300 text-lg md:text-2xl animate-pulse">✨</div>
         <div className="absolute top-4 right-8 md:top-8 md:right-20 text-yellow-300 text-base md:text-xl animate-pulse" style={{animationDelay: '0.5s'}}>⭐</div>
@@ -324,7 +324,7 @@ export default function LandingPage() {
             <div className="flex items-center gap-3 w-full md:w-auto">
               <Link
                 href="/categories/fortune"
-                className="bg-white text-[#0f3460] font-bold px-6 py-3 md:px-8 md:py-4 rounded-full hover:bg-gray-100 transition-all shadow-2xl hover:scale-105 whitespace-nowrap text-sm md:text-base w-full md:w-auto text-center"
+                className="bg-white text-brand-primary font-bold px-6 py-3 md:px-8 md:py-4 rounded-full hover:bg-gray-100 transition-all shadow-2xl hover:scale-105 whitespace-nowrap text-sm md:text-base w-full md:w-auto text-center"
               >
                 🌙 운세 보러가기
               </Link>
@@ -348,7 +348,7 @@ export default function LandingPage() {
               </div>
               <div>
                 <div className="mb-3 md:mb-4">
-                  <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Life Services</span>
+                  <span className="text-xs md:text-sm font-bold uppercase text-brand-primary">Life Services</span>
                   <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
                     당신의 일상을 더 편리하고 풍요롭게
                   </h2>
@@ -357,7 +357,7 @@ export default function LandingPage() {
                 {/* 내 주변 전문가 찾기 강조 박스 */}
                 <div className="mt-3 md:mt-4 p-3 md:p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
                   <div className="flex items-center gap-2 md:gap-3 mb-1.5 md:mb-2">
-                    <svg className="w-5 h-5 md:w-6 md:h-6 text-[#0f3460] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 md:w-6 md:h-6 text-brand-primary flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                     </svg>
                     <h3 className="text-base md:text-lg font-bold text-gray-900">내 주변 가까운 전문가 찾기</h3>
@@ -373,7 +373,7 @@ export default function LandingPage() {
                   <FeatureItem>맞춤형 취미 및 외국어 레슨</FeatureItem>
                   <FeatureItem>신뢰할 수 있는 펫시터 및 산책 서비스</FeatureItem>
                 </ul>
-                <Link href="/categories/life" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
+                <Link href="/categories/life" className="mt-6 md:mt-8 inline-block bg-brand-primary text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
                   생활 서비스 찾아보기
                 </Link>
               </div>
@@ -382,7 +382,7 @@ export default function LandingPage() {
             {/* Life Services 전문가 카드 - 위치 정보 포함 */}
             <div className="mt-6 md:mt-8">
               <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 md:mb-4 px-4 md:px-0">
-                <i className="fas fa-map-marker-alt text-[#0f3460] mr-2"></i>
+                <i className="fas fa-map-marker-alt text-brand-primary mr-2"></i>
                 내 주변 생활 서비스 전문가
               </h3>
               <div className="flex md:grid md:grid-cols-5 gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory px-4 md:px-0 -mx-4 md:mx-0">
@@ -400,7 +400,7 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
               <div className="order-2 md:order-1">
                 <div className="mb-3 md:mb-4">
-                  <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">Errand Services</span>
+                  <span className="text-xs md:text-sm font-bold uppercase text-brand-primary">Errand Services</span>
                   <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
                     바쁜 당신을 위한, 믿을 수 있는 심부름 서비스
                   </h2>
@@ -409,7 +409,7 @@ export default function LandingPage() {
                 {/* 실시간 위치 추적 강조 박스 */}
                 <div className="mt-3 md:mt-4 p-3 md:p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
                   <div className="flex items-center gap-2 md:gap-3 mb-1.5 md:mb-2">
-                    <svg className="w-5 h-5 md:w-6 md:h-6 text-[#0f3460] animate-pulse flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 md:w-6 md:h-6 text-brand-primary animate-pulse flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                     </svg>
                     <h3 className="text-base md:text-lg font-bold text-gray-900">전문가 위치 실시간 추적</h3>
@@ -425,7 +425,7 @@ export default function LandingPage() {
                   <FeatureItem>빠른 퀵 배송 및 서류 전달</FeatureItem>
                   <FeatureItem>안전한 대리 운전 서비스</FeatureItem>
                 </ul>
-                <Link href="/categories/errand" className="mt-6 md:mt-8 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
+                <Link href="/categories/errand" className="mt-6 md:mt-8 inline-block bg-brand-primary text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
                   심부름 전문가 찾기
                 </Link>
               </div>
@@ -441,7 +441,7 @@ export default function LandingPage() {
             {/* Errand Services 전문가 카드 - 위치 정보 포함 */}
             <div className="mt-6 md:mt-8">
               <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 md:mb-4 px-4 md:px-0">
-                <i className="fas fa-location-arrow text-[#0f3460] mr-2 animate-pulse"></i>
+                <i className="fas fa-location-arrow text-brand-primary mr-2 animate-pulse"></i>
                 실시간 추적 가능한 심부름 전문가
               </h3>
               <div className="flex md:grid md:grid-cols-5 gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory px-4 md:px-0 -mx-4 md:mx-0">
@@ -469,7 +469,7 @@ export default function LandingPage() {
           </div>
           <div className="grid md:grid-cols-2 gap-6 md:gap-8 lg:gap-12">
             {/* For Buyers */}
-            <div className="bg-gray-800/50 backdrop-blur-sm p-5 md:p-8 rounded-xl md:rounded-2xl border border-gray-700 hover:border-[#0f3460]/50 hover:bg-gray-800/80 transition-all duration-300 transform hover:-translate-y-1">
+            <div className="bg-gray-800/50 backdrop-blur-sm p-5 md:p-8 rounded-xl md:rounded-2xl border border-gray-700 hover:border-brand-primary/50 hover:bg-gray-800/80 transition-all duration-300 transform hover:-translate-y-1">
               <div className="flex items-center gap-2 mb-2">
                 <h3 className="text-lg md:text-2xl font-bold text-white">구매자 (Clients)</h3>
                 <span className="bg-yellow-400 text-gray-900 text-xs md:text-sm font-bold px-2 py-1 rounded">수수료 0원</span>
@@ -504,7 +504,7 @@ export default function LandingPage() {
                   </div>
                 </li>
               </ul>
-              <Link href="/categories" className="mt-6 md:mt-10 inline-block bg-[#0f3460] text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
+              <Link href="/categories" className="mt-6 md:mt-10 inline-block bg-brand-primary text-white font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#0a2340] transition-colors shadow-lg text-sm md:text-base">
                 최고의 전문가 찾기
               </Link>
             </div>
@@ -564,7 +564,7 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="w-20 h-20 bg-[#0f3460] rounded-full flex items-center justify-center mx-auto mb-4 text-white shadow-lg">
+              <div className="w-20 h-20 bg-brand-primary rounded-full flex items-center justify-center mx-auto mb-4 text-white shadow-lg">
                 <span className="text-2xl font-bold">1</span>
               </div>
               <h3 className="font-bold mb-2">서비스 검색</h3>
@@ -572,7 +572,7 @@ export default function LandingPage() {
             </div>
 
             <div className="text-center">
-              <div className="w-20 h-20 bg-[#0f3460] rounded-full flex items-center justify-center mx-auto mb-4 text-white shadow-lg">
+              <div className="w-20 h-20 bg-brand-primary rounded-full flex items-center justify-center mx-auto mb-4 text-white shadow-lg">
                 <span className="text-2xl font-bold">2</span>
               </div>
               <h3 className="font-bold mb-2">상담 및 견적</h3>
@@ -580,7 +580,7 @@ export default function LandingPage() {
             </div>
 
             <div className="text-center">
-              <div className="w-20 h-20 bg-[#0f3460] rounded-full flex items-center justify-center mx-auto mb-4 text-white shadow-lg">
+              <div className="w-20 h-20 bg-brand-primary rounded-full flex items-center justify-center mx-auto mb-4 text-white shadow-lg">
                 <span className="text-2xl font-bold">3</span>
               </div>
               <h3 className="font-bold mb-2">안전 결제</h3>
@@ -588,7 +588,7 @@ export default function LandingPage() {
             </div>
 
             <div className="text-center">
-              <div className="w-20 h-20 bg-[#0f3460] rounded-full flex items-center justify-center mx-auto mb-4 text-white shadow-lg">
+              <div className="w-20 h-20 bg-brand-primary rounded-full flex items-center justify-center mx-auto mb-4 text-white shadow-lg">
                 <span className="text-2xl font-bold">4</span>
               </div>
               <h3 className="font-bold mb-2">작업 완료</h3>

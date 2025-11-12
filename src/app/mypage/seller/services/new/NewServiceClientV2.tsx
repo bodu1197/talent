@@ -244,7 +244,7 @@ export default function NewServiceClientV2({ sellerId, categories, sellerData }:
                       <div
                         className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-colors ${
                           currentStep >= step.number
-                            ? 'bg-[#0f3460] text-white'
+                            ? 'bg-brand-primary text-white'
                             : 'bg-gray-200 text-gray-600'
                         }`}
                       >
@@ -252,7 +252,7 @@ export default function NewServiceClientV2({ sellerId, categories, sellerData }:
                       </div>
                       <span
                         className={`text-sm mt-2 font-medium ${
-                          currentStep >= step.number ? 'text-[#0f3460]' : 'text-gray-500'
+                          currentStep >= step.number ? 'text-brand-primary' : 'text-gray-500'
                         }`}
                       >
                         {step.title}
@@ -261,7 +261,7 @@ export default function NewServiceClientV2({ sellerId, categories, sellerData }:
                     {index < steps.length - 1 && (
                       <div
                         className={`h-1 flex-1 mx-2 transition-colors ${
-                          currentStep > step.number ? 'bg-[#0f3460]' : 'bg-gray-200'
+                          currentStep > step.number ? 'bg-brand-primary' : 'bg-gray-200'
                         }`}
                       />
                     )}
@@ -319,7 +319,7 @@ export default function NewServiceClientV2({ sellerId, categories, sellerData }:
               {currentStep < 3 ? (
                 <button
                   onClick={handleNext}
-                  className="px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+                  className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
                 >
                   다음
                 </button>
@@ -327,7 +327,7 @@ export default function NewServiceClientV2({ sellerId, categories, sellerData }:
                 <button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
                   {loading ? '등록 중...' : '서비스 등록'}
                 </button>

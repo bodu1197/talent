@@ -194,7 +194,7 @@ export default async function RecentViewedServices() {
                 <div className="mt-2">
                   {/* 판매자 */}
                   <div className="flex items-center gap-1 mb-1">
-                    <div className="w-4 h-4 rounded-full bg-[#0f3460] flex items-center justify-center text-white text-[8px] font-bold">
+                    <div className="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center text-white text-[8px] font-bold">
                       {service.seller?.display_name?.[0] || 'S'}
                     </div>
                     <span className="text-xs text-gray-600 truncate">
@@ -206,7 +206,7 @@ export default async function RecentViewedServices() {
                   </div>
 
                   {/* 제목 */}
-                  <h3 className="font-medium text-sm line-clamp-2 group-hover:text-[#0f3460] transition-colors mb-1">
+                  <h3 className="font-medium text-sm line-clamp-2 group-hover:text-brand-primary transition-colors mb-1">
                     {service.title}
                   </h3>
 
@@ -219,7 +219,7 @@ export default async function RecentViewedServices() {
                   </div>
 
                   {/* 가격 */}
-                  <p className="text-[#0f3460] font-bold text-sm">
+                  <p className="text-brand-primary font-bold text-sm">
                     {(service.price || 0).toLocaleString()}원
                   </p>
 

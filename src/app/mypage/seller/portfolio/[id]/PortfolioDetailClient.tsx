@@ -102,7 +102,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId }: Props) {
             <div className="flex items-center justify-between mb-4">
               <Link
                 href="/mypage/seller/portfolio"
-                className="text-gray-600 hover:text-[#0f3460] transition-colors"
+                className="text-gray-600 hover:text-brand-primary transition-colors"
               >
                 <i className="fas fa-arrow-left mr-2"></i>
                 포트폴리오 목록
@@ -156,7 +156,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId }: Props) {
                           onClick={() => setCurrentImageIndex(index)}
                           className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
                             currentImageIndex === index
-                              ? 'border-[#0f3460] ring-2 ring-[#0f3460] ring-opacity-50'
+                              ? 'border-brand-primary ring-2 ring-brand-primary ring-opacity-50'
                               : 'border-gray-300 hover:border-gray-400'
                           }`}
                         >
@@ -211,7 +211,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId }: Props) {
                 href={portfolio.project_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#0f3460] hover:underline break-all"
+                className="text-brand-primary hover:underline break-all"
               >
                 <i className="fas fa-external-link-alt mr-2"></i>
                 {portfolio.project_url}

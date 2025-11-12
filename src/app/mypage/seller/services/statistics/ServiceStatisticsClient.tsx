@@ -99,7 +99,7 @@ export default function ServiceStatisticsClient({ stats, dailyViews, ratingPerce
                   <span className="text-sm text-gray-600 w-12">{day.date}</span>
                   <div className="flex-1 bg-gray-100 rounded-full h-6 overflow-hidden">
                     <div
-                      className="bg-[#0f3460] h-full rounded-full flex items-center justify-end pr-2"
+                      className="bg-brand-primary h-full rounded-full flex items-center justify-end pr-2"
                       style={{ width: `${(day.views / 25) * 100}%` }}
                     >
                       <span className="text-xs text-white font-medium">{day.views}</span>

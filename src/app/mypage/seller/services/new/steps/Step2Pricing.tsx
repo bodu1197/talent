@@ -28,7 +28,7 @@ export default function Step2Pricing({ formData, setFormData }: Props) {
             type="text"
             value={formatPrice(formData.price)}
             onChange={handlePriceChange}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
             placeholder="0"
             required
           />
@@ -49,7 +49,7 @@ export default function Step2Pricing({ formData, setFormData }: Props) {
             type="number"
             value={formData.delivery_days}
             onChange={(e) => setFormData({ ...formData, delivery_days: e.target.value })}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
             placeholder="7"
             min="1"
             max="365"
@@ -71,7 +71,7 @@ export default function Step2Pricing({ formData, setFormData }: Props) {
           id="revisionCount"
           value={formData.revision_count}
           onChange={(e) => setFormData({ ...formData, revision_count: e.target.value })}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
         >
           <option value="0">수정 불가</option>
           <option value="1">1회</option>
@@ -103,7 +103,7 @@ export default function Step2Pricing({ formData, setFormData }: Props) {
           </div>
           <div className="border-t border-blue-300 pt-3 flex justify-between">
             <span className="font-bold text-gray-900">예상 수익</span>
-            <span className="font-bold text-[#0f3460] text-lg">
+            <span className="font-bold text-brand-primary text-lg">
               {formatPrice(Math.max(0, parseInt(formData.price || '0') - 1000).toString())}원
             </span>
           </div>

@@ -13,7 +13,7 @@ export default function ChatNotificationBadge() {
   return (
     <Link
       href="/chat"
-      className="relative text-gray-900 hover:text-[#0f3460] transition-colors"
+      className="relative text-gray-900 hover:text-brand-primary transition-colors"
       aria-label="채팅"
     >
       <i className="far fa-comments text-xl"></i>

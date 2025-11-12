@@ -97,7 +97,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
                   <span className="text-sm w-8">{rating}점</span>
                   <div className="flex-1 bg-gray-200 rounded-full h-2">
                     <div
-                      className="bg-[#0f3460] h-2 rounded-full"
+                      className="bg-brand-primary h-2 rounded-full"
                       style={{ width: `${initialReviews.length > 0 ? (ratingCounts[rating as keyof typeof ratingCounts] / initialReviews.length) * 100 : 0}%` }}
                     ></div>
                   </div>
@@ -116,7 +116,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
                     onClick={() => setRatingFilter(filter)}
                     className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${
                       ratingFilter === filter
-                        ? 'bg-[#0f3460] text-white'
+                        ? 'bg-brand-primary text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
@@ -150,7 +150,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
                             setSelectedReview(review)
                             setShowReplyModal(true)
                           }}
-                          className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm"
+                          className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm"
                         >
                           답변하기
                         </button>
@@ -160,7 +160,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
                     <p className="text-gray-900 mb-3">{review.content}</p>
 
                     {review.reply && (
-                      <div className="mt-4 pl-4 border-l-4 border-[#0f3460] bg-blue-50 p-4 rounded">
+                      <div className="mt-4 pl-4 border-l-4 border-brand-primary bg-blue-50 p-4 rounded">
                         <div className="text-sm font-medium text-gray-900 mb-2">판매자 답변</div>
                         <p className="text-gray-700">{review.reply}</p>
                         <div className="text-xs text-gray-500 mt-2">
@@ -214,7 +214,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
                 value={replyContent}
                 onChange={(e) => setReplyContent(e.target.value)}
                 placeholder="답변 내용을 입력하세요"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent mb-4"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent mb-4"
               ></textarea>
 
               <div className="flex gap-3">
@@ -232,7 +232,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
                 <button
                   onClick={handleReplySubmit}
                   disabled={submitting || !replyContent.trim()}
-                  className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {submitting ? '등록중...' : '답변 등록'}
                 </button>

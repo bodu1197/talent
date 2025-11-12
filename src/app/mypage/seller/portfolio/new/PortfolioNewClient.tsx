@@ -283,7 +283,7 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 placeholder="포트폴리오 제목을 입력하세요"
                 required
               />
@@ -317,7 +317,7 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
                             })
                           }
                         }}
-                        className="mt-1 w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+                        className="mt-1 w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
                       />
                       <div className="flex-1">
                         <p className="text-sm font-medium text-gray-900">{service.title}</p>
@@ -346,7 +346,7 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={6}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 placeholder="프로젝트에 대한 자세한 설명을 입력하세요"
                 required
               />
@@ -362,7 +362,7 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
                 accept="image/*"
                 multiple
                 onChange={handleImageChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               />
               {imagePreviews.length > 0 && (
                 <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -374,7 +374,7 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
                         className="w-full h-32 object-cover rounded-lg"
                       />
                       {index === 0 && (
-                        <span className="absolute top-2 left-2 bg-[#0f3460] text-white text-xs px-2 py-1 rounded">
+                        <span className="absolute top-2 left-2 bg-brand-primary text-white text-xs px-2 py-1 rounded">
                           썸네일
                         </span>
                       )}
@@ -400,7 +400,7 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
                 type="url"
                 value={formData.project_url}
                 onChange={(e) => setFormData({ ...formData, project_url: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 placeholder="https://example.com"
               />
             </div>
@@ -414,7 +414,7 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
                 type="url"
                 value={formData.youtube_url}
                 onChange={(e) => handleYoutubeUrlChange(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 placeholder="https://www.youtube.com/watch?v=..."
                 disabled={fetchingYoutubeThumbnail}
               />
@@ -456,7 +456,7 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   placeholder="태그 입력 후 Enter"
                 />
                 <button
@@ -500,7 +500,7 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
+                className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
                 {uploading ? '이미지 업로드 중...' : loading ? '등록 중...' : '등록하기'}
               </button>

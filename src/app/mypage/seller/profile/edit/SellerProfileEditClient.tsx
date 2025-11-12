@@ -67,7 +67,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                   value={profile.display_name || ''}
                   onChange={(e) => setProfile({ ...profile, display_name: e.target.value })}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 />
               </div>
 
@@ -80,7 +80,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                   value={profile.bio || ''}
                   onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   placeholder="자신의 전문성과 경력을 소개해주세요"
                 ></textarea>
               </div>
@@ -100,7 +100,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                   value={profile.phone || ''}
                   onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 />
                 <div className="mt-2">
                   <label className="flex items-center">
@@ -108,7 +108,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                       type="checkbox"
                       checked={profile.show_phone || false}
                       onChange={(e) => setProfile({ ...profile, show_phone: e.target.checked })}
-                      className="w-4 h-4 text-[#0f3460] rounded"
+                      className="w-4 h-4 text-brand-primary rounded"
                     />
                     <span className="ml-2 text-sm text-gray-700">프로필에 전화번호 공개</span>
                   </label>
@@ -123,7 +123,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                   type="text"
                   value={profile.kakao_id || ''}
                   onChange={(e) => setProfile({ ...profile, kakao_id: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 />
               </div>
 
@@ -135,7 +135,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                   type="text"
                   value={profile.whatsapp || ''}
                   onChange={(e) => setProfile({ ...profile, whatsapp: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 />
               </div>
 
@@ -147,7 +147,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                   type="url"
                   value={profile.website || ''}
                   onChange={(e) => setProfile({ ...profile, website: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 />
               </div>
 
@@ -165,7 +165,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                         const endTime = profile.contact_hours?.split('-')[1] || '18:00'
                         setProfile({ ...profile, contact_hours: `${e.target.value}-${endTime}` })
                       }}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     >
                       {Array.from({ length: 24 }, (_, i) => {
                         const hour = i.toString().padStart(2, '0')
@@ -185,7 +185,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                         const startTime = profile.contact_hours?.split('-')[0] || '09:00'
                         setProfile({ ...profile, contact_hours: `${startTime}-${e.target.value}` })
                       }}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     >
                       {Array.from({ length: 24 }, (_, i) => {
                         const hour = i.toString().padStart(2, '0')
@@ -217,7 +217,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                   value={profile.bank_name || ''}
                   onChange={(e) => setProfile({ ...profile, bank_name: e.target.value })}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 />
               </div>
 
@@ -230,7 +230,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                   value={profile.account_holder || ''}
                   onChange={(e) => setProfile({ ...profile, account_holder: e.target.value })}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 />
               </div>
 
@@ -243,7 +243,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                   value={profile.account_number || ''}
                   onChange={(e) => setProfile({ ...profile, account_number: e.target.value })}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 />
               </div>
 
@@ -253,7 +253,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                     type="checkbox"
                     checked={profile.is_business || false}
                     onChange={(e) => setProfile({ ...profile, is_business: e.target.checked })}
-                    className="w-4 h-4 text-[#0f3460] rounded"
+                    className="w-4 h-4 text-brand-primary rounded"
                   />
                   <span className="ml-2 text-sm text-gray-700">사업자입니다</span>
                 </label>
@@ -268,7 +268,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                     type="text"
                     value={profile.business_number || ''}
                     onChange={(e) => setProfile({ ...profile, business_number: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   />
                 </div>
               )}
@@ -279,7 +279,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                     type="checkbox"
                     checked={profile.tax_invoice_available || false}
                     onChange={(e) => setProfile({ ...profile, tax_invoice_available: e.target.checked })}
-                    className="w-4 h-4 text-[#0f3460] rounded"
+                    className="w-4 h-4 text-brand-primary rounded"
                   />
                   <span className="ml-2 text-sm text-gray-700">세금계산서 발행 가능</span>
                 </label>
@@ -302,7 +302,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50"
+              className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50"
             >
               {saving ? '저장중...' : '저장하기'}
             </button>

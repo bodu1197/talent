@@ -39,7 +39,12 @@
       "WebFetch(domain:github.com)",
       "Bash(claude plugin marketplace list:*)",
       "Bash(npm run test:run:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(dir \"C:\\Users\\ohyus\\talent\\supabase\\migrations\" /B)",
+      "Bash(node scripts/export-supabase-schema.js:*)",
+      "Bash(tee:*)",
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(node scripts/fix-color-hardcoding.js:*)"
     ],
     "deny": [],
     "ask": []

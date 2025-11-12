@@ -28,7 +28,7 @@ export default function SettingsClient({ profile, isSeller }: Props) {
           </div>
           <button
             onClick={() => router.push('/mypage/settings/edit')}
-            className="px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+            className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
           >
             <i className="fas fa-edit mr-2"></i>
             수정
@@ -41,7 +41,7 @@ export default function SettingsClient({ profile, isSeller }: Props) {
             <button
               onClick={() => setActiveTab('profile')}
               className={`w-full px-4 py-2 rounded-lg text-left transition-colors ${
-                activeTab === 'profile' ? 'bg-[#0f3460] text-white' : 'text-gray-700 hover:bg-gray-100'
+                activeTab === 'profile' ? 'bg-brand-primary text-white' : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
               <i className="fas fa-user mr-2"></i>
@@ -50,7 +50,7 @@ export default function SettingsClient({ profile, isSeller }: Props) {
             <button
               onClick={() => setActiveTab('account')}
               className={`w-full px-4 py-2 rounded-lg text-left transition-colors mt-2 ${
-                activeTab === 'account' ? 'bg-[#0f3460] text-white' : 'text-gray-700 hover:bg-gray-100'
+                activeTab === 'account' ? 'bg-brand-primary text-white' : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
               <i className="fas fa-key mr-2"></i>
@@ -59,7 +59,7 @@ export default function SettingsClient({ profile, isSeller }: Props) {
             <button
               onClick={() => setActiveTab('notifications')}
               className={`w-full px-4 py-2 rounded-lg text-left transition-colors mt-2 ${
-                activeTab === 'notifications' ? 'bg-[#0f3460] text-white' : 'text-gray-700 hover:bg-gray-100'
+                activeTab === 'notifications' ? 'bg-brand-primary text-white' : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
               <i className="fas fa-bell mr-2"></i>
@@ -76,7 +76,7 @@ export default function SettingsClient({ profile, isSeller }: Props) {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">프로필 이미지</label>
                     <div className="flex items-center gap-4">
-                      <div className="w-20 h-20 bg-[#0f3460] rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                      <div className="w-20 h-20 bg-brand-primary rounded-full flex items-center justify-center text-white text-2xl font-bold">
                         {profile?.name?.[0] || 'U'}
                       </div>
                     </div>

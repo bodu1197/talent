@@ -246,7 +246,7 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
                   {service && (
                     <Link
                       href={`/services/${service.id}`}
-                      className="text-sm text-gray-600 hover:text-[#0f3460] hover:underline"
+                      className="text-sm text-gray-600 hover:text-brand-primary hover:underline"
                     >
                       {service.title}
                     </Link>
@@ -324,7 +324,7 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
                         <div
                           className={`px-4 py-2 rounded-2xl ${
                             isMine
-                              ? 'bg-[#0f3460] text-white rounded-br-sm'
+                              ? 'bg-brand-primary text-white rounded-br-sm'
                               : 'bg-white border border-gray-200 rounded-bl-sm'
                           }`}
                         >
@@ -384,13 +384,13 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="메시지를 입력하세요..."
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               disabled={isLoading}
             />
             <button
               type="submit"
               disabled={isLoading || !newMessage.trim()}
-              className="px-6 py-3 bg-[#0f3460] text-white rounded-full hover:bg-[#1a4d8f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="px-6 py-3 bg-brand-primary text-white rounded-full hover:bg-[#1a4d8f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               {isLoading ? (
                 <i className="fas fa-spinner fa-spin"></i>
@@ -681,7 +681,7 @@ function PaymentRequestModal({ roomId, service, onClose }: { roomId: string, ser
               type="text"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               placeholder="작업 제목"
               required
             />
@@ -695,7 +695,7 @@ function PaymentRequestModal({ roomId, service, onClose }: { roomId: string, ser
               type="number"
               value={formData.amount}
               onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               placeholder="10000"
               min="1000"
               step="1000"
@@ -711,7 +711,7 @@ function PaymentRequestModal({ roomId, service, onClose }: { roomId: string, ser
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               rows={3}
               placeholder="작업 내용 및 요구사항"
             />
@@ -726,7 +726,7 @@ function PaymentRequestModal({ roomId, service, onClose }: { roomId: string, ser
                 type="number"
                 value={formData.deliveryDays}
                 onChange={(e) => setFormData({ ...formData, deliveryDays: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 min="1"
                 max="365"
               />
@@ -740,7 +740,7 @@ function PaymentRequestModal({ roomId, service, onClose }: { roomId: string, ser
                 type="number"
                 value={formData.revisionCount}
                 onChange={(e) => setFormData({ ...formData, revisionCount: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 min="0"
                 max="10"
               />

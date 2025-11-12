@@ -178,7 +178,7 @@ export default function AdminWithdrawalsPage() {
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="text-sm text-gray-600 mb-2">대기 중인 출금 금액</div>
-          <div className="text-2xl font-bold text-[#0f3460]">{totalPendingAmount.toLocaleString()}원</div>
+          <div className="text-2xl font-bold text-brand-primary">{totalPendingAmount.toLocaleString()}원</div>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="text-sm text-gray-600 mb-2">전체 요청</div>
@@ -191,7 +191,7 @@ export default function AdminWithdrawalsPage() {
           onClick={() => setFilter('all')}
           className={`px-4 py-2 rounded-lg font-medium transition-colors ${
             filter === 'all'
-              ? 'bg-[#0f3460] text-white'
+              ? 'bg-brand-primary text-white'
               : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
           }`}
         >
@@ -201,7 +201,7 @@ export default function AdminWithdrawalsPage() {
           onClick={() => setFilter('pending')}
           className={`px-4 py-2 rounded-lg font-medium transition-colors ${
             filter === 'pending'
-              ? 'bg-[#0f3460] text-white'
+              ? 'bg-brand-primary text-white'
               : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
           }`}
         >
@@ -211,7 +211,7 @@ export default function AdminWithdrawalsPage() {
           onClick={() => setFilter('completed')}
           className={`px-4 py-2 rounded-lg font-medium transition-colors ${
             filter === 'completed'
-              ? 'bg-[#0f3460] text-white'
+              ? 'bg-brand-primary text-white'
               : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
           }`}
         >
@@ -221,7 +221,7 @@ export default function AdminWithdrawalsPage() {
           onClick={() => setFilter('rejected')}
           className={`px-4 py-2 rounded-lg font-medium transition-colors ${
             filter === 'rejected'
-              ? 'bg-[#0f3460] text-white'
+              ? 'bg-brand-primary text-white'
               : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
           }`}
         >

@@ -14,7 +14,7 @@ export default async function PersonalizedServices() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <div className="flex items-center gap-2">
-                <i className="fas fa-heart text-[#0f3460]"></i>
+                <i className="fas fa-heart text-brand-primary"></i>
                 <h2 className="text-2xl font-bold text-gray-900">회원님의 관심 카테고리</h2>
               </div>
               <p className="text-sm text-gray-600 mt-1">
@@ -38,7 +38,7 @@ export default async function PersonalizedServices() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <div className="flex items-center gap-2">
-              <i className="fas fa-heart text-[#0f3460]"></i>
+              <i className="fas fa-heart text-brand-primary"></i>
               <h2 className="text-2xl font-bold text-gray-900">회원님의 관심 카테고리</h2>
             </div>
             <p className="text-sm text-gray-600 mt-1">
@@ -58,14 +58,14 @@ export default async function PersonalizedServices() {
                     {category.category_name}
                   </h3>
                   {category.visit_count > 1 && (
-                    <span className="px-2 py-1 bg-[#0f3460] text-white text-xs rounded-full">
+                    <span className="px-2 py-1 bg-brand-primary text-white text-xs rounded-full">
                       {category.visit_count}회 방문
                     </span>
                   )}
                 </div>
                 <Link
                   href={`/categories/${category.category_slug}`}
-                  className="text-sm text-[#0f3460] hover:underline flex items-center gap-1"
+                  className="text-sm text-brand-primary hover:underline flex items-center gap-1"
                 >
                   더보기
                   <i className="fas fa-chevron-right text-xs"></i>

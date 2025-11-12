@@ -255,7 +255,7 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
             <button
               onClick={() => setActiveTab('profile')}
               className={`w-full px-4 py-2 rounded-lg text-left transition-colors ${
-                activeTab === 'profile' ? 'bg-[#0f3460] text-white' : 'text-gray-700 hover:bg-gray-100'
+                activeTab === 'profile' ? 'bg-brand-primary text-white' : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
               <i className="fas fa-user mr-2"></i>
@@ -264,7 +264,7 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
             <button
               onClick={() => setActiveTab('account')}
               className={`w-full px-4 py-2 rounded-lg text-left transition-colors mt-2 ${
-                activeTab === 'account' ? 'bg-[#0f3460] text-white' : 'text-gray-700 hover:bg-gray-100'
+                activeTab === 'account' ? 'bg-brand-primary text-white' : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
               <i className="fas fa-key mr-2"></i>
@@ -273,7 +273,7 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
             <button
               onClick={() => setActiveTab('notifications')}
               className={`w-full px-4 py-2 rounded-lg text-left transition-colors mt-2 ${
-                activeTab === 'notifications' ? 'bg-[#0f3460] text-white' : 'text-gray-700 hover:bg-gray-100'
+                activeTab === 'notifications' ? 'bg-brand-primary text-white' : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
               <i className="fas fa-bell mr-2"></i>
@@ -297,7 +297,7 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
                           className="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
                         />
                       ) : (
-                        <div className="w-20 h-20 bg-[#0f3460] rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                        <div className="w-20 h-20 bg-brand-primary rounded-full flex items-center justify-center text-white text-2xl font-bold">
                           {name?.[0] || profile?.name?.[0] || 'U'}
                         </div>
                       )}
@@ -329,7 +329,7 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     />
                   </div>
 
@@ -349,7 +349,7 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
                       rows={4}
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                       placeholder="자기소개를 입력하세요"
                     ></textarea>
                   </div>
@@ -357,7 +357,7 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
                   <button
                     onClick={handleSaveProfile}
                     disabled={isLoading}
-                    className="px-6 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isLoading ? '저장 중...' : '저장'}
                   </button>
@@ -375,7 +375,7 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
                       type="password"
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     />
                   </div>
 
@@ -385,7 +385,7 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
                       type="password"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     />
                   </div>
 
@@ -395,14 +395,14 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
                       type="password"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     />
                   </div>
 
                   <button
                     onClick={handleChangePassword}
                     disabled={isLoading}
-                    className="px-6 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isLoading ? '변경 중...' : '비밀번호 변경'}
                   </button>
@@ -423,7 +423,7 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
                       type="checkbox"
                       checked={orderNotification}
                       onChange={(e) => setOrderNotification(e.target.checked)}
-                      className="w-5 h-5 text-[#0f3460]"
+                      className="w-5 h-5 text-brand-primary"
                     />
                   </label>
 
@@ -436,7 +436,7 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
                       type="checkbox"
                       checked={messageNotification}
                       onChange={(e) => setMessageNotification(e.target.checked)}
-                      className="w-5 h-5 text-[#0f3460]"
+                      className="w-5 h-5 text-brand-primary"
                     />
                   </label>
 
@@ -449,14 +449,14 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
                       type="checkbox"
                       checked={reviewNotification}
                       onChange={(e) => setReviewNotification(e.target.checked)}
-                      className="w-5 h-5 text-[#0f3460]"
+                      className="w-5 h-5 text-brand-primary"
                     />
                   </label>
 
                   <button
                     onClick={handleSaveNotifications}
                     disabled={isLoading}
-                    className="px-6 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isLoading ? '저장 중...' : '저장'}
                   </button>

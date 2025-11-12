@@ -195,7 +195,7 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
             <div className="pt-4 border-t border-gray-200">
               <div className="flex justify-between items-center">
                 <span className="text-lg font-bold text-gray-900">총 결제금액</span>
-                <span className="text-2xl font-bold text-[#0f3460]">
+                <span className="text-2xl font-bold text-brand-primary">
                   {paymentRequest.amount.toLocaleString()}원
                 </span>
               </div>
@@ -247,7 +247,7 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
               type="checkbox"
               checked={agreedToTerms}
               onChange={(e) => setAgreedToTerms(e.target.checked)}
-              className="w-5 h-5 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+              className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
             />
             <span className="text-sm text-gray-900">
               위 구매 조건을 확인하였으며, 이에 동의합니다
@@ -259,7 +259,7 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
         <button
           onClick={handlePayment}
           disabled={!agreedToTerms || isProcessing}
-          className="w-full py-4 bg-[#0f3460] text-white rounded-lg font-bold text-lg hover:bg-[#1a4d8f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-4 bg-brand-primary text-white rounded-lg font-bold text-lg hover:bg-[#1a4d8f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isProcessing ? (
             <>

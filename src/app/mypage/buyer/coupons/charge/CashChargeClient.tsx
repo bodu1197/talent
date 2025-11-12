@@ -40,7 +40,7 @@ export default function CashChargeClient() {
                   onClick={() => setAmount(preset)}
                   className={`px-4 py-3 rounded-lg font-medium transition-colors ${
                     amount === preset
-                      ? 'bg-[#0f3460] text-white'
+                      ? 'bg-brand-primary text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
@@ -55,7 +55,7 @@ export default function CashChargeClient() {
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(parseInt(e.target.value) || 0)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               />
             </div>
           </div>
@@ -63,12 +63,12 @@ export default function CashChargeClient() {
           <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
             <h2 className="text-lg font-bold text-gray-900 mb-4">결제 수단</h2>
             <div className="space-y-2">
-              <label className="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-[#0f3460] transition-colors">
-                <input type="radio" name="payment" className="w-4 h-4 text-[#0f3460]" defaultChecked />
+              <label className="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-brand-primary transition-colors">
+                <input type="radio" name="payment" className="w-4 h-4 text-brand-primary" defaultChecked />
                 <span className="ml-3">신용카드</span>
               </label>
-              <label className="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-[#0f3460] transition-colors">
-                <input type="radio" name="payment" className="w-4 h-4 text-[#0f3460]" />
+              <label className="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-brand-primary transition-colors">
+                <input type="radio" name="payment" className="w-4 h-4 text-brand-primary" />
                 <span className="ml-3">계좌이체</span>
               </label>
             </div>
@@ -77,11 +77,11 @@ export default function CashChargeClient() {
           <div className="bg-gray-50 rounded-lg p-6 mb-6">
             <div className="flex items-center justify-between text-lg font-bold">
               <span>충전 금액</span>
-              <span className="text-[#0f3460]">{amount.toLocaleString()}원</span>
+              <span className="text-brand-primary">{amount.toLocaleString()}원</span>
             </div>
           </div>
 
-          <button className="w-full px-6 py-4 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium text-lg">
+          <button className="w-full px-6 py-4 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium text-lg">
             <i className="fas fa-credit-card mr-2"></i>
             {amount.toLocaleString()}원 충전하기
           </button>

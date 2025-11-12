@@ -187,7 +187,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
               {order.status === 'in_progress' && (
                 <button
                   onClick={() => setShowDeliveryModal(true)}
-                  className="px-6 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+                  className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
                 >
                   <i className="fas fa-upload mr-2"></i>
                   납품하기
@@ -281,7 +281,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                       <a
                         href={file.file_url}
                         download
-                        className="px-4 py-2 text-[#0f3460] hover:bg-blue-50 rounded-lg transition-colors"
+                        className="px-4 py-2 text-brand-primary hover:bg-blue-50 rounded-lg transition-colors"
                       >
                         <i className="fas fa-download mr-2"></i>
                         다운로드
@@ -305,7 +305,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                     key={index}
                     className="flex items-start gap-3 pb-3 border-b border-gray-200 last:border-0"
                   >
-                    <div className="w-8 h-8 bg-[#0f3460] rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-8 h-8 bg-brand-primary rounded-full flex items-center justify-center flex-shrink-0">
                       <i className="fas fa-check text-white text-sm"></i>
                     </div>
                     <div className="flex-1">
@@ -334,7 +334,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h3 className="font-bold text-gray-900 mb-4">구매자 정보</h3>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-[#0f3460] rounded-full flex items-center justify-center text-white font-bold">
+                <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center text-white font-bold">
                   {(order.buyer?.name || '구매자')[0]}
                 </div>
                 <div>
@@ -344,7 +344,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
               </div>
               <Link
                 href={`/chat?order=${orderId}`}
-                className="w-full px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium text-center block"
+                className="w-full px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium text-center block"
               >
                 <i className="fas fa-comment mr-2"></i>
                 메시지 보내기
@@ -361,7 +361,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                 </div>
                 <div className="flex items-center justify-between pt-3 border-t border-gray-200">
                   <span className="font-bold text-gray-900">최종 금액</span>
-                  <span className="font-bold text-[#0f3460] text-lg">{order.total_amount?.toLocaleString() || '0'}원</span>
+                  <span className="font-bold text-brand-primary text-lg">{order.total_amount?.toLocaleString() || '0'}원</span>
                 </div>
                 <div className="pt-3 border-t border-gray-200 text-sm text-gray-600">
                   <div>주문일: {new Date(order.created_at).toLocaleString('ko-KR')}</div>
@@ -379,7 +379,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                   <button
                     onClick={handleAcceptOrder}
                     disabled={submitting}
-                    className="w-full px-4 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-4 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {submitting ? (
                       <>
@@ -438,7 +438,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     파일 업로드
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#0f3460] transition-colors cursor-pointer">
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-brand-primary transition-colors cursor-pointer">
                     <i className="fas fa-cloud-upload-alt text-gray-400 text-4xl mb-3"></i>
                     <p className="text-gray-600">클릭하여 파일 선택 또는 드래그 앤 드롭</p>
                     <p className="text-sm text-gray-500 mt-2">최대 100MB</p>
@@ -454,7 +454,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                     value={deliveryMessage}
                     onChange={(e) => setDeliveryMessage(e.target.value)}
                     placeholder="구매자에게 전달할 메시지를 입력하세요"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   ></textarea>
                 </div>
 
@@ -469,7 +469,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                   <button
                     onClick={handleDelivery}
                     disabled={submitting}
-                    className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50"
+                    className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50"
                   >
                     {submitting ? '처리중...' : '납품 완료'}
                   </button>

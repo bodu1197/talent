@@ -78,7 +78,7 @@ export default function PurchaseButton({
     <button
       onClick={handlePurchase}
       disabled={isLoading}
-      className="w-full py-3 bg-[#0f3460] text-white rounded-lg font-medium hover:bg-[#1a4d8f] transition-colors mb-3 disabled:opacity-50 disabled:cursor-not-allowed"
+      className="w-full py-3 bg-brand-primary text-white rounded-lg font-medium hover:bg-[#1a4d8f] transition-colors mb-3 disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {isLoading ? (
         <>

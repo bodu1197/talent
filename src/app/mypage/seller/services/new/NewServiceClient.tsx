@@ -415,7 +415,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                         </button>
                       </div>
                     ) : (
-                      <label className="block border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#0f3460] transition-colors cursor-pointer">
+                      <label className="block border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-brand-primary transition-colors cursor-pointer">
                         <input
                           type="file"
                           accept="image/*"
@@ -501,7 +501,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="예: 전문 로고 디자인 작업"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   required
                 />
               </div>
@@ -515,7 +515,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                   <select
                     value={selectedLevel1}
                     onChange={(e) => setSelectedLevel1(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     required
                     disabled={loading}
                     aria-label="1차 카테고리"
@@ -535,7 +535,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                     <select
                       value={selectedLevel2}
                       onChange={(e) => setSelectedLevel2(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                       required
                       aria-label="2차 카테고리"
                     >
@@ -553,7 +553,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                     <select
                       value={selectedLevel3}
                       onChange={(e) => setSelectedLevel3(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                       required
                       aria-label="3차 카테고리"
                     >
@@ -587,7 +587,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={6}
                   placeholder="서비스에 대해 자세히 설명해주세요"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   required
                 ></textarea>
               </div>
@@ -606,7 +606,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                     setFormData({ ...formData, searchKeywords: value })
                   }}
                   placeholder="로고 디자인 브랜딩 CI 기업"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 />
                 <div className="mt-2 text-sm text-gray-600 space-y-1">
                   <p>• 검색 키워드는 서비스 설명에 노출되지 않지만, 서비스 제목, 서비스 타입과 함께 검색 대상 단어로 사용됩니다.</p>
@@ -642,7 +642,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                       }
                     }}
                     placeholder="50000"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     required
                   />
                 </div>
@@ -666,7 +666,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                       }
                     }}
                     placeholder="7"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     required
                   />
                 </div>
@@ -680,7 +680,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                   id="revisionCount"
                   value={formData.revisionCount}
                   onChange={(e) => setFormData({ ...formData, revisionCount: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   required
                 >
                   <option value="0">수정 불가</option>
@@ -700,7 +700,7 @@ export default function NewServiceClient({ sellerId }: Props) {
             <div className="space-y-4">
               <div>
                 <label className="flex items-center gap-2">
-                  <input type="checkbox" className="w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]" />
+                  <input type="checkbox" className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary" />
                   <span className="text-sm text-gray-700">빠른 작업 가능 (24시간 이내 시작)</span>
                 </label>
               </div>
@@ -711,7 +711,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                     type="checkbox"
                     checked={formData.taxInvoiceAvailable}
                     onChange={(e) => setFormData({ ...formData, taxInvoiceAvailable: e.target.checked })}
-                    className="w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+                    className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
                   />
                   <span className="text-sm text-gray-700">세금계산서 발행 가능</span>
                 </label>
@@ -720,14 +720,14 @@ export default function NewServiceClient({ sellerId }: Props) {
 
               <div>
                 <label className="flex items-center gap-2">
-                  <input type="checkbox" className="w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]" />
+                  <input type="checkbox" className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary" />
                   <span className="text-sm text-gray-700">상업적 이용 가능</span>
                 </label>
               </div>
 
               <div>
                 <label className="flex items-center gap-2">
-                  <input type="checkbox" className="w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]" />
+                  <input type="checkbox" className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary" />
                   <span className="text-sm text-gray-700">원본 파일 제공</span>
                 </label>
               </div>
@@ -745,7 +745,7 @@ export default function NewServiceClient({ sellerId }: Props) {
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>

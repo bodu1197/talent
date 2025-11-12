@@ -137,7 +137,7 @@ export default function AdminServicesPage() {
               onClick={() => setStatusFilter(tab.value)}
               className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
                 statusFilter === tab.value
-                  ? 'border-[#0f3460] text-[#0f3460]'
+                  ? 'border-brand-primary text-brand-primary'
                   : 'border-transparent text-gray-600 hover:text-gray-900'
               }`}
             >
@@ -145,7 +145,7 @@ export default function AdminServicesPage() {
               {tab.count > 0 && (
                 <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
                   statusFilter === tab.value
-                    ? 'bg-[#0f3460] text-white'
+                    ? 'bg-brand-primary text-white'
                     : 'bg-gray-200 text-gray-600'
                 }`}>
                   {tab.count}
@@ -165,7 +165,7 @@ export default function AdminServicesPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="서비스명 또는 판매자명으로 검색"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
             />
           </div>
           <button
@@ -227,7 +227,7 @@ export default function AdminServicesPage() {
                             href={`/services/${service.id}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-sm font-medium text-[#0f3460] hover:underline"
+                            className="text-sm font-medium text-brand-primary hover:underline"
                           >
                             {service.title}
                             <i className="fas fa-external-link-alt ml-2 text-xs"></i>
@@ -261,7 +261,7 @@ export default function AdminServicesPage() {
                       <div className="flex gap-2">
                         <a
                           href={`/admin/services/pending/${service.id}`}
-                          className="px-3 py-1.5 bg-[#0f3460] text-white rounded hover:bg-[#1a4d8f] transition-colors font-medium inline-block text-xs"
+                          className="px-3 py-1.5 bg-brand-primary text-white rounded hover:bg-[#1a4d8f] transition-colors font-medium inline-block text-xs"
                         >
                           <i className="fas fa-eye mr-1"></i>
                           상세보기

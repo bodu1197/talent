@@ -23,7 +23,7 @@ export default function MobileBottomNav() {
           <Link
             href="/"
             className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
-              isActive('/') ? 'text-[#0f3460]' : 'text-gray-500'
+              isActive('/') ? 'text-brand-primary' : 'text-gray-500'
             }`}
           >
             <i className="fas fa-home text-xl"></i>
@@ -33,7 +33,7 @@ export default function MobileBottomNav() {
           {/* 검색 */}
           <button
             onClick={() => setShowSearch(true)}
-            className="flex flex-col items-center justify-center space-y-1 text-gray-500 transition-colors active:text-[#0f3460]"
+            className="flex flex-col items-center justify-center space-y-1 text-gray-500 transition-colors active:text-brand-primary"
             aria-label="검색 열기"
           >
             <i className="fas fa-search text-xl"></i>
@@ -44,7 +44,7 @@ export default function MobileBottomNav() {
           <Link
             href={user ? "/mypage/buyer/favorites" : "/auth/login"}
             className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
-              pathname === '/mypage/buyer/favorites' ? 'text-[#0f3460]' : 'text-gray-500'
+              pathname === '/mypage/buyer/favorites' ? 'text-brand-primary' : 'text-gray-500'
             }`}
           >
             <i className="fas fa-heart text-xl"></i>
@@ -55,7 +55,7 @@ export default function MobileBottomNav() {
           <Link
             href={user ? "/chat" : "/auth/login"}
             className={`relative flex flex-col items-center justify-center space-y-1 transition-colors ${
-              pathname.startsWith('/chat') ? 'text-[#0f3460]' : 'text-gray-500'
+              pathname.startsWith('/chat') ? 'text-brand-primary' : 'text-gray-500'
             }`}
           >
             <div className="relative">
@@ -73,7 +73,7 @@ export default function MobileBottomNav() {
           <Link
             href={user ? "/mypage/buyer/dashboard" : "/auth/login"}
             className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
-              pathname.startsWith('/mypage') ? 'text-[#0f3460]' : 'text-gray-500'
+              pathname.startsWith('/mypage') ? 'text-brand-primary' : 'text-gray-500'
             }`}
           >
             <i className="fas fa-user text-xl"></i>

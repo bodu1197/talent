@@ -35,7 +35,7 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
             </div>
             <Link
               href="/quotes/new"
-              className="px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+              className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
             >
               <i className="fas fa-plus mr-2"></i>
               견적 요청하기
@@ -63,7 +63,7 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
                   </div>
                   {(quote.response_count || 0) > 0 && (
                     <div className="text-right">
-                      <div className="text-2xl font-bold text-[#0f3460]">{quote.response_count}</div>
+                      <div className="text-2xl font-bold text-brand-primary">{quote.response_count}</div>
                       <div className="text-sm text-gray-600">답변</div>
                     </div>
                   )}
@@ -71,7 +71,7 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
                 <div className="flex gap-2">
                   <Link
                     href={`/mypage/buyer/quotes/${quote.id}`}
-                    className="px-4 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium"
+                    className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium"
                   >
                     상세보기
                   </Link>
@@ -84,7 +84,7 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
               <p className="text-gray-500 mb-4">등록한 견적 요청이 없습니다</p>
               <Link
                 href="/quotes/new"
-                className="inline-flex items-center px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+                className="inline-flex items-center px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
               >
                 <i className="fas fa-plus mr-2"></i>
                 견적 요청하기

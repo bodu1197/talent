@@ -496,7 +496,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                         </div>
                       </div>
                     ) : (
-                      <label className="block border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#0f3460] transition-colors cursor-pointer">
+                      <label className="block border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-brand-primary transition-colors cursor-pointer">
                         <input
                           type="file"
                           accept="image/*"
@@ -606,7 +606,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="예: 전문 로고 디자인 작업"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   required
                 />
               </div>
@@ -620,7 +620,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                   <select
                     value={selectedLevel1}
                     onChange={(e) => setSelectedLevel1(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     required
                     disabled={loading}
                     aria-label="1차 카테고리"
@@ -640,7 +640,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                     <select
                       value={selectedLevel2}
                       onChange={(e) => setSelectedLevel2(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                       required
                       aria-label="2차 카테고리"
                     >
@@ -658,7 +658,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                     <select
                       value={selectedLevel3}
                       onChange={(e) => setSelectedLevel3(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                       required
                       aria-label="3차 카테고리"
                     >
@@ -692,7 +692,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={6}
                   placeholder="서비스에 대해 자세히 설명해주세요"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   required
                 ></textarea>
               </div>
@@ -714,7 +714,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                     placeholder="50000"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     required
                   />
                 </div>
@@ -728,7 +728,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                     value={formData.deliveryDays}
                     onChange={(e) => setFormData({ ...formData, deliveryDays: e.target.value })}
                     placeholder="7"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     required
                   />
                 </div>
@@ -742,7 +742,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                   id="revisionCount"
                   value={formData.revisionCount}
                   onChange={(e) => setFormData({ ...formData, revisionCount: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   required
                 >
                   <option value="0">수정 불가</option>
@@ -762,21 +762,21 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
             <div className="space-y-4">
               <div>
                 <label className="flex items-center gap-2">
-                  <input type="checkbox" className="w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]" />
+                  <input type="checkbox" className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary" />
                   <span className="text-sm text-gray-700">빠른 작업 가능 (24시간 이내 시작)</span>
                 </label>
               </div>
 
               <div>
                 <label className="flex items-center gap-2">
-                  <input type="checkbox" className="w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]" />
+                  <input type="checkbox" className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary" />
                   <span className="text-sm text-gray-700">상업적 이용 가능</span>
                 </label>
               </div>
 
               <div>
                 <label className="flex items-center gap-2">
-                  <input type="checkbox" className="w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]" />
+                  <input type="checkbox" className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary" />
                   <span className="text-sm text-gray-700">원본 파일 제공</span>
                 </label>
               </div>
@@ -794,7 +794,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>

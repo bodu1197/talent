@@ -1,4 +1,7 @@
 const { withSentryConfig } = require('@sentry/nextjs')
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -178,22 +181,29 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
-// module.exports = withSentryConfig(
-//   nextConfig,
-//   {
-//     // Sentry 빌드 설정
-//     silent: true,
-//     org: process.env.SENTRY_ORG,
-//     project: process.env.SENTRY_PROJECT,
-//   },
-//   {
-//     // Sentry 업로드 설정
-//     widenClientFileUpload: true,
-//     transpileClientSDK: true,
-//     tunnelRoute: '/monitoring',
-//     hideSourceMaps: true,
-//     disableLogger: true,
-//     automaticVercelMonitors: true,
-//   }
-// )
+// 번들 분석기와 Sentry 설정 적용
+const configWithBundleAnalyzer = withBundleAnalyzer(nextConfig)
+
+// Sentry는 환경 변수가 설정된 경우에만 활성화
+const shouldEnableSentry = process.env.SENTRY_ORG && process.env.SENTRY_PROJECT
+
+module.exports = shouldEnableSentry
+  ? withSentryConfig(
+      configWithBundleAnalyzer,
+      {
+        // Sentry 빌드 설정
+        silent: true,
+        org: process.env.SENTRY_ORG,
+        project: process.env.SENTRY_PROJECT,
+      },
+      {
+        // Sentry 업로드 설정
+        widenClientFileUpload: true,
+        transpileClientSDK: true,
+        tunnelRoute: '/monitoring',
+        hideSourceMaps: true,
+        disableLogger: true,
+        automaticVercelMonitors: true,
+      }
+    )
+  : configWithBundleAnalyzer

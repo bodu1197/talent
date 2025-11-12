@@ -15,7 +15,7 @@ export default async function RecentVisitedCategories() {
     <section className="py-6 bg-gray-50 border-b border-gray-200">
       <div className="container-1200">
         <div className="flex items-center gap-3 mb-4">
-          <i className="fas fa-clock-rotate-left text-[#0f3460]"></i>
+          <i className="fas fa-clock-rotate-left text-brand-primary"></i>
           <h2 className="text-lg font-bold text-gray-900">최근 방문한 카테고리</h2>
           <span className="text-sm text-gray-500">(최근 30일)</span>
         </div>
@@ -27,13 +27,13 @@ export default async function RecentVisitedCategories() {
               href={`/categories/${category.category_slug}`}
               className="flex-shrink-0"
             >
-              <div className="px-4 py-2 bg-white border border-gray-200 rounded-full hover:border-[#0f3460] hover:bg-[#0f3460] hover:text-white transition-all duration-200 group">
+              <div className="px-4 py-2 bg-white border border-gray-200 rounded-full hover:border-brand-primary hover:bg-brand-primary hover:text-white transition-all duration-200 group">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium whitespace-nowrap">
                     {category.category_name}
                   </span>
                   {category.visit_count > 1 && (
-                    <span className="text-xs px-1.5 py-0.5 bg-[#0f3460] text-white group-hover:bg-white group-hover:text-[#0f3460] rounded-full">
+                    <span className="text-xs px-1.5 py-0.5 bg-brand-primary text-white group-hover:bg-white group-hover:text-brand-primary rounded-full">
                       {category.visit_count}
                     </span>
                   )}

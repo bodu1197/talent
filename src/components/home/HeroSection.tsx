@@ -17,7 +17,7 @@ interface Slide {
 const slides: Slide[] = [
   {
     id: 1,
-    title: '당신이 번 돈,<br><span class="hero-highlight">한 푼도 떼지 않습니다</span>',
+    title: '당신이 번 돈,\n한 푼도 떼지 않습니다',
     subtitle: '수수료 0%. 당신의 재능이 온전히 당신의 수익으로.',
     gradient: 'from-pink-500 to-pink-600',
     icon: 'fa-sack-dollar',
@@ -27,7 +27,7 @@ const slides: Slide[] = [
   },
   {
     id: 2,
-    title: '첫날부터 공정하게,<br>모두에게 같은 기회를',
+    title: '첫날부터 공정하게,\n모두에게 같은 기회를',
     subtitle: '신규 판매자와 베테랑, 시작이 평등한 곳입니다.',
     gradient: 'from-indigo-500 to-indigo-600',
     icon: 'fa-balance-scale',
@@ -37,7 +37,7 @@ const slides: Slide[] = [
   },
   {
     id: 3,
-    title: '표시된 가격이 전부입니다<br>숨은 비용 없습니다',
+    title: '표시된 가격이 전부입니다\n숨은 비용 없습니다',
     subtitle: '구매 수수료 0원. 보이는 그대로 결제하세요.',
     gradient: 'from-purple-500 to-purple-600',
     icon: 'fa-shield-alt',
@@ -47,7 +47,7 @@ const slides: Slide[] = [
   },
   {
     id: 4,
-    title: '시작하는 당신에게,<br>1,500만원 드립니다',
+    title: '시작하는 당신에게,\n1,500만원 드립니다',
     subtitle: '런칭 기념. 광고 크레딧으로 첫 고객을 만나세요.',
     gradient: 'from-blue-500 to-blue-600',
     icon: 'fa-bullhorn',
@@ -91,9 +91,10 @@ export default function HeroSection() {
           <div className="flex-1 w-full">
             <div className="mb-6 lg:mb-8">
               <h1
-                className={`text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 lg:mb-4 transition-opacity duration-500 lg:min-h-[120px] leading-[1.6] ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
-                dangerouslySetInnerHTML={{ __html: slide.title }}
-              />
+                className={`text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 lg:mb-4 transition-opacity duration-500 lg:min-h-[120px] leading-[1.6] whitespace-pre-line ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+              >
+                {slide.title}
+              </h1>
               <p className={`text-sm sm:text-base text-gray-600 lg:min-h-[48px] leading-[1.5] transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
                 {slide.subtitle}
               </p>

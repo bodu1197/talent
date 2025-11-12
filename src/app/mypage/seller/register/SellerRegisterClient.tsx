@@ -301,23 +301,23 @@ export default function SellerRegisterClient({ userId }: Props) {
             {[1, 2, 3, 4].map((step) => (
               <div key={step} className="flex items-center flex-1">
                 <div className={`flex items-center justify-center w-10 h-10 rounded-full font-bold ${
-                  currentStep >= step ? 'bg-[#0f3460] text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= step ? 'bg-brand-primary text-white' : 'bg-gray-200 text-gray-500'
                 }`}>
                   {step}
                 </div>
                 {step < 4 && (
                   <div className={`flex-1 h-1 mx-2 ${
-                    currentStep > step ? 'bg-[#0f3460]' : 'bg-gray-200'
+                    currentStep > step ? 'bg-brand-primary' : 'bg-gray-200'
                   }`}></div>
                 )}
               </div>
             ))}
           </div>
           <div className="flex justify-between mt-2 text-sm">
-            <span className={currentStep === 1 ? 'text-[#0f3460] font-medium' : 'text-gray-500'}>신원인증</span>
-            <span className={currentStep === 2 ? 'text-[#0f3460] font-medium' : 'text-gray-500'}>프로필</span>
-            <span className={currentStep === 3 ? 'text-[#0f3460] font-medium' : 'text-gray-500'}>연락처</span>
-            <span className={currentStep === 4 ? 'text-[#0f3460] font-medium' : 'text-gray-500'}>약관동의</span>
+            <span className={currentStep === 1 ? 'text-brand-primary font-medium' : 'text-gray-500'}>신원인증</span>
+            <span className={currentStep === 2 ? 'text-brand-primary font-medium' : 'text-gray-500'}>프로필</span>
+            <span className={currentStep === 3 ? 'text-brand-primary font-medium' : 'text-gray-500'}>연락처</span>
+            <span className={currentStep === 4 ? 'text-brand-primary font-medium' : 'text-gray-500'}>약관동의</span>
           </div>
         </div>
 
@@ -350,7 +350,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                     className={`w-full px-6 py-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
                       isVerified
                         ? 'bg-green-100 text-green-800 cursor-not-allowed'
-                        : 'bg-[#0f3460] text-white hover:bg-[#1a4d8f]'
+                        : 'bg-brand-primary text-white hover:bg-[#1a4d8f]'
                     }`}
                   >
                     <i className={`fas ${isVerified ? 'fa-check-circle' : 'fa-shield-alt'}`}></i>
@@ -394,7 +394,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                         id="bankName"
                         value={formData.bankName}
                         onChange={(e) => setFormData({ ...formData, bankName: e.target.value })}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                         required
                       >
                         <option value="">선택하세요</option>
@@ -418,7 +418,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                         value={formData.accountHolder}
                         onChange={(e) => setFormData({ ...formData, accountHolder: e.target.value })}
                         placeholder="홍길동"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                         required
                       />
                     </div>
@@ -433,7 +433,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                       value={formData.accountNumber}
                       onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value })}
                       placeholder="123-456-789012"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                       required
                     />
                   </div>
@@ -445,7 +445,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                       type="checkbox"
                       checked={formData.isBusiness}
                       onChange={(e) => setFormData({ ...formData, isBusiness: e.target.checked })}
-                      className="w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+                      className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
                     />
                     <span className="text-sm font-medium text-gray-700">사업자입니다</span>
                   </label>
@@ -460,7 +460,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                         value={formData.businessNumber}
                         onChange={(e) => setFormData({ ...formData, businessNumber: e.target.value })}
                         placeholder="123-45-67890"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                       />
                     </div>
                   )}
@@ -522,7 +522,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                     value={formData.displayName}
                     onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
                     placeholder="예: 디자이너 홍길동"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     required
                   />
                   <p className="text-sm text-gray-500 mt-1">구매자에게 보여질 이름입니다</p>
@@ -538,7 +538,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                     rows={6}
                     maxLength={300}
                     placeholder="자신의 전문 분야, 경력, 강점 등을 소개해주세요"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     required
                   ></textarea>
                   <p className={`text-sm mt-1 ${formData.bio.length < 50 ? 'text-red-600' : 'text-gray-500'}`}>
@@ -560,7 +560,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                       type="checkbox"
                       checked={formData.showPhone}
                       onChange={(e) => setFormData({ ...formData, showPhone: e.target.checked })}
-                      className="w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+                      className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
                     />
                     <span className="text-sm font-medium text-gray-700">전화번호 공개</span>
                   </label>
@@ -570,7 +570,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                       value={formData.publicPhone}
                       onChange={(e) => setFormData({ ...formData, publicPhone: e.target.value })}
                       placeholder="010-1234-5678"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     />
                   )}
                 </div>
@@ -584,7 +584,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                     value={formData.kakaoId}
                     onChange={(e) => setFormData({ ...formData, kakaoId: e.target.value })}
                     placeholder="kakaotalk_id"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   />
                 </div>
 
@@ -597,7 +597,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                     value={formData.kakaoOpenChat}
                     onChange={(e) => setFormData({ ...formData, kakaoOpenChat: e.target.value })}
                     placeholder="https://open.kakao.com/..."
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   />
                 </div>
 
@@ -610,7 +610,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                     value={formData.whatsapp}
                     onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
                     placeholder="821012345678 (국가번호 포함, 하이픈 없이)"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   />
                   <p className="text-sm text-gray-500 mt-1">
                     클릭 시 바로 WhatsApp 채팅 연결됩니다 (예: 821012345678)
@@ -626,7 +626,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                     value={formData.website}
                     onChange={(e) => setFormData({ ...formData, website: e.target.value })}
                     placeholder="https://..."
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   />
                 </div>
 
@@ -641,7 +641,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                           type="checkbox"
                           checked={formData.preferredContact.includes(contact)}
                           onChange={() => handlePreferredContactToggle(contact)}
-                          className="w-4 h-4 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460]"
+                          className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
                         />
                         <span className="text-sm text-gray-700">{contact}</span>
                       </label>
@@ -663,7 +663,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                       type="checkbox"
                       checked={formData.termsAgree}
                       onChange={(e) => setFormData({ ...formData, termsAgree: e.target.checked })}
-                      className="w-5 h-5 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460] mt-0.5"
+                      className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary mt-0.5"
                       required
                     />
                     <div className="flex-1">
@@ -681,7 +681,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                       type="checkbox"
                       checked={formData.commissionAgree}
                       onChange={(e) => setFormData({ ...formData, commissionAgree: e.target.checked })}
-                      className="w-5 h-5 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460] mt-0.5"
+                      className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary mt-0.5"
                       required
                     />
                     <div className="flex-1">
@@ -699,7 +699,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                       type="checkbox"
                       checked={formData.refundAgree}
                       onChange={(e) => setFormData({ ...formData, refundAgree: e.target.checked })}
-                      className="w-5 h-5 text-[#0f3460] border-gray-300 rounded focus:ring-[#0f3460] mt-0.5"
+                      className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary mt-0.5"
                       required
                     />
                     <div className="flex-1">
@@ -732,7 +732,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                 type="button"
                 onClick={nextStep}
                 disabled={!canProceed()}
-                className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 다음
                 <i className="fas fa-arrow-right ml-2"></i>
@@ -742,7 +742,7 @@ export default function SellerRegisterClient({ userId }: Props) {
                 type="button"
                 onClick={handleSubmit}
                 disabled={!canProceed() || loading}
-                className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>

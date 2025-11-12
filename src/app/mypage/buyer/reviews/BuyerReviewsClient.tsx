@@ -94,7 +94,7 @@ export default function BuyerReviewsClient({
               onClick={() => setActiveTab('pending')}
               className={`flex-1 px-6 py-4 font-medium text-sm border-b-2 transition-colors ${
                 activeTab === 'pending'
-                  ? 'border-[#0f3460] text-[#0f3460]'
+                  ? 'border-brand-primary text-brand-primary'
                   : 'border-transparent text-gray-600 hover:text-gray-900'
               }`}
             >
@@ -102,7 +102,7 @@ export default function BuyerReviewsClient({
               {pendingReviews.length > 0 && (
                 <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
                   activeTab === 'pending'
-                    ? 'bg-[#0f3460] text-white'
+                    ? 'bg-brand-primary text-white'
                     : 'bg-gray-200 text-gray-600'
                 }`}>
                   {pendingReviews.length}
@@ -113,7 +113,7 @@ export default function BuyerReviewsClient({
               onClick={() => setActiveTab('written')}
               className={`flex-1 px-6 py-4 font-medium text-sm border-b-2 transition-colors ${
                 activeTab === 'written'
-                  ? 'border-[#0f3460] text-[#0f3460]'
+                  ? 'border-brand-primary text-brand-primary'
                   : 'border-transparent text-gray-600 hover:text-gray-900'
               }`}
             >
@@ -121,7 +121,7 @@ export default function BuyerReviewsClient({
               {writtenReviews.length > 0 && (
                 <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
                   activeTab === 'written'
-                    ? 'bg-[#0f3460] text-white'
+                    ? 'bg-brand-primary text-white'
                     : 'bg-gray-200 text-gray-600'
                 }`}>
                   {writtenReviews.length}
@@ -168,7 +168,7 @@ export default function BuyerReviewsClient({
                           setSelectedOrder(order)
                           setShowWriteModal(true)
                         }}
-                        className="px-6 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium"
+                        className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium"
                       >
                         <i className="fas fa-star mr-2"></i>
                         리뷰 작성
@@ -225,7 +225,7 @@ export default function BuyerReviewsClient({
                       {review.seller_reply && (
                         <div className="bg-gray-50 rounded-lg p-4 mb-4">
                           <div className="flex items-center gap-2 mb-2">
-                            <i className="fas fa-reply text-[#0f3460]"></i>
+                            <i className="fas fa-reply text-brand-primary"></i>
                             <span className="text-sm font-medium text-gray-900">판매자 답변</span>
                           </div>
                           <p className="text-gray-700">{review.seller_reply}</p>
@@ -294,7 +294,7 @@ export default function BuyerReviewsClient({
                     onChange={(e) => setReviewContent(e.target.value)}
                     rows={6}
                     placeholder="서비스 이용 후기를 작성해주세요"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   ></textarea>
                 </div>
 
@@ -327,7 +327,7 @@ export default function BuyerReviewsClient({
                   <button
                     onClick={handleSubmitReview}
                     disabled={submitting}
-                    className="flex-1 px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50"
+                    className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50"
                   >
                     {submitting ? '등록 중...' : (
                       <>

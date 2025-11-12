@@ -167,7 +167,7 @@ export default function AIServicesShowcase() {
       <div className="container-1200 px-4">
         {/* 제목 */}
         <div className="mb-6 md:mb-8">
-          <span className="text-xs md:text-sm font-bold uppercase text-[#0f3460]">AI Services</span>
+          <span className="text-xs md:text-sm font-bold uppercase text-brand-primary">AI Services</span>
           <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-gray-900 tracking-tight leading-tight">
             미래를 여는 기술, AI 전문가
           </h2>

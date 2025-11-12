@@ -56,7 +56,7 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
             </div>
             <Link
               href="/mypage/seller/portfolio/new"
-              className="px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+              className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
             >
               <i className="fas fa-plus mr-2"></i>
               포트폴리오 등록
@@ -67,7 +67,7 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {portfolio.length > 0 ? (
             portfolio.map((item) => (
-              <div key={item.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-[#0f3460] transition-colors">
+              <div key={item.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-brand-primary transition-colors">
                 <Link href={`/mypage/seller/portfolio/${item.id}`} className="block">
                   <div className="aspect-[4/3] bg-gray-100 flex items-center justify-center relative">
                     {item.thumbnail_url ? (
@@ -76,7 +76,7 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
                       <i className="fas fa-image text-gray-400 text-4xl"></i>
                     )}
                     {item.service && (
-                      <div className="absolute top-2 right-2 bg-[#0f3460] text-white text-xs px-2 py-1 rounded-md flex items-center gap-1">
+                      <div className="absolute top-2 right-2 bg-brand-primary text-white text-xs px-2 py-1 rounded-md flex items-center gap-1">
                         <i className="fas fa-link"></i>
                         <span>서비스 연동</span>
                       </div>
@@ -89,12 +89,12 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
                   {item.service && (
                     <div className="mb-3 p-2 bg-blue-50 border border-blue-200 rounded-lg">
                       <div className="flex items-center gap-2">
-                        <i className="fas fa-briefcase text-[#0f3460] text-sm"></i>
+                        <i className="fas fa-briefcase text-brand-primary text-sm"></i>
                         <div className="flex-1 min-w-0">
                           <p className="text-xs text-gray-600">연동된 서비스</p>
                           <Link
                             href={`/services/${item.service.id}`}
-                            className="text-sm font-medium text-[#0f3460] hover:underline truncate block"
+                            className="text-sm font-medium text-brand-primary hover:underline truncate block"
                             onClick={(e) => e.stopPropagation()}
                           >
                             {item.service.title}
@@ -131,7 +131,7 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
               <p className="text-gray-500 mb-4">등록된 포트폴리오가 없습니다</p>
               <Link
                 href="/mypage/seller/portfolio/new"
-                className="inline-flex items-center px-6 py-3 bg-[#0f3460] text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+                className="inline-flex items-center px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
               >
                 <i className="fas fa-plus mr-2"></i>
                 포트폴리오 등록

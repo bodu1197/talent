@@ -428,7 +428,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
               onClick={() => setActiveTab('all')}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
                 activeTab === 'all'
-                  ? 'bg-[#0f3460] text-white'
+                  ? 'bg-brand-primary text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
               }`}
             >
@@ -438,7 +438,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
               onClick={() => setActiveTab('unread')}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
                 activeTab === 'unread'
-                  ? 'bg-[#0f3460] text-white'
+                  ? 'bg-brand-primary text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
               }`}
             >
@@ -878,7 +878,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
                   <button
                     type="submit"
                     disabled={(!newMessage.trim() && !selectedFile) || isLoading || isUploading}
-                    className="px-6 py-2 bg-[#0f3460] text-white rounded-lg hover:bg-[#0a2540] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#0a2540] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     {isUploading ? '업로드 중...' : isLoading ? '전송 중...' : '전송'}
                   </button>
