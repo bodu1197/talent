@@ -187,11 +187,6 @@ CREATE INDEX IF NOT EXISTS idx_services_active
 CREATE INDEX IF NOT EXISTS idx_services_status
   ON services(status, created_at DESC);
 
--- Index for finding services by category
-CREATE INDEX IF NOT EXISTS idx_services_category_id
-  ON services(category_id, created_at DESC)
-  WHERE status = 'active';
-
 -- Index for seller + status queries
 CREATE INDEX IF NOT EXISTS idx_services_seller_status
   ON services(seller_id, status, created_at DESC);
