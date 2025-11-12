@@ -9,11 +9,24 @@ import {
 } from '@/lib/advertising-cron';
 
 export async function GET(request: NextRequest) {
-  // Cron 보안키 확인
+  // Cron 보안키 확인 (필수)
+  const cronSecret = process.env.CRON_SECRET;
+
+  if (!cronSecret) {
+    console.error('[SECURITY] CRON_SECRET environment variable is not set!');
+    return NextResponse.json(
+      { error: 'Server misconfiguration' },
+      { status: 500 }
+    );
+  }
+
   const authHeader = request.headers.get('authorization');
-  const cronSecret = process.env.CRON_SECRET || 'default-secret';
 
   if (authHeader !== `Bearer ${cronSecret}`) {
+    console.warn('[SECURITY] Unauthorized cron job attempt:', {
+      ip: request.headers.get('x-forwarded-for') || 'unknown',
+      timestamp: new Date().toISOString()
+    });
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -47,9 +60,20 @@ export async function GET(request: NextRequest) {
         );
     }
   } catch (error) {
-    console.error('Cron job 실행 실패:', error);
+    // 서버 로그에만 상세 정보 기록
+    console.error('[ERROR] Cron job failed:', {
+      job,
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      timestamp: new Date().toISOString()
+    });
+
+    // 클라이언트에는 일반 메시지만 반환
     return NextResponse.json(
-      { error: 'Cron job failed', details: error },
+      {
+        error: 'Internal server error',
+        job: job || 'unknown'
+      },
       { status: 500 }
     );
   }

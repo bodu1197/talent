@@ -1,6 +1,7 @@
-// 광고 시스템 핵심 로직
+// 광고 시스템 핵심 로직 - Server Actions
+'use server';
 
-import { createClient } from '@/lib/supabase/client';
+import { SupabaseManager } from '@/lib/supabase/singleton';
 import type {
   AdvertisingCredit,
   AdvertisingSubscription,
@@ -11,13 +12,92 @@ const MONTHLY_PRICE = 100000; // 월 10만원 고정
 const LAUNCH_PROMO_AMOUNT = 600000; // 런칭 프로모션 60만원
 const LAUNCH_PROMO_DURATION_MONTHS = 6;
 
+// ===== 헬퍼 함수 =====
+
+/**
+ * Service Role 클라이언트 (RLS 우회)
+ */
+function getAdminClient() {
+  return SupabaseManager.getServiceRoleClient();
+}
+
+/**
+ * 현재 인증된 사용자 가져오기
+ */
+async function getCurrentUser() {
+  const supabase = await SupabaseManager.getServerClient();
+  const { data: { user }, error } = await supabase.auth.getUser();
+
+  if (error || !user) {
+    throw new Error('인증이 필요합니다');
+  }
+
+  return user;
+}
+
+/**
+ * UUID 검증
+ */
+function validateUUID(id: string): boolean {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(id);
+}
+
+/**
+ * 금액 검증
+ */
+function validateAmount(amount: number): boolean {
+  return Number.isInteger(amount) && amount > 0 && amount <= 10000000;
+}
+
+/**
+ * 관리자 권한 확인
+ */
+async function requireAdmin(userId: string) {
+  const supabase = getAdminClient();
+
+  const { data: admin } = await supabase
+    .from('admins')
+    .select('id')
+    .eq('user_id', userId)
+    .single();
+
+  if (!admin) {
+    throw new Error('관리자 권한이 필요합니다');
+  }
+
+  return admin;
+}
+
 // ===== 크레딧 관리 =====
 
 /**
  * 런칭 프로모션 크레딧 지급 (60만원, 6개월)
+ * 관리자만 호출 가능
  */
 export async function grantLaunchPromotion(sellerId: string) {
-  const supabase = createClient();
+  // 인증 및 권한 검증
+  const user = await getCurrentUser();
+  await requireAdmin(user.id);
+
+  // 입력 검증
+  if (!validateUUID(sellerId)) {
+    throw new Error('유효하지 않은 판매자 ID입니다');
+  }
+
+  const supabase = getAdminClient();
+
+  // 이미 프로모션 받았는지 확인
+  const { data: existing } = await supabase
+    .from('advertising_credits')
+    .select('id')
+    .eq('seller_id', sellerId)
+    .eq('promotion_type', 'launch_promo')
+    .single();
+
+  if (existing) {
+    throw new Error('이미 런칭 프로모션을 받은 판매자입니다');
+  }
 
   const expiresAt = new Date();
   expiresAt.setMonth(expiresAt.getMonth() + LAUNCH_PROMO_DURATION_MONTHS);
@@ -55,7 +135,12 @@ export async function grantLaunchPromotion(sellerId: string) {
  * 판매자의 총 크레딧 조회
  */
 export async function getTotalCredits(sellerId: string): Promise<number> {
-  const supabase = createClient();
+  // 입력 검증
+  if (!validateUUID(sellerId)) {
+    throw new Error('유효하지 않은 판매자 ID입니다');
+  }
+
+  const supabase = getAdminClient();
 
   const { data: credits } = await supabase
     .from('advertising_credits')
@@ -75,7 +160,12 @@ export async function payWithCredit(
   subscriptionId: string,
   amount: number
 ): Promise<{ success: boolean; remaining: number }> {
-  const supabase = createClient();
+  // 입력 검증
+  if (!validateUUID(sellerId)) throw new Error('유효하지 않은 판매자 ID');
+  if (!validateUUID(subscriptionId)) throw new Error('유효하지 않은 구독 ID');
+  if (!validateAmount(amount)) throw new Error('유효하지 않은 금액');
+
+  const supabase = getAdminClient();
 
   // 사용 가능한 크레딧 조회 (만료일 가까운 것부터)
   const { data: credits } = await supabase
@@ -134,7 +224,30 @@ export async function startAdvertisingSubscription(
   serviceId: string,
   paymentMethod: 'credit' | 'card' | 'bank_transfer' = 'credit'
 ) {
-  const supabase = createClient();
+  // 인증 검증
+  const user = await getCurrentUser();
+
+  // 본인 확인
+  if (user.id !== sellerId) {
+    throw new Error('본인의 서비스만 광고 등록할 수 있습니다');
+  }
+
+  // 입력 검증
+  if (!validateUUID(sellerId)) throw new Error('유효하지 않은 판매자 ID');
+  if (!validateUUID(serviceId)) throw new Error('유효하지 않은 서비스 ID');
+
+  const supabase = getAdminClient();
+
+  // 서비스 소유권 확인
+  const { data: service } = await supabase
+    .from('services')
+    .select('seller_id')
+    .eq('id', serviceId)
+    .single();
+
+  if (!service || service.seller_id !== sellerId) {
+    throw new Error('본인의 서비스만 광고 등록할 수 있습니다');
+  }
 
   const nextBillingDate = new Date();
   nextBillingDate.setMonth(nextBillingDate.getMonth() + 1);
@@ -197,7 +310,26 @@ export async function startAdvertisingSubscription(
  * 구독 취소
  */
 export async function cancelSubscription(subscriptionId: string) {
-  const supabase = createClient();
+  // 인증 검증
+  const user = await getCurrentUser();
+
+  // 입력 검증
+  if (!validateUUID(subscriptionId)) {
+    throw new Error('유효하지 않은 구독 ID');
+  }
+
+  const supabase = getAdminClient();
+
+  // 구독 소유권 확인
+  const { data: subscription } = await supabase
+    .from('advertising_subscriptions')
+    .select('seller_id')
+    .eq('id', subscriptionId)
+    .single();
+
+  if (!subscription || subscription.seller_id !== user.id) {
+    throw new Error('본인의 구독만 취소할 수 있습니다');
+  }
 
   return await supabase
     .from('advertising_subscriptions')
@@ -218,7 +350,12 @@ export async function requestBankTransferPayment(
   sellerId: string,
   amount: number
 ) {
-  const supabase = createClient();
+  // 입력 검증
+  if (!validateUUID(subscriptionId)) throw new Error('유효하지 않은 구독 ID');
+  if (!validateUUID(sellerId)) throw new Error('유효하지 않은 판매자 ID');
+  if (!validateAmount(amount)) throw new Error('유효하지 않은 금액');
+
+  const supabase = getAdminClient();
 
   const deadline = new Date();
   deadline.setDate(deadline.getDate() + 3); // 3일 내 입금
@@ -256,10 +393,10 @@ export async function requestBankTransferPayment(
 예금주: ${process.env.NEXT_PUBLIC_BANK_HOLDER}
 입금 기한: ${deadline.toLocaleString()}
 
-입금자명: [이름-${payment.id.slice(0, 8)}]
+입금자명: [이름-${payment!.id.slice(0, 8)}]
 ※ 입금 후 자동으로 처리됩니다.
     `.trim(),
-    link_url: `/seller/advertising/payments/${payment.id}`
+    link_url: `/mypage/seller/advertising/payments/${payment!.id}`
   });
 
   return payment;
@@ -278,7 +415,26 @@ export async function uploadPaymentReceipt(
     depositTime: string;
   }
 ) {
-  const supabase = createClient();
+  // 인증 검증
+  const user = await getCurrentUser();
+
+  // 입력 검증
+  if (!validateUUID(paymentId)) {
+    throw new Error('유효하지 않은 결제 ID');
+  }
+
+  const supabase = getAdminClient();
+
+  // 결제 소유권 확인
+  const { data: payment } = await supabase
+    .from('advertising_payments')
+    .select('seller_id')
+    .eq('id', paymentId)
+    .single();
+
+  if (!payment || payment.seller_id !== user.id) {
+    throw new Error('본인의 결제만 수정할 수 있습니다');
+  }
 
   // 입금증 이미지 업로드
   const fileName = `receipts/${paymentId}.jpg`;
@@ -309,7 +465,16 @@ export async function confirmBankTransferPayment(
   adminId: string,
   memo?: string
 ) {
-  const supabase = createClient();
+  // 인증 및 권한 검증
+  const user = await getCurrentUser();
+  await requireAdmin(user.id);
+
+  // 입력 검증
+  if (!validateUUID(paymentId)) {
+    throw new Error('유효하지 않은 결제 ID');
+  }
+
+  const supabase = getAdminClient();
   const now = new Date().toISOString();
 
   // 결제 정보 조회
@@ -355,7 +520,7 @@ export async function confirmBankTransferPayment(
     type: 'payment_confirmed',
     title: '광고 결제 확인 완료',
     content: `${payment.amount.toLocaleString()}원 입금이 확인되었습니다. 광고가 활성화되었습니다.`,
-    link_url: '/seller/advertising'
+    link_url: '/mypage/seller/advertising'
   });
 
   return payment;
@@ -383,7 +548,20 @@ export async function getServicesForCategoryPage(
   page: number = 1,
   pageSize: number = 12
 ) {
-  const supabase = createClient();
+  // 입력 검증
+  if (!validateUUID(categoryId)) {
+    throw new Error('유효하지 않은 카테고리 ID');
+  }
+
+  if (!Number.isInteger(page) || page < 1) {
+    throw new Error('유효하지 않은 페이지 번호');
+  }
+
+  if (!Number.isInteger(pageSize) || pageSize < 1 || pageSize > 100) {
+    throw new Error('유효하지 않은 페이지 크기');
+  }
+
+  const supabase = getAdminClient();
 
   // 1. 해당 카테고리의 모든 활성 서비스 조회
   const { data: allServices } = await supabase
@@ -453,7 +631,7 @@ async function recordImpression(
   position: number,
   page: number
 ) {
-  const supabase = createClient();
+  const supabase = getAdminClient();
 
   await supabase.from('advertising_impressions').insert({
     subscription_id: subscriptionId,
@@ -482,7 +660,12 @@ async function recordImpression(
  * 클릭 기록
  */
 export async function recordClick(impressionId: string) {
-  const supabase = createClient();
+  // 입력 검증
+  if (!validateUUID(impressionId)) {
+    throw new Error('유효하지 않은 노출 ID');
+  }
+
+  const supabase = getAdminClient();
   const now = new Date().toISOString();
 
   // 노출 기록 업데이트
