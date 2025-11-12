@@ -130,10 +130,10 @@ export default function AdvertisingPage() {
           <div className="flex justify-between">
             <span className="text-gray-600">현재 잔액</span>
             <span className="text-2xl font-bold text-blue-600">
-              {dashboard?.credits.total.toLocaleString()}원
+              {dashboard?.credits?.total.toLocaleString()}원
             </span>
           </div>
-          {dashboard?.credits.promotional > 0 && (
+          {dashboard?.credits?.promotional && dashboard.credits.promotional > 0 && (
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">프로모션 크레딧</span>
               <span className="text-gray-700">
@@ -222,8 +222,8 @@ export default function AdvertisingPage() {
                 <li>✓ 모든 광고 100% 공평한 기회</li>
               </ul>
               <p className="mt-3 text-xs text-gray-600">
-                * 크레딧 잔액: {dashboard?.credits.total.toLocaleString()}원
-                {dashboard && dashboard.credits.total >= 100000 && (
+                * 크레딧 잔액: {dashboard?.credits?.total.toLocaleString()}원
+                {dashboard?.credits && dashboard.credits.total >= 100000 && (
                   <span className="ml-2 text-green-600 font-medium">
                     (즉시 광고 시작 가능)
                   </span>
@@ -248,19 +248,19 @@ export default function AdvertisingPage() {
         <div className="grid grid-cols-3 gap-4">
           <div className="text-center">
             <div className="text-2xl font-bold text-blue-600">
-              {dashboard?.stats.totalImpressions.toLocaleString()}
+              {dashboard?.stats?.totalImpressions.toLocaleString()}
             </div>
             <div className="text-sm text-gray-600">총 노출</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-green-600">
-              {dashboard?.stats.totalClicks.toLocaleString()}
+              {dashboard?.stats?.totalClicks.toLocaleString()}
             </div>
             <div className="text-sm text-gray-600">총 클릭</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-purple-600">
-              {dashboard?.stats.ctr.toFixed(2)}%
+              {dashboard?.stats?.ctr.toFixed(2)}%
             </div>
             <div className="text-sm text-gray-600">클릭률 (CTR)</div>
           </div>
