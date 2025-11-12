@@ -3,6 +3,7 @@
 import { ReactNode } from 'react'
 import Sidebar from './Sidebar'
 import MobileSidebar from './MobileSidebar'
+import Footer from '@/components/layout/Footer'
 
 interface MypageLayoutWrapperProps {
   mode: 'seller' | 'buyer'
@@ -21,6 +22,7 @@ export default function MypageLayoutWrapper({ mode, sellerData, children }: Mypa
         <Sidebar mode={mode} sellerData={sellerData} />
         <main className="flex-1 overflow-y-auto">
           {children}
+          <Footer />
         </main>
       </div>
     </div>
