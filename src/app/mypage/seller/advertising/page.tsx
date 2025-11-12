@@ -129,11 +129,20 @@ export default function AdvertisingPage() {
 
       {/* 크레딧 정보 */}
       <div className="bg-white rounded-lg shadow p-6 mb-6">
-        <h2 className="text-xl font-bold mb-4">💰 광고 크레딧</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold">광고 크레딧</h2>
+          <button
+            onClick={() => window.location.href = '/mypage/seller/advertising/charge'}
+            className="px-6 py-2.5 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+          >
+            <i className="fas fa-plus mr-2"></i>
+            크레딧 충전
+          </button>
+        </div>
         <div className="space-y-2">
           <div className="flex justify-between">
             <span className="text-gray-600">현재 잔액</span>
-            <span className="text-2xl font-bold text-blue-600">
+            <span className="text-2xl font-bold text-brand-primary">
               {dashboard?.credits?.total.toLocaleString()}원
             </span>
           </div>
@@ -155,7 +164,7 @@ export default function AdvertisingPage() {
 
       {/* 활성 광고 */}
       <div className="bg-white rounded-lg shadow p-6 mb-6">
-        <h2 className="text-xl font-bold mb-4">📊 활성 광고</h2>
+        <h2 className="text-xl font-bold mb-4">활성 광고</h2>
         {dashboard?.subscriptions && dashboard.subscriptions.length > 0 ? (
           <div className="space-y-4">
             {dashboard.subscriptions.map(sub => (
@@ -199,7 +208,7 @@ export default function AdvertisingPage() {
       {/* 새 광고 시작 */}
       {services.length > 0 && (
         <div className="bg-white rounded-lg shadow p-6 mb-6">
-          <h2 className="text-xl font-bold mb-4">✨ 새 서비스 광고 시작</h2>
+          <h2 className="text-xl font-bold mb-4">새 서비스 광고 시작</h2>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2">서비스 선택</label>
@@ -248,7 +257,7 @@ export default function AdvertisingPage() {
 
       {/* 이번 달 통계 */}
       <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-bold mb-4">📈 이번 달 통계</h2>
+        <h2 className="text-xl font-bold mb-4">이번 달 통계</h2>
         <div className="grid grid-cols-3 gap-4">
           <div className="text-center">
             <div className="text-2xl font-bold text-blue-600">

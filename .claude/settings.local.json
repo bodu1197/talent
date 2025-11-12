@@ -44,7 +44,8 @@
       "Bash(node scripts/export-supabase-schema.js:*)",
       "Bash(tee:*)",
       "mcp__sequential-thinking__sequentialthinking",
-      "Bash(node scripts/fix-color-hardcoding.js:*)"
+      "Bash(node scripts/fix-color-hardcoding.js:*)",
+      "Bash(nul)"
     ],
     "deny": [],
     "ask": []

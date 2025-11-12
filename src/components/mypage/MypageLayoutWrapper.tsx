@@ -17,13 +17,11 @@ interface MypageLayoutWrapperProps {
 export default function MypageLayoutWrapper({ mode, sellerData, children }: MypageLayoutWrapperProps) {
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-16 lg:pt-[86px] absolute inset-0 top-[86px]">
-      <div className="flex w-full max-w-[1200px]">
+      <div className="flex w-full max-w-[1200px] h-full">
         <MobileSidebar mode={mode} />
         <Sidebar mode={mode} sellerData={sellerData} />
-        <main className="flex-1 overflow-y-auto flex flex-col">
-          <div className="flex-1">
-            {children}
-          </div>
+        <main className="flex-1 overflow-y-auto">
+          {children}
           <Footer />
         </main>
       </div>
