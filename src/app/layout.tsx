@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
+import { Suspense } from "react";
 import "./globals.css";
 import "@fontsource/noto-sans-kr/300.css";
 import "@fontsource/noto-sans-kr/400.css";
@@ -13,6 +14,7 @@ import { ChatUnreadProvider } from "@/components/providers/ChatUnreadProvider";
 import { ErrorBoundary } from "@/components/providers/ErrorBoundary";
 import ConditionalLayout from "@/components/layout/ConditionalLayout";
 import ConditionalMegaMenuWrapper from "@/components/layout/ConditionalMegaMenuWrapper";
+import { PageViewTracker } from "@/components/analytics/PageViewTracker";
 
 export const metadata: Metadata = {
   title: "돌파구 - 수수료 0원 재능 거래 플랫폼 | 판매자·구매자 모두 무료",
@@ -112,6 +114,9 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-gray-50 overflow-x-hidden">
         <ErrorBoundary>
+          <Suspense fallback={null}>
+            <PageViewTracker />
+          </Suspense>
           <AuthProvider>
             <ChatUnreadProvider>
               <ConditionalLayout megaMenu={<ConditionalMegaMenuWrapper />}>
