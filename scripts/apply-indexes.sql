@@ -47,11 +47,6 @@ CREATE INDEX IF NOT EXISTS idx_chat_messages_unread
 CREATE INDEX IF NOT EXISTS idx_chat_messages_sender
   ON chat_messages(sender_id);
 
--- Index for deleted messages (soft delete)
-CREATE INDEX IF NOT EXISTS idx_chat_messages_not_deleted
-  ON chat_messages(room_id, created_at DESC)
-  WHERE deleted_at IS NULL;
-
 -- Composite index for room + sender (for permission checks)
 CREATE INDEX IF NOT EXISTS idx_chat_messages_room_sender
   ON chat_messages(room_id, sender_id);
@@ -190,31 +185,25 @@ CREATE INDEX IF NOT EXISTS idx_services_seller_id
 -- Index for active services (most common public query)
 CREATE INDEX IF NOT EXISTS idx_services_active
   ON services(created_at DESC)
-  WHERE status = 'active' AND deleted_at IS NULL;
+  WHERE status = 'active';
 
 -- Index for filtering by status
 CREATE INDEX IF NOT EXISTS idx_services_status
-  ON services(status, created_at DESC)
-  WHERE deleted_at IS NULL;
+  ON services(status, created_at DESC);
 
 -- Index for finding services by category
 CREATE INDEX IF NOT EXISTS idx_services_category_id
   ON services(category_id, created_at DESC)
-  WHERE status = 'active' AND deleted_at IS NULL;
+  WHERE status = 'active';
 
 -- Index for seller + status queries
 CREATE INDEX IF NOT EXISTS idx_services_seller_status
   ON services(seller_id, status, created_at DESC);
 
--- Index for soft-deleted services
-CREATE INDEX IF NOT EXISTS idx_services_deleted
-  ON services(deleted_at)
-  WHERE deleted_at IS NOT NULL;
-
 -- Index for price range queries
 CREATE INDEX IF NOT EXISTS idx_services_price
   ON services(min_price, max_price)
-  WHERE status = 'active' AND deleted_at IS NULL;
+  WHERE status = 'active';
 
 -- Index for popular services (by view count, if column exists)
 DO $$
@@ -225,7 +214,7 @@ BEGIN
   ) THEN
     CREATE INDEX IF NOT EXISTS idx_services_popular
       ON services(view_count DESC)
-      WHERE status = 'active' AND deleted_at IS NULL;
+      WHERE status = 'active';
   END IF;
 END $$;
 
@@ -353,8 +342,7 @@ BEGIN
 
     -- Index for favorite count queries
     CREATE INDEX IF NOT EXISTS idx_favorites_count
-      ON favorites(service_id)
-      WHERE deleted_at IS NULL;
+      ON favorites(service_id);
   END IF;
 END $$;
 
