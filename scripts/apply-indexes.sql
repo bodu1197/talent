@@ -36,11 +36,11 @@ CREATE INDEX IF NOT EXISTS idx_chat_rooms_user2_last_message
 
 -- Index for finding messages by chat room (with ordering)
 CREATE INDEX IF NOT EXISTS idx_chat_messages_room_created
-  ON chat_messages(chat_room_id, created_at DESC);
+  ON chat_messages(room_id, created_at DESC);
 
 -- Index for finding unread messages
 CREATE INDEX IF NOT EXISTS idx_chat_messages_unread
-  ON chat_messages(chat_room_id, is_read)
+  ON chat_messages(room_id, is_read)
   WHERE is_read = false;
 
 -- Index for finding messages by sender
@@ -49,12 +49,12 @@ CREATE INDEX IF NOT EXISTS idx_chat_messages_sender
 
 -- Index for deleted messages (soft delete)
 CREATE INDEX IF NOT EXISTS idx_chat_messages_not_deleted
-  ON chat_messages(chat_room_id, created_at DESC)
+  ON chat_messages(room_id, created_at DESC)
   WHERE deleted_at IS NULL;
 
 -- Composite index for room + sender (for permission checks)
 CREATE INDEX IF NOT EXISTS idx_chat_messages_room_sender
-  ON chat_messages(chat_room_id, sender_id);
+  ON chat_messages(room_id, sender_id);
 
 -- =====================================================
 -- CHAT_PARTICIPANTS INDEXES (if table exists)
@@ -69,7 +69,7 @@ BEGIN
   ) THEN
     -- Index for finding participants by chat room
     CREATE INDEX IF NOT EXISTS idx_chat_participants_room
-      ON chat_participants(chat_room_id);
+      ON chat_participants(room_id);
 
     -- Index for finding chat rooms by user
     CREATE INDEX IF NOT EXISTS idx_chat_participants_user
@@ -77,7 +77,7 @@ BEGIN
 
     -- Composite index for room + user (for permission checks)
     CREATE INDEX IF NOT EXISTS idx_chat_participants_room_user
-      ON chat_participants(chat_room_id, user_id);
+      ON chat_participants(room_id, user_id);
 
     -- Index for unread count queries
     CREATE INDEX IF NOT EXISTS idx_chat_participants_unread
