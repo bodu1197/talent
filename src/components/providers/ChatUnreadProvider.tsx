@@ -52,7 +52,6 @@ export function ChatUnreadProvider({ children }: { children: ReactNode }) {
       oscillator.start(audioContext.currentTime)
       oscillator.stop(audioContext.currentTime + 0.3)
 
-      console.log('[ChatUnreadProvider] Notification sound played')
     } catch (error) {
       console.error('Notification sound error:', error)
     }
@@ -88,7 +87,6 @@ export function ChatUnreadProvider({ children }: { children: ReactNode }) {
         .or(`user1_id.eq.${userId},user2_id.eq.${userId}`)
 
       const roomIds = rooms?.map(r => r.id) || []
-      console.log('[ChatUnreadProvider] My room IDs:', roomIds)
       setMyRoomIds(roomIds)
     } catch (error) {
       console.error('[ChatUnreadProvider] Failed to fetch rooms:', error)
@@ -99,7 +97,6 @@ export function ChatUnreadProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const initUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
-      console.log('[ChatUnreadProvider] User:', user?.id)
       if (user) {
         setUserId(user.id)
         fetchUnreadCount()
@@ -120,13 +117,8 @@ export function ChatUnreadProvider({ children }: { children: ReactNode }) {
   // 실시간 메시지 구독
   useEffect(() => {
     if (!userId || myRoomIds.length === 0) {
-      console.log('[ChatUnreadProvider] No userId or rooms, skipping subscription')
       return
     }
-
-    console.log('[ChatUnreadProvider] 🔔 Setting up realtime subscription')
-    console.log('[ChatUnreadProvider] User ID:', userId)
-    console.log('[ChatUnreadProvider] Monitoring rooms:', myRoomIds)
 
     const channel = supabase
       .channel(`chat_notifications_${userId}`)
@@ -139,23 +131,10 @@ export function ChatUnreadProvider({ children }: { children: ReactNode }) {
         },
         async (payload) => {
           const newMessage = payload.new as any
-          console.log('[ChatUnreadProvider] ====== 🔔 REALTIME EVENT ======')
-          console.log('[ChatUnreadProvider] Message ID:', newMessage.id)
-          console.log('[ChatUnreadProvider] Room ID:', newMessage.room_id)
-          console.log('[ChatUnreadProvider] Sender:', newMessage.sender_id)
-          console.log('[ChatUnreadProvider] Current User:', userId)
-          console.log('[ChatUnreadProvider] Is my room?', myRoomIds.includes(newMessage.room_id))
-          console.log('[ChatUnreadProvider] Is from other user?', newMessage.sender_id !== userId)
 
           // 내 채팅방이면서 내가 보낸 메시지가 아닌 경우에만 알림
           if (myRoomIds.includes(newMessage.room_id) && newMessage.sender_id !== userId) {
-            console.log('[ChatUnreadProvider] ✅ INCREMENTING COUNT!')
-
-            setUnreadCount(prev => {
-              const newCount = prev + 1
-              console.log('[ChatUnreadProvider] 📊 Count updated:', prev, '→', newCount)
-              return newCount
-            })
+            setUnreadCount(prev => prev + 1)
 
             // 알림음 재생
             await playNotificationSound()
@@ -167,31 +146,19 @@ export function ChatUnreadProvider({ children }: { children: ReactNode }) {
                 icon: '/favicon.ico'
               })
             }
-          } else {
-            console.log('[ChatUnreadProvider] ⏭️ Ignoring message')
           }
         }
       )
-      .subscribe((status) => {
-        console.log('[ChatUnreadProvider] ====== SUBSCRIPTION STATUS:', status, '======')
-        if (status === 'SUBSCRIBED') {
-          console.log('[ChatUnreadProvider] ✅ Successfully subscribed to realtime updates')
-        }
-      })
+      .subscribe()
 
     return () => {
-      console.log('[ChatUnreadProvider] Cleaning up subscription')
       supabase.removeChannel(channel)
     }
   }, [userId, myRoomIds, supabase, playNotificationSound, hasPermission])
 
   // 카운트 감소 함수
   const decrementCount = useCallback((amount: number) => {
-    setUnreadCount(prev => {
-      const newCount = Math.max(0, prev - amount)
-      console.log('[ChatUnreadProvider] 📉 Decrementing count:', prev, '→', newCount, '(amount:', amount, ')')
-      return newCount
-    })
+    setUnreadCount(prev => Math.max(0, prev - amount))
   }, [])
 
   const value = useMemo(() => ({

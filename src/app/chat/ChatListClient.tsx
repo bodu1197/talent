@@ -75,13 +75,6 @@ export default function ChatListClient({ userId, sellerId }: Props) {
       const response = await fetch('/api/chat/rooms')
       if (response.ok) {
         const data = await response.json()
-        console.log('[ChatListClient] Loaded rooms:', data.rooms)
-
-        // 디버깅: 읽지 않은 메시지 수 확인
-        data.rooms?.forEach((room: ChatRoom) => {
-          console.log(`[ChatListClient] Room ${room.id.substring(0, 8)}: unreadCount=${room.unreadCount}`)
-        })
-
         setRooms(data.rooms || [])
       } else {
         const error = await response.json()
@@ -152,8 +145,6 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     const currentRoom = rooms.find(r => r.id === roomId)
     const unreadInThisRoom = currentRoom?.unreadCount || 0
 
-    console.log('[ChatListClient] 📍 Selecting room:', roomId, 'unread:', unreadInThisRoom)
-
     // 즉시 UI 업데이트 (배지 제거)
     setRooms(prevRooms =>
       prevRooms.map(room =>
@@ -165,7 +156,6 @@ export default function ChatListClient({ userId, sellerId }: Props) {
 
     // 전역 카운트도 즉시 감소 (헤더 배지 업데이트)
     if (unreadInThisRoom > 0) {
-      console.log('[ChatListClient] 📉 Decrementing global count by:', unreadInThisRoom)
       decrementCount(unreadInThisRoom)
     }
 
@@ -192,17 +182,13 @@ export default function ChatListClient({ userId, sellerId }: Props) {
   // 읽지 않은 메시지를 읽음 처리
   const markMessagesAsRead = async (roomId: string) => {
     try {
-      console.log('[ChatListClient] Marking messages as read for room:', roomId)
-      const response = await fetch('/api/chat/messages/mark-read', {
+      await fetch('/api/chat/messages/mark-read', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ room_id: roomId })
       })
-      const data = await response.json()
-      console.log('[ChatListClient] Mark-read response:', data)
-      // refreshCount 호출 제거 - DB 재조회 방지
     } catch (error) {
       console.error('[ChatListClient] Mark messages as read error:', error)
     }
@@ -343,8 +329,6 @@ export default function ChatListClient({ userId, sellerId }: Props) {
 
   // 채팅방 목록의 unreadCount 실시간 업데이트
   useEffect(() => {
-    console.log('[ChatListClient] Setting up global message subscription for user:', userId)
-
     const channel = supabase
       .channel(`chat_list_updates_${userId}`)
       .on(
@@ -356,25 +340,16 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         },
         async (payload) => {
           const newMsg = payload.new as Message
-          console.log('[ChatListClient] ====== NEW MESSAGE EVENT ======')
-          console.log('[ChatListClient] Message ID:', newMsg.id)
-          console.log('[ChatListClient] Room ID:', newMsg.room_id)
-          console.log('[ChatListClient] Sender:', newMsg.sender_id)
-          console.log('[ChatListClient] Current User:', userId)
 
           // 내가 보낸 메시지가 아닌 경우에만 unreadCount 증가
           if (newMsg.sender_id !== userId) {
-            console.log('[ChatListClient] ✅ Message from other user - updating room unreadCount')
-
             // 해당 채팅방의 unreadCount 증가
             setRooms(prevRooms => {
               const updatedRooms = prevRooms.map(room => {
                 if (room.id === newMsg.room_id) {
-                  const newUnreadCount = (room.unreadCount || 0) + 1
-                  console.log(`[ChatListClient] Room ${room.id.substring(0, 8)} unreadCount: ${room.unreadCount || 0} → ${newUnreadCount}`)
                   return {
                     ...room,
-                    unreadCount: newUnreadCount,
+                    unreadCount: (room.unreadCount || 0) + 1,
                     last_message_at: newMsg.created_at
                   }
                 }
@@ -386,17 +361,12 @@ export default function ChatListClient({ userId, sellerId }: Props) {
                 new Date(b.last_message_at).getTime() - new Date(a.last_message_at).getTime()
               )
             })
-          } else {
-            console.log('[ChatListClient] ⏭️ Message from myself - ignoring')
           }
         }
       )
-      .subscribe((status) => {
-        console.log('[ChatListClient] ====== SUBSCRIPTION STATUS:', status, '======')
-      })
+      .subscribe()
 
     return () => {
-      console.log('[ChatListClient] Cleaning up global message subscription')
       supabase.removeChannel(channel)
     }
   }, [userId, supabase])
