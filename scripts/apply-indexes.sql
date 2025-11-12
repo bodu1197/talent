@@ -142,22 +142,6 @@ CREATE INDEX IF NOT EXISTS idx_services_popular
   WHERE status = 'active';
 
 -- =====================================================
--- SERVICE_PACKAGES INDEXES
--- =====================================================
-
--- Index for finding packages by service
-CREATE INDEX IF NOT EXISTS idx_service_packages_service_id
-  ON service_packages(service_id, display_order);
-
--- Index for package type filtering
-CREATE INDEX IF NOT EXISTS idx_service_packages_type
-  ON service_packages(package_type);
-
--- Composite index for service + active packages
-CREATE INDEX IF NOT EXISTS idx_service_packages_service_active
-  ON service_packages(service_id, is_active, display_order);
-
--- =====================================================
 -- REVIEWS INDEXES
 -- =====================================================
 
