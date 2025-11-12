@@ -1,27 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-
-// Rate Limiting
-// ⚠️ 개선 필요: In-memory 방식은 Vercel 서버리스 환경에서 각 요청이 새 인스턴스를 사용하므로 효과가 제한적입니다.
-// 프로덕션 환경에서는 Redis (Upstash 등) 기반 Rate Limiting 사용을 권장합니다.
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
-
-function checkRateLimit(userId: string, maxRequests = 10, windowMs = 60000): boolean {
-  const now = Date.now()
-  const userLimit = rateLimitMap.get(userId)
-
-  if (!userLimit || userLimit.resetAt < now) {
-    rateLimitMap.set(userId, { count: 1, resetAt: now + windowMs })
-    return true
-  }
-
-  if (userLimit.count >= maxRequests) {
-    return false
-  }
-
-  userLimit.count++
-  return true
-}
+import { directPurchaseRateLimit, checkRateLimit } from '@/lib/rate-limit'
+import { createOrderWithIdempotency } from '@/lib/transaction'
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,9 +12,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 })
     }
 
-    // Rate Limiting
-    if (!checkRateLimit(user.id)) {
-      return NextResponse.json({ error: '너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.' }, { status: 429 })
+    // Redis 기반 Rate Limiting 체크
+    const rateLimitResult = await checkRateLimit(user.id, directPurchaseRateLimit)
+    if (!rateLimitResult.success) {
+      return rateLimitResult.error!
     }
 
     const body = await request.json()
@@ -87,17 +68,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '서비스 가격과 일치하지 않습니다' }, { status: 400 })
     }
 
-    // 주문 생성 (pending_payment 상태)
-    // ⚠️ Race Condition 가능: 동시 요청 시 중복 주문 생성 가능
-    // 개선 방안: DB에 유니크 제약 조건 추가 또는 트랜잭션 처리
+    // 주문 생성 (Idempotency 보장 - Race Condition 방지)
+    // merchant_uid를 Idempotency Key로 사용하여 중복 주문 방지
     const merchantUid = `order_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
 
     // 납품 예정일 계산 (형식적, 실제로는 판매자 작업 완료 선언이 중요)
     const deliveryDate = new Date(Date.now() + (delivery_days || service.delivery_days || 7) * 24 * 60 * 60 * 1000)
 
-    const { data: order, error: orderError } = await supabase
-      .from('orders')
-      .insert({
+    const { data: order, error: orderError, isExisting } = await createOrderWithIdempotency(
+      supabase,
+      {
         buyer_id: user.id,
         seller_id: seller.user_id, // users.id를 참조 (sellers.id가 아님)
         service_id: service_id,
@@ -113,10 +93,9 @@ export async function POST(request: NextRequest) {
         revision_count: revision_count || service.revision_count,
         delivery_date: deliveryDate.toISOString(),
         status: 'pending_payment',
-        merchant_uid: merchantUid
-      })
-      .select()
-      .single()
+      },
+      merchantUid
+    )
 
     if (orderError) {
       // 보안: 서버 로그에만 상세 정보 기록, 클라이언트에는 일반 메시지만 반환

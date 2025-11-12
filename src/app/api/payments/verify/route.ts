@@ -1,28 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { notifyPaymentReceived } from '@/lib/notifications'
-
-// Rate Limiting을 위한 간단한 인메모리 캐시
-// ⚠️ 개선 필요: In-memory 방식은 Vercel 서버리스 환경에서 효과가 제한적입니다.
-// 프로덕션에서는 Redis (Upstash 등) 사용을 권장합니다.
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
-
-function checkRateLimit(userId: string, maxRequests = 5, windowMs = 60000): boolean {
-  const now = Date.now()
-  const userLimit = rateLimitMap.get(userId)
-
-  if (!userLimit || userLimit.resetAt < now) {
-    rateLimitMap.set(userId, { count: 1, resetAt: now + windowMs })
-    return true
-  }
-
-  if (userLimit.count >= maxRequests) {
-    return false
-  }
-
-  userLimit.count++
-  return true
-}
+import { paymentVerifyRateLimit, checkRateLimit } from '@/lib/rate-limit'
+import { createPaymentWithIdempotency } from '@/lib/transaction'
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,9 +13,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 })
     }
 
-    // Rate Limiting 체크 (검증은 더 엄격하게)
-    if (!checkRateLimit(user.id, 5)) {
-      return NextResponse.json({ error: '너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.' }, { status: 429 })
+    // Redis 기반 Rate Limiting 체크 (검증은 더 엄격하게: 분당 5회)
+    const rateLimitResult = await checkRateLimit(user.id, paymentVerifyRateLimit)
+    if (!rateLimitResult.success) {
+      return rateLimitResult.error!
     }
 
     const body = await request.json()
@@ -84,23 +65,35 @@ export async function POST(request: NextRequest) {
     //   throw new Error('결제 금액이 일치하지 않습니다')
     // }
 
-    // 결제 기록 생성
-    const { data: payment, error: paymentError } = await supabase
-      .from('payments')
-      .insert({
+    // 결제 기록 생성 (Idempotency 보장 - 중복 결제 방지)
+    const { data: payment, error: paymentError, isExisting } = await createPaymentWithIdempotency(
+      supabase,
+      {
         order_id: order.id,
         amount: order.amount,
         payment_method: 'card', // PortOne에서 받은 정보로 설정
         payment_id: payment_id,
         status: 'completed',
         paid_at: new Date().toISOString()
-      })
-      .select()
-      .single()
+      }
+    )
 
     if (paymentError) {
       console.error('Payment record error:', paymentError)
       return NextResponse.json({ error: '결제 기록 생성 실패' }, { status: 500 })
+    }
+
+    // 이미 존재하는 결제인 경우 (동시 요청으로 인한 중복)
+    if (isExisting) {
+      console.log(`[Idempotency] Returning existing payment result for order: ${order.id}`)
+      return NextResponse.json({
+        success: true,
+        order: {
+          id: order.id,
+          status: order.status,
+          payment_id: payment.id
+        }
+      })
     }
 
     // 주문 상태 업데이트

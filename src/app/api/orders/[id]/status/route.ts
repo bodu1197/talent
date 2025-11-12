@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { orderStatusRateLimit, checkRateLimit } from '@/lib/rate-limit'
 
 // 주문 상태 전환 규칙 (보안: 임의 상태 변경 방지)
 const ALLOWED_TRANSITIONS: Record<string, Record<string, string[]>> = {
@@ -43,6 +44,12 @@ export async function PATCH(
 
     if (authError || !user) {
       return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 })
+    }
+
+    // Redis 기반 Rate Limiting 체크
+    const rateLimitResult = await checkRateLimit(user.id, orderStatusRateLimit)
+    if (!rateLimitResult.success) {
+      return rateLimitResult.error!
     }
 
     const { status: newStatus } = await request.json()
