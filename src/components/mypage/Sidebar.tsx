@@ -58,6 +58,11 @@ const sellerNavItems: NavItem[] = [
     ]
   },
   {
+    label: '광고 관리',
+    href: '/mypage/seller/advertising',
+    icon: 'fa-bullhorn'
+  },
+  {
     label: '리뷰 관리',
     href: '/mypage/seller/reviews',
     icon: 'fa-star',
