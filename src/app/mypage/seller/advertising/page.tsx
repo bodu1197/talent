@@ -127,38 +127,82 @@ export default function AdvertisingPage() {
       <div className="container mx-auto p-6 max-w-6xl">
       <h1 className="text-3xl font-bold mb-8">광고 관리</h1>
 
-      {/* 크레딧 정보 */}
+      {/* 광고 구독 플랜 선택 */}
       <div className="bg-white rounded-lg shadow p-6 mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold">광고 크레딧</h2>
-          <button
-            onClick={() => window.location.href = '/mypage/seller/advertising/charge'}
-            className="px-6 py-2.5 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
-          >
-            <i className="fas fa-plus mr-2"></i>
-            크레딧 충전
-          </button>
-        </div>
-        <div className="space-y-2">
-          <div className="flex justify-between">
-            <span className="text-gray-600">현재 잔액</span>
-            <span className="text-2xl font-bold text-brand-primary">
-              {dashboard?.credits?.total.toLocaleString()}원
-            </span>
-          </div>
-          {dashboard?.credits?.promotional && dashboard.credits.promotional > 0 && (
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-500">프로모션 크레딧</span>
-              <span className="text-gray-700">
-                {dashboard.credits.promotional.toLocaleString()}원
-                {dashboard.credits.expiresAt && (
-                  <span className="ml-2 text-xs">
-                    (만료: {new Date(dashboard.credits.expiresAt).toLocaleDateString()})
+        <h2 className="text-xl font-bold mb-6">광고 구독 플랜</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          {[
+            { months: 1, price: 150000, monthlyPrice: 150000 },
+            { months: 3, price: 420000, monthlyPrice: 140000, discount: 10000 },
+            { months: 6, price: 600000, monthlyPrice: 100000, discount: 50000, popular: true }
+          ].map((plan) => (
+            <div
+              key={plan.months}
+              className={`relative border-2 rounded-lg p-6 cursor-pointer transition-all ${
+                plan.popular
+                  ? 'border-brand-primary shadow-lg'
+                  : 'border-gray-200 hover:border-brand-primary'
+              }`}
+            >
+              {plan.popular && (
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-brand-primary text-white px-4 py-1 rounded-full text-xs font-medium">
+                    추천
                   </span>
+                </div>
+              )}
+              <div className="text-center mb-4">
+                <div className="text-3xl font-bold text-gray-900 mb-2">
+                  {plan.months}개월
+                </div>
+                {plan.discount && (
+                  <div className="text-sm text-red-600 font-medium mb-1">
+                    월 {plan.discount.toLocaleString()}원 할인
+                  </div>
                 )}
-              </span>
+                <div className="text-sm text-gray-500">
+                  월 {plan.monthlyPrice.toLocaleString()}원
+                </div>
+              </div>
+              <div className="text-center mb-4">
+                <div className="text-2xl font-bold text-brand-primary">
+                  {plan.price.toLocaleString()}원
+                </div>
+                <div className="text-xs text-gray-500 mt-1">
+                  {plan.months}개월 총액
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  alert(`${plan.months}개월 플랜 구매 기능은 준비중입니다`)
+                }}
+                className="w-full py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+              >
+                구독하기
+              </button>
             </div>
-          )}
+          ))}
+        </div>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <h3 className="font-bold text-sm mb-2">광고 혜택</h3>
+          <ul className="space-y-1 text-sm text-gray-700">
+            <li className="flex items-start gap-2">
+              <i className="fas fa-check text-green-600 mt-1"></i>
+              <span>카테고리 1페이지 완전 랜덤 노출</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <i className="fas fa-check text-green-600 mt-1"></i>
+              <span>무제한 노출 및 클릭</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <i className="fas fa-check text-green-600 mt-1"></i>
+              <span>모든 광고 100% 공평한 기회</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <i className="fas fa-check text-green-600 mt-1"></i>
+              <span>장기 구독 시 월 비용 할인</span>
+            </li>
+          </ul>
         </div>
       </div>
 
@@ -208,7 +252,7 @@ export default function AdvertisingPage() {
       {/* 새 광고 시작 */}
       {services.length > 0 && (
         <div className="bg-white rounded-lg shadow p-6 mb-6">
-          <h2 className="text-xl font-bold mb-4">새 서비스 광고 시작</h2>
+          <h2 className="text-xl font-bold mb-4">광고할 서비스 선택</h2>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2">서비스 선택</label>
@@ -226,28 +270,10 @@ export default function AdvertisingPage() {
               </select>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded p-4">
-              <h3 className="font-bold mb-2">광고 플랜 정보</h3>
-              <ul className="space-y-1 text-sm">
-                <li>✓ 월 100,000원 정액제</li>
-                <li>✓ 카테고리 1페이지 완전 랜덤 노출</li>
-                <li>✓ 무제한 노출 및 클릭</li>
-                <li>✓ 모든 광고 100% 공평한 기회</li>
-              </ul>
-              <p className="mt-3 text-xs text-gray-600">
-                * 크레딧 잔액: {dashboard?.credits?.total.toLocaleString()}원
-                {dashboard?.credits && dashboard.credits.total >= 100000 && (
-                  <span className="ml-2 text-green-600 font-medium">
-                    (즉시 광고 시작 가능)
-                  </span>
-                )}
-              </p>
-            </div>
-
             <button
               onClick={handleStartAdvertising}
               disabled={!selectedService}
-              className="w-full bg-blue-600 text-white py-3 rounded font-bold hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="w-full bg-brand-primary text-white py-3 rounded-lg font-bold hover:bg-[#1a4d8f] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
             >
               광고 시작하기
             </button>
