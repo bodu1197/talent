@@ -161,10 +161,6 @@ CREATE INDEX IF NOT EXISTS idx_notifications_unread
 CREATE INDEX IF NOT EXISTS idx_notifications_type
   ON notifications(user_id, type, created_at DESC);
 
--- Index for finding notifications by related entity
-CREATE INDEX IF NOT EXISTS idx_notifications_entity
-  ON notifications(entity_type, entity_id);
-
 -- Composite index for user + type + read status
 CREATE INDEX IF NOT EXISTS idx_notifications_user_type_read
   ON notifications(user_id, type, is_read, created_at DESC);
@@ -200,23 +196,10 @@ CREATE INDEX IF NOT EXISTS idx_services_category_id
 CREATE INDEX IF NOT EXISTS idx_services_seller_status
   ON services(seller_id, status, created_at DESC);
 
--- Index for price range queries
-CREATE INDEX IF NOT EXISTS idx_services_price
-  ON services(min_price, max_price)
+-- Index for popular services (by views column)
+CREATE INDEX IF NOT EXISTS idx_services_popular
+  ON services(views DESC)
   WHERE status = 'active';
-
--- Index for popular services (by view count, if column exists)
-DO $$
-BEGIN
-  IF EXISTS (
-    SELECT 1 FROM information_schema.columns
-    WHERE table_name = 'services' AND column_name = 'view_count'
-  ) THEN
-    CREATE INDEX IF NOT EXISTS idx_services_popular
-      ON services(view_count DESC)
-      WHERE status = 'active';
-  END IF;
-END $$;
 
 -- =====================================================
 -- SERVICE_PACKAGES INDEXES
