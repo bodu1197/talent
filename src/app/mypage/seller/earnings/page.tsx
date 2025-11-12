@@ -87,5 +87,5 @@ export default async function SellerEarningsPage() {
     .order('updated_at', { ascending: false })
     .limit(10)
 
-  return <SellerEarningsClient earnings={earnings} transactions={transactions || []} sellerData={seller} />
+  return <SellerEarningsClient earnings={earnings} transactions={transactions as any || []} sellerData={seller} />
 }

@@ -49,7 +49,7 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
       alert('반려 메시지가 삭제되었습니다.')
     } catch (err: unknown) {
       logger.error('반려 메시지 삭제 실패:', err)
-      alert('삭제에 실패했습니다: ' + err.message)
+      alert('삭제에 실패했습니다: ' + (err instanceof Error ? err.message : '알 수 없는 오류'))
     }
   }
 
@@ -78,7 +78,7 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
       alert(newStatus === 'active' ? '서비스가 활성화되었습니다.' : '서비스가 일시정지되었습니다.')
     } catch (err: unknown) {
       logger.error('상태 변경 실패:', err)
-      alert('상태 변경에 실패했습니다: ' + err.message)
+      alert('상태 변경에 실패했습니다: ' + (err instanceof Error ? err.message : '알 수 없는 오류'))
     }
   }
 
@@ -117,7 +117,7 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
       alert('서비스가 성공적으로 삭제되었습니다.')
     } catch (err: unknown) {
       logger.error('서비스 삭제 실패:', err)
-      alert('삭제에 실패했습니다: ' + err.message)
+      alert('삭제에 실패했습니다: ' + (err instanceof Error ? err.message : '알 수 없는 오류'))
     }
   }
 

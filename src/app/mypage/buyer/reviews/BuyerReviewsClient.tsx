@@ -10,8 +10,8 @@ import { useRouter } from 'next/navigation'
 import { Order } from '@/types/common'
 
 interface BuyerReviewsClientProps {
-  initialPendingReviews: Order[]
-  initialWrittenReviews: Order[]
+  initialPendingReviews: Partial<Order>[]
+  initialWrittenReviews: Partial<Order>[]
   userId: string
 }
 
@@ -25,7 +25,7 @@ export default function BuyerReviewsClient({
   const tabFromUrl = searchParams.get('tab') || 'pending'
   const [activeTab, setActiveTab] = useState<'pending' | 'written'>(tabFromUrl as 'pending' | 'written')
   const [showWriteModal, setShowWriteModal] = useState(false)
-  const [selectedOrder, setSelectedOrder] = useState<any>(null)
+  const [selectedOrder, setSelectedOrder] = useState<Partial<Order> | null>(null)
   const [rating, setRating] = useState(5)
   const [reviewContent, setReviewContent] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -40,6 +40,11 @@ export default function BuyerReviewsClient({
   const handleSubmitReview = async () => {
     if (!reviewContent.trim()) {
       alert('리뷰 내용을 입력해주세요')
+      return
+    }
+
+    if (!selectedOrder?.id || !selectedOrder?.service_id || !selectedOrder?.seller_id) {
+      alert('주문 정보가 올바르지 않습니다')
       return
     }
 
@@ -146,7 +151,7 @@ export default function BuyerReviewsClient({
                         <div>
                           <h3 className="text-lg font-bold text-gray-900 mb-1">{order.title || order.service?.title}</h3>
                           <div className="text-sm text-gray-600">
-                            판매자: {order.seller?.name} • 주문번호 #{order.order_number || order.id.slice(0, 8)}
+                            판매자: {order.seller?.name} • 주문번호 #{order.order_number || order.id?.slice(0, 8) || 'N/A'}
                           </div>
                         </div>
                       </div>
@@ -212,7 +217,7 @@ export default function BuyerReviewsClient({
                       </div>
 
                       <div className="text-sm text-gray-600 mb-3">
-                        작성일: {new Date(review.created_at).toLocaleDateString('ko-KR')}
+                        작성일: {review.created_at ? new Date(review.created_at).toLocaleDateString('ko-KR') : '-'}
                       </div>
 
                       <p className="text-gray-700 mb-4">{review.comment || ''}</p>

@@ -16,5 +16,5 @@ export default async function BuyerReviewsPage() {
     getBuyerReviews(user.id)
   ])
 
-  return <BuyerReviewsClient initialPendingReviews={pendingReviews} initialWrittenReviews={writtenReviews} userId={user.id} />
+  return <BuyerReviewsClient initialPendingReviews={pendingReviews as any} initialWrittenReviews={writtenReviews as any} userId={user.id} />
 }

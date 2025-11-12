@@ -61,7 +61,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
       alert('주문이 접수되었습니다. 구매자에게 작업 시작 알림이 전송되었습니다.')
     } catch (err: unknown) {
       logger.error('주문 접수 실패:', err)
-      alert('주문 접수에 실패했습니다: ' + err.message)
+      alert('주문 접수에 실패했습니다: ' + (err instanceof Error ? err.message : '알 수 없는 오류'))
     } finally {
       setSubmitting(false)
     }
@@ -81,7 +81,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
       alert('납품이 완료되었습니다')
     } catch (err: unknown) {
       logger.error('납품 실패:', err)
-      alert('납품에 실패했습니다: ' + err.message)
+      alert('납품에 실패했습니다: ' + (err instanceof Error ? err.message : '알 수 없는 오류'))
     } finally {
       setSubmitting(false)
     }

@@ -164,7 +164,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
                         <div className="text-sm font-medium text-gray-900 mb-2">판매자 답변</div>
                         <p className="text-gray-700">{review.reply}</p>
                         <div className="text-xs text-gray-500 mt-2">
-                          {new Date(review.replied_at).toLocaleDateString('ko-KR')}
+                          {review.replied_at ? new Date(review.replied_at).toLocaleDateString('ko-KR') : ''}
                         </div>
                       </div>
                     )}
