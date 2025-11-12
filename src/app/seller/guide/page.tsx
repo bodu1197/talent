@@ -1,4 +1,11 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: '판매자 이용 가이드 - 돌파구 | 수수료 0원으로 재능 판매하기',
+  description: '돌파구에서 재능을 판매하고 100% 수익을 가져가세요! 수수료 0원, 판매자 등록부터 정산까지 모든 과정을 안내합니다.',
+  keywords: '돌파구 판매, 재능 판매 방법, 수수료 0원 판매, 프리랜서 수익, 판매자 가이드',
+}
 
 export default function SellerGuidePage() {
   return (

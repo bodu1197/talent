@@ -2,8 +2,9 @@ import Link from 'next/link'
 import { getTopLevelCategories } from '@/lib/categories'
 
 export const metadata = {
-  title: '전체 카테고리 - AI Talent Hub',
-  description: 'AI 재능 거래 플랫폼의 모든 카테고리를 둘러보세요',
+  title: '전체 카테고리 - 돌파구 | 수수료 0원 재능 거래',
+  description: '디자인, 개발, 마케팅, 생활 서비스 등 다양한 카테고리의 전문가를 만나보세요. 돌파구에서 수수료 부담 없이 원하는 재능을 찾으세요.',
+  keywords: '돌파구 카테고리, 재능 카테고리, 디자인 외주, 개발 외주, 마케팅 대행, 생활 서비스',
 }
 
 export default async function CategoriesPage() {

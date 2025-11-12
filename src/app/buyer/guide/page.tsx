@@ -1,4 +1,11 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: '구매자 이용 가이드 - 돌파구 | 수수료 0원으로 서비스 구매하기',
+  description: '돌파구에서 재능 서비스를 구매하는 방법을 알아보세요. 수수료 0원, 안전한 결제 시스템으로 원하는 서비스를 이용하세요.',
+  keywords: '돌파구 구매, 서비스 구매 방법, 재능 구매, 수수료 없는 구매, 안전 결제',
+}
 
 export default function BuyerGuidePage() {
   return (
