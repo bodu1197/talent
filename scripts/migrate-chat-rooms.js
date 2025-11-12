@@ -1,12 +1,23 @@
 const https = require('https')
+require('dotenv').config({ path: '.env.local' })
 
-const SUPABASE_URL = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co'
-const SUPABASE_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8'
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
+  console.error('❌ Missing required environment variables:')
+  console.error('   - NEXT_PUBLIC_SUPABASE_URL')
+  console.error('   - SUPABASE_SERVICE_ROLE_KEY')
+  console.error('\nPlease check your .env.local file.')
+  process.exit(1)
+}
 
 function executeSQL(query) {
   return new Promise((resolve, reject) => {
+    const hostname = new URL(SUPABASE_URL).hostname
+
     const options = {
-      hostname: 'bpvfkkrlyrjkwgwmfrci.supabase.co',
+      hostname: hostname,
       port: 443,
       path: '/rest/v1/rpc/exec_sql',
       method: 'POST',
