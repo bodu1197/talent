@@ -33,7 +33,13 @@
       "Bash(cat:*)",
       "Bash(node scripts/apply-migration.js:*)",
       "Bash(node scripts/fix-security-definer.js:*)",
-      "Bash(echo $SUPABASE_DB_PASSWORD)"
+      "Bash(echo $SUPABASE_DB_PASSWORD)",
+      "WebFetch(domain:code.claude.com)",
+      "Bash(claude plugin install:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(claude plugin marketplace list:*)",
+      "Bash(npm run test:run:*)",
+      "Bash(mkdir:*)"
     ],
     "deny": [],
     "ask": []
