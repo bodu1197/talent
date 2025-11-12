@@ -42,7 +42,7 @@ const faqs = [
       },
       {
         question: '수수료는 얼마인가요?',
-        answer: '플랫폼 수수료는 거래 금액의 10%입니다. 정산 시 추가 수수료는 없습니다.',
+        answer: '돌파구는 판매자와 구매자 모두 수수료가 0원입니다! 다른 플랫폼과 달리 중개 수수료가 전혀 없어서 판매자는 판매가의 100%를 수익으로 가져갈 수 있고, 구매자는 표시된 가격 그대로 결제하시면 됩니다.',
       },
       {
         question: '정산은 언제 받을 수 있나요?',
@@ -73,8 +73,30 @@ export default function FAQPage() {
     setOpenItems((prev) => ({ ...prev, [key]: !prev[key] }))
   }
 
+  // Schema.org FAQPage 구조화 데이터
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.flatMap(category =>
+      category.items.map(item => ({
+        "@type": "Question",
+        "name": item.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": item.answer
+        }
+      }))
+    )
+  }
+
   return (
     <div className="container-1200 py-16">
+      {/* Schema.org 구조화 데이터 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
       <h1 className="text-3xl font-bold mb-8">자주 묻는 질문</h1>
 
       <div className="max-w-4xl">

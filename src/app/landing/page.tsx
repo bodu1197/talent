@@ -15,6 +15,33 @@ export const metadata: Metadata = {
   },
 }
 
+const landingPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "serviceType": "재능 거래 플랫폼",
+  "provider": {
+    "@type": "Organization",
+    "name": "돌파구"
+  },
+  "areaServed": {
+    "@type": "Country",
+    "name": "대한민국"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "KRW",
+    "description": "판매자 수수료 0원, 구매자 수수료 0원"
+  },
+  "category": [
+    "IT/프로그래밍",
+    "디자인",
+    "마케팅",
+    "생활 서비스",
+    "심부름"
+  ]
+}
+
 const CheckIcon = () => (
   <svg className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
@@ -126,6 +153,12 @@ const ExpertCard = ({ expert }: ExpertCardProps) => (
 export default function LandingPage() {
   return (
     <div className="pb-0">
+      {/* Schema.org 구조화 데이터 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(landingPageSchema) }}
+      />
+
       {/* 히어로 섹션 + 카테고리 (공통) */}
       <HeroWithCategories />
 

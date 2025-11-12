@@ -49,6 +49,48 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const schemaOrgData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "돌파구",
+    "url": "https://talent-zeta.vercel.app",
+    "description": "판매자와 구매자 모두 수수료 0원! 디자인, 영상, 개발, 마케팅 등 다양한 재능을 자유롭게 거래하세요.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://talent-zeta.vercel.app/search?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "돌파구",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://talent-zeta.vercel.app/icon.svg"
+      }
+    }
+  };
+
+  const organizationData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "돌파구",
+    "alternateName": "Dolpagu",
+    "url": "https://talent-zeta.vercel.app",
+    "logo": "https://talent-zeta.vercel.app/icon.svg",
+    "description": "수수료 0원 재능 거래 플랫폼. 판매자와 구매자 모두 중개 수수료 없이 거래할 수 있습니다.",
+    "areaServed": "KR",
+    "serviceType": [
+      "재능 거래",
+      "프리랜서 매칭",
+      "디자인 외주",
+      "개발 외주",
+      "마케팅 대행"
+    ]
+  };
+
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
@@ -58,6 +100,14 @@ export default function RootLayout({
           integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
           crossOrigin="anonymous"
           referrerPolicy="no-referrer"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrgData) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }}
         />
       </head>
       <body className="min-h-screen bg-gray-50 overflow-x-hidden">
