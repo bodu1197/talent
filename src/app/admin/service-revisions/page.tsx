@@ -36,7 +36,7 @@ export default function AdminServiceRevisionsPage() {
         searchQuery
       })
       setRevisions(data)
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('수정 요청 조회 실패:', err)
       setError(err?.message || '수정 요청 목록을 불러오는데 실패했습니다')
     } finally {
@@ -72,7 +72,7 @@ export default function AdminServiceRevisionsPage() {
       alert('수정 요청이 승인되었습니다.')
       loadRevisions()
       loadStatusCounts()
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('승인 실패:', err)
       alert('승인에 실패했습니다: ' + err.message)
     }
@@ -87,7 +87,7 @@ export default function AdminServiceRevisionsPage() {
       alert('수정 요청이 반려되었습니다.')
       loadRevisions()
       loadStatusCounts()
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('반려 실패:', err)
       alert('반려에 실패했습니다: ' + err.message)
     }

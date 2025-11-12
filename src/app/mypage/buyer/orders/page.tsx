@@ -67,7 +67,7 @@ function BuyerOrdersContent() {
 
       const { orders } = await response.json()
       setOrders(orders)
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('주문 조회 실패:', err)
       setError(err.message || '주문 내역을 불러오는데 실패했습니다')
     } finally {
@@ -110,7 +110,7 @@ function BuyerOrdersContent() {
       alert('구매가 확정되었습니다.')
       loadOrders()
       loadStatusCounts()
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('구매 확정 실패:', err)
       alert(err.message || '구매 확정에 실패했습니다')
     }
@@ -138,7 +138,7 @@ function BuyerOrdersContent() {
 
       alert('수정 요청이 전송되었습니다.')
       loadOrders()
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('수정 요청 실패:', err)
       alert(err.message || '수정 요청에 실패했습니다')
     }

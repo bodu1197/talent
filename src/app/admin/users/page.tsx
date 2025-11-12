@@ -36,7 +36,7 @@ export default function AdminUsersPage() {
         searchQuery
       })
       setUsers(data)
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('사용자 조회 실패:', err)
       setError(err.message || '사용자 목록을 불러오는데 실패했습니다')
     } finally {

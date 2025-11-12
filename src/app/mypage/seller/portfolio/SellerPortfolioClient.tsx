@@ -25,7 +25,7 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
       await deletePortfolioItem(itemId)
       setPortfolio(portfolio.filter(item => item.id !== itemId))
       router.refresh()
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('삭제 실패:', err)
       alert('삭제에 실패했습니다')
     } finally {

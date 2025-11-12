@@ -29,7 +29,7 @@ export default function AdminReviewsPage() {
         searchQuery
       })
       setReviews(data)
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('리뷰 조회 실패:', err)
       setError(err.message || '리뷰 목록을 불러오는데 실패했습니다')
     } finally {

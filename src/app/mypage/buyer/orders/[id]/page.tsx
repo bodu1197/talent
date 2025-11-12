@@ -50,7 +50,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
 
       const { order } = await response.json()
       setOrder(order)
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('주문 조회 실패:', err)
       setError(err.message || '주문 정보를 불러오는데 실패했습니다')
     } finally {
@@ -65,7 +65,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
       setShowConfirmModal(false)
       await loadOrder() // Reload to get updated status
       alert('구매가 확정되었습니다')
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('구매 확정 실패:', err)
       alert('구매 확정에 실패했습니다')
     } finally {
@@ -86,7 +86,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
       setRevisionDetails('')
       await loadOrder() // Reload to get updated status
       alert('수정 요청이 전송되었습니다')
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('수정 요청 실패:', err)
       alert('수정 요청에 실패했습니다')
     } finally {
@@ -110,7 +110,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
 
       const data = await response.json()
       window.location.href = `/chat/${data.room.id}`
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('채팅방 생성 실패:', err)
       alert(err.message || '채팅방 생성 중 오류가 발생했습니다')
     } finally {

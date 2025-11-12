@@ -35,7 +35,7 @@ export default function BuyerCouponsPage() {
 
       setCoupons(couponsData)
       setWallet(walletData)
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('쿠폰 데이터 로드 실패:', err)
       setError(err.message || '쿠폰 데이터를 불러오는데 실패했습니다')
     } finally {

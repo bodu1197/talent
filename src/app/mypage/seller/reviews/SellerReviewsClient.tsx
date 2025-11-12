@@ -46,7 +46,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
       setSelectedReview(null)
       router.refresh()
       alert('답변이 등록되었습니다')
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('답변 등록 실패:', err)
       alert('답변 등록에 실패했습니다: ' + err.message)
     } finally {

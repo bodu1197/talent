@@ -7,10 +7,11 @@ import MobileSidebar from '@/components/mypage/MobileSidebar'
 import { createReview } from '@/lib/supabase/mutations/reviews'
 import { logger } from '@/lib/logger'
 import { useRouter } from 'next/navigation'
+import { Order } from '@/types/common'
 
 interface BuyerReviewsClientProps {
-  initialPendingReviews: any[]
-  initialWrittenReviews: any[]
+  initialPendingReviews: Order[]
+  initialWrittenReviews: Order[]
   userId: string
 }
 
@@ -59,7 +60,7 @@ export default function BuyerReviewsClient({
       setReviewContent('')
       refreshData()
       alert('리뷰가 등록되었습니다')
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('리뷰 등록 실패:', err)
       alert('리뷰 등록에 실패했습니다')
     } finally {

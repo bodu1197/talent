@@ -41,7 +41,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
 
       const { order } = await response.json()
       setOrder(order)
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('주문 조회 실패:', err)
       setError(err.message || '주문 정보를 불러오는데 실패했습니다')
     } finally {
@@ -59,7 +59,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
       await updateOrderStatus(orderId, 'in_progress')
       await loadOrder() // 주문 정보 새로고침
       alert('주문이 접수되었습니다. 구매자에게 작업 시작 알림이 전송되었습니다.')
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('주문 접수 실패:', err)
       alert('주문 접수에 실패했습니다: ' + err.message)
     } finally {
@@ -79,7 +79,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
       setShowDeliveryModal(false)
       await loadOrder() // 주문 정보 새로고침
       alert('납품이 완료되었습니다')
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('납품 실패:', err)
       alert('납품에 실패했습니다: ' + err.message)
     } finally {

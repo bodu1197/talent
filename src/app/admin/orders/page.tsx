@@ -39,7 +39,7 @@ export default function AdminOrdersPage() {
         searchQuery
       })
       setOrders(data)
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('주문 조회 실패:', err)
       setError(err.message || '주문 목록을 불러오는데 실패했습니다')
     } finally {

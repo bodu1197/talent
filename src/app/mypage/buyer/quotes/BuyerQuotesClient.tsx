@@ -3,9 +3,10 @@
 import Sidebar from '@/components/mypage/Sidebar'
 import MobileSidebar from '@/components/mypage/MobileSidebar'
 import Link from 'next/link'
+import { Quote } from '@/types/common'
 
 interface BuyerQuotesClientProps {
-  quotes: any[]
+  quotes: Quote[]
 }
 
 export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {

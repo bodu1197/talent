@@ -83,11 +83,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-      id: data?.id,
-      categoryName,
-      isUpdate: !!existing
-    })
-
     // 5. 성공
     return NextResponse.json(
       {

@@ -18,7 +18,7 @@ export default function RevisionDetailClient({ revision }: Props) {
       await approveServiceRevision(revision.id)
       alert('수정 요청이 승인되었습니다.')
       router.push('/admin/services?status=revisions')
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('수정 승인 실패:', err)
       alert('수정 승인에 실패했습니다: ' + err.message)
     }
@@ -32,7 +32,7 @@ export default function RevisionDetailClient({ revision }: Props) {
       await rejectServiceRevision(revision.id, reason)
       alert('수정 요청이 반려되었습니다.')
       router.push('/admin/services?status=revisions')
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('수정 반려 실패:', err)
       alert('수정 반려에 실패했습니다: ' + err.message)
     }

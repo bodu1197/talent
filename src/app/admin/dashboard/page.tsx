@@ -32,9 +32,9 @@ export default function AdminDashboardPage() {
       setStats(statsData)
       setRecentOrders(ordersData)
       setRecentUsers(usersData)
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('대시보드 데이터 로드 실패:', err)
-      setError(err.message || '대시보드 데이터를 불러오는데 실패했습니다')
+      setError(err instanceof Error ? err.message : '대시보드 데이터를 불러오는데 실패했습니다')
     } finally {
       setLoading(false)
     }

@@ -63,7 +63,7 @@ export default function SellerOrdersClient() {
 
       const { orders } = await response.json()
       setOrders(orders)
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('주문 조회 실패:', err)
       setError(err.message || '주문 내역을 불러오는데 실패했습니다')
     } finally {
