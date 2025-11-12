@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { getSellerEarnings } from '@/lib/supabase/queries/earnings'
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/server'
 
-vi.mock('@/lib/supabase/client')
+vi.mock('@/lib/supabase/server')
 
 describe('getSellerEarnings', () => {
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('getSellerEarnings', () => {
       total_earned: 160000,
     }
 
-    vi.mocked(createClient).mockReturnValue({
+    vi.mocked(createClient).mockResolvedValue({
       from: vi.fn(() => ({
         select: vi.fn(() => ({
           eq: vi.fn(() => ({
@@ -35,7 +35,7 @@ describe('getSellerEarnings', () => {
   })
 
   it('판매자가 없으면 null을 반환한다', async () => {
-    vi.mocked(createClient).mockReturnValue({
+    vi.mocked(createClient).mockResolvedValue({
       from: vi.fn(() => ({
         select: vi.fn(() => ({
           eq: vi.fn(() => ({
@@ -52,7 +52,7 @@ describe('getSellerEarnings', () => {
   it('에러 발생 시 throw 한다', async () => {
     const mockError = { message: 'Database error' }
 
-    vi.mocked(createClient).mockReturnValue({
+    vi.mocked(createClient).mockResolvedValue({
       from: vi.fn(() => ({
         select: vi.fn(() => ({
           eq: vi.fn(() => ({

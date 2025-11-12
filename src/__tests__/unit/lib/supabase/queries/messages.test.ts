@@ -14,8 +14,8 @@ describe('getUserConversations', () => {
       {
         id: 'conv-1',
         last_message_preview: '안녕하세요',
-        participant1_unread_count: 0,
-        participant2_unread_count: 2,
+        participant1_unread_count: 2,
+        participant2_unread_count: 0,
         last_message_at: '2025-10-30T10:00:00Z',
         participant1_id: 'user-123',
         participant2_id: 'user-456',

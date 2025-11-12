@@ -11,7 +11,7 @@ export default function ErrorState({
 }: ErrorStateProps) {
   return (
     <div className="text-center py-12">
-      <i className="fas fa-exclamation-triangle text-6xl text-red-500 mb-4"></i>
+      <i className="fas fa-exclamation-circle text-6xl text-red-500 mb-4"></i>
       <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
       <p className="text-gray-600 mb-6">{message}</p>
       {retry && (

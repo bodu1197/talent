@@ -23,7 +23,7 @@ const slides: Slide[] = [
     icon: 'fa-sack-dollar',
     cardTitle: '수수료 0%',
     cardSubtitle: '판매자가 100% 가져갑니다',
-    cardDescription: '당신이 번 돈, 한 푼도 떼지 않습니다. 다른 플랫폼의 15~20% 수수료는 이제 그만. 톨파구에서는 100% 당신의 것입니다.'
+    cardDescription: '당신이 번 돈, 한 푼도 떼지 않습니다. 다른 플랫폼의 15~20% 수수료는 이제 그만. 돌파구에서는 100% 당신의 것입니다.'
   },
   {
     id: 2,
@@ -53,7 +53,7 @@ const slides: Slide[] = [
     icon: 'fa-bullhorn',
     cardTitle: '런칭 기념 1,500만원',
     cardSubtitle: '시작하는 당신에게 드립니다',
-    cardDescription: '런칭 기념, 모든 전문가에게 최대 1,500만원 광고 크레딧 지원. 톨파구 내 광고로 첫 고객을 만나세요.'
+    cardDescription: '런칭 기념, 모든 전문가에게 최대 1,500만원 광고 크레딧 지원. 돌파구 내 광고로 첫 고객을 만나세요.'
   }
 ]
 

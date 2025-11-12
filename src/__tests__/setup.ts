@@ -30,21 +30,32 @@ vi.mock('next/navigation', () => ({
 }))
 
 // Mock Supabase client
-vi.mock('@/lib/supabase/client', () => ({
-  createClient: vi.fn(() => ({
-    auth: {
-      getUser: vi.fn(),
-      signOut: vi.fn(),
-    },
-    from: vi.fn(() => ({
-      select: vi.fn(() => ({
-        eq: vi.fn(() => ({
-          single: vi.fn(),
-        })),
-      })),
+vi.mock('@/lib/supabase/client', () => {
+  const createMockQueryBuilder = () => {
+    const mockBuilder: any = {
+      select: vi.fn(() => mockBuilder),
+      eq: vi.fn(() => mockBuilder),
+      single: vi.fn(() => Promise.resolve({ data: null, error: null })),
+      order: vi.fn(() => mockBuilder),
+      limit: vi.fn(() => mockBuilder),
+      range: vi.fn(() => mockBuilder),
+      insert: vi.fn(() => mockBuilder),
+      update: vi.fn(() => mockBuilder),
+      delete: vi.fn(() => mockBuilder),
+    }
+    return mockBuilder
+  }
+
+  return {
+    createClient: vi.fn(() => ({
+      auth: {
+        getUser: vi.fn(),
+        signOut: vi.fn(),
+      },
+      from: vi.fn(() => createMockQueryBuilder()),
     })),
-  })),
-}))
+  }
+})
 
 // Add custom matchers if needed
 expect.extend({

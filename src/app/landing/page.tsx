@@ -1,6 +1,19 @@
 import HeroWithCategories from '@/components/common/HeroWithCategories'
 import AIServicesShowcase from '@/components/landing/AIServicesShowcase'
 import Link from 'next/link'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: '돌파구 - 수수료 0원 재능 거래 플랫폼 | 판매자·구매자 모두 무료',
+  description: '국내 유일 수수료 0원! 디자인, 개발, 마케팅, 생활 서비스까지. 판매자와 구매자 모두 수수료 부담 없이 자유롭게 거래하세요.',
+  keywords: '돌파구, 재능거래, 수수료0원, 무료플랫폼, 프리랜서마켓, 디자인외주, 개발외주, 마케팅대행, 생활서비스',
+  openGraph: {
+    title: '돌파구 - 수수료 0원! 부담 없이 시작하는 재능 거래',
+    description: '판매자·구매자 모두 수수료 0원! 국내 유일 무료 재능 거래 플랫폼',
+    type: 'website',
+    locale: 'ko_KR',
+  },
+}
 
 const CheckIcon = () => (
   <svg className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -415,17 +428,20 @@ export default function LandingPage() {
         <div className="container-1200 px-4">
           <div className="text-center mb-8 md:mb-16">
             <h2 className="text-xl md:text-4xl font-extrabold text-white tracking-tight">
-              왜 톨파구를 선택해야 할까요?
+              왜 돌파구를 선택해야 할까요?
             </h2>
             <p className="mt-2 md:mt-4 max-w-2xl mx-auto text-sm md:text-lg text-gray-400">
-              구매자와 전문가 모두를 위한 최고의 재능 마켓플레이스
+              <span className="text-yellow-400 font-bold">수수료 0원!</span> 구매자와 전문가 모두를 위한 최고의 재능 마켓플레이스
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-6 md:gap-8 lg:gap-12">
             {/* For Buyers */}
             <div className="bg-gray-800/50 backdrop-blur-sm p-5 md:p-8 rounded-xl md:rounded-2xl border border-gray-700 hover:border-[#0f3460]/50 hover:bg-gray-800/80 transition-all duration-300 transform hover:-translate-y-1">
-              <h3 className="text-lg md:text-2xl font-bold text-white">구매자 (Clients)</h3>
-              <p className="mt-2 text-white/80 text-sm md:text-lg">필요한 모든 재능을 한 곳에서, 빠르고 안전하게 만나보세요.</p>
+              <div className="flex items-center gap-2 mb-2">
+                <h3 className="text-lg md:text-2xl font-bold text-white">구매자 (Clients)</h3>
+                <span className="bg-yellow-400 text-gray-900 text-xs md:text-sm font-bold px-2 py-1 rounded">수수료 0원</span>
+              </div>
+              <p className="mt-2 text-white/80 text-sm md:text-lg">필요한 모든 재능을 한 곳에서, 수수료 부담 없이 빠르고 안전하게 만나보세요.</p>
               <ul className="mt-5 md:mt-8 space-y-4 md:space-y-6">
                 <li className="flex items-start space-x-3 md:space-x-4">
                   <div className="flex-shrink-0">
@@ -441,8 +457,8 @@ export default function LandingPage() {
                     <i className="fas fa-tags text-xl md:text-3xl text-white"></i>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-white text-base md:text-lg">투명한 가격 정책</h4>
-                    <p className="text-white/80 mt-1 text-sm md:text-base leading-relaxed">숨은 비용이나 추가 수수료 걱정 없이, 예산에 맞춰 합리적으로 서비스를 이용하세요.</p>
+                    <h4 className="font-semibold text-white text-base md:text-lg">투명한 가격 정책 (수수료 0원!)</h4>
+                    <p className="text-white/80 mt-1 text-sm md:text-base leading-relaxed">숨은 비용이나 추가 수수료 걱정 없이, 표시된 가격 그대로 결제하세요. 다른 플랫폼과 달리 중개 수수료가 전혀 없습니다.</p>
                   </div>
                 </li>
                 <li className="flex items-start space-x-3 md:space-x-4">
@@ -451,7 +467,7 @@ export default function LandingPage() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-white text-base md:text-lg">안전 결제 시스템</h4>
-                    <p className="text-white/80 mt-1 text-sm md:text-base leading-relaxed">작업이 만족스럽게 완료될 때까지 결제 대금은 톨파구가 안전하게 보호합니다.</p>
+                    <p className="text-white/80 mt-1 text-sm md:text-base leading-relaxed">작업이 만족스럽게 완료될 때까지 결제 대금은 돌파구가 안전하게 보호합니다.</p>
                   </div>
                 </li>
               </ul>
@@ -461,16 +477,19 @@ export default function LandingPage() {
             </div>
             {/* For Sellers */}
             <div className="bg-gray-800/50 backdrop-blur-sm p-5 md:p-8 rounded-xl md:rounded-2xl border border-gray-700 hover:border-gray-500/50 hover:bg-gray-800/80 transition-all duration-300 transform hover:-translate-y-1">
-              <h3 className="text-lg md:text-2xl font-bold text-white">판매자 (Experts)</h3>
-              <p className="mt-2 text-white/80 text-sm md:text-lg">당신의 재능과 전문성을 가치로 바꾸고, 새로운 기회를 만드세요.</p>
+              <div className="flex items-center gap-2 mb-2">
+                <h3 className="text-lg md:text-2xl font-bold text-white">판매자 (Experts)</h3>
+                <span className="bg-yellow-400 text-gray-900 text-xs md:text-sm font-bold px-2 py-1 rounded">수수료 0원</span>
+              </div>
+              <p className="mt-2 text-white/80 text-sm md:text-lg">당신의 재능과 전문성을 가치로 바꾸세요. 판매 수수료 0원으로 수익을 100% 가져가세요!</p>
               <ul className="mt-5 md:mt-8 space-y-4 md:space-y-6">
                 <li className="flex items-start space-x-3 md:space-x-4">
                   <div className="flex-shrink-0">
                     <i className="fas fa-rocket text-xl md:text-3xl text-white"></i>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-white text-base md:text-lg">새로운 수익 창출</h4>
-                    <p className="text-white/80 mt-1 text-sm md:text-base leading-relaxed">재능을 상품으로 등록하고 판매하여 안정적인 부가 수익을 만들 수 있는 기회를 잡으세요.</p>
+                    <h4 className="font-semibold text-white text-base md:text-lg">새로운 수익 창출 (수수료 0원!)</h4>
+                    <p className="text-white/80 mt-1 text-sm md:text-base leading-relaxed">재능을 상품으로 등록하고 판매하세요. 판매 수수료가 전혀 없어서 판매가의 100%를 수익으로 가져갈 수 있습니다.</p>
                   </div>
                 </li>
                 <li className="flex items-start space-x-3 md:space-x-4">

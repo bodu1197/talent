@@ -15,14 +15,27 @@ import ConditionalLayout from "@/components/layout/ConditionalLayout";
 import ConditionalMegaMenuWrapper from "@/components/layout/ConditionalMegaMenuWrapper";
 
 export const metadata: Metadata = {
-  title: "AI Talent Hub - 국내 최대 AI 재능 거래 플랫폼",
-  description: "AI 기술을 활용한 디자인, 영상, 콘텐츠 제작 등 다양한 AI 재능을 거래하는 전문 마켓플레이스",
-  keywords: "AI, 인공지능, 재능거래, Midjourney, ChatGPT, Stable Diffusion, AI디자인, AI영상",
+  title: "돌파구 - 수수료 0원 재능 거래 플랫폼 | 판매자·구매자 모두 무료",
+  description: "판매자와 구매자 모두 수수료 0원! 디자인, 영상, 개발, 마케팅 등 다양한 재능을 자유롭게 거래하세요. 돌파구에서 새로운 기회를 찾아보세요.",
+  keywords: "돌파구, 재능거래, 수수료0원, 무료플랫폼, 프리랜서, 재능마켓, 디자인외주, 영상제작, 개발외주, 마케팅",
   openGraph: {
-    title: "AI Talent Hub",
-    description: "국내 최대 AI 재능 거래 플랫폼",
+    title: "돌파구 - 수수료 0원 재능 거래 플랫폼",
+    description: "판매자·구매자 모두 수수료 0원! 부담 없이 시작하는 재능 거래",
     type: "website",
     locale: "ko_KR",
+    siteName: "돌파구",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "돌파구 - 수수료 0원 재능 거래 플랫폼",
+    description: "판매자·구매자 모두 수수료 0원! 부담 없이 시작하는 재능 거래",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: "https://talent-zeta.vercel.app",
   },
 };
 

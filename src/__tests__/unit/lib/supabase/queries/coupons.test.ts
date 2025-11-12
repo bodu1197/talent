@@ -18,14 +18,15 @@ describe('getUserCoupons', () => {
       },
     ]
 
+    const mockBuilder: any = {
+      select: vi.fn(() => mockBuilder),
+      eq: vi.fn(() => mockBuilder),
+      gte: vi.fn(() => mockBuilder),
+      order: vi.fn(() => Promise.resolve({ data: mockData, error: null })),
+    }
+
     vi.mocked(createClient).mockReturnValue({
-      from: vi.fn(() => ({
-        select: vi.fn(() => ({
-          eq: vi.fn(() => ({
-            order: vi.fn(() => Promise.resolve({ data: mockData, error: null })),
-          })),
-        })),
-      })),
+      from: vi.fn(() => mockBuilder),
     } as any)
 
     const result = await getUserCoupons('user-123')
@@ -35,28 +36,30 @@ describe('getUserCoupons', () => {
   it('에러 발생 시 throw 한다', async () => {
     const mockError = { message: 'Database error' }
 
+    const mockBuilder: any = {
+      select: vi.fn(() => mockBuilder),
+      eq: vi.fn(() => mockBuilder),
+      gte: vi.fn(() => mockBuilder),
+      order: vi.fn(() => Promise.resolve({ data: null, error: mockError })),
+    }
+
     vi.mocked(createClient).mockReturnValue({
-      from: vi.fn(() => ({
-        select: vi.fn(() => ({
-          eq: vi.fn(() => ({
-            order: vi.fn(() => Promise.resolve({ data: null, error: mockError })),
-          })),
-        })),
-      })),
+      from: vi.fn(() => mockBuilder),
     } as any)
 
     await expect(getUserCoupons('user-123')).rejects.toThrow('Database error')
   })
 
   it('빈 배열을 반환할 수 있다', async () => {
+    const mockBuilder: any = {
+      select: vi.fn(() => mockBuilder),
+      eq: vi.fn(() => mockBuilder),
+      gte: vi.fn(() => mockBuilder),
+      order: vi.fn(() => Promise.resolve({ data: [], error: null })),
+    }
+
     vi.mocked(createClient).mockReturnValue({
-      from: vi.fn(() => ({
-        select: vi.fn(() => ({
-          eq: vi.fn(() => ({
-            order: vi.fn(() => Promise.resolve({ data: [], error: null })),
-          })),
-        })),
-      })),
+      from: vi.fn(() => mockBuilder),
     } as any)
 
     const result = await getUserCoupons('user-123')
