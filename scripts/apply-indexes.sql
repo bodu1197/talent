@@ -52,36 +52,6 @@ CREATE INDEX IF NOT EXISTS idx_chat_messages_room_sender
   ON chat_messages(room_id, sender_id);
 
 -- =====================================================
--- CHAT_PARTICIPANTS INDEXES (if table exists)
--- =====================================================
-
-DO $$
-BEGIN
-  IF EXISTS (
-    SELECT 1 FROM information_schema.tables
-    WHERE table_schema = 'public'
-    AND table_name = 'chat_participants'
-  ) THEN
-    -- Index for finding participants by chat room
-    CREATE INDEX IF NOT EXISTS idx_chat_participants_room
-      ON chat_participants(room_id);
-
-    -- Index for finding chat rooms by user
-    CREATE INDEX IF NOT EXISTS idx_chat_participants_user
-      ON chat_participants(user_id);
-
-    -- Composite index for room + user (for permission checks)
-    CREATE INDEX IF NOT EXISTS idx_chat_participants_room_user
-      ON chat_participants(room_id, user_id);
-
-    -- Index for unread count queries
-    CREATE INDEX IF NOT EXISTS idx_chat_participants_unread
-      ON chat_participants(user_id, unread_count)
-      WHERE unread_count > 0;
-  END IF;
-END $$;
-
--- =====================================================
 -- ORDERS INDEXES
 -- =====================================================
 
@@ -118,31 +88,6 @@ CREATE INDEX IF NOT EXISTS idx_orders_completed
 CREATE INDEX IF NOT EXISTS idx_orders_pending_payment
   ON orders(created_at DESC)
   WHERE status = 'pending_payment';
-
--- =====================================================
--- ORDER_ITEMS INDEXES (if table exists)
--- =====================================================
-
-DO $$
-BEGIN
-  IF EXISTS (
-    SELECT 1 FROM information_schema.tables
-    WHERE table_schema = 'public'
-    AND table_name = 'order_items'
-  ) THEN
-    -- Index for finding items by order
-    CREATE INDEX IF NOT EXISTS idx_order_items_order_id
-      ON order_items(order_id);
-
-    -- Index for finding items by service
-    CREATE INDEX IF NOT EXISTS idx_order_items_service_id
-      ON order_items(service_id);
-
-    -- Index for finding items by package
-    CREATE INDEX IF NOT EXISTS idx_order_items_package_id
-      ON order_items(package_id);
-  END IF;
-END $$;
 
 -- =====================================================
 -- NOTIFICATIONS INDEXES
@@ -271,58 +216,20 @@ CREATE INDEX IF NOT EXISTS idx_categories_root
   WHERE parent_id IS NULL AND is_active = true;
 
 -- =====================================================
--- CATEGORY_VISITS INDEXES (if table exists)
+-- FAVORITES INDEXES
 -- =====================================================
 
-DO $$
-BEGIN
-  IF EXISTS (
-    SELECT 1 FROM information_schema.tables
-    WHERE table_schema = 'public'
-    AND table_name = 'category_visits'
-  ) THEN
-    -- Index for finding visits by category
-    CREATE INDEX IF NOT EXISTS idx_category_visits_category_id
-      ON category_visits(category_id, visited_at DESC);
+-- Index for finding favorites by user
+CREATE INDEX IF NOT EXISTS idx_favorites_user_id
+  ON favorites(user_id, created_at DESC);
 
-    -- Index for finding visits by user
-    CREATE INDEX IF NOT EXISTS idx_category_visits_user_id
-      ON category_visits(user_id, visited_at DESC);
+-- Index for finding favorites by service
+CREATE INDEX IF NOT EXISTS idx_favorites_service_id
+  ON favorites(service_id);
 
-    -- Index for analytics queries
-    CREATE INDEX IF NOT EXISTS idx_category_visits_date
-      ON category_visits(visited_at DESC);
-  END IF;
-END $$;
-
--- =====================================================
--- FAVORITES INDEXES (if table exists)
--- =====================================================
-
-DO $$
-BEGIN
-  IF EXISTS (
-    SELECT 1 FROM information_schema.tables
-    WHERE table_schema = 'public'
-    AND table_name = 'favorites'
-  ) THEN
-    -- Index for finding favorites by user
-    CREATE INDEX IF NOT EXISTS idx_favorites_user_id
-      ON favorites(user_id, created_at DESC);
-
-    -- Index for finding favorites by service
-    CREATE INDEX IF NOT EXISTS idx_favorites_service_id
-      ON favorites(service_id);
-
-    -- Composite unique index for user + service
-    CREATE UNIQUE INDEX IF NOT EXISTS idx_favorites_user_service
-      ON favorites(user_id, service_id);
-
-    -- Index for favorite count queries
-    CREATE INDEX IF NOT EXISTS idx_favorites_count
-      ON favorites(service_id);
-  END IF;
-END $$;
+-- Composite unique index for user + service
+CREATE UNIQUE INDEX IF NOT EXISTS idx_favorites_user_service
+  ON favorites(user_id, service_id);
 
 -- =====================================================
 -- 인덱스 생성 확인
