@@ -82,7 +82,6 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
         .from('profiles')
         .getPublicUrl(filePath)
 
-      console.log('Image uploaded successfully:', publicUrl)
       setProfileImage(publicUrl)
       alert('프로필 이미지가 업로드되었습니다.')
     } catch (error) {
@@ -103,10 +102,6 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
         alert('로그인이 필요합니다.')
         return
       }
-
-      console.log('Saving profile for user:', user.id)
-      console.log('Name:', name)
-      console.log('Profile image:', profileImage)
 
       // API를 통해 프로필 업데이트 (RLS 우회)
       const response = await fetch('/api/users/profile', {
@@ -147,7 +142,6 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
         return
       }
 
-      console.log('Profile updated successfully:', result)
       alert('프로필이 저장되었습니다.')
       router.push('/mypage/settings')
     } catch (error: any) {

@@ -97,7 +97,6 @@ export default function NotificationBell() {
           filter: `user_id=eq.${user.id}`
         },
         (payload) => {
-          console.log('[NotificationBell] New notification:', payload)
 
           // 알림 소리 재생
           playNotificationSound()

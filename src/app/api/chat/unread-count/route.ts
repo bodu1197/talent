@@ -40,7 +40,6 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    console.log(`[unread-count] User ${user.id} has ${unreadRoomCount} rooms with unread messages`)
 
     return NextResponse.json({ unreadCount: unreadRoomCount })
   } catch (error) {

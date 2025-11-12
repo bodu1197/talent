@@ -50,7 +50,6 @@ export async function GET(
       order.service = order.service[0]
     }
 
-    console.log('[Order API] Returning order with seller:', order.seller)
 
     return NextResponse.json({ order })
   } catch (error) {
