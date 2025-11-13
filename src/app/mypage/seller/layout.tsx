@@ -19,9 +19,9 @@ export default async function SellerLayout({ children }: { children: React.React
     .eq('user_id', user.id)
     .maybeSingle()
 
-  // 판매자가 아니면 "판매자 되기" 페이지로
+  // 판매자가 아니면 마이페이지로
   if (!seller) {
-    redirect('/become-seller')
+    redirect('/mypage')
   }
 
   return <>{children}</>
