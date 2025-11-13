@@ -45,7 +45,8 @@
       "Bash(tee:*)",
       "mcp__sequential-thinking__sequentialthinking",
       "Bash(node scripts/fix-color-hardcoding.js:*)",
-      "Bash(nul)"
+      "Bash(nul)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []
