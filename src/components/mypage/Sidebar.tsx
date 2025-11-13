@@ -249,43 +249,52 @@ export default function Sidebar({ mode, sellerData }: SidebarProps) {
           {navItems.map((item) => (
             <div key={item.href} className="mb-1">
               {/* 메인 아이템 */}
-              <div
-                className={`flex items-center justify-between px-4 py-2.5 rounded-lg cursor-pointer transition-colors ${
-                  isActive(item.href)
-                    ? 'bg-brand-primary text-white'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-                onClick={() => {
-                  if (item.children) {
-                    toggleExpand(item.href)
-                  }
-                }}
-              >
-                <Link
-                  href={item.href}
-                  className="flex items-center gap-3 flex-1"
-                  onClick={(e) => {
-                    if (item.children) {
-                      e.preventDefault()
-                    }
-                  }}
+              {item.children ? (
+                // 하위 메뉴가 있는 경우: div로 렌더링하고 클릭 시 확장/축소만
+                <div
+                  className={`flex items-center justify-between px-4 py-2.5 rounded-lg cursor-pointer transition-colors ${
+                    isActive(item.href)
+                      ? 'bg-brand-primary text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                  onClick={() => toggleExpand(item.href)}
                 >
-                  <i className={`fas ${item.icon} text-base`}></i>
-                  <span className="text-sm font-medium">{item.label}</span>
-                  {item.badge !== undefined && item.badge > 0 && (
-                    <span className="ml-auto px-2 py-0.5 bg-red-500 text-white text-xs rounded-full badge-pulse">
-                      {item.badge}
-                    </span>
-                  )}
-                </Link>
-                {item.children && (
+                  <div className="flex items-center gap-3 flex-1">
+                    <i className={`fas ${item.icon} text-base`}></i>
+                    <span className="text-sm font-medium">{item.label}</span>
+                    {item.badge !== undefined && item.badge > 0 && (
+                      <span className="ml-auto px-2 py-0.5 bg-red-500 text-white text-xs rounded-full badge-pulse">
+                        {item.badge}
+                      </span>
+                    )}
+                  </div>
                   <i
                     className={`fas fa-chevron-down text-xs transition-transform duration-200 ${
                       expandedItems.has(item.href) ? 'rotate-180' : ''
                     }`}
                   ></i>
-                )}
-              </div>
+                </div>
+              ) : (
+                // 하위 메뉴가 없는 경우: Link로 렌더링하여 정상 네비게이션
+                <Link
+                  href={item.href}
+                  className={`flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors ${
+                    isActive(item.href)
+                      ? 'bg-brand-primary text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <div className="flex items-center gap-3 flex-1">
+                    <i className={`fas ${item.icon} text-base`}></i>
+                    <span className="text-sm font-medium">{item.label}</span>
+                    {item.badge !== undefined && item.badge > 0 && (
+                      <span className="ml-auto px-2 py-0.5 bg-red-500 text-white text-xs rounded-full badge-pulse">
+                        {item.badge}
+                      </span>
+                    )}
+                  </div>
+                </Link>
+              )}
 
               {/* 하위 메뉴 */}
               {item.children && (
