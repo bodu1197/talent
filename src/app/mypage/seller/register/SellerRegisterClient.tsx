@@ -187,12 +187,27 @@ export default function SellerRegisterClient({ userId }: Props) {
         profileImageUrl = publicUrl
       }
 
-      // 2. sellers 테이블에 판매자 정보 등록
+      // 2. profiles 테이블 업데이트 (display_name, profile_image, bio)
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({
+          name: formData.displayName,
+          profile_image: profileImageUrl || null,
+          bio: formData.bio,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', userId)
+
+      if (profileError) {
+        alert(`프로필 업데이트에 실패했습니다.\n\n에러: ${profileError.message}\n코드: ${profileError.code}`)
+        setLoading(false)
+        return
+      }
+
+      // 3. sellers 테이블에 판매자 정보 등록 (display_name, profile_image 제거됨)
       const insertData = {
         user_id: userId,
         real_name: formData.realName,
-        display_name: formData.displayName,
-        profile_image: profileImageUrl || null,
         bio: formData.bio,
         phone: formData.phone,
         show_phone: formData.showPhone,

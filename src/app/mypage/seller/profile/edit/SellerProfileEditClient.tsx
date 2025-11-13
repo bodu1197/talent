@@ -22,12 +22,26 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
       setSaving(true)
       const supabase = createClient()
 
-      const { error } = await supabase
+      // 1. Update profiles table (display_name -> name, bio, profile_image)
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({
+          name: profile.display_name,
+          bio: profile.bio,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', profile.user_id)
+
+      if (profileError) throw profileError
+
+      // 2. Update sellers table (remove display_name, bio, profile_image from update)
+      const { display_name, bio, profile_image, ...sellerData } = profile
+      const { error: sellerError } = await supabase
         .from('sellers')
-        .update(profile)
+        .update(sellerData)
         .eq('id', profile.id)
 
-      if (error) throw error
+      if (sellerError) throw sellerError
 
       alert('프로필이 저장되었습니다')
       router.push('/mypage/seller/profile')

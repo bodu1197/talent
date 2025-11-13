@@ -28,11 +28,26 @@ export default function BecomeSellerForm({ userId }: Props) {
     try {
       const supabase = createClient()
 
+      // 1. Update profiles table with display name
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({
+          name: displayName.trim(),
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', userId)
+
+      if (profileError) {
+        setError('프로필 업데이트에 실패했습니다: ' + profileError.message)
+        setLoading(false)
+        return
+      }
+
+      // 2. Insert into sellers table (without display_name)
       const { error: insertError } = await supabase
         .from('sellers')
         .insert({
           user_id: userId,
-          display_name: displayName.trim(),
           status: 'active'
         })
 
