@@ -21,8 +21,9 @@ export default async function SellerDashboardPage() {
     .eq('user_id', user.id)
     .maybeSingle()
 
+  // 판매자 등록이 안 된 경우에도 대시보드 표시 (등록 유도 UI 표시)
   if (!seller) {
-    redirect('/mypage/seller/register')
+    return <SellerDashboardClient stats={null} recentOrders={[]} sellerData={null} />
   }
 
   // 대시보드 데이터 서버에서 로드

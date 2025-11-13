@@ -1,6 +1,7 @@
 'use client'
 
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
+import Link from 'next/link'
 
 type Stats = {
   newOrders: number
@@ -8,7 +9,7 @@ type Stats = {
   deliveredOrders: number
   completedOrders: number
   monthlyRevenue: number
-}
+} | null
 
 type Order = {
   id: string
@@ -31,10 +32,72 @@ type Props = {
     id: string
     display_name: string
     profile_image?: string | null
-  }
+  } | null
 }
 
 export default function SellerDashboardClient({ stats, recentOrders, sellerData }: Props) {
+  // 판매자 미등록 상태 - 등록 유도 UI 표시
+  if (!sellerData) {
+    return (
+      <MypageLayoutWrapper mode="seller" sellerData={null}>
+        <div className="py-8 px-4">
+          <div className="max-w-3xl mx-auto">
+            {/* 판매자 등록 안내 카드 */}
+            <div className="bg-white rounded-lg shadow-lg p-8 text-center">
+              <div className="mb-6">
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-full mb-4">
+                  <i className="fas fa-store text-4xl text-brand-primary"></i>
+                </div>
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                  판매자로 등록하고 서비스를 판매하세요
+                </h1>
+                <p className="text-gray-600">
+                  전문가로 등록하여 여러분의 재능을 공유하고 수익을 창출할 수 있습니다
+                </p>
+              </div>
+
+              {/* 혜택 리스트 */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <i className="fas fa-chart-line text-2xl text-green-500 mb-2"></i>
+                  <h3 className="font-semibold text-gray-900 mb-1">수익 창출</h3>
+                  <p className="text-sm text-gray-600">전문 서비스로 안정적인 수입</p>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <i className="fas fa-users text-2xl text-blue-500 mb-2"></i>
+                  <h3 className="font-semibold text-gray-900 mb-1">고객 관리</h3>
+                  <p className="text-sm text-gray-600">체계적인 주문 및 고객 관리</p>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <i className="fas fa-badge-check text-2xl text-purple-500 mb-2"></i>
+                  <h3 className="font-semibold text-gray-900 mb-1">신뢰도 향상</h3>
+                  <p className="text-sm text-gray-600">리뷰와 평점으로 브랜드 구축</p>
+                </div>
+              </div>
+
+              {/* 등록 버튼 */}
+              <Link
+                href="/mypage/seller/register"
+                className="inline-flex items-center px-8 py-4 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-lg font-semibold shadow-md hover:shadow-lg"
+              >
+                <i className="fas fa-rocket mr-3"></i>
+                판매자 등록하기
+              </Link>
+
+              {/* 추가 정보 */}
+              <div className="mt-8 pt-6 border-t border-gray-200">
+                <p className="text-sm text-gray-500">
+                  등록은 무료이며, 간단한 정보 입력만으로 바로 시작할 수 있습니다
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </MypageLayoutWrapper>
+    )
+  }
+
+  // 판매자 등록 완료 - 정상 대시보드 표시
   return (
     <MypageLayoutWrapper mode="seller" sellerData={sellerData}>
       <div className="py-8 px-4">
@@ -50,7 +113,7 @@ export default function SellerDashboardClient({ stats, recentOrders, sellerData 
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-gray-600">신규 주문</p>
-                  <p className="text-lg font-bold text-gray-900">{stats.newOrders}건</p>
+                  <p className="text-lg font-bold text-gray-900">{stats?.newOrders || 0}건</p>
                 </div>
                 <i className="fas fa-shopping-cart text-2xl text-blue-500"></i>
               </div>
@@ -59,7 +122,7 @@ export default function SellerDashboardClient({ stats, recentOrders, sellerData 
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-gray-600">진행중</p>
-                  <p className="text-lg font-bold text-gray-900">{stats.inProgressOrders}건</p>
+                  <p className="text-lg font-bold text-gray-900">{stats?.inProgressOrders || 0}건</p>
                 </div>
                 <i className="fas fa-spinner text-2xl text-yellow-500"></i>
               </div>
@@ -68,7 +131,7 @@ export default function SellerDashboardClient({ stats, recentOrders, sellerData 
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-gray-600">완료된 주문</p>
-                  <p className="text-lg font-bold text-gray-900">{stats.completedOrders}건</p>
+                  <p className="text-lg font-bold text-gray-900">{stats?.completedOrders || 0}건</p>
                 </div>
                 <i className="fas fa-check-circle text-2xl text-green-500"></i>
               </div>
@@ -77,7 +140,7 @@ export default function SellerDashboardClient({ stats, recentOrders, sellerData 
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-gray-600">이번달 수익</p>
-                  <p className="text-lg font-bold text-gray-900">{stats.monthlyRevenue.toLocaleString()}원</p>
+                  <p className="text-lg font-bold text-gray-900">{(stats?.monthlyRevenue || 0).toLocaleString()}원</p>
                 </div>
                 <i className="fas fa-won-sign text-2xl text-purple-500"></i>
               </div>

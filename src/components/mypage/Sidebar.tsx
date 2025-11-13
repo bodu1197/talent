@@ -84,6 +84,11 @@ const sellerNavItems: NavItem[] = [
     icon: 'fa-chart-bar'
   },
   {
+    label: '판매자 등록',
+    href: '/mypage/seller/register',
+    icon: 'fa-user-plus'
+  },
+  {
     label: '기본정보',
     href: '/mypage/settings',
     icon: 'fa-user-circle'
