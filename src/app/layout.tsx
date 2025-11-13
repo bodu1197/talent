@@ -108,14 +108,18 @@ export default async function RootLayout({
           crossOrigin="anonymous"
           referrerPolicy="no-referrer"
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrgData) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }}
-        />
+        {!isAdminPage && (
+          <>
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrgData) }}
+            />
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }}
+            />
+          </>
+        )}
       </head>
       <body className="min-h-screen bg-gray-50 overflow-x-hidden">
         <ErrorBoundary>
