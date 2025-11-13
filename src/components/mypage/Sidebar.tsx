@@ -31,7 +31,7 @@ const sellerNavItems: NavItem[] = [
     href: '/mypage/seller/orders',
     icon: 'fa-box',
     children: [
-      { label: '신규 주문', href: '/mypage/seller/orders?status=new', icon: '', badge: 0 },
+      { label: '신규 주문', href: '/mypage/seller/orders?status=paid', icon: '', badge: 0 },
       { label: '진행중', href: '/mypage/seller/orders?status=in_progress', icon: '' },
       { label: '수정 요청', href: '/mypage/seller/orders?status=revision', icon: '' },
       { label: '완료 대기', href: '/mypage/seller/orders?status=delivered', icon: '' },
