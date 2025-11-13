@@ -564,8 +564,12 @@ export default function SellerRegisterClient({ userId }: Props) {
                     <input
                       type="tel"
                       value={formData.publicPhone}
-                      onChange={(e) => setFormData({ ...formData, publicPhone: e.target.value })}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/[^0-9-]/g, '')
+                        setFormData({ ...formData, publicPhone: value })
+                      }}
                       placeholder="010-1234-5678"
+                      pattern="[0-9-]*"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     />
                   )}
@@ -604,8 +608,12 @@ export default function SellerRegisterClient({ userId }: Props) {
                   <input
                     type="tel"
                     value={formData.whatsapp}
-                    onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^0-9]/g, '')
+                      setFormData({ ...formData, whatsapp: value })
+                    }}
                     placeholder="821012345678 (국가번호 포함, 하이픈 없이)"
+                    pattern="[0-9]*"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   />
                   <p className="text-sm text-gray-500 mt-1">
