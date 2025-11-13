@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import { createReview } from '@/lib/supabase/mutations/reviews'
@@ -31,6 +31,10 @@ export default function BuyerReviewsClient({
 
   const [pendingReviews, setPendingReviews] = useState(initialPendingReviews)
   const [writtenReviews, setWrittenReviews] = useState(initialWrittenReviews)
+
+  useEffect(() => {
+    setActiveTab(tabFromUrl as 'pending' | 'written')
+  }, [tabFromUrl])
 
   function refreshData() {
     router.refresh()

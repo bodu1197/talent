@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import OrderCard from '@/components/mypage/OrderCard'
 import Link from 'next/link'
@@ -21,6 +22,9 @@ interface OrderFilter {
 }
 
 export default function SellerOrdersClient() {
+  const searchParams = useSearchParams()
+  const statusFromUrl = (searchParams.get('status') as OrderStatus) || 'all'
+
   const [orders, setOrders] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -34,13 +38,17 @@ export default function SellerOrdersClient() {
   })
 
   const [filters, setFilters] = useState<OrderFilter>({
-    status: 'all',
+    status: statusFromUrl,
     searchQuery: '',
     startDate: '',
     endDate: '',
     minPrice: '',
     maxPrice: ''
   })
+
+  useEffect(() => {
+    setFilters(prev => ({ ...prev, status: statusFromUrl }))
+  }, [statusFromUrl])
 
   useEffect(() => {
     loadOrders()
