@@ -149,17 +149,13 @@ export default async function RootLayout({
             </Suspense>
           )}
           <AuthProvider>
-            {isAdminPage ? (
-              <ConditionalLayout megaMenu={null}>
+            <ChatUnreadProvider>
+              <ConditionalLayout
+                megaMenu={!isAdminPage ? <ConditionalMegaMenuWrapper /> : null}
+              >
                 {children}
               </ConditionalLayout>
-            ) : (
-              <ChatUnreadProvider>
-                <ConditionalLayout megaMenu={<ConditionalMegaMenuWrapper />}>
-                  {children}
-                </ConditionalLayout>
-              </ChatUnreadProvider>
-            )}
+            </ChatUnreadProvider>
           </AuthProvider>
         </ErrorBoundary>
       </body>
