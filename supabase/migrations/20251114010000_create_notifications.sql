@@ -1,8 +1,11 @@
 -- 실시간 알림 시스템 구축
 -- 주문 상태 변경, 메시지, 리뷰 등의 이벤트 발생 시 알림 생성
 
+-- 0. 기존 notifications 테이블이 있다면 삭제 (조심스럽게)
+DROP TABLE IF EXISTS notifications CASCADE;
+
 -- 1. notifications 테이블 생성
-CREATE TABLE IF NOT EXISTS notifications (
+CREATE TABLE notifications (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   type text NOT NULL,
