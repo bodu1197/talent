@@ -75,6 +75,8 @@ export default async function RootLayout({
   const headersList = await headers();
   const pathname = headersList.get("x-pathname") || "";
   const isAdminPage = pathname.startsWith("/admin");
+  const isMypagePage = pathname.startsWith("/mypage");
+  const shouldHideMegaMenu = isAdminPage || isMypagePage;
 
   const schemaOrgData = {
     "@context": "https://schema.org",
@@ -151,7 +153,7 @@ export default async function RootLayout({
           <AuthProvider>
             <ChatUnreadProvider>
               <ConditionalLayout
-                megaMenu={!isAdminPage ? <ConditionalMegaMenuWrapper /> : null}
+                megaMenu={!shouldHideMegaMenu ? <ConditionalMegaMenuWrapper /> : null}
               >
                 {children}
               </ConditionalLayout>
