@@ -143,17 +143,23 @@ export default async function RootLayout({
       </head>
       <body className="min-h-screen bg-gray-50 overflow-x-hidden">
         <ErrorBoundary>
-          <Suspense fallback={null}>
-            <PageViewTracker />
-          </Suspense>
+          {!isAdminPage && (
+            <Suspense fallback={null}>
+              <PageViewTracker />
+            </Suspense>
+          )}
           <AuthProvider>
-            <ChatUnreadProvider>
-              <ConditionalLayout
-                megaMenu={!isAdminPage ? <ConditionalMegaMenuWrapper /> : null}
-              >
+            {isAdminPage ? (
+              <ConditionalLayout megaMenu={null}>
                 {children}
               </ConditionalLayout>
-            </ChatUnreadProvider>
+            ) : (
+              <ChatUnreadProvider>
+                <ConditionalLayout megaMenu={<ConditionalMegaMenuWrapper />}>
+                  {children}
+                </ConditionalLayout>
+              </ChatUnreadProvider>
+            )}
           </AuthProvider>
         </ErrorBoundary>
       </body>
