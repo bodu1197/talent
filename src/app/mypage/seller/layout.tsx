@@ -21,7 +21,7 @@ export default async function SellerLayout({ children }: { children: React.React
 
   // 판매자가 아니면 "판매자 되기" 페이지로
   if (!seller) {
-    redirect('/mypage/become-seller')
+    redirect('/become-seller')
   }
 
   return <>{children}</>
