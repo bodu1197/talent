@@ -12,6 +12,7 @@ import "@fontsource/noto-sans-kr/900.css";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { ChatUnreadProvider } from "@/components/providers/ChatUnreadProvider";
 import { ErrorBoundary } from "@/components/providers/ErrorBoundary";
+import { headers } from "next/headers";
 import ConditionalLayout from "@/components/layout/ConditionalLayout";
 import ConditionalMegaMenuWrapper from "@/components/layout/ConditionalMegaMenuWrapper";
 import { PageViewTracker } from "@/components/analytics/PageViewTracker";
@@ -51,6 +52,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const headersList = headers();
+  const pathname = headersList.get("x-pathname") || "";
+  const isAdminPage = pathname.startsWith("/admin");
+
   const schemaOrgData = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -119,7 +124,9 @@ export default function RootLayout({
           </Suspense>
           <AuthProvider>
             <ChatUnreadProvider>
-              <ConditionalLayout megaMenu={<ConditionalMegaMenuWrapper />}>
+              <ConditionalLayout
+                megaMenu={!isAdminPage ? <ConditionalMegaMenuWrapper /> : null}
+              >
                 {children}
               </ConditionalLayout>
             </ChatUnreadProvider>
