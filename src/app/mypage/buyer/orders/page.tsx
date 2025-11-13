@@ -45,6 +45,10 @@ function BuyerOrdersContent() {
   })
 
   useEffect(() => {
+    setFilters(prev => ({ ...prev, status: statusFromUrl }))
+  }, [statusFromUrl])
+
+  useEffect(() => {
     if (user) {
       loadOrders()
       loadStatusCounts()
