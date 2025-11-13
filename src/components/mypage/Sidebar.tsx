@@ -84,11 +84,6 @@ const sellerNavItems: NavItem[] = [
     icon: 'fa-chart-bar'
   },
   {
-    label: '전문가 등급',
-    href: '/mypage/seller/grade',
-    icon: 'fa-trophy'
-  },
-  {
     label: '기본정보',
     href: '/mypage/settings',
     icon: 'fa-user-circle'
