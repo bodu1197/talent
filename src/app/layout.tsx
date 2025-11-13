@@ -17,30 +17,50 @@ import ConditionalLayout from "@/components/layout/ConditionalLayout";
 import ConditionalMegaMenuWrapper from "@/components/layout/ConditionalMegaMenuWrapper";
 import { PageViewTracker } from "@/components/analytics/PageViewTracker";
 
-export const metadata: Metadata = {
-  title: "돌파구 - 수수료 0원 재능 거래 플랫폼 | 판매자·구매자 모두 무료",
-  description: "판매자와 구매자 모두 수수료 0원! 디자인, 영상, 개발, 마케팅 등 다양한 재능을 자유롭게 거래하세요. 돌파구에서 새로운 기회를 찾아보세요.",
-  keywords: "돌파구, 재능거래, 수수료0원, 무료플랫폼, 프리랜서, 재능마켓, 디자인외주, 영상제작, 개발외주, 마케팅",
-  openGraph: {
-    title: "돌파구 - 수수료 0원 재능 거래 플랫폼",
-    description: "판매자·구매자 모두 수수료 0원! 부담 없이 시작하는 재능 거래",
-    type: "website",
-    locale: "ko_KR",
-    siteName: "돌파구",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "돌파구 - 수수료 0원 재능 거래 플랫폼",
-    description: "판매자·구매자 모두 수수료 0원! 부담 없이 시작하는 재능 거래",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  alternates: {
-    canonical: "https://talent-zeta.vercel.app",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") || "";
+  const isAdminPage = pathname.startsWith("/admin");
+
+  // Admin 페이지: 최소한의 메타데이터만, 구글 노출 차단
+  if (isAdminPage) {
+    return {
+      title: "Admin",
+      robots: {
+        index: false,
+        follow: false,
+        noarchive: true,
+        nosnippet: true,
+      },
+    };
+  }
+
+  // 일반 페이지: 전체 SEO 메타데이터
+  return {
+    title: "돌파구 - 수수료 0원 재능 거래 플랫폼 | 판매자·구매자 모두 무료",
+    description: "판매자와 구매자 모두 수수료 0원! 디자인, 영상, 개발, 마케팅 등 다양한 재능을 자유롭게 거래하세요. 돌파구에서 새로운 기회를 찾아보세요.",
+    keywords: "돌파구, 재능거래, 수수료0원, 무료플랫폼, 프리랜서, 재능마켓, 디자인외주, 영상제작, 개발외주, 마케팅",
+    openGraph: {
+      title: "돌파구 - 수수료 0원 재능 거래 플랫폼",
+      description: "판매자·구매자 모두 수수료 0원! 부담 없이 시작하는 재능 거래",
+      type: "website",
+      locale: "ko_KR",
+      siteName: "돌파구",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "돌파구 - 수수료 0원 재능 거래 플랫폼",
+      description: "판매자·구매자 모두 수수료 0원! 부담 없이 시작하는 재능 거래",
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+    alternates: {
+      canonical: "https://talent-zeta.vercel.app",
+    },
+  };
+}
 
 export const viewport: Viewport = {
   width: "device-width",
