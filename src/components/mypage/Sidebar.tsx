@@ -102,7 +102,9 @@ const buyerNavItems: NavItem[] = [
     icon: 'fa-shopping-cart',
     children: [
       { label: '전체', href: '/mypage/buyer/orders', icon: '' },
+      { label: '결제완료', href: '/mypage/buyer/orders?status=paid', icon: '', badge: 0 },
       { label: '진행중', href: '/mypage/buyer/orders?status=in_progress', icon: '', badge: 0 },
+      { label: '수정 요청', href: '/mypage/buyer/orders?status=revision', icon: '', badge: 0 },
       { label: '도착 확인 대기', href: '/mypage/buyer/orders?status=delivered', icon: '', badge: 0 },
       { label: '완료', href: '/mypage/buyer/orders?status=completed', icon: '' },
       { label: '취소/환불', href: '/mypage/buyer/orders?status=cancelled', icon: '' }

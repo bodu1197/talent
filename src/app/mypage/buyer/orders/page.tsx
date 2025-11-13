@@ -11,7 +11,7 @@ import EmptyState from '@/components/common/EmptyState'
 import ErrorState from '@/components/common/ErrorState'
 import { logger } from '@/lib/logger'
 
-type OrderStatus = 'all' | 'paid' | 'in_progress' | 'delivered' | 'completed' | 'cancelled'
+type OrderStatus = 'all' | 'paid' | 'in_progress' | 'revision' | 'delivered' | 'completed' | 'cancelled'
 
 interface OrderFilter {
   status: OrderStatus
@@ -32,6 +32,7 @@ function BuyerOrdersContent() {
     all: 0,
     paid: 0,
     in_progress: 0,
+    revision: 0,
     delivered: 0,
     completed: 0,
     cancelled: 0
@@ -162,6 +163,7 @@ function BuyerOrdersContent() {
     { value: 'all', label: '전체', count: statusCounts.all },
     { value: 'paid', label: '결제완료', count: statusCounts.paid },
     { value: 'in_progress', label: '진행중', count: statusCounts.in_progress },
+    { value: 'revision', label: '수정 요청', count: statusCounts.revision },
     { value: 'delivered', label: '도착 확인 대기', count: statusCounts.delivered },
     { value: 'completed', label: '완료', count: statusCounts.completed },
     { value: 'cancelled', label: '취소/환불', count: statusCounts.cancelled }
@@ -180,6 +182,7 @@ function BuyerOrdersContent() {
     switch (status) {
       case 'paid': return '결제완료'
       case 'in_progress': return '진행중'
+      case 'revision': return '수정 요청'
       case 'delivered': return '도착 확인 대기'
       case 'completed': return '완료'
       case 'cancelled': return '취소/환불'
@@ -191,6 +194,7 @@ function BuyerOrdersContent() {
   const getStatusColor = (status: string): 'red' | 'yellow' | 'green' | 'gray' => {
     switch (status) {
       case 'delivered': return 'red'
+      case 'revision': return 'red'
       case 'in_progress': return 'yellow'
       case 'completed': return 'green'
       default: return 'gray'
@@ -198,6 +202,26 @@ function BuyerOrdersContent() {
   }
 
   const getActionButtons = (order: any) => {
+    if (order.status === 'revision') {
+      return (
+        <>
+          <Link
+            href={`/mypage/buyer/orders/${order.id}`}
+            className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium"
+          >
+            <i className="fas fa-eye mr-2"></i>
+            수정 내역 확인
+          </Link>
+          <Link
+            href={`/chat?order=${order.id}`}
+            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+          >
+            메시지
+          </Link>
+        </>
+      )
+    }
+
     if (order.status === 'delivered') {
       return (
         <>
