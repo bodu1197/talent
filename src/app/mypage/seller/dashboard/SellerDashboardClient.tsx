@@ -28,18 +28,17 @@ type Order = {
 type Props = {
   stats: Stats
   recentOrders: Order[]
-  sellerData: {
-    id: string
-    display_name: string
+  profileData: {
+    name: string
     profile_image?: string | null
   } | null
 }
 
-export default function SellerDashboardClient({ stats, recentOrders, sellerData }: Props) {
+export default function SellerDashboardClient({ stats, recentOrders, profileData }: Props) {
   // 판매자 미등록 상태 - 등록 유도 UI 표시
-  if (!sellerData) {
+  if (!stats) {
     return (
-      <MypageLayoutWrapper mode="seller" sellerData={null}>
+      <MypageLayoutWrapper mode="seller" profileData={profileData}>
         <div className="py-8 px-4">
           <div className="max-w-3xl mx-auto">
             {/* 판매자 등록 안내 카드 */}
@@ -99,7 +98,7 @@ export default function SellerDashboardClient({ stats, recentOrders, sellerData 
 
   // 판매자 등록 완료 - 정상 대시보드 표시
   return (
-    <MypageLayoutWrapper mode="seller" sellerData={sellerData}>
+    <MypageLayoutWrapper mode="seller" profileData={profileData}>
       <div className="py-8 px-4">
           {/* 페이지 헤더 */}
           <div className="mb-6">

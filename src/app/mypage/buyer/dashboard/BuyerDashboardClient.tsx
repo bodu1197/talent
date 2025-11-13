@@ -14,14 +14,13 @@ type Props = {
   recentOrders: Order[]
   favorites: Favorite[]
   benefits: Benefits
-  sellerData?: {
-    id: string
-    display_name: string
+  profileData?: {
+    name: string
     profile_image?: string | null
   } | null
 }
 
-export default function BuyerDashboardClient({ stats, recentOrders, favorites, benefits, sellerData }: Props) {
+export default function BuyerDashboardClient({ stats, recentOrders, favorites, benefits, profileData }: Props) {
   // Generate alerts based on real data
   const alerts = []
   if (stats?.deliveredOrders > 0) {
@@ -59,7 +58,7 @@ export default function BuyerDashboardClient({ stats, recentOrders, favorites, b
   }
 
   return (
-    <MypageLayoutWrapper mode="buyer" sellerData={sellerData}>
+    <MypageLayoutWrapper mode="buyer" profileData={profileData}>
       <div className="py-8 px-4">
           {/* 페이지 헤더 */}
           <div className="mb-6 lg:mb-8">

@@ -14,8 +14,8 @@ interface NavItem {
 
 interface SidebarProps {
   mode: 'seller' | 'buyer'
-  sellerData?: {
-    display_name: string
+  profileData?: {
+    name: string
     profile_image?: string | null
   } | null
 }
@@ -151,7 +151,7 @@ const buyerNavItems: NavItem[] = [
   }
 ]
 
-export default function Sidebar({ mode, sellerData }: SidebarProps) {
+export default function Sidebar({ mode, profileData }: SidebarProps) {
   const pathname = usePathname()
   const navItems = mode === 'seller' ? sellerNavItems : buyerNavItems
 
@@ -198,45 +198,27 @@ export default function Sidebar({ mode, sellerData }: SidebarProps) {
       <div className="p-4 flex-1">
         {/* 프로필 정보 카드 */}
         <div className="mb-4">
-          {sellerData ? (
-            // 판매자로 등록된 경우: 전문가 프로필 표시 (구매자/판매자 모드 모두)
-            <Link
-              href="/mypage/seller/profile"
-              className="flex items-center gap-3 w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 card-interactive"
-            >
-              {sellerData.profile_image ? (
-                <img
-                  src={sellerData.profile_image}
-                  alt={sellerData.display_name}
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-              ) : (
-                <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center text-white">
-                  <i className="fas fa-user text-xl"></i>
-                </div>
-              )}
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-900">{sellerData.display_name}</p>
-                <p className="text-xs text-gray-500">전문가 프로필</p>
-              </div>
-              <i className="fas fa-chevron-right text-gray-400 text-sm"></i>
-            </Link>
-          ) : (
-            // 판매자로 등록되지 않은 경우: 기본 회원 정보 표시
-            <Link
-              href="/mypage/settings"
-              className="flex items-center gap-3 w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 card-interactive"
-            >
+          <Link
+            href={mode === 'seller' ? '/mypage/seller/profile' : '/mypage/settings'}
+            className="flex items-center gap-3 w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 card-interactive"
+          >
+            {profileData?.profile_image ? (
+              <img
+                src={profileData.profile_image}
+                alt={profileData.name}
+                className="w-12 h-12 rounded-full object-cover"
+              />
+            ) : (
               <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center text-white">
                 <i className="fas fa-user text-xl"></i>
               </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-900">회원 정보</p>
-                <p className="text-xs text-gray-500">프로필 설정</p>
-              </div>
-              <i className="fas fa-chevron-right text-gray-400 text-sm"></i>
-            </Link>
-          )}
+            )}
+            <div className="flex-1">
+              <p className="text-sm font-medium text-gray-900">{profileData?.name || '회원'}</p>
+              <p className="text-xs text-gray-500">{mode === 'seller' ? '전문가 프로필' : '프로필 설정'}</p>
+            </div>
+            <i className="fas fa-chevron-right text-gray-400 text-sm"></i>
+          </Link>
         </div>
 
         {/* 모드 전환 버튼 */}

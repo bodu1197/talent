@@ -14,16 +14,23 @@ export default async function SellerDashboardPage() {
     redirect('/auth/login')
   }
 
+  // 프로필 정보 가져오기 (profiles 테이블)
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('name, profile_image')
+    .eq('user_id', user.id)
+    .maybeSingle()
+
   // 판매자 정보 가져오기
   const { data: seller } = await supabase
     .from('sellers')
-    .select('id, display_name, profile_image, user_id')
+    .select('id')
     .eq('user_id', user.id)
     .maybeSingle()
 
   // 판매자 등록이 안 된 경우에도 대시보드 표시 (등록 유도 UI 표시)
   if (!seller) {
-    return <SellerDashboardClient stats={null} recentOrders={[]} sellerData={null} />
+    return <SellerDashboardClient stats={null} recentOrders={[]} profileData={profile} />
   }
 
   // 대시보드 데이터 서버에서 로드
@@ -34,5 +41,5 @@ export default async function SellerDashboardPage() {
   ])
 
   // 클라이언트 컴포넌트에 데이터 전달
-  return <SellerDashboardClient stats={stats} recentOrders={recentOrders} sellerData={seller} />
+  return <SellerDashboardClient stats={stats} recentOrders={recentOrders} profileData={profile} />
 }

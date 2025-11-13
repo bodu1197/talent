@@ -7,48 +7,46 @@ import MobileSidebar from './MobileSidebar'
 
 interface MypageLayoutWrapperProps {
   mode: 'seller' | 'buyer'
-  sellerData?: {
-    display_name: string
+  profileData?: {
+    name: string
     profile_image?: string | null
   } | null
   children: ReactNode
 }
 
-export default function MypageLayoutWrapper({ mode, sellerData: initialSellerData, children }: MypageLayoutWrapperProps) {
-  const [sellerData, setSellerData] = useState(initialSellerData)
+export default function MypageLayoutWrapper({ mode, profileData: initialProfileData, children }: MypageLayoutWrapperProps) {
+  const [profileData, setProfileData] = useState(initialProfileData)
 
-  // seller 모드일 때 자동으로 seller 정보 로드
+  // 자동으로 프로필 정보 로드
   useEffect(() => {
-    // initialSellerData가 이미 있으면 사용 (dashboard에서 전달한 경우)
-    if (initialSellerData !== undefined) {
-      setSellerData(initialSellerData)
+    // initialProfileData가 이미 있으면 사용 (dashboard에서 전달한 경우)
+    if (initialProfileData !== undefined) {
+      setProfileData(initialProfileData)
       return
     }
 
-    // seller 모드이고 sellerData가 없으면 자동 로드
-    if (mode === 'seller') {
-      loadSellerData()
-    }
-  }, [mode, initialSellerData])
+    // profileData가 없으면 자동 로드
+    loadProfileData()
+  }, [mode, initialProfileData])
 
-  async function loadSellerData() {
+  async function loadProfileData() {
     try {
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
 
       if (!user) return
 
-      // Use seller_profiles view which joins sellers + profiles
-      const { data: seller } = await supabase
-        .from('seller_profiles')
-        .select('display_name, profile_image')
+      // Load from profiles table (unified source for both buyer and seller)
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('name, profile_image')
         .eq('user_id', user.id)
         .maybeSingle()
 
-      setSellerData(seller)
+      setProfileData(profile)
     } catch (error) {
-      console.error('Failed to load seller data:', error)
-      setSellerData(null)
+      console.error('Failed to load profile data:', error)
+      setProfileData(null)
     }
   }
 
@@ -56,7 +54,7 @@ export default function MypageLayoutWrapper({ mode, sellerData: initialSellerDat
     <div className="bg-gray-100 flex justify-center">
       <div className="flex w-full max-w-[1200px]">
         <MobileSidebar mode={mode} />
-        <Sidebar mode={mode} sellerData={sellerData} />
+        <Sidebar mode={mode} profileData={profileData} />
         <main className="flex-1 overflow-y-auto">
           {children}
         </main>
