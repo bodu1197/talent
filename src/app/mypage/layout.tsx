@@ -1,14 +1,7 @@
 import { ReactNode } from 'react'
-import Footer from '@/components/layout/Footer'
 
 // Middleware에서 이미 로그인 체크하므로 여기서는 불필요
+// ConditionalLayout에서 헤더/푸터 관리하므로 여기서는 children만 렌더링
 export default function MypageLayout({ children }: { children: ReactNode }) {
-  return (
-    <div className="flex flex-col min-h-screen">
-      <div className="flex-1 pt-16 lg:pt-[86px]">
-        {children}
-      </div>
-      <Footer />
-    </div>
-  )
+  return <>{children}</>
 }

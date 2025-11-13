@@ -15,8 +15,8 @@ interface ConditionalLayoutProps {
 export default function ConditionalLayout({ children, megaMenu }: ConditionalLayoutProps) {
   const pathname = usePathname()
 
-  // 관리자 페이지에서만 헤더/푸터 숨기기
-  const hideLayout = pathname?.startsWith('/admin')
+  // 관리자 및 마이페이지에서 헤더/푸터 숨기기
+  const hideLayout = pathname?.startsWith('/admin') || pathname?.startsWith('/mypage')
 
   // 메인 페이지 확인 (모바일에서 헤더/검색 표시) - 랜딩 페이지도 포함
   const isMainPage = pathname === '/' || pathname === '/landing'
@@ -27,9 +27,14 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
   // 서브 페이지 확인 (모바일에서 뒤로가기 헤더 표시)
   const isSubPage = !hideLayout && !isMainPage && !isMypagePage
 
-  // Admin 페이지는 자체 레이아웃을 사용하므로 children만 반환
+  // Admin 및 Mypage는 자체 레이아웃을 사용하므로 children만 반환
   if (hideLayout) {
-    return <>{children}</>
+    return (
+      <>
+        {children}
+        <MobileBottomNav />
+      </>
+    )
   }
 
   return (
