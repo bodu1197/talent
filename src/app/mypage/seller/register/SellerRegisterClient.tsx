@@ -40,13 +40,17 @@ interface SellerFormData {
 
 interface Props {
   userId: string
+  initialProfile?: {
+    name: string
+    profile_image?: string | null
+  } | null
 }
 
-export default function SellerRegisterClient({ userId }: Props) {
+export default function SellerRegisterClient({ userId, initialProfile }: Props) {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState<Step>(1)
   const [loading, setLoading] = useState(false)
-  const [profilePreview, setProfilePreview] = useState<string | null>(null)
+  const [profilePreview, setProfilePreview] = useState<string | null>(initialProfile?.profile_image || null)
   const [isVerified, setIsVerified] = useState(false)
 
   const [formData, setFormData] = useState<SellerFormData>({
@@ -57,7 +61,7 @@ export default function SellerRegisterClient({ userId }: Props) {
     bankName: '',
     businessNumber: '',
     isBusiness: false,
-    displayName: '',
+    displayName: initialProfile?.name || '',
     profileImage: null,
     bio: '',
     publicPhone: '',
@@ -164,7 +168,7 @@ export default function SellerRegisterClient({ userId }: Props) {
       const supabase = createClient()
 
       // 1. 프로필 이미지 업로드
-      let profileImageUrl = ''
+      let profileImageUrl = initialProfile?.profile_image || ''
       if (formData.profileImage) {
         const fileExt = formData.profileImage.name.split('.').pop()
         const fileName = `${userId}-profile.${fileExt}`
@@ -272,7 +276,9 @@ export default function SellerRegisterClient({ userId }: Props) {
                !!formData.accountHolder && !!formData.bankName
         break
       case 2:
-        result = !!formData.displayName && formData.bio.length >= 50 && !!formData.profileImage
+        // 프로필 이미지: 새로 업로드했거나 기존 이미지가 있으면 통과
+        const hasProfileImage = !!formData.profileImage || !!initialProfile?.profile_image
+        result = !!formData.displayName && formData.bio.length >= 50 && hasProfileImage
         break
       case 3:
         result = true // 연락처는 선택사항
@@ -489,6 +495,14 @@ export default function SellerRegisterClient({ userId }: Props) {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     프로필 사진 *
                   </label>
+                  {initialProfile?.profile_image && !formData.profileImage && (
+                    <div className="mb-3 bg-blue-50 border border-blue-200 rounded-lg p-3">
+                      <p className="text-sm text-blue-800">
+                        <i className="fas fa-info-circle mr-1"></i>
+                        현재 회원 프로필 사진이 사용됩니다. 변경하려면 새 사진을 업로드하세요.
+                      </p>
+                    </div>
+                  )}
                   <div className="space-y-3">
                     {profilePreview ? (
                       <div className="flex items-center gap-4">
@@ -497,17 +511,22 @@ export default function SellerRegisterClient({ userId }: Props) {
                           alt="프로필 미리보기"
                           className="w-32 h-32 object-cover rounded-full border border-gray-300"
                         />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setFormData({ ...formData, profileImage: null })
-                            setProfilePreview(null)
-                          }}
-                          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm"
-                        >
-                          <i className="fas fa-times mr-1"></i>
-                          삭제
-                        </button>
+                        <div className="flex flex-col gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setFormData({ ...formData, profileImage: null })
+                              setProfilePreview(initialProfile?.profile_image || null)
+                            }}
+                            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm"
+                          >
+                            <i className="fas fa-times mr-1"></i>
+                            {formData.profileImage ? '변경 취소' : '이미지 제거'}
+                          </button>
+                          {initialProfile?.profile_image && formData.profileImage && (
+                            <p className="text-xs text-gray-500">기존 이미지로 되돌아갑니다</p>
+                          )}
+                        </div>
                       </div>
                     ) : (
                       <label className="inline-block px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer">

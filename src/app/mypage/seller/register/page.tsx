@@ -21,5 +21,12 @@ export default async function SellerRegisterPage() {
     redirect('/mypage/seller/dashboard')
   }
 
-  return <SellerRegisterClient userId={user.id} />
+  // Get current profile data from profiles table
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('name, profile_image')
+    .eq('user_id', user.id)
+    .maybeSingle()
+
+  return <SellerRegisterClient userId={user.id} initialProfile={profile} />
 }
