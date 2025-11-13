@@ -31,6 +31,12 @@ ALTER TABLE revision_history ENABLE ROW LEVEL SECURITY;
 
 -- 4. RLS 정책 설정
 
+-- 기존 정책 삭제
+DROP POLICY IF EXISTS "구매자는 자신의 수정 요청 이력 조회 가능" ON revision_history;
+DROP POLICY IF EXISTS "판매자는 판매 주문의 수정 이력 조회 가능" ON revision_history;
+DROP POLICY IF EXISTS "구매자는 수정 요청 생성 가능" ON revision_history;
+DROP POLICY IF EXISTS "판매자는 수정 완료 처리 가능" ON revision_history;
+
 -- 구매자는 자신이 요청한 수정 이력만 조회 가능
 CREATE POLICY "구매자는 자신의 수정 요청 이력 조회 가능"
 ON revision_history FOR SELECT
