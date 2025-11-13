@@ -21,11 +21,24 @@ export async function generateMetadata(): Promise<Metadata> {
   const headersList = await headers();
   const pathname = headersList.get("x-pathname") || "";
   const isAdminPage = pathname.startsWith("/admin");
+  const isMypagePage = pathname.startsWith("/mypage");
 
-  // Admin 페이지: 최소한의 메타데이터만, 구글 노출 차단
+  // Admin 및 Mypage: 최소한의 메타데이터만, 구글 노출 차단
   if (isAdminPage) {
     return {
       title: "Admin",
+      robots: {
+        index: false,
+        follow: false,
+        noarchive: true,
+        nosnippet: true,
+      },
+    };
+  }
+
+  if (isMypagePage) {
+    return {
+      title: "마이페이지",
       robots: {
         index: false,
         follow: false,
@@ -130,7 +143,7 @@ export default async function RootLayout({
           crossOrigin="anonymous"
           referrerPolicy="no-referrer"
         />
-        {!isAdminPage && (
+        {!isAdminPage && !isMypagePage && (
           <>
             <script
               type="application/ld+json"
@@ -145,7 +158,7 @@ export default async function RootLayout({
       </head>
       <body className="min-h-screen bg-gray-50 overflow-x-hidden">
         <ErrorBoundary>
-          {!isAdminPage && (
+          {!isAdminPage && !isMypagePage && (
             <Suspense fallback={null}>
               <PageViewTracker />
             </Suspense>
