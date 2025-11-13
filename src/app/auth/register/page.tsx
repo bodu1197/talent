@@ -173,8 +173,15 @@ export default function RegisterPage() {
         setRegisterAttempts(0)
         setLockoutUntil(null)
 
-        // 트리거가 자동으로 users 테이블 프로필 생성
-        router.push('/auth/login?registered=true')
+        // 이메일 인증 없이 즉시 로그인 처리
+        // authData.session이 있으면 이미 로그인된 상태
+        if (authData.session) {
+          // 즉시 홈으로 리다이렉트
+          router.push('/')
+        } else {
+          // 세션이 없으면 (이메일 인증 필요한 경우) 로그인 페이지로
+          router.push('/auth/login?registered=true')
+        }
       }
     } catch (error: unknown) {
       logger.error('회원가입 실패:', error)
