@@ -11,9 +11,12 @@ interface Notification {
   type: string
   title: string
   message: string
-  link_url: string | null
+  link: string | null
   is_read: boolean
   created_at: string
+  order_id?: string
+  sender_id?: string
+  metadata?: Record<string, unknown>
 }
 
 export default function NotificationBell() {
@@ -193,7 +196,7 @@ export default function NotificationBell() {
                 {notifications.map((notification) => (
                   <Link
                     key={notification.id}
-                    href={notification.link_url || '#'}
+                    href={notification.link || '#'}
                     onClick={() => {
                       markAsRead(notification.id)
                       setShowDropdown(false)

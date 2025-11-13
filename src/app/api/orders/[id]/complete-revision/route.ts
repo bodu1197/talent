@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
-// POST /api/orders/[id]/revision - 수정 요청
-export async function POST(
+// PATCH /api/orders/[id]/complete-revision - 수정 완료
+export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
@@ -17,12 +17,6 @@ export async function POST(
       return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 })
     }
 
-    const { reason } = await request.json()
-
-    if (!reason || reason.trim() === '') {
-      return NextResponse.json({ error: '수정 요청 사유가 필요합니다' }, { status: 400 })
-    }
-
     // 주문 조회 및 권한 확인
     const { data: order, error: fetchError } = await supabase
       .from('orders')
@@ -34,49 +28,54 @@ export async function POST(
       return NextResponse.json({ error: '주문을 찾을 수 없습니다' }, { status: 404 })
     }
 
-    // 구매자만 수정 요청 가능
-    if (order.buyer_id !== user.id) {
+    // 판매자만 수정 완료 가능
+    if (order.seller_id !== user.id) {
       return NextResponse.json({ error: '권한이 없습니다' }, { status: 403 })
     }
 
-    // 트랜잭션으로 처리: orders 업데이트 + revision_history 추가
-    // 1. 상태를 'revision'으로 변경
+    // 주문 상태가 'revision'인지 확인
+    if (order.status !== 'revision') {
+      return NextResponse.json({ error: '수정 요청 상태가 아닙니다' }, { status: 400 })
+    }
+
+    // 트랜잭션으로 처리: orders 업데이트 + revision_history 완료 처리
+    // 1. 상태를 'delivered'로 변경
     const { error: updateError } = await supabase
       .from('orders')
       .update({
-        status: 'revision',
-        revision_reason: reason,
-        revision_requested_at: new Date().toISOString(),
+        status: 'delivered',
         updated_at: new Date().toISOString()
       })
       .eq('id', id)
 
     if (updateError) {
-      console.error('Revision request error:', updateError)
-      return NextResponse.json({ error: '수정 요청에 실패했습니다' }, { status: 500 })
+      console.error('Complete revision error:', updateError)
+      return NextResponse.json({ error: '수정 완료 처리에 실패했습니다' }, { status: 500 })
     }
 
-    // 2. revision_history에 이력 추가
+    // 2. revision_history에서 가장 최근의 미완료 수정 요청을 완료 처리
     const { error: historyError } = await supabase
       .from('revision_history')
-      .insert({
-        order_id: id,
-        requested_by: user.id,
-        reason: reason,
-        requested_at: new Date().toISOString()
+      .update({
+        completed_at: new Date().toISOString(),
+        completed_by: user.id
       })
+      .eq('order_id', id)
+      .is('completed_at', null)
+      .order('requested_at', { ascending: false })
+      .limit(1)
 
     if (historyError) {
-      console.error('Revision history insert error:', historyError)
-      // 이력 추가 실패해도 메인 기능은 동작하도록 경고만 출력
-      console.warn('수정 요청 이력 저장에 실패했지만 주문 상태는 변경되었습니다')
+      console.error('Revision history update error:', historyError)
+      // 이력 업데이트 실패해도 메인 기능은 동작하도록 경고만 출력
+      console.warn('수정 완료 이력 저장에 실패했지만 주문 상태는 변경되었습니다')
     }
 
-    // TODO: 판매자에게 알림 전송
+    // TODO: 구매자에게 알림 전송
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Revision request API error:', error)
+    console.error('Complete revision API error:', error)
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
   }
 }

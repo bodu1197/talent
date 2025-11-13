@@ -10,7 +10,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
 import { logger } from '@/lib/logger'
 
-type OrderStatus = 'all' | 'paid' | 'in_progress' | 'delivered' | 'completed' | 'cancelled'
+type OrderStatus = 'all' | 'paid' | 'in_progress' | 'revision' | 'delivered' | 'completed' | 'cancelled'
 
 interface OrderFilter {
   status: OrderStatus
@@ -32,6 +32,7 @@ export default function SellerOrdersClient() {
     all: 0,
     paid: 0,
     in_progress: 0,
+    revision: 0,
     delivered: 0,
     completed: 0,
     cancelled: 0
@@ -93,6 +94,30 @@ export default function SellerOrdersClient() {
     }
   }
 
+  async function handleCompleteRevision(orderId: string) {
+    if (!confirm('수정을 완료하고 구매자에게 전달하시겠습니까?')) {
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/orders/${orderId}/complete-revision`, {
+        method: 'PATCH'
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || '수정 완료 처리에 실패했습니다')
+      }
+
+      alert('수정이 완료되었습니다.')
+      loadOrders()
+      loadStatusCounts()
+    } catch (err: unknown) {
+      logger.error('수정 완료 처리 실패:', err)
+      alert(err instanceof Error ? err.message : '수정 완료 처리에 실패했습니다')
+    }
+  }
+
   const filteredOrders = orders.filter(order => {
     if (filters.searchQuery) {
       const query = filters.searchQuery.toLowerCase()
@@ -112,6 +137,7 @@ export default function SellerOrdersClient() {
     { value: 'all', label: '전체', count: statusCounts.all },
     { value: 'paid', label: '신규 주문', count: statusCounts.paid },
     { value: 'in_progress', label: '진행중', count: statusCounts.in_progress },
+    { value: 'revision', label: '수정 요청', count: statusCounts.revision },
     { value: 'delivered', label: '완료 대기', count: statusCounts.delivered },
     { value: 'completed', label: '완료', count: statusCounts.completed },
     { value: 'cancelled', label: '취소/환불', count: statusCounts.cancelled }
@@ -132,6 +158,7 @@ export default function SellerOrdersClient() {
     switch (status) {
       case 'paid': return '결제완료'
       case 'in_progress': return '진행중'
+      case 'revision': return '수정 요청'
       case 'delivered': return '완료 대기'
       case 'completed': return '완료'
       case 'cancelled': return '취소/환불'
@@ -144,6 +171,7 @@ export default function SellerOrdersClient() {
     switch (status) {
       case 'paid': return 'red'
       case 'in_progress': return 'yellow'
+      case 'revision': return 'red'
       case 'delivered': return 'green'
       case 'completed': return 'gray'
       default: return 'gray'
@@ -179,6 +207,39 @@ export default function SellerOrdersClient() {
           >
             상세보기
           </Link>
+          <Link
+            href={`/chat?order=${order.id}`}
+            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+          >
+            메시지
+          </Link>
+        </>
+      )
+    }
+
+    if (order.status === 'revision') {
+      const revisionCount = order.revision_count || 0
+      return (
+        <>
+          <Link
+            href={`/mypage/seller/orders/${order.id}`}
+            className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium flex items-center gap-2"
+          >
+            <i className="fas fa-eye"></i>
+            <span>수정 요청 확인</span>
+            {revisionCount > 0 && (
+              <span className="px-2 py-0.5 bg-red-500 text-white text-xs rounded-full">
+                {revisionCount}차
+              </span>
+            )}
+          </Link>
+          <button
+            onClick={() => handleCompleteRevision(order.id)}
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+          >
+            <i className="fas fa-check mr-2"></i>
+            수정 완료
+          </button>
           <Link
             href={`/chat?order=${order.id}`}
             className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
@@ -240,7 +301,8 @@ export default function SellerOrdersClient() {
       orderDate: new Date(order.created_at).toLocaleString('ko-KR'),
       expectedDeliveryDate: order.delivery_date ? new Date(order.delivery_date).toLocaleDateString('ko-KR') : '-',
       daysLeft: order.delivery_date ? Math.ceil((new Date(order.delivery_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) : 0,
-      requirements: order.requirements
+      requirements: order.requirements,
+      revisionCount: order.revision_count || 0
     }
   }
 

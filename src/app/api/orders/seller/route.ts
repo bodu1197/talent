@@ -39,7 +39,24 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: '주문 목록을 불러올 수 없습니다' }, { status: 500 })
     }
 
-    return NextResponse.json({ orders: data })
+    // 각 주문의 수정 요청 횟수 조회
+    const ordersWithRevisionCount = await Promise.all(
+      (data || []).map(async (order) => {
+        const { data: revisionStats } = await supabase
+          .from('order_revision_stats')
+          .select('total_revisions, pending_revisions')
+          .eq('order_id', order.id)
+          .single()
+
+        return {
+          ...order,
+          revision_count: revisionStats?.total_revisions || 0,
+          pending_revision_count: revisionStats?.pending_revisions || 0
+        }
+      })
+    )
+
+    return NextResponse.json({ orders: ordersWithRevisionCount })
   } catch (error) {
     console.error('Seller orders API error:', error)
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
