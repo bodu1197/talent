@@ -74,10 +74,11 @@ export async function getServiceById(serviceId: string) {
     .from('services')
     .select(`
       *,
-      seller:sellers(
+      seller:seller_profiles(
         id,
         business_name,
         display_name,
+        profile_image,
         user_id
       ),
       service_categories(
@@ -161,10 +162,11 @@ export async function getServicesByCategory(categoryId: string, limit: number = 
     .from('services')
     .select(`
       *,
-      seller:sellers!inner(
+      seller:seller_profiles!inner(
         id,
         business_name,
         display_name,
+        profile_image,
         user_id,
         is_verified
       ),
@@ -276,10 +278,11 @@ export async function getActiveServices(limit?: number) {
     .from('services')
     .select(`
       *,
-      seller:sellers!inner(
+      seller:seller_profiles!inner(
         id,
         business_name,
         display_name,
+        profile_image,
         user_id,
         is_verified
       ),
