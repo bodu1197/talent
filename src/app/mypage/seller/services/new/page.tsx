@@ -10,15 +10,23 @@ export default async function NewServicePage() {
     redirect('/auth/login')
   }
 
+  // Get seller info
   const { data: seller } = await supabase
     .from('sellers')
-    .select('id, display_name, profile_image')
+    .select('id')
     .eq('user_id', user.id)
     .maybeSingle()
 
   if (!seller) {
     redirect('/mypage/seller/register')
   }
+
+  // Get profile data
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('name, profile_image')
+    .eq('user_id', user.id)
+    .maybeSingle()
 
   // Load categories
   const { data: categories } = await supabase
@@ -27,5 +35,5 @@ export default async function NewServicePage() {
     .order('level', { ascending: true })
     .order('name', { ascending: true })
 
-  return <NewServiceClientV2 sellerId={seller.id} categories={categories || []} sellerData={seller} />
+  return <NewServiceClientV2 sellerId={seller.id} categories={categories || []} profileData={profile} />
 }

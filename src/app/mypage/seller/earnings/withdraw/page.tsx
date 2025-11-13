@@ -10,15 +10,23 @@ export default async function WithdrawPage() {
     redirect('/auth/login')
   }
 
+  // Get seller info (id and account details)
   const { data: seller } = await supabase
     .from('sellers')
-    .select('id, display_name, bank_name, account_number, account_holder')
+    .select('id, bank_name, account_number, account_holder')
     .eq('user_id', user.id)
     .maybeSingle()
 
   if (!seller) {
     redirect('/mypage/seller/register')
   }
+
+  // Get profile data (name and profile_image)
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('name, profile_image')
+    .eq('user_id', user.id)
+    .maybeSingle()
 
   // Get completed orders to calculate available balance
   const { data: completedOrders } = await supabase
@@ -49,6 +57,7 @@ export default async function WithdrawPage() {
   return (
     <WithdrawClient
       sellerData={seller}
+      profileData={profile}
       availableBalance={availableBalance}
       pendingWithdrawal={pendingWithdrawal}
     />

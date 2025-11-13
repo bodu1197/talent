@@ -10,15 +10,23 @@ export default async function SellerEarningsPage() {
     redirect('/auth/login')
   }
 
+  // Get seller info (id and account details)
   const { data: seller } = await supabase
     .from('sellers')
-    .select('id, display_name, profile_image, bank_name, account_number, account_holder')
+    .select('id, bank_name, account_number, account_holder')
     .eq('user_id', user.id)
     .maybeSingle()
 
   if (!seller) {
     redirect('/mypage/seller/register')
   }
+
+  // Get profile data (name and profile_image)
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('name, profile_image')
+    .eq('user_id', user.id)
+    .maybeSingle()
 
   // Calculate earnings from actual orders
   // Note: orders.seller_id references users.id, not sellers.id
@@ -87,5 +95,5 @@ export default async function SellerEarningsPage() {
     .order('updated_at', { ascending: false })
     .limit(10)
 
-  return <SellerEarningsClient earnings={earnings} transactions={transactions as any || []} sellerData={seller} />
+  return <SellerEarningsClient earnings={earnings} transactions={transactions as any || []} sellerData={seller} profileData={profile} />
 }

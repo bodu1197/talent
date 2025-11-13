@@ -8,11 +8,14 @@ import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 interface WithdrawClientProps {
   sellerData: {
     id: string
-    display_name: string
     bank_name: string | null
     account_number: string | null
     account_holder: string | null
   }
+  profileData?: {
+    name: string
+    profile_image?: string | null
+  } | null
   availableBalance: number
   pendingWithdrawal: {
     id: string
@@ -21,7 +24,7 @@ interface WithdrawClientProps {
   } | null
 }
 
-export default function WithdrawClient({ sellerData, availableBalance, pendingWithdrawal }: WithdrawClientProps) {
+export default function WithdrawClient({ sellerData, profileData, availableBalance, pendingWithdrawal }: WithdrawClientProps) {
   const [amount, setAmount] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -82,7 +85,7 @@ export default function WithdrawClient({ sellerData, availableBalance, pendingWi
   }
 
   return (
-    <MypageLayoutWrapper mode="seller" sellerData={{ display_name: sellerData.display_name, profile_image: null }}>
+    <MypageLayoutWrapper mode="seller" profileData={profileData}>
       <div className="py-8 px-4">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-2xl font-bold mb-6">출금 신청</h1>

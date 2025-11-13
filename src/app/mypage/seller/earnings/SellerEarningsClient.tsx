@@ -21,15 +21,17 @@ interface SellerEarningsClientProps {
   transactions: Order[]
   sellerData: {
     id: string
-    display_name: string
-    profile_image?: string | null
     bank_name: string
     account_number: string
     account_holder: string
   }
+  profileData?: {
+    name: string
+    profile_image?: string | null
+  } | null
 }
 
-export default function SellerEarningsClient({ earnings, transactions, sellerData }: SellerEarningsClientProps) {
+export default function SellerEarningsClient({ earnings, transactions, sellerData, profileData }: SellerEarningsClientProps) {
   const [loading, setLoading] = useState(false)
   const hasPendingWithdrawal = !!earnings.pending_withdrawal
 
@@ -152,7 +154,7 @@ export default function SellerEarningsClient({ earnings, transactions, sellerDat
   }
 
   return (
-    <MypageLayoutWrapper mode="seller" sellerData={sellerData}>
+    <MypageLayoutWrapper mode="seller" profileData={profileData}>
       <div className="py-8 px-4">
         <div className="mb-8">
           <h1 className="text-xl font-bold text-gray-900">수익 관리</h1>
