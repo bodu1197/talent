@@ -27,37 +27,37 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
   // 서브 페이지 확인 (모바일에서 뒤로가기 헤더 표시)
   const isSubPage = !hideLayout && !isMainPage && !isMypagePage
 
+  // Admin 페이지는 자체 레이아웃을 사용하므로 children만 반환
+  if (hideLayout) {
+    return <>{children}</>
+  }
+
   return (
     <>
-      {!hideLayout && (
-        <>
-          {/* PC: 항상 일반 헤더 표시 */}
-          <div className="hidden lg:block">
-            <Header />
-            <SearchBar id="desktop-search" />
-            {megaMenu}
-          </div>
+      {/* PC: 항상 일반 헤더 표시 */}
+      <div className="hidden lg:block">
+        <Header />
+        <SearchBar id="desktop-search" />
+        {megaMenu}
+      </div>
 
-          {/* 모바일: 메인 페이지일 때만 헤더/검색 표시 */}
-          {isMainPage && (
-            <div className="lg:hidden">
-              <Header />
-              <SearchBar id="mobile-search" />
-            </div>
-          )}
-
-          {/* 모바일: 서브 페이지일 때 뒤로가기 헤더 표시 */}
-          {isSubPage && <MobileSubHeader />}
-        </>
+      {/* 모바일: 메인 페이지일 때만 헤더/검색 표시 */}
+      {isMainPage && (
+        <div className="lg:hidden">
+          <Header />
+          <SearchBar id="mobile-search" />
+        </div>
       )}
+
+      {/* 모바일: 서브 페이지일 때 뒤로가기 헤더 표시 */}
+      {isSubPage && <MobileSubHeader />}
+
       <main className={
-        hideLayout
-          ? ''
-          : isMypagePage
-            ? 'flex-1 pt-16 lg:pt-[86px] pb-16 lg:pb-0 w-full max-w-none'
-            : isMainPage
-              ? 'flex-1 pt-[140px] lg:pt-[86px] pb-16 lg:pb-0'
-              : 'flex-1 pt-16 lg:pt-[86px] pb-16 lg:pb-0'
+        isMypagePage
+          ? 'flex-1 pt-16 lg:pt-[86px] pb-16 lg:pb-0 w-full max-w-none'
+          : isMainPage
+            ? 'flex-1 pt-[140px] lg:pt-[86px] pb-16 lg:pb-0'
+            : 'flex-1 pt-16 lg:pt-[86px] pb-16 lg:pb-0'
       }>
         {isMypagePage ? (
           <div className="h-full w-full">
@@ -69,22 +69,19 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
           </div>
         )}
       </main>
-      {!hideLayout && (
-        <>
-          {/* PC: mypage 제외한 모든 페이지에서 풋터 표시, 모바일: 메인 페이지에서만 풋터 표시 */}
-          {!isMypagePage && (
-            <div className="hidden lg:block">
-              <Footer />
-            </div>
-          )}
-          {isMainPage && (
-            <div className="lg:hidden">
-              <Footer />
-            </div>
-          )}
-          <MobileBottomNav />
-        </>
+
+      {/* PC: mypage 제외한 모든 페이지에서 풋터 표시, 모바일: 메인 페이지에서만 풋터 표시 */}
+      {!isMypagePage && (
+        <div className="hidden lg:block">
+          <Footer />
+        </div>
       )}
+      {isMainPage && (
+        <div className="lg:hidden">
+          <Footer />
+        </div>
+      )}
+      <MobileBottomNav />
     </>
   )
 }
