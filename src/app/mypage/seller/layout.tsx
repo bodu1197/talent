@@ -12,15 +12,6 @@ export default async function SellerLayout({ children }: { children: React.React
     redirect('/auth/login')
   }
 
-  // Register 페이지는 판매자 체크 생략 - pathname 체크를 위해 headers 사용
-  const { headers } = await import('next/headers')
-  const headersList = await headers()
-  const pathname = headersList.get('x-pathname') || ''
-
-  if (pathname === '/mypage/seller/register') {
-    return <>{children}</>
-  }
-
   // 판매자 확인
   const { data: seller } = await supabase
     .from('sellers')
@@ -28,9 +19,9 @@ export default async function SellerLayout({ children }: { children: React.React
     .eq('user_id', user.id)
     .maybeSingle()
 
-  // 판매자가 아니면 등록 페이지로
+  // 판매자가 아니면 "판매자 되기" 페이지로
   if (!seller) {
-    redirect('/mypage/seller/register')
+    redirect('/mypage/become-seller')
   }
 
   return <>{children}</>
