@@ -84,17 +84,18 @@ export default function BecomeSellerClient({ userId }: BecomeSellerClientProps) 
   )
 
   // 2단계: 본인인증
-  const VerifyStep = () => {
-    const handleVerification = async () => {
-      // TODO: 실제 본인인증 API 연동
-      // 현재는 임시로 다음 단계로 진행
-      if (!verificationData.name || !verificationData.phone) {
-        setError('모든 정보를 입력해주세요')
-        return
-      }
-
-      setStep('profile')
+  const handleVerification = async () => {
+    // TODO: 실제 본인인증 API 연동
+    // 현재는 임시로 다음 단계로 진행
+    if (!verificationData.name || !verificationData.phone) {
+      setError('모든 정보를 입력해주세요')
+      return
     }
+
+    setStep('profile')
+  }
+
+  const VerifyStep = () => {
 
     return (
       <div className="max-w-2xl mx-auto p-8">
@@ -127,7 +128,7 @@ export default function BecomeSellerClient({ userId }: BecomeSellerClientProps) 
             <input
               type="text"
               value={verificationData.name}
-              onChange={(e) => setVerificationData({ ...verificationData, name: e.target.value })}
+              onChange={(e) => setVerificationData(prev => ({ ...prev, name: e.target.value }))}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               placeholder="실명을 입력하세요"
             />
@@ -140,7 +141,7 @@ export default function BecomeSellerClient({ userId }: BecomeSellerClientProps) 
             <input
               type="tel"
               value={verificationData.phone}
-              onChange={(e) => setVerificationData({ ...verificationData, phone: e.target.value })}
+              onChange={(e) => setVerificationData(prev => ({ ...prev, phone: e.target.value }))}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               placeholder="010-0000-0000"
             />
@@ -153,7 +154,7 @@ export default function BecomeSellerClient({ userId }: BecomeSellerClientProps) 
             <input
               type="date"
               value={verificationData.birthdate}
-              onChange={(e) => setVerificationData({ ...verificationData, birthdate: e.target.value })}
+              onChange={(e) => setVerificationData(prev => ({ ...prev, birthdate: e.target.value }))}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
             />
           </div>
@@ -177,49 +178,49 @@ export default function BecomeSellerClient({ userId }: BecomeSellerClientProps) 
     )
   }
 
-  // 3단계: 프로필 등록
-  const ProfileStep = () => {
-    const handleSubmit = async () => {
-      if (!profileData.businessName) {
-        setError('판매자명을 입력해주세요')
-        return
-      }
-
-      setLoading(true)
-      setError(null)
-
-      try {
-        // sellers 레코드 생성 + 본인인증 정보 저장
-        const response = await fetch('/api/sellers/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            userId,
-            businessName: profileData.businessName,
-            description: profileData.description,
-            category: profileData.category,
-            verifiedName: verificationData.name,
-            verifiedPhone: verificationData.phone,
-          }),
-        })
-
-        if (!response.ok) {
-          const error = await response.json()
-          throw new Error(error.error || '판매자 등록에 실패했습니다')
-        }
-
-        // 성공 - 판매자 대시보드로 이동
-        router.push('/mypage/seller/dashboard')
-      } catch (err: unknown) {
-        logger.error('판매자 등록 실패:', err)
-        setError(err instanceof Error ? err.message : '판매자 등록 중 오류가 발생했습니다')
-      } finally {
-        setLoading(false)
-      }
+  // 3단계: 프로필 등록 제출
+  const handleSubmit = async () => {
+    if (!profileData.businessName) {
+      setError('판매자명을 입력해주세요')
+      return
     }
 
+    setLoading(true)
+    setError(null)
+
+    try {
+      // sellers 레코드 생성 + 본인인증 정보 저장
+      const response = await fetch('/api/sellers/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          businessName: profileData.businessName,
+          description: profileData.description,
+          category: profileData.category,
+          verifiedName: verificationData.name,
+          verifiedPhone: verificationData.phone,
+        }),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || '판매자 등록에 실패했습니다')
+      }
+
+      // 성공 - 판매자 대시보드로 이동
+      router.push('/mypage/seller/dashboard')
+    } catch (err: unknown) {
+      logger.error('판매자 등록 실패:', err)
+      setError(err instanceof Error ? err.message : '판매자 등록 중 오류가 발생했습니다')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const ProfileStep = () => {
     return (
       <div className="max-w-2xl mx-auto p-8">
         <div className="mb-6">
@@ -251,7 +252,7 @@ export default function BecomeSellerClient({ userId }: BecomeSellerClientProps) 
             <input
               type="text"
               value={profileData.businessName}
-              onChange={(e) => setProfileData({ ...profileData, businessName: e.target.value })}
+              onChange={(e) => setProfileData(prev => ({ ...prev, businessName: e.target.value }))}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               placeholder="판매자로 활동할 이름"
             />
@@ -266,7 +267,7 @@ export default function BecomeSellerClient({ userId }: BecomeSellerClientProps) 
             </label>
             <select
               value={profileData.category}
-              onChange={(e) => setProfileData({ ...profileData, category: e.target.value })}
+              onChange={(e) => setProfileData(prev => ({ ...prev, category: e.target.value }))}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
             >
               <option value="">선택하세요</option>
@@ -285,7 +286,7 @@ export default function BecomeSellerClient({ userId }: BecomeSellerClientProps) 
             </label>
             <textarea
               value={profileData.description}
-              onChange={(e) => setProfileData({ ...profileData, description: e.target.value })}
+              onChange={(e) => setProfileData(prev => ({ ...prev, description: e.target.value }))}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               rows={4}
               placeholder="자신을 소개하고 어떤 서비스를 제공하는지 설명해주세요"
