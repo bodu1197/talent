@@ -228,8 +228,9 @@ export default function SellerRegisterClient({ userId }: Props) {
       router.push('/mypage/seller/dashboard')
       router.refresh()
 
-    } catch (error: any) {
-      alert(`판매자 등록 중 오류가 발생했습니다.\n\n${error.message || error}`)
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다'
+      alert(`판매자 등록 중 오류가 발생했습니다.\n\n${message}`)
       setLoading(false)
     } finally {
       setLoading(false)
