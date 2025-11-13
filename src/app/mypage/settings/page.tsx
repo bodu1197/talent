@@ -10,10 +10,11 @@ export default async function SettingsPage() {
     redirect('/auth/login')
   }
 
+  // Get profile from profiles table (unified source)
   const { data: profile } = await supabase
-    .from('users')
+    .from('profiles')
     .select('*')
-    .eq('id', user.id)
+    .eq('user_id', user.id)
     .single()
 
   const { data: seller } = await supabase

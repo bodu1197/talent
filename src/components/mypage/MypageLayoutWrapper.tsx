@@ -38,8 +38,9 @@ export default function MypageLayoutWrapper({ mode, sellerData: initialSellerDat
 
       if (!user) return
 
+      // Use seller_profiles view which joins sellers + profiles
       const { data: seller } = await supabase
-        .from('sellers')
+        .from('seller_profiles')
         .select('display_name, profile_image')
         .eq('user_id', user.id)
         .maybeSingle()

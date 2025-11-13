@@ -25,15 +25,15 @@ export async function PATCH(request: NextRequest) {
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
     const serviceClient = createServiceClient(supabaseUrl, supabaseServiceKey)
 
-    // 서버 측에서 업데이트 (Service Role 사용으로 RLS 우회)
+    // Update profiles table (unified source)
     const { data, error } = await serviceClient
-      .from('users')
+      .from('profiles')
       .update({
         name,
         profile_image: profile_image || null,
         updated_at: new Date().toISOString()
       })
-      .eq('id', user.id)
+      .eq('user_id', user.id)
       .select()
       .single()
 

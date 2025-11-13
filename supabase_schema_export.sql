@@ -1,5 +1,5 @@
 -- Supabase Schema Export
--- Generated: 2025-11-12T11:06:24.194Z
+-- Generated: 2025-11-13T22:48:03.546Z
 -- Project: bpvfkkrlyrjkwgwmfrci
 -- Database: postgres
 
@@ -20,7 +20,7 @@
 --   created_at: timestamp with time zone
 --   updated_at: timestamp with time zone
 --   user_type: varchar
--- Row count: 2
+-- Row count: 3
 
 -- Table: sellers
 -- Columns detected from API response:
@@ -62,6 +62,9 @@
 --   real_name: nullable
 --   contact_hours: varchar
 --   tax_invoice_available: boolean
+--   verified: boolean
+--   verified_name: nullable
+--   verified_phone: nullable
 -- Row count: 1
 
 -- Table: seller_categories (Could not fetch: Could not find the table 'public.seller_categories' in the schema cache)

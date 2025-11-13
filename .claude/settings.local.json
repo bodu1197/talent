@@ -46,7 +46,8 @@
       "mcp__sequential-thinking__sequentialthinking",
       "Bash(node scripts/fix-color-hardcoding.js:*)",
       "Bash(nul)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(node scripts/advanced-security-advisor.js:*)"
     ],
     "deny": [],
     "ask": []

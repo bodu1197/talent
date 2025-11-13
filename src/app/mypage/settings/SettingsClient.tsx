@@ -71,9 +71,17 @@ export default function SettingsClient({ profile, isSeller }: Props) {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">프로필 이미지</label>
                     <div className="flex items-center gap-4">
-                      <div className="w-20 h-20 bg-brand-primary rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                        {profile?.name?.[0] || 'U'}
-                      </div>
+                      {profile?.profile_image ? (
+                        <img
+                          src={profile.profile_image}
+                          alt={profile.name || '프로필'}
+                          className="w-20 h-20 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-20 h-20 bg-brand-primary rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                          {profile?.name?.[0] || 'U'}
+                        </div>
+                      )}
                     </div>
                   </div>
 
