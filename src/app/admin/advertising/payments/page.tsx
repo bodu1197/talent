@@ -206,7 +206,7 @@ export default function AdminAdvertisingPaymentsPage() {
       const bankName = payment.bank_name || '-';
       const depositDate = payment.deposit_date || '-';
       const depositTime = payment.deposit_time || '-';
-      const status = getStatusBadge(payment.status).label;
+      const status = getStatusLabel(payment.status);
       const createdAt = new Date(payment.created_at).toLocaleString('ko-KR');
       const adminMemo = payment.admin_memo || '-';
 
@@ -304,6 +304,16 @@ export default function AdminAdvertisingPaymentsPage() {
       console.error('상태 업데이트 실패:', error);
       alert('업데이트에 실패했습니다');
     }
+  }
+
+  function getStatusLabel(status: string): string {
+    const config: Record<string, string> = {
+      pending: '입금 대기',
+      confirmed: '입금 확인',
+      completed: '처리 완료',
+      cancelled: '취소/환불'
+    };
+    return config[status] || status;
   }
 
   function getStatusBadge(status: string) {
