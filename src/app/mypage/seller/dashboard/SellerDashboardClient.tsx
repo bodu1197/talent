@@ -1,5 +1,8 @@
 'use client'
 
+import { useEffect } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { prefetchSellerData } from '@/lib/prefetch/buyerPrefetch'
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import Link from 'next/link'
 
@@ -35,6 +38,20 @@ type Props = {
 }
 
 export default function SellerDashboardClient({ stats, recentOrders, profileData }: Props) {
+  const queryClient = useQueryClient()
+
+  // 백그라운드에서 모든 판매자 페이지 데이터 프리페치
+  useEffect(() => {
+    // 판매자 등록이 완료된 경우에만 프리페치
+    if (stats) {
+      const timer = setTimeout(() => {
+        prefetchSellerData(queryClient).catch(console.error)
+      }, 500) // 대시보드 로딩 후 0.5초 뒤에 실행
+
+      return () => clearTimeout(timer)
+    }
+  }, [queryClient, stats])
+
   // 판매자 미등록 상태 - 등록 유도 UI 표시
   if (!stats) {
     return (

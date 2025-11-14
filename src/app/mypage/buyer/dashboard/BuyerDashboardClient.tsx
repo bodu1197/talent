@@ -1,5 +1,8 @@
 'use client'
 
+import { useEffect } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { prefetchBuyerData } from '@/lib/prefetch/buyerPrefetch'
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import StatCard from '@/components/mypage/StatCard'
 import Link from 'next/link'
@@ -21,6 +24,18 @@ type Props = {
 }
 
 export default function BuyerDashboardClient({ stats, recentOrders, favorites, benefits, profileData }: Props) {
+  const queryClient = useQueryClient()
+
+  // 백그라운드에서 모든 구매자 페이지 데이터 프리페치
+  useEffect(() => {
+    // 대시보드 렌더링 후 즉시 다른 페이지 데이터 미리 불러오기
+    const timer = setTimeout(() => {
+      prefetchBuyerData(queryClient).catch(console.error)
+    }, 500) // 대시보드 로딩 후 0.5초 뒤에 실행
+
+    return () => clearTimeout(timer)
+  }, [queryClient])
+
   // Generate alerts based on real data
   const alerts = []
   if (stats?.deliveredOrders > 0) {

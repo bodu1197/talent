@@ -12,6 +12,7 @@ import "@fontsource/noto-sans-kr/900.css";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { ChatUnreadProvider } from "@/components/providers/ChatUnreadProvider";
 import { ErrorBoundary } from "@/components/providers/ErrorBoundary";
+import { QueryProvider } from "@/components/providers/QueryProvider";
 import { headers } from "next/headers";
 import ConditionalLayout from "@/components/layout/ConditionalLayout";
 import ConditionalMegaMenuWrapper from "@/components/layout/ConditionalMegaMenuWrapper";
@@ -163,15 +164,17 @@ export default async function RootLayout({
               <PageViewTracker />
             </Suspense>
           )}
-          <AuthProvider>
-            <ChatUnreadProvider>
-              <ConditionalLayout
-                megaMenu={!shouldHideMegaMenu ? <ConditionalMegaMenuWrapper /> : null}
-              >
-                {children}
-              </ConditionalLayout>
-            </ChatUnreadProvider>
-          </AuthProvider>
+          <QueryProvider>
+            <AuthProvider>
+              <ChatUnreadProvider>
+                <ConditionalLayout
+                  megaMenu={!shouldHideMegaMenu ? <ConditionalMegaMenuWrapper /> : null}
+                >
+                  {children}
+                </ConditionalLayout>
+              </ChatUnreadProvider>
+            </AuthProvider>
+          </QueryProvider>
         </ErrorBoundary>
       </body>
     </html>
