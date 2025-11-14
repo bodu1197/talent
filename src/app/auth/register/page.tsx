@@ -465,11 +465,13 @@ export default function RegisterPage() {
                 프로필 정보 (자동 생성)
               </label>
               <div className="flex items-center gap-4">
-                <img
-                  src={profileImage}
-                  alt="프로필 이미지"
-                  className="w-16 h-16 rounded-full bg-white border-2 border-gray-200"
-                />
+                {profileImage && (
+                  <img
+                    src={profileImage}
+                    alt="프로필 이미지"
+                    className="w-16 h-16 rounded-full bg-white border-2 border-gray-200"
+                  />
+                )}
                 <div className="flex-1">
                   <p className="text-lg font-semibold text-gray-900">{randomNickname}</p>
                   <p className="text-xs text-gray-500">회원가입 후 마이페이지에서 변경 가능합니다</p>

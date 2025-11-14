@@ -210,9 +210,14 @@ export default function AdvertisingPage() {
         setSelectedService('');
         setSelectedMonths(1);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('광고 시작 실패:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
-      alert('광고 시작에 실패했습니다');
+      const errorMessage = error?.message || error?.toString() || '광고 시작에 실패했습니다';
+      alert(errorMessage);
+      // 에러 후 데이터 새로고침하여 UI 동기화
+      await loadDashboard();
+      setIsModalOpen(false);
+      setSelectedService('');
     } finally {
       setPurchasing(false);
     }
