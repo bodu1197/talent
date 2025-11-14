@@ -222,8 +222,8 @@ export async function payWithCredit(
 export async function startAdvertisingSubscription(
   sellerId: string,
   serviceId: string,
-  paymentMethod: 'card' | 'bank_transfer' = 'bank_transfer',
-  months: number = 1,
+  paymentMethod: 'card' | 'bank_transfer',
+  months: number,
   totalAmount: number
 ) {
   // 인증 검증
