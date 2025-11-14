@@ -29,23 +29,25 @@ export default function AdvertisingPage() {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'card' | 'bank_transfer'>('bank_transfer');
   const [purchasing, setPurchasing] = useState(false);
 
-  // 할인율 계산: 1개월 20만원 → 12개월 10만원 (선형 할인)
+  // 할인율 계산: 1개월 20만원(공급가액) → 12개월 10만원(공급가액) (선형 할인)
   const calculateMonthlyPrice = (months: number): number => {
-    const basePrice = 200000; // 1개월 기준 20만원
-    const finalPrice = 100000; // 12개월 시 10만원
+    const basePrice = 200000; // 1개월 기준 20만원 (공급가액)
+    const finalPrice = 100000; // 12개월 시 10만원 (공급가액)
     const discountPerMonth = (basePrice - finalPrice) / 11; // 11단계로 할인
     const price = basePrice - (discountPerMonth * (months - 1));
     // 100원 단위 제거 (1000원 단위로 반올림)
     return Math.round(price / 1000) * 1000;
   };
 
-  const monthlyPrice = useMemo(() => calculateMonthlyPrice(selectedMonths), [selectedMonths]);
-  const totalPrice = useMemo(() => monthlyPrice * selectedMonths, [monthlyPrice, selectedMonths]);
+  const monthlySupplyPrice = useMemo(() => calculateMonthlyPrice(selectedMonths), [selectedMonths]); // 월 공급가액
+  const totalSupplyPrice = useMemo(() => monthlySupplyPrice * selectedMonths, [monthlySupplyPrice, selectedMonths]); // 총 공급가액
+  const totalTaxAmount = useMemo(() => Math.round(totalSupplyPrice * 0.1), [totalSupplyPrice]); // 총 부가세 (10%)
+  const totalPrice = useMemo(() => totalSupplyPrice + totalTaxAmount, [totalSupplyPrice, totalTaxAmount]); // VAT 포함 총액
   const discountRate = useMemo(() => {
     if (selectedMonths === 1) return 0;
     const originalTotal = 200000 * selectedMonths;
-    return Math.round(((originalTotal - totalPrice) / originalTotal) * 100);
-  }, [selectedMonths, totalPrice]);
+    return Math.round(((originalTotal - totalSupplyPrice) / originalTotal) * 100);
+  }, [selectedMonths, totalSupplyPrice]);
 
   useEffect(() => {
     loadDashboard();
@@ -188,7 +190,7 @@ export default function AdvertisingPage() {
         return;
       }
 
-      const result = await startAdvertisingSubscription(user.id, selectedService, selectedPaymentMethod, selectedMonths, totalPrice);
+      const result = await startAdvertisingSubscription(user.id, selectedService, selectedPaymentMethod, selectedMonths, totalSupplyPrice);
 
       if (selectedPaymentMethod === 'bank_transfer' && result.payment) {
         // 무통장 입금 페이지로 리다이렉트
@@ -486,11 +488,13 @@ export default function AdvertisingPage() {
                     >
                       {[1, 3, 6, 12].map(months => {
                         const price = calculateMonthlyPrice(months);
-                        const total = price * months;
-                        const discount = months === 1 ? 0 : Math.round(((200000 * months - total) / (200000 * months)) * 100);
+                        const supplyTotal = price * months;
+                        const taxTotal = Math.round(supplyTotal * 0.1);
+                        const total = supplyTotal + taxTotal;
+                        const discount = months === 1 ? 0 : Math.round(((200000 * months - supplyTotal) / (200000 * months)) * 100);
                         return (
                           <option key={months} value={months}>
-                            {months}개월 - 월 {price.toLocaleString()}원 (총 {total.toLocaleString()}원)
+                            {months}개월 - 월 {price.toLocaleString()}원 (총 {total.toLocaleString()}원, VAT포함)
                             {discount > 0 && ` - ${discount}% 할인`}
                           </option>
                         );
@@ -504,8 +508,26 @@ export default function AdvertisingPage() {
                           <p className="text-sm text-gray-600">카테고리 1페이지 완전 랜덤 노출</p>
                         </div>
                         <div className="text-right">
-                          <div className="text-3xl font-bold text-brand-primary">{monthlyPrice.toLocaleString()}원</div>
-                          <div className="text-sm text-gray-600">/ 월</div>
+                          <div className="text-3xl font-bold text-brand-primary">{monthlySupplyPrice.toLocaleString()}원</div>
+                          <div className="text-sm text-gray-600">/ 월 (VAT 별도)</div>
+                        </div>
+                      </div>
+
+                      {/* VAT 정보 */}
+                      <div className="mb-4 p-3 bg-white border border-gray-200 rounded-lg">
+                        <div className="text-sm space-y-1">
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">공급가액 ({selectedMonths}개월)</span>
+                            <span className="font-bold text-gray-900">{totalSupplyPrice.toLocaleString()}원</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">부가세 (10%)</span>
+                            <span className="font-bold text-gray-900">{totalTaxAmount.toLocaleString()}원</span>
+                          </div>
+                          <div className="flex justify-between pt-2 border-t border-gray-200">
+                            <span className="font-bold text-gray-900">총 결제금액</span>
+                            <span className="font-bold text-brand-primary text-lg">{totalPrice.toLocaleString()}원</span>
+                          </div>
                         </div>
                       </div>
 
@@ -516,7 +538,7 @@ export default function AdvertisingPage() {
                             <span className="font-bold">{discountRate}% 할인 적용!</span>
                           </div>
                           <div className="text-sm text-green-700 mt-1">
-                            {selectedMonths}개월 계약 시 총 {totalPrice.toLocaleString()}원
+                            {selectedMonths}개월 계약 시 공급가액 {totalSupplyPrice.toLocaleString()}원
                             <span className="ml-2 line-through text-green-600">{(200000 * selectedMonths).toLocaleString()}원</span>
                           </div>
                         </div>

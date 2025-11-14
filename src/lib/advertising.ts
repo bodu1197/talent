@@ -225,7 +225,7 @@ export async function startAdvertisingSubscription(
   serviceId: string,
   paymentMethod: 'card' | 'bank_transfer',
   months: number,
-  totalAmount: number
+  supplyAmount: number // 공급가액 (VAT 별도)
 ) {
   // 인증 검증
   const user = await getCurrentUser();
@@ -236,7 +236,7 @@ export async function startAdvertisingSubscription(
   if (!Number.isInteger(months) || months < 1 || months > 12) {
     throw new Error('계약 기간은 1~12개월만 가능합니다');
   }
-  if (!validateAmount(totalAmount)) throw new Error('유효하지 않은 금액');
+  if (!validateAmount(supplyAmount)) throw new Error('유효하지 않은 금액');
 
   // 본인 확인
   if (userId !== user.id) {
@@ -267,10 +267,14 @@ export async function startAdvertisingSubscription(
     throw new Error('본인의 서비스만 광고 등록할 수 있습니다');
   }
 
+  // VAT 계산 (10%)
+  const taxAmount = Math.round(supplyAmount * 0.1);
+  const totalAmount = supplyAmount + taxAmount;
+
   const nextBillingDate = new Date();
   nextBillingDate.setMonth(nextBillingDate.getMonth() + months);
 
-  const monthlyPrice = Math.round(totalAmount / months);
+  const monthlyPrice = Math.round(supplyAmount / months);
 
   // 구독 생성
   const { data: subscription, error: subError } = await supabase
@@ -290,7 +294,7 @@ export async function startAdvertisingSubscription(
 
   // 무통장 입금 처리
   if (paymentMethod === 'bank_transfer') {
-    const payment = await requestBankTransferPayment(subscription.id, userId, totalAmount, months);
+    const payment = await requestBankTransferPayment(subscription.id, userId, supplyAmount, taxAmount, totalAmount, months);
     return { subscription, payment };
   }
 
@@ -351,13 +355,15 @@ export async function cancelSubscription(subscriptionId: string) {
 export async function requestBankTransferPayment(
   subscriptionId: string,
   userId: string,
-  amount: number,
+  supplyAmount: number,
+  taxAmount: number,
+  totalAmount: number,
   months: number = 1
 ) {
   // 입력 검증
   if (!validateUUID(subscriptionId)) throw new Error('유효하지 않은 구독 ID');
   if (!validateUUID(userId)) throw new Error('유효하지 않은 사용자 ID');
-  if (!validateAmount(amount)) throw new Error('유효하지 않은 금액');
+  if (!validateAmount(totalAmount)) throw new Error('유효하지 않은 금액');
 
   const supabase = getAdminClient();
 
@@ -370,7 +376,9 @@ export async function requestBankTransferPayment(
     .insert({
       subscription_id: subscriptionId,
       seller_id: userId, // users.id를 사용 (FK 제약조건)
-      amount,
+      amount: totalAmount,
+      supply_amount: supplyAmount,
+      tax_amount: taxAmount,
       payment_method: 'bank_transfer',
       status: 'pending'
     })
@@ -392,13 +400,15 @@ export async function requestBankTransferPayment(
     type: 'payment_bank_transfer',
     title: '광고 구독 결제 - 무통장 입금 안내',
     content: `
-입금 금액: ${amount.toLocaleString()}원 (${months}개월)
+입금 금액 (VAT 포함): ${totalAmount.toLocaleString()}원 (${months}개월)
+- 공급가액: ${supplyAmount.toLocaleString()}원
+- 부가세(10%): ${taxAmount.toLocaleString()}원
 입금 계좌: ${process.env.NEXT_PUBLIC_BANK_NAME} ${process.env.NEXT_PUBLIC_BANK_ACCOUNT}
 예금주: ${process.env.NEXT_PUBLIC_BANK_HOLDER}
 입금 기한: ${deadline.toLocaleString()}
 
 입금자명: [이름-${payment!.id.slice(0, 8)}]
-※ 입금 후 자동으로 처리됩니다.
+※ 입금 확인 후 세금계산서가 자동 발행됩니다.
     `.trim(),
     link_url: `/mypage/seller/advertising/payments/${payment!.id}`
   });
@@ -529,16 +539,140 @@ export async function confirmBankTransferPayment(
     })
     .eq('id', payment.subscription_id);
 
+  // 세금계산서 자동 발행
+  const taxInvoice = await issueTaxInvoice(payment.id, adminId);
+
   // 판매자에게 확인 완료 알림
   await supabase.from('notifications').insert({
     user_id: payment.seller_id,
     type: 'payment_confirmed',
     title: '광고 결제 확인 완료',
-    content: `${payment.amount.toLocaleString()}원 입금이 확인되었습니다. 광고가 활성화되었습니다.`,
-    link_url: '/mypage/seller/advertising'
+    content: `${payment.amount.toLocaleString()}원 입금이 확인되었습니다. 광고가 활성화되었으며 세금계산서가 발행되었습니다.`,
+    link_url: '/mypage/seller/tax-invoices'
   });
 
   return payment;
+}
+
+/**
+ * 세금계산서 발행
+ */
+export async function issueTaxInvoice(
+  paymentId: string,
+  issuedBy: string
+) {
+  const supabase = getAdminClient();
+
+  // 결제 정보 조회
+  const { data: payment } = await supabase
+    .from('advertising_payments')
+    .select(`
+      *,
+      subscription:advertising_subscriptions(
+        id,
+        service:services(title)
+      )
+    `)
+    .eq('id', paymentId)
+    .single();
+
+  if (!payment) throw new Error('결제 정보를 찾을 수 없습니다');
+
+  // 공급자 정보 조회 (우리 회사)
+  const { data: companyInfo } = await supabase
+    .from('company_info')
+    .select('*')
+    .eq('is_active', true)
+    .single();
+
+  if (!companyInfo) throw new Error('회사 정보가 설정되지 않았습니다');
+
+  // 공급받는자 정보 조회 (판매자)
+  const { data: buyerInfo } = await supabase
+    .from('sellers')
+    .select('business_number, business_name, ceo_name, business_address, business_type, business_item, business_email')
+    .eq('user_id', payment.seller_id)
+    .single();
+
+  if (!buyerInfo || !buyerInfo.business_number) {
+    throw new Error('판매자 사업자 정보가 등록되지 않았습니다');
+  }
+
+  // 승인번호 생성 (YYYYMMDD-시퀀스)
+  const today = new Date();
+  const dateStr = today.toISOString().split('T')[0].replace(/-/g, '');
+
+  const { data: existingInvoices } = await supabase
+    .from('tax_invoices')
+    .select('invoice_number')
+    .like('invoice_number', `${dateStr}-%`)
+    .order('invoice_number', { ascending: false })
+    .limit(1);
+
+  let sequence = 1;
+  if (existingInvoices && existingInvoices.length > 0) {
+    const lastNumber = existingInvoices[0].invoice_number.split('-')[1];
+    sequence = parseInt(lastNumber) + 1;
+  }
+
+  const invoiceNumber = `${dateStr}-${sequence.toString().padStart(4, '0')}`;
+
+  // 서비스명 가져오기
+  const serviceName = payment.subscription?.service?.title || '광고 서비스';
+
+  // 세금계산서 생성
+  const { data: taxInvoice, error } = await supabase
+    .from('tax_invoices')
+    .insert({
+      invoice_number: invoiceNumber,
+      payment_id: paymentId,
+      subscription_id: payment.subscription_id,
+      issue_date: today.toISOString().split('T')[0],
+      issue_type: 'regular',
+      status: 'issued',
+
+      // 공급자 정보
+      supplier_business_number: companyInfo.business_number,
+      supplier_company_name: companyInfo.company_name,
+      supplier_ceo_name: companyInfo.ceo_name,
+      supplier_address: companyInfo.address,
+      supplier_business_type: companyInfo.business_type,
+      supplier_business_item: companyInfo.business_item,
+
+      // 공급받는자 정보
+      buyer_business_number: buyerInfo.business_number,
+      buyer_company_name: buyerInfo.business_name || '',
+      buyer_ceo_name: buyerInfo.ceo_name || '',
+      buyer_address: buyerInfo.business_address || '',
+      buyer_business_type: buyerInfo.business_type,
+      buyer_business_item: buyerInfo.business_item,
+      buyer_email: buyerInfo.business_email,
+
+      // 금액 정보
+      supply_amount: payment.supply_amount,
+      tax_amount: payment.tax_amount,
+      total_amount: payment.amount,
+
+      // 품목 정보
+      item_name: `${serviceName} 광고`,
+      item_spec: `광고 서비스`,
+      item_quantity: 1,
+      item_unit_price: payment.supply_amount,
+
+      remarks: `승인번호: ${invoiceNumber}`
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+
+  // 결제 테이블에 세금계산서 ID 연결
+  await supabase
+    .from('advertising_payments')
+    .update({ tax_invoice_id: taxInvoice.id })
+    .eq('id', paymentId);
+
+  return taxInvoice;
 }
 
 // ===== 완전 공평 랜덤 노출 알고리즘 =====
