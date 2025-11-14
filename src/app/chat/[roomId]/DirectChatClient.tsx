@@ -489,7 +489,7 @@ function PaymentRequestCard({
 
   return (
     <div className="flex justify-center">
-      <div className="bg-gradient-to-br from-green-50 to-blue-50 border-2 border-green-200 rounded-xl p-5 max-w-md w-full shadow-sm">
+      <div className="bg-green-50 border-2 border-green-200 rounded-xl p-5 max-w-md w-full shadow-sm">
         {/* 헤더 */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-2">

@@ -133,7 +133,7 @@ CREATE TABLE advertising_impressions (
   service_id UUID NOT NULL REFERENCES services(id) ON DELETE CASCADE,
 
   -- 노출 정보
-  category_id UUID REFERENCES categories(id) ON DELETE SET NULL,
+  category_id TEXT REFERENCES categories(id) ON DELETE SET NULL,
   position INTEGER NOT NULL, -- 노출 순서 (1, 2, 3...)
   page_number INTEGER DEFAULT 1, -- 페이지 번호
 

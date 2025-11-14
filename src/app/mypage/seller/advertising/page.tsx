@@ -149,7 +149,7 @@ export default function AdvertisingPage() {
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen">
+      <div className="bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
           {/* 헤더 섹션 */}
@@ -162,7 +162,7 @@ export default function AdvertisingPage() {
 
           {/* 크레딧 잔액 카드 */}
           {dashboard && dashboard.credits.total > 0 && (
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-lg p-8 mb-8 text-white">
+            <div className="bg-brand-primary rounded-2xl shadow-lg p-8 mb-8 text-white">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-blue-100 text-sm mb-2">사용 가능한 크레딧</p>

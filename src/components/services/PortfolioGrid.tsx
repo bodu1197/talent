@@ -47,7 +47,7 @@ export default function PortfolioGrid({ portfolios }: Props) {
           <button
             key={portfolio.id}
             onClick={() => setSelectedPortfolio(portfolio)}
-            className="group relative bg-gray-100 rounded-lg overflow-hidden hover:ring-2 hover:ring-[#0f3460] transition-all"
+            className="group relative bg-gray-100 rounded-lg overflow-hidden hover:ring-2 hover:ring-brand-primary transition-all"
             style={{ aspectRatio: '35/26' }}
           >
             {portfolio.thumbnail_url ? (
@@ -63,7 +63,7 @@ export default function PortfolioGrid({ portfolios }: Props) {
             )}
 
             {/* 오버레이 */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
               <h3 className="text-white font-bold text-sm line-clamp-2 mb-1">
                 {portfolio.title}
               </h3>
