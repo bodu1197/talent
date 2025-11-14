@@ -60,11 +60,14 @@ export default function AdvertisingPage() {
       if (!user) return;
 
       // Get seller ID from sellers table
-      const { data: seller } = await supabase
+      const { data: seller, error: sellerError } = await supabase
         .from('sellers')
         .select('id')
         .eq('user_id', user.id)
         .maybeSingle();
+
+      console.log('📊 User ID:', user.id);
+      console.log('📊 Seller query result:', seller, 'Error:', sellerError);
 
       if (!seller) {
         console.error('Seller not found for user:', user.id);
@@ -113,18 +116,21 @@ export default function AdvertisingPage() {
       });
 
       // Get all services with thumbnails
-      const { data: myServices } = await supabase
+      const { data: myServices, error: servicesError } = await supabase
         .from('services')
         .select('id, title, thumbnail_url')
         .eq('seller_id', seller.id)
         .eq('status', 'active')
         .is('deleted_at', null);
 
+      console.log('📊 Seller ID:', seller.id);
+      console.log('📊 Services query result:', myServices, 'Error:', servicesError);
+
       // Get active subscriptions with full details
       const { data: activeAds } = await supabase
         .from('advertising_subscriptions')
         .select('*')
-        .eq('seller_id', user.id)
+        .eq('seller_id', seller.id)
         .eq('status', 'active');
 
       // Create a map of service_id -> ad details

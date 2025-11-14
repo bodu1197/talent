@@ -48,7 +48,8 @@
       "Bash(nul)",
       "Bash(rm:*)",
       "Bash(node scripts/advanced-security-advisor.js:*)",
-      "mcp__chrome-devtools__evaluate_script"
+      "mcp__chrome-devtools__evaluate_script",
+      "mcp__next-devtools__browser_eval"
     ],
     "deny": [],
     "ask": []
