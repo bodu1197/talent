@@ -114,7 +114,17 @@ export default function AdminAdvertisingPaymentsPage() {
       }
 
       const response = await fetch(`/api/admin/advertising/payments?${params}`);
-      if (!response.ok) throw new Error('Failed to fetch');
+
+      if (response.status === 401 || response.status === 403) {
+        alert('로그인이 필요하거나 권한이 없습니다');
+        window.location.href = '/admin/login';
+        return;
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || 'Failed to fetch');
+      }
 
       const data = await response.json();
       setPayments(data.payments || []);
