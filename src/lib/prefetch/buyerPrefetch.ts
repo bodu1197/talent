@@ -11,11 +11,6 @@ export async function prefetchBuyerData(queryClient: QueryClient) {
       queryKey: ['buyer', 'orders', 'count'],
       queryFn: () => fetch('/api/orders/buyer/count').then(res => res.json()),
     }),
-
-    queryClient.prefetchQuery({
-      queryKey: ['buyer', 'favorites'],
-      queryFn: () => fetch('/api/favorites').then(res => res.json()),
-    }),
   ])
 }
 
