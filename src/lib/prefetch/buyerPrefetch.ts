@@ -16,11 +16,12 @@ export async function prefetchBuyerData(queryClient: QueryClient) {
       queryFn: () => fetch('/api/orders/buyer/count').then(res => res.json()),
     }),
 
-    // 견적 요청 목록
-    queryClient.prefetchQuery({
-      queryKey: ['buyer', 'quotes'],
-      queryFn: () => fetch('/api/quotes/buyer').then(res => res.json()),
-    }),
+    // TODO: Uncomment when these API routes are implemented
+    // // 견적 요청 목록
+    // queryClient.prefetchQuery({
+    //   queryKey: ['buyer', 'quotes'],
+    //   queryFn: () => fetch('/api/quotes/buyer').then(res => res.json()),
+    // }),
 
     // 찜한 서비스 목록
     queryClient.prefetchQuery({
@@ -28,11 +29,12 @@ export async function prefetchBuyerData(queryClient: QueryClient) {
       queryFn: () => fetch('/api/favorites').then(res => res.json()),
     }),
 
-    // 리뷰 목록
-    queryClient.prefetchQuery({
-      queryKey: ['buyer', 'reviews'],
-      queryFn: () => fetch('/api/reviews/buyer').then(res => res.json()),
-    }),
+    // TODO: Uncomment when API route is implemented
+    // // 리뷰 목록
+    // queryClient.prefetchQuery({
+    //   queryKey: ['buyer', 'reviews'],
+    //   queryFn: () => fetch('/api/reviews/buyer').then(res => res.json()),
+    // }),
   ])
 }
 
@@ -51,22 +53,23 @@ export async function prefetchSellerData(queryClient: QueryClient) {
       queryFn: () => fetch('/api/orders/seller/count').then(res => res.json()),
     }),
 
-    // 서비스 목록
-    queryClient.prefetchQuery({
-      queryKey: ['seller', 'services'],
-      queryFn: () => fetch('/api/services/seller').then(res => res.json()),
-    }),
+    // TODO: Uncomment when these API routes are implemented
+    // // 서비스 목록
+    // queryClient.prefetchQuery({
+    //   queryKey: ['seller', 'services'],
+    //   queryFn: () => fetch('/api/services/seller').then(res => res.json()),
+    // }),
 
-    // 리뷰 목록
-    queryClient.prefetchQuery({
-      queryKey: ['seller', 'reviews'],
-      queryFn: () => fetch('/api/reviews/seller').then(res => res.json()),
-    }),
+    // // 리뷰 목록
+    // queryClient.prefetchQuery({
+    //   queryKey: ['seller', 'reviews'],
+    //   queryFn: () => fetch('/api/reviews/seller').then(res => res.json()),
+    // }),
 
-    // 수익 정보
-    queryClient.prefetchQuery({
-      queryKey: ['seller', 'earnings'],
-      queryFn: () => fetch('/api/earnings').then(res => res.json()),
-    }),
+    // // 수익 정보
+    // queryClient.prefetchQuery({
+    //   queryKey: ['seller', 'earnings'],
+    //   queryFn: () => fetch('/api/earnings').then(res => res.json()),
+    // }),
   ])
 }
