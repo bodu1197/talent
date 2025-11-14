@@ -166,9 +166,16 @@ export default function AdvertisingPage() {
           {/* 헤더 섹션 */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">광고 관리</h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
               더 많은 고객에게 서비스를 노출하고 매출을 증대시키세요
             </p>
+            <a
+              href="/mypage/seller/advertising/bank-transfer"
+              className="inline-flex items-center gap-2 bg-[#0f3460] text-white px-6 py-3 rounded-lg hover:bg-[#1a4d8f] transition-colors"
+            >
+              <i className="fas fa-university"></i>
+              <span>무통장 입금으로 광고 신청하기</span>
+            </a>
           </div>
 
           {/* 통계 카드 */}
