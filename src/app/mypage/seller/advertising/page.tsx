@@ -96,32 +96,28 @@ export default function AdvertisingPage() {
         recentActivity: []
       });
 
-      // Get all services with active subscription status
+      // Get all services
       const { data: myServices } = await supabase
         .from('services')
-        .select(`
-          id,
-          title,
-          advertising_subscriptions!left(
-            id,
-            status
-          )
-        `)
+        .select('id, title')
         .eq('seller_id', seller.id)
         .eq('status', 'active')
         .is('deleted_at', null);
 
+      // Get active subscriptions
+      const { data: activeAds } = await supabase
+        .from('advertising_subscriptions')
+        .select('service_id')
+        .eq('seller_id', user.id)
+        .eq('status', 'active');
+
       // Map services with hasActiveAd flag
-      const servicesWithAdStatus = myServices?.map(service => {
-        const hasActiveAd = service.advertising_subscriptions?.some(
-          (sub: any) => sub.status === 'active'
-        ) || false;
-        return {
-          id: service.id,
-          title: service.title,
-          hasActiveAd
-        };
-      }) || [];
+      const activeServiceIds = new Set(activeAds?.map(ad => ad.service_id) || []);
+      const servicesWithAdStatus = myServices?.map(service => ({
+        id: service.id,
+        title: service.title,
+        hasActiveAd: activeServiceIds.has(service.id)
+      })) || [];
 
       setServices(servicesWithAdStatus);
 
