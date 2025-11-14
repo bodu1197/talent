@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createServiceRoleClient } from '@/lib/supabase/singleton'
 import { checkAdminAuth } from '@/lib/admin/auth'
 
 // GET - 무통장 입금 목록 조회 (필터, 검색, 통계 포함)
@@ -14,7 +15,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const supabase = await createClient()
+    const supabase = createServiceRoleClient()
     const { searchParams } = new URL(request.url)
 
     // 필터 파라미터
@@ -204,7 +205,7 @@ export async function PATCH(request: NextRequest) {
       )
     }
 
-    const supabase = await createClient()
+    const supabase = createServiceRoleClient()
     const body = await request.json()
     const { paymentIds, status, adminMemo } = body
 
@@ -215,8 +216,9 @@ export async function PATCH(request: NextRequest) {
       )
     }
 
-    // 관리자 정보 조회
-    const { data: { user } } = await supabase.auth.getUser()
+    // 관리자 정보 조회 - checkAdminAuth에서 이미 인증되었으므로 세션에서 가져옴
+    const sessionSupabase = await createClient()
+    const { data: { user } } = await sessionSupabase.auth.getUser()
     if (!user) {
       return NextResponse.json(
         { error: 'Unauthorized' },

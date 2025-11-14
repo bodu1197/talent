@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createServiceRoleClient } from '@/lib/supabase/singleton'
 import { checkAdminAuth } from '@/lib/admin/auth'
 
 interface SubscriptionWithDetails {
@@ -38,7 +39,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const supabase = await createClient()
+    const supabase = createServiceRoleClient()
     const { searchParams } = new URL(request.url)
 
     const status = searchParams.get('status')
@@ -134,7 +135,7 @@ export async function PATCH(request: NextRequest) {
       )
     }
 
-    const supabase = await createClient()
+    const supabase = createServiceRoleClient()
     const body = await request.json()
     const { subscriptionId, status, adminMemo } = body
 
@@ -189,7 +190,7 @@ export async function DELETE(request: NextRequest) {
       )
     }
 
-    const supabase = await createClient()
+    const supabase = createServiceRoleClient()
     const { searchParams } = new URL(request.url)
     const subscriptionId = searchParams.get('id')
 
