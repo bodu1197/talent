@@ -57,38 +57,13 @@ export default function AdvertisingPage() {
 
   async function loadDashboard() {
     try {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      const response = await fetch('/api/seller/advertising/dashboard');
 
-      // Get seller ID from sellers table
-      const { data: seller, error: sellerError } = await supabase
-        .from('sellers')
-        .select('id')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      console.log('📊 User ID:', user.id);
-      console.log('📊 Seller query result:', seller, 'Error:', sellerError);
-
-      if (!seller) {
-        console.error('Seller not found for user:', user.id);
-        setLoading(false);
-        return;
+      if (!response.ok) {
+        throw new Error('Failed to fetch dashboard');
       }
 
-      const { data: subscriptions } = await supabase
-        .from('advertising_subscriptions')
-        .select(`
-          *,
-          service:services(id, title)
-        `)
-        .eq('seller_id', seller.id)
-        .in('status', ['active', 'pending_payment']);
-
-      const totalImpressions = subscriptions?.reduce((sum, s) => sum + s.total_impressions, 0) || 0;
-      const totalClicks = subscriptions?.reduce((sum, s) => sum + s.total_clicks, 0) || 0;
-      const ctr = totalImpressions > 0 ? (totalClicks / totalImpressions) * 100 : 0;
+      const data = await response.json();
 
       setDashboard({
         credits: {
@@ -97,71 +72,17 @@ export default function AdvertisingPage() {
           purchased: 0,
           expiresAt: null
         },
-        subscriptions: subscriptions?.map(s => ({
-          id: s.id,
-          serviceId: s.service_id,
-          serviceName: s.service?.title || '',
-          status: s.status,
-          nextBillingDate: s.next_billing_date,
-          monthlyPrice: s.monthly_price,
-          totalImpressions: s.total_impressions,
-          totalClicks: s.total_clicks,
-          ctr: s.total_impressions > 0 ? (s.total_clicks / s.total_impressions) * 100 : 0
-        })) || [],
-        stats: {
-          totalImpressions,
-          totalClicks,
-          ctr,
+        subscriptions: data.subscriptions || [],
+        stats: data.stats || {
+          totalImpressions: 0,
+          totalClicks: 0,
+          ctr: 0,
           averagePosition: 0
         },
         recentActivity: []
       });
 
-      // Get all services with thumbnails
-      const { data: myServices, error: servicesError } = await supabase
-        .from('services')
-        .select('id, title, thumbnail_url')
-        .eq('seller_id', seller.id)
-        .eq('status', 'active')
-        .is('deleted_at', null);
-
-      console.log('📊 Seller ID:', seller.id);
-      console.log('📊 Services query result:', myServices, 'Error:', servicesError);
-
-      // Get active subscriptions with full details (including pending_payment)
-      const { data: activeAds } = await supabase
-        .from('advertising_subscriptions')
-        .select('*')
-        .eq('seller_id', seller.id)
-        .in('status', ['active', 'pending_payment']);
-
-      // Create a map of service_id -> ad details
-      const adDetailsMap = new Map(
-        activeAds?.map(ad => [
-          ad.service_id,
-          {
-            subscriptionId: ad.id,
-            monthlyPrice: ad.monthly_price,
-            nextBillingDate: ad.next_billing_date,
-            totalImpressions: ad.total_impressions,
-            totalClicks: ad.total_clicks,
-            ctr: ad.total_impressions > 0 ? (ad.total_clicks / ad.total_impressions) * 100 : 0,
-            createdAt: ad.created_at,
-            status: ad.status
-          }
-        ]) || []
-      );
-
-      // Map services with ad details
-      const servicesWithAdStatus = myServices?.map(service => ({
-        id: service.id,
-        title: service.title,
-        thumbnailUrl: service.thumbnail_url,
-        hasActiveAd: adDetailsMap.has(service.id),
-        adDetails: adDetailsMap.get(service.id)
-      })) || [];
-
-      setServices(servicesWithAdStatus);
+      setServices(data.services || []);
 
     } catch (error) {
       console.error('대시보드 로딩 실패:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
