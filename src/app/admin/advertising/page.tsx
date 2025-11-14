@@ -134,6 +134,18 @@ export default function AdminAdvertisingPage() {
         </div>
         <div className="flex gap-2">
           <Link
+            href="/admin/advertising/payments"
+            className="px-4 py-2 bg-red-600 text-white rounded-md font-medium hover:bg-red-700 transition-colors flex items-center gap-2"
+          >
+            <i className="fas fa-money-bill-wave"></i>
+            무통장 입금 확인
+            {summary && summary.pendingPayments > 0 && (
+              <span className="bg-white text-red-600 rounded-full px-2 py-0.5 text-xs font-bold">
+                {summary.pendingPayments}
+              </span>
+            )}
+          </Link>
+          <Link
             href="/admin/advertising/credits"
             className="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-md font-medium hover:bg-slate-50 transition-colors"
           >
