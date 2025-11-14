@@ -15,6 +15,7 @@ const menuItems = [
   { name: '정산 관리', path: '/admin/settlements', icon: 'fa-money-bill-wave' },
   { name: '출금 관리', path: '/admin/withdrawals', icon: 'fa-wallet', badge: 'pendingWithdrawals' },
   { name: '광고 관리', path: '/admin/advertising', icon: 'fa-bullhorn', badge: 'pendingPayments' },
+  { name: '세금계산서', path: '/admin/tax-invoices', icon: 'fa-file-invoice' },
   { name: '리뷰 관리', path: '/admin/reviews', icon: 'fa-star' },
   { name: '신고 관리', path: '/admin/reports', icon: 'fa-flag' },
   { name: '분쟁 관리', path: '/admin/disputes', icon: 'fa-gavel' },
