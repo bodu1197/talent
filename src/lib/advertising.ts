@@ -227,16 +227,22 @@ export async function startAdvertisingSubscription(
   // 인증 검증
   const user = await getCurrentUser();
 
-  // 본인 확인
-  if (user.id !== sellerId) {
-    throw new Error('본인의 서비스만 광고 등록할 수 있습니다');
-  }
-
   // 입력 검증
   if (!validateUUID(sellerId)) throw new Error('유효하지 않은 판매자 ID');
   if (!validateUUID(serviceId)) throw new Error('유효하지 않은 서비스 ID');
 
   const supabase = getAdminClient();
+
+  // 본인 확인 - sellers 테이블에서 user_id 확인
+  const { data: seller } = await supabase
+    .from('sellers')
+    .select('user_id')
+    .eq('id', sellerId)
+    .single();
+
+  if (!seller || seller.user_id !== user.id) {
+    throw new Error('본인의 서비스만 광고 등록할 수 있습니다');
+  }
 
   // 서비스 소유권 확인
   const { data: service } = await supabase
@@ -320,14 +326,25 @@ export async function cancelSubscription(subscriptionId: string) {
 
   const supabase = getAdminClient();
 
-  // 구독 소유권 확인
+  // 구독 소유권 확인 - seller_id로 sellers 테이블 조회
   const { data: subscription } = await supabase
     .from('advertising_subscriptions')
     .select('seller_id')
     .eq('id', subscriptionId)
     .single();
 
-  if (!subscription || subscription.seller_id !== user.id) {
+  if (!subscription) {
+    throw new Error('구독 정보를 찾을 수 없습니다');
+  }
+
+  // sellers 테이블에서 user_id 확인
+  const { data: seller } = await supabase
+    .from('sellers')
+    .select('user_id')
+    .eq('id', subscription.seller_id)
+    .single();
+
+  if (!seller || seller.user_id !== user.id) {
     throw new Error('본인의 구독만 취소할 수 있습니다');
   }
 
@@ -425,14 +442,25 @@ export async function uploadPaymentReceipt(
 
   const supabase = getAdminClient();
 
-  // 결제 소유권 확인
+  // 결제 소유권 확인 - seller_id로 sellers 테이블 조회
   const { data: payment } = await supabase
     .from('advertising_payments')
     .select('seller_id')
     .eq('id', paymentId)
     .single();
 
-  if (!payment || payment.seller_id !== user.id) {
+  if (!payment) {
+    throw new Error('결제 정보를 찾을 수 없습니다');
+  }
+
+  // sellers 테이블에서 user_id 확인
+  const { data: seller } = await supabase
+    .from('sellers')
+    .select('user_id')
+    .eq('id', payment.seller_id)
+    .single();
+
+  if (!seller || seller.user_id !== user.id) {
     throw new Error('본인의 결제만 수정할 수 있습니다');
   }
 

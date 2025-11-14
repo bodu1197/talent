@@ -24,12 +24,25 @@ export default function AdvertisingPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const totalCredits = await getTotalCredits(user.id);
+      // Get seller ID from sellers table
+      const { data: seller } = await supabase
+        .from('sellers')
+        .select('id')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (!seller) {
+        console.error('Seller not found for user:', user.id);
+        setLoading(false);
+        return;
+      }
+
+      const totalCredits = await getTotalCredits(seller.id);
 
       const { data: creditData } = await supabase
         .from('advertising_credits')
         .select('*')
-        .eq('seller_id', user.id)
+        .eq('seller_id', seller.id)
         .single();
 
       const { data: subscriptions } = await supabase
@@ -38,7 +51,7 @@ export default function AdvertisingPage() {
           *,
           service:services(id, title)
         `)
-        .eq('seller_id', user.id)
+        .eq('seller_id', seller.id)
         .eq('status', 'active');
 
       const totalImpressions = subscriptions?.reduce((sum, s) => sum + s.total_impressions, 0) || 0;
@@ -75,7 +88,7 @@ export default function AdvertisingPage() {
       const { data: myServices } = await supabase
         .from('services')
         .select('id, title')
-        .eq('seller_id', user.id)
+        .eq('seller_id', seller.id)
         .eq('status', 'active')
         .is('deleted_at', null);
 
@@ -112,7 +125,19 @@ export default function AdvertisingPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      await startAdvertisingSubscription(user.id, selectedService, selectedPaymentMethod);
+      // Get seller ID from sellers table
+      const { data: seller } = await supabase
+        .from('sellers')
+        .select('id')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (!seller) {
+        alert('판매자 정보를 찾을 수 없습니다');
+        return;
+      }
+
+      await startAdvertisingSubscription(seller.id, selectedService, selectedPaymentMethod);
 
       if (selectedPaymentMethod === 'bank_transfer') {
         alert('무통장 입금 신청이 완료되었습니다.\n\n입금 계좌 정보가 알림으로 전송되었습니다.\n입금 후 관리자 확인까지 1-2일이 소요됩니다.');
