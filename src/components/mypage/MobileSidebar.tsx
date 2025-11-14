@@ -29,11 +29,6 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
       href: '/mypage/buyer/quotes',
     },
     {
-      icon: 'fa-ticket',
-      label: '쿠폰/캐시',
-      href: '/mypage/buyer/coupons',
-    },
-    {
       icon: 'fa-heart',
       label: '찜한 서비스',
       href: '/mypage/buyer/favorites',
@@ -108,11 +103,6 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
       icon: 'fa-tags',
       label: '카테고리 관리',
       href: '/admin/categories',
-    },
-    {
-      icon: 'fa-ticket',
-      label: '쿠폰 관리',
-      href: '/admin/coupons',
     },
     {
       icon: 'fa-dollar-sign',

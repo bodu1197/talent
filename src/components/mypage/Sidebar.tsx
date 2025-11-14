@@ -135,16 +135,6 @@ const buyerNavItems: NavItem[] = [
     icon: 'fa-heart'
   },
   {
-    label: '쿠폰/캐시',
-    href: '/mypage/buyer/coupons',
-    icon: 'fa-ticket',
-    children: [
-      { label: '보유 쿠폰', href: '/mypage/buyer/coupons', icon: '' },
-      { label: '캐시 충전', href: '/mypage/buyer/coupons/charge', icon: '' },
-      { label: '사용 내역', href: '/mypage/buyer/coupons/history', icon: '' }
-    ]
-  },
-  {
     label: '기본정보',
     href: '/mypage/settings',
     icon: 'fa-user-circle'
