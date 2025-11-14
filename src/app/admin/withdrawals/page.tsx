@@ -47,7 +47,7 @@ export default function AdminWithdrawalsPage() {
           created_at,
           requested_at,
           completed_at,
-          seller:sellers!withdrawal_requests_seller_id_fkey(
+          seller:seller_profiles!withdrawal_requests_seller_id_fkey(
             id,
             display_name,
             user_id
