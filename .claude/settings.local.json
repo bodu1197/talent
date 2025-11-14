@@ -47,7 +47,8 @@
       "Bash(node scripts/fix-color-hardcoding.js:*)",
       "Bash(nul)",
       "Bash(rm:*)",
-      "Bash(node scripts/advanced-security-advisor.js:*)"
+      "Bash(node scripts/advanced-security-advisor.js:*)",
+      "mcp__chrome-devtools__evaluate_script"
     ],
     "deny": [],
     "ask": []
