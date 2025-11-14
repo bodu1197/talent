@@ -403,14 +403,20 @@ export default function AdvertisingPage() {
                         <td className="py-3 px-4 text-center">
                           {service.hasActiveAd ? (
                             <button
-                              onClick={() => setSelectedService(selectedService === service.id ? '' : service.id)}
+                              onClick={() => {
+                                console.log('상세보기 클릭:', service.id);
+                                setSelectedService(selectedService === service.id ? '' : service.id);
+                              }}
                               className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
                             >
                               상세보기
                             </button>
                           ) : (
                             <button
-                              onClick={() => setSelectedService(selectedService === service.id ? '' : service.id)}
+                              onClick={() => {
+                                console.log('광고 신청 클릭:', service.id);
+                                setSelectedService(selectedService === service.id ? '' : service.id);
+                              }}
                               className="px-4 py-2 bg-brand-primary text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
                             >
                               광고 신청
