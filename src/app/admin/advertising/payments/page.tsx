@@ -259,19 +259,19 @@ export default function AdminAdvertisingPaymentsPage() {
     <div className="min-h-screen bg-gradient-to-br from-[#667eea] to-[#764ba2] p-5">
       <div className="max-w-[1400px] mx-auto bg-white rounded-[20px] shadow-2xl overflow-hidden">
         {/* 헤더 */}
-        <div className="bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white p-8 flex justify-between items-center">
-          <h1 className="text-3xl font-semibold">💳 무통장 입금 관리</h1>
+        <div className="bg-gradient-to-br from-[#667eea] to-[#764ba2] p-8 flex justify-between items-center">
+          <h1 className="text-3xl font-semibold text-gray-900">💳 무통장 입금 관리</h1>
           <div className="flex gap-4">
             <button
               onClick={loadPayments}
-              className="px-5 py-2.5 bg-white/20 border border-white/30 rounded-lg hover:bg-white/30 transition-all"
+              className="px-5 py-2.5 bg-white/20 border border-white/30 rounded-lg hover:bg-white/30 transition-all text-gray-900"
             >
               🔄 새로고침
             </button>
-            <button className="px-5 py-2.5 bg-white/20 border border-white/30 rounded-lg hover:bg-white/30 transition-all">
+            <button className="px-5 py-2.5 bg-white/20 border border-white/30 rounded-lg hover:bg-white/30 transition-all text-gray-900">
               📊 데이터 내보내기
             </button>
-            <button className="px-5 py-2.5 bg-white/20 border border-white/30 rounded-lg hover:bg-white/30 transition-all">
+            <button className="px-5 py-2.5 bg-white/20 border border-white/30 rounded-lg hover:bg-white/30 transition-all text-gray-900">
               🔔 알림 설정
             </button>
           </div>
