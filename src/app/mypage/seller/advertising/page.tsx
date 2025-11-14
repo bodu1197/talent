@@ -9,7 +9,7 @@ import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 export default function AdvertisingPage() {
   const [loading, setLoading] = useState(true);
   const [dashboard, setDashboard] = useState<AdvertisingDashboard | null>(null);
-  const [services, setServices] = useState<Array<{ id: string; title: string }>>([]);
+  const [services, setServices] = useState<Array<{ id: string; title: string; hasActiveAd: boolean }>>([]);
   const [selectedService, setSelectedService] = useState<string>('');
   const [selectedMonths, setSelectedMonths] = useState<number>(1);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'card' | 'bank_transfer'>('bank_transfer');
@@ -96,16 +96,34 @@ export default function AdvertisingPage() {
         recentActivity: []
       });
 
+      // Get all services with active subscription status
       const { data: myServices } = await supabase
         .from('services')
-        .select('id, title')
+        .select(`
+          id,
+          title,
+          advertising_subscriptions!left(
+            id,
+            status
+          )
+        `)
         .eq('seller_id', seller.id)
         .eq('status', 'active')
         .is('deleted_at', null);
 
-      const advertisedServiceIds = new Set(subscriptions?.map(s => s.service_id) || []);
-      const availableServices = myServices?.filter(s => !advertisedServiceIds.has(s.id)) || [];
-      setServices(availableServices);
+      // Map services with hasActiveAd flag
+      const servicesWithAdStatus = myServices?.map(service => {
+        const hasActiveAd = service.advertising_subscriptions?.some(
+          (sub: any) => sub.status === 'active'
+        ) || false;
+        return {
+          id: service.id,
+          title: service.title,
+          hasActiveAd
+        };
+      }) || [];
+
+      setServices(servicesWithAdStatus);
 
     } catch (error) {
       console.error('대시보드 로딩 실패:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
@@ -306,8 +324,13 @@ export default function AdvertisingPage() {
                   >
                     <option value="">서비스를 선택하세요</option>
                     {services.map(service => (
-                      <option key={service.id} value={service.id}>
+                      <option
+                        key={service.id}
+                        value={service.id}
+                        disabled={service.hasActiveAd}
+                      >
                         {service.title}
+                        {service.hasActiveAd ? ' (광고 진행 중)' : ''}
                       </option>
                     ))}
                   </select>
