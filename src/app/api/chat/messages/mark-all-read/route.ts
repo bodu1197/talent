@@ -20,13 +20,13 @@ export async function POST(request: NextRequest) {
       .select()
 
     if (error) {
-      console.error('Mark all messages as read error:', error instanceof Error ? error.message : String(error))
+      console.error('Mark all messages as read error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
     return NextResponse.json({ success: true, count: data?.length || 0 })
   } catch (error) {
-    console.error('Mark all messages as read API error:', error instanceof Error ? error.message : String(error))
+    console.error('Mark all messages as read API error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

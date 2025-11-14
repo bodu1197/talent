@@ -187,7 +187,7 @@ export async function GET(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Admin analytics error:', error instanceof Error ? error.message : String(error))
+    console.error('Admin analytics error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return NextResponse.json(
       { error: 'Failed to fetch analytics data' },
       { status: 500 }
@@ -231,7 +231,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ topPages })
 
   } catch (error) {
-    console.error('Top pages error:', error instanceof Error ? error.message : String(error))
+    console.error('Top pages error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return NextResponse.json(
       { error: 'Failed to fetch top pages' },
       { status: 500 }

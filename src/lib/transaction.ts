@@ -179,7 +179,7 @@ export async function deductCreditWithLocking(
   })
 
   if (error) {
-    console.error('Credit deduction failed:', error instanceof Error ? error.message : String(error))
+    console.error('Credit deduction failed:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return { success: false, remaining: 0, error: error.message }
   }
 

@@ -78,10 +78,10 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         setRooms(data.rooms || [])
       } else {
         const error = await response.json()
-        console.error('[ChatListClient] Failed to load rooms:', error instanceof Error ? error.message : String(error))
+        console.error('[ChatListClient] Failed to load rooms:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       }
     } catch (error) {
-      console.error('[ChatListClient] Load rooms error:', error instanceof Error ? error.message : String(error))
+      console.error('[ChatListClient] Load rooms error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     }
   }
 
@@ -105,7 +105,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         alert(error.error || '채팅방 생성에 실패했습니다')
       }
     } catch (error) {
-      console.error('Create room from order error:', error instanceof Error ? error.message : String(error))
+      console.error('Create room from order error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       alert('채팅방 생성 중 오류가 발생했습니다')
     } finally {
       setIsCreatingRoom(false)
@@ -135,7 +135,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         )
       }
     } catch (error) {
-      console.error('[ChatListClient] Toggle favorite error:', error instanceof Error ? error.message : String(error))
+      console.error('[ChatListClient] Toggle favorite error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     }
   }
 
@@ -175,7 +175,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         body: JSON.stringify({ room_id: roomId })
       })
     } catch (error) {
-      console.error('[ChatListClient] Mark as read error:', error instanceof Error ? error.message : String(error))
+      console.error('[ChatListClient] Mark as read error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     }
   }
 
@@ -190,7 +190,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         body: JSON.stringify({ room_id: roomId })
       })
     } catch (error) {
-      console.error('[ChatListClient] Mark messages as read error:', error instanceof Error ? error.message : String(error))
+      console.error('[ChatListClient] Mark messages as read error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     }
   }
 
@@ -232,7 +232,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         .upload(filePath, file)
 
       if (error) {
-        console.error('File upload error:', error instanceof Error ? error.message : String(error))
+        console.error('File upload error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
         return null
       }
 
@@ -242,7 +242,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
 
       return publicUrl
     } catch (error) {
-      console.error('Upload error:', error instanceof Error ? error.message : String(error))
+      console.error('Upload error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       return null
     } finally {
       setIsUploading(false)
@@ -299,7 +299,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         setSelectedFile(fileToUpload) // 실패 시 파일 복원
       }
     } catch (error) {
-      console.error('Send message error:', error instanceof Error ? error.message : String(error))
+      console.error('Send message error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       alert('메시지 전송 중 오류가 발생했습니다.')
       setNewMessage(messageText) // 실패 시 메시지 복원
       setSelectedFile(fileToUpload) // 실패 시 파일 복원

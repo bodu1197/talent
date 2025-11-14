@@ -139,7 +139,7 @@ export async function POST(request: NextRequest) {
       amount: amount
     })
   } catch (error) {
-    console.error('Direct purchase error:', error instanceof Error ? error.message : String(error))
+    console.error('Direct purchase error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
   }
 }

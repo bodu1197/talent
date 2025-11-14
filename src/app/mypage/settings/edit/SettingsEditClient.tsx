@@ -84,7 +84,7 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
       setProfileImage(publicUrl)
       alert('프로필 이미지가 업로드되었습니다.')
     } catch (error) {
-      console.error('Image upload error:', error instanceof Error ? error.message : String(error))
+      console.error('Image upload error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       alert('이미지 업로드 중 오류가 발생했습니다.')
     } finally {
       setUploading(false)
@@ -144,7 +144,7 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
       alert('프로필이 저장되었습니다.')
       router.push('/mypage/settings')
     } catch (error: any) {
-      console.error('Profile save error:', error instanceof Error ? error.message : String(error))
+      console.error('Profile save error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       if (!error.message) {
         alert('프로필 저장 중 알 수 없는 오류가 발생했습니다.')
       }
@@ -185,7 +185,7 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
       setConfirmPassword('')
       router.push('/mypage/settings')
     } catch (error) {
-      console.error('Password change error:', error instanceof Error ? error.message : String(error))
+      console.error('Password change error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       alert('비밀번호 변경 중 오류가 발생했습니다.')
     } finally {
       setIsLoading(false)
@@ -220,7 +220,7 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
       alert('알림 설정이 저장되었습니다.')
       router.push('/mypage/settings')
     } catch (error) {
-      console.error('Notification settings save error:', error instanceof Error ? error.message : String(error))
+      console.error('Notification settings save error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       alert('알림 설정 저장 중 오류가 발생했습니다.')
     } finally {
       setIsLoading(false)

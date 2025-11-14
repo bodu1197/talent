@@ -25,13 +25,13 @@ export async function PATCH(
       .eq('user_id', user.id) // 본인 알림만
 
     if (error) {
-      console.error('Mark notification as read error:', error instanceof Error ? error.message : String(error))
+      console.error('Mark notification as read error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       return NextResponse.json({ error: '알림 읽음 처리에 실패했습니다' }, { status: 500 })
     }
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Mark notification as read API error:', error instanceof Error ? error.message : String(error))
+    console.error('Mark notification as read API error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
   }
 }

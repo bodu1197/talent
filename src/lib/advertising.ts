@@ -609,7 +609,7 @@ export async function getServicesForCategoryPage(
         categoryId,
         start + index + 1,
         page
-      ).catch(err => console.error('Operation error:', err instanceof Error ? err.message : String(err)));
+      ).catch(err => console.error('Operation error:', JSON.stringify(err, Object.getOwnPropertyNames(err), 2)));
     });
 
   return {

@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, payment_request: paymentRequest })
   } catch (error) {
-    console.error('Payment request API error:', error instanceof Error ? error.message : String(error))
+    console.error('Payment request API error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
   }
 }
@@ -101,13 +101,13 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false })
 
     if (error) {
-      console.error('결제 요청 조회 실패:', error instanceof Error ? error.message : String(error))
+      console.error('결제 요청 조회 실패:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       return NextResponse.json({ error: '결제 요청 조회에 실패했습니다' }, { status: 500 })
     }
 
     return NextResponse.json({ payment_requests: paymentRequests || [] })
   } catch (error) {
-    console.error('Get payment requests error:', error instanceof Error ? error.message : String(error))
+    console.error('Get payment requests error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
   }
 }

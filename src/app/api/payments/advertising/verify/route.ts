@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
       total_credited: amount + (bonus || 0)
     })
   } catch (error) {
-    console.error('Advertising payment verify error:', error instanceof Error ? error.message : String(error))
+    console.error('Advertising payment verify error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
   }
 }

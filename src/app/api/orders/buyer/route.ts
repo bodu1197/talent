@@ -35,13 +35,13 @@ export async function GET(request: NextRequest) {
     const { data, error } = await query
 
     if (error) {
-      console.error('Orders fetch error:', error instanceof Error ? error.message : String(error))
+      console.error('Orders fetch error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       return NextResponse.json({ error: '주문 목록을 불러올 수 없습니다' }, { status: 500 })
     }
 
     return NextResponse.json({ orders: data })
   } catch (error) {
-    console.error('Buyer orders API error:', error instanceof Error ? error.message : String(error))
+    console.error('Buyer orders API error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
   }
 }

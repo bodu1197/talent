@@ -83,7 +83,7 @@ export default function AdvertisingPage() {
       setServices(availableServices);
 
     } catch (error) {
-      console.error('대시보드 로딩 실패:', error instanceof Error ? error.message : String(error));
+      console.error('대시보드 로딩 실패:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
     } finally {
       setLoading(false);
     }
@@ -104,7 +104,7 @@ export default function AdvertisingPage() {
       alert('광고가 시작되었습니다!');
       loadDashboard();
     } catch (error) {
-      console.error('광고 시작 실패:', error instanceof Error ? error.message : String(error));
+      console.error('광고 시작 실패:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
       alert('광고 시작에 실패했습니다');
     }
   }

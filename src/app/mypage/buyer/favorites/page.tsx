@@ -32,7 +32,7 @@ export default function FavoritesPage() {
           setFavorites(data || [])
         }
       } catch (error) {
-        console.error('Failed to fetch favorites:', error instanceof Error ? error.message : String(error))
+        console.error('Failed to fetch favorites:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       } finally {
         setLoading(false)
       }
@@ -57,7 +57,7 @@ export default function FavoritesPage() {
         alert('찜 취소에 실패했습니다.')
       }
     } catch (error) {
-      console.error('Remove favorite error:', error instanceof Error ? error.message : String(error))
+      console.error('Remove favorite error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       alert('오류가 발생했습니다.')
     }
   }

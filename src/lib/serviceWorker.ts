@@ -7,7 +7,7 @@ export function registerServiceWorker() {
           console.log('Service Worker registered:', registration)
         })
         .catch((error) => {
-          console.error('Service Worker registration failed:', error instanceof Error ? error.message : String(error))
+          console.error('Service Worker registration failed:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
         })
     })
   }

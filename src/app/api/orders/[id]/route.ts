@@ -30,7 +30,7 @@ export async function GET(
       .single()
 
     if (error) {
-      console.error('Order fetch error:', error instanceof Error ? error.message : String(error))
+      console.error('Order fetch error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       return NextResponse.json({ error: '주문을 찾을 수 없습니다' }, { status: 404 })
     }
 
@@ -53,7 +53,7 @@ export async function GET(
 
     return NextResponse.json({ order })
   } catch (error) {
-    console.error('Order API error:', error instanceof Error ? error.message : String(error))
+    console.error('Order API error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
   }
 }

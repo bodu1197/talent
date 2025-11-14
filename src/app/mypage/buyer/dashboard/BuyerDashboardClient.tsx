@@ -30,7 +30,7 @@ export default function BuyerDashboardClient({ stats, recentOrders, favorites, b
   useEffect(() => {
     // 대시보드 렌더링 후 즉시 다른 페이지 데이터 미리 불러오기
     const timer = setTimeout(() => {
-      prefetchBuyerData(queryClient).catch(err => console.error('Operation error:', err instanceof Error ? err.message : String(err)))
+      prefetchBuyerData(queryClient).catch(err => console.error('Operation error:', JSON.stringify(err, Object.getOwnPropertyNames(err), 2)))
     }, 500) // 대시보드 로딩 후 0.5초 뒤에 실행
 
     return () => clearTimeout(timer)

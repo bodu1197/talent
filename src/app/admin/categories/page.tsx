@@ -37,7 +37,7 @@ export default function AdminCategoriesPage() {
         setCategories(data.categories || [])
       }
     } catch (error) {
-      console.error('Failed to fetch categories:', error instanceof Error ? error.message : String(error))
+      console.error('Failed to fetch categories:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     } finally {
       setLoading(false)
     }
@@ -100,7 +100,7 @@ export default function AdminCategoriesPage() {
       setDialogOpen(false)
       fetchCategories()
     } catch (error) {
-      console.error('Failed to save category:', error instanceof Error ? error.message : String(error))
+      console.error('Failed to save category:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       alert('Failed to save category')
     }
   }
@@ -123,7 +123,7 @@ export default function AdminCategoriesPage() {
 
       fetchCategories()
     } catch (error) {
-      console.error('Failed to delete category:', error instanceof Error ? error.message : String(error))
+      console.error('Failed to delete category:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       alert('Failed to delete category')
     }
   }

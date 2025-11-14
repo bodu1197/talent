@@ -38,7 +38,7 @@ export async function PATCH(request: NextRequest) {
       .single()
 
     if (error) {
-      console.error('Profile update error:', error instanceof Error ? error.message : String(error))
+      console.error('Profile update error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       return NextResponse.json({
         error: error.message,
         code: error.code,
@@ -48,7 +48,7 @@ export async function PATCH(request: NextRequest) {
 
     return NextResponse.json({ user: data })
   } catch (error: any) {
-    console.error('Profile update API error:', error instanceof Error ? error.message : String(error))
+    console.error('Profile update API error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return NextResponse.json({
       error: 'Internal server error',
       message: error.message

@@ -41,7 +41,7 @@ export default function AdminStatisticsPage() {
         setAnalytics(data)
       }
     } catch (error) {
-      console.error('Failed to fetch analytics:', error instanceof Error ? error.message : String(error))
+      console.error('Failed to fetch analytics:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     } finally {
       setLoading(false)
     }

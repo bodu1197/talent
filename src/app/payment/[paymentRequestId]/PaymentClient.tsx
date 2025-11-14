@@ -135,7 +135,7 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
       alert('결제가 완료되었습니다!')
       router.push(`/mypage/buyer/orders/${order.id}`)
     } catch (error) {
-      console.error('Payment error:', error instanceof Error ? error.message : String(error))
+      console.error('Payment error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       alert(error instanceof Error ? error.message : '결제 중 오류가 발생했습니다')
       setIsProcessing(false)
     }

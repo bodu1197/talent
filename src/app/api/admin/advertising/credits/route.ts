@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error('Failed to fetch credits:', error instanceof Error ? error.message : String(error))
+    console.error('Failed to fetch credits:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return NextResponse.json(
       { error: 'Failed to fetch credits' },
       { status: 500 }
@@ -165,7 +165,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Failed to grant credit:', error instanceof Error ? error.message : String(error))
+    console.error('Failed to grant credit:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return NextResponse.json(
       { error: 'Failed to grant credit' },
       { status: 500 }
@@ -245,7 +245,7 @@ export async function PATCH(request: NextRequest) {
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Failed to deduct credit:', error instanceof Error ? error.message : String(error))
+    console.error('Failed to deduct credit:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return NextResponse.json(
       { error: 'Failed to deduct credit' },
       { status: 500 }

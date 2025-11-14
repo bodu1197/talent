@@ -45,7 +45,7 @@ export default function MypageLayoutWrapper({ mode, profileData: initialProfileD
 
       setProfileData(profile)
     } catch (error) {
-      console.error('Failed to load profile data:', error instanceof Error ? error.message : String(error))
+      console.error('Failed to load profile data:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       setProfileData(null)
     }
   }

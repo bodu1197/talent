@@ -56,7 +56,7 @@ export default function AdminAdvertisingPaymentsPage() {
 
       setPendingPayments(payments || []);
     } catch (error) {
-      console.error('입금 대기 목록 로딩 실패:', error instanceof Error ? error.message : String(error));
+      console.error('입금 대기 목록 로딩 실패:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
     } finally {
       setLoading(false);
     }
@@ -86,7 +86,7 @@ export default function AdminAdvertisingPaymentsPage() {
       alert('입금이 확인되었습니다');
       loadPendingPayments();
     } catch (error) {
-      console.error('입금 확인 실패:', error instanceof Error ? error.message : String(error));
+      console.error('입금 확인 실패:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
       alert('입금 확인에 실패했습니다');
     }
   }
@@ -109,7 +109,7 @@ export default function AdminAdvertisingPaymentsPage() {
       alert('결제가 거절되었습니다');
       loadPendingPayments();
     } catch (error) {
-      console.error('거절 실패:', error instanceof Error ? error.message : String(error));
+      console.error('거절 실패:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
       alert('거절 처리에 실패했습니다');
     }
   }

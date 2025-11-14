@@ -90,7 +90,7 @@ export default function AdvertisingChargePage() {
       })
 
     } catch (error) {
-      console.error('Purchase error:', error instanceof Error ? error.message : String(error))
+      console.error('Purchase error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       alert('결제 처리 중 오류가 발생했습니다')
     } finally {
       setLoading(false)

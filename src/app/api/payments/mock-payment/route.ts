@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       message: 'Mock 결제 완료 (테스트 모드)'
     })
   } catch (error) {
-    console.error('Mock payment error:', error instanceof Error ? error.message : String(error))
+    console.error('Mock payment error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
   }
 }

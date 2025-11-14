@@ -29,7 +29,7 @@ export function ChatUnreadProvider({ children }: { children: ReactNode }) {
         setHasPermission(Notification.permission === 'granted')
       }
     } catch (error) {
-      console.error('Failed to request notification permission:', error instanceof Error ? error.message : String(error))
+      console.error('Failed to request notification permission:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     }
   }, [])
 
@@ -53,7 +53,7 @@ export function ChatUnreadProvider({ children }: { children: ReactNode }) {
       oscillator.stop(audioContext.currentTime + 0.3)
 
     } catch (error) {
-      console.error('Notification sound error:', error instanceof Error ? error.message : String(error))
+      console.error('Notification sound error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     }
   }, [])
 
@@ -72,7 +72,7 @@ export function ChatUnreadProvider({ children }: { children: ReactNode }) {
         setUnreadCount(data.unreadCount || 0)
       }
     } catch (error) {
-      console.error('[ChatUnreadProvider] Failed to fetch unread count:', error instanceof Error ? error.message : String(error))
+      console.error('[ChatUnreadProvider] Failed to fetch unread count:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     }
   }, [])
 
@@ -89,7 +89,7 @@ export function ChatUnreadProvider({ children }: { children: ReactNode }) {
       const roomIds = rooms?.map(r => r.id) || []
       setMyRoomIds(roomIds)
     } catch (error) {
-      console.error('[ChatUnreadProvider] Failed to fetch rooms:', error instanceof Error ? error.message : String(error))
+      console.error('[ChatUnreadProvider] Failed to fetch rooms:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     }
   }, [userId, supabase])
 

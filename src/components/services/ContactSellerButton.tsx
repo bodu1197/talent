@@ -43,7 +43,7 @@ export default function ContactSellerButton({ sellerId, serviceId }: Props) {
       // 채팅 메인 페이지로 이동 (해당 채팅방 선택된 상태)
       router.push(`/chat?room=${room_id}`)
     } catch (error) {
-      console.error('Contact seller error:', error instanceof Error ? error.message : String(error))
+      console.error('Contact seller error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
       alert('문의 시작에 실패했습니다. 다시 시도해주세요.')
     } finally {
       setIsLoading(false)

@@ -162,7 +162,7 @@ export async function GET(request: NextRequest) {
       subscriptions: subscriptionStats,
     })
   } catch (error) {
-    console.error('Failed to fetch advertising statistics:', error instanceof Error ? error.message : String(error))
+    console.error('Failed to fetch advertising statistics:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return NextResponse.json(
       { error: 'Failed to fetch advertising statistics' },
       { status: 500 }

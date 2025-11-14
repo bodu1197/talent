@@ -74,7 +74,7 @@ export default function AdminAdvertisingStatisticsPage() {
         setStatistics(data)
       }
     } catch (error) {
-      console.error('Failed to fetch statistics:', error instanceof Error ? error.message : String(error))
+      console.error('Failed to fetch statistics:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     } finally {
       setLoading(false)
     }

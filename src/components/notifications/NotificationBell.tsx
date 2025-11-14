@@ -46,7 +46,7 @@ export default function NotificationBell() {
       oscillator.start(audioContext.currentTime)
       oscillator.stop(audioContext.currentTime + 0.3)
     } catch (err) {
-      console.error('Failed to play notification sound:', err)
+      console.error('Failed to play notification sound:', JSON.stringify(err, Object.getOwnPropertyNames(err), 2))
     }
   }
 

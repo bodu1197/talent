@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
       amount: paymentRequest.amount
     })
   } catch (error) {
-    console.error('Payment prepare error:', error instanceof Error ? error.message : String(error))
+    console.error('Payment prepare error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
   }
 }
