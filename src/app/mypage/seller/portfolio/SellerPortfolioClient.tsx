@@ -3,9 +3,7 @@
 import { useState } from 'react'
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import Link from 'next/link'
-import { deletePortfolioItem } from '@/lib/supabase/queries/earnings'
 import { useRouter } from 'next/navigation'
-import { logger } from '@/lib/logger'
 import { Portfolio } from '@/types/common'
 
 interface PortfolioWithService extends Portfolio {
@@ -29,11 +27,18 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
 
     try {
       setDeleting(itemId)
-      await deletePortfolioItem(itemId)
+      const response = await fetch(`/api/portfolio?itemId=${itemId}`, {
+        method: 'DELETE'
+      })
+
+      if (!response.ok) {
+        throw new Error('삭제에 실패했습니다')
+      }
+
       setPortfolio(portfolio.filter(item => item.id !== itemId))
       router.refresh()
     } catch (err: unknown) {
-      logger.error('삭제 실패:', err)
+      console.error('삭제 실패:', JSON.stringify(err, Object.getOwnPropertyNames(err), 2))
       alert('삭제에 실패했습니다')
     } finally {
       setDeleting(null)
