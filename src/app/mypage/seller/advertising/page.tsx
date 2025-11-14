@@ -20,7 +20,9 @@ export default function AdvertisingPage() {
     const basePrice = 200000; // 1개월 기준 20만원
     const finalPrice = 100000; // 12개월 시 10만원
     const discountPerMonth = (basePrice - finalPrice) / 11; // 11단계로 할인
-    return Math.round(basePrice - (discountPerMonth * (months - 1)));
+    const price = basePrice - (discountPerMonth * (months - 1));
+    // 100원 단위 제거 (1000원 단위로 반올림)
+    return Math.round(price / 1000) * 1000;
   };
 
   const monthlyPrice = useMemo(() => calculateMonthlyPrice(selectedMonths), [selectedMonths]);
@@ -323,7 +325,7 @@ export default function AdvertisingPage() {
                       onChange={(e) => setSelectedMonths(Number(e.target.value))}
                       className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all mb-4"
                     >
-                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(months => {
+                      {[1, 3, 6, 12].map(months => {
                         const price = calculateMonthlyPrice(months);
                         const total = price * months;
                         const discount = months === 1 ? 0 : Math.round(((200000 * months - total) / (200000 * months)) * 100);
