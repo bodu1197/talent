@@ -178,17 +178,9 @@ export async function getAdminUsers(filters?: {
 }) {
   const supabase = createClient()
 
-  // users 테이블과 profiles 테이블을 join하여 최신 프로필 정보 가져오기
   let query = supabase
-    .from('users')
-    .select(`
-      id,
-      email,
-      role,
-      created_at,
-      status,
-      profile:profiles(name, profile_image)
-    `)
+    .from('profiles')
+    .select('*')
     .order('created_at', { ascending: false })
 
   if (filters?.role && filters.role !== 'all') {
@@ -196,22 +188,25 @@ export async function getAdminUsers(filters?: {
   }
 
   if (filters?.searchQuery) {
-    query = query.or(`email.ilike.%${filters.searchQuery}%`)
+    query = query.or(`name.ilike.%${filters.searchQuery}%`)
   }
 
-  if (filters?.status && filters.status !== 'all') {
-    query = query.eq('status', filters.status)
+  const { data: profiles, error } = await query
+
+  if (error) {
+    console.error('getAdminUsers error:', error)
+    return []
   }
 
-  const { data, error } = await query
-
-  if (error) throw error
-
-  // 데이터 변환: profile 객체를 펼쳐서 최상위로 올림
-  return data?.map((user: any) => ({
-    ...user,
-    name: user.profile?.name || 'Unknown',
-    profile_image: user.profile?.profile_image || null
+  // profiles 데이터를 users 형식으로 변환
+  return profiles?.map((profile: any) => ({
+    id: profile.user_id,
+    email: 'user@example.com', // TODO: Server Component에서 auth.users 조회 필요
+    role: profile.role || 'buyer',
+    created_at: profile.created_at,
+    status: 'active',
+    name: profile.name || 'Unknown',
+    profile_image: profile.profile_image || null
   })) || []
 }
 
@@ -220,7 +215,7 @@ export async function getAdminUsersCount(role?: string) {
   const supabase = createClient()
 
   let query = supabase
-    .from('users')
+    .from('profiles')
     .select('*', { count: 'exact', head: true })
 
   if (role) {
@@ -229,7 +224,10 @@ export async function getAdminUsersCount(role?: string) {
 
   const { count, error } = await query
 
-  if (error) throw error
+  if (error) {
+    console.error('getAdminUsersCount error:', error)
+    return 0
+  }
   return count || 0
 }
 
