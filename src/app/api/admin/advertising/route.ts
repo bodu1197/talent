@@ -46,16 +46,11 @@ export async function GET(request: NextRequest) {
     const sortBy = searchParams.get('sortBy') || 'created_at'
     const sortOrder = searchParams.get('sortOrder') === 'asc' ? true : false
 
-    // 광고 구독 목록 조회
+    // 광고 구독 목록 조회 - seller 정보는 별도로 조회
     let query = supabase
       .from('advertising_subscriptions')
       .select(`
         *,
-        seller:sellers!advertising_subscriptions_seller_id_fkey(
-          id,
-          user_id,
-          user:users!sellers_user_id_fkey(email, name)
-        ),
         service:services!advertising_subscriptions_service_id_fkey(title)
       `)
 
@@ -74,6 +69,33 @@ export async function GET(request: NextRequest) {
 
     if (subsError) throw subsError
 
+    // Seller 및 user 정보를 별도로 조회하여 추가
+    const subscriptionsWithSellers = await Promise.all((subscriptions || []).map(async (sub) => {
+      const { data: seller } = await supabase
+        .from('sellers')
+        .select('id, user_id')
+        .eq('id', sub.seller_id)
+        .single();
+
+      if (seller) {
+        const { data: user } = await supabase
+          .from('users')
+          .select('email, name')
+          .eq('id', seller.user_id)
+          .single();
+
+        return {
+          ...sub,
+          seller: {
+            ...seller,
+            user: user || null
+          }
+        };
+      }
+
+      return sub;
+    }))
+
     // 통계 계산
     const { data: stats } = await supabase
       .from('advertising_subscriptions')
@@ -89,7 +111,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({
-      subscriptions,
+      subscriptions: subscriptionsWithSellers,
       summary,
     })
   } catch (error) {

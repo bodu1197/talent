@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { checkAdminAuth } from '@/lib/admin/auth'
 
 // GET - 무통장 입금 목록 조회 (필터, 검색, 통계 포함)
+// Updated: FK constraint fix applied
 export async function GET(request: NextRequest) {
   try {
     const adminCheck = await checkAdminAuth()
@@ -26,7 +27,7 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1')
     const pageSize = parseInt(searchParams.get('pageSize') || '20')
 
-    // 기본 쿼리 - seller 테이블을 통해 올바르게 조인
+    // 기본 쿼리 - seller 정보는 별도로 조회
     let query = supabase
       .from('advertising_payments')
       .select(`
@@ -34,15 +35,6 @@ export async function GET(request: NextRequest) {
         subscription:advertising_subscriptions(
           id,
           service:services(title)
-        ),
-        seller:sellers!advertising_payments_seller_id_fkey(
-          id,
-          user_id,
-          user:users!sellers_user_id_fkey(email, name)
-        ),
-        confirmed_by_admin:admins!advertising_payments_confirmed_by_fkey(
-          id,
-          user:users!admins_user_id_fkey(name)
         )
       `, { count: 'exact' })
       .eq('payment_method', 'bank_transfer')
@@ -80,8 +72,64 @@ export async function GET(request: NextRequest) {
 
     if (paymentsError) throw paymentsError
 
+    // Seller 및 user 정보를 별도로 조회하여 추가
+    const paymentsWithSellers = await Promise.all((payments || []).map(async (payment) => {
+      const { data: seller } = await supabase
+        .from('sellers')
+        .select('id, user_id')
+        .eq('id', payment.seller_id)
+        .single();
+
+      if (seller) {
+        const { data: user } = await supabase
+          .from('users')
+          .select('email, name')
+          .eq('id', seller.user_id)
+          .single();
+
+        return {
+          ...payment,
+          seller: {
+            ...seller,
+            user: user || null
+          }
+        };
+      }
+
+      return payment;
+    }));
+
+    // Admin 정보도 별도로 조회
+    const paymentsWithAdmins = await Promise.all(paymentsWithSellers.map(async (payment) => {
+      if (payment.confirmed_by) {
+        const { data: admin } = await supabase
+          .from('admins')
+          .select('id, user_id')
+          .eq('id', payment.confirmed_by)
+          .single();
+
+        if (admin) {
+          const { data: user } = await supabase
+            .from('users')
+            .select('name')
+            .eq('id', admin.user_id)
+            .single();
+
+          return {
+            ...payment,
+            confirmed_by_admin: {
+              id: admin.id,
+              user: user || null
+            }
+          };
+        }
+      }
+
+      return payment;
+    }));
+
     // 검색어 필터링 (클라이언트 사이드에서 처리)
-    let filteredPayments = payments || []
+    let filteredPayments = paymentsWithAdmins || []
     if (search) {
       const searchLower = search.toLowerCase()
       filteredPayments = filteredPayments.filter(p => {
