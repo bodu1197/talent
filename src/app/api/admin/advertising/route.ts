@@ -51,7 +51,10 @@ export async function GET(request: NextRequest) {
       .from('advertising_subscriptions')
       .select(`
         *,
-        seller:users!advertising_subscriptions_seller_id_fkey(email, full_name),
+        seller:sellers!advertising_subscriptions_seller_id_fkey(
+          id,
+          user:users(email, full_name)
+        ),
         service:services!advertising_subscriptions_service_id_fkey(title)
       `)
 

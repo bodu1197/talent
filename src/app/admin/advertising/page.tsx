@@ -17,8 +17,11 @@ interface Subscription {
   total_clicks: number
   total_paid: number
   seller?: {
-    email: string
-    full_name: string | null
+    id: string
+    user?: {
+      email: string
+      full_name: string | null
+    }
   }
   service?: {
     title: string
@@ -299,9 +302,9 @@ export default function AdminAdvertisingPage() {
                     <td className="whitespace-nowrap px-6 py-4 text-sm">
                       <div>
                         <p className="font-medium text-slate-900">
-                          {sub.seller?.full_name || 'Unknown'}
+                          {sub.seller?.user?.full_name || 'Unknown'}
                         </p>
-                        <p className="text-slate-500">{sub.seller?.email}</p>
+                        <p className="text-slate-500">{sub.seller?.user?.email}</p>
                       </div>
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-900">
@@ -383,10 +386,10 @@ export default function AdminAdvertisingPage() {
                 <div>
                   <p className="text-sm font-medium text-slate-600">판매자</p>
                   <p className="text-sm text-slate-900 mt-1">
-                    {selectedSubscription.seller?.full_name || 'Unknown'}
+                    {selectedSubscription.seller?.user?.full_name || 'Unknown'}
                   </p>
                   <p className="text-sm text-slate-500">
-                    {selectedSubscription.seller?.email}
+                    {selectedSubscription.seller?.user?.email}
                   </p>
                 </div>
                 <div>
