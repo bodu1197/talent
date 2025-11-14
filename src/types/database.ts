@@ -751,64 +751,52 @@ export type Database = {
       }
       payments: {
         Row: {
-          amount: number
-          approval_number: string | null
-          cancelled_at: string | null
-          card_company: string | null
-          card_number_masked: string | null
-          created_at: string | null
-          failed_at: string | null
           id: string
-          installment_months: number | null
-          order_id: string | null
-          paid_at: string | null
+          order_id: string
+          amount: number
           payment_method: string
-          pg_provider: string
-          pg_response: Json | null
-          status: string | null
-          transaction_id: string
-          updated_at: string | null
-          vat: number | null
+          payment_id: string | null
+          status: string
+          pg_provider: string | null
+          pg_tid: string | null
+          receipt_url: string | null
+          paid_at: string | null
+          failed_at: string | null
+          cancelled_at: string | null
+          created_at: string
+          updated_at: string
         }
         Insert: {
-          amount: number
-          approval_number?: string | null
-          cancelled_at?: string | null
-          card_company?: string | null
-          card_number_masked?: string | null
-          created_at?: string | null
-          failed_at?: string | null
           id?: string
-          installment_months?: number | null
-          order_id?: string | null
-          paid_at?: string | null
+          order_id: string
+          amount: number
           payment_method: string
-          pg_provider: string
-          pg_response?: Json | null
-          status?: string | null
-          transaction_id: string
-          updated_at?: string | null
-          vat?: number | null
+          payment_id?: string | null
+          status?: string
+          pg_provider?: string | null
+          pg_tid?: string | null
+          receipt_url?: string | null
+          paid_at?: string | null
+          failed_at?: string | null
+          cancelled_at?: string | null
+          created_at?: string
+          updated_at?: string
         }
         Update: {
-          amount?: number
-          approval_number?: string | null
-          cancelled_at?: string | null
-          card_company?: string | null
-          card_number_masked?: string | null
-          created_at?: string | null
-          failed_at?: string | null
           id?: string
-          installment_months?: number | null
-          order_id?: string | null
-          paid_at?: string | null
+          order_id?: string
+          amount?: number
           payment_method?: string
-          pg_provider?: string
-          pg_response?: Json | null
-          status?: string | null
-          transaction_id?: string
-          updated_at?: string | null
-          vat?: number | null
+          payment_id?: string | null
+          status?: string
+          pg_provider?: string | null
+          pg_tid?: string | null
+          receipt_url?: string | null
+          paid_at?: string | null
+          failed_at?: string | null
+          cancelled_at?: string | null
+          created_at?: string
+          updated_at?: string
         }
         Relationships: [
           {

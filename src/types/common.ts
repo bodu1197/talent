@@ -15,10 +15,39 @@ export interface Seller {
   name?: string
   business_name: string | null
   business_number: string | null
-  account_holder: string | null
+  business_registration_file: string | null
   bank_name: string | null
   account_number: string | null
+  account_holder: string | null
   is_verified: boolean
+  verification_status: string | null
+  verified_at: string | null
+  rejection_reason: string | null
+  total_sales: number | null
+  total_revenue: number | null
+  service_count: number | null
+  rating: number | null
+  review_count: number | null
+  last_sale_at: string | null
+  is_active: boolean | null
+  bio: string | null
+  phone: string | null
+  show_phone: boolean | null
+  kakao_id: string | null
+  kakao_openchat: string | null
+  whatsapp: string | null
+  website: string | null
+  preferred_contact: string[] | null
+  certificates: string | null
+  experience: string | null
+  is_business: boolean | null
+  status: string | null
+  real_name: string | null
+  contact_hours: string | null
+  tax_invoice_available: boolean | null
+  verified: boolean | null
+  verified_name: string | null
+  verified_phone: string | null
   created_at: string
   updated_at: string
   user?: User

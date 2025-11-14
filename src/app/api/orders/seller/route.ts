@@ -1,17 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { withAuth } from '@/lib/api/auth-middleware'
+import { ApiError, handleApiError } from '@/lib/api/error-handler'
 
 // GET /api/orders/seller - 판매자 주문 목록 조회
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: NextRequest, user) => {
   try {
     const supabase = await createClient()
-
-    // 사용자 인증 확인
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    if (authError || !user) {
-      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 })
-    }
 
     // URL 파라미터에서 status 가져오기
     const { searchParams } = new URL(request.url)
@@ -35,8 +30,7 @@ export async function GET(request: NextRequest) {
     const { data, error } = await query
 
     if (error) {
-      console.error('Orders fetch error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
-      return NextResponse.json({ error: '주문 목록을 불러올 수 없습니다' }, { status: 500 })
+      throw new ApiError('주문 목록을 불러올 수 없습니다', 500)
     }
 
     // N+1 쿼리 문제 해결: 모든 주문의 revision stats를 한 번에 조회
@@ -68,7 +62,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ orders: [] })
   } catch (error) {
-    console.error('Seller orders API error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
-    return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
+    return handleApiError(error)
   }
-}
+})
