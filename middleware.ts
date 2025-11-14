@@ -23,8 +23,8 @@ export async function middleware(request: NextRequest) {
       style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;
       img-src 'self' blob: data: https:;
       font-src 'self' data: https://cdnjs.cloudflare.com;
-      connect-src 'self' https://*.supabase.co wss://*.supabase.co https://vercel.live;
-      frame-src 'self' https://vercel.live;
+      connect-src 'self' https://*.supabase.co wss://*.supabase.co https://vercel.live https://img.youtube.com https://www.youtube.com;
+      frame-src 'self' https://vercel.live https://www.youtube.com;
       frame-ancestors 'none';
       object-src 'none';
       base-uri 'self';
