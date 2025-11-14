@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
         *,
         seller:sellers!advertising_subscriptions_seller_id_fkey(
           id,
-          user:users(email, full_name)
+          user:users(email, name)
         ),
         service:services!advertising_subscriptions_service_id_fkey(title)
       `)

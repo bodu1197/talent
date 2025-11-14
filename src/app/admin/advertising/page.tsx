@@ -20,7 +20,7 @@ interface Subscription {
     id: string
     user?: {
       email: string
-      full_name: string | null
+      name: string | null
     }
   }
   service?: {
@@ -302,7 +302,7 @@ export default function AdminAdvertisingPage() {
                     <td className="whitespace-nowrap px-6 py-4 text-sm">
                       <div>
                         <p className="font-medium text-slate-900">
-                          {sub.seller?.user?.full_name || 'Unknown'}
+                          {sub.seller?.user?.name || 'Unknown'}
                         </p>
                         <p className="text-slate-500">{sub.seller?.user?.email}</p>
                       </div>
@@ -386,7 +386,7 @@ export default function AdminAdvertisingPage() {
                 <div>
                   <p className="text-sm font-medium text-slate-600">판매자</p>
                   <p className="text-sm text-slate-900 mt-1">
-                    {selectedSubscription.seller?.user?.full_name || 'Unknown'}
+                    {selectedSubscription.seller?.user?.name || 'Unknown'}
                   </p>
                   <p className="text-sm text-slate-500">
                     {selectedSubscription.seller?.user?.email}
