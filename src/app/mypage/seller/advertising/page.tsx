@@ -9,7 +9,21 @@ import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 export default function AdvertisingPage() {
   const [loading, setLoading] = useState(true);
   const [dashboard, setDashboard] = useState<AdvertisingDashboard | null>(null);
-  const [services, setServices] = useState<Array<{ id: string; title: string; hasActiveAd: boolean }>>([]);
+  const [services, setServices] = useState<Array<{
+    id: string;
+    title: string;
+    thumbnailUrl: string | null;
+    hasActiveAd: boolean;
+    adDetails?: {
+      subscriptionId: string;
+      monthlyPrice: number;
+      nextBillingDate: string;
+      totalImpressions: number;
+      totalClicks: number;
+      ctr: number;
+      createdAt: string;
+    };
+  }>>([]);
   const [selectedService, setSelectedService] = useState<string>('');
   const [selectedMonths, setSelectedMonths] = useState<number>(1);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'card' | 'bank_transfer'>('bank_transfer');
@@ -96,27 +110,44 @@ export default function AdvertisingPage() {
         recentActivity: []
       });
 
-      // Get all services
+      // Get all services with thumbnails
       const { data: myServices } = await supabase
         .from('services')
-        .select('id, title')
+        .select('id, title, thumbnail_url')
         .eq('seller_id', seller.id)
         .eq('status', 'active')
         .is('deleted_at', null);
 
-      // Get active subscriptions
+      // Get active subscriptions with full details
       const { data: activeAds } = await supabase
         .from('advertising_subscriptions')
-        .select('service_id')
+        .select('*')
         .eq('seller_id', user.id)
         .eq('status', 'active');
 
-      // Map services with hasActiveAd flag
-      const activeServiceIds = new Set(activeAds?.map(ad => ad.service_id) || []);
+      // Create a map of service_id -> ad details
+      const adDetailsMap = new Map(
+        activeAds?.map(ad => [
+          ad.service_id,
+          {
+            subscriptionId: ad.id,
+            monthlyPrice: ad.monthly_price,
+            nextBillingDate: ad.next_billing_date,
+            totalImpressions: ad.total_impressions,
+            totalClicks: ad.total_clicks,
+            ctr: ad.total_impressions > 0 ? (ad.total_clicks / ad.total_impressions) * 100 : 0,
+            createdAt: ad.created_at
+          }
+        ]) || []
+      );
+
+      // Map services with ad details
       const servicesWithAdStatus = myServices?.map(service => ({
         id: service.id,
         title: service.title,
-        hasActiveAd: activeServiceIds.has(service.id)
+        thumbnailUrl: service.thumbnail_url,
+        hasActiveAd: adDetailsMap.has(service.id),
+        adDetails: adDetailsMap.get(service.id)
       })) || [];
 
       setServices(servicesWithAdStatus);
@@ -296,49 +327,158 @@ export default function AdvertisingPage() {
             </div>
           )}
 
-          {/* 새 광고 시작하기 */}
+          {/* 서비스 광고 관리 테이블 */}
           {services.length > 0 && (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                 <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <i className="fas fa-rocket text-blue-600"></i>
+                  <i className="fas fa-list text-blue-600"></i>
                 </div>
-                새 광고 시작하기
+                서비스 광고 관리
               </h2>
 
-              <div className="space-y-6">
-                {/* Step 1: 서비스 선택 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold mr-2">1</span>
-                    광고할 서비스를 선택하세요
-                  </label>
-                  <select
-                    value={selectedService}
-                    onChange={(e) => setSelectedService(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
-                  >
-                    <option value="">서비스를 선택하세요</option>
+              {/* 테이블 */}
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b-2 border-gray-200">
+                      <th className="text-left py-3 px-4 font-semibold text-gray-700">서비스</th>
+                      <th className="text-center py-3 px-4 font-semibold text-gray-700">상태</th>
+                      <th className="text-center py-3 px-4 font-semibold text-gray-700">노출 수</th>
+                      <th className="text-center py-3 px-4 font-semibold text-gray-700">클릭 수</th>
+                      <th className="text-center py-3 px-4 font-semibold text-gray-700">평균 클릭률</th>
+                      <th className="text-center py-3 px-4 font-semibold text-gray-700">신청 정보</th>
+                    </tr>
+                  </thead>
+                  <tbody>
                     {services.map(service => (
-                      <option
-                        key={service.id}
-                        value={service.id}
-                        disabled={service.hasActiveAd}
-                      >
-                        {service.title}
-                        {service.hasActiveAd ? ' (광고 진행 중)' : ''}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                      <tr key={service.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                        {/* 서비스 썸네일 + 제목 (툴팁) */}
+                        <td className="py-3 px-4">
+                          <div className="group relative">
+                            <img
+                              src={service.thumbnailUrl || '/placeholder-service.png'}
+                              alt={service.title}
+                              className="w-16 h-16 object-cover rounded-lg cursor-pointer"
+                            />
+                            {/* 툴팁 */}
+                            <div className="absolute left-0 top-full mt-2 hidden group-hover:block z-10 bg-gray-900 text-white text-sm py-1 px-3 rounded shadow-lg whitespace-nowrap">
+                              {service.title}
+                            </div>
+                          </div>
+                        </td>
 
-                {/* Step 2: 계약 기간 선택 */}
-                {selectedService && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold mr-2">2</span>
-                      계약 기간을 선택하세요
-                    </label>
+                        {/* 상태 */}
+                        <td className="py-3 px-4 text-center">
+                          {service.hasActiveAd ? (
+                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                              <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                              광고 진행중
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                              미진행
+                            </span>
+                          )}
+                        </td>
+
+                        {/* 노출 수 */}
+                        <td className="py-3 px-4 text-center font-semibold text-blue-600">
+                          {service.adDetails?.totalImpressions.toLocaleString() || '-'}
+                        </td>
+
+                        {/* 클릭 수 */}
+                        <td className="py-3 px-4 text-center font-semibold text-green-600">
+                          {service.adDetails?.totalClicks.toLocaleString() || '-'}
+                        </td>
+
+                        {/* 평균 클릭률 */}
+                        <td className="py-3 px-4 text-center font-semibold text-purple-600">
+                          {service.adDetails ? `${service.adDetails.ctr.toFixed(2)}%` : '-'}
+                        </td>
+
+                        {/* 신청 정보 */}
+                        <td className="py-3 px-4 text-center">
+                          {service.hasActiveAd ? (
+                            <button
+                              onClick={() => setSelectedService(selectedService === service.id ? '' : service.id)}
+                              className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                            >
+                              상세보기
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => setSelectedService(selectedService === service.id ? '' : service.id)}
+                              className="px-4 py-2 bg-brand-primary text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                            >
+                              광고 신청
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* 선택한 서비스의 상세 정보 또는 신청 폼 */}
+              {selectedService && (
+                <div className="mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+                  {(() => {
+                    const service = services.find(s => s.id === selectedService);
+                    if (!service) return null;
+
+                    // 광고 진행 중인 경우
+                    if (service.hasActiveAd && service.adDetails) {
+                      return (
+                        <div>
+                          <h3 className="text-xl font-bold text-gray-900 mb-4">{service.title} - 광고 상세 정보</h3>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="bg-white p-4 rounded-lg">
+                              <div className="text-sm text-gray-600 mb-1">월 결제액</div>
+                              <div className="text-2xl font-bold text-gray-900">{service.adDetails.monthlyPrice.toLocaleString()}원</div>
+                            </div>
+                            <div className="bg-white p-4 rounded-lg">
+                              <div className="text-sm text-gray-600 mb-1">다음 결제일</div>
+                              <div className="text-lg font-bold text-gray-900">
+                                {new Date(service.adDetails.nextBillingDate).toLocaleDateString('ko-KR')}
+                              </div>
+                            </div>
+                            <div className="bg-white p-4 rounded-lg">
+                              <div className="text-sm text-gray-600 mb-1">광고 시작일</div>
+                              <div className="text-lg font-bold text-gray-900">
+                                {new Date(service.adDetails.createdAt).toLocaleDateString('ko-KR')}
+                              </div>
+                            </div>
+                            <div className="bg-white p-4 rounded-lg">
+                              <div className="text-sm text-gray-600 mb-1">총 노출 수</div>
+                              <div className="text-2xl font-bold text-blue-600">{service.adDetails.totalImpressions.toLocaleString()}회</div>
+                            </div>
+                            <div className="bg-white p-4 rounded-lg">
+                              <div className="text-sm text-gray-600 mb-1">총 클릭 수</div>
+                              <div className="text-2xl font-bold text-green-600">{service.adDetails.totalClicks.toLocaleString()}회</div>
+                            </div>
+                            <div className="bg-white p-4 rounded-lg">
+                              <div className="text-sm text-gray-600 mb-1">클릭률 (CTR)</div>
+                              <div className="text-2xl font-bold text-purple-600">{service.adDetails.ctr.toFixed(2)}%</div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    // 광고 신청 폼
+                    return (
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-900 mb-4">{service.title} - 광고 신청</h3>
+
+                        <div className="space-y-6">
+                          {/* 계약 기간 선택 */}
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold mr-2">1</span>
+                              계약 기간을 선택하세요
+                            </label>
                     <select
                       value={selectedMonths}
                       onChange={(e) => setSelectedMonths(Number(e.target.value))}
@@ -400,17 +540,15 @@ export default function AdvertisingPage() {
                           <span>공정한 랜덤 노출</span>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                )}
+                            </div>
+                          </div>
 
-                {/* Step 3: 결제 방식 선택 */}
-                {selectedService && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold mr-2">3</span>
-                      결제 방식을 선택하세요
-                    </label>
+                          {/* 결제 방식 선택 */}
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold mr-2">2</span>
+                              결제 방식을 선택하세요
+                            </label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {/* 카드 (준비중) */}
                       <div className="relative border-2 border-gray-200 rounded-lg p-4 opacity-50 cursor-not-allowed">
@@ -455,33 +593,35 @@ export default function AdvertisingPage() {
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                )}
+                            </div>
+                          </div>
 
-                {/* 구매 버튼 */}
-                {selectedService && (
-                  <div className="pt-4">
-                    <button
-                      onClick={handleStartAdvertising}
-                      disabled={purchasing}
-                      className="w-full bg-brand-primary text-white py-4 rounded-lg font-bold hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl disabled:shadow-none text-lg"
-                    >
-                      {purchasing ? (
-                        <span className="flex items-center justify-center gap-2">
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          처리 중...
-                        </span>
-                      ) : (
-                        <>
-                          <i className="fas fa-rocket mr-2"></i>
-                          광고 시작하기
-                        </>
-                      )}
-                    </button>
-                  </div>
-                )}
-              </div>
+                          {/* 구매 버튼 */}
+                          <div className="pt-4">
+                            <button
+                              onClick={handleStartAdvertising}
+                              disabled={purchasing}
+                              className="w-full bg-brand-primary text-white py-4 rounded-lg font-bold hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl disabled:shadow-none text-lg"
+                            >
+                              {purchasing ? (
+                                <span className="flex items-center justify-center gap-2">
+                                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                  처리 중...
+                                </span>
+                              ) : (
+                                <>
+                                  <i className="fas fa-rocket mr-2"></i>
+                                  광고 시작하기
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
+              )}
             </div>
           )}
 
