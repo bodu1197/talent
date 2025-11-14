@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { getTotalCredits, startAdvertisingSubscription } from '@/lib/advertising';
+import { startAdvertisingSubscription } from '@/lib/advertising';
 import type { AdvertisingDashboard } from '@/types/advertising';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 
@@ -11,8 +11,25 @@ export default function AdvertisingPage() {
   const [dashboard, setDashboard] = useState<AdvertisingDashboard | null>(null);
   const [services, setServices] = useState<Array<{ id: string; title: string }>>([]);
   const [selectedService, setSelectedService] = useState<string>('');
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'credit' | 'card' | 'bank_transfer'>('credit');
+  const [selectedMonths, setSelectedMonths] = useState<number>(1);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'card' | 'bank_transfer'>('bank_transfer');
   const [purchasing, setPurchasing] = useState(false);
+
+  // 할인율 계산: 1개월 20만원 → 12개월 10만원 (선형 할인)
+  const calculateMonthlyPrice = (months: number): number => {
+    const basePrice = 200000; // 1개월 기준 20만원
+    const finalPrice = 100000; // 12개월 시 10만원
+    const discountPerMonth = (basePrice - finalPrice) / 11; // 11단계로 할인
+    return Math.round(basePrice - (discountPerMonth * (months - 1)));
+  };
+
+  const monthlyPrice = useMemo(() => calculateMonthlyPrice(selectedMonths), [selectedMonths]);
+  const totalPrice = useMemo(() => monthlyPrice * selectedMonths, [monthlyPrice, selectedMonths]);
+  const discountRate = useMemo(() => {
+    if (selectedMonths === 1) return 0;
+    const originalTotal = 200000 * selectedMonths;
+    return Math.round(((originalTotal - totalPrice) / originalTotal) * 100);
+  }, [selectedMonths, totalPrice]);
 
   useEffect(() => {
     loadDashboard();
@@ -37,14 +54,6 @@ export default function AdvertisingPage() {
         return;
       }
 
-      const totalCredits = await getTotalCredits(seller.id);
-
-      const { data: creditData } = await supabase
-        .from('advertising_credits')
-        .select('*')
-        .eq('seller_id', seller.id)
-        .single();
-
       const { data: subscriptions } = await supabase
         .from('advertising_subscriptions')
         .select(`
@@ -60,10 +69,10 @@ export default function AdvertisingPage() {
 
       setDashboard({
         credits: {
-          total: totalCredits,
-          promotional: creditData?.promotion_type ? creditData.amount : 0,
+          total: 0,
+          promotional: 0,
           purchased: 0,
-          expiresAt: creditData?.expires_at || null
+          expiresAt: null
         },
         subscriptions: subscriptions?.map(s => ({
           id: s.id,
@@ -109,13 +118,8 @@ export default function AdvertisingPage() {
       return;
     }
 
-    if (selectedPaymentMethod === 'credit' && (!dashboard || dashboard.credits.total < 100000)) {
-      alert('크레딧이 부족합니다. 다른 결제 방식을 선택해주세요.');
-      return;
-    }
-
     if (selectedPaymentMethod === 'card') {
-      alert('카드 결제 기능은 준비 중입니다. 크레딧 또는 무통장 입금을 이용해주세요.');
+      alert('카드 결제 기능은 준비 중입니다. 무통장 입금을 이용해주세요.');
       return;
     }
 
@@ -137,16 +141,17 @@ export default function AdvertisingPage() {
         return;
       }
 
-      await startAdvertisingSubscription(seller.id, selectedService, selectedPaymentMethod);
+      await startAdvertisingSubscription(seller.id, selectedService, selectedPaymentMethod, selectedMonths, totalPrice);
 
       if (selectedPaymentMethod === 'bank_transfer') {
-        alert('무통장 입금 신청이 완료되었습니다.\n\n입금 계좌 정보가 알림으로 전송되었습니다.\n입금 후 관리자 확인까지 1-2일이 소요됩니다.');
+        alert(`무통장 입금 신청이 완료되었습니다.\n\n결제 금액: ${totalPrice.toLocaleString()}원 (${selectedMonths}개월)\n입금 계좌 정보가 알림으로 전송되었습니다.\n입금 후 관리자 확인까지 1-2일이 소요됩니다.`);
       } else {
         alert('광고가 시작되었습니다!');
       }
 
       loadDashboard();
       setSelectedService('');
+      setSelectedMonths(1);
     } catch (error) {
       console.error('광고 시작 실패:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
       alert('광고 시작에 실패했습니다');
@@ -155,9 +160,6 @@ export default function AdvertisingPage() {
     }
   }
 
-  const canPurchaseWithCredit = useMemo(() => {
-    return dashboard && dashboard.credits.total >= 100000;
-  }, [dashboard]);
 
   if (loading) {
     return (
@@ -184,28 +186,6 @@ export default function AdvertisingPage() {
               더 많은 고객에게 서비스를 노출하고 매출을 증대시키세요
             </p>
           </div>
-
-          {/* 크레딧 잔액 카드 */}
-          {dashboard && dashboard.credits.total > 0 && (
-            <div className="bg-brand-primary rounded-2xl shadow-lg p-8 mb-8 text-white">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-blue-100 text-sm mb-2">사용 가능한 크레딧</p>
-                  <p className="text-4xl font-bold">
-                    {dashboard.credits.total.toLocaleString()}원
-                  </p>
-                  {dashboard.credits.expiresAt && (
-                    <p className="text-blue-100 text-sm mt-2">
-                      만료일: {new Date(dashboard.credits.expiresAt).toLocaleDateString('ko-KR')}
-                    </p>
-                  )}
-                </div>
-                <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center">
-                  <i className="fas fa-coins text-4xl"></i>
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* 통계 카드 */}
           {dashboard?.subscriptions && dashboard.subscriptions.length > 0 && (
@@ -331,25 +311,57 @@ export default function AdvertisingPage() {
                   </select>
                 </div>
 
-                {/* Step 2: 플랜 정보 */}
+                {/* Step 2: 계약 기간 선택 */}
                 {selectedService && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold mr-2">2</span>
-                      광고 플랜
+                      계약 기간을 선택하세요
                     </label>
+                    <select
+                      value={selectedMonths}
+                      onChange={(e) => setSelectedMonths(Number(e.target.value))}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all mb-4"
+                    >
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(months => {
+                        const price = calculateMonthlyPrice(months);
+                        const total = price * months;
+                        const discount = months === 1 ? 0 : Math.round(((200000 * months - total) / (200000 * months)) * 100);
+                        return (
+                          <option key={months} value={months}>
+                            {months}개월 - 월 {price.toLocaleString()}원 (총 {total.toLocaleString()}원)
+                            {discount > 0 && ` - ${discount}% 할인`}
+                          </option>
+                        );
+                      })}
+                    </select>
+
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between mb-4">
                         <div>
-                          <h3 className="text-lg font-bold text-gray-900 mb-1">월정액 플랜</h3>
+                          <h3 className="text-lg font-bold text-gray-900 mb-1">광고 플랜</h3>
                           <p className="text-sm text-gray-600">카테고리 1페이지 완전 랜덤 노출</p>
                         </div>
                         <div className="text-right">
-                          <div className="text-3xl font-bold text-brand-primary">100,000원</div>
+                          <div className="text-3xl font-bold text-brand-primary">{monthlyPrice.toLocaleString()}원</div>
                           <div className="text-sm text-gray-600">/ 월</div>
                         </div>
                       </div>
-                      <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+
+                      {discountRate > 0 && (
+                        <div className="mb-4 p-3 bg-green-100 border border-green-300 rounded-lg">
+                          <div className="flex items-center gap-2 text-green-800">
+                            <i className="fas fa-tag"></i>
+                            <span className="font-bold">{discountRate}% 할인 적용!</span>
+                          </div>
+                          <div className="text-sm text-green-700 mt-1">
+                            {selectedMonths}개월 계약 시 총 {totalPrice.toLocaleString()}원
+                            <span className="ml-2 line-through text-green-600">{(200000 * selectedMonths).toLocaleString()}원</span>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="grid grid-cols-2 gap-3 text-sm">
                         <div className="flex items-center gap-2">
                           <i className="fas fa-check-circle text-green-600"></i>
                           <span>무제한 노출</span>
@@ -378,47 +390,7 @@ export default function AdvertisingPage() {
                       <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold mr-2">3</span>
                       결제 방식을 선택하세요
                     </label>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      {/* 크레딧 */}
-                      <div
-                        onClick={() => canPurchaseWithCredit && setSelectedPaymentMethod('credit')}
-                        className={`relative border-2 rounded-lg p-4 cursor-pointer transition-all ${
-                          selectedPaymentMethod === 'credit'
-                            ? 'border-brand-primary bg-blue-50'
-                            : canPurchaseWithCredit
-                            ? 'border-gray-200 hover:border-gray-300'
-                            : 'border-gray-200 opacity-50 cursor-not-allowed'
-                        }`}
-                      >
-                        <div className="flex items-start gap-3">
-                          <input
-                            type="radio"
-                            name="paymentMethod"
-                            value="credit"
-                            checked={selectedPaymentMethod === 'credit'}
-                            disabled={!canPurchaseWithCredit}
-                            onChange={() => setSelectedPaymentMethod('credit')}
-                            className="mt-1"
-                          />
-                          <div className="flex-1">
-                            <div className="font-bold text-gray-900 mb-1">크레딧</div>
-                            <div className="text-sm text-gray-600 mb-2">즉시 광고 시작</div>
-                            {dashboard && (
-                              <div className="text-xs">
-                                <span className={canPurchaseWithCredit ? 'text-green-600 font-medium' : 'text-red-600 font-medium'}>
-                                  잔액: {dashboard.credits.total.toLocaleString()}원
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        {!canPurchaseWithCredit && (
-                          <div className="absolute inset-0 flex items-center justify-center bg-white/80 rounded-lg">
-                            <span className="text-sm text-red-600 font-medium">크레딧 부족</span>
-                          </div>
-                        )}
-                      </div>
-
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {/* 카드 (준비중) */}
                       <div className="relative border-2 border-gray-200 rounded-lg p-4 opacity-50 cursor-not-allowed">
                         <div className="flex items-start gap-3">

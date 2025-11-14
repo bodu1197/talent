@@ -222,7 +222,9 @@ export async function payWithCredit(
 export async function startAdvertisingSubscription(
   sellerId: string,
   serviceId: string,
-  paymentMethod: 'credit' | 'card' | 'bank_transfer' = 'credit'
+  paymentMethod: 'card' | 'bank_transfer' = 'bank_transfer',
+  months: number = 1,
+  totalAmount: number
 ) {
   // 인증 검증
   const user = await getCurrentUser();
@@ -230,6 +232,10 @@ export async function startAdvertisingSubscription(
   // 입력 검증
   if (!validateUUID(sellerId)) throw new Error('유효하지 않은 판매자 ID');
   if (!validateUUID(serviceId)) throw new Error('유효하지 않은 서비스 ID');
+  if (!Number.isInteger(months) || months < 1 || months > 12) {
+    throw new Error('계약 기간은 1~12개월만 가능합니다');
+  }
+  if (!validateAmount(totalAmount)) throw new Error('유효하지 않은 금액');
 
   const supabase = getAdminClient();
 
@@ -256,7 +262,9 @@ export async function startAdvertisingSubscription(
   }
 
   const nextBillingDate = new Date();
-  nextBillingDate.setMonth(nextBillingDate.getMonth() + 1);
+  nextBillingDate.setMonth(nextBillingDate.getMonth() + months);
+
+  const monthlyPrice = Math.round(totalAmount / months);
 
   // 구독 생성
   const { data: subscription, error: subError } = await supabase
@@ -264,7 +272,7 @@ export async function startAdvertisingSubscription(
     .insert({
       seller_id: sellerId,
       service_id: serviceId,
-      monthly_price: MONTHLY_PRICE,
+      monthly_price: monthlyPrice,
       payment_method: paymentMethod,
       next_billing_date: nextBillingDate.toISOString().split('T')[0],
       status: paymentMethod === 'bank_transfer' ? 'pending_payment' : 'active'
@@ -274,39 +282,9 @@ export async function startAdvertisingSubscription(
 
   if (subError) throw subError;
 
-  // 크레딧으로 즉시 결제 시도
-  if (paymentMethod === 'credit') {
-    const { success } = await payWithCredit(sellerId, subscription.id, MONTHLY_PRICE);
-
-    if (success) {
-      // 결제 성공 - 구독 활성화
-      await supabase
-        .from('advertising_subscriptions')
-        .update({
-          status: 'active',
-          last_billed_at: new Date().toISOString()
-        })
-        .eq('id', subscription.id);
-
-      // 결제 기록
-      await supabase.from('advertising_payments').insert({
-        subscription_id: subscription.id,
-        seller_id: sellerId,
-        amount: MONTHLY_PRICE,
-        payment_method: 'credit',
-        status: 'completed',
-        paid_at: new Date().toISOString()
-      });
-    } else {
-      // 크레딧 부족 - 다른 결제 방법 필요
-      await supabase
-        .from('advertising_subscriptions')
-        .update({ status: 'pending_payment' })
-        .eq('id', subscription.id);
-    }
-  } else if (paymentMethod === 'bank_transfer') {
-    // 무통장 입금 처리
-    await requestBankTransferPayment(subscription.id, sellerId, MONTHLY_PRICE);
+  // 무통장 입금 처리
+  if (paymentMethod === 'bank_transfer') {
+    await requestBankTransferPayment(subscription.id, sellerId, totalAmount, months);
   }
 
   return subscription;
@@ -365,7 +343,8 @@ export async function cancelSubscription(subscriptionId: string) {
 export async function requestBankTransferPayment(
   subscriptionId: string,
   sellerId: string,
-  amount: number
+  amount: number,
+  months: number = 1
 ) {
   // 입력 검증
   if (!validateUUID(subscriptionId)) throw new Error('유효하지 않은 구독 ID');
@@ -405,7 +384,7 @@ export async function requestBankTransferPayment(
     type: 'payment_bank_transfer',
     title: '광고 구독 결제 - 무통장 입금 안내',
     content: `
-입금 금액: ${amount.toLocaleString()}원
+입금 금액: ${amount.toLocaleString()}원 (${months}개월)
 입금 계좌: ${process.env.NEXT_PUBLIC_BANK_NAME} ${process.env.NEXT_PUBLIC_BANK_ACCOUNT}
 예금주: ${process.env.NEXT_PUBLIC_BANK_HOLDER}
 입금 기한: ${deadline.toLocaleString()}
