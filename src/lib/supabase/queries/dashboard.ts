@@ -116,40 +116,11 @@ export async function getBuyerRecentFavorites(userId: string, limit: number = 5)
 }
 
 export async function getBuyerBenefits(userId: string) {
-  try {
-    const supabase = await createClient()
-
-    // Get coupons count
-    const { count: couponsCount, error: couponError } = await supabase
-      .from('user_coupons')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', userId)
-      .eq('is_used', false)
-      .gte('expires_at', new Date().toISOString())
-
-    if (couponError) logger.error('[getBuyerBenefits] Coupon error:', couponError)
-
-    // Get cash balance from user_wallets or users table
-    const { data: walletData, error: walletError } = await supabase
-      .from('user_wallets')
-      .select('balance')
-      .eq('user_id', userId)
-      .maybeSingle()
-
-    if (walletError) logger.error('[getBuyerBenefits] Wallet error:', walletError)
-
-    const benefits = {
-      coupons: couponsCount || 0,
-      cash: walletData?.balance || 0
-    }
-
-    return benefits
-  } catch (error) {
-    logger.error('[getBuyerBenefits] Unexpected error:', error)
-    return {
-      coupons: 0,
-      cash: 0
-    }
+  // Coupon/cash features have been removed
+  // Return empty benefits to avoid querying deleted tables
+  return {
+    coupons: 0,
+    cash: 0
   }
 }
 
