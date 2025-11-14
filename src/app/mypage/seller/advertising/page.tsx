@@ -141,7 +141,7 @@ export default function AdvertisingPage() {
         return;
       }
 
-      await startAdvertisingSubscription(seller.id, selectedService, selectedPaymentMethod, selectedMonths, totalPrice);
+      await startAdvertisingSubscription(user.id, selectedService, selectedPaymentMethod, selectedMonths, totalPrice);
 
       if (selectedPaymentMethod === 'bank_transfer') {
         alert(`무통장 입금 신청이 완료되었습니다.\n\n결제 금액: ${totalPrice.toLocaleString()}원 (${selectedMonths}개월)\n입금 계좌 정보가 알림으로 전송되었습니다.\n입금 후 관리자 확인까지 1-2일이 소요됩니다.`);

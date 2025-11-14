@@ -218,9 +218,10 @@ export async function payWithCredit(
 
 /**
  * 광고 구독 시작
+ * @param userId - 사용자 ID (users.id, advertising 테이블의 seller_id로 사용됨)
  */
 export async function startAdvertisingSubscription(
-  sellerId: string,
+  userId: string,
   serviceId: string,
   paymentMethod: 'card' | 'bank_transfer',
   months: number,
@@ -230,34 +231,39 @@ export async function startAdvertisingSubscription(
   const user = await getCurrentUser();
 
   // 입력 검증
-  if (!validateUUID(sellerId)) throw new Error('유효하지 않은 판매자 ID');
+  if (!validateUUID(userId)) throw new Error('유효하지 않은 사용자 ID');
   if (!validateUUID(serviceId)) throw new Error('유효하지 않은 서비스 ID');
   if (!Number.isInteger(months) || months < 1 || months > 12) {
     throw new Error('계약 기간은 1~12개월만 가능합니다');
   }
   if (!validateAmount(totalAmount)) throw new Error('유효하지 않은 금액');
 
-  const supabase = getAdminClient();
-
-  // 본인 확인 - sellers 테이블에서 user_id 확인
-  const { data: seller } = await supabase
-    .from('sellers')
-    .select('user_id')
-    .eq('id', sellerId)
-    .single();
-
-  if (!seller || seller.user_id !== user.id) {
+  // 본인 확인
+  if (userId !== user.id) {
     throw new Error('본인의 서비스만 광고 등록할 수 있습니다');
   }
 
-  // 서비스 소유권 확인
+  const supabase = getAdminClient();
+
+  // sellers 테이블에서 seller.id 조회
+  const { data: seller } = await supabase
+    .from('sellers')
+    .select('id')
+    .eq('user_id', userId)
+    .single();
+
+  if (!seller) {
+    throw new Error('판매자 정보를 찾을 수 없습니다');
+  }
+
+  // 서비스 소유권 확인 (services.seller_id는 sellers.id를 참조)
   const { data: service } = await supabase
     .from('services')
     .select('seller_id')
     .eq('id', serviceId)
     .single();
 
-  if (!service || service.seller_id !== sellerId) {
+  if (!service || service.seller_id !== seller.id) {
     throw new Error('본인의 서비스만 광고 등록할 수 있습니다');
   }
 
@@ -270,7 +276,7 @@ export async function startAdvertisingSubscription(
   const { data: subscription, error: subError } = await supabase
     .from('advertising_subscriptions')
     .insert({
-      seller_id: sellerId,
+      seller_id: userId, // users.id를 사용 (FK 제약조건)
       service_id: serviceId,
       monthly_price: monthlyPrice,
       payment_method: paymentMethod,
@@ -284,7 +290,7 @@ export async function startAdvertisingSubscription(
 
   // 무통장 입금 처리
   if (paymentMethod === 'bank_transfer') {
-    await requestBankTransferPayment(subscription.id, sellerId, totalAmount, months);
+    await requestBankTransferPayment(subscription.id, userId, totalAmount, months);
   }
 
   return subscription;
@@ -339,16 +345,17 @@ export async function cancelSubscription(subscriptionId: string) {
 
 /**
  * 무통장 입금 요청
+ * @param userId - 사용자 ID (users.id)
  */
 export async function requestBankTransferPayment(
   subscriptionId: string,
-  sellerId: string,
+  userId: string,
   amount: number,
   months: number = 1
 ) {
   // 입력 검증
   if (!validateUUID(subscriptionId)) throw new Error('유효하지 않은 구독 ID');
-  if (!validateUUID(sellerId)) throw new Error('유효하지 않은 판매자 ID');
+  if (!validateUUID(userId)) throw new Error('유효하지 않은 사용자 ID');
   if (!validateAmount(amount)) throw new Error('유효하지 않은 금액');
 
   const supabase = getAdminClient();
@@ -361,7 +368,7 @@ export async function requestBankTransferPayment(
     .from('advertising_payments')
     .insert({
       subscription_id: subscriptionId,
-      seller_id: sellerId,
+      seller_id: userId, // users.id를 사용 (FK 제약조건)
       amount,
       payment_method: 'bank_transfer',
       status: 'pending'
@@ -380,7 +387,7 @@ export async function requestBankTransferPayment(
 
   // 판매자에게 입금 안내 알림
   await supabase.from('notifications').insert({
-    user_id: sellerId,
+    user_id: userId, // users.id 사용
     type: 'payment_bank_transfer',
     title: '광고 구독 결제 - 무통장 입금 안내',
     content: `
