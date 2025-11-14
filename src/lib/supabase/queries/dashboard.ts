@@ -5,46 +5,48 @@ export async function getBuyerDashboardStats(userId: string) {
   try {
     const supabase = await createClient()
 
-    // Get counts for different order statuses
-    const [inProgressResult, deliveredResult, completedResult] = await Promise.all([
-      supabase
-        .from('orders')
-        .select('*', { count: 'exact', head: true })
-        .eq('buyer_id', userId)
-        .eq('status', 'in_progress'),
-      supabase
-        .from('orders')
-        .select('*', { count: 'exact', head: true })
-        .eq('buyer_id', userId)
-        .eq('status', 'delivered'),
-      supabase
-        .from('orders')
-        .select('*', { count: 'exact', head: true })
-        .eq('buyer_id', userId)
-        .eq('status', 'completed')
-        .gte('created_at', new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString())
-    ])
-
-    if (inProgressResult.error) logger.error('[getBuyerDashboardStats] inProgress error:', inProgressResult.error)
-    if (deliveredResult.error) logger.error('[getBuyerDashboardStats] delivered error:', deliveredResult.error)
-    if (completedResult.error) logger.error('[getBuyerDashboardStats] completed error:', completedResult.error)
-
-    // Get pending reviews count (completed orders without reviews)
-    const { count: pendingReviewsCount, error: reviewError } = await supabase
+    // 단일 쿼리로 모든 주문 데이터 가져오기 (4개 쿼리 → 1개 쿼리로 최적화)
+    const { data: orders, error } = await supabase
       .from('orders')
-      .select('*', { count: 'exact', head: true })
+      .select('status, review_id, created_at')
       .eq('buyer_id', userId)
-      .eq('status', 'completed')
-      .is('review_id', null)
 
-    if (reviewError) logger.error('[getBuyerDashboardStats] review error:', reviewError)
-
-    const stats = {
-      inProgressOrders: inProgressResult.count || 0,
-      deliveredOrders: deliveredResult.count || 0,
-      pendingReviews: pendingReviewsCount || 0,
-      monthlyPurchases: completedResult.count || 0
+    if (error) {
+      logger.error('[getBuyerDashboardStats] Error:', error)
+      return {
+        inProgressOrders: 0,
+        deliveredOrders: 0,
+        pendingReviews: 0,
+        monthlyPurchases: 0
+      }
     }
+
+    // JavaScript로 카운트 계산
+    const stats = {
+      inProgressOrders: 0,
+      deliveredOrders: 0,
+      pendingReviews: 0,
+      monthlyPurchases: 0
+    }
+
+    const monthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()
+
+    orders?.forEach(order => {
+      if (order.status === 'in_progress') {
+        stats.inProgressOrders++
+      } else if (order.status === 'delivered') {
+        stats.deliveredOrders++
+      } else if (order.status === 'completed') {
+        // 리뷰가 없는 완료된 주문 = 대기중인 리뷰
+        if (!order.review_id) {
+          stats.pendingReviews++
+        }
+        // 이번 달 완료된 주문
+        if (order.created_at >= monthStart) {
+          stats.monthlyPurchases++
+        }
+      }
+    })
 
     return stats
   } catch (error) {
@@ -127,47 +129,49 @@ export async function getBuyerBenefits(userId: string) {
 export async function getSellerDashboardStats(sellerUserId: string) {
   const supabase = await createClient()
 
-  // Get counts for different order statuses
+  // 단일 쿼리로 모든 주문 데이터 가져오기 (5개 쿼리 → 1개 쿼리로 최적화)
   // Note: orders.seller_id actually references users.id (not sellers.id)
-  const [newOrdersResult, inProgressResult, deliveredResult, completedResult, monthlyCompletedResult] = await Promise.all([
-    supabase
-      .from('orders')
-      .select('*', { count: 'exact', head: true })
-      .eq('seller_id', sellerUserId)
-      .eq('status', 'paid'),
-    supabase
-      .from('orders')
-      .select('*', { count: 'exact', head: true })
-      .eq('seller_id', sellerUserId)
-      .eq('status', 'in_progress'),
-    supabase
-      .from('orders')
-      .select('*', { count: 'exact', head: true })
-      .eq('seller_id', sellerUserId)
-      .eq('status', 'delivered'),
-    supabase
-      .from('orders')
-      .select('*', { count: 'exact', head: true })
-      .eq('seller_id', sellerUserId)
-      .eq('status', 'completed'),
-    supabase
-      .from('orders')
-      .select('total_amount', { count: 'exact' })
-      .eq('seller_id', sellerUserId)
-      .eq('status', 'completed')
-      .gte('created_at', new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString())
-  ])
+  const { data: orders, error } = await supabase
+    .from('orders')
+    .select('status, total_amount, created_at')
+    .eq('seller_id', sellerUserId)
 
-  // Calculate monthly revenue (no commission - 100% to seller)
-  const monthlyRevenue = monthlyCompletedResult.data?.reduce((sum, order) => sum + (order.total_amount || 0), 0) || 0
-
-  return {
-    newOrders: newOrdersResult.count || 0,
-    inProgressOrders: inProgressResult.count || 0,
-    deliveredOrders: deliveredResult.count || 0,
-    completedOrders: completedResult.count || 0,
-    monthlyRevenue
+  if (error) {
+    logger.error('[getSellerDashboardStats] Error:', error)
+    return {
+      newOrders: 0,
+      inProgressOrders: 0,
+      deliveredOrders: 0,
+      completedOrders: 0,
+      monthlyRevenue: 0
+    }
   }
+
+  // JavaScript로 카운트 및 수익 계산
+  const stats = {
+    newOrders: 0,
+    inProgressOrders: 0,
+    deliveredOrders: 0,
+    completedOrders: 0,
+    monthlyRevenue: 0
+  }
+
+  const monthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()
+
+  orders?.forEach(order => {
+    if (order.status === 'paid') stats.newOrders++
+    else if (order.status === 'in_progress') stats.inProgressOrders++
+    else if (order.status === 'delivered') stats.deliveredOrders++
+    else if (order.status === 'completed') {
+      stats.completedOrders++
+      // 이번 달 완료된 주문의 수익 계산
+      if (order.created_at >= monthStart) {
+        stats.monthlyRevenue += order.total_amount || 0
+      }
+    }
+  })
+
+  return stats
 }
 
 export async function getSellerRecentOrders(sellerUserId: string, limit: number = 5) {
