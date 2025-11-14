@@ -174,6 +174,78 @@ export default function AdminAdvertisingPaymentsPage() {
     setSelectedIds(newSelected);
   }
 
+  function handleExportData() {
+    // CSV 헤더
+    const headers = [
+      '입금번호',
+      '판매자명',
+      '이메일',
+      '서비스',
+      '금액',
+      '공급가액',
+      '부가세',
+      '입금자명',
+      '은행',
+      '입금일',
+      '입금시간',
+      '상태',
+      '등록일',
+      '관리자 메모'
+    ];
+
+    // CSV 데이터 생성
+    const rows = payments.map(payment => {
+      const depositNumber = generateDepositNumber(payment);
+      const sellerName = payment.seller?.user?.name || '-';
+      const sellerEmail = payment.seller?.user?.email || '-';
+      const serviceTitle = payment.subscription?.service?.title || '-';
+      const amount = payment.amount.toLocaleString();
+      const supplyAmount = payment.supply_amount.toLocaleString();
+      const taxAmount = payment.tax_amount.toLocaleString();
+      const depositorName = payment.depositor_name || '-';
+      const bankName = payment.bank_name || '-';
+      const depositDate = payment.deposit_date || '-';
+      const depositTime = payment.deposit_time || '-';
+      const status = getStatusBadge(payment.status).label;
+      const createdAt = new Date(payment.created_at).toLocaleString('ko-KR');
+      const adminMemo = payment.admin_memo || '-';
+
+      return [
+        depositNumber,
+        sellerName,
+        sellerEmail,
+        serviceTitle,
+        amount,
+        supplyAmount,
+        taxAmount,
+        depositorName,
+        bankName,
+        depositDate,
+        depositTime,
+        status,
+        createdAt,
+        adminMemo
+      ];
+    });
+
+    // CSV 문자열 생성 (Excel 호환을 위해 BOM 추가)
+    const csvContent = '\uFEFF' + [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+    ].join('\n');
+
+    // 파일 다운로드
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `무통장입금_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   async function handleBulkAction(action: 'confirm' | 'complete' | 'cancel') {
     if (selectedIds.size === 0) {
       alert('선택된 항목이 없습니다');
@@ -268,11 +340,11 @@ export default function AdminAdvertisingPaymentsPage() {
             >
               🔄 새로고침
             </button>
-            <button className="px-5 py-2.5 bg-white/20 border border-white/30 rounded-lg hover:bg-white/30 transition-all text-gray-900">
+            <button
+              onClick={handleExportData}
+              className="px-5 py-2.5 bg-white/20 border border-white/30 rounded-lg hover:bg-white/30 transition-all text-gray-900"
+            >
               📊 데이터 내보내기
-            </button>
-            <button className="px-5 py-2.5 bg-white/20 border border-white/30 rounded-lg hover:bg-white/30 transition-all text-gray-900">
-              🔔 알림 설정
             </button>
           </div>
         </div>
