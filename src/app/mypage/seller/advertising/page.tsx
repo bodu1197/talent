@@ -28,6 +28,7 @@ export default function AdvertisingPage() {
   const [selectedMonths, setSelectedMonths] = useState<number>(1);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'card' | 'bank_transfer'>('bank_transfer');
   const [purchasing, setPurchasing] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 할인율 계산: 1개월 20만원(공급가액) → 12개월 10만원(공급가액) (선형 할인)
   const calculateMonthlyPrice = (months: number): number => {
@@ -411,7 +412,8 @@ export default function AdvertisingPage() {
                             <button
                               onClick={() => {
                                 console.log('상세보기 클릭:', service.id);
-                                setSelectedService(selectedService === service.id ? '' : service.id);
+                                setSelectedService(service.id);
+                                setIsModalOpen(true);
                               }}
                               className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
                             >
@@ -421,7 +423,8 @@ export default function AdvertisingPage() {
                             <button
                               onClick={() => {
                                 console.log('광고 신청 클릭:', service.id);
-                                setSelectedService(selectedService === service.id ? '' : service.id);
+                                setSelectedService(service.id);
+                                setIsModalOpen(true);
                               }}
                               className="px-4 py-2 bg-brand-primary text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
                             >
@@ -434,10 +437,42 @@ export default function AdvertisingPage() {
                   </tbody>
                 </table>
               </div>
+            </div>
+          )}
 
-              {/* 선택한 서비스의 상세 정보 또는 신청 폼 */}
-              {selectedService && (
-                <div className="mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+          {/* 모달 팝업 */}
+          {isModalOpen && selectedService && (
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+              onClick={() => {
+                setIsModalOpen(false);
+                setSelectedService('');
+              }}
+            >
+              <div
+                className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* 모달 헤더 */}
+                <div className="sticky top-0 bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center rounded-t-2xl">
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    {services.find(s => s.id === selectedService)?.hasActiveAd ? '광고 상세 정보' : '광고 신청'}
+                  </h2>
+                  <button
+                    onClick={() => {
+                      setIsModalOpen(false);
+                      setSelectedService('');
+                    }}
+                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* 모달 내용 */}
+                <div className="p-8">
                   {(() => {
                     const service = services.find(s => s.id === selectedService);
                     if (!service) return null;
@@ -446,7 +481,7 @@ export default function AdvertisingPage() {
                     if (service.hasActiveAd && service.adDetails) {
                       return (
                         <div>
-                          <h3 className="text-xl font-bold text-gray-900 mb-4">{service.title} - 광고 상세 정보</h3>
+                          <h3 className="text-xl font-bold text-gray-900 mb-4">{service.title}</h3>
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div className="bg-white p-4 rounded-lg">
                               <div className="text-sm text-gray-600 mb-1">월 결제액</div>
@@ -484,7 +519,7 @@ export default function AdvertisingPage() {
                     // 광고 신청 폼
                     return (
                       <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-4">{service.title} - 광고 신청</h3>
+                        <h3 className="text-xl font-bold text-gray-900 mb-4">{service.title}</h3>
 
                         <div className="space-y-6">
                           {/* 계약 기간 선택 */}
@@ -655,7 +690,7 @@ export default function AdvertisingPage() {
                     );
                   })()}
                 </div>
-              )}
+              </div>
             </div>
           )}
 
