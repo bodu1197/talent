@@ -545,9 +545,6 @@ export default function AdminAdvertisingPaymentsPage() {
             >
               ❌ 취소 처리
             </button>
-            <button className="px-5 py-2.5 bg-[#6c757d] text-white rounded-lg text-sm font-medium hover:bg-[#5a6268] transition-colors flex items-center gap-2">
-              ✉️ 이메일 발송
-            </button>
           </div>
           <button className="px-5 py-2.5 bg-[#667eea] text-white rounded-lg text-sm font-medium hover:bg-[#5a67d8] transition-colors flex items-center gap-2">
             ➕ 수동 입력
