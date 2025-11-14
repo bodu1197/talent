@@ -208,79 +208,40 @@ export default function BuyerDashboardClient({ stats, recentOrders, favorites, b
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* 최근 찜한 서비스 */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-                <i className="fas fa-heart text-red-500"></i>
-                최근 찜한 서비스
-              </h2>
-              <Link
-                href="/mypage/buyer/favorites"
-                className="text-sm text-brand-primary hover:underline"
-              >
-                전체 보기
-              </Link>
-            </div>
-            <div className="space-y-3">
-              {favorites.length > 0 ? (
-                favorites.map((item) => (
-                  <Link
-                    key={item.id}
-                    href={`/services/${item.service?.id}`}
-                    className="flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
-                  >
-                    <div>
-                      <div className="font-medium text-gray-900">{item.service?.title}</div>
-                      <div className="text-sm text-gray-600">{item.service?.seller?.name}</div>
-                    </div>
-                    <i className="fas fa-arrow-right text-gray-400"></i>
-                  </Link>
-                ))
-              ) : (
-                <div className="text-center py-8 text-gray-500">
-                  찜한 서비스가 없습니다
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* 보유 혜택 */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <i className="fas fa-gift text-purple-500"></i>
-              보유 혜택
+        {/* 최근 찜한 서비스 */}
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+              <i className="fas fa-heart text-red-500"></i>
+              최근 찜한 서비스
             </h2>
-            <div className="space-y-4">
-              <Link
-                href="/mypage/buyer/coupons"
-                className="flex items-center justify-between p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <i className="fas fa-ticket text-purple-600 text-2xl"></i>
+            <Link
+              href="/mypage/buyer/favorites"
+              className="text-sm text-brand-primary hover:underline"
+            >
+              전체 보기
+            </Link>
+          </div>
+          <div className="space-y-3">
+            {favorites.length > 0 ? (
+              favorites.map((item) => (
+                <Link
+                  key={item.id}
+                  href={`/services/${item.service?.id}`}
+                  className="flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                >
                   <div>
-                    <div className="font-medium text-gray-900">쿠폰</div>
-                    <div className="text-2xl font-bold text-purple-600">{benefits?.coupons || 0}장</div>
+                    <div className="font-medium text-gray-900">{item.service?.title}</div>
+                    <div className="text-sm text-gray-600">{item.service?.seller?.name}</div>
                   </div>
-                </div>
-                <i className="fas fa-arrow-right text-gray-400"></i>
-              </Link>
-
-              <Link
-                href="/mypage/buyer/coupons/charge"
-                className="flex items-center justify-between p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <i className="fas fa-wallet text-blue-600 text-2xl"></i>
-                  <div>
-                    <div className="font-medium text-gray-900">캐시</div>
-                    <div className="text-2xl font-bold text-blue-600">{benefits?.cash?.toLocaleString() || '0'}원</div>
-                  </div>
-                </div>
-                <i className="fas fa-arrow-right text-gray-400"></i>
-              </Link>
-            </div>
+                  <i className="fas fa-arrow-right text-gray-400"></i>
+                </Link>
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                찜한 서비스가 없습니다
+              </div>
+            )}
           </div>
         </div>
       </div>
