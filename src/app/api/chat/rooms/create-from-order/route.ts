@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
       message: '채팅방이 생성되었습니다'
     })
   } catch (error) {
-    console.error('Create chat room from order error:', error)
+    console.error('Create chat room from order error:', error instanceof Error ? error.message : String(error))
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
   }
 }

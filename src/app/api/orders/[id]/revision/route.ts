@@ -76,7 +76,7 @@ export async function POST(
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Revision request API error:', error)
+    console.error('Revision request API error:', error instanceof Error ? error.message : String(error))
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
   }
 }

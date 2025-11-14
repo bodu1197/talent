@@ -81,7 +81,7 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
         body: JSON.stringify({ room_id: roomId })
       })
     } catch (error) {
-      console.error('[DirectChatClient] Mark messages as read error:', error)
+      console.error('[DirectChatClient] Mark messages as read error:', error instanceof Error ? error.message : String(error))
     }
   }
 
@@ -135,7 +135,7 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
         alert(`메시지 전송 실패: ${errorData.error || '알 수 없는 오류'}`)
       }
     } catch (error) {
-      console.error('Send message error:', error)
+      console.error('Send message error:', error instanceof Error ? error.message : String(error))
       alert('메시지 전송 중 오류가 발생했습니다.')
     } finally {
       setIsLoading(false)
@@ -461,7 +461,7 @@ function PaymentRequestCard({
         alert(`처리 실패: ${error.error || '알 수 없는 오류'}`)
       }
     } catch (error) {
-      console.error('Response error:', error)
+      console.error('Response error:', error instanceof Error ? error.message : String(error))
       alert('처리 중 오류가 발생했습니다')
     } finally {
       setIsProcessing(false)
@@ -652,7 +652,7 @@ function PaymentRequestModal({ roomId, service, onClose }: { roomId: string, ser
         alert(`결제 요청 실패: ${error.error || '알 수 없는 오류'}`)
       }
     } catch (error) {
-      console.error('Payment request error:', error)
+      console.error('Payment request error:', error instanceof Error ? error.message : String(error))
       alert('결제 요청 중 오류가 발생했습니다')
     } finally {
       setIsSubmitting(false)

@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
       summary,
     })
   } catch (error) {
-    console.error('Failed to fetch advertising subscriptions:', error)
+    console.error('Failed to fetch advertising subscriptions:', error instanceof Error ? error.message : String(error))
     return NextResponse.json(
       { error: 'Failed to fetch advertising subscriptions' },
       { status: 500 }
@@ -144,7 +144,7 @@ export async function PATCH(request: NextRequest) {
 
     return NextResponse.json({ subscription })
   } catch (error) {
-    console.error('Failed to update subscription:', error)
+    console.error('Failed to update subscription:', error instanceof Error ? error.message : String(error))
     return NextResponse.json(
       { error: 'Failed to update subscription' },
       { status: 500 }
@@ -188,7 +188,7 @@ export async function DELETE(request: NextRequest) {
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Failed to cancel subscription:', error)
+    console.error('Failed to cancel subscription:', error instanceof Error ? error.message : String(error))
     return NextResponse.json(
       { error: 'Failed to cancel subscription' },
       { status: 500 }

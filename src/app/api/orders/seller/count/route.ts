@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
       .eq('seller_id', user.id)
 
     if (error) {
-      console.error('Orders count fetch error:', error)
+      console.error('Orders count fetch error:', error instanceof Error ? error.message : String(error))
       return NextResponse.json({ error: '주문 카운트를 불러올 수 없습니다' }, { status: 500 })
     }
 
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ counts })
   } catch (error) {
-    console.error('Seller orders count API error:', error)
+    console.error('Seller orders count API error:', error instanceof Error ? error.message : String(error))
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
   }
 }

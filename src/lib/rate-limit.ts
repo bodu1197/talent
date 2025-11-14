@@ -77,7 +77,7 @@ export async function checkRateLimit(
 
     return { success: true }
   } catch (error) {
-    console.error('Rate limit check failed:', error)
+    console.error('Rate limit check failed:', error instanceof Error ? error.message : String(error))
     // Redis 오류 시에도 요청 허용 (fallback)
     return { success: true }
   }

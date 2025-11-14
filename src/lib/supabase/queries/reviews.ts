@@ -15,7 +15,7 @@ export async function getBuyerReviews(userId: string) {
     .order('created_at', { ascending: false })
 
   if (error) {
-    console.error('[getBuyerReviews] Error:', error)
+    console.error('[getBuyerReviews] Error:', error instanceof Error ? error.message : String(error))
     return []
   }
   return data || []
@@ -62,7 +62,7 @@ export async function getPendingReviews(userId: string) {
     .order('completed_at', { ascending: false })
 
   if (error) {
-    console.error('[getPendingReviews] Error:', error)
+    console.error('[getPendingReviews] Error:', error instanceof Error ? error.message : String(error))
     return []
   }
   return data || []

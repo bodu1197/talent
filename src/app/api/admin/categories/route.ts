@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ categories })
   } catch (error) {
-    console.error('Failed to fetch categories:', error)
+    console.error('Failed to fetch categories:', error instanceof Error ? error.message : String(error))
     return NextResponse.json(
       { error: 'Failed to fetch categories' },
       { status: 500 }
@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ category }, { status: 201 })
   } catch (error) {
-    console.error('Failed to create category:', error)
+    console.error('Failed to create category:', error instanceof Error ? error.message : String(error))
     return NextResponse.json(
       { error: 'Failed to create category' },
       { status: 500 }
@@ -160,7 +160,7 @@ export async function PATCH(request: NextRequest) {
 
     return NextResponse.json({ category })
   } catch (error) {
-    console.error('Failed to update category:', error)
+    console.error('Failed to update category:', error instanceof Error ? error.message : String(error))
     return NextResponse.json(
       { error: 'Failed to update category' },
       { status: 500 }
@@ -227,7 +227,7 @@ export async function DELETE(request: NextRequest) {
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Failed to delete category:', error)
+    console.error('Failed to delete category:', error instanceof Error ? error.message : String(error))
     return NextResponse.json(
       { error: 'Failed to delete category' },
       { status: 500 }

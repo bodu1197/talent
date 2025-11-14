@@ -45,7 +45,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
     // 판매자 등록이 완료된 경우에만 프리페치
     if (stats) {
       const timer = setTimeout(() => {
-        prefetchSellerData(queryClient).catch(console.error)
+        prefetchSellerData(queryClient).catch(err => console.error('Operation error:', err instanceof Error ? err.message : String(err)))
       }, 500) // 대시보드 로딩 후 0.5초 뒤에 실행
 
       return () => clearTimeout(timer)

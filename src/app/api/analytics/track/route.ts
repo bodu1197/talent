@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
     return response
 
   } catch (error) {
-    console.error('Analytics tracking error:', error)
+    console.error('Analytics tracking error:', error instanceof Error ? error.message : String(error))
     // Return success even on error - analytics should never break the app
     return NextResponse.json({ success: true })
   }

@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ unreadCount: unreadRoomCount })
   } catch (error) {
-    console.error('Unread count API error:', error)
+    console.error('Unread count API error:', error instanceof Error ? error.message : String(error))
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

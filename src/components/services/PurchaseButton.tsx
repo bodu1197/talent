@@ -67,7 +67,7 @@ export default function PurchaseButton({
       // 결제 페이지로 이동
       router.push(`/payment/direct/${order_id}`)
     } catch (error) {
-      console.error('Purchase error:', error)
+      console.error('Purchase error:', error instanceof Error ? error.message : String(error))
       alert(error instanceof Error ? error.message : '구매 진행 중 오류가 발생했습니다')
     } finally {
       setIsLoading(false)

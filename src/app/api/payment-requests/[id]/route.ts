@@ -81,7 +81,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       message: action === 'accept' ? '결제 요청을 수락했습니다' : '결제 요청을 거부했습니다'
     })
   } catch (error) {
-    console.error('Payment request response error:', error)
+    console.error('Payment request response error:', error instanceof Error ? error.message : String(error))
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
   }
 }

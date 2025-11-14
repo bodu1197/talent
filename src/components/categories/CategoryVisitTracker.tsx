@@ -50,7 +50,7 @@ export default function CategoryVisitTracker({
           logger.error('Failed to track category visit:', response.status)
         }
       } catch (error) {
-        console.error('[VISIT TRACKER] Network error:', error)
+        console.error('[VISIT TRACKER] Network error:', error instanceof Error ? error.message : String(error))
       }
     }
 

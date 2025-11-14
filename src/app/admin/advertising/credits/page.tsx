@@ -61,7 +61,7 @@ export default function AdminCreditsPage() {
         setSummary(data.summary)
       }
     } catch (error) {
-      console.error('Failed to fetch credits:', error)
+      console.error('Failed to fetch credits:', error instanceof Error ? error.message : String(error))
     } finally {
       setLoading(false)
     }
@@ -75,7 +75,7 @@ export default function AdminCreditsPage() {
         setTransactions(data.transactions || [])
       }
     } catch (error) {
-      console.error('Failed to fetch credit details:', error)
+      console.error('Failed to fetch credit details:', error instanceof Error ? error.message : String(error))
     }
   }
 
@@ -113,7 +113,7 @@ export default function AdminCreditsPage() {
         alert('크레딧 지급에 실패했습니다.')
       }
     } catch (error) {
-      console.error('Failed to grant credit:', error)
+      console.error('Failed to grant credit:', error instanceof Error ? error.message : String(error))
       alert('크레딧 지급에 실패했습니다.')
     }
   }

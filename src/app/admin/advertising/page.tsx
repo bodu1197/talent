@@ -60,7 +60,7 @@ export default function AdminAdvertisingPage() {
         setSummary(data.summary)
       }
     } catch (error) {
-      console.error('Failed to fetch subscriptions:', error)
+      console.error('Failed to fetch subscriptions:', error instanceof Error ? error.message : String(error))
     } finally {
       setLoading(false)
     }
@@ -85,7 +85,7 @@ export default function AdminAdvertisingPage() {
         alert('상태 변경에 실패했습니다.')
       }
     } catch (error) {
-      console.error('Failed to update status:', error)
+      console.error('Failed to update status:', error instanceof Error ? error.message : String(error))
       alert('상태 변경에 실패했습니다.')
     }
   }

@@ -29,7 +29,7 @@ export async function createNotification({
     .single()
 
   if (error) {
-    console.error('Failed to create notification:', error)
+    console.error('Failed to create notification:', error instanceof Error ? error.message : String(error))
     return null
   }
 

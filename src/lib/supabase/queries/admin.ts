@@ -194,7 +194,7 @@ export async function getAdminUsers(filters?: {
   const { data: profiles, error } = await query
 
   if (error) {
-    console.error('getAdminUsers error:', error)
+    console.error('getAdminUsers error:', error instanceof Error ? error.message : String(error))
     return []
   }
 
@@ -225,7 +225,7 @@ export async function getAdminUsersCount(role?: string) {
   const { count, error } = await query
 
   if (error) {
-    console.error('getAdminUsersCount error:', error)
+    console.error('getAdminUsersCount error:', error instanceof Error ? error.message : String(error))
     return 0
   }
   return count || 0

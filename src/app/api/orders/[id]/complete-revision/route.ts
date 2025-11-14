@@ -75,7 +75,7 @@ export async function PATCH(
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Complete revision API error:', error)
+    console.error('Complete revision API error:', error instanceof Error ? error.message : String(error))
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
   }
 }

@@ -89,7 +89,7 @@ export async function processMonthlyBilling() {
     .eq('next_billing_date', today);
 
   if (error) {
-    console.error('[Cron] 구독 조회 실패:', error);
+    console.error('[Cron] 구독 조회 실패:', error instanceof Error ? error.message : String(error));
     return;
   }
 
@@ -149,7 +149,7 @@ export async function processMonthlyBilling() {
         });
       }
     } catch (error) {
-      console.error(`[Cron] 구독 처리 실패: ${sub.id}`, error);
+      console.error(`[Cron] 구독 처리 실패: ${sub.id}`, error instanceof Error ? error.message : String(error));
     }
   }
 
@@ -179,7 +179,7 @@ export async function cancelExpiredBankTransfers() {
     .lt('subscription.bank_transfer_deadline', now);
 
   if (error) {
-    console.error('[Cron] 만료 결제 조회 실패:', error);
+    console.error('[Cron] 만료 결제 조회 실패:', error instanceof Error ? error.message : String(error));
     return;
   }
 
@@ -213,7 +213,7 @@ export async function cancelExpiredBankTransfers() {
         link_url: '/mypage/seller/advertising'
       });
     } catch (error) {
-      console.error(`[Cron] 결제 취소 실패: ${payment.id}`, error);
+      console.error(`[Cron] 결제 취소 실패: ${payment.id}`, error instanceof Error ? error.message : String(error));
     }
   }
 
@@ -237,7 +237,7 @@ export async function expireCredits() {
     .lt('expires_at', now);
 
   if (error) {
-    console.error('[Cron] 만료 크레딧 조회 실패:', error);
+    console.error('[Cron] 만료 크레딧 조회 실패:', error instanceof Error ? error.message : String(error));
     return;
   }
 
@@ -278,7 +278,7 @@ export async function expireCredits() {
         link_url: '/mypage/seller/advertising'
       });
     } catch (error) {
-      console.error(`[Cron] 크레딧 만료 처리 실패: ${credit.id}`, error);
+      console.error(`[Cron] 크레딧 만료 처리 실패: ${credit.id}`, error instanceof Error ? error.message : String(error));
     }
   }
 

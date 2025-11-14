@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (error) {
-      console.error('[API] Category visit error:', error)
+      console.error('[API] Category visit error:', error instanceof Error ? error.message : String(error))
       logger.error('Category visit upsert error:', error)
       return NextResponse.json(
         { error: 'Failed to track category visit', details: error },

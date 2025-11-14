@@ -92,14 +92,14 @@ export default function SellerEarningsClient({ earnings, transactions, sellerDat
         })
 
       if (error) {
-        console.error('Withdrawal insert error:', error)
+        console.error('Withdrawal insert error:', error instanceof Error ? error.message : String(error))
         throw error
       }
 
       alert('출금 신청이 완료되었습니다.\n영업일 기준 1-3일 내 처리됩니다.')
       window.location.reload()
     } catch (error: unknown) {
-      console.error('Withdrawal request error:', error)
+      console.error('Withdrawal request error:', error instanceof Error ? error.message : String(error))
       alert('출금 신청에 실패했습니다.\n' + (error instanceof Error ? error.message : '알 수 없는 오류'))
     } finally {
       setLoading(false)
@@ -129,7 +129,7 @@ export default function SellerEarningsClient({ earnings, transactions, sellerDat
       alert('출금 신청이 취소되었습니다.')
       window.location.reload()
     } catch (error: unknown) {
-      console.error('Withdrawal cancel error:', error)
+      console.error('Withdrawal cancel error:', error instanceof Error ? error.message : String(error))
       alert('출금 신청 취소에 실패했습니다.\n' + (error instanceof Error ? error.message : '알 수 없는 오류'))
     } finally {
       setLoading(false)
