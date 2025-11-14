@@ -260,9 +260,41 @@ export async function PATCH(request: NextRequest) {
       .from('advertising_payments')
       .update(updateData)
       .in('id', paymentIds)
-      .select()
+      .select('*, subscription_id')
 
     if (error) throw error
+
+    // 결제 상태 변경 시 연결된 구독 상태도 업데이트
+    if (status && updatedPayments && updatedPayments.length > 0) {
+      const subscriptionIds = updatedPayments
+        .map(p => p.subscription_id)
+        .filter(Boolean)
+
+      if (subscriptionIds.length > 0) {
+        const subscriptionUpdateData: Record<string, unknown> = {
+          updated_at: new Date().toISOString(),
+        }
+
+        // 결제 상태에 따라 구독 상태 결정
+        if (status === 'confirmed' || status === 'completed') {
+          subscriptionUpdateData.status = 'active'
+        } else if (status === 'cancelled') {
+          subscriptionUpdateData.status = 'cancelled'
+          subscriptionUpdateData.cancelled_at = new Date().toISOString()
+        }
+
+        // 구독 상태 업데이트
+        const { error: subError } = await supabase
+          .from('advertising_subscriptions')
+          .update(subscriptionUpdateData)
+          .in('id', subscriptionIds)
+
+        if (subError) {
+          console.error('Failed to update subscription status:', subError)
+          // 구독 업데이트 실패해도 결제 업데이트는 성공했으므로 에러를 던지지 않음
+        }
+      }
+    }
 
     return NextResponse.json({
       success: true,
