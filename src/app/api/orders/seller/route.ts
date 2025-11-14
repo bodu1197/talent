@@ -39,24 +39,34 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: '주문 목록을 불러올 수 없습니다' }, { status: 500 })
     }
 
-    // 각 주문의 수정 요청 횟수 조회
-    const ordersWithRevisionCount = await Promise.all(
-      (data || []).map(async (order) => {
-        const { data: revisionStats } = await supabase
-          .from('order_revision_stats')
-          .select('total_revisions, pending_revisions')
-          .eq('order_id', order.id)
-          .single()
+    // N+1 쿼리 문제 해결: 모든 주문의 revision stats를 한 번에 조회
+    if (data && data.length > 0) {
+      const orderIds = data.map(order => order.id)
+      const { data: revisionStats } = await supabase
+        .from('order_revision_stats')
+        .select('order_id, total_revisions, pending_revisions')
+        .in('order_id', orderIds)
 
+      // revision stats를 맵으로 변환
+      const statsMap = new Map()
+      revisionStats?.forEach(stat => {
+        statsMap.set(stat.order_id, stat)
+      })
+
+      // 주문 데이터에 revision 정보 병합
+      const ordersWithRevisionCount = data.map(order => {
+        const stats = statsMap.get(order.id)
         return {
           ...order,
-          revision_count: revisionStats?.total_revisions || 0,
-          pending_revision_count: revisionStats?.pending_revisions || 0
+          revision_count: stats?.total_revisions || 0,
+          pending_revision_count: stats?.pending_revisions || 0
         }
       })
-    )
 
-    return NextResponse.json({ orders: ordersWithRevisionCount })
+      return NextResponse.json({ orders: ordersWithRevisionCount })
+    }
+
+    return NextResponse.json({ orders: [] })
   } catch (error) {
     console.error('Seller orders API error:', error)
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
