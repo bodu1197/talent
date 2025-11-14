@@ -37,7 +37,8 @@ export async function GET(request: NextRequest) {
         ),
         seller:sellers!advertising_payments_seller_id_fkey(
           id,
-          user:users(email, name)
+          user_id,
+          user:users!sellers_user_id_fkey(email, name)
         ),
         confirmed_by_admin:admins!advertising_payments_confirmed_by_fkey(
           id,
