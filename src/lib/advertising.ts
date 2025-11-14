@@ -267,11 +267,11 @@ export async function startAdvertisingSubscription(
     throw new Error('본인의 서비스만 광고 등록할 수 있습니다');
   }
 
-  // 이미 활성 광고가 있는지 확인
+  // 이미 활성 광고가 있는지 확인 (seller.id 사용)
   const { data: existingAd } = await supabase
     .from('advertising_subscriptions')
     .select('id, status')
-    .eq('seller_id', userId)
+    .eq('seller_id', seller.id)
     .eq('service_id', serviceId)
     .in('status', ['active', 'pending_payment'])
     .maybeSingle();
@@ -292,11 +292,11 @@ export async function startAdvertisingSubscription(
 
   const monthlyPrice = Math.round(supplyAmount / months);
 
-  // 구독 생성
+  // 구독 생성 (seller.id 사용 - FK 제약조건)
   const { data: subscription, error: subError } = await supabase
     .from('advertising_subscriptions')
     .insert({
-      seller_id: userId, // users.id를 사용 (FK 제약조건)
+      seller_id: seller.id, // sellers.id를 사용 (FK 제약조건)
       service_id: serviceId,
       monthly_price: monthlyPrice,
       payment_method: paymentMethod,
@@ -310,7 +310,7 @@ export async function startAdvertisingSubscription(
 
   // 무통장 입금 처리
   if (paymentMethod === 'bank_transfer') {
-    const payment = await requestBankTransferPayment(subscription.id, userId, supplyAmount, taxAmount, totalAmount, months);
+    const payment = await requestBankTransferPayment(subscription.id, seller.id, supplyAmount, taxAmount, totalAmount, months);
     return { subscription, payment };
   }
 
@@ -366,11 +366,11 @@ export async function cancelSubscription(subscriptionId: string) {
 
 /**
  * 무통장 입금 요청
- * @param userId - 사용자 ID (users.id)
+ * @param sellerId - 판매자 ID (sellers.id)
  */
 export async function requestBankTransferPayment(
   subscriptionId: string,
-  userId: string,
+  sellerId: string,
   supplyAmount: number,
   taxAmount: number,
   totalAmount: number,
@@ -378,7 +378,7 @@ export async function requestBankTransferPayment(
 ) {
   // 입력 검증
   if (!validateUUID(subscriptionId)) throw new Error('유효하지 않은 구독 ID');
-  if (!validateUUID(userId)) throw new Error('유효하지 않은 사용자 ID');
+  if (!validateUUID(sellerId)) throw new Error('유효하지 않은 판매자 ID');
   if (!validateAmount(totalAmount)) throw new Error('유효하지 않은 금액');
 
   const supabase = getAdminClient();
@@ -386,12 +386,21 @@ export async function requestBankTransferPayment(
   const deadline = new Date();
   deadline.setDate(deadline.getDate() + 3); // 3일 내 입금
 
-  // 결제 내역 생성
+  // sellers 테이블에서 user_id 조회
+  const { data: seller } = await supabase
+    .from('sellers')
+    .select('user_id')
+    .eq('id', sellerId)
+    .single();
+
+  if (!seller) throw new Error('판매자 정보를 찾을 수 없습니다');
+
+  // 결제 내역 생성 (sellers.id 사용)
   const { data: payment } = await supabase
     .from('advertising_payments')
     .insert({
       subscription_id: subscriptionId,
-      seller_id: userId, // users.id를 사용 (FK 제약조건)
+      seller_id: sellerId, // sellers.id를 사용 (FK 제약조건)
       amount: totalAmount,
       supply_amount: supplyAmount,
       tax_amount: taxAmount,
@@ -410,9 +419,9 @@ export async function requestBankTransferPayment(
     })
     .eq('id', subscriptionId);
 
-  // 판매자에게 입금 안내 알림
+  // 판매자에게 입금 안내 알림 (users.id 사용)
   await supabase.from('notifications').insert({
-    user_id: userId, // users.id 사용
+    user_id: seller.user_id, // users.id 사용
     type: 'payment_bank_transfer',
     title: '광고 구독 결제 - 무통장 입금 안내',
     content: `
@@ -558,14 +567,23 @@ export async function confirmBankTransferPayment(
   // 세금계산서 자동 발행
   const taxInvoice = await issueTaxInvoice(payment.id, adminId);
 
+  // 판매자의 user_id 조회
+  const { data: sellerForNotification } = await supabase
+    .from('sellers')
+    .select('user_id')
+    .eq('id', payment.seller_id)
+    .single();
+
   // 판매자에게 확인 완료 알림
-  await supabase.from('notifications').insert({
-    user_id: payment.seller_id,
-    type: 'payment_confirmed',
-    title: '광고 결제 확인 완료',
-    content: `${payment.amount.toLocaleString()}원 입금이 확인되었습니다. 광고가 활성화되었으며 세금계산서가 발행되었습니다.`,
-    link_url: '/mypage/seller/tax-invoices'
-  });
+  if (sellerForNotification) {
+    await supabase.from('notifications').insert({
+      user_id: sellerForNotification.user_id,
+      type: 'payment_confirmed',
+      title: '광고 결제 확인 완료',
+      content: `${payment.amount.toLocaleString()}원 입금이 확인되었습니다. 광고가 활성화되었으며 세금계산서가 발행되었습니다.`,
+      link_url: '/mypage/seller/tax-invoices'
+    });
+  }
 
   return payment;
 }
@@ -603,11 +621,11 @@ export async function issueTaxInvoice(
 
   if (!companyInfo) throw new Error('회사 정보가 설정되지 않았습니다');
 
-  // 공급받는자 정보 조회 (판매자)
+  // 공급받는자 정보 조회 (판매자) - payment.seller_id는 sellers.id
   const { data: buyerInfo } = await supabase
     .from('sellers')
     .select('business_number, business_name, ceo_name, business_address, business_type, business_item, business_email')
-    .eq('user_id', payment.seller_id)
+    .eq('id', payment.seller_id)
     .single();
 
   if (!buyerInfo || !buyerInfo.business_number) {
