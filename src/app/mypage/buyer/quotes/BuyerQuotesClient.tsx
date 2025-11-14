@@ -28,13 +28,15 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
               <h1 className="text-xl font-bold text-gray-900">견적 요청 내역</h1>
               <p className="text-gray-600 mt-1 text-sm">맞춤 견적 요청을 관리하세요</p>
             </div>
-            <Link
-              href="/quotes/new"
-              className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+            {/* TODO: Implement quote request feature */}
+            <button
+              disabled
+              className="px-6 py-3 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed font-medium"
+              title="견적 요청 기능은 준비 중입니다"
             >
               <i className="fas fa-plus mr-2"></i>
-              견적 요청하기
-            </Link>
+              견적 요청하기 (준비중)
+            </button>
           </div>
         </div>
 
@@ -77,13 +79,15 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
             <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
               <i className="fas fa-file-alt text-gray-300 text-4xl mb-4"></i>
               <p className="text-gray-500 mb-4">등록한 견적 요청이 없습니다</p>
-              <Link
-                href="/quotes/new"
-                className="inline-flex items-center px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+              {/* TODO: Implement quote request feature */}
+              <button
+                disabled
+                className="inline-flex items-center px-6 py-3 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed font-medium"
+                title="견적 요청 기능은 준비 중입니다"
               >
                 <i className="fas fa-plus mr-2"></i>
-                견적 요청하기
-              </Link>
+                견적 요청하기 (준비중)
+              </button>
             </div>
           )}
         </div>
