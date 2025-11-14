@@ -141,17 +141,17 @@ export default function AdvertisingPage() {
         return;
       }
 
-      await startAdvertisingSubscription(user.id, selectedService, selectedPaymentMethod, selectedMonths, totalPrice);
+      const result = await startAdvertisingSubscription(user.id, selectedService, selectedPaymentMethod, selectedMonths, totalPrice);
 
-      if (selectedPaymentMethod === 'bank_transfer') {
-        alert(`무통장 입금 신청이 완료되었습니다.\n\n결제 금액: ${totalPrice.toLocaleString()}원 (${selectedMonths}개월)\n입금 계좌 정보가 알림으로 전송되었습니다.\n입금 후 관리자 확인까지 1-2일이 소요됩니다.`);
+      if (selectedPaymentMethod === 'bank_transfer' && result.payment) {
+        // 무통장 입금 페이지로 리다이렉트
+        window.location.href = `/mypage/seller/advertising/payments/${result.payment.id}`;
       } else {
         alert('광고가 시작되었습니다!');
+        loadDashboard();
+        setSelectedService('');
+        setSelectedMonths(1);
       }
-
-      loadDashboard();
-      setSelectedService('');
-      setSelectedMonths(1);
     } catch (error) {
       console.error('광고 시작 실패:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
       alert('광고 시작에 실패했습니다');

@@ -290,10 +290,11 @@ export async function startAdvertisingSubscription(
 
   // 무통장 입금 처리
   if (paymentMethod === 'bank_transfer') {
-    await requestBankTransferPayment(subscription.id, userId, totalAmount, months);
+    const payment = await requestBankTransferPayment(subscription.id, userId, totalAmount, months);
+    return { subscription, payment };
   }
 
-  return subscription;
+  return { subscription, payment: null };
 }
 
 /**
