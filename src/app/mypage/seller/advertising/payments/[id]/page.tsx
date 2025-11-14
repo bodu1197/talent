@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { uploadPaymentReceipt } from '@/lib/advertising';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 
 interface PaymentDetail {
@@ -33,14 +32,6 @@ export default function PaymentDetailPage() {
 
   const [loading, setLoading] = useState(true);
   const [payment, setPayment] = useState<PaymentDetail | null>(null);
-  const [uploading, setUploading] = useState(false);
-
-  // 입금증 업로드 폼 데이터
-  const [depositorName, setDepositorName] = useState('');
-  const [bankName, setBankName] = useState('');
-  const [depositDate, setDepositDate] = useState('');
-  const [depositTime, setDepositTime] = useState('');
-  const [receiptFile, setReceiptFile] = useState<File | null>(null);
 
   useEffect(() => {
     loadPaymentDetail();
@@ -62,11 +53,6 @@ export default function PaymentDetailPage() {
 
       if (data) {
         setPayment(data);
-        // 기존 입금 정보가 있으면 채우기
-        if (data.depositor_name) setDepositorName(data.depositor_name);
-        if (data.bank_name) setBankName(data.bank_name);
-        if (data.deposit_date) setDepositDate(data.deposit_date);
-        if (data.deposit_time) setDepositTime(data.deposit_time);
       }
     } catch (error) {
       console.error('결제 정보 로딩 실패:', error);
@@ -77,38 +63,6 @@ export default function PaymentDetailPage() {
     }
   }
 
-  async function handleUploadReceipt(e: React.FormEvent) {
-    e.preventDefault();
-
-    if (!receiptFile) {
-      alert('입금증 이미지를 선택해주세요');
-      return;
-    }
-
-    if (!depositorName || !bankName || !depositDate || !depositTime) {
-      alert('모든 입금 정보를 입력해주세요');
-      return;
-    }
-
-    try {
-      setUploading(true);
-
-      await uploadPaymentReceipt(paymentId, receiptFile, {
-        depositorName,
-        bankName,
-        depositDate,
-        depositTime
-      });
-
-      alert('입금증이 업로드되었습니다.\n관리자 확인 후 광고가 시작됩니다.');
-      loadPaymentDetail();
-    } catch (error) {
-      console.error('입금증 업로드 실패:', error);
-      alert('입금증 업로드에 실패했습니다');
-    } finally {
-      setUploading(false);
-    }
-  }
 
   if (loading) {
     return (
@@ -145,16 +99,10 @@ export default function PaymentDetailPage() {
 
         {/* 상태 표시 */}
         <div className="mb-6">
-          {payment.status === 'pending' && !payment.receipt_image && (
+          {payment.status === 'pending' && (
             <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
               <p className="text-yellow-800 font-medium">⏳ 입금 대기 중</p>
-              <p className="text-yellow-700 text-sm mt-1">아래 계좌로 입금 후 입금증을 업로드해주세요</p>
-            </div>
-          )}
-          {payment.status === 'pending' && payment.receipt_image && (
-            <div className="bg-blue-50 border-l-4 border-blue-400 p-4">
-              <p className="text-blue-800 font-medium">📋 관리자 확인 대기 중</p>
-              <p className="text-blue-700 text-sm mt-1">입금증이 업로드되었습니다. 관리자 확인까지 1-2일 소요됩니다.</p>
+              <p className="text-yellow-700 text-sm mt-1">아래 계좌로 입금해주세요. 관리자가 입금을 확인한 후 광고가 시작됩니다.</p>
             </div>
           )}
           {payment.status === 'completed' && (
@@ -204,111 +152,10 @@ export default function PaymentDetailPage() {
           <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-sm text-blue-800">
               <i className="fas fa-info-circle mr-2"></i>
-              입금자명은 본인 이름으로 입금해주세요. 다른 이름으로 입금 시 확인이 지연될 수 있습니다.
+              입금 후 관리자가 확인하면 광고가 자동으로 시작됩니다. 입금 확인까지 1-2일 정도 소요될 수 있습니다.
             </p>
           </div>
         </div>
-
-        {/* 입금증 업로드 폼 */}
-        {payment.status === 'pending' && (
-          <div className="bg-white rounded-2xl shadow-lg p-8">
-            <h2 className="text-2xl font-bold mb-6 text-gray-900">입금증 업로드</h2>
-
-            <form onSubmit={handleUploadReceipt} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    입금자명 <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={depositorName}
-                    onChange={(e) => setDepositorName(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-                    placeholder="홍길동"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    입금 은행 <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={bankName}
-                    onChange={(e) => setBankName(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-                    placeholder="국민은행"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    입금 날짜 <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="date"
-                    value={depositDate}
-                    onChange={(e) => setDepositDate(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    입금 시간 <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="time"
-                    value={depositTime}
-                    onChange={(e) => setDepositTime(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  입금증 이미지 <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => setReceiptFile(e.target.files?.[0] || null)}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-                  required={!payment.receipt_image}
-                />
-                {payment.receipt_image && (
-                  <p className="text-sm text-gray-500 mt-1">
-                    이미 업로드된 입금증이 있습니다. 새로 업로드하면 기존 파일이 교체됩니다.
-                  </p>
-                )}
-              </div>
-
-              <button
-                type="submit"
-                disabled={uploading}
-                className="w-full bg-brand-primary text-white py-3 rounded-lg font-bold hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all"
-              >
-                {uploading ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    업로드 중...
-                  </span>
-                ) : (
-                  <>
-                    <i className="fas fa-upload mr-2"></i>
-                    입금증 업로드
-                  </>
-                )}
-              </button>
-            </form>
-          </div>
-        )}
       </div>
     </MypageLayoutWrapper>
   );
