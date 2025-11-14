@@ -267,6 +267,22 @@ export async function startAdvertisingSubscription(
     throw new Error('본인의 서비스만 광고 등록할 수 있습니다');
   }
 
+  // 이미 활성 광고가 있는지 확인
+  const { data: existingAd } = await supabase
+    .from('advertising_subscriptions')
+    .select('id, status')
+    .eq('seller_id', userId)
+    .eq('service_id', serviceId)
+    .in('status', ['active', 'pending_payment'])
+    .maybeSingle();
+
+  if (existingAd) {
+    if (existingAd.status === 'pending_payment') {
+      throw new Error('이미 결제 대기 중인 광고가 있습니다');
+    }
+    throw new Error('이미 광고가 진행 중인 서비스입니다');
+  }
+
   // VAT 계산 (10%)
   const taxAmount = Math.round(supplyAmount * 0.1);
   const totalAmount = supplyAmount + taxAmount;

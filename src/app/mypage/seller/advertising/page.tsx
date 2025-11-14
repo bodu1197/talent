@@ -22,6 +22,7 @@ export default function AdvertisingPage() {
       totalClicks: number;
       ctr: number;
       createdAt: string;
+      status: string;
     };
   }>>([]);
   const [selectedService, setSelectedService] = useState<string>('');
@@ -83,7 +84,7 @@ export default function AdvertisingPage() {
           service:services(id, title)
         `)
         .eq('seller_id', seller.id)
-        .eq('status', 'active');
+        .in('status', ['active', 'pending_payment']);
 
       const totalImpressions = subscriptions?.reduce((sum, s) => sum + s.total_impressions, 0) || 0;
       const totalClicks = subscriptions?.reduce((sum, s) => sum + s.total_clicks, 0) || 0;
@@ -127,12 +128,12 @@ export default function AdvertisingPage() {
       console.log('📊 Seller ID:', seller.id);
       console.log('📊 Services query result:', myServices, 'Error:', servicesError);
 
-      // Get active subscriptions with full details
+      // Get active subscriptions with full details (including pending_payment)
       const { data: activeAds } = await supabase
         .from('advertising_subscriptions')
         .select('*')
         .eq('seller_id', seller.id)
-        .eq('status', 'active');
+        .in('status', ['active', 'pending_payment']);
 
       // Create a map of service_id -> ad details
       const adDetailsMap = new Map(
@@ -145,7 +146,8 @@ export default function AdvertisingPage() {
             totalImpressions: ad.total_impressions,
             totalClicks: ad.total_clicks,
             ctr: ad.total_impressions > 0 ? (ad.total_clicks / ad.total_impressions) * 100 : 0,
-            createdAt: ad.created_at
+            createdAt: ad.created_at,
+            status: ad.status
           }
         ]) || []
       );
@@ -380,10 +382,17 @@ export default function AdvertisingPage() {
                         {/* 상태 */}
                         <td className="py-3 px-4 text-center">
                           {service.hasActiveAd ? (
-                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                              <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-                              광고 진행중
-                            </span>
+                            service.adDetails?.status === 'pending_payment' ? (
+                              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                <span className="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span>
+                                결제 대기중
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                                광고 진행중
+                              </span>
+                            )
                           ) : (
                             <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
                               미진행
@@ -409,16 +418,29 @@ export default function AdvertisingPage() {
                         {/* 신청 정보 */}
                         <td className="py-3 px-4 text-center">
                           {service.hasActiveAd ? (
-                            <button
-                              onClick={() => {
-                                console.log('상세보기 클릭:', service.id);
-                                setSelectedService(service.id);
-                                setIsModalOpen(true);
-                              }}
-                              className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
-                            >
-                              상세보기
-                            </button>
+                            service.adDetails?.status === 'pending_payment' ? (
+                              <button
+                                onClick={() => {
+                                  console.log('입금 확인 클릭:', service.id);
+                                  setSelectedService(service.id);
+                                  setIsModalOpen(true);
+                                }}
+                                className="px-4 py-2 bg-yellow-600 text-white text-sm rounded-lg hover:bg-yellow-700 transition-colors"
+                              >
+                                입금 확인
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() => {
+                                  console.log('상세보기 클릭:', service.id);
+                                  setSelectedService(service.id);
+                                  setIsModalOpen(true);
+                                }}
+                                className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                              >
+                                상세보기
+                              </button>
+                            )
                           ) : (
                             <button
                               onClick={() => {
