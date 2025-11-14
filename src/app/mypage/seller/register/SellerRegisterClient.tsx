@@ -242,7 +242,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
         return
       }
 
-      alert('판매자 등록이 완료되었습니다! 승인 후 판매를 시작할 수 있습니다.')
+      alert('판매자로 등록되었습니다! 서비스를 등록하세요.')
 
       router.push('/mypage/seller/dashboard')
       router.refresh()

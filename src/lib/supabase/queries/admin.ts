@@ -178,9 +178,17 @@ export async function getAdminUsers(filters?: {
 }) {
   const supabase = createClient()
 
+  // users 테이블과 profiles 테이블을 join하여 최신 프로필 정보 가져오기
   let query = supabase
     .from('users')
-    .select('*')
+    .select(`
+      id,
+      email,
+      role,
+      created_at,
+      status,
+      profile:profiles(name, profile_image)
+    `)
     .order('created_at', { ascending: false })
 
   if (filters?.role && filters.role !== 'all') {
@@ -188,7 +196,7 @@ export async function getAdminUsers(filters?: {
   }
 
   if (filters?.searchQuery) {
-    query = query.or(`name.ilike.%${filters.searchQuery}%,email.ilike.%${filters.searchQuery}%`)
+    query = query.or(`email.ilike.%${filters.searchQuery}%`)
   }
 
   if (filters?.status && filters.status !== 'all') {
@@ -198,7 +206,13 @@ export async function getAdminUsers(filters?: {
   const { data, error } = await query
 
   if (error) throw error
-  return data
+
+  // 데이터 변환: profile 객체를 펼쳐서 최상위로 올림
+  return data?.map((user: any) => ({
+    ...user,
+    name: user.profile?.name || 'Unknown',
+    profile_image: user.profile?.profile_image || null
+  })) || []
 }
 
 // 사용자 역할별 카운트
