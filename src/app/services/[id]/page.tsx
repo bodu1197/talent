@@ -242,7 +242,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   {[1, 2, 3, 4, 5].map((star) => (
                     <i
                       key={star}
-                      className={`fas fa-star ${star <= Math.round(parseFloat(averageRating)) ? 'text-yellow-400' : 'text-gray-300'}`}
+                      className="fas fa-star text-yellow-400"
                     ></i>
                   ))}
                   <span className="font-bold ml-1">{averageRating}</span>
