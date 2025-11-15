@@ -195,6 +195,11 @@ export async function getServicesByCategory(categoryId: string, limit: number = 
     return []
   }
 
+  // 모든 서비스에 광고 여부 표시 (페이지네이션 전에 미리 표시)
+  allServices.forEach(service => {
+    service.is_advertised = advertisedServiceIds.includes(service.id)
+  })
+
   // 광고 서비스와 일반 서비스 분리
   const advertisedServices = allServices.filter(s => advertisedServiceIds.includes(s.id))
   const regularServices = allServices.filter(s => !advertisedServiceIds.includes(s.id))
@@ -247,9 +252,6 @@ export async function getServicesByCategory(categoryId: string, limit: number = 
 
       // order_count 매핑
       service.order_count = service.orders_count || 0
-
-      // 광고 여부 표시 (클라이언트 정렬에서 유지하기 위함)
-      service.is_advertised = advertisedServiceIds.includes(service.id)
 
       // 평균 별점 및 리뷰 수 설정
       const stats = ratingMap.get(service.id)
