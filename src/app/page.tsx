@@ -89,7 +89,6 @@ async function AIServicesSection({ aiCategoryIds }: { aiCategoryIds: string[] })
         seller:sellers(
           id,
           business_name,
-          display_name,
           is_verified
         ),
         service_categories!inner(category_id)

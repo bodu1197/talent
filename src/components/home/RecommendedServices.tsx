@@ -44,7 +44,6 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
       seller:sellers(
         id,
         business_name,
-        display_name,
         is_verified
       )
     `)

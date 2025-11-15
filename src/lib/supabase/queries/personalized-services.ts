@@ -79,7 +79,6 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
             seller:sellers(
               id,
               business_name,
-              display_name,
               is_verified
             ),
             service_categories!inner(category_id)
