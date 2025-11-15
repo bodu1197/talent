@@ -64,7 +64,7 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
           // 2차 카테고리 → 부모(1차) 찾기
           const { data: parent } = await supabase
             .from('categories')
-            .select('id, name, slug, level')
+            .select('id, name, slug, level, parent_id')
             .eq('id', categoryInfo.parent_id)
             .single()
           if (parent) topLevelCategory = parent
@@ -78,7 +78,7 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
           if (parent2nd?.parent_id) {
             const { data: grandparent } = await supabase
               .from('categories')
-              .select('id, name, slug, level')
+              .select('id, name, slug, level, parent_id')
               .eq('id', parent2nd.parent_id)
               .single()
             if (grandparent) topLevelCategory = grandparent
