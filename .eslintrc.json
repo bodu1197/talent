@@ -24,6 +24,14 @@
     "prefer-const": "error",
     "no-var": "error"
   },
+  "overrides": [
+    {
+      "files": ["scripts/**/*.js"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2021,
