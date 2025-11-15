@@ -68,7 +68,23 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
   const [isLoading, setIsLoading] = useState(false)
   const [showPaymentRequestModal, setShowPaymentRequestModal] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
   const supabase = createClient()
+
+  // 알림음 초기화
+  useEffect(() => {
+    audioRef.current = new Audio('/sounds/notification.mp3')
+    audioRef.current.volume = 0.5
+  }, [])
+
+  // 알림음 재생
+  const playNotificationSound = () => {
+    if (audioRef.current) {
+      audioRef.current.play().catch(err => {
+        console.log('Notification sound play failed:', err)
+      })
+    }
+  }
 
   // 읽지 않은 메시지를 읽음 처리
   const markMessagesAsRead = async () => {
@@ -184,6 +200,8 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
         async (payload) => {
           const newMsg = payload.new as any
           if (newMsg.sender_id !== userId) {
+            // 알림음 재생
+            playNotificationSound()
             await loadMessages()
             // 새 메시지가 오면 즉시 읽음 처리
             await markMessagesAsRead()
