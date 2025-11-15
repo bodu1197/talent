@@ -1,18 +1,18 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useAuth } from '@/components/providers/AuthProvider'
-import { useChatUnreadCount } from '@/components/providers/ChatUnreadProvider'
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useAuth } from "@/components/providers/AuthProvider";
+import { useChatUnreadCount } from "@/components/providers/ChatUnreadProvider";
 
 export default function MobileBottomNav() {
-  const pathname = usePathname()
-  const { user } = useAuth()
-  const [showSearch, setShowSearch] = useState(false)
-  const { unreadCount } = useChatUnreadCount()
+  const pathname = usePathname();
+  const { user } = useAuth();
+  const [showSearch, setShowSearch] = useState(false);
+  const { unreadCount } = useChatUnreadCount();
 
-  const isActive = (path: string) => pathname === path
+  const isActive = (path: string) => pathname === path;
 
   return (
     <>
@@ -23,10 +23,12 @@ export default function MobileBottomNav() {
           <Link
             href="/"
             className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
-              isActive('/') ? 'text-brand-primary' : 'text-gray-500'
+              isActive("/") ? "text-brand-primary" : "text-gray-500"
             }`}
+            aria-label="홈으로 이동"
+            aria-current={isActive("/") ? "page" : undefined}
           >
-            <i className="fas fa-home text-xl"></i>
+            <i className="fas fa-home text-xl" aria-hidden="true"></i>
             <span className="text-xs font-medium">홈</span>
           </Link>
 
@@ -36,7 +38,7 @@ export default function MobileBottomNav() {
             className="flex flex-col items-center justify-center space-y-1 text-gray-500 transition-colors active:text-brand-primary"
             aria-label="검색 열기"
           >
-            <i className="fas fa-search text-xl"></i>
+            <i className="fas fa-search text-xl" aria-hidden="true"></i>
             <span className="text-xs font-medium">검색</span>
           </button>
 
@@ -44,10 +46,16 @@ export default function MobileBottomNav() {
           <Link
             href={user ? "/mypage/buyer/favorites" : "/auth/login"}
             className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
-              pathname === '/mypage/buyer/favorites' ? 'text-brand-primary' : 'text-gray-500'
+              pathname === "/mypage/buyer/favorites"
+                ? "text-brand-primary"
+                : "text-gray-500"
             }`}
+            aria-label="찜목록 보기"
+            aria-current={
+              pathname === "/mypage/buyer/favorites" ? "page" : undefined
+            }
           >
-            <i className="fas fa-heart text-xl"></i>
+            <i className="fas fa-heart text-xl" aria-hidden="true"></i>
             <span className="text-xs font-medium">찜목록</span>
           </Link>
 
@@ -55,14 +63,21 @@ export default function MobileBottomNav() {
           <Link
             href={user ? "/chat" : "/auth/login"}
             className={`relative flex flex-col items-center justify-center space-y-1 transition-colors ${
-              pathname.startsWith('/chat') ? 'text-brand-primary' : 'text-gray-500'
+              pathname.startsWith("/chat")
+                ? "text-brand-primary"
+                : "text-gray-500"
             }`}
+            aria-label={unreadCount > 0 ? `메시지 ${unreadCount}개` : "메시지"}
+            aria-current={pathname.startsWith("/chat") ? "page" : undefined}
           >
             <div className="relative">
-              <i className="far fa-comments text-xl"></i>
+              <i className="far fa-comments text-xl" aria-hidden="true"></i>
               {unreadCount > 0 && (
-                <span className="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                  {unreadCount > 99 ? '99+' : unreadCount}
+                <span
+                  className="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center"
+                  aria-hidden="true"
+                >
+                  {unreadCount > 99 ? "99+" : unreadCount}
                 </span>
               )}
             </div>
@@ -73,10 +88,14 @@ export default function MobileBottomNav() {
           <Link
             href={user ? "/mypage/buyer/dashboard" : "/auth/login"}
             className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
-              pathname.startsWith('/mypage') ? 'text-brand-primary' : 'text-gray-500'
+              pathname.startsWith("/mypage")
+                ? "text-brand-primary"
+                : "text-gray-500"
             }`}
+            aria-label="마이페이지로 이동"
+            aria-current={pathname.startsWith("/mypage") ? "page" : undefined}
           >
-            <i className="fas fa-user text-xl"></i>
+            <i className="fas fa-user text-xl" aria-hidden="true"></i>
             <span className="text-xs font-medium">마이페이지</span>
           </Link>
         </div>
@@ -87,13 +106,16 @@ export default function MobileBottomNav() {
         <div className="fixed inset-0 bg-white z-50 lg:hidden">
           <div className="flex items-center p-4 border-b border-gray-200">
             <button
-              aria-label="뒤로가기"
+              aria-label="검색 닫기"
               onClick={() => setShowSearch(false)}
               className="mr-4"
             >
-              <i className="fas fa-arrow-left text-xl"></i>
+              <i className="fas fa-arrow-left text-xl" aria-hidden="true"></i>
             </button>
             <div className="flex-1 relative">
+              <label htmlFor="search-mobile" className="sr-only">
+                서비스 검색
+              </label>
               <input
                 id="search-mobile"
                 name="search"
@@ -102,12 +124,16 @@ export default function MobileBottomNav() {
                 className="w-full px-4 py-2 pr-10 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
                 autoComplete="off"
                 autoFocus
+                aria-label="서비스 검색"
               />
               <button
-                aria-label="검색"
+                aria-label="검색 실행"
                 className="absolute right-3 top-1/2 -translate-y-1/2"
               >
-                <i className="fas fa-search text-gray-500"></i>
+                <i
+                  className="fas fa-search text-gray-500"
+                  aria-hidden="true"
+                ></i>
               </button>
             </div>
           </div>
@@ -115,14 +141,22 @@ export default function MobileBottomNav() {
           <div className="p-4">
             <h3 className="font-semibold mb-4">인기 검색어</h3>
             <div className="flex flex-wrap gap-2">
-              {['로고 디자인', 'AI 이미지', '영상 편집', '번역', '블로그 작성', 'PPT 디자인'].map((keyword) => (
+              {[
+                "로고 디자인",
+                "AI 이미지",
+                "영상 편집",
+                "번역",
+                "블로그 작성",
+                "PPT 디자인",
+              ].map((keyword) => (
                 <button
                   key={keyword}
                   className="px-3 py-1.5 bg-gray-100 rounded-full text-sm hover:bg-gray-200 hover:text-brand-primary"
                   onClick={() => {
                     // 검색 실행
-                    setShowSearch(false)
+                    setShowSearch(false);
                   }}
+                  aria-label={`${keyword} 검색하기`}
                 >
                   {keyword}
                 </button>
@@ -134,14 +168,20 @@ export default function MobileBottomNav() {
               <ul className="space-y-3">
                 <li className="flex items-center justify-between">
                   <span className="text-gray-600">웹 개발</span>
-                  <button aria-label="삭제" className="text-gray-400">
-                    <i className="fas fa-times text-sm"></i>
+                  <button
+                    aria-label="웹 개발 검색 기록 삭제"
+                    className="text-gray-400"
+                  >
+                    <i className="fas fa-times text-sm" aria-hidden="true"></i>
                   </button>
                 </li>
                 <li className="flex items-center justify-between">
                   <span className="text-gray-600">로고 디자인</span>
-                  <button aria-label="삭제" className="text-gray-400">
-                    <i className="fas fa-times text-sm"></i>
+                  <button
+                    aria-label="로고 디자인 검색 기록 삭제"
+                    className="text-gray-400"
+                  >
+                    <i className="fas fa-times text-sm" aria-hidden="true"></i>
                   </button>
                 </li>
               </ul>
@@ -150,5 +190,5 @@ export default function MobileBottomNav() {
         </div>
       )}
     </>
-  )
+  );
 }

@@ -1,72 +1,75 @@
-'use client'
+"use client";
 
-import { useState, useRef, useEffect } from 'react'
-import Link from 'next/link'
-import { CategoryItem } from '@/lib/categories'
+import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
+import { CategoryItem } from "@/lib/categories";
 
 interface MegaMenuProps {
-  categories: CategoryItem[]
+  categories: CategoryItem[];
 }
 
 export default function MegaMenu({ categories }: MegaMenuProps) {
-  const [activeCategory, setActiveCategory] = useState<string | null>(null)
-  const [isOpen, setIsOpen] = useState(false)
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const menuRef = useRef<HTMLDivElement>(null)
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   // 마우스 벗어날 때 지연 후 닫기
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
-      setActiveCategory(null)
-      setIsOpen(false)
-    }, 300)
-  }
+      setActiveCategory(null);
+      setIsOpen(false);
+    }, 300);
+  };
 
   // 마우스 진입 시 타이머 취소
   const handleMouseEnter = () => {
     if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
-      timeoutRef.current = null
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
     }
-  }
+  };
 
   // 카테고리 호버
   const handleCategoryHover = (categoryId: string) => {
-    handleMouseEnter()
-    setActiveCategory(categoryId)
-    setIsOpen(true)
-  }
+    handleMouseEnter();
+    setActiveCategory(categoryId);
+    setIsOpen(true);
+  };
 
   // 카테고리 클릭 시 메뉴 닫기
   const handleCategoryClick = () => {
-    setIsOpen(false)
-    setActiveCategory(null)
-  }
+    setIsOpen(false);
+    setActiveCategory(null);
+  };
 
   // 외부 클릭 감지
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsOpen(false)
-        setActiveCategory(null)
+        setIsOpen(false);
+        setActiveCategory(null);
       }
-    }
+    };
 
-    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // 현재 활성 카테고리의 하위 카테고리 가져오기
-  const getActiveSubCategories = (): CategoryItem['children'] => {
-    if (!activeCategory) return []
-    const category = categories.find(cat => cat.id === activeCategory)
-    return category?.children || []
-  }
+  const getActiveSubCategories = (): CategoryItem["children"] => {
+    if (!activeCategory) return [];
+    const category = categories.find((cat) => cat.id === activeCategory);
+    return category?.children || [];
+  };
 
   return (
-    <div className="hidden lg:block fixed top-16 left-0 right-0 bg-white z-40" ref={menuRef}>
+    <div
+      className="hidden lg:block fixed top-16 left-0 right-0 bg-white z-40"
+      ref={menuRef}
+    >
       {/* 메인 카테고리 바 */}
       <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="container-1200">
@@ -80,8 +83,19 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                 aria-expanded={isOpen}
                 aria-haspopup="true"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 </svg>
                 <span>전체 카테고리</span>
               </button>
@@ -93,8 +107,9 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                   href="/categories/ai-services"
                   className="text-brand-primary font-medium hover:text-brand-light flex items-center gap-1"
                   onClick={handleCategoryClick}
+                  aria-label="AI 서비스 카테고리 보기"
                 >
-                  <i className="fas fa-robot"></i> AI 서비스
+                  <i className="fas fa-robot" aria-hidden="true"></i> AI 서비스
                 </Link>
 
                 {/* IT/프로그래밍 (고정) */}
@@ -102,26 +117,32 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                   href="/categories/it-programming"
                   className="hover:text-gray-900"
                   onClick={handleCategoryClick}
+                  aria-label="IT/프로그래밍 카테고리 보기"
                 >
                   IT/프로그래밍
                 </Link>
 
                 {/* 서비스 수 순으로 상위 4개 표시 (AI, IT 제외) */}
                 {categories
-                  .filter(cat => cat.id !== 'ai-services' && cat.id !== 'it-programming')
-                  .sort((a, b) => (b.service_count || 0) - (a.service_count || 0))
+                  .filter(
+                    (cat) =>
+                      cat.id !== "ai-services" && cat.id !== "it-programming",
+                  )
+                  .sort(
+                    (a, b) => (b.service_count || 0) - (a.service_count || 0),
+                  )
                   .slice(0, 4)
-                  .map(cat => (
+                  .map((cat) => (
                     <Link
                       key={cat.id}
                       href={`/categories/${cat.slug}`}
                       className="hover:text-gray-900"
                       onClick={handleCategoryClick}
+                      aria-label={`${cat.name} 카테고리 보기`}
                     >
                       {cat.name}
                     </Link>
-                  ))
-                }
+                  ))}
               </div>
             </div>
 
@@ -129,8 +150,9 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
             <Link
               href="/ai"
               className="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg hover:shadow-lg transition-all font-medium text-sm mr-4"
+              aria-label="AI Hub 페이지로 이동"
             >
-              <i className="fas fa-robot"></i>
+              <i className="fas fa-robot" aria-hidden="true"></i>
               <span>AI Hub</span>
             </Link>
           </nav>
@@ -155,22 +177,34 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                         href={`/categories/${category.slug}`}
                         className={`flex items-center justify-between px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
                           activeCategory === category.id
-                            ? 'bg-gray-100 text-gray-800'
-                            : 'text-gray-700 hover:bg-gray-50'
+                            ? "bg-gray-100 text-gray-800"
+                            : "text-gray-700 hover:bg-gray-50"
                         }`}
                         onMouseEnter={() => handleCategoryHover(category.id)}
                         onClick={handleCategoryClick}
+                        aria-label={`${category.name} 카테고리로 이동`}
                       >
                         <div className="flex items-center gap-3">
                           {category.icon && (
-                            <i className={`fas fa-${category.icon} text-lg`}></i>
+                            <i
+                              className={`fas fa-${category.icon} text-lg`}
+                              aria-hidden="true"
+                            ></i>
                           )}
                           <span>{category.name}</span>
                           {category.is_ai && (
-                            <span className="text-xs bg-blue-100 text-brand-primary px-1.5 py-0.5 rounded">AI</span>
+                            <span
+                              className="text-xs bg-blue-100 text-brand-primary px-1.5 py-0.5 rounded"
+                              aria-label="AI 카테고리"
+                            >
+                              AI
+                            </span>
                           )}
                         </div>
-                        <i className="fas fa-chevron-right text-xs text-gray-400"></i>
+                        <i
+                          className="fas fa-chevron-right text-xs text-gray-400"
+                          aria-hidden="true"
+                        ></i>
                       </Link>
                     </div>
                   ))}
@@ -181,11 +215,12 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
               <div className="col-span-9">
                 {activeCategory && (
                   <>
-
-
                     <div className="grid grid-cols-4 gap-4">
                       {getActiveSubCategories()?.map((subCategory) => (
-                        <div key={subCategory.id} className="flex flex-col gap-2">
+                        <div
+                          key={subCategory.id}
+                          className="flex flex-col gap-2"
+                        >
                           <h4 className="font-semibold text-sm">
                             <Link
                               href={`/categories/${subCategory.slug}`}
@@ -225,23 +260,25 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                       <i className="fas fa-fire text-red-500"></i> 인기 카테고리
                     </h3>
                     <div className="grid grid-cols-4 gap-4">
-                      {categories.flatMap(cat =>
-                        cat.children?.flatMap(sub =>
-                          sub.children || []
-                        ) || []
-                      ).slice(0, 16).map((item) => (
-                        <Link
-                          key={item.id}
-                          href={`/categories/${item.slug}`}
-                          className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg hover:bg-blue-50 hover:text-brand-primary transition-colors"
-                          onClick={handleCategoryClick}
-                        >
-                          <span className="font-medium">{item.name}</span>
-                        </Link>
-                      ))}
+                      {categories
+                        .flatMap(
+                          (cat) =>
+                            cat.children?.flatMap(
+                              (sub) => sub.children || [],
+                            ) || [],
+                        )
+                        .slice(0, 16)
+                        .map((item) => (
+                          <Link
+                            key={item.id}
+                            href={`/categories/${item.slug}`}
+                            className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg hover:bg-blue-50 hover:text-brand-primary transition-colors"
+                            onClick={handleCategoryClick}
+                          >
+                            <span className="font-medium">{item.name}</span>
+                          </Link>
+                        ))}
                     </div>
-
-
                   </div>
                 )}
               </div>
@@ -250,5 +287,5 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
         </div>
       )}
     </div>
-  )
+  );
 }
