@@ -58,6 +58,14 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
           }
         }
 
+        // 광고 서비스 ID 조회
+        const { data: advertisingData } = await supabase
+          .from('advertising_subscriptions')
+          .select('service_id')
+          .eq('status', 'active')
+
+        const advertisedServiceIds = advertisingData?.map(ad => ad.service_id) || []
+
         // 서비스 조회 (JOIN으로 한 번에, 최적화: 50개만)
         const { data: services } = await supabase
           .from('services')
@@ -81,15 +89,18 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
           .order('created_at', { ascending: false })
           .limit(50) // 최적화: 1000 -> 50
 
-        // 랜덤 셔플
-        const shuffledServices = services ? [...services] : []
-        for (let i = shuffledServices.length - 1; i > 0; i--) {
+        // 광고 서비스와 일반 서비스 분리
+        const advertisedServices = services?.filter(s => advertisedServiceIds.includes(s.id)) || []
+        const regularServices = services?.filter(s => !advertisedServiceIds.includes(s.id)) || []
+
+        // 일반 서비스 랜덤 셔플
+        for (let i = regularServices.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
-          [shuffledServices[i], shuffledServices[j]] = [shuffledServices[j], shuffledServices[i]]
+          [regularServices[i], regularServices[j]] = [regularServices[j], regularServices[i]]
         }
 
-        // 상위 5개만 선택 후 리뷰 통계 조회
-        const topServices = shuffledServices.slice(0, 5)
+        // 광고 서비스 + 랜덤 일반 서비스 (상위 5개)
+        const topServices = [...advertisedServices, ...regularServices].slice(0, 5)
 
         if (topServices.length > 0) {
           const serviceIdsForRating = topServices.map(s => s.id)

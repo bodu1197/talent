@@ -23,6 +23,14 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
     }
   }
 
+  // 광고 서비스 ID 조회 (status = 'active')
+  const { data: advertisingData } = await supabase
+    .from('advertising_subscriptions')
+    .select('service_id')
+    .eq('status', 'active')
+
+  const advertisedServiceIds = advertisingData?.map(ad => ad.service_id) || []
+
   // 추천 서비스 조회 (AI 카테고리 제외) - 최적화: 50개만
   let recommendedQuery = supabase
     .from('services')
@@ -51,15 +59,18 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
 
   const { data: recommendedData } = await recommendedQuery
 
-  // 랜덤 셔플
-  let shuffled = recommendedData ? [...recommendedData] : []
-  for (let i = shuffled.length - 1; i > 0; i--) {
+  // 광고 서비스와 일반 서비스 분리
+  const advertisedServices = recommendedData?.filter(s => advertisedServiceIds.includes(s.id)) || []
+  const regularServices = recommendedData?.filter(s => !advertisedServiceIds.includes(s.id)) || []
+
+  // 일반 서비스 랜덤 셔플
+  for (let i = regularServices.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    [regularServices[i], regularServices[j]] = [regularServices[j], regularServices[i]]
   }
 
-  // 상위 15개만 선택
-  shuffled = shuffled.slice(0, 15)
+  // 광고 서비스 + 랜덤 일반 서비스 (총 15개)
+  const shuffled = [...advertisedServices, ...regularServices].slice(0, 15)
 
   // 리뷰 통계 조회 (15개만)
   const serviceIds = shuffled.map(s => s.id)

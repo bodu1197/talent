@@ -67,6 +67,14 @@ async function AIServicesSection({ aiCategoryIds }: { aiCategoryIds: string[] })
   let services: Service[] = []
 
   if (aiCategoryIds.length > 0) {
+    // 광고 서비스 ID 조회
+    const { data: advertisingData } = await supabase
+      .from('advertising_subscriptions')
+      .select('service_id')
+      .eq('status', 'active')
+
+    const advertisedServiceIds = advertisingData?.map(ad => ad.service_id) || []
+
     // AI 카테고리의 서비스 조회 (JOIN으로 한 번에)
     const { data: aiServices } = await supabase
       .from('services')
@@ -92,8 +100,21 @@ async function AIServicesSection({ aiCategoryIds }: { aiCategoryIds: string[] })
       .limit(50) // 최적화: 1000 -> 50
 
     if (aiServices && aiServices.length > 0) {
+      // 광고 서비스와 일반 서비스 분리
+      const advertisedServices = aiServices.filter(s => advertisedServiceIds.includes(s.id))
+      const regularServices = aiServices.filter(s => !advertisedServiceIds.includes(s.id))
+
+      // 일반 서비스 랜덤 셔플
+      for (let i = regularServices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [regularServices[i], regularServices[j]] = [regularServices[j], regularServices[i]]
+      }
+
+      // 광고 서비스 + 랜덤 일반 서비스 (상위 20개)
+      const combinedServices = [...advertisedServices, ...regularServices].slice(0, 20)
+
       // 리뷰 통계 한 번에 조회
-      const serviceIds = aiServices.map(s => s.id)
+      const serviceIds = combinedServices.map(s => s.id)
       const { data: reviewStats } = await supabase
         .from('reviews')
         .select('service_id, rating')
@@ -110,14 +131,7 @@ async function AIServicesSection({ aiCategoryIds }: { aiCategoryIds: string[] })
         })
       })
 
-      // 클라이언트 랜덤 (서버 캐싱 활용)
-      const shuffled = [...aiServices]
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-      }
-
-      services = shuffled.slice(0, 20).map((service) => {
+      services = combinedServices.map((service) => {
         const stats = ratingMap.get(service.id)
         return {
           ...service,
