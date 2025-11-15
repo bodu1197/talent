@@ -24,5 +24,5 @@ export default async function SellerOrdersPage() {
     redirect('/mypage/seller/register')
   }
 
-  return <SellerOrdersClient />
+  return <SellerOrdersClient sellerId={seller.id} />
 }

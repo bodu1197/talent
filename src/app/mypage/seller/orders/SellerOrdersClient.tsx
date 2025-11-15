@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSearchParams } from 'next/navigation'
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import OrderCard from '@/components/mypage/OrderCard'
@@ -9,6 +9,7 @@ import EmptyState from '@/components/common/EmptyState'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
 import { logger } from '@/lib/logger'
+import { createClient } from '@/lib/supabase/client'
 
 type OrderStatus = 'all' | 'paid' | 'in_progress' | 'revision' | 'delivered' | 'completed' | 'cancelled'
 
@@ -21,9 +22,11 @@ interface OrderFilter {
   maxPrice: string
 }
 
-export default function SellerOrdersClient() {
+export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
   const searchParams = useSearchParams()
   const statusFromUrl = (searchParams.get('status') as OrderStatus) || 'all'
+  const supabase = createClient()
+  const audioRef = useRef<HTMLAudioElement | null>(null)
 
   const [orders, setOrders] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -93,6 +96,41 @@ export default function SellerOrdersClient() {
       logger.error('상태별 카운트 조회 실패:', err)
     }
   }
+
+  const playNotificationSound = () => {
+    if (audioRef.current) {
+      audioRef.current.play().catch(err => {
+        console.log('Notification sound play failed:', err)
+      })
+    }
+  }
+
+  // Initialize audio
+  useEffect(() => {
+    audioRef.current = new Audio('/sounds/notification.mp3')
+    audioRef.current.volume = 0.5
+  }, [])
+
+  // Real-time subscription for new orders
+  useEffect(() => {
+    const channel = supabase
+      .channel('seller-orders')
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'orders',
+        filter: `seller_id=eq.${sellerId}`
+      }, async (payload) => {
+        playNotificationSound()
+        loadOrders()
+        loadStatusCounts()
+      })
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [sellerId])
 
   async function handleCompleteRevision(orderId: string) {
     if (!confirm('수정을 완료하고 구매자에게 전달하시겠습니까?')) {
