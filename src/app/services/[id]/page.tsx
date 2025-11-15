@@ -51,8 +51,6 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       seller:sellers(
         id,
         business_name,
-        display_name,
-        profile_image,
         contact_hours,
         tax_invoice_available,
         user_id,
@@ -261,8 +259,8 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                 <div className="flex items-center gap-3 w-full">
                   {/* 프로필 이미지 */}
                   <div className="w-[54px] h-[54px] bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
-                    {service.seller?.profile_image ? (
-                      <img src={service.seller.profile_image} alt={service.seller.business_name} className="w-full h-full object-cover" />
+                    {service.seller?.user?.profile_image ? (
+                      <img src={service.seller.user.profile_image} alt={service.seller.business_name} className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-400">
                         <i className="fas fa-user text-xl"></i>
@@ -275,7 +273,6 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                     {/* 판매자명 */}
                     <h3 className="font-bold text-sm leading-tight truncate">
                       {service.seller?.business_name}
-                      {service.seller?.display_name && ` ${service.seller.display_name}`}
                     </h3>
 
                     {/* 정보 한 줄 */}
@@ -393,14 +390,14 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   <div className="flex items-start gap-4">
                     {/* 프로필 이미지 */}
                     <div className="w-16 h-16 rounded-full bg-brand-primary flex items-center justify-center text-white text-2xl font-bold flex-shrink-0">
-                      {service.seller?.profile_image ? (
+                      {service.seller?.user?.profile_image ? (
                         <img
-                          src={service.seller.profile_image}
-                          alt={service.seller.display_name || service.seller.business_name}
+                          src={service.seller.user.profile_image}
+                          alt={service.seller.business_name}
                           className="w-full h-full rounded-full object-cover"
                         />
                       ) : (
-                        <span>{(service.seller?.display_name || service.seller?.business_name || 'U')[0]}</span>
+                        <span>{(service.seller?.business_name || 'U')[0]}</span>
                       )}
                     </div>
 
@@ -408,7 +405,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                     <div>
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="text-lg font-bold text-gray-900">
-                          {service.seller?.business_name || service.seller?.display_name}
+                          {service.seller?.business_name}
                         </h3>
                         <span className="text-yellow-500">
                           <i className="fas fa-crown"></i>
