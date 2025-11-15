@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { FaSearch, FaRobot } from "react-icons/fa";
 
 interface SearchBarProps {
   id?: string;
@@ -41,7 +42,7 @@ export default function SearchBar({ id = "search" }: SearchBarProps) {
               className="absolute right-2 top-1/2 -translate-y-1/2 bg-brand-primary text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-brand-light transition-colors"
               aria-label="검색 실행"
             >
-              <i className="fas fa-search" aria-hidden="true"></i>
+              <FaSearch aria-hidden="true" />
             </button>
           </div>
         </form>
@@ -57,8 +58,7 @@ export default function SearchBar({ id = "search" }: SearchBarProps) {
             className="px-3 py-1.5 text-sm bg-blue-50 text-brand-primary rounded-full font-medium hover:bg-blue-100 transition-colors flex items-center gap-2"
             aria-label="AI 서비스 카테고리 보기"
           >
-            <i className="fas fa-robot text-sm" aria-hidden="true"></i>{" "}
-            <span>AI</span>
+            <FaRobot className="text-sm" aria-hidden="true" /> <span>AI</span>
           </Link>
           <Link
             href="/categories/it-programming"

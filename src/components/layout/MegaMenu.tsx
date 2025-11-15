@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { CategoryItem } from "@/lib/categories";
+import { FaRobot, FaChevronRight, FaFire } from "react-icons/fa";
+import * as FaIcons from "react-icons/fa";
 
 interface MegaMenuProps {
   categories: CategoryItem[];
@@ -13,6 +15,31 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // 동적 아이콘 렌더링 헬퍼
+  const renderIcon = (iconName?: string) => {
+    if (!iconName) return null;
+
+    // fa- 접두사 제거 및 PascalCase 변환
+    const iconKey =
+      "Fa" +
+      iconName
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join("");
+
+    const IconComponent = (
+      FaIcons as Record<
+        string,
+        React.ComponentType<{ className?: string; "aria-hidden"?: string }>
+      >
+    )[iconKey];
+
+    if (IconComponent) {
+      return <IconComponent className="text-lg" aria-hidden="true" />;
+    }
+    return null;
+  };
 
   // 마우스 벗어날 때 지연 후 닫기
   const handleMouseLeave = () => {
@@ -109,7 +136,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                   onClick={handleCategoryClick}
                   aria-label="AI 서비스 카테고리 보기"
                 >
-                  <i className="fas fa-robot" aria-hidden="true"></i> AI 서비스
+                  <FaRobot aria-hidden="true" /> AI 서비스
                 </Link>
 
                 {/* IT/프로그래밍 (고정) */}
@@ -152,7 +179,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
               className="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg hover:shadow-lg transition-all font-medium text-sm mr-4"
               aria-label="AI Hub 페이지로 이동"
             >
-              <i className="fas fa-robot" aria-hidden="true"></i>
+              <FaRobot aria-hidden="true" />
               <span>AI Hub</span>
             </Link>
           </nav>
@@ -185,12 +212,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                         aria-label={`${category.name} 카테고리로 이동`}
                       >
                         <div className="flex items-center gap-3">
-                          {category.icon && (
-                            <i
-                              className={`fas fa-${category.icon} text-lg`}
-                              aria-hidden="true"
-                            ></i>
-                          )}
+                          {category.icon && renderIcon(category.icon)}
                           <span>{category.name}</span>
                           {category.is_ai && (
                             <span
@@ -201,10 +223,10 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                             </span>
                           )}
                         </div>
-                        <i
-                          className="fas fa-chevron-right text-xs text-gray-400"
+                        <FaChevronRight
+                          className="text-xs text-gray-400"
                           aria-hidden="true"
-                        ></i>
+                        />
                       </Link>
                     </div>
                   ))}
@@ -257,7 +279,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                 {!activeCategory && (
                   <div>
                     <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                      <i className="fas fa-fire text-red-500"></i> 인기 카테고리
+                      <FaFire className="text-red-500" /> 인기 카테고리
                     </h3>
                     <div className="grid grid-cols-4 gap-4">
                       {categories

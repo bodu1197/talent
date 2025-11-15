@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Service } from "@/types";
+import { FaBox, FaStar, FaCheckCircle } from "react-icons/fa";
 
 interface ServiceCardProps {
   service: Service;
@@ -25,10 +26,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-100">
-            <i
-              className="fas fa-box text-4xl text-gray-400"
-              aria-hidden="true"
-            ></i>
+            <FaBox className="text-4xl text-gray-400" aria-hidden="true" />
           </div>
         )}
 
@@ -40,7 +38,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
               role="status"
               aria-label="프리미엄 서비스"
             >
-              <i className="fas fa-star" aria-hidden="true"></i>
+              <FaStar aria-hidden="true" />
               PREMIUM
             </div>
           </div>
@@ -61,10 +59,10 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             {service.seller?.display_name}
           </span>
           {service.seller?.is_verified && (
-            <i
-              className="fas fa-check-circle text-[10px] text-blue-500"
+            <FaCheckCircle
+              className="text-[10px] text-blue-500"
               aria-label="인증된 판매자"
-            ></i>
+            />
           )}
         </div>
 
@@ -76,7 +74,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         {/* 평점 및 주문 수 */}
         <div className="flex items-center gap-2 text-xs text-gray-600 mb-1">
           <span className="flex items-center gap-1">
-            <i className="fas fa-star text-yellow-400" aria-hidden="true"></i>
+            <FaStar className="text-yellow-400" aria-hidden="true" />
             <span className="sr-only">평점</span>
             {(service.rating || 0).toFixed(1)}
           </span>

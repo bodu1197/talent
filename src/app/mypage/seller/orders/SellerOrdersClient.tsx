@@ -1,47 +1,61 @@
-'use client'
+"use client";
 
-import { useState, useEffect, useRef } from 'react'
-import { useSearchParams } from 'next/navigation'
-import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
-import OrderCard from '@/components/mypage/OrderCard'
-import Link from 'next/link'
-import EmptyState from '@/components/common/EmptyState'
-import LoadingSpinner from '@/components/common/LoadingSpinner'
-import ErrorState from '@/components/common/ErrorState'
-import { logger } from '@/lib/logger'
-import { createClient } from '@/lib/supabase/client'
-import type { Order, Service, User } from '@/types/common'
+import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
+import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
+import OrderCard from "@/components/mypage/OrderCard";
+import Link from "next/link";
+import EmptyState from "@/components/common/EmptyState";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
+import ErrorState from "@/components/common/ErrorState";
+import { logger } from "@/lib/logger";
+import { createClient } from "@/lib/supabase/client";
+import type { Order, Service, User } from "@/types/common";
+import {
+  FaEye,
+  FaCheck,
+  FaRedoAlt,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
 
-type OrderStatus = 'all' | 'paid' | 'in_progress' | 'revision' | 'delivered' | 'completed' | 'cancelled'
+type OrderStatus =
+  | "all"
+  | "paid"
+  | "in_progress"
+  | "revision"
+  | "delivered"
+  | "completed"
+  | "cancelled";
 
 interface OrderFilter {
-  status: OrderStatus
-  searchQuery: string
-  startDate: string
-  endDate: string
-  minPrice: string
-  maxPrice: string
+  status: OrderStatus;
+  searchQuery: string;
+  startDate: string;
+  endDate: string;
+  minPrice: string;
+  maxPrice: string;
 }
 
 interface SellerOrderListItem extends Order {
-  order_number?: string
-  title?: string
-  delivery_date?: string | null
-  revision_count?: number
-  requirements?: string
-  service?: Service
-  buyer?: User
+  order_number?: string;
+  title?: string;
+  delivery_date?: string | null;
+  revision_count?: number;
+  requirements?: string;
+  service?: Service;
+  buyer?: User;
 }
 
 export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
-  const searchParams = useSearchParams()
-  const statusFromUrl = (searchParams.get('status') as OrderStatus) || 'all'
-  const supabase = createClient()
-  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const searchParams = useSearchParams();
+  const statusFromUrl = (searchParams.get("status") as OrderStatus) || "all";
+  const supabase = createClient();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const [orders, setOrders] = useState<SellerOrderListItem[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [orders, setOrders] = useState<SellerOrderListItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [statusCounts, setStatusCounts] = useState({
     all: 0,
     paid: 0,
@@ -49,62 +63,67 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
     revision: 0,
     delivered: 0,
     completed: 0,
-    cancelled: 0
-  })
+    cancelled: 0,
+  });
 
   const [filters, setFilters] = useState<OrderFilter>({
     status: statusFromUrl,
-    searchQuery: '',
-    startDate: '',
-    endDate: '',
-    minPrice: '',
-    maxPrice: ''
-  })
+    searchQuery: "",
+    startDate: "",
+    endDate: "",
+    minPrice: "",
+    maxPrice: "",
+  });
 
   useEffect(() => {
-    setFilters(prev => ({ ...prev, status: statusFromUrl }))
-  }, [statusFromUrl])
+    setFilters((prev) => ({ ...prev, status: statusFromUrl }));
+  }, [statusFromUrl]);
 
   useEffect(() => {
-    loadOrders()
-    loadStatusCounts()
-  }, [filters.status])
+    loadOrders();
+    loadStatusCounts();
+  }, [filters.status]);
 
   async function loadOrders() {
     try {
-      setLoading(true)
-      setError(null)
+      setLoading(true);
+      setError(null);
 
-      const statusParam = filters.status === 'all' ? '' : `?status=${filters.status}`
-      const response = await fetch(`/api/orders/seller${statusParam}`)
+      const statusParam =
+        filters.status === "all" ? "" : `?status=${filters.status}`;
+      const response = await fetch(`/api/orders/seller${statusParam}`);
 
       if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || '주문 목록을 불러올 수 없습니다')
+        const error = await response.json();
+        throw new Error(error.error || "주문 목록을 불러올 수 없습니다");
       }
 
-      const { orders } = await response.json()
-      setOrders(orders)
+      const { orders } = await response.json();
+      setOrders(orders);
     } catch (err: unknown) {
-      logger.error('주문 조회 실패:', err)
-      setError(err instanceof Error ? err.message : '주문 내역을 불러오는데 실패했습니다')
+      logger.error("주문 조회 실패:", err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "주문 내역을 불러오는데 실패했습니다",
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
   async function loadStatusCounts() {
     try {
-      const response = await fetch('/api/orders/seller/count')
+      const response = await fetch("/api/orders/seller/count");
 
       if (!response.ok) {
-        throw new Error('카운트 조회 실패')
+        throw new Error("카운트 조회 실패");
       }
 
-      const { counts } = await response.json()
-      setStatusCounts(counts)
+      const { counts } = await response.json();
+      setStatusCounts(counts);
     } catch (err: unknown) {
-      logger.error('상태별 카운트 조회 실패:', err)
+      logger.error("상태별 카운트 조회 실패:", err);
     }
   }
 
@@ -112,123 +131,150 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
     if (audioRef.current) {
       audioRef.current.play().catch(() => {
         // Notification sound play failed - silently ignore
-      })
+      });
     }
-  }
+  };
 
   // Initialize audio
   useEffect(() => {
-    audioRef.current = new Audio('/sounds/notification.mp3')
-    audioRef.current.volume = 0.5
-  }, [])
+    audioRef.current = new Audio("/sounds/notification.mp3");
+    audioRef.current.volume = 0.5;
+  }, []);
 
   // Real-time subscription for new orders
   useEffect(() => {
     const channel = supabase
-      .channel('seller-orders')
-      .on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'orders',
-        filter: `seller_id=eq.${sellerId}`
-      }, async () => {
-        playNotificationSound()
-        loadOrders()
-        loadStatusCounts()
-      })
-      .subscribe()
+      .channel("seller-orders")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "orders",
+          filter: `seller_id=eq.${sellerId}`,
+        },
+        async () => {
+          playNotificationSound();
+          loadOrders();
+          loadStatusCounts();
+        },
+      )
+      .subscribe();
 
     return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [sellerId])
+      supabase.removeChannel(channel);
+    };
+  }, [sellerId]);
 
   async function handleCompleteRevision(orderId: string) {
-    if (!confirm('수정을 완료하고 구매자에게 전달하시겠습니까?')) {
-      return
+    if (!confirm("수정을 완료하고 구매자에게 전달하시겠습니까?")) {
+      return;
     }
 
     try {
       const response = await fetch(`/api/orders/${orderId}/complete-revision`, {
-        method: 'PATCH'
-      })
+        method: "PATCH",
+      });
 
       if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || '수정 완료 처리에 실패했습니다')
+        const error = await response.json();
+        throw new Error(error.error || "수정 완료 처리에 실패했습니다");
       }
 
-      alert('수정이 완료되었습니다.')
-      loadOrders()
-      loadStatusCounts()
+      alert("수정이 완료되었습니다.");
+      loadOrders();
+      loadStatusCounts();
     } catch (err: unknown) {
-      logger.error('수정 완료 처리 실패:', err)
-      alert(err instanceof Error ? err.message : '수정 완료 처리에 실패했습니다')
+      logger.error("수정 완료 처리 실패:", err);
+      alert(
+        err instanceof Error ? err.message : "수정 완료 처리에 실패했습니다",
+      );
     }
   }
 
-  const filteredOrders = orders.filter(order => {
+  const filteredOrders = orders.filter((order) => {
     if (filters.searchQuery) {
-      const query = filters.searchQuery.toLowerCase()
-      const matchesBuyerName = order.buyer?.name?.toLowerCase().includes(query)
-      const matchesOrderNumber = order.order_number?.toLowerCase().includes(query)
-      const matchesTitle = order.title?.toLowerCase().includes(query)
-      if (!matchesBuyerName && !matchesOrderNumber && !matchesTitle) return false
+      const query = filters.searchQuery.toLowerCase();
+      const matchesBuyerName = order.buyer?.name?.toLowerCase().includes(query);
+      const matchesOrderNumber = order.order_number
+        ?.toLowerCase()
+        .includes(query);
+      const matchesTitle = order.title?.toLowerCase().includes(query);
+      if (!matchesBuyerName && !matchesOrderNumber && !matchesTitle)
+        return false;
     }
 
-    if (filters.minPrice && order.total_amount < parseInt(filters.minPrice)) return false
-    if (filters.maxPrice && order.total_amount > parseInt(filters.maxPrice)) return false
+    if (filters.minPrice && order.total_amount < parseInt(filters.minPrice))
+      return false;
+    if (filters.maxPrice && order.total_amount > parseInt(filters.maxPrice))
+      return false;
 
-    return true
-  })
+    return true;
+  });
 
   const tabs = [
-    { value: 'all', label: '전체', count: statusCounts.all },
-    { value: 'paid', label: '신규 주문', count: statusCounts.paid },
-    { value: 'in_progress', label: '진행중', count: statusCounts.in_progress },
-    { value: 'revision', label: '수정 요청', count: statusCounts.revision },
-    { value: 'delivered', label: '완료 대기', count: statusCounts.delivered },
-    { value: 'completed', label: '완료', count: statusCounts.completed },
-    { value: 'cancelled', label: '취소/환불', count: statusCounts.cancelled }
-  ]
+    { value: "all", label: "전체", count: statusCounts.all },
+    { value: "paid", label: "신규 주문", count: statusCounts.paid },
+    { value: "in_progress", label: "진행중", count: statusCounts.in_progress },
+    { value: "revision", label: "수정 요청", count: statusCounts.revision },
+    { value: "delivered", label: "완료 대기", count: statusCounts.delivered },
+    { value: "completed", label: "완료", count: statusCounts.completed },
+    { value: "cancelled", label: "취소/환불", count: statusCounts.cancelled },
+  ];
 
   const resetFilters = () => {
     setFilters({
-      status: 'all',
-      searchQuery: '',
-      startDate: '',
-      endDate: '',
-      minPrice: '',
-      maxPrice: ''
-    })
-  }
+      status: "all",
+      searchQuery: "",
+      startDate: "",
+      endDate: "",
+      minPrice: "",
+      maxPrice: "",
+    });
+  };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'paid': return '결제완료'
-      case 'in_progress': return '진행중'
-      case 'revision': return '수정 요청'
-      case 'delivered': return '완료 대기'
-      case 'completed': return '완료'
-      case 'cancelled': return '취소/환불'
-      case 'refunded': return '환불완료'
-      default: return status
+      case "paid":
+        return "결제완료";
+      case "in_progress":
+        return "진행중";
+      case "revision":
+        return "수정 요청";
+      case "delivered":
+        return "완료 대기";
+      case "completed":
+        return "완료";
+      case "cancelled":
+        return "취소/환불";
+      case "refunded":
+        return "환불완료";
+      default:
+        return status;
     }
-  }
+  };
 
-  const getStatusColor = (status: string): 'red' | 'yellow' | 'green' | 'gray' => {
+  const getStatusColor = (
+    status: string,
+  ): "red" | "yellow" | "green" | "gray" => {
     switch (status) {
-      case 'paid': return 'red'
-      case 'in_progress': return 'yellow'
-      case 'revision': return 'red'
-      case 'delivered': return 'green'
-      case 'completed': return 'gray'
-      default: return 'gray'
+      case "paid":
+        return "red";
+      case "in_progress":
+        return "yellow";
+      case "revision":
+        return "red";
+      case "delivered":
+        return "green";
+      case "completed":
+        return "gray";
+      default:
+        return "gray";
     }
-  }
+  };
 
   const getActionButtons = (order: SellerOrderListItem) => {
-    if (order.status === 'paid') {
+    if (order.status === "paid") {
       return (
         <>
           <Link
@@ -244,10 +290,10 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
             메시지
           </Link>
         </>
-      )
+      );
     }
 
-    if (order.status === 'in_progress') {
+    if (order.status === "in_progress") {
       return (
         <>
           <Link
@@ -263,18 +309,18 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
             메시지
           </Link>
         </>
-      )
+      );
     }
 
-    if (order.status === 'revision') {
-      const revisionCount = order.revision_count || 0
+    if (order.status === "revision") {
+      const revisionCount = order.revision_count || 0;
       return (
         <>
           <Link
             href={`/mypage/seller/orders/${order.id}`}
             className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium flex items-center gap-2"
           >
-            <i className="fas fa-eye"></i>
+            <FaEye aria-hidden="true" />
             <span>수정 요청 확인</span>
             {revisionCount > 0 && (
               <span className="px-2 py-0.5 bg-red-500 text-white text-xs rounded-full">
@@ -286,7 +332,7 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
             onClick={() => handleCompleteRevision(order.id)}
             className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
           >
-            <i className="fas fa-check mr-2"></i>
+            <FaCheck className="mr-2 inline" aria-hidden="true" />
             수정 완료
           </button>
           <Link
@@ -296,10 +342,10 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
             메시지
           </Link>
         </>
-      )
+      );
     }
 
-    if (order.status === 'delivered') {
+    if (order.status === "delivered") {
       return (
         <>
           <Link
@@ -315,7 +361,7 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
             메시지
           </Link>
         </>
-      )
+      );
     }
 
     return (
@@ -333,27 +379,34 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
           메시지
         </Link>
       </>
-    )
-  }
+    );
+  };
 
   const formatOrderData = (order: SellerOrderListItem) => {
     return {
       id: order.id,
       orderNumber: order.order_number,
-      title: order.title || order.service?.title || '',
+      title: order.title || order.service?.title || "",
       thumbnailUrl: order.service?.thumbnail_url,
       buyerName: order.buyer?.name,
       status: order.status,
       statusLabel: getStatusLabel(order.status),
       statusColor: getStatusColor(order.status),
       price: order.total_amount,
-      orderDate: new Date(order.created_at).toLocaleString('ko-KR'),
-      expectedDeliveryDate: order.delivery_date ? new Date(order.delivery_date).toLocaleDateString('ko-KR') : '-',
-      daysLeft: order.delivery_date ? Math.ceil((new Date(order.delivery_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) : 0,
+      orderDate: new Date(order.created_at).toLocaleString("ko-KR"),
+      expectedDeliveryDate: order.delivery_date
+        ? new Date(order.delivery_date).toLocaleDateString("ko-KR")
+        : "-",
+      daysLeft: order.delivery_date
+        ? Math.ceil(
+            (new Date(order.delivery_date).getTime() - new Date().getTime()) /
+              (1000 * 60 * 60 * 24),
+          )
+        : 0,
       requirements: order.requirements,
-      revisionCount: order.revision_count || 0
-    }
-  }
+      revisionCount: order.revision_count || 0,
+    };
+  };
 
   if (loading) {
     return (
@@ -362,7 +415,7 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
           <LoadingSpinner message="주문 내역을 불러오는 중..." />
         </div>
       </MypageLayoutWrapper>
-    )
+    );
   }
 
   if (error) {
@@ -372,7 +425,7 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
           <ErrorState message={error} retry={loadOrders} />
         </div>
       </MypageLayoutWrapper>
-    )
+    );
   }
 
   return (
@@ -381,7 +434,9 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
         {/* 페이지 헤더 */}
         <div className="mb-8">
           <h1 className="text-xl font-bold text-gray-900">주문 관리</h1>
-          <p className="text-gray-600 mt-1 text-sm">전체 주문 내역을 관리하세요</p>
+          <p className="text-gray-600 mt-1 text-sm">
+            전체 주문 내역을 관리하세요
+          </p>
         </div>
 
         {/* 탭 네비게이션 */}
@@ -390,20 +445,24 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
             {tabs.map((tab) => (
               <button
                 key={tab.value}
-                onClick={() => setFilters({ ...filters, status: tab.value as OrderStatus })}
+                onClick={() =>
+                  setFilters({ ...filters, status: tab.value as OrderStatus })
+                }
                 className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
                   filters.status === tab.value
-                    ? 'border-brand-primary text-brand-primary'
-                    : 'border-transparent text-gray-600 hover:text-gray-900'
+                    ? "border-brand-primary text-brand-primary"
+                    : "border-transparent text-gray-600 hover:text-gray-900"
                 }`}
               >
                 {tab.label}
                 {tab.count > 0 && (
-                  <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                    filters.status === tab.value
-                      ? 'bg-brand-primary text-white'
-                      : 'bg-gray-200 text-gray-600'
-                  }`}>
+                  <span
+                    className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
+                      filters.status === tab.value
+                        ? "bg-brand-primary text-white"
+                        : "bg-gray-200 text-gray-600"
+                    }`}
+                  >
                     {tab.count}
                   </span>
                 )}
@@ -423,7 +482,9 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
               <input
                 type="text"
                 value={filters.searchQuery}
-                onChange={(e) => setFilters({ ...filters, searchQuery: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, searchQuery: e.target.value })
+                }
                 placeholder="검색어를 입력하세요"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               />
@@ -431,43 +492,59 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
 
             {/* 기간 검색 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">시작일</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                시작일
+              </label>
               <input
                 type="date"
                 value={filters.startDate}
-                onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, startDate: e.target.value })
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">종료일</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                종료일
+              </label>
               <input
                 type="date"
                 value={filters.endDate}
-                onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, endDate: e.target.value })
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               />
             </div>
 
             {/* 가격 범위 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">최소 금액</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                최소 금액
+              </label>
               <input
                 type="number"
                 value={filters.minPrice}
-                onChange={(e) => setFilters({ ...filters, minPrice: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, minPrice: e.target.value })
+                }
                 placeholder="0"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">최대 금액</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                최대 금액
+              </label>
               <input
                 type="number"
                 value={filters.maxPrice}
-                onChange={(e) => setFilters({ ...filters, maxPrice: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, maxPrice: e.target.value })
+                }
                 placeholder="0"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               />
@@ -479,7 +556,7 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
                 onClick={resetFilters}
                 className="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
               >
-                <i className="fas fa-redo-alt mr-2"></i>
+                <FaRedoAlt className="mr-2 inline" aria-hidden="true" />
                 초기화
               </button>
             </div>
@@ -488,7 +565,11 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
 
         {/* 결과 카운트 */}
         <div className="mb-4 text-sm text-gray-600">
-          총 <span className="font-bold text-gray-900">{filteredOrders.length}</span>건의 주문
+          총{" "}
+          <span className="font-bold text-gray-900">
+            {filteredOrders.length}
+          </span>
+          건의 주문
         </div>
 
         {/* 주문 목록 */}
@@ -515,17 +596,23 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
         {filteredOrders.length > 0 && (
           <div className="mt-8 flex items-center justify-center gap-2">
             <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
-              <i className="fas fa-chevron-left"></i>
+              <FaChevronLeft aria-hidden="true" />
             </button>
-            <button className="px-4 py-2 bg-brand-primary text-white rounded-lg">1</button>
-            <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">2</button>
-            <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">3</button>
+            <button className="px-4 py-2 bg-brand-primary text-white rounded-lg">
+              1
+            </button>
             <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-              <i className="fas fa-chevron-right"></i>
+              2
+            </button>
+            <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+              3
+            </button>
+            <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+              <FaChevronRight aria-hidden="true" />
             </button>
           </div>
         )}
       </div>
     </MypageLayoutWrapper>
-  )
+  );
 }

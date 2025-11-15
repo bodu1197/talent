@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/components/providers/AuthProvider";
 import Link from "next/link";
+import { FaRegBell, FaRegBellSlash } from "react-icons/fa";
 
 interface Notification {
   id: string;
@@ -168,7 +169,7 @@ export default function NotificationBell() {
         aria-expanded={showDropdown}
         aria-haspopup="true"
       >
-        <i className="far fa-bell text-xl" aria-hidden="true"></i>
+        <FaRegBell className="text-xl" aria-hidden="true" />
         {unreadCount > 0 && (
           <span
             className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold"
@@ -204,10 +205,10 @@ export default function NotificationBell() {
 
             {notifications.length === 0 ? (
               <div className="p-8 text-center text-gray-500">
-                <i
-                  className="far fa-bell-slash text-4xl mb-3"
+                <FaRegBellSlash
+                  className="text-4xl mb-3 mx-auto"
                   aria-hidden="true"
-                ></i>
+                />
                 <p>알림이 없습니다</p>
               </div>
             ) : (

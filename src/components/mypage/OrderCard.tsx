@@ -1,37 +1,38 @@
-import Link from 'next/link'
+import Link from "next/link";
+import { FaImage, FaClock } from "react-icons/fa";
 
 interface OrderCardProps {
   order: {
-    id: string
-    orderNumber: string | undefined
-    title: string
-    thumbnailUrl?: string | null
-    buyerName?: string
-    sellerName?: string
-    status: string
-    statusLabel: string
-    statusColor: 'red' | 'yellow' | 'blue' | 'green' | 'gray'
-    price: number
-    orderDate: string
-    expectedDeliveryDate?: string
-    daysLeft?: number
-    requirements?: string
-  }
-  mode: 'seller' | 'buyer'
-  actions?: React.ReactNode
+    id: string;
+    orderNumber: string | undefined;
+    title: string;
+    thumbnailUrl?: string | null;
+    buyerName?: string;
+    sellerName?: string;
+    status: string;
+    statusLabel: string;
+    statusColor: "red" | "yellow" | "blue" | "green" | "gray";
+    price: number;
+    orderDate: string;
+    expectedDeliveryDate?: string;
+    daysLeft?: number;
+    requirements?: string;
+  };
+  mode: "seller" | "buyer";
+  actions?: React.ReactNode;
 }
 
 const statusColorClasses = {
-  red: 'bg-red-100 text-red-700 border-red-200',
-  yellow: 'bg-yellow-100 text-yellow-700 border-yellow-200',
-  blue: 'bg-blue-100 text-blue-700 border-blue-200',
-  green: 'bg-green-100 text-green-700 border-green-200',
-  gray: 'bg-gray-100 text-gray-700 border-gray-200'
-}
+  red: "bg-red-100 text-red-700 border-red-200",
+  yellow: "bg-yellow-100 text-yellow-700 border-yellow-200",
+  blue: "bg-blue-100 text-blue-700 border-blue-200",
+  green: "bg-green-100 text-green-700 border-green-200",
+  gray: "bg-gray-100 text-gray-700 border-gray-200",
+};
 
 export default function OrderCard({ order, mode, actions }: OrderCardProps) {
-  const userName = mode === 'seller' ? order.buyerName : order.sellerName
-  const userLabel = mode === 'seller' ? '구매자' : '판매자'
+  const userName = mode === "seller" ? order.buyerName : order.sellerName;
+  const userLabel = mode === "seller" ? "구매자" : "판매자";
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-6 hover:border-brand-primary transition-colors">
@@ -45,7 +46,7 @@ export default function OrderCard({ order, mode, actions }: OrderCardProps) {
               className="w-full h-full object-cover"
             />
           ) : (
-            <i className="fas fa-image text-gray-400 text-2xl"></i>
+            <FaImage className="text-gray-400 text-2xl" aria-hidden="true" />
           )}
         </div>
 
@@ -55,7 +56,9 @@ export default function OrderCard({ order, mode, actions }: OrderCardProps) {
           <div className="flex items-start justify-between mb-3">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-sm text-gray-500">#{order.orderNumber || 'N/A'}</span>
+                <span className="text-sm text-gray-500">
+                  #{order.orderNumber || "N/A"}
+                </span>
                 <Link
                   href={`/mypage/${mode}/orders/${order.id}`}
                   className="text-base font-bold text-gray-900 hover:text-brand-primary"
@@ -66,19 +69,23 @@ export default function OrderCard({ order, mode, actions }: OrderCardProps) {
 
               {/* 사용자 정보 */}
               <div className="flex items-center gap-3 text-sm text-gray-600 mb-2">
-                <span>{userLabel}: {userName}</span>
+                <span>
+                  {userLabel}: {userName}
+                </span>
                 <span>•</span>
                 <span>{order.orderDate}</span>
               </div>
 
               {/* 상태 + 가격 + 납기일 */}
               <div className="flex items-center gap-3 flex-wrap">
-                <span className={`px-3 py-1 rounded-full text-xs font-medium border ${statusColorClasses[order.statusColor]}`}>
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-medium border ${statusColorClasses[order.statusColor]}`}
+                >
                   {order.statusLabel}
                 </span>
                 {order.daysLeft !== undefined && order.daysLeft > 0 && (
                   <span className="text-sm text-gray-600 flex items-center gap-1">
-                    <i className="fas fa-clock text-xs"></i>
+                    <FaClock className="text-xs" aria-hidden="true" />
                     D-{order.daysLeft}일
                   </span>
                 )}
@@ -104,12 +111,10 @@ export default function OrderCard({ order, mode, actions }: OrderCardProps) {
 
           {/* 액션 버튼들 */}
           {actions && (
-            <div className="flex items-center gap-2 mt-3">
-              {actions}
-            </div>
+            <div className="flex items-center gap-2 mt-3">{actions}</div>
           )}
         </div>
       </div>
     </div>
-  )
+  );
 }

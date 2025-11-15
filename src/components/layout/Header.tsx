@@ -5,6 +5,17 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/providers/AuthProvider";
 import ChatNotificationBadge from "@/components/chat/ChatNotificationBadge";
 import NotificationBell from "@/components/notifications/NotificationBell";
+import {
+  FaStar,
+  FaUser,
+  FaShoppingCart,
+  FaBox,
+  FaUserCircle,
+  FaCog,
+  FaSignOutAlt,
+  FaChevronDown,
+} from "react-icons/fa";
+import { FaHeart as FaRegHeart } from "react-icons/fa";
 
 export default function Header() {
   const { user, profile, loading, signOut } = useAuth();
@@ -36,10 +47,7 @@ export default function Header() {
             aria-label="돌파구 홈으로 이동"
           >
             <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
-              <i
-                className="fas fa-star text-white text-sm"
-                aria-hidden="true"
-              ></i>
+              <FaStar className="text-white text-sm" aria-hidden="true" />
             </div>
             <span className="text-xl font-bold">돌파구</span>
           </Link>
@@ -62,10 +70,7 @@ export default function Header() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <i
-                        className="fas fa-user text-gray-600"
-                        aria-hidden="true"
-                      ></i>
+                      <FaUser className="text-gray-600" aria-hidden="true" />
                     )}
                   </div>
                 </Link>
@@ -106,10 +111,10 @@ export default function Header() {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg"
                       role="menuitem"
                     >
-                      <i
-                        className="fas fa-shopping-cart mr-2"
+                      <FaShoppingCart
+                        className="inline mr-2"
                         aria-hidden="true"
-                      ></i>
+                      />
                       구매 관리
                     </Link>
                     <Link
@@ -117,7 +122,7 @@ export default function Header() {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-b-lg"
                       role="menuitem"
                     >
-                      <i className="fas fa-box mr-2" aria-hidden="true"></i>
+                      <FaBox className="inline mr-2" aria-hidden="true" />
                       판매 관리
                     </Link>
                   </div>
@@ -129,7 +134,7 @@ export default function Header() {
                   className="text-gray-900 hover:text-red-500 transition-colors"
                   aria-label="찜한 서비스"
                 >
-                  <i className="far fa-heart text-xl"></i>
+                  <FaRegHeart className="text-xl" />
                 </Link>
 
                 {/* 채팅 */}
@@ -154,18 +159,15 @@ export default function Header() {
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <i
-                          className="fas fa-user text-gray-600"
-                          aria-hidden="true"
-                        ></i>
+                        <FaUser className="text-gray-600" aria-hidden="true" />
                       )}
                     </div>
 
                     {/* 드롭다운 아이콘 */}
-                    <i
-                      className="fas fa-chevron-down text-xs text-gray-400"
+                    <FaChevronDown
+                      className="text-xs text-gray-400"
                       aria-hidden="true"
-                    ></i>
+                    />
                   </button>
 
                   {/* 드롭다운 메뉴 */}
@@ -178,10 +180,10 @@ export default function Header() {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg"
                       role="menuitem"
                     >
-                      <i
-                        className="fas fa-user-circle mr-2"
+                      <FaUserCircle
+                        className="inline mr-2"
                         aria-hidden="true"
-                      ></i>
+                      />
                       마이페이지
                     </Link>
                     <Link
@@ -189,7 +191,7 @@ export default function Header() {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                       role="menuitem"
                     >
-                      <i className="fas fa-cog mr-2" aria-hidden="true"></i>
+                      <FaCog className="inline mr-2" aria-hidden="true" />
                       설정
                     </Link>
                     <hr className="border-gray-200" />
@@ -202,10 +204,10 @@ export default function Header() {
                       role="menuitem"
                       aria-label="로그아웃"
                     >
-                      <i
-                        className="fas fa-sign-out-alt mr-2"
+                      <FaSignOutAlt
+                        className="inline mr-2"
                         aria-hidden="true"
-                      ></i>
+                      />
                       로그아웃
                     </button>
                   </div>

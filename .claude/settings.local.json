@@ -49,7 +49,20 @@
       "Bash(rm:*)",
       "Bash(node scripts/advanced-security-advisor.js:*)",
       "mcp__chrome-devtools__evaluate_script",
-      "mcp__next-devtools__browser_eval"
+      "mcp__next-devtools__browser_eval",
+      "mcp__sonarqube__system_health",
+      "mcp__chrome-devtools__new_page",
+      "mcp__chrome-devtools__take_snapshot",
+      "mcp__chrome-devtools__performance_start_trace",
+      "mcp__eslint__lint-files",
+      "mcp__memory__create_entities",
+      "mcp__github__search_repositories",
+      "mcp__memory__create_relations",
+      "mcp__memory__add_observations",
+      "mcp__memory__read_graph",
+      "mcp__chrome-devtools__list_pages",
+      "Bash(findstr:*)",
+      "Bash(C:Usersohyustalent)"
     ],
     "deny": [],
     "ask": []

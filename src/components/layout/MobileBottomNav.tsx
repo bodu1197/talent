@@ -5,6 +5,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { useChatUnreadCount } from "@/components/providers/ChatUnreadProvider";
+import {
+  FaHome,
+  FaSearch,
+  FaHeart,
+  FaUser,
+  FaArrowLeft,
+  FaTimes,
+} from "react-icons/fa";
+import { FaRegComments } from "react-icons/fa";
 
 export default function MobileBottomNav() {
   const pathname = usePathname();
@@ -28,7 +37,7 @@ export default function MobileBottomNav() {
             aria-label="홈으로 이동"
             aria-current={isActive("/") ? "page" : undefined}
           >
-            <i className="fas fa-home text-xl" aria-hidden="true"></i>
+            <FaHome className="text-xl" aria-hidden="true" />
             <span className="text-xs font-medium">홈</span>
           </Link>
 
@@ -38,7 +47,7 @@ export default function MobileBottomNav() {
             className="flex flex-col items-center justify-center space-y-1 text-gray-500 transition-colors active:text-brand-primary"
             aria-label="검색 열기"
           >
-            <i className="fas fa-search text-xl" aria-hidden="true"></i>
+            <FaSearch className="text-xl" aria-hidden="true" />
             <span className="text-xs font-medium">검색</span>
           </button>
 
@@ -55,7 +64,7 @@ export default function MobileBottomNav() {
               pathname === "/mypage/buyer/favorites" ? "page" : undefined
             }
           >
-            <i className="fas fa-heart text-xl" aria-hidden="true"></i>
+            <FaHeart className="text-xl" aria-hidden="true" />
             <span className="text-xs font-medium">찜목록</span>
           </Link>
 
@@ -71,7 +80,7 @@ export default function MobileBottomNav() {
             aria-current={pathname.startsWith("/chat") ? "page" : undefined}
           >
             <div className="relative">
-              <i className="far fa-comments text-xl" aria-hidden="true"></i>
+              <FaRegComments className="text-xl" aria-hidden="true" />
               {unreadCount > 0 && (
                 <span
                   className="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center"
@@ -95,7 +104,7 @@ export default function MobileBottomNav() {
             aria-label="마이페이지로 이동"
             aria-current={pathname.startsWith("/mypage") ? "page" : undefined}
           >
-            <i className="fas fa-user text-xl" aria-hidden="true"></i>
+            <FaUser className="text-xl" aria-hidden="true" />
             <span className="text-xs font-medium">마이페이지</span>
           </Link>
         </div>
@@ -110,7 +119,7 @@ export default function MobileBottomNav() {
               onClick={() => setShowSearch(false)}
               className="mr-4"
             >
-              <i className="fas fa-arrow-left text-xl" aria-hidden="true"></i>
+              <FaArrowLeft className="text-xl" aria-hidden="true" />
             </button>
             <div className="flex-1 relative">
               <label htmlFor="search-mobile" className="sr-only">
@@ -130,10 +139,7 @@ export default function MobileBottomNav() {
                 aria-label="검색 실행"
                 className="absolute right-3 top-1/2 -translate-y-1/2"
               >
-                <i
-                  className="fas fa-search text-gray-500"
-                  aria-hidden="true"
-                ></i>
+                <FaSearch className="text-gray-500" aria-hidden="true" />
               </button>
             </div>
           </div>
@@ -172,7 +178,7 @@ export default function MobileBottomNav() {
                     aria-label="웹 개발 검색 기록 삭제"
                     className="text-gray-400"
                   >
-                    <i className="fas fa-times text-sm" aria-hidden="true"></i>
+                    <FaTimes className="text-sm" aria-hidden="true" />
                   </button>
                 </li>
                 <li className="flex items-center justify-between">
@@ -181,7 +187,7 @@ export default function MobileBottomNav() {
                     aria-label="로고 디자인 검색 기록 삭제"
                     className="text-gray-400"
                   >
-                    <i className="fas fa-times text-sm" aria-hidden="true"></i>
+                    <FaTimes className="text-sm" aria-hidden="true" />
                   </button>
                 </li>
               </ul>
