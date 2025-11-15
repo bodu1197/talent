@@ -227,7 +227,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
       const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`
       const filePath = `chat-files/${fileName}`
 
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from('uploads')
         .upload(filePath, file)
 
@@ -411,7 +411,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
   }, [selectedRoomId, userId])
 
   const selectedRoom = rooms.find(r => r.id === selectedRoomId)
-  const isSeller = selectedRoom ? selectedRoom.seller_id === sellerId : false
+  const _isSeller = selectedRoom ? selectedRoom.seller_id === sellerId : false
   const otherUser = selectedRoom?.otherUser || null
 
   return (

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 // NICE 본인인증 요청 API
 // 실제 환경에서는 NICE 평가정보 API를 연동해야 함
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   // 실제로는 NICE API에 요청하고 EncodeData를 받아옴
   // 여기서는 테스트용 HTML 페이지 반환
 

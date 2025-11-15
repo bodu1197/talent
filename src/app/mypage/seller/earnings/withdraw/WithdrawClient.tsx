@@ -77,8 +77,8 @@ export default function WithdrawClient({ sellerData, profileData, availableBalan
       alert('출금 신청이 완료되었습니다.')
       router.push('/mypage/seller/earnings')
       router.refresh()
-    } catch (error: any) {
-      setError(error.message || '출금 신청 중 오류가 발생했습니다.')
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : '출금 신청 중 오류가 발생했습니다.')
     } finally {
       setIsLoading(false)
     }

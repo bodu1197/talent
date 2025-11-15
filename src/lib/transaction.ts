@@ -4,7 +4,9 @@
  */
 
 import { createClient } from '@/lib/supabase/server'
-import { SupabaseClient } from '@supabase/supabase-js'
+import { SupabaseClient, PostgrestError } from '@supabase/supabase-js'
+import { logger } from '@/lib/logger'
+import type { Tables } from '@/types/database'
 
 /**
  * Idempotency Key를 사용한 중복 주문 방지
@@ -17,10 +19,10 @@ export async function createOrderWithIdempotency(
     seller_id: string
     service_id: string
     amount: number
-    [key: string]: any
+    [key: string]: unknown
   },
   idempotencyKey: string
-): Promise<{ data: any; error: any; isExisting: boolean }> {
+): Promise<{ data: Tables<'orders'> | null; error: PostgrestError | null; isExisting: boolean }> {
   // 1. Idempotency Key로 기존 주문 확인
   const { data: existingOrder, error: checkError } = await supabase
     .from('orders')
@@ -34,7 +36,6 @@ export async function createOrderWithIdempotency(
 
   // 2. 이미 존재하는 주문이면 그대로 반환 (멱등성 보장)
   if (existingOrder) {
-    console.log(`[Idempotency] Returning existing order: ${existingOrder.id}`)
     return { data: existingOrder, error: null, isExisting: true }
   }
 
@@ -51,7 +52,6 @@ export async function createOrderWithIdempotency(
   if (createError) {
     // merchant_uid unique constraint 위반 시 (동시 요청)
     if (createError.code === '23505' && createError.message.includes('merchant_uid')) {
-      console.log(`[Idempotency] Concurrent creation detected, fetching existing order`)
       // 동시 생성 시도로 constraint 위반 → 기존 주문 조회
       const { data: existingOrder2 } = await supabase
         .from('orders')
@@ -78,9 +78,9 @@ export async function createPaymentWithIdempotency(
     amount: number
     payment_method: string
     payment_id: string
-    [key: string]: any
+    [key: string]: unknown
   }
-): Promise<{ data: any; error: any; isExisting: boolean }> {
+): Promise<{ data: Tables<'payments'> | null; error: PostgrestError | null; isExisting: boolean }> {
   // 1. payment_id로 기존 결제 확인
   const { data: existingPayment, error: checkError } = await supabase
     .from('payments')
@@ -94,7 +94,6 @@ export async function createPaymentWithIdempotency(
 
   // 2. 이미 존재하는 결제면 그대로 반환
   if (existingPayment) {
-    console.log(`[Idempotency] Returning existing payment: ${existingPayment.id}`)
     return { data: existingPayment, error: null, isExisting: true }
   }
 
@@ -108,7 +107,6 @@ export async function createPaymentWithIdempotency(
   if (createError) {
     // payment_id unique constraint 위반 시
     if (createError.code === '23505' && createError.message.includes('payment_id')) {
-      console.log(`[Idempotency] Concurrent payment creation detected`)
       const { data: existingPayment2 } = await supabase
         .from('payments')
         .select('*')
@@ -133,7 +131,7 @@ export async function updateOrderStatusWithLocking(
   orderId: string,
   newStatus: string,
   expectedUpdatedAt: string
-): Promise<{ success: boolean; error?: string; data?: any }> {
+): Promise<{ success: boolean; error?: string; data?: unknown }> {
   const now = new Date().toISOString()
 
   // updated_at이 예상값과 일치하는 경우에만 업데이트 (Optimistic Lock)
@@ -179,7 +177,7 @@ export async function deductCreditWithLocking(
   })
 
   if (error) {
-    console.error('Credit deduction failed:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
+    logger.error('Credit deduction failed', error)
     return { success: false, remaining: 0, error: error.message }
   }
 

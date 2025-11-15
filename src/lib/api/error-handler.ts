@@ -74,10 +74,10 @@ export function handleApiError(error: unknown): NextResponse {
  * )
  * ```
  */
-export function withErrorHandling(
-  handler: (...args: any[]) => Promise<NextResponse>
+export function withErrorHandling<T extends unknown[]>(
+  handler: (...args: T) => Promise<NextResponse>
 ) {
-  return async (...args: any[]): Promise<NextResponse> => {
+  return async (...args: T): Promise<NextResponse> => {
     try {
       return await handler(...args)
     } catch (error) {

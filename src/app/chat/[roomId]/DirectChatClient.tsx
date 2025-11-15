@@ -80,8 +80,8 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
   // 알림음 재생
   const playNotificationSound = () => {
     if (audioRef.current) {
-      audioRef.current.play().catch(err => {
-        console.log('Notification sound play failed:', err)
+      audioRef.current.play().catch(() => {
+        // Silently fail if notification sound cannot play
       })
     }
   }
@@ -198,7 +198,7 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
           filter: `room_id=eq.${roomId}`
         },
         async (payload) => {
-          const newMsg = payload.new as any
+          const newMsg = payload.new as Message
           if (newMsg.sender_id !== userId) {
             // 알림음 재생
             playNotificationSound()
@@ -313,7 +313,7 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
                 <p className="text-sm mt-1">첫 메시지를 보내보세요!</p>
               </div>
             ) : (
-              getTimeline().map((item, index) => {
+              getTimeline().map((item) => {
                 if (item.type === 'message') {
                   const message = item.data as Message
                   const isMine = message.sender_id === userId
@@ -438,7 +438,6 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
 // 결제 요청 카드 컴포넌트
 function PaymentRequestCard({
   paymentRequest,
-  userId,
   isSeller,
   onUpdate
 }: {

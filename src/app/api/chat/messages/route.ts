@@ -80,7 +80,17 @@ export async function POST(request: NextRequest) {
     }
 
     // 메시지 전송
-    const insertData: any = {
+    interface ChatMessageInsert {
+      room_id: string
+      sender_id: string
+      message: string
+      file_url?: string
+      file_name?: string
+      file_size?: number
+      file_type?: string
+    }
+
+    const insertData: ChatMessageInsert = {
       room_id,
       sender_id: user.id,
       message: message || ''

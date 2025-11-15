@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 import { Suspense } from "react";
 import "./globals.css";
 import "@fontsource/noto-sans-kr/300.css";

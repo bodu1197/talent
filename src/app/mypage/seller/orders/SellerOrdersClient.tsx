@@ -10,6 +10,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
 import { logger } from '@/lib/logger'
 import { createClient } from '@/lib/supabase/client'
+import type { Order, Service, User } from '@/types/common'
 
 type OrderStatus = 'all' | 'paid' | 'in_progress' | 'revision' | 'delivered' | 'completed' | 'cancelled'
 
@@ -22,13 +23,23 @@ interface OrderFilter {
   maxPrice: string
 }
 
+interface SellerOrderListItem extends Order {
+  order_number?: string
+  title?: string
+  delivery_date?: string | null
+  revision_count?: number
+  requirements?: string
+  service?: Service
+  buyer?: User
+}
+
 export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
   const searchParams = useSearchParams()
   const statusFromUrl = (searchParams.get('status') as OrderStatus) || 'all'
   const supabase = createClient()
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
-  const [orders, setOrders] = useState<any[]>([])
+  const [orders, setOrders] = useState<SellerOrderListItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [statusCounts, setStatusCounts] = useState({
@@ -92,15 +103,15 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
 
       const { counts } = await response.json()
       setStatusCounts(counts)
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error('상태별 카운트 조회 실패:', err)
     }
   }
 
   const playNotificationSound = () => {
     if (audioRef.current) {
-      audioRef.current.play().catch(err => {
-        console.log('Notification sound play failed:', err)
+      audioRef.current.play().catch(() => {
+        // Notification sound play failed - silently ignore
       })
     }
   }
@@ -120,7 +131,7 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
         schema: 'public',
         table: 'orders',
         filter: `seller_id=eq.${sellerId}`
-      }, async (payload) => {
+      }, async () => {
         playNotificationSound()
         loadOrders()
         loadStatusCounts()
@@ -216,7 +227,7 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
     }
   }
 
-  const getActionButtons = (order: any) => {
+  const getActionButtons = (order: SellerOrderListItem) => {
     if (order.status === 'paid') {
       return (
         <>
@@ -325,11 +336,11 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
     )
   }
 
-  const formatOrderData = (order: any) => {
+  const formatOrderData = (order: SellerOrderListItem) => {
     return {
       id: order.id,
       orderNumber: order.order_number,
-      title: order.title || order.service?.title,
+      title: order.title || order.service?.title || '',
       thumbnailUrl: order.service?.thumbnail_url,
       buyerName: order.buyer?.name,
       status: order.status,

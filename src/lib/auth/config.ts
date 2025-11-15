@@ -81,7 +81,7 @@ export function parseOAuthState<T = Record<string, unknown>>(
     }
 
     return decoded as T
-  } catch (error) {
+  } catch {
     throw new Error('Invalid state parameter')
   }
 }

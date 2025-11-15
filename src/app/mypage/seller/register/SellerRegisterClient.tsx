@@ -133,7 +133,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
       if (event.origin !== window.location.origin) return
 
       if (event.data.type === 'NICE_VERIFICATION_SUCCESS') {
-        const { name, phone, birthDate, gender } = event.data.data
+        const { name, phone, _birthDate, _gender } = event.data.data
 
         setFormData({
           ...formData,
@@ -230,7 +230,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
         status: 'pending_review'
       }
 
-      const { data: seller, error: sellerError } = await supabase
+      const { error: sellerError } = await supabase
         .from('sellers')
         .insert(insertData)
         .select()
@@ -275,11 +275,12 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
         result = isVerified && !!formData.accountNumber &&
                !!formData.accountHolder && !!formData.bankName
         break
-      case 2:
+      case 2: {
         // 프로필 이미지: 새로 업로드했거나 기존 이미지가 있으면 통과
         const hasProfileImage = !!formData.profileImage || !!initialProfile?.profile_image
         result = !!formData.displayName && formData.bio.length >= 50 && hasProfileImage
         break
+      }
       case 3:
         result = true // 연락처는 선택사항
         break

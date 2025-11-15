@@ -19,7 +19,7 @@ interface Props {
   serviceId?: string
 }
 
-export default function ServiceStatisticsClient({ stats, dailyViews, ratingPercentages, serviceId }: Props) {
+export default function ServiceStatisticsClient({ stats, dailyViews, ratingPercentages, serviceId: _serviceId }: Props) {
   return (
     <MypageLayoutWrapper mode="seller">
       <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8 mx-auto">
@@ -112,7 +112,7 @@ export default function ServiceStatisticsClient({ stats, dailyViews, ratingPerce
               </div>
             </div>
             <div className="space-y-2">
-              {[5, 4, 3, 2, 1].map((rating, index) => {
+              {[5, 4, 3, 2, 1].map((rating, _index) => {
                 const percentage = ratingPercentages[rating - 1] || 0
                 return (
                   <div key={rating} className="flex items-center gap-3">

@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { getRecentVisitedCategoriesServer } from '@/lib/supabase/queries/category-visits'
-import { logger } from '@/lib/logger'
 
 export default async function RecentVisitedCategories() {
   // 최근 방문한 카테고리 조회 (서버에서 직접)

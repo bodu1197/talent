@@ -59,8 +59,8 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
     if (!canvasRef.current) return
 
     const canvas = canvasRef.current
-    const displayWidth = canvas.offsetWidth
-    const displayHeight = canvas.offsetHeight
+    const _displayWidth = canvas.offsetWidth
+    const _displayHeight = canvas.offsetHeight
 
     // 실제 캔버스 해상도 (652x488)
     canvas.width = 652

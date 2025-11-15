@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     const supabaseAdmin = createAdminClient(supabaseUrl, serviceRoleKey)
 
     // Supabase Storage에 업로드 (Admin Client 사용)
-    const { data, error } = await supabaseAdmin.storage
+    const { error } = await supabaseAdmin.storage
       .from('portfolio')
       .upload(filePath, buffer, {
         contentType: file.type,

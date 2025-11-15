@@ -1,7 +1,6 @@
 import { createClient as createBrowserClient } from '@/lib/supabase/client'
 import { createClient as createServerClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
-import { Service } from '@/types'
 
 // 한 번의 쿼리로 모든 하위 카테고리 ID 가져오기 (최적화)
 async function getAllDescendantCategories(
@@ -121,7 +120,7 @@ export async function getSellerServicesCount(userId: string, status: string) {
 
 // 카테고리별 승인된 서비스 조회 (서버 컴포넌트용)
 // useAuth=true이면 인증된 클라이언트 사용 (기본값), false면 anon 클라이언트 사용 (캐싱 가능)
-export async function getServicesByCategory(categoryId: string, limit: number = 100, useAuth: boolean = true, page: number = 1) {
+export async function getServicesByCategory(categoryId: string, _limit: number = 100, useAuth: boolean = true, page: number = 1) {
   const supabase = useAuth
     ? await createServerClient()
     : createBrowserClient()
@@ -199,13 +198,15 @@ export async function getServicesByCategory(categoryId: string, limit: number = 
     service.is_advertised = advertisedServiceIds.includes(service.id)
   })
 
-  console.log('🎯 [SERVER] getServicesByCategory - 광고 ID 목록:', advertisedServiceIds)
-  console.log('🎯 [SERVER] getServicesByCategory - 광고 서비스 수:', allServices.filter(s => s.is_advertised).length)
-  console.log('🎯 [SERVER] getServicesByCategory - 전체 서비스 수:', allServices.length)
-  console.log('🎯 [SERVER] getServicesByCategory - 샘플 서비스:', {
-    id: allServices[0]?.id,
-    title: allServices[0]?.title,
-    is_advertised: allServices[0]?.is_advertised
+  logger.info('getServicesByCategory - 광고 통계', {
+    advertisedIds: advertisedServiceIds,
+    advertisedCount: allServices.filter(s => s.is_advertised).length,
+    totalCount: allServices.length,
+    sample: {
+      id: allServices[0]?.id,
+      title: allServices[0]?.title,
+      is_advertised: allServices[0]?.is_advertised
+    }
   })
 
   // 광고 서비스와 일반 서비스 분리

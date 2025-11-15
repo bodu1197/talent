@@ -17,9 +17,20 @@ interface Category {
   parent_id: string | null
 }
 
+interface TextStyleConfig {
+  text: string
+  x: number
+  y: number
+  fontSize: number
+  color: string
+  textAlign: CanvasTextAlign
+  fontWeight: string
+  shadowBlur: number
+}
+
 interface Props {
   sellerId: string
-  categories: any[]
+  categories: Category[]
 }
 
 export default function NewServiceClient({ sellerId }: Props) {
@@ -36,7 +47,7 @@ export default function NewServiceClient({ sellerId }: Props) {
   // 템플릿 관련 상태
   const [uploadMode, setUploadMode] = useState<'file' | 'template'>('file')
   const [selectedTemplate, setSelectedTemplate] = useState<GradientTemplate | null>(null)
-  const [textStyle, setTextStyle] = useState<any>(null)
+  const [textStyle, setTextStyle] = useState<TextStyleConfig | null>(null)
 
   const [formData, setFormData] = useState({
     title: '',

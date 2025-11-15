@@ -23,7 +23,7 @@ export default function PortfolioGrid({ portfolios }: Props) {
   const [selectedPortfolio, setSelectedPortfolio] = useState<Portfolio | null>(null)
 
   // YouTube URL에서 비디오 ID 추출
-  const getYoutubeVideoId = (url: string | null): string | null => {
+  const _getYoutubeVideoId = (url: string | null): string | null => {
     if (!url) return null
 
     const patterns = [

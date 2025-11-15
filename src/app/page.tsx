@@ -127,8 +127,12 @@ async function AIServicesSection({ aiCategoryIds }: { aiCategoryIds: string[] })
         .eq('is_visible', true)
 
       // 서비스별 평균 별점 계산
+      interface ReviewStat {
+        service_id: string
+        rating: number
+      }
       const ratingMap = new Map<string, { sum: number, count: number }>()
-      reviewStats?.forEach((review: any) => {
+      reviewStats?.forEach((review: ReviewStat) => {
         const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 }
         ratingMap.set(review.service_id, {
           sum: current.sum + review.rating,

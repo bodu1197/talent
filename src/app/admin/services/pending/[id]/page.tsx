@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import type { ServiceDetailWithCategories } from '@/lib/supabase/queries/admin'
 import PendingServiceDetailClient from './PendingServiceDetailClient'
 
 export default async function PendingServiceDetailPage({
@@ -53,7 +54,7 @@ export default async function PendingServiceDetailPage({
       .single()
 
     // seller user 정보
-    let sellerWithUser: any = seller
+    let sellerWithUser: ServiceDetailWithCategories['seller'] = seller ? { ...seller, user: null } : null
     if (seller?.user_id) {
       const { data: userData } = await supabase
         .from('users')
@@ -66,19 +67,20 @@ export default async function PendingServiceDetailPage({
       }
     }
 
-    const serviceDetail = {
+    const serviceDetail: ServiceDetailWithCategories = {
       ...service,
-      service_categories: serviceCategories,
+      service_categories: serviceCategories as Array<{ category: { id: string; name: string } }> | null,
       seller: sellerWithUser
     }
 
     return <PendingServiceDetailClient service={serviceDetail} />
-  } catch (error: any) {
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : '서비스를 불러올 수 없습니다'
     return (
       <div className="p-8">
         <div className="bg-red-50 border border-red-200 rounded-lg p-6">
           <h2 className="text-xl font-bold text-red-900 mb-4">오류가 발생했습니다</h2>
-          <p className="text-red-700">{error?.message || '서비스를 불러올 수 없습니다'}</p>
+          <p className="text-red-700">{errorMessage}</p>
         </div>
       </div>
     )

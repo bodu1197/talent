@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import * as PortOne from '@portone/browser-sdk/v2'
+// import * as PortOne from '@portone/browser-sdk/v2' // Unused for now
 
 interface Order {
   id: string

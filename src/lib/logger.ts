@@ -10,6 +10,13 @@
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'none'
 
+/**
+ * 로그 메타데이터 타입
+ * - 객체 형태의 추가 정보를 담음
+ * - 중첩된 객체와 배열 지원
+ */
+type LogMetadata = Record<string, unknown>
+
 const LOG_LEVELS: Record<LogLevel, number> = {
   debug: 0,
   info: 1,
@@ -41,7 +48,7 @@ class Logger {
     return LOG_LEVELS[level] >= LOG_LEVELS[this.level]
   }
 
-  private formatMessage(level: string, message: string, data?: any): string {
+  private formatMessage(level: string, message: string, data?: LogMetadata): string {
     const timestamp = new Date().toISOString()
     const environment = this.isClient ? '[Client]' : '[Server]'
     const prefix = `${timestamp} ${environment} [${level.toUpperCase()}]`
@@ -49,7 +56,7 @@ class Logger {
     return data ? `${prefix} ${message}` : `${prefix} ${message}`
   }
 
-  private sanitizeData(data: any): any {
+  private sanitizeData(data: LogMetadata | unknown): LogMetadata | unknown {
     if (!data) return data
 
     // 민감한 정보 필드 목록
@@ -67,11 +74,11 @@ class Logger {
       'email' // email은 필요에 따라 제거/유지
     ]
 
-    const sanitize = (obj: any): any => {
+    const sanitize = (obj: unknown): unknown => {
       if (typeof obj !== 'object' || obj === null) return obj
       if (Array.isArray(obj)) return obj.map(sanitize)
 
-      const sanitized: any = {}
+      const sanitized: Record<string, unknown> = {}
       for (const [key, value] of Object.entries(obj)) {
         const lowerKey = key.toLowerCase()
         const isSensitive = sensitiveFields.some(field => lowerKey.includes(field.toLowerCase()))
@@ -90,28 +97,30 @@ class Logger {
     return sanitize(data)
   }
 
-  debug(message: string, data?: any) {
+  debug(message: string, data?: LogMetadata) {
     if (!this.shouldLog('debug')) return
 
     const sanitized = this.sanitizeData(data)
+    // eslint-disable-next-line no-console
     console.log(this.formatMessage('debug', message), sanitized || '')
   }
 
-  info(message: string, data?: any) {
+  info(message: string, data?: LogMetadata) {
     if (!this.shouldLog('info')) return
 
     const sanitized = this.sanitizeData(data)
+    // eslint-disable-next-line no-console
     console.info(this.formatMessage('info', message), sanitized || '')
   }
 
-  warn(message: string, data?: any) {
+  warn(message: string, data?: LogMetadata) {
     if (!this.shouldLog('warn')) return
 
     const sanitized = this.sanitizeData(data)
     console.warn(this.formatMessage('warn', message), sanitized || '')
   }
 
-  error(message: string, error?: Error | any, data?: any) {
+  error(message: string, error?: Error | unknown, data?: LogMetadata) {
     if (!this.shouldLog('error')) return
 
     const sanitized = this.sanitizeData(data)
@@ -123,7 +132,7 @@ class Logger {
           name: error.name,
           message: error.message,
           stack: this.isDevelopment ? error.stack : undefined,
-          ...sanitized
+          ...(sanitized as Record<string, unknown>)
         }
       )
     } else {
@@ -145,8 +154,9 @@ class Logger {
    * 개발 환경에서만 실행되는 로그
    * 디버깅 목적으로 사용하며 프로덕션에서는 완전히 제거됨
    */
-  dev(message: string, data?: any) {
+  dev(message: string, data?: LogMetadata) {
     if (this.isDevelopment) {
+      // eslint-disable-next-line no-console
       console.log(`[DEV] ${message}`, data || '')
     }
   }

@@ -23,9 +23,9 @@ export function PageViewTracker() {
             referrer: document.referrer || undefined,
           }),
         })
-      } catch (error) {
+      } catch {
         // Silent failure - analytics should never break the app
-        console.debug('Analytics tracking failed:', error)
+        // Error ignored intentionally
       }
     }
 

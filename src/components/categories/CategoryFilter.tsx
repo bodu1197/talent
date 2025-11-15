@@ -7,11 +7,11 @@ interface CategoryFilterProps {
   isAI: boolean
 }
 
-export default function CategoryFilter({ categoryId, isAI }: CategoryFilterProps) {
+export default function CategoryFilter({ categoryId: _categoryId, isAI: _isAI }: CategoryFilterProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const currentPrice = searchParams.get('price')
-  const currentSort = searchParams.get('sort') || 'popular'
+  const _currentSort = searchParams.get('sort') || 'popular'
 
   const handlePriceChange = (priceRange: string) => {
     const params = new URLSearchParams(searchParams)

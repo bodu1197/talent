@@ -7,23 +7,50 @@ import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import StatCard from '@/components/mypage/StatCard'
 import Link from 'next/link'
 
-type Stats = any
-type Order = any
-type Favorite = any
-type Benefits = any
+import type { Order, Service, Seller } from '@/types/common'
 
-type Props = {
-  stats: Stats
-  recentOrders: Order[]
+interface BuyerStats {
+  inProgressOrders: number
+  deliveredOrders: number
+  pendingReviews: number
+  monthlyPurchases: number
+}
+
+interface BuyerOrder extends Order {
+  delivery_date?: string | null
+  buyer_note?: string | null
+  seller_message?: string | null
+  revision_count?: number
+  remaining_revisions?: number
+  requirements?: string
+}
+
+interface Favorite {
+  id: string
+  service?: Service & {
+    seller?: Seller
+  }
+  created_at: string
+}
+
+interface BuyerBenefits {
+  points: number
+  coupons: number
+  membershipLevel: string
+}
+
+interface Props {
+  stats: BuyerStats
+  recentOrders: BuyerOrder[]
   favorites: Favorite[]
-  benefits: Benefits
+  benefits: BuyerBenefits
   profileData?: {
     name: string
     profile_image?: string | null
   } | null
 }
 
-export default function BuyerDashboardClient({ stats, recentOrders, favorites, benefits, profileData }: Props) {
+export default function BuyerDashboardClient({ stats, recentOrders, favorites, benefits: _benefits, profileData }: Props) {
   const queryClient = useQueryClient()
 
   // 백그라운드에서 모든 구매자 페이지 데이터 프리페치

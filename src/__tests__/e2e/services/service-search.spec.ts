@@ -76,7 +76,7 @@ test.describe('서비스 검색 및 조회', () => {
 
       // 상세 정보 표시 확인
       const hasTitle = await page.locator('h1, [data-testid="service-title"]').count() > 0
-      const hasPrice = await page.locator('[data-testid="service-price"], text=/₩|원/').count() > 0
+      const _hasPrice = await page.locator('[data-testid="service-price"], text=/₩|원/').count() > 0
 
       expect(hasTitle).toBeTruthy()
     }

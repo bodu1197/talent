@@ -52,6 +52,20 @@ export default async function BuyerDashboardPage() {
     getBuyerBenefits(user.id)
   ])
 
+  // Map Supabase array results to expected types
+  const mappedFavorites = (favorites as unknown[]).map((fav: unknown) => {
+    const favItem = fav as { id: string; created_at: string; service?: unknown[] }
+    return {
+      id: favItem.id,
+      created_at: favItem.created_at,
+      service: favItem.service?.[0] ? {
+        ...(favItem.service[0] as Record<string, unknown>),
+        seller: (favItem.service[0] as { seller?: unknown[] }).seller?.[0] || null
+      } : null
+    }
+  })
+
   // 클라이언트 컴포넌트에 데이터 전달
-  return <BuyerDashboardClient stats={stats} recentOrders={recentOrders} favorites={favorites} benefits={benefits} profileData={profile} />
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return <BuyerDashboardClient stats={stats} recentOrders={recentOrders} favorites={mappedFavorites as any} benefits={benefits} profileData={profile} />
 }

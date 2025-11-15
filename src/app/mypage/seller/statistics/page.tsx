@@ -82,10 +82,17 @@ export default async function SellerStatisticsPage() {
     .eq('seller_id', seller.id)
     .limit(10)
 
-  let topServices: any[] = []
+  interface TopService {
+    id: string
+    name: string
+    views: number
+    orders: number
+  }
+
+  let topServices: TopService[] = []
   if (services) {
     const servicesWithStats = await Promise.all(
-      services.map(async (service: any) => {
+      services.map(async (service: { id: string; title: string }) => {
         const [viewsResult, ordersResult] = await Promise.all([
           supabase.from('service_views').select('*', { count: 'exact', head: true })
             .eq('service_id', service.id)

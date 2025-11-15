@@ -4,6 +4,7 @@ export function registerServiceWorker() {
       navigator.serviceWorker
         .register('/sw.js')
         .then((registration) => {
+          // eslint-disable-next-line no-console
           console.log('Service Worker registered:', registration)
         })
         .catch((error) => {

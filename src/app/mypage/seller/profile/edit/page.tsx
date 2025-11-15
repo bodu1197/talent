@@ -10,7 +10,7 @@ export default async function SellerProfileEditPage() {
     redirect('/auth/login')
   }
 
-  const { data: seller, error } = await supabase
+  const { data: seller } = await supabase
     .from('sellers')
     .select(`
       *,

@@ -5,8 +5,16 @@ import { useRouter } from 'next/navigation'
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import { createClient } from '@/lib/supabase/client'
 
+interface ProfileData {
+  name?: string
+  email?: string
+  profile_image?: string | null
+  phone?: string | null
+  bio?: string | null
+}
+
 interface Props {
-  profile: any
+  profile: ProfileData | null
   isSeller: boolean
 }
 
@@ -65,7 +73,7 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
       const filePath = `profiles/${fileName}`
 
       // Supabase Storage에 업로드
-      const { data, error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from('profiles')
         .upload(filePath, file, {
           upsert: true
@@ -143,9 +151,9 @@ export default function SettingsEditClient({ profile, isSeller }: Props) {
 
       alert('프로필이 저장되었습니다.')
       router.push('/mypage/settings')
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Profile save error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
-      if (!error.message) {
+      if (!(error instanceof Error) || !error.message) {
         alert('프로필 저장 중 알 수 없는 오류가 발생했습니다.')
       }
     } finally {

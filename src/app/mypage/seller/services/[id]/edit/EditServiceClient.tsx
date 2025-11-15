@@ -17,10 +17,35 @@ interface Category {
   parent_id: string | null
 }
 
+interface ServiceData {
+  id: string
+  title: string
+  thumbnail_url?: string | null
+  service_categories?: Array<{ category_id: string }>
+  description?: string
+  price?: number
+  delivery_days?: number
+  revision_count?: number
+  tax_invoice_available?: boolean
+  search_keywords?: string
+  status?: string
+}
+
+interface TextStyleConfig {
+  text: string
+  x: number
+  y: number
+  fontSize: number
+  color: string
+  textAlign: CanvasTextAlign
+  fontWeight: string
+  shadowBlur: number
+}
+
 interface Props {
-  service: any
+  service: ServiceData
   sellerId: string
-  categories: any[]
+  categories: Category[]
   categoryHierarchy?: {
     level1: string | null
     level2: string | null
@@ -43,7 +68,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
   // 템플릿 관련 상태
   const [uploadMode, setUploadMode] = useState<'file' | 'template'>('file')
   const [selectedTemplate, setSelectedTemplate] = useState<GradientTemplate | null>(null)
-  const [textStyle, setTextStyle] = useState<any>(null)
+  const [textStyle, setTextStyle] = useState<TextStyleConfig | null>(null)
 
   const [formData, setFormData] = useState({
     title: service.title || '',
@@ -327,7 +352,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
         alert('수정 요청이 제출되었습니다. 관리자 승인 후 반영됩니다.')
       } else {
         // pending, draft, suspended 상태 서비스는 직접 수정
-        const updateData: any = {
+        const updateData: Record<string, unknown> = {
           title: formData.title,
           description: formData.description,
           price: parseInt(formData.price) || 0,

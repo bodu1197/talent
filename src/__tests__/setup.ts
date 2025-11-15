@@ -31,8 +31,20 @@ vi.mock('next/navigation', () => ({
 
 // Mock Supabase client
 vi.mock('@/lib/supabase/client', () => {
-  const createMockQueryBuilder = () => {
-    const mockBuilder: any = {
+  interface MockQueryBuilder {
+    select: ReturnType<typeof vi.fn>
+    eq: ReturnType<typeof vi.fn>
+    single: ReturnType<typeof vi.fn>
+    order: ReturnType<typeof vi.fn>
+    limit: ReturnType<typeof vi.fn>
+    range: ReturnType<typeof vi.fn>
+    insert: ReturnType<typeof vi.fn>
+    update: ReturnType<typeof vi.fn>
+    delete: ReturnType<typeof vi.fn>
+  }
+
+  const createMockQueryBuilder = (): MockQueryBuilder => {
+    const mockBuilder: MockQueryBuilder = {
       select: vi.fn(() => mockBuilder),
       eq: vi.fn(() => mockBuilder),
       single: vi.fn(() => Promise.resolve({ data: null, error: null })),

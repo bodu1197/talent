@@ -1,16 +1,28 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { getAdminDashboardStats, getAdminRecentOrders, getAdminRecentUsers } from '@/lib/supabase/queries/admin'
+import { getAdminDashboardStats, getAdminRecentOrders, getAdminRecentUsers, type OrderWithRelations } from '@/lib/supabase/queries/admin'
+import type { Tables } from '@/types/database'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
 import Link from 'next/link'
 import { logger } from '@/lib/logger'
 
+interface DashboardStats {
+  totalUsers: number
+  todayRevenue: number
+  inProgressOrders: number
+  pendingReports: number
+  monthlyRevenue: number
+  monthlyOrderCount: number
+  totalOrders: number
+  totalServices: number
+}
+
 export default function AdminDashboardPage() {
-  const [stats, setStats] = useState<any>(null)
-  const [recentOrders, setRecentOrders] = useState<any[]>([])
-  const [recentUsers, setRecentUsers] = useState<any[]>([])
+  const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [recentOrders, setRecentOrders] = useState<OrderWithRelations[]>([])
+  const [recentUsers, setRecentUsers] = useState<Tables<'users'>[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -166,13 +178,13 @@ export default function AdminDashboardPage() {
                     <span className="font-medium text-gray-900">
                       {order.service?.title || order.title}
                     </span>
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(order.status)}`}>
-                      {getStatusLabel(order.status)}
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(order.status || '')}`}>
+                      {getStatusLabel(order.status || '')}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm text-gray-600">
-                    <span>{order.buyer?.name} → {order.seller?.name}</span>
-                    <span className="font-medium">{order.total_amount?.toLocaleString()}원</span>
+                    <span>{order.buyer?.name || 'Unknown'} → {order.seller?.name || 'Unknown'}</span>
+                    <span className="font-medium">{(order.total_amount ?? 0).toLocaleString()}원</span>
                   </div>
                 </Link>
               ))
@@ -201,7 +213,7 @@ export default function AdminDashboardPage() {
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-medium text-gray-900">{user.name}</span>
                     <span className="text-xs text-gray-500">
-                      {new Date(user.created_at).toLocaleDateString('ko-KR')}
+                      {user.created_at ? new Date(user.created_at).toLocaleDateString('ko-KR') : ''}
                     </span>
                   </div>
                   <div className="text-sm text-gray-600">{user.email}</div>

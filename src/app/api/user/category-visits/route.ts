@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     // 4. 오늘 이미 방문했는지 확인
     const today = new Date()
     today.setHours(0, 0, 0, 0)
-    const todayStr = today.toISOString().split('T')[0] // YYYY-MM-DD
+    const _todayStr = today.toISOString().split('T')[0] // YYYY-MM-DD
 
     const { data: existing } = await supabase
       .from('category_visits')
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
 }
 
 // GET: 사용자의 카테고리 방문 기록 조회 (선택 사항)
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const supabase = await createClient()
 

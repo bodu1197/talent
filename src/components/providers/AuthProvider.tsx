@@ -104,7 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       logger.debug('[AuthProvider] Profile loaded successfully:', { isBuyer, isSeller })
       setProfile(profileData)
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('[AuthProvider] Profile fetch error:', error)
 
       // 에러 시 fallback 프로필 설정
@@ -165,7 +165,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } else {
           setProfile(null)
         }
-      } catch (error) {
+      } catch {
         // 에러 무시하고 loading만 false로
         if (mounted) {
           setLoading(false)

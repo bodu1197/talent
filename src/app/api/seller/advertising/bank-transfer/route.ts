@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       const fileName = `${seller.id}_${Date.now()}.${fileExt}`
       const filePath = `advertising-receipts/${fileName}`
 
-      const { data: uploadData, error: uploadError } = await serviceSupabase
+      const { data: _uploadData, error: uploadError } = await serviceSupabase
         .storage
         .from('public-files')
         .upload(filePath, receiptFile)

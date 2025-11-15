@@ -81,7 +81,7 @@ export default async function SellerServicesPage({
         .order('reviewed_at', { ascending: false })
 
       // 서비스에 revision 정보 추가
-      services.forEach((service: any) => {
+      services.forEach((service: Record<string, unknown>) => {
         const pendingRevision = pendingRevisions?.find(r => r.service_id === service.id)
         service.hasPendingRevision = !!pendingRevision
 
@@ -116,7 +116,7 @@ export default async function SellerServicesPage({
       statusFilter={statusFilter}
       statusCounts={statusCounts}
     />
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('SellerServicesPage 전체 오류:', error)
     logger.error('오류 상세:', JSON.stringify(error, null, 2))
 
@@ -124,7 +124,7 @@ export default async function SellerServicesPage({
       <div className="p-8">
         <div className="bg-red-50 border border-red-200 rounded-lg p-6">
           <h2 className="text-xl font-bold text-red-900 mb-4">오류가 발생했습니다</h2>
-          <p className="text-red-700 mb-4">{error?.message || '서비스 목록을 불러올 수 없습니다'}</p>
+          <p className="text-red-700 mb-4">{error instanceof Error ? error.message : '서비스 목록을 불러올 수 없습니다'}</p>
           <details className="mt-4">
             <summary className="cursor-pointer text-red-600 font-medium">오류 상세 정보</summary>
             <pre className="mt-2 p-4 bg-red-100 rounded text-xs overflow-auto">

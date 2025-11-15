@@ -83,7 +83,7 @@ export default function BankTransferAdvertisingPage() {
       if (!response.ok) throw new Error('Failed to load services')
 
       const data = await response.json()
-      setServices(data.services?.filter((s: any) => !s.hasActiveAd) || [])
+      setServices(data.services?.filter((s: Service & { hasActiveAd?: boolean }) => !s.hasActiveAd) || [])
     } catch (error) {
       console.error('Failed to load services:', error)
     } finally {

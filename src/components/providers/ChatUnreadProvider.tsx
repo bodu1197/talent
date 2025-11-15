@@ -3,6 +3,14 @@
 import { createContext, useContext, useEffect, useState, useCallback, useMemo, ReactNode } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
+interface ChatMessage {
+  id: string
+  room_id: string
+  sender_id: string
+  message: string
+  created_at: string
+}
+
 interface ChatUnreadContextType {
   unreadCount: number
   userId: string | null
@@ -36,7 +44,8 @@ export function ChatUnreadProvider({ children }: { children: ReactNode }) {
   // 알림음 재생
   const playNotificationSound = useCallback(async () => {
     try {
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+      const AudioContextClass = window.AudioContext || (window as typeof window & { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+      const audioContext = new AudioContextClass()
       const oscillator = audioContext.createOscillator()
       const gainNode = audioContext.createGain()
 
@@ -130,7 +139,7 @@ export function ChatUnreadProvider({ children }: { children: ReactNode }) {
           table: 'chat_messages'
         },
         async (payload) => {
-          const newMessage = payload.new as any
+          const newMessage = payload.new as ChatMessage
 
           // 내 채팅방이면서 내가 보낸 메시지가 아닌 경우에만 알림
           if (myRoomIds.includes(newMessage.room_id) && newMessage.sender_id !== userId) {

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { getAdminUsers, getAdminUsersCount } from '@/lib/supabase/queries/admin'
+import { getAdminUsers, getAdminUsersCount, type AdminUserProfile } from '@/lib/supabase/queries/admin'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
 import EmptyState from '@/components/common/EmptyState'
@@ -10,7 +10,7 @@ import { logger } from '@/lib/logger'
 type RoleFilter = 'all' | 'buyer' | 'seller' | 'admin'
 
 export default function AdminUsersPage() {
-  const [users, setUsers] = useState<any[]>([])
+  const [users, setUsers] = useState<AdminUserProfile[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [roleFilter, setRoleFilter] = useState<RoleFilter>('all')

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/components/providers/AuthProvider'
 import Link from 'next/link'
@@ -24,13 +24,13 @@ export default function NotificationBell() {
   const [unreadCount, setUnreadCount] = useState(0)
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [showDropdown, setShowDropdown] = useState(false)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
   const supabase = createClient()
 
   // 알림 소리 재생 (Web Audio API 사용)
   const playNotificationSound = () => {
     try {
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+      const AudioContextClass = window.AudioContext || (window as typeof window & { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+      const audioContext = new AudioContextClass()
       const oscillator = audioContext.createOscillator()
       const gainNode = audioContext.createGain()
 

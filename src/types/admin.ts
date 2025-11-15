@@ -1,4 +1,5 @@
 // Admin Dashboard Types
+import type { Json } from './database'
 
 export interface DashboardStats {
   // User Stats
@@ -549,8 +550,8 @@ export interface ActivityLog {
   action: string
   entityType: string
   entityId: string
-  oldValue: any
-  newValue: any
+  oldValue: Json | null
+  newValue: Json | null
   ipAddress: string
   userAgent: string
   createdAt: Date

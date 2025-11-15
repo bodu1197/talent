@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { PostgrestError } from '@supabase/supabase-js'
 import { directPurchaseRateLimit, checkRateLimit } from '@/lib/rate-limit'
 import { createOrderWithIdempotency } from '@/lib/transaction'
 
@@ -75,7 +76,7 @@ export async function POST(request: NextRequest) {
     // 납품 예정일 계산 (형식적, 실제로는 판매자 작업 완료 선언이 중요)
     const deliveryDate = new Date(Date.now() + (delivery_days || service.delivery_days || 7) * 24 * 60 * 60 * 1000)
 
-    const { data: order, error: orderError, isExisting } = await createOrderWithIdempotency(
+    const { data: order, error: orderError, isExisting: _isExisting } = await createOrderWithIdempotency(
       supabase,
       {
         buyer_id: user.id,
@@ -99,11 +100,12 @@ export async function POST(request: NextRequest) {
 
     if (orderError) {
       // 보안: 서버 로그에만 상세 정보 기록, 클라이언트에는 일반 메시지만 반환
+      const pgError = orderError as PostgrestError
       console.error('Order creation error:', {
-        message: orderError.message,
-        code: orderError.code,
-        details: orderError.details,
-        hint: orderError.hint
+        message: pgError.message,
+        code: pgError.code,
+        details: pgError.details,
+        hint: pgError.hint
       })
       return NextResponse.json({
         error: '주문 생성 실패'
@@ -131,6 +133,11 @@ export async function POST(request: NextRequest) {
     } catch (chatError) {
       // 채팅방 생성 실패는 주문 생성을 막지 않음
       console.error('Chat room creation error:', chatError)
+    }
+
+    // Type assertion: order is guaranteed to be non-null here due to error check above
+    if (!order) {
+      return NextResponse.json({ error: '주문 생성 실패' }, { status: 500 })
     }
 
     return NextResponse.json({

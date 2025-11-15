@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { getServiceRevisions, getServiceRevisionsCount, approveServiceRevision, rejectServiceRevision } from '@/lib/supabase/queries/admin'
+import { getServiceRevisions, getServiceRevisionsCount, approveServiceRevision, rejectServiceRevision, type ServiceRevision } from '@/lib/supabase/queries/admin'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
 import EmptyState from '@/components/common/EmptyState'
@@ -10,7 +10,7 @@ import { logger } from '@/lib/logger'
 type RevisionStatus = 'all' | 'pending' | 'approved' | 'rejected'
 
 export default function AdminServiceRevisionsPage() {
-  const [revisions, setRevisions] = useState<any[]>([])
+  const [revisions, setRevisions] = useState<ServiceRevision[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState<RevisionStatus>('pending')
@@ -32,7 +32,7 @@ export default function AdminServiceRevisionsPage() {
       setLoading(true)
       setError(null)
       const data = await getServiceRevisions({
-        status: statusFilter === 'all' ? undefined : statusFilter as any,
+        status: statusFilter === 'all' ? undefined : (statusFilter as 'pending' | 'approved' | 'rejected'),
         searchQuery
       })
       setRevisions(data)
@@ -64,7 +64,7 @@ export default function AdminServiceRevisionsPage() {
     }
   }
 
-  async function handleApprove(revisionId: string) {
+  async function _handleApprove(revisionId: string) {
     if (!confirm('이 수정 요청을 승인하시겠습니까? 서비스가 업데이트됩니다.')) return
 
     try {
@@ -78,7 +78,7 @@ export default function AdminServiceRevisionsPage() {
     }
   }
 
-  async function handleReject(revisionId: string) {
+  async function _handleReject(revisionId: string) {
     const reason = prompt('반려 사유를 입력해주세요:')
     if (!reason) return
 

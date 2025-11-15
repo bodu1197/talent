@@ -47,11 +47,12 @@ export async function PATCH(request: NextRequest) {
     }
 
     return NextResponse.json({ user: data })
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     console.error('Profile update API error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
     return NextResponse.json({
       error: 'Internal server error',
-      message: error.message
+      message: errorMessage
     }, { status: 500 })
   }
 }

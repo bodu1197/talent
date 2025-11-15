@@ -82,7 +82,7 @@ export interface Service {
   price?: number
   delivery_days?: number
   revision_count?: number
-  status: 'draft' | 'pending' | 'active' | 'rejected' | 'suspended'
+  status: 'draft' | 'pending' | 'active' | 'inactive' | 'rejected' | 'suspended'
   rejection_reason: string | null
   view_count: number
   favorite_count: number
@@ -118,7 +118,7 @@ export interface Order {
   title?: string
   order_number?: string
   order_id?: string
-  status: 'pending_payment' | 'payment_completed' | 'in_progress' | 'in_review' | 'completed' | 'cancelled' | 'refunded' | 'paid' | 'delivered'
+  status: 'pending_payment' | 'payment_completed' | 'in_progress' | 'in_review' | 'completed' | 'cancelled' | 'refunded' | 'paid' | 'delivered' | 'revision'
   total_amount: number
   platform_fee: number
   seller_amount: number
@@ -278,11 +278,29 @@ export interface Portfolio {
   updated_at: string
 }
 
+// Payment type (matching database schema)
+export interface Payment {
+  id: string
+  order_id: string
+  amount: number
+  payment_method: string
+  payment_id: string | null
+  status: string
+  pg_provider: string | null
+  pg_tid: string | null
+  receipt_url: string | null
+  paid_at: string | null
+  failed_at: string | null
+  cancelled_at: string | null
+  created_at: string
+  updated_at: string
+}
+
 // Error type for catch blocks
 export type CatchError = unknown
 
 // API Response types
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   data?: T
   error?: string
   message?: string

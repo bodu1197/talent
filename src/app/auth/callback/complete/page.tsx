@@ -33,7 +33,7 @@ function CallbackCompleteContent() {
             nickname = stateData.nickname
             profileImage = stateData.profileImage
           } catch (error) {
-            logger.warn('Invalid or expired state parameter:', error)
+            logger.warn('Invalid or expired state parameter:', error instanceof Error ? { message: error.message } : { error: String(error) })
             // state가 유효하지 않아도 로그인은 성공했으므로 계속 진행
           }
         }

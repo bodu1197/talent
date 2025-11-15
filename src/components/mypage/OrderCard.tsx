@@ -3,7 +3,7 @@ import Link from 'next/link'
 interface OrderCardProps {
   order: {
     id: string
-    orderNumber: string
+    orderNumber: string | undefined
     title: string
     thumbnailUrl?: string | null
     buyerName?: string
@@ -55,7 +55,7 @@ export default function OrderCard({ order, mode, actions }: OrderCardProps) {
           <div className="flex items-start justify-between mb-3">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-sm text-gray-500">#{order.orderNumber}</span>
+                <span className="text-sm text-gray-500">#{order.orderNumber || 'N/A'}</span>
                 <Link
                   href={`/mypage/${mode}/orders/${order.id}`}
                   className="text-base font-bold text-gray-900 hover:text-brand-primary"

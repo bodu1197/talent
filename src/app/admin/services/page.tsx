@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { getAdminServices, getAdminServicesCount } from '@/lib/supabase/queries/admin'
+import { getAdminServices, getAdminServicesCount, type ServiceWithSeller } from '@/lib/supabase/queries/admin'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
 import EmptyState from '@/components/common/EmptyState'
@@ -10,7 +10,7 @@ import { logger } from '@/lib/logger'
 type ServiceStatus = 'all' | 'pending' | 'approved' | 'rejected'
 
 export default function AdminServicesPage() {
-  const [services, setServices] = useState<any[]>([])
+  const [services, setServices] = useState<ServiceWithSeller[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState<ServiceStatus>('pending')
@@ -250,12 +250,12 @@ export default function AdminServicesPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(service.status)}`}>
-                        {getStatusLabel(service.status)}
+                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(service.status || '')}`}>
+                        {getStatusLabel(service.status || '')}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(service.created_at).toLocaleDateString('ko-KR')}
+                      {service.created_at ? new Date(service.created_at).toLocaleDateString('ko-KR') : ''}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <div className="flex gap-2">

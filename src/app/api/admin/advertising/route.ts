@@ -1,32 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
 import { createServiceRoleClient } from '@/lib/supabase/singleton'
 import { checkAdminAuth } from '@/lib/admin/auth'
-
-interface SubscriptionWithDetails {
-  id: string
-  seller_id: string
-  service_id: string
-  monthly_price: number
-  status: string
-  payment_method: string
-  next_billing_date: string
-  last_billed_at: string | null
-  started_at: string
-  cancelled_at: string | null
-  expires_at: string | null
-  total_impressions: number
-  total_clicks: number
-  total_paid: number
-  created_at: string
-  seller?: {
-    email: string
-    full_name: string | null
-  }
-  service?: {
-    title: string
-  }
-}
 
 // GET - 광고 구독 목록 조회
 export async function GET(request: NextRequest) {
@@ -137,7 +111,7 @@ export async function PATCH(request: NextRequest) {
 
     const supabase = createServiceRoleClient()
     const body = await request.json()
-    const { subscriptionId, status, adminMemo } = body
+    const { subscriptionId, status } = body
 
     if (!subscriptionId) {
       return NextResponse.json(

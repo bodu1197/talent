@@ -40,50 +40,28 @@ export default function ServiceGrid({ initialServices }: ServiceGridProps) {
       })
     }
 
-    // 광고 서비스와 일반 서비스 분리 (광고 우선순위 유지)
-    const advertisedServices = filtered.filter(s => s.is_advertised === true)
-    const regularServices = filtered.filter(s => s.is_advertised !== true)
-
-    console.log('🔍 ServiceGrid - 광고 서비스:', advertisedServices.length, '개')
-    console.log('🔍 ServiceGrid - 일반 서비스:', regularServices.length, '개')
-
-    // 정렬 함수
-    const sortServices = (services: Service[]) => {
-      const sorted = [...services]
-      switch (sort) {
-        case 'latest':
-          // 이미 created_at 기준 정렬됨
-          break
-        case 'price_low':
-          sorted.sort((a, b) => (a.price || 0) - (b.price || 0))
-          break
-        case 'price_high':
-          sorted.sort((a, b) => (b.price || 0) - (a.price || 0))
-          break
-        case 'rating':
-          sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0))
-          break
-        case 'popular':
-        default:
-          sorted.sort((a, b) => (b.orders_count || 0) - (a.orders_count || 0))
-          break
-      }
-      return sorted
+    // 정렬이 기본(popular)이거나 latest일 경우, 서버에서 이미 정렬된 순서를 유지
+    // (서버에서 광고 우선 + 랜덤 셔플 완료)
+    if (sort === 'popular' || sort === 'latest') {
+      setServices(filtered)
+      return
     }
 
-    // 광고 서비스와 일반 서비스 각각 정렬
-    const sortedAdvertised = sortServices(advertisedServices)
-    const sortedRegular = sortServices(regularServices)
+    // 가격/별점 정렬만 클라이언트에서 처리
+    const sorted = [...filtered]
+    switch (sort) {
+      case 'price_low':
+        sorted.sort((a, b) => (a.price || 0) - (b.price || 0))
+        break
+      case 'price_high':
+        sorted.sort((a, b) => (b.price || 0) - (a.price || 0))
+        break
+      case 'rating':
+        sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0))
+        break
+    }
 
-    // 광고 서비스(정렬) + 일반 서비스(정렬) 순서로 합치기
-    const combined = [...sortedAdvertised, ...sortedRegular]
-
-    console.log('✅ ServiceGrid - 최종 순서 (상위 5개):')
-    combined.slice(0, 5).forEach((s, i) => {
-      console.log(`  ${i + 1}. ${s.title} ${s.is_advertised ? '[광고]' : ''}`)
-    })
-
-    setServices(combined)
+    setServices(sorted)
   }, [sort, price, initialServices])
 
   if (services.length === 0) {

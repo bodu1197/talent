@@ -1,17 +1,16 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { getAdminOrders, getAdminOrdersCount } from '@/lib/supabase/queries/admin'
+import { getAdminOrders, getAdminOrdersCount, type OrderWithRelations } from '@/lib/supabase/queries/admin'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
 import EmptyState from '@/components/common/EmptyState'
-import Link from 'next/link'
 import { logger } from '@/lib/logger'
 
 type OrderStatus = 'all' | 'paid' | 'in_progress' | 'delivered' | 'completed' | 'cancelled'
 
 export default function AdminOrdersPage() {
-  const [orders, setOrders] = useState<any[]>([])
+  const [orders, setOrders] = useState<OrderWithRelations[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState<OrderStatus>('all')
@@ -225,8 +224,8 @@ export default function AdminOrdersPage() {
                       <div className="flex items-center">
                         {order.service?.thumbnail_url && (
                           <img
-                            src={order.service.thumbnail_url}
-                            alt={order.service?.title}
+                            src={order.service.thumbnail_url || ''}
+                            alt={order.service?.title || ''}
                             className="w-10 h-10 rounded object-cover mr-3"
                           />
                         )}
@@ -245,16 +244,16 @@ export default function AdminOrdersPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
-                        {order.total_amount?.toLocaleString()}원
+                        {(order.total_amount ?? 0).toLocaleString()}원
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status)}`}>
-                        {getStatusLabel(order.status)}
+                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status || '')}`}>
+                        {getStatusLabel(order.status || '')}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(order.created_at).toLocaleDateString('ko-KR')}
+                      {order.created_at ? new Date(order.created_at).toLocaleDateString('ko-KR') : ''}
                     </td>
                   </tr>
                 ))}

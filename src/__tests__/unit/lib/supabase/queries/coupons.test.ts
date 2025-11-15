@@ -4,6 +4,13 @@ import { createClient } from '@/lib/supabase/client'
 
 vi.mock('@/lib/supabase/client')
 
+interface MockQueryBuilder {
+  select: ReturnType<typeof vi.fn>
+  eq: ReturnType<typeof vi.fn>
+  gte: ReturnType<typeof vi.fn>
+  order: ReturnType<typeof vi.fn>
+}
+
 describe('getUserCoupons', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -18,16 +25,16 @@ describe('getUserCoupons', () => {
       },
     ]
 
-    const mockBuilder: any = {
-      select: vi.fn(() => mockBuilder),
-      eq: vi.fn(() => mockBuilder),
-      gte: vi.fn(() => mockBuilder),
+    const mockBuilder: MockQueryBuilder = {
+      select: vi.fn(function(this: MockQueryBuilder) { return this }),
+      eq: vi.fn(function(this: MockQueryBuilder) { return this }),
+      gte: vi.fn(function(this: MockQueryBuilder) { return this }),
       order: vi.fn(() => Promise.resolve({ data: mockData, error: null })),
     }
 
     vi.mocked(createClient).mockReturnValue({
       from: vi.fn(() => mockBuilder),
-    } as any)
+    } as unknown as ReturnType<typeof createClient>)
 
     const result = await getUserCoupons('user-123')
     expect(result).toEqual(mockData)
@@ -36,31 +43,31 @@ describe('getUserCoupons', () => {
   it('에러 발생 시 throw 한다', async () => {
     const mockError = { message: 'Database error' }
 
-    const mockBuilder: any = {
-      select: vi.fn(() => mockBuilder),
-      eq: vi.fn(() => mockBuilder),
-      gte: vi.fn(() => mockBuilder),
+    const mockBuilder: MockQueryBuilder = {
+      select: vi.fn(function(this: MockQueryBuilder) { return this }),
+      eq: vi.fn(function(this: MockQueryBuilder) { return this }),
+      gte: vi.fn(function(this: MockQueryBuilder) { return this }),
       order: vi.fn(() => Promise.resolve({ data: null, error: mockError })),
     }
 
     vi.mocked(createClient).mockReturnValue({
       from: vi.fn(() => mockBuilder),
-    } as any)
+    } as unknown as ReturnType<typeof createClient>)
 
     await expect(getUserCoupons('user-123')).rejects.toThrow('Database error')
   })
 
   it('빈 배열을 반환할 수 있다', async () => {
-    const mockBuilder: any = {
-      select: vi.fn(() => mockBuilder),
-      eq: vi.fn(() => mockBuilder),
-      gte: vi.fn(() => mockBuilder),
+    const mockBuilder: MockQueryBuilder = {
+      select: vi.fn(function(this: MockQueryBuilder) { return this }),
+      eq: vi.fn(function(this: MockQueryBuilder) { return this }),
+      gte: vi.fn(function(this: MockQueryBuilder) { return this }),
       order: vi.fn(() => Promise.resolve({ data: [], error: null })),
     }
 
     vi.mocked(createClient).mockReturnValue({
       from: vi.fn(() => mockBuilder),
-    } as any)
+    } as unknown as ReturnType<typeof createClient>)
 
     const result = await getUserCoupons('user-123')
     expect(result).toEqual([])

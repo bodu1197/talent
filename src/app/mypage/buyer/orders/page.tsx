@@ -10,6 +10,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner'
 import EmptyState from '@/components/common/EmptyState'
 import ErrorState from '@/components/common/ErrorState'
 import { logger } from '@/lib/logger'
+import type { Order, Service, Seller } from '@/types/common'
 
 type OrderStatus = 'all' | 'paid' | 'in_progress' | 'revision' | 'delivered' | 'completed' | 'cancelled'
 
@@ -20,12 +21,21 @@ interface OrderFilter {
   endDate: string
 }
 
+interface BuyerOrderListItem extends Order {
+  order_number?: string
+  title?: string
+  delivery_date?: string | null
+  requirements?: string
+  service?: Service
+  seller?: Seller
+}
+
 function BuyerOrdersContent() {
   const { user } = useAuth()
   const searchParams = useSearchParams()
   const statusFromUrl = (searchParams.get('status') as OrderStatus) || 'all'
 
-  const [orders, setOrders] = useState<any[]>([])
+  const [orders, setOrders] = useState<BuyerOrderListItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [statusCounts, setStatusCounts] = useState({
@@ -201,7 +211,7 @@ function BuyerOrdersContent() {
     }
   }
 
-  const getActionButtons = (order: any) => {
+  const getActionButtons = (order: BuyerOrderListItem) => {
     if (order.status === 'revision') {
       return (
         <>
@@ -307,11 +317,11 @@ function BuyerOrdersContent() {
     )
   }
 
-  const formatOrderData = (order: any) => {
+  const formatOrderData = (order: BuyerOrderListItem) => {
     return {
       id: order.id,
       orderNumber: order.order_number,
-      title: order.title || order.service?.title,
+      title: order.title || order.service?.title || '제목 없음',
       thumbnailUrl: order.service?.thumbnail_url,
       sellerName: order.seller?.name,
       status: order.status,

@@ -2,13 +2,7 @@
 'use server';
 
 import { SupabaseManager } from '@/lib/supabase/singleton';
-import type {
-  AdvertisingCredit,
-  AdvertisingSubscription,
-  AdvertisingPayment
-} from '@/types/advertising';
 
-const MONTHLY_PRICE = 100000; // 월 10만원 고정
 const LAUNCH_PROMO_AMOUNT = 600000; // 런칭 프로모션 60만원
 const LAUNCH_PROMO_DURATION_MONTHS = 6;
 
@@ -499,7 +493,7 @@ export async function confirmBankTransferPayment(
     .eq('id', payment.subscription_id);
 
   // 세금계산서 자동 발행
-  const taxInvoice = await issueTaxInvoice(payment.id, adminId);
+  await issueTaxInvoice(payment.id, adminId);
 
   // 판매자의 user_id 조회
   const { data: sellerForNotification } = await supabase
@@ -527,7 +521,7 @@ export async function confirmBankTransferPayment(
  */
 export async function issueTaxInvoice(
   paymentId: string,
-  issuedBy: string
+  _issuedBy: string
 ) {
   const supabase = getAdminClient();
 

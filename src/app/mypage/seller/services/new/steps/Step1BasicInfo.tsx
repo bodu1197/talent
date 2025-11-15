@@ -12,13 +12,39 @@ interface Category {
   parent_id: string | null
 }
 
-interface Props {
-  formData: any
-  setFormData: (data: any) => void
-  categories: any[]
+interface ServiceFormData {
+  title: string
+  category_ids: string[]
+  price: string
+  delivery_days: string
+  revision_count: string
+  description: string
+  thumbnail_url: string
+  thumbnail_file: File | null
+  requirements: { question: string; required: boolean }[]
+  create_portfolio: boolean
+  portfolio_data: {
+    title: string
+    description: string
+    youtube_url: string
+    project_url: string
+    tags: string[]
+    images: File[]
+  }
+  features?: {
+    commercial_use?: boolean
+    source_files?: boolean
+    express_delivery?: boolean
+  }
 }
 
-export default function Step1BasicInfo({ formData, setFormData, categories }: Props) {
+interface Props {
+  formData: ServiceFormData
+  setFormData: (data: ServiceFormData) => void
+  categories: Category[]
+}
+
+export default function Step1BasicInfo({ formData, setFormData }: Props) {
   const [level1Categories, setLevel1Categories] = useState<Category[]>([])
   const [level2Categories, setLevel2Categories] = useState<Category[]>([])
   const [level3Categories, setLevel3Categories] = useState<Category[]>([])

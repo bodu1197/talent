@@ -4,8 +4,16 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 
+interface ProfileData {
+  name: string
+  email?: string
+  profile_image?: string | null
+  phone?: string | null
+  bio?: string | null
+}
+
 interface Props {
-  profile: any
+  profile: ProfileData
   isSeller: boolean
 }
 

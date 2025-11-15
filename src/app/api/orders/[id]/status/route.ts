@@ -100,7 +100,14 @@ export async function PATCH(
     }
 
     // 상태 업데이트
-    const updateData: any = {
+    interface OrderStatusUpdate {
+      status: string
+      updated_at: string
+      delivered_at?: string
+      completed_at?: string
+    }
+
+    const updateData: OrderStatusUpdate = {
       status: newStatus,
       updated_at: new Date().toISOString()
     }

@@ -144,7 +144,7 @@ export default function NotificationProvider({ children }: { children: React.Rea
           // 신호음 재생
           playNotificationSound()
 
-          logger.info('새 알림 수신:', newNotification)
+          logger.info('새 알림 수신:', { notificationId: newNotification.id, title: newNotification.title })
         }
       )
       .on(

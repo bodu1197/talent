@@ -3,10 +3,42 @@ import { createClient } from '@/lib/supabase/server'
 import { Service } from '@/types'
 import { getServicesByCategory } from '@/lib/supabase/queries/services'
 
-interface ServiceView {
+// Supabase returns nested relations as arrays
+interface SupabaseServiceView {
   service_id: string
   viewed_at: string
+  service: Array<{
+    id: string
+    title: string
+    price: number
+    thumbnail_url: string | null
+    orders_count: number
+    seller: Array<{
+      id: string
+      business_name: string
+      is_verified: boolean
+    }>
+    service_categories: Array<{
+      category_id: string
+      category: Array<{
+        id: string
+        name: string
+        slug: string
+      }>
+    }>
+  }>
+}
+
+interface ReviewData {
+  service_id: string
+  rating: number
+}
+
+interface ServiceItemDisplay {
   service: Service
+  isRecentView: boolean
+  viewIndex: number
+  viewed_at: string | null
 }
 
 export default async function RecentViewedServices() {
@@ -47,11 +79,11 @@ export default async function RecentViewedServices() {
     .order('viewed_at', { ascending: false })
     .limit(10)
 
-  const validViews = (recentViews || []).filter((v: any) => v.service)
+  const validViews = (recentViews || []).filter((v: SupabaseServiceView) => v.service && v.service.length > 0)
 
   // 최근 본 서비스들의 별점 계산
   if (validViews.length > 0) {
-    const serviceIds = validViews.map((v: any) => v.service_id)
+    const serviceIds = validViews.map((v: SupabaseServiceView) => v.service_id)
     const { data: reviewStats } = await supabase
       .from('reviews')
       .select('service_id, rating')
@@ -60,7 +92,7 @@ export default async function RecentViewedServices() {
 
     // 서비스별 평균 별점 계산
     const ratingMap = new Map<string, { sum: number, count: number }>()
-    reviewStats?.forEach((review: any) => {
+    reviewStats?.forEach((review: ReviewData) => {
       const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 }
       ratingMap.set(review.service_id, {
         sum: current.sum + review.rating,
@@ -69,11 +101,12 @@ export default async function RecentViewedServices() {
     })
 
     // 각 서비스에 별점 추가
-    validViews.forEach((view: any) => {
-      if (view.service) {
+    validViews.forEach((view: SupabaseServiceView) => {
+      if (view.service && view.service.length > 0) {
+        const serviceData = view.service[0] as unknown as Service & { rating?: number; review_count?: number }
         const stats = ratingMap.get(view.service_id)
-        view.service.rating = stats && stats.count > 0 ? stats.sum / stats.count : 0
-        view.service.review_count = stats?.count || 0
+        serviceData.rating = stats && stats.count > 0 ? stats.sum / stats.count : 0
+        serviceData.review_count = stats?.count || 0
       }
     })
   }
@@ -82,11 +115,13 @@ export default async function RecentViewedServices() {
 
   // 최근 본 서비스가 있으면 같은 카테고리의 서비스 가져오기
   if (validViews.length > 0) {
-    const firstService: any = validViews[0].service
+    const firstService = validViews[0].service[0]
     const categories = firstService.service_categories
 
     if (categories && categories.length > 0) {
-      const categoryId = categories[0].category?.id || categories[0].category_id
+      const categoryId = categories[0].category && categories[0].category.length > 0
+        ? categories[0].category[0].id
+        : categories[0].category_id
 
       if (categoryId) {
         // 필요한 개수만 계산
@@ -97,7 +132,7 @@ export default async function RecentViewedServices() {
           const categoryServices = await getServicesByCategory(categoryId, needed * 2)
 
           // 최근 본 서비스 제외
-          const viewedIds = validViews.map((v: any) => v.service_id)
+          const viewedIds = validViews.map((v: SupabaseServiceView) => v.service_id)
           const filtered = categoryServices.filter((s: Service) => !viewedIds.includes(s.id))
 
           // 랜덤 셔플
@@ -115,9 +150,9 @@ export default async function RecentViewedServices() {
   }
 
   // 최근 본 서비스 + 같은 카테고리 서비스 합치기
-  const allServices = [
-    ...validViews.map((v: any, index: number) => ({
-      service: v.service,
+  const allServices: ServiceItemDisplay[] = [
+    ...validViews.map((v: SupabaseServiceView, index: number) => ({
+      service: v.service[0] as unknown as Service,
       isRecentView: true,
       viewIndex: index,
       viewed_at: v.viewed_at

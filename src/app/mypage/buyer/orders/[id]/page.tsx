@@ -9,6 +9,7 @@ import { confirmOrder, requestRevision } from '@/lib/supabase/mutations/orders'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
 import { logger } from '@/lib/logger'
+import type { Order, Service, User, Seller, Deliverable } from '@/types/common'
 
 interface PageProps {
   params: Promise<{
@@ -16,10 +17,32 @@ interface PageProps {
   }>
 }
 
+interface OrderDetail extends Order {
+  order_number?: string
+  title?: string
+  package_type?: string
+  delivery_date?: string | null
+  delivered_at?: string | null
+  revision_count?: number
+  remaining_revisions?: number
+  requirements?: string
+  buyer_note?: string
+  seller_message?: string
+  service?: Service
+  seller?: Seller
+  buyer?: User
+}
+
+interface StatusHistory {
+  status: string
+  date: string
+  actor: string
+}
+
 export default function BuyerOrderDetailPage({ params }: PageProps) {
   const { id } = use(params)
   const { user } = useAuth()
-  const [order, setOrder] = useState<any>(null)
+  const [order, setOrder] = useState<OrderDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
@@ -149,13 +172,13 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
     }
   }
 
-  const statusHistory = [
+  const statusHistory: StatusHistory[] = [
     { status: '주문 접수', date: new Date(order.created_at).toLocaleString('ko-KR'), actor: '시스템' },
-    order.paid_at && { status: '결제 완료', date: new Date(order.paid_at).toLocaleString('ko-KR'), actor: '구매자' },
-    order.started_at && { status: '작업 시작', date: new Date(order.started_at).toLocaleString('ko-KR'), actor: '판매자' },
-    order.delivered_at && { status: '작업 완료', date: new Date(order.delivered_at).toLocaleString('ko-KR'), actor: '판매자' },
-    order.completed_at && { status: '구매 확정', date: new Date(order.completed_at).toLocaleString('ko-KR'), actor: '구매자' }
-  ].filter(Boolean)
+    order.paid_at ? { status: '결제 완료', date: new Date(order.paid_at).toLocaleString('ko-KR'), actor: '구매자' } : null,
+    order.started_at ? { status: '작업 시작', date: new Date(order.started_at).toLocaleString('ko-KR'), actor: '판매자' } : null,
+    order.delivered_at ? { status: '작업 완료', date: new Date(order.delivered_at).toLocaleString('ko-KR'), actor: '판매자' } : null,
+    order.completed_at ? { status: '구매 확정', date: new Date(order.completed_at).toLocaleString('ko-KR'), actor: '구매자' } : null
+  ].filter((item): item is StatusHistory => item !== null)
 
   return (
     <MypageLayoutWrapper mode="buyer">
@@ -303,18 +326,18 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
 
               {order.deliverables && order.deliverables.length > 0 ? (
                 <div className="space-y-3">
-                  {order.deliverables.map((file: any) => (
+                  {order.deliverables.map((file: Deliverable, index: number) => (
                     <div
-                      key={file.id}
+                      key={index}
                       className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                     >
                       <div className="flex items-center gap-3">
                         <i className="fas fa-file-alt text-blue-500 text-2xl"></i>
                         <div>
-                          <div className="font-medium text-gray-900">{file.file_name || file.fileName}</div>
+                          <div className="font-medium text-gray-900">{file.file_name}</div>
                           <div className="text-sm text-gray-600">
                             {file.file_size ? (file.file_size / 1024 / 1024).toFixed(2) : '0.00'}MB •
-                            {file.created_at ? new Date(file.created_at).toLocaleString('ko-KR') : ''}
+                            {file.uploaded_at ? new Date(file.uploaded_at).toLocaleString('ko-KR') : ''}
                           </div>
                         </div>
                       </div>

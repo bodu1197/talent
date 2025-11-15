@@ -133,9 +133,9 @@ export default function AdvertisingPage() {
         setSelectedService('');
         setSelectedMonths(1);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('광고 시작 실패:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
-      const errorMessage = error?.message || error?.toString() || '광고 시작에 실패했습니다';
+      const errorMessage = error instanceof Error ? error.message : (typeof error === 'string' ? error : '광고 시작에 실패했습니다');
       alert(errorMessage);
       // 에러 후 데이터 새로고침하여 UI 동기화
       await loadDashboard();
@@ -402,7 +402,7 @@ export default function AdvertisingPage() {
                             service.adDetails?.status === 'pending_payment' ? (
                               <button
                                 onClick={() => {
-                                  console.log('입금 확인 클릭:', service.id);
+                                  // console.log('입금 확인 클릭:', service.id);
                                   setSelectedService(service.id);
                                   setIsModalOpen(true);
                                 }}
@@ -413,7 +413,7 @@ export default function AdvertisingPage() {
                             ) : (
                               <button
                                 onClick={() => {
-                                  console.log('상세보기 클릭:', service.id);
+                                  // console.log('상세보기 클릭:', service.id);
                                   setSelectedService(service.id);
                                   setIsModalOpen(true);
                                 }}

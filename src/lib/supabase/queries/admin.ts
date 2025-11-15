@@ -1,4 +1,80 @@
 import { createClient } from '@/lib/supabase/client'
+import type { Tables } from '@/types/database'
+
+// Types for query results with joins
+type UserRow = Tables<'users'>
+type OrderRow = Tables<'orders'>
+type ServiceRow = Tables<'services'>
+type ReviewRow = Tables<'reviews'>
+
+export interface OrderWithRelations extends OrderRow {
+  buyer: Pick<UserRow, 'id' | 'name' | 'email'> | null
+  seller: Pick<UserRow, 'id' | 'name' | 'email'> | null
+  service: Pick<ServiceRow, 'id' | 'title' | 'thumbnail_url'> | null
+}
+
+export interface ReviewWithRelations extends ReviewRow {
+  buyer: Pick<UserRow, 'id' | 'name' | 'email'> | null
+  seller: Pick<UserRow, 'id' | 'name' | 'email'> | null
+  service: Pick<ServiceRow, 'id' | 'title'> | null
+}
+
+export interface ServiceWithSeller extends ServiceRow {
+  seller: {
+    id: string
+    business_name: string | null
+    user_id: string
+    user?: Pick<UserRow, 'id' | 'name' | 'email'> | null
+  } | null
+}
+
+export interface ServiceRevision {
+  id: string
+  service_id: string
+  seller_id: string
+  title: string
+  description: string
+  price: number
+  delivery_days: number
+  revision_count: number | null
+  thumbnail_url: string | null
+  status: string
+  created_at: string
+  reviewed_at: string | null
+  admin_note: string | null
+  revision_note: string | null
+  service: ServiceWithSeller | null
+  seller: {
+    id: string
+    business_name: string | null
+    user_id: string
+    user: Pick<UserRow, 'id' | 'name' | 'email'> | null
+  } | null
+}
+
+export interface ServiceRevisionWithCategories extends ServiceRevision {
+  revision_categories: Array<{ category: { id: string; name: string } }>
+}
+
+export interface ServiceDetailWithCategories extends ServiceRow {
+  service_categories: Array<{ category: { id: string; name: string } }> | null
+  seller: {
+    id: string
+    business_name: string | null
+    user_id: string
+    user: Pick<UserRow, 'id' | 'name' | 'email'> | null
+  } | null
+}
+
+export interface AdminUserProfile {
+  id: string
+  email: string
+  role: string
+  created_at: string
+  status: string
+  name: string
+  profile_image: string | null
+}
 
 // 관리자 대시보드 통계
 export async function getAdminDashboardStats() {
@@ -34,7 +110,7 @@ export async function getAdminDashboardStats() {
       .eq('status', 'pending')
       .throwOnError()
     pendingReports = count || 0
-  } catch (err) {
+  } catch {
     // reports 테이블이 없으면 0 반환
     pendingReports = 0
   }
@@ -74,10 +150,10 @@ export async function getAdminDashboardStats() {
 }
 
 // 최근 주문 목록
-export async function getAdminRecentOrders(limit: number = 10) {
+export async function getAdminRecentOrders(limit: number = 10): Promise<OrderWithRelations[]> {
   const supabase = createClient()
 
-  const { data, error } = await supabase
+  const { data, error} = await supabase
     .from('orders')
     .select(`
       *,
@@ -89,11 +165,11 @@ export async function getAdminRecentOrders(limit: number = 10) {
     .limit(limit)
 
   if (error) throw error
-  return data
+  return (data as OrderWithRelations[]) || []
 }
 
 // 최근 가입 회원
-export async function getAdminRecentUsers(limit: number = 10) {
+export async function getAdminRecentUsers(limit: number = 10): Promise<UserRow[]> {
   const supabase = createClient()
 
   const { data, error } = await supabase
@@ -103,11 +179,11 @@ export async function getAdminRecentUsers(limit: number = 10) {
     .limit(limit)
 
   if (error) throw error
-  return data
+  return data || []
 }
 
 // 최근 리뷰
-export async function getAdminRecentReviews(limit: number = 10) {
+export async function getAdminRecentReviews(limit: number = 10): Promise<ReviewWithRelations[]> {
   const supabase = createClient()
 
   const { data, error } = await supabase
@@ -122,7 +198,7 @@ export async function getAdminRecentReviews(limit: number = 10) {
     .limit(limit)
 
   if (error) throw error
-  return data
+  return (data as ReviewWithRelations[]) || []
 }
 
 // 일별 매출 통계 (최근 7일)
@@ -175,7 +251,7 @@ export async function getAdminUsers(filters?: {
   role?: string
   searchQuery?: string
   status?: string
-}) {
+}): Promise<AdminUserProfile[]> {
   const supabase = createClient()
 
   let query = supabase
@@ -199,7 +275,7 @@ export async function getAdminUsers(filters?: {
   }
 
   // profiles 데이터를 users 형식으로 변환
-  return profiles?.map((profile: any) => ({
+  return profiles?.map((profile: { user_id: string; role?: string; created_at: string; name?: string; profile_image?: string | null }): AdminUserProfile => ({
     id: profile.user_id,
     email: 'user@example.com', // TODO: Server Component에서 auth.users 조회 필요
     role: profile.role || 'buyer',
@@ -235,7 +311,7 @@ export async function getAdminUsersCount(role?: string) {
 export async function getAdminOrders(filters?: {
   status?: string
   searchQuery?: string
-}) {
+}): Promise<OrderWithRelations[]> {
   const supabase = createClient()
 
   let query = supabase
@@ -260,7 +336,7 @@ export async function getAdminOrders(filters?: {
   const { data, error } = await query
 
   if (error) throw error
-  return data
+  return (data as OrderWithRelations[]) || []
 }
 
 // 관리자 주문 상태별 카운트
@@ -285,7 +361,7 @@ export async function getAdminOrdersCount(status?: string) {
 export async function getAdminServices(filters?: {
   status?: string
   searchQuery?: string
-}) {
+}): Promise<ServiceWithSeller[]> {
   const supabase = createClient()
 
   let query = supabase
@@ -314,7 +390,7 @@ export async function getAdminServices(filters?: {
 
   // seller의 user 정보를 별도로 조회
   if (services && services.length > 0) {
-    const userIds = [...new Set(services.map(s => s.seller?.user_id).filter(Boolean))]
+    const userIds = [...new Set(services.map(s => s.seller?.user_id).filter(Boolean))] as string[]
 
     if (userIds.length > 0) {
       const { data: users } = await supabase
@@ -324,15 +400,15 @@ export async function getAdminServices(filters?: {
 
       // services에 user 정보 병합
       const userMap = new Map(users?.map(u => [u.id, u]) || [])
-      services.forEach(service => {
+      services.forEach((service: ServiceWithSeller) => {
         if (service.seller?.user_id) {
-          service.seller.user = userMap.get(service.seller.user_id)
+          service.seller.user = userMap.get(service.seller.user_id) || null
         }
       })
     }
   }
 
-  return services
+  return (services as ServiceWithSeller[]) || []
 }
 
 // 관리자 서비스 상태별 카운트
@@ -357,7 +433,7 @@ export async function getAdminServicesCount(status?: string) {
 export async function getAdminReviews(filters?: {
   rating?: number
   searchQuery?: string
-}) {
+}): Promise<ReviewWithRelations[]> {
   const supabase = createClient()
 
   let query = supabase
@@ -368,7 +444,7 @@ export async function getAdminReviews(filters?: {
       seller:users!seller_id(id, name, email),
       service:services(id, title)
     `)
-    .order('created_at', { ascending: false })
+    .order('created_at', { ascending: false})
 
   if (filters?.rating && filters.rating > 0) {
     query = query.eq('rating', filters.rating)
@@ -381,14 +457,14 @@ export async function getAdminReviews(filters?: {
   const { data, error } = await query
 
   if (error) throw error
-  return data
+  return (data as ReviewWithRelations[]) || []
 }
 
 // 서비스 수정 요청 조회
 export async function getServiceRevisions(filters?: {
   status?: 'pending' | 'approved' | 'rejected'
   searchQuery?: string
-}) {
+}): Promise<ServiceRevision[]> {
   const supabase = createClient()
 
   let query = supabase
@@ -418,10 +494,10 @@ export async function getServiceRevisions(filters?: {
   if (error) throw error
 
   // 사용자 정보를 별도로 조회
-  const userIds = [...new Set(revisions?.map((r: any) => r.seller?.user_id).filter(Boolean))] as string[]
+  const userIds = [...new Set(revisions?.map((r: ServiceRevision) => r.seller?.user_id).filter(Boolean))] as string[]
 
   if (userIds.length === 0) {
-    return revisions?.map((r: any) => ({
+    return revisions?.map((r: ServiceRevision) => ({
       ...r,
       seller: r.seller ? { ...r.seller, user: null } : null
     })) || []
@@ -435,7 +511,7 @@ export async function getServiceRevisions(filters?: {
   // 사용자 정보 병합
   const usersMap = new Map(users?.map(u => [u.id, u]) || [])
 
-  return revisions?.map((revision: any) => ({
+  return revisions?.map((revision: ServiceRevision) => ({
     ...revision,
     seller: revision.seller ? {
       ...revision.seller,
@@ -491,7 +567,7 @@ export async function rejectServiceRevision(revisionId: string, adminNote?: stri
 }
 
 // 서비스 수정 요청 상세 조회
-export async function getServiceRevisionDetail(revisionId: string, supabaseClient?: any) {
+export async function getServiceRevisionDetail(revisionId: string, supabaseClient?: ReturnType<typeof createClient>): Promise<ServiceRevisionWithCategories & { service: ServiceDetailWithCategories }> {
   const supabase = supabaseClient || createClient()
 
   // 수정 요청 정보
@@ -516,15 +592,15 @@ export async function getServiceRevisionDetail(revisionId: string, supabaseClien
     .select('category_id')
     .eq('service_id', revision.service_id)
 
-  let serviceCategories: any[] = []
+  let serviceCategories: Array<{ category: { id: string; name: string } }> = []
   if (serviceCategoryLinks && serviceCategoryLinks.length > 0) {
-    const categoryIds = serviceCategoryLinks.map((sc: any) => sc.category_id)
+    const categoryIds = serviceCategoryLinks.map((sc: { category_id: string }) => sc.category_id)
     const { data: cats } = await supabase
       .from('categories')
       .select('id, name')
       .in('id', categoryIds)
 
-    serviceCategories = cats?.map((cat: any) => ({ category: cat })) || []
+    serviceCategories = cats?.map((cat: { id: string; name: string }) => ({ category: cat })) || []
   }
 
   // 수정 요청의 카테고리
@@ -533,15 +609,15 @@ export async function getServiceRevisionDetail(revisionId: string, supabaseClien
     .select('category_id')
     .eq('revision_id', revisionId)
 
-  let revisionCategories: any[] = []
+  let revisionCategories: Array<{ category: { id: string; name: string } }> = []
   if (revisionCategoryLinks && revisionCategoryLinks.length > 0) {
-    const categoryIds = revisionCategoryLinks.map((rc: any) => rc.category_id)
+    const categoryIds = revisionCategoryLinks.map((rc: { category_id: string }) => rc.category_id)
     const { data: cats } = await supabase
       .from('categories')
       .select('id, name')
       .in('id', categoryIds)
 
-    revisionCategories = cats?.map((cat: any) => ({ category: cat })) || []
+    revisionCategories = cats?.map((cat: { id: string; name: string }) => ({ category: cat })) || []
   }
 
   // 판매자 정보
@@ -552,7 +628,7 @@ export async function getServiceRevisionDetail(revisionId: string, supabaseClien
     .single()
 
   // seller user 정보
-  let sellerWithUser: any = seller
+  let sellerWithUser: { id: string; business_name: string | null; user_id: string; user: Pick<UserRow, 'id' | 'name' | 'email'> | null } | null = seller ? { ...seller, user: null } : null
   if (seller?.user_id) {
     const { data: userData } = await supabase
       .from('users')
@@ -569,9 +645,10 @@ export async function getServiceRevisionDetail(revisionId: string, supabaseClien
     ...revision,
     service: {
       ...service,
-      service_categories: serviceCategories
-    },
+      service_categories: serviceCategories,
+      seller: null
+    } as ServiceDetailWithCategories,
     seller: sellerWithUser,
     revision_categories: revisionCategories
-  }
+  } as ServiceRevisionWithCategories & { service: ServiceDetailWithCategories }
 }

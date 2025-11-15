@@ -78,7 +78,7 @@ export class SupabaseManager {
           set(name: string, value: string, options: CookieOptions) {
             try {
               cookieStore.set({ name, value, ...options })
-            } catch (error) {
+            } catch {
               // Server Component에서 호출된 경우 무시
               // 미들웨어에서 세션 새로고침을 처리합니다
             }
@@ -86,7 +86,7 @@ export class SupabaseManager {
           remove(name: string, options: CookieOptions) {
             try {
               cookieStore.set({ name, value: '', ...options })
-            } catch (error) {
+            } catch {
               // Server Component에서 호출된 경우 무시
             }
           },

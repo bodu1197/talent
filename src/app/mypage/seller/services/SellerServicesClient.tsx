@@ -6,11 +6,23 @@ import EmptyState from '@/components/common/EmptyState'
 import { createClient } from '@/lib/supabase/client'
 import { logger } from '@/lib/logger'
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
+import type { Service } from '@/types/common'
 
 type ServiceStatus = 'all' | 'active' | 'inactive' | 'pending'
 
+interface ServiceWithRejection extends Service {
+  hasPendingRevision?: boolean
+  order_count?: number
+  _rejectedRevision?: {
+    id: string
+    rejection_reason: string
+    reviewed_at?: string
+    admin_note?: string
+  }
+}
+
 interface Props {
-  initialServices: any[]
+  initialServices: ServiceWithRejection[]
   statusFilter: ServiceStatus
   statusCounts: {
     all: number
@@ -37,9 +49,9 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
       if (error) throw error
 
       // UI 업데이트
-      setServices(services.map((service: any) => {
-        if (service.rejectedRevision?.id === revisionId) {
-          const { rejectedRevision, ...rest } = service
+      setServices(services.map((service: ServiceWithRejection) => {
+        if (service._rejectedRevision?.id === revisionId) {
+          const { _rejectedRevision, ...rest } = service
           return rest
         }
         return service
@@ -70,7 +82,7 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
       if (error) throw error
 
       // UI 업데이트
-      setServices(services.map((service: any) =>
+      setServices(services.map((service: ServiceWithRejection) =>
         service.id === serviceId ? { ...service, status: newStatus } : service
       ))
 
@@ -111,7 +123,7 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
       if (deleteError) throw deleteError
 
       // UI 업데이트
-      setServices(services.filter((service: any) => service.id !== serviceId))
+      setServices(services.filter((service: ServiceWithRejection) => service.id !== serviceId))
 
       alert('서비스가 성공적으로 삭제되었습니다.')
     } catch (err: unknown) {
@@ -311,23 +323,25 @@ export default function SellerServicesClient({ initialServices, statusFilter, st
                 </div>
 
                 {/* 반려 메시지 */}
-                {service.rejectedRevision && (
+                {service._rejectedRevision && (
                   <div className="mt-3 mx-4 mb-4 p-4 bg-red-50 border-l-4 border-red-500 rounded">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           <i className="fas fa-exclamation-circle text-red-500"></i>
                           <span className="font-bold text-red-800">수정 요청이 반려되었습니다</span>
-                          <span className="text-xs text-red-600">
-                            ({new Date(service.rejectedRevision.reviewed_at).toLocaleDateString('ko-KR')})
-                          </span>
+                          {service._rejectedRevision.reviewed_at && (
+                            <span className="text-xs text-red-600">
+                              ({new Date(service._rejectedRevision.reviewed_at).toLocaleDateString('ko-KR')})
+                            </span>
+                          )}
                         </div>
                         <p className="text-sm text-red-700 whitespace-pre-wrap">
-                          {service.rejectedRevision.admin_note}
+                          {service._rejectedRevision.admin_note}
                         </p>
                       </div>
                       <button
-                        onClick={() => handleDismissRejection(service.rejectedRevision.id)}
+                        onClick={() => service._rejectedRevision && handleDismissRejection(service._rejectedRevision.id)}
                         className="ml-4 px-3 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors"
                       >
                         <i className="fas fa-times mr-1"></i>

@@ -29,8 +29,8 @@ export default function BuyerReviewsClient({
   const [reviewContent, setReviewContent] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
-  const [pendingReviews, setPendingReviews] = useState(initialPendingReviews)
-  const [writtenReviews, setWrittenReviews] = useState(initialWrittenReviews)
+  const [pendingReviews, _setPendingReviews] = useState(initialPendingReviews)
+  const [writtenReviews, _setWrittenReviews] = useState(initialWrittenReviews)
 
   useEffect(() => {
     setActiveTab(tabFromUrl as 'pending' | 'written')

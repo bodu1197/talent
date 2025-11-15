@@ -5,9 +5,16 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import { logger } from '@/lib/logger'
+import type { Seller } from '@/types/common'
+
+interface SellerProfile extends Omit<Seller, 'created_at' | 'updated_at' | 'bio'> {
+  display_name?: string
+  bio?: string | null
+  profile_image?: string | null
+}
 
 interface Props {
-  profile: any
+  profile: SellerProfile
 }
 
 export default function SellerProfileEditClient({ profile: initialProfile }: Props) {
@@ -35,7 +42,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
       if (profileError) throw profileError
 
       // 2. Update sellers table (remove display_name, bio, profile_image from update)
-      const { display_name, bio, profile_image, ...sellerData } = profile
+      const { display_name: _display_name, bio: _bio, profile_image: _profile_image, ...sellerData } = profile
       const { error: sellerError } = await supabase
         .from('sellers')
         .update(sellerData)

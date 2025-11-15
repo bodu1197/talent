@@ -149,7 +149,7 @@ export async function DELETE(request: NextRequest) {
 }
 
 // GET: 찜 목록 조회
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const supabase = await createClient()
 
@@ -191,9 +191,16 @@ export async function GET(request: NextRequest) {
 
     // orders_count를 order_count로 매핑
     if (data && data.length > 0) {
+      interface ServiceWithOrdersCount {
+        orders_count?: number
+        order_count?: number
+        [key: string]: unknown
+      }
+
       data.forEach(item => {
         if (item.service) {
-          (item.service as any).order_count = (item.service as any).orders_count || 0
+          const service = item.service as unknown as ServiceWithOrdersCount
+          service.order_count = service.orders_count || 0
         }
       })
     }

@@ -16,5 +16,16 @@ export default async function BuyerReviewsPage() {
     getBuyerReviews(user.id)
   ])
 
-  return <BuyerReviewsClient initialPendingReviews={pendingReviews as any} initialWrittenReviews={writtenReviews as any} userId={user.id} />
+  // Map Supabase array results to expected types
+  const mappedPendingReviews = (pendingReviews as unknown[]).map((order: unknown) => {
+    const orderItem = order as Record<string, unknown> & { service?: unknown[]; seller?: unknown[] }
+    return {
+      ...orderItem,
+      service: orderItem.service?.[0] || null,
+      seller: orderItem.seller?.[0] || null
+    }
+  })
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return <BuyerReviewsClient initialPendingReviews={mappedPendingReviews as any} initialWrittenReviews={writtenReviews} userId={user.id} />
 }

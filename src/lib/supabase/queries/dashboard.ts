@@ -96,6 +96,7 @@ export async function getBuyerRecentFavorites(userId: string, limit: number = 5)
       .from('favorites')
       .select(`
         id,
+        created_at,
         service:services(
           id, title,
           seller:users!seller_id(id, name)
@@ -117,12 +118,13 @@ export async function getBuyerRecentFavorites(userId: string, limit: number = 5)
   }
 }
 
-export async function getBuyerBenefits(userId: string) {
+export async function getBuyerBenefits(_userId: string) {
   // Coupon/cash features have been removed
   // Return empty benefits to avoid querying deleted tables
   return {
+    points: 0,
     coupons: 0,
-    cash: 0
+    membershipLevel: 'basic'
   }
 }
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { getAdminReviews } from '@/lib/supabase/queries/admin'
+import { getAdminReviews, type ReviewWithRelations } from '@/lib/supabase/queries/admin'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorState from '@/components/common/ErrorState'
 import EmptyState from '@/components/common/EmptyState'
@@ -10,7 +10,7 @@ import { logger } from '@/lib/logger'
 type RatingFilter = 'all' | '5' | '4' | '3' | '2' | '1'
 
 export default function AdminReviewsPage() {
-  const [reviews, setReviews] = useState<any[]>([])
+  const [reviews, setReviews] = useState<ReviewWithRelations[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [ratingFilter, setRatingFilter] = useState<RatingFilter>('all')
@@ -40,7 +40,8 @@ export default function AdminReviewsPage() {
   const filteredReviews = reviews.filter(review => {
     if (searchQuery) {
       const query = searchQuery.toLowerCase()
-      return review.content?.toLowerCase().includes(query) ||
+      const reviewComment = review.comment || ''
+      return reviewComment.toLowerCase().includes(query) ||
              review.buyer?.name?.toLowerCase().includes(query) ||
              review.seller?.name?.toLowerCase().includes(query)
     }
@@ -186,13 +187,13 @@ export default function AdminReviewsPage() {
                   <div>
                     <div className="font-medium text-gray-900">{review.buyer?.name}</div>
                     <div className="text-sm text-gray-600">
-                      {new Date(review.created_at).toLocaleDateString('ko-KR')}
+                      {review.created_at ? new Date(review.created_at).toLocaleDateString('ko-KR') : ''}
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-1">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <i key={star} className={`fas fa-star ${star <= review.rating ? 'text-yellow-400' : 'text-gray-300'}`}></i>
+                    <i key={star} className={`fas fa-star ${star <= (review.rating ?? 0) ? 'text-yellow-400' : 'text-gray-300'}`}></i>
                   ))}
                 </div>
               </div>
@@ -203,7 +204,7 @@ export default function AdminReviewsPage() {
                 </div>
               </div>
 
-              <p className="text-gray-700 mb-4">{review.content}</p>
+              <p className="text-gray-700 mb-4">{review.comment}</p>
 
               {review.seller_reply && (
                 <div className="bg-gray-50 rounded-lg p-4">

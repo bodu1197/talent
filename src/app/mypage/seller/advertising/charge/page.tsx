@@ -5,6 +5,22 @@ import { useRouter } from 'next/navigation'
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
 import { createClient } from '@/lib/supabase/client'
 
+interface PaymentResponse {
+  success: boolean
+  imp_uid: string
+  merchant_uid: string
+  error_msg?: string
+}
+
+interface Window {
+  IMP?: {
+    init: (code: string) => void
+    request_pay: (params: Record<string, unknown>, callback: (response: PaymentResponse) => void) => void
+  }
+}
+
+declare let window: Window
+
 const CREDIT_PACKAGES = [
   { amount: 100000, bonus: 0, label: '10만원' },
   { amount: 300000, bonus: 10000, label: '30만원', popular: true },
@@ -48,13 +64,13 @@ export default function AdvertisingChargePage() {
       }
 
       // PortOne 결제 호출
-      const IMP = (window as any).IMP
+      const IMP = window.IMP
       if (!IMP) {
         alert('결제 모듈을 불러오는 중입니다. 잠시 후 다시 시도해주세요.')
         return
       }
 
-      IMP.init(process.env.NEXT_PUBLIC_PORTONE_IMP_CODE)
+      IMP.init(process.env.NEXT_PUBLIC_PORTONE_IMP_CODE!)
       IMP.request_pay({
         pg: 'html5_inicis',
         pay_method: 'card',
@@ -63,7 +79,7 @@ export default function AdvertisingChargePage() {
         amount: pkg.amount,
         buyer_email: user.email,
         buyer_name: user.user_metadata?.name || '구매자'
-      }, async (rsp: any) => {
+      }, async (rsp: PaymentResponse) => {
         if (rsp.success) {
           // 결제 검증
           const verifyResponse = await fetch('/api/payments/advertising/verify', {

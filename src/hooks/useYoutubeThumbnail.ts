@@ -78,7 +78,7 @@ export function useYoutubeThumbnail() {
               blob
             }
           }
-        } catch (err) {
+        } catch {
           continue
         }
       }

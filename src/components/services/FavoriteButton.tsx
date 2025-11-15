@@ -10,6 +10,13 @@ interface FavoriteButtonProps {
   className?: string
 }
 
+interface FavoriteData {
+  id: string
+  service_id: string
+  user_id: string
+  created_at: string
+}
+
 export default function FavoriteButton({ serviceId, className = '' }: FavoriteButtonProps) {
   const { user } = useAuth()
   const router = useRouter()
@@ -25,7 +32,7 @@ export default function FavoriteButton({ serviceId, className = '' }: FavoriteBu
         const response = await fetch('/api/user/service-favorites')
         if (response.ok) {
           const { data } = await response.json()
-          const favorited = data?.some((fav: any) => fav.service_id === serviceId)
+          const favorited = data?.some((fav: FavoriteData) => fav.service_id === serviceId)
           setIsFavorited(favorited)
         }
       } catch (error) {

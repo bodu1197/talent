@@ -1,6 +1,53 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
+interface CategoryVisit {
+  category_name: string
+  category_slug: string
+  category_id: string
+}
+
+interface CategoryLookup {
+  slug: string
+  found: boolean
+  uuid?: string
+  error: unknown
+}
+
+interface ServiceLink {
+  category: string
+  uuid: string
+  linksCount: number
+  error: unknown
+}
+
+interface ServiceDebug {
+  category: string
+  serviceIds: number
+  servicesFound: number
+  error: unknown
+  services?: Array<{ id: string; title: string }>
+}
+
+interface DebugInfo {
+  step1_rpc: {
+    count: number
+    error: unknown
+    categories?: Array<{
+      name: string
+      slug: string
+      id: string
+    }>
+  }
+  step2_category_lookup: CategoryLookup[]
+  step3_service_links: ServiceLink[]
+  step4_services: ServiceDebug[]
+  final: {
+    categoriesWithServices: number
+    categoriesFiltered: number
+  }
+}
+
 export async function GET() {
   try {
     const supabase = await createClient()
@@ -18,11 +65,11 @@ export async function GET() {
         p_limit: 10
       })
 
-    const debugInfo: any = {
+    const debugInfo: DebugInfo = {
       step1_rpc: {
         count: topCategories?.length || 0,
         error: rpcError,
-        categories: topCategories?.map((c: any) => ({
+        categories: (topCategories as CategoryVisit[] | null)?.map((c) => ({
           name: c.category_name,
           slug: c.category_slug,
           id: c.category_id

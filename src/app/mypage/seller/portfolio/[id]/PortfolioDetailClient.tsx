@@ -27,7 +27,7 @@ interface Props {
   sellerId: string
 }
 
-export default function PortfolioDetailClient({ portfolio, sellerId }: Props) {
+export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }: Props) {
   const router = useRouter()
   const [deleting, setDeleting] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)

@@ -1,11 +1,11 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { approveServiceRevision, rejectServiceRevision } from '@/lib/supabase/queries/admin'
+import { approveServiceRevision, rejectServiceRevision, type ServiceRevisionWithCategories, type ServiceDetailWithCategories } from '@/lib/supabase/queries/admin'
 import { logger } from '@/lib/logger'
 
 interface Props {
-  revision: any
+  revision: ServiceRevisionWithCategories & { service: ServiceDetailWithCategories }
 }
 
 export default function RevisionDetailClient({ revision }: Props) {
@@ -112,7 +112,7 @@ export default function RevisionDetailClient({ revision }: Props) {
             <div className="mb-4">
               <span className="text-sm text-gray-600 block mb-1">카테고리</span>
               <div className="flex flex-wrap gap-2">
-                {revision.service?.service_categories?.map((sc: any, idx: number) => (
+                {revision.service?.service_categories?.map((sc: { category: { id: string; name: string } }, idx: number) => (
                   <span key={idx} className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-sm">
                     {sc.category?.name}
                   </span>
@@ -167,7 +167,7 @@ export default function RevisionDetailClient({ revision }: Props) {
             <div className="mb-4">
               <span className="text-sm text-gray-600 block mb-1">카테고리</span>
               <div className="flex flex-wrap gap-2">
-                {revision.revision_categories?.map((rc: any, idx: number) => (
+                {revision.revision_categories?.map((rc: { category: { id: string; name: string } }, idx: number) => (
                   <span key={idx} className="px-2 py-1 bg-orange-50 text-orange-700 rounded text-sm font-medium">
                     {rc.category?.name}
                   </span>

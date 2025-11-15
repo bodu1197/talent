@@ -13,9 +13,52 @@ interface Props {
   orderId: string
 }
 
+interface Deliverable {
+  id: string
+  file_name: string
+  file_url: string
+  file_size: number
+  created_at: string
+}
+
+interface ServiceData {
+  id: string
+  title: string
+  thumbnail_url: string | null
+}
+
+interface BuyerData {
+  id: string
+  name: string
+  profile_image?: string | null
+}
+
+interface OrderData {
+  id: string
+  order_number?: string
+  status: string
+  total_amount: number
+  created_at: string
+  updated_at?: string
+  paid_at?: string
+  started_at?: string
+  delivered_at?: string
+  completed_at?: string
+  title?: string
+  package?: string
+  revision_count?: number
+  delivery_date?: string
+  requirements?: string
+  buyer_note?: string
+  deliverables?: Deliverable[]
+  service?: ServiceData
+  buyer?: BuyerData
+  [key: string]: unknown
+}
+
 export default function SellerOrderDetailClient({ orderId }: Props) {
-  const router = useRouter()
-  const [order, setOrder] = useState<any>(null)
+  const _router = useRouter()
+  const [order, setOrder] = useState<OrderData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [showDeliveryModal, setShowDeliveryModal] = useState(false)
@@ -130,10 +173,10 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
 
   const statusHistory = [
     { status: '주문 접수', date: new Date(order.created_at).toLocaleString('ko-KR'), actor: '시스템' },
-    ...(order.paid_at ? [{ status: '결제 완료', date: new Date(order.paid_at).toLocaleString('ko-KR'), actor: '구매자' }] : []),
-    ...(order.started_at ? [{ status: '작업 시작', date: new Date(order.started_at).toLocaleString('ko-KR'), actor: '판매자' }] : []),
-    ...(order.delivered_at ? [{ status: '납품 완료', date: new Date(order.delivered_at).toLocaleString('ko-KR'), actor: '판매자' }] : []),
-    ...(order.completed_at ? [{ status: '구매 확정', date: new Date(order.completed_at).toLocaleString('ko-KR'), actor: '구매자' }] : [])
+    ...(order.paid_at && typeof order.paid_at === 'string' ? [{ status: '결제 완료', date: new Date(order.paid_at).toLocaleString('ko-KR'), actor: '구매자' }] : []),
+    ...(order.started_at && typeof order.started_at === 'string' ? [{ status: '작업 시작', date: new Date(order.started_at).toLocaleString('ko-KR'), actor: '판매자' }] : []),
+    ...(order.delivered_at && typeof order.delivered_at === 'string' ? [{ status: '납품 완료', date: new Date(order.delivered_at).toLocaleString('ko-KR'), actor: '판매자' }] : []),
+    ...(order.completed_at && typeof order.completed_at === 'string' ? [{ status: '구매 확정', date: new Date(order.completed_at).toLocaleString('ko-KR'), actor: '구매자' }] : [])
   ]
 
   return (
@@ -195,7 +238,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                     )}
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg font-bold text-gray-900 mb-2">{order.title || order.service?.title}</h3>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">{order.title || order.service?.title || '서비스 제목 없음'}</h3>
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div>
                         <span className="text-gray-600">패키지:</span>
@@ -207,12 +250,12 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                       </div>
                       <div>
                         <span className="text-gray-600">예상 완료일:</span>
-                        <span className="ml-2 font-medium">{order.delivery_date ? new Date(order.delivery_date).toLocaleDateString('ko-KR') : '-'}</span>
+                        <span className="ml-2 font-medium">{order.delivery_date && typeof order.delivery_date === 'string' ? new Date(order.delivery_date).toLocaleDateString('ko-KR') : '-'}</span>
                       </div>
                       <div>
                         <span className="text-gray-600">남은 기간:</span>
                         <span className="ml-2 font-medium text-red-600">
-                          {order.delivery_date ? `D-${Math.ceil((new Date(order.delivery_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))}일` : '-'}
+                          {order.delivery_date && typeof order.delivery_date === 'string' ? `D-${Math.ceil((new Date(order.delivery_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))}일` : '-'}
                         </span>
                       </div>
                     </div>
@@ -245,7 +288,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
               <h2 className="text-xl font-bold text-gray-900 mb-4">납품 파일</h2>
               {order.deliverables && order.deliverables.length > 0 ? (
                 <div className="space-y-3">
-                  {order.deliverables.map((file: any) => (
+                  {order.deliverables.map((file) => (
                     <div
                       key={file.id}
                       className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
@@ -255,7 +298,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                         <div>
                           <div className="font-medium text-gray-900">{file.file_name}</div>
                           <div className="text-sm text-gray-600">
-                            {(file.file_size / 1024 / 1024).toFixed(2)}MB • {new Date(file.created_at).toLocaleString('ko-KR')}
+                            {(file.file_size / 1024 / 1024).toFixed(2)}MB • {file.created_at && typeof file.created_at === 'string' ? new Date(file.created_at).toLocaleString('ko-KR') : '날짜 정보 없음'}
                           </div>
                         </div>
                       </div>
@@ -316,7 +359,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
               <h3 className="font-bold text-gray-900 mb-4">구매자 정보</h3>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center text-white font-bold">
-                  {(order.buyer?.name || '구매자')[0]}
+                  {((order.buyer?.name || '구매자')[0]) || 'U'}
                 </div>
                 <div>
                   <div className="font-medium text-gray-900">{order.buyer?.name || '구매자'}</div>
@@ -346,7 +389,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                 </div>
                 <div className="pt-3 border-t border-gray-200 text-sm text-gray-600">
                   <div>주문일: {new Date(order.created_at).toLocaleString('ko-KR')}</div>
-                  {order.paid_at && <div>결제일: {new Date(order.paid_at).toLocaleString('ko-KR')}</div>}
+                  {order.paid_at && typeof order.paid_at === 'string' && <div>결제일: {new Date(order.paid_at).toLocaleString('ko-KR')}</div>}
                 </div>
               </div>
             </div>

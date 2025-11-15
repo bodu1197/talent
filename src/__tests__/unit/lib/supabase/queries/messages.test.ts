@@ -30,10 +30,10 @@ describe('getUserConversations', () => {
       select: vi.fn().mockReturnThis(),
       or: vi.fn().mockReturnThis(),
       order: vi.fn().mockResolvedValue({ data: mockData, error: null }),
-    } as any)
+    } as unknown as ReturnType<typeof createClient>)
 
     const result = await getUserConversations('user-123')
-    
+
     expect(result).toHaveLength(1)
     expect(result[0].id).toBe('conv-1')
     expect(result[0].userName).toBe('Other User')
@@ -51,7 +51,7 @@ describe('getUserConversations', () => {
           })),
         })),
       })),
-    } as any)
+    } as unknown as ReturnType<typeof createClient>)
 
     const result = await getUserConversations('user-123')
     expect(result).toEqual([])
@@ -69,7 +69,7 @@ describe('getUserConversations', () => {
           })),
         })),
       })),
-    } as any)
+    } as unknown as ReturnType<typeof createClient>)
 
     await expect(getUserConversations('user-123')).rejects.toThrow('Database error')
   })

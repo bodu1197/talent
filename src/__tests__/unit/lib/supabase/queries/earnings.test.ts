@@ -27,7 +27,7 @@ describe('getSellerEarnings', () => {
           })),
         })),
       })),
-    } as any)
+    } as unknown as Awaited<ReturnType<typeof createClient>>)
 
     const result = await getSellerEarnings('seller-123')
     expect(result).toEqual(mockData)
@@ -43,7 +43,7 @@ describe('getSellerEarnings', () => {
           })),
         })),
       })),
-    } as any)
+    } as unknown as Awaited<ReturnType<typeof createClient>>)
 
     const result = await getSellerEarnings('seller-123')
     expect(result).toBeNull()
@@ -60,7 +60,7 @@ describe('getSellerEarnings', () => {
           })),
         })),
       })),
-    } as any)
+    } as unknown as Awaited<ReturnType<typeof createClient>>)
 
     await expect(getSellerEarnings('seller-123')).rejects.toThrow('Database error')
   })

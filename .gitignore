@@ -42,3 +42,9 @@ passwords.txt
 
 # Supabase
 .supabase
+
+# SonarQube
+.scannerwork/
+.sonar/
+sonar-report.json
+eslint-report.json

@@ -3,9 +3,35 @@
 import { useState } from 'react'
 import { logger } from '@/lib/logger'
 
+interface ServiceFormData {
+  title: string
+  category_ids: string[]
+  price: string
+  delivery_days: string
+  revision_count: string
+  description: string
+  thumbnail_url: string
+  thumbnail_file: File | null
+  requirements: { question: string; required: boolean }[]
+  create_portfolio: boolean
+  portfolio_data: {
+    title: string
+    description: string
+    youtube_url: string
+    project_url: string
+    tags: string[]
+    images: File[]
+  }
+  features?: {
+    commercial_use?: boolean
+    source_files?: boolean
+    express_delivery?: boolean
+  }
+}
+
 interface Props {
-  formData: any
-  setFormData: (data: any) => void
+  formData: ServiceFormData
+  setFormData: (data: ServiceFormData) => void
   showOnlyRequirements?: boolean
 }
 
@@ -38,7 +64,7 @@ export default function Step5Requirements({ formData, setFormData, showOnlyRequi
   const removeRequirement = (index: number) => {
     setFormData({
       ...formData,
-      requirements: formData.requirements.filter((_: any, i: number) => i !== index)
+      requirements: formData.requirements.filter((_, i: number) => i !== index)
     })
   }
 
@@ -156,7 +182,7 @@ export default function Step5Requirements({ formData, setFormData, showOnlyRequi
       ...formData,
       portfolio_data: {
         ...formData.portfolio_data,
-        images: formData.portfolio_data.images.filter((_: any, i: number) => i !== index)
+        images: formData.portfolio_data.images.filter((_, i: number) => i !== index)
       }
     })
   }
@@ -179,7 +205,7 @@ export default function Step5Requirements({ formData, setFormData, showOnlyRequi
         {/* 요청사항 목록 */}
         {formData.requirements && formData.requirements.length > 0 && (
           <div className="mb-4 space-y-2">
-            {formData.requirements.map((req: any, index: number) => (
+            {formData.requirements.map((req: { question: string; required: boolean }, index: number) => (
               <div
                 key={index}
                 className="flex items-center justify-between bg-gray-50 p-4 rounded-lg border border-gray-200"

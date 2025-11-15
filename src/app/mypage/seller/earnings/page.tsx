@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import SellerEarningsClient from './SellerEarningsClient'
+import { Order } from '@/types/common'
 
 export default async function SellerEarningsPage() {
   const supabase = await createClient()
@@ -88,12 +89,32 @@ export default async function SellerEarningsPage() {
       status,
       created_at,
       updated_at,
-      service:services(id, title)
+      services!inner(id, title)
     `)
     .eq('seller_id', user.id)
     .in('status', ['completed', 'delivered'])
     .order('updated_at', { ascending: false })
     .limit(10)
 
-  return <SellerEarningsClient earnings={earnings} transactions={transactions as any || []} sellerData={seller} profileData={profile} />
+  // Transform the data to match expected type
+  const transformedTransactions = (transactions?.map(({ services, ...t }) => ({
+    ...t,
+    buyer_id: '',
+    seller_id: user.id,
+    service_id: Array.isArray(services) && services[0] ? services[0].id : '',
+    package_id: null,
+    payment_method: null,
+    payment_id: null,
+    paid_at: null,
+    started_at: null,
+    completed_at: null,
+    cancelled_at: null,
+    cancel_reason: null,
+    platform_fee: 0,
+    seller_amount: t.total_amount || 0,
+    deliverables: [],
+    service: Array.isArray(services) ? services[0] : services
+  } as unknown as Order)) || []) as Order[]
+
+  return <SellerEarningsClient earnings={earnings} transactions={transformedTransactions} sellerData={seller} profileData={profile} />
 }

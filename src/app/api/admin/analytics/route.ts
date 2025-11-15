@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    let stats: unknown[] = []
+    let stats: Array<Record<string, number | string>> = []
 
     switch (period) {
       case 'hour': {
@@ -170,8 +170,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Get summary stats
-    const totalViews = stats.reduce((sum: number, item: any) => sum + (item.total_views || 0), 0)
-    const totalUniqueVisitors = stats.reduce((sum: number, item: any) => sum + (item.unique_visitors || 0), 0)
+    const totalViews = stats.reduce((sum: number, item: Record<string, number | string>) => sum + (Number(item.total_views) || 0), 0)
+    const totalUniqueVisitors = stats.reduce((sum: number, item: Record<string, number | string>) => sum + (Number(item.unique_visitors) || 0), 0)
 
     return NextResponse.json({
       period,

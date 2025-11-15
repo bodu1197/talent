@@ -2,6 +2,27 @@ import { createClient as createServerClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { Service } from '@/types'
 
+/**
+ * Supabase에서 반환하는 부분 서비스 타입
+ * (Supabase 쿼리의 select 필드와 일치)
+ */
+interface PartialServiceFromDB {
+  id: string
+  title: string
+  description: string
+  price: number
+  thumbnail_url: string | null
+  orders_count: number
+  seller: Array<{
+    id: string
+    business_name: string | null
+    is_verified: boolean
+  }>
+  service_categories: Array<{
+    category_id: string
+  }>
+}
+
 export interface PersonalizedCategory {
   category_id: string
   category_name: string
@@ -138,9 +159,12 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
           .order('created_at', { ascending: false })
           .limit(100) // 1차 카테고리 전체이므로 더 많이
 
+        // Type assertion: Supabase returns PartialServiceFromDB
+        const typedServices = (services || []) as PartialServiceFromDB[]
+
         // 광고 서비스와 일반 서비스 분리
-        const advertisedServices = services?.filter(s => advertisedServiceIds.includes(s.id)) || []
-        const regularServices = services?.filter(s => !advertisedServiceIds.includes(s.id)) || []
+        const advertisedServices = typedServices.filter(s => advertisedServiceIds.includes(s.id))
+        const regularServices = typedServices.filter(s => !advertisedServiceIds.includes(s.id))
 
         // 광고 서비스 랜덤 셔플
         for (let i = advertisedServices.length - 1; i > 0; i--) {
@@ -175,12 +199,14 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
             })
           })
 
-          // 각 서비스에 별점 추가
-          topServices.forEach((service: any) => {
+          // 각 서비스에 별점 추가 (타입 캐스팅: Service 타입으로 사용)
+          topServices.forEach((service: PartialServiceFromDB) => {
             const stats = ratingMap.get(service.id)
-            service.rating = stats && stats.count > 0 ? stats.sum / stats.count : 0
-            service.review_count = stats?.count || 0
-            service.order_count = service.orders_count || 0
+            // PartialServiceFromDB를 Service로 확장
+            const serviceWithRating = service as unknown as Service
+            serviceWithRating.rating = stats && stats.count > 0 ? stats.sum / stats.count : 0
+            serviceWithRating.review_count = stats?.count || 0
+            serviceWithRating.order_count = service.orders_count || 0
           })
         }
 
@@ -189,7 +215,7 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
           category_name: topLevelCategory.name,
           category_slug: topLevelCategory.slug,
           visit_count: category.visit_count,
-          services: topServices
+          services: topServices as unknown as Service[]
         }
       })
     )

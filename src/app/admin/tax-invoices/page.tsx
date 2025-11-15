@@ -38,7 +38,7 @@ export default function AdminTaxInvoicesPage() {
     try {
       const supabase = createClient();
 
-      let query = supabase
+      const query = supabase
         .from('tax_invoices')
         .select('*')
         .order('issue_date', { ascending: false })

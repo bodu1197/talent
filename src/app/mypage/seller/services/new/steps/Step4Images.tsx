@@ -6,16 +6,53 @@ import TextOverlayEditor from '@/components/services/TextOverlayEditor'
 import { generateThumbnailWithText, type GradientTemplate } from '@/lib/template-generator'
 import { logger } from '@/lib/logger'
 
+interface ServiceFormData {
+  title: string
+  category_ids: string[]
+  price: string
+  delivery_days: string
+  revision_count: string
+  description: string
+  thumbnail_url: string
+  thumbnail_file: File | null
+  requirements: { question: string; required: boolean }[]
+  create_portfolio: boolean
+  portfolio_data: {
+    title: string
+    description: string
+    youtube_url: string
+    project_url: string
+    tags: string[]
+    images: File[]
+  }
+  features?: {
+    commercial_use?: boolean
+    source_files?: boolean
+    express_delivery?: boolean
+  }
+}
+
+interface TextStyle {
+  text: string
+  x: number
+  y: number
+  fontSize: number
+  color: string
+  textAlign: CanvasTextAlign
+  fontWeight: string
+  shadowBlur: number
+}
+
 interface Props {
-  formData: any
-  setFormData: (data: any) => void
+  formData: ServiceFormData
+  setFormData: (data: ServiceFormData) => void
 }
 
 export default function Step4Images({ formData, setFormData }: Props) {
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null)
   const [uploadMode, setUploadMode] = useState<'file' | 'template'>('file')
   const [selectedTemplate, setSelectedTemplate] = useState<GradientTemplate | null>(null)
-  const [textStyle, setTextStyle] = useState<any>(null)
+  const [textStyle, setTextStyle] = useState<TextStyle | null>(null)
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]

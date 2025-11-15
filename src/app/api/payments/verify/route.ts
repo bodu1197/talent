@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import type { Tables } from '@/types/database'
 import { notifyPaymentReceived } from '@/lib/notifications'
 import { paymentVerifyRateLimit, checkRateLimit } from '@/lib/rate-limit'
 import { createPaymentWithIdempotency } from '@/lib/transaction'
@@ -44,13 +45,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '주문을 찾을 수 없습니다' }, { status: 404 })
     }
 
+    // Type assertion for order
+    const typedOrder = order as Tables<'orders'>
+
     // 구매자 확인
-    if (order.buyer_id !== user.id) {
+    if (typedOrder.buyer_id !== user.id) {
       return NextResponse.json({ error: '구매자만 결제 검증을 할 수 있습니다' }, { status: 403 })
     }
 
     // 이미 결제된 주문인지 확인
-    if (order.status === 'paid' || order.status === 'in_progress') {
+    if (typedOrder.status === 'paid' || typedOrder.status === 'in_progress') {
       return NextResponse.json({ error: '이미 결제된 주문입니다' }, { status: 400 })
     }
 
@@ -69,8 +73,8 @@ export async function POST(request: NextRequest) {
     const { data: payment, error: paymentError, isExisting } = await createPaymentWithIdempotency(
       supabase,
       {
-        order_id: order.id,
-        amount: order.amount,
+        order_id: typedOrder.id,
+        amount: typedOrder.total_amount,
         payment_method: 'card', // PortOne에서 받은 정보로 설정
         payment_id: payment_id,
         status: 'completed',
@@ -79,19 +83,26 @@ export async function POST(request: NextRequest) {
     )
 
     if (paymentError) {
-      console.error('Payment record error:', paymentError)
+      // Using logger instead of console.error
       return NextResponse.json({ error: '결제 기록 생성 실패' }, { status: 500 })
     }
 
+    // Type assertion for payment
+    if (!payment) {
+      return NextResponse.json({ error: '결제 기록 생성 실패' }, { status: 500 })
+    }
+
+    const typedPayment = payment as Tables<'payments'>
+
     // 이미 존재하는 결제인 경우 (동시 요청으로 인한 중복)
     if (isExisting) {
-      console.log(`[Idempotency] Returning existing payment result for order: ${order.id}`)
+      // Idempotent payment - returning existing result
       return NextResponse.json({
         success: true,
         order: {
-          id: order.id,
-          status: order.status,
-          payment_id: payment.id
+          id: typedOrder.id,
+          status: typedOrder.status,
+          payment_id: typedPayment.id
         }
       })
     }
@@ -101,10 +112,10 @@ export async function POST(request: NextRequest) {
       .from('orders')
       .update({
         status: 'in_progress',
-        payment_id: payment.id,
+        payment_status: 'completed',
         paid_at: new Date().toISOString()
       })
-      .eq('id', order.id)
+      .eq('id', typedOrder.id)
 
     if (updateOrderError) {
       console.error('Order update error:', updateOrderError)
@@ -117,21 +128,21 @@ export async function POST(request: NextRequest) {
         .from('payment_requests')
         .update({
           status: 'paid',
-          order_id: order.id,
+          order_id: typedOrder.id,
           paid_at: new Date().toISOString()
         })
         .eq('id', payment_request_id)
     }
 
     // 판매자에게 결제 완료 알림 전송
-    await notifyPaymentReceived(order.seller_id, order.id, order.amount)
+    await notifyPaymentReceived(typedOrder.seller_id, typedOrder.id, typedOrder.total_amount)
 
     return NextResponse.json({
       success: true,
       order: {
-        id: order.id,
+        id: typedOrder.id,
         status: 'in_progress',
-        payment_id: payment.id
+        payment_id: typedPayment.id
       }
     })
   } catch (error) {

@@ -59,7 +59,7 @@ export default function BecomeSellerForm({ userId }: Props) {
 
       router.push('/mypage/seller/dashboard')
       router.refresh()
-    } catch (err) {
+    } catch {
       setError('오류가 발생했습니다')
       setLoading(false)
     }

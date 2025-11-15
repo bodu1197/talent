@@ -84,7 +84,7 @@ export default function PortfolioEditClient({ portfolio, sellerId, categories, s
   const [fetchingYoutubeThumbnail, setFetchingYoutubeThumbnail] = useState(false)
 
   // 카테고리 계층 구조 생성
-  const categoryTree = useMemo(() => {
+  const _categoryTree = useMemo(() => {
     const topLevel = categories.filter(c => !c.parent_id)
     return topLevel.map(parent => ({
       ...parent,

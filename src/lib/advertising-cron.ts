@@ -3,6 +3,7 @@
 
 import { SupabaseManager } from '@/lib/supabase/singleton';
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { logger } from '@/lib/logger';
 
 /**
  * Cron 작업용 Service Role 클라이언트 가져오기
@@ -53,7 +54,7 @@ async function payWithCreditInternal(
     .eq('id', credit.id);
 
   if (updateError) {
-    console.error('[Cron] 크레딧 차감 실패:', updateError);
+    logger.error('[Cron] 크레딧 차감 실패', updateError);
     return { success: false, remaining: amount };
   }
 
@@ -79,7 +80,7 @@ export async function processMonthlyBilling() {
   const supabase = getAdminClient();
   const today = new Date().toISOString().split('T')[0];
 
-  console.log(`[Cron] 월간 결제 처리 시작: ${today}`);
+  logger.info('[Cron] 월간 결제 처리 시작', { today });
 
   // 오늘 결제일인 구독 조회
   const { data: subscriptions, error } = await supabase
@@ -89,15 +90,15 @@ export async function processMonthlyBilling() {
     .eq('next_billing_date', today);
 
   if (error) {
-    console.error('[Cron] 구독 조회 실패:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+    logger.error('[Cron] 구독 조회 실패', error);
     return;
   }
 
-  console.log(`[Cron] 처리할 구독: ${subscriptions?.length || 0}개`);
+  logger.info('[Cron] 처리할 구독', { count: subscriptions?.length || 0 });
 
   for (const sub of subscriptions || []) {
     try {
-      console.log(`[Cron] 구독 처리 중: ${sub.id}`);
+      logger.info('[Cron] 구독 처리 중', { subscriptionId: sub.id });
 
       // 크레딧으로 결제 시도
       const { success, remaining } = await payWithCreditInternal(
@@ -107,7 +108,7 @@ export async function processMonthlyBilling() {
       );
 
       if (success) {
-        console.log(`[Cron] 크레딧 결제 성공: ${sub.id}`);
+        logger.info('[Cron] 크레딧 결제 성공', { subscriptionId: sub.id });
 
         // 다음 결제일 업데이트
         const nextBilling = new Date(sub.next_billing_date);
@@ -131,7 +132,7 @@ export async function processMonthlyBilling() {
           paid_at: new Date().toISOString()
         });
       } else {
-        console.log(`[Cron] 크레딧 부족: ${sub.id}, 부족액: ${remaining}원`);
+        logger.warn('[Cron] 크레딧 부족', { subscriptionId: sub.id, remaining });
 
         // 크레딧 부족 - 구독 일시정지
         await supabase
@@ -149,11 +150,11 @@ export async function processMonthlyBilling() {
         });
       }
     } catch (error) {
-      console.error(`[Cron] 구독 처리 실패: ${sub.id}`, JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+      logger.error('[Cron] 구독 처리 실패', error, { subscriptionId: sub.id });
     }
   }
 
-  console.log('[Cron] 월간 결제 처리 완료');
+  logger.info('[Cron] 월간 결제 처리 완료');
 }
 
 /**
@@ -163,7 +164,7 @@ export async function cancelExpiredBankTransfers() {
   const supabase = getAdminClient();
   const now = new Date().toISOString();
 
-  console.log(`[Cron] 만료된 무통장 입금 처리 시작: ${now}`);
+  logger.info('[Cron] 만료된 무통장 입금 처리 시작', { now });
 
   // 기한 초과된 미입금 결제 조회
   const { data: expiredPayments, error } = await supabase
@@ -179,15 +180,15 @@ export async function cancelExpiredBankTransfers() {
     .lt('subscription.bank_transfer_deadline', now);
 
   if (error) {
-    console.error('[Cron] 만료 결제 조회 실패:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+    logger.error('[Cron] 만료 결제 조회 실패', error);
     return;
   }
 
-  console.log(`[Cron] 만료된 결제: ${expiredPayments?.length || 0}개`);
+  logger.info('[Cron] 만료된 결제', { count: expiredPayments?.length || 0 });
 
   for (const payment of expiredPayments || []) {
     try {
-      console.log(`[Cron] 결제 취소 중: ${payment.id}`);
+      logger.info('[Cron] 결제 취소 중', { paymentId: payment.id });
 
       // 결제 취소
       await supabase
@@ -213,11 +214,11 @@ export async function cancelExpiredBankTransfers() {
         link_url: '/mypage/seller/advertising'
       });
     } catch (error) {
-      console.error(`[Cron] 결제 취소 실패: ${payment.id}`, JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+      logger.error('[Cron] 결제 취소 실패', error, { paymentId: payment.id });
     }
   }
 
-  console.log('[Cron] 만료된 무통장 입금 처리 완료');
+  logger.info('[Cron] 만료된 무통장 입금 처리 완료');
 }
 
 /**
@@ -227,7 +228,7 @@ export async function expireCredits() {
   const supabase = getAdminClient();
   const now = new Date().toISOString();
 
-  console.log(`[Cron] 크레딧 만료 처리 시작: ${now}`);
+  logger.info('[Cron] 크레딧 만료 처리 시작', { now });
 
   // 만료된 크레딧 조회
   const { data: expiredCredits, error } = await supabase
@@ -237,15 +238,15 @@ export async function expireCredits() {
     .lt('expires_at', now);
 
   if (error) {
-    console.error('[Cron] 만료 크레딧 조회 실패:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+    logger.error('[Cron] 만료 크레딧 조회 실패', error);
     return;
   }
 
-  console.log(`[Cron] 만료된 크레딧: ${expiredCredits?.length || 0}개`);
+  logger.info('[Cron] 만료된 크레딧', { count: expiredCredits?.length || 0 });
 
   for (const credit of expiredCredits || []) {
     try {
-      console.log(`[Cron] 크레딧 만료 처리: ${credit.id}, 금액: ${credit.amount}원`);
+      logger.info('[Cron] 크레딧 만료 처리', { creditId: credit.id, amount: credit.amount });
 
       const expiredAmount = credit.amount;
 
@@ -278,22 +279,22 @@ export async function expireCredits() {
         link_url: '/mypage/seller/advertising'
       });
     } catch (error) {
-      console.error(`[Cron] 크레딧 만료 처리 실패: ${credit.id}`, JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+      logger.error('[Cron] 크레딧 만료 처리 실패', error, { creditId: credit.id });
     }
   }
 
-  console.log('[Cron] 크레딧 만료 처리 완료');
+  logger.info('[Cron] 크레딧 만료 처리 완료');
 }
 
 /**
  * 모든 Cron 작업 실행 (테스트용)
  */
 export async function runAllCronJobs() {
-  console.log('[Cron] 모든 작업 시작');
+  logger.info('[Cron] 모든 작업 시작');
 
   await processMonthlyBilling();
   await cancelExpiredBankTransfers();
   await expireCredits();
 
-  console.log('[Cron] 모든 작업 완료');
+  logger.info('[Cron] 모든 작업 완료');
 }

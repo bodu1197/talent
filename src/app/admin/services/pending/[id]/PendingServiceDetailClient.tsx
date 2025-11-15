@@ -3,12 +3,10 @@
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { logger } from '@/lib/logger'
-import { Service, ServiceCategory } from '@/types/common'
+import type { ServiceDetailWithCategories } from '@/lib/supabase/queries/admin'
 
 interface Props {
-  service: Service & {
-    service_categories?: ServiceCategory[]
-  }
+  service: ServiceDetailWithCategories
 }
 
 export default function PendingServiceDetailClient({ service }: Props) {
@@ -106,7 +104,7 @@ export default function PendingServiceDetailClient({ service }: Props) {
             </div>
             <div>
               <span className="text-sm text-gray-600">{isResubmission ? '최초 등록일' : '등록일'}</span>
-              <p className="font-medium">{new Date(service.created_at).toLocaleDateString('ko-KR')}</p>
+              <p className="font-medium">{service.created_at ? new Date(service.created_at).toLocaleDateString('ko-KR') : ''}</p>
             </div>
             {isResubmission && service.updated_at && (
               <div>

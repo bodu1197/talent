@@ -20,7 +20,7 @@ interface ServiceDetailProps {
 }
 
 // YouTube 비디오 ID 추출 함수
-function getYoutubeVideoId(url: string | null): string | null {
+function _getYoutubeVideoId(url: string | null): string | null {
   if (!url) return null
 
   const patterns = [
@@ -111,10 +111,15 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
     } else if (portfolioLinks) {
       // portfolios 데이터 구조 평탄화
       linkedPortfolios = portfolioLinks
-        .map((link: any) => link.portfolio)
-        .filter((p: any) => p !== null && p !== undefined && typeof p === 'object')
+        .map((link: { portfolio: typeof linkedPortfolios[number] | typeof linkedPortfolios[number][] | null }) => {
+          if (Array.isArray(link.portfolio) && link.portfolio.length > 0) {
+            return link.portfolio[0]
+          }
+          return link.portfolio
+        })
+        .filter((p): p is NonNullable<typeof linkedPortfolios[number]> => p !== null && p !== undefined && typeof p === 'object')
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Portfolio fetch exception:', error)
     // 에러가 있어도 페이지는 계속 렌더링 (포트폴리오만 없는 상태로)
   }
@@ -149,7 +154,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
     .order('created_at', { ascending: false })
 
   // seller의 통계 정보 조회
-  let sellerStats = {
+  const sellerStats = {
     totalOrders: 0,
     satisfactionRate: 0,
     avgResponseTime: '10분 이내'
@@ -187,10 +192,18 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
     }
   }
 
-  const categories = service.service_categories?.map((sc: any) => sc.category) || []
+  interface ServiceCategory {
+    category: {
+      id: string
+      name: string
+      slug: string
+    }
+  }
+
+  const categories = service.service_categories?.map((sc: ServiceCategory) => sc.category) || []
 
   // 카테고리 경로 가져오기 (1차 > 2차 > 3차)
-  let categoryPath: any[] = []
+  let categoryPath: Array<{ id: string; name: string; slug: string }> = []
   if (categories.length > 0) {
     // 첫 번째 카테고리의 전체 경로를 가져옴
     categoryPath = await getCategoryPath(categories[0].id)
@@ -212,7 +225,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         <div className="container-1200 px-4 py-4">
           <div className="flex items-center gap-2 text-sm">
             <Link href="/" className="text-gray-500 hover:text-gray-700">홈</Link>
-            {categoryPath.map((cat: any, index: number) => (
+            {categoryPath.map((cat) => (
               <div key={cat.id} className="flex items-center gap-2">
                 <span className="text-gray-400">/</span>
                 <Link
@@ -501,17 +514,17 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
               {serviceReviews && serviceReviews.length > 0 ? (
                 <div className="space-y-6">
-                  {serviceReviews.map((review: any) => (
+                  {serviceReviews.map((review) => (
                     <div key={review.id} className="border-b border-gray-200 pb-6 last:border-0">
                       {/* 리뷰 헤더 */}
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
                           {/* 프로필 이미지 */}
                           <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-                            {review.buyer?.profile_image ? (
+                            {Array.isArray(review.buyer) && review.buyer[0]?.profile_image ? (
                               <img
-                                src={review.buyer.profile_image}
-                                alt={review.buyer.name}
+                                src={review.buyer[0].profile_image}
+                                alt={review.buyer[0].name}
                                 className="w-full h-full object-cover"
                               />
                             ) : (
@@ -520,7 +533,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                           </div>
                           <div>
                             <div className="font-medium text-gray-900">
-                              {review.buyer?.name || '익명'}
+                              {(Array.isArray(review.buyer) && review.buyer[0]?.name) || '익명'}
                             </div>
                             <div className="text-sm text-gray-500">
                               {new Date(review.created_at).toLocaleDateString('ko-KR')}

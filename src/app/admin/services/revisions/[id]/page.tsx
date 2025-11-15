@@ -30,12 +30,13 @@ export default async function RevisionDetailPage({
   try {
     const revision = await getServiceRevisionDetail(id, supabase)
     return <RevisionDetailClient revision={revision} />
-  } catch (error: any) {
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : '수정 요청을 불러올 수 없습니다'
     return (
       <div className="p-8">
         <div className="bg-red-50 border border-red-200 rounded-lg p-6">
           <h2 className="text-xl font-bold text-red-900 mb-4">오류가 발생했습니다</h2>
-          <p className="text-red-700">{error?.message || '수정 요청을 불러올 수 없습니다'}</p>
+          <p className="text-red-700">{errorMessage}</p>
         </div>
       </div>
     )
