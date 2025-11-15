@@ -1,44 +1,56 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import PortfolioModal from './PortfolioModal'
+import { useState } from "react";
+import dynamic from "next/dynamic";
+
+// Dynamic import for PortfolioModal - only loads when needed
+const PortfolioModal = dynamic(() => import("./PortfolioModal"), {
+  loading: () => (
+    <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center">
+      <div className="text-white">Loading...</div>
+    </div>
+  ),
+  ssr: false,
+});
 
 interface Portfolio {
-  id: string
-  title: string
-  description: string
-  thumbnail_url: string | null
-  image_urls: string[]
-  youtube_url: string | null
-  project_url: string | null
-  tags: string[]
-  created_at: string
+  id: string;
+  title: string;
+  description: string;
+  thumbnail_url: string | null;
+  image_urls: string[];
+  youtube_url: string | null;
+  project_url: string | null;
+  tags: string[];
+  created_at: string;
 }
 
 interface Props {
-  portfolios: Portfolio[]
+  portfolios: Portfolio[];
 }
 
 export default function PortfolioGrid({ portfolios }: Props) {
-  const [selectedPortfolio, setSelectedPortfolio] = useState<Portfolio | null>(null)
+  const [selectedPortfolio, setSelectedPortfolio] = useState<Portfolio | null>(
+    null,
+  );
 
   // YouTube URL에서 비디오 ID 추출
   const _getYoutubeVideoId = (url: string | null): string | null => {
-    if (!url) return null
+    if (!url) return null;
 
     const patterns = [
       /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
       /youtube\.com\/embed\/([^&\n?#]+)/,
-      /youtube\.com\/v\/([^&\n?#]+)/
-    ]
+      /youtube\.com\/v\/([^&\n?#]+)/,
+    ];
 
     for (const pattern of patterns) {
-      const match = url.match(pattern)
-      if (match) return match[1]
+      const match = url.match(pattern);
+      if (match) return match[1];
     }
 
-    return null
-  }
+    return null;
+  };
 
   return (
     <>
@@ -48,7 +60,7 @@ export default function PortfolioGrid({ portfolios }: Props) {
             key={portfolio.id}
             onClick={() => setSelectedPortfolio(portfolio)}
             className="group relative bg-gray-100 rounded-lg overflow-hidden hover:ring-2 hover:ring-brand-primary transition-all"
-            style={{ aspectRatio: '35/26' }}
+            style={{ aspectRatio: "35/26" }}
           >
             {portfolio.thumbnail_url ? (
               <img
@@ -84,5 +96,5 @@ export default function PortfolioGrid({ portfolios }: Props) {
         />
       )}
     </>
-  )
+  );
 }

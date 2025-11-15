@@ -1,94 +1,109 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import TemplateSelector from '@/components/services/TemplateSelector'
-import TextOverlayEditor from '@/components/services/TextOverlayEditor'
-import { generateThumbnailWithText, type GradientTemplate } from '@/lib/template-generator'
-import { logger } from '@/lib/logger'
+import { useState } from "react";
+import dynamic from "next/dynamic";
+import TemplateSelector from "@/components/services/TemplateSelector";
+import {
+  generateThumbnailWithText,
+  type GradientTemplate,
+} from "@/lib/template-generator";
+import { logger } from "@/lib/logger";
+
+// Dynamic import for TextOverlayEditor - only loads when template mode is selected
+const TextOverlayEditor = dynamic(
+  () => import("@/components/services/TextOverlayEditor"),
+  {
+    loading: () => (
+      <div className="py-8 text-center text-gray-500">Loading editor...</div>
+    ),
+    ssr: false,
+  },
+);
 
 interface ServiceFormData {
-  title: string
-  category_ids: string[]
-  price: string
-  delivery_days: string
-  revision_count: string
-  description: string
-  thumbnail_url: string
-  thumbnail_file: File | null
-  requirements: { question: string; required: boolean }[]
-  create_portfolio: boolean
+  title: string;
+  category_ids: string[];
+  price: string;
+  delivery_days: string;
+  revision_count: string;
+  description: string;
+  thumbnail_url: string;
+  thumbnail_file: File | null;
+  requirements: { question: string; required: boolean }[];
+  create_portfolio: boolean;
   portfolio_data: {
-    title: string
-    description: string
-    youtube_url: string
-    project_url: string
-    tags: string[]
-    images: File[]
-  }
+    title: string;
+    description: string;
+    youtube_url: string;
+    project_url: string;
+    tags: string[];
+    images: File[];
+  };
   features?: {
-    commercial_use?: boolean
-    source_files?: boolean
-    express_delivery?: boolean
-  }
+    commercial_use?: boolean;
+    source_files?: boolean;
+    express_delivery?: boolean;
+  };
 }
 
 interface TextStyle {
-  text: string
-  x: number
-  y: number
-  fontSize: number
-  color: string
-  textAlign: CanvasTextAlign
-  fontWeight: string
-  shadowBlur: number
+  text: string;
+  x: number;
+  y: number;
+  fontSize: number;
+  color: string;
+  textAlign: CanvasTextAlign;
+  fontWeight: string;
+  shadowBlur: number;
 }
 
 interface Props {
-  formData: ServiceFormData
-  setFormData: (data: ServiceFormData) => void
+  formData: ServiceFormData;
+  setFormData: (data: ServiceFormData) => void;
 }
 
 export default function Step4Images({ formData, setFormData }: Props) {
-  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null)
-  const [uploadMode, setUploadMode] = useState<'file' | 'template'>('file')
-  const [selectedTemplate, setSelectedTemplate] = useState<GradientTemplate | null>(null)
-  const [textStyle, setTextStyle] = useState<TextStyle | null>(null)
+  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
+  const [uploadMode, setUploadMode] = useState<"file" | "template">("file");
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<GradientTemplate | null>(null);
+  const [textStyle, setTextStyle] = useState<TextStyle | null>(null);
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        alert('파일 크기는 5MB를 초과할 수 없습니다.')
-        return
+        alert("파일 크기는 5MB를 초과할 수 없습니다.");
+        return;
       }
-      if (!file.type.startsWith('image/')) {
-        alert('이미지 파일만 업로드 가능합니다.')
-        return
+      if (!file.type.startsWith("image/")) {
+        alert("이미지 파일만 업로드 가능합니다.");
+        return;
       }
       // formData 업데이트
-      setFormData({ ...formData, thumbnail_file: file })
+      setFormData({ ...formData, thumbnail_file: file });
 
       // 미리보기 생성
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setThumbnailPreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
+        setThumbnailPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
   const removeThumbnail = () => {
-    setFormData({ ...formData, thumbnail_file: null, thumbnail_url: '' })
-    setThumbnailPreview(null)
-    setSelectedTemplate(null)
-    setTextStyle(null)
-  }
+    setFormData({ ...formData, thumbnail_file: null, thumbnail_url: "" });
+    setThumbnailPreview(null);
+    setSelectedTemplate(null);
+    setTextStyle(null);
+  };
 
   // 템플릿 기반 썸네일 생성
   const generateTemplateThumbnail = async () => {
     if (!selectedTemplate || !textStyle || !textStyle.text.trim()) {
-      alert('템플릿과 텍스트를 입력해주세요.')
-      return
+      alert("템플릿과 텍스트를 입력해주세요.");
+      return;
     }
 
     try {
@@ -99,31 +114,33 @@ export default function Step4Images({ formData, setFormData }: Props) {
           x: textStyle.x,
           y: textStyle.y,
           fontSize: textStyle.fontSize,
-          fontFamily: 'Noto Sans KR, sans-serif',
+          fontFamily: "Noto Sans KR, sans-serif",
           color: textStyle.color,
           textAlign: textStyle.textAlign,
           fontWeight: textStyle.fontWeight,
           shadowBlur: textStyle.shadowBlur,
-          shadowColor: 'rgba(0,0,0,0.5)',
+          shadowColor: "rgba(0,0,0,0.5)",
         },
         652,
-        488
-      )
+        488,
+      );
 
       // Blob을 File로 변환
-      const file = new File([blob], `thumbnail-${Date.now()}.jpg`, { type: 'image/jpeg' })
-      setFormData({ ...formData, thumbnail_file: file })
+      const file = new File([blob], `thumbnail-${Date.now()}.jpg`, {
+        type: "image/jpeg",
+      });
+      setFormData({ ...formData, thumbnail_file: file });
 
       // 미리보기 URL 생성
-      const previewUrl = URL.createObjectURL(blob)
-      setThumbnailPreview(previewUrl)
+      const previewUrl = URL.createObjectURL(blob);
+      setThumbnailPreview(previewUrl);
 
-      alert('썸네일이 생성되었습니다!')
+      alert("썸네일이 생성되었습니다!");
     } catch (error) {
-      logger.error('썸네일 생성 오류:', error)
-      alert('썸네일 생성에 실패했습니다.')
+      logger.error("썸네일 생성 오류:", error);
+      alert("썸네일 생성에 실패했습니다.");
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -140,15 +157,15 @@ export default function Step4Images({ formData, setFormData }: Props) {
           <button
             type="button"
             onClick={() => {
-              setUploadMode('file')
-              if (uploadMode === 'template') {
-                removeThumbnail()
+              setUploadMode("file");
+              if (uploadMode === "template") {
+                removeThumbnail();
               }
             }}
             className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
-              uploadMode === 'file'
-                ? 'bg-brand-primary text-white border-brand-primary'
-                : 'bg-white text-gray-700 border-gray-300 hover:border-brand-primary'
+              uploadMode === "file"
+                ? "bg-brand-primary text-white border-brand-primary"
+                : "bg-white text-gray-700 border-gray-300 hover:border-brand-primary"
             }`}
           >
             <i className="fas fa-upload mr-2"></i>
@@ -157,15 +174,15 @@ export default function Step4Images({ formData, setFormData }: Props) {
           <button
             type="button"
             onClick={() => {
-              setUploadMode('template')
-              if (uploadMode === 'file') {
-                removeThumbnail()
+              setUploadMode("template");
+              if (uploadMode === "file") {
+                removeThumbnail();
               }
             }}
             className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
-              uploadMode === 'template'
-                ? 'bg-brand-primary text-white border-brand-primary'
-                : 'bg-white text-gray-700 border-gray-300 hover:border-brand-primary'
+              uploadMode === "template"
+                ? "bg-brand-primary text-white border-brand-primary"
+                : "bg-white text-gray-700 border-gray-300 hover:border-brand-primary"
             }`}
           >
             <i className="fas fa-wand-magic-sparkles mr-2"></i>
@@ -174,7 +191,7 @@ export default function Step4Images({ formData, setFormData }: Props) {
         </div>
 
         {/* 파일 업로드 모드 */}
-        {uploadMode === 'file' && (
+        {uploadMode === "file" && (
           <div>
             {thumbnailPreview ? (
               <div className="relative">
@@ -201,16 +218,22 @@ export default function Step4Images({ formData, setFormData }: Props) {
                   className="hidden"
                 />
                 <i className="fas fa-cloud-upload-alt text-gray-400 text-4xl mb-3"></i>
-                <p className="text-gray-600 font-medium">클릭하여 이미지 선택</p>
-                <p className="text-sm text-gray-500 mt-2">권장 크기: 652×488px (최대 5MB)</p>
-                <p className="text-xs text-gray-400 mt-1">JPG, PNG, GIF 형식 지원</p>
+                <p className="text-gray-600 font-medium">
+                  클릭하여 이미지 선택
+                </p>
+                <p className="text-sm text-gray-500 mt-2">
+                  권장 크기: 652×488px (최대 5MB)
+                </p>
+                <p className="text-xs text-gray-400 mt-1">
+                  JPG, PNG, GIF 형식 지원
+                </p>
               </label>
             )}
           </div>
         )}
 
         {/* 템플릿 모드 */}
-        {uploadMode === 'template' && (
+        {uploadMode === "template" && (
           <div className="space-y-6">
             {thumbnailPreview ? (
               <div className="relative">
@@ -218,7 +241,7 @@ export default function Step4Images({ formData, setFormData }: Props) {
                   src={thumbnailPreview}
                   alt="생성된 썸네일"
                   className="w-full rounded-lg border-2 border-green-500"
-                  style={{ aspectRatio: '652/488' }}
+                  style={{ aspectRatio: "652/488" }}
                 />
                 <button
                   type="button"
@@ -269,5 +292,5 @@ export default function Step4Images({ formData, setFormData }: Props) {
         )}
       </div>
     </div>
-  )
+  );
 }
