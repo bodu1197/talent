@@ -200,6 +200,9 @@ export async function getServicesByCategory(categoryId: string, limit: number = 
     service.is_advertised = advertisedServiceIds.includes(service.id)
   })
 
+  console.log('🎯 getServicesByCategory - 광고 서비스 수:', allServices.filter(s => s.is_advertised).length)
+  console.log('🎯 getServicesByCategory - 전체 서비스 수:', allServices.length)
+
   // 광고 서비스와 일반 서비스 분리
   const advertisedServices = allServices.filter(s => advertisedServiceIds.includes(s.id))
   const regularServices = allServices.filter(s => !advertisedServiceIds.includes(s.id))

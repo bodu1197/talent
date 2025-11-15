@@ -114,6 +114,7 @@ export interface Service {
   rating: number
   review_count: number
   is_featured: boolean
+  is_advertised?: boolean // 광고 서비스 여부 (런타임에 추가됨)
   metadata?: Record<string, unknown>
   created_at: string
   updated_at: string

@@ -41,8 +41,8 @@ export default function ServiceGrid({ initialServices }: ServiceGridProps) {
     }
 
     // 광고 서비스와 일반 서비스 분리 (광고 우선순위 유지)
-    const advertisedServices = filtered.filter(s => (s as any).is_advertised === true)
-    const regularServices = filtered.filter(s => (s as any).is_advertised !== true)
+    const advertisedServices = filtered.filter(s => s.is_advertised === true)
+    const regularServices = filtered.filter(s => s.is_advertised !== true)
 
     console.log('🔍 ServiceGrid - 광고 서비스:', advertisedServices.length, '개')
     console.log('🔍 ServiceGrid - 일반 서비스:', regularServices.length, '개')
@@ -80,7 +80,7 @@ export default function ServiceGrid({ initialServices }: ServiceGridProps) {
 
     console.log('✅ ServiceGrid - 최종 순서 (상위 5개):')
     combined.slice(0, 5).forEach((s, i) => {
-      console.log(`  ${i + 1}. ${s.title} ${(s as any).is_advertised ? '[광고]' : ''}`)
+      console.log(`  ${i + 1}. ${s.title} ${s.is_advertised ? '[광고]' : ''}`)
     })
 
     setServices(combined)
