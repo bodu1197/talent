@@ -103,13 +103,19 @@ async function AIServicesSection({ aiCategoryIds }: { aiCategoryIds: string[] })
       const advertisedServices = aiServices.filter(s => advertisedServiceIds.includes(s.id))
       const regularServices = aiServices.filter(s => !advertisedServiceIds.includes(s.id))
 
+      // 광고 서비스 랜덤 셔플
+      for (let i = advertisedServices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [advertisedServices[i], advertisedServices[j]] = [advertisedServices[j], advertisedServices[i]]
+      }
+
       // 일반 서비스 랜덤 셔플
       for (let i = regularServices.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [regularServices[i], regularServices[j]] = [regularServices[j], regularServices[i]]
       }
 
-      // 광고 서비스 + 랜덤 일반 서비스 (상위 20개)
+      // 광고 서비스(랜덤) + 일반 서비스(랜덤) (상위 20개)
       const combinedServices = [...advertisedServices, ...regularServices].slice(0, 20)
 
       // 리뷰 통계 한 번에 조회

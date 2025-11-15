@@ -199,13 +199,19 @@ export async function getServicesByCategory(categoryId: string, limit: number = 
   const advertisedServices = allServices.filter(s => advertisedServiceIds.includes(s.id))
   const regularServices = allServices.filter(s => !advertisedServiceIds.includes(s.id))
 
+  // 광고 서비스 랜덤 셔플
+  for (let i = advertisedServices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [advertisedServices[i], advertisedServices[j]] = [advertisedServices[j], advertisedServices[i]]
+  }
+
   // 일반 서비스 랜덤 셔플
   for (let i = regularServices.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [regularServices[i], regularServices[j]] = [regularServices[j], regularServices[i]]
   }
 
-  // 광고 서비스 + 랜덤 일반 서비스 결합
+  // 광고 서비스(랜덤) + 일반 서비스(랜덤) 결합
   const combinedServices = [...advertisedServices, ...regularServices]
 
   // 페이지네이션 적용 (1페이지 = 28개)
