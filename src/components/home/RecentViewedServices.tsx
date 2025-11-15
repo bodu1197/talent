@@ -35,7 +35,6 @@ export default async function RecentViewedServices() {
         seller:sellers(
           id,
           business_name,
-          display_name,
           is_verified
         ),
         service_categories(
@@ -195,10 +194,10 @@ export default async function RecentViewedServices() {
                   {/* 판매자 */}
                   <div className="flex items-center gap-1 mb-1">
                     <div className="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center text-white text-[8px] font-bold">
-                      {service.seller?.display_name?.[0] || 'S'}
+                      {service.seller?.business_name?.[0] || 'S'}
                     </div>
                     <span className="text-xs text-gray-600 truncate">
-                      {service.seller?.display_name}
+                      {service.seller?.business_name}
                     </span>
                     {service.seller?.is_verified && (
                       <i className="fas fa-check-circle text-[10px] text-blue-500"></i>
