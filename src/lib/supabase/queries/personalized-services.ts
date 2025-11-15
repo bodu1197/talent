@@ -41,10 +41,10 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
         category_slug: string
         visit_count: number
       }) => {
-        // 카테고리 UUID 조회
+        // 카테고리 정보 조회 (level 포함)
         const { data: categoryInfo } = await supabase
           .from('categories')
-          .select('id')
+          .select('id, name, slug, level, parent_id')
           .eq('slug', category.category_slug)
           .single()
 
@@ -58,6 +58,56 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
           }
         }
 
+        // 1차 카테고리 찾기
+        let topLevelCategory = categoryInfo
+        if (categoryInfo.level === 2) {
+          // 2차 카테고리 → 부모(1차) 찾기
+          const { data: parent } = await supabase
+            .from('categories')
+            .select('id, name, slug, level')
+            .eq('id', categoryInfo.parent_id)
+            .single()
+          if (parent) topLevelCategory = parent
+        } else if (categoryInfo.level === 3) {
+          // 3차 카테고리 → 조부모(1차) 찾기
+          const { data: parent2nd } = await supabase
+            .from('categories')
+            .select('id, parent_id')
+            .eq('id', categoryInfo.parent_id)
+            .single()
+          if (parent2nd?.parent_id) {
+            const { data: grandparent } = await supabase
+              .from('categories')
+              .select('id, name, slug, level')
+              .eq('id', parent2nd.parent_id)
+              .single()
+            if (grandparent) topLevelCategory = grandparent
+          }
+        }
+
+        // 1차 카테고리의 모든 하위 카테고리 ID 수집
+        let allCategoryIds = [topLevelCategory.id]
+
+        // 2차 카테고리들
+        const { data: level2Categories } = await supabase
+          .from('categories')
+          .select('id')
+          .eq('parent_id', topLevelCategory.id)
+
+        const level2Ids = level2Categories?.map(c => c.id) || []
+        allCategoryIds = [...allCategoryIds, ...level2Ids]
+
+        // 3차 카테고리들
+        if (level2Ids.length > 0) {
+          const { data: level3Categories } = await supabase
+            .from('categories')
+            .select('id')
+            .in('parent_id', level2Ids)
+
+          const level3Ids = level3Categories?.map(c => c.id) || []
+          allCategoryIds = [...allCategoryIds, ...level3Ids]
+        }
+
         // 광고 서비스 ID 조회
         const { data: advertisingData } = await supabase
           .from('advertising_subscriptions')
@@ -66,7 +116,7 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
 
         const advertisedServiceIds = advertisingData?.map(ad => ad.service_id) || []
 
-        // 서비스 조회 (JOIN으로 한 번에, 최적화: 50개만)
+        // 1차 카테고리의 모든 서비스 조회 (하위 포함)
         const { data: services } = await supabase
           .from('services')
           .select(`
@@ -83,10 +133,10 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
             ),
             service_categories!inner(category_id)
           `)
-          .eq('service_categories.category_id', categoryInfo.id)
+          .in('service_categories.category_id', allCategoryIds)
           .eq('status', 'active')
           .order('created_at', { ascending: false })
-          .limit(50) // 최적화: 1000 -> 50
+          .limit(100) // 1차 카테고리 전체이므로 더 많이
 
         // 광고 서비스와 일반 서비스 분리
         const advertisedServices = services?.filter(s => advertisedServiceIds.includes(s.id)) || []
@@ -135,16 +185,28 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
         }
 
         return {
-          category_id: category.category_id,
-          category_name: category.category_name,
-          category_slug: category.category_slug,
+          category_id: topLevelCategory.id,
+          category_name: topLevelCategory.name,
+          category_slug: topLevelCategory.slug,
           visit_count: category.visit_count,
           services: topServices
         }
       })
     )
 
-    return categoriesWithServices
+    // 중복된 1차 카테고리 제거 (같은 1차 카테고리가 여러 번 나오지 않도록)
+    const uniqueCategories = new Map<string, PersonalizedCategory>()
+    categoriesWithServices.forEach(cat => {
+      if (!uniqueCategories.has(cat.category_id)) {
+        uniqueCategories.set(cat.category_id, cat)
+      } else {
+        // 이미 있으면 visit_count 합산
+        const existing = uniqueCategories.get(cat.category_id)!
+        existing.visit_count += cat.visit_count
+      }
+    })
+
+    return Array.from(uniqueCategories.values())
 
   } catch (error) {
     logger.error('Failed to fetch personalized services:', error)
