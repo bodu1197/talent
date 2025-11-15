@@ -8,8 +8,8 @@ import CategorySidebar from '@/components/categories/CategorySidebar'
 import CategoryVisitTracker from '@/components/categories/CategoryVisitTracker'
 import Link from 'next/link'
 
-// ISR 캐싱: 5분마다 재생성
-export const revalidate = 300
+// ISR 캐싱: 광고 우선순위 테스트를 위해 일시적으로 비활성화
+export const revalidate = 0
 
 interface CategoryPageProps {
   params: Promise<{
