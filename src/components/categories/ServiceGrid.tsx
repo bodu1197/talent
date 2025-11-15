@@ -44,6 +44,9 @@ export default function ServiceGrid({ initialServices }: ServiceGridProps) {
     const advertisedServices = filtered.filter(s => (s as any).is_advertised === true)
     const regularServices = filtered.filter(s => (s as any).is_advertised !== true)
 
+    console.log('🔍 ServiceGrid - 광고 서비스:', advertisedServices.length, '개')
+    console.log('🔍 ServiceGrid - 일반 서비스:', regularServices.length, '개')
+
     // 정렬 함수
     const sortServices = (services: Service[]) => {
       const sorted = [...services]
@@ -74,6 +77,11 @@ export default function ServiceGrid({ initialServices }: ServiceGridProps) {
 
     // 광고 서비스(정렬) + 일반 서비스(정렬) 순서로 합치기
     const combined = [...sortedAdvertised, ...sortedRegular]
+
+    console.log('✅ ServiceGrid - 최종 순서 (상위 5개):')
+    combined.slice(0, 5).forEach((s, i) => {
+      console.log(`  ${i + 1}. ${s.title} ${(s as any).is_advertised ? '[광고]' : ''}`)
+    })
 
     setServices(combined)
   }, [sort, price, initialServices])
