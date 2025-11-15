@@ -173,7 +173,6 @@ export async function getServicesByCategory(categoryId: string, limit: number = 
       seller:seller_profiles!inner(
         id,
         business_name,
-        display_name,
         profile_image,
         user_id,
         is_verified
@@ -200,8 +199,14 @@ export async function getServicesByCategory(categoryId: string, limit: number = 
     service.is_advertised = advertisedServiceIds.includes(service.id)
   })
 
-  console.log('🎯 getServicesByCategory - 광고 서비스 수:', allServices.filter(s => s.is_advertised).length)
-  console.log('🎯 getServicesByCategory - 전체 서비스 수:', allServices.length)
+  console.log('🎯 [SERVER] getServicesByCategory - 광고 ID 목록:', advertisedServiceIds)
+  console.log('🎯 [SERVER] getServicesByCategory - 광고 서비스 수:', allServices.filter(s => s.is_advertised).length)
+  console.log('🎯 [SERVER] getServicesByCategory - 전체 서비스 수:', allServices.length)
+  console.log('🎯 [SERVER] getServicesByCategory - 샘플 서비스:', {
+    id: allServices[0]?.id,
+    title: allServices[0]?.title,
+    is_advertised: allServices[0]?.is_advertised
+  })
 
   // 광고 서비스와 일반 서비스 분리
   const advertisedServices = allServices.filter(s => advertisedServiceIds.includes(s.id))
