@@ -121,7 +121,7 @@ export async function getSellerServicesCount(userId: string, status: string) {
 
 // 카테고리별 승인된 서비스 조회 (서버 컴포넌트용)
 // useAuth=true이면 인증된 클라이언트 사용 (기본값), false면 anon 클라이언트 사용 (캐싱 가능)
-export async function getServicesByCategory(categoryId: string, limit: number = 100, useAuth: boolean = true) {
+export async function getServicesByCategory(categoryId: string, limit: number = 100, useAuth: boolean = true, page: number = 1) {
   const supabase = useAuth
     ? await createServerClient()
     : createBrowserClient()
@@ -157,8 +157,16 @@ export async function getServicesByCategory(categoryId: string, limit: number = 
     return []
   }
 
-  // 4. 서비스 조회 (limit 적용)
-  const { data, error } = await supabase
+  // 광고 서비스 ID 조회
+  const { data: advertisingData } = await supabase
+    .from('advertising_subscriptions')
+    .select('service_id')
+    .eq('status', 'active')
+
+  const advertisedServiceIds = advertisingData?.map(ad => ad.service_id) || []
+
+  // 4. 서비스 조회 (페이지네이션 적용 전 모든 서비스 조회)
+  const { data: allServices, error } = await supabase
     .from('services')
     .select(`
       *,
@@ -177,12 +185,34 @@ export async function getServicesByCategory(categoryId: string, limit: number = 
     .in('id', serviceIds)
     .eq('status', 'active')  // 승인된 서비스만
     .order('created_at', { ascending: false })
-    .limit(limit)
 
   if (error) {
     logger.error('Error fetching services by category:', error)
     throw error
   }
+
+  if (!allServices || allServices.length === 0) {
+    return []
+  }
+
+  // 광고 서비스와 일반 서비스 분리
+  const advertisedServices = allServices.filter(s => advertisedServiceIds.includes(s.id))
+  const regularServices = allServices.filter(s => !advertisedServiceIds.includes(s.id))
+
+  // 일반 서비스 랜덤 셔플
+  for (let i = regularServices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [regularServices[i], regularServices[j]] = [regularServices[j], regularServices[i]]
+  }
+
+  // 광고 서비스 + 랜덤 일반 서비스 결합
+  const combinedServices = [...advertisedServices, ...regularServices]
+
+  // 페이지네이션 적용 (1페이지 = 28개)
+  const perPage = 28
+  const startIndex = (page - 1) * perPage
+  const endIndex = startIndex + perPage
+  const data = combinedServices.slice(startIndex, endIndex)
 
   // 데이터 매핑 및 seller user 정보 추가
   if (data && data.length > 0) {

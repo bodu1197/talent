@@ -15,10 +15,15 @@ interface CategoryPageProps {
   params: Promise<{
     slug: string
   }>
+  searchParams: Promise<{
+    page?: string
+  }>
 }
 
-export default async function CategoryPage({ params }: CategoryPageProps) {
+export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
   const { slug } = await params
+  const { page: pageParam } = await searchParams
+  const currentPage = parseInt(pageParam || '1', 10)
 
   // 카테고리 찾기 (인증 불필요, 캐싱 가능)
   const category = await getCategory(slug, false)
@@ -37,7 +42,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const [categoryPath, allCategories, services] = await Promise.all([
     getCategoryPath(category.id, false),
     getCachedCategoriesTree(false),
-    getServicesByCategory(category.id, 100, false) // 최대 100개, 인증 불필요
+    getServicesByCategory(category.id, 1000, false, currentPage) // 모든 서비스 조회, 페이지네이션 적용
   ])
 
   return (
@@ -91,9 +96,32 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               </div>
 
               {/* 서비스 그리드 */}
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
                 <ServiceGrid initialServices={services} />
               </div>
+
+              {/* 페이지네이션 */}
+              {services.length === 28 && (
+                <div className="flex justify-center gap-2">
+                  {currentPage > 1 && (
+                    <Link
+                      href={`/categories/${slug}?page=${currentPage - 1}`}
+                      className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    >
+                      <i className="fas fa-chevron-left"></i>
+                    </Link>
+                  )}
+                  <span className="px-4 py-2 bg-brand-primary text-white rounded-lg">
+                    {currentPage}
+                  </span>
+                  <Link
+                    href={`/categories/${slug}?page=${currentPage + 1}`}
+                    className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                  >
+                    <i className="fas fa-chevron-right"></i>
+                  </Link>
+                </div>
+              )}
             </main>
           </div>
         </div>
