@@ -248,6 +248,9 @@ export async function getServicesByCategory(categoryId: string, limit: number = 
       // order_count 매핑
       service.order_count = service.orders_count || 0
 
+      // 광고 여부 표시 (클라이언트 정렬에서 유지하기 위함)
+      service.is_advertised = advertisedServiceIds.includes(service.id)
+
       // 평균 별점 및 리뷰 수 설정
       const stats = ratingMap.get(service.id)
       if (stats && stats.count > 0) {

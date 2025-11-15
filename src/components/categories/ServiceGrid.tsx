@@ -40,27 +40,42 @@ export default function ServiceGrid({ initialServices }: ServiceGridProps) {
       })
     }
 
-    // 정렬 적용
-    switch (sort) {
-      case 'latest':
-        // 이미 created_at 기준 정렬됨
-        break
-      case 'price_low':
-        filtered.sort((a, b) => (a.price || 0) - (b.price || 0))
-        break
-      case 'price_high':
-        filtered.sort((a, b) => (b.price || 0) - (a.price || 0))
-        break
-      case 'rating':
-        filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0))
-        break
-      case 'popular':
-      default:
-        filtered.sort((a, b) => (b.orders_count || 0) - (a.orders_count || 0))
-        break
+    // 광고 서비스와 일반 서비스 분리 (광고 우선순위 유지)
+    const advertisedServices = filtered.filter(s => (s as any).is_advertised === true)
+    const regularServices = filtered.filter(s => (s as any).is_advertised !== true)
+
+    // 정렬 함수
+    const sortServices = (services: Service[]) => {
+      const sorted = [...services]
+      switch (sort) {
+        case 'latest':
+          // 이미 created_at 기준 정렬됨
+          break
+        case 'price_low':
+          sorted.sort((a, b) => (a.price || 0) - (b.price || 0))
+          break
+        case 'price_high':
+          sorted.sort((a, b) => (b.price || 0) - (a.price || 0))
+          break
+        case 'rating':
+          sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0))
+          break
+        case 'popular':
+        default:
+          sorted.sort((a, b) => (b.orders_count || 0) - (a.orders_count || 0))
+          break
+      }
+      return sorted
     }
 
-    setServices(filtered)
+    // 광고 서비스와 일반 서비스 각각 정렬
+    const sortedAdvertised = sortServices(advertisedServices)
+    const sortedRegular = sortServices(regularServices)
+
+    // 광고 서비스(정렬) + 일반 서비스(정렬) 순서로 합치기
+    const combined = [...sortedAdvertised, ...sortedRegular]
+
+    setServices(combined)
   }, [sort, price, initialServices])
 
   if (services.length === 0) {
