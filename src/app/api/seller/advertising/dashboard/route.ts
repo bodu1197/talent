@@ -69,7 +69,9 @@ export async function GET(request: NextRequest) {
           totalClicks: ad.total_clicks,
           ctr: ad.total_impressions > 0 ? (ad.total_clicks / ad.total_impressions) * 100 : 0,
           createdAt: ad.created_at,
-          status: ad.status
+          status: ad.status,
+          isFreePromotion: ad.is_free_promotion || false,
+          promotionEndDate: ad.promotion_end_date || null
         }
       ]) || []
     )
@@ -97,7 +99,9 @@ export async function GET(request: NextRequest) {
         monthlyPrice: s.monthly_price,
         totalImpressions: s.total_impressions,
         totalClicks: s.total_clicks,
-        ctr: s.total_impressions > 0 ? (s.total_clicks / s.total_impressions) * 100 : 0
+        ctr: s.total_impressions > 0 ? (s.total_clicks / s.total_impressions) * 100 : 0,
+        isFreePromotion: s.is_free_promotion || false,
+        promotionEndDate: s.promotion_end_date || null
       })) || [],
       services: servicesWithAdStatus,
       stats: {

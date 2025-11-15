@@ -23,6 +23,8 @@ export default function AdvertisingPage() {
       ctr: number;
       createdAt: string;
       status: string;
+      isFreePromotion: boolean;
+      promotionEndDate: string | null;
     };
   }>>([]);
   const [selectedService, setSelectedService] = useState<string>('');
@@ -171,6 +173,44 @@ export default function AdvertisingPage() {
             </p>
           </div>
 
+          {/* 무료 프로모션 알림 배너 */}
+          {services.some(s => s.adDetails?.isFreePromotion && s.adDetails?.promotionEndDate) && (
+            <div className="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6 shadow-sm">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                  <i className="fas fa-gift text-white text-xl"></i>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-bold text-blue-900 mb-2">
+                    무료 광고 프로모션 진행 중입니다! 🎉
+                  </h3>
+                  <p className="text-blue-700 mb-3">
+                    현재 {services.filter(s => s.adDetails?.isFreePromotion).length}개의 서비스가 무료 광고 프로모션을 이용 중입니다.
+                    프로모션 기간 동안 광고 비용 없이 서비스를 홍보하세요!
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    {services
+                      .filter(s => s.adDetails?.isFreePromotion && s.adDetails?.promotionEndDate)
+                      .map(service => {
+                        const endDate = new Date(service.adDetails!.promotionEndDate!);
+                        const today = new Date();
+                        const daysLeft = Math.ceil((endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+                        return (
+                          <div key={service.id} className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm border border-blue-200">
+                            <i className="fas fa-check-circle text-green-500"></i>
+                            <span className="font-medium text-gray-900">{service.title}</span>
+                            <span className="text-sm text-blue-600 font-semibold">
+                              ({daysLeft > 0 ? `${daysLeft}일 남음` : '종료'})
+                            </span>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* 통계 카드 */}
           {dashboard?.subscriptions && dashboard.subscriptions.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
@@ -307,23 +347,38 @@ export default function AdvertisingPage() {
 
                         {/* 상태 */}
                         <td className="py-3 px-4 text-center">
-                          {service.hasActiveAd ? (
-                            service.adDetails?.status === 'pending_payment' ? (
-                              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                <span className="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span>
-                                결제 대기중
-                              </span>
+                          <div className="flex flex-col items-center gap-1">
+                            {service.hasActiveAd ? (
+                              service.adDetails?.status === 'pending_payment' ? (
+                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                  <span className="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span>
+                                  결제 대기중
+                                </span>
+                              ) : (
+                                <>
+                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                                    광고 진행중
+                                  </span>
+                                  {service.adDetails?.isFreePromotion && service.adDetails?.promotionEndDate && (
+                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-1">
+                                      <i className="fas fa-gift mr-1 text-xs"></i>
+                                      무료 프로모션 ({(() => {
+                                        const endDate = new Date(service.adDetails.promotionEndDate);
+                                        const today = new Date();
+                                        const daysLeft = Math.ceil((endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+                                        return daysLeft > 0 ? `${daysLeft}일 남음` : '종료';
+                                      })()})
+                                    </span>
+                                  )}
+                                </>
+                              )
                             ) : (
-                              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-                                광고 진행중
+                              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                                미진행
                               </span>
-                            )
-                          ) : (
-                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                              미진행
-                            </span>
-                          )}
+                            )}
+                          </div>
                         </td>
 
                         {/* 노출 수 */}
