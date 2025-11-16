@@ -1,32 +1,34 @@
+import { FaLightbulb, FaCheck } from "react-icons/fa";
+
 interface ServiceFormData {
-  title: string
-  category_ids: string[]
-  price: string
-  delivery_days: string
-  revision_count: string
-  description: string
-  thumbnail_url: string
-  thumbnail_file: File | null
-  requirements: { question: string; required: boolean }[]
-  create_portfolio: boolean
+  title: string;
+  category_ids: string[];
+  price: string;
+  delivery_days: string;
+  revision_count: string;
+  description: string;
+  thumbnail_url: string;
+  thumbnail_file: File | null;
+  requirements: { question: string; required: boolean }[];
+  create_portfolio: boolean;
   portfolio_data: {
-    title: string
-    description: string
-    youtube_url: string
-    project_url: string
-    tags: string[]
-    images: File[]
-  }
+    title: string;
+    description: string;
+    youtube_url: string;
+    project_url: string;
+    tags: string[];
+    images: File[];
+  };
   features?: {
-    commercial_use?: boolean
-    source_files?: boolean
-    express_delivery?: boolean
-  }
+    commercial_use?: boolean;
+    source_files?: boolean;
+    express_delivery?: boolean;
+  };
 }
 
 interface Props {
-  formData: ServiceFormData
-  setFormData: (data: ServiceFormData) => void
+  formData: ServiceFormData;
+  setFormData: (data: ServiceFormData) => void;
 }
 
 export default function Step3Description({ formData, setFormData }: Props) {
@@ -41,7 +43,9 @@ export default function Step3Description({ formData, setFormData }: Props) {
         </label>
         <textarea
           value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, description: e.target.value })
+          }
           rows={12}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent resize-none"
           placeholder="서비스에 대한 자세한 설명을 입력하세요.
@@ -58,7 +62,9 @@ export default function Step3Description({ formData, setFormData }: Props) {
         />
         <div className="mt-2 flex justify-between text-sm">
           <p className="text-gray-500">최소 100자 이상 작성해주세요</p>
-          <p className={`${formData.description.length >= 100 ? 'text-green-600' : 'text-gray-500'}`}>
+          <p
+            className={`${formData.description.length >= 100 ? "text-green-600" : "text-gray-500"}`}
+          >
             {formData.description.length} / 최소 100자
           </p>
         </div>
@@ -67,29 +73,40 @@ export default function Step3Description({ formData, setFormData }: Props) {
       {/* 작성 가이드 */}
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
         <h3 className="text-lg font-bold text-gray-900 mb-4">
-          <i className="fas fa-lightbulb text-yellow-500 mr-2"></i>
+          <FaLightbulb className="text-yellow-500 mr-2 inline" />
           좋은 서비스 설명 작성 팁
         </h3>
         <ul className="space-y-2 text-sm text-gray-700">
           <li className="flex items-start gap-2">
-            <i className="fas fa-check text-green-600 mt-1"></i>
-            <span><strong>명확한 범위:</strong> 어떤 작업을 해드리는지 구체적으로 명시</span>
+            <FaCheck className="text-green-600 mt-1" />
+            <span>
+              <strong>명확한 범위:</strong> 어떤 작업을 해드리는지 구체적으로
+              명시
+            </span>
           </li>
           <li className="flex items-start gap-2">
-            <i className="fas fa-check text-green-600 mt-1"></i>
-            <span><strong>작업 프로세스:</strong> 어떤 순서로 진행되는지 설명</span>
+            <FaCheck className="text-green-600 mt-1" />
+            <span>
+              <strong>작업 프로세스:</strong> 어떤 순서로 진행되는지 설명
+            </span>
           </li>
           <li className="flex items-start gap-2">
-            <i className="fas fa-check text-green-600 mt-1"></i>
-            <span><strong>준비 사항:</strong> 고객이 제공해야 할 자료나 정보</span>
+            <FaCheck className="text-green-600 mt-1" />
+            <span>
+              <strong>준비 사항:</strong> 고객이 제공해야 할 자료나 정보
+            </span>
           </li>
           <li className="flex items-start gap-2">
-            <i className="fas fa-check text-green-600 mt-1"></i>
-            <span><strong>결과물 형식:</strong> 최종 파일 형식이나 전달 방법</span>
+            <FaCheck className="text-green-600 mt-1" />
+            <span>
+              <strong>결과물 형식:</strong> 최종 파일 형식이나 전달 방법
+            </span>
           </li>
           <li className="flex items-start gap-2">
-            <i className="fas fa-check text-green-600 mt-1"></i>
-            <span><strong>추가 비용:</strong> 기본 가격에 포함되지 않는 항목 안내</span>
+            <FaCheck className="text-green-600 mt-1" />
+            <span>
+              <strong>추가 비용:</strong> 기본 가격에 포함되지 않는 항목 안내
+            </span>
           </li>
         </ul>
       </div>
@@ -104,10 +121,15 @@ export default function Step3Description({ formData, setFormData }: Props) {
             <input
               type="checkbox"
               checked={formData.features?.commercial_use || false}
-              onChange={(e) => setFormData({
-                ...formData,
-                features: { ...formData.features, commercial_use: e.target.checked }
-              })}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  features: {
+                    ...formData.features,
+                    commercial_use: e.target.checked,
+                  },
+                })
+              }
               className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
             />
             <label className="text-sm text-gray-700">상업적 이용 가능</label>
@@ -116,10 +138,15 @@ export default function Step3Description({ formData, setFormData }: Props) {
             <input
               type="checkbox"
               checked={formData.features?.source_files || false}
-              onChange={(e) => setFormData({
-                ...formData,
-                features: { ...formData.features, source_files: e.target.checked }
-              })}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  features: {
+                    ...formData.features,
+                    source_files: e.target.checked,
+                  },
+                })
+              }
               className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
             />
             <label className="text-sm text-gray-700">원본 파일 제공</label>
@@ -128,16 +155,23 @@ export default function Step3Description({ formData, setFormData }: Props) {
             <input
               type="checkbox"
               checked={formData.features?.express_delivery || false}
-              onChange={(e) => setFormData({
-                ...formData,
-                features: { ...formData.features, express_delivery: e.target.checked }
-              })}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  features: {
+                    ...formData.features,
+                    express_delivery: e.target.checked,
+                  },
+                })
+              }
               className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
             />
-            <label className="text-sm text-gray-700">급행 작업 가능 (추가 비용)</label>
+            <label className="text-sm text-gray-700">
+              급행 작업 가능 (추가 비용)
+            </label>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

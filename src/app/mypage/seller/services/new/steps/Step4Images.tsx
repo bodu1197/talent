@@ -8,6 +8,8 @@ import {
   type GradientTemplate,
 } from "@/lib/template-generator";
 import { logger } from "@/lib/logger";
+import { FaUpload, FaTimes, FaCheck, FaCloudUploadAlt } from "react-icons/fa";
+import { FaWandMagicSparkles } from "react-icons/fa6";
 
 // Dynamic import for TextOverlayEditor - only loads when template mode is selected
 const TextOverlayEditor = dynamic(
@@ -168,7 +170,7 @@ export default function Step4Images({ formData, setFormData }: Props) {
                 : "bg-white text-gray-700 border-gray-300 hover:border-brand-primary"
             }`}
           >
-            <i className="fas fa-upload mr-2"></i>
+            <FaUpload className="mr-2 inline" />
             파일 업로드
           </button>
           <button
@@ -185,7 +187,7 @@ export default function Step4Images({ formData, setFormData }: Props) {
                 : "bg-white text-gray-700 border-gray-300 hover:border-brand-primary"
             }`}
           >
-            <i className="fas fa-wand-magic-sparkles mr-2"></i>
+            <FaWandMagicSparkles className="mr-2 inline" />
             템플릿 생성
           </button>
         </div>
@@ -205,7 +207,7 @@ export default function Step4Images({ formData, setFormData }: Props) {
                   onClick={removeThumbnail}
                   className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors text-sm"
                 >
-                  <i className="fas fa-times mr-1"></i>
+                  <FaTimes className="mr-1 inline" />
                   삭제
                 </button>
               </div>
@@ -217,7 +219,7 @@ export default function Step4Images({ formData, setFormData }: Props) {
                   onChange={handleThumbnailChange}
                   className="hidden"
                 />
-                <i className="fas fa-cloud-upload-alt text-gray-400 text-4xl mb-3"></i>
+                <FaCloudUploadAlt className="text-gray-400 text-4xl mb-3 inline-block" />
                 <p className="text-gray-600 font-medium">
                   클릭하여 이미지 선택
                 </p>
@@ -248,11 +250,11 @@ export default function Step4Images({ formData, setFormData }: Props) {
                   onClick={removeThumbnail}
                   className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors text-sm"
                 >
-                  <i className="fas fa-times mr-1"></i>
+                  <FaTimes className="mr-1 inline" />
                   다시 만들기
                 </button>
                 <div className="absolute top-2 left-2 bg-green-500 text-white px-3 py-1 rounded-lg text-sm">
-                  <i className="fas fa-check mr-1"></i>
+                  <FaCheck className="mr-1 inline" />
                   생성 완료
                 </div>
               </div>
@@ -280,7 +282,7 @@ export default function Step4Images({ formData, setFormData }: Props) {
                         disabled={!textStyle?.text?.trim()}
                         className="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
                       >
-                        <i className="fas fa-wand-magic-sparkles mr-2"></i>
+                        <FaWandMagicSparkles className="mr-2 inline" />
                         썸네일 생성하기 (652×488px)
                       </button>
                     </div>

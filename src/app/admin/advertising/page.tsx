@@ -1,131 +1,160 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import {
+  FaMoneyBillWave,
+  FaBullhorn,
+  FaClock,
+  FaWonSign,
+  FaEye,
+  FaBan,
+  FaCheckCircle,
+  FaTimes,
+} from "react-icons/fa";
 
 interface Subscription {
-  id: string
-  seller_id: string
-  service_id: string
-  monthly_price: number
-  status: string
-  payment_method: string
-  next_billing_date: string
-  last_billed_at: string | null
-  started_at: string
-  total_impressions: number
-  total_clicks: number
-  total_paid: number
+  id: string;
+  seller_id: string;
+  service_id: string;
+  monthly_price: number;
+  status: string;
+  payment_method: string;
+  next_billing_date: string;
+  last_billed_at: string | null;
+  started_at: string;
+  total_impressions: number;
+  total_clicks: number;
+  total_paid: number;
   seller?: {
-    id: string
+    id: string;
     user?: {
-      email: string
-      name: string | null
-    }
-  }
+      email: string;
+      name: string | null;
+    };
+  };
   service?: {
-    title: string
-  }
+    title: string;
+  };
 }
 
 interface Summary {
-  totalSubscriptions: number
-  activeSubscriptions: number
-  pendingPayments: number
-  cancelledSubscriptions: number
-  totalRevenue: number
-  monthlyRevenue: number
+  totalSubscriptions: number;
+  activeSubscriptions: number;
+  pendingPayments: number;
+  cancelledSubscriptions: number;
+  totalRevenue: number;
+  monthlyRevenue: number;
 }
 
 export default function AdminAdvertisingPage() {
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
-  const [summary, setSummary] = useState<Summary | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [statusFilter, setStatusFilter] = useState<string>('all')
-  const [paymentFilter, setPaymentFilter] = useState<string>('all')
-  const [selectedSubscription, setSelectedSubscription] = useState<Subscription | null>(null)
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [summary, setSummary] = useState<Summary | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [paymentFilter, setPaymentFilter] = useState<string>("all");
+  const [selectedSubscription, setSelectedSubscription] =
+    useState<Subscription | null>(null);
 
   useEffect(() => {
-    fetchSubscriptions()
-  }, [statusFilter, paymentFilter])
+    fetchSubscriptions();
+  }, [statusFilter, paymentFilter]);
 
   const fetchSubscriptions = async () => {
     try {
-      setLoading(true)
-      const params = new URLSearchParams()
-      if (statusFilter !== 'all') params.append('status', statusFilter)
-      if (paymentFilter !== 'all') params.append('paymentMethod', paymentFilter)
+      setLoading(true);
+      const params = new URLSearchParams();
+      if (statusFilter !== "all") params.append("status", statusFilter);
+      if (paymentFilter !== "all")
+        params.append("paymentMethod", paymentFilter);
 
-      const response = await fetch(`/api/admin/advertising?${params.toString()}`)
+      const response = await fetch(
+        `/api/admin/advertising?${params.toString()}`,
+      );
       if (response.ok) {
-        const data = await response.json()
-        setSubscriptions(data.subscriptions || [])
-        setSummary(data.summary)
+        const data = await response.json();
+        setSubscriptions(data.subscriptions || []);
+        setSummary(data.summary);
       }
     } catch (error) {
-      console.error('Failed to fetch subscriptions:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
+      console.error(
+        "Failed to fetch subscriptions:",
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  const handleStatusChange = async (subscriptionId: string, newStatus: string) => {
-    if (!confirm(`정말 이 광고를 ${newStatus === 'active' ? '활성화' : '취소'}하시겠습니까?`)) {
-      return
+  const handleStatusChange = async (
+    subscriptionId: string,
+    newStatus: string,
+  ) => {
+    if (
+      !confirm(
+        `정말 이 광고를 ${newStatus === "active" ? "활성화" : "취소"}하시겠습니까?`,
+      )
+    ) {
+      return;
     }
 
     try {
-      const response = await fetch('/api/admin/advertising', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/admin/advertising", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ subscriptionId, status: newStatus }),
-      })
+      });
 
       if (response.ok) {
-        await fetchSubscriptions()
-        alert('상태가 변경되었습니다.')
+        await fetchSubscriptions();
+        alert("상태가 변경되었습니다.");
       } else {
-        alert('상태 변경에 실패했습니다.')
+        alert("상태 변경에 실패했습니다.");
       }
     } catch (error) {
-      console.error('Failed to update status:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
-      alert('상태 변경에 실패했습니다.')
+      console.error(
+        "Failed to update status:",
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+      );
+      alert("상태 변경에 실패했습니다.");
     }
-  }
+  };
 
   const getStatusBadge = (status: string) => {
     const styles = {
-      active: 'bg-green-100 text-green-800',
-      pending_payment: 'bg-yellow-100 text-yellow-800',
-      cancelled: 'bg-red-100 text-red-800',
-      expired: 'bg-gray-100 text-gray-800',
-    }
+      active: "bg-green-100 text-green-800",
+      pending_payment: "bg-yellow-100 text-yellow-800",
+      cancelled: "bg-red-100 text-red-800",
+      expired: "bg-gray-100 text-gray-800",
+    };
     const labels = {
-      active: '활성',
-      pending_payment: '결제 대기',
-      cancelled: '취소',
-      expired: '만료',
-    }
+      active: "활성",
+      pending_payment: "결제 대기",
+      cancelled: "취소",
+      expired: "만료",
+    };
     return (
-      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${styles[status as keyof typeof styles] || 'bg-gray-100 text-gray-800'}`}>
+      <span
+        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${styles[status as keyof typeof styles] || "bg-gray-100 text-gray-800"}`}
+      >
         {labels[status as keyof typeof labels] || status}
       </span>
-    )
-  }
+    );
+  };
 
   const getPaymentMethodLabel = (method: string) => {
     const labels = {
-      credit: '크레딧',
-      card: '카드',
-      bank_transfer: '무통장',
-    }
-    return labels[method as keyof typeof labels] || method
-  }
+      credit: "크레딧",
+      card: "카드",
+      bank_transfer: "무통장",
+    };
+    return labels[method as keyof typeof labels] || method;
+  };
 
   const getCTR = (impressions: number, clicks: number) => {
-    if (impressions === 0) return '0.00'
-    return ((clicks / impressions) * 100).toFixed(2)
-  }
+    if (impressions === 0) return "0.00";
+    return ((clicks / impressions) * 100).toFixed(2);
+  };
 
   return (
     <div className="space-y-8">
@@ -140,7 +169,7 @@ export default function AdminAdvertisingPage() {
             href="/admin/advertising/payments"
             className="px-4 py-2 bg-red-600 text-white rounded-md font-medium hover:bg-red-700 transition-colors flex items-center gap-2"
           >
-            <i className="fas fa-money-bill-wave"></i>
+            <FaMoneyBillWave />
             무통장 입금 확인
             {summary && summary.pendingPayments > 0 && (
               <span className="bg-white text-red-600 rounded-full px-2 py-0.5 text-xs font-bold">
@@ -169,13 +198,15 @@ export default function AdminAdvertisingPage() {
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600 mb-2">총 수익</p>
+                <p className="text-sm font-medium text-slate-600 mb-2">
+                  총 수익
+                </p>
                 <p className="text-3xl font-bold text-slate-900">
                   ₩{summary.totalRevenue.toLocaleString()}
                 </p>
               </div>
               <div className="rounded-lg bg-blue-50 p-3">
-                <i className="fas fa-won-sign text-[#0f3460] text-xl"></i>
+                <FaWonSign className="text-[#0f3460] text-xl" />
               </div>
             </div>
           </div>
@@ -183,7 +214,9 @@ export default function AdminAdvertisingPage() {
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600 mb-2">활성 광고</p>
+                <p className="text-sm font-medium text-slate-600 mb-2">
+                  활성 광고
+                </p>
                 <p className="text-3xl font-bold text-slate-900">
                   {summary.activeSubscriptions}
                 </p>
@@ -192,7 +225,7 @@ export default function AdminAdvertisingPage() {
                 </p>
               </div>
               <div className="rounded-lg bg-green-50 p-3">
-                <i className="fas fa-bullhorn text-green-600 text-xl"></i>
+                <FaBullhorn className="text-green-600 text-xl" />
               </div>
             </div>
           </div>
@@ -200,13 +233,15 @@ export default function AdminAdvertisingPage() {
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600 mb-2">결제 대기</p>
+                <p className="text-sm font-medium text-slate-600 mb-2">
+                  결제 대기
+                </p>
                 <p className="text-3xl font-bold text-slate-900">
                   {summary.pendingPayments}
                 </p>
               </div>
               <div className="rounded-lg bg-yellow-50 p-3">
-                <i className="fas fa-clock text-yellow-600 text-xl"></i>
+                <FaClock className="text-yellow-600 text-xl" />
               </div>
             </div>
           </div>
@@ -258,7 +293,7 @@ export default function AdminAdvertisingPage() {
         </div>
       ) : subscriptions.length === 0 ? (
         <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
-          <i className="fas fa-bullhorn text-slate-400 text-5xl mb-4"></i>
+          <FaBullhorn className="text-slate-400 text-5xl mb-4 inline-block" />
           <p className="text-slate-600">광고 구독이 없습니다.</p>
         </div>
       ) : (
@@ -302,13 +337,15 @@ export default function AdminAdvertisingPage() {
                     <td className="whitespace-nowrap px-6 py-4 text-sm">
                       <div>
                         <p className="font-medium text-slate-900">
-                          {sub.seller?.user?.name || 'Unknown'}
+                          {sub.seller?.user?.name || "Unknown"}
                         </p>
-                        <p className="text-slate-500">{sub.seller?.user?.email}</p>
+                        <p className="text-slate-500">
+                          {sub.seller?.user?.email}
+                        </p>
                       </div>
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-900">
-                      {sub.service?.title || 'Unknown Service'}
+                      {sub.service?.title || "Unknown Service"}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-sm">
                       {getStatusBadge(sub.status)}
@@ -335,24 +372,26 @@ export default function AdminAdvertisingPage() {
                           className="text-[#0f3460] hover:text-[#0f3460]/80"
                           title="상세 보기"
                         >
-                          <i className="fas fa-eye"></i>
+                          <FaEye />
                         </button>
-                        {sub.status === 'active' && (
+                        {sub.status === "active" && (
                           <button
-                            onClick={() => handleStatusChange(sub.id, 'cancelled')}
+                            onClick={() =>
+                              handleStatusChange(sub.id, "cancelled")
+                            }
                             className="text-red-600 hover:text-red-700"
                             title="취소"
                           >
-                            <i className="fas fa-ban"></i>
+                            <FaBan />
                           </button>
                         )}
-                        {sub.status === 'cancelled' && (
+                        {sub.status === "cancelled" && (
                           <button
-                            onClick={() => handleStatusChange(sub.id, 'active')}
+                            onClick={() => handleStatusChange(sub.id, "active")}
                             className="text-green-600 hover:text-green-700"
                             title="활성화"
                           >
-                            <i className="fas fa-check-circle"></i>
+                            <FaCheckCircle />
                           </button>
                         )}
                       </div>
@@ -371,12 +410,14 @@ export default function AdminAdvertisingPage() {
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div className="px-6 py-4 border-b border-slate-200">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-slate-900">광고 상세 정보</h2>
+                <h2 className="text-xl font-bold text-slate-900">
+                  광고 상세 정보
+                </h2>
                 <button
                   onClick={() => setSelectedSubscription(null)}
                   className="text-slate-400 hover:text-slate-600"
                 >
-                  <i className="fas fa-times text-xl"></i>
+                  <FaTimes className="text-xl" />
                 </button>
               </div>
             </div>
@@ -386,7 +427,7 @@ export default function AdminAdvertisingPage() {
                 <div>
                   <p className="text-sm font-medium text-slate-600">판매자</p>
                   <p className="text-sm text-slate-900 mt-1">
-                    {selectedSubscription.seller?.user?.name || 'Unknown'}
+                    {selectedSubscription.seller?.user?.name || "Unknown"}
                   </p>
                   <p className="text-sm text-slate-500">
                     {selectedSubscription.seller?.user?.email}
@@ -395,7 +436,7 @@ export default function AdminAdvertisingPage() {
                 <div>
                   <p className="text-sm font-medium text-slate-600">서비스</p>
                   <p className="text-sm text-slate-900 mt-1">
-                    {selectedSubscription.service?.title || 'Unknown Service'}
+                    {selectedSubscription.service?.title || "Unknown Service"}
                   </p>
                 </div>
               </div>
@@ -403,10 +444,14 @@ export default function AdminAdvertisingPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm font-medium text-slate-600">상태</p>
-                  <div className="mt-1">{getStatusBadge(selectedSubscription.status)}</div>
+                  <div className="mt-1">
+                    {getStatusBadge(selectedSubscription.status)}
+                  </div>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-600">결제 방법</p>
+                  <p className="text-sm font-medium text-slate-600">
+                    결제 방법
+                  </p>
                   <p className="text-sm text-slate-900 mt-1">
                     {getPaymentMethodLabel(selectedSubscription.payment_method)}
                   </p>
@@ -421,7 +466,9 @@ export default function AdminAdvertisingPage() {
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-600">총 결제액</p>
+                  <p className="text-sm font-medium text-slate-600">
+                    총 결제액
+                  </p>
                   <p className="text-sm text-slate-900 mt-1">
                     ₩{selectedSubscription.total_paid.toLocaleString()}
                   </p>
@@ -444,7 +491,11 @@ export default function AdminAdvertisingPage() {
                 <div>
                   <p className="text-sm font-medium text-slate-600">CTR</p>
                   <p className="text-sm text-slate-900 mt-1">
-                    {getCTR(selectedSubscription.total_impressions, selectedSubscription.total_clicks)}%
+                    {getCTR(
+                      selectedSubscription.total_impressions,
+                      selectedSubscription.total_clicks,
+                    )}
+                    %
                   </p>
                 </div>
               </div>
@@ -453,13 +504,19 @@ export default function AdminAdvertisingPage() {
                 <div>
                   <p className="text-sm font-medium text-slate-600">시작일</p>
                   <p className="text-sm text-slate-900 mt-1">
-                    {new Date(selectedSubscription.started_at).toLocaleDateString('ko-KR')}
+                    {new Date(
+                      selectedSubscription.started_at,
+                    ).toLocaleDateString("ko-KR")}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-600">다음 결제일</p>
+                  <p className="text-sm font-medium text-slate-600">
+                    다음 결제일
+                  </p>
                   <p className="text-sm text-slate-900 mt-1">
-                    {new Date(selectedSubscription.next_billing_date).toLocaleDateString('ko-KR')}
+                    {new Date(
+                      selectedSubscription.next_billing_date,
+                    ).toLocaleDateString("ko-KR")}
                   </p>
                 </div>
               </div>
@@ -477,5 +534,5 @@ export default function AdminAdvertisingPage() {
         </div>
       )}
     </div>
-  )
+  );
 }

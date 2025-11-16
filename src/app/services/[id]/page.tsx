@@ -1,52 +1,68 @@
-import { notFound } from 'next/navigation'
-import Link from 'next/link'
-import { createClient } from '@/lib/supabase/server'
-import ViewTracker from '@/components/services/ViewTracker'
-import FavoriteButton from '@/components/services/FavoriteButton'
-import PortfolioGrid from '@/components/services/PortfolioGrid'
-import ExpertResponseBanner from '@/components/services/ExpertResponseBanner'
-import ContactSellerButton from '@/components/services/ContactSellerButton'
-import PurchaseButton from '@/components/services/PurchaseButton'
-import { logger } from '@/lib/logger'
-import { getCategoryPath } from '@/lib/categories'
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
+import ViewTracker from "@/components/services/ViewTracker";
+import FavoriteButton from "@/components/services/FavoriteButton";
+import PortfolioGrid from "@/components/services/PortfolioGrid";
+import ExpertResponseBanner from "@/components/services/ExpertResponseBanner";
+import ContactSellerButton from "@/components/services/ContactSellerButton";
+import PurchaseButton from "@/components/services/PurchaseButton";
+import { logger } from "@/lib/logger";
+import { getCategoryPath } from "@/lib/categories";
+import {
+  FaStar,
+  FaHeart,
+  FaUser,
+  FaCrown,
+  FaReply,
+  FaShare,
+  FaShieldAlt,
+  FaImage,
+} from "react-icons/fa";
+import { FaRegComment, FaRegUser } from "react-icons/fa";
 
 // 동적 렌더링 강제 (찜 개수 실시간 반영)
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 interface ServiceDetailProps {
   params: Promise<{
-    id: string
-  }>
+    id: string;
+  }>;
 }
 
 // YouTube 비디오 ID 추출 함수
 function _getYoutubeVideoId(url: string | null): string | null {
-  if (!url) return null
+  if (!url) return null;
 
   const patterns = [
     /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
     /youtube\.com\/embed\/([^&\n?#]+)/,
-    /youtube\.com\/v\/([^&\n?#]+)/
-  ]
+    /youtube\.com\/v\/([^&\n?#]+)/,
+  ];
 
   for (const pattern of patterns) {
-    const match = url.match(pattern)
-    if (match) return match[1]
+    const match = url.match(pattern);
+    if (match) return match[1];
   }
 
-  return null
+  return null;
 }
 
-export default async function ServiceDetailPage({ params }: ServiceDetailProps) {
-  const { id } = await params
-  const supabase = await createClient()
+export default async function ServiceDetailPage({
+  params,
+}: ServiceDetailProps) {
+  const { id } = await params;
+  const supabase = await createClient();
 
   // 현재 로그인한 사용자 확인
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   const { data: service, error } = await supabase
-    .from('services')
-    .select(`
+    .from("services")
+    .select(
+      `
       *,
       seller:sellers(
         id,
@@ -61,36 +77,38 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       service_categories(
         category:categories(id, name, slug)
       )
-    `)
-    .eq('id', id)
-    .single()
+    `,
+    )
+    .eq("id", id)
+    .single();
 
   if (error) {
-    logger.error('Service fetch error:', error)
-    notFound()
+    logger.error("Service fetch error:", error);
+    notFound();
   }
 
   if (!service) {
-    notFound()
+    notFound();
   }
 
   // 이 서비스와 연결된 포트폴리오 조회 (portfolio_services 중간 테이블 사용)
   let linkedPortfolios: Array<{
-    id: string
-    title: string
-    thumbnail_url: string | null
-    description: string
-    youtube_url: string | null
-    project_url: string | null
-    image_urls: string[]
-    tags: string[]
-    created_at: string
-  }> = []
+    id: string;
+    title: string;
+    thumbnail_url: string | null;
+    description: string;
+    youtube_url: string | null;
+    project_url: string | null;
+    image_urls: string[];
+    tags: string[];
+    created_at: string;
+  }> = [];
 
   try {
     const { data: portfolioLinks, error: portfolioError } = await supabase
-      .from('portfolio_services')
-      .select(`
+      .from("portfolio_services")
+      .select(
+        `
         portfolio:seller_portfolio(
           id,
           title,
@@ -102,45 +120,57 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
           tags,
           created_at
         )
-      `)
-      .eq('service_id', id)
-      .order('created_at', { ascending: false })
+      `,
+      )
+      .eq("service_id", id)
+      .order("created_at", { ascending: false });
 
     if (portfolioError) {
-      logger.error('Portfolio links fetch error:', portfolioError)
+      logger.error("Portfolio links fetch error:", portfolioError);
     } else if (portfolioLinks) {
       // portfolios 데이터 구조 평탄화
       linkedPortfolios = portfolioLinks
-        .map((link: { portfolio: typeof linkedPortfolios[number] | typeof linkedPortfolios[number][] | null }) => {
-          if (Array.isArray(link.portfolio) && link.portfolio.length > 0) {
-            return link.portfolio[0]
-          }
-          return link.portfolio
-        })
-        .filter((p): p is NonNullable<typeof linkedPortfolios[number]> => p !== null && p !== undefined && typeof p === 'object')
+        .map(
+          (link: {
+            portfolio:
+              | (typeof linkedPortfolios)[number]
+              | (typeof linkedPortfolios)[number][]
+              | null;
+          }) => {
+            if (Array.isArray(link.portfolio) && link.portfolio.length > 0) {
+              return link.portfolio[0];
+            }
+            return link.portfolio;
+          },
+        )
+        .filter(
+          (p): p is NonNullable<(typeof linkedPortfolios)[number]> =>
+            p !== null && p !== undefined && typeof p === "object",
+        );
     }
   } catch (error: unknown) {
-    logger.error('Portfolio fetch exception:', error)
+    logger.error("Portfolio fetch exception:", error);
     // 에러가 있어도 페이지는 계속 렌더링 (포트폴리오만 없는 상태로)
   }
 
   // seller의 user 정보를 별도로 조회
   if (service?.seller?.user_id) {
     const { data: userData } = await supabase
-      .from('users')
-      .select('id, name, email, profile_image, created_at')
-      .eq('id', service.seller.user_id)
-      .single()
+      .from("users")
+      .select("id, name, email, profile_image, created_at")
+      .eq("id", service.seller.user_id)
+      .single();
 
     if (userData) {
-      service.seller.user = userData
+      service.seller.user = userData;
     }
   }
 
   // 이 서비스에 대한 리뷰 조회
   const { data: serviceReviews } = await supabase
-    .from('reviews')
-    .select(`
+    .from("reviews")
+    .select(
+      `
       id,
       rating,
       comment,
@@ -148,72 +178,79 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       buyer:users!buyer_id(id, name, profile_image),
       seller_reply,
       seller_reply_at
-    `)
-    .eq('service_id', id)
-    .eq('is_visible', true)
-    .order('created_at', { ascending: false })
+    `,
+    )
+    .eq("service_id", id)
+    .eq("is_visible", true)
+    .order("created_at", { ascending: false });
 
   // seller의 통계 정보 조회
   const sellerStats = {
     totalOrders: 0,
     satisfactionRate: 0,
-    avgResponseTime: '10분 이내'
-  }
+    avgResponseTime: "10분 이내",
+  };
 
   if (service?.seller?.id) {
     // 총 거래 건수 (완료된 주문)
     const { count: orderCount } = await supabase
-      .from('orders')
-      .select('*', { count: 'exact', head: true })
-      .eq('seller_id', service.seller.id)
-      .eq('status', 'completed')
+      .from("orders")
+      .select("*", { count: "exact", head: true })
+      .eq("seller_id", service.seller.id)
+      .eq("status", "completed");
 
-    sellerStats.totalOrders = orderCount || 0
+    sellerStats.totalOrders = orderCount || 0;
 
     // 만족도 계산 (평균 평점)
     // 먼저 판매자의 모든 서비스 ID 조회
     const { data: sellerServices } = await supabase
-      .from('services')
-      .select('id')
-      .eq('seller_id', service.seller.id)
+      .from("services")
+      .select("id")
+      .eq("seller_id", service.seller.id);
 
     if (sellerServices && sellerServices.length > 0) {
-      const serviceIds = sellerServices.map(s => s.id)
+      const serviceIds = sellerServices.map((s) => s.id);
 
       const { data: reviews } = await supabase
-        .from('reviews')
-        .select('rating')
-        .in('service_id', serviceIds)
+        .from("reviews")
+        .select("rating")
+        .in("service_id", serviceIds);
 
       if (reviews && reviews.length > 0) {
-        const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
-        sellerStats.satisfactionRate = Math.round((avgRating / 5) * 100)
+        const avgRating =
+          reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+        sellerStats.satisfactionRate = Math.round((avgRating / 5) * 100);
       }
     }
   }
 
   interface ServiceCategory {
     category: {
-      id: string
-      name: string
-      slug: string
-    }
+      id: string;
+      name: string;
+      slug: string;
+    };
   }
 
-  const categories = service.service_categories?.map((sc: ServiceCategory) => sc.category) || []
+  const categories =
+    service.service_categories?.map((sc: ServiceCategory) => sc.category) || [];
 
   // 카테고리 경로 가져오기 (1차 > 2차 > 3차)
-  let categoryPath: Array<{ id: string; name: string; slug: string }> = []
+  let categoryPath: Array<{ id: string; name: string; slug: string }> = [];
   if (categories.length > 0) {
     // 첫 번째 카테고리의 전체 경로를 가져옴
-    categoryPath = await getCategoryPath(categories[0].id)
+    categoryPath = await getCategoryPath(categories[0].id);
   }
 
   // 실제 리뷰 데이터로 평균 별점 계산
-  const averageRating = serviceReviews && serviceReviews.length > 0
-    ? (serviceReviews.reduce((sum, r) => sum + r.rating, 0) / serviceReviews.length).toFixed(1)
-    : '0.0'
-  const reviewCount = serviceReviews?.length || 0
+  const averageRating =
+    serviceReviews && serviceReviews.length > 0
+      ? (
+          serviceReviews.reduce((sum, r) => sum + r.rating, 0) /
+          serviceReviews.length
+        ).toFixed(1)
+      : "0.0";
+  const reviewCount = serviceReviews?.length || 0;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -224,7 +261,9 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       <nav className="bg-white border-b mt-16">
         <div className="container-1200 px-4 py-4">
           <div className="flex items-center gap-2 text-sm">
-            <Link href="/" className="text-gray-500 hover:text-gray-700">홈</Link>
+            <Link href="/" className="text-gray-500 hover:text-gray-700">
+              홈
+            </Link>
             {categoryPath.map((cat) => (
               <div key={cat.id} className="flex items-center gap-2">
                 <span className="text-gray-400">/</span>
@@ -241,7 +280,13 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       </nav>
 
       {/* 제목 및 판매자 프로필 영역 - 전체 가로 배경 */}
-      <div className="w-full" style={{ background: 'radial-gradient(ellipse at center, #a7f3d0 0%, #d1fae5 50%, #ecfdf5 100%)' }}>
+      <div
+        className="w-full"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, #a7f3d0 0%, #d1fae5 50%, #ecfdf5 100%)",
+        }}
+      >
         <div className="container-1200 px-4 py-8">
           <div className="flex flex-col lg:flex-row gap-5">
             {/* 왼쪽: 제목, 통계, 판매자 카드 */}
@@ -253,17 +298,16 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                 <div className="flex items-center gap-2">
                   {/* 별점 5개 표시 */}
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <i
-                      key={star}
-                      className="fas fa-star text-yellow-400"
-                    ></i>
+                    <FaStar key={star} className="text-yellow-400" />
                   ))}
                   <span className="font-bold ml-1">{averageRating}</span>
                   <span className="text-gray-500">({reviewCount})</span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-600">
-                  <i className="fas fa-heart text-red-400"></i>
-                  <span className="font-bold">{service.wishlist_count || 0}</span>
+                  <FaHeart className="text-red-400" />
+                  <span className="font-bold">
+                    {service.wishlist_count || 0}
+                  </span>
                 </div>
               </div>
 
@@ -273,10 +317,14 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   {/* 프로필 이미지 */}
                   <div className="w-[54px] h-[54px] bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
                     {service.seller?.user?.profile_image ? (
-                      <img src={service.seller.user.profile_image} alt={service.seller.business_name} className="w-full h-full object-cover" />
+                      <img
+                        src={service.seller.user.profile_image}
+                        alt={service.seller.business_name}
+                        className="w-full h-full object-cover"
+                      />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-400">
-                        <i className="fas fa-user text-xl"></i>
+                        <FaUser className="text-xl" />
                       </div>
                     )}
                   </div>
@@ -298,14 +346,15 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       )}
 
                       {/* 평균 응답 시간 */}
-                      <span className="whitespace-nowrap">
-                        응답: 00분
-                      </span>
+                      <span className="whitespace-nowrap">응답: 00분</span>
 
                       {/* 세금계산서 */}
                       <span className="whitespace-nowrap">
-                        세금계산서: {service.seller?.tax_invoice_available ? (
-                          <span className="text-green-600 font-medium">가능</span>
+                        세금계산서:{" "}
+                        {service.seller?.tax_invoice_available ? (
+                          <span className="text-green-600 font-medium">
+                            가능
+                          </span>
                         ) : (
                           <span className="text-gray-500">불가</span>
                         )}
@@ -316,10 +365,10 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   {/* 버튼 */}
                   <div className="flex gap-2 flex-shrink-0">
                     <button className="px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs whitespace-nowrap">
-                      <i className="far fa-comment mr-1"></i> 문의
+                      <FaRegComment className="mr-1 inline" /> 문의
                     </button>
                     <button className="px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs whitespace-nowrap">
-                      <i className="far fa-user mr-1"></i> 프로필
+                      <FaRegUser className="mr-1 inline" /> 프로필
                     </button>
                   </div>
                 </div>
@@ -327,19 +376,34 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
               {/* 탭 메뉴 */}
               <div className="flex gap-4 mt-6 border-b border-gray-200">
-                <a href="#portfolio" className="pb-3 px-2 text-sm hover:text-brand-primary hover:border-b-2 hover:border-brand-primary transition-colors">
+                <a
+                  href="#portfolio"
+                  className="pb-3 px-2 text-sm hover:text-brand-primary hover:border-b-2 hover:border-brand-primary transition-colors"
+                >
                   포트폴리오
                 </a>
-                <a href="#description" className="pb-3 px-2 text-sm hover:text-brand-primary hover:border-b-2 hover:border-brand-primary transition-colors">
+                <a
+                  href="#description"
+                  className="pb-3 px-2 text-sm hover:text-brand-primary hover:border-b-2 hover:border-brand-primary transition-colors"
+                >
                   서비스 설명
                 </a>
-                <a href="#price" className="pb-3 px-2 text-sm hover:text-brand-primary hover:border-b-2 hover:border-brand-primary transition-colors">
+                <a
+                  href="#price"
+                  className="pb-3 px-2 text-sm hover:text-brand-primary hover:border-b-2 hover:border-brand-primary transition-colors"
+                >
                   가격 정보
                 </a>
-                <a href="#expert" className="pb-3 px-2 text-sm hover:text-brand-primary hover:border-b-2 hover:border-brand-primary transition-colors">
+                <a
+                  href="#expert"
+                  className="pb-3 px-2 text-sm hover:text-brand-primary hover:border-b-2 hover:border-brand-primary transition-colors"
+                >
                   전문가 정보
                 </a>
-                <a href="#reviews" className="pb-3 px-2 text-sm hover:text-brand-primary hover:border-b-2 hover:border-brand-primary transition-colors">
+                <a
+                  href="#reviews"
+                  className="pb-3 px-2 text-sm hover:text-brand-primary hover:border-b-2 hover:border-brand-primary transition-colors"
+                >
                   리뷰
                 </a>
               </div>
@@ -357,7 +421,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                     />
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                      <i className="fas fa-image text-[40px]"></i>
+                      <FaImage className="text-[40px]" />
                     </div>
                   )}
                 </div>
@@ -374,119 +438,155 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
           <div className="flex-1 min-w-0 space-y-8">
             {/* 포트폴리오 */}
             {linkedPortfolios && linkedPortfolios.length > 0 && (
-              <div id="portfolio" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
-                <h2 className="text-xl font-bold mb-6">포트폴리오 ({linkedPortfolios.length})</h2>
+              <div
+                id="portfolio"
+                className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20"
+              >
+                <h2 className="text-xl font-bold mb-6">
+                  포트폴리오 ({linkedPortfolios.length})
+                </h2>
                 <PortfolioGrid portfolios={linkedPortfolios} />
               </div>
             )}
 
             {/* 서비스 설명 */}
-            <div id="description" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20 overflow-hidden">
+            <div
+              id="description"
+              className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20 overflow-hidden"
+            >
               <h2 className="text-xl font-bold mb-4">서비스 설명</h2>
-              <div className="prose prose-lg max-w-none whitespace-pre-wrap break-words overflow-wrap-anywhere" style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
+              <div
+                className="prose prose-lg max-w-none whitespace-pre-wrap break-words overflow-wrap-anywhere"
+                style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}
+              >
                 {service.description}
               </div>
             </div>
 
             {/* 전문가 정보 */}
             {service.seller && (
-              <div id="expert" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
+              <div
+                id="expert"
+                className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20"
+              >
                 <h2 className="text-xl font-bold mb-6">전문가 정보</h2>
 
                 {/* 전문가 카드 */}
                 <div className="border border-gray-200 rounded-lg p-6">
-                {/* 상단 알림 배너 (응답 시간) */}
-                <ExpertResponseBanner avgResponseTime={sellerStats.avgResponseTime} />
+                  {/* 상단 알림 배너 (응답 시간) */}
+                  <ExpertResponseBanner
+                    avgResponseTime={sellerStats.avgResponseTime}
+                  />
 
-                {/* 전문가 기본 정보 */}
-                <div className="flex items-start justify-between mb-6">
-                  <div className="flex items-start gap-4">
-                    {/* 프로필 이미지 */}
-                    <div className="w-16 h-16 rounded-full bg-brand-primary flex items-center justify-center text-white text-2xl font-bold flex-shrink-0">
-                      {service.seller?.user?.profile_image ? (
-                        <img
-                          src={service.seller.user.profile_image}
-                          alt={service.seller.business_name}
-                          className="w-full h-full rounded-full object-cover"
-                        />
-                      ) : (
-                        <span>{(service.seller?.business_name || 'U')[0]}</span>
-                      )}
-                    </div>
-
-                    {/* 이름 및 영업 시간 */}
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-lg font-bold text-gray-900">
-                          {service.seller?.business_name}
-                        </h3>
-                        <span className="text-yellow-500">
-                          <i className="fas fa-crown"></i>
-                        </span>
+                  {/* 전문가 기본 정보 */}
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="flex items-start gap-4">
+                      {/* 프로필 이미지 */}
+                      <div className="w-16 h-16 rounded-full bg-brand-primary flex items-center justify-center text-white text-2xl font-bold flex-shrink-0">
+                        {service.seller?.user?.profile_image ? (
+                          <img
+                            src={service.seller.user.profile_image}
+                            alt={service.seller.business_name}
+                            className="w-full h-full rounded-full object-cover"
+                          />
+                        ) : (
+                          <span>
+                            {(service.seller?.business_name || "U")[0]}
+                          </span>
+                        )}
                       </div>
-                      <p className="text-sm text-gray-600 mb-1">
-                        영업 가능 시간: {service.seller?.contact_hours || '9시 - 18시'}
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        평균 응답 시간: {sellerStats.avgResponseTime}
-                      </p>
-                      <div className="mt-2 flex gap-2">
-                        <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
-                          결제 전 전화상담 제공
-                        </span>
-                        <button className="text-xs px-2 py-1 border border-gray-300 text-gray-700 rounded hover:bg-gray-50">
-                          연락처 보기
-                        </button>
+
+                      {/* 이름 및 영업 시간 */}
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="text-lg font-bold text-gray-900">
+                            {service.seller?.business_name}
+                          </h3>
+                          <span className="text-yellow-500">
+                            <FaCrown />
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-1">
+                          영업 가능 시간:{" "}
+                          {service.seller?.contact_hours || "9시 - 18시"}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          평균 응답 시간: {sellerStats.avgResponseTime}
+                        </p>
+                        <div className="mt-2 flex gap-2">
+                          <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
+                            결제 전 전화상담 제공
+                          </span>
+                          <button className="text-xs px-2 py-1 border border-gray-300 text-gray-700 rounded hover:bg-gray-50">
+                            연락처 보기
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 문의하기 버튼 */}
+                    <Link
+                      href="/chat"
+                      className="px-6 py-2 border border-brand-primary text-brand-primary rounded-lg hover:bg-brand-primary hover:text-white transition-colors font-medium"
+                    >
+                      문의하기
+                    </Link>
+                  </div>
+
+                  {/* 통계 정보 */}
+                  <div className="grid grid-cols-4 gap-4 py-4 border-t border-gray-200">
+                    <div className="text-center">
+                      <div className="text-sm text-gray-600 mb-1">
+                        총 거래 건수
+                      </div>
+                      <div className="text-lg font-bold text-gray-900">
+                        {sellerStats.totalOrders}건
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-sm text-gray-600 mb-1">만족도</div>
+                      <div className="text-lg font-bold text-gray-900">
+                        {sellerStats.satisfactionRate}%
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-sm text-gray-600 mb-1">회원구분</div>
+                      <div className="text-lg font-bold text-gray-900">
+                        기업회원
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-sm text-gray-600 mb-1">
+                        세금계산서
+                      </div>
+                      <div className="text-lg font-bold text-gray-900">
+                        {service.seller?.tax_invoice_available
+                          ? "발행 가능"
+                          : "미발행"}
                       </div>
                     </div>
                   </div>
 
-                  {/* 문의하기 버튼 */}
-                  <Link
-                    href="/chat"
-                    className="px-6 py-2 border border-brand-primary text-brand-primary rounded-lg hover:bg-brand-primary hover:text-white transition-colors font-medium"
-                  >
-                    문의하기
-                  </Link>
-                </div>
-
-                {/* 통계 정보 */}
-                <div className="grid grid-cols-4 gap-4 py-4 border-t border-gray-200">
-                  <div className="text-center">
-                    <div className="text-sm text-gray-600 mb-1">총 거래 건수</div>
-                    <div className="text-lg font-bold text-gray-900">{sellerStats.totalOrders}건</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-sm text-gray-600 mb-1">만족도</div>
-                    <div className="text-lg font-bold text-gray-900">{sellerStats.satisfactionRate}%</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-sm text-gray-600 mb-1">회원구분</div>
-                    <div className="text-lg font-bold text-gray-900">기업회원</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-sm text-gray-600 mb-1">세금계산서</div>
-                    <div className="text-lg font-bold text-gray-900">
-                      {service.seller?.tax_invoice_available ? '발행 가능' : '미발행'}
+                  {/* 전문가 소개 */}
+                  {service.seller?.bio && (
+                    <div className="mt-6 pt-6 border-t border-gray-200">
+                      <h4 className="font-bold text-gray-900 mb-3">
+                        전문가 소개
+                      </h4>
+                      <p className="text-gray-700 whitespace-pre-wrap leading-relaxed break-words overflow-wrap-anywhere">
+                        {service.seller.bio}
+                      </p>
                     </div>
-                  </div>
+                  )}
                 </div>
-
-                {/* 전문가 소개 */}
-                {service.seller?.bio && (
-                  <div className="mt-6 pt-6 border-t border-gray-200">
-                    <h4 className="font-bold text-gray-900 mb-3">전문가 소개</h4>
-                    <p className="text-gray-700 whitespace-pre-wrap leading-relaxed break-words overflow-wrap-anywhere">
-                      {service.seller.bio}
-                    </p>
-                  </div>
-                )}
-              </div>
               </div>
             )}
 
             {/* 리뷰 */}
-            <div id="reviews" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
+            <div
+              id="reviews"
+              className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20"
+            >
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold">
                   리뷰 ({serviceReviews?.length || 0})
@@ -495,18 +595,27 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-1">
                       {[1, 2, 3, 4, 5].map((star) => (
-                        <i
+                        <FaStar
                           key={star}
-                          className={`fas fa-star ${
-                            star <= Math.round(serviceReviews.reduce((sum, r) => sum + r.rating, 0) / serviceReviews.length)
-                              ? 'text-yellow-400'
-                              : 'text-gray-300'
-                          }`}
-                        ></i>
+                          className={
+                            star <=
+                            Math.round(
+                              serviceReviews.reduce(
+                                (sum, r) => sum + r.rating,
+                                0,
+                              ) / serviceReviews.length,
+                            )
+                              ? "text-yellow-400"
+                              : "text-gray-300"
+                          }
+                        />
                       ))}
                     </div>
                     <span className="font-bold text-lg">
-                      {(serviceReviews.reduce((sum, r) => sum + r.rating, 0) / serviceReviews.length).toFixed(1)}
+                      {(
+                        serviceReviews.reduce((sum, r) => sum + r.rating, 0) /
+                        serviceReviews.length
+                      ).toFixed(1)}
                     </span>
                   </div>
                 )}
@@ -515,40 +624,50 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
               {serviceReviews && serviceReviews.length > 0 ? (
                 <div className="space-y-6">
                   {serviceReviews.map((review) => (
-                    <div key={review.id} className="border-b border-gray-200 pb-6 last:border-0">
+                    <div
+                      key={review.id}
+                      className="border-b border-gray-200 pb-6 last:border-0"
+                    >
                       {/* 리뷰 헤더 */}
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
                           {/* 프로필 이미지 */}
                           <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-                            {Array.isArray(review.buyer) && review.buyer[0]?.profile_image ? (
+                            {Array.isArray(review.buyer) &&
+                            review.buyer[0]?.profile_image ? (
                               <img
                                 src={review.buyer[0].profile_image}
                                 alt={review.buyer[0].name}
                                 className="w-full h-full object-cover"
                               />
                             ) : (
-                              <i className="fas fa-user text-gray-400"></i>
+                              <FaUser className="text-gray-400" />
                             )}
                           </div>
                           <div>
                             <div className="font-medium text-gray-900">
-                              {(Array.isArray(review.buyer) && review.buyer[0]?.name) || '익명'}
+                              {(Array.isArray(review.buyer) &&
+                                review.buyer[0]?.name) ||
+                                "익명"}
                             </div>
                             <div className="text-sm text-gray-500">
-                              {new Date(review.created_at).toLocaleDateString('ko-KR')}
+                              {new Date(review.created_at).toLocaleDateString(
+                                "ko-KR",
+                              )}
                             </div>
                           </div>
                         </div>
                         {/* 별점 */}
                         <div className="flex items-center gap-1">
                           {[1, 2, 3, 4, 5].map((star) => (
-                            <i
+                            <FaStar
                               key={star}
-                              className={`fas fa-star text-sm ${
-                                star <= review.rating ? 'text-yellow-400' : 'text-gray-300'
+                              className={`text-sm ${
+                                star <= review.rating
+                                  ? "text-yellow-400"
+                                  : "text-gray-300"
                               }`}
-                            ></i>
+                            />
                           ))}
                         </div>
                       </div>
@@ -562,13 +681,19 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       {review.seller_reply && (
                         <div className="bg-gray-50 rounded-lg p-4 ml-8">
                           <div className="flex items-center gap-2 mb-2">
-                            <i className="fas fa-reply text-brand-primary"></i>
-                            <span className="text-sm font-medium text-gray-900">판매자 답변</span>
+                            <FaReply className="text-brand-primary" />
+                            <span className="text-sm font-medium text-gray-900">
+                              판매자 답변
+                            </span>
                             <span className="text-xs text-gray-500">
-                              {new Date(review.seller_reply_at).toLocaleDateString('ko-KR')}
+                              {new Date(
+                                review.seller_reply_at,
+                              ).toLocaleDateString("ko-KR")}
                             </span>
                           </div>
-                          <p className="text-gray-700 whitespace-pre-wrap">{review.seller_reply}</p>
+                          <p className="text-gray-700 whitespace-pre-wrap">
+                            {review.seller_reply}
+                          </p>
                         </div>
                       )}
                     </div>
@@ -576,9 +701,11 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <i className="fas fa-star text-gray-300 text-5xl mb-4"></i>
+                  <FaStar className="text-gray-300 text-5xl mb-4 inline-block" />
                   <p className="text-gray-600">아직 작성된 리뷰가 없습니다</p>
-                  <p className="text-sm text-gray-500 mt-2">첫 번째 리뷰를 작성해보세요!</p>
+                  <p className="text-sm text-gray-500 mt-2">
+                    첫 번째 리뷰를 작성해보세요!
+                  </p>
                 </div>
               )}
             </div>
@@ -588,13 +715,20 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
           <div className="w-full lg:w-[350px] flex-shrink-0">
             <div className="sticky top-12 space-y-6">
               {/* 가격 정보 */}
-              <div id="price" className="bg-white rounded-xl shadow-sm overflow-hidden scroll-mt-20">
+              <div
+                id="price"
+                className="bg-white rounded-xl shadow-sm overflow-hidden scroll-mt-20"
+              >
                 <div className="p-6">
                   <div className="text-2xl font-bold mb-1">
                     {service.price?.toLocaleString() || 0}원
                   </div>
                   <div className="text-sm text-gray-600 mb-6">
-                    {service.delivery_days || 0}일 이내 완료 · {service.revision_count === 999 ? '무제한' : `${service.revision_count || 0}회`} 수정
+                    {service.delivery_days || 0}일 이내 완료 ·{" "}
+                    {service.revision_count === 999
+                      ? "무제한"
+                      : `${service.revision_count || 0}회`}{" "}
+                    수정
                   </div>
 
                   {service.seller?.id && user && (
@@ -611,14 +745,19 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                     />
                   )}
 
-                  {service.seller?.id && user && service.seller.user_id !== user.id && (
-                    <ContactSellerButton sellerId={service.seller.id} serviceId={id} />
-                  )}
+                  {service.seller?.id &&
+                    user &&
+                    service.seller.user_id !== user.id && (
+                      <ContactSellerButton
+                        sellerId={service.seller.id}
+                        serviceId={id}
+                      />
+                    )}
 
                   <div className="flex gap-2 mt-3">
                     <FavoriteButton serviceId={id} />
                     <button className="flex-1 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-                      <i className="fas fa-share"></i> 공유
+                      <FaShare className="inline" /> 공유
                     </button>
                   </div>
                 </div>
@@ -626,10 +765,11 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
               {/* 안전거래 배지 */}
               <div className="bg-blue-50 rounded-xl p-4 text-center">
-                <i className="fas fa-shield-alt text-2xl text-brand-primary mb-2"></i>
+                <FaShieldAlt className="text-2xl text-brand-primary mb-2 inline-block" />
                 <h4 className="font-bold mb-1">100% 안전거래</h4>
                 <p className="text-xs text-gray-600">
-                  에스크로 결제 시스템으로<br/>
+                  에스크로 결제 시스템으로
+                  <br />
                   안전하게 거래하세요
                 </p>
               </div>
@@ -638,5 +778,5 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,4 +1,13 @@
-import Link from 'next/link'
+import Link from "next/link";
+import {
+  FaSearch,
+  FaQuestionCircle,
+  FaBullhorn,
+  FaComments,
+  FaPhone,
+  FaShoppingBag,
+  FaStore,
+} from "react-icons/fa";
 
 export default function HelpPage() {
   return (
@@ -23,32 +32,41 @@ export default function HelpPage() {
             aria-label="검색"
             className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-primary"
           >
-            <i className="fas fa-search text-xl"></i>
+            <FaSearch className="text-xl" />
           </button>
         </div>
       </div>
 
       {/* 주요 메뉴 */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-        <Link href="/help/faq" className="bg-white rounded-lg border border-gray-200 p-8 text-center hover:border-brand-primary hover:shadow-lg transition-all group">
+        <Link
+          href="/help/faq"
+          className="bg-white rounded-lg border border-gray-200 p-8 text-center hover:border-brand-primary hover:shadow-lg transition-all group"
+        >
           <div className="w-16 h-16 bg-brand-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-opacity-20 transition-colors">
-            <i className="fas fa-question-circle text-brand-primary text-3xl"></i>
+            <FaQuestionCircle className="text-brand-primary text-3xl" />
           </div>
           <h3 className="font-bold text-lg mb-2">자주 묻는 질문</h3>
           <p className="text-sm text-gray-600">FAQ를 확인해보세요</p>
         </Link>
 
-        <Link href="/help/notice" className="bg-white rounded-lg border border-gray-200 p-8 text-center hover:border-brand-primary hover:shadow-lg transition-all group">
+        <Link
+          href="/help/notice"
+          className="bg-white rounded-lg border border-gray-200 p-8 text-center hover:border-brand-primary hover:shadow-lg transition-all group"
+        >
           <div className="w-16 h-16 bg-brand-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-opacity-20 transition-colors">
-            <i className="fas fa-bullhorn text-brand-primary text-3xl"></i>
+            <FaBullhorn className="text-brand-primary text-3xl" />
           </div>
           <h3 className="font-bold text-lg mb-2">공지사항</h3>
           <p className="text-sm text-gray-600">최신 소식을 확인하세요</p>
         </Link>
 
-        <Link href="/help/contact" className="bg-white rounded-lg border border-gray-200 p-8 text-center hover:border-brand-primary hover:shadow-lg transition-all group">
+        <Link
+          href="/help/contact"
+          className="bg-white rounded-lg border border-gray-200 p-8 text-center hover:border-brand-primary hover:shadow-lg transition-all group"
+        >
           <div className="w-16 h-16 bg-brand-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-opacity-20 transition-colors">
-            <i className="fas fa-comments text-brand-primary text-3xl"></i>
+            <FaComments className="text-brand-primary text-3xl" />
           </div>
           <h3 className="font-bold text-lg mb-2">1:1 문의</h3>
           <p className="text-sm text-gray-600">직접 문의하기</p>
@@ -56,7 +74,7 @@ export default function HelpPage() {
 
         <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
           <div className="w-16 h-16 bg-brand-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <i className="fas fa-phone text-brand-primary text-3xl"></i>
+            <FaPhone className="text-brand-primary text-3xl" />
           </div>
           <h3 className="font-bold text-lg mb-2">전화 상담</h3>
           <p className="text-sm text-gray-600 mb-2">1234-5678</p>
@@ -70,29 +88,62 @@ export default function HelpPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h3 className="font-bold mb-4 flex items-center gap-2">
-              <i className="fas fa-shopping-bag text-brand-primary"></i>
+              <FaShoppingBag className="text-brand-primary" />
               구매자 가이드
             </h3>
             <ul className="space-y-2 text-sm text-gray-600">
-              <li><Link href="/buyer/guide" className="hover:text-brand-primary">• 서비스 구매 방법</Link></li>
-              <li><Link href="/buyer/payment" className="hover:text-brand-primary">• 결제 안내</Link></li>
-              <li><Link href="/buyer/refund" className="hover:text-brand-primary">• 환불 정책</Link></li>
+              <li>
+                <Link href="/buyer/guide" className="hover:text-brand-primary">
+                  • 서비스 구매 방법
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/buyer/payment"
+                  className="hover:text-brand-primary"
+                >
+                  • 결제 안내
+                </Link>
+              </li>
+              <li>
+                <Link href="/buyer/refund" className="hover:text-brand-primary">
+                  • 환불 정책
+                </Link>
+              </li>
             </ul>
           </div>
 
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h3 className="font-bold mb-4 flex items-center gap-2">
-              <i className="fas fa-store text-brand-primary"></i>
+              <FaStore className="text-brand-primary" />
               판매자 가이드
             </h3>
             <ul className="space-y-2 text-sm text-gray-600">
-              <li><Link href="/seller/guide" className="hover:text-brand-primary">• 판매자 가이드</Link></li>
-              <li><Link href="/seller/commission" className="hover:text-brand-primary">• 수수료 안내</Link></li>
-              <li><Link href="/seller/settlement" className="hover:text-brand-primary">• 정산 안내</Link></li>
+              <li>
+                <Link href="/seller/guide" className="hover:text-brand-primary">
+                  • 판매자 가이드
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/seller/commission"
+                  className="hover:text-brand-primary"
+                >
+                  • 수수료 안내
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/seller/settlement"
+                  className="hover:text-brand-primary"
+                >
+                  • 정산 안내
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

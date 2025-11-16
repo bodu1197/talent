@@ -1,58 +1,84 @@
-import Link from 'next/link'
-import { getTopLevelCategories } from '@/lib/categories'
-import CategoryGridClient from './CategoryGridClient'
+import Link from "next/link";
+import { getTopLevelCategories } from "@/lib/categories";
+import CategoryGridClient from "./CategoryGridClient";
+import {
+  FaRobot,
+  FaPalette,
+  FaCut,
+  FaCode,
+  FaBullhorn,
+  FaCamera,
+  FaLanguage,
+  FaPenFancy,
+  FaBriefcase,
+  FaBook,
+  FaMusic,
+  FaCalendar,
+  FaSpa,
+  FaBullseye,
+  FaStar,
+  FaBookOpen,
+  FaGavel,
+  FaHammer,
+  FaGraduationCap,
+  FaChartLine,
+  FaHome,
+  FaMotorcycle,
+  FaRunning,
+  FaCircle,
+} from "react-icons/fa";
 
 function CategoryIcon({ icon }: { icon?: string }) {
-  if (icon === 'robot') return <i className="fas fa-robot"></i>
-  if (icon === 'palette') return <i className="fas fa-palette"></i>
-  if (icon === 'scissors') return <i className="fas fa-scissors"></i>
-  if (icon === 'code') return <i className="fas fa-code"></i>
-  if (icon === 'bullhorn') return <i className="fas fa-bullhorn"></i>
-  if (icon === 'camera') return <i className="fas fa-camera"></i>
-  if (icon === 'language') return <i className="fas fa-language"></i>
-  if (icon === 'pen-fancy') return <i className="fas fa-pen-fancy"></i>
-  if (icon === 'briefcase') return <i className="fas fa-briefcase"></i>
-  if (icon === 'book') return <i className="fas fa-book"></i>
-  if (icon === 'music') return <i className="fas fa-music"></i>
-  if (icon === 'calendar') return <i className="fas fa-calendar"></i>
-  if (icon === 'spa') return <i className="fas fa-spa"></i>
-  if (icon === 'bullseye') return <i className="fas fa-bullseye"></i>
-  if (icon === 'star') return <i className="fas fa-star"></i>
-  if (icon === 'book-open') return <i className="fas fa-book-open"></i>
-  if (icon === 'gavel') return <i className="fas fa-gavel"></i>
-  if (icon === 'hammer') return <i className="fas fa-hammer"></i>
-  if (icon === 'graduation-cap') return <i className="fas fa-graduation-cap"></i>
-  if (icon === 'chart-line') return <i className="fas fa-chart-line"></i>
-  if (icon === 'home') return <i className="fas fa-home"></i>
-  if (icon === 'motorcycle') return <i className="fas fa-motorcycle"></i>
-  if (icon === 'running') return <i className="fas fa-running"></i>
+  if (icon === "robot") return <FaRobot />;
+  if (icon === "palette") return <FaPalette />;
+  if (icon === "scissors") return <FaCut />;
+  if (icon === "code") return <FaCode />;
+  if (icon === "bullhorn") return <FaBullhorn />;
+  if (icon === "camera") return <FaCamera />;
+  if (icon === "language") return <FaLanguage />;
+  if (icon === "pen-fancy") return <FaPenFancy />;
+  if (icon === "briefcase") return <FaBriefcase />;
+  if (icon === "book") return <FaBook />;
+  if (icon === "music") return <FaMusic />;
+  if (icon === "calendar") return <FaCalendar />;
+  if (icon === "spa") return <FaSpa />;
+  if (icon === "bullseye") return <FaBullseye />;
+  if (icon === "star") return <FaStar />;
+  if (icon === "book-open") return <FaBookOpen />;
+  if (icon === "gavel") return <FaGavel />;
+  if (icon === "hammer") return <FaHammer />;
+  if (icon === "graduation-cap") return <FaGraduationCap />;
+  if (icon === "chart-line") return <FaChartLine />;
+  if (icon === "home") return <FaHome />;
+  if (icon === "motorcycle") return <FaMotorcycle />;
+  if (icon === "running") return <FaRunning />;
 
-  return <i className="fas fa-circle"></i>
+  return <FaCircle />;
 }
 
 export default async function CategoryGrid() {
   // 데이터베이스에서 1단계 카테고리 가져오기
-  const topLevelCategories = await getTopLevelCategories()
+  const topLevelCategories = await getTopLevelCategories();
 
-  const initialVisibleCount = 11
-  const categoriesInFirstRow = topLevelCategories.slice(0, initialVisibleCount)
-  const remainingCategories = topLevelCategories.slice(initialVisibleCount)
-  const hasMoreCategories = topLevelCategories.length > initialVisibleCount
+  const initialVisibleCount = 11;
+  const categoriesInFirstRow = topLevelCategories.slice(0, initialVisibleCount);
+  const remainingCategories = topLevelCategories.slice(initialVisibleCount);
+  const hasMoreCategories = topLevelCategories.length > initialVisibleCount;
 
   const brightColors = [
-    'text-red-500',
-    'text-blue-500',
-    'text-green-500',
-    'text-yellow-500',
-    'text-purple-500',
-    'text-pink-500',
-    'text-indigo-500',
-    'text-teal-500',
-    'text-orange-500',
-    'text-cyan-500',
-    'text-lime-500',
-    'text-fuchsia-500',
-  ]
+    "text-red-500",
+    "text-blue-500",
+    "text-green-500",
+    "text-yellow-500",
+    "text-purple-500",
+    "text-pink-500",
+    "text-indigo-500",
+    "text-teal-500",
+    "text-orange-500",
+    "text-cyan-500",
+    "text-lime-500",
+    "text-fuchsia-500",
+  ];
 
   return (
     <section className="py-8 bg-white">
@@ -72,10 +98,14 @@ export default async function CategoryGrid() {
                   href={`/categories/${category.slug}`}
                   className="flex flex-col items-center group cursor-pointer flex-shrink-0 w-[76px]"
                 >
-                  <div className={`text-[27px] mb-1 h-11 w-11 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[index % brightColors.length]} group-hover:text-brand-primary`}>
+                  <div
+                    className={`text-[27px] mb-1 h-11 w-11 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[index % brightColors.length]} group-hover:text-brand-primary`}
+                  >
                     <CategoryIcon icon={category.icon} />
                   </div>
-                  <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-bold text-mobile-sm text-center w-[76px] whitespace-nowrap px-0">{category.name}</div>
+                  <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-bold text-mobile-sm text-center w-[76px] whitespace-nowrap px-0">
+                    {category.name}
+                  </div>
                 </Link>
               ))}
             </div>
@@ -88,10 +118,14 @@ export default async function CategoryGrid() {
                   href={`/categories/${category.slug}`}
                   className="flex flex-col items-center group cursor-pointer flex-shrink-0 w-[76px]"
                 >
-                  <div className={`text-[27px] mb-1 h-11 w-11 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[(index + 11) % brightColors.length]} group-hover:text-brand-primary`}>
+                  <div
+                    className={`text-[27px] mb-1 h-11 w-11 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[(index + 11) % brightColors.length]} group-hover:text-brand-primary`}
+                  >
                     <CategoryIcon icon={category.icon} />
                   </div>
-                  <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-bold text-mobile-sm text-center w-[76px] whitespace-nowrap px-0">{category.name}</div>
+                  <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-bold text-mobile-sm text-center w-[76px] whitespace-nowrap px-0">
+                    {category.name}
+                  </div>
                 </Link>
               ))}
             </div>
@@ -108,5 +142,5 @@ export default async function CategoryGrid() {
         />
       </div>
     </section>
-  )
+  );
 }

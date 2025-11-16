@@ -1,58 +1,59 @@
-'use client'
+"use client";
 
-import { useEffect } from 'react'
+import { useEffect } from "react";
+import { FaTimes, FaExternalLinkAlt } from "react-icons/fa";
 
 interface Portfolio {
-  id: string
-  title: string
-  description: string
-  thumbnail_url: string | null
-  image_urls: string[]
-  youtube_url: string | null
-  project_url: string | null
-  tags: string[]
-  created_at: string
+  id: string;
+  title: string;
+  description: string;
+  thumbnail_url: string | null;
+  image_urls: string[];
+  youtube_url: string | null;
+  project_url: string | null;
+  tags: string[];
+  created_at: string;
 }
 
 interface Props {
-  portfolio: Portfolio
-  onClose: () => void
+  portfolio: Portfolio;
+  onClose: () => void;
 }
 
 export default function PortfolioModal({ portfolio, onClose }: Props) {
   // ESC 키로 모달 닫기
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-    }
-    document.addEventListener('keydown', handleEscape)
-    document.body.style.overflow = 'hidden'
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleEscape);
+    document.body.style.overflow = "hidden";
 
     return () => {
-      document.removeEventListener('keydown', handleEscape)
-      document.body.style.overflow = 'auto'
-    }
-  }, [onClose])
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "auto";
+    };
+  }, [onClose]);
 
   // YouTube URL에서 비디오 ID 추출
   const getYoutubeVideoId = (url: string | null): string | null => {
-    if (!url) return null
+    if (!url) return null;
 
     const patterns = [
       /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
       /youtube\.com\/embed\/([^&\n?#]+)/,
-      /youtube\.com\/v\/([^&\n?#]+)/
-    ]
+      /youtube\.com\/v\/([^&\n?#]+)/,
+    ];
 
     for (const pattern of patterns) {
-      const match = url.match(pattern)
-      if (match) return match[1]
+      const match = url.match(pattern);
+      if (match) return match[1];
     }
 
-    return null
-  }
+    return null;
+  };
 
-  const youtubeVideoId = getYoutubeVideoId(portfolio.youtube_url)
+  const youtubeVideoId = getYoutubeVideoId(portfolio.youtube_url);
 
   return (
     <div
@@ -69,7 +70,7 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
           className="absolute top-4 right-4 z-10 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-colors"
           aria-label="포트폴리오 닫기"
         >
-          <i className="fas fa-times text-gray-700" aria-hidden="true"></i>
+          <FaTimes className="text-gray-700" aria-hidden="true" />
         </button>
 
         {/* YouTube 영상 (우선 표시) */}
@@ -112,7 +113,10 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
               <h3 className="text-lg font-bold mb-3">추가 이미지</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {portfolio.image_urls.map((url: string, idx: number) => (
-                  <div key={idx} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                  <div
+                    key={idx}
+                    className="aspect-square bg-gray-100 rounded-lg overflow-hidden"
+                  >
                     <img
                       src={url}
                       alt={`${portfolio.title} - ${idx + 1}`}
@@ -133,7 +137,7 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-brand-primary font-medium"
               >
-                <i className="fas fa-external-link-alt"></i>
+                <FaExternalLinkAlt />
                 <span>프로젝트 보기</span>
               </a>
             </div>
@@ -155,5 +159,5 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
         </div>
       </div>
     </div>
-  )
+  );
 }

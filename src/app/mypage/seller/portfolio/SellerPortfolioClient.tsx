@@ -1,47 +1,60 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { Portfolio } from '@/types/common'
+import { useState } from "react";
+import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Portfolio } from "@/types/common";
+import {
+  FaPlus,
+  FaImage,
+  FaLink,
+  FaBriefcase,
+  FaEye,
+  FaFolderOpen,
+} from "react-icons/fa";
 
 interface PortfolioWithService extends Portfolio {
   service?: {
-    id: string
-    title: string
-  } | null
+    id: string;
+    title: string;
+  } | null;
 }
 
 interface Props {
-  portfolio: PortfolioWithService[]
+  portfolio: PortfolioWithService[];
 }
 
-export default function SellerPortfolioClient({ portfolio: initialPortfolio }: Props) {
-  const router = useRouter()
-  const [portfolio, setPortfolio] = useState(initialPortfolio)
-  const [deleting, setDeleting] = useState<string | null>(null)
+export default function SellerPortfolioClient({
+  portfolio: initialPortfolio,
+}: Props) {
+  const router = useRouter();
+  const [portfolio, setPortfolio] = useState(initialPortfolio);
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   async function handleDelete(itemId: string) {
-    if (!confirm('정말 삭제하시겠습니까?')) return
+    if (!confirm("정말 삭제하시겠습니까?")) return;
 
     try {
-      setDeleting(itemId)
+      setDeleting(itemId);
       const response = await fetch(`/api/portfolio?itemId=${itemId}`, {
-        method: 'DELETE'
-      })
+        method: "DELETE",
+      });
 
       if (!response.ok) {
-        throw new Error('삭제에 실패했습니다')
+        throw new Error("삭제에 실패했습니다");
       }
 
-      setPortfolio(portfolio.filter(item => item.id !== itemId))
-      router.refresh()
+      setPortfolio(portfolio.filter((item) => item.id !== itemId));
+      router.refresh();
     } catch (err: unknown) {
-      console.error('삭제 실패:', JSON.stringify(err, Object.getOwnPropertyNames(err), 2))
-      alert('삭제에 실패했습니다')
+      console.error(
+        "삭제 실패:",
+        JSON.stringify(err, Object.getOwnPropertyNames(err), 2),
+      );
+      alert("삭제에 실패했습니다");
     } finally {
-      setDeleting(null)
+      setDeleting(null);
     }
   }
 
@@ -52,13 +65,15 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-xl font-bold text-gray-900">포트폴리오</h1>
-              <p className="text-gray-600 mt-1 text-sm">작업물을 등록하고 관리하세요</p>
+              <p className="text-gray-600 mt-1 text-sm">
+                작업물을 등록하고 관리하세요
+              </p>
             </div>
             <Link
               href="/mypage/seller/portfolio/new"
               className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
             >
-              <i className="fas fa-plus mr-2"></i>
+              <FaPlus className="inline mr-2" />
               포트폴리오 등록
             </Link>
           </div>
@@ -67,29 +82,43 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {portfolio.length > 0 ? (
             portfolio.map((item) => (
-              <div key={item.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-brand-primary transition-colors">
-                <Link href={`/mypage/seller/portfolio/${item.id}`} className="block">
+              <div
+                key={item.id}
+                className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-brand-primary transition-colors"
+              >
+                <Link
+                  href={`/mypage/seller/portfolio/${item.id}`}
+                  className="block"
+                >
                   <div className="aspect-[4/3] bg-gray-100 flex items-center justify-center relative">
                     {item.thumbnail_url ? (
-                      <img src={item.thumbnail_url} alt={item.title} className="w-full h-full object-cover" />
+                      <img
+                        src={item.thumbnail_url}
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                      />
                     ) : (
-                      <i className="fas fa-image text-gray-400 text-4xl"></i>
+                      <FaImage className="text-gray-400 text-4xl" />
                     )}
                     {item.service && (
                       <div className="absolute top-2 right-2 bg-brand-primary text-white text-xs px-2 py-1 rounded-md flex items-center gap-1">
-                        <i className="fas fa-link"></i>
+                        <FaLink />
                         <span>서비스 연동</span>
                       </div>
                     )}
                   </div>
                 </Link>
                 <div className="p-4">
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{item.title}</h3>
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">{item.description}</p>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                    {item.description}
+                  </p>
                   {item.service && (
                     <div className="mb-3 p-2 bg-blue-50 border border-blue-200 rounded-lg">
                       <div className="flex items-center gap-2">
-                        <i className="fas fa-briefcase text-brand-primary text-sm"></i>
+                        <FaBriefcase className="text-brand-primary text-sm" />
                         <div className="flex-1 min-w-0">
                           <p className="text-xs text-gray-600">연동된 서비스</p>
                           <Link
@@ -104,8 +133,13 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
                     </div>
                   )}
                   <div className="flex items-center justify-between text-sm text-gray-600">
-                    <span><i className="fas fa-eye mr-1"></i>{item.view_count || 0}</span>
-                    <span>{new Date(item.created_at).toLocaleDateString('ko-KR')}</span>
+                    <span>
+                      <FaEye className="inline mr-1" />
+                      {item.view_count || 0}
+                    </span>
+                    <span>
+                      {new Date(item.created_at).toLocaleDateString("ko-KR")}
+                    </span>
                   </div>
                   <div className="flex gap-2 mt-4">
                     <Link
@@ -119,7 +153,7 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
                       disabled={deleting === item.id}
                       className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
                     >
-                      {deleting === item.id ? '삭제중...' : '삭제'}
+                      {deleting === item.id ? "삭제중..." : "삭제"}
                     </button>
                   </div>
                 </div>
@@ -127,13 +161,13 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
             ))
           ) : (
             <div className="col-span-full bg-white border border-gray-200 rounded-lg p-12 text-center">
-              <i className="fas fa-folder-open text-gray-300 text-6xl mb-4"></i>
+              <FaFolderOpen className="text-gray-300 text-6xl mb-4 mx-auto" />
               <p className="text-gray-500 mb-4">등록된 포트폴리오가 없습니다</p>
               <Link
                 href="/mypage/seller/portfolio/new"
                 className="inline-flex items-center px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
               >
-                <i className="fas fa-plus mr-2"></i>
+                <FaPlus className="inline mr-2" />
                 포트폴리오 등록
               </Link>
             </div>
@@ -141,5 +175,5 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
         </div>
       </div>
     </MypageLayoutWrapper>
-  )
+  );
 }

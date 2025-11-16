@@ -11,6 +11,19 @@ import {
   type GradientTemplate,
   generateThumbnailWithText,
 } from "@/lib/template-generator";
+import {
+  FaArrowLeft,
+  FaUpload,
+  FaPalette,
+  FaTimes,
+  FaCheck,
+  FaCloudUploadAlt,
+  FaUndo,
+  FaTrash,
+  FaInfoCircle,
+  FaSpinner,
+} from "react-icons/fa";
+import { FaWandMagicSparkles } from "react-icons/fa6";
 
 // Dynamic import for TextOverlayEditor - only loads when template mode is selected
 const TextOverlayEditor = dynamic(
@@ -464,7 +477,7 @@ export default function EditServiceClient({
             href="/mypage/seller/services"
             className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
           >
-            <i className="fas fa-arrow-left"></i>
+            <FaArrowLeft />
             <span>서비스 관리로</span>
           </Link>
         </div>
@@ -507,7 +520,7 @@ export default function EditServiceClient({
                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                   >
-                    <i className="fas fa-upload mr-2"></i>
+                    <FaUpload className="mr-2 inline" />
                     파일 업로드
                   </button>
                   <button
@@ -525,7 +538,7 @@ export default function EditServiceClient({
                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                   >
-                    <i className="fas fa-palette mr-2"></i>
+                    <FaPalette className="mr-2 inline" />
                     템플릿 사용
                   </button>
                 </div>
@@ -548,7 +561,7 @@ export default function EditServiceClient({
                               onClick={cancelNewThumbnail}
                               className="bg-gray-500 text-white px-3 py-1 rounded-lg hover:bg-gray-600 transition-colors text-sm"
                             >
-                              <i className="fas fa-undo mr-1"></i>
+                              <FaUndo className="mr-1 inline" />
                               취소
                             </button>
                           )}
@@ -558,7 +571,7 @@ export default function EditServiceClient({
                             onClick={deleteThumbnail}
                             className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors text-sm"
                           >
-                            <i className="fas fa-trash mr-1"></i>
+                            <FaTrash className="mr-1 inline" />
                             삭제
                           </button>
                         </div>
@@ -571,7 +584,7 @@ export default function EditServiceClient({
                           onChange={handleThumbnailChange}
                           className="hidden"
                         />
-                        <i className="fas fa-cloud-upload-alt text-gray-400 text-4xl mb-3"></i>
+                        <FaCloudUploadAlt className="text-gray-400 text-4xl mb-3 inline-block" />
                         <p className="text-gray-600 font-medium">
                           클릭하여 이미지 선택
                         </p>
@@ -599,7 +612,7 @@ export default function EditServiceClient({
                     {originalThumbnailUrl && !thumbnailFile && (
                       <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
                         <div className="flex items-start gap-3">
-                          <i className="fas fa-info-circle text-amber-600 mt-0.5"></i>
+                          <FaInfoCircle className="text-amber-600 mt-0.5" />
                           <div className="flex-1">
                             <p className="text-sm font-medium text-amber-900 mb-1">
                               기존 이미지 교체
@@ -632,11 +645,11 @@ export default function EditServiceClient({
                           }}
                           className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors text-sm"
                         >
-                          <i className="fas fa-times mr-1"></i>
+                          <FaTimes className="mr-1 inline" />
                           다시 만들기
                         </button>
                         <div className="absolute top-2 left-2 bg-green-500 text-white px-3 py-1 rounded-lg text-sm">
-                          <i className="fas fa-check mr-1"></i>
+                          <FaCheck className="mr-1 inline" />
                           생성 완료
                         </div>
                       </div>
@@ -664,7 +677,7 @@ export default function EditServiceClient({
                                 disabled={!textStyle?.text?.trim()}
                                 className="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
                               >
-                                <i className="fas fa-wand-magic-sparkles mr-2"></i>
+                                <FaWandMagicSparkles className="mr-2 inline" />
                                 썸네일 생성하기 (652×488px)
                               </button>
                             </div>
@@ -913,12 +926,12 @@ export default function EditServiceClient({
             >
               {loading ? (
                 <>
-                  <i className="fas fa-spinner fa-spin mr-2"></i>
+                  <FaSpinner className="fa-spin mr-2 inline" />
                   등록 중...
                 </>
               ) : (
                 <>
-                  <i className="fas fa-check mr-2"></i>
+                  <FaCheck className="mr-2 inline" />
                   서비스 등록
                 </>
               )}

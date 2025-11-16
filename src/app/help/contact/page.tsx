@@ -1,21 +1,22 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { useState } from "react";
+import { FaClock, FaPhone, FaExclamationCircle } from "react-icons/fa";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    category: '',
-    title: '',
-    content: '',
-  })
+    name: "",
+    email: "",
+    category: "",
+    title: "",
+    content: "",
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    alert('문의가 접수되었습니다. 빠른 시일 내에 답변드리겠습니다.')
-    setFormData({ name: '', email: '', category: '', title: '', content: '' })
-  }
+    e.preventDefault();
+    alert("문의가 접수되었습니다. 빠른 시일 내에 답변드리겠습니다.");
+    setFormData({ name: "", email: "", category: "", title: "", content: "" });
+  };
 
   return (
     <div className="container-1200 py-16">
@@ -25,11 +26,17 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* 문의 폼 */}
           <div className="lg:col-span-2">
-            <form onSubmit={handleSubmit} className="bg-white rounded-lg border border-gray-200 p-8">
+            <form
+              onSubmit={handleSubmit}
+              className="bg-white rounded-lg border border-gray-200 p-8"
+            >
               <div className="space-y-6">
                 {/* 이름 */}
                 <div>
-                  <label htmlFor="contact-name" className="block text-sm font-medium mb-2">
+                  <label
+                    htmlFor="contact-name"
+                    className="block text-sm font-medium mb-2"
+                  >
                     이름 <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -37,7 +44,9 @@ export default function ContactPage() {
                     name="name"
                     type="text"
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
                     placeholder="이름을 입력하세요"
                     autoComplete="name"
@@ -47,7 +56,10 @@ export default function ContactPage() {
 
                 {/* 이메일 */}
                 <div>
-                  <label htmlFor="contact-email" className="block text-sm font-medium mb-2">
+                  <label
+                    htmlFor="contact-email"
+                    className="block text-sm font-medium mb-2"
+                  >
                     이메일 <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -55,7 +67,9 @@ export default function ContactPage() {
                     name="email"
                     type="email"
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
                     placeholder="답변 받을 이메일을 입력하세요"
                     autoComplete="email"
@@ -65,14 +79,19 @@ export default function ContactPage() {
 
                 {/* 문의 유형 */}
                 <div>
-                  <label htmlFor="contact-category" className="block text-sm font-medium mb-2">
+                  <label
+                    htmlFor="contact-category"
+                    className="block text-sm font-medium mb-2"
+                  >
                     문의 유형 <span className="text-red-500">*</span>
                   </label>
                   <select
                     id="contact-category"
                     name="category"
                     value={formData.category}
-                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, category: e.target.value })
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
                     required
                   >
@@ -88,7 +107,10 @@ export default function ContactPage() {
 
                 {/* 제목 */}
                 <div>
-                  <label htmlFor="contact-title" className="block text-sm font-medium mb-2">
+                  <label
+                    htmlFor="contact-title"
+                    className="block text-sm font-medium mb-2"
+                  >
                     제목 <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -96,7 +118,9 @@ export default function ContactPage() {
                     name="title"
                     type="text"
                     value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, title: e.target.value })
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
                     placeholder="문의 제목을 입력하세요"
                     autoComplete="off"
@@ -106,14 +130,19 @@ export default function ContactPage() {
 
                 {/* 내용 */}
                 <div>
-                  <label htmlFor="contact-content" className="block text-sm font-medium mb-2">
+                  <label
+                    htmlFor="contact-content"
+                    className="block text-sm font-medium mb-2"
+                  >
                     문의 내용 <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     id="contact-content"
                     name="content"
                     value={formData.content}
-                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, content: e.target.value })
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary h-48 resize-none"
                     placeholder="문의 내용을 상세히 입력해주세요"
                     required
@@ -136,7 +165,7 @@ export default function ContactPage() {
             {/* 운영 시간 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h3 className="font-bold mb-4 flex items-center gap-2">
-                <i className="fas fa-clock text-brand-primary"></i>
+                <FaClock className="text-brand-primary" />
                 운영 시간
               </h3>
               <div className="space-y-2 text-sm text-gray-600">
@@ -150,8 +179,8 @@ export default function ContactPage() {
                 </div>
                 <div className="border-t border-gray-200 my-3"></div>
                 <p className="text-xs text-gray-500">
-                  * 점심시간: 12:00 - 13:00<br />
-                  * 운영시간 외 문의는 익일 순차적으로 답변됩니다.
+                  * 점심시간: 12:00 - 13:00
+                  <br />* 운영시간 외 문의는 익일 순차적으로 답변됩니다.
                 </p>
               </div>
             </div>
@@ -159,7 +188,7 @@ export default function ContactPage() {
             {/* 연락처 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h3 className="font-bold mb-4 flex items-center gap-2">
-                <i className="fas fa-phone text-brand-primary"></i>
+                <FaPhone className="text-brand-primary" />
                 연락처
               </h3>
               <div className="space-y-3 text-sm">
@@ -169,7 +198,9 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="text-gray-600 mb-1">이메일</p>
-                  <p className="font-semibold text-brand-primary">support@example.com</p>
+                  <p className="font-semibold text-brand-primary">
+                    support@example.com
+                  </p>
                 </div>
               </div>
             </div>
@@ -177,7 +208,7 @@ export default function ContactPage() {
             {/* 유의사항 */}
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
               <h3 className="font-bold mb-3 flex items-center gap-2 text-sm">
-                <i className="fas fa-exclamation-circle text-yellow-600"></i>
+                <FaExclamationCircle className="text-yellow-600" />
                 유의사항
               </h3>
               <ul className="space-y-2 text-xs text-gray-700">
@@ -190,5 +221,5 @@ export default function ContactPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

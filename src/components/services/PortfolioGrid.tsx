@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import { FaImage, FaExpandAlt } from "react-icons/fa";
 
 // Dynamic import for PortfolioModal - only loads when needed
 const PortfolioModal = dynamic(() => import("./PortfolioModal"), {
@@ -70,7 +71,7 @@ export default function PortfolioGrid({ portfolios }: Props) {
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-400">
-                <i className="fas fa-image text-4xl"></i>
+                <FaImage className="text-4xl" />
               </div>
             )}
 
@@ -80,7 +81,7 @@ export default function PortfolioGrid({ portfolios }: Props) {
                 {portfolio.title}
               </h3>
               <div className="flex items-center gap-1 text-white/80 text-xs">
-                <i className="fas fa-expand-alt"></i>
+                <FaExpandAlt />
                 <span>자세히 보기</span>
               </div>
             </div>

@@ -1,84 +1,96 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
-import Link from 'next/link'
-import { logger } from '@/lib/logger'
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
+import Link from "next/link";
+import { logger } from "@/lib/logger";
+import {
+  FaArrowLeft,
+  FaEdit,
+  FaTrash,
+  FaEye,
+  FaCalendar,
+  FaYoutube,
+  FaExternalLinkAlt,
+} from "react-icons/fa";
 
 interface Portfolio {
-  id: string
-  seller_id: string
-  title: string
-  description: string
-  category_id: string | null
-  thumbnail_url: string | null
-  image_urls: string[]
-  project_url: string | null
-  youtube_url: string | null
-  tags: string[]
-  view_count: number
-  created_at: string
-  updated_at: string
+  id: string;
+  seller_id: string;
+  title: string;
+  description: string;
+  category_id: string | null;
+  thumbnail_url: string | null;
+  image_urls: string[];
+  project_url: string | null;
+  youtube_url: string | null;
+  tags: string[];
+  view_count: number;
+  created_at: string;
+  updated_at: string;
 }
 
 interface Props {
-  portfolio: Portfolio
-  sellerId: string
+  portfolio: Portfolio;
+  sellerId: string;
 }
 
-export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }: Props) {
-  const router = useRouter()
-  const [deleting, setDeleting] = useState(false)
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+export default function PortfolioDetailClient({
+  portfolio,
+  sellerId: _sellerId,
+}: Props) {
+  const router = useRouter();
+  const [deleting, setDeleting] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // 썸네일 + 추가 이미지 배열
   const allImages = [
     portfolio.thumbnail_url,
-    ...(portfolio.image_urls || [])
-  ].filter(Boolean) as string[]
+    ...(portfolio.image_urls || []),
+  ].filter(Boolean) as string[];
 
   // YouTube 비디오 ID 추출
   const getYoutubeVideoId = (url: string | null): string | null => {
-    if (!url) return null
+    if (!url) return null;
     const patterns = [
       /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
       /youtube\.com\/embed\/([^&\n?#]+)/,
-      /youtube\.com\/v\/([^&\n?#]+)/
-    ]
+      /youtube\.com\/v\/([^&\n?#]+)/,
+    ];
     for (const pattern of patterns) {
-      const match = url.match(pattern)
-      if (match) return match[1]
+      const match = url.match(pattern);
+      if (match) return match[1];
     }
-    return null
-  }
+    return null;
+  };
 
-  const youtubeVideoId = getYoutubeVideoId(portfolio.youtube_url)
+  const youtubeVideoId = getYoutubeVideoId(portfolio.youtube_url);
 
   const handleDelete = async () => {
-    if (!confirm('정말 삭제하시겠습니까?')) return
+    if (!confirm("정말 삭제하시겠습니까?")) return;
 
     try {
-      setDeleting(true)
+      setDeleting(true);
 
       const response = await fetch(`/api/seller/portfolio/${portfolio.id}`, {
-        method: 'DELETE'
-      })
+        method: "DELETE",
+      });
 
       if (!response.ok) {
-        throw new Error('삭제 실패')
+        throw new Error("삭제 실패");
       }
 
-      alert('포트폴리오가 삭제되었습니다')
-      router.push('/mypage/seller/portfolio')
-      router.refresh()
+      alert("포트폴리오가 삭제되었습니다");
+      router.push("/mypage/seller/portfolio");
+      router.refresh();
     } catch (error) {
-      logger.error('Portfolio delete error:', error)
-      alert('삭제에 실패했습니다')
+      logger.error("Portfolio delete error:", error);
+      alert("삭제에 실패했습니다");
     } finally {
-      setDeleting(false)
+      setDeleting(false);
     }
-  }
+  };
 
   return (
     <MypageLayoutWrapper mode="seller">
@@ -91,7 +103,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
                 href="/mypage/seller/portfolio"
                 className="text-gray-600 hover:text-brand-primary transition-colors"
               >
-                <i className="fas fa-arrow-left mr-2"></i>
+                <FaArrowLeft className="inline mr-2" />
                 포트폴리오 목록
               </Link>
               <div className="flex gap-2">
@@ -99,7 +111,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
                   href={`/mypage/seller/portfolio/${portfolio.id}/edit`}
                   className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
                 >
-                  <i className="fas fa-edit mr-2"></i>
+                  <FaEdit className="inline mr-2" />
                   수정
                 </Link>
                 <button
@@ -107,16 +119,24 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
                   disabled={deleting}
                   className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
-                  <i className="fas fa-trash mr-2"></i>
-                  {deleting ? '삭제 중...' : '삭제'}
+                  <FaTrash className="inline mr-2" />
+                  {deleting ? "삭제 중..." : "삭제"}
                 </button>
               </div>
             </div>
 
-            <h1 className="text-xl font-bold text-gray-900">{portfolio.title}</h1>
+            <h1 className="text-xl font-bold text-gray-900">
+              {portfolio.title}
+            </h1>
             <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
-              <span><i className="fas fa-eye mr-1"></i>{portfolio.view_count || 0} 조회</span>
-              <span><i className="fas fa-calendar mr-1"></i>{new Date(portfolio.created_at).toLocaleDateString('ko-KR')}</span>
+              <span>
+                <FaEye className="inline mr-1" />
+                {portfolio.view_count || 0} 조회
+              </span>
+              <span>
+                <FaCalendar className="inline mr-1" />
+                {new Date(portfolio.created_at).toLocaleDateString("ko-KR")}
+              </span>
             </div>
           </div>
 
@@ -143,8 +163,8 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
                           onClick={() => setCurrentImageIndex(index)}
                           className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
                             currentImageIndex === index
-                              ? 'border-brand-primary ring-2 ring-brand-primary ring-opacity-50'
-                              : 'border-gray-300 hover:border-gray-400'
+                              ? "border-brand-primary ring-2 ring-brand-primary ring-opacity-50"
+                              : "border-gray-300 hover:border-gray-400"
                           }`}
                         >
                           <img
@@ -165,7 +185,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
           {youtubeVideoId && (
             <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4">
-                <i className="fab fa-youtube text-red-600 mr-2"></i>
+                <FaYoutube className="inline text-red-600 mr-2" />
                 프로젝트 영상
               </h2>
               <div className="aspect-video bg-black rounded-lg overflow-hidden">
@@ -184,7 +204,9 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
 
           {/* 설명 */}
           <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">프로젝트 설명</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              프로젝트 설명
+            </h2>
             <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
               {portfolio.description}
             </p>
@@ -193,14 +215,16 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
           {/* 프로젝트 URL */}
           {portfolio.project_url && (
             <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">프로젝트 링크</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                프로젝트 링크
+              </h2>
               <a
                 href={portfolio.project_url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-brand-primary hover:underline break-all"
               >
-                <i className="fas fa-external-link-alt mr-2"></i>
+                <FaExternalLinkAlt className="inline mr-2" />
                 {portfolio.project_url}
               </a>
             </div>
@@ -225,5 +249,5 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
         </div>
       </div>
     </MypageLayoutWrapper>
-  )
+  );
 }

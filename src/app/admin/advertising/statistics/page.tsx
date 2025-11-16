@@ -1,107 +1,121 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
+import {
+  FaWonSign,
+  FaChartLine,
+  FaMousePointer,
+  FaCoins,
+  FaCreditCard,
+  FaUniversity,
+  FaChartBar,
+} from "react-icons/fa";
 
 interface RevenueByPeriod {
-  period: string
-  amount: number
+  period: string;
+  amount: number;
 }
 
 interface RevenueByPaymentMethod {
-  method: string
-  amount: number
+  method: string;
+  amount: number;
 }
 
 interface TopService {
-  subscriptionId: string
-  serviceName: string
-  sellerName: string
-  impressions: number
-  clicks: number
-  ctr: number
+  subscriptionId: string;
+  serviceName: string;
+  sellerName: string;
+  impressions: number;
+  clicks: number;
+  ctr: number;
 }
 
 interface SubscriptionStats {
-  total: number
-  active: number
-  pending: number
-  cancelled: number
-  totalRevenue: number
-  monthlyRevenue: number
+  total: number;
+  active: number;
+  pending: number;
+  cancelled: number;
+  totalRevenue: number;
+  monthlyRevenue: number;
 }
 
 interface Statistics {
-  period: string
-  startDate?: string
-  endDate?: string
+  period: string;
+  startDate?: string;
+  endDate?: string;
   revenue: {
-    byPeriod: RevenueByPeriod[]
-    byPaymentMethod: RevenueByPaymentMethod[]
-    total: number
-  }
+    byPeriod: RevenueByPeriod[];
+    byPaymentMethod: RevenueByPaymentMethod[];
+    total: number;
+  };
   performance: {
-    totalImpressions: number
-    totalClicks: number
-    ctr: number
-    topServices: TopService[]
-  }
-  subscriptions: SubscriptionStats
+    totalImpressions: number;
+    totalClicks: number;
+    ctr: number;
+    topServices: TopService[];
+  };
+  subscriptions: SubscriptionStats;
 }
 
-type Period = 'day' | 'month' | 'year'
+type Period = "day" | "month" | "year";
 
 export default function AdminAdvertisingStatisticsPage() {
-  const [statistics, setStatistics] = useState<Statistics | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [period, setPeriod] = useState<Period>('month')
-  const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
+  const [statistics, setStatistics] = useState<Statistics | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [period, setPeriod] = useState<Period>("month");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
-    fetchStatistics()
-  }, [period])
+    fetchStatistics();
+  }, [period]);
 
   const fetchStatistics = async () => {
     try {
-      setLoading(true)
-      const params = new URLSearchParams({ period })
-      if (startDate) params.append('startDate', startDate)
-      if (endDate) params.append('endDate', endDate)
+      setLoading(true);
+      const params = new URLSearchParams({ period });
+      if (startDate) params.append("startDate", startDate);
+      if (endDate) params.append("endDate", endDate);
 
-      const response = await fetch(`/api/admin/advertising/statistics?${params.toString()}`)
+      const response = await fetch(
+        `/api/admin/advertising/statistics?${params.toString()}`,
+      );
       if (response.ok) {
-        const data = await response.json()
-        setStatistics(data)
+        const data = await response.json();
+        setStatistics(data);
       }
     } catch (error) {
-      console.error('Failed to fetch statistics:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
+      console.error(
+        "Failed to fetch statistics:",
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleFilterSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    fetchStatistics()
-  }
+    e.preventDefault();
+    fetchStatistics();
+  };
 
   const getPaymentMethodLabel = (method: string) => {
     const labels = {
-      credit: '크레딧',
-      card: '카드',
-      bank_transfer: '무통장',
-    }
-    return labels[method as keyof typeof labels] || method
-  }
+      credit: "크레딧",
+      card: "카드",
+      bank_transfer: "무통장",
+    };
+    return labels[method as keyof typeof labels] || method;
+  };
 
   const getPaymentMethodIcon = (method: string) => {
     const icons = {
-      credit: 'fa-coins',
-      card: 'fa-credit-card',
-      bank_transfer: 'fa-building-columns',
-    }
-    return icons[method as keyof typeof icons] || 'fa-money-bill'
-  }
+      credit: FaCoins,
+      card: FaCreditCard,
+      bank_transfer: FaUniversity,
+    };
+    return icons[method as keyof typeof icons] || FaCoins;
+  };
 
   return (
     <div className="space-y-8">
@@ -120,31 +134,31 @@ export default function AdminAdvertisingStatisticsPage() {
             </label>
             <div className="flex gap-2">
               <button
-                onClick={() => setPeriod('day')}
+                onClick={() => setPeriod("day")}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  period === 'day'
-                    ? 'bg-[#0f3460] text-white'
-                    : 'text-slate-700 hover:bg-slate-100'
+                  period === "day"
+                    ? "bg-[#0f3460] text-white"
+                    : "text-slate-700 hover:bg-slate-100"
                 }`}
               >
                 일별
               </button>
               <button
-                onClick={() => setPeriod('month')}
+                onClick={() => setPeriod("month")}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  period === 'month'
-                    ? 'bg-[#0f3460] text-white'
-                    : 'text-slate-700 hover:bg-slate-100'
+                  period === "month"
+                    ? "bg-[#0f3460] text-white"
+                    : "text-slate-700 hover:bg-slate-100"
                 }`}
               >
                 월별
               </button>
               <button
-                onClick={() => setPeriod('year')}
+                onClick={() => setPeriod("year")}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  period === 'year'
-                    ? 'bg-[#0f3460] text-white'
-                    : 'text-slate-700 hover:bg-slate-100'
+                  period === "year"
+                    ? "bg-[#0f3460] text-white"
+                    : "text-slate-700 hover:bg-slate-100"
                 }`}
               >
                 연별
@@ -196,13 +210,15 @@ export default function AdminAdvertisingStatisticsPage() {
             <div className="bg-white rounded-lg border border-slate-200 p-6">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-sm font-medium text-slate-600 mb-2">총 수익</p>
+                  <p className="text-sm font-medium text-slate-600 mb-2">
+                    총 수익
+                  </p>
                   <p className="text-3xl font-bold text-slate-900">
                     ₩{statistics.revenue.total.toLocaleString()}
                   </p>
                 </div>
                 <div className="rounded-lg bg-blue-50 p-3">
-                  <i className="fas fa-won-sign text-[#0f3460] text-xl"></i>
+                  <FaWonSign className="text-[#0f3460] text-xl" />
                 </div>
               </div>
             </div>
@@ -210,7 +226,9 @@ export default function AdminAdvertisingStatisticsPage() {
             <div className="bg-white rounded-lg border border-slate-200 p-6">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-sm font-medium text-slate-600 mb-2">월 예상 수익</p>
+                  <p className="text-sm font-medium text-slate-600 mb-2">
+                    월 예상 수익
+                  </p>
                   <p className="text-3xl font-bold text-slate-900">
                     ₩{statistics.subscriptions.monthlyRevenue.toLocaleString()}
                   </p>
@@ -219,7 +237,7 @@ export default function AdminAdvertisingStatisticsPage() {
                   </p>
                 </div>
                 <div className="rounded-lg bg-green-50 p-3">
-                  <i className="fas fa-chart-line text-green-600 text-xl"></i>
+                  <FaChartLine className="text-green-600 text-xl" />
                 </div>
               </div>
             </div>
@@ -227,17 +245,20 @@ export default function AdminAdvertisingStatisticsPage() {
             <div className="bg-white rounded-lg border border-slate-200 p-6">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-sm font-medium text-slate-600 mb-2">평균 CTR</p>
+                  <p className="text-sm font-medium text-slate-600 mb-2">
+                    평균 CTR
+                  </p>
                   <p className="text-3xl font-bold text-slate-900">
                     {statistics.performance.ctr.toFixed(2)}%
                   </p>
                   <p className="text-sm text-slate-500 mt-1">
-                    노출 {statistics.performance.totalImpressions.toLocaleString()} /
+                    노출{" "}
+                    {statistics.performance.totalImpressions.toLocaleString()} /
                     클릭 {statistics.performance.totalClicks.toLocaleString()}
                   </p>
                 </div>
                 <div className="rounded-lg bg-purple-50 p-3">
-                  <i className="fas fa-mouse-pointer text-purple-600 text-xl"></i>
+                  <FaMousePointer className="text-purple-600 text-xl" />
                 </div>
               </div>
             </div>
@@ -246,7 +267,9 @@ export default function AdminAdvertisingStatisticsPage() {
           {/* Payment Method Stats */}
           <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
             <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-              <h2 className="text-xl font-bold text-slate-900">결제 방법별 수익</h2>
+              <h2 className="text-xl font-bold text-slate-900">
+                결제 방법별 수익
+              </h2>
             </div>
             <div className="p-6">
               <div className="grid gap-4 md:grid-cols-3">
@@ -255,24 +278,27 @@ export default function AdminAdvertisingStatisticsPage() {
                     결제 내역이 없습니다.
                   </div>
                 ) : (
-                  statistics.revenue.byPaymentMethod.map((item) => (
-                    <div
-                      key={item.method}
-                      className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white p-4"
-                    >
-                      <div className="rounded-lg bg-slate-50 p-3">
-                        <i className={`fas ${getPaymentMethodIcon(item.method)} text-slate-700 text-xl`}></i>
+                  statistics.revenue.byPaymentMethod.map((item) => {
+                    const IconComponent = getPaymentMethodIcon(item.method);
+                    return (
+                      <div
+                        key={item.method}
+                        className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white p-4"
+                      >
+                        <div className="rounded-lg bg-slate-50 p-3">
+                          <IconComponent className="text-slate-700 text-xl" />
+                        </div>
+                        <div>
+                          <p className="text-sm text-slate-600">
+                            {getPaymentMethodLabel(item.method)}
+                          </p>
+                          <p className="text-2xl font-bold text-slate-900">
+                            ₩{item.amount.toLocaleString()}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm text-slate-600">
-                          {getPaymentMethodLabel(item.method)}
-                        </p>
-                        <p className="text-2xl font-bold text-slate-900">
-                          ₩{item.amount.toLocaleString()}
-                        </p>
-                      </div>
-                    </div>
-                  ))
+                    );
+                  })
                 )}
               </div>
             </div>
@@ -281,7 +307,9 @@ export default function AdminAdvertisingStatisticsPage() {
           {/* Top Services */}
           <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
             <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-              <h2 className="text-xl font-bold text-slate-900">Top 10 광고 서비스</h2>
+              <h2 className="text-xl font-bold text-slate-900">
+                Top 10 광고 서비스
+              </h2>
             </div>
             {statistics.performance.topServices.length === 0 ? (
               <div className="p-12 text-center text-slate-600">
@@ -313,28 +341,33 @@ export default function AdminAdvertisingStatisticsPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200 bg-white">
-                    {statistics.performance.topServices.map((service, index) => (
-                      <tr key={service.subscriptionId} className="hover:bg-slate-50">
-                        <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-slate-900">
-                          {index + 1}
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-900">
-                          {service.serviceName}
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-700">
-                          {service.sellerName}
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-slate-900">
-                          {service.impressions.toLocaleString()}
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-slate-900">
-                          {service.clicks.toLocaleString()}
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium text-slate-900">
-                          {service.ctr.toFixed(2)}%
-                        </td>
-                      </tr>
-                    ))}
+                    {statistics.performance.topServices.map(
+                      (service, index) => (
+                        <tr
+                          key={service.subscriptionId}
+                          className="hover:bg-slate-50"
+                        >
+                          <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-slate-900">
+                            {index + 1}
+                          </td>
+                          <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-900">
+                            {service.serviceName}
+                          </td>
+                          <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-700">
+                            {service.sellerName}
+                          </td>
+                          <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-slate-900">
+                            {service.impressions.toLocaleString()}
+                          </td>
+                          <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-slate-900">
+                            {service.clicks.toLocaleString()}
+                          </td>
+                          <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium text-slate-900">
+                            {service.ctr.toFixed(2)}%
+                          </td>
+                        </tr>
+                      ),
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -345,7 +378,13 @@ export default function AdminAdvertisingStatisticsPage() {
           <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
             <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
               <h2 className="text-xl font-bold text-slate-900">
-                기간별 수익 ({period === 'day' ? '일별' : period === 'month' ? '월별' : '연별'})
+                기간별 수익 (
+                {period === "day"
+                  ? "일별"
+                  : period === "month"
+                    ? "월별"
+                    : "연별"}
+                )
               </h2>
             </div>
             {statistics.revenue.byPeriod.length === 0 ? (
@@ -419,10 +458,10 @@ export default function AdminAdvertisingStatisticsPage() {
         </>
       ) : (
         <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
-          <i className="fas fa-chart-bar text-slate-400 text-5xl mb-4"></i>
+          <FaChartBar className="text-slate-400 text-5xl mb-4 mx-auto" />
           <p className="text-slate-600">통계 데이터가 없습니다.</p>
         </div>
       )}
     </div>
-  )
+  );
 }

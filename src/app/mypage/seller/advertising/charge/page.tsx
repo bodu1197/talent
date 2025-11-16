@@ -1,117 +1,133 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper'
-import { createClient } from '@/lib/supabase/client'
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
+import { createClient } from "@/lib/supabase/client";
+import { FaArrowLeft, FaCheckCircle, FaCheck } from "react-icons/fa";
 
 interface PaymentResponse {
-  success: boolean
-  imp_uid: string
-  merchant_uid: string
-  error_msg?: string
+  success: boolean;
+  imp_uid: string;
+  merchant_uid: string;
+  error_msg?: string;
 }
 
 interface Window {
   IMP?: {
-    init: (code: string) => void
-    request_pay: (params: Record<string, unknown>, callback: (response: PaymentResponse) => void) => void
-  }
+    init: (code: string) => void;
+    request_pay: (
+      params: Record<string, unknown>,
+      callback: (response: PaymentResponse) => void,
+    ) => void;
+  };
 }
 
-declare let window: Window
+declare let window: Window;
 
 const CREDIT_PACKAGES = [
-  { amount: 100000, bonus: 0, label: '10만원' },
-  { amount: 300000, bonus: 10000, label: '30만원', popular: true },
-  { amount: 500000, bonus: 30000, label: '50만원' },
-  { amount: 1000000, bonus: 100000, label: '100만원' }
-]
+  { amount: 100000, bonus: 0, label: "10만원" },
+  { amount: 300000, bonus: 10000, label: "30만원", popular: true },
+  { amount: 500000, bonus: 30000, label: "50만원" },
+  { amount: 1000000, bonus: 100000, label: "100만원" },
+];
 
 export default function AdvertisingChargePage() {
-  const router = useRouter()
-  const [selectedPackage, setSelectedPackage] = useState(300000)
-  const [loading, setLoading] = useState(false)
+  const router = useRouter();
+  const [selectedPackage, setSelectedPackage] = useState(300000);
+  const [loading, setLoading] = useState(false);
 
   const handlePurchase = async () => {
-    const pkg = CREDIT_PACKAGES.find(p => p.amount === selectedPackage)
-    if (!pkg) return
+    const pkg = CREDIT_PACKAGES.find((p) => p.amount === selectedPackage);
+    if (!pkg) return;
 
-    setLoading(true)
+    setLoading(true);
     try {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) {
-        alert('로그인이 필요합니다')
-        return
+        alert("로그인이 필요합니다");
+        return;
       }
 
       // 결제 준비 API 호출
-      const response = await fetch('/api/payments/prepare', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/payments/prepare", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           amount: pkg.amount,
           name: `광고 크레딧 ${pkg.label}`,
-          type: 'advertising_credit'
-        })
-      })
+          type: "advertising_credit",
+        }),
+      });
 
-      const data = await response.json()
+      const data = await response.json();
       if (data.error) {
-        alert(data.error)
-        return
+        alert(data.error);
+        return;
       }
 
       // PortOne 결제 호출
-      const IMP = window.IMP
+      const IMP = window.IMP;
       if (!IMP) {
-        alert('결제 모듈을 불러오는 중입니다. 잠시 후 다시 시도해주세요.')
-        return
+        alert("결제 모듈을 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
+        return;
       }
 
-      IMP.init(process.env.NEXT_PUBLIC_PORTONE_IMP_CODE!)
-      IMP.request_pay({
-        pg: 'html5_inicis',
-        pay_method: 'card',
-        merchant_uid: data.merchant_uid,
-        name: `광고 크레딧 ${pkg.label}`,
-        amount: pkg.amount,
-        buyer_email: user.email,
-        buyer_name: user.user_metadata?.name || '구매자'
-      }, async (rsp: PaymentResponse) => {
-        if (rsp.success) {
-          // 결제 검증
-          const verifyResponse = await fetch('/api/payments/advertising/verify', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              imp_uid: rsp.imp_uid,
-              merchant_uid: rsp.merchant_uid,
-              amount: pkg.amount,
-              bonus: pkg.bonus
-            })
-          })
+      IMP.init(process.env.NEXT_PUBLIC_PORTONE_IMP_CODE!);
+      IMP.request_pay(
+        {
+          pg: "html5_inicis",
+          pay_method: "card",
+          merchant_uid: data.merchant_uid,
+          name: `광고 크레딧 ${pkg.label}`,
+          amount: pkg.amount,
+          buyer_email: user.email,
+          buyer_name: user.user_metadata?.name || "구매자",
+        },
+        async (rsp: PaymentResponse) => {
+          if (rsp.success) {
+            // 결제 검증
+            const verifyResponse = await fetch(
+              "/api/payments/advertising/verify",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  imp_uid: rsp.imp_uid,
+                  merchant_uid: rsp.merchant_uid,
+                  amount: pkg.amount,
+                  bonus: pkg.bonus,
+                }),
+              },
+            );
 
-          const verifyData = await verifyResponse.json()
-          if (verifyData.success) {
-            alert(`${(pkg.amount + pkg.bonus).toLocaleString()}원 크레딧이 충전되었습니다!`)
-            router.push('/mypage/seller/advertising')
+            const verifyData = await verifyResponse.json();
+            if (verifyData.success) {
+              alert(
+                `${(pkg.amount + pkg.bonus).toLocaleString()}원 크레딧이 충전되었습니다!`,
+              );
+              router.push("/mypage/seller/advertising");
+            } else {
+              alert("결제 검증 실패: " + verifyData.error);
+            }
           } else {
-            alert('결제 검증 실패: ' + verifyData.error)
+            alert("결제 실패: " + rsp.error_msg);
           }
-        } else {
-          alert('결제 실패: ' + rsp.error_msg)
-        }
-      })
-
+        },
+      );
     } catch (error) {
-      console.error('Purchase error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
-      alert('결제 처리 중 오류가 발생했습니다')
+      console.error(
+        "Purchase error:",
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+      );
+      alert("결제 처리 중 오류가 발생했습니다");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <MypageLayoutWrapper mode="seller">
@@ -122,11 +138,15 @@ export default function AdvertisingChargePage() {
               onClick={() => router.back()}
               className="text-gray-600 hover:text-gray-900 mb-4"
             >
-              <i className="fas fa-arrow-left mr-2"></i>
+              <FaArrowLeft className="inline mr-2" />
               뒤로 가기
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">광고 크레딧 충전</h1>
-            <p className="text-gray-600 mt-2">서비스를 홍보할 광고 크레딧을 구매하세요</p>
+            <h1 className="text-2xl font-bold text-gray-900">
+              광고 크레딧 충전
+            </h1>
+            <p className="text-gray-600 mt-2">
+              서비스를 홍보할 광고 크레딧을 구매하세요
+            </p>
           </div>
 
           {/* 크레딧 패키지 선택 */}
@@ -137,8 +157,8 @@ export default function AdvertisingChargePage() {
                 onClick={() => setSelectedPackage(pkg.amount)}
                 className={`relative bg-white border-2 rounded-lg p-6 cursor-pointer transition-all ${
                   selectedPackage === pkg.amount
-                    ? 'border-brand-primary shadow-lg scale-105'
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? "border-brand-primary shadow-lg scale-105"
+                    : "border-gray-200 hover:border-gray-300"
                 }`}
               >
                 {pkg.popular && (
@@ -163,7 +183,7 @@ export default function AdvertisingChargePage() {
                 </div>
                 {selectedPackage === pkg.amount && (
                   <div className="absolute top-4 right-4">
-                    <i className="fas fa-check-circle text-brand-primary text-xl"></i>
+                    <FaCheckCircle className="text-brand-primary text-xl" />
                   </div>
                 )}
               </div>
@@ -175,19 +195,19 @@ export default function AdvertisingChargePage() {
             <h3 className="font-bold text-lg mb-4">광고 서비스 안내</h3>
             <div className="space-y-3 text-sm text-gray-700">
               <div className="flex items-start gap-2">
-                <i className="fas fa-check text-green-600 mt-1"></i>
+                <FaCheck className="text-green-600 mt-1" />
                 <span>월 100,000원 정액제 광고 구독</span>
               </div>
               <div className="flex items-start gap-2">
-                <i className="fas fa-check text-green-600 mt-1"></i>
+                <FaCheck className="text-green-600 mt-1" />
                 <span>카테고리 1페이지 완전 랜덤 노출</span>
               </div>
               <div className="flex items-start gap-2">
-                <i className="fas fa-check text-green-600 mt-1"></i>
+                <FaCheck className="text-green-600 mt-1" />
                 <span>무제한 노출 및 클릭</span>
               </div>
               <div className="flex items-start gap-2">
-                <i className="fas fa-check text-green-600 mt-1"></i>
+                <FaCheck className="text-green-600 mt-1" />
                 <span>모든 광고 100% 공평한 기회</span>
               </div>
             </div>
@@ -200,25 +220,40 @@ export default function AdvertisingChargePage() {
               <div className="flex justify-between">
                 <span className="text-gray-600">선택한 패키지</span>
                 <span className="font-medium">
-                  {CREDIT_PACKAGES.find(p => p.amount === selectedPackage)?.label}
+                  {
+                    CREDIT_PACKAGES.find((p) => p.amount === selectedPackage)
+                      ?.label
+                  }
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">기본 금액</span>
-                <span className="font-medium">{selectedPackage.toLocaleString()}원</span>
+                <span className="font-medium">
+                  {selectedPackage.toLocaleString()}원
+                </span>
               </div>
-              {CREDIT_PACKAGES.find(p => p.amount === selectedPackage)?.bonus! > 0 && (
+              {CREDIT_PACKAGES.find((p) => p.amount === selectedPackage)
+                ?.bonus! > 0 && (
                 <div className="flex justify-between text-green-600">
                   <span>보너스 크레딧</span>
                   <span className="font-medium">
-                    +{CREDIT_PACKAGES.find(p => p.amount === selectedPackage)?.bonus.toLocaleString()}원
+                    +
+                    {CREDIT_PACKAGES.find(
+                      (p) => p.amount === selectedPackage,
+                    )?.bonus.toLocaleString()}
+                    원
                   </span>
                 </div>
               )}
               <div className="border-t pt-3 flex justify-between text-lg">
                 <span className="font-bold">충전될 크레딧</span>
                 <span className="font-bold text-brand-primary">
-                  {(selectedPackage + (CREDIT_PACKAGES.find(p => p.amount === selectedPackage)?.bonus || 0)).toLocaleString()}원
+                  {(
+                    selectedPackage +
+                    (CREDIT_PACKAGES.find((p) => p.amount === selectedPackage)
+                      ?.bonus || 0)
+                  ).toLocaleString()}
+                  원
                 </span>
               </div>
             </div>
@@ -230,7 +265,9 @@ export default function AdvertisingChargePage() {
             disabled={loading}
             className="w-full bg-brand-primary text-white py-4 rounded-lg text-lg font-bold hover:bg-[#1a4d8f] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
-            {loading ? '처리 중...' : `${selectedPackage.toLocaleString()}원 결제하기`}
+            {loading
+              ? "처리 중..."
+              : `${selectedPackage.toLocaleString()}원 결제하기`}
           </button>
 
           {/* 주의사항 */}
@@ -242,5 +279,5 @@ export default function AdvertisingChargePage() {
         </div>
       </div>
     </MypageLayoutWrapper>
-  )
+  );
 }

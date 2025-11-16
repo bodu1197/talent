@@ -1,93 +1,101 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  FaArrowLeft,
+  FaCreditCard,
+  FaUniversity,
+  FaCheck,
+  FaSpinner,
+  FaInfoCircle,
+} from "react-icons/fa";
 // import * as PortOne from '@portone/browser-sdk/v2' // Unused for now
 
 interface Order {
-  id: string
-  buyer_id: string
-  seller_id: string
-  service_id: string | null
-  amount: number
-  title: string
-  description: string | null
-  delivery_days: number
-  revision_count: number
-  status: string
-  merchant_uid: string
-  created_at: string
+  id: string;
+  buyer_id: string;
+  seller_id: string;
+  service_id: string | null;
+  amount: number;
+  title: string;
+  description: string | null;
+  delivery_days: number;
+  revision_count: number;
+  status: string;
+  merchant_uid: string;
+  created_at: string;
 }
 
 interface Seller {
-  id: string
-  business_name: string | null
-  display_name: string | null
-  profile_image: string | null
-  user_id: string
+  id: string;
+  business_name: string | null;
+  display_name: string | null;
+  profile_image: string | null;
+  user_id: string;
 }
 
 interface Buyer {
-  id: string
-  name: string | null
-  email: string | null
-  phone: string | null
+  id: string;
+  name: string | null;
+  email: string | null;
+  phone: string | null;
 }
 
 interface Props {
-  order: Order
-  seller: Seller | null
-  buyer: Buyer | null
+  order: Order;
+  seller: Seller | null;
+  buyer: Buyer | null;
 }
 
 export default function DirectPaymentClient({ order, seller, buyer }: Props) {
-  const router = useRouter()
-  const [isProcessing, setIsProcessing] = useState(false)
-  const [agreedToTerms, setAgreedToTerms] = useState(false)
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'bank'>('card')
+  const router = useRouter();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "bank">("card");
 
   const handlePayment = async () => {
     if (!agreedToTerms) {
-      alert('구매 조건을 확인하고 동의해주세요')
-      return
+      alert("구매 조건을 확인하고 동의해주세요");
+      return;
     }
 
-    if (isProcessing) return
+    if (isProcessing) return;
 
     // 클라이언트 사이드 금액 검증
     if (order.amount < 1000 || order.amount > 100000000) {
-      alert('유효하지 않은 결제 금액입니다')
-      return
+      alert("유효하지 않은 결제 금액입니다");
+      return;
     }
 
-    setIsProcessing(true)
+    setIsProcessing(true);
 
     try {
       // 무통장 입금 선택 시
-      if (paymentMethod === 'bank') {
-        router.push(`/payment/bank-transfer/${order.id}`)
-        return
+      if (paymentMethod === "bank") {
+        router.push(`/payment/bank-transfer/${order.id}`);
+        return;
       }
 
       // 카드 결제 (PortOne 건너뛰고 바로 결제 완료 처리)
       // 테스트용: 실제 결제 없이 바로 paid 상태로 변경
-      const verifyResponse = await fetch('/api/payments/mock-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const verifyResponse = await fetch("/api/payments/mock-payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          order_id: order.id
-        })
-      })
+          order_id: order.id,
+        }),
+      });
 
       if (!verifyResponse.ok) {
-        const error = await verifyResponse.json()
-        throw new Error(error.error || '결제 처리 실패')
+        const error = await verifyResponse.json();
+        throw new Error(error.error || "결제 처리 실패");
       }
 
       // 성공
-      alert('결제가 완료되었습니다! (테스트 모드)')
-      router.push(`/mypage/buyer/orders/${order.id}`)
-      return
+      alert("결제가 완료되었습니다! (테스트 모드)");
+      router.push(`/mypage/buyer/orders/${order.id}`);
+      return;
 
       // 실제 PortOne 결제 (나중에 사용)
       /*
@@ -141,13 +149,18 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
       router.push(`/mypage/buyer/orders/${order.id}`)
       */
     } catch (error) {
-      console.error('Payment error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
-      alert(error instanceof Error ? error.message : '결제 중 오류가 발생했습니다')
-      setIsProcessing(false)
+      console.error(
+        "Payment error:",
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+      );
+      alert(
+        error instanceof Error ? error.message : "결제 중 오류가 발생했습니다",
+      );
+      setIsProcessing(false);
     }
-  }
+  };
 
-  const sellerName = seller?.display_name || seller?.business_name || '판매자'
+  const sellerName = seller?.display_name || seller?.business_name || "판매자";
 
   return (
     <div className="min-h-screen bg-gray-50 pt-16">
@@ -158,7 +171,7 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
             onClick={() => router.back()}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4"
           >
-            <i className="fas fa-arrow-left"></i>
+            <FaArrowLeft />
             <span>뒤로가기</span>
           </button>
           <h1 className="text-2xl font-bold text-gray-900">결제하기</h1>
@@ -171,7 +184,9 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
           <div className="space-y-3">
             <div className="flex justify-between items-start">
               <span className="text-gray-600">상품명</span>
-              <span className="font-medium text-gray-900 text-right">{order.title}</span>
+              <span className="font-medium text-gray-900 text-right">
+                {order.title}
+              </span>
             </div>
 
             {order.description && (
@@ -195,12 +210,18 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
 
             <div className="flex justify-between">
               <span className="text-gray-600">수정 횟수</span>
-              <span className="text-gray-900">{order.revision_count === 999 ? '무제한' : `${order.revision_count}회`}</span>
+              <span className="text-gray-900">
+                {order.revision_count === 999
+                  ? "무제한"
+                  : `${order.revision_count}회`}
+              </span>
             </div>
 
             <div className="pt-4 border-t border-gray-200">
               <div className="flex justify-between items-center">
-                <span className="text-lg font-bold text-gray-900">총 결제금액</span>
+                <span className="text-lg font-bold text-gray-900">
+                  총 결제금액
+                </span>
                 <span className="text-2xl font-bold text-brand-primary">
                   {order.amount.toLocaleString()}원
                 </span>
@@ -211,20 +232,22 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
 
         {/* 결제 수단 선택 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-4">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">결제 수단 선택</h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-4">
+            결제 수단 선택
+          </h2>
 
           <div className="grid grid-cols-2 gap-4">
             <button
               type="button"
-              onClick={() => setPaymentMethod('card')}
+              onClick={() => setPaymentMethod("card")}
               className={`p-4 rounded-lg border-2 transition-all ${
-                paymentMethod === 'card'
-                  ? 'border-brand-primary bg-blue-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                paymentMethod === "card"
+                  ? "border-brand-primary bg-blue-50"
+                  : "border-gray-200 hover:border-gray-300"
               }`}
             >
               <div className="flex flex-col items-center gap-2">
-                <i className="fas fa-credit-card text-2xl text-brand-primary"></i>
+                <FaCreditCard className="text-2xl text-brand-primary" />
                 <span className="font-medium">카드 결제</span>
                 <span className="text-xs text-gray-500">PortOne 결제창</span>
               </div>
@@ -232,15 +255,15 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
 
             <button
               type="button"
-              onClick={() => setPaymentMethod('bank')}
+              onClick={() => setPaymentMethod("bank")}
               className={`p-4 rounded-lg border-2 transition-all ${
-                paymentMethod === 'bank'
-                  ? 'border-brand-primary bg-blue-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                paymentMethod === "bank"
+                  ? "border-brand-primary bg-blue-50"
+                  : "border-gray-200 hover:border-gray-300"
               }`}
             >
               <div className="flex flex-col items-center gap-2">
-                <i className="fas fa-university text-2xl text-brand-primary"></i>
+                <FaUniversity className="text-2xl text-brand-primary" />
                 <span className="font-medium">무통장 입금</span>
                 <span className="text-xs text-gray-500">계좌 이체</span>
               </div>
@@ -255,34 +278,44 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
           <div className="space-y-3">
             <div className="flex justify-between">
               <span className="text-gray-600">이름</span>
-              <span className="text-gray-900">{buyer?.name || '-'}</span>
+              <span className="text-gray-900">{buyer?.name || "-"}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">이메일</span>
-              <span className="text-gray-900">{buyer?.email || '-'}</span>
+              <span className="text-gray-900">{buyer?.email || "-"}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">연락처</span>
-              <span className="text-gray-900">{buyer?.phone || '-'}</span>
+              <span className="text-gray-900">{buyer?.phone || "-"}</span>
             </div>
           </div>
         </div>
 
         {/* 구매 조건 동의 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">구매 조건 확인 및 동의</h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-4">
+            구매 조건 확인 및 동의
+          </h2>
 
           <div className="space-y-3 mb-4">
             <div className="flex items-start gap-2 text-sm text-gray-600">
-              <i className="fas fa-check text-green-600 mt-1"></i>
-              <span>작업 완료 후 {order.delivery_days}일 이내에 납품됩니다</span>
+              <FaCheck className="text-green-600 mt-1" />
+              <span>
+                작업 완료 후 {order.delivery_days}일 이내에 납품됩니다
+              </span>
             </div>
             <div className="flex items-start gap-2 text-sm text-gray-600">
-              <i className="fas fa-check text-green-600 mt-1"></i>
-              <span>최대 {order.revision_count === 999 ? '무제한' : `${order.revision_count}회`}까지 수정 요청이 가능합니다</span>
+              <FaCheck className="text-green-600 mt-1" />
+              <span>
+                최대{" "}
+                {order.revision_count === 999
+                  ? "무제한"
+                  : `${order.revision_count}회`}
+                까지 수정 요청이 가능합니다
+              </span>
             </div>
             <div className="flex items-start gap-2 text-sm text-gray-600">
-              <i className="fas fa-check text-green-600 mt-1"></i>
+              <FaCheck className="text-green-600 mt-1" />
               <span>결제 후 환불은 판매자와 협의가 필요합니다</span>
             </div>
           </div>
@@ -308,24 +341,22 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
         >
           {isProcessing ? (
             <>
-              <i className="fas fa-spinner fa-spin mr-2"></i>
+              <FaSpinner className="fa-spin mr-2 inline" />
               결제 처리 중...
             </>
           ) : (
-            <>
-              {order.amount.toLocaleString()}원 결제하기
-            </>
+            <>{order.amount.toLocaleString()}원 결제하기</>
           )}
         </button>
 
         {/* 안내 메시지 */}
         <div className="mt-6 bg-blue-50 rounded-lg p-4 border border-blue-200">
           <p className="text-sm text-blue-900">
-            <i className="fas fa-info-circle mr-2"></i>
+            <FaInfoCircle className="mr-2 inline" />
             결제 후 작업이 시작되며, 판매자와의 소통은 채팅을 통해 진행됩니다.
           </p>
         </div>
       </div>
     </div>
-  )
+  );
 }

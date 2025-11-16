@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { FaArrowLeft, FaPrint } from "react-icons/fa";
 
 interface TaxInvoiceDetail {
   id: string;
@@ -53,23 +54,23 @@ export default function TaxInvoiceDetailPage() {
     try {
       const supabase = createClient();
       const { data, error } = await supabase
-        .from('tax_invoices')
-        .select('*')
-        .eq('id', invoiceId)
+        .from("tax_invoices")
+        .select("*")
+        .eq("id", invoiceId)
         .single();
 
       if (error) {
-        console.error('세금계산서 로딩 실패:', error);
-        alert('세금계산서를 불러올 수 없습니다');
-        router.push('/admin/tax-invoices');
+        console.error("세금계산서 로딩 실패:", error);
+        alert("세금계산서를 불러올 수 없습니다");
+        router.push("/admin/tax-invoices");
         return;
       }
 
       setInvoice(data);
     } catch (error) {
-      console.error('세금계산서 로딩 중 오류:', error);
-      alert('세금계산서를 불러올 수 없습니다');
-      router.push('/admin/tax-invoices');
+      console.error("세금계산서 로딩 중 오류:", error);
+      alert("세금계산서를 불러올 수 없습니다");
+      router.push("/admin/tax-invoices");
     } finally {
       setLoading(false);
     }
@@ -103,17 +104,17 @@ export default function TaxInvoiceDetailPage() {
       {/* 액션 버튼 (인쇄 시 숨김) */}
       <div className="flex justify-between items-center print:hidden">
         <button
-          onClick={() => router.push('/admin/tax-invoices')}
+          onClick={() => router.push("/admin/tax-invoices")}
           className="px-4 py-2 text-gray-600 hover:text-gray-900 flex items-center gap-2"
         >
-          <i className="fas fa-arrow-left"></i>
+          <FaArrowLeft />
           목록으로
         </button>
         <button
           onClick={handlePrint}
           className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
         >
-          <i className="fas fa-print"></i>
+          <FaPrint />
           인쇄하기
         </button>
       </div>
@@ -129,10 +130,12 @@ export default function TaxInvoiceDetailPage() {
         {/* 계산서 번호 및 발행일 */}
         <div className="mb-6 flex justify-between text-sm">
           <div>
-            <span className="font-medium">승인번호:</span> {invoice.invoice_number}
+            <span className="font-medium">승인번호:</span>{" "}
+            {invoice.invoice_number}
           </div>
           <div>
-            <span className="font-medium">작성일자:</span> {new Date(invoice.issue_date).toLocaleDateString('ko-KR')}
+            <span className="font-medium">작성일자:</span>{" "}
+            {new Date(invoice.issue_date).toLocaleDateString("ko-KR")}
           </div>
         </div>
 
@@ -140,15 +143,21 @@ export default function TaxInvoiceDetailPage() {
         <div className="grid grid-cols-2 gap-6 mb-8">
           {/* 공급자 (좌측) */}
           <div className="border-2 border-gray-300 p-4">
-            <h3 className="text-lg font-bold mb-3 pb-2 border-b border-gray-300">공급자</h3>
+            <h3 className="text-lg font-bold mb-3 pb-2 border-b border-gray-300">
+              공급자
+            </h3>
             <div className="space-y-2 text-sm">
               <div className="grid grid-cols-3 gap-2">
                 <span className="font-medium text-gray-600">사업자번호</span>
-                <span className="col-span-2">{invoice.supplier_business_number}</span>
+                <span className="col-span-2">
+                  {invoice.supplier_business_number}
+                </span>
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <span className="font-medium text-gray-600">상호</span>
-                <span className="col-span-2 font-bold">{invoice.supplier_company_name}</span>
+                <span className="col-span-2 font-bold">
+                  {invoice.supplier_company_name}
+                </span>
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <span className="font-medium text-gray-600">대표자</span>
@@ -163,15 +172,21 @@ export default function TaxInvoiceDetailPage() {
 
           {/* 공급받는자 (우측) */}
           <div className="border-2 border-gray-300 p-4">
-            <h3 className="text-lg font-bold mb-3 pb-2 border-b border-gray-300">공급받는자</h3>
+            <h3 className="text-lg font-bold mb-3 pb-2 border-b border-gray-300">
+              공급받는자
+            </h3>
             <div className="space-y-2 text-sm">
               <div className="grid grid-cols-3 gap-2">
                 <span className="font-medium text-gray-600">사업자번호</span>
-                <span className="col-span-2">{invoice.buyer_business_number}</span>
+                <span className="col-span-2">
+                  {invoice.buyer_business_number}
+                </span>
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <span className="font-medium text-gray-600">상호</span>
-                <span className="col-span-2 font-bold">{invoice.buyer_company_name}</span>
+                <span className="col-span-2 font-bold">
+                  {invoice.buyer_company_name}
+                </span>
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <span className="font-medium text-gray-600">대표자</span>
@@ -196,20 +211,40 @@ export default function TaxInvoiceDetailPage() {
           <table className="w-full border-2 border-gray-300">
             <thead className="bg-gray-100">
               <tr>
-                <th className="border border-gray-300 px-4 py-2 text-sm font-medium">품목</th>
-                <th className="border border-gray-300 px-4 py-2 text-sm font-medium">규격</th>
-                <th className="border border-gray-300 px-4 py-2 text-sm font-medium">수량</th>
-                <th className="border border-gray-300 px-4 py-2 text-sm font-medium">단가</th>
-                <th className="border border-gray-300 px-4 py-2 text-sm font-medium">공급가액</th>
-                <th className="border border-gray-300 px-4 py-2 text-sm font-medium">세액</th>
-                <th className="border border-gray-300 px-4 py-2 text-sm font-medium">비고</th>
+                <th className="border border-gray-300 px-4 py-2 text-sm font-medium">
+                  품목
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-sm font-medium">
+                  규격
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-sm font-medium">
+                  수량
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-sm font-medium">
+                  단가
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-sm font-medium">
+                  공급가액
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-sm font-medium">
+                  세액
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-sm font-medium">
+                  비고
+                </th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="border border-gray-300 px-4 py-3 text-sm">{invoice.item_name}</td>
-                <td className="border border-gray-300 px-4 py-3 text-sm text-center">-</td>
-                <td className="border border-gray-300 px-4 py-3 text-sm text-center">{invoice.item_quantity}</td>
+                <td className="border border-gray-300 px-4 py-3 text-sm">
+                  {invoice.item_name}
+                </td>
+                <td className="border border-gray-300 px-4 py-3 text-sm text-center">
+                  -
+                </td>
+                <td className="border border-gray-300 px-4 py-3 text-sm text-center">
+                  {invoice.item_quantity}
+                </td>
                 <td className="border border-gray-300 px-4 py-3 text-sm text-right">
                   {invoice.item_unit_price.toLocaleString()}원
                 </td>
@@ -219,7 +254,9 @@ export default function TaxInvoiceDetailPage() {
                 <td className="border border-gray-300 px-4 py-3 text-sm text-right font-medium">
                   {invoice.tax_amount.toLocaleString()}원
                 </td>
-                <td className="border border-gray-300 px-4 py-3 text-sm text-center">{invoice.remarks || '-'}</td>
+                <td className="border border-gray-300 px-4 py-3 text-sm text-center">
+                  {invoice.remarks || "-"}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -230,22 +267,30 @@ export default function TaxInvoiceDetailPage() {
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
               <div className="text-sm text-gray-600 mb-2">공급가액</div>
-              <div className="text-2xl font-bold text-gray-900">{invoice.supply_amount.toLocaleString()}원</div>
+              <div className="text-2xl font-bold text-gray-900">
+                {invoice.supply_amount.toLocaleString()}원
+              </div>
             </div>
             <div>
               <div className="text-sm text-gray-600 mb-2">세액 (10%)</div>
-              <div className="text-2xl font-bold text-gray-900">{invoice.tax_amount.toLocaleString()}원</div>
+              <div className="text-2xl font-bold text-gray-900">
+                {invoice.tax_amount.toLocaleString()}원
+              </div>
             </div>
             <div className="bg-blue-50 rounded-lg p-3">
               <div className="text-sm text-gray-600 mb-2">합계금액</div>
-              <div className="text-3xl font-bold text-brand-primary">{invoice.total_amount.toLocaleString()}원</div>
+              <div className="text-3xl font-bold text-brand-primary">
+                {invoice.total_amount.toLocaleString()}원
+              </div>
             </div>
           </div>
         </div>
 
         {/* 하단 안내문 */}
         <div className="text-xs text-gray-500 text-center space-y-1 border-t pt-4">
-          <p>이 세금계산서는 부가가치세법 제32조 및 제54조에 의거 발급되었습니다.</p>
+          <p>
+            이 세금계산서는 부가가치세법 제32조 및 제54조에 의거 발급되었습니다.
+          </p>
           <p>본 세금계산서는 전자세금계산서 시스템을 통해 발행되었습니다.</p>
         </div>
 
@@ -256,13 +301,13 @@ export default function TaxInvoiceDetailPage() {
               <span className="font-medium">계산서 ID:</span> {invoice.id}
             </div>
             <div>
-              <span className="font-medium">발행일시:</span>{' '}
-              {new Date(invoice.created_at).toLocaleString('ko-KR')}
+              <span className="font-medium">발행일시:</span>{" "}
+              {new Date(invoice.created_at).toLocaleString("ko-KR")}
             </div>
             <div>
-              <span className="font-medium">상태:</span>{' '}
+              <span className="font-medium">상태:</span>{" "}
               <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
-                {invoice.status === 'issued' ? '발행완료' : invoice.status}
+                {invoice.status === "issued" ? "발행완료" : invoice.status}
               </span>
             </div>
           </div>

@@ -1,9 +1,10 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { useState } from "react";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 export default function FooterMobileBusinessInfo() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="px-5 pt-4">
@@ -14,13 +15,17 @@ export default function FooterMobileBusinessInfo() {
         aria-label="사업자정보 토글"
       >
         <span>돌파구 사업자정보</span>
-        <i className={`fas fa-chevron-${isOpen ? 'up' : 'down'} text-mobile-sm text-gray-600 transition-transform`}></i>
+        {isOpen ? (
+          <FaChevronUp className="text-mobile-sm text-gray-600 transition-transform" />
+        ) : (
+          <FaChevronDown className="text-mobile-sm text-gray-600 transition-transform" />
+        )}
       </button>
 
       {/* 드롭다운 내용 */}
       <div
         className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen ? 'max-h-96 opacity-100 mt-3' : 'max-h-0 opacity-0'
+          isOpen ? "max-h-96 opacity-100 mt-3" : "max-h-0 opacity-0"
         }`}
       >
         <div className="text-mobile-sm text-gray-600 space-y-1.5 pb-3">
@@ -33,5 +38,5 @@ export default function FooterMobileBusinessInfo() {
         </div>
       </div>
     </div>
-  )
+  );
 }

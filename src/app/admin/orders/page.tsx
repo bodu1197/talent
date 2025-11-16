@@ -1,61 +1,83 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { getAdminOrders, getAdminOrdersCount, type OrderWithRelations } from '@/lib/supabase/queries/admin'
-import LoadingSpinner from '@/components/common/LoadingSpinner'
-import ErrorState from '@/components/common/ErrorState'
-import EmptyState from '@/components/common/EmptyState'
-import { logger } from '@/lib/logger'
+import { useState, useEffect } from "react";
+import {
+  getAdminOrders,
+  getAdminOrdersCount,
+  type OrderWithRelations,
+} from "@/lib/supabase/queries/admin";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
+import ErrorState from "@/components/common/ErrorState";
+import EmptyState from "@/components/common/EmptyState";
+import { logger } from "@/lib/logger";
+import { FaRedoAlt } from "react-icons/fa";
 
-type OrderStatus = 'all' | 'paid' | 'in_progress' | 'delivered' | 'completed' | 'cancelled'
+type OrderStatus =
+  | "all"
+  | "paid"
+  | "in_progress"
+  | "delivered"
+  | "completed"
+  | "cancelled";
 
 export default function AdminOrdersPage() {
-  const [orders, setOrders] = useState<OrderWithRelations[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [statusFilter, setStatusFilter] = useState<OrderStatus>('all')
-  const [searchQuery, setSearchQuery] = useState('')
+  const [orders, setOrders] = useState<OrderWithRelations[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<OrderStatus>("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [statusCounts, setStatusCounts] = useState({
     all: 0,
     paid: 0,
     in_progress: 0,
     delivered: 0,
     completed: 0,
-    cancelled: 0
-  })
+    cancelled: 0,
+  });
 
   useEffect(() => {
-    loadOrders()
-    loadStatusCounts()
-  }, [statusFilter])
+    loadOrders();
+    loadStatusCounts();
+  }, [statusFilter]);
 
   async function loadOrders() {
     try {
-      setLoading(true)
-      setError(null)
+      setLoading(true);
+      setError(null);
       const data = await getAdminOrders({
-        status: statusFilter === 'all' ? undefined : statusFilter,
-        searchQuery
-      })
-      setOrders(data)
+        status: statusFilter === "all" ? undefined : statusFilter,
+        searchQuery,
+      });
+      setOrders(data);
     } catch (err: unknown) {
-      logger.error('주문 조회 실패:', err)
-      setError(err instanceof Error ? err.message : '주문 목록을 불러오는데 실패했습니다')
+      logger.error("주문 조회 실패:", err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "주문 목록을 불러오는데 실패했습니다",
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
   async function loadStatusCounts() {
     try {
-      const [allCount, paidCount, inProgressCount, deliveredCount, completedCount, cancelledCount] = await Promise.all([
+      const [
+        allCount,
+        paidCount,
+        inProgressCount,
+        deliveredCount,
+        completedCount,
+        cancelledCount,
+      ] = await Promise.all([
         getAdminOrdersCount(),
-        getAdminOrdersCount('paid'),
-        getAdminOrdersCount('in_progress'),
-        getAdminOrdersCount('delivered'),
-        getAdminOrdersCount('completed'),
-        getAdminOrdersCount('cancelled')
-      ])
+        getAdminOrdersCount("paid"),
+        getAdminOrdersCount("in_progress"),
+        getAdminOrdersCount("delivered"),
+        getAdminOrdersCount("completed"),
+        getAdminOrdersCount("cancelled"),
+      ]);
 
       setStatusCounts({
         all: allCount,
@@ -63,60 +85,94 @@ export default function AdminOrdersPage() {
         in_progress: inProgressCount,
         delivered: deliveredCount,
         completed: completedCount,
-        cancelled: cancelledCount
-      })
+        cancelled: cancelledCount,
+      });
     } catch (err) {
-      logger.error('상태별 카운트 조회 실패:', err)
+      logger.error("상태별 카운트 조회 실패:", err);
     }
   }
 
-  const filteredOrders = orders.filter(order => {
+  const filteredOrders = orders.filter((order) => {
     if (searchQuery) {
-      const query = searchQuery.toLowerCase()
-      return order.order_number?.toLowerCase().includes(query) ||
-             order.buyer?.name?.toLowerCase().includes(query) ||
-             order.seller?.name?.toLowerCase().includes(query)
+      const query = searchQuery.toLowerCase();
+      return (
+        order.order_number?.toLowerCase().includes(query) ||
+        order.buyer?.name?.toLowerCase().includes(query) ||
+        order.seller?.name?.toLowerCase().includes(query)
+      );
     }
-    return true
-  })
+    return true;
+  });
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'paid': return '결제완료'
-      case 'in_progress': return '진행중'
-      case 'delivered': return '완료 대기'
-      case 'completed': return '완료'
-      case 'cancelled': return '취소/환불'
-      default: return status
+      case "paid":
+        return "결제완료";
+      case "in_progress":
+        return "진행중";
+      case "delivered":
+        return "완료 대기";
+      case "completed":
+        return "완료";
+      case "cancelled":
+        return "취소/환불";
+      default:
+        return status;
     }
-  }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'paid': return 'bg-red-100 text-red-700'
-      case 'in_progress': return 'bg-yellow-100 text-yellow-700'
-      case 'delivered': return 'bg-blue-100 text-blue-700'
-      case 'completed': return 'bg-green-100 text-green-700'
-      case 'cancelled': return 'bg-gray-100 text-gray-700'
-      default: return 'bg-gray-100 text-gray-700'
+      case "paid":
+        return "bg-red-100 text-red-700";
+      case "in_progress":
+        return "bg-yellow-100 text-yellow-700";
+      case "delivered":
+        return "bg-blue-100 text-blue-700";
+      case "completed":
+        return "bg-green-100 text-green-700";
+      case "cancelled":
+        return "bg-gray-100 text-gray-700";
+      default:
+        return "bg-gray-100 text-gray-700";
     }
-  }
+  };
 
   const tabs = [
-    { value: 'all' as OrderStatus, label: '전체', count: statusCounts.all },
-    { value: 'paid' as OrderStatus, label: '결제완료', count: statusCounts.paid },
-    { value: 'in_progress' as OrderStatus, label: '진행중', count: statusCounts.in_progress },
-    { value: 'delivered' as OrderStatus, label: '완료 대기', count: statusCounts.delivered },
-    { value: 'completed' as OrderStatus, label: '완료', count: statusCounts.completed },
-    { value: 'cancelled' as OrderStatus, label: '취소/환불', count: statusCounts.cancelled }
-  ]
+    { value: "all" as OrderStatus, label: "전체", count: statusCounts.all },
+    {
+      value: "paid" as OrderStatus,
+      label: "결제완료",
+      count: statusCounts.paid,
+    },
+    {
+      value: "in_progress" as OrderStatus,
+      label: "진행중",
+      count: statusCounts.in_progress,
+    },
+    {
+      value: "delivered" as OrderStatus,
+      label: "완료 대기",
+      count: statusCounts.delivered,
+    },
+    {
+      value: "completed" as OrderStatus,
+      label: "완료",
+      count: statusCounts.completed,
+    },
+    {
+      value: "cancelled" as OrderStatus,
+      label: "취소/환불",
+      count: statusCounts.cancelled,
+    },
+  ];
 
   if (loading) {
-    return <LoadingSpinner message="주문 목록을 불러오는 중..." />
+    return <LoadingSpinner message="주문 목록을 불러오는 중..." />;
   }
 
   if (error) {
-    return <ErrorState message={error} retry={loadOrders} />
+    return <ErrorState message={error} retry={loadOrders} />;
   }
 
   return (
@@ -136,17 +192,19 @@ export default function AdminOrdersPage() {
               onClick={() => setStatusFilter(tab.value)}
               className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
                 statusFilter === tab.value
-                  ? 'border-brand-primary text-brand-primary'
-                  : 'border-transparent text-gray-600 hover:text-gray-900'
+                  ? "border-brand-primary text-brand-primary"
+                  : "border-transparent text-gray-600 hover:text-gray-900"
               }`}
             >
               {tab.label}
               {tab.count > 0 && (
-                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                  statusFilter === tab.value
-                    ? 'bg-brand-primary text-white'
-                    : 'bg-gray-200 text-gray-600'
-                }`}>
+                <span
+                  className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
+                    statusFilter === tab.value
+                      ? "bg-brand-primary text-white"
+                      : "bg-gray-200 text-gray-600"
+                  }`}
+                >
                   {tab.count}
                 </span>
               )}
@@ -168,10 +226,10 @@ export default function AdminOrdersPage() {
             />
           </div>
           <button
-            onClick={() => setSearchQuery('')}
+            onClick={() => setSearchQuery("")}
             className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
           >
-            <i className="fas fa-redo-alt mr-2"></i>
+            <FaRedoAlt className="inline mr-2" />
             초기화
           </button>
         </div>
@@ -179,7 +237,9 @@ export default function AdminOrdersPage() {
 
       {/* 결과 카운트 */}
       <div className="text-sm text-gray-600">
-        총 <span className="font-bold text-gray-900">{filteredOrders.length}</span>건의 주문
+        총{" "}
+        <span className="font-bold text-gray-900">{filteredOrders.length}</span>
+        건의 주문
       </div>
 
       {/* 주문 목록 */}
@@ -224,8 +284,8 @@ export default function AdminOrdersPage() {
                       <div className="flex items-center">
                         {order.service?.thumbnail_url && (
                           <img
-                            src={order.service.thumbnail_url || ''}
-                            alt={order.service?.title || ''}
+                            src={order.service.thumbnail_url || ""}
+                            alt={order.service?.title || ""}
                             className="w-10 h-10 rounded object-cover mr-3"
                           />
                         )}
@@ -235,12 +295,20 @@ export default function AdminOrdersPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{order.buyer?.name}</div>
-                      <div className="text-xs text-gray-500">{order.buyer?.email}</div>
+                      <div className="text-sm text-gray-900">
+                        {order.buyer?.name}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {order.buyer?.email}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{order.seller?.name}</div>
-                      <div className="text-xs text-gray-500">{order.seller?.email}</div>
+                      <div className="text-sm text-gray-900">
+                        {order.seller?.name}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {order.seller?.email}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
@@ -248,12 +316,16 @@ export default function AdminOrdersPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status || '')}`}>
-                        {getStatusLabel(order.status || '')}
+                      <span
+                        className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status || "")}`}
+                      >
+                        {getStatusLabel(order.status || "")}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {order.created_at ? new Date(order.created_at).toLocaleDateString('ko-KR') : ''}
+                      {order.created_at
+                        ? new Date(order.created_at).toLocaleDateString("ko-KR")
+                        : ""}
                     </td>
                   </tr>
                 ))}
@@ -271,5 +343,5 @@ export default function AdminOrdersPage() {
         )}
       </div>
     </div>
-  )
+  );
 }

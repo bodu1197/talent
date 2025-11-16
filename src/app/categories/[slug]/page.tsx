@@ -1,49 +1,63 @@
-import { notFound } from 'next/navigation'
-import { getCategoryBySlug as getCategory, getCategoryPath, getCachedCategoriesTree, getAllCategoriesForBuild } from '@/lib/categories'
-import { getServicesByCategory } from '@/lib/supabase/queries/services'
-import ServiceGrid from '@/components/categories/ServiceGrid'
-import CategoryFilter from '@/components/categories/CategoryFilter'
-import CategorySort from '@/components/categories/CategorySort'
-import CategorySidebar from '@/components/categories/CategorySidebar'
-import CategoryVisitTracker from '@/components/categories/CategoryVisitTracker'
-import Link from 'next/link'
+import { notFound } from "next/navigation";
+import {
+  getCategoryBySlug as getCategory,
+  getCategoryPath,
+  getCachedCategoriesTree,
+  getAllCategoriesForBuild,
+} from "@/lib/categories";
+import { getServicesByCategory } from "@/lib/supabase/queries/services";
+import ServiceGrid from "@/components/categories/ServiceGrid";
+import CategoryFilter from "@/components/categories/CategoryFilter";
+import CategorySort from "@/components/categories/CategorySort";
+import CategorySidebar from "@/components/categories/CategorySidebar";
+import CategoryVisitTracker from "@/components/categories/CategoryVisitTracker";
+import Link from "next/link";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 // ISR 캐싱: 광고 우선순위 테스트를 위해 일시적으로 비활성화
-export const revalidate = 0
+export const revalidate = 0;
 
 interface CategoryPageProps {
   params: Promise<{
-    slug: string
-  }>
+    slug: string;
+  }>;
   searchParams: Promise<{
-    page?: string
-  }>
+    page?: string;
+  }>;
 }
 
-export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
-  const { slug } = await params
-  const { page: pageParam } = await searchParams
-  const currentPage = parseInt(pageParam || '1', 10)
+export default async function CategoryPage({
+  params,
+  searchParams,
+}: CategoryPageProps) {
+  const { slug } = await params;
+  const { page: pageParam } = await searchParams;
+  const currentPage = parseInt(pageParam || "1", 10);
 
   // 카테고리 찾기 (인증 불필요, 캐싱 가능)
-  const category = await getCategory(slug, false)
+  const category = await getCategory(slug, false);
 
   if (!category) {
-    notFound()
+    notFound();
   }
 
   // category.id가 유효한지 확인
   if (!category.id) {
-    console.error('[CategoryPage] category.id is invalid:', category.id, 'slug:', slug)
-    notFound()
+    console.error(
+      "[CategoryPage] category.id is invalid:",
+      category.id,
+      "slug:",
+      slug,
+    );
+    notFound();
   }
 
   // 병렬 처리로 성능 향상 (모두 인증 불필요, 캐싱 가능)
   const [categoryPath, allCategories, services] = await Promise.all([
     getCategoryPath(category.id, false),
     getCachedCategoriesTree(false),
-    getServicesByCategory(category.id, 1000, false, currentPage) // 모든 서비스 조회, 페이지네이션 적용
-  ])
+    getServicesByCategory(category.id, 1000, false, currentPage), // 모든 서비스 조회, 페이지네이션 적용
+  ]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -72,14 +86,24 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                 <div className="flex items-center justify-between gap-4 mb-4">
                   {/* Breadcrumb */}
                   <nav className="flex items-center gap-2 text-sm flex-wrap">
-                    <Link href="/" className="text-gray-500 hover:text-gray-700">홈</Link>
+                    <Link
+                      href="/"
+                      className="text-gray-500 hover:text-gray-700"
+                    >
+                      홈
+                    </Link>
                     {categoryPath.map((cat, index) => (
                       <div key={cat.id} className="flex items-center gap-2">
                         <span className="text-gray-400">/</span>
                         {index === categoryPath.length - 1 ? (
-                          <span className="text-gray-900 font-medium">{cat.name}</span>
+                          <span className="text-gray-900 font-medium">
+                            {cat.name}
+                          </span>
                         ) : (
-                          <Link href={`/categories/${cat.slug}`} className="text-gray-500 hover:text-gray-700">
+                          <Link
+                            href={`/categories/${cat.slug}`}
+                            className="text-gray-500 hover:text-gray-700"
+                          >
                             {cat.name}
                           </Link>
                         )}
@@ -92,7 +116,10 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                 </div>
 
                 {/* 필터 영역 */}
-                <CategoryFilter categoryId={category.id} isAI={category.is_ai || false} />
+                <CategoryFilter
+                  categoryId={category.id}
+                  isAI={category.is_ai || false}
+                />
               </div>
 
               {/* 서비스 그리드 */}
@@ -108,7 +135,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                       href={`/categories/${slug}?page=${currentPage - 1}`}
                       className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
                     >
-                      <i className="fas fa-chevron-left"></i>
+                      <FaChevronLeft />
                     </Link>
                   )}
                   <span className="px-4 py-2 bg-brand-primary text-white rounded-lg">
@@ -118,7 +145,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                     href={`/categories/${slug}?page=${currentPage + 1}`}
                     className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
                   >
-                    <i className="fas fa-chevron-right"></i>
+                    <FaChevronRight />
                   </Link>
                 </div>
               )}
@@ -127,23 +154,23 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
         </div>
       </section>
     </div>
-  )
+  );
 }
 
 // 정적 경로 생성
 export async function generateStaticParams() {
-  const allCategories = await getAllCategoriesForBuild()
-  const paths: { slug: string }[] = []
+  const allCategories = await getAllCategoriesForBuild();
+  const paths: { slug: string }[] = [];
 
   const addPaths = (categories: typeof allCategories) => {
-    categories.forEach(category => {
-      paths.push({ slug: category.slug })
+    categories.forEach((category) => {
+      paths.push({ slug: category.slug });
       if (category.children) {
-        addPaths(category.children)
+        addPaths(category.children);
       }
-    })
-  }
+    });
+  };
 
-  addPaths(allCategories)
-  return paths
+  addPaths(allCategories);
+  return paths;
 }

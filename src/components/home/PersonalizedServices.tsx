@@ -1,10 +1,11 @@
-import Link from 'next/link'
-import ServiceCard from '@/components/services/ServiceCard'
-import { getPersonalizedServicesByInterest } from '@/lib/supabase/queries/personalized-services'
+import Link from "next/link";
+import ServiceCard from "@/components/services/ServiceCard";
+import { getPersonalizedServicesByInterest } from "@/lib/supabase/queries/personalized-services";
+import { FaHeart, FaChevronRight } from "react-icons/fa";
 
 export default async function PersonalizedServices() {
   // 회원의 관심 카테고리 기반 서비스 조회
-  const personalizedCategories = await getPersonalizedServicesByInterest()
+  const personalizedCategories = await getPersonalizedServicesByInterest();
 
   // 데이터가 없으면 표시
   if (personalizedCategories.length === 0) {
@@ -14,8 +15,10 @@ export default async function PersonalizedServices() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <div className="flex items-center gap-2">
-                <i className="fas fa-heart text-brand-primary"></i>
-                <h2 className="text-2xl font-bold text-gray-900">회원님의 관심 카테고리</h2>
+                <FaHeart className="text-brand-primary" />
+                <h2 className="text-2xl font-bold text-gray-900">
+                  회원님의 관심 카테고리
+                </h2>
               </div>
               <p className="text-sm text-gray-600 mt-1">
                 방문한 카테고리에 서비스가 없습니다
@@ -24,11 +27,13 @@ export default async function PersonalizedServices() {
           </div>
           <div className="bg-gray-100 rounded-lg p-8 text-center text-gray-600">
             <p>아직 서비스가 등록된 카테고리를 방문하지 않으셨습니다.</p>
-            <p className="mt-2">카테고리를 탐색하고 관심있는 서비스를 찾아보세요!</p>
+            <p className="mt-2">
+              카테고리를 탐색하고 관심있는 서비스를 찾아보세요!
+            </p>
           </div>
         </div>
       </section>
-    )
+    );
   }
 
   return (
@@ -38,8 +43,10 @@ export default async function PersonalizedServices() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <div className="flex items-center gap-2">
-              <i className="fas fa-heart text-brand-primary"></i>
-              <h2 className="text-2xl font-bold text-gray-900">회원님의 관심 카테고리</h2>
+              <FaHeart className="text-brand-primary" />
+              <h2 className="text-2xl font-bold text-gray-900">
+                회원님의 관심 카테고리
+              </h2>
             </div>
             <p className="text-sm text-gray-600 mt-1">
               자주 방문하시는 카테고리의 추천 서비스입니다
@@ -68,7 +75,7 @@ export default async function PersonalizedServices() {
                   className="text-sm text-brand-primary hover:underline flex items-center gap-1"
                 >
                   더보기
-                  <i className="fas fa-chevron-right text-xs"></i>
+                  <FaChevronRight className="text-xs" />
                 </Link>
               </div>
 
@@ -83,5 +90,5 @@ export default async function PersonalizedServices() {
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -1,55 +1,66 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
+import {
+  FaEye,
+  FaUsers,
+  FaChartLine,
+  FaDesktop,
+  FaMobileAlt,
+  FaTabletAlt,
+} from "react-icons/fa";
 
 interface AnalyticsStats {
-  total_views: number
-  unique_visitors: number
-  desktop_views: number
-  mobile_views: number
-  tablet_views: number
-  bot_views: number
+  total_views: number;
+  unique_visitors: number;
+  desktop_views: number;
+  mobile_views: number;
+  tablet_views: number;
+  bot_views: number;
 }
 
 interface AnalyticsResponse {
-  period: string
+  period: string;
   summary: {
-    totalViews: number
-    totalUniqueVisitors: number
-    avgViewsPerDay: number
-  }
-  data: AnalyticsStats[]
+    totalViews: number;
+    totalUniqueVisitors: number;
+    avgViewsPerDay: number;
+  };
+  data: AnalyticsStats[];
 }
 
-type Period = 'hour' | 'day' | 'month' | 'year'
+type Period = "hour" | "day" | "month" | "year";
 
 export default function AdminStatisticsPage() {
-  const [period, setPeriod] = useState<Period>('day')
-  const [analytics, setAnalytics] = useState<AnalyticsResponse | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [period, setPeriod] = useState<Period>("day");
+  const [analytics, setAnalytics] = useState<AnalyticsResponse | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchAnalytics()
-  }, [period])
+    fetchAnalytics();
+  }, [period]);
 
   const fetchAnalytics = async () => {
     try {
-      setLoading(true)
-      const response = await fetch(`/api/admin/analytics?period=${period}`)
+      setLoading(true);
+      const response = await fetch(`/api/admin/analytics?period=${period}`);
       if (response.ok) {
-        const data = await response.json()
-        setAnalytics(data)
+        const data = await response.json();
+        setAnalytics(data);
       }
     } catch (error) {
-      console.error('Failed to fetch analytics:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
+      console.error(
+        "Failed to fetch analytics:",
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const getDeviceStats = () => {
     if (!analytics?.data || analytics.data.length === 0) {
-      return { desktop: 0, mobile: 0, tablet: 0, bot: 0 }
+      return { desktop: 0, mobile: 0, tablet: 0, bot: 0 };
     }
 
     return analytics.data.reduce(
@@ -59,61 +70,59 @@ export default function AdminStatisticsPage() {
         tablet: acc.tablet + curr.tablet_views,
         bot: acc.bot + curr.bot_views,
       }),
-      { desktop: 0, mobile: 0, tablet: 0, bot: 0 }
-    )
-  }
+      { desktop: 0, mobile: 0, tablet: 0, bot: 0 },
+    );
+  };
 
-  const deviceStats = getDeviceStats()
+  const deviceStats = getDeviceStats();
 
   return (
     <div className="space-y-8">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-slate-900 mb-2">사이트 통계</h1>
-        <p className="text-slate-600">
-          방문자 통계 및 페이지 뷰 분석
-        </p>
+        <p className="text-slate-600">방문자 통계 및 페이지 뷰 분석</p>
       </div>
 
       {/* Period Tabs */}
       <div className="bg-white rounded-lg border border-slate-200 p-4">
         <div className="flex gap-2">
           <button
-            onClick={() => setPeriod('hour')}
+            onClick={() => setPeriod("hour")}
             className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              period === 'hour'
-                ? 'bg-[#0f3460] text-white'
-                : 'text-slate-700 hover:bg-slate-100'
+              period === "hour"
+                ? "bg-[#0f3460] text-white"
+                : "text-slate-700 hover:bg-slate-100"
             }`}
           >
             시간별
           </button>
           <button
-            onClick={() => setPeriod('day')}
+            onClick={() => setPeriod("day")}
             className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              period === 'day'
-                ? 'bg-[#0f3460] text-white'
-                : 'text-slate-700 hover:bg-slate-100'
+              period === "day"
+                ? "bg-[#0f3460] text-white"
+                : "text-slate-700 hover:bg-slate-100"
             }`}
           >
             일별
           </button>
           <button
-            onClick={() => setPeriod('month')}
+            onClick={() => setPeriod("month")}
             className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              period === 'month'
-                ? 'bg-[#0f3460] text-white'
-                : 'text-slate-700 hover:bg-slate-100'
+              period === "month"
+                ? "bg-[#0f3460] text-white"
+                : "text-slate-700 hover:bg-slate-100"
             }`}
           >
             월별
           </button>
           <button
-            onClick={() => setPeriod('year')}
+            onClick={() => setPeriod("year")}
             className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              period === 'year'
-                ? 'bg-[#0f3460] text-white'
-                : 'text-slate-700 hover:bg-slate-100'
+              period === "year"
+                ? "bg-[#0f3460] text-white"
+                : "text-slate-700 hover:bg-slate-100"
             }`}
           >
             연별
@@ -136,11 +145,11 @@ export default function AdminStatisticsPage() {
                     총 페이지 뷰
                   </p>
                   <p className="text-3xl font-bold text-slate-900">
-                    {analytics?.summary.totalViews.toLocaleString() || '0'}
+                    {analytics?.summary.totalViews.toLocaleString() || "0"}
                   </p>
                 </div>
                 <div className="rounded-lg bg-blue-50 p-3">
-                  <i className="fas fa-eye text-[#0f3460] text-xl"></i>
+                  <FaEye className="text-[#0f3460] text-xl" />
                 </div>
               </div>
             </div>
@@ -152,11 +161,12 @@ export default function AdminStatisticsPage() {
                     고유 방문자
                   </p>
                   <p className="text-3xl font-bold text-slate-900">
-                    {analytics?.summary.totalUniqueVisitors.toLocaleString() || '0'}
+                    {analytics?.summary.totalUniqueVisitors.toLocaleString() ||
+                      "0"}
                   </p>
                 </div>
                 <div className="rounded-lg bg-blue-50 p-3">
-                  <i className="fas fa-users text-[#0f3460] text-xl"></i>
+                  <FaUsers className="text-[#0f3460] text-xl" />
                 </div>
               </div>
             </div>
@@ -168,11 +178,11 @@ export default function AdminStatisticsPage() {
                     일평균 뷰
                   </p>
                   <p className="text-3xl font-bold text-slate-900">
-                    {analytics?.summary.avgViewsPerDay.toLocaleString() || '0'}
+                    {analytics?.summary.avgViewsPerDay.toLocaleString() || "0"}
                   </p>
                 </div>
                 <div className="rounded-lg bg-blue-50 p-3">
-                  <i className="fas fa-chart-line text-[#0f3460] text-xl"></i>
+                  <FaChartLine className="text-[#0f3460] text-xl" />
                 </div>
               </div>
             </div>
@@ -187,7 +197,7 @@ export default function AdminStatisticsPage() {
               <div className="grid gap-4 md:grid-cols-3">
                 <div className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white p-4">
                   <div className="rounded-lg bg-slate-50 p-3">
-                    <i className="fas fa-desktop text-slate-700 text-xl"></i>
+                    <FaDesktop className="text-slate-700 text-xl" />
                   </div>
                   <div>
                     <p className="text-sm text-slate-600">데스크톱</p>
@@ -199,7 +209,7 @@ export default function AdminStatisticsPage() {
 
                 <div className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white p-4">
                   <div className="rounded-lg bg-slate-50 p-3">
-                    <i className="fas fa-mobile-alt text-slate-700 text-xl"></i>
+                    <FaMobileAlt className="text-slate-700 text-xl" />
                   </div>
                   <div>
                     <p className="text-sm text-slate-600">모바일</p>
@@ -211,7 +221,7 @@ export default function AdminStatisticsPage() {
 
                 <div className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white p-4">
                   <div className="rounded-lg bg-slate-50 p-3">
-                    <i className="fas fa-tablet-alt text-slate-700 text-xl"></i>
+                    <FaTabletAlt className="text-slate-700 text-xl" />
                   </div>
                   <div>
                     <p className="text-sm text-slate-600">태블릿</p>
@@ -229,10 +239,10 @@ export default function AdminStatisticsPage() {
             <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
               <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
                 <h2 className="text-xl font-bold text-slate-900">
-                  {period === 'hour' && '시간별 상세 통계'}
-                  {period === 'day' && '일별 상세 통계'}
-                  {period === 'month' && '월별 상세 통계'}
-                  {period === 'year' && '연별 상세 통계'}
+                  {period === "hour" && "시간별 상세 통계"}
+                  {period === "day" && "일별 상세 통계"}
+                  {period === "month" && "월별 상세 통계"}
+                  {period === "year" && "연별 상세 통계"}
                 </h2>
               </div>
               <div className="overflow-x-auto">
@@ -260,39 +270,60 @@ export default function AdminStatisticsPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200 bg-white">
-                    {analytics.data.slice(0, 20).map((row: AnalyticsStats & { hour?: string; date?: string; year?: number; month?: number }, index: number) => (
-                      <tr key={index} className="hover:bg-slate-50">
-                        <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-900">
-                          {period === 'hour' && row.hour && new Date(row.hour).toLocaleString('ko-KR')}
-                          {period === 'day' && row.date && new Date(row.date).toLocaleDateString('ko-KR')}
-                          {period === 'month' && row.year && row.month && `${row.year}년 ${row.month}월`}
-                          {period === 'year' && row.year && `${row.year}년`}
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium text-slate-900">
-                          {row.total_views.toLocaleString()}
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-slate-700">
-                          {row.unique_visitors.toLocaleString()}
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-slate-600">
-                          {row.desktop_views.toLocaleString()}
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-slate-600">
-                          {row.mobile_views.toLocaleString()}
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-slate-600">
-                          {row.tablet_views.toLocaleString()}
-                        </td>
-                      </tr>
-                    ))}
+                    {analytics.data
+                      .slice(0, 20)
+                      .map(
+                        (
+                          row: AnalyticsStats & {
+                            hour?: string;
+                            date?: string;
+                            year?: number;
+                            month?: number;
+                          },
+                          index: number,
+                        ) => (
+                          <tr key={index} className="hover:bg-slate-50">
+                            <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-900">
+                              {period === "hour" &&
+                                row.hour &&
+                                new Date(row.hour).toLocaleString("ko-KR")}
+                              {period === "day" &&
+                                row.date &&
+                                new Date(row.date).toLocaleDateString("ko-KR")}
+                              {period === "month" &&
+                                row.year &&
+                                row.month &&
+                                `${row.year}년 ${row.month}월`}
+                              {period === "year" && row.year && `${row.year}년`}
+                            </td>
+                            <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium text-slate-900">
+                              {row.total_views.toLocaleString()}
+                            </td>
+                            <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-slate-700">
+                              {row.unique_visitors.toLocaleString()}
+                            </td>
+                            <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-slate-600">
+                              {row.desktop_views.toLocaleString()}
+                            </td>
+                            <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-slate-600">
+                              {row.mobile_views.toLocaleString()}
+                            </td>
+                            <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-slate-600">
+                              {row.tablet_views.toLocaleString()}
+                            </td>
+                          </tr>
+                        ),
+                      )}
                   </tbody>
                 </table>
               </div>
             </div>
           ) : (
             <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
-              <i className="fas fa-eye text-slate-400 text-5xl mb-4"></i>
-              <p className="text-slate-600">아직 수집된 통계 데이터가 없습니다.</p>
+              <FaEye className="text-slate-400 text-5xl mb-4 mx-auto" />
+              <p className="text-slate-600">
+                아직 수집된 통계 데이터가 없습니다.
+              </p>
               <p className="text-sm text-slate-500 mt-2">
                 사용자가 사이트를 방문하면 자동으로 데이터가 수집됩니다.
               </p>
@@ -301,5 +332,5 @@ export default function AdminStatisticsPage() {
         </>
       )}
     </div>
-  )
+  );
 }

@@ -1,142 +1,160 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import type { Category } from '@/types/common'
+import { useState, useEffect } from "react";
+import type { Category } from "@/types/common";
+import {
+  FaPlus,
+  FaFolder,
+  FaEdit,
+  FaTrash,
+  FaFolderOpen,
+} from "react-icons/fa";
 
 interface CategoryFormData {
-  name: string
-  slug: string
-  parent_id: string | null
-  display_order: number
-  is_active: boolean
+  name: string;
+  slug: string;
+  parent_id: string | null;
+  display_order: number;
+  is_active: boolean;
 }
 
 export default function AdminCategoriesPage() {
-  const [categories, setCategories] = useState<Category[]>([])
-  const [loading, setLoading] = useState(true)
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editingCategory, setEditingCategory] = useState<Category | null>(null)
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [formData, setFormData] = useState<CategoryFormData>({
-    name: '',
-    slug: '',
+    name: "",
+    slug: "",
     parent_id: null,
     display_order: 0,
     is_active: true,
-  })
+  });
 
   useEffect(() => {
-    fetchCategories()
-  }, [])
+    fetchCategories();
+  }, []);
 
   const fetchCategories = async () => {
     try {
-      setLoading(true)
-      const response = await fetch('/api/admin/categories?includeInactive=true')
+      setLoading(true);
+      const response = await fetch(
+        "/api/admin/categories?includeInactive=true",
+      );
       if (response.ok) {
-        const data = await response.json()
-        setCategories(data.categories || [])
+        const data = await response.json();
+        setCategories(data.categories || []);
       }
     } catch (error) {
-      console.error('Failed to fetch categories:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
+      console.error(
+        "Failed to fetch categories:",
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleCreate = () => {
-    setEditingCategory(null)
+    setEditingCategory(null);
     setFormData({
-      name: '',
-      slug: '',
+      name: "",
+      slug: "",
       parent_id: null,
       display_order: 0,
       is_active: true,
-    })
-    setDialogOpen(true)
-  }
+    });
+    setDialogOpen(true);
+  };
 
   const handleEdit = (category: Category) => {
-    setEditingCategory(category)
+    setEditingCategory(category);
     setFormData({
       name: category.name,
       slug: category.slug,
       parent_id: category.parent_id,
       display_order: category.display_order,
       is_active: category.is_active,
-    })
-    setDialogOpen(true)
-  }
+    });
+    setDialogOpen(true);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
       if (editingCategory) {
-        const response = await fetch('/api/admin/categories', {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("/api/admin/categories", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id: editingCategory.id, ...formData }),
-        })
+        });
 
         if (!response.ok) {
-          const error = await response.json()
-          alert(error.error || 'Failed to update category')
-          return
+          const error = await response.json();
+          alert(error.error || "Failed to update category");
+          return;
         }
       } else {
-        const response = await fetch('/api/admin/categories', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("/api/admin/categories", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
-        })
+        });
 
         if (!response.ok) {
-          const error = await response.json()
-          alert(error.error || 'Failed to create category')
-          return
+          const error = await response.json();
+          alert(error.error || "Failed to create category");
+          return;
         }
       }
 
-      setDialogOpen(false)
-      fetchCategories()
+      setDialogOpen(false);
+      fetchCategories();
     } catch (error) {
-      console.error('Failed to save category:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
-      alert('Failed to save category')
+      console.error(
+        "Failed to save category:",
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+      );
+      alert("Failed to save category");
     }
-  }
+  };
 
   const handleDelete = async (category: Category) => {
     if (!confirm(`"${category.name}" 카테고리를 삭제하시겠습니까?`)) {
-      return
+      return;
     }
 
     try {
       const response = await fetch(`/api/admin/categories?id=${category.id}`, {
-        method: 'DELETE',
-      })
+        method: "DELETE",
+      });
 
       if (!response.ok) {
-        const error = await response.json()
-        alert(error.error || 'Failed to delete category')
-        return
+        const error = await response.json();
+        alert(error.error || "Failed to delete category");
+        return;
       }
 
-      fetchCategories()
+      fetchCategories();
     } catch (error) {
-      console.error('Failed to delete category:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
-      alert('Failed to delete category')
+      console.error(
+        "Failed to delete category:",
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+      );
+      alert("Failed to delete category");
     }
-  }
+  };
 
   const getParentCategories = () => {
-    return categories.filter(cat => cat.parent_id === null)
-  }
+    return categories.filter((cat) => cat.parent_id === null);
+  };
 
   const getChildCategories = (parentId: string) => {
-    return categories.filter(cat => cat.parent_id === parentId)
-  }
+    return categories.filter((cat) => cat.parent_id === parentId);
+  };
 
-  const parentCategories = getParentCategories()
+  const parentCategories = getParentCategories();
 
   return (
     <div className="space-y-8">
@@ -146,14 +164,15 @@ export default function AdminCategoriesPage() {
           <h1 className="text-3xl font-bold text-slate-900 mb-2">
             카테고리 관리
           </h1>
-          <p className="text-slate-600">서비스 카테고리를 추가, 수정, 삭제할 수 있습니다</p>
+          <p className="text-slate-600">
+            서비스 카테고리를 추가, 수정, 삭제할 수 있습니다
+          </p>
         </div>
         <button
           onClick={handleCreate}
           className="px-4 py-2 bg-[#0f3460] hover:bg-[#0f3460]/90 text-white rounded-md font-medium flex items-center gap-2 transition-colors"
         >
-          <i className="fas fa-plus"></i>
-          새 카테고리
+          <FaPlus />새 카테고리
         </button>
       </div>
 
@@ -165,14 +184,17 @@ export default function AdminCategoriesPage() {
       ) : (
         <div className="space-y-4">
           {parentCategories.map((parent) => {
-            const children = getChildCategories(parent.id)
+            const children = getChildCategories(parent.id);
             return (
-              <div key={parent.id} className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+              <div
+                key={parent.id}
+                className="bg-white rounded-lg border border-slate-200 overflow-hidden"
+              >
                 <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="rounded-lg bg-white p-2 border border-slate-200">
-                        <i className="fas fa-folder text-[#0f3460] text-lg"></i>
+                        <FaFolder className="text-[#0f3460] text-lg" />
                       </div>
                       <div>
                         <h3 className="text-lg font-bold text-slate-900">
@@ -193,13 +215,13 @@ export default function AdminCategoriesPage() {
                         onClick={() => handleEdit(parent)}
                         className="px-3 py-2 border border-slate-200 rounded-md hover:bg-slate-50 transition-colors"
                       >
-                        <i className="fas fa-edit text-slate-700"></i>
+                        <FaEdit className="text-slate-700" />
                       </button>
                       <button
                         onClick={() => handleDelete(parent)}
                         className="px-3 py-2 border border-slate-200 rounded-md hover:bg-red-50 text-red-600 hover:text-red-700 transition-colors"
                       >
-                        <i className="fas fa-trash"></i>
+                        <FaTrash />
                       </button>
                     </div>
                   </div>
@@ -215,7 +237,7 @@ export default function AdminCategoriesPage() {
                         >
                           <div className="flex items-center gap-3">
                             <div className="rounded-lg bg-slate-50 p-2">
-                              <i className="fas fa-folder-open text-slate-600"></i>
+                              <FaFolderOpen className="text-slate-600" />
                             </div>
                             <div>
                               <p className="font-medium text-slate-900">
@@ -236,13 +258,13 @@ export default function AdminCategoriesPage() {
                               onClick={() => handleEdit(child)}
                               className="px-3 py-2 border border-slate-200 rounded-md hover:bg-slate-50 transition-colors"
                             >
-                              <i className="fas fa-edit text-slate-700"></i>
+                              <FaEdit className="text-slate-700" />
                             </button>
                             <button
                               onClick={() => handleDelete(child)}
                               className="px-3 py-2 border border-slate-200 rounded-md hover:bg-red-50 text-red-600 hover:text-red-700 transition-colors"
                             >
-                              <i className="fas fa-trash"></i>
+                              <FaTrash />
                             </button>
                           </div>
                         </div>
@@ -251,12 +273,12 @@ export default function AdminCategoriesPage() {
                   </div>
                 )}
               </div>
-            )
+            );
           })}
 
           {parentCategories.length === 0 && (
             <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
-              <i className="fas fa-folder text-slate-400 text-5xl mb-4"></i>
+              <FaFolder className="text-slate-400 text-5xl mb-4 mx-auto" />
               <p className="text-slate-600">등록된 카테고리가 없습니다.</p>
               <p className="text-sm text-slate-500 mt-2">
                 새 카테고리 버튼을 눌러 카테고리를 추가하세요.
@@ -273,18 +295,21 @@ export default function AdminCategoriesPage() {
             <form onSubmit={handleSubmit}>
               <div className="px-6 py-4 border-b border-slate-200">
                 <h2 className="text-xl font-bold text-slate-900">
-                  {editingCategory ? '카테고리 수정' : '새 카테고리 추가'}
+                  {editingCategory ? "카테고리 수정" : "새 카테고리 추가"}
                 </h2>
                 <p className="text-sm text-slate-600 mt-1">
                   {editingCategory
-                    ? '카테고리 정보를 수정합니다.'
-                    : '새로운 카테고리를 추가합니다.'}
+                    ? "카테고리 정보를 수정합니다."
+                    : "새로운 카테고리를 추가합니다."}
                 </p>
               </div>
 
               <div className="px-6 py-4 space-y-4">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-slate-700 mb-1"
+                  >
                     카테고리 이름 *
                   </label>
                   <input
@@ -301,7 +326,10 @@ export default function AdminCategoriesPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="slug" className="block text-sm font-medium text-slate-700 mb-1">
+                  <label
+                    htmlFor="slug"
+                    className="block text-sm font-medium text-slate-700 mb-1"
+                  >
                     URL 슬러그 *
                   </label>
                   <input
@@ -321,12 +349,15 @@ export default function AdminCategoriesPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="parent" className="block text-sm font-medium text-slate-700 mb-1">
+                  <label
+                    htmlFor="parent"
+                    className="block text-sm font-medium text-slate-700 mb-1"
+                  >
                     상위 카테고리
                   </label>
                   <select
                     id="parent"
-                    value={formData.parent_id || ''}
+                    value={formData.parent_id || ""}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
@@ -345,7 +376,10 @@ export default function AdminCategoriesPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="display_order" className="block text-sm font-medium text-slate-700 mb-1">
+                  <label
+                    htmlFor="display_order"
+                    className="block text-sm font-medium text-slate-700 mb-1"
+                  >
                     표시 순서
                   </label>
                   <input
@@ -361,12 +395,17 @@ export default function AdminCategoriesPage() {
                     min="0"
                     className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
                   />
-                  <p className="text-xs text-slate-500 mt-1">숫자가 작을수록 먼저 표시됩니다</p>
+                  <p className="text-xs text-slate-500 mt-1">
+                    숫자가 작을수록 먼저 표시됩니다
+                  </p>
                 </div>
 
                 <div className="flex items-center justify-between rounded-lg border border-slate-200 p-4">
                   <div>
-                    <label htmlFor="is_active" className="block text-sm font-medium text-slate-700 cursor-pointer">
+                    <label
+                      htmlFor="is_active"
+                      className="block text-sm font-medium text-slate-700 cursor-pointer"
+                    >
                       카테고리 활성화
                     </label>
                     <p className="text-xs text-slate-500">
@@ -397,7 +436,7 @@ export default function AdminCategoriesPage() {
                   type="submit"
                   className="px-4 py-2 bg-[#0f3460] hover:bg-[#0f3460]/90 text-white rounded-md transition-colors"
                 >
-                  {editingCategory ? '수정' : '추가'}
+                  {editingCategory ? "수정" : "추가"}
                 </button>
               </div>
             </form>
@@ -405,5 +444,5 @@ export default function AdminCategoriesPage() {
         </div>
       )}
     </div>
-  )
+  );
 }

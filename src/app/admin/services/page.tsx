@@ -1,123 +1,161 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { getAdminServices, getAdminServicesCount, type ServiceWithSeller } from '@/lib/supabase/queries/admin'
-import LoadingSpinner from '@/components/common/LoadingSpinner'
-import ErrorState from '@/components/common/ErrorState'
-import EmptyState from '@/components/common/EmptyState'
-import { logger } from '@/lib/logger'
+import { useState, useEffect } from "react";
+import {
+  getAdminServices,
+  getAdminServicesCount,
+  type ServiceWithSeller,
+} from "@/lib/supabase/queries/admin";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
+import ErrorState from "@/components/common/ErrorState";
+import EmptyState from "@/components/common/EmptyState";
+import { logger } from "@/lib/logger";
+import {
+  FaRedoAlt,
+  FaExternalLinkAlt,
+  FaEye,
+  FaCheck,
+  FaTimes,
+} from "react-icons/fa";
 
-type ServiceStatus = 'all' | 'pending' | 'approved' | 'rejected'
+type ServiceStatus = "all" | "pending" | "approved" | "rejected";
 
 export default function AdminServicesPage() {
-  const [services, setServices] = useState<ServiceWithSeller[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [statusFilter, setStatusFilter] = useState<ServiceStatus>('pending')
-  const [searchQuery, setSearchQuery] = useState('')
+  const [services, setServices] = useState<ServiceWithSeller[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<ServiceStatus>("pending");
+  const [searchQuery, setSearchQuery] = useState("");
   const [statusCounts, setStatusCounts] = useState({
     all: 0,
     pending: 0,
     approved: 0,
-    rejected: 0
-  })
+    rejected: 0,
+  });
 
   useEffect(() => {
-    loadServices()
-    loadStatusCounts()
-  }, [statusFilter])
+    loadServices();
+    loadStatusCounts();
+  }, [statusFilter]);
 
   async function loadServices() {
     try {
-      setLoading(true)
-      setError(null)
+      setLoading(true);
+      setError(null);
 
       // pending: 최초 등록 검토중
       // approved: active 상태 (승인됨)
       // rejected: suspended 상태 (반려됨)
-      let queryStatus: string | undefined
-      if (statusFilter === 'pending') {
-        queryStatus = 'pending'
-      } else if (statusFilter === 'approved') {
-        queryStatus = 'active'
-      } else if (statusFilter === 'rejected') {
-        queryStatus = 'suspended'
+      let queryStatus: string | undefined;
+      if (statusFilter === "pending") {
+        queryStatus = "pending";
+      } else if (statusFilter === "approved") {
+        queryStatus = "active";
+      } else if (statusFilter === "rejected") {
+        queryStatus = "suspended";
       }
 
       const data = await getAdminServices({
-        status: statusFilter === 'all' ? undefined : queryStatus,
-        searchQuery
-      })
-      setServices(data)
+        status: statusFilter === "all" ? undefined : queryStatus,
+        searchQuery,
+      });
+      setServices(data);
     } catch (err: unknown) {
-      logger.error('서비스 조회 실패:', err)
-      setError(err instanceof Error ? err.message : '서비스 목록을 불러오는데 실패했습니다')
+      logger.error("서비스 조회 실패:", err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "서비스 목록을 불러오는데 실패했습니다",
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
   async function loadStatusCounts() {
     try {
-      const [allCount, pendingCount, approvedCount, rejectedCount] = await Promise.all([
-        getAdminServicesCount(),
-        getAdminServicesCount('pending'),
-        getAdminServicesCount('active'),
-        getAdminServicesCount('suspended')
-      ])
+      const [allCount, pendingCount, approvedCount, rejectedCount] =
+        await Promise.all([
+          getAdminServicesCount(),
+          getAdminServicesCount("pending"),
+          getAdminServicesCount("active"),
+          getAdminServicesCount("suspended"),
+        ]);
 
       setStatusCounts({
         all: allCount,
         pending: pendingCount,
         approved: approvedCount,
-        rejected: rejectedCount
-      })
+        rejected: rejectedCount,
+      });
     } catch (err) {
-      logger.error('상태별 카운트 조회 실패:', err)
+      logger.error("상태별 카운트 조회 실패:", err);
     }
   }
 
-  const filteredServices = services.filter(service => {
+  const filteredServices = services.filter((service) => {
     if (searchQuery) {
-      const query = searchQuery.toLowerCase()
-      return service.title?.toLowerCase().includes(query) ||
-             service.seller?.user?.name?.toLowerCase().includes(query) ||
-             service.seller?.business_name?.toLowerCase().includes(query)
+      const query = searchQuery.toLowerCase();
+      return (
+        service.title?.toLowerCase().includes(query) ||
+        service.seller?.user?.name?.toLowerCase().includes(query) ||
+        service.seller?.business_name?.toLowerCase().includes(query)
+      );
     }
-    return true
-  })
+    return true;
+  });
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'pending': return '검토중'
-      case 'active': return '승인됨'
-      case 'suspended': return '반려됨'
-      default: return status
+      case "pending":
+        return "검토중";
+      case "active":
+        return "승인됨";
+      case "suspended":
+        return "반려됨";
+      default:
+        return status;
     }
-  }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-700'
-      case 'active': return 'bg-green-100 text-green-700'
-      case 'suspended': return 'bg-red-100 text-red-700'
-      default: return 'bg-gray-100 text-gray-700'
+      case "pending":
+        return "bg-yellow-100 text-yellow-700";
+      case "active":
+        return "bg-green-100 text-green-700";
+      case "suspended":
+        return "bg-red-100 text-red-700";
+      default:
+        return "bg-gray-100 text-gray-700";
     }
-  }
+  };
 
   const tabs = [
-    { value: 'all' as ServiceStatus, label: '전체', count: statusCounts.all },
-    { value: 'pending' as ServiceStatus, label: '검토중', count: statusCounts.pending },
-    { value: 'approved' as ServiceStatus, label: '승인됨', count: statusCounts.approved },
-    { value: 'rejected' as ServiceStatus, label: '반려됨', count: statusCounts.rejected }
-  ]
+    { value: "all" as ServiceStatus, label: "전체", count: statusCounts.all },
+    {
+      value: "pending" as ServiceStatus,
+      label: "검토중",
+      count: statusCounts.pending,
+    },
+    {
+      value: "approved" as ServiceStatus,
+      label: "승인됨",
+      count: statusCounts.approved,
+    },
+    {
+      value: "rejected" as ServiceStatus,
+      label: "반려됨",
+      count: statusCounts.rejected,
+    },
+  ];
 
   if (loading) {
-    return <LoadingSpinner message="서비스 목록을 불러오는 중..." />
+    return <LoadingSpinner message="서비스 목록을 불러오는 중..." />;
   }
 
   if (error) {
-    return <ErrorState message={error} retry={loadServices} />
+    return <ErrorState message={error} retry={loadServices} />;
   }
 
   return (
@@ -137,17 +175,19 @@ export default function AdminServicesPage() {
               onClick={() => setStatusFilter(tab.value)}
               className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
                 statusFilter === tab.value
-                  ? 'border-brand-primary text-brand-primary'
-                  : 'border-transparent text-gray-600 hover:text-gray-900'
+                  ? "border-brand-primary text-brand-primary"
+                  : "border-transparent text-gray-600 hover:text-gray-900"
               }`}
             >
               {tab.label}
               {tab.count > 0 && (
-                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                  statusFilter === tab.value
-                    ? 'bg-brand-primary text-white'
-                    : 'bg-gray-200 text-gray-600'
-                }`}>
+                <span
+                  className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
+                    statusFilter === tab.value
+                      ? "bg-brand-primary text-white"
+                      : "bg-gray-200 text-gray-600"
+                  }`}
+                >
                   {tab.count}
                 </span>
               )}
@@ -169,10 +209,10 @@ export default function AdminServicesPage() {
             />
           </div>
           <button
-            onClick={() => setSearchQuery('')}
+            onClick={() => setSearchQuery("")}
             className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
           >
-            <i className="fas fa-redo-alt mr-2"></i>
+            <FaRedoAlt className="inline mr-2" />
             초기화
           </button>
         </div>
@@ -180,7 +220,11 @@ export default function AdminServicesPage() {
 
       {/* 결과 카운트 */}
       <div className="text-sm text-gray-600">
-        총 <span className="font-bold text-gray-900">{filteredServices.length}</span>개의 서비스
+        총{" "}
+        <span className="font-bold text-gray-900">
+          {filteredServices.length}
+        </span>
+        개의 서비스
       </div>
 
       {/* 서비스 목록 */}
@@ -230,7 +274,7 @@ export default function AdminServicesPage() {
                             className="text-sm font-medium text-brand-primary hover:underline"
                           >
                             {service.title}
-                            <i className="fas fa-external-link-alt ml-2 text-xs"></i>
+                            <FaExternalLinkAlt className="inline ml-2 text-xs" />
                           </a>
                           {service.description && (
                             <div className="text-xs text-gray-500 line-clamp-2 mt-1">
@@ -241,8 +285,13 @@ export default function AdminServicesPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{service.seller?.user?.name || service.seller?.business_name}</div>
-                      <div className="text-xs text-gray-500">{service.seller?.user?.email}</div>
+                      <div className="text-sm text-gray-900">
+                        {service.seller?.user?.name ||
+                          service.seller?.business_name}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {service.seller?.user?.email}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
@@ -250,12 +299,18 @@ export default function AdminServicesPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(service.status || '')}`}>
-                        {getStatusLabel(service.status || '')}
+                      <span
+                        className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(service.status || "")}`}
+                      >
+                        {getStatusLabel(service.status || "")}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {service.created_at ? new Date(service.created_at).toLocaleDateString('ko-KR') : ''}
+                      {service.created_at
+                        ? new Date(service.created_at).toLocaleDateString(
+                            "ko-KR",
+                          )
+                        : ""}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <div className="flex gap-2">
@@ -263,23 +318,23 @@ export default function AdminServicesPage() {
                           href={`/admin/services/pending/${service.id}`}
                           className="px-3 py-1.5 bg-brand-primary text-white rounded hover:bg-[#1a4d8f] transition-colors font-medium inline-block text-xs"
                         >
-                          <i className="fas fa-eye mr-1"></i>
+                          <FaEye className="inline mr-1" />
                           상세보기
                         </a>
-                        {service.status === 'pending' && (
+                        {service.status === "pending" && (
                           <>
                             <a
                               href={`/admin/services/pending/${service.id}?action=approve`}
                               className="px-3 py-1.5 bg-green-600 text-white rounded hover:bg-green-700 transition-colors font-medium inline-block text-xs"
                             >
-                              <i className="fas fa-check mr-1"></i>
+                              <FaCheck className="inline mr-1" />
                               승인
                             </a>
                             <a
                               href={`/admin/services/pending/${service.id}?action=reject`}
                               className="px-3 py-1.5 bg-red-600 text-white rounded hover:bg-red-700 transition-colors font-medium inline-block text-xs"
                             >
-                              <i className="fas fa-times mr-1"></i>
+                              <FaTimes className="inline mr-1" />
                               반려
                             </a>
                           </>
@@ -302,5 +357,5 @@ export default function AdminServicesPage() {
         )}
       </div>
     </div>
-  )
+  );
 }
