@@ -9,7 +9,7 @@ import { QueryProvider } from "@/components/providers/QueryProvider";
 import ToastProvider from "@/components/providers/ToastProvider";
 import { headers } from "next/headers";
 import ConditionalLayout from "@/components/layout/ConditionalLayout";
-import CategoryBar from "@/components/layout/CategoryBar";
+import ConditionalMegaMenuWrapper from "@/components/layout/ConditionalMegaMenuWrapper";
 import { PageViewTracker } from "@/components/analytics/PageViewTracker";
 
 // Optimized font loading with next/font
@@ -100,6 +100,7 @@ export default async function RootLayout({
   const nonce = headersList.get("x-nonce") || "";
   const isAdminPage = pathname.startsWith("/admin");
   const isMypagePage = pathname.startsWith("/mypage");
+  const shouldHideMegaMenu = isAdminPage || isMypagePage;
 
   const schemaOrgData = {
     "@context": "https://schema.org",
@@ -184,7 +185,11 @@ export default async function RootLayout({
           <QueryProvider>
             <AuthProvider>
               <ChatUnreadProvider>
-                <ConditionalLayout>
+                <ConditionalLayout
+                  megaMenu={
+                    !shouldHideMegaMenu ? <ConditionalMegaMenuWrapper /> : null
+                  }
+                >
                   {children}
                 </ConditionalLayout>
               </ChatUnreadProvider>
