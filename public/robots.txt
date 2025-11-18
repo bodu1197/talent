@@ -1,1 +1,11 @@
-404: Not Found
+# 돌파구 - 수수료 0원 재능 거래 플랫폼
+# https://dolpagu.com/
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /mypage/
+Disallow: /api/
+
+# Sitemap 위치
+Sitemap: https://dolpagu.com/sitemap.xml

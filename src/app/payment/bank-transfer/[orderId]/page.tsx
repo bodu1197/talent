@@ -1,2 +1,41 @@
-429: Too Many Requests
-For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (https://docs.github.com/en/site-policy/github-terms/github-terms-of-service).
+import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
+import BankTransferClient from './BankTransferClient'
+
+export default async function BankTransferPage({
+  params
+}: {
+  params: Promise<{ orderId: string }>
+}) {
+  const { orderId } = await params
+  const supabase = await createClient()
+
+  // 사용자 인증 확인
+  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  if (authError || !user) {
+    redirect('/login')
+  }
+
+  // 주문 정보 조회
+  const { data: order, error: orderError } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('id', orderId)
+    .single()
+
+  if (orderError || !order) {
+    redirect('/404')
+  }
+
+  // 본인 주문인지 확인
+  if (order.buyer_id !== user.id) {
+    redirect('/404')
+  }
+
+  // 이미 결제된 주문인지 확인
+  if (order.status !== 'pending_payment') {
+    redirect(`/mypage/buyer/orders/${orderId}`)
+  }
+
+  return <BankTransferClient order={order} />
+}

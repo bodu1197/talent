@@ -1,2 +1,298 @@
-429: Too Many Requests
-For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (https://docs.github.com/en/site-policy/github-terms/github-terms-of-service).
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Scrollbar hide utility */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Fix text-size-adjust for better browser support */
+@layer base {
+  html,
+  :host {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* ========================================
+     Z-Index Layer Management System
+     ======================================== */
+  :root {
+    /* Base layer (default content) */
+    --z-base: 0;
+
+    /* Elevated content (badges, tooltips, content overlays) */
+    --z-elevated: 10;
+
+    /* Headers and navigation bars */
+    --z-header: 20;
+
+    /* Sticky navigation and overlays */
+    --z-sticky: 40;
+
+    /* Dropdown menus and mega menus */
+    --z-dropdown: 50;
+
+    /* Modal dialogs and full-screen overlays */
+    --z-modal: 50;
+
+    /* Notifications and alerts */
+    --z-notification: 70;
+
+    /* Accessibility elements (skip-to-content) */
+    --z-skip-link: 100;
+  }
+}
+
+/* Global Base Styles - Using next/font variable */
+html, body {
+  font-family: var(--font-noto-sans-kr), -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+}
+
+/* Pattern Background - Removed gradient pattern */
+
+/* Hero Section Highlight */
+.hero-highlight {
+  color: rgb(17 24 39); /* gray-900 */
+  background: transparent;
+  padding: 4px 12px 4px 0;
+  border-radius: 8px;
+}
+
+.container-1200 {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.container-1500 {
+  max-width: 1500px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.container-wide {
+  max-width: 1920px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Interactive Click Animations */
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes bounce-click {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-8px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Click effect classes */
+.click-pop {
+  transition: all 0.2s ease;
+}
+
+.click-pop:active {
+  animation: pop 0.3s ease;
+}
+
+.click-bounce {
+  transition: all 0.2s ease;
+}
+
+.click-bounce:active {
+  animation: bounce-click 0.4s ease;
+}
+
+.click-shake {
+  transition: all 0.2s ease;
+}
+
+.click-shake:active {
+  animation: shake 0.3s ease;
+}
+
+/* Button ripple effect */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+}
+
+.btn-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-ripple:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Card interactive effects */
+.card-interactive {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.card-interactive:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -10px rgba(15, 52, 96, 0.3);
+}
+
+.card-interactive:active {
+  transform: translateY(-2px) scale(0.98);
+  box-shadow: 0 8px 16px -8px rgba(15, 52, 96, 0.2);
+}
+
+/* Smooth transitions for all interactive elements */
+button, a, .interactive {
+  transition: all 0.2s ease;
+}
+
+button:active, a:active, .interactive:active {
+  transform: scale(0.96);
+}
+
+/* Pulse effect for badges */
+.badge-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* ========================================
+   Accessibility Enhancements
+   ======================================== */
+
+/* Screen reader only - visually hidden but accessible to screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus visible - keyboard navigation */
+*:focus-visible {
+  outline: 2px solid rgb(59 130 246); /* blue-500 */
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Remove outline for mouse users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Skip to content link for keyboard users */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: rgb(59 130 246); /* blue-500 */
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  z-index: var(--z-skip-link);
+  border-radius: 0 0 4px 0;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* High contrast focus for buttons and links */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid rgb(59 130 246); /* blue-500 */
+  outline-offset: 2px;
+}
+
+/* Reduced motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

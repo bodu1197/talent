@@ -1,1 +1,6 @@
-404: Not Found
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
