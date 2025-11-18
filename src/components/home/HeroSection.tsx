@@ -107,9 +107,9 @@ export default function HeroSection() {
   const slide = slides[currentSlide];
 
   return (
-    <section className="bg-white py-12 sm:py-16 lg:py-20 hidden lg:block">
+    <section className="bg-white py-2 sm:py-4 lg:py-8 hidden lg:block">
       <div className="container-1200 px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 mb-12">
+        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 mb-2">
           {/* 왼쪽: 타이틀 + 검색 + 카테고리 */}
           <div className="flex-1 w-full">
             <div className="mb-6 lg:mb-8">

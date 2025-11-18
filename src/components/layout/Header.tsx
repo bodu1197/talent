@@ -233,21 +233,21 @@ export default function Header({ megaMenu }: HeaderProps) {
               <>
                 <Link
                   href="/expert/register"
-                  className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm transition-colors"
+                  className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-base transition-colors"
                   aria-label="전문가로 등록하기"
                 >
                   전문가등록
                 </Link>
                 <Link
                   href="/auth/login"
-                  className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm transition-colors"
+                  className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-base transition-colors"
                   aria-label="로그인 페이지로 이동"
                 >
                   로그인
                 </Link>
                 <Link
                   href="/auth/register"
-                  className="px-3 py-1.5 text-brand-primary hover:text-brand-light font-semibold text-sm transition-colors"
+                  className="px-3 py-1.5 text-brand-primary hover:text-brand-light font-semibold text-base transition-colors"
                   aria-label="회원가입 페이지로 이동"
                 >
                   회원가입
