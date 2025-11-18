@@ -96,32 +96,32 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
     <div className="hidden lg:flex items-center gap-4 relative" ref={menuRef}>
       {/* 전체 카테고리 버튼 */}
       <button
-        className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 rounded-lg font-medium transition-colors"
+        className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-lg font-semibold transition-colors"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="전체 카테고리 메뉴"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <FaBars className="text-sm" aria-hidden="true" />
-        <span className="text-sm">전체 카테고리</span>
+        <FaBars className="text-base" aria-hidden="true" />
+        <span className="text-base">전체 카테고리</span>
       </button>
 
       {/* 인기 카테고리 퀵링크 */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-5">
         {/* AI 서비스 (고정) */}
         <Link
           href="/categories/ai-services"
-          className="text-sm text-brand-primary font-medium hover:text-brand-light flex items-center gap-1"
+          className="text-base text-brand-primary font-semibold hover:text-brand-light flex items-center gap-1.5 transition-colors"
           onClick={handleCategoryClick}
           aria-label="AI 서비스 카테고리 보기"
         >
-          <FaRobot className="text-xs" aria-hidden="true" /> AI 서비스
+          <FaRobot className="text-sm" aria-hidden="true" /> AI 서비스
         </Link>
 
         {/* IT/프로그래밍 (고정) */}
         <Link
           href="/categories/it-programming"
-          className="text-sm text-gray-700 hover:text-gray-900"
+          className="text-base text-gray-700 font-medium hover:text-gray-900 transition-colors"
           onClick={handleCategoryClick}
           aria-label="IT/프로그래밍 카테고리 보기"
         >
@@ -142,7 +142,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
             <Link
               key={cat.id}
               href={`/categories/${cat.slug}`}
-              className="text-sm text-gray-700 hover:text-gray-900"
+              className="text-base text-gray-700 font-medium hover:text-gray-900 transition-colors"
               onClick={handleCategoryClick}
               aria-label={`${cat.name} 카테고리 보기`}
             >
