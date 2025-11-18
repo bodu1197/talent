@@ -17,7 +17,11 @@ import {
 } from "react-icons/fa";
 import { FaHeart as FaRegHeart } from "react-icons/fa";
 
-export default function Header() {
+interface HeaderProps {
+  megaMenu?: React.ReactNode;
+}
+
+export default function Header({ megaMenu }: HeaderProps) {
   const { user, profile, loading, signOut } = useAuth();
   const router = useRouter();
 
@@ -40,17 +44,22 @@ export default function Header() {
     <header className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-50">
       <div className="container-1200">
         <div className="flex items-center justify-between h-16">
-          {/* 로고 */}
-          <Link
-            href="/"
-            className="flex items-center space-x-2"
-            aria-label="돌파구 홈으로 이동"
-          >
-            <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
-              <FaStar className="text-white text-sm" aria-hidden="true" />
-            </div>
-            <span className="text-xl font-bold">돌파구</span>
-          </Link>
+          {/* 로고 + 메가 메뉴 */}
+          <div className="flex items-center space-x-6">
+            <Link
+              href="/"
+              className="flex items-center space-x-2"
+              aria-label="돌파구 홈으로 이동"
+            >
+              <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
+                <FaStar className="text-white text-sm" aria-hidden="true" />
+              </div>
+              <span className="text-xl font-bold">돌파구</span>
+            </Link>
+
+            {/* 메가 메뉴 */}
+            {megaMenu}
+          </div>
 
           {/* 모바일 버전 */}
           <div className="lg:hidden flex items-center space-x-2">

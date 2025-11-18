@@ -39,11 +39,10 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
 
   return (
     <>
-      {/* PC: 항상 일반 헤더 표시 */}
+      {/* PC: 항상 일반 헤더 표시 (메가 메뉴는 헤더 내부에 포함) */}
       <div className="hidden lg:block">
-        <Header />
+        <Header megaMenu={megaMenu} />
         <SearchBar id="desktop-search" />
-        {megaMenu}
       </div>
 
       {/* 모바일: 메인 페이지일 때만 헤더/검색 표시 */}
