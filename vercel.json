@@ -1,12 +1,16 @@
 {
-  "buildCommand": "npm run build",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install",
-  "framework": "nextjs",
-  "git": {
-    "deploymentEnabled": {
-      "main": true,
-      "master": true
+  "crons": [
+    {
+      "path": "/api/cron/advertising?job=monthly-billing",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/advertising?job=expire-bank-transfers",
+      "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/advertising?job=expire-credits",
+      "schedule": "0 0 * * *"
     }
-  }
+  ]
 }

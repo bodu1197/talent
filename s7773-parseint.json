@@ -1,0 +1,2095 @@
+{
+  "total": 40,
+  "p": 1,
+  "ps": 500,
+  "paging": {
+    "pageIndex": 1,
+    "pageSize": 500,
+    "total": 40
+  },
+  "effortTotal": 80,
+  "issues": [
+    {
+      "key": "329712bc-627b-4758-adf2-e9641f2d8d55",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/chat/[roomId]/DirectChatClient.tsx",
+      "project": "talent",
+      "line": 768,
+      "hash": "27240cd0bc54ae34dd1f293ff74219ed",
+      "textRange": {
+        "startLine": 768,
+        "endLine": 768,
+        "startOffset": 28,
+        "endOffset": 36
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-18T04:11:12+0000",
+      "updateDate": "2025-11-18T04:11:12+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "457342cc-e2d5-44e3-bfde-a4ef3124f106",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/chat/[roomId]/DirectChatClient.tsx",
+      "project": "talent",
+      "line": 782,
+      "hash": "de00f13aa4d29a3f488226c383677ea2",
+      "textRange": {
+        "startLine": 782,
+        "endLine": 782,
+        "startOffset": 18,
+        "endOffset": 26
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-18T04:11:12+0000",
+      "updateDate": "2025-11-18T04:11:12+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "f90042fc-8c19-4973-a0f8-9ccf21b3f8db",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/chat/[roomId]/DirectChatClient.tsx",
+      "project": "talent",
+      "line": 784,
+      "hash": "34874220b2663ebce173a7e9c211e6f4",
+      "textRange": {
+        "startLine": 784,
+        "endLine": 784,
+        "startOffset": 25,
+        "endOffset": 33
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-18T04:11:12+0000",
+      "updateDate": "2025-11-18T04:11:12+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "671c01c6-324a-4e36-9c26-be6728302107",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/chat/[roomId]/DirectChatClient.tsx",
+      "project": "talent",
+      "line": 785,
+      "hash": "fa7165914cfaa4d7649dfaff291c978f",
+      "textRange": {
+        "startLine": 785,
+        "endLine": 785,
+        "startOffset": 26,
+        "endOffset": 34
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-18T04:11:12+0000",
+      "updateDate": "2025-11-18T04:11:12+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "f7719594-c262-40c3-a7e5-2eee99f90aaa",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/earnings/withdraw/WithdrawClient.tsx",
+      "project": "talent",
+      "line": 44,
+      "hash": "5b30ad016ee58131233652e12978da7b",
+      "textRange": {
+        "startLine": 44,
+        "endLine": 44,
+        "startOffset": 27,
+        "endOffset": 35
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-17T13:12:35+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "51208eb2-423a-4d90-932f-93e06cd974a9",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/admin/advertising/credits/page.tsx",
+      "project": "talent",
+      "line": 399,
+      "hash": "5ddb4c35776d8ba75a8ea982e1c0f412",
+      "textRange": {
+        "startLine": 399,
+        "endLine": 399,
+        "startOffset": 32,
+        "endOffset": 40
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-16T01:42:48+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "2f41153b-ebba-4f49-9ab6-b7a8f006828c",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/admin/reviews/page.tsx",
+      "project": "talent",
+      "line": 32,
+      "hash": "eb91dc0f9dcaf9e8fe3ac1b9a019d541",
+      "textRange": {
+        "startLine": 32,
+        "endLine": 32,
+        "startOffset": 53,
+        "endOffset": 61
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-16T01:42:48+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "51a7d667-e7a0-4694-8abb-ca2d2b6e9ce3",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/categories/[slug]/page.tsx",
+      "project": "talent",
+      "line": 36,
+      "hash": "c29595a71cd5169b9e7a31bdeae0bfff",
+      "textRange": {
+        "startLine": 36,
+        "endLine": 36,
+        "startOffset": 22,
+        "endOffset": 30
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-16T01:42:48+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "6e54df3a-c2f5-4288-9a3a-f1b921fc6a79",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/reviews/SellerReviewsClient.tsx",
+      "project": "talent",
+      "line": 31,
+      "hash": "c278ca82a10f9976a4a166aaac49c772",
+      "textRange": {
+        "startLine": 31,
+        "endLine": 31,
+        "startOffset": 29,
+        "endOffset": 37
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-16T01:42:48+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "6208e9e0-1d9b-4a94-bb93-fc114438e6f4",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/reviews/SellerReviewsClient.tsx",
+      "project": "talent",
+      "line": 101,
+      "hash": "83bec6eac89a463e0229e812f0925afe",
+      "textRange": {
+        "startLine": 101,
+        "endLine": 101,
+        "startOffset": 22,
+        "endOffset": 32
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseFloat` over `parseFloat`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-16T01:42:48+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "fbd5a81d-a9ec-4520-9726-2b4e7fcd262f",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/components/services/TextOverlayEditor.tsx",
+      "project": "talent",
+      "line": 319,
+      "hash": "d337e4e67a604ccd4a94b3144ac777c9",
+      "textRange": {
+        "startLine": 319,
+        "endLine": 319,
+        "startOffset": 24,
+        "endOffset": 32
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-16T01:42:48+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "1de24b76-287a-49e6-8d74-1e13256fdbf5",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/components/services/TextOverlayEditor.tsx",
+      "project": "talent",
+      "line": 375,
+      "hash": "b562864b495d47a3d878f1d9135630b6",
+      "textRange": {
+        "startLine": 375,
+        "endLine": 375,
+        "startOffset": 26,
+        "endOffset": 34
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-16T01:42:48+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "20c45274-77da-4fe3-8434-46ebe3696e4e",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/orders/SellerOrdersClient.tsx",
+      "project": "talent",
+      "line": 208,
+      "hash": "e4951ecf6aef0a4feb803c32aedb6e45",
+      "textRange": {
+        "startLine": 208,
+        "endLine": 208,
+        "startOffset": 49,
+        "endOffset": 57
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-15T23:09:36+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "376c6eef-c5e9-4db3-9fab-c8d523bfc624",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/orders/SellerOrdersClient.tsx",
+      "project": "talent",
+      "line": 210,
+      "hash": "a92f7ea651ad71020a38bd0ddc35a4cb",
+      "textRange": {
+        "startLine": 210,
+        "endLine": 210,
+        "startOffset": 49,
+        "endOffset": 57
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-15T23:09:36+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "683c779b-a864-4a4d-b6df-893b8a46f923",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/services/[id]/edit/EditServiceClient.tsx",
+      "project": "talent",
+      "line": 385,
+      "hash": "32617348227619dc2e62adc52f5b178e",
+      "textRange": {
+        "startLine": 385,
+        "endLine": 385,
+        "startOffset": 18,
+        "endOffset": 26
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-15T22:15:28+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "a91279bd-9dca-4a39-b001-ed8ed2a99496",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/services/[id]/edit/EditServiceClient.tsx",
+      "project": "talent",
+      "line": 418,
+      "hash": "32617348227619dc2e62adc52f5b178e",
+      "textRange": {
+        "startLine": 418,
+        "endLine": 418,
+        "startOffset": 16,
+        "endOffset": 24
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-15T22:15:28+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "9fe81bc4-91b4-4366-a607-34a693c956a0",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/services/new/NewServiceClient.tsx",
+      "project": "talent",
+      "line": 337,
+      "hash": "2a746732485396bacca29e99adc3ebe2",
+      "textRange": {
+        "startLine": 337,
+        "endLine": 337,
+        "startOffset": 28,
+        "endOffset": 36
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-15T22:15:28+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "97c99269-42c0-41e7-b0fd-2388474cb565",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/api/seller/advertising/bank-transfer/route.ts",
+      "project": "talent",
+      "line": 31,
+      "hash": "dca2fe0e4190001f2dd20ead3c8b5e72",
+      "textRange": {
+        "startLine": 31,
+        "endLine": 31,
+        "startOffset": 19,
+        "endOffset": 27
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-14T23:40:39+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "3b7b0c13-6a5e-4017-883a-1d7e17c3c9cd",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/api/admin/advertising/payments/route.ts",
+      "project": "talent",
+      "line": 29,
+      "hash": "c1c8833f00685d284334c8b1d3fab0b6",
+      "textRange": {
+        "startLine": 29,
+        "endLine": 29,
+        "startOffset": 17,
+        "endOffset": 25
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-14T21:40:28+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "2018d752-e1ea-4ed3-a6a7-e01258120307",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/api/admin/advertising/payments/route.ts",
+      "project": "talent",
+      "line": 30,
+      "hash": "aa91a906fe7e17a6f658a58a8f150682",
+      "textRange": {
+        "startLine": 30,
+        "endLine": 30,
+        "startOffset": 21,
+        "endOffset": 29
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-14T21:40:28+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "d82f301a-bbc2-4d66-ae8f-e161b43cfebf",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/api/admin/advertising/payments/route.ts",
+      "project": "talent",
+      "line": 58,
+      "hash": "5b82a08154acff898edff9c50f5b24e5",
+      "textRange": {
+        "startLine": 58,
+        "endLine": 58,
+        "startOffset": 34,
+        "endOffset": 42
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-14T21:40:28+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "e50ea046-8407-46ea-8bb2-3fb268b9723a",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/api/admin/advertising/payments/route.ts",
+      "project": "talent",
+      "line": 62,
+      "hash": "cd4ad4b1a29a0b5f05a7f7a4344e39f0",
+      "textRange": {
+        "startLine": 62,
+        "endLine": 62,
+        "startOffset": 34,
+        "endOffset": 42
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-14T21:40:28+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "6156ab67-73e4-42dc-905f-05983b9d6c71",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/lib/advertising.ts",
+      "project": "talent",
+      "line": 577,
+      "hash": "8313ef8ab4e753b30db0087dca0159a7",
+      "textRange": {
+        "startLine": 577,
+        "endLine": 577,
+        "startOffset": 15,
+        "endOffset": 23
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-14T13:02:21+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "b9f726e8-ebc1-4448-9024-16e6c05b726b",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/api/notifications/route.ts",
+      "project": "talent",
+      "line": 20,
+      "hash": "9f8ca725a1925168901070a9890f2d66",
+      "textRange": {
+        "startLine": 20,
+        "endLine": 20,
+        "startOffset": 18,
+        "endOffset": 26
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-13T20:32:49+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "bbafbd9a-7cd3-484b-a672-2856b365e7d4",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/admin/categories/page.tsx",
+      "project": "talent",
+      "line": 394,
+      "hash": "ac15974a8421ab667b679b8474006419",
+      "textRange": {
+        "startLine": 394,
+        "endLine": 394,
+        "startOffset": 39,
+        "endOffset": 47
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-12T20:03:42+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "2c8316f5-edc2-41a8-902a-428a4d108fbc",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/utils/validation.ts",
+      "project": "talent",
+      "line": 62,
+      "hash": "5589f94b4418a28eaaba910d9278ba30",
+      "textRange": {
+        "startLine": 62,
+        "endLine": 62,
+        "startOffset": 10,
+        "endOffset": 15
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.isNaN` over `isNaN`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-12T05:58:46+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": true,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "2e0ecf62-d0d3-4824-88e7-f420e2b155b5",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/utils/validation.ts",
+      "project": "talent",
+      "line": 62,
+      "hash": "5589f94b4418a28eaaba910d9278ba30",
+      "textRange": {
+        "startLine": 62,
+        "endLine": 62,
+        "startOffset": 16,
+        "endOffset": 26
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseFloat` over `parseFloat`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-12T05:58:46+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "bde6fc75-95d7-4a4c-84da-145f13be8a7b",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/utils/validation.ts",
+      "project": "talent",
+      "line": 62,
+      "hash": "5589f94b4418a28eaaba910d9278ba30",
+      "textRange": {
+        "startLine": 62,
+        "endLine": 62,
+        "startOffset": 38,
+        "endOffset": 46
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.isFinite` over `isFinite`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-12T05:58:46+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": true,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "82e130fd-591d-492c-9fcf-65333ea225da",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/services/new/NewServiceClientV2.tsx",
+      "project": "talent",
+      "line": 106,
+      "hash": "4e7db621a83392edd0d3e35fc3e68266",
+      "textRange": {
+        "startLine": 106,
+        "endLine": 106,
+        "startOffset": 29,
+        "endOffset": 37
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-06T12:57:56+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "9e18f031-d1f5-4da8-8b4f-39cedbd6168c",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/services/new/NewServiceClientV2.tsx",
+      "project": "talent",
+      "line": 110,
+      "hash": "719a4b4788c818c08aa3b392f44d8ec6",
+      "textRange": {
+        "startLine": 110,
+        "endLine": 110,
+        "startOffset": 37,
+        "endOffset": 45
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-06T12:57:56+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "f96d38ac-a050-4ee5-9369-d1145b4a530d",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/services/new/steps/Step2Pricing.tsx",
+      "project": "talent",
+      "line": 133,
+      "hash": "be1c7a143d97209ee3ef5a4729c3e955",
+      "textRange": {
+        "startLine": 133,
+        "endLine": 133,
+        "startOffset": 39,
+        "endOffset": 47
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-06T12:32:40+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "13d1f330-e24a-4a4d-8ce0-c8e4565a955f",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/services/new/NewServiceClientV2.tsx",
+      "project": "talent",
+      "line": 161,
+      "hash": "dc34793a7f42ce975281f810c9991579",
+      "textRange": {
+        "startLine": 161,
+        "endLine": 161,
+        "startOffset": 17,
+        "endOffset": 25
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-06T12:06:20+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "d22b23f3-aeeb-4286-aff4-d02207e5cc09",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/services/new/NewServiceClientV2.tsx",
+      "project": "talent",
+      "line": 162,
+      "hash": "cd3594359ec218d18bccead666fde64c",
+      "textRange": {
+        "startLine": 162,
+        "endLine": 162,
+        "startOffset": 25,
+        "endOffset": 33
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-06T12:06:20+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "8e76dde2-f272-4bea-bc3d-883e85c508a5",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/services/new/NewServiceClient.tsx",
+      "project": "talent",
+      "line": 332,
+      "hash": "60a79331b5ca9070c908e5a53b812f1b",
+      "textRange": {
+        "startLine": 332,
+        "endLine": 332,
+        "startOffset": 32,
+        "endOffset": 40
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-06T02:44:46+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "60ea3394-bac8-4c34-90a6-3287be43231d",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/services/new/NewServiceClient.tsx",
+      "project": "talent",
+      "line": 333,
+      "hash": "87c3cc0958bab256e9ef8cd09df16629",
+      "textRange": {
+        "startLine": 333,
+        "endLine": 333,
+        "startOffset": 37,
+        "endOffset": 45
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-06T02:39:54+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "ff34918a-9163-4594-9f14-3a4579dc5fd4",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/api/user/service-views/route.ts",
+      "project": "talent",
+      "line": 78,
+      "hash": "3ecd7ca472fba717a379b3dbb103316c",
+      "textRange": {
+        "startLine": 78,
+        "endLine": 78,
+        "startOffset": 18,
+        "endOffset": 26
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-02T07:52:24+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "71b51603-09a6-4333-a86c-dd628c51afcf",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/services/[id]/edit/EditServiceClient.tsx",
+      "project": "talent",
+      "line": 380,
+      "hash": "99c9f57818ad7db3360ee668f1431aeb",
+      "textRange": {
+        "startLine": 380,
+        "endLine": 380,
+        "startOffset": 19,
+        "endOffset": 27
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-02T06:12:22+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "668129ca-3cd0-438e-afa6-2c42eacdc3b5",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/services/[id]/edit/EditServiceClient.tsx",
+      "project": "talent",
+      "line": 381,
+      "hash": "8c57875a22e356de79058b4b1e701fdb",
+      "textRange": {
+        "startLine": 381,
+        "endLine": 381,
+        "startOffset": 27,
+        "endOffset": 35
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-02T06:12:22+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "6d59867d-ae55-409b-b6f6-b2436f1405e7",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/services/[id]/edit/EditServiceClient.tsx",
+      "project": "talent",
+      "line": 413,
+      "hash": "99c9f57818ad7db3360ee668f1431aeb",
+      "textRange": {
+        "startLine": 413,
+        "endLine": 413,
+        "startOffset": 17,
+        "endOffset": 25
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-02T06:12:22+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "ffa8bc33-6fb0-4dbb-95d5-141c38d8cf14",
+      "rule": "typescript:S7773",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/services/[id]/edit/EditServiceClient.tsx",
+      "project": "talent",
+      "line": 414,
+      "hash": "8c57875a22e356de79058b4b1e701fdb",
+      "textRange": {
+        "startLine": 414,
+        "endLine": 414,
+        "startOffset": 25,
+        "endOffset": 33
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer `Number.parseInt` over `parseInt`.",
+      "effort": "2min",
+      "debt": "2min",
+      "author": "your_email@example.com",
+      "tags": [
+        "convention",
+        "es2015"
+      ],
+      "creationDate": "2025-11-02T06:12:22+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    }
+  ],
+  "components": [
+    {
+      "key": "talent:src/app/admin/advertising/credits/page.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "page.tsx",
+      "longName": "src/app/admin/advertising/credits/page.tsx",
+      "path": "src/app/admin/advertising/credits/page.tsx"
+    },
+    {
+      "key": "talent:src/lib/advertising.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "advertising.ts",
+      "longName": "src/lib/advertising.ts",
+      "path": "src/lib/advertising.ts"
+    },
+    {
+      "key": "talent:src/app/mypage/seller/services/new/steps/Step2Pricing.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "Step2Pricing.tsx",
+      "longName": "src/app/mypage/seller/services/new/steps/Step2Pricing.tsx",
+      "path": "src/app/mypage/seller/services/new/steps/Step2Pricing.tsx"
+    },
+    {
+      "key": "talent:src/app/categories/[slug]/page.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "page.tsx",
+      "longName": "src/app/categories/[slug]/page.tsx",
+      "path": "src/app/categories/[slug]/page.tsx"
+    },
+    {
+      "key": "talent:src/app/api/notifications/route.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "route.ts",
+      "longName": "src/app/api/notifications/route.ts",
+      "path": "src/app/api/notifications/route.ts"
+    },
+    {
+      "key": "talent:src/app/api/admin/advertising/payments/route.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "route.ts",
+      "longName": "src/app/api/admin/advertising/payments/route.ts",
+      "path": "src/app/api/admin/advertising/payments/route.ts"
+    },
+    {
+      "key": "talent:src/app/mypage/seller/earnings/withdraw/WithdrawClient.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "WithdrawClient.tsx",
+      "longName": "src/app/mypage/seller/earnings/withdraw/WithdrawClient.tsx",
+      "path": "src/app/mypage/seller/earnings/withdraw/WithdrawClient.tsx"
+    },
+    {
+      "key": "talent:src/app/mypage/seller/services/[id]/edit/EditServiceClient.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "EditServiceClient.tsx",
+      "longName": "src/app/mypage/seller/services/[id]/edit/EditServiceClient.tsx",
+      "path": "src/app/mypage/seller/services/[id]/edit/EditServiceClient.tsx"
+    },
+    {
+      "key": "talent:src/components/services/TextOverlayEditor.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "TextOverlayEditor.tsx",
+      "longName": "src/components/services/TextOverlayEditor.tsx",
+      "path": "src/components/services/TextOverlayEditor.tsx"
+    },
+    {
+      "key": "talent:src/app/api/user/service-views/route.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "route.ts",
+      "longName": "src/app/api/user/service-views/route.ts",
+      "path": "src/app/api/user/service-views/route.ts"
+    },
+    {
+      "key": "talent:src/app/admin/reviews/page.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "page.tsx",
+      "longName": "src/app/admin/reviews/page.tsx",
+      "path": "src/app/admin/reviews/page.tsx"
+    },
+    {
+      "key": "talent:src/app/mypage/seller/reviews/SellerReviewsClient.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "SellerReviewsClient.tsx",
+      "longName": "src/app/mypage/seller/reviews/SellerReviewsClient.tsx",
+      "path": "src/app/mypage/seller/reviews/SellerReviewsClient.tsx"
+    },
+    {
+      "key": "talent:src/utils/validation.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "validation.ts",
+      "longName": "src/utils/validation.ts",
+      "path": "src/utils/validation.ts"
+    },
+    {
+      "key": "talent:src/app/mypage/seller/orders/SellerOrdersClient.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "SellerOrdersClient.tsx",
+      "longName": "src/app/mypage/seller/orders/SellerOrdersClient.tsx",
+      "path": "src/app/mypage/seller/orders/SellerOrdersClient.tsx"
+    },
+    {
+      "key": "talent:src/app/api/seller/advertising/bank-transfer/route.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "route.ts",
+      "longName": "src/app/api/seller/advertising/bank-transfer/route.ts",
+      "path": "src/app/api/seller/advertising/bank-transfer/route.ts"
+    },
+    {
+      "key": "talent:src/app/admin/categories/page.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "page.tsx",
+      "longName": "src/app/admin/categories/page.tsx",
+      "path": "src/app/admin/categories/page.tsx"
+    },
+    {
+      "key": "talent:src/app/mypage/seller/services/new/NewServiceClientV2.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "NewServiceClientV2.tsx",
+      "longName": "src/app/mypage/seller/services/new/NewServiceClientV2.tsx",
+      "path": "src/app/mypage/seller/services/new/NewServiceClientV2.tsx"
+    },
+    {
+      "key": "talent:src/app/chat/[roomId]/DirectChatClient.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "DirectChatClient.tsx",
+      "longName": "src/app/chat/[roomId]/DirectChatClient.tsx",
+      "path": "src/app/chat/[roomId]/DirectChatClient.tsx"
+    },
+    {
+      "key": "talent",
+      "enabled": true,
+      "qualifier": "TRK",
+      "name": "AI Talent Hub",
+      "longName": "AI Talent Hub"
+    },
+    {
+      "key": "talent:src/app/mypage/seller/services/new/NewServiceClient.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "NewServiceClient.tsx",
+      "longName": "src/app/mypage/seller/services/new/NewServiceClient.tsx",
+      "path": "src/app/mypage/seller/services/new/NewServiceClient.tsx"
+    }
+  ],
+  "facets": []
+}

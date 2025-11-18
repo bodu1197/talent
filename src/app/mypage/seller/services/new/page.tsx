@@ -1,2 +1,39 @@
-429: Too Many Requests
-For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (https://docs.github.com/en/site-policy/github-terms/github-terms-of-service).
+import { redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
+import NewServiceClientV2 from './NewServiceClientV2'
+
+export default async function NewServicePage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    redirect('/auth/login')
+  }
+
+  // Get seller info
+  const { data: seller } = await supabase
+    .from('sellers')
+    .select('id')
+    .eq('user_id', user.id)
+    .maybeSingle()
+
+  if (!seller) {
+    redirect('/mypage/seller/register')
+  }
+
+  // Get profile data
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('name, profile_image')
+    .eq('user_id', user.id)
+    .maybeSingle()
+
+  // Load categories
+  const { data: categories } = await supabase
+    .from('categories')
+    .select('*')
+    .order('level', { ascending: true })
+    .order('name', { ascending: true })
+
+  return <NewServiceClientV2 sellerId={seller.id} categories={categories || []} profileData={profile} />
+}

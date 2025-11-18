@@ -1,0 +1,169 @@
+-- Supabase Schema Export
+-- Generated: 2025-11-13T22:48:03.546Z
+-- Project: bpvfkkrlyrjkwgwmfrci
+-- Database: postgres
+
+
+-- Table: users
+-- Columns detected from API response:
+--   id: varchar
+--   email: varchar
+--   name: varchar
+--   phone: varchar
+--   profile_image: nullable
+--   bio: nullable
+--   email_verified: boolean
+--   phone_verified: boolean
+--   is_active: boolean
+--   last_login_at: nullable
+--   deleted_at: nullable
+--   created_at: timestamp with time zone
+--   updated_at: timestamp with time zone
+--   user_type: varchar
+-- Row count: 3
+
+-- Table: sellers
+-- Columns detected from API response:
+--   id: varchar
+--   user_id: varchar
+--   business_name: nullable
+--   business_number: varchar
+--   business_registration_file: nullable
+--   bank_name: varchar
+--   account_number: varchar
+--   account_holder: varchar
+--   is_verified: boolean
+--   verification_status: varchar
+--   verified_at: nullable
+--   rejection_reason: nullable
+--   total_sales: integer or bigint
+--   total_revenue: integer or bigint
+--   service_count: integer or bigint
+--   rating: integer or bigint
+--   review_count: integer or bigint
+--   last_sale_at: nullable
+--   is_active: boolean
+--   created_at: timestamp with time zone
+--   updated_at: timestamp with time zone
+--   display_name: varchar
+--   profile_image: varchar
+--   bio: varchar
+--   phone: varchar
+--   show_phone: boolean
+--   kakao_id: nullable
+--   kakao_openchat: nullable
+--   whatsapp: nullable
+--   website: nullable
+--   preferred_contact: jsonb
+--   certificates: nullable
+--   experience: nullable
+--   is_business: boolean
+--   status: varchar
+--   real_name: nullable
+--   contact_hours: varchar
+--   tax_invoice_available: boolean
+--   verified: boolean
+--   verified_name: nullable
+--   verified_phone: nullable
+-- Row count: 1
+
+-- Table: seller_categories (Could not fetch: Could not find the table 'public.seller_categories' in the schema cache)
+
+-- Table: favorites
+-- Table is empty
+
+-- Table: seller_additional_info (Could not fetch: Could not find the table 'public.seller_additional_info' in the schema cache)
+
+-- Table: reviews
+-- Columns detected from API response:
+--   id: varchar
+--   order_id: varchar
+--   buyer_id: varchar
+--   seller_id: varchar
+--   service_id: varchar
+--   rating: integer or bigint
+--   communication_rating: nullable
+--   quality_rating: nullable
+--   delivery_rating: nullable
+--   comment: varchar
+--   tags: nullable
+--   images: nullable
+--   seller_reply: nullable
+--   seller_reply_at: nullable
+--   helpful_count: integer or bigint
+--   not_helpful_count: integer or bigint
+--   is_visible: boolean
+--   is_featured: boolean
+--   moderated: boolean
+--   moderation_reason: nullable
+--   created_at: timestamp with time zone
+--   updated_at: timestamp with time zone
+-- Row count: 1
+
+-- Table: orders
+-- Columns detected from API response:
+--   id: varchar
+--   order_number: varchar
+--   buyer_id: varchar
+--   seller_id: varchar
+--   service_id: varchar
+--   requirements: nullable
+--   attachments: nullable
+--   base_amount: integer or bigint
+--   express_amount: integer or bigint
+--   additional_amount: integer or bigint
+--   discount_amount: integer or bigint
+--   total_amount: integer or bigint
+--   commission_rate: integer or bigint
+--   commission_fee: integer or bigint
+--   seller_amount: integer or bigint
+--   delivery_date: varchar
+--   used_revisions: integer or bigint
+--   status: varchar
+--   payment_status: varchar
+--   work_status: varchar
+--   delivered_at: nullable
+--   completed_at: nullable
+--   cancellation_reason: nullable
+--   auto_complete_at: nullable
+--   buyer_satisfied: nullable
+--   seller_rating: nullable
+--   created_at: timestamp with time zone
+--   updated_at: timestamp with time zone
+--   review_id: nullable
+--   payment_id: nullable
+--   merchant_uid: varchar
+--   payment_request_id: nullable
+--   delivery_days: integer or bigint
+--   revision_count: integer or bigint
+--   revisions_used: integer or bigint
+--   title: varchar
+--   description: varchar
+--   paid_at: timestamp with time zone
+--   started_at: timestamp with time zone
+--   cancelled_at: nullable
+--   amount: integer or bigint
+--   revision_reason: nullable
+--   revision_requested_at: nullable
+-- Row count: 5
+
+-- Table: order_items (Could not fetch: Could not find the table 'public.order_items' in the schema cache)
+
+-- Table: withdrawals (Could not fetch: Could not find the table 'public.withdrawals' in the schema cache)
+
+-- Table: chats (Could not fetch: Could not find the table 'public.chats' in the schema cache)
+
+-- Table: chat_messages
+-- Columns detected from API response:
+--   id: varchar
+--   room_id: varchar
+--   sender_id: varchar
+--   message: varchar
+--   is_read: boolean
+--   created_at: timestamp with time zone
+--   updated_at: timestamp with time zone
+--   file_url: nullable
+--   file_name: nullable
+--   file_size: nullable
+--   file_type: nullable
+-- Row count: 56

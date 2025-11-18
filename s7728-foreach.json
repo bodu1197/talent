@@ -1,0 +1,1811 @@
+{
+  "total": 37,
+  "p": 1,
+  "ps": 500,
+  "paging": {
+    "pageIndex": 1,
+    "pageSize": 500,
+    "total": 37
+  },
+  "effortTotal": 185,
+  "issues": [
+    {
+      "key": "8a5b496d-9d62-4cec-906c-0f4979698a37",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/supabase/queries/admin.ts",
+      "project": "talent",
+      "line": 344,
+      "hash": "cef5a61352a58a1d0496be5808d1be16",
+      "textRange": {
+        "startLine": 344,
+        "endLine": 344,
+        "startOffset": 8,
+        "endOffset": 15
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-17T08:56:23+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "e67719b5-c52b-4e05-a358-2c5b814ad393",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/supabase/queries/services.ts",
+      "project": "talent",
+      "line": 217,
+      "hash": "8d6c54c720d5539a59a24e27307890c6",
+      "textRange": {
+        "startLine": 217,
+        "endLine": 217,
+        "startOffset": 14,
+        "endOffset": 21
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-17T08:56:23+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "d1b3c27f-09c9-4f64-9ffe-0bef2c153332",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/supabase/queries/services.ts",
+      "project": "talent",
+      "line": 288,
+      "hash": "c46a06fdb21b44dbb89768b90524c567",
+      "textRange": {
+        "startLine": 288,
+        "endLine": 288,
+        "startOffset": 9,
+        "endOffset": 16
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-17T08:56:23+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "c8318215-03f0-452d-8911-49a044a54eec",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/supabase/queries/services.ts",
+      "project": "talent",
+      "line": 316,
+      "hash": "c46a06fdb21b44dbb89768b90524c567",
+      "textRange": {
+        "startLine": 316,
+        "endLine": 316,
+        "startOffset": 13,
+        "endOffset": 20
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-17T08:56:23+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "6f557bd2-8c53-472c-a768-b103331ee34b",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/supabase/queries/services.ts",
+      "project": "talent",
+      "line": 422,
+      "hash": "c46a06fdb21b44dbb89768b90524c567",
+      "textRange": {
+        "startLine": 422,
+        "endLine": 422,
+        "startOffset": 9,
+        "endOffset": 16
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-17T08:56:23+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "3fd53b38-950c-45bc-a6ce-ed4ef3cf1d76",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/components/mypage/Sidebar.tsx",
+      "project": "talent",
+      "line": 255,
+      "hash": "ceeca86686e01a2db3939caafd2dbeb1",
+      "textRange": {
+        "startLine": 255,
+        "endLine": 255,
+        "startOffset": 13,
+        "endOffset": 20
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-16T01:42:48+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "5f647d01-6051-478a-8f9c-28a65a1cb635",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/services/statistics/page.tsx",
+      "project": "talent",
+      "line": 88,
+      "hash": "fa1006c127e2501e704f9a83b9a39ee9",
+      "textRange": {
+        "startLine": 88,
+        "endLine": 88,
+        "startOffset": 12,
+        "endOffset": 19
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-15T22:15:28+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "b0a5129d-c052-4a21-8b76-cdacc36b30fa",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/app/mypage/seller/services/statistics/page.tsx",
+      "project": "talent",
+      "line": 108,
+      "hash": "95961c0aecbc3dd86d70f35ad0969da8",
+      "textRange": {
+        "startLine": 108,
+        "endLine": 108,
+        "startOffset": 11,
+        "endOffset": 18
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-15T22:15:28+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "68b0e0cb-4380-483d-8b9a-0acece4af908",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/app/page.tsx",
+      "project": "talent",
+      "line": 163,
+      "hash": "22a9df3d743025a616c376c13f858085",
+      "textRange": {
+        "startLine": 163,
+        "endLine": 163,
+        "startOffset": 19,
+        "endOffset": 26
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-15T16:21:23+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "c17d7510-e9a5-45c5-b285-bba095efec0b",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/components/home/RecentViewedServices.tsx",
+      "project": "talent",
+      "line": 110,
+      "hash": "50c1c994e55fac4837e0c1cb241899ae",
+      "textRange": {
+        "startLine": 110,
+        "endLine": 110,
+        "startOffset": 17,
+        "endOffset": 24
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-15T16:21:23+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "4a631d67-4c29-4f24-9f5d-12948c45a12f",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/components/home/RecentViewedServices.tsx",
+      "project": "talent",
+      "line": 119,
+      "hash": "e9ad030a95c88bad1cb619eb532af8f7",
+      "textRange": {
+        "startLine": 119,
+        "endLine": 119,
+        "startOffset": 15,
+        "endOffset": 22
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-15T16:21:23+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "06609df5-f391-4ab8-bec3-fcc0548ccdeb",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/supabase/queries/admin.ts",
+      "project": "talent",
+      "line": 615,
+      "hash": "af129705d714e7e25fd46539e87b07d6",
+      "textRange": {
+        "startLine": 615,
+        "endLine": 615,
+        "startOffset": 15,
+        "endOffset": 22
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-15T16:21:23+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "3e532230-76fe-4e10-92c5-60cb969e1242",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/supabase/queries/personalized-services.ts",
+      "project": "talent",
+      "line": 203,
+      "hash": "b09584e51e452c480d2c85bec7bf0038",
+      "textRange": {
+        "startLine": 203,
+        "endLine": 203,
+        "startOffset": 22,
+        "endOffset": 29
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-15T16:21:23+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "5d23f6a0-47f8-4533-8f4b-c8f095614083",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/supabase/queries/personalized-services.ts",
+      "project": "talent",
+      "line": 225,
+      "hash": "4936083950ccb72dad6f91fdb0b6a746",
+      "textRange": {
+        "startLine": 225,
+        "endLine": 225,
+        "startOffset": 27,
+        "endOffset": 34
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-15T11:19:39+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "3bd68192-2997-44b9-8b16-37265928987d",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/app/api/orders/buyer/count/route.ts",
+      "project": "talent",
+      "line": 38,
+      "hash": "0e6aa6f6a159e135fcc4915e334b6a5f",
+      "textRange": {
+        "startLine": 38,
+        "endLine": 38,
+        "startOffset": 12,
+        "endOffset": 19
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-14T01:31:38+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "29a8258a-12ad-4860-b356-0041264b1acc",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/app/api/orders/seller/count/route.ts",
+      "project": "talent",
+      "line": 38,
+      "hash": "0e6aa6f6a159e135fcc4915e334b6a5f",
+      "textRange": {
+        "startLine": 38,
+        "endLine": 38,
+        "startOffset": 12,
+        "endOffset": 19
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-14T01:31:38+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "05ce183a-5ec8-43ee-be92-b52c684e110f",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/supabase/queries/dashboard.ts",
+      "project": "talent",
+      "line": 34,
+      "hash": "0e6aa6f6a159e135fcc4915e334b6a5f",
+      "textRange": {
+        "startLine": 34,
+        "endLine": 34,
+        "startOffset": 12,
+        "endOffset": 19
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-14T01:31:38+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "e68f19eb-fdec-4d8d-85dd-b636b7e9a087",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/supabase/queries/dashboard.ts",
+      "project": "talent",
+      "line": 163,
+      "hash": "0e6aa6f6a159e135fcc4915e334b6a5f",
+      "textRange": {
+        "startLine": 163,
+        "endLine": 163,
+        "startOffset": 10,
+        "endOffset": 17
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-14T01:31:38+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "37dfab50-4f06-49f8-9e7b-6048f805145d",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/app/api/orders/seller/route.ts",
+      "project": "talent",
+      "line": 46,
+      "hash": "4fabe54f53ab35827a13281ec0903252",
+      "textRange": {
+        "startLine": 46,
+        "endLine": 46,
+        "startOffset": 21,
+        "endOffset": 28
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-14T01:24:47+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "f3f080f7-548d-4ae8-ab75-9805cd7bb59b",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/app/api/admin/advertising/statistics/route.ts",
+      "project": "talent",
+      "line": 51,
+      "hash": "2c9d5fd76c991d7fce615a32e1326034",
+      "textRange": {
+        "startLine": 51,
+        "endLine": 51,
+        "startOffset": 14,
+        "endOffset": 21
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-12T20:19:20+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "dccb73e6-8999-472c-a8d2-faa0fece05c0",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/app/api/admin/advertising/statistics/route.ts",
+      "project": "talent",
+      "line": 88,
+      "hash": "75d11fcf604fe231060e8ec66b74799f",
+      "textRange": {
+        "startLine": 88,
+        "endLine": 88,
+        "startOffset": 17,
+        "endOffset": 24
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-12T20:19:20+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "9baa833d-36f1-4b66-be33-611c5f31b6d2",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/app/api/admin/analytics/route.ts",
+      "project": "talent",
+      "line": 139,
+      "hash": "2ea09f9fbb13f7bfed90981f81d0b25b",
+      "textRange": {
+        "startLine": 139,
+        "endLine": 139,
+        "startOffset": 14,
+        "endOffset": 21
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-12T20:03:42+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "778a9eec-238d-4b96-83d5-0986d6db7940",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/advertising.ts",
+      "project": "talent",
+      "line": 716,
+      "hash": "4cb2f7469f3f3dc38180db4d12eea1f2",
+      "textRange": {
+        "startLine": 716,
+        "endLine": 716,
+        "startOffset": 5,
+        "endOffset": 12
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-12T12:40:54+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "8d8fbb35-42d4-45b5-8a22-007f49f02f5e",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/components/home/RecommendedServices.tsx",
+      "project": "talent",
+      "line": 90,
+      "hash": "19b2de47b36c8bf72f4373909730567e",
+      "textRange": {
+        "startLine": 90,
+        "endLine": 90,
+        "startOffset": 15,
+        "endOffset": 22
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-11T00:56:19+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "bb7f7fc6-9a57-436f-ad37-1b5fb0d92410",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/supabase/queries/personalized-services.ts",
+      "project": "talent",
+      "line": 194,
+      "hash": "19b2de47b36c8bf72f4373909730567e",
+      "textRange": {
+        "startLine": 194,
+        "endLine": 194,
+        "startOffset": 23,
+        "endOffset": 30
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-11T00:56:19+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "75e18e06-882c-40db-a6a9-b24cbf590ff1",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/supabase/queries/services.ts",
+      "project": "talent",
+      "line": 279,
+      "hash": "19b2de47b36c8bf72f4373909730567e",
+      "textRange": {
+        "startLine": 279,
+        "endLine": 279,
+        "startOffset": 17,
+        "endOffset": 24
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-11T00:56:19+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "81e70b62-ece5-492a-8655-4c8166eaec76",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/supabase/queries/services.ts",
+      "project": "talent",
+      "line": 414,
+      "hash": "19b2de47b36c8bf72f4373909730567e",
+      "textRange": {
+        "startLine": 414,
+        "endLine": 414,
+        "startOffset": 17,
+        "endOffset": 24
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-11T00:56:19+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "df7d96d7-4c5a-4625-b989-f255fe2db0cd",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/categories.ts",
+      "project": "talent",
+      "line": 54,
+      "hash": "f3589f23b9ec2361f496cda51c06d061",
+      "textRange": {
+        "startLine": 54,
+        "endLine": 54,
+        "startOffset": 13,
+        "endOffset": 20
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-04T09:44:16+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "c42d0159-33cc-41c6-824a-17e66061d86c",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/categories.ts",
+      "project": "talent",
+      "line": 59,
+      "hash": "f3589f23b9ec2361f496cda51c06d061",
+      "textRange": {
+        "startLine": 59,
+        "endLine": 59,
+        "startOffset": 13,
+        "endOffset": 20
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-04T09:44:16+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "f6a0c402-503e-425d-a0b4-f7eed7ba561a",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/categories.ts",
+      "project": "talent",
+      "line": 217,
+      "hash": "f3589f23b9ec2361f496cda51c06d061",
+      "textRange": {
+        "startLine": 217,
+        "endLine": 217,
+        "startOffset": 13,
+        "endOffset": 20
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-04T09:44:16+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "ccba2126-9e8d-43ac-93ff-8ad623dec81e",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/categories.ts",
+      "project": "talent",
+      "line": 221,
+      "hash": "f3589f23b9ec2361f496cda51c06d061",
+      "textRange": {
+        "startLine": 221,
+        "endLine": 221,
+        "startOffset": 13,
+        "endOffset": 20
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-04T09:44:16+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "5739aaee-56df-4596-892b-bce4d4c128de",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/components/services/TextOverlayEditor.tsx",
+      "project": "talent",
+      "line": 164,
+      "hash": "185d5c3aa2ad4b32295310be4a9981b2",
+      "textRange": {
+        "startLine": 164,
+        "endLine": 164,
+        "startOffset": 19,
+        "endOffset": 26
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-03T08:06:49+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "1b2c614c-017a-440b-8b95-e80bb0c0e859",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/template-generator.ts",
+      "project": "talent",
+      "line": 183,
+      "hash": "185d5c3aa2ad4b32295310be4a9981b2",
+      "textRange": {
+        "startLine": 183,
+        "endLine": 183,
+        "startOffset": 15,
+        "endOffset": 22
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-03T08:06:49+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "9c90faab-882e-4968-9957-3a182ba3e4aa",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/template-generator.ts",
+      "project": "talent",
+      "line": 86,
+      "hash": "137183fa3d50c6754a61c63ca02284f4",
+      "textRange": {
+        "startLine": 86,
+        "endLine": 86,
+        "startOffset": 18,
+        "endOffset": 25
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-03T05:49:20+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "7b546d78-deea-4e41-a0f9-a1dcbc85eee4",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/supabase/queries/category-visits.ts",
+      "project": "talent",
+      "line": 55,
+      "hash": "343b67b7e685193645ea09b82103a1b2",
+      "textRange": {
+        "startLine": 55,
+        "endLine": 55,
+        "startOffset": 9,
+        "endOffset": 16
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-03T03:45:34+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "32c9fd0c-7ae1-4a4c-b2f3-94569e932e0f",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/app/api/user/service-favorites/route.ts",
+      "project": "talent",
+      "line": 200,
+      "hash": "09d404b4b630713d96e209572dc22bbb",
+      "textRange": {
+        "startLine": 200,
+        "endLine": 200,
+        "startOffset": 11,
+        "endOffset": 18
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-03T01:28:42+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    },
+    {
+      "key": "d9c5b032-e657-4c2f-8693-a79f40c11ad0",
+      "rule": "typescript:S7728",
+      "severity": "MINOR",
+      "component": "talent:src/lib/supabase/queries/category-visits.ts",
+      "project": "talent",
+      "line": 120,
+      "hash": "343b67b7e685193645ea09b82103a1b2",
+      "textRange": {
+        "startLine": 120,
+        "endLine": 120,
+        "startOffset": 7,
+        "endOffset": 14
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use `for…of` instead of `.forEach(…)`.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": [
+        "readability",
+        "performance"
+      ],
+      "creationDate": "2025-11-02T07:28:05+0000",
+      "updateDate": "2025-11-18T02:13:16+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    }
+  ],
+  "components": [
+    {
+      "key": "talent:src/lib/supabase/queries/category-visits.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "category-visits.ts",
+      "longName": "src/lib/supabase/queries/category-visits.ts",
+      "path": "src/lib/supabase/queries/category-visits.ts"
+    },
+    {
+      "key": "talent:src/components/home/RecentViewedServices.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "RecentViewedServices.tsx",
+      "longName": "src/components/home/RecentViewedServices.tsx",
+      "path": "src/components/home/RecentViewedServices.tsx"
+    },
+    {
+      "key": "talent:src/lib/advertising.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "advertising.ts",
+      "longName": "src/lib/advertising.ts",
+      "path": "src/lib/advertising.ts"
+    },
+    {
+      "key": "talent:src/lib/template-generator.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "template-generator.ts",
+      "longName": "src/lib/template-generator.ts",
+      "path": "src/lib/template-generator.ts"
+    },
+    {
+      "key": "talent:src/app/api/orders/buyer/count/route.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "route.ts",
+      "longName": "src/app/api/orders/buyer/count/route.ts",
+      "path": "src/app/api/orders/buyer/count/route.ts"
+    },
+    {
+      "key": "talent:src/app/page.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "page.tsx",
+      "longName": "src/app/page.tsx",
+      "path": "src/app/page.tsx"
+    },
+    {
+      "key": "talent:src/components/services/TextOverlayEditor.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "TextOverlayEditor.tsx",
+      "longName": "src/components/services/TextOverlayEditor.tsx",
+      "path": "src/components/services/TextOverlayEditor.tsx"
+    },
+    {
+      "key": "talent:src/lib/supabase/queries/services.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "services.ts",
+      "longName": "src/lib/supabase/queries/services.ts",
+      "path": "src/lib/supabase/queries/services.ts"
+    },
+    {
+      "key": "talent:src/app/api/admin/analytics/route.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "route.ts",
+      "longName": "src/app/api/admin/analytics/route.ts",
+      "path": "src/app/api/admin/analytics/route.ts"
+    },
+    {
+      "key": "talent:src/lib/supabase/queries/dashboard.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "dashboard.ts",
+      "longName": "src/lib/supabase/queries/dashboard.ts",
+      "path": "src/lib/supabase/queries/dashboard.ts"
+    },
+    {
+      "key": "talent:src/components/home/RecommendedServices.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "RecommendedServices.tsx",
+      "longName": "src/components/home/RecommendedServices.tsx",
+      "path": "src/components/home/RecommendedServices.tsx"
+    },
+    {
+      "key": "talent:src/app/mypage/seller/services/statistics/page.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "page.tsx",
+      "longName": "src/app/mypage/seller/services/statistics/page.tsx",
+      "path": "src/app/mypage/seller/services/statistics/page.tsx"
+    },
+    {
+      "key": "talent:src/app/api/user/service-favorites/route.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "route.ts",
+      "longName": "src/app/api/user/service-favorites/route.ts",
+      "path": "src/app/api/user/service-favorites/route.ts"
+    },
+    {
+      "key": "talent:src/app/api/orders/seller/route.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "route.ts",
+      "longName": "src/app/api/orders/seller/route.ts",
+      "path": "src/app/api/orders/seller/route.ts"
+    },
+    {
+      "key": "talent:src/app/api/orders/seller/count/route.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "route.ts",
+      "longName": "src/app/api/orders/seller/count/route.ts",
+      "path": "src/app/api/orders/seller/count/route.ts"
+    },
+    {
+      "key": "talent:src/lib/supabase/queries/personalized-services.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "personalized-services.ts",
+      "longName": "src/lib/supabase/queries/personalized-services.ts",
+      "path": "src/lib/supabase/queries/personalized-services.ts"
+    },
+    {
+      "key": "talent:src/lib/categories.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "categories.ts",
+      "longName": "src/lib/categories.ts",
+      "path": "src/lib/categories.ts"
+    },
+    {
+      "key": "talent:src/components/mypage/Sidebar.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "Sidebar.tsx",
+      "longName": "src/components/mypage/Sidebar.tsx",
+      "path": "src/components/mypage/Sidebar.tsx"
+    },
+    {
+      "key": "talent",
+      "enabled": true,
+      "qualifier": "TRK",
+      "name": "AI Talent Hub",
+      "longName": "AI Talent Hub"
+    },
+    {
+      "key": "talent:src/app/api/admin/advertising/statistics/route.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "route.ts",
+      "longName": "src/app/api/admin/advertising/statistics/route.ts",
+      "path": "src/app/api/admin/advertising/statistics/route.ts"
+    },
+    {
+      "key": "talent:src/lib/supabase/queries/admin.ts",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "admin.ts",
+      "longName": "src/lib/supabase/queries/admin.ts",
+      "path": "src/lib/supabase/queries/admin.ts"
+    }
+  ],
+  "facets": []
+}

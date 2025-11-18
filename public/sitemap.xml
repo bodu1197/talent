@@ -1,1 +1,122 @@
-404: Not Found
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- 홈페이지 -->
+  <url>
+    <loc>https://dolpagu.com/</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- 주요 페이지 -->
+  <url>
+    <loc>https://dolpagu.com/about</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://dolpagu.com/categories</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- AI Hub -->
+  <url>
+    <loc>https://dolpagu.com/ai</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 구매자 안내 -->
+  <url>
+    <loc>https://dolpagu.com/buyer/guide</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://dolpagu.com/buyer/how-to-order</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://dolpagu.com/buyer/payment</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://dolpagu.com/buyer/refund</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 전문가 등록 -->
+  <url>
+    <loc>https://dolpagu.com/expert/register</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 고객센터 -->
+  <url>
+    <loc>https://dolpagu.com/help</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://dolpagu.com/help/faq</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://dolpagu.com/help/notice</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://dolpagu.com/help/contact</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- 이용약관 및 개인정보처리방침 -->
+  <url>
+    <loc>https://dolpagu.com/terms</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://dolpagu.com/privacy</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- 제휴 문의 -->
+  <url>
+    <loc>https://dolpagu.com/contact</loc>
+    <lastmod>2025-11-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>
