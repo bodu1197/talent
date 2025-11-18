@@ -15,7 +15,7 @@ import {
   FaSignOutAlt,
   FaChevronDown,
 } from "react-icons/fa";
-import { FaHeart as FaRegHeart } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
 
 export default function Header() {
   const { user, profile, loading, signOut } = useAuth();
