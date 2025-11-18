@@ -14,6 +14,7 @@ import {
   FaCog,
   FaSignOutAlt,
   FaChevronDown,
+  FaRobot,
 } from "react-icons/fa";
 import { FaHeart as FaRegHeart } from "react-icons/fa";
 
@@ -92,6 +93,16 @@ export default function Header({ megaMenu }: HeaderProps) {
 
           {/* PC 버전: 네비게이션 메뉴 */}
           <nav className="hidden lg:flex items-center space-x-4">
+            {/* AI Hub 버튼 (모든 상태에서 표시) */}
+            <Link
+              href="/ai"
+              className="flex items-center gap-2 px-3 py-1.5 bg-brand-primary text-white rounded-lg hover:shadow-lg transition-all font-medium text-sm"
+              aria-label="AI Hub 페이지로 이동"
+            >
+              <FaRobot aria-hidden="true" />
+              <span>AI Hub</span>
+            </Link>
+
             {user ? (
               // 로그인 상태
               <>
