@@ -11,8 +11,12 @@ interface ConditionalMegaMenuProps {
 export default function ConditionalMegaMenu({ categories }: ConditionalMegaMenuProps) {
   const pathname = usePathname()
 
-  // 전문가 등록 페이지에서는 MegaMenu를 표시하지 않음
-  if (pathname?.startsWith('/expert')) {
+  // 랜딩 페이지, 메인 페이지, 전문가 등록 페이지에서는 MegaMenu를 표시하지 않음
+  if (
+    pathname === '/' || 
+    pathname === '/landing' || 
+    pathname?.startsWith('/expert')
+  ) {
     return null
   }
 
