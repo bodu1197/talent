@@ -93,7 +93,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
   };
 
   return (
-    <div className="hidden lg:flex items-center gap-4 relative" ref={menuRef}>
+    <div className="hidden lg:flex items-center gap-9 relative" ref={menuRef}>
       {/* 전체 카테고리 버튼 */}
       <button
         className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-lg font-semibold transition-colors"
@@ -107,7 +107,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
       </button>
 
       {/* 인기 카테고리 퀵링크 */}
-      <div className="flex items-center gap-5">
+      <div className="flex items-center gap-9">
         {/* AI 서비스 (고정) */}
         <Link
           href="/categories/ai-services"
@@ -149,6 +149,16 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
               {cat.name}
             </Link>
           ))}
+        
+        {/* AI Hub */}
+        <Link
+          href="/ai"
+          className="flex items-center gap-2 px-3 py-1.5 bg-brand-primary text-white rounded-lg hover:shadow-lg transition-all font-medium text-sm"
+          aria-label="AI Hub 페이지로 이동"
+        >
+          <FaRobot aria-hidden="true" />
+          <span>AI Hub</span>
+        </Link>
       </div>
 
       {/* 메가 메뉴 드롭다운 */}
