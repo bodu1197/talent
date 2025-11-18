@@ -46,7 +46,7 @@ export default function Header({ megaMenu }: HeaderProps) {
       <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: '1440px' }}>
         <div className="flex items-center justify-between h-16">
           {/* 로고 + 메가 메뉴 */}
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-14">
             <Link
               href="/"
               className="flex items-center space-x-2"
