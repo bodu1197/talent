@@ -64,15 +64,7 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
             ? 'flex-1 pt-[140px] lg:pt-16 pb-16 lg:pb-0'
             : 'flex-1 pt-16 lg:pt-[86px] pb-16 lg:pb-0'
       }>
-        {isMypagePage ? (
-          <div className="h-full w-full">
-            {children}
-          </div>
-        ) : (
-          <div className="container-1200 h-full">
-            {children}
-          </div>
-        )}
+        {children}
       </main>
 
       {/* PC: mypage 제외한 모든 페이지에서 풋터 표시, 모바일: 메인 페이지에서만 풋터 표시 */}
