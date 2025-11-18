@@ -14,15 +14,10 @@ import {
   FaCog,
   FaSignOutAlt,
   FaChevronDown,
-  FaRobot,
 } from "react-icons/fa";
 import { FaHeart as FaRegHeart } from "react-icons/fa";
 
-interface HeaderProps {
-  megaMenu?: React.ReactNode;
-}
-
-export default function Header({ megaMenu }: HeaderProps) {
+export default function Header() {
   const { user, profile, loading, signOut } = useAuth();
   const router = useRouter();
 
@@ -43,24 +38,19 @@ export default function Header({ megaMenu }: HeaderProps) {
 
   return (
     <header className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-50">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: '1440px' }}>
+      <div className="container-1200">
         <div className="flex items-center justify-between h-16">
-          {/* 로고 + 메가 메뉴 */}
-          <div className="flex items-center space-x-4 xl:space-x-14">
-            <Link
-              href="/"
-              className="flex items-center space-x-2"
-              aria-label="돌파구 홈으로 이동"
-            >
-              <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
-                <FaStar className="text-white text-sm" aria-hidden="true" />
-              </div>
-              <span className="text-xl font-bold">돌파구</span>
-            </Link>
-
-            {/* 메가 메뉴 */}
-            {megaMenu}
-          </div>
+          {/* 로고 */}
+          <Link
+            href="/"
+            className="flex items-center space-x-2"
+            aria-label="돌파구 홈으로 이동"
+          >
+            <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
+              <FaStar className="text-white text-sm" aria-hidden="true" />
+            </div>
+            <span className="text-xl font-bold">돌파구</span>
+          </Link>
 
           {/* 모바일 버전 */}
           <div className="lg:hidden flex items-center space-x-2">
@@ -223,21 +213,21 @@ export default function Header({ megaMenu }: HeaderProps) {
               <>
                 <Link
                   href="/expert/register"
-                  className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-base transition-colors"
+                  className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm"
                   aria-label="전문가로 등록하기"
                 >
                   전문가등록
                 </Link>
                 <Link
                   href="/auth/login"
-                  className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-base transition-colors"
+                  className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm"
                   aria-label="로그인 페이지로 이동"
                 >
                   로그인
                 </Link>
                 <Link
                   href="/auth/register"
-                  className="px-3 py-1.5 text-brand-primary hover:text-brand-light font-semibold text-base transition-colors"
+                  className="px-3 py-1.5 bg-brand-primary text-white rounded-lg hover:bg-brand-light hover:shadow-lg transition-all font-medium text-sm"
                   aria-label="회원가입 페이지로 이동"
                 >
                   회원가입
