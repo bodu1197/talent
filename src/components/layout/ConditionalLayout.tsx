@@ -42,7 +42,6 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
       {/* PC: 항상 일반 헤더 표시 (메가 메뉴는 헤더 내부에 포함) */}
       <div className="hidden lg:block">
         <Header megaMenu={megaMenu} />
-        <SearchBar id="desktop-search" />
       </div>
 
       {/* 모바일: 메인 페이지일 때만 헤더/검색 표시 */}
@@ -58,10 +57,10 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
 
       <main className={
         isMypagePage
-          ? 'flex-1 pt-16 lg:pt-[86px] pb-16 lg:pb-0 w-full max-w-none'
+          ? 'flex-1 pt-16 lg:pt-16 pb-16 lg:pb-0 w-full max-w-none'
           : isMainPage
-            ? 'flex-1 pt-[140px] lg:pt-[86px] pb-16 lg:pb-0'
-            : 'flex-1 pt-16 lg:pt-[86px] pb-16 lg:pb-0'
+            ? 'flex-1 pt-[140px] lg:pt-16 pb-16 lg:pb-0'
+            : 'flex-1 pt-16 lg:pt-16 pb-16 lg:pb-0'
       }>
         {isMypagePage ? (
           <div className="h-full w-full">
