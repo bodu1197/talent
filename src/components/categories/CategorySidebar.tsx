@@ -101,7 +101,7 @@ export default function CategorySidebar({
               {/* 1차 카테고리 */}
               <Link
                 href={`/categories/${category1.slug}`}
-                className={`flex items-center justify-between px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
+                className={`flex items-center justify-between pl-0 pr-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
                   category1.id === currentCategoryId
                     ? "bg-gray-100 text-gray-800"
                     : "text-gray-700 hover:bg-gray-50"
