@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
 import Link from "next/link";
-import { updateOrderStatus } from "@/lib/supabase/mutations/orders";
+import { updateOrderStatus, cancelOrder } from "@/lib/supabase/mutations/orders";
 import { useRouter } from "next/navigation";
 import { logger } from "@/lib/logger";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
@@ -80,8 +80,10 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showDeliveryModal, setShowDeliveryModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [deliveryMessage, setDeliveryMessage] = useState("");
+  const [cancelReason, setCancelReason] = useState("");
 
   useEffect(() => {
     loadOrder();
@@ -124,7 +126,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
       setSubmitting(true);
       await updateOrderStatus(orderId, "in_progress");
       await loadOrder(); // 주문 정보 새로고침
-      toast.error(
+      toast.success(
         "주문이 접수되었습니다. 구매자에게 작업 시작 알림이 전송되었습니다.",
       );
     } catch (err: unknown) {
@@ -149,11 +151,35 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
       await updateOrderStatus(orderId, "delivered");
       setShowDeliveryModal(false);
       await loadOrder(); // 주문 정보 새로고침
-      toast.error("납품이 완료되었습니다");
+      toast.success("납품이 완료되었습니다");
     } catch (err: unknown) {
       logger.error("납품 실패:", err);
       toast.error(
         "납품에 실패했습니다: " +
+          (err instanceof Error ? err.message : "알 수 없는 오류"),
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function handleCancelOrder() {
+    if (!cancelReason.trim()) {
+      toast.error("취소 사유를 입력해주세요");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      await cancelOrder(orderId, cancelReason);
+      setShowCancelModal(false);
+      setCancelReason("");
+      await loadOrder(); // 주문 정보 새로고침
+      toast.success("주문이 취소되었습니다");
+    } catch (err: unknown) {
+      logger.error("주문 취소 실패:", err);
+      toast.error(
+        "주문 취소에 실패했습니다: " +
           (err instanceof Error ? err.message : "알 수 없는 오류"),
       );
     } finally {
@@ -575,7 +601,10 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                   </button>
                 )}
 
-                <button className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
+                <button
+                  onClick={() => setShowCancelModal(true)}
+                  className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+                >
                   <FaBan className="mr-2 inline" />
                   취소 요청
                 </button>
@@ -587,6 +616,69 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
             </div>
           </div>
         </div>
+
+        {/* 취소 요청 모달 */}
+        {showCancelModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg max-w-md w-full p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">주문 취소 요청</h2>
+                <button
+                  onClick={() => setShowCancelModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <FaTimes className="text-2xl" />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div className="bg-red-50 rounded-lg p-4">
+                  <div className="flex items-start gap-2">
+                    <FaBan className="text-red-600 mt-1" />
+                    <div className="text-sm text-red-800">
+                      <p className="font-medium mb-1">취소 요청 안내</p>
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>취소 요청 시 구매자에게 알림이 전송됩니다</li>
+                        <li>구매자 동의 후 취소가 확정됩니다</li>
+                        <li>정당한 사유 없는 취소는 불이익이 있을 수 있습니다</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    취소 사유 *
+                  </label>
+                  <textarea
+                    rows={4}
+                    value={cancelReason}
+                    onChange={(e) => setCancelReason(e.target.value)}
+                    placeholder="주문을 취소하려는 사유를 구체적으로 작성해주세요"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
+                  ></textarea>
+                </div>
+
+                <div className="flex gap-3 pt-4">
+                  <button
+                    onClick={() => setShowCancelModal(false)}
+                    disabled={submitting}
+                    className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+                  >
+                    닫기
+                  </button>
+                  <button
+                    onClick={handleCancelOrder}
+                    disabled={submitting}
+                    className="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:opacity-50"
+                  >
+                    {submitting ? "처리중..." : "취소 요청"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* 납품 모달 */}
         {showDeliveryModal && (
