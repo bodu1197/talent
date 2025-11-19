@@ -337,6 +337,198 @@ export async function getServicesByCategory(
   return data || [];
 }
 
+// 판매자의 다른 서비스 조회 (현재 서비스 제외)
+export async function getSellerOtherServices(
+  sellerId: string,
+  currentServiceId: string,
+  limit: number = 5,
+) {
+  const supabase = await createServerClient();
+
+  const { data, error } = await supabase
+    .from("services")
+    .select(
+      `
+      *,
+      seller:seller_profiles(
+        id,
+        business_name,
+        display_name,
+        profile_image,
+        is_verified
+      )
+    `,
+    )
+    .eq("seller_id", sellerId)
+    .eq("status", "active")
+    .neq("id", currentServiceId)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    logger.error("Error fetching seller other services:", error);
+    return [];
+  }
+
+  // 평균 별점 및 리뷰 수 추가
+  if (data && data.length > 0) {
+    const serviceIds = data.map((s) => s.id);
+    const { data: reviewStats } = await supabase
+      .from("reviews")
+      .select("service_id, rating")
+      .in("service_id", serviceIds)
+      .eq("is_visible", true);
+
+    const ratingMap = new Map<string, { sum: number; count: number }>();
+    reviewStats?.forEach((review: { service_id: string; rating: number }) => {
+      const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
+      ratingMap.set(review.service_id, {
+        sum: current.sum + review.rating,
+        count: current.count + 1,
+      });
+    });
+
+    data.forEach((service) => {
+      service.order_count = service.orders_count || 0;
+      const stats = ratingMap.get(service.id);
+      if (stats && stats.count > 0) {
+        service.rating = stats.sum / stats.count;
+        service.review_count = stats.count;
+      } else {
+        service.rating = 0;
+        service.review_count = 0;
+      }
+    });
+  }
+
+  return data || [];
+}
+
+// 같은 카테고리의 추천 서비스 조회 (광고 우선, 현재 서비스 제외)
+export async function getRecommendedServicesByCategory(
+  categoryId: string,
+  currentServiceId: string,
+  limit: number = 5,
+) {
+  const supabase = await createServerClient();
+
+  // 광고 서비스 ID 조회 - Service Role 클라이언트 사용하여 RLS 우회
+  const serviceRoleClient = createServiceRoleClient();
+  const { data: advertisingData } = await serviceRoleClient
+    .from("advertising_subscriptions")
+    .select("service_id")
+    .eq("status", "active");
+
+  const advertisedServiceIds =
+    advertisingData?.map((ad) => ad.service_id) || [];
+
+  // 해당 카테고리의 서비스 ID 조회
+  const { data: serviceLinks } = await supabase
+    .from("service_categories")
+    .select("service_id")
+    .eq("category_id", categoryId);
+
+  const serviceIds =
+    serviceLinks?.map((sl) => sl.service_id).filter((id) => id !== currentServiceId) || [];
+
+  if (serviceIds.length === 0) {
+    return [];
+  }
+
+  // 서비스 조회
+  const { data: allServices, error } = await supabase
+    .from("services")
+    .select(
+      `
+      *,
+      seller:seller_profiles(
+        id,
+        business_name,
+        display_name,
+        profile_image,
+        is_verified
+      )
+    `,
+    )
+    .in("id", serviceIds)
+    .eq("status", "active")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    logger.error("Error fetching recommended services:", error);
+    return [];
+  }
+
+  if (!allServices || allServices.length === 0) {
+    return [];
+  }
+
+  // 광고 서비스와 일반 서비스 분리
+  const advertisedServices = allServices.filter((s) =>
+    advertisedServiceIds.includes(s.id),
+  );
+  const regularServices = allServices.filter(
+    (s) => !advertisedServiceIds.includes(s.id),
+  );
+
+  // 광고 서비스 랜덤 셔플
+  for (let i = advertisedServices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [advertisedServices[i], advertisedServices[j]] = [
+      advertisedServices[j],
+      advertisedServices[i],
+    ];
+  }
+
+  // 일반 서비스 랜덤 셔플
+  for (let i = regularServices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [regularServices[i], regularServices[j]] = [
+      regularServices[j],
+      regularServices[i],
+    ];
+  }
+
+  // 광고 서비스(랜덤) + 일반 서비스(랜덤)
+  const combinedServices = [...advertisedServices, ...regularServices].slice(
+    0,
+    limit,
+  );
+
+  // 평균 별점 및 리뷰 수 추가
+  if (combinedServices.length > 0) {
+    const serviceIds = combinedServices.map((s) => s.id);
+    const { data: reviewStats } = await supabase
+      .from("reviews")
+      .select("service_id, rating")
+      .in("service_id", serviceIds)
+      .eq("is_visible", true);
+
+    const ratingMap = new Map<string, { sum: number; count: number }>();
+    reviewStats?.forEach((review: { service_id: string; rating: number }) => {
+      const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
+      ratingMap.set(review.service_id, {
+        sum: current.sum + review.rating,
+        count: current.count + 1,
+      });
+    });
+
+    combinedServices.forEach((service) => {
+      service.order_count = service.orders_count || 0;
+      const stats = ratingMap.get(service.id);
+      if (stats && stats.count > 0) {
+        service.rating = stats.sum / stats.count;
+        service.review_count = stats.count;
+      } else {
+        service.rating = 0;
+        service.review_count = 0;
+      }
+    });
+  }
+
+  return combinedServices;
+}
+
 // 전체 승인된 서비스 조회 (홈페이지용) - AI 카테고리 제외
 export async function getActiveServices(limit?: number) {
   const supabase = await createServerClient();
@@ -441,4 +633,181 @@ export async function getActiveServices(limit?: number) {
   }
 
   return data || [];
+}
+
+
+// 판매자의 다른 서비스 조회 (현재 서비스 제외)
+export async function getSellerOtherServices(
+  sellerId: string,
+  currentServiceId: string,
+  limit: number = 5,
+) {
+  const supabase = await createServerClient();
+
+  const { data, error } = await supabase
+    .from("services")
+    .select(
+      `
+      *,
+      seller:seller_profiles(
+        id,
+        business_name,
+        display_name,
+        profile_image,
+        is_verified
+      )
+    `,
+    )
+    .eq("seller_id", sellerId)
+    .eq("status", "active")
+    .neq("id", currentServiceId)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    logger.error("Error fetching seller other services:", error);
+    return [];
+  }
+
+  if (!data || data.length === 0) {
+    return [];
+  }
+
+  // 리뷰 통계 조회
+  const serviceIds = data.map((s) => s.id);
+  const { data: reviewStats } = await supabase
+    .from("reviews")
+    .select("service_id, rating")
+    .in("service_id", serviceIds)
+    .eq("is_visible", true);
+
+  // 서비스별 평균 별점 계산
+  const ratingMap = new Map<string, { sum: number; count: number }>();
+  reviewStats?.forEach((review: { service_id: string; rating: number }) => {
+    const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
+    ratingMap.set(review.service_id, {
+      sum: current.sum + review.rating,
+      count: current.count + 1,
+    });
+  });
+
+  return data.map((service) => {
+    const stats = ratingMap.get(service.id);
+    return {
+      ...service,
+      order_count: service.orders_count || 0,
+      rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
+      review_count: stats?.count || 0,
+    };
+  });
+}
+
+// 같은 카테고리의 추천 서비스 조회 (광고 우선, 현재 서비스 제외)
+export async function getRecommendedServicesByCategory(
+  categoryId: string,
+  currentServiceId: string,
+  limit: number = 5,
+) {
+  const supabase = await createServerClient();
+  const serviceRoleClient = createServiceRoleClient();
+
+  // 광고 서비스 ID 조회 (Service Role 클라이언트 사용하여 RLS 우회)
+  const { data: advertisingData } = await serviceRoleClient
+    .from("advertising_subscriptions")
+    .select("service_id")
+    .eq("status", "active");
+
+  const advertisedServiceIds =
+    advertisingData?.map((ad) => ad.service_id) || [];
+
+  // 같은 카테고리의 서비스 조회 (현재 서비스 제외)
+  const { data, error } = await supabase
+    .from("services")
+    .select(
+      `
+      *,
+      seller:seller_profiles(
+        id,
+        business_name,
+        display_name,
+        profile_image,
+        is_verified
+      ),
+      service_categories!inner(category_id)
+    `,
+    )
+    .eq("service_categories.category_id", categoryId)
+    .eq("status", "active")
+    .neq("id", currentServiceId)
+    .order("created_at", { ascending: false })
+    .limit(50);
+
+  if (error) {
+    logger.error("Error fetching recommended services:", error);
+    return [];
+  }
+
+  if (!data || data.length === 0) {
+    return [];
+  }
+
+  // 광고 서비스와 일반 서비스 분리
+  const advertisedServices = data.filter((s) =>
+    advertisedServiceIds.includes(s.id),
+  );
+  const regularServices = data.filter(
+    (s) => !advertisedServiceIds.includes(s.id),
+  );
+
+  // 광고 서비스 랜덤 셔플
+  for (let i = advertisedServices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [advertisedServices[i], advertisedServices[j]] = [
+      advertisedServices[j],
+      advertisedServices[i],
+    ];
+  }
+
+  // 일반 서비스 랜덤 셔플
+  for (let i = regularServices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [regularServices[i], regularServices[j]] = [
+      regularServices[j],
+      regularServices[i],
+    ];
+  }
+
+  // 광고 서비스(랜덤) + 일반 서비스(랜덤) (상위 limit개)
+  const combinedServices = [...advertisedServices, ...regularServices].slice(
+    0,
+    limit,
+  );
+
+  // 리뷰 통계 조회
+  const serviceIds = combinedServices.map((s) => s.id);
+  const { data: reviewStats } = await supabase
+    .from("reviews")
+    .select("service_id, rating")
+    .in("service_id", serviceIds)
+    .eq("is_visible", true);
+
+  // 서비스별 평균 별점 계산
+  const ratingMap = new Map<string, { sum: number; count: number }>();
+  reviewStats?.forEach((review: { service_id: string; rating: number }) => {
+    const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
+    ratingMap.set(review.service_id, {
+      sum: current.sum + review.rating,
+      count: current.count + 1,
+    });
+  });
+
+  return combinedServices.map((service) => {
+    const stats = ratingMap.get(service.id);
+    return {
+      ...service,
+      order_count: service.orders_count || 0,
+      rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
+      review_count: stats?.count || 0,
+    };
+  });
 }

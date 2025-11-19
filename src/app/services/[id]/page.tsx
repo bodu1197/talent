@@ -21,6 +21,11 @@ import {
   FaImage,
 } from "react-icons/fa";
 import { FaRegComment, FaRegUser } from "react-icons/fa";
+import ServiceCard from "@/components/services/ServiceCard";
+import {
+  getSellerOtherServices,
+  getRecommendedServicesByCategory,
+} from "@/lib/supabase/queries/services";
 
 // 동적 렌더링 강제 (찜 개수 실시간 반영)
 export const dynamic = "force-dynamic";
@@ -244,6 +249,23 @@ export default async function ServiceDetailPage({
         ).toFixed(1)
       : "0.0";
   const reviewCount = serviceReviews?.length || 0;
+
+  // 판매자의 다른 서비스 조회 (현재 서비스 제외, 5개)
+  const otherServices = await getSellerOtherServices(
+    service.seller.id,
+    service.id,
+    5,
+  );
+
+  // 같은 카테고리의 추천 서비스 조회 (현재 서비스 제외, 5개)
+  const recommendedServices =
+    categories.length > 0
+      ? await getRecommendedServicesByCategory(
+          categories[categories.length - 1].id,
+          service.id,
+          5,
+        )
+      : [];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -788,6 +810,34 @@ export default async function ServiceDetailPage({
           </div>
         </div>
       </div>
+
+      {/* 이 전문가의 다른 서비스예요 */}
+      {otherServices && otherServices.length > 0 && (
+        <div className="bg-white py-12">
+          <div className="container-1200 px-4">
+            <h2 className="text-2xl font-bold mb-6">이 전문가의 다른 서비스예요</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {otherServices.map((service) => (
+                <ServiceCard key={service.id} service={service} />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 돌파구가 추천 서비스 */}
+      {recommendedServices && recommendedServices.length > 0 && (
+        <div className="bg-gray-50 py-12">
+          <div className="container-1200 px-4">
+            <h2 className="text-2xl font-bold mb-6">돌파구가 추천 서비스</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {recommendedServices.map((service) => (
+                <ServiceCard key={service.id} service={service} />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
