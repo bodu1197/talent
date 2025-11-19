@@ -13,7 +13,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   if (!query) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 py-12" style={{ marginTop: '1000px' }}>
         <div className="container-1200 px-4">
           <div className="text-center py-20">
             <FaSearch className="text-6xl text-gray-300 mx-auto mb-4" />
@@ -37,7 +37,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   if (totalResults === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 py-12" style={{ marginTop: '1000px' }}>
         <div className="container-1200 px-4">
           <div className="text-center py-20">
             <FaSearch className="text-6xl text-gray-300 mx-auto mb-4" />
