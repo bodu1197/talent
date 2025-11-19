@@ -192,6 +192,7 @@ export async function getServicesByCategory(
       seller:seller_profiles!inner(
         id,
         business_name,
+        display_name,
         profile_image,
         user_id,
         is_verified
