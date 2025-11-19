@@ -23,7 +23,7 @@ export default function SearchBar({ id = "search" }: SearchBarProps) {
       <div className="container-1200 px-4 py-4">
         {/* 검색창 */}
         <form onSubmit={handleSearch} className="mb-3" role="search">
-          <div className="relative w-full">
+          <div className="relative w-full h-[52px] flex items-center">
             <label htmlFor={id} className="sr-only">
               서비스 검색
             </label>
@@ -34,12 +34,12 @@ export default function SearchBar({ id = "search" }: SearchBarProps) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="어떤 재능이 필요하신가요?"
-              className="w-full px-6 py-3 pr-12 border-2 border-gray-300 rounded-full focus:outline-none focus:border-brand-primary transition-colors text-gray-900"
+              className="w-full h-full px-6 py-3 pr-12 border-2 border-gray-300 rounded-full focus:outline-none focus:border-brand-primary transition-colors text-gray-900"
               aria-label="서비스 검색"
             />
             <button
               type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-brand-primary text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-brand-light transition-colors"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-brand-primary text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-brand-light transition-colors flex-shrink-0 focus:outline-none"
               aria-label="검색 실행"
             >
               <FaSearch aria-hidden="true" />
