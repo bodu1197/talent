@@ -15,7 +15,6 @@ export async function GET(_request: NextRequest) {
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-import toast from "react-hot-toast";
       padding: 20px;
       background: #f5f5f5;
     }
@@ -131,7 +130,7 @@ import toast from "react-hot-toast";
           }
         }, window.location.origin);
 
-        toast.error('본인인증이 완료되었습니다.');
+        alert('본인인증이 완료되었습니다.');
         window.close();
       }
     });
