@@ -139,7 +139,7 @@ export default function HeroSection() {
             <div className="mb-4 lg:mb-6 hidden lg:block">
               <form onSubmit={handleSearch} className="relative w-full lg:max-w-[490px]" autoComplete="off">
                 <input
-                  type="search"
+                  type="text"
                   id="hero-search"
                   name="hero-search-query"
                   value={searchQuery}
@@ -151,6 +151,8 @@ export default function HeroSection() {
                   spellCheck={false}
                   data-form-type="other"
                   data-lpignore="true"
+                  role="searchbox"
+                  aria-label="서비스 검색"
                   className="w-full px-4 sm:px-6 py-3 sm:py-4 pr-14 border-2 border-gray-300 rounded-full hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-gray-300 transition-all text-gray-900 text-sm sm:text-base"
                   style={{
                     WebkitAppearance: 'none',
