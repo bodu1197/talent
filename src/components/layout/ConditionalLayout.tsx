@@ -62,12 +62,14 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
           </div>
 
           {/* 모바일: 메인 페이지일 때만 헤더/검색 표시 */}
-          {isMainPage && (
-            <div className="lg:hidden">
-              <Header />
-              <SearchBar id="mobile-search" />
-            </div>
-          )}
+          <div className="lg:hidden">
+            {isMainPage && (
+              <>
+                <Header />
+                <SearchBar id="mobile-search" />
+              </>
+            )}
+          </div>
 
           {/* 모바일: 서브 페이지일 때 뒤로가기 헤더 표시 */}
           {isSubPage && <MobileSubHeader />}
