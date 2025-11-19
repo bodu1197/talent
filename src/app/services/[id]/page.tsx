@@ -19,8 +19,9 @@ import {
   FaShare,
   FaShieldAlt,
   FaImage,
+  FaRegComment,
+  FaRegUser,
 } from "react-icons/fa";
-import { FaRegComment, FaRegUser } from "react-icons/fa";
 import ServiceCard from "@/components/services/ServiceCard";
 import {
   getSellerOtherServices,

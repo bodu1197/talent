@@ -11,9 +11,10 @@ import {
   FaPaperclip,
   FaTimes,
   FaFileDownload,
+  FaStar,
+  FaRegStar,
 } from "react-icons/fa";
 import ProfileImage from "@/components/common/ProfileImage";
-import { FaStar, FaRegStar } from "react-icons/fa";
 import toast from "react-hot-toast";
 
 interface ChatRoom {

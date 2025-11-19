@@ -100,18 +100,18 @@ export default function NotificationsClient({
       .update({ is_read: true })
       .eq("id", notificationId);
 
-    if (!error) {
+    if (error) {
+      console.error(
+        "Failed to mark notification as read:",
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+      );
+    } else {
       setNotifications((prev) =>
         prev.map((n) =>
           n.id === notificationId ? { ...n, is_read: true } : n,
         ),
       );
       setUnreadCount((prev) => Math.max(0, prev - 1));
-    } else {
-      console.error(
-        "Failed to mark notification as read:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
-      );
     }
   };
 
@@ -123,14 +123,14 @@ export default function NotificationsClient({
       .update({ is_read: true })
       .eq("is_read", false);
 
-    if (!error) {
-      setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
-      setUnreadCount(0);
-    } else {
+    if (error) {
       console.error(
         "Failed to mark all notifications as read:",
         JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
       );
+    } else {
+      setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
+      setUnreadCount(0);
     }
     setLoading(false);
   };
@@ -283,7 +283,7 @@ export default function NotificationsClient({
                   <div
                     key={notification.id}
                     className={`${
-                      !notification.is_read ? "bg-blue-50" : "bg-white"
+                      notification.is_read ? "bg-white" : "bg-blue-50"
                     } hover:bg-gray-50 transition-colors`}
                   >
                     {notification.link ? (
@@ -301,9 +301,9 @@ export default function NotificationsClient({
                           <div className="flex items-start justify-between gap-2 mb-1">
                             <h3
                               className={`text-base font-bold ${
-                                !notification.is_read
-                                  ? "text-gray-900"
-                                  : "text-gray-700"
+                                notification.is_read
+                                  ? "text-gray-700"
+                                  : "text-gray-900"
                               }`}
                             >
                               {notification.title}
@@ -331,9 +331,9 @@ export default function NotificationsClient({
                           <div className="flex items-start justify-between gap-2 mb-1">
                             <h3
                               className={`text-base font-bold ${
-                                !notification.is_read
-                                  ? "text-gray-900"
-                                  : "text-gray-700"
+                                notification.is_read
+                                  ? "text-gray-700"
+                                  : "text-gray-900"
                               }`}
                             >
                               {notification.title}

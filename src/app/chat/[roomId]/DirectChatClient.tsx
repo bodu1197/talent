@@ -764,7 +764,7 @@ function PaymentRequestModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.amount || parseInt(formData.amount) < 1000) {
+    if (!formData.amount || Number.parseInt(formData.amount) < 1000) {
       toast.error("최소 결제 금액은 1,000원입니다");
       return;
     }
@@ -778,10 +778,10 @@ function PaymentRequestModal({
           room_id: roomId,
           service_id: service?.id,
           title: formData.title,
-          amount: parseInt(formData.amount),
+          amount: Number.parseInt(formData.amount),
           description: formData.description,
-          delivery_days: parseInt(formData.deliveryDays),
-          revision_count: parseInt(formData.revisionCount),
+          delivery_days: Number.parseInt(formData.deliveryDays),
+          revision_count: Number.parseInt(formData.revisionCount),
         }),
       });
 

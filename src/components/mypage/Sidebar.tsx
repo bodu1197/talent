@@ -1,10 +1,9 @@
 "use client";
 
 import ProfileImage from "@/components/common/ProfileImage";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 import {
   FaChartLine,
   FaBox,

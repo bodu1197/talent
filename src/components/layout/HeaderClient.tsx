@@ -13,8 +13,8 @@ import {
   FaCog,
   FaSignOutAlt,
   FaChevronDown,
+  FaHeart as FaRegHeart,
 } from "react-icons/fa";
-import { FaHeart as FaRegHeart } from "react-icons/fa";
 
 export default function HeaderClient() {
   const { user, profile, loading, signOut } = useAuth();

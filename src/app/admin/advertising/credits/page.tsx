@@ -383,7 +383,7 @@ export default function AdminCreditsPage() {
                     onChange={(e) =>
                       setGrantForm({
                         ...grantForm,
-                        amount: parseInt(e.target.value) || 0,
+                        amount: Number.parseInt(e.target.value) || 0,
                       })
                     }
                     min="0"

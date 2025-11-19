@@ -205,9 +205,9 @@ export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
         return false;
     }
 
-    if (filters.minPrice && order.total_amount < parseInt(filters.minPrice))
+    if (filters.minPrice && order.total_amount < Number.parseInt(filters.minPrice))
       return false;
-    if (filters.maxPrice && order.total_amount > parseInt(filters.maxPrice))
+    if (filters.maxPrice && order.total_amount > Number.parseInt(filters.maxPrice))
       return false;
 
     return true;

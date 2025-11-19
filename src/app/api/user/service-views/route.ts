@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
-    const limit = parseInt(searchParams.get('limit') || '20')
+    const limit = Number.parseInt(searchParams.get('limit') || '20')
 
     const { data, error } = await supabase
       .from('service_views')

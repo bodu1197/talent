@@ -41,7 +41,7 @@ export default function WithdrawClient({
     e.preventDefault();
     setError(null);
 
-    const withdrawAmount = parseInt(amount);
+    const withdrawAmount = Number.parseInt(amount);
 
     // Validation
     if (!withdrawAmount || withdrawAmount <= 0) {

@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     // URL 파라미터
     const { searchParams } = new URL(request.url)
     const unreadOnly = searchParams.get('unread_only') === 'true'
-    const limit = parseInt(searchParams.get('limit') || '50')
+    const limit = Number.parseInt(searchParams.get('limit') || '50')
 
     // 알림 조회
     let query = supabase

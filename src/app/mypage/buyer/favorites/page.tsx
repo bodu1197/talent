@@ -11,8 +11,8 @@ import {
   FaStar,
   FaCheckCircle,
   FaTimes,
+  FaRegHeart,
 } from "react-icons/fa";
-import { FaRegHeart } from "react-icons/fa";
 import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
 import toast from "react-hot-toast";
 

@@ -334,12 +334,12 @@ export default function NewServiceClient({ sellerId }: Props) {
           title: formData.title,
           slug: `${slug}-${Date.now()}`,
           description: formData.description,
-          price: Math.max(1000, parseInt(formData.price) || 1000),
-          delivery_days: Math.max(1, parseInt(formData.deliveryDays) || 7),
+          price: Math.max(1000, Number.parseInt(formData.price) || 1000),
+          delivery_days: Math.max(1, Number.parseInt(formData.deliveryDays) || 7),
           revision_count:
             formData.revisionCount === "unlimited"
               ? 999
-              : Math.max(0, parseInt(formData.revisionCount) || 0),
+              : Math.max(0, Number.parseInt(formData.revisionCount) || 0),
           thumbnail_url: publicUrl,
           search_keywords: formData.searchKeywords || null,
           status: "pending",

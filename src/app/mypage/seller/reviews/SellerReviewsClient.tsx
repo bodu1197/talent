@@ -28,7 +28,7 @@ export default function SellerReviewsClient({
 
   const filteredReviews = initialReviews.filter((review) => {
     if (ratingFilter === "all") return true;
-    return review.rating === parseInt(ratingFilter);
+    return review.rating === Number.parseInt(ratingFilter);
   });
 
   async function handleReplySubmit() {
@@ -98,7 +98,7 @@ export default function SellerReviewsClient({
                   <FaStar
                     key={star}
                     className={
-                      parseFloat(avgRating) >= star
+                      Number.parseFloat(avgRating) >= star
                         ? "text-yellow-400"
                         : "text-gray-300"
                     }

@@ -25,8 +25,8 @@ export async function GET(request: NextRequest) {
     const endDate = searchParams.get('endDate')
     const minAmount = searchParams.get('minAmount')
     const maxAmount = searchParams.get('maxAmount')
-    const page = parseInt(searchParams.get('page') || '1')
-    const pageSize = parseInt(searchParams.get('pageSize') || '20')
+    const page = Number.parseInt(searchParams.get('page') || '1')
+    const pageSize = Number.parseInt(searchParams.get('pageSize') || '20')
 
     // 기본 쿼리 - seller 정보는 별도로 조회
     let query = supabase
@@ -54,11 +54,11 @@ export async function GET(request: NextRequest) {
     }
 
     if (minAmount) {
-      query = query.gte('amount', parseInt(minAmount))
+      query = query.gte('amount', Number.parseInt(minAmount))
     }
 
     if (maxAmount) {
-      query = query.lte('amount', parseInt(maxAmount))
+      query = query.lte('amount', Number.parseInt(maxAmount))
     }
 
     // 정렬 및 페이지네이션

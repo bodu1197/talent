@@ -228,12 +228,12 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
     // 중복된 1차 카테고리 제거 (같은 1차 카테고리가 여러 번 나오지 않도록)
     const uniqueCategories = new Map<string, PersonalizedCategory>()
     categoriesWithServices.forEach(cat => {
-      if (!uniqueCategories.has(cat.category_id)) {
-        uniqueCategories.set(cat.category_id, cat)
-      } else {
+      if (uniqueCategories.has(cat.category_id)) {
         // 이미 있으면 visit_count 합산
         const existing = uniqueCategories.get(cat.category_id)!
         existing.visit_count += cat.visit_count
+      } else {
+        uniqueCategories.set(cat.category_id, cat)
       }
     })
 

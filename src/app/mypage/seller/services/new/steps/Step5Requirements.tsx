@@ -328,21 +328,7 @@ export default function Step5Requirements({
             </label>
           </div>
 
-          {!formData.create_portfolio ? (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-              <p className="text-blue-900 mb-2">
-                <FaInfoCircle className="mr-2 inline" />
-                <strong>
-                  포트폴리오를 등록하면 서비스 신뢰도가 높아집니다!
-                </strong>
-              </p>
-              <p className="text-sm text-blue-800">
-                작업 샘플이나 이전 프로젝트를 보여주면 고객이 서비스를 선택하는
-                데 큰 도움이 됩니다. 위의 체크박스를 선택하여 포트폴리오를 함께
-                등록하세요.
-              </p>
-            </div>
-          ) : (
+          {formData.create_portfolio ? (
             <div className="space-y-6 border border-gray-200 rounded-lg p-6 bg-white">
               {/* 포트폴리오 제목 */}
               <div>
@@ -548,6 +534,20 @@ export default function Step5Requirements({
                   </div>
                 )}
               </div>
+            </div>
+          ) : (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+              <p className="text-blue-900 mb-2">
+                <FaInfoCircle className="mr-2 inline" />
+                <strong>
+                  포트폴리오를 등록하면 서비스 신뢰도가 높아집니다!
+                </strong>
+              </p>
+              <p className="text-sm text-blue-800">
+                작업 샘플이나 이전 프로젝트를 보여주면 고객이 서비스를 선택하는
+                데 큰 도움이 됩니다. 위의 체크박스를 선택하여 포트폴리오를 함께
+                등록하세요.
+              </p>
             </div>
           )}
         </div>

@@ -223,23 +223,7 @@ export default function SellerEarningsClient({
         </div>
 
         <div className="mb-6 flex gap-4">
-          {!hasPendingWithdrawal ? (
-            <>
-              <button
-                onClick={handleWithdrawRequest}
-                disabled={earnings.available_balance <= 0 || loading}
-                className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
-              >
-                <FaMoneyBillWave className="inline mr-2" />
-                {loading ? "처리 중..." : "출금 신청"}
-              </button>
-              {earnings.available_balance <= 0 && (
-                <p className="text-sm text-gray-500 self-center">
-                  출금 가능 금액이 없습니다
-                </p>
-              )}
-            </>
-          ) : (
+          {hasPendingWithdrawal ? (
             <>
               <button
                 onClick={handleCancelWithdrawal}
@@ -256,6 +240,22 @@ export default function SellerEarningsClient({
                   {earnings.pending_withdrawal?.amount?.toLocaleString()}원)
                 </p>
               </div>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={handleWithdrawRequest}
+                disabled={earnings.available_balance <= 0 || loading}
+                className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                <FaMoneyBillWave className="inline mr-2" />
+                {loading ? "처리 중..." : "출금 신청"}
+              </button>
+              {earnings.available_balance <= 0 && (
+                <p className="text-sm text-gray-500 self-center">
+                  출금 가능 금액이 없습니다
+                </p>
+              )}
             </>
           )}
         </div>

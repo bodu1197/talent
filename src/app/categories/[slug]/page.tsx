@@ -32,7 +32,7 @@ export default async function CategoryPage({
 }: CategoryPageProps) {
   const { slug } = await params;
   const { page: pageParam } = await searchParams;
-  const currentPage = parseInt(pageParam || "1", 10);
+  const currentPage = Number.parseInt(pageParam || "1", 10);
 
   // 카테고리 찾기 (인증 불필요, 캐싱 가능)
   const category = await getCategory(slug, false);

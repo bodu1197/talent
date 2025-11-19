@@ -109,7 +109,15 @@ export default function PortfolioNewClient({
 
         // 썸네일 이미지를 Blob으로 가져오기
         const response = await fetch(thumbnailUrl);
-        if (!response.ok) {
+        if (response.ok) {
+          const blob = await response.blob();
+          const file = new File([blob], `youtube-${videoId}.jpg`, {
+            type: "image/jpeg",
+          });
+          setImageFiles((prev) => [file, ...prev]);
+          const preview = URL.createObjectURL(blob);
+          setImagePreviews((prev) => [preview, ...prev]);
+        } else {
           // maxresdefault가 없으면 hqdefault 시도
           const fallbackUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
           const fallbackResponse = await fetch(fallbackUrl);
@@ -124,14 +132,6 @@ export default function PortfolioNewClient({
           setImageFiles((prev) => [file, ...prev]);
 
           // 미리보기 생성
-          const preview = URL.createObjectURL(blob);
-          setImagePreviews((prev) => [preview, ...prev]);
-        } else {
-          const blob = await response.blob();
-          const file = new File([blob], `youtube-${videoId}.jpg`, {
-            type: "image/jpeg",
-          });
-          setImageFiles((prev) => [file, ...prev]);
           const preview = URL.createObjectURL(blob);
           setImagePreviews((prev) => [preview, ...prev]);
         }

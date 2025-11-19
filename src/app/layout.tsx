@@ -187,7 +187,7 @@ export default async function RootLayout({
               <ChatUnreadProvider>
                 <ConditionalLayout
                   megaMenu={
-                    !shouldHideMegaMenu ? <ConditionalMegaMenuWrapper /> : null
+                    shouldHideMegaMenu ? null : <ConditionalMegaMenuWrapper />
                   }
                 >
                   {children}

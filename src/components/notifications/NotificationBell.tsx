@@ -245,23 +245,23 @@ export default function NotificationBell() {
                       setShowDropdown(false);
                     }}
                     className={`block px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors ${
-                      !notification.is_read ? "bg-blue-50" : ""
+                      notification.is_read ? "" : "bg-blue-50"
                     }`}
                   >
                     <div className="flex items-start gap-3">
                       <div
                         className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${
-                          !notification.is_read
-                            ? "bg-blue-500"
-                            : "bg-transparent"
+                          notification.is_read
+                            ? "bg-transparent"
+                            : "bg-blue-500"
                         }`}
                       ></div>
                       <div className="flex-1 min-w-0">
                         <h4
                           className={`text-sm font-medium mb-1 ${
-                            !notification.is_read
-                              ? "text-gray-900"
-                              : "text-gray-700"
+                            notification.is_read
+                              ? "text-gray-700"
+                              : "text-gray-900"
                           }`}
                         >
                           {notification.title}

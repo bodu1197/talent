@@ -12,8 +12,8 @@ import {
   FaUser,
   FaArrowLeft,
   FaTimes,
+  FaRegComments,
 } from "react-icons/fa";
-import { FaRegComments } from "react-icons/fa";
 
 export default function MobileBottomNav() {
   const pathname = usePathname();

@@ -390,7 +390,7 @@ export default function AdminCategoriesPage() {
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        display_order: parseInt(e.target.value) || 0,
+                        display_order: Number.parseInt(e.target.value) || 0,
                       })
                     }
                     min="0"

@@ -1,11 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
 import { createReview } from "@/lib/supabase/mutations/reviews";
 import { logger } from "@/lib/logger";
-import { useRouter } from "next/navigation";
 import { Order } from "@/types/common";
 import {
   FaStar,

@@ -50,7 +50,7 @@ export default function NoticePage() {
             <div
               key={notice.id}
               className={`flex items-center gap-4 px-6 py-4 hover:bg-gray-50 transition-colors cursor-pointer ${
-                index !== notices.length - 1 ? "border-b border-gray-200" : ""
+                index === notices.length - 1 ? "" : "border-b border-gray-200"
               }`}
             >
               {/* 카테고리 */}

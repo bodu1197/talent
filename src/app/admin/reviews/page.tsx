@@ -29,7 +29,7 @@ export default function AdminReviewsPage() {
       setLoading(true);
       setError(null);
       const data = await getAdminReviews({
-        rating: ratingFilter === "all" ? undefined : parseInt(ratingFilter),
+        rating: ratingFilter === "all" ? undefined : Number.parseInt(ratingFilter),
         searchQuery,
       });
       setReviews(data);

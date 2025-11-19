@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     const depositBank = formData.get('depositBank') as string
     const depositDate = formData.get('depositDate') as string
     const depositTime = formData.get('depositTime') as string
-    const amount = parseInt(formData.get('amount') as string)
+    const amount = Number.parseInt(formData.get('amount') as string)
     const receiptFile = formData.get('receipt') as File | null
 
     // Validate required fields

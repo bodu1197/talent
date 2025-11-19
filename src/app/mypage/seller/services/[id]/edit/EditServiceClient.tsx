@@ -159,12 +159,12 @@ async function createServiceRevision(
       seller_id: sellerId,
       title: formData.title,
       description: formData.description,
-      price: parseInt(formData.price) || 0,
-      delivery_days: parseInt(formData.deliveryDays) || 7,
+      price: Number.parseInt(formData.price) || 0,
+      delivery_days: Number.parseInt(formData.deliveryDays) || 7,
       revision_count:
         formData.revisionCount === "unlimited"
           ? 999
-          : parseInt(formData.revisionCount) || 0,
+          : Number.parseInt(formData.revisionCount) || 0,
       thumbnail_url: thumbnailUrl,
       status: "pending",
       revision_note: "서비스 정보 수정",
@@ -191,12 +191,12 @@ async function updateServiceDirectly(
   const updateData: Record<string, unknown> = {
     title: formData.title,
     description: formData.description,
-    price: parseInt(formData.price) || 0,
-    delivery_days: parseInt(formData.deliveryDays) || 7,
+    price: Number.parseInt(formData.price) || 0,
+    delivery_days: Number.parseInt(formData.deliveryDays) || 7,
     revision_count:
       formData.revisionCount === "unlimited"
         ? 999
-        : parseInt(formData.revisionCount) || 0,
+        : Number.parseInt(formData.revisionCount) || 0,
     thumbnail_url: thumbnailUrl,
     updated_at: new Date().toISOString(),
   };
