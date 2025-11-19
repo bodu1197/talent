@@ -101,9 +101,11 @@ async function AIServicesSection({
         thumbnail_url,
         orders_count,
         status,
-        seller:sellers(
+        seller:seller_profiles(
           id,
           business_name,
+          display_name,
+          profile_image,
           is_verified
         ),
         service_categories!inner(category_id)

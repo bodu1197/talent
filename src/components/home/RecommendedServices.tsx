@@ -42,9 +42,11 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
       price,
       thumbnail_url,
       orders_count,
-      seller:sellers(
+      seller:seller_profiles(
         id,
         business_name,
+        display_name,
+        profile_image,
         is_verified
       )
     `)
