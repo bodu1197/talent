@@ -104,7 +104,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
             <div className="flex items-center">
               {/* 전체 카테고리 버튼 */}
               <button
-                className="flex items-center gap-2 px-4 py-3 hover:bg-gray-50 font-medium border-r border-gray-200 cursor-pointer"
+                className="flex items-center gap-2 pl-0 pr-4 py-3 hover:bg-gray-50 font-medium border-r border-gray-200 cursor-pointer"
                 onClick={() => setIsOpen(!isOpen)}
                 aria-label="전체 카테고리 메뉴"
                 aria-expanded={isOpen}
