@@ -66,7 +66,7 @@ export default async function SellerServicesPage({
       throw servicesError;
     }
 
-    // 각 서비스의 pending/rejected revision 조회
+    // 각 서비스의 pending/rejected revision 및 진행중인 주문 조회
     if (services && services.length > 0) {
       const serviceIds = services.map((s) => s.id);
 
@@ -85,7 +85,14 @@ export default async function SellerServicesPage({
         .eq("status", "rejected")
         .order("reviewed_at", { ascending: false });
 
-      // 서비스에 revision 정보 추가
+      // 진행중인 주문 수 조회 (pending_payment, paid, in_progress, delivered)
+      const { data: activeOrders } = await supabase
+        .from("orders")
+        .select("service_id")
+        .in("service_id", serviceIds)
+        .in("status", ["pending_payment", "paid", "in_progress", "delivered"]);
+
+      // 서비스에 revision 및 주문 정보 추가
       services.forEach((service: Record<string, unknown>) => {
         const pendingRevision = pendingRevisions?.find(
           (r) => r.service_id === service.id,
@@ -99,6 +106,11 @@ export default async function SellerServicesPage({
         if (rejectedRevision) {
           service.rejectedRevision = rejectedRevision;
         }
+
+        // 진행중인 주문 수
+        const orderCount =
+          activeOrders?.filter((o) => o.service_id === service.id).length || 0;
+        service.activeOrderCount = orderCount;
       });
     }
 

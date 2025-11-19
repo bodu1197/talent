@@ -33,6 +33,7 @@ type ServiceStatus = "all" | "active" | "inactive" | "pending";
 interface ServiceWithRejection extends Service {
   hasPendingRevision?: boolean;
   order_count?: number;
+  activeOrderCount?: number;
   _rejectedRevision?: {
     id: string;
     rejection_reason: string;
@@ -145,12 +146,12 @@ export default function SellerServicesClient({
     try {
       const supabase = createClient();
 
-      // 1. 진행 중인 주문 확인
+      // 1. 진행 중인 주문 확인 (pending_payment 포함)
       const { data: activeOrders, error: ordersError } = await supabase
         .from("orders")
         .select("id")
         .eq("service_id", serviceId)
-        .in("status", ["paid", "in_progress", "delivered"])
+        .in("status", ["pending_payment", "paid", "in_progress", "delivered"])
         .limit(1);
 
       if (ordersError) throw ordersError;
