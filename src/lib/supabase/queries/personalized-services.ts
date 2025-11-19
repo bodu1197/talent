@@ -1,4 +1,4 @@
-import { createClient as createServerClient } from '@/lib/supabase/server'
+import { createClient as createServerClient, createServiceRoleClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { Service } from '@/types'
 
@@ -16,6 +16,8 @@ interface PartialServiceFromDB {
   seller: Array<{
     id: string
     business_name: string | null
+    display_name: string | null
+    profile_image: string | null
     is_verified: boolean
   }>
   service_categories: Array<{
@@ -129,8 +131,9 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
           allCategoryIds = [...allCategoryIds, ...level3Ids]
         }
 
-        // 광고 서비스 ID 조회
-        const { data: advertisingData } = await supabase
+        // 광고 서비스 ID 조회 - Service Role 클라이언트 사용하여 RLS 우회
+        const serviceRoleClient = createServiceRoleClient()
+        const { data: advertisingData } = await serviceRoleClient
           .from('advertising_subscriptions')
           .select('service_id')
           .eq('status', 'active')
@@ -147,9 +150,11 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
             price,
             thumbnail_url,
             orders_count,
-            seller:sellers(
+            seller:seller_profiles(
               id,
               business_name,
+              display_name,
+              profile_image,
               is_verified
             ),
             service_categories!inner(category_id)
