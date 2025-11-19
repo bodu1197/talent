@@ -248,15 +248,20 @@ export default function NewServiceClient({ sellerId }: Props) {
     fetchLevel3Categories();
   }, [selectedLevel2]);
 
-  // Update final category when level 3 is selected
+  // Update final category - use the deepest level selected
   useEffect(() => {
+    // Priority: Level 3 > Level 2 > Level 1
     if (selectedLevel3) {
       setFormData((prev) => ({ ...prev, category: selectedLevel3 }));
-    } else if (selectedLevel2 && level3Categories.length === 0) {
-      // If level 2 selected but no level 3 exists, use level 2
+    } else if (selectedLevel2) {
       setFormData((prev) => ({ ...prev, category: selectedLevel2 }));
+    } else if (selectedLevel1) {
+      setFormData((prev) => ({ ...prev, category: selectedLevel1 }));
+    } else {
+      // Reset category if nothing selected
+      setFormData((prev) => ({ ...prev, category: "" }));
     }
-  }, [selectedLevel3, selectedLevel2, level3Categories]);
+  }, [selectedLevel3, selectedLevel2, selectedLevel1]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
