@@ -36,6 +36,18 @@ interface ServiceDetailProps {
   }>;
 }
 
+type PortfolioItem = {
+  id: string;
+  title: string;
+  thumbnail_url: string | null;
+  description: string;
+  youtube_url: string | null;
+  project_url: string | null;
+  image_urls: string[];
+  tags: string[];
+  created_at: string;
+};
+
 // YouTube 비디오 ID 추출 함수
 function _getYoutubeVideoId(url: string | null): string | null {
   if (!url) return null;
@@ -52,6 +64,114 @@ function _getYoutubeVideoId(url: string | null): string | null {
   }
 
   return null;
+}
+
+// Helper function to fetch linked portfolios
+async function fetchLinkedPortfolios(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  serviceId: string
+): Promise<PortfolioItem[]> {
+  try {
+    const { data: portfolioLinks, error: portfolioError } = await supabase
+      .from("portfolio_services")
+      .select(
+        `
+        portfolio:seller_portfolio(
+          id,
+          title,
+          thumbnail_url,
+          description,
+          youtube_url,
+          project_url,
+          image_urls,
+          tags,
+          created_at
+        )
+      `
+      )
+      .eq("service_id", serviceId)
+      .order("created_at", { ascending: false });
+
+    if (portfolioError) {
+      logger.error("Portfolio links fetch error:", portfolioError);
+      return [];
+    }
+
+    if (!portfolioLinks) {
+      return [];
+    }
+
+    // Flatten portfolio data structure
+    return portfolioLinks
+      .map((link: { portfolio: PortfolioItem | PortfolioItem[] | null }) => {
+        if (Array.isArray(link.portfolio) && link.portfolio.length > 0) {
+          return link.portfolio[0];
+        }
+        return link.portfolio;
+      })
+      .filter((p): p is PortfolioItem =>
+        p !== null && p !== undefined && typeof p === "object"
+      );
+  } catch (error: unknown) {
+    logger.error("Portfolio fetch exception:", error);
+    return [];
+  }
+}
+
+// Helper function to fetch seller statistics
+async function fetchSellerStats(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  seller: { id: string; user_id: string }
+) {
+  const stats = {
+    totalOrders: 0,
+    satisfactionRate: 0,
+    avgResponseTime: "10분 이내",
+  };
+
+  // Fetch total completed orders
+  const { count: orderCount } = await supabase
+    .from("orders")
+    .select("*", { count: "exact", head: true })
+    .eq("seller_id", seller.user_id)
+    .eq("status", "completed");
+
+  stats.totalOrders = orderCount || 0;
+
+  // Calculate satisfaction rate from reviews
+  const satisfactionRate = await calculateSatisfactionRate(supabase, seller.id);
+  stats.satisfactionRate = satisfactionRate;
+
+  return stats;
+}
+
+// Helper function to calculate satisfaction rate
+async function calculateSatisfactionRate(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  sellerId: string
+): Promise<number> {
+  const { data: sellerServices } = await supabase
+    .from("services")
+    .select("id")
+    .eq("seller_id", sellerId);
+
+  if (!sellerServices || sellerServices.length === 0) {
+    return 0;
+  }
+
+  const serviceIds = sellerServices.map((s) => s.id);
+
+  const { data: reviews } = await supabase
+    .from("reviews")
+    .select("rating")
+    .in("service_id", serviceIds);
+
+  if (!reviews || reviews.length === 0) {
+    return 0;
+  }
+
+  const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+  return Math.round((avgRating / 5) * 100);
 }
 
 export default async function ServiceDetailPage({
@@ -100,66 +220,7 @@ export default async function ServiceDetailPage({
   }
 
   // 이 서비스와 연결된 포트폴리오 조회 (portfolio_services 중간 테이블 사용)
-  let linkedPortfolios: Array<{
-    id: string;
-    title: string;
-    thumbnail_url: string | null;
-    description: string;
-    youtube_url: string | null;
-    project_url: string | null;
-    image_urls: string[];
-    tags: string[];
-    created_at: string;
-  }> = [];
-
-  try {
-    const { data: portfolioLinks, error: portfolioError } = await supabase
-      .from("portfolio_services")
-      .select(
-        `
-        portfolio:seller_portfolio(
-          id,
-          title,
-          thumbnail_url,
-          description,
-          youtube_url,
-          project_url,
-          image_urls,
-          tags,
-          created_at
-        )
-      `,
-      )
-      .eq("service_id", id)
-      .order("created_at", { ascending: false });
-
-    if (portfolioError) {
-      logger.error("Portfolio links fetch error:", portfolioError);
-    } else if (portfolioLinks) {
-      // portfolios 데이터 구조 평탄화
-      linkedPortfolios = portfolioLinks
-        .map(
-          (link: {
-            portfolio:
-              | (typeof linkedPortfolios)[number]
-              | (typeof linkedPortfolios)[number][]
-              | null;
-          }) => {
-            if (Array.isArray(link.portfolio) && link.portfolio.length > 0) {
-              return link.portfolio[0];
-            }
-            return link.portfolio;
-          },
-        )
-        .filter(
-          (p): p is NonNullable<(typeof linkedPortfolios)[number]> =>
-            p !== null && p !== undefined && typeof p === "object",
-        );
-    }
-  } catch (error: unknown) {
-    logger.error("Portfolio fetch exception:", error);
-    // 에러가 있어도 페이지는 계속 렌더링 (포트폴리오만 없는 상태로)
-  }
+  const linkedPortfolios = await fetchLinkedPortfolios(supabase, id);
 
   // seller_profiles 뷰에서 이미 display_name과 profile_image를 포함한 모든 정보를 가져왔으므로
   // 추가 조회가 필요 없음
@@ -183,45 +244,9 @@ export default async function ServiceDetailPage({
     .order("created_at", { ascending: false });
 
   // seller의 통계 정보 조회
-  const sellerStats = {
-    totalOrders: 0,
-    satisfactionRate: 0,
-    avgResponseTime: "10분 이내",
-  };
-
-  if (service?.seller?.user_id) {
-    // 총 거래 건수 (완료된 주문)
-    // orders 테이블의 seller_id는 sellers.user_id를 참조함
-    const { count: orderCount } = await supabase
-      .from("orders")
-      .select("*", { count: "exact", head: true })
-      .eq("seller_id", service.seller.user_id)
-      .eq("status", "completed");
-
-    sellerStats.totalOrders = orderCount || 0;
-
-    // 만족도 계산 (평균 평점)
-    // 먼저 판매자의 모든 서비스 ID 조회
-    const { data: sellerServices } = await supabase
-      .from("services")
-      .select("id")
-      .eq("seller_id", service.seller.id);
-
-    if (sellerServices && sellerServices.length > 0) {
-      const serviceIds = sellerServices.map((s) => s.id);
-
-      const { data: reviews } = await supabase
-        .from("reviews")
-        .select("rating")
-        .in("service_id", serviceIds);
-
-      if (reviews && reviews.length > 0) {
-        const avgRating =
-          reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
-        sellerStats.satisfactionRate = Math.round((avgRating / 5) * 100);
-      }
-    }
-  }
+  const sellerStats = service?.seller
+    ? await fetchSellerStats(supabase, service.seller)
+    : { totalOrders: 0, satisfactionRate: 0, avgResponseTime: "10분 이내" };
 
   interface ServiceCategory {
     category: {

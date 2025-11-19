@@ -45,34 +45,36 @@ interface Props {
   initialVisibleCount: number;
 }
 
+// Icon mapping using lookup table for O(1) access
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+  robot: FaRobot,
+  palette: FaPalette,
+  scissors: FaCut,
+  code: FaCode,
+  bullhorn: FaBullhorn,
+  camera: FaCamera,
+  language: FaLanguage,
+  "pen-fancy": FaPenFancy,
+  briefcase: FaBriefcase,
+  book: FaBook,
+  music: FaMusic,
+  calendar: FaCalendar,
+  spa: FaSpa,
+  bullseye: FaBullseye,
+  star: FaStar,
+  "book-open": FaBookOpen,
+  gavel: FaGavel,
+  hammer: FaHammer,
+  "graduation-cap": FaGraduationCap,
+  "chart-line": FaChartLine,
+  home: FaHome,
+  motorcycle: FaMotorcycle,
+};
+
 function CategoryIcon({ icon, color }: { icon?: string; color: string }) {
   const iconClass = `${color}`;
-
-  if (icon === "robot") return <FaRobot className={iconClass} />;
-  if (icon === "palette") return <FaPalette className={iconClass} />;
-  if (icon === "scissors") return <FaCut className={iconClass} />;
-  if (icon === "code") return <FaCode className={iconClass} />;
-  if (icon === "bullhorn") return <FaBullhorn className={iconClass} />;
-  if (icon === "camera") return <FaCamera className={iconClass} />;
-  if (icon === "language") return <FaLanguage className={iconClass} />;
-  if (icon === "pen-fancy") return <FaPenFancy className={iconClass} />;
-  if (icon === "briefcase") return <FaBriefcase className={iconClass} />;
-  if (icon === "book") return <FaBook className={iconClass} />;
-  if (icon === "music") return <FaMusic className={iconClass} />;
-  if (icon === "calendar") return <FaCalendar className={iconClass} />;
-  if (icon === "spa") return <FaSpa className={iconClass} />;
-  if (icon === "bullseye") return <FaBullseye className={iconClass} />;
-  if (icon === "star") return <FaStar className={iconClass} />;
-  if (icon === "book-open") return <FaBookOpen className={iconClass} />;
-  if (icon === "gavel") return <FaGavel className={iconClass} />;
-  if (icon === "hammer") return <FaHammer className={iconClass} />;
-  if (icon === "graduation-cap")
-    return <FaGraduationCap className={iconClass} />;
-  if (icon === "chart-line") return <FaChartLine className={iconClass} />;
-  if (icon === "home") return <FaHome className={iconClass} />;
-  if (icon === "motorcycle") return <FaMotorcycle className={iconClass} />;
-
-  return <FaCircle className={iconClass} />;
+  const IconComponent = (icon && ICON_MAP[icon]) || FaCircle;
+  return <IconComponent className={iconClass} />;
 }
 
 export default function CategoryGridClient({

@@ -64,10 +64,9 @@ export default function RegisterPage() {
     const checkEmailAvailability = async () => {
       const email = formData.email.trim();
 
-      // 이메일이 비어있거나 유효하지 않으면 체크하지 않음
-      if (!email || !email.includes("@")) {
-        setEmailCheckStatus("idle");
-        setEmailCheckMessage("");
+      // Early return for invalid email
+      if (!isValidEmail(email)) {
+        resetEmailCheckStatus();
         return;
       }
 
@@ -75,12 +74,9 @@ export default function RegisterPage() {
       setEmailCheckMessage("이메일 확인 중...");
 
       try {
-        // API를 통해 서버에서 이메일 중복 체크
         const response = await fetch("/api/auth/check-email", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email }),
         });
 
@@ -88,22 +84,14 @@ export default function RegisterPage() {
 
         if (!response.ok) {
           logger.error("이메일 중복 체크 오류:", data.error);
-          setEmailCheckStatus("idle");
-          setEmailCheckMessage("");
+          resetEmailCheckStatus();
           return;
         }
 
-        if (data.available) {
-          setEmailCheckStatus("available");
-          setEmailCheckMessage(data.message);
-        } else {
-          setEmailCheckStatus("taken");
-          setEmailCheckMessage(data.message);
-        }
+        updateEmailCheckStatus(data.available, data.message);
       } catch (err) {
         logger.error("이메일 중복 체크 오류:", err);
-        setEmailCheckStatus("idle");
-        setEmailCheckMessage("");
+        resetEmailCheckStatus();
       }
     };
 
@@ -115,96 +103,163 @@ export default function RegisterPage() {
     return () => clearTimeout(timeoutId);
   }, [formData.email]);
 
+  // Helper functions for email validation
+  function isValidEmail(email: string): boolean {
+    return email.length > 0 && email.includes("@");
+  }
+
+  function resetEmailCheckStatus() {
+    setEmailCheckStatus("idle");
+    setEmailCheckMessage("");
+  }
+
+  function updateEmailCheckStatus(available: boolean, message: string) {
+    setEmailCheckStatus(available ? "available" : "taken");
+    setEmailCheckMessage(message);
+  }
+
   const generateNewNickname = () => {
     const nickname = generateRandomNickname();
     setRandomNickname(nickname);
     setProfileImage(generateProfileImage(nickname));
   };
 
+  // Validation helper functions
+  function validateRegistration(): string | null {
+    if (lockoutUntil && Date.now() < lockoutUntil) {
+      const remainingSeconds = Math.ceil((lockoutUntil - Date.now()) / 1000);
+      return `너무 많은 시도가 있었습니다. ${remainingSeconds}초 후 다시 시도해주세요.`;
+    }
+
+    if (emailCheckStatus === "taken") {
+      return "이미 사용 중인 이메일입니다. 다른 이메일을 사용해주세요.";
+    }
+
+    if (emailCheckStatus === "checking") {
+      return "이메일 확인 중입니다. 잠시만 기다려주세요.";
+    }
+
+    if (!isPasswordValid) {
+      return "비밀번호 조건을 모두 충족해주세요.";
+    }
+
+    if (formData.password !== formData.passwordConfirm) {
+      return "비밀번호가 일치하지 않습니다.";
+    }
+
+    if (!formData.agreeTerms || !formData.agreePrivacy) {
+      return "필수 약관에 동의해주세요.";
+    }
+
+    return null;
+  }
+
+  // Profile image upload helper
+  async function uploadProfileImage(imageUrl: string): Promise<string | null> {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+
+      const tempId = Date.now();
+      const fileName = `temp_${tempId}.svg`;
+      const filePath = `profiles/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("profiles")
+        .upload(filePath, blob, {
+          contentType: "image/svg+xml",
+          upsert: true,
+        });
+
+      if (!uploadError) {
+        const { data: { publicUrl } } = supabase.storage
+          .from("profiles")
+          .getPublicUrl(filePath);
+        return publicUrl;
+      }
+    } catch (uploadErr) {
+      logger.error("Profile image upload error:", uploadErr);
+    }
+    return null;
+  }
+
+  // Post-registration profile update helper
+  async function updateUserProfile(userId: string, nickname: string, imageUrl: string) {
+    try {
+      const pngResponse = await fetch(imageUrl);
+      const pngBlob = await pngResponse.blob();
+
+      const fileName = `${userId}_${Date.now()}.png`;
+      const filePath = `profiles/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("profiles")
+        .upload(filePath, pngBlob, {
+          contentType: "image/png",
+          upsert: true,
+        });
+
+      if (!uploadError) {
+        const { data: { publicUrl } } = supabase.storage
+          .from("profiles")
+          .getPublicUrl(filePath);
+
+        await fetch("/api/users/profile", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: nickname,
+            profile_image: publicUrl,
+          }),
+        });
+      }
+    } catch (err) {
+      logger.error("Profile image upload error:", err);
+    }
+  }
+
+  // Handle registration errors
+  function handleRegistrationError(error: unknown) {
+    logger.error("회원가입 실패:", error);
+
+    const newAttempts = registerAttempts + 1;
+    setRegisterAttempts(newAttempts);
+
+    if (newAttempts >= RATE_LIMIT_CONFIG.REGISTER.MAX_ATTEMPTS) {
+      setLockoutUntil(Date.now() + RATE_LIMIT_CONFIG.REGISTER.LOCKOUT_DURATION);
+      setError("너무 많은 시도가 있었습니다. 10분 후 다시 시도해주세요.");
+    } else {
+      const message = error instanceof Error
+        ? error.message
+        : "회원가입 중 오류가 발생했습니다.";
+      setError(message);
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Rate Limiting 체크
-    if (lockoutUntil && Date.now() < lockoutUntil) {
-      const remainingSeconds = Math.ceil((lockoutUntil - Date.now()) / 1000);
-      setError(
-        `너무 많은 시도가 있었습니다. ${remainingSeconds}초 후 다시 시도해주세요.`,
-      );
+    const validationError = validateRegistration();
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
     setError(null);
-
-    // 이메일 중복 체크
-    if (emailCheckStatus === "taken") {
-      setError("이미 사용 중인 이메일입니다. 다른 이메일을 사용해주세요.");
-      return;
-    }
-
-    if (emailCheckStatus === "checking") {
-      setError("이메일 확인 중입니다. 잠시만 기다려주세요.");
-      return;
-    }
-
-    // 유효성 검사
-    if (!isPasswordValid) {
-      setError("비밀번호 조건을 모두 충족해주세요.");
-      return;
-    }
-
-    if (formData.password !== formData.passwordConfirm) {
-      setError("비밀번호가 일치하지 않습니다.");
-      return;
-    }
-
-    if (!formData.agreeTerms || !formData.agreePrivacy) {
-      setError("필수 약관에 동의해주세요.");
-      return;
-    }
-
     setIsLoading(true);
 
     try {
-      // 1. DiceBear SVG 이미지를 다운로드하여 Supabase Storage에 저장
-      let uploadedProfileImage = null;
-      try {
-        // DiceBear SVG를 blob으로 다운로드
-        const svgResponse = await fetch(profileImage);
-        const svgBlob = await svgResponse.blob();
+      // 1. Upload profile image to Supabase Storage
+      const uploadedProfileImage = await uploadProfileImage(profileImage);
 
-        // 임시 사용자 ID (timestamp 사용)
-        const tempId = Date.now();
-        const fileName = `temp_${tempId}.svg`;
-        const filePath = `profiles/${fileName}`;
-
-        // Supabase Storage에 업로드
-        const { error: uploadError } = await supabase.storage
-          .from("profiles")
-          .upload(filePath, svgBlob, {
-            contentType: "image/svg+xml",
-            upsert: true,
-          });
-
-        if (!uploadError) {
-          const {
-            data: { publicUrl },
-          } = supabase.storage.from("profiles").getPublicUrl(filePath);
-          uploadedProfileImage = publicUrl;
-        }
-      } catch (uploadErr) {
-        logger.error("Profile image upload error:", uploadErr);
-        // 업로드 실패해도 회원가입은 진행 (이미지는 나중에 설정 가능)
-      }
-
-      // 2. Supabase Auth 회원가입
-      // 트리거가 자동으로 users 테이블에 프로필 생성
+      // 2. Register with Supabase Auth
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
         options: {
           data: {
             name: randomNickname,
-            profile_image: uploadedProfileImage || profileImage, // Supabase URL 우선, 실패시 DiceBear URL
+            profile_image: uploadedProfileImage || profileImage,
           },
         },
       });
@@ -212,79 +267,22 @@ export default function RegisterPage() {
       if (authError) throw authError;
 
       if (authData.user) {
-        // 3. 회원가입 성공 후 DiceBear 이미지를 Supabase Storage에 저장
-        try {
-          // DiceBear PNG 다운로드
-          const pngResponse = await fetch(profileImage);
-          const pngBlob = await pngResponse.blob();
+        // 3. Update user profile with permanent image
+        await updateUserProfile(authData.user.id, randomNickname, profileImage);
 
-          // user_id로 파일명 생성
-          const fileName = `${authData.user.id}_${Date.now()}.png`;
-          const filePath = `profiles/${fileName}`;
-
-          // Supabase Storage에 업로드
-          const { error: uploadError } = await supabase.storage
-            .from("profiles")
-            .upload(filePath, pngBlob, {
-              contentType: "image/png",
-              upsert: true,
-            });
-
-          if (!uploadError) {
-            const {
-              data: { publicUrl },
-            } = supabase.storage.from("profiles").getPublicUrl(filePath);
-
-            // profiles 테이블 업데이트 (API 사용)
-            await fetch("/api/users/profile", {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                name: randomNickname,
-                profile_image: publicUrl,
-              }),
-            });
-          }
-        } catch (err) {
-          logger.error("Profile image upload error:", err);
-          // 실패해도 회원가입은 성공이므로 계속 진행
-        }
-
-        // 회원가입 성공 - 시도 횟수 초기화
+        // Reset attempts on success
         setRegisterAttempts(0);
         setLockoutUntil(null);
 
-        // 이메일 인증 없이 즉시 로그인 처리
-        // authData.session이 있으면 이미 로그인된 상태
+        // Redirect based on session availability
         if (authData.session) {
-          // 즉시 홈으로 리다이렉트
           router.push("/");
         } else {
-          // 세션이 없으면 (이메일 인증 필요한 경우) 로그인 페이지로
           router.push("/auth/login?registered=true");
         }
       }
     } catch (error: unknown) {
-      logger.error("회원가입 실패:", error);
-
-      const newAttempts = registerAttempts + 1;
-      setRegisterAttempts(newAttempts);
-
-      // Rate Limiting 적용
-      if (newAttempts >= RATE_LIMIT_CONFIG.REGISTER.MAX_ATTEMPTS) {
-        setLockoutUntil(
-          Date.now() + RATE_LIMIT_CONFIG.REGISTER.LOCKOUT_DURATION,
-        );
-        setError("너무 많은 시도가 있었습니다. 10분 후 다시 시도해주세요.");
-      } else {
-        const message =
-          error instanceof Error
-            ? error.message
-            : "회원가입 중 오류가 발생했습니다.";
-        setError(message);
-      }
+      handleRegistrationError(error);
     } finally {
       setIsLoading(false);
     }

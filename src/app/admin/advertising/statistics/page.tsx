@@ -99,369 +99,456 @@ export default function AdminAdvertisingStatisticsPage() {
     fetchStatistics();
   };
 
-  const getPaymentMethodLabel = (method: string) => {
-    const labels = {
-      credit: "크레딧",
-      card: "카드",
-      bank_transfer: "무통장",
-    };
-    return labels[method as keyof typeof labels] || method;
-  };
-
-  const getPaymentMethodIcon = (method: string) => {
-    const icons = {
-      credit: FaCoins,
-      card: FaCreditCard,
-      bank_transfer: FaUniversity,
-    };
-    return icons[method as keyof typeof icons] || FaCoins;
-  };
-
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">광고 통계</h1>
-        <p className="text-slate-600">광고 수익 및 성과 분석</p>
-      </div>
+      <PageHeader />
+      <PeriodFilter
+        period={period}
+        startDate={startDate}
+        endDate={endDate}
+        onPeriodChange={setPeriod}
+        onStartDateChange={setStartDate}
+        onEndDateChange={setEndDate}
+        onSubmit={handleFilterSubmit}
+      />
+      <StatisticsContent loading={loading} statistics={statistics} />
+    </div>
+  );
+}
 
-      {/* Period Tabs */}
-      <div className="bg-white rounded-lg border border-slate-200 p-4">
-        <div className="flex flex-wrap gap-4 items-end">
+// Helper components to reduce complexity
+function PageHeader() {
+  return (
+    <div>
+      <h1 className="text-3xl font-bold text-slate-900 mb-2">광고 통계</h1>
+      <p className="text-slate-600">광고 수익 및 성과 분석</p>
+    </div>
+  );
+}
+
+interface PeriodFilterProps {
+  period: Period;
+  startDate: string;
+  endDate: string;
+  onPeriodChange: (period: Period) => void;
+  onStartDateChange: (date: string) => void;
+  onEndDateChange: (date: string) => void;
+  onSubmit: (e: React.FormEvent) => void;
+}
+
+function PeriodFilter({
+  period,
+  startDate,
+  endDate,
+  onPeriodChange,
+  onStartDateChange,
+  onEndDateChange,
+  onSubmit,
+}: PeriodFilterProps) {
+  const periodButtons: Array<{ value: Period; label: string }> = [
+    { value: "day", label: "일별" },
+    { value: "month", label: "월별" },
+    { value: "year", label: "연별" },
+  ];
+
+  return (
+    <div className="bg-white rounded-lg border border-slate-200 p-4">
+      <div className="flex flex-wrap gap-4 items-end">
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            기간 단위
+          </label>
+          <div className="flex gap-2">
+            {periodButtons.map((btn) => (
+              <button
+                key={btn.value}
+                onClick={() => onPeriodChange(btn.value)}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  period === btn.value
+                    ? "bg-[#0f3460] text-white"
+                    : "text-slate-700 hover:bg-slate-100"
+                }`}
+              >
+                {btn.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <form onSubmit={onSubmit} className="flex gap-2 items-end">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              기간 단위
+              시작일
             </label>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setPeriod("day")}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  period === "day"
-                    ? "bg-[#0f3460] text-white"
-                    : "text-slate-700 hover:bg-slate-100"
-                }`}
-              >
-                일별
-              </button>
-              <button
-                onClick={() => setPeriod("month")}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  period === "month"
-                    ? "bg-[#0f3460] text-white"
-                    : "text-slate-700 hover:bg-slate-100"
-                }`}
-              >
-                월별
-              </button>
-              <button
-                onClick={() => setPeriod("year")}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  period === "year"
-                    ? "bg-[#0f3460] text-white"
-                    : "text-slate-700 hover:bg-slate-100"
-                }`}
-              >
-                연별
-              </button>
-            </div>
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => onStartDateChange(e.target.value)}
+              className="px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
+            />
           </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              종료일
+            </label>
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => onEndDateChange(e.target.value)}
+              className="px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
+            />
+          </div>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-[#0f3460] text-white rounded-md hover:bg-[#0f3460]/90 transition-colors"
+          >
+            조회
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
 
-          <form onSubmit={handleFilterSubmit} className="flex gap-2 items-end">
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
-                시작일
-              </label>
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
-                종료일
-              </label>
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
-              />
-            </div>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-[#0f3460] text-white rounded-md hover:bg-[#0f3460]/90 transition-colors"
-            >
-              조회
-            </button>
-          </form>
+interface StatisticsContentProps {
+  loading: boolean;
+  statistics: Statistics | null;
+}
+
+function StatisticsContent({ loading, statistics }: StatisticsContentProps) {
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-slate-600">데이터를 불러오는 중...</div>
+      </div>
+    );
+  }
+
+  if (!statistics) {
+    return (
+      <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
+        <FaChartBar className="text-slate-400 text-5xl mb-4 mx-auto" />
+        <p className="text-slate-600">통계 데이터가 없습니다.</p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <SummaryCards statistics={statistics} />
+      <PaymentMethodStats revenue={statistics.revenue} />
+      <TopServicesTable services={statistics.performance.topServices} />
+      <RevenueByPeriodTable
+        revenue={statistics.revenue}
+        period={statistics.period}
+      />
+      <SubscriptionStats subscriptions={statistics.subscriptions} />
+    </>
+  );
+}
+
+function SummaryCards({ statistics }: { statistics: Statistics }) {
+  return (
+    <div className="grid gap-6 md:grid-cols-3">
+      <div className="bg-white rounded-lg border border-slate-200 p-6">
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="text-sm font-medium text-slate-600 mb-2">총 수익</p>
+            <p className="text-3xl font-bold text-slate-900">
+              ₩{statistics.revenue.total.toLocaleString()}
+            </p>
+          </div>
+          <div className="rounded-lg bg-blue-50 p-3">
+            <FaWonSign className="text-[#0f3460] text-xl" />
+          </div>
         </div>
       </div>
 
-      {loading ? (
-        <div className="flex items-center justify-center py-12">
-          <div className="text-slate-600">데이터를 불러오는 중...</div>
-        </div>
-      ) : statistics ? (
-        <>
-          {/* Summary Cards */}
-          <div className="grid gap-6 md:grid-cols-3">
-            <div className="bg-white rounded-lg border border-slate-200 p-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-sm font-medium text-slate-600 mb-2">
-                    총 수익
-                  </p>
-                  <p className="text-3xl font-bold text-slate-900">
-                    ₩{statistics.revenue.total.toLocaleString()}
-                  </p>
-                </div>
-                <div className="rounded-lg bg-blue-50 p-3">
-                  <FaWonSign className="text-[#0f3460] text-xl" />
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg border border-slate-200 p-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-sm font-medium text-slate-600 mb-2">
-                    월 예상 수익
-                  </p>
-                  <p className="text-3xl font-bold text-slate-900">
-                    ₩{statistics.subscriptions.monthlyRevenue.toLocaleString()}
-                  </p>
-                  <p className="text-sm text-slate-500 mt-1">
-                    활성 광고 {statistics.subscriptions.active}개
-                  </p>
-                </div>
-                <div className="rounded-lg bg-green-50 p-3">
-                  <FaChartLine className="text-green-600 text-xl" />
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg border border-slate-200 p-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-sm font-medium text-slate-600 mb-2">
-                    평균 CTR
-                  </p>
-                  <p className="text-3xl font-bold text-slate-900">
-                    {statistics.performance.ctr.toFixed(2)}%
-                  </p>
-                  <p className="text-sm text-slate-500 mt-1">
-                    노출{" "}
-                    {statistics.performance.totalImpressions.toLocaleString()} /
-                    클릭 {statistics.performance.totalClicks.toLocaleString()}
-                  </p>
-                </div>
-                <div className="rounded-lg bg-purple-50 p-3">
-                  <FaMousePointer className="text-purple-600 text-xl" />
-                </div>
-              </div>
-            </div>
+      <div className="bg-white rounded-lg border border-slate-200 p-6">
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="text-sm font-medium text-slate-600 mb-2">
+              월 예상 수익
+            </p>
+            <p className="text-3xl font-bold text-slate-900">
+              ₩{statistics.subscriptions.monthlyRevenue.toLocaleString()}
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              활성 광고 {statistics.subscriptions.active}개
+            </p>
           </div>
+          <div className="rounded-lg bg-green-50 p-3">
+            <FaChartLine className="text-green-600 text-xl" />
+          </div>
+        </div>
+      </div>
 
-          {/* Payment Method Stats */}
-          <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-            <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-              <h2 className="text-xl font-bold text-slate-900">
-                결제 방법별 수익
-              </h2>
+      <div className="bg-white rounded-lg border border-slate-200 p-6">
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="text-sm font-medium text-slate-600 mb-2">평균 CTR</p>
+            <p className="text-3xl font-bold text-slate-900">
+              {statistics.performance.ctr.toFixed(2)}%
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              노출 {statistics.performance.totalImpressions.toLocaleString()} /
+              클릭 {statistics.performance.totalClicks.toLocaleString()}
+            </p>
+          </div>
+          <div className="rounded-lg bg-purple-50 p-3">
+            <FaMousePointer className="text-purple-600 text-xl" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const PAYMENT_METHOD_CONFIG = {
+  credit: { label: "크레딧", icon: FaCoins },
+  card: { label: "카드", icon: FaCreditCard },
+  bank_transfer: { label: "무통장", icon: FaUniversity },
+} as const;
+
+function getPaymentMethodConfig(method: string) {
+  return (
+    PAYMENT_METHOD_CONFIG[method as keyof typeof PAYMENT_METHOD_CONFIG] || {
+      label: method,
+      icon: FaCoins,
+    }
+  );
+}
+
+function PaymentMethodStats({
+  revenue,
+}: {
+  revenue: Statistics["revenue"];
+}) {
+  return (
+    <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+      <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
+        <h2 className="text-xl font-bold text-slate-900">결제 방법별 수익</h2>
+      </div>
+      <div className="p-6">
+        <div className="grid gap-4 md:grid-cols-3">
+          {revenue.byPaymentMethod.length === 0 ? (
+            <div className="col-span-3 text-center py-8 text-slate-600">
+              결제 내역이 없습니다.
             </div>
-            <div className="p-6">
-              <div className="grid gap-4 md:grid-cols-3">
-                {statistics.revenue.byPaymentMethod.length === 0 ? (
-                  <div className="col-span-3 text-center py-8 text-slate-600">
-                    결제 내역이 없습니다.
+          ) : (
+            revenue.byPaymentMethod.map((item) => {
+              const config = getPaymentMethodConfig(item.method);
+              const IconComponent = config.icon;
+              return (
+                <div
+                  key={item.method}
+                  className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white p-4"
+                >
+                  <div className="rounded-lg bg-slate-50 p-3">
+                    <IconComponent className="text-slate-700 text-xl" />
                   </div>
-                ) : (
-                  statistics.revenue.byPaymentMethod.map((item) => {
-                    const IconComponent = getPaymentMethodIcon(item.method);
-                    return (
-                      <div
-                        key={item.method}
-                        className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white p-4"
-                      >
-                        <div className="rounded-lg bg-slate-50 p-3">
-                          <IconComponent className="text-slate-700 text-xl" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-slate-600">
-                            {getPaymentMethodLabel(item.method)}
-                          </p>
-                          <p className="text-2xl font-bold text-slate-900">
-                            ₩{item.amount.toLocaleString()}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Top Services */}
-          <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-            <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-              <h2 className="text-xl font-bold text-slate-900">
-                Top 10 광고 서비스
-              </h2>
-            </div>
-            {statistics.performance.topServices.length === 0 ? (
-              <div className="p-12 text-center text-slate-600">
-                광고 노출 데이터가 없습니다.
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="border-b border-slate-200 bg-slate-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">
-                        순위
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">
-                        서비스명
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">
-                        판매자
-                      </th>
-                      <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-700">
-                        노출수
-                      </th>
-                      <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-700">
-                        클릭수
-                      </th>
-                      <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-700">
-                        CTR
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-200 bg-white">
-                    {statistics.performance.topServices.map(
-                      (service, index) => (
-                        <tr
-                          key={service.subscriptionId}
-                          className="hover:bg-slate-50"
-                        >
-                          <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-slate-900">
-                            {index + 1}
-                          </td>
-                          <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-900">
-                            {service.serviceName}
-                          </td>
-                          <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-700">
-                            {service.sellerName}
-                          </td>
-                          <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-slate-900">
-                            {service.impressions.toLocaleString()}
-                          </td>
-                          <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-slate-900">
-                            {service.clicks.toLocaleString()}
-                          </td>
-                          <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium text-slate-900">
-                            {service.ctr.toFixed(2)}%
-                          </td>
-                        </tr>
-                      ),
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-
-          {/* Revenue by Period */}
-          <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-            <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-              <h2 className="text-xl font-bold text-slate-900">
-                기간별 수익 (
-                {period === "day"
-                  ? "일별"
-                  : period === "month"
-                    ? "월별"
-                    : "연별"}
-                )
-              </h2>
-            </div>
-            {statistics.revenue.byPeriod.length === 0 ? (
-              <div className="p-12 text-center text-slate-600">
-                수익 데이터가 없습니다.
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="border-b border-slate-200 bg-slate-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">
-                        기간
-                      </th>
-                      <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-700">
-                        수익
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-200 bg-white">
-                    {statistics.revenue.byPeriod.map((item) => (
-                      <tr key={item.period} className="hover:bg-slate-50">
-                        <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-900">
-                          {item.period}
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium text-slate-900">
-                          ₩{item.amount.toLocaleString()}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-
-          {/* Subscription Stats */}
-          <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-            <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-              <h2 className="text-xl font-bold text-slate-900">구독 현황</h2>
-            </div>
-            <div className="p-6">
-              <div className="grid gap-4 md:grid-cols-4">
-                <div className="bg-slate-50 rounded-lg p-4">
-                  <p className="text-sm text-slate-600 mb-1">전체 구독</p>
-                  <p className="text-2xl font-bold text-slate-900">
-                    {statistics.subscriptions.total}
-                  </p>
+                  <div>
+                    <p className="text-sm text-slate-600">{config.label}</p>
+                    <p className="text-2xl font-bold text-slate-900">
+                      ₩{item.amount.toLocaleString()}
+                    </p>
+                  </div>
                 </div>
-                <div className="bg-green-50 rounded-lg p-4">
-                  <p className="text-sm text-slate-600 mb-1">활성 구독</p>
-                  <p className="text-2xl font-bold text-green-600">
-                    {statistics.subscriptions.active}
-                  </p>
-                </div>
-                <div className="bg-yellow-50 rounded-lg p-4">
-                  <p className="text-sm text-slate-600 mb-1">결제 대기</p>
-                  <p className="text-2xl font-bold text-yellow-600">
-                    {statistics.subscriptions.pending}
-                  </p>
-                </div>
-                <div className="bg-red-50 rounded-lg p-4">
-                  <p className="text-sm text-slate-600 mb-1">취소됨</p>
-                  <p className="text-2xl font-bold text-red-600">
-                    {statistics.subscriptions.cancelled}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
-      ) : (
-        <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
-          <FaChartBar className="text-slate-400 text-5xl mb-4 mx-auto" />
-          <p className="text-slate-600">통계 데이터가 없습니다.</p>
+              );
+            })
+          )}
         </div>
-      )}
+      </div>
+    </div>
+  );
+}
+
+function TopServicesTable({ services }: { services: TopService[] }) {
+  if (services.length === 0) {
+    return (
+      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+        <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
+          <h2 className="text-xl font-bold text-slate-900">
+            Top 10 광고 서비스
+          </h2>
+        </div>
+        <div className="p-12 text-center text-slate-600">
+          광고 노출 데이터가 없습니다.
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+      <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
+        <h2 className="text-xl font-bold text-slate-900">Top 10 광고 서비스</h2>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead className="border-b border-slate-200 bg-slate-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">
+                순위
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">
+                서비스명
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">
+                판매자
+              </th>
+              <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-700">
+                노출수
+              </th>
+              <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-700">
+                클릭수
+              </th>
+              <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-700">
+                CTR
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-200 bg-white">
+            {services.map((service, index) => (
+              <tr key={service.subscriptionId} className="hover:bg-slate-50">
+                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-slate-900">
+                  {index + 1}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-900">
+                  {service.serviceName}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-700">
+                  {service.sellerName}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-slate-900">
+                  {service.impressions.toLocaleString()}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-slate-900">
+                  {service.clicks.toLocaleString()}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium text-slate-900">
+                  {service.ctr.toFixed(2)}%
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function RevenueByPeriodTable({
+  revenue,
+  period,
+}: {
+  revenue: Statistics["revenue"];
+  period: string;
+}) {
+  const periodLabel =
+    period === "day" ? "일별" : period === "month" ? "월별" : "연별";
+
+  if (revenue.byPeriod.length === 0) {
+    return (
+      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+        <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
+          <h2 className="text-xl font-bold text-slate-900">
+            기간별 수익 ({periodLabel})
+          </h2>
+        </div>
+        <div className="p-12 text-center text-slate-600">
+          수익 데이터가 없습니다.
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+      <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
+        <h2 className="text-xl font-bold text-slate-900">
+          기간별 수익 ({periodLabel})
+        </h2>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead className="border-b border-slate-200 bg-slate-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">
+                기간
+              </th>
+              <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-700">
+                수익
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-200 bg-white">
+            {revenue.byPeriod.map((item) => (
+              <tr key={item.period} className="hover:bg-slate-50">
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-900">
+                  {item.period}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium text-slate-900">
+                  ₩{item.amount.toLocaleString()}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function SubscriptionStats({
+  subscriptions,
+}: {
+  subscriptions: SubscriptionStats;
+}) {
+  const stats = [
+    {
+      label: "전체 구독",
+      value: subscriptions.total,
+      bgColor: "bg-slate-50",
+      textColor: "text-slate-900",
+    },
+    {
+      label: "활성 구독",
+      value: subscriptions.active,
+      bgColor: "bg-green-50",
+      textColor: "text-green-600",
+    },
+    {
+      label: "결제 대기",
+      value: subscriptions.pending,
+      bgColor: "bg-yellow-50",
+      textColor: "text-yellow-600",
+    },
+    {
+      label: "취소됨",
+      value: subscriptions.cancelled,
+      bgColor: "bg-red-50",
+      textColor: "text-red-600",
+    },
+  ];
+
+  return (
+    <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+      <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
+        <h2 className="text-xl font-bold text-slate-900">구독 현황</h2>
+      </div>
+      <div className="p-6">
+        <div className="grid gap-4 md:grid-cols-4">
+          {stats.map((stat) => (
+            <div key={stat.label} className={`${stat.bgColor} rounded-lg p-4`}>
+              <p className="text-sm text-slate-600 mb-1">{stat.label}</p>
+              <p className={`text-2xl font-bold ${stat.textColor}`}>
+                {stat.value}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

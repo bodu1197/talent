@@ -194,117 +194,141 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// Helper functions for PATCH handler
+function buildPaymentUpdateData(status: string | undefined, adminMemo: string | undefined, adminId: string) {
+  const updateData: Record<string, unknown> = {
+    updated_at: new Date().toISOString(),
+  };
+
+  if (status) {
+    updateData.status = status;
+
+    if (status === 'confirmed' || status === 'completed') {
+      updateData.confirmed_at = new Date().toISOString();
+      updateData.confirmed_by = adminId;
+    }
+  }
+
+  if (adminMemo !== undefined) {
+    updateData.admin_memo = adminMemo;
+  }
+
+  return updateData;
+}
+
+function buildSubscriptionUpdateData(status: string) {
+  const subscriptionUpdateData: Record<string, unknown> = {
+    updated_at: new Date().toISOString(),
+  };
+
+  if (status === 'confirmed' || status === 'completed') {
+    subscriptionUpdateData.status = 'active';
+  } else if (status === 'cancelled') {
+    subscriptionUpdateData.status = 'cancelled';
+    subscriptionUpdateData.cancelled_at = new Date().toISOString();
+  }
+
+  return subscriptionUpdateData;
+}
+
+async function updateRelatedSubscriptions(
+  supabase: ReturnType<typeof createServiceRoleClient>,
+  updatedPayments: Array<{ subscription_id: string }>,
+  status: string
+) {
+  const subscriptionIds = updatedPayments
+    .map(p => p.subscription_id)
+    .filter(Boolean);
+
+  if (subscriptionIds.length === 0) {
+    return;
+  }
+
+  const subscriptionUpdateData = buildSubscriptionUpdateData(status);
+
+  const { error: subError } = await supabase
+    .from('advertising_subscriptions')
+    .update(subscriptionUpdateData)
+    .in('id', subscriptionIds);
+
+  if (subError) {
+    console.error('Failed to update subscription status:', subError);
+    // 구독 업데이트 실패해도 결제 업데이트는 성공했으므로 에러를 던지지 않음
+  }
+}
+
+async function getAdminId(supabase: ReturnType<typeof createServiceRoleClient>) {
+  const sessionSupabase = await createClient();
+  const { data: { user } } = await sessionSupabase.auth.getUser();
+
+  if (!user) {
+    throw new Error('Unauthorized');
+  }
+
+  const { data: admin } = await supabase
+    .from('admins')
+    .select('id')
+    .eq('user_id', user.id)
+    .single();
+
+  if (!admin) {
+    throw new Error('Admin not found');
+  }
+
+  return admin.id;
+}
+
 // PATCH - 무통장 입금 상태 업데이트 (단일 또는 일괄)
 export async function PATCH(request: NextRequest) {
   try {
-    const adminCheck = await checkAdminAuth()
+    const adminCheck = await checkAdminAuth();
     if (!adminCheck.isAdmin) {
       return NextResponse.json(
         { error: adminCheck.error },
         { status: adminCheck.error === 'Unauthorized' ? 401 : 403 }
-      )
+      );
     }
 
-    const supabase = createServiceRoleClient()
-    const body = await request.json()
-    const { paymentIds, status, adminMemo } = body
+    const supabase = createServiceRoleClient();
+    const body = await request.json();
+    const { paymentIds, status, adminMemo } = body;
 
     if (!paymentIds || !Array.isArray(paymentIds) || paymentIds.length === 0) {
       return NextResponse.json(
         { error: 'Payment IDs are required' },
         { status: 400 }
-      )
+      );
     }
 
-    // 관리자 정보 조회 - checkAdminAuth에서 이미 인증되었으므로 세션에서 가져옴
-    const sessionSupabase = await createClient()
-    const { data: { user } } = await sessionSupabase.auth.getUser()
-    if (!user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
-
-    const { data: admin } = await supabase
-      .from('admins')
-      .select('id')
-      .eq('user_id', user.id)
-      .single()
-
-    if (!admin) {
-      return NextResponse.json(
-        { error: 'Admin not found' },
-        { status: 403 }
-      )
-    }
-
-    const updateData: Record<string, unknown> = {
-      updated_at: new Date().toISOString(),
-    }
-
-    if (status) {
-      updateData.status = status
-
-      if (status === 'confirmed' || status === 'completed') {
-        updateData.confirmed_at = new Date().toISOString()
-        updateData.confirmed_by = admin.id
-      }
-    }
-
-    if (adminMemo !== undefined) {
-      updateData.admin_memo = adminMemo
-    }
+    const adminId = await getAdminId(supabase);
+    const updateData = buildPaymentUpdateData(status, adminMemo, adminId);
 
     const { data: updatedPayments, error } = await supabase
       .from('advertising_payments')
       .update(updateData)
       .in('id', paymentIds)
-      .select('*, subscription_id')
+      .select('*, subscription_id');
 
-    if (error) throw error
+    if (error) throw error;
 
     // 결제 상태 변경 시 연결된 구독 상태도 업데이트
     if (status && updatedPayments && updatedPayments.length > 0) {
-      const subscriptionIds = updatedPayments
-        .map(p => p.subscription_id)
-        .filter(Boolean)
-
-      if (subscriptionIds.length > 0) {
-        const subscriptionUpdateData: Record<string, unknown> = {
-          updated_at: new Date().toISOString(),
-        }
-
-        // 결제 상태에 따라 구독 상태 결정
-        if (status === 'confirmed' || status === 'completed') {
-          subscriptionUpdateData.status = 'active'
-        } else if (status === 'cancelled') {
-          subscriptionUpdateData.status = 'cancelled'
-          subscriptionUpdateData.cancelled_at = new Date().toISOString()
-        }
-
-        // 구독 상태 업데이트
-        const { error: subError } = await supabase
-          .from('advertising_subscriptions')
-          .update(subscriptionUpdateData)
-          .in('id', subscriptionIds)
-
-        if (subError) {
-          console.error('Failed to update subscription status:', subError)
-          // 구독 업데이트 실패해도 결제 업데이트는 성공했으므로 에러를 던지지 않음
-        }
-      }
+      await updateRelatedSubscriptions(supabase, updatedPayments, status);
     }
 
     return NextResponse.json({
       success: true,
       updatedCount: updatedPayments?.length || 0
-    })
+    });
   } catch (error) {
-    console.error('Failed to update payments:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
+    console.error('Failed to update payments:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+
+    const errorMessage = error instanceof Error ? error.message : 'Failed to update payments';
+    const statusCode = errorMessage === 'Unauthorized' ? 401 : errorMessage === 'Admin not found' ? 403 : 500;
+
     return NextResponse.json(
-      { error: 'Failed to update payments' },
-      { status: 500 }
-    )
+      { error: errorMessage },
+      { status: statusCode }
+    );
   }
 }

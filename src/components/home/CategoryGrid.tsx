@@ -28,32 +28,36 @@ import {
   FaCircle,
 } from "react-icons/fa";
 
-function CategoryIcon({ icon }: { icon?: string }) {
-  if (icon === "robot") return <FaRobot />;
-  if (icon === "palette") return <FaPalette />;
-  if (icon === "scissors") return <FaCut />;
-  if (icon === "code") return <FaCode />;
-  if (icon === "bullhorn") return <FaBullhorn />;
-  if (icon === "camera") return <FaCamera />;
-  if (icon === "language") return <FaLanguage />;
-  if (icon === "pen-fancy") return <FaPenFancy />;
-  if (icon === "briefcase") return <FaBriefcase />;
-  if (icon === "book") return <FaBook />;
-  if (icon === "music") return <FaMusic />;
-  if (icon === "calendar") return <FaCalendar />;
-  if (icon === "spa") return <FaSpa />;
-  if (icon === "bullseye") return <FaBullseye />;
-  if (icon === "star") return <FaStar />;
-  if (icon === "book-open") return <FaBookOpen />;
-  if (icon === "gavel") return <FaGavel />;
-  if (icon === "hammer") return <FaHammer />;
-  if (icon === "graduation-cap") return <FaGraduationCap />;
-  if (icon === "chart-line") return <FaChartLine />;
-  if (icon === "home") return <FaHome />;
-  if (icon === "motorcycle") return <FaMotorcycle />;
-  if (icon === "running") return <FaRunning />;
+// Icon mapping using lookup table for O(1) access
+const ICON_MAP: Record<string, React.ComponentType> = {
+  robot: FaRobot,
+  palette: FaPalette,
+  scissors: FaCut,
+  code: FaCode,
+  bullhorn: FaBullhorn,
+  camera: FaCamera,
+  language: FaLanguage,
+  "pen-fancy": FaPenFancy,
+  briefcase: FaBriefcase,
+  book: FaBook,
+  music: FaMusic,
+  calendar: FaCalendar,
+  spa: FaSpa,
+  bullseye: FaBullseye,
+  star: FaStar,
+  "book-open": FaBookOpen,
+  gavel: FaGavel,
+  hammer: FaHammer,
+  "graduation-cap": FaGraduationCap,
+  "chart-line": FaChartLine,
+  home: FaHome,
+  motorcycle: FaMotorcycle,
+  running: FaRunning,
+};
 
-  return <FaCircle />;
+function CategoryIcon({ icon }: { icon?: string }) {
+  const IconComponent = (icon && ICON_MAP[icon]) || FaCircle;
+  return <IconComponent />;
 }
 
 export default async function CategoryGrid() {

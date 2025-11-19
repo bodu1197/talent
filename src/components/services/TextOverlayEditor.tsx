@@ -78,95 +78,106 @@ export default function TextOverlayEditor({
     if (!canvasRef.current) return;
 
     const canvas = canvasRef.current;
-    const _displayWidth = canvas.offsetWidth;
-    const _displayHeight = canvas.offsetHeight;
-
-    // 실제 캔버스 해상도 (652x488)
-    canvas.width = 652;
-    canvas.height = 488;
+    initializeCanvas(canvas);
 
     const ctx = canvas.getContext("2d")!;
+    drawBackground(ctx);
 
-    // 1. 배경 그리기
-    const bgCanvas = createGradientBackground(template, 652, 488);
-    ctx.drawImage(bgCanvas, 0, 0);
-
-    // 2. 텍스트가 있으면 그리기
     if (textStyle.text.trim()) {
-      ctx.font = `${textStyle.fontWeight} ${textStyle.fontSize}px "Noto Sans KR", sans-serif`;
-      ctx.fillStyle = textStyle.color;
-      ctx.textAlign = textStyle.textAlign;
-      ctx.textBaseline = "middle";
-
-      // 그림자
-      if (textStyle.shadowBlur > 0) {
-        ctx.shadowBlur = textStyle.shadowBlur;
-        ctx.shadowColor = "rgba(0,0,0,0.5)";
-      }
-
-      // 좌우 여백 설정 (전체 너비의 10%)
-      const width = 652;
-      const height = 488;
-      const horizontalPadding = width * 0.1;
-      const maxTextWidth = width - horizontalPadding * 2;
-
-      // 텍스트를 줄바꿈(\n)으로 먼저 분할
-      const manualLines = textStyle.text.split("\n");
-      const lines: string[] = [];
-
-      // 각 수동 줄바꿈된 줄에 대해 자동 줄바꿈 처리
-      for (const manualLine of manualLines) {
-        const words = manualLine.split(" ");
-        let currentLine = "";
-
-        for (const word of words) {
-          const testLine = currentLine ? `${currentLine} ${word}` : word;
-          const metrics = ctx.measureText(testLine);
-
-          if (metrics.width > maxTextWidth && currentLine) {
-            // 현재 줄이 너무 길면 줄바꿈
-            lines.push(currentLine);
-            currentLine = word;
-          } else {
-            currentLine = testLine;
-          }
-        }
-
-        if (currentLine) {
-          lines.push(currentLine);
-        }
-      }
-
-      // 최대 3줄까지 표시
-      const displayLines = lines.slice(0, 3);
-
-      // 실제 위치 계산
-      let actualX = textStyle.x * width;
-      let actualY = textStyle.y * height;
-
-      // textAlign에 따라 X 좌표 조정 (여백 고려)
-      if (textStyle.textAlign === "left") {
-        actualX = Math.max(actualX, horizontalPadding);
-      } else if (textStyle.textAlign === "right") {
-        actualX = Math.min(actualX, width - horizontalPadding);
-      }
-
-      // 줄 간격 설정
-      const lineHeight = textStyle.fontSize * 1.3;
-
-      // 여러 줄일 경우 중앙 정렬
-      if (displayLines.length > 1) {
-        // 전체 텍스트 블록의 중앙을 기준으로 배치
-        actualY -= (lineHeight * (displayLines.length - 1)) / 2;
-      }
-
-      // 각 줄 그리기
-      displayLines.forEach((line, index) => {
-        const y = actualY + index * lineHeight;
-        ctx.fillText(line, actualX, y);
-      });
+      drawText(ctx);
     }
   }, [template, textStyle]);
+
+  // Helper functions for canvas rendering
+  function initializeCanvas(canvas: HTMLCanvasElement) {
+    canvas.width = 652;
+    canvas.height = 488;
+  }
+
+  function drawBackground(ctx: CanvasRenderingContext2D) {
+    const bgCanvas = createGradientBackground(template, 652, 488);
+    ctx.drawImage(bgCanvas, 0, 0);
+  }
+
+  function setupTextContext(ctx: CanvasRenderingContext2D) {
+    ctx.font = `${textStyle.fontWeight} ${textStyle.fontSize}px "Noto Sans KR", sans-serif`;
+    ctx.fillStyle = textStyle.color;
+    ctx.textAlign = textStyle.textAlign;
+    ctx.textBaseline = "middle";
+
+    if (textStyle.shadowBlur > 0) {
+      ctx.shadowBlur = textStyle.shadowBlur;
+      ctx.shadowColor = "rgba(0,0,0,0.5)";
+    }
+  }
+
+  function wrapTextLines(ctx: CanvasRenderingContext2D, maxTextWidth: number): string[] {
+    const manualLines = textStyle.text.split("\n");
+    const lines: string[] = [];
+
+    for (const manualLine of manualLines) {
+      const words = manualLine.split(" ");
+      let currentLine = "";
+
+      for (const word of words) {
+        const testLine = currentLine ? `${currentLine} ${word}` : word;
+        const metrics = ctx.measureText(testLine);
+
+        if (metrics.width > maxTextWidth && currentLine) {
+          lines.push(currentLine);
+          currentLine = word;
+        } else {
+          currentLine = testLine;
+        }
+      }
+
+      if (currentLine) {
+        lines.push(currentLine);
+      }
+    }
+
+    return lines.slice(0, 3); // 최대 3줄까지 표시
+  }
+
+  function calculateTextPosition(width: number, height: number, horizontalPadding: number) {
+    let actualX = textStyle.x * width;
+    let actualY = textStyle.y * height;
+
+    // textAlign에 따라 X 좌표 조정 (여백 고려)
+    if (textStyle.textAlign === "left") {
+      actualX = Math.max(actualX, horizontalPadding);
+    } else if (textStyle.textAlign === "right") {
+      actualX = Math.min(actualX, width - horizontalPadding);
+    }
+
+    return { actualX, actualY };
+  }
+
+  function drawText(ctx: CanvasRenderingContext2D) {
+    setupTextContext(ctx);
+
+    const width = 652;
+    const height = 488;
+    const horizontalPadding = width * 0.1;
+    const maxTextWidth = width - horizontalPadding * 2;
+
+    const displayLines = wrapTextLines(ctx, maxTextWidth);
+    const { actualX, actualY: baseY } = calculateTextPosition(width, height, horizontalPadding);
+
+    // 줄 간격 설정
+    const lineHeight = textStyle.fontSize * 1.3;
+
+    // 여러 줄일 경우 중앙 정렬을 위한 Y 위치 조정
+    const adjustedY = displayLines.length > 1
+      ? baseY - (lineHeight * (displayLines.length - 1)) / 2
+      : baseY;
+
+    // 각 줄 그리기
+    displayLines.forEach((line, index) => {
+      const y = adjustedY + index * lineHeight;
+      ctx.fillText(line, actualX, y);
+    });
+  }
 
   const handleTextChange = (value: string) => {
     // 최대 25자 제한
