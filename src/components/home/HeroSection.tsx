@@ -9,6 +9,7 @@ import {
   FaBalanceScale,
   FaShieldAlt,
   FaBullhorn,
+  FaSearch,
 } from "react-icons/fa";
 
 interface Slide {
@@ -136,7 +137,7 @@ export default function HeroSection() {
 
             {/* 검색창 - PC에서만 표시 */}
             <div className="mb-4 lg:mb-6 hidden lg:block">
-              <form onSubmit={handleSearch}>
+              <form onSubmit={handleSearch} className="relative">
                 <input
                   type="text"
                   id="hero-search"
@@ -145,8 +146,15 @@ export default function HeroSection() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="어떤 재능이 필요하신가요?"
                   autoComplete="off"
-                  className="w-full lg:max-w-[490px] px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 rounded-full focus:outline-none focus:border-brand-primary transition-colors text-gray-900 text-sm sm:text-base"
+                  className="w-full lg:max-w-[490px] px-4 sm:px-6 py-3 sm:py-4 pr-12 border-2 border-gray-300 rounded-full focus:outline-none focus:border-brand-primary transition-colors text-gray-900 text-sm sm:text-base"
                 />
+                <button
+                  type="submit"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 h-full px-4 flex items-center justify-center text-gray-400 hover:text-brand-primary transition-colors"
+                  aria-label="검색"
+                >
+                  <FaSearch className="text-xl" />
+                </button>
               </form>
             </div>
 
