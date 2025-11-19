@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/providers/AuthProvider";
 import ChatNotificationBadge from "@/components/chat/ChatNotificationBadge";
 import NotificationBell from "@/components/notifications/NotificationBell";
+import { useState } from "react";
 import {
   FaStar,
   FaShoppingCart,
@@ -14,12 +15,21 @@ import {
   FaCog,
   FaSignOutAlt,
   FaChevronDown,
+  FaSearch,
 } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 
 export default function Header() {
   const { user, profile, loading, signOut } = useAuth();
   const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
 
   // 사용자 역할에 따른 마이페이지 URL
   const getMypageUrl = () => {
@@ -39,11 +49,11 @@ export default function Header() {
   return (
     <header className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-50">
       <div className="container-1200">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16 gap-4">
           {/* 로고 */}
           <Link
             href="/"
-            className="flex items-center space-x-2"
+            className="flex items-center space-x-2 flex-shrink-0"
             aria-label="돌파구 홈으로 이동"
           >
             <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
@@ -51,6 +61,7 @@ export default function Header() {
             </div>
             <span className="text-xl font-bold">돌파구</span>
           </Link>
+{/* 검색창 - PC에서만 표시 */}          <div className="hidden lg:block flex-1 max-w-md">            <form onSubmit={handleSearch} className="relative" autoComplete="off">              <input                type="text"                value={searchQuery}                onChange={(e) => setSearchQuery(e.target.value)}                placeholder="어떤 재능이 필요하신가요?"                autoComplete="off"                autoCorrect="off"                autoCapitalize="off"                spellCheck={false}                data-form-type="other"                data-lpignore="true"                role="searchbox"                aria-label="서비스 검색"                className="focus-visible:outline-none w-full px-4 py-2 pr-10 border-2 border-gray-300 rounded-full focus:rounded-full hover:border-gray-300 focus:outline-none focus:border-gray-300 focus:shadow-none transition-none text-gray-900 text-sm"                style={{                  WebkitAppearance: 'none',                  MozAppearance: 'none',                  appearance: 'none'                }}              />              <button                type="submit"                className="absolute right-2 top-1/2 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-brand-primary transition-colors rounded-full hover:bg-gray-100 active:scale-100 focus:outline-none isolate"                style={{                  transform: 'translate3d(0, -50%, 0)',                  backfaceVisibility: 'hidden',                  willChange: 'transform'                }}                aria-label="검색"              >                <FaSearch className="text-sm" />              </button>            </form>          </div>
 
           {/* 모바일 버전 */}
           <div className="lg:hidden flex items-center space-x-2">
