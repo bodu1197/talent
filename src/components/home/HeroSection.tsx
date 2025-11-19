@@ -131,6 +131,7 @@ export default function HeroSection() {
                 id="hero-search"
                 name="search"
                 placeholder="어떤 재능이 필요하신가요?"
+                autoComplete="off"
                 className="w-full lg:max-w-[490px] px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 rounded-full focus:outline-none focus:border-brand-primary transition-colors text-gray-900 text-sm sm:text-base"
               />
             </div>
