@@ -21,15 +21,15 @@ export default function SearchBar({ id = "search", recommendedTerms = [] }: Sear
     
     const trimmedQuery = searchQuery.trim();
     if (trimmedQuery) {
+      const searchUrl = `/search?q=${encodeURIComponent(trimmedQuery)}`;
       setIsFocused(false);
-      setSearchQuery("");
-      router.push(`/search?q=${encodeURIComponent(trimmedQuery)}`);
+      router.push(searchUrl);
     }
   };
 
   const handleTermClick = (term: string) => {
+    setSearchQuery(term);
     setIsFocused(false);
-    setSearchQuery("");
     router.push(`/search?q=${encodeURIComponent(term)}`);
   };
 
@@ -48,34 +48,31 @@ export default function SearchBar({ id = "search", recommendedTerms = [] }: Sear
   }, []);
 
   return (
-    <div className="bg-white lg:bg-transparent" suppressHydrationWarning>
+    <div className="bg-white border-b border-gray-200 lg:border-0" suppressHydrationWarning>
       <div className="container-1200 px-4 py-4">
         {/* 검색창 */}
         <div ref={searchRef} className="relative w-full">
-          <form onSubmit={handleSearch} autoComplete="off" role="search" action="/search" method="get">
+          <form onSubmit={handleSearch} autoComplete="off" role="search">
             <div className="relative w-full">
               <label htmlFor={id} className="sr-only">
                 서비스 검색
               </label>
               <input
                 type="text"
-                id={`search-${Math.random().toString(36).substring(7)}`}
-                name={`search-${Math.random().toString(36).substring(7)}`}
+                id={id}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsFocused(true)}
                 placeholder="어떤 재능이 필요하신가요?"
                 className="w-full px-6 py-3 pr-12 border-2 border-gray-300 rounded-full focus:outline-none focus:border-brand-primary transition-colors text-gray-900"
                 aria-label="서비스 검색"
-                autoComplete="new-password"
+                autoComplete="off"
                 autoCorrect="off"
                 autoCapitalize="off"
                 spellCheck={false}
-                data-form-type="other"
               />
               <button
                 type="submit"
-                onMouseDown={(e) => e.preventDefault()}
                 className="absolute right-2 top-1/2 -translate-y-1/2 bg-brand-primary text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-brand-light transition-colors"
                 aria-label="검색 실행"
               >
