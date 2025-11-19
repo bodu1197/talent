@@ -1,16 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 import ServiceCard from "@/components/services/ServiceCard";
 import { Service } from "@/types";
 import { FaInbox } from "react-icons/fa";
 
 interface ServiceGridProps {
   initialServices: Service[];
+  categoryId?: string;
+  page?: number;
 }
 
-export default function ServiceGrid({ initialServices }: ServiceGridProps) {
+export default function ServiceGrid({ initialServices, categoryId, page }: ServiceGridProps) {
   const searchParams = useSearchParams();
   const sort = searchParams.get("sort") || "popular";
   const price = searchParams.get("price");
@@ -76,8 +78,14 @@ export default function ServiceGrid({ initialServices }: ServiceGridProps) {
 
   return (
     <>
-      {services.map((service) => (
-        <ServiceCard key={service.id} service={service} />
+      {services.map((service, index) => (
+        <ServiceCard
+          key={service.id}
+          service={service}
+          categoryId={categoryId}
+          position={index + 1}
+          page={page || 1}
+        />
       ))}
     </>
   );

@@ -124,7 +124,11 @@ export default async function CategoryPage({
 
               {/* 서비스 그리드 */}
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
-                <ServiceGrid initialServices={services} />
+                <ServiceGrid
+                  initialServices={services}
+                  categoryId={category.id}
+                  page={currentPage}
+                />
               </div>
 
               {/* 페이지네이션 */}

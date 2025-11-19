@@ -1,18 +1,68 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Service } from "@/types";
 import { FaBox, FaStar, FaCheckCircle } from "react-icons/fa";
+import { usePathname } from "next/navigation";
 
 interface ServiceCardProps {
   service: Service;
+  position?: number; // 카드의 위치 (광고 통계용)
+  categoryId?: string; // 현재 카테고리 ID
+  page?: number; // 현재 페이지
 }
 
-export default function ServiceCard({ service }: ServiceCardProps) {
+export default function ServiceCard({ service, position, categoryId, page }: ServiceCardProps) {
+  const impressionTracked = useRef(false);
+  const pathname = usePathname();
+
+  // 노출 추적 (한 번만 실행)
+  useEffect(() => {
+    // is_advertised 플래그가 있는 서비스만 추적
+    if ((service as any).is_advertised && !impressionTracked.current && categoryId) {
+      impressionTracked.current = true;
+
+      // 노출 기록 API 호출 (비동기, 오류 무시)
+      fetch('/api/advertising/track/impression', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          serviceId: service.id,
+          categoryId,
+          position: position || 1,
+          page: page || 1,
+        }),
+      }).catch(() => {
+        // 추적 실패는 조용히 무시 (사용자 경험에 영향 없음)
+      });
+    }
+  }, [service.id, categoryId, position, page]);
+
+  // 클릭 추적
+  const handleClick = () => {
+    // 광고 서비스인 경우에만 클릭 추적
+    if ((service as any).is_advertised) {
+      // 클릭 기록 API 호출 (비동기, 오류 무시)
+      fetch('/api/advertising/track/click', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          serviceId: service.id,
+        }),
+      }).catch(() => {
+        // 추적 실패는 조용히 무시
+      });
+    }
+  };
+
   return (
     <Link
       href={`/services/${service.id}`}
       className="group relative"
       aria-label={`${service.title} 서비스 상세보기`}
+      onClick={handleClick}
     >
       {/* 썸네일 */}
       <div
@@ -34,15 +84,15 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           </div>
         )}
 
-        {/* 광고 배지 */}
-        {(service as any).is_promoted && (
+        {/* 추천 배지 */}
+        {(service as any).is_advertised && (
           <div className="absolute top-2 right-2">
             <div
               className="px-2 py-1 bg-blue-600 text-white text-xs font-bold rounded shadow-lg"
               role="status"
-              aria-label="광고 서비스"
+              aria-label="추천"
             >
-              광고
+              추천
             </div>
           </div>
         )}
