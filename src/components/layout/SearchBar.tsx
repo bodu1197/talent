@@ -21,15 +21,15 @@ export default function SearchBar({ id = "search", recommendedTerms = [] }: Sear
     
     const trimmedQuery = searchQuery.trim();
     if (trimmedQuery) {
-      const searchUrl = `/search?q=${encodeURIComponent(trimmedQuery)}`;
       setIsFocused(false);
-      router.push(searchUrl);
+      setSearchQuery("");
+      router.push(`/search?q=${encodeURIComponent(trimmedQuery)}`);
     }
   };
 
   const handleTermClick = (term: string) => {
-    setSearchQuery(term);
     setIsFocused(false);
+    setSearchQuery("");
     router.push(`/search?q=${encodeURIComponent(term)}`);
   };
 
@@ -52,7 +52,7 @@ export default function SearchBar({ id = "search", recommendedTerms = [] }: Sear
       <div className="container-1200 px-4 py-4">
         {/* 검색창 */}
         <div ref={searchRef} className="relative w-full">
-          <form onSubmit={handleSearch} autoComplete="off" role="search">
+          <form onSubmit={handleSearch} autoComplete="off" role="search" action="/search" method="get">
             <div className="relative w-full">
               <label htmlFor={id} className="sr-only">
                 서비스 검색
