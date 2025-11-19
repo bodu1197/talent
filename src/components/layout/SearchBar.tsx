@@ -20,7 +20,7 @@ export default function SearchBar({ id = "search", recommendedTerms = [] }: Sear
   };
 
   return (
-    <div className="bg-white border-b border-gray-200 lg:hidden fixed top-16 left-0 right-0 z-40" suppressHydrationWarning>
+    <div className="bg-white border-b border-gray-200 fixed top-16 left-0 right-0 z-40 lg:static lg:border-0" suppressHydrationWarning>
       <div className="container-1200 px-4 py-4">
         {/* 검색창 */}
         <form onSubmit={handleSearch} className="mb-3" role="search">
