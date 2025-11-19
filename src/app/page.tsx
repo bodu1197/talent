@@ -73,14 +73,15 @@ async function AIServicesSection({
 }: {
   aiCategoryIds: string[];
 }) {
-  const { createClient } = await import("@/lib/supabase/server");
+  const { createClient, createServiceRoleClient } = await import("@/lib/supabase/server");
   const supabase = await createClient();
 
   let services: Service[] = [];
 
   if (aiCategoryIds.length > 0) {
-    // 광고 서비스 ID 조회
-    const { data: advertisingData } = await supabase
+    // 광고 서비스 ID 조회 - Service Role 클라이언트 사용하여 RLS 우회
+    const serviceRoleClient = createServiceRoleClient();
+    const { data: advertisingData } = await serviceRoleClient
       .from("advertising_subscriptions")
       .select("service_id")
       .eq("status", "active");

@@ -1,5 +1,5 @@
 import ServiceCard from '@/components/services/ServiceCard'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceRoleClient } from '@/lib/supabase/server'
 import { Service } from '@/types'
 
 interface RecommendedServicesProps {
@@ -23,8 +23,9 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
     }
   }
 
-  // 광고 서비스 ID 조회 (status = 'active')
-  const { data: advertisingData } = await supabase
+  // 광고 서비스 ID 조회 (status = 'active') - Service Role 클라이언트 사용하여 RLS 우회
+  const serviceRoleClient = createServiceRoleClient()
+  const { data: advertisingData } = await serviceRoleClient
     .from('advertising_subscriptions')
     .select('service_id')
     .eq('status', 'active')
