@@ -48,7 +48,7 @@ export default function SearchBar({ id = "search", recommendedTerms = [] }: Sear
   }, []);
 
   return (
-    <div className="bg-white border-b border-gray-200 lg:border-0" suppressHydrationWarning>
+    <div className="bg-white lg:bg-transparent" suppressHydrationWarning>
       <div className="container-1200 px-4 py-4">
         {/* 검색창 */}
         <div ref={searchRef} className="relative w-full">
