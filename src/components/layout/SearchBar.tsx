@@ -19,7 +19,7 @@ export default function SearchBar({ id = "search" }: SearchBarProps) {
   };
 
   return (
-    <div className="bg-white border-b border-gray-200" suppressHydrationWarning>
+    <div className="bg-white border-b border-gray-200 lg:hidden" suppressHydrationWarning>
       <div className="container-1200 px-4 py-4">
         {/* 검색창 */}
         <form onSubmit={handleSearch} className="mb-3" role="search">
