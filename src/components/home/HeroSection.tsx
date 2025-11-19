@@ -137,7 +137,7 @@ export default function HeroSection() {
                 />
                 <button
                   type="button"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-brand-primary text-white w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center hover:bg-brand-light transition-colors"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-brand-primary text-white w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center hover:bg-brand-light transition-colors focus:outline-none"
                   aria-label="검색"
                 >
                   <FaSearch className="text-sm sm:text-base" />

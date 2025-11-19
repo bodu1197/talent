@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import Header from './Header'
-import SearchBar from './SearchBar'
+
 import Footer from './Footer'
 import MobileBottomNav from './MobileBottomNav'
 import MobileSubHeader from './MobileSubHeader'
