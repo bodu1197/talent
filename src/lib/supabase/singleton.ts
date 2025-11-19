@@ -72,22 +72,17 @@ export class SupabaseManager {
       key,
       {
         cookies: {
-          get(name: string) {
-            return cookieStore.get(name)?.value
+          getAll() {
+            return cookieStore.getAll()
           },
-          set(name: string, value: string, options: CookieOptions) {
+          setAll(cookiesToSet) {
             try {
-              cookieStore.set({ name, value, ...options })
+              cookiesToSet.forEach(({ name, value, options }) => {
+                cookieStore.set({ name, value, ...options })
+              })
             } catch {
               // Server Component에서 호출된 경우 무시
               // 미들웨어에서 세션 새로고침을 처리합니다
-            }
-          },
-          remove(name: string, options: CookieOptions) {
-            try {
-              cookieStore.set({ name, value: '', ...options })
-            } catch {
-              // Server Component에서 호출된 경우 무시
             }
           },
         },

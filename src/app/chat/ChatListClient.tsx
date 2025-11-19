@@ -250,7 +250,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
   };
 
   // 메시지 목록 로드
-  const loadMessages = async (roomId: string) => {
+  const loadMessages = useCallback(async (roomId: string) => {
     const response = await fetch(`/api/chat/messages?room_id=${roomId}`);
     if (response.ok) {
       const data = await response.json();
@@ -259,7 +259,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
       await markMessagesAsRead(roomId);
       // loadRooms 호출 제거 - DB 재조회 방지
     }
-  };
+  }, []);
 
   // 파일 선택 처리
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -392,7 +392,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     if (selectedRoomId) {
       loadMessages(selectedRoomId);
     }
-  }, [selectedRoomId]);
+  }, [selectedRoomId, loadMessages]);
 
   // Helper: Update room list with new message
   const updateRoomWithNewMessage = useCallback((newMsg: Message) => {
@@ -486,7 +486,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [selectedRoomId, userId]);
+  }, [selectedRoomId, userId, supabase]);
 
   const selectedRoom = rooms.find((r) => r.id === selectedRoomId);
   const _isSeller = selectedRoom ? selectedRoom.seller_id === sellerId : false;
@@ -946,7 +946,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
                       <textarea
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
-                        onKeyPress={(e) => {
+                        onKeyDown={(e) => {
                           if (e.key === "Enter" && !e.shiftKey) {
                             e.preventDefault();
                             sendMessage(e);

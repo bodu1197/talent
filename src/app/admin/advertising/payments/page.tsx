@@ -523,7 +523,7 @@ export default function AdminAdvertisingPaymentsPage() {
                 placeholder="고객명, 회사명, 입금자명으로 검색..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 className="w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#667eea]"
               />
               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">

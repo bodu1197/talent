@@ -153,7 +153,7 @@ export async function getCategoryPath(categoryId: string, useAuth: boolean = tru
   // Note: categoryId must be a valid UUID string
   const { data, error } = await supabase.rpc('get_category_path', {
     p_category_id: categoryId
-  }).returns<CategoryItem[]>()
+  }) as { data: CategoryItem[] | null; error: any }
 
   if (error) {
     // Fallback: RPC 함수 없거나 타입 에러 시 기존 방식 사용
