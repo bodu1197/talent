@@ -251,10 +251,10 @@ export default function NewServiceClient({ sellerId }: Props) {
   // Update final category when level 3 is selected
   useEffect(() => {
     if (selectedLevel3) {
-      setFormData({ ...formData, category: selectedLevel3 });
+      setFormData((prev) => ({ ...prev, category: selectedLevel3 }));
     } else if (selectedLevel2 && level3Categories.length === 0) {
       // If level 2 selected but no level 3 exists, use level 2
-      setFormData({ ...formData, category: selectedLevel2 });
+      setFormData((prev) => ({ ...prev, category: selectedLevel2 }));
     }
   }, [selectedLevel3, selectedLevel2, level3Categories]);
 
