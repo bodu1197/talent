@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   FaRobot,
   FaMoneyBillWave,
@@ -80,8 +81,17 @@ const slides: Slide[] = [
 ];
 
 export default function HeroSection() {
+  const router = useRouter();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
 
   const changeSlide = (index: number) => {
     setIsTransitioning(true);
@@ -126,14 +136,18 @@ export default function HeroSection() {
 
             {/* 검색창 - PC에서만 표시 */}
             <div className="mb-4 lg:mb-6 hidden lg:block">
-              <input
-                type="text"
-                id="hero-search"
-                name="search"
-                placeholder="어떤 재능이 필요하신가요?"
-                autoComplete="off"
-                className="w-full lg:max-w-[490px] px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 rounded-full focus:outline-none focus:border-brand-primary transition-colors text-gray-900 text-sm sm:text-base"
-              />
+              <form onSubmit={handleSearch}>
+                <input
+                  type="text"
+                  id="hero-search"
+                  name="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="어떤 재능이 필요하신가요?"
+                  autoComplete="off"
+                  className="w-full lg:max-w-[490px] px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 rounded-full focus:outline-none focus:border-brand-primary transition-colors text-gray-900 text-sm sm:text-base"
+                />
+              </form>
             </div>
 
             {/* 인기 카테고리 - PC에서만 표시 */}
