@@ -223,19 +223,20 @@ export async function getRecommendedSearchTerms(limit: number = 10) {
           name: string;
           slug: string;
           level: number;
-        } | null;
+        }[] | null;
       }) => {
-        if (click.categories) {
-          const key = click.categories.id;
+        if (click.categories && Array.isArray(click.categories) && click.categories.length > 0) {
+          const category = click.categories[0];
+          const key = category.id;
           const current = clickMap.get(key);
           if (current) {
             current.count += 1;
           } else {
             clickMap.set(key, {
-              name: click.categories.name,
-              slug: click.categories.slug,
+              name: category.name,
+              slug: category.slug,
               count: 1,
-              level: click.categories.level,
+              level: category.level,
             });
           }
         }
