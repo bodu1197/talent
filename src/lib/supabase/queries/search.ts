@@ -9,14 +9,25 @@ export interface SearchResult {
 
 /**
  * 통합 검색 함수 - 서비스, 전문가, 포트폴리오 검색
+ * 광고 중인 서비스를 상단에 랜덤으로 표시
  */
 export async function searchAll(query: string): Promise<SearchResult> {
   const supabase = await createServerClient();
   const searchTerm = `%${query}%`;
 
   try {
-    // 서비스 검색
-    const { data: services } = await supabase
+    // 1. 광고 중인 서비스 조회 (active 구독만)
+    const { data: promotedSubscriptions } = await supabase
+      .from("advertising_subscriptions")
+      .select("service_id")
+      .eq("status", "active");
+
+    const promotedServiceIds = new Set(
+      promotedSubscriptions?.map((p) => p.service_id) || []
+    );
+
+    // 2. 모든 서비스 검색 (광고/일반 모두 포함)
+    const { data: allServices } = await supabase
       .from("services")
       .select(
         `
@@ -37,8 +48,34 @@ export async function searchAll(query: string): Promise<SearchResult> {
       )
       .eq("status", "active")
       .or(`title.ilike.${searchTerm},description.ilike.${searchTerm}`)
-      .order("orders_count", { ascending: false })
-      .limit(20);
+      .limit(50);
+
+    // 3. 광고/일반 서비스 분류
+    const promotedServices: any[] = [];
+    const regularServices: any[] = [];
+
+    allServices?.forEach((service) => {
+      if (promotedServiceIds.has(service.id)) {
+        promotedServices.push(service);
+      } else {
+        regularServices.push(service);
+      }
+    });
+
+    // 4. 광고 서비스 랜덤 셔플 (Fisher-Yates)
+    for (let i = promotedServices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [promotedServices[i], promotedServices[j]] = [
+        promotedServices[j],
+        promotedServices[i],
+      ];
+    }
+
+    // 5. 일반 서비스는 주문 수 기준으로 정렬
+    regularServices.sort((a, b) => (b.orders_count || 0) - (a.orders_count || 0));
+
+    // 6. 광고(랜덤) + 일반(주문순) 결합
+    const services = [...promotedServices, ...regularServices].slice(0, 20);
 
     // 서비스별 리뷰 통계 조회
     let servicesWithRating: any[] = [];
@@ -69,6 +106,7 @@ export async function searchAll(query: string): Promise<SearchResult> {
           order_count: service.orders_count || 0,
           rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
           review_count: stats?.count || 0,
+          is_promoted: promotedServiceIds.has(service.id),
         };
       });
     }

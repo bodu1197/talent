@@ -34,6 +34,18 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           </div>
         )}
 
+        {/* 광고 배지 */}
+        {(service as any).is_promoted && (
+          <div className="absolute top-2 right-2">
+            <div
+              className="px-2 py-1 bg-blue-600 text-white text-xs font-bold rounded shadow-lg"
+              role="status"
+              aria-label="광고 서비스"
+            >
+              광고
+            </div>
+          </div>
+        )}
         {/* 프리미엄 배지 */}
         {service.is_featured && (
           <div className="absolute top-2 left-2">
