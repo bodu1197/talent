@@ -39,14 +39,10 @@ export default function SearchResults({
     <div className="min-h-screen bg-gray-50">
       {/* 검색 결과 헤더 */}
       <div className="bg-white border-b">
-        <div className="container-1200 px-4 py-6">
-          <h1 className="text-2xl font-bold mb-2">
-            <span className="text-brand-primary">"{query}"</span> 검색 결과
+        <div className="container-1200 px-4 py-4">
+          <h1 className="text-base text-gray-700">
+            <span className="text-brand-primary font-semibold">'{query}'</span>에 대한 검색결과
           </h1>
-          <p className="text-gray-600">
-            총 <span className="font-semibold">{totalResults}개</span>의 결과를
-            찾았습니다
-          </p>
         </div>
 
         {/* 탭 네비게이션 */}
