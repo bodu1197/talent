@@ -151,7 +151,7 @@ export default function HeroSection() {
                   spellCheck={false}
                   data-form-type="other"
                   data-lpignore="true"
-                  className="w-full px-4 sm:px-6 py-3 sm:py-4 pr-14 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-gray-300 transition-all text-gray-900 text-sm sm:text-base"
+                  className="w-full px-4 sm:px-6 py-3 sm:py-4 pr-14 border-2 border-gray-300 rounded-full hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-gray-300 transition-all text-gray-900 text-sm sm:text-base"
                   style={{
                     WebkitAppearance: 'none',
                     MozAppearance: 'none',
