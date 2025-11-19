@@ -137,15 +137,18 @@ export default function HeroSection() {
 
             {/* 검색창 - PC에서만 표시 */}
             <div className="mb-4 lg:mb-6 hidden lg:block">
-              <form onSubmit={handleSearch} className="relative w-full lg:max-w-[490px]">
+              <form onSubmit={handleSearch} className="relative w-full lg:max-w-[490px]" autoComplete="off">
                 <input
-                  type="text"
+                  type="search"
                   id="hero-search"
-                  name="search"
+                  name="q"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="어떤 재능이 필요하신가요?"
                   autoComplete="off"
+                  autoCorrect="off"
+                  autoCapitalize="off"
+                  spellCheck={false}
                   className="w-full px-4 sm:px-6 py-3 sm:py-4 pr-14 border-2 border-gray-300 rounded-full focus:outline-none focus:border-brand-primary transition-colors text-gray-900 text-sm sm:text-base"
                   style={{
                     WebkitAppearance: 'none',
