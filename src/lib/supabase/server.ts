@@ -7,3 +7,11 @@ import { SupabaseManager } from './singleton'
 export async function createClient() {
   return SupabaseManager.getServerClient()
 }
+
+/**
+ * Service Role 클라이언트 생성 (RLS 우회)
+ * 서버 사이드에서만 사용 가능합니다
+ */
+export function createServiceRoleClient() {
+  return SupabaseManager.getServiceRoleClient()
+}

@@ -1,5 +1,5 @@
 import { createClient as createBrowserClient } from "@/lib/supabase/client";
-import { createClient as createServerClient } from "@/lib/supabase/server";
+import { createClient as createServerClient, createServiceRoleClient } from "@/lib/supabase/server";
 import { logger } from "@/lib/logger";
 
 // 한 번의 쿼리로 모든 하위 카테고리 ID 가져오기 (최적화)
@@ -173,8 +173,9 @@ export async function getServicesByCategory(
     return [];
   }
 
-  // 광고 서비스 ID 조회
-  const { data: advertisingData } = await supabase
+  // 광고 서비스 ID 조회 - Service Role 클라이언트 사용하여 RLS 우회
+  const serviceRoleClient = createServiceRoleClient();
+  const { data: advertisingData } = await serviceRoleClient
     .from("advertising_subscriptions")
     .select("service_id")
     .eq("status", "active");
