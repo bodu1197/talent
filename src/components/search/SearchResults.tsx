@@ -36,9 +36,9 @@ export default function SearchResults({
   const totalResults = services.length + experts.length + portfolios.length;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50">
       {/* 검색 결과 헤더 */}
-      <div className="bg-white border-b">
+      <div className="bg-white border-b mt-8">
         <div className="container-1200 px-4 py-6">
           <h1 className="text-2xl font-bold mb-2">
             <span className="text-brand-primary">"{query}"</span> 검색 결과
