@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FaSearch } from "react-icons/fa";
 
@@ -18,9 +17,13 @@ export default function SearchBar({ id = "search", recommendedTerms = [] }: Sear
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    e.stopPropagation();
+    
+    const trimmedQuery = searchQuery.trim();
+    if (trimmedQuery) {
+      const searchUrl = `/search?q=${encodeURIComponent(trimmedQuery)}`;
       setIsFocused(false);
+      router.push(searchUrl);
     }
   };
 
@@ -49,7 +52,7 @@ export default function SearchBar({ id = "search", recommendedTerms = [] }: Sear
       <div className="container-1200 px-4 py-4">
         {/* 검색창 */}
         <div ref={searchRef} className="relative w-full">
-          <form onSubmit={handleSearch} role="search">
+          <form onSubmit={handleSearch} autoComplete="off" role="search">
             <div className="relative w-full">
               <label htmlFor={id} className="sr-only">
                 서비스 검색
@@ -57,7 +60,6 @@ export default function SearchBar({ id = "search", recommendedTerms = [] }: Sear
               <input
                 type="text"
                 id={id}
-                name="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsFocused(true)}
@@ -67,7 +69,7 @@ export default function SearchBar({ id = "search", recommendedTerms = [] }: Sear
                 autoComplete="off"
                 autoCorrect="off"
                 autoCapitalize="off"
-                spellCheck="false"
+                spellCheck={false}
               />
               <button
                 type="submit"
@@ -88,6 +90,7 @@ export default function SearchBar({ id = "search", recommendedTerms = [] }: Sear
                   {recommendedTerms.slice(0, 10).map((term) => (
                     <button
                       key={term.slug}
+                      type="button"
                       onClick={() => handleTermClick(term.name)}
                       className="w-full text-left px-4 py-2 hover:bg-gray-50 rounded-lg transition-colors flex items-center gap-3 group"
                     >
