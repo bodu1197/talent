@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
 import { createClient } from "@/lib/supabase/client";
@@ -99,19 +99,24 @@ export default function PortfolioEditClient({
   const [fetchingYoutubeThumbnail, setFetchingYoutubeThumbnail] =
     useState(false);
 
+  // Helper: Build child categories
+  const buildChildCategories = useCallback((parentId: string) => {
+    return categories
+      .filter((c) => c.parent_id === parentId)
+      .map((child) => ({
+        ...child,
+        children: categories.filter((c) => c.parent_id === child.id),
+      }));
+  }, [categories]);
+
   // 카테고리 계층 구조 생성
   const _categoryTree = useMemo(() => {
     const topLevel = categories.filter((c) => !c.parent_id);
     return topLevel.map((parent) => ({
       ...parent,
-      children: categories
-        .filter((c) => c.parent_id === parent.id)
-        .map((child) => ({
-          ...child,
-          children: categories.filter((c) => c.parent_id === child.id),
-        })),
+      children: buildChildCategories(parent.id),
     }));
-  }, [categories]);
+  }, [categories, buildChildCategories]);
 
   // YouTube URL에서 비디오 ID 추출
   const extractYoutubeVideoId = (url: string): string | null => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
 import Link from "next/link";
@@ -135,6 +135,25 @@ export default function NotificationsClient({
     setLoading(false);
   };
 
+  // Handler for INSERT notifications
+  const handleInsertNotification = useCallback((payload: unknown) => {
+    const newNotification = (payload as { new: Notification }).new;
+    setNotifications((prev) => [newNotification, ...prev]);
+    if (!newNotification.is_read) {
+      setUnreadCount((prev) => prev + 1);
+    }
+  }, []);
+
+  // Handler for UPDATE notifications
+  const handleUpdateNotification = useCallback((payload: unknown) => {
+    const updatedNotification = (payload as { new: Notification }).new;
+    setNotifications((prev) =>
+      prev.map((n) =>
+        n.id === updatedNotification.id ? updatedNotification : n,
+      ),
+    );
+  }, []);
+
   // 실시간 알림 구독
   useEffect(() => {
     const channel = supabase
@@ -146,13 +165,7 @@ export default function NotificationsClient({
           schema: "public",
           table: "notifications",
         },
-        (payload) => {
-          const newNotification = payload.new as Notification;
-          setNotifications((prev) => [newNotification, ...prev]);
-          if (!newNotification.is_read) {
-            setUnreadCount((prev) => prev + 1);
-          }
-        },
+        handleInsertNotification,
       )
       .on(
         "postgres_changes",
@@ -161,21 +174,14 @@ export default function NotificationsClient({
           schema: "public",
           table: "notifications",
         },
-        (payload) => {
-          const updatedNotification = payload.new as Notification;
-          setNotifications((prev) =>
-            prev.map((n) =>
-              n.id === updatedNotification.id ? updatedNotification : n,
-            ),
-          );
-        },
+        handleUpdateNotification,
       )
       .subscribe();
 
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [supabase]);
+  }, [supabase, handleInsertNotification, handleUpdateNotification]);
 
   // 날짜 포맷팅
   const formatDate = (dateString: string) => {

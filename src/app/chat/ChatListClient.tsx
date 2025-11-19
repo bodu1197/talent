@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useChatUnreadCount } from "@/components/providers/ChatUnreadProvider";
@@ -393,6 +393,38 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     }
   }, [selectedRoomId]);
 
+  // Helper: Update room list with new message
+  const updateRoomWithNewMessage = useCallback((newMsg: Message) => {
+    const updatedRooms = rooms.map((room) => {
+      if (room.id === newMsg.room_id) {
+        return {
+          ...room,
+          unreadCount: (room.unreadCount || 0) + 1,
+          last_message_at: newMsg.created_at,
+        };
+      }
+      return room;
+    });
+
+    // last_message_at 기준으로 재정렬
+    return updatedRooms.sort(
+      (a, b) =>
+        new Date(b.last_message_at).getTime() -
+        new Date(a.last_message_at).getTime(),
+    );
+  }, [rooms]);
+
+  // Handler for new chat messages
+  const handleNewChatMessage = useCallback(async (payload: unknown) => {
+    const newMsg = (payload as { new: Message }).new;
+
+    // 내가 보낸 메시지가 아닌 경우에만 unreadCount 증가
+    if (newMsg.sender_id !== userId) {
+      // 해당 채팅방의 unreadCount 증가
+      setRooms(() => updateRoomWithNewMessage(newMsg));
+    }
+  }, [userId, updateRoomWithNewMessage]);
+
   // 채팅방 목록의 unreadCount 실시간 업데이트
   useEffect(() => {
     const channel = supabase
@@ -404,40 +436,14 @@ export default function ChatListClient({ userId, sellerId }: Props) {
           schema: "public",
           table: "chat_messages",
         },
-        async (payload) => {
-          const newMsg = payload.new as Message;
-
-          // 내가 보낸 메시지가 아닌 경우에만 unreadCount 증가
-          if (newMsg.sender_id !== userId) {
-            // 해당 채팅방의 unreadCount 증가
-            setRooms((prevRooms) => {
-              const updatedRooms = prevRooms.map((room) => {
-                if (room.id === newMsg.room_id) {
-                  return {
-                    ...room,
-                    unreadCount: (room.unreadCount || 0) + 1,
-                    last_message_at: newMsg.created_at,
-                  };
-                }
-                return room;
-              });
-
-              // last_message_at 기준으로 재정렬
-              return updatedRooms.sort(
-                (a, b) =>
-                  new Date(b.last_message_at).getTime() -
-                  new Date(a.last_message_at).getTime(),
-              );
-            });
-          }
-        },
+        handleNewChatMessage,
       )
       .subscribe();
 
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [userId, supabase]);
+  }, [userId, supabase, handleNewChatMessage]);
 
   // 실시간 메시지 구독 (선택된 채팅방)
   useEffect(() => {

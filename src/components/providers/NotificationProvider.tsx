@@ -120,6 +120,35 @@ export default function NotificationProvider({ children }: { children: React.Rea
     fetchNotifications()
   }, [fetchNotifications])
 
+  // Handler for INSERT notification events
+  const handleInsertNotification = useCallback((payload: unknown) => {
+    const newNotification = (payload as { new: Notification }).new
+
+    // 알림 목록에 추가
+    setNotifications(prev => [newNotification, ...prev])
+    setUnreadCount(prev => prev + 1)
+
+    // 신호음 재생
+    playNotificationSound()
+
+    logger.info('새 알림 수신:', { notificationId: newNotification.id, title: newNotification.title })
+  }, [playNotificationSound])
+
+  // Handler for UPDATE notification events
+  const handleUpdateNotification = useCallback((payload: unknown) => {
+    const updatedNotification = (payload as { new: Notification }).new
+
+    // 알림 업데이트
+    setNotifications(prev =>
+      prev.map(n => n.id === updatedNotification.id ? updatedNotification : n)
+    )
+
+    // 읽음 처리된 경우 카운트 업데이트
+    if (updatedNotification.is_read) {
+      setUnreadCount(prev => Math.max(0, prev - 1))
+    }
+  }, [])
+
   // Realtime 구독
   useEffect(() => {
     if (!user) return
@@ -134,18 +163,7 @@ export default function NotificationProvider({ children }: { children: React.Rea
           table: 'notifications',
           filter: `user_id=eq.${user.id}`
         },
-        (payload) => {
-          const newNotification = payload.new as Notification
-
-          // 알림 목록에 추가
-          setNotifications(prev => [newNotification, ...prev])
-          setUnreadCount(prev => prev + 1)
-
-          // 신호음 재생
-          playNotificationSound()
-
-          logger.info('새 알림 수신:', { notificationId: newNotification.id, title: newNotification.title })
-        }
+        handleInsertNotification
       )
       .on(
         'postgres_changes',
@@ -155,26 +173,14 @@ export default function NotificationProvider({ children }: { children: React.Rea
           table: 'notifications',
           filter: `user_id=eq.${user.id}`
         },
-        (payload) => {
-          const updatedNotification = payload.new as Notification
-
-          // 알림 업데이트
-          setNotifications(prev =>
-            prev.map(n => n.id === updatedNotification.id ? updatedNotification : n)
-          )
-
-          // 읽음 처리된 경우 카운트 업데이트
-          if (updatedNotification.is_read) {
-            setUnreadCount(prev => Math.max(0, prev - 1))
-          }
-        }
+        handleUpdateNotification
       )
       .subscribe()
 
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [user, supabase, playNotificationSound])
+  }, [user, supabase, handleInsertNotification, handleUpdateNotification])
 
   return (
     <NotificationContext.Provider

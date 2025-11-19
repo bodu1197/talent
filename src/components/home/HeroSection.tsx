@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -94,25 +94,29 @@ export default function HeroSection() {
     }
   };
 
+  // Helper: Perform slide transition
+  const performSlideTransition = useCallback((newSlide: number) => {
+    setCurrentSlide(newSlide);
+    setIsTransitioning(false);
+  }, []);
+
   const changeSlide = (index: number) => {
     setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentSlide(index);
-      setIsTransitioning(false);
-    }, 300);
+    setTimeout(() => performSlideTransition(index), 300);
   };
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setCurrentSlide((prev) => (prev + 1) % slides.length);
-        setIsTransitioning(false);
-      }, 300);
-    }, 8000);
+  // Helper: Auto-advance slides
+  const advanceSlide = useCallback(() => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      performSlideTransition((currentSlide + 1) % slides.length);
+    }, 300);
+  }, [currentSlide, performSlideTransition]);
 
+  useEffect(() => {
+    const timer = setInterval(advanceSlide, 8000);
     return () => clearInterval(timer);
-  }, []);
+  }, [advanceSlide]);
 
   const slide = slides[currentSlide];
 
