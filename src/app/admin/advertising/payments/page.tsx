@@ -88,45 +88,63 @@ export default function AdminAdvertisingPaymentsPage() {
     loadPayments();
   }, [activeTab, statusFilter, startDate, endDate, amountFilter, currentPage]);
 
+  // Helper: Determine filter status
+  function getFilterStatus(): string {
+    if (activeTab !== "all") return activeTab;
+    if (statusFilter !== "all") return statusFilter;
+    return "";
+  }
+
+  // Helper: Apply amount filter to params
+  function applyAmountFilter(params: URLSearchParams): void {
+    if (amountFilter === "all") return;
+
+    const amountRanges: Record<string, { min?: string; max?: string }> = {
+      under1m: { max: "1000000" },
+      "1m-5m": { min: "1000000", max: "5000000" },
+      "5m-10m": { min: "5000000", max: "10000000" },
+      over10m: { min: "10000000" },
+    };
+
+    const range = amountRanges[amountFilter];
+    if (range?.min) params.append("minAmount", range.min);
+    if (range?.max) params.append("maxAmount", range.max);
+  }
+
+  // Helper: Build query parameters
+  function buildQueryParams(): URLSearchParams {
+    const params = new URLSearchParams({
+      page: currentPage.toString(),
+      pageSize: "20",
+    });
+
+    const filterStatus = getFilterStatus();
+    if (filterStatus) params.append("status", filterStatus);
+    if (searchTerm) params.append("search", searchTerm);
+    if (startDate) params.append("startDate", startDate);
+    if (endDate) params.append("endDate", endDate);
+
+    applyAmountFilter(params);
+    return params;
+  }
+
+  // Helper: Handle authentication errors
+  function handleAuthError(status: number): boolean {
+    if (status === 401 || status === 403) {
+      toast.error("로그인이 필요하거나 권한이 없습니다");
+      globalThis.location.href = "/admin/login";
+      return true;
+    }
+    return false;
+  }
+
   async function loadPayments() {
     try {
       setLoading(true);
-      const params = new URLSearchParams({
-        page: currentPage.toString(),
-        pageSize: "20",
-      });
-
-      const filterStatus =
-        activeTab !== "all"
-          ? activeTab
-          : statusFilter !== "all"
-            ? statusFilter
-            : "";
-      if (filterStatus) params.append("status", filterStatus);
-      if (searchTerm) params.append("search", searchTerm);
-      if (startDate) params.append("startDate", startDate);
-      if (endDate) params.append("endDate", endDate);
-
-      // 금액 필터 처리
-      if (amountFilter !== "all") {
-        if (amountFilter === "under1m") params.append("maxAmount", "1000000");
-        else if (amountFilter === "1m-5m") {
-          params.append("minAmount", "1000000");
-          params.append("maxAmount", "5000000");
-        } else if (amountFilter === "5m-10m") {
-          params.append("minAmount", "5000000");
-          params.append("maxAmount", "10000000");
-        } else if (amountFilter === "over10m")
-          params.append("minAmount", "10000000");
-      }
-
+      const params = buildQueryParams();
       const response = await fetch(`/api/admin/advertising/payments?${params}`);
 
-      if (response.status === 401 || response.status === 403) {
-        toast.error("로그인이 필요하거나 권한이 없습니다");
-        globalThis.location.href = "/admin/login";
-        return;
-      }
+      if (handleAuthError(response.status)) return;
 
       if (!response.ok) {
         const errorData = await response

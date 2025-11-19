@@ -172,33 +172,33 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     }
   };
 
-  // 채팅방 선택 시 메시지 읽음 처리
-  const handleSelectRoom = async (roomId: string) => {
-    // 현재 방의 unreadCount를 확인
+  // Helper: Update room UI to mark as read
+  function updateRoomUIAsRead(roomId: string): number {
     const currentRoom = rooms.find((r) => r.id === roomId);
-    const unreadInThisRoom = currentRoom?.unreadCount || 0;
+    const unreadCount = currentRoom?.unreadCount || 0;
 
-    // 즉시 UI 업데이트 (배지 제거)
     setRooms((prevRooms) =>
       prevRooms.map((room) =>
         room.id === roomId ? { ...room, unreadCount: 0 } : room,
       ),
     );
 
-    // 전역 카운트도 즉시 감소 (헤더 배지 업데이트)
-    if (unreadInThisRoom > 0) {
-      decrementCount(unreadInThisRoom);
-    }
+    return unreadCount;
+  }
 
-    // 모바일에서는 채팅방 페이지로 이동
-    if (window.innerWidth < 768) {
+  // Helper: Navigate to chat room based on device
+  function navigateToRoom(roomId: string): void {
+    const isMobile = window.innerWidth < 768;
+
+    if (isMobile) {
       router.push(`/chat/${roomId}`);
     } else {
-      // PC에서는 현재 화면에서 선택
       setSelectedRoomId(roomId);
     }
+  }
 
-    // 백그라운드에서 읽음 처리
+  // Helper: Mark messages as read in background
+  async function markMessagesReadInBackground(roomId: string): Promise<void> {
     try {
       await fetch("/api/chat/messages/mark-read", {
         method: "POST",
@@ -211,6 +211,23 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
       );
     }
+  }
+
+  // 채팅방 선택 시 메시지 읽음 처리
+  const handleSelectRoom = async (roomId: string) => {
+    // 즉시 UI 업데이트 및 unread count 가져오기
+    const unreadCount = updateRoomUIAsRead(roomId);
+
+    // 전역 카운트 감소
+    if (unreadCount > 0) {
+      decrementCount(unreadCount);
+    }
+
+    // 디바이스에 따라 네비게이션 처리
+    navigateToRoom(roomId);
+
+    // 백그라운드에서 읽음 처리
+    await markMessagesReadInBackground(roomId);
   };
 
   // 읽지 않은 메시지를 읽음 처리

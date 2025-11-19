@@ -50,6 +50,102 @@ interface ServiceItemDisplay {
   viewed_at: string | null;
 }
 
+// Helper: Filter valid service views
+function filterValidViews(
+  recentViews: SupabaseServiceView[] | null
+): SupabaseServiceView[] {
+  return (recentViews || []).filter(
+    (v) => v.service && v.service.length > 0,
+  );
+}
+
+// Helper: Calculate rating map from reviews
+function calculateRatingMap(
+  reviewStats: ReviewData[] | null | undefined
+): Map<string, { sum: number; count: number }> {
+  const ratingMap = new Map<string, { sum: number; count: number }>();
+
+  reviewStats?.forEach((review) => {
+    const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
+    ratingMap.set(review.service_id, {
+      sum: current.sum + review.rating,
+      count: current.count + 1,
+    });
+  });
+
+  return ratingMap;
+}
+
+// Helper: Add ratings to services
+function addRatingsToServices(
+  validViews: SupabaseServiceView[],
+  ratingMap: Map<string, { sum: number; count: number }>
+): void {
+  validViews.forEach((view) => {
+    if (view.service && view.service.length > 0) {
+      const serviceData = view.service[0] as unknown as Service & {
+        rating?: number;
+        review_count?: number;
+      };
+      const stats = ratingMap.get(view.service_id);
+      serviceData.rating =
+        stats && stats.count > 0 ? stats.sum / stats.count : 0;
+      serviceData.review_count = stats?.count || 0;
+    }
+  });
+}
+
+// Helper: Get category ID from service
+function getCategoryIdFromService(service: any): string | null {
+  const categories = service.service_categories;
+  if (!categories || categories.length === 0) return null;
+
+  return categories[0].category && categories[0].category.length > 0
+    ? categories[0].category[0].id
+    : categories[0].category_id;
+}
+
+// Helper: Get related services
+async function getRelatedServices(
+  validViews: SupabaseServiceView[],
+  needed: number
+): Promise<Service[]> {
+  if (validViews.length === 0 || needed <= 0) return [];
+
+  const firstService = validViews[0].service[0];
+  const categoryId = getCategoryIdFromService(firstService);
+
+  if (!categoryId) return [];
+
+  const categoryServices = await getServicesByCategory(categoryId, needed * 2);
+  const viewedIds = validViews.map((v) => v.service_id);
+  const filtered = categoryServices.filter((s) => !viewedIds.includes(s.id));
+  const shuffled = filtered.sort(() => Math.random() - 0.5);
+
+  return shuffled.slice(0, needed);
+}
+
+// Helper: Combine services for display
+function combineServicesForDisplay(
+  validViews: SupabaseServiceView[],
+  relatedServices: Service[]
+): ServiceItemDisplay[] {
+  return [
+    ...validViews.map((v, index) => ({
+      service: v.service[0] as unknown as Service,
+      isRecentView: true,
+      viewIndex: index,
+      viewed_at: v.viewed_at,
+    })),
+    ...relatedServices.map((s) => ({
+      service: s,
+      isRecentView: false,
+      viewIndex: -1,
+      viewed_at: null,
+    })),
+  ];
+}
+
 export default async function RecentViewedServices() {
   const supabase = await createClient();
 
@@ -58,12 +154,9 @@ export default async function RecentViewedServices() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // 로그인하지 않았으면 표시 안 함
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
 
-  // 최근 본 서비스 조회 (최대 10개, 필요한 필드만)
+  // 최근 본 서비스 조회
   const { data: recentViews } = await supabase
     .from("service_views")
     .select(
@@ -92,84 +185,24 @@ export default async function RecentViewedServices() {
     .order("viewed_at", { ascending: false })
     .limit(10);
 
-  const validViews = (recentViews || []).filter(
-    (v: SupabaseServiceView) => v.service && v.service.length > 0,
-  );
+  const validViews = filterValidViews(recentViews);
 
   // 최근 본 서비스들의 별점 계산
   if (validViews.length > 0) {
-    const serviceIds = validViews.map((v: SupabaseServiceView) => v.service_id);
+    const serviceIds = validViews.map((v) => v.service_id);
     const { data: reviewStats } = await supabase
       .from("reviews")
       .select("service_id, rating")
       .in("service_id", serviceIds)
       .eq("is_visible", true);
 
-    // 서비스별 평균 별점 계산
-    const ratingMap = new Map<string, { sum: number; count: number }>();
-    reviewStats?.forEach((review: ReviewData) => {
-      const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
-      ratingMap.set(review.service_id, {
-        sum: current.sum + review.rating,
-        count: current.count + 1,
-      });
-    });
-
-    // 각 서비스에 별점 추가
-    validViews.forEach((view: SupabaseServiceView) => {
-      if (view.service && view.service.length > 0) {
-        const serviceData = view.service[0] as unknown as Service & {
-          rating?: number;
-          review_count?: number;
-        };
-        const stats = ratingMap.get(view.service_id);
-        serviceData.rating =
-          stats && stats.count > 0 ? stats.sum / stats.count : 0;
-        serviceData.review_count = stats?.count || 0;
-      }
-    });
+    const ratingMap = calculateRatingMap(reviewStats);
+    addRatingsToServices(validViews, ratingMap);
   }
 
-  let relatedServices: Service[] = [];
-
-  // 최근 본 서비스가 있으면 같은 카테고리의 서비스 가져오기
-  if (validViews.length > 0) {
-    const firstService = validViews[0].service[0];
-    const categories = firstService.service_categories;
-
-    if (categories && categories.length > 0) {
-      const categoryId =
-        categories[0].category && categories[0].category.length > 0
-          ? categories[0].category[0].id
-          : categories[0].category_id;
-
-      if (categoryId) {
-        // 필요한 개수만 계산
-        const needed = Math.max(0, 10 - validViews.length);
-
-        if (needed > 0) {
-          // 같은 카테고리의 서비스 조회 (최적화: 필요한 개수 + 여유분만)
-          const categoryServices = await getServicesByCategory(
-            categoryId,
-            needed * 2,
-          );
-
-          // 최근 본 서비스 제외
-          const viewedIds = validViews.map(
-            (v: SupabaseServiceView) => v.service_id,
-          );
-          const filtered = categoryServices.filter(
-            (s: Service) => !viewedIds.includes(s.id),
-          );
-
-          // 랜덤 셔플
-          const shuffled = filtered.sort(() => Math.random() - 0.5);
-
-          relatedServices = shuffled.slice(0, needed);
-        }
-      }
-    }
-  }
+  // 관련 서비스 가져오기
+  const needed = Math.max(0, 10 - validViews.length);
+  const relatedServices = await getRelatedServices(validViews, needed);
 
   // 데이터 없으면 표시 안 함
   if (validViews.length === 0 && relatedServices.length === 0) {
@@ -177,20 +210,7 @@ export default async function RecentViewedServices() {
   }
 
   // 최근 본 서비스 + 같은 카테고리 서비스 합치기
-  const allServices: ServiceItemDisplay[] = [
-    ...validViews.map((v: SupabaseServiceView, index: number) => ({
-      service: v.service[0] as unknown as Service,
-      isRecentView: true,
-      viewIndex: index,
-      viewed_at: v.viewed_at,
-    })),
-    ...relatedServices.map((s: Service) => ({
-      service: s,
-      isRecentView: false,
-      viewIndex: -1,
-      viewed_at: null,
-    })),
-  ];
+  const allServices = combineServicesForDisplay(validViews, relatedServices);
 
   return (
     <section className="py-8 bg-white border-t border-gray-200">

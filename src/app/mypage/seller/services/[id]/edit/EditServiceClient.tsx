@@ -470,11 +470,82 @@ export default function EditServiceClient({
     }
   }, [selectedLevel3, selectedLevel2, level3Categories]);
 
+  // Helper: Process active service updates
+  async function processActiveServiceUpdate(
+    supabase: any,
+    thumbnail_url: string | null
+  ): Promise<void> {
+    const revision = await createServiceRevision(
+      supabase,
+      service.id,
+      sellerId,
+      formData,
+      thumbnail_url
+    );
+
+    if (formData.category) {
+      await updateServiceCategory(
+        supabase,
+        service.id,
+        formData.category,
+        true,
+        revision.id
+      );
+    }
+
+    toast.error("수정 요청이 제출되었습니다. 관리자 승인 후 반영됩니다.");
+  }
+
+  // Helper: Process non-active service updates
+  async function processNonActiveServiceUpdate(
+    supabase: any,
+    thumbnail_url: string | null
+  ): Promise<void> {
+    const originalStatus = await updateServiceDirectly(
+      supabase,
+      service.id,
+      service.status!,
+      formData,
+      thumbnail_url
+    );
+
+    if (formData.category) {
+      await updateServiceCategory(
+        supabase,
+        service.id,
+        formData.category,
+        false,
+        undefined,
+        service.service_categories?.[0]?.category_id
+      );
+    }
+
+    const message = originalStatus === "suspended"
+      ? "서비스가 성공적으로 수정되었습니다. 관리자 승인 후 다시 활성화됩니다."
+      : "서비스가 성공적으로 수정되었습니다!";
+
+    toast.error(message);
+  }
+
+  // Helper: Get authenticated user
+  async function getAuthenticatedUser(supabase: any) {
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      throw new Error("로그인이 필요합니다.");
+    }
+
+    return user;
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Early validation
     try {
-      // Validate thumbnail requirements
       validateThumbnailRequirements(
         uploadMode,
         selectedTemplate,
@@ -490,22 +561,12 @@ export default function EditServiceClient({
 
     try {
       const supabase = createClient();
+      const user = await getAuthenticatedUser(supabase);
 
-      // Get current user
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
-      if (userError || !user) {
-        toast.error("로그인이 필요합니다.");
-        return;
-      }
-
-      // Handle thumbnail upload
-      let uploadedUrl: string | undefined;
-      if (thumbnailFile) {
-        uploadedUrl = await uploadThumbnail(supabase, thumbnailFile, user.id);
-      }
+      // Handle thumbnail upload if needed
+      const uploadedUrl = thumbnailFile
+        ? await uploadThumbnail(supabase, thumbnailFile, user.id)
+        : undefined;
 
       const thumbnail_url = determineThumbnailUrl(
         thumbnailFile,
@@ -516,57 +577,9 @@ export default function EditServiceClient({
 
       // Process based on service status
       if (service.status === "active") {
-        // Create revision for active services
-        const revision = await createServiceRevision(
-          supabase,
-          service.id,
-          sellerId,
-          formData,
-          thumbnail_url
-        );
-
-        // Update category
-        if (formData.category) {
-          await updateServiceCategory(
-            supabase,
-            service.id,
-            formData.category,
-            true,
-            revision.id
-          );
-        }
-
-        toast.error("수정 요청이 제출되었습니다. 관리자 승인 후 반영됩니다.");
+        await processActiveServiceUpdate(supabase, thumbnail_url);
       } else {
-        // Update service directly for non-active services
-        const originalStatus = await updateServiceDirectly(
-          supabase,
-          service.id,
-          service.status!,
-          formData,
-          thumbnail_url
-        );
-
-        // Update category
-        if (formData.category) {
-          await updateServiceCategory(
-            supabase,
-            service.id,
-            formData.category,
-            false,
-            undefined,
-            service.service_categories?.[0]?.category_id
-          );
-        }
-
-        // Show appropriate success message
-        if (originalStatus === "suspended") {
-          toast.error(
-            "서비스가 성공적으로 수정되었습니다. 관리자 승인 후 다시 활성화됩니다."
-          );
-        } else {
-          toast.error("서비스가 성공적으로 수정되었습니다!");
-        }
+        await processNonActiveServiceUpdate(supabase, thumbnail_url);
       }
 
       globalThis.location.href = "/mypage/seller/services";

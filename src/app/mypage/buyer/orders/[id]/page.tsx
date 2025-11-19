@@ -233,41 +233,35 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
     }
   };
 
-  const statusHistory: StatusHistory[] = [
-    {
-      status: "주문 접수",
-      date: new Date(order.created_at).toLocaleString("ko-KR"),
-      actor: "시스템",
-    },
-    order.paid_at
-      ? {
-          status: "결제 완료",
-          date: new Date(order.paid_at).toLocaleString("ko-KR"),
-          actor: "구매자",
-        }
-      : null,
-    order.started_at
-      ? {
-          status: "작업 시작",
-          date: new Date(order.started_at).toLocaleString("ko-KR"),
-          actor: "판매자",
-        }
-      : null,
-    order.delivered_at
-      ? {
-          status: "작업 완료",
-          date: new Date(order.delivered_at).toLocaleString("ko-KR"),
-          actor: "판매자",
-        }
-      : null,
-    order.completed_at
-      ? {
-          status: "구매 확정",
-          date: new Date(order.completed_at).toLocaleString("ko-KR"),
-          actor: "구매자",
-        }
-      : null,
-  ].filter((item): item is StatusHistory => item !== null);
+  // Helper: Create status history entry
+  function createStatusEntry(
+    status: string,
+    timestamp: string | null | undefined,
+    actor: string
+  ): StatusHistory | null {
+    if (!timestamp) return null;
+
+    return {
+      status,
+      date: new Date(timestamp).toLocaleString("ko-KR"),
+      actor,
+    };
+  }
+
+  // Helper: Build complete status history
+  function buildStatusHistory(order: OrderDetail): StatusHistory[] {
+    const entries = [
+      createStatusEntry("주문 접수", order.created_at, "시스템"),
+      createStatusEntry("결제 완료", order.paid_at, "구매자"),
+      createStatusEntry("작업 시작", order.started_at, "판매자"),
+      createStatusEntry("작업 완료", order.delivered_at, "판매자"),
+      createStatusEntry("구매 확정", order.completed_at, "구매자"),
+    ];
+
+    return entries.filter((entry): entry is StatusHistory => entry !== null);
+  }
+
+  const statusHistory = buildStatusHistory(order);
 
   return (
     <MypageLayoutWrapper mode="buyer">

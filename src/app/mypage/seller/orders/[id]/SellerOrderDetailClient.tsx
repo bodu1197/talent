@@ -244,49 +244,35 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
     );
   }
 
-  const statusHistory = [
-    {
-      status: "주문 접수",
-      date: new Date(order.created_at).toLocaleString("ko-KR"),
-      actor: "시스템",
-    },
-    ...(order.paid_at && typeof order.paid_at === "string"
-      ? [
-          {
-            status: "결제 완료",
-            date: new Date(order.paid_at).toLocaleString("ko-KR"),
-            actor: "구매자",
-          },
-        ]
-      : []),
-    ...(order.started_at && typeof order.started_at === "string"
-      ? [
-          {
-            status: "작업 시작",
-            date: new Date(order.started_at).toLocaleString("ko-KR"),
-            actor: "판매자",
-          },
-        ]
-      : []),
-    ...(order.delivered_at && typeof order.delivered_at === "string"
-      ? [
-          {
-            status: "납품 완료",
-            date: new Date(order.delivered_at).toLocaleString("ko-KR"),
-            actor: "판매자",
-          },
-        ]
-      : []),
-    ...(order.completed_at && typeof order.completed_at === "string"
-      ? [
-          {
-            status: "구매 확정",
-            date: new Date(order.completed_at).toLocaleString("ko-KR"),
-            actor: "구매자",
-          },
-        ]
-      : []),
-  ];
+  // Helper: Build status history entry
+  function buildStatusEntry(
+    status: string,
+    timestamp: string | undefined,
+    actor: string
+  ): { status: string; date: string; actor: string } | null {
+    if (!timestamp || typeof timestamp !== "string") return null;
+
+    return {
+      status,
+      date: new Date(timestamp).toLocaleString("ko-KR"),
+      actor,
+    };
+  }
+
+  // Helper: Build complete status history
+  function buildStatusHistory(order: OrderData) {
+    const entries = [
+      buildStatusEntry("주문 접수", order.created_at, "시스템"),
+      buildStatusEntry("결제 완료", order.paid_at, "구매자"),
+      buildStatusEntry("작업 시작", order.started_at, "판매자"),
+      buildStatusEntry("납품 완료", order.delivered_at, "판매자"),
+      buildStatusEntry("구매 확정", order.completed_at, "구매자"),
+    ];
+
+    return entries.filter((entry): entry is NonNullable<typeof entry> => entry !== null);
+  }
+
+  const statusHistory = buildStatusHistory(order);
 
   return (
     <MypageLayoutWrapper mode="seller">
