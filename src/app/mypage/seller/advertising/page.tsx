@@ -90,12 +90,34 @@ export default function AdvertisingPage() {
   useEffect(() => {
     loadDashboard();
 
-    // 30초마다 자동 새로고침
+    // Supabase Realtime 구독
+    const supabase = createClient();
+    const channel = supabase
+      .channel('advertising-stats-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'advertising_subscriptions',
+        },
+        (payload) => {
+          console.log('📡 Realtime update:', payload);
+          // 변경된 데이터로 대시보드 새로고침
+          loadDashboard();
+        }
+      )
+      .subscribe();
+
+    // 백업용 폴링 (5분마다) - Realtime 연결 실패 시 대비
     const interval = setInterval(() => {
       loadDashboard();
-    }, 30000); // 30초
+    }, 300000); // 5분
 
-    return () => clearInterval(interval);
+    return () => {
+      supabase.removeChannel(channel);
+      clearInterval(interval);
+    };
   }, []);
 
   // ESC 키로 모달 닫기
