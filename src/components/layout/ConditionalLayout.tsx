@@ -10,9 +10,10 @@ import MobileSubHeader from './MobileSubHeader'
 interface ConditionalLayoutProps {
   children: React.ReactNode
   megaMenu: React.ReactNode
+  recommendedTerms?: Array<{ name: string; slug: string; count: number }>
 }
 
-export default function ConditionalLayout({ children, megaMenu }: ConditionalLayoutProps) {
+export default function ConditionalLayout({ children, megaMenu, recommendedTerms }: ConditionalLayoutProps) {
   const pathname = usePathname()
 
   // 관리자 및 마이페이지에서 헤더/푸터 숨기기
@@ -57,7 +58,7 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
           {/* PC: 항상 일반 헤더 표시 */}
           <div className="hidden lg:block">
             <Header />
-            <SearchBar id="desktop-search" />
+            <SearchBar id="desktop-search" recommendedTerms={recommendedTerms} />
             {megaMenu}
           </div>
 
@@ -65,7 +66,7 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
           {isMainPage && (
             <div className="lg:hidden">
               <Header />
-              <SearchBar id="mobile-search" />
+              <SearchBar id="mobile-search" recommendedTerms={recommendedTerms} />
             </div>
           )}
 

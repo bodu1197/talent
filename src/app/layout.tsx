@@ -11,6 +11,7 @@ import { headers } from "next/headers";
 import ConditionalLayout from "@/components/layout/ConditionalLayout";
 import ConditionalMegaMenuWrapper from "@/components/layout/ConditionalMegaMenuWrapper";
 import { PageViewTracker } from "@/components/analytics/PageViewTracker";
+import { getRecommendedSearchTerms } from "@/lib/supabase/queries/search";
 
 // Optimized font loading with next/font
 const notoSansKR = Noto_Sans_KR({
@@ -102,6 +103,9 @@ export default async function RootLayout({
   const isMypagePage = pathname.startsWith("/mypage");
   const shouldHideMegaMenu = isAdminPage || isMypagePage;
 
+  // 추천 검색어 조회 (최종 카테고리 클릭 수 기반)
+  const recommendedTerms = await getRecommendedSearchTerms(10);
+
   const schemaOrgData = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -189,6 +193,7 @@ export default async function RootLayout({
                   megaMenu={
                     !shouldHideMegaMenu ? <ConditionalMegaMenuWrapper /> : null
                   }
+                  recommendedTerms={recommendedTerms}
                 >
                   {children}
                 </ConditionalLayout>

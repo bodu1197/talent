@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaSearch, FaRobot } from "react-icons/fa";
 
 interface SearchBarProps {
   id?: string;
+  recommendedTerms?: Array<{ name: string; slug: string; count: number }>;
 }
 
-export default function SearchBar({ id = "search" }: SearchBarProps) {
+export default function SearchBar({ id = "search", recommendedTerms = [] }: SearchBarProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (e: React.FormEvent) => {
@@ -47,40 +48,55 @@ export default function SearchBar({ id = "search" }: SearchBarProps) {
           </div>
         </form>
 
-        {/* 인기 카테고리 */}
+        {/* 추천 검색어 (실제 사용자 클릭 데이터 기반) */}
         <div
           className="flex flex-wrap gap-2"
           role="navigation"
-          aria-label="인기 카테고리"
+          aria-label="추천 검색어"
         >
-          <Link
-            href="/categories/ai-services"
-            className="px-3 py-1.5 text-sm bg-blue-50 text-brand-primary rounded-full font-medium hover:bg-blue-100 transition-colors flex items-center gap-2"
-            aria-label="AI 서비스 카테고리 보기"
-          >
-            <FaRobot className="text-sm" aria-hidden="true" /> <span>AI</span>
-          </Link>
-          <Link
-            href="/categories/it-programming"
-            className="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors"
-            aria-label="IT/프로그래밍 카테고리 보기"
-          >
-            IT
-          </Link>
-          <Link
-            href="/categories/design"
-            className="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors"
-            aria-label="디자인 카테고리 보기"
-          >
-            디자인
-          </Link>
-          <Link
-            href="/categories/marketing"
-            className="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors"
-            aria-label="마케팅 카테고리 보기"
-          >
-            마케팅
-          </Link>
+          {recommendedTerms && recommendedTerms.length > 0 ? (
+            recommendedTerms.slice(0, 8).map((term) => (
+              <Link
+                key={term.slug}
+                href={`/search?q=${encodeURIComponent(term.name)}`}
+                className="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors"
+                aria-label={`${term.name} 검색`}
+              >
+                {term.name}
+              </Link>
+            ))
+          ) : (
+            <>
+              <Link
+                href="/categories/ai-services"
+                className="px-3 py-1.5 text-sm bg-blue-50 text-brand-primary rounded-full font-medium hover:bg-blue-100 transition-colors flex items-center gap-2"
+                aria-label="AI 서비스 카테고리 보기"
+              >
+                <FaRobot className="text-sm" aria-hidden="true" /> <span>AI</span>
+              </Link>
+              <Link
+                href="/categories/it-programming"
+                className="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors"
+                aria-label="IT/프로그래밍 카테고리 보기"
+              >
+                IT
+              </Link>
+              <Link
+                href="/categories/design"
+                className="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors"
+                aria-label="디자인 카테고리 보기"
+              >
+                디자인
+              </Link>
+              <Link
+                href="/categories/marketing"
+                className="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors"
+                aria-label="마케팅 카테고리 보기"
+              >
+                마케팅
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>
