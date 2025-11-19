@@ -14,6 +14,11 @@ function generateNonce(): string {
 }
 
 export async function middleware(request: NextRequest) {
+  // /api/nice/verify 경로는 CSP 제외 (인라인 스타일/스크립트 사용)
+  if (request.nextUrl.pathname === "/api/nice/verify") {
+    return NextResponse.next();
+  }
+
   let supabaseResponse = NextResponse.next({
     request,
   });
@@ -188,8 +193,8 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * Feel free to modify this pattern to include more paths.
+     * - *.svg, *.png, *.jpg, etc. (image files)
      */
-    "/(?!_next/static|_next/image|favicon.ico|api/nice/verify|.*.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|.*\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
