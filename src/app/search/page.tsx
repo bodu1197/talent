@@ -60,11 +60,13 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   }
 
   return (
-    <SearchResults
-      services={results.services}
-      experts={results.experts}
-      portfolios={results.portfolios}
-      query={query}
-    />
+    <div className="mt-8">
+      <SearchResults
+        services={results.services}
+        experts={results.experts}
+        portfolios={results.portfolios}
+        query={query}
+      />
+    </div>
   );
 }
