@@ -60,7 +60,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   }
 
   return (
-    <div className="mt-8">
+    <div style={{ marginTop: '1000px' }}>
       <SearchResults
         services={results.services}
         experts={results.experts}
