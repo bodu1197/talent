@@ -654,10 +654,26 @@ export default function AdvertisingPage() {
                 setIsModalOpen(false);
                 setSelectedService("");
               }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setIsModalOpen(false);
+                  setSelectedService("");
+                }
+              }}
+              role="button"
+              tabIndex={0}
             >
               <div
                 className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.stopPropagation();
+                  }
+                }}
+                role="dialog"
+                tabIndex={-1}
               >
                 {/* 모달 헤더 */}
                 <div className="sticky top-0 bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center rounded-t-2xl">
@@ -941,6 +957,14 @@ export default function AdvertisingPage() {
                                 onClick={() =>
                                   setSelectedPaymentMethod("bank_transfer")
                                 }
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault();
+                                    setSelectedPaymentMethod("bank_transfer");
+                                  }
+                                }}
+                                role="button"
+                                tabIndex={0}
                                 className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
                                   selectedPaymentMethod === "bank_transfer"
                                     ? "border-brand-primary bg-blue-50"

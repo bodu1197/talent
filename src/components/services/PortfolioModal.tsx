@@ -60,10 +60,26 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
     <div
       className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
       onClick={onClose}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClose();
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-label="모달 닫기"
     >
       <div
         className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
         onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.stopPropagation();
+          }
+        }}
+        role="dialog"
+        tabIndex={-1}
       >
         {/* 닫기 버튼 */}
         <button

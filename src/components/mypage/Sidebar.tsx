@@ -350,6 +350,15 @@ export default function Sidebar({ mode, profileData }: SidebarProps) {
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
                   onClick={() => toggleExpand(item.href)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      toggleExpand(item.href);
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={expandedItems.has(item.href)}
                 >
                   <div className="flex items-center gap-3 flex-1">
                     {React.createElement(iconMap[item.icon] || FaUser, {

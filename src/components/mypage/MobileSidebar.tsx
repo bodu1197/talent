@@ -195,6 +195,15 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
         <div
           className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity"
           onClick={() => setIsOpen(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setIsOpen(false);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label="사이드바 닫기"
         />
       )}
 

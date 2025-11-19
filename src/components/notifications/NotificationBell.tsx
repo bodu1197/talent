@@ -200,6 +200,15 @@ export default function NotificationBell() {
           <div
             className="fixed inset-0 z-40"
             onClick={() => setShowDropdown(false)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setShowDropdown(false);
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label="알림 닫기"
           ></div>
 
           {/* 드롭다운 */}

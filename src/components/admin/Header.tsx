@@ -81,6 +81,15 @@ export default function AdminHeader() {
                 <div
                   className="fixed inset-0 z-10"
                   onClick={() => setShowUserMenu(false)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setShowUserMenu(false);
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label="메뉴 닫기"
                 ></div>
                 <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-20">
                   <Link
