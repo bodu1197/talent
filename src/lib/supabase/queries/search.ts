@@ -41,7 +41,7 @@ export async function searchAll(query: string): Promise<SearchResult> {
       .limit(20);
 
     // 서비스별 리뷰 통계 조회
-    let servicesWithRating = [];
+    let servicesWithRating: any[] = [];
     if (services && services.length > 0) {
       const serviceIds = services.map((s) => s.id);
       const { data: reviewStats } = await supabase
@@ -94,7 +94,7 @@ export async function searchAll(query: string): Promise<SearchResult> {
       .limit(20);
 
     // 각 전문가의 서비스 수와 평균 평점 조회
-    let expertsWithStats = [];
+    let expertsWithStats: any[] = [];
     if (experts && experts.length > 0) {
       expertsWithStats = await Promise.all(
         experts.map(async (expert) => {
