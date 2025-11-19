@@ -189,12 +189,13 @@ export default async function ServiceDetailPage({
     avgResponseTime: "10분 이내",
   };
 
-  if (service?.seller?.id) {
+  if (service?.seller?.user_id) {
     // 총 거래 건수 (완료된 주문)
+    // orders 테이블의 seller_id는 sellers.user_id를 참조함
     const { count: orderCount } = await supabase
       .from("orders")
       .select("*", { count: "exact", head: true })
-      .eq("seller_id", service.seller.id)
+      .eq("seller_id", service.seller.user_id)
       .eq("status", "completed");
 
     sellerStats.totalOrders = orderCount || 0;
