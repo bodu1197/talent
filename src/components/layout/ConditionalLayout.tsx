@@ -8,8 +8,8 @@ import MobileBottomNav from './MobileBottomNav'
 import MobileSubHeader from './MobileSubHeader'
 
 interface ConditionalLayoutProps {
-  children: React.ReactNode
-  megaMenu: React.ReactNode
+  readonly children: React.ReactNode
+  readonly megaMenu: React.ReactNode
 }
 
 export default function ConditionalLayout({ children, megaMenu }: ConditionalLayoutProps) {

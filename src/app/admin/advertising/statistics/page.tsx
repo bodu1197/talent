@@ -127,13 +127,13 @@ function PageHeader() {
 }
 
 interface PeriodFilterProps {
-  period: Period;
-  startDate: string;
-  endDate: string;
-  onPeriodChange: (period: Period) => void;
-  onStartDateChange: (date: string) => void;
-  onEndDateChange: (date: string) => void;
-  onSubmit: (e: React.FormEvent) => void;
+  readonly period: Period;
+  readonly startDate: string;
+  readonly endDate: string;
+  readonly onPeriodChange: (period: Period) => void;
+  readonly onStartDateChange: (date: string) => void;
+  readonly onEndDateChange: (date: string) => void;
+  readonly onSubmit: (e: React.FormEvent) => void;
 }
 
 function PeriodFilter({
@@ -211,8 +211,8 @@ function PeriodFilter({
 }
 
 interface StatisticsContentProps {
-  loading: boolean;
-  statistics: Statistics | null;
+  readonly loading: boolean;
+  readonly statistics: Statistics | null;
 }
 
 function StatisticsContent({ loading, statistics }: StatisticsContentProps) {
@@ -247,7 +247,7 @@ function StatisticsContent({ loading, statistics }: StatisticsContentProps) {
   );
 }
 
-function SummaryCards({ statistics }: { statistics: Statistics }) {
+function SummaryCards({ statistics }: Readonly<{ statistics: Statistics }>) {
   return (
     <div className="grid gap-6 md:grid-cols-3">
       <div className="bg-white rounded-lg border border-slate-200 p-6">
@@ -321,9 +321,9 @@ function getPaymentMethodConfig(method: string) {
 
 function PaymentMethodStats({
   revenue,
-}: {
+}: Readonly<{
   revenue: Statistics["revenue"];
-}) {
+}>) {
   return (
     <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
       <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
@@ -363,7 +363,7 @@ function PaymentMethodStats({
   );
 }
 
-function TopServicesTable({ services }: { services: TopService[] }) {
+function TopServicesTable({ services }: Readonly<{ services: TopService[] }>) {
   if (services.length === 0) {
     return (
       <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
@@ -441,10 +441,10 @@ function TopServicesTable({ services }: { services: TopService[] }) {
 function RevenueByPeriodTable({
   revenue,
   period,
-}: {
+}: Readonly<{
   revenue: Statistics["revenue"];
   period: string;
-}) {
+}>) {
   const periodLabel =
     period === "day" ? "일별" : period === "month" ? "월별" : "연별";
 
@@ -502,9 +502,9 @@ function RevenueByPeriodTable({
 
 function SubscriptionStats({
   subscriptions,
-}: {
+}: Readonly<{
   subscriptions: SubscriptionStats;
-}) {
+}>) {
   const stats = [
     {
       label: "전체 구독",

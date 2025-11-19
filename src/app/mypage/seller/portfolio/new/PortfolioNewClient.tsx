@@ -22,9 +22,9 @@ interface Service {
 }
 
 interface Props {
-  sellerId: string;
-  categories: Category[];
-  services: Service[];
+  readonly sellerId: string;
+  readonly categories: Category[];
+  readonly services: Service[];
 }
 
 export default function PortfolioNewClient({

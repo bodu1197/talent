@@ -1,3 +1,3 @@
-export default function SellerLayout({ children }: { children: React.ReactNode }) {
+export default function SellerLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <>{children}</>
 }

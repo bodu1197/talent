@@ -28,7 +28,7 @@ interface SellerProfile {
 }
 
 interface Props {
-  profile: SellerProfile;
+  readonly profile: SellerProfile;
 }
 
 export default function SellerProfileClient({ profile }: Props) {

@@ -3,7 +3,7 @@ import { createClient, createServiceRoleClient } from '@/lib/supabase/server'
 import { Service } from '@/types'
 
 interface RecommendedServicesProps {
-  aiCategoryIds: string[]
+  readonly aiCategoryIds: string[]
 }
 
 export default async function RecommendedServices({ aiCategoryIds }: RecommendedServicesProps) {

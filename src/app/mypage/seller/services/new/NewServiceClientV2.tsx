@@ -24,9 +24,9 @@ interface Category {
 }
 
 interface Props {
-  sellerId: string;
-  categories: Category[];
-  profileData?: {
+  readonly sellerId: string;
+  readonly categories: Category[];
+  readonly profileData?: {
     name: string;
     profile_image?: string | null;
   } | null;

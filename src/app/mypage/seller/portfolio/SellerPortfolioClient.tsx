@@ -23,7 +23,7 @@ interface PortfolioWithService extends Portfolio {
 }
 
 interface Props {
-  portfolio: PortfolioWithService[];
+  readonly portfolio: PortfolioWithService[];
 }
 
 export default function SellerPortfolioClient({

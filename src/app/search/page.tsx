@@ -4,7 +4,7 @@ import SearchResults from "@/components/search/SearchResults";
 import { FaSearch } from "react-icons/fa";
 
 interface SearchPageProps {
-  searchParams: Promise<{ q?: string }>;
+  readonly searchParams: Promise<{ q?: string }>;
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {

@@ -62,8 +62,8 @@ interface TextStyle {
 }
 
 interface Props {
-  formData: ServiceFormData;
-  setFormData: (data: ServiceFormData) => void;
+  readonly formData: ServiceFormData;
+  readonly setFormData: (data: ServiceFormData) => void;
 }
 
 export default function Step4Images({ formData, setFormData }: Props) {

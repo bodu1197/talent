@@ -65,8 +65,8 @@ interface Message {
 }
 
 interface Props {
-  userId: string;
-  sellerId: string | null;
+  readonly userId: string;
+  readonly sellerId: string | null;
 }
 
 export default function ChatListClient({ userId, sellerId }: Props) {

@@ -8,10 +8,10 @@ import { FaBox, FaStar, FaCheckCircle } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 
 interface ServiceCardProps {
-  service: Service;
-  position?: number; // 카드의 위치 (광고 통계용)
-  categoryId?: string; // 현재 카테고리 ID
-  page?: number; // 현재 페이지
+  readonly service: Service;
+  readonly position?: number; // 카드의 위치 (광고 통계용)
+  readonly categoryId?: string; // 현재 카테고리 ID
+  readonly page?: number; // 현재 페이지
 }
 
 export default function ServiceCard({ service, position, categoryId, page }: ServiceCardProps) {

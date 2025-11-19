@@ -7,9 +7,9 @@ import { Service } from "@/types";
 import { FaInbox } from "react-icons/fa";
 
 interface ServiceGridProps {
-  initialServices: Service[];
-  categoryId?: string;
-  page?: number;
+  readonly initialServices: Service[];
+  readonly categoryId?: string;
+  readonly page?: number;
 }
 
 export default function ServiceGrid({ initialServices, categoryId, page }: ServiceGridProps) {

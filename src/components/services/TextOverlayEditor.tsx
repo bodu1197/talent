@@ -30,9 +30,9 @@ interface TextStyle {
 }
 
 interface Props {
-  template: GradientTemplate;
-  onTextChange: (style: TextStyle) => void;
-  initialText?: string;
+  readonly template: GradientTemplate;
+  readonly onTextChange: (style: TextStyle) => void;
+  readonly initialText?: string;
 }
 
 const PRESET_COLORS = [

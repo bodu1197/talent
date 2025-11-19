@@ -17,8 +17,8 @@ interface Portfolio {
 }
 
 interface Props {
-  portfolio: Portfolio;
-  onClose: () => void;
+  readonly portfolio: Portfolio;
+  readonly onClose: () => void;
 }
 
 export default function PortfolioModal({ portfolio, onClose }: Props) {

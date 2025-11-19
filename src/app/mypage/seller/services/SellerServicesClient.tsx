@@ -43,9 +43,9 @@ interface ServiceWithRejection extends Service {
 }
 
 interface Props {
-  initialServices: ServiceWithRejection[];
-  statusFilter: ServiceStatus;
-  statusCounts: {
+  readonly initialServices: ServiceWithRejection[];
+  readonly statusFilter: ServiceStatus;
+  readonly statusCounts: {
     all: number;
     active: number;
     inactive: number;

@@ -18,10 +18,10 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 export const revalidate = 0;
 
 interface CategoryPageProps {
-  params: Promise<{
+  readonly params: Promise<{
     slug: string;
   }>;
-  searchParams: Promise<{
+  readonly searchParams: Promise<{
     page?: string;
   }>;
 }

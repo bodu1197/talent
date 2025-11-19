@@ -38,7 +38,7 @@ export function useNotifications() {
   return context
 }
 
-export default function NotificationProvider({ children }: { children: React.ReactNode }) {
+export default function NotificationProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   const { user } = useAuth()
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = useState(0)

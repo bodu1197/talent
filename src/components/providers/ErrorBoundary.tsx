@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-export function ErrorBoundary({ children }: { children: React.ReactNode }) {
+export function ErrorBoundary({ children }: Readonly<{ children: React.ReactNode }>) {
   useEffect(() => {
     // 전역 unhandled promise rejection 핸들러
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {

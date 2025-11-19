@@ -51,8 +51,8 @@ interface SellerFormData {
 }
 
 interface Props {
-  userId: string;
-  initialProfile?: {
+  readonly userId: string;
+  readonly initialProfile?: {
     name: string;
     profile_image?: string | null;
   } | null;

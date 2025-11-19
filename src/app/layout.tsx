@@ -92,9 +92,9 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   const headersList = await headers();
   const pathname = headersList.get("x-pathname") || "";
   const nonce = headersList.get("x-nonce") || "";

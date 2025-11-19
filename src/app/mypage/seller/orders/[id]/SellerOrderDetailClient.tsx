@@ -28,7 +28,7 @@ import {
 } from "react-icons/fa";
 
 interface Props {
-  orderId: string;
+  readonly orderId: string;
 }
 
 interface Deliverable {

@@ -13,7 +13,7 @@ import {
 import toast from "react-hot-toast";
 
 interface Props {
-  service: ServiceDetailWithCategories;
+  readonly service: ServiceDetailWithCategories;
 }
 
 export default function PendingServiceDetailClient({ service }: Props) {

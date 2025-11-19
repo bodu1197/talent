@@ -10,8 +10,8 @@ import {
 import { FaPalette, FaCheck, FaInfoCircle } from "react-icons/fa";
 
 interface Props {
-  onSelect: (template: GradientTemplate) => void;
-  selectedTemplateId?: string;
+  readonly onSelect: (template: GradientTemplate) => void;
+  readonly selectedTemplateId?: string;
 }
 
 export default function TemplateSelector({

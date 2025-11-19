@@ -33,13 +33,13 @@ interface Notification {
 }
 
 interface Props {
-  initialNotifications: Notification[];
-  unreadCount: number;
-  profileData?: {
+  readonly initialNotifications: Notification[];
+  readonly unreadCount: number;
+  readonly profileData?: {
     name: string;
     profile_image?: string | null;
   } | null;
-  isSeller: boolean;
+  readonly isSeller: boolean;
 }
 
 type FilterType = "all" | "unread" | "read";

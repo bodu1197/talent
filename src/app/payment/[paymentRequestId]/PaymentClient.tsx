@@ -38,9 +38,9 @@ interface Buyer {
 }
 
 interface Props {
-  paymentRequest: PaymentRequest;
-  seller: Seller | null;
-  buyer: Buyer | null;
+  readonly paymentRequest: PaymentRequest;
+  readonly seller: Seller | null;
+  readonly buyer: Buyer | null;
 }
 
 export default function PaymentClient({

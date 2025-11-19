@@ -55,7 +55,7 @@ const ICON_MAP: Record<string, React.ComponentType> = {
   running: FaRunning,
 };
 
-function CategoryIcon({ icon }: { icon?: string }) {
+function CategoryIcon({ icon }: Readonly<{ icon?: string }>) {
   const IconComponent = (icon && ICON_MAP[icon]) || FaCircle;
   return <IconComponent />;
 }

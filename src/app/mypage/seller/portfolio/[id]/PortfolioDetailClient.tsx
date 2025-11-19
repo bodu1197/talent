@@ -33,8 +33,8 @@ interface Portfolio {
 }
 
 interface Props {
-  portfolio: Portfolio;
-  sellerId: string;
+  readonly portfolio: Portfolio;
+  readonly sellerId: string;
 }
 
 export default function PortfolioDetailClient({

@@ -15,7 +15,7 @@ import {
 } from "react-icons/fa";
 
 interface AIPageContentProps {
-  aiCategories: CategoryItem[];
+  readonly aiCategories: CategoryItem[];
 }
 
 export default function AIPageContent({ aiCategories }: AIPageContentProps) {

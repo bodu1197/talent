@@ -46,11 +46,11 @@ interface Service {
 }
 
 interface Props {
-  portfolio: Portfolio;
-  sellerId: string;
-  categories: Category[];
-  services: Service[];
-  linkedServiceIds: string[];
+  readonly portfolio: Portfolio;
+  readonly sellerId: string;
+  readonly categories: Category[];
+  readonly services: Service[];
+  readonly linkedServiceIds: string[];
 }
 
 export default function PortfolioEditClient({

@@ -27,8 +27,8 @@ interface ServiceFormData {
 }
 
 interface Props {
-  formData: ServiceFormData;
-  setFormData: (data: ServiceFormData) => void;
+  readonly formData: ServiceFormData;
+  readonly setFormData: (data: ServiceFormData) => void;
 }
 
 export default function Step3Description({ formData, setFormData }: Props) {

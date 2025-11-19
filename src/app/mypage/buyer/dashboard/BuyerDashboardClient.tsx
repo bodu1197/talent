@@ -48,11 +48,11 @@ interface BuyerBenefits {
 }
 
 interface Props {
-  stats: BuyerStats;
-  recentOrders: BuyerOrder[];
-  favorites: Favorite[];
-  benefits: BuyerBenefits;
-  profileData?: {
+  readonly stats: BuyerStats;
+  readonly recentOrders: BuyerOrder[];
+  readonly favorites: Favorite[];
+  readonly benefits: BuyerBenefits;
+  readonly profileData?: {
     name: string;
     profile_image?: string | null;
   } | null;

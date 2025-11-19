@@ -32,7 +32,7 @@ import {
 export const dynamic = "force-dynamic";
 
 interface ServiceDetailProps {
-  params: Promise<{
+  readonly params: Promise<{
     id: string;
   }>;
 }

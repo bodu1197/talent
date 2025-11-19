@@ -55,8 +55,8 @@ interface TextStyleConfig {
 }
 
 interface Props {
-  sellerId: string;
-  categories: Category[];
+  readonly sellerId: string;
+  readonly categories: Category[];
 }
 
 export default function NewServiceClient({ sellerId }: Props) {

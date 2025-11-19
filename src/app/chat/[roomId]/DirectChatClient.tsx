@@ -72,11 +72,11 @@ interface PaymentRequest {
 }
 
 interface Props {
-  roomId: string;
-  userId: string;
-  isSeller: boolean;
-  otherUser: OtherUser;
-  service: Service | null;
+  readonly roomId: string;
+  readonly userId: string;
+  readonly isSeller: boolean;
+  readonly otherUser: OtherUser;
+  readonly service: Service | null;
 }
 
 export default function DirectChatClient({
@@ -512,12 +512,12 @@ function PaymentRequestCard({
   paymentRequest,
   isSeller,
   onUpdate,
-}: {
+}: Readonly<{
   paymentRequest: PaymentRequest;
   userId: string;
   isSeller: boolean;
   onUpdate: () => void;
-}) {
+}>) {
   const [isProcessing, setIsProcessing] = useState(false);
   const isExpired = new Date(paymentRequest.expires_at) < new Date();
   const isPending = paymentRequest.status === "pending" && !isExpired;
@@ -747,11 +747,11 @@ function PaymentRequestModal({
   roomId,
   service,
   onClose,
-}: {
+}: Readonly<{
   roomId: string;
   service: Service | null;
   onClose: () => void;
-}) {
+}>) {
   const [formData, setFormData] = useState({
     title: service?.title || "",
     amount: "",

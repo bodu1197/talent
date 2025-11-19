@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 interface Props {
-  userId: string
+  readonly userId: string
 }
 
 export default function BecomeSellerForm({ userId }: Props) {

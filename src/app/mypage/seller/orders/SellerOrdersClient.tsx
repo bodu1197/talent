@@ -48,7 +48,7 @@ interface SellerOrderListItem extends Order {
   buyer?: User;
 }
 
-export default function SellerOrdersClient({ sellerId }: { sellerId: string }) {
+export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: string }>) {
   const searchParams = useSearchParams();
   const statusFromUrl = (searchParams.get("status") as OrderStatus) || "all";
   const supabase = createClient();

@@ -21,9 +21,9 @@ const MobileBottomNav = dynamic(
 
 export default function AdminLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   const router = useRouter();
   const { user, loading } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);

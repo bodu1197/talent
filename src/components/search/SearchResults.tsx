@@ -9,10 +9,10 @@ import { FaStar, FaCheckCircle, FaBriefcase } from "react-icons/fa";
 type TabType = "services" | "experts" | "portfolios";
 
 interface SearchResultsProps {
-  services: any[];
-  experts: any[];
-  portfolios: any[];
-  query: string;
+  readonly services: any[];
+  readonly experts: any[];
+  readonly portfolios: any[];
+  readonly query: string;
 }
 
 export default function SearchResults({

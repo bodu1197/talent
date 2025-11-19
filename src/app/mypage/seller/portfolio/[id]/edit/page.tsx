@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import PortfolioEditClient from './PortfolioEditClient'
 
 interface Props {
-  params: Promise<{ id: string }>
+  readonly params: Promise<{ id: string }>
 }
 
 export default async function PortfolioEditPage({ params }: Props) {

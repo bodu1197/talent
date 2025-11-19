@@ -38,11 +38,11 @@ interface Category {
 }
 
 interface Props {
-  categoriesInFirstRow: Category[];
-  remainingCategories: Category[];
-  hasMoreCategories: boolean;
-  brightColors: string[];
-  initialVisibleCount: number;
+  readonly categoriesInFirstRow: Category[];
+  readonly remainingCategories: Category[];
+  readonly hasMoreCategories: boolean;
+  readonly brightColors: string[];
+  readonly initialVisibleCount: number;
 }
 
 // Icon mapping using lookup table for O(1) access

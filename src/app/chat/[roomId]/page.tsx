@@ -11,7 +11,7 @@ const DirectChatClient = dynamic(() => import("./DirectChatClient"), {
 });
 
 interface ChatPageProps {
-  params: Promise<{
+  readonly params: Promise<{
     roomId: string;
   }>;
 }

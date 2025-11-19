@@ -12,7 +12,7 @@ import { FaArrowLeft, FaTimes, FaCheck } from "react-icons/fa";
 import toast from "react-hot-toast";
 
 interface Props {
-  revision: ServiceRevisionWithCategories & {
+  readonly revision: ServiceRevisionWithCategories & {
     service: ServiceDetailWithCategories;
   };
 }

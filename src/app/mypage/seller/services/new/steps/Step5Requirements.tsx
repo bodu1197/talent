@@ -33,9 +33,9 @@ interface ServiceFormData {
 }
 
 interface Props {
-  formData: ServiceFormData;
-  setFormData: (data: ServiceFormData) => void;
-  showOnlyRequirements?: boolean;
+  readonly formData: ServiceFormData;
+  readonly setFormData: (data: ServiceFormData) => void;
+  readonly showOnlyRequirements?: boolean;
 }
 
 export default function Step5Requirements({

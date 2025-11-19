@@ -5,9 +5,9 @@ import RevisionDetailClient from './RevisionDetailClient'
 
 export default async function RevisionDetailPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ id: string }>
-}) {
+}>) {
   const { id } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

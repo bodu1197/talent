@@ -5,9 +5,9 @@ import PendingServiceDetailClient from "./PendingServiceDetailClient";
 
 export default async function PendingServiceDetailPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ id: string }>;
-}) {
+}>) {
   const { id } = await params;
   const supabase = await createClient();
   const {

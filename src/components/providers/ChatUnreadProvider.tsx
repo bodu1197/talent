@@ -30,7 +30,7 @@ const ChatUnreadContext = createContext<ChatUnreadContextType | undefined>(
   undefined,
 );
 
-export function ChatUnreadProvider({ children }: { children: ReactNode }) {
+export function ChatUnreadProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [unreadCount, setUnreadCount] = useState(0);
   const [userId, setUserId] = useState<string | null>(null);
   const [hasPermission, setHasPermission] = useState(false);

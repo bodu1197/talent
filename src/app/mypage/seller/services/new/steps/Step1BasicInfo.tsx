@@ -40,9 +40,9 @@ interface ServiceFormData {
 }
 
 interface Props {
-  formData: ServiceFormData;
-  setFormData: (data: ServiceFormData) => void;
-  categories: Category[];
+  readonly formData: ServiceFormData;
+  readonly setFormData: (data: ServiceFormData) => void;
+  readonly categories: Category[];
 }
 
 export default function Step1BasicInfo({ formData, setFormData }: Props) {

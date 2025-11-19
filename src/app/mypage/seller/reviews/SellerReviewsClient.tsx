@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 type RatingFilter = "all" | "5" | "4" | "3" | "2" | "1";
 
 interface Props {
-  reviews: Review[];
+  readonly reviews: Review[];
 }
 
 export default function SellerReviewsClient({
