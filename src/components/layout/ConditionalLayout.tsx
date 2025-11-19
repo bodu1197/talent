@@ -77,10 +77,8 @@ export default function ConditionalLayout({ children, megaMenu, recommendedTerms
 
       <main className={
         isMypagePage
-          ? 'flex-1 pt-16 lg:pt-[86px] pb-16 lg:pb-0 w-full max-w-none'
-          : isMainPage
-            ? 'flex-1 pt-[140px] lg:pt-[140px] pb-16 lg:pb-0'
-            : 'flex-1 pt-16 lg:pt-[140px] pb-16 lg:pb-0'
+          ? 'flex-1 pt-16 lg:pt-16 pb-16 lg:pb-0 w-full max-w-none'
+          : 'flex-1 pt-16 lg:pt-16 pb-16 lg:pb-0'
       }>
         {children}
       </main>
