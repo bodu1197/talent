@@ -65,6 +65,9 @@ export default function SearchBar({ id = "search", recommendedTerms = [] }: Sear
                 className="w-full px-6 py-3 pr-12 border-2 border-gray-300 rounded-full focus:outline-none focus:border-brand-primary transition-colors text-gray-900"
                 aria-label="서비스 검색"
                 autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck="false"
               />
               <button
                 type="submit"
