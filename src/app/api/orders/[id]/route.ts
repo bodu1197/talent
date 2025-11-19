@@ -23,8 +23,8 @@ export async function GET(
       .select(`
         *,
         service:services(id, title, thumbnail_url, seller_id),
-        buyer:users!buyer_id(id, name, email, profile_image),
-        seller:users!seller_id(id, name, email, profile_image)
+        buyer:users!orders_buyer_id_fkey(id, name, email, profile_image),
+        seller:users!orders_seller_id_fkey(id, name, email, profile_image)
       `)
       .eq('id', id)
       .single()
