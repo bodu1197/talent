@@ -9,6 +9,98 @@ interface AnalyticsQuery {
   path?: string
 }
 
+interface StatsQueryConfig {
+  table: string
+  orderColumn: string
+  limit: number
+  dateColumn?: string
+}
+
+interface YearlyStatsRow {
+  year: number
+  total_views: number
+  unique_visitors: number
+  desktop_views: number
+  mobile_views: number
+  tablet_views: number
+  bot_views: number
+}
+
+// Helper: Get query configuration for each period
+function getQueryConfig(period: AnalyticsQuery['period']): StatsQueryConfig {
+  const configs: Record<AnalyticsQuery['period'], StatsQueryConfig> = {
+    hour: { table: 'visitor_stats_hourly', orderColumn: 'hour', limit: 168, dateColumn: 'hour' },
+    day: { table: 'visitor_stats_daily', orderColumn: 'date', limit: 90, dateColumn: 'date' },
+    month: { table: 'visitor_stats_monthly', orderColumn: 'year', limit: 24 },
+    year: { table: 'visitor_stats_monthly', orderColumn: 'year', limit: 9999 }
+  }
+  return configs[period]
+}
+
+// Helper: Apply date filters to query
+function applyDateFilters(
+  query: any,
+  startDate: string | null,
+  endDate: string | null,
+  dateColumn: string
+) {
+  let filteredQuery = query
+  if (startDate) {
+    filteredQuery = filteredQuery.gte(dateColumn, startDate)
+  }
+  if (endDate) {
+    filteredQuery = filteredQuery.lte(dateColumn, endDate)
+  }
+  return filteredQuery
+}
+
+// Helper: Apply path filter to query
+function applyPathFilter(query: any, path: string | null) {
+  return path ? query.eq('path', path) : query
+}
+
+// Helper: Aggregate monthly data into yearly stats
+function aggregateYearlyStats(data: YearlyStatsRow[] | null): YearlyStatsRow[] {
+  if (!data) return []
+
+  const yearlyStats = new Map<number, YearlyStatsRow>()
+
+  data.forEach((row) => {
+    const existing = yearlyStats.get(row.year) || {
+      year: row.year,
+      total_views: 0,
+      unique_visitors: 0,
+      desktop_views: 0,
+      mobile_views: 0,
+      tablet_views: 0,
+      bot_views: 0
+    }
+
+    existing.total_views += row.total_views
+    existing.unique_visitors += row.unique_visitors
+    existing.desktop_views += row.desktop_views
+    existing.mobile_views += row.mobile_views
+    existing.tablet_views += row.tablet_views
+    existing.bot_views += row.bot_views
+
+    yearlyStats.set(row.year, existing)
+  })
+
+  return Array.from(yearlyStats.values())
+}
+
+// Helper: Calculate summary statistics
+function calculateSummary(stats: Array<Record<string, number | string>>) {
+  const totalViews = stats.reduce((sum, item) => sum + (Number(item.total_views) || 0), 0)
+  const totalUniqueVisitors = stats.reduce((sum, item) => sum + (Number(item.unique_visitors) || 0), 0)
+
+  return {
+    totalViews,
+    totalUniqueVisitors,
+    avgViewsPerDay: stats.length > 0 ? Math.round(totalViews / stats.length) : 0
+  }
+}
+
 export async function GET(request: NextRequest) {
   try {
     // Require admin authentication
@@ -37,152 +129,42 @@ export async function GET(request: NextRequest) {
     }
 
     let stats: Array<Record<string, number | string>> = []
+    const config = getQueryConfig(period)
 
-    switch (period) {
-      case 'hour': {
-        // Get hourly stats
-        let query = supabase
-          .from('visitor_stats_hourly')
-          .select('*')
-          .order('hour', { ascending: false })
-          .limit(168) // Last 7 days of hourly data
+    // Build base query
+    let query = supabase
+      .from(config.table)
+      .select('*')
+      .order(config.orderColumn, { ascending: false })
+      .limit(config.limit)
 
-        if (startDate) {
-          query = query.gte('hour', startDate)
-        }
-        if (endDate) {
-          query = query.lte('hour', endDate)
-        }
-        if (path) {
-          query = query.eq('path', path)
-        }
-
-        const { data, error } = await query
-
-        if (error) throw error
-        stats = data || []
-        break
-      }
-
-      case 'day': {
-        // Get daily stats
-        let query = supabase
-          .from('visitor_stats_daily')
-          .select('*')
-          .order('date', { ascending: false })
-          .limit(90) // Last 90 days
-
-        if (startDate) {
-          query = query.gte('date', startDate)
-        }
-        if (endDate) {
-          query = query.lte('date', endDate)
-        }
-        if (path) {
-          query = query.eq('path', path)
-        }
-
-        const { data, error } = await query
-
-        if (error) throw error
-        stats = data || []
-        break
-      }
-
-      case 'month': {
-        // Get monthly stats
-        let query = supabase
-          .from('visitor_stats_monthly')
-          .select('*')
-          .order('year', { ascending: false })
-          .order('month', { ascending: false })
-          .limit(24) // Last 24 months
-
-        if (path) {
-          query = query.eq('path', path)
-        }
-
-        const { data, error } = await query
-
-        if (error) throw error
-        stats = data || []
-        break
-      }
-
-      case 'year': {
-        // Aggregate from monthly stats
-        let query = supabase
-          .from('visitor_stats_monthly')
-          .select('*')
-          .order('year', { ascending: false })
-
-        if (path) {
-          query = query.eq('path', path)
-        }
-
-        const { data, error } = await query
-
-        if (error) throw error
-
-        // Group by year
-        const yearlyStats = new Map<number, {
-          year: number
-          total_views: number
-          unique_visitors: number
-          desktop_views: number
-          mobile_views: number
-          tablet_views: number
-          bot_views: number
-        }>()
-
-        data?.forEach((row: {
-          year: number
-          total_views: number
-          unique_visitors: number
-          desktop_views: number
-          mobile_views: number
-          tablet_views: number
-          bot_views: number
-        }) => {
-          const existing = yearlyStats.get(row.year) || {
-            year: row.year,
-            total_views: 0,
-            unique_visitors: 0,
-            desktop_views: 0,
-            mobile_views: 0,
-            tablet_views: 0,
-            bot_views: 0
-          }
-
-          existing.total_views += row.total_views
-          existing.unique_visitors += row.unique_visitors
-          existing.desktop_views += row.desktop_views
-          existing.mobile_views += row.mobile_views
-          existing.tablet_views += row.tablet_views
-          existing.bot_views += row.bot_views
-
-          yearlyStats.set(row.year, existing)
-        })
-
-        stats = Array.from(yearlyStats.values())
-        break
-      }
+    // Add month ordering for monthly stats
+    if (period === 'month') {
+      query = query.order('month', { ascending: false })
     }
 
-    // Get summary stats
-    const totalViews = stats.reduce((sum: number, item: Record<string, number | string>) => sum + (Number(item.total_views) || 0), 0)
-    const totalUniqueVisitors = stats.reduce((sum: number, item: Record<string, number | string>) => sum + (Number(item.unique_visitors) || 0), 0)
+    // Apply filters based on period
+    if (config.dateColumn) {
+      query = applyDateFilters(query, startDate, endDate, config.dateColumn)
+    }
+    query = applyPathFilter(query, path)
+
+    // Execute query
+    const { data, error } = await query
+    if (error) throw error
+
+    // Handle year aggregation or use data directly
+    stats = period === 'year' ? aggregateYearlyStats(data as YearlyStatsRow[]) : (data || [])
+
+    // Calculate summary
+    const summary = calculateSummary(stats)
 
     return NextResponse.json({
       period,
       startDate,
       endDate,
       path,
-      summary: {
-        totalViews,
-        totalUniqueVisitors,
-        avgViewsPerDay: stats.length > 0 ? Math.round(totalViews / stats.length) : 0
-      },
+      summary,
       data: stats
     })
 

@@ -82,6 +82,172 @@ interface Props {
   } | null;
 }
 
+// Helper: Validate thumbnail requirements
+function validateThumbnailRequirements(
+  uploadMode: "file" | "template",
+  selectedTemplate: GradientTemplate | null,
+  thumbnailFile: File | null,
+  originalThumbnailUrl: string | null
+): void {
+  if (uploadMode === "template" && selectedTemplate && !thumbnailFile) {
+    throw new Error(
+      '템플릿을 선택하셨습니다.\n"썸네일 생성하기" 버튼을 눌러 썸네일을 먼저 생성해주세요.'
+    );
+  }
+
+  if (uploadMode === "template" && !thumbnailFile && !originalThumbnailUrl) {
+    throw new Error(
+      '썸네일 이미지가 필요합니다.\n템플릿을 선택하고 "썸네일 생성하기" 버튼을 눌러주세요.'
+    );
+  }
+}
+
+// Helper: Upload thumbnail file to storage
+async function uploadThumbnail(
+  supabase: any,
+  thumbnailFile: File,
+  userId: string
+): Promise<string> {
+  const fileExt = thumbnailFile.name.split(".").pop();
+  const fileName = `${userId}-${Date.now()}.${fileExt}`;
+  const filePath = `service-thumbnails/${fileName}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from("services")
+    .upload(filePath, thumbnailFile);
+
+  if (uploadError) {
+    logger.error("Thumbnail upload error:", uploadError);
+    throw new Error("썸네일 업로드에 실패했습니다.");
+  }
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from("services").getPublicUrl(filePath);
+
+  return publicUrl;
+}
+
+// Helper: Determine final thumbnail URL
+function determineThumbnailUrl(
+  thumbnailFile: File | null,
+  thumbnailPreview: string | null,
+  originalThumbnailUrl: string | null,
+  uploadedUrl?: string
+): string | null {
+  if (thumbnailFile && uploadedUrl) {
+    return uploadedUrl;
+  }
+  if (!thumbnailPreview && originalThumbnailUrl) {
+    return null;
+  }
+  return originalThumbnailUrl;
+}
+
+// Helper: Create service revision for active services
+async function createServiceRevision(
+  supabase: any,
+  serviceId: string,
+  sellerId: string,
+  formData: any,
+  thumbnailUrl: string | null
+): Promise<any> {
+  const { data: revision, error: revisionError } = await supabase
+    .from("service_revisions")
+    .insert({
+      service_id: serviceId,
+      seller_id: sellerId,
+      title: formData.title,
+      description: formData.description,
+      price: parseInt(formData.price) || 0,
+      delivery_days: parseInt(formData.deliveryDays) || 7,
+      revision_count:
+        formData.revisionCount === "unlimited"
+          ? 999
+          : parseInt(formData.revisionCount) || 0,
+      thumbnail_url: thumbnailUrl,
+      status: "pending",
+      revision_note: "서비스 정보 수정",
+    })
+    .select()
+    .single();
+
+  if (revisionError) {
+    logger.error("Revision create error:", revisionError);
+    throw new Error("수정본 생성에 실패했습니다: " + revisionError.message);
+  }
+
+  return revision;
+}
+
+// Helper: Update service directly for non-active services
+async function updateServiceDirectly(
+  supabase: any,
+  serviceId: string,
+  serviceStatus: string,
+  formData: any,
+  thumbnailUrl: string | null
+): Promise<string> {
+  const updateData: Record<string, unknown> = {
+    title: formData.title,
+    description: formData.description,
+    price: parseInt(formData.price) || 0,
+    delivery_days: parseInt(formData.deliveryDays) || 7,
+    revision_count:
+      formData.revisionCount === "unlimited"
+        ? 999
+        : parseInt(formData.revisionCount) || 0,
+    thumbnail_url: thumbnailUrl,
+    updated_at: new Date().toISOString(),
+  };
+
+  if (serviceStatus === "suspended") {
+    updateData.status = "pending";
+  }
+
+  const { error: serviceError } = await supabase
+    .from("services")
+    .update(updateData)
+    .eq("id", serviceId);
+
+  if (serviceError) {
+    logger.error("Service update error:", serviceError);
+    throw new Error("서비스 수정에 실패했습니다: " + serviceError.message);
+  }
+
+  return serviceStatus;
+}
+
+// Helper: Update service category
+async function updateServiceCategory(
+  supabase: any,
+  serviceId: string,
+  categoryId: string,
+  isRevision: boolean,
+  revisionId?: string,
+  currentCategoryId?: string
+): Promise<void> {
+  if (isRevision) {
+    await supabase.from("service_revision_categories").insert({
+      revision_id: revisionId,
+      category_id: categoryId,
+    });
+  } else {
+    if (categoryId && categoryId !== currentCategoryId) {
+      await supabase
+        .from("service_categories")
+        .delete()
+        .eq("service_id", serviceId);
+
+      await supabase.from("service_categories").insert({
+        service_id: serviceId,
+        category_id: categoryId,
+        is_primary: true,
+      });
+    }
+  }
+}
+
 export default function EditServiceClient({
   service,
   sellerId,
@@ -307,19 +473,16 @@ export default function EditServiceClient({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 템플릿 모드에서 썸네일을 생성하지 않은 경우 체크
-    if (uploadMode === "template" && selectedTemplate && !thumbnailFile) {
-      toast.error(
-        '템플릿을 선택하셨습니다.\n"썸네일 생성하기" 버튼을 눌러 썸네일을 먼저 생성해주세요.',
+    try {
+      // Validate thumbnail requirements
+      validateThumbnailRequirements(
+        uploadMode,
+        selectedTemplate,
+        thumbnailFile,
+        originalThumbnailUrl
       );
-      return;
-    }
-
-    // 템플릿 모드에서 생성도 안하고 기존 이미지도 없는 경우
-    if (uploadMode === "template" && !thumbnailFile && !originalThumbnailUrl) {
-      toast.error(
-        '썸네일 이미지가 필요합니다.\n템플릿을 선택하고 "썸네일 생성하기" 버튼을 눌러주세요.',
-      );
+    } catch (error) {
+      toast.error((error as Error).message);
       return;
     }
 
@@ -328,7 +491,7 @@ export default function EditServiceClient({
     try {
       const supabase = createClient();
 
-      // 1. Get current user
+      // Get current user
       const {
         data: { user },
         error: userError,
@@ -338,133 +501,82 @@ export default function EditServiceClient({
         return;
       }
 
-      let thumbnail_url = service.thumbnail_url;
-
-      // 2. Upload new thumbnail if changed
+      // Handle thumbnail upload
+      let uploadedUrl: string | undefined;
       if (thumbnailFile) {
-        // 새 파일 업로드 (파일 업로드 또는 템플릿 생성)
-        const fileExt = thumbnailFile.name.split(".").pop();
-        const fileName = `${user.id}-${Date.now()}.${fileExt}`;
-        const filePath = `service-thumbnails/${fileName}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from("services")
-          .upload(filePath, thumbnailFile);
-
-        if (uploadError) {
-          logger.error("Thumbnail upload error:", uploadError);
-          toast.error("썸네일 업로드에 실패했습니다.");
-          return;
-        }
-
-        const {
-          data: { publicUrl },
-        } = supabase.storage.from("services").getPublicUrl(filePath);
-
-        thumbnail_url = publicUrl;
-      } else if (!thumbnailPreview && originalThumbnailUrl) {
-        // 기존 이미지를 삭제했지만 새 이미지를 업로드하지 않은 경우
-        thumbnail_url = null;
+        uploadedUrl = await uploadThumbnail(supabase, thumbnailFile, user.id);
       }
 
-      // 3. 서비스 상태에 따라 다르게 처리
+      const thumbnail_url = determineThumbnailUrl(
+        thumbnailFile,
+        thumbnailPreview,
+        originalThumbnailUrl,
+        uploadedUrl
+      );
+
+      // Process based on service status
       if (service.status === "active") {
-        // 활성화된 서비스는 수정본(revision) 생성
-        const { data: revision, error: revisionError } = await supabase
-          .from("service_revisions")
-          .insert({
-            service_id: service.id,
-            seller_id: sellerId,
-            title: formData.title,
-            description: formData.description,
-            price: parseInt(formData.price) || 0,
-            delivery_days: parseInt(formData.deliveryDays) || 7,
-            revision_count:
-              formData.revisionCount === "unlimited"
-                ? 999
-                : parseInt(formData.revisionCount) || 0,
-            thumbnail_url: thumbnail_url,
-            status: "pending",
-            revision_note: "서비스 정보 수정",
-          })
-          .select()
-          .single();
+        // Create revision for active services
+        const revision = await createServiceRevision(
+          supabase,
+          service.id,
+          sellerId,
+          formData,
+          thumbnail_url
+        );
 
-        if (revisionError) {
-          logger.error("Revision create error:", revisionError);
-          toast.error("수정본 생성에 실패했습니다: " + revisionError.message);
-          return;
-        }
-
-        // 카테고리 추가
+        // Update category
         if (formData.category) {
-          await supabase.from("service_revision_categories").insert({
-            revision_id: revision.id,
-            category_id: formData.category,
-          });
+          await updateServiceCategory(
+            supabase,
+            service.id,
+            formData.category,
+            true,
+            revision.id
+          );
         }
 
         toast.error("수정 요청이 제출되었습니다. 관리자 승인 후 반영됩니다.");
       } else {
-        // pending, draft, suspended 상태 서비스는 직접 수정
-        const updateData: Record<string, unknown> = {
-          title: formData.title,
-          description: formData.description,
-          price: parseInt(formData.price) || 0,
-          delivery_days: parseInt(formData.deliveryDays) || 7,
-          revision_count:
-            formData.revisionCount === "unlimited"
-              ? 999
-              : parseInt(formData.revisionCount) || 0,
-          thumbnail_url: thumbnail_url,
-          updated_at: new Date().toISOString(),
-        };
+        // Update service directly for non-active services
+        const originalStatus = await updateServiceDirectly(
+          supabase,
+          service.id,
+          service.status!,
+          formData,
+          thumbnail_url
+        );
 
-        // suspended 상태였다면 pending으로 변경 (재승인 요청)
-        if (service.status === "suspended") {
-          updateData.status = "pending";
+        // Update category
+        if (formData.category) {
+          await updateServiceCategory(
+            supabase,
+            service.id,
+            formData.category,
+            false,
+            undefined,
+            service.service_categories?.[0]?.category_id
+          );
         }
 
-        const { error: serviceError } = await supabase
-          .from("services")
-          .update(updateData)
-          .eq("id", service.id);
-
-        if (serviceError) {
-          logger.error("Service update error:", serviceError);
-          toast.error("서비스 수정에 실패했습니다: " + serviceError.message);
-          return;
-        }
-
-        // 카테고리 업데이트
-        if (
-          formData.category &&
-          formData.category !== service.service_categories?.[0]?.category_id
-        ) {
-          await supabase
-            .from("service_categories")
-            .delete()
-            .eq("service_id", service.id);
-
-          await supabase.from("service_categories").insert({
-            service_id: service.id,
-            category_id: formData.category,
-            is_primary: true,
-          });
-        }
-
-        if (service.status === "suspended") {
+        // Show appropriate success message
+        if (originalStatus === "suspended") {
           toast.error(
-            "서비스가 성공적으로 수정되었습니다. 관리자 승인 후 다시 활성화됩니다.",
+            "서비스가 성공적으로 수정되었습니다. 관리자 승인 후 다시 활성화됩니다."
           );
         } else {
           toast.error("서비스가 성공적으로 수정되었습니다!");
         }
       }
+
       globalThis.location.href = "/mypage/seller/services";
     } catch (error) {
       logger.error("Service update error:", error);
-      toast.error("서비스 수정 중 오류가 발생했습니다.");
+      toast.error(
+        error instanceof Error && error.message.includes(":")
+          ? error.message
+          : "서비스 수정 중 오류가 발생했습니다."
+      );
     } finally {
       setLoading(false);
     }

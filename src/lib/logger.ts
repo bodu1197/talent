@@ -53,7 +53,7 @@ class Logger {
     const environment = this.isClient ? '[Client]' : '[Server]'
     const prefix = `${timestamp} ${environment} [${level.toUpperCase()}]`
 
-    return data ? `${prefix} ${message}` : `${prefix} ${message}`
+    return `${prefix} ${message}`
   }
 
   private sanitizeData(data: LogMetadata | unknown): LogMetadata | unknown {
