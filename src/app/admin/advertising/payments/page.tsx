@@ -871,7 +871,7 @@ export default function AdminAdvertisingPaymentsPage() {
           >
             ‹
           </button>
-          {[...Array(Math.min(5, totalPages))].map((_, i) => (
+          {[...new Array(Math.min(5, totalPages))].map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrentPage(i + 1)}

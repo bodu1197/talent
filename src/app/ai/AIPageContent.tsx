@@ -289,7 +289,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
                 </div>
                 <div className="flex items-center gap-2 mb-3">
                   <div className="flex text-yellow-400">
-                    {[...Array(5)].map((_, idx) => (
+                    {[...new Array(5)].map((_, idx) => (
                       <FaStar key={idx} className="text-xs" />
                     ))}
                   </div>

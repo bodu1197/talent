@@ -187,7 +187,7 @@ export default function SellerRegisterClient({
     }
 
     popupCheckIntervalRef.current = setInterval(() => {
-      if (popup && popup.closed) {
+      if (popup?.closed) {
         if (popupCheckIntervalRef.current) {
           clearInterval(popupCheckIntervalRef.current);
           popupCheckIntervalRef.current = null;
@@ -815,7 +815,7 @@ export default function SellerRegisterClient({
                     type="tel"
                     value={formData.whatsapp}
                     onChange={(e) => {
-                      const value = e.target.value.replace(/[^0-9]/g, "");
+                      const value = e.target.value.replace(/\D/g, "");
                       setFormData({ ...formData, whatsapp: value });
                     }}
                     placeholder="821012345678 (국가번호 포함, 하이픈 없이)"

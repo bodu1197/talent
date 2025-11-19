@@ -556,7 +556,7 @@ export async function issueTaxInvoice(
     .eq('id', payment.seller_id)
     .single();
 
-  if (!buyerInfo || !buyerInfo.business_number) {
+  if (!buyerInfo?.business_number) {
     throw new Error('판매자 사업자 정보가 등록되지 않았습니다');
   }
 
@@ -697,8 +697,7 @@ export async function getServicesForCategoryPage(
   const servicesWithAdStatus = allServices.map(service => ({
     ...service,
     is_advertised: !!(
-      service.active_subscription &&
-      service.active_subscription.status === 'active' &&
+      service.active_subscription?.status === 'active' &&
       new Date(service.active_subscription.expires_at) > new Date()
     )
   }));

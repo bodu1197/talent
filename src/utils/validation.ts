@@ -16,7 +16,7 @@ export function isValidEmail(email: string): boolean {
  * @example isValidPhone("010-1234-5678") => true
  */
 export function isValidPhone(phone: string): boolean {
-  const phoneRegex = /^01[0-9]-?[0-9]{3,4}-?[0-9]{4}$/
+  const phoneRegex = /^01\d-?\d{3,4}-?\d{4}$/
   return phoneRegex.test(phone.replace(/\s/g, ''))
 }
 
@@ -41,7 +41,7 @@ export function isStrongPassword(password: string): boolean {
   const hasMinLength = password.length >= 8
   const hasUpperCase = /[A-Z]/.test(password)
   const hasLowerCase = /[a-z]/.test(password)
-  const hasNumber = /[0-9]/.test(password)
+  const hasNumber = /\d/.test(password)
 
   return hasMinLength && hasUpperCase && hasLowerCase && hasNumber
 }

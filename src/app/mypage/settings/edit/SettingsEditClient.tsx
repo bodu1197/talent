@@ -157,8 +157,7 @@ export default function SettingsEditClient({
 
         if (
           response.status === 500 &&
-          result.details &&
-          result.details.includes("SUPABASE_SERVICE_ROLE_KEY")
+          result.details?.includes("SUPABASE_SERVICE_ROLE_KEY")
         ) {
           errorMessage += "서버 설정 오류: 관리자에게 문의해주세요.\n";
           errorMessage += "(환경 변수가 설정되지 않았습니다)";

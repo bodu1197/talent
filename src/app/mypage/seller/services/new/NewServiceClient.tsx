@@ -116,7 +116,7 @@ export default function NewServiceClient({ sellerId }: Props) {
 
   // 템플릿 기반 썸네일 생성
   const generateTemplateThumbnail = async () => {
-    if (!selectedTemplate || !textStyle || !textStyle.text.trim()) {
+    if (!selectedTemplate || !textStyle?.text.trim()) {
       toast.error("템플릿과 텍스트를 입력해주세요.");
       return;
     }
@@ -717,7 +717,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                     max="10000000"
                     value={formData.price}
                     onChange={(e) => {
-                      const value = e.target.value.replace(/[^0-9]/g, "");
+                      const value = e.target.value.replace(/\D/g, "");
                       setFormData({ ...formData, price: value });
                     }}
                     onKeyDown={(e) => {
@@ -746,7 +746,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                     max="365"
                     value={formData.deliveryDays}
                     onChange={(e) => {
-                      const value = e.target.value.replace(/[^0-9]/g, "");
+                      const value = e.target.value.replace(/\D/g, "");
                       setFormData({ ...formData, deliveryDays: value });
                     }}
                     onKeyDown={(e) => {

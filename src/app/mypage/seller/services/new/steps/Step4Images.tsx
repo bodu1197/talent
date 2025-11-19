@@ -105,7 +105,7 @@ export default function Step4Images({ formData, setFormData }: Props) {
 
   // 템플릿 기반 썸네일 생성
   const generateTemplateThumbnail = async () => {
-    if (!selectedTemplate || !textStyle || !textStyle.text.trim()) {
+    if (!selectedTemplate || !textStyle?.text.trim()) {
       toast.error("템플릿과 텍스트를 입력해주세요.");
       return;
     }
