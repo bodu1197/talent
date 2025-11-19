@@ -147,6 +147,11 @@ export default function HeroSection() {
                   placeholder="어떤 재능이 필요하신가요?"
                   autoComplete="off"
                   className="w-full px-4 sm:px-6 py-3 sm:py-4 pr-14 border-2 border-gray-300 rounded-full focus:outline-none focus:border-brand-primary transition-colors text-gray-900 text-sm sm:text-base"
+                  style={{
+                    WebkitAppearance: 'none',
+                    MozAppearance: 'none',
+                    appearance: 'none'
+                  }}
                 />
                 <button
                   type="submit"

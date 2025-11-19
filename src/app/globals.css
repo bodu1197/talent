@@ -296,3 +296,28 @@ select:focus-visible {
     scroll-behavior: auto !important;
   }
 }
+
+/* ========================================
+   Remove browser autocomplete styles
+   ======================================== */
+
+/* Remove autofill background color and maintain styles */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-text-fill-color: inherit !important;
+  border-radius: inherit !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Remove default input appearance */
+input[type="text"],
+input[type="search"],
+input[type="email"],
+input[type="password"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
