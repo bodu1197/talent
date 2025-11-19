@@ -141,11 +141,11 @@ async function AIServicesSection({
         ];
       }
 
-      // 광고 서비스(랜덤) + 일반 서비스(랜덤) (상위 20개)
+      // 광고 서비스(랜덤) + 일반 서비스(랜덤) (상위 15개)
       const combinedServices = [
         ...advertisedServices,
         ...regularServices,
-      ].slice(0, 20);
+      ].slice(0, 15);
 
       // 리뷰 통계 한 번에 조회
       const serviceIds = combinedServices.map((s) => s.id);
