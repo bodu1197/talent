@@ -16,12 +16,14 @@ import {
   FaTag,
   FaRocket,
   FaPlus,
+  FaSync,
 } from "react-icons/fa";
 import toast from "react-hot-toast";
 import Image from "next/image";
 
 export default function AdvertisingPage() {
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [dashboard, setDashboard] = useState<AdvertisingDashboard | null>(null);
   const [services, setServices] = useState<
     Array<{
@@ -87,6 +89,13 @@ export default function AdvertisingPage() {
 
   useEffect(() => {
     loadDashboard();
+
+    // 30초마다 자동 새로고침
+    const interval = setInterval(() => {
+      loadDashboard();
+    }, 30000); // 30초
+
+    return () => clearInterval(interval);
   }, []);
 
   // ESC 키로 모달 닫기
@@ -101,8 +110,12 @@ export default function AdvertisingPage() {
     return () => document.removeEventListener("keydown", handleEscape);
   }, [isModalOpen]);
 
-  async function loadDashboard() {
+  async function loadDashboard(isManualRefresh = false) {
     try {
+      if (isManualRefresh) {
+        setRefreshing(true);
+      }
+
       const response = await fetch("/api/seller/advertising/dashboard");
 
       if (!response.ok) {
@@ -129,13 +142,23 @@ export default function AdvertisingPage() {
       });
 
       setServices(data.services || []);
+
+      if (isManualRefresh) {
+        toast.success("통계가 업데이트되었습니다");
+      }
     } catch (error) {
       console.error(
         "대시보드 로딩 실패:",
         JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
       );
+      if (isManualRefresh) {
+        toast.error("통계 업데이트에 실패했습니다");
+      }
     } finally {
       setLoading(false);
+      if (isManualRefresh) {
+        setRefreshing(false);
+      }
     }
   }
 
@@ -297,7 +320,22 @@ export default function AdvertisingPage() {
 
           {/* 통계 카드 */}
           {dashboard?.subscriptions && dashboard.subscriptions.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <>
+              {/* 통계 헤더 with 새로고침 버튼 */}
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-gray-900">광고 성과 통계</h2>
+                <button
+                  onClick={() => loadDashboard(true)}
+                  disabled={refreshing}
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="통계 새로고침 (자동: 30초마다)"
+                >
+                  <FaSync className={`text-gray-600 ${refreshing ? 'animate-spin' : ''}`} />
+                  {refreshing ? '업데이트 중...' : '새로고침'}
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium text-gray-600">
@@ -345,6 +383,7 @@ export default function AdvertisingPage() {
                 </p>
               </div>
             </div>
+            </>
           )}
 
           {/* 활성 광고 섹션 */}
