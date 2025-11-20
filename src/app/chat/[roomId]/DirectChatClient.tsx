@@ -469,7 +469,9 @@ export default function DirectChatClient({
           )}
 
           <form onSubmit={sendMessage} className="flex gap-2">
+            <label htmlFor="message-input" className="sr-only">메시지 입력</label>
             <input
+              id="message-input"
               type="text"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
@@ -818,10 +820,11 @@ function PaymentRequestModal({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="payment-title" className="block text-sm font-medium text-gray-700 mb-2">
               제목 *
             </label>
             <input
+              id="payment-title"
               type="text"
               value={formData.title}
               onChange={(e) =>
@@ -834,10 +837,11 @@ function PaymentRequestModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="payment-amount" className="block text-sm font-medium text-gray-700 mb-2">
               결제 금액 (원) *
             </label>
             <input
+              id="payment-amount"
               type="number"
               value={formData.amount}
               onChange={(e) =>
@@ -853,10 +857,11 @@ function PaymentRequestModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="payment-description" className="block text-sm font-medium text-gray-700 mb-2">
               작업 설명
             </label>
             <textarea
+              id="payment-description"
               value={formData.description}
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })
@@ -869,10 +874,11 @@ function PaymentRequestModal({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="delivery-days" className="block text-sm font-medium text-gray-700 mb-2">
                 작업 기간 (일)
               </label>
               <input
+                id="delivery-days"
                 type="number"
                 value={formData.deliveryDays}
                 onChange={(e) =>
@@ -885,10 +891,11 @@ function PaymentRequestModal({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="revision-count" className="block text-sm font-medium text-gray-700 mb-2">
                 수정 횟수
               </label>
               <input
+                id="revision-count"
                 type="number"
                 value={formData.revisionCount}
                 onChange={(e) =>

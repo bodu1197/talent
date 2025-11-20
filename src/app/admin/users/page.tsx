@@ -156,10 +156,23 @@ export default function AdminUsersPage() {
       {/* 탭 네비게이션 */}
       <div className="bg-white rounded-lg border border-gray-200">
         <div className="flex items-center overflow-x-auto">
-          {tabs.map((tab) => (
+          {tabs.map((tab, index) => (
             <button
               key={tab.value}
               onClick={() => setRoleFilter(tab.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'ArrowLeft' && index > 0) {
+                  e.preventDefault();
+                  setRoleFilter(tabs[index - 1].value);
+                } else if (e.key === 'ArrowRight' && index < tabs.length - 1) {
+                  e.preventDefault();
+                  setRoleFilter(tabs[index + 1].value);
+                }
+              }}
+              role="tab"
+              aria-selected={roleFilter === tab.value}
+              aria-label={`${tab.label} (${tab.count}개)`}
+              tabIndex={roleFilter === tab.value ? 0 : -1}
               className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
                 roleFilter === tab.value
                   ? "border-brand-primary text-brand-primary"
@@ -187,7 +200,9 @@ export default function AdminUsersPage() {
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <div className="flex gap-4">
           <div className="flex-1">
+            <label htmlFor="user-search" className="sr-only">사용자 검색</label>
             <input
+              id="user-search"
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -207,9 +222,9 @@ export default function AdminUsersPage() {
 
       {/* 결과 카운트 */}
       <div className="text-sm text-gray-600">
-        총{" "}
+        총{' '}
         <span className="font-bold text-gray-900">{filteredUsers.length}</span>
-        명의 사용자
+        {' '}명의 사용자
       </div>
 
       {/* 사용자 목록 */}
@@ -303,28 +318,22 @@ export default function AdminUsersPage() {
 
       {/* 사용자 상세 모달 */}
       {selectedUser && (
-        <div
+        <dialog
+          open
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
           onClick={() => setSelectedUser(null)}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
+            if (e.key === 'Escape') {
               e.preventDefault();
               setSelectedUser(null);
             }
           }}
-          role="button"
-          tabIndex={0}
         >
           <div
             className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.stopPropagation();
-              }
-            }}
-            role="dialog"
-            tabIndex={-1}
+            onKeyDown={(e) => e.stopPropagation()}
+            role="document"
           >
             {/* 모달 헤더 */}
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
@@ -383,39 +392,39 @@ export default function AdminUsersPage() {
               {/* 기본 정보 */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-500 mb-1">
+                  <p className="block text-sm font-medium text-gray-500 mb-1">
                     사용자 ID
-                  </label>
+                  </p>
                   <p className="text-sm text-gray-900 font-mono bg-gray-50 px-3 py-2 rounded">
                     {selectedUser.id}
                   </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-500 mb-1">
+                  <p className="block text-sm font-medium text-gray-500 mb-1">
                     이메일
-                  </label>
+                  </p>
                   <p className="text-sm text-gray-900">{selectedUser.email}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-500 mb-1">
+                  <p className="block text-sm font-medium text-gray-500 mb-1">
                     역할
-                  </label>
+                  </p>
                   <p className="text-sm text-gray-900">
                     {getRoleLabel(selectedUser.role)}
                   </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-500 mb-1">
+                  <p className="block text-sm font-medium text-gray-500 mb-1">
                     상태
-                  </label>
+                  </p>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                     {selectedUser.status === "active" ? "활성" : "비활성"}
                   </span>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-500 mb-1">
+                  <p className="block text-sm font-medium text-gray-500 mb-1">
                     가입일
-                  </label>
+                  </p>
                   <p className="text-sm text-gray-900">
                     {new Date(selectedUser.created_at).toLocaleString("ko-KR")}
                   </p>
@@ -436,7 +445,7 @@ export default function AdminUsersPage() {
               </button>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
     </div>
   );

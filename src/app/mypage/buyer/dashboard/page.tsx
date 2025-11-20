@@ -15,7 +15,7 @@ export default async function BuyerDashboardPage() {
   }
 
   // 구매자 정보 가져오기 (없으면 자동 생성)
-  let { data: buyer } = await supabase
+  const { data: buyer } = await supabase
     .from('buyers')
     .select('id')
     .eq('user_id', user.id)
@@ -23,7 +23,7 @@ export default async function BuyerDashboardPage() {
 
   // 구매자 레코드가 없으면 자동 생성
   if (!buyer) {
-    const { data: newBuyer, error: createError } = await supabase
+    const { error: createError } = await supabase
       .from('buyers')
       .insert({ user_id: user.id })
       .select('id')
@@ -32,8 +32,6 @@ export default async function BuyerDashboardPage() {
     if (createError) {
       throw new Error('구매자 생성 실패: ' + createError.message)
     }
-
-    buyer = newBuyer
   }
 
   // 프로필 정보 가져오기 (profiles 테이블)

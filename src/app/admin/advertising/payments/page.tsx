@@ -49,6 +49,32 @@ interface Stats {
   all: { count: number; total: number };
 }
 
+// Helper: Handle authentication errors
+function handleAuthError(status: number): boolean {
+  if (status === 401 || status === 403) {
+    toast.error("로그인이 필요하거나 권한이 없습니다");
+    globalThis.location.href = "/admin/login";
+    return true;
+  }
+  return false;
+}
+
+// Helper: Get avatar letter from name
+function getAvatar(name: string | null): string {
+  return name ? name[0] : "?";
+}
+
+// Helper: Get status label
+function getStatusLabel(status: string): string {
+  const config: Record<string, string> = {
+    pending: "입금 대기",
+    confirmed: "입금 확인",
+    completed: "처리 완료",
+    cancelled: "취소/환불",
+  };
+  return config[status] || status;
+}
+
 export default function AdminAdvertisingPaymentsPage() {
   const [loading, setLoading] = useState(true);
   const [payments, setPayments] = useState<Payment[]>([]);
@@ -128,16 +154,6 @@ export default function AdminAdvertisingPaymentsPage() {
     return params;
   }
 
-  // Helper: Handle authentication errors
-  function handleAuthError(status: number): boolean {
-    if (status === 401 || status === 403) {
-      toast.error("로그인이 필요하거나 권한이 없습니다");
-      globalThis.location.href = "/admin/login";
-      return true;
-    }
-    return false;
-  }
-
   async function loadPayments() {
     try {
       setLoading(true);
@@ -174,30 +190,28 @@ export default function AdminAdvertisingPaymentsPage() {
     return `#DP${year}${month}${day}${seq}`;
   }
 
-  function getAvatar(name: string | null): string {
-    return name ? name[0] : "?";
-  }
-
   function handleSearch() {
     setCurrentPage(1);
     loadPayments();
   }
 
-  function handleSelectAll(checked: boolean) {
-    if (checked) {
-      setSelectedIds(new Set(payments.map((p) => p.id)));
-    } else {
-      setSelectedIds(new Set());
-    }
+  function selectAll() {
+    setSelectedIds(new Set(payments.map((p) => p.id)));
   }
 
-  function handleSelectOne(id: string, checked: boolean) {
+  function deselectAll() {
+    setSelectedIds(new Set());
+  }
+
+  function selectOne(id: string) {
     const newSelected = new Set(selectedIds);
-    if (checked) {
-      newSelected.add(id);
-    } else {
-      newSelected.delete(id);
-    }
+    newSelected.add(id);
+    setSelectedIds(newSelected);
+  }
+
+  function deselectOne(id: string) {
+    const newSelected = new Set(selectedIds);
+    newSelected.delete(id);
     setSelectedIds(newSelected);
   }
 
@@ -275,7 +289,7 @@ export default function AdminAdvertisingPaymentsPage() {
     link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
+    link.remove();
   }
 
   async function handleBulkAction(action: "confirm" | "complete" | "cancel") {
@@ -338,16 +352,6 @@ export default function AdminAdvertisingPaymentsPage() {
       console.error("상태 업데이트 실패:", error);
       toast.error("업데이트에 실패했습니다");
     }
-  }
-
-  function getStatusLabel(status: string): string {
-    const config: Record<string, string> = {
-      pending: "입금 대기",
-      confirmed: "입금 확인",
-      completed: "처리 완료",
-      cancelled: "취소/환불",
-    };
-    return config[status] || status;
   }
 
   function getStatusBadge(status: string) {
@@ -532,8 +536,9 @@ export default function AdminAdvertisingPaymentsPage() {
             </div>
 
             <div className="flex items-center gap-2">
-              <label className="text-sm font-medium text-gray-700">상태:</label>
+              <label htmlFor="status-filter" className="text-sm font-medium text-gray-700">상태:</label>
               <select
+                id="status-filter"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 className="px-4 py-2.5 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#667eea]"
@@ -547,8 +552,9 @@ export default function AdminAdvertisingPaymentsPage() {
             </div>
 
             <div className="flex items-center gap-2">
-              <label className="text-sm font-medium text-gray-700">기간:</label>
+              <label htmlFor="start-date" className="text-sm font-medium text-gray-700">기간:</label>
               <input
+                id="start-date"
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
@@ -556,16 +562,19 @@ export default function AdminAdvertisingPaymentsPage() {
               />
               <span>~</span>
               <input
+                id="end-date"
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
                 className="px-4 py-2.5 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#667eea]"
+                aria-label="종료일"
               />
             </div>
 
             <div className="flex items-center gap-2">
-              <label className="text-sm font-medium text-gray-700">금액:</label>
+              <label htmlFor="amount-filter" className="text-sm font-medium text-gray-700">금액:</label>
               <select
+                id="amount-filter"
                 value={amountFilter}
                 onChange={(e) => setAmountFilter(e.target.value)}
                 className="px-4 py-2.5 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#667eea]"
@@ -651,8 +660,9 @@ export default function AdminAdvertisingPaymentsPage() {
               checked={
                 selectedIds.size === payments.length && payments.length > 0
               }
-              onChange={(e) => handleSelectAll(e.target.checked)}
+              onChange={(e) => e.target.checked ? selectAll() : deselectAll()}
               className="w-5 h-5 cursor-pointer"
+              aria-label="전체 선택"
             />
             <span className="text-sm text-gray-600">
               {selectedIds.size}개 선택됨
@@ -687,11 +697,13 @@ export default function AdminAdvertisingPaymentsPage() {
             <div className="flex flex-col items-center justify-center py-12">
               <div className="w-10 h-10 border-3 border-[#667eea] border-t-transparent rounded-full animate-spin mb-4"></div>
             </div>
-          ) : payments.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
-              결제 내역이 없습니다
-            </div>
           ) : (
+            <>
+              {payments.length === 0 ? (
+                <div className="text-center py-12 text-gray-500">
+                  결제 내역이 없습니다
+                </div>
+              ) : (
             <table className="w-full">
               <thead>
                 <tr className="bg-gray-50">
@@ -735,9 +747,10 @@ export default function AdminAdvertisingPaymentsPage() {
                         type="checkbox"
                         checked={selectedIds.has(payment.id)}
                         onChange={(e) =>
-                          handleSelectOne(payment.id, e.target.checked)
+                          e.target.checked ? selectOne(payment.id) : deselectOne(payment.id)
                         }
                         className="w-4 h-4"
+                        aria-label={`${generateDepositNumber(payment)} 선택`}
                       />
                     </td>
                     <td className="px-4 py-4">
@@ -859,6 +872,8 @@ export default function AdminAdvertisingPaymentsPage() {
                 ))}
               </tbody>
             </table>
+              )}
+            </>
           )}
         </div>
 
@@ -873,7 +888,7 @@ export default function AdminAdvertisingPaymentsPage() {
           </button>
           {[...new Array(Math.min(5, totalPages))].map((_, i) => (
             <button
-              key={i}
+              key={`page-${i + 1}`}
               onClick={() => setCurrentPage(i + 1)}
               className={`w-9 h-9 border rounded-lg flex items-center justify-center text-sm transition-all ${
                 currentPage === i + 1
