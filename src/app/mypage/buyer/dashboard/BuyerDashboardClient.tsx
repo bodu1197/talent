@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { prefetchBuyerData } from "@/lib/prefetch/buyerPrefetch";
 import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import StatCard from "@/components/mypage/StatCard";
 import Link from "next/link";
 import {
   FaBell,
@@ -13,6 +12,10 @@ import {
   FaBox,
   FaHeart,
   FaImage,
+  FaSpinner,
+  FaBoxOpen,
+  FaStar,
+  FaShoppingCart,
 } from "react-icons/fa";
 
 import type { Order, Service, Seller } from "@/types/common";
@@ -137,31 +140,51 @@ export default function BuyerDashboardClient({
         </div>
 
         {/* 통계 카드 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatCard
-            title="진행중 주문"
-            value={`${stats?.inProgressOrders || 0}건`}
-            icon="fa-spinner"
-            color="yellow"
-          />
-          <StatCard
-            title="도착 확인 대기"
-            value={`${stats?.deliveredOrders || 0}건`}
-            icon="fa-box-open"
-            color="blue"
-          />
-          <StatCard
-            title="작성 가능 리뷰"
-            value={`${stats?.pendingReviews || 0}건`}
-            icon="fa-star"
-            color="purple"
-          />
-          <StatCard
-            title="이번달 구매"
-            value={`${stats?.monthlyPurchases || 0}건`}
-            icon="fa-shopping-cart"
-            color="green"
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="bg-white rounded-lg shadow p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600">진행중 주문</p>
+                <p className="text-lg font-bold text-gray-900">
+                  {stats?.inProgressOrders || 0}건
+                </p>
+              </div>
+              <FaSpinner className="text-2xl text-yellow-500" />
+            </div>
+          </div>
+          <div className="bg-white rounded-lg shadow p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600">도착 확인 대기</p>
+                <p className="text-lg font-bold text-gray-900">
+                  {stats?.deliveredOrders || 0}건
+                </p>
+              </div>
+              <FaBoxOpen className="text-2xl text-blue-500" />
+            </div>
+          </div>
+          <div className="bg-white rounded-lg shadow p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600">작성 가능 리뷰</p>
+                <p className="text-lg font-bold text-gray-900">
+                  {stats?.pendingReviews || 0}건
+                </p>
+              </div>
+              <FaStar className="text-2xl text-purple-500" />
+            </div>
+          </div>
+          <div className="bg-white rounded-lg shadow p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600">이번달 구매</p>
+                <p className="text-lg font-bold text-gray-900">
+                  {stats?.monthlyPurchases || 0}건
+                </p>
+              </div>
+              <FaShoppingCart className="text-2xl text-green-500" />
+            </div>
+          </div>
         </div>
 
         {/* 알림 */}
