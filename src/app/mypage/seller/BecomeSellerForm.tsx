@@ -80,10 +80,11 @@ export default function BecomeSellerForm({ userId }: Props) {
 
           <form onSubmit={handleSubmit}>
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="seller-name" className="block text-sm font-medium text-gray-700 mb-2">
                 판매자명 *
               </label>
               <input
+                id="seller-name"
                 type="text"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}

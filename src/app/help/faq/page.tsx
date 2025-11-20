@@ -112,7 +112,7 @@ export default function FAQPage() {
 
       <div className="max-w-4xl">
         {faqs.map((category, categoryIndex) => (
-          <div key={categoryIndex} className="mb-12">
+          <div key={category.category || `category-${categoryIndex}`} className="mb-12">
             <h2 className="text-2xl font-semibold mb-6 text-brand-primary">
               {category.category}
             </h2>

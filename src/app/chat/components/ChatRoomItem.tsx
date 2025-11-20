@@ -50,11 +50,10 @@ export default function ChatRoomItem({
   const displayName = room.otherUser?.name || "사용자";
   const hasUnread = (room.unreadCount || 0) > 0;
 
-  const buttonClassName = isMobile
-    ? "w-full px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors text-left"
-    : `w-full p-4 border-b border-gray-100 hover:bg-gray-50 text-left transition-colors ${
-        isSelected ? "bg-gray-50 border-l-4 border-l-green-500" : ""
-      }`;
+  const baseClassName = "w-full border-b border-gray-100 hover:bg-gray-50 text-left transition-colors";
+  const mobileClassName = "px-4 py-3";
+  const desktopClassName = `p-4 ${isSelected ? "bg-gray-50 border-l-4 border-l-green-500" : ""}`;
+  const buttonClassName = isMobile ? `${baseClassName} ${mobileClassName}` : `${baseClassName} ${desktopClassName}`;
 
   return (
     <button
@@ -96,12 +95,12 @@ export default function ChatRoomItem({
                       month: "short",
                       day: "numeric",
                     })
-                  : room.last_message_at
+                  : (room.last_message_at
                     ? new Date(room.last_message_at).toLocaleDateString("ko-KR", {
                         month: "2-digit",
                         day: "2-digit",
                       })
-                    : ""}
+                    : "")}
               </span>
             )}
           </div>

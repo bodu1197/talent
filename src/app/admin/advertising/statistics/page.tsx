@@ -155,10 +155,10 @@ function PeriodFilter({
     <div className="bg-white rounded-lg border border-slate-200 p-4">
       <div className="flex flex-wrap gap-4 items-end">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">
+          <label htmlFor="period-filter" className="block text-sm font-medium text-slate-700 mb-1">
             기간 단위
           </label>
-          <div className="flex gap-2" role="group" aria-label="기간 단위 선택">
+          <div id="period-filter" className="flex gap-2" aria-label="기간 단위 선택">
             {periodButtons.map((btn) => (
               <button
                 key={btn.value}

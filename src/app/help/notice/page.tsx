@@ -59,13 +59,13 @@ export default function NoticePage() {
                   className={`px-3 py-1 rounded text-xs font-semibold ${
                     notice.category === "공지"
                       ? "bg-brand-primary text-white"
-                      : (notice.category === "이벤트"
+                      : notice.category === "이벤트"
                         ? "bg-green-100 text-green-800"
-                        : (notice.category === "업데이트"
+                        : notice.category === "업데이트"
                           ? "bg-blue-100 text-blue-800"
-                          : (notice.category === "점검"
+                          : notice.category === "점검"
                             ? "bg-yellow-100 text-yellow-800"
-                            : "bg-gray-100 text-gray-800")))
+                            : "bg-gray-100 text-gray-800"
                   }`}
                 >
                   {notice.category}

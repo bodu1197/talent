@@ -151,10 +151,11 @@ export default function WithdrawClient({
             )}
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="withdraw-amount" className="block text-sm font-medium text-gray-700 mb-2">
                 출금 금액
               </label>
               <input
+                id="withdraw-amount"
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}

@@ -155,17 +155,10 @@ export default function AdvertisingChargePage() {
           {/* 크레딧 패키지 선택 */}
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             {CREDIT_PACKAGES.map((pkg) => (
-              <div
+              <button
                 key={pkg.amount}
                 onClick={() => setSelectedPackage(pkg.amount)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    setSelectedPackage(pkg.amount);
-                  }
-                }}
-                role="button"
-                tabIndex={0}
+                type="button"
                 aria-label={`${pkg.label} 크레딧 패키지 선택`}
                 className={`relative bg-white border-2 rounded-lg p-6 cursor-pointer transition-all ${
                   selectedPackage === pkg.amount
@@ -198,7 +191,7 @@ export default function AdvertisingChargePage() {
                     <FaCheckCircle className="text-brand-primary text-xl" />
                   </div>
                 )}
-              </div>
+              </button>
             ))}
           </div>
 

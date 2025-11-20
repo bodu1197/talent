@@ -450,10 +450,11 @@ function BuyerOrdersContent() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* 검색 */}
             <div className="lg:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="order-search" className="block text-sm font-medium text-gray-700 mb-2">
                 판매자명 / 주문번호 검색
               </label>
               <input
+                id="order-search"
                 type="text"
                 value={filters.searchQuery}
                 onChange={(e) =>
@@ -466,10 +467,11 @@ function BuyerOrdersContent() {
 
             {/* 기간 검색 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="order-start-date" className="block text-sm font-medium text-gray-700 mb-2">
                 시작일
               </label>
               <input
+                id="order-start-date"
                 type="date"
                 value={filters.startDate}
                 onChange={(e) =>
@@ -480,10 +482,11 @@ function BuyerOrdersContent() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="order-end-date" className="block text-sm font-medium text-gray-700 mb-2">
                 종료일
               </label>
               <input
+                id="order-end-date"
                 type="date"
                 value={filters.endDate}
                 onChange={(e) =>
@@ -508,11 +511,11 @@ function BuyerOrdersContent() {
 
         {/* 결과 카운트 */}
         <div className="mb-4 text-sm text-gray-600">
-          총{" "}
+          총{' '}
           <span className="font-bold text-gray-900">
             {filteredOrders.length}
           </span>
-          건의 주문
+          {' '}건의 주문
         </div>
 
         {/* 주문 목록 */}

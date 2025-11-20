@@ -127,9 +127,9 @@ export default function ChatRoomList({
           </div>
         ) : rooms.length === 0 ? (
           <div
-            className={`${isMobile ? "flex flex-col items-center justify-center py-12" : "p-8"} text-center text-gray-500`}
+            className={`text-center text-gray-500 ${isMobile ? "flex flex-col items-center justify-center py-12" : "p-8"}`}
           >
-            <FaComments className={`${isMobile ? "text-4xl mb-4" : "text-4xl mb-3 inline-block"}`} />
+            <FaComments className={`text-4xl ${isMobile ? "mb-4" : "mb-3 inline-block"}`} />
             <p>{isMobile ? "채팅 내역이 없습니다" : "채팅방이 없습니다"}</p>
           </div>
         ) : (

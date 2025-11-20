@@ -465,7 +465,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
               <div className="space-y-3">
                 {statusHistory.map((history, index) => (
                   <div
-                    key={index}
+                    key={`status-${history.status}-${index}`}
                     className="flex items-start gap-3 pb-3 border-b border-gray-200 last:border-0"
                   >
                     <div className="w-8 h-8 bg-brand-primary rounded-full flex items-center justify-center flex-shrink-0">
@@ -633,10 +633,11 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="seller-cancel-reason" className="block text-sm font-medium text-gray-700 mb-2">
                     취소 사유 *
                   </label>
                   <textarea
+                    id="seller-cancel-reason"
                     rows={4}
                     value={cancelReason}
                     onChange={(e) => setCancelReason(e.target.value)}

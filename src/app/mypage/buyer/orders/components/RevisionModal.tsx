@@ -50,10 +50,11 @@ export default function RevisionModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="revision-details" className="block text-sm font-medium text-gray-700 mb-2">
               수정 요청 사항 *
             </label>
             <textarea
+              id="revision-details"
               rows={6}
               value={revisionDetails}
               onChange={(e) => onDetailsChange(e.target.value)}
@@ -63,10 +64,10 @@ export default function RevisionModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="revision-file-upload" className="block text-sm font-medium text-gray-700 mb-2">
               참고 파일 첨부 (선택)
             </label>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-brand-primary transition-colors cursor-pointer">
+            <div id="revision-file-upload" className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-brand-primary transition-colors cursor-pointer">
               <FaCloudUploadAlt className="text-gray-400 text-3xl mb-2" />
               <p className="text-gray-600 text-sm">클릭하여 파일 선택</p>
             </div>

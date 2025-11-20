@@ -313,7 +313,7 @@ export default function BankTransferAdvertisingPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {Object.entries(PACKAGES).map(([key, pkg]) => (
-                  <div
+                  <button
                     key={key}
                     onClick={() => {
                       setFormData({
@@ -322,20 +322,9 @@ export default function BankTransferAdvertisingPage() {
                         depositAmount: pkg.price,
                       });
                     }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setFormData({
-                          ...formData,
-                          packageType: key as PackageType,
-                          depositAmount: pkg.price,
-                        });
-                      }
-                    }}
-                    role="button"
-                    tabIndex={0}
+                    type="button"
                     aria-label={`${pkg.name} 상품 선택`}
-                    className={`border-2 rounded-lg p-6 cursor-pointer transition-all ${
+                    className={`border-2 rounded-lg p-6 cursor-pointer transition-all text-left ${
                       formData.packageType === key
                         ? "border-[#0f3460] bg-blue-50"
                         : "border-gray-200 hover:border-[#0f3460]"
@@ -348,12 +337,12 @@ export default function BankTransferAdvertisingPage() {
                     </p>
                     <ul className="space-y-2">
                       {pkg.features.map((feature, idx) => (
-                        <li key={idx} className="text-sm text-gray-700">
+                        <li key={`${key}-feature-${idx}`} className="text-sm text-gray-700">
                           ✓ {feature}
                         </li>
                       ))}
                     </ul>
-                  </div>
+                  </button>
                 ))}
               </div>
 
@@ -383,10 +372,11 @@ export default function BankTransferAdvertisingPage() {
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-bold mb-2">
+                  <label htmlFor="depositor-name" className="block text-sm font-bold mb-2">
                     입금자명 *
                   </label>
                   <input
+                    id="depositor-name"
                     type="text"
                     value={formData.depositorName}
                     onChange={(e) =>
@@ -401,10 +391,11 @@ export default function BankTransferAdvertisingPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold mb-2">
+                  <label htmlFor="depositor-phone" className="block text-sm font-bold mb-2">
                     연락처 *
                   </label>
                   <input
+                    id="depositor-phone"
                     type="tel"
                     value={formData.phone}
                     onChange={(e) =>
@@ -416,10 +407,11 @@ export default function BankTransferAdvertisingPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold mb-2">
+                  <label htmlFor="depositor-email" className="block text-sm font-bold mb-2">
                     이메일 *
                   </label>
                   <input
+                    id="depositor-email"
                     type="email"
                     value={formData.email}
                     onChange={(e) =>
@@ -431,10 +423,11 @@ export default function BankTransferAdvertisingPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold mb-2">
+                  <label htmlFor="business-registration" className="block text-sm font-bold mb-2">
                     사업자 등록번호 (선택)
                   </label>
                   <input
+                    id="business-registration"
                     type="text"
                     value={formData.businessRegistrationNumber}
                     onChange={(e) =>
@@ -570,10 +563,11 @@ export default function BankTransferAdvertisingPage() {
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-bold mb-2">
+                  <label htmlFor="deposit-bank" className="block text-sm font-bold mb-2">
                     입금 은행 *
                   </label>
                   <select
+                    id="deposit-bank"
                     value={formData.depositBank}
                     onChange={(e) =>
                       setFormData({ ...formData, depositBank: e.target.value })
@@ -593,10 +587,11 @@ export default function BankTransferAdvertisingPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold mb-2">
+                  <label htmlFor="deposit-date" className="block text-sm font-bold mb-2">
                     입금 날짜 *
                   </label>
                   <input
+                    id="deposit-date"
                     type="date"
                     value={formData.depositDate}
                     onChange={(e) =>
@@ -607,10 +602,11 @@ export default function BankTransferAdvertisingPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold mb-2">
+                  <label htmlFor="deposit-time" className="block text-sm font-bold mb-2">
                     입금 시간 *
                   </label>
                   <input
+                    id="deposit-time"
                     type="time"
                     value={formData.depositTime}
                     onChange={(e) =>
@@ -621,10 +617,11 @@ export default function BankTransferAdvertisingPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold mb-2">
+                  <label htmlFor="deposit-amount" className="block text-sm font-bold mb-2">
                     입금 금액 확인 *
                   </label>
                   <input
+                    id="deposit-amount"
                     type="number"
                     value={formData.depositAmount}
                     readOnly
@@ -633,10 +630,11 @@ export default function BankTransferAdvertisingPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold mb-2">
+                  <label htmlFor="receipt-upload" className="block text-sm font-bold mb-2">
                     입금증 첨부 (선택)
                   </label>
                   <input
+                    id="receipt-upload"
                     type="file"
                     accept="image/*"
                     onChange={(e) => {

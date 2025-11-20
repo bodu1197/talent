@@ -331,10 +331,10 @@ export default function BuyerReviewsClient({
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="review-rating" className="block text-sm font-medium text-gray-700 mb-2">
                     평점 *
                   </label>
-                  <div className="flex items-center gap-2">
+                  <div id="review-rating" className="flex items-center gap-2">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <button
                         key={star}
@@ -352,10 +352,11 @@ export default function BuyerReviewsClient({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="review-content" className="block text-sm font-medium text-gray-700 mb-2">
                     리뷰 내용 *
                   </label>
                   <textarea
+                    id="review-content"
                     value={reviewContent}
                     onChange={(e) => setReviewContent(e.target.value)}
                     rows={6}

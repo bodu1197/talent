@@ -26,6 +26,10 @@ import {
   FaDownload,
   FaUserCircle,
   FaImage,
+  FaInfoCircle,
+  FaExclamationTriangle,
+  FaBan,
+  FaTimes,
 } from "react-icons/fa";
 
 interface PageProps {
@@ -440,7 +444,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                   {order.deliverables.map(
                     (file: Deliverable, index: number) => (
                       <div
-                        key={index}
+                        key={`deliverable-${index}`}
                         className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                       >
                         <div className="flex items-center gap-3">
@@ -496,7 +500,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
               <div className="space-y-3">
                 {statusHistory.map((history, index) => (
                   <div
-                    key={index}
+                    key={`status-${history.status}-${index}`}
                     className="flex items-start gap-3 pb-3 border-b border-gray-200 last:border-0"
                   >
                     <div className="w-8 h-8 bg-brand-primary rounded-full flex items-center justify-center flex-shrink-0">

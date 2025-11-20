@@ -333,7 +333,6 @@ export default function AdminUsersPage() {
             className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => e.stopPropagation()}
-            role="document"
           >
             {/* 모달 헤더 */}
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">

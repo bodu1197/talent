@@ -50,10 +50,11 @@ export default function CancelModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="cancel-reason" className="block text-sm font-medium text-gray-700 mb-2">
               취소 사유 *
             </label>
             <textarea
+              id="cancel-reason"
               rows={4}
               value={cancelReason}
               onChange={(e) => onReasonChange(e.target.value)}

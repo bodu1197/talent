@@ -430,7 +430,7 @@ export default function AdvertisingPage() {
                         </h3>
                         <span className="inline-flex items-center px-3 py-1 mt-2 rounded-full text-xs font-medium bg-green-100 text-green-800">
                           <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-                          광고 진행중
+                          {' '}광고 진행중
                         </span>
                       </div>
                     </div>
@@ -541,13 +541,13 @@ export default function AdvertisingPage() {
                               "pending_payment" ? (
                                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                                   <span className="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span>
-                                  결제 대기중
+                                  {' '}결제 대기중
                                 </span>
                               ) : (
                                 <>
                                   <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                     <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-                                    광고 진행중
+                                    {' '}광고 진행중
                                   </span>
                                   {service.adDetails?.isFreePromotion &&
                                     service.adDetails?.promotionEndDate && (
@@ -606,7 +606,6 @@ export default function AdvertisingPage() {
                             service.adDetails?.status === "pending_payment" ? (
                               <button
                                 onClick={() => {
-                                  // console.log('입금 확인 클릭:', service.id);
                                   setSelectedService(service.id);
                                   setIsModalOpen(true);
                                 }}
@@ -617,7 +616,6 @@ export default function AdvertisingPage() {
                             ) : (
                               <button
                                 onClick={() => {
-                                  // console.log('상세보기 클릭:', service.id);
                                   setSelectedService(service.id);
                                   setIsModalOpen(true);
                                 }}
@@ -648,32 +646,25 @@ export default function AdvertisingPage() {
 
           {/* 모달 팝업 */}
           {isModalOpen && selectedService && (
-            <div
+            <dialog
+              open
               className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
               onClick={() => {
                 setIsModalOpen(false);
                 setSelectedService("");
               }}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
+                if (e.key === 'Escape') {
                   e.preventDefault();
                   setIsModalOpen(false);
                   setSelectedService("");
                 }
               }}
-              role="button"
-              tabIndex={0}
             >
               <div
                 className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.stopPropagation();
-                  }
-                }}
-                role="dialog"
-                tabIndex={-1}
+                onKeyDown={(e) => e.stopPropagation()}
               >
                 {/* 모달 헤더 */}
                 <div className="sticky top-0 bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center rounded-t-2xl">
@@ -791,13 +782,14 @@ export default function AdvertisingPage() {
                         <div className="space-y-6">
                           {/* 계약 기간 선택 */}
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label htmlFor="contract-period" className="block text-sm font-medium text-gray-700 mb-2">
                               <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold mr-2">
                                 1
                               </span>
-                              계약 기간을 선택하세요
+                              {' '}계약 기간을 선택하세요
                             </label>
                             <select
+                              id="contract-period"
                               value={selectedMonths}
                               onChange={(e) =>
                                 setSelectedMonths(Number(e.target.value))
@@ -921,11 +913,11 @@ export default function AdvertisingPage() {
 
                           {/* 결제 방식 선택 */}
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label htmlFor="payment-method" className="block text-sm font-medium text-gray-700 mb-2">
                               <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold mr-2">
                                 2
                               </span>
-                              결제 방식을 선택하세요
+                              {' '}결제 방식을 선택하세요
                             </label>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               {/* 카드 (준비중) */}
@@ -953,19 +945,12 @@ export default function AdvertisingPage() {
                               </div>
 
                               {/* 무통장 입금 */}
-                              <div
+                              <button
+                                type="button"
                                 onClick={() =>
                                   setSelectedPaymentMethod("bank_transfer")
                                 }
-                                onKeyDown={(e) => {
-                                  if (e.key === 'Enter' || e.key === ' ') {
-                                    e.preventDefault();
-                                    setSelectedPaymentMethod("bank_transfer");
-                                  }
-                                }}
-                                role="button"
-                                tabIndex={0}
-                                className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                                className={`border-2 rounded-lg p-4 cursor-pointer transition-all text-left w-full ${
                                   selectedPaymentMethod === "bank_transfer"
                                     ? "border-brand-primary bg-blue-50"
                                     : "border-gray-200 hover:border-gray-300"
@@ -996,7 +981,7 @@ export default function AdvertisingPage() {
                                     </div>
                                   </div>
                                 </div>
-                              </div>
+                              </button>
                             </div>
                           </div>
 
@@ -1026,7 +1011,7 @@ export default function AdvertisingPage() {
                   })()}
                 </div>
               </div>
-            </div>
+            </dialog>
           )}
 
           {/* 서비스 없음 */}

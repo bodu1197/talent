@@ -415,9 +415,9 @@ export default function RegisterPage() {
                   className={`input pr-10 ${
                     emailCheckStatus === "taken"
                       ? "border-red-500 focus:ring-red-500"
-                      : (emailCheckStatus === "available"
+                      : emailCheckStatus === "available"
                         ? "border-green-500 focus:ring-green-500"
-                        : "")
+                        : ""
                   }`}
                   placeholder="your@email.com"
                   required
@@ -486,9 +486,9 @@ export default function RegisterPage() {
                   className={`mt-1 text-xs ${
                     emailCheckStatus === "taken"
                       ? "text-red-600"
-                      : (emailCheckStatus === "available"
+                      : emailCheckStatus === "available"
                         ? "text-green-600"
-                        : "text-gray-500")
+                        : "text-gray-500"
                   }`}
                 >
                   {emailCheckMessage}
@@ -657,7 +657,7 @@ export default function RegisterPage() {
 
             {/* 랜덤 닉네임 및 프로필 이미지 */}
             <div className="bg-gray-50 p-4 rounded-lg">
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label htmlFor="profile-info" className="block text-sm font-medium text-gray-700 mb-3">
                 프로필 정보 (자동 생성)
               </label>
               <div className="flex items-center gap-4">
