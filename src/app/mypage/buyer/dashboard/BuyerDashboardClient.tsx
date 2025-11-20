@@ -180,7 +180,7 @@ export default function BuyerDashboardClient({
                 >
                   <div className="flex items-center gap-3">
                     <FaInfoCircle className="text-blue-500" />
-                    <span className="text-gray-900 font-medium">
+                    <span className="text-sm md:text-base text-gray-900 font-medium">
                       {alert.message}
                     </span>
                   </div>
@@ -200,7 +200,7 @@ export default function BuyerDashboardClient({
             </h2>
             <Link
               href="/mypage/buyer/orders"
-              className="text-sm text-brand-primary hover:underline flex items-center gap-1"
+              className="text-xs md:text-sm text-brand-primary hover:underline flex items-center gap-1"
             >
               전체 보기 <FaArrowRight className="text-xs" />
             </Link>
@@ -234,14 +234,14 @@ export default function BuyerDashboardClient({
                         <div className="flex items-start justify-between mb-2">
                           <div>
                             <div className="flex items-center gap-2 mb-1">
-                              <span className="text-sm text-gray-500">
+                              <span className="text-xs md:text-sm text-gray-500">
                                 #{order.order_number || order.id.slice(0, 8)}
                               </span>
-                              <span className="text-base font-bold text-gray-900">
+                              <span className="text-sm md:text-base font-bold text-gray-900">
                                 {order.title || order.service?.title}
                               </span>
                             </div>
-                            <div className="text-sm text-gray-600 mb-2">
+                            <div className="text-xs md:text-sm text-gray-600 mb-2">
                               판매자: {order.seller?.name || "판매자"}
                             </div>
                           </div>
@@ -257,11 +257,11 @@ export default function BuyerDashboardClient({
                             {getStatusLabel(order.status)}
                           </span>
                           {daysLeft && (
-                            <span className="text-sm text-gray-600">
+                            <span className="text-xs md:text-sm text-gray-600">
                               D-{daysLeft}일
                             </span>
                           )}
-                          <span className="text-sm font-bold text-gray-900">
+                          <span className="text-xs md:text-sm font-bold text-gray-900">
                             {order.total_amount?.toLocaleString() || "0"}원
                           </span>
                         </div>
@@ -269,7 +269,7 @@ export default function BuyerDashboardClient({
                         <div className="flex items-center gap-2">
                           <Link
                             href={`/mypage/buyer/orders/${order.id}`}
-                            className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#0a2540] transition-colors text-sm font-medium"
+                            className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#0a2540] transition-colors text-xs md:text-sm font-medium"
                           >
                             {order.status === "delivered"
                               ? "확인하기"
@@ -277,7 +277,7 @@ export default function BuyerDashboardClient({
                           </Link>
                           <Link
                             href={`/chat?order=${order.id}`}
-                            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-xs md:text-sm font-medium"
                           >
                             메시지
                           </Link>
@@ -288,7 +288,7 @@ export default function BuyerDashboardClient({
                 );
               })
             ) : (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-sm md:text-base text-gray-500">
                 진행중인 주문이 없습니다
               </div>
             )}
@@ -304,7 +304,7 @@ export default function BuyerDashboardClient({
             </h2>
             <Link
               href="/mypage/buyer/favorites"
-              className="text-sm text-brand-primary hover:underline"
+              className="text-xs md:text-sm text-brand-primary hover:underline"
             >
               전체 보기
             </Link>
@@ -318,10 +318,10 @@ export default function BuyerDashboardClient({
                   className="flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
                 >
                   <div>
-                    <div className="font-medium text-gray-900">
+                    <div className="font-medium text-sm md:text-base text-gray-900">
                       {item.service?.title}
                     </div>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-xs md:text-sm text-gray-600">
                       {item.service?.seller?.name}
                     </div>
                   </div>
@@ -329,7 +329,7 @@ export default function BuyerDashboardClient({
                 </Link>
               ))
             ) : (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-sm md:text-base text-gray-500">
                 찜한 서비스가 없습니다
               </div>
             )}
