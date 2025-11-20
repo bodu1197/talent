@@ -153,8 +153,8 @@ export default function SellerDashboardClient({
       <div className="py-8 px-4">
         {/* 페이지 헤더 */}
         <div className="mb-6">
-          <h1 className="text-xl font-bold text-gray-900">판매 대시보드</h1>
-          <p className="text-gray-600 mt-1 text-sm">
+          <h1 className="text-2xl font-bold text-gray-900">판매 대시보드</h1>
+          <p className="text-gray-600 mt-2 text-base">
             판매 현황을 한눈에 확인하세요
           </p>
         </div>
@@ -210,7 +210,7 @@ export default function SellerDashboardClient({
         {/* 최근 주문 */}
         <div className="bg-white rounded-lg shadow">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-base font-semibold text-gray-900">최근 주문</h2>
+            <h2 className="text-lg font-bold text-gray-900">최근 주문</h2>
           </div>
           <div className="p-6">
             {recentOrders.length > 0 ? (
@@ -249,21 +249,20 @@ export default function SellerDashboardClient({
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                              order.status === "completed"
-                                ? "bg-green-100 text-green-800"
-                                : order.status === "in_progress"
+                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${order.status === "completed"
+                              ? "bg-green-100 text-green-800"
+                              : order.status === "in_progress"
                                 ? "bg-yellow-100 text-yellow-800"
                                 : "bg-gray-100 text-gray-800"
-                            }`}
+                              }`}
                           >
                             {order.status === "in_progress"
                               ? "진행중"
                               : order.status === "completed"
-                              ? "완료"
-                              : order.status === "paid"
-                              ? "결제완료"
-                              : order.status}
+                                ? "완료"
+                                : order.status === "paid"
+                                  ? "결제완료"
+                                  : order.status}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">

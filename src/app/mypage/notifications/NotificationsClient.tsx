@@ -209,11 +209,11 @@ export default function NotificationsClient({
       <div className="py-8 px-4">
         {/* 헤더 */}
         <div className="mb-6">
-          <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
             <FaBell className="text-brand-primary" />
             전체 알림
           </h1>
-          <p className="text-gray-600 mt-1 text-sm">
+          <p className="text-gray-600 mt-2 text-base">
             {unreadCount > 0
               ? `읽지 않은 알림 ${unreadCount}개`
               : "모든 알림을 확인했습니다"}
@@ -228,31 +228,28 @@ export default function NotificationsClient({
               <FaFilter className="text-gray-400" />
               <button
                 onClick={() => setFilter("all")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  filter === "all"
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === "all"
                     ? "bg-brand-primary text-white"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
+                  }`}
               >
                 전체 ({notifications.length})
               </button>
               <button
                 onClick={() => setFilter("unread")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  filter === "unread"
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === "unread"
                     ? "bg-brand-primary text-white"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
+                  }`}
               >
                 읽지 않음 ({unreadCount})
               </button>
               <button
                 onClick={() => setFilter("read")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  filter === "read"
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === "read"
                     ? "bg-brand-primary text-white"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
+                  }`}
               >
                 읽음 ({notifications.length - unreadCount})
               </button>
@@ -282,9 +279,8 @@ export default function NotificationsClient({
                 return (
                   <div
                     key={notification.id}
-                    className={`${
-                      notification.is_read ? "bg-white" : "bg-blue-50"
-                    } hover:bg-gray-50 transition-colors`}
+                    className={`${notification.is_read ? "bg-white" : "bg-blue-50"
+                      } hover:bg-gray-50 transition-colors`}
                   >
                     {notification.link ? (
                       <Link
@@ -300,11 +296,10 @@ export default function NotificationsClient({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2 mb-1">
                             <h3
-                              className={`text-base font-bold ${
-                                notification.is_read
+                              className={`text-base font-bold ${notification.is_read
                                   ? "text-gray-700"
                                   : "text-gray-900"
-                              }`}
+                                }`}
                             >
                               {notification.title}
                             </h3>
@@ -330,11 +325,10 @@ export default function NotificationsClient({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2 mb-1">
                             <h3
-                              className={`text-base font-bold ${
-                                notification.is_read
+                              className={`text-base font-bold ${notification.is_read
                                   ? "text-gray-700"
                                   : "text-gray-900"
-                              }`}
+                                }`}
                             >
                               {notification.title}
                             </h3>
@@ -367,8 +361,8 @@ export default function NotificationsClient({
                 {filter === "unread"
                   ? "읽지 않은 알림이 없습니다"
                   : filter === "read"
-                  ? "읽은 알림이 없습니다"
-                  : "알림이 없습니다"}
+                    ? "읽은 알림이 없습니다"
+                    : "알림이 없습니다"}
               </h3>
               <p className="text-gray-600">
                 {filter === "all"

@@ -32,8 +32,8 @@ export default function SettingsClient({
       <div className="py-8 px-4">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">설정</h1>
-            <p className="text-gray-600 mt-1 text-sm">
+            <h1 className="text-2xl font-bold text-gray-900">설정</h1>
+            <p className="text-gray-600 mt-2 text-base">
               계정 및 알림 설정을 확인하세요
             </p>
           </div>
@@ -51,33 +51,30 @@ export default function SettingsClient({
           <div className="w-64 bg-white rounded-lg border border-gray-200 p-4">
             <button
               onClick={() => setActiveTab("profile")}
-              className={`w-full px-4 py-2 rounded-lg text-left transition-colors ${
-                activeTab === "profile"
-                  ? "bg-brand-primary text-white"
-                  : "text-gray-700 hover:bg-gray-100"
-              }`}
+              className={`w-full px-4 py-2 rounded-lg text-left transition-colors ${activeTab === "profile"
+                ? "bg-brand-primary text-white"
+                : "text-gray-700 hover:bg-gray-100"
+                }`}
             >
               <FaUser className="mr-2 inline" />
               프로필
             </button>
             <button
               onClick={() => setActiveTab("account")}
-              className={`w-full px-4 py-2 rounded-lg text-left transition-colors mt-2 ${
-                activeTab === "account"
-                  ? "bg-brand-primary text-white"
-                  : "text-gray-700 hover:bg-gray-100"
-              }`}
+              className={`w-full px-4 py-2 rounded-lg text-left transition-colors mt-2 ${activeTab === "account"
+                ? "bg-brand-primary text-white"
+                : "text-gray-700 hover:bg-gray-100"
+                }`}
             >
               <FaKey className="mr-2 inline" />
               계정 보안
             </button>
             <button
               onClick={() => setActiveTab("notifications")}
-              className={`w-full px-4 py-2 rounded-lg text-left transition-colors mt-2 ${
-                activeTab === "notifications"
-                  ? "bg-brand-primary text-white"
-                  : "text-gray-700 hover:bg-gray-100"
-              }`}
+              className={`w-full px-4 py-2 rounded-lg text-left transition-colors mt-2 ${activeTab === "notifications"
+                ? "bg-brand-primary text-white"
+                : "text-gray-700 hover:bg-gray-100"
+                }`}
             >
               <FaBell className="mr-2 inline" />
               알림 설정
@@ -88,7 +85,7 @@ export default function SettingsClient({
           <div className="flex-1">
             {activeTab === "profile" && (
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-6">
+                <h2 className="text-lg font-bold text-gray-900 mb-6">
                   프로필 정보
                 </h2>
                 <div className="space-y-4">
@@ -139,7 +136,7 @@ export default function SettingsClient({
 
             {activeTab === "account" && (
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-6">
+                <h2 className="text-lg font-bold text-gray-900 mb-6">
                   계정 보안
                 </h2>
                 <div className="space-y-4">
@@ -168,7 +165,7 @@ export default function SettingsClient({
 
             {activeTab === "notifications" && (
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-6">
+                <h2 className="text-lg font-bold text-gray-900 mb-6">
                   알림 설정
                 </h2>
                 <div className="space-y-4">

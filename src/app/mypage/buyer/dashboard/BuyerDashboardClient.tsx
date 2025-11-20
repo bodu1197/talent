@@ -122,7 +122,7 @@ export default function BuyerDashboardClient({
     if (!deliveryDate) return null;
     const days = Math.ceil(
       (new Date(deliveryDate).getTime() - new Date().getTime()) /
-        (1000 * 60 * 60 * 24),
+      (1000 * 60 * 60 * 24),
     );
     return days > 0 ? days : null;
   };
@@ -132,8 +132,8 @@ export default function BuyerDashboardClient({
       <div className="py-8 px-4">
         {/* 페이지 헤더 */}
         <div className="mb-6 lg:mb-8">
-          <h1 className="text-xl font-bold text-gray-900">구매 대시보드</h1>
-          <p className="text-gray-600 mt-1 text-sm">주문 현황을 확인하세요</p>
+          <h1 className="text-2xl font-bold text-gray-900">구매 대시보드</h1>
+          <p className="text-gray-600 mt-2 text-base">주문 현황을 확인하세요</p>
         </div>
 
         {/* 통계 카드 */}
@@ -249,11 +249,10 @@ export default function BuyerDashboardClient({
 
                         <div className="flex items-center gap-3 mb-3">
                           <span
-                            className={`px-3 py-1 rounded-full text-xs font-medium ${
-                              order.status === "delivered"
-                                ? "bg-red-100 text-red-700"
-                                : "bg-yellow-100 text-yellow-700"
-                            }`}
+                            className={`px-3 py-1 rounded-full text-xs font-medium ${order.status === "delivered"
+                              ? "bg-red-100 text-red-700"
+                              : "bg-yellow-100 text-yellow-700"
+                              }`}
                           >
                             {getStatusLabel(order.status)}
                           </span>
