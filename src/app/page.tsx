@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
 import { createClient } from "@/lib/supabase/server";
@@ -26,11 +26,6 @@ export default async function HomePage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // 비로그인 사용자는 랜딩 페이지로
-  if (!user) {
-    redirect("/landing");
-  }
-
   // AI 카테고리 한 번만 조회 (중복 제거)
   const { data: aiCategories } = await supabase
     .from("categories")
@@ -39,15 +34,18 @@ export default async function HomePage() {
 
   const aiCategoryIds = aiCategories?.map((cat) => cat.id) || [];
 
-  // 로그인 사용자는 메인 페이지 표시
   return (
     <div className="pb-0">
       {/* 히어로 섹션 + 카테고리 (즉시 표시) */}
       <HeroWithCategories />
 
       {/* 로그인 사용자 전용 섹션 (클라이언트 사이드) */}
-      <RecentVisitedCategories />
-      <RecentViewedServices />
+      {user && (
+        <>
+          <RecentVisitedCategories />
+          <RecentViewedServices />
+        </>
+      )}
 
       {/* AI 재능 쇼케이스 (Suspense로 감싸기) */}
       <Suspense fallback={<AIShowcaseSkeleton />}>
@@ -59,10 +57,12 @@ export default async function HomePage() {
         <RecommendedServices aiCategoryIds={aiCategoryIds} />
       </Suspense>
 
-      {/* 회원 맞춤 관심 카테고리 서비스 (Suspense로 감싸기) */}
-      <Suspense fallback={<PersonalizedSkeleton />}>
-        <PersonalizedServices />
-      </Suspense>
+      {/* 회원 맞춤 관심 카테고리 서비스 (Suspense로 감싸기) - 로그인 시에만 표시 */}
+      {user && (
+        <Suspense fallback={<PersonalizedSkeleton />}>
+          <PersonalizedServices />
+        </Suspense>
+      )}
     </div>
   );
 }
