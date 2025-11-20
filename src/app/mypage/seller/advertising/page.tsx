@@ -243,8 +243,8 @@ export default function AdvertisingPage() {
         error instanceof Error
           ? error.message
           : typeof error === "string"
-          ? error
-          : "광고 시작에 실패했습니다";
+            ? error
+            : "광고 시작에 실패했습니다";
       toast.error(errorMessage);
       // 에러 후 데이터 새로고침하여 UI 동기화
       await loadDashboard();
@@ -274,8 +274,8 @@ export default function AdvertisingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* 헤더 섹션 */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">광고 관리</h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">광고 관리</h1>
+            <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
               더 많은 고객에게 서비스를 노출하고 매출을 증대시키세요
             </p>
           </div>
@@ -285,67 +285,67 @@ export default function AdvertisingPage() {
             (s) =>
               s.adDetails?.isFreePromotion && s.adDetails?.promotionEndDate,
           ) && (
-            <div className="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6 shadow-sm">
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                  <FaGift className="text-white text-xl" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-bold text-blue-900 mb-2">
-                    무료 광고 프로모션 진행 중입니다! 🎉
-                  </h3>
-                  <p className="text-blue-700 mb-3">
-                    현재{" "}
-                    {
-                      services.filter((s) => s.adDetails?.isFreePromotion)
-                        .length
-                    }
-                    개의 서비스가 무료 광고 프로모션을 이용 중입니다. 프로모션
-                    기간 동안 광고 비용 없이 서비스를 홍보하세요!
-                  </p>
-                  <div className="flex flex-wrap gap-3">
-                    {services
-                      .filter(
-                        (s) =>
-                          s.adDetails?.isFreePromotion &&
-                          s.adDetails?.promotionEndDate,
-                      )
-                      .map((service) => {
-                        const endDate = new Date(
-                          service.adDetails!.promotionEndDate!,
-                        );
-                        const today = new Date();
-                        const daysLeft = Math.ceil(
-                          (endDate.getTime() - today.getTime()) /
+              <div className="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6 shadow-sm">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                    <FaGift className="text-white text-xl" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-base md:text-lg font-bold text-blue-900 mb-2">
+                      무료 광고 프로모션 진행 중입니다! 🎉
+                    </h3>
+                    <p className="text-sm md:text-base text-blue-700 mb-3">
+                      현재{" "}
+                      {
+                        services.filter((s) => s.adDetails?.isFreePromotion)
+                          .length
+                      }
+                      개의 서비스가 무료 광고 프로모션을 이용 중입니다. 프로모션
+                      기간 동안 광고 비용 없이 서비스를 홍보하세요!
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      {services
+                        .filter(
+                          (s) =>
+                            s.adDetails?.isFreePromotion &&
+                            s.adDetails?.promotionEndDate,
+                        )
+                        .map((service) => {
+                          const endDate = new Date(
+                            service.adDetails!.promotionEndDate!,
+                          );
+                          const today = new Date();
+                          const daysLeft = Math.ceil(
+                            (endDate.getTime() - today.getTime()) /
                             (1000 * 60 * 60 * 24),
-                        );
-                        return (
-                          <div
-                            key={service.id}
-                            className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm border border-blue-200"
-                          >
-                            <FaCheckCircle className="text-green-500" />
-                            <span className="font-medium text-gray-900">
-                              {service.title}
-                            </span>
-                            <span className="text-sm text-blue-600 font-semibold">
-                              ({daysLeft > 0 ? `${daysLeft}일 남음` : "종료"})
-                            </span>
-                          </div>
-                        );
-                      })}
+                          );
+                          return (
+                            <div
+                              key={service.id}
+                              className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm border border-blue-200"
+                            >
+                              <FaCheckCircle className="text-green-500" />
+                              <span className="font-medium text-gray-900">
+                                {service.title}
+                              </span>
+                              <span className="text-sm text-blue-600 font-semibold">
+                                ({daysLeft > 0 ? `${daysLeft}일 남음` : "종료"})
+                              </span>
+                            </div>
+                          );
+                        })}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
           {/* 통계 카드 */}
           {dashboard?.subscriptions && dashboard.subscriptions.length > 0 && (
             <>
               {/* 통계 헤더 with 새로고침 버튼 */}
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-gray-900">광고 성과 통계</h2>
+                <h2 className="text-base md:text-lg font-bold text-gray-900">광고 성과 통계</h2>
                 <button
                   onClick={() => loadDashboard(true)}
                   disabled={refreshing}
@@ -358,60 +358,60 @@ export default function AdvertisingPage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">
-                    총 노출수
-                  </span>
-                  <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-                    <FaEye className="text-blue-600" />
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-gray-600">
+                      총 노출수
+                    </span>
+                    <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
+                      <FaEye className="text-blue-600" />
+                    </div>
                   </div>
+                  <div className="text-3xl font-bold text-gray-900">
+                    {dashboard.stats.totalImpressions.toLocaleString()}
+                  </div>
+                  <p className="text-xs md:text-sm text-gray-500 mt-1">이번 달 기준</p>
                 </div>
-                <div className="text-3xl font-bold text-gray-900">
-                  {dashboard.stats.totalImpressions.toLocaleString()}
-                </div>
-                <p className="text-xs text-gray-500 mt-1">이번 달 기준</p>
-              </div>
 
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">
-                    총 클릭수
-                  </span>
-                  <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
-                    <FaMousePointer className="text-green-600" />
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-gray-600">
+                      총 클릭수
+                    </span>
+                    <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
+                      <FaMousePointer className="text-green-600" />
+                    </div>
                   </div>
+                  <div className="text-3xl font-bold text-gray-900">
+                    {dashboard.stats.totalClicks.toLocaleString()}
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">이번 달 기준</p>
                 </div>
-                <div className="text-3xl font-bold text-gray-900">
-                  {dashboard.stats.totalClicks.toLocaleString()}
-                </div>
-                <p className="text-xs text-gray-500 mt-1">이번 달 기준</p>
-              </div>
 
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">
-                    클릭률
-                  </span>
-                  <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
-                    <FaChartLine className="text-purple-600" />
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-gray-600">
+                      클릭률
+                    </span>
+                    <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
+                      <FaChartLine className="text-purple-600" />
+                    </div>
                   </div>
+                  <div className="text-3xl font-bold text-gray-900">
+                    {dashboard.stats.ctr.toFixed(2)}%
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    CTR (Click Through Rate)
+                  </p>
                 </div>
-                <div className="text-3xl font-bold text-gray-900">
-                  {dashboard.stats.ctr.toFixed(2)}%
-                </div>
-                <p className="text-xs text-gray-500 mt-1">
-                  CTR (Click Through Rate)
-                </p>
               </div>
-            </div>
             </>
           )}
 
           {/* 활성 광고 섹션 */}
           {dashboard?.subscriptions && dashboard.subscriptions.length > 0 && (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+              <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                 <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                   <FaBullhorn className="text-green-600" />
                 </div>
@@ -472,7 +472,7 @@ export default function AdvertisingPage() {
           {/* 서비스 광고 관리 테이블 */}
           {services.length > 0 && (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+              <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                 <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                   <FaList className="text-blue-600" />
                 </div>
@@ -561,7 +561,7 @@ export default function AdvertisingPage() {
                                           const daysLeft = Math.ceil(
                                             (endDate.getTime() -
                                               today.getTime()) /
-                                              (1000 * 60 * 60 * 24),
+                                            (1000 * 60 * 60 * 24),
                                           );
                                           return daysLeft > 0
                                             ? `${daysLeft}일 남음`
@@ -662,7 +662,7 @@ export default function AdvertisingPage() {
               >
                 {/* 모달 헤더 */}
                 <div className="sticky top-0 bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center rounded-t-2xl">
-                  <h2 id="advertising-modal-title" className="text-2xl font-bold text-gray-900">
+                  <h2 id="advertising-modal-title" className="text-base md:text-lg font-bold text-gray-900">
                     {services.find((s) => s.id === selectedService)?.hasActiveAd
                       ? "광고 상세 정보"
                       : "광고 신청"}
@@ -702,7 +702,7 @@ export default function AdvertisingPage() {
                     if (service.hasActiveAd && service.adDetails) {
                       return (
                         <div>
-                          <h3 className="text-xl font-bold text-gray-900 mb-4">
+                          <h3 className="text-base md:text-lg font-bold text-gray-900 mb-4">
                             {service.title}
                           </h3>
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -769,7 +769,7 @@ export default function AdvertisingPage() {
                     // 광고 신청 폼
                     return (
                       <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-4">
+                        <h3 className="text-base md:text-lg font-bold text-gray-900 mb-4">
                           {service.title}
                         </h3>
 
@@ -799,10 +799,10 @@ export default function AdvertisingPage() {
                                   months === 1
                                     ? 0
                                     : Math.round(
-                                        ((200000 * months - supplyTotal) /
-                                          (200000 * months)) *
-                                          100,
-                                      );
+                                      ((200000 * months - supplyTotal) /
+                                        (200000 * months)) *
+                                      100,
+                                    );
                                 return (
                                   <option key={months} value={months}>
                                     {months}개월 - 월 {price.toLocaleString()}원
@@ -944,11 +944,10 @@ export default function AdvertisingPage() {
                                 onClick={() =>
                                   setSelectedPaymentMethod("bank_transfer")
                                 }
-                                className={`border-2 rounded-lg p-4 cursor-pointer transition-all text-left w-full ${
-                                  selectedPaymentMethod === "bank_transfer"
+                                className={`border-2 rounded-lg p-4 cursor-pointer transition-all text-left w-full ${selectedPaymentMethod === "bank_transfer"
                                     ? "border-brand-primary bg-blue-50"
                                     : "border-gray-200 hover:border-gray-300"
-                                }`}
+                                  }`}
                               >
                                 <div className="flex items-start gap-3">
                                   <input

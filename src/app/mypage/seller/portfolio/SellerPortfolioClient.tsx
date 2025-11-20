@@ -65,7 +65,7 @@ export default function SellerPortfolioClient({
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-xl font-bold text-gray-900">포트폴리오</h1>
+              <h1 className="text-base md:text-lg font-bold text-gray-900">포트폴리오</h1>
               <p className="text-gray-600 mt-1 text-sm">
                 작업물을 등록하고 관리하세요
               </p>
@@ -110,7 +110,7 @@ export default function SellerPortfolioClient({
                   </div>
                 </Link>
                 <div className="p-4">
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">
+                  <h3 className="text-sm md:text-base font-bold text-gray-900 mb-2">
                     {item.title}
                   </h3>
                   <p className="text-sm text-gray-600 mb-3 line-clamp-2">

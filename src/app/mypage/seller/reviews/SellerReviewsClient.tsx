@@ -54,7 +54,7 @@ export default function SellerReviewsClient({
       logger.error("답변 등록 실패:", err);
       toast.error(
         "답변 등록에 실패했습니다: " +
-          (err instanceof Error ? err.message : "알 수 없는 오류"),
+        (err instanceof Error ? err.message : "알 수 없는 오류"),
       );
     } finally {
       setSubmitting(false);
@@ -64,9 +64,9 @@ export default function SellerReviewsClient({
   const avgRating =
     initialReviews.length > 0
       ? (
-          initialReviews.reduce((sum, r) => sum + r.rating, 0) /
-          initialReviews.length
-        ).toFixed(1)
+        initialReviews.reduce((sum, r) => sum + r.rating, 0) /
+        initialReviews.length
+      ).toFixed(1)
       : "0.0";
 
   const ratingCounts = {
@@ -81,8 +81,8 @@ export default function SellerReviewsClient({
     <MypageLayoutWrapper mode="seller">
       <div className="py-8 px-4">
         <div className="mb-8">
-          <h1 className="text-xl font-bold text-gray-900">받은 리뷰</h1>
-          <p className="text-gray-600 mt-1 text-sm">
+          <h1 className="text-base md:text-lg font-bold text-gray-900">받은 리뷰</h1>
+          <p className="text-gray-600 mt-1 text-sm md:text-base">
             고객들이 남긴 리뷰를 확인하고 답변하세요
           </p>
         </div>
@@ -138,11 +138,10 @@ export default function SellerReviewsClient({
                     <button
                       key={filter}
                       onClick={() => setRatingFilter(filter)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${
-                        ratingFilter === filter
+                      className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${ratingFilter === filter
                           ? "bg-brand-primary text-white"
                           : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                      }`}
+                        }`}
                     >
                       {filter === "all" ? "전체" : `${filter}점`}
                     </button>
@@ -208,8 +207,8 @@ export default function SellerReviewsClient({
                         <div className="text-xs text-gray-500 mt-2">
                           {review.replied_at
                             ? new Date(review.replied_at).toLocaleDateString(
-                                "ko-KR",
-                              )
+                              "ko-KR",
+                            )
                             : ""}
                         </div>
                       </div>
@@ -231,7 +230,7 @@ export default function SellerReviewsClient({
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg max-w-2xl w-full p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">리뷰 답변</h2>
+                <h2 className="text-base md:text-lg font-bold text-gray-900">리뷰 답변</h2>
                 <button
                   onClick={() => {
                     setShowReplyModal(false);

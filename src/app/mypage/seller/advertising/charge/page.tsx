@@ -144,10 +144,10 @@ export default function AdvertisingChargePage() {
               <FaArrowLeft className="inline mr-2" />
               뒤로 가기
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-base md:text-lg font-bold text-gray-900">
               광고 크레딧 충전
             </h1>
-            <p className="text-gray-600 mt-2">
+            <p className="text-sm md:text-base text-gray-600 mt-2">
               서비스를 홍보할 광고 크레딧을 구매하세요
             </p>
           </div>
@@ -160,11 +160,10 @@ export default function AdvertisingChargePage() {
                 onClick={() => setSelectedPackage(pkg.amount)}
                 type="button"
                 aria-label={`${pkg.label} 크레딧 패키지 선택`}
-                className={`relative bg-white border-2 rounded-lg p-6 cursor-pointer transition-all ${
-                  selectedPackage === pkg.amount
+                className={`relative bg-white border-2 rounded-lg p-6 cursor-pointer transition-all ${selectedPackage === pkg.amount
                     ? "border-brand-primary shadow-lg scale-105"
                     : "border-gray-200 hover:border-gray-300"
-                }`}
+                  }`}
               >
                 {pkg.popular && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -197,8 +196,8 @@ export default function AdvertisingChargePage() {
 
           {/* 광고 상품 안내 */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-            <h3 className="font-bold text-lg mb-4">광고 서비스 안내</h3>
-            <div className="space-y-3 text-sm text-gray-700">
+            <h3 className="font-bold text-base md:text-lg mb-4">광고 서비스 안내</h3>
+            <div className="space-y-3 text-xs md:text-sm text-gray-700">
               <div className="flex items-start gap-2">
                 <FaCheck className="text-green-600 mt-1" />
                 <span>월 100,000원 정액제 광고 구독</span>
@@ -220,7 +219,7 @@ export default function AdvertisingChargePage() {
 
           {/* 결제 정보 */}
           <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
-            <h3 className="font-bold text-lg mb-4">결제 정보</h3>
+            <h3 className="font-bold text-base md:text-lg mb-4">결제 정보</h3>
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span className="text-gray-600">선택한 패키지</span>
@@ -239,17 +238,17 @@ export default function AdvertisingChargePage() {
               </div>
               {CREDIT_PACKAGES.find((p) => p.amount === selectedPackage)
                 ?.bonus! > 0 && (
-                <div className="flex justify-between text-green-600">
-                  <span>보너스 크레딧</span>
-                  <span className="font-medium">
-                    +
-                    {CREDIT_PACKAGES.find(
-                      (p) => p.amount === selectedPackage,
-                    )?.bonus.toLocaleString()}
-                    원
-                  </span>
-                </div>
-              )}
+                  <div className="flex justify-between text-green-600">
+                    <span>보너스 크레딧</span>
+                    <span className="font-medium">
+                      +
+                      {CREDIT_PACKAGES.find(
+                        (p) => p.amount === selectedPackage,
+                      )?.bonus.toLocaleString()}
+                      원
+                    </span>
+                  </div>
+                )}
               <div className="border-t pt-3 flex justify-between text-lg">
                 <span className="font-bold">충전될 크레딧</span>
                 <span className="font-bold text-brand-primary">

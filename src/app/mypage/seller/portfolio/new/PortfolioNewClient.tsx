@@ -249,7 +249,7 @@ export default function PortfolioNewClient({
       logger.error("Portfolio creation error:", error);
       toast.error(
         "등록에 실패했습니다: " +
-          (error instanceof Error ? error.message : "알 수 없는 오류"),
+        (error instanceof Error ? error.message : "알 수 없는 오류"),
       );
     } finally {
       setLoading(false);
@@ -279,7 +279,7 @@ export default function PortfolioNewClient({
       <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8 mx-auto">
         <div className="max-w-3xl">
           <div className="mb-8">
-            <h1 className="text-xl font-bold text-gray-900">포트폴리오 등록</h1>
+            <h1 className="text-base md:text-lg font-bold text-gray-900">포트폴리오 등록</h1>
             <p className="text-gray-600 mt-1 text-sm">
               작업물을 등록하여 고객에게 보여주세요
             </p>
@@ -556,8 +556,8 @@ export default function PortfolioNewClient({
                 {uploading
                   ? "이미지 업로드 중..."
                   : loading
-                  ? "등록 중..."
-                  : "등록하기"}
+                    ? "등록 중..."
+                    : "등록하기"}
               </button>
             </div>
           </form>

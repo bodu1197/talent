@@ -119,7 +119,7 @@ export default function SellerEarningsClient({
       );
       toast.error(
         "출금 신청에 실패했습니다.\n" +
-          (error instanceof Error ? error.message : "알 수 없는 오류"),
+        (error instanceof Error ? error.message : "알 수 없는 오류"),
       );
     } finally {
       setLoading(false);
@@ -155,7 +155,7 @@ export default function SellerEarningsClient({
       );
       toast.error(
         "출금 신청 취소에 실패했습니다.\n" +
-          (error instanceof Error ? error.message : "알 수 없는 오류"),
+        (error instanceof Error ? error.message : "알 수 없는 오류"),
       );
     } finally {
       setLoading(false);
@@ -191,13 +191,13 @@ export default function SellerEarningsClient({
     <MypageLayoutWrapper mode="seller" profileData={profileData}>
       <div className="py-8 px-4">
         <div className="mb-8">
-          <h1 className="text-xl font-bold text-gray-900">수익 관리</h1>
-          <p className="text-gray-600 mt-1 text-sm">판매 수익을 관리하세요</p>
+          <h1 className="text-base md:text-lg font-bold text-gray-900">수익 관리</h1>
+          <p className="text-gray-600 mt-1 text-sm md:text-base">판매 수익을 관리하세요</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="text-sm text-gray-600 mb-2">출금 가능 금액</div>
+            <div className="text-sm md:text-base text-gray-600 mb-2">출금 가능 금액</div>
             <div className="text-2xl font-bold text-brand-primary">
               {earnings?.available_balance?.toLocaleString() || "0"}원
             </div>
@@ -235,7 +235,7 @@ export default function SellerEarningsClient({
               </button>
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-3 flex items-center gap-2">
                 <FaClock className="text-yellow-600" />
-                <p className="text-sm text-yellow-800">
+                <p className="text-xs md:text-sm text-yellow-800">
                   출금 신청 대기 중 (
                   {earnings.pending_withdrawal?.amount?.toLocaleString()}원)
                 </p>
@@ -252,7 +252,7 @@ export default function SellerEarningsClient({
                 {loading ? "처리 중..." : "출금 신청"}
               </button>
               {earnings.available_balance <= 0 && (
-                <p className="text-sm text-gray-500 self-center">
+                <p className="text-xs md:text-sm text-gray-500 self-center">
                   출금 가능 금액이 없습니다
                 </p>
               )}
@@ -262,18 +262,18 @@ export default function SellerEarningsClient({
 
         <div className="bg-white rounded-lg border border-gray-200">
           <div className="p-4 border-b border-gray-200">
-            <h2 className="text-lg font-bold text-gray-900">정산 내역</h2>
+            <h2 className="text-base md:text-lg font-bold text-gray-900">정산 내역</h2>
           </div>
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-900">
+                <th className="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-900">
                   날짜
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-900">
+                <th className="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-900">
                   구분
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-900">
+                <th className="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-900">
                   주문번호
                 </th>
                 <th className="px-6 py-3 text-right text-sm font-medium text-gray-900">
@@ -288,18 +288,18 @@ export default function SellerEarningsClient({
               {transactions.length > 0 ? (
                 transactions.map((tx) => (
                   <tr key={tx.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-xs md:text-sm text-gray-600">
                       {new Date(
                         tx.updated_at || tx.created_at,
                       ).toLocaleDateString("ko-KR")}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">
+                    <td className="px-6 py-4 text-sm md:text-base text-gray-900">
                       {tx.service?.title || "판매 수익"}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">
                       #{tx.order_number || tx.id.slice(0, 8)}
                     </td>
-                    <td className="px-6 py-4 text-sm font-medium text-right text-green-600">
+                    <td className="px-6 py-4 text-sm md:text-base font-medium text-right text-green-600">
                       +{(tx.total_amount || 0).toLocaleString()}원
                     </td>
                     <td className="px-6 py-4 text-center">

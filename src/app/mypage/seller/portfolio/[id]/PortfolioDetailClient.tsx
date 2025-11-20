@@ -126,7 +126,7 @@ export default function PortfolioDetailClient({
               </div>
             </div>
 
-            <h1 className="text-xl font-bold text-gray-900">
+            <h1 className="text-base md:text-lg font-bold text-gray-900">
               {portfolio.title}
             </h1>
             <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
@@ -162,11 +162,10 @@ export default function PortfolioDetailClient({
                         <button
                           key={`image-${image}`}
                           onClick={() => setCurrentImageIndex(index)}
-                          className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                            currentImageIndex === index
+                          className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${currentImageIndex === index
                               ? "border-brand-primary ring-2 ring-brand-primary ring-opacity-50"
                               : "border-gray-300 hover:border-gray-400"
-                          }`}
+                            }`}
                         >
                           <img
                             src={image}
@@ -185,7 +184,7 @@ export default function PortfolioDetailClient({
           {/* YouTube 영상 */}
           {youtubeVideoId && (
             <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">
+              <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">
                 <FaYoutube className="inline text-red-600 mr-2" />
                 프로젝트 영상
               </h2>
@@ -205,7 +204,7 @@ export default function PortfolioDetailClient({
 
           {/* 설명 */}
           <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+            <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">
               프로젝트 설명
             </h2>
             <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
@@ -216,7 +215,7 @@ export default function PortfolioDetailClient({
           {/* 프로젝트 URL */}
           {portfolio.project_url && (
             <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">
+              <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">
                 프로젝트 링크
               </h2>
               <a
@@ -234,7 +233,7 @@ export default function PortfolioDetailClient({
           {/* 태그 */}
           {portfolio.tags && portfolio.tags.length > 0 && (
             <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">태그</h2>
+              <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">태그</h2>
               <div className="flex flex-wrap gap-2">
                 {portfolio.tags.map((tag, index) => (
                   <span

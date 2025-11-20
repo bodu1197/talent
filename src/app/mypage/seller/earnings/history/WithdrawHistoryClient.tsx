@@ -49,21 +49,21 @@ export default function WithdrawHistoryClient({
     <MypageLayoutWrapper mode="seller">
       <div className="py-8 px-4">
         <div className="mb-8">
-          <h1 className="text-xl font-bold text-gray-900">출금 내역</h1>
-          <p className="text-gray-600 mt-1 text-sm">출금 이력을 확인하세요</p>
+          <h1 className="text-base md:text-lg font-bold text-gray-900">출금 내역</h1>
+          <p className="text-gray-600 mt-1 text-sm md:text-base">출금 이력을 확인하세요</p>
         </div>
 
         <div className="bg-white rounded-lg border border-gray-200">
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-900">
+                <th className="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-900">
                   날짜
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-900">
+                <th className="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-900">
                   은행
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-900">
+                <th className="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-900">
                   계좌
                 </th>
                 <th className="px-6 py-3 text-right text-sm font-medium text-gray-900">
@@ -78,16 +78,16 @@ export default function WithdrawHistoryClient({
               {history.length > 0 ? (
                 history.map((item) => (
                   <tr key={item.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-xs md:text-sm text-gray-600">
                       {new Date(item.requested_at).toLocaleDateString("ko-KR")}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">
+                    <td className="px-6 py-4 text-sm md:text-base text-gray-900">
                       {item.bank_name}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-xs md:text-sm text-gray-600">
                       {item.account_number}
                     </td>
-                    <td className="px-6 py-4 text-sm font-medium text-red-600 text-right">
+                    <td className="px-6 py-4 text-sm md:text-base font-medium text-red-600 text-right">
                       -{item.amount.toLocaleString()}원
                     </td>
                     <td className="px-6 py-4 text-center">

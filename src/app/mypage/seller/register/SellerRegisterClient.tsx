@@ -372,19 +372,17 @@ export default function SellerRegisterClient({
             {[1, 2, 3, 4].map((step) => (
               <div key={step} className="flex items-center flex-1">
                 <div
-                  className={`flex items-center justify-center w-10 h-10 rounded-full font-bold ${
-                    currentStep >= step
+                  className={`flex items-center justify-center w-10 h-10 rounded-full font-bold ${currentStep >= step
                       ? "bg-brand-primary text-white"
                       : "bg-gray-200 text-gray-500"
-                  }`}
+                    }`}
                 >
                   {step}
                 </div>
                 {step < 4 && (
                   <div
-                    className={`flex-1 h-1 mx-2 ${
-                      currentStep > step ? "bg-brand-primary" : "bg-gray-200"
-                    }`}
+                    className={`flex-1 h-1 mx-2 ${currentStep > step ? "bg-brand-primary" : "bg-gray-200"
+                      }`}
                   ></div>
                 )}
               </div>
@@ -434,7 +432,7 @@ export default function SellerRegisterClient({
           {/* 1단계: 신원 인증 */}
           {currentStep === 1 && (
             <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">
+              <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">
                 1단계: 신원 인증
               </h2>
               <div className="space-y-4">
@@ -462,11 +460,10 @@ export default function SellerRegisterClient({
                     onClick={handleNiceVerification}
                     disabled={isVerified}
                     aria-label="NICE 휴대폰 본인인증"
-                    className={`w-full px-6 py-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
-                      isVerified
+                    className={`w-full px-6 py-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${isVerified
                         ? "bg-green-100 text-green-800 cursor-not-allowed"
                         : "bg-brand-primary text-white hover:bg-[#1a4d8f]"
-                    }`}
+                      }`}
                   >
                     {isVerified ? <FaCheckCircle /> : <FaShieldAlt />}
                     {isVerified ? "본인인증 완료" : "NICE 휴대폰 본인인증"}
@@ -623,7 +620,7 @@ export default function SellerRegisterClient({
           {/* 2단계: 판매자 프로필 */}
           {currentStep === 2 && (
             <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">
+              <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">
                 2단계: 판매자 프로필
               </h2>
               <div className="space-y-4">
@@ -743,7 +740,7 @@ export default function SellerRegisterClient({
           {/* 3단계: 연락처 정보 */}
           {currentStep === 3 && (
             <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">
+              <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">
                 3단계: 연락처 정보 (선택)
               </h2>
               <div className="space-y-4">
