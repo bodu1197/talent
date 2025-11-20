@@ -147,6 +147,7 @@ export interface Order {
 }
 
 export interface Deliverable {
+  id?: string
   file_url: string
   file_name: string
   file_size: number
