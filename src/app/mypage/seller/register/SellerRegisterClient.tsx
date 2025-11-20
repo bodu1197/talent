@@ -454,13 +454,14 @@ export default function SellerRegisterClient({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <div className="block text-sm font-medium text-gray-700 mb-2">
                     본인인증 *
-                  </label>
+                  </div>
                   <button
                     type="button"
                     onClick={handleNiceVerification}
                     disabled={isVerified}
+                    aria-label="NICE 휴대폰 본인인증"
                     className={`w-full px-6 py-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
                       isVerified
                         ? "bg-green-100 text-green-800 cursor-not-allowed"
@@ -535,10 +536,11 @@ export default function SellerRegisterClient({
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label htmlFor="seller-account-holder" className="block text-sm font-medium text-gray-700 mb-2">
                         예금주명 *
                       </label>
                       <input
+                        id="seller-account-holder"
                         type="text"
                         value={formData.accountHolder}
                         onChange={(e) =>
@@ -555,10 +557,11 @@ export default function SellerRegisterClient({
                   </div>
 
                   <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="seller-account-number" className="block text-sm font-medium text-gray-700 mb-2">
                       계좌번호 *
                     </label>
                     <input
+                      id="seller-account-number"
                       type="text"
                       value={formData.accountNumber}
                       onChange={(e) =>
@@ -594,10 +597,11 @@ export default function SellerRegisterClient({
 
                   {formData.isBusiness && (
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label htmlFor="seller-business-number" className="block text-sm font-medium text-gray-700 mb-2">
                         사업자 등록번호
                       </label>
                       <input
+                        id="seller-business-number"
                         type="text"
                         value={formData.businessNumber}
                         onChange={(e) =>
@@ -624,9 +628,9 @@ export default function SellerRegisterClient({
               </h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <div className="block text-sm font-medium text-gray-700 mb-2">
                     프로필 사진 *
-                  </label>
+                  </div>
                   {initialProfile?.profile_image && !formData.profileImage && (
                     <div className="mb-3 bg-blue-50 border border-blue-200 rounded-lg p-3">
                       <p className="text-sm text-blue-800">
@@ -658,6 +662,7 @@ export default function SellerRegisterClient({
                                 initialProfile?.profile_image || null,
                               );
                             }}
+                            aria-label="프로필 사진 변경 취소 또는 제거"
                             className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm"
                           >
                             <FaTimes className="mr-1 inline" />
@@ -674,8 +679,9 @@ export default function SellerRegisterClient({
                         </div>
                       </div>
                     ) : (
-                      <label className="inline-block px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer">
+                      <label htmlFor="seller-profile-image" className="inline-block px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer">
                         <input
+                          id="seller-profile-image"
                           type="file"
                           accept="image/*"
                           onChange={handleProfileImageChange}
@@ -689,10 +695,11 @@ export default function SellerRegisterClient({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="seller-display-name" className="block text-sm font-medium text-gray-700 mb-2">
                     판매자명 (활동명) *
                   </label>
                   <input
+                    id="seller-display-name"
                     type="text"
                     value={formData.displayName}
                     onChange={(e) =>
@@ -708,10 +715,11 @@ export default function SellerRegisterClient({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="seller-bio" className="block text-sm font-medium text-gray-700 mb-2">
                     자기소개 * (최소 50자)
                   </label>
                   <textarea
+                    id="seller-bio"
                     value={formData.bio}
                     onChange={(e) =>
                       setFormData({ ...formData, bio: e.target.value })
@@ -740,8 +748,9 @@ export default function SellerRegisterClient({
               </h2>
               <div className="space-y-4">
                 <div>
-                  <label className="flex items-center gap-2 mb-2">
+                  <label htmlFor="seller-show-phone" className="flex items-center gap-2 mb-2">
                     <input
+                      id="seller-show-phone"
                       type="checkbox"
                       checked={formData.showPhone}
                       onChange={(e) =>
@@ -758,6 +767,7 @@ export default function SellerRegisterClient({
                   </label>
                   {formData.showPhone && (
                     <input
+                      id="seller-public-phone"
                       type="tel"
                       value={formData.publicPhone}
                       onChange={(e) => {
@@ -766,16 +776,18 @@ export default function SellerRegisterClient({
                       }}
                       placeholder="010-1234-5678"
                       pattern="[0-9-]*"
+                      aria-label="공개할 전화번호"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     />
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="seller-kakao-id" className="block text-sm font-medium text-gray-700 mb-2">
                     카카오톡 ID
                   </label>
                   <input
+                    id="seller-kakao-id"
                     type="text"
                     value={formData.kakaoId}
                     onChange={(e) =>
@@ -787,10 +799,11 @@ export default function SellerRegisterClient({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="seller-kakao-openchat" className="block text-sm font-medium text-gray-700 mb-2">
                     카카오톡 오픈채팅 링크
                   </label>
                   <input
+                    id="seller-kakao-openchat"
                     type="url"
                     value={formData.kakaoOpenChat}
                     onChange={(e) =>
@@ -805,10 +818,11 @@ export default function SellerRegisterClient({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="seller-whatsapp" className="block text-sm font-medium text-gray-700 mb-2">
                     WhatsApp
                   </label>
                   <input
+                    id="seller-whatsapp"
                     type="tel"
                     value={formData.whatsapp}
                     onChange={(e) => {
@@ -825,10 +839,11 @@ export default function SellerRegisterClient({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="seller-website" className="block text-sm font-medium text-gray-700 mb-2">
                     개인 웹사이트/블로그
                   </label>
                   <input
+                    id="seller-website"
                     type="url"
                     value={formData.website}
                     onChange={(e) =>
@@ -840,9 +855,9 @@ export default function SellerRegisterClient({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <div className="block text-sm font-medium text-gray-700 mb-2">
                     선호하는 연락 수단 (복수 선택 가능)
-                  </label>
+                  </div>
                   <div className="space-y-2">
                     {[
                       "플랫폼 메시지",
@@ -851,8 +866,9 @@ export default function SellerRegisterClient({
                       "이메일",
                       "전화",
                     ].map((contact) => (
-                      <label key={contact} className="flex items-center gap-2">
+                      <label key={contact} htmlFor={`seller-contact-${contact}`} className="flex items-center gap-2">
                         <input
+                          id={`seller-contact-${contact}`}
                           type="checkbox"
                           checked={formData.preferredContact.includes(contact)}
                           onChange={() => handlePreferredContactToggle(contact)}
@@ -875,8 +891,9 @@ export default function SellerRegisterClient({
               </h2>
               <div className="space-y-4">
                 <div className="border rounded-lg p-4">
-                  <label className="flex items-start gap-3">
+                  <label htmlFor="seller-terms-agree" className="flex items-start gap-3">
                     <input
+                      id="seller-terms-agree"
                       type="checkbox"
                       checked={formData.termsAgree}
                       onChange={(e) =>
@@ -900,8 +917,9 @@ export default function SellerRegisterClient({
                 </div>
 
                 <div className="border rounded-lg p-4">
-                  <label className="flex items-start gap-3">
+                  <label htmlFor="seller-commission-agree" className="flex items-start gap-3">
                     <input
+                      id="seller-commission-agree"
                       type="checkbox"
                       checked={formData.commissionAgree}
                       onChange={(e) =>
@@ -925,8 +943,9 @@ export default function SellerRegisterClient({
                 </div>
 
                 <div className="border rounded-lg p-4">
-                  <label className="flex items-start gap-3">
+                  <label htmlFor="seller-refund-agree" className="flex items-start gap-3">
                     <input
+                      id="seller-refund-agree"
                       type="checkbox"
                       checked={formData.refundAgree}
                       onChange={(e) =>

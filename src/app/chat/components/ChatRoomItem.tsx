@@ -95,12 +95,12 @@ export default function ChatRoomItem({
                       month: "short",
                       day: "numeric",
                     })
-                  : (room.last_message_at
-                    ? new Date(room.last_message_at).toLocaleDateString("ko-KR", {
-                        month: "2-digit",
-                        day: "2-digit",
-                      })
-                    : "")}
+                  : room.last_message_at
+                  ? new Date(room.last_message_at).toLocaleDateString("ko-KR", {
+                      month: "2-digit",
+                      day: "2-digit",
+                    })
+                  : ""}
               </span>
             )}
           </div>

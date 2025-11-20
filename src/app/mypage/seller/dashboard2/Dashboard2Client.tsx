@@ -142,17 +142,17 @@ export default function Dashboard2Client({ stats, recentOrders }: Props) {
                               order.status === "completed"
                                 ? "bg-green-100 text-green-800"
                                 : order.status === "in_progress"
-                                  ? "bg-yellow-100 text-yellow-800"
-                                  : "bg-gray-100 text-gray-800"
+                                ? "bg-yellow-100 text-yellow-800"
+                                : "bg-gray-100 text-gray-800"
                             }`}
                           >
                             {order.status === "in_progress"
                               ? "진행중"
                               : order.status === "completed"
-                                ? "완료"
-                                : order.status === "paid"
-                                  ? "결제완료"
-                                  : order.status}
+                              ? "완료"
+                              : order.status === "paid"
+                              ? "결제완료"
+                              : order.status}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">

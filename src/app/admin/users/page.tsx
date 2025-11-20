@@ -156,19 +156,10 @@ export default function AdminUsersPage() {
       {/* 탭 네비게이션 */}
       <div className="bg-white rounded-lg border border-gray-200">
         <div className="flex items-center overflow-x-auto">
-          {tabs.map((tab, index) => (
+          {tabs.map((tab) => (
             <button
               key={tab.value}
               onClick={() => setRoleFilter(tab.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'ArrowLeft' && index > 0) {
-                  e.preventDefault();
-                  setRoleFilter(tabs[index - 1].value);
-                } else if (e.key === 'ArrowRight' && index < tabs.length - 1) {
-                  e.preventDefault();
-                  setRoleFilter(tabs[index + 1].value);
-                }
-              }}
               role="tab"
               aria-selected={roleFilter === tab.value}
               aria-label={`${tab.label} (${tab.count}개)`}
@@ -222,9 +213,7 @@ export default function AdminUsersPage() {
 
       {/* 결과 카운트 */}
       <div className="text-sm text-gray-600">
-        총{' '}
-        <span className="font-bold text-gray-900">{filteredUsers.length}</span>
-        {' '}명의 사용자
+        총 <span className="font-bold text-gray-900">{filteredUsers.length}</span> 명의 사용자
       </div>
 
       {/* 사용자 목록 */}
@@ -319,8 +308,7 @@ export default function AdminUsersPage() {
 
       {/* 사용자 상세 모달 */}
       {selectedUser && (
-        <dialog
-          open
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
           onClick={() => setSelectedUser(null)}
           onKeyDown={(e) => {
@@ -329,6 +317,9 @@ export default function AdminUsersPage() {
               setSelectedUser(null);
             }
           }}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="user-detail-title"
         >
           <div
             className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
@@ -337,7 +328,7 @@ export default function AdminUsersPage() {
           >
             {/* 모달 헤더 */}
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-              <h2 className="text-xl font-bold text-gray-900">
+              <h2 id="user-detail-title" className="text-xl font-bold text-gray-900">
                 사용자 상세 정보
               </h2>
               <button
@@ -445,7 +436,7 @@ export default function AdminUsersPage() {
               </button>
             </div>
           </div>
-        </dialog>
+        </div>
       )}
     </div>
   );

@@ -243,8 +243,8 @@ export default function AdvertisingPage() {
         error instanceof Error
           ? error.message
           : typeof error === "string"
-            ? error
-            : "광고 시작에 실패했습니다";
+          ? error
+          : "광고 시작에 실패했습니다";
       toast.error(errorMessage);
       // 에러 후 데이터 새로고침하여 UI 동기화
       await loadDashboard();
@@ -537,8 +537,7 @@ export default function AdvertisingPage() {
                         <td className="py-3 px-4 text-center">
                           <div className="flex flex-col items-center gap-1">
                             {service.hasActiveAd ? (
-                              service.adDetails?.status ===
-                              "pending_payment" ? (
+                              service.adDetails?.status === "pending_payment" ? (
                                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                                   <span className="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span>
                                   {' '}결제 대기중

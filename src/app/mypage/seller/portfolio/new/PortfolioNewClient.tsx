@@ -402,7 +402,7 @@ export default function PortfolioNewClient({
               {imagePreviews.length > 0 && (
                 <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
                   {imagePreviews.map((preview, index) => (
-                    <div key={index} className="relative">
+                    <div key={`preview-${preview}-${index}`} className="relative">
                       <img
                         src={preview}
                         alt={`Preview ${index + 1}`}
@@ -556,8 +556,8 @@ export default function PortfolioNewClient({
                 {uploading
                   ? "이미지 업로드 중..."
                   : loading
-                    ? "등록 중..."
-                    : "등록하기"}
+                  ? "등록 중..."
+                  : "등록하기"}
               </button>
             </div>
           </form>

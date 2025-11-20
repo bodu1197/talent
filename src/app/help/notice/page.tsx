@@ -60,12 +60,12 @@ export default function NoticePage() {
                     notice.category === "공지"
                       ? "bg-brand-primary text-white"
                       : notice.category === "이벤트"
-                        ? "bg-green-100 text-green-800"
-                        : notice.category === "업데이트"
-                          ? "bg-blue-100 text-blue-800"
-                          : notice.category === "점검"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-gray-100 text-gray-800"
+                      ? "bg-green-100 text-green-800"
+                      : notice.category === "업데이트"
+                      ? "bg-blue-100 text-blue-800"
+                      : notice.category === "점검"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : "bg-gray-100 text-gray-800"
                   }`}
                 >
                   {notice.category}

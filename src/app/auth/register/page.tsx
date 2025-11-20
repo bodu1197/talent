@@ -416,8 +416,8 @@ export default function RegisterPage() {
                     emailCheckStatus === "taken"
                       ? "border-red-500 focus:ring-red-500"
                       : emailCheckStatus === "available"
-                        ? "border-green-500 focus:ring-green-500"
-                        : ""
+                      ? "border-green-500 focus:ring-green-500"
+                      : ""
                   }`}
                   placeholder="your@email.com"
                   required
@@ -487,8 +487,8 @@ export default function RegisterPage() {
                     emailCheckStatus === "taken"
                       ? "text-red-600"
                       : emailCheckStatus === "available"
-                        ? "text-green-600"
-                        : "text-gray-500"
+                      ? "text-green-600"
+                      : "text-gray-500"
                   }`}
                 >
                   {emailCheckMessage}

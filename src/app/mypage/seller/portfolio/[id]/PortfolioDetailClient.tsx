@@ -160,7 +160,7 @@ export default function PortfolioDetailClient({
                     <div className="flex gap-2 overflow-x-auto">
                       {allImages.map((image, index) => (
                         <button
-                          key={index}
+                          key={`image-${image}-${index}`}
                           onClick={() => setCurrentImageIndex(index)}
                           className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
                             currentImageIndex === index
@@ -236,9 +236,9 @@ export default function PortfolioDetailClient({
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4">태그</h2>
               <div className="flex flex-wrap gap-2">
-                {portfolio.tags.map((tag, index) => (
+                {portfolio.tags.map((tag) => (
                   <span
-                    key={index}
+                    key={tag}
                     className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm"
                   >
                     #{tag}

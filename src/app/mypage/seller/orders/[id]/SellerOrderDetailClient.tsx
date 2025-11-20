@@ -683,10 +683,10 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="seller-delivery-file-upload" className="block text-sm font-medium text-gray-700 mb-2">
                     파일 업로드
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-brand-primary transition-colors cursor-pointer">
+                  <div id="seller-delivery-file-upload" className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-brand-primary transition-colors cursor-pointer">
                     <FaCloudUploadAlt className="text-gray-400 text-4xl mb-3 inline-block" />
                     <p className="text-gray-600">
                       클릭하여 파일 선택 또는 드래그 앤 드롭
@@ -696,10 +696,11 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="seller-delivery-message" className="block text-sm font-medium text-gray-700 mb-2">
                     전달 메시지
                   </label>
                   <textarea
+                    id="seller-delivery-message"
                     rows={4}
                     value={deliveryMessage}
                     onChange={(e) => setDeliveryMessage(e.target.value)}

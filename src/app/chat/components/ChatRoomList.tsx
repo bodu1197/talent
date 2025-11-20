@@ -125,7 +125,8 @@ export default function ChatRoomList({
             <FaSpinner className="fa-spin text-4xl mb-3 inline-block" />
             <p>채팅방을 생성하는 중...</p>
           </div>
-        ) : rooms.length === 0 ? (
+        ) : (
+          rooms.length === 0 ? (
           <div
             className={`text-center text-gray-500 ${isMobile ? "flex flex-col items-center justify-center py-12" : "p-8"}`}
           >
@@ -143,6 +144,7 @@ export default function ChatRoomList({
               onToggleFavorite={onToggleFavorite}
             />
           ))
+          )
         )}
       </div>
     </>

@@ -63,9 +63,9 @@ export default function SellerProfileClient({ profile }: Props) {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="block text-sm font-medium text-gray-700 mb-2">
                   프로필 사진
-                </label>
+                </div>
                 {profile.profile_image ? (
                   <img
                     src={profile.profile_image}
@@ -85,16 +85,16 @@ export default function SellerProfileClient({ profile }: Props) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="block text-sm font-medium text-gray-700 mb-2">
                   판매자명 (활동명)
-                </label>
+                </div>
                 <p className="text-gray-900">{profile.display_name}</p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="block text-sm font-medium text-gray-700 mb-2">
                   자기소개
-                </label>
+                </div>
                 <p className="text-gray-900 whitespace-pre-wrap">
                   {profile.bio}
                 </p>
@@ -110,16 +110,16 @@ export default function SellerProfileClient({ profile }: Props) {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="block text-sm font-medium text-gray-700 mb-2">
                   실명 (본인인증)
-                </label>
+                </div>
                 <p className="text-gray-900">{profile.real_name || "-"}</p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="block text-sm font-medium text-gray-700 mb-2">
                   전화번호
-                </label>
+                </div>
                 <p className="text-gray-900">
                   {profile.phone}
                   {profile.show_phone ? (
@@ -132,18 +132,18 @@ export default function SellerProfileClient({ profile }: Props) {
 
               {profile.kakao_id && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <div className="block text-sm font-medium text-gray-700 mb-2">
                     카카오톡 ID
-                  </label>
+                  </div>
                   <p className="text-gray-900">{profile.kakao_id}</p>
                 </div>
               )}
 
               {profile.kakao_openchat && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <div className="block text-sm font-medium text-gray-700 mb-2">
                     카카오톡 오픈채팅
-                  </label>
+                  </div>
                   <a
                     href={profile.kakao_openchat}
                     target="_blank"
@@ -157,18 +157,18 @@ export default function SellerProfileClient({ profile }: Props) {
 
               {profile.whatsapp && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <div className="block text-sm font-medium text-gray-700 mb-2">
                     WhatsApp
-                  </label>
+                  </div>
                   <p className="text-gray-900">{profile.whatsapp}</p>
                 </div>
               )}
 
               {profile.website && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <div className="block text-sm font-medium text-gray-700 mb-2">
                     웹사이트
-                  </label>
+                  </div>
                   <a
                     href={profile.website}
                     target="_blank"
@@ -183,9 +183,9 @@ export default function SellerProfileClient({ profile }: Props) {
               {profile.preferred_contact &&
                 profile.preferred_contact.length > 0 && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <div className="block text-sm font-medium text-gray-700 mb-2">
                       선호 연락 수단
-                    </label>
+                    </div>
                     <div className="flex flex-wrap gap-2">
                       {profile.preferred_contact.map((contact) => (
                         <span
@@ -201,9 +201,9 @@ export default function SellerProfileClient({ profile }: Props) {
 
               {profile.contact_hours && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <div className="block text-sm font-medium text-gray-700 mb-2">
                     연락 가능 시간
-                  </label>
+                  </div>
                   <p className="text-gray-900">{profile.contact_hours}</p>
                 </div>
               )}
@@ -216,30 +216,30 @@ export default function SellerProfileClient({ profile }: Props) {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="block text-sm font-medium text-gray-700 mb-2">
                   은행명
-                </label>
+                </div>
                 <p className="text-gray-900">{profile.bank_name}</p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="block text-sm font-medium text-gray-700 mb-2">
                   예금주명
-                </label>
+                </div>
                 <p className="text-gray-900">{profile.account_holder}</p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="block text-sm font-medium text-gray-700 mb-2">
                   계좌번호
-                </label>
+                </div>
                 <p className="text-gray-900">{profile.account_number}</p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="block text-sm font-medium text-gray-700 mb-2">
                   사업자 여부
-                </label>
+                </div>
                 <p className="text-gray-900">
                   {profile.is_business ? "사업자" : "개인"}
                   {profile.is_business && profile.business_number && (
@@ -251,9 +251,9 @@ export default function SellerProfileClient({ profile }: Props) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="block text-sm font-medium text-gray-700 mb-2">
                   세금계산서 발행
-                </label>
+                </div>
                 <p className="text-gray-900">
                   {profile.tax_invoice_available ? (
                     <span className="text-green-600">

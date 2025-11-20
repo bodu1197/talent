@@ -366,9 +366,9 @@ export default function NotificationsClient({
               <h3 className="text-lg font-bold text-gray-900 mb-2">
                 {filter === "unread"
                   ? "읽지 않은 알림이 없습니다"
-                  : (filter === "read"
-                    ? "읽은 알림이 없습니다"
-                    : "알림이 없습니다")}
+                  : filter === "read"
+                  ? "읽은 알림이 없습니다"
+                  : "알림이 없습니다"}
               </h3>
               <p className="text-gray-600">
                 {filter === "all"

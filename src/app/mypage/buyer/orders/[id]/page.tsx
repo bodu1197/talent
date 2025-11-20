@@ -444,7 +444,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                   {order.deliverables.map(
                     (file: Deliverable, index: number) => (
                       <div
-                        key={`deliverable-${index}`}
+                        key={file.id || `deliverable-${file.file_name}-${index}`}
                         className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                       >
                         <div className="flex items-center gap-3">
@@ -531,10 +531,10 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                     order.status === "delivered"
                       ? "bg-red-100 text-red-700"
                       : order.status === "in_progress"
-                        ? "bg-yellow-100 text-yellow-700"
-                        : order.status === "completed"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-gray-100 text-gray-700"
+                      ? "bg-yellow-100 text-yellow-700"
+                      : order.status === "completed"
+                      ? "bg-green-100 text-green-700"
+                      : "bg-gray-100 text-gray-700"
                   }`}
                 >
                   {getStatusLabel(order.status)}

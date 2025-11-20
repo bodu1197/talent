@@ -623,12 +623,12 @@ export default function EditServiceClient({
             <div className="space-y-4">
               {/* 썸네일 이미지 - 최상단 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="block text-sm font-medium text-gray-700 mb-2">
                   썸네일 이미지 {!service.thumbnail_url && "*"}{" "}
                   <span className="text-xs text-gray-500">
                     (권장: 652×488px)
                   </span>
-                </label>
+                </div>
 
                 {/* 업로드 방식 선택 */}
                 <div className="flex gap-2 mb-4">
@@ -818,10 +818,11 @@ export default function EditServiceClient({
 
               {/* 서비스 제목 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="service-title" className="block text-sm font-medium text-gray-700 mb-2">
                   서비스 제목 *
                 </label>
                 <input
+                  id="service-title"
                   type="text"
                   value={formData.title}
                   onChange={(e) =>
@@ -834,9 +835,9 @@ export default function EditServiceClient({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="block text-sm font-medium text-gray-700 mb-2">
                   카테고리 *
-                </label>
+                </div>
                 <div className="space-y-3">
                   {/* 1차 카테고리 */}
                   <select
@@ -913,10 +914,11 @@ export default function EditServiceClient({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="service-description" className="block text-sm font-medium text-gray-700 mb-2">
                   서비스 설명 *
                 </label>
                 <textarea
+                  id="service-description"
                   value={formData.description}
                   onChange={(e) =>
                     setFormData({ ...formData, description: e.target.value })
@@ -939,10 +941,11 @@ export default function EditServiceClient({
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="service-price" className="block text-sm font-medium text-gray-700 mb-2">
                     가격 (원) *
                   </label>
                   <input
+                    id="service-price"
                     type="number"
                     value={formData.price}
                     onChange={(e) =>
@@ -955,10 +958,11 @@ export default function EditServiceClient({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="service-delivery-days" className="block text-sm font-medium text-gray-700 mb-2">
                     작업 기간 (일) *
                   </label>
                   <input
+                    id="service-delivery-days"
                     type="number"
                     value={formData.deliveryDays}
                     onChange={(e) =>

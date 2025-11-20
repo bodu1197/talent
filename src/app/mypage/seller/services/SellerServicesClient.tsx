@@ -303,11 +303,9 @@ export default function SellerServicesClient({
         </div>
 
         <div className="mb-4 text-sm text-gray-600">
-          총{" "}
-          <span className="font-bold text-gray-900">
+          총 <span className="font-bold text-gray-900">
             {filteredServices.length}
-          </span>
-          개의 서비스
+          </span> 개의 서비스
         </div>
 
         {filteredServices.length > 0 ? (
