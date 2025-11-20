@@ -59,7 +59,7 @@ export function createOAuthState(data: Record<string, unknown>): string {
   const stateData = {
     ...data,
     timestamp: Date.now(),
-    nonce: Math.random().toString(36).substring(2, 15),
+    nonce: require('crypto').randomBytes(8).toString('hex'),
   };
   return btoa(JSON.stringify(stateData));
 }

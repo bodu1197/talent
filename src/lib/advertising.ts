@@ -2,6 +2,7 @@
 'use server';
 
 import { SupabaseManager } from '@/lib/supabase/singleton';
+import { cryptoShuffleArray } from './utils/crypto-shuffle';
 
 const LAUNCH_PROMO_AMOUNT = 600000; // 런칭 프로모션 60만원
 const LAUNCH_PROMO_DURATION_MONTHS = 6;
@@ -644,11 +645,7 @@ export async function issueTaxInvoice(
  */
 function fisherYatesShuffle<T>(array: T[]): T[] {
   const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
+  return cryptoShuffleArray(shuffled);
 }
 
 /**

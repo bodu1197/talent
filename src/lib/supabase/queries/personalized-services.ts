@@ -1,5 +1,6 @@
 import { createClient as createServerClient, createServiceRoleClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { cryptoShuffleArray } from '@/lib/utils/crypto-shuffle'
 import { Service } from '@/types'
 
 /**
@@ -171,17 +172,11 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
         const advertisedServices = typedServices.filter(s => advertisedServiceIds.includes(s.id))
         const regularServices = typedServices.filter(s => !advertisedServiceIds.includes(s.id))
 
-        // 광고 서비스 랜덤 셔플
-        for (let i = advertisedServices.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [advertisedServices[i], advertisedServices[j]] = [advertisedServices[j], advertisedServices[i]]
-        }
+        // 광고 서비스 랜덤 셔플 (cryptographically secure)
+        cryptoShuffleArray(advertisedServices);
 
-        // 일반 서비스 랜덤 셔플
-        for (let i = regularServices.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [regularServices[i], regularServices[j]] = [regularServices[j], regularServices[i]]
-        }
+        // 일반 서비스 랜덤 셔플 (cryptographically secure)
+        cryptoShuffleArray(regularServices);
 
         // 광고 서비스(랜덤) + 일반 서비스(랜덤) (상위 5개)
         const topServices = [...advertisedServices, ...regularServices].slice(0, 5)

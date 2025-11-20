@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 
     // 파일 이름 생성 (타임스탬프 + 랜덤 문자열)
     const timestamp = Date.now()
-    const randomString = Math.random().toString(36).substring(2, 15)
+    const randomString = require('crypto').randomBytes(8).toString('hex')
     const fileExt = file.name.split('.').pop()
     const fileName = `${timestamp}_${randomString}.${fileExt}`
     const filePath = `${folder}/${fileName}`

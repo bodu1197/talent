@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 주문 생성
-    const merchantUid = `order_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
+    const merchantUid = `order_${Date.now()}_${require('crypto').randomBytes(4).toString('hex')}`
 
     const { data: order, error: orderError } = await supabase
       .from('orders')

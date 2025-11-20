@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
 
     // 주문 생성 (Idempotency 보장 - Race Condition 방지)
     // merchant_uid를 Idempotency Key로 사용하여 중복 주문 방지
-    const merchantUid = `order_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
+    const merchantUid = `order_${Date.now()}_${require('crypto').randomBytes(4).toString('hex')}`
 
     // 납품 예정일 계산 (형식적, 실제로는 판매자 작업 완료 선언이 중요)
     const deliveryDate = new Date(Date.now() + (delivery_days || service.delivery_days || 7) * 24 * 60 * 60 * 1000)

@@ -1,4 +1,14 @@
 // 성별 중립적인 랜덤 닉네임 생성기
+import { randomBytes } from 'crypto';
+
+/**
+ * Get cryptographically secure random integer
+ */
+function getSecureRandomInt(max: number): number {
+  const buffer = randomBytes(4);
+  const randomValue = buffer.readUInt32BE(0) / 0xffffffff;
+  return Math.floor(randomValue * max);
+}
 
 const adjectives = [
   "행복한",
@@ -86,8 +96,8 @@ const nouns = [
  * @returns "행복한사과", "빛나는구름" 등
  */
 export function generateRandomNickname(): string {
-  const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
-  const noun = nouns[Math.floor(Math.random() * nouns.length)];
+  const adjective = adjectives[getSecureRandomInt(adjectives.length)];
+  const noun = nouns[getSecureRandomInt(nouns.length)];
   return `${adjective}${noun}`;
 }
 
@@ -97,7 +107,7 @@ export function generateRandomNickname(): string {
  */
 export function generateUniqueNickname(): string {
   const base = generateRandomNickname();
-  const number = Math.floor(Math.random() * 10000);
+  const number = getSecureRandomInt(10000);
   return `${base}${number}`;
 }
 
