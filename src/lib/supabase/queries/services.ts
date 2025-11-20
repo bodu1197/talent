@@ -377,40 +377,8 @@ export async function getRecommendedServicesByCategory(
     limit,
   );
 
-  // 평균 별점 및 리뷰 수 추가
-  if (combinedServices.length > 0) {
-    const serviceIds = combinedServices.map((s) => s.id);
-    const { data: reviewStats } = await supabase
-      .from("reviews")
-      .select("service_id, rating")
-      .in("service_id", serviceIds)
-      .eq("is_visible", true);
-
-    const ratingMap = new Map<string, { sum: number; count: number }>();
-    if (reviewStats) {
-      for (const review of reviewStats as { service_id: string; rating: number }[]) {
-        const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
-        ratingMap.set(review.service_id, {
-          sum: current.sum + review.rating,
-          count: current.count + 1,
-        });
-      }
-    }
-
-    for (const service of combinedServices) {
-      service.order_count = service.orders_count || 0;
-      const stats = ratingMap.get(service.id);
-      if (stats && stats.count > 0) {
-        service.rating = stats.sum / stats.count;
-        service.review_count = stats.count;
-      } else {
-        service.rating = 0;
-        service.review_count = 0;
-      }
-    }
-  }
-
-  return combinedServices;
+  // 평균 별점 및 리뷰 수 추가 (헬퍼 함수 사용)
+  return enrichServicesWithReviewStats(supabase, combinedServices);
 }
 
 // 전체 승인된 서비스 조회 (홈페이지용) - AI 카테고리 제외
@@ -477,45 +445,17 @@ export async function getActiveServices(limit?: number) {
     throw error;
   }
 
-  // 데이터 매핑 (단일 가격 사용)
+  // 데이터 매핑 (단일 가격 사용) 및 리뷰 통계 추가
   if (data && data.length > 0) {
-    // 각 서비스에 대해 평균 별점 계산
-    const serviceIds = data.map((s) => s.id);
-    const { data: reviewStats } = await supabase
-      .from("reviews")
-      .select("service_id, rating")
-      .in("service_id", serviceIds)
-      .eq("is_visible", true);
-
-    // 서비스별 평균 별점 계산
-    const ratingMap = new Map<string, { sum: number; count: number }>();
-    if (reviewStats) {
-      for (const review of reviewStats as { service_id: string; rating: number }[]) {
-        const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
-        ratingMap.set(review.service_id, {
-          sum: current.sum + review.rating,
-          count: current.count + 1,
-        });
-      }
-    }
-
+    // 가격 매핑
     for (const service of data) {
       service.price_min = service.price || 0;
       service.price_max = service.price || undefined;
-
-      // order_count 매핑
       service.order_count = service.orders_count || 0;
-
-      // 평균 별점 및 리뷰 수 설정
-      const stats = ratingMap.get(service.id);
-      if (stats && stats.count > 0) {
-        service.rating = stats.sum / stats.count;
-        service.review_count = stats.count;
-      } else {
-        service.rating = 0;
-        service.review_count = 0;
-      }
     }
+
+    // 평균 별점 및 리뷰 수 추가 (헬퍼 함수 사용)
+    return enrichServicesWithReviewStats(supabase, data);
   }
 
   return data || [];
