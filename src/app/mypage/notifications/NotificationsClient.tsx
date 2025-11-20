@@ -209,11 +209,11 @@ export default function NotificationsClient({
       <div className="py-8 px-4">
         {/* 헤더 */}
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-base md:text-lg font-bold text-gray-900 flex items-center gap-2">
             <FaBell className="text-brand-primary" />
             전체 알림
           </h1>
-          <p className="text-gray-600 mt-2 text-base">
+          <p className="text-gray-600 mt-2 text-sm md:text-base">
             {unreadCount > 0
               ? `읽지 않은 알림 ${unreadCount}개`
               : "모든 알림을 확인했습니다"}
@@ -229,8 +229,8 @@ export default function NotificationsClient({
               <button
                 onClick={() => setFilter("all")}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === "all"
-                    ? "bg-brand-primary text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-brand-primary text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
               >
                 전체 ({notifications.length})
@@ -238,8 +238,8 @@ export default function NotificationsClient({
               <button
                 onClick={() => setFilter("unread")}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === "unread"
-                    ? "bg-brand-primary text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-brand-primary text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
               >
                 읽지 않음 ({unreadCount})
@@ -247,8 +247,8 @@ export default function NotificationsClient({
               <button
                 onClick={() => setFilter("read")}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === "read"
-                    ? "bg-brand-primary text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-brand-primary text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
               >
                 읽음 ({notifications.length - unreadCount})
@@ -297,8 +297,8 @@ export default function NotificationsClient({
                           <div className="flex items-start justify-between gap-2 mb-1">
                             <h3
                               className={`text-base font-bold ${notification.is_read
-                                  ? "text-gray-700"
-                                  : "text-gray-900"
+                                ? "text-gray-700"
+                                : "text-gray-900"
                                 }`}
                             >
                               {notification.title}
@@ -326,8 +326,8 @@ export default function NotificationsClient({
                           <div className="flex items-start justify-between gap-2 mb-1">
                             <h3
                               className={`text-base font-bold ${notification.is_read
-                                  ? "text-gray-700"
-                                  : "text-gray-900"
+                                ? "text-gray-700"
+                                : "text-gray-900"
                                 }`}
                             >
                               {notification.title}

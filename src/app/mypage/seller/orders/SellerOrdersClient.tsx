@@ -434,8 +434,8 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
       <div className="py-8 px-4">
         {/* 페이지 헤더 */}
         <div className="mb-8">
-          <h1 className="text-xl font-bold text-gray-900">주문 관리</h1>
-          <p className="text-gray-600 mt-1 text-sm">
+          <h1 className="text-base md:text-lg font-bold text-gray-900">주문 관리</h1>
+          <p className="text-gray-600 mt-2 text-sm md:text-base">
             전체 주문 내역을 관리하세요
           </p>
         </div>
@@ -450,16 +450,16 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
                   setFilters({ ...filters, status: tab.value as OrderStatus })
                 }
                 className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${filters.status === tab.value
-                    ? "border-brand-primary text-brand-primary"
-                    : "border-transparent text-gray-600 hover:text-gray-900"
+                  ? "border-brand-primary text-brand-primary"
+                  : "border-transparent text-gray-600 hover:text-gray-900"
                   }`}
               >
                 {tab.label}
                 {tab.count > 0 && (
                   <span
                     className={`ml-2 px-2 py-0.5 rounded-full text-xs ${filters.status === tab.value
-                        ? "bg-brand-primary text-white"
-                        : "bg-gray-200 text-gray-600"
+                      ? "bg-brand-primary text-white"
+                      : "bg-gray-200 text-gray-600"
                       }`}
                   >
                     {tab.count}

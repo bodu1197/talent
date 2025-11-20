@@ -132,8 +132,8 @@ export default function BuyerDashboardClient({
       <div className="py-8 px-4">
         {/* 페이지 헤더 */}
         <div className="mb-6 lg:mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">구매 대시보드</h1>
-          <p className="text-gray-600 mt-2 text-base">주문 현황을 확인하세요</p>
+          <h1 className="text-base md:text-lg font-bold text-gray-900">구매 대시보드</h1>
+          <p className="text-gray-600 mt-2 text-sm md:text-base">주문 현황을 확인하세요</p>
         </div>
 
         {/* 통계 카드 */}
@@ -167,7 +167,7 @@ export default function BuyerDashboardClient({
         {/* 알림 */}
         {alerts.length > 0 && (
           <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
-            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <h2 className="text-base md:text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
               <FaBell className="text-red-500" />
               확인 필요
             </h2>
@@ -194,7 +194,7 @@ export default function BuyerDashboardClient({
         {/* 진행중인 주문 */}
         <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+            <h2 className="text-base md:text-lg font-bold text-gray-900 flex items-center gap-2">
               <FaBox className="text-purple-500" />
               진행중인 주문
             </h2>
@@ -298,7 +298,7 @@ export default function BuyerDashboardClient({
         {/* 최근 찜한 서비스 */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+            <h2 className="text-base md:text-lg font-bold text-gray-900 flex items-center gap-2">
               <FaHeart className="text-red-500" />
               최근 찜한 서비스
             </h2>

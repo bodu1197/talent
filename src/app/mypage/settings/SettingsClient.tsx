@@ -32,8 +32,8 @@ export default function SettingsClient({
       <div className="py-8 px-4">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">설정</h1>
-            <p className="text-gray-600 mt-2 text-base">
+            <h1 className="text-base md:text-lg font-bold text-gray-900">설정</h1>
+            <p className="text-gray-600 mt-2 text-sm md:text-base">
               계정 및 알림 설정을 확인하세요
             </p>
           </div>
@@ -85,7 +85,7 @@ export default function SettingsClient({
           <div className="flex-1">
             {activeTab === "profile" && (
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-lg font-bold text-gray-900 mb-6">
+                <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">
                   프로필 정보
                 </h2>
                 <div className="space-y-4">
@@ -136,7 +136,7 @@ export default function SettingsClient({
 
             {activeTab === "account" && (
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-lg font-bold text-gray-900 mb-6">
+                <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">
                   계정 보안
                 </h2>
                 <div className="space-y-4">
@@ -165,7 +165,7 @@ export default function SettingsClient({
 
             {activeTab === "notifications" && (
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-lg font-bold text-gray-900 mb-6">
+                <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">
                   알림 설정
                 </h2>
                 <div className="space-y-4">
