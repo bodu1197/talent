@@ -444,7 +444,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                   {order.deliverables.map(
                     (file: Deliverable, index: number) => (
                       <div
-                        key={file.id || `deliverable-${file.file_name}-${index}`}
+                        key={file.id || `deliverable-${file.file_name}`}
                         className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                       >
                         <div className="flex items-center gap-3">

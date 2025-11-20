@@ -60,26 +60,14 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
     <div
       className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
       onClick={onClose}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onClose();
-        }
-      }}
-      role="button"
-      tabIndex={0}
-      aria-label="모달 닫기"
+      role="presentation"
     >
       <div
         className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
         onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.stopPropagation();
-          }
-        }}
         role="dialog"
-        tabIndex={-1}
+        aria-modal="true"
+        aria-labelledby="portfolio-title"
       >
         {/* 닫기 버튼 */}
         <button
@@ -120,7 +108,7 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
         {/* 내용 */}
         <div className="p-8">
           {/* 제목 */}
-          <h2 className="text-3xl font-bold mb-4">{portfolio.title}</h2>
+          <h2 id="portfolio-title" className="text-3xl font-bold mb-4">{portfolio.title}</h2>
 
           {/* 설명 */}
           <div className="prose prose-lg max-w-none mb-6 whitespace-pre-wrap text-gray-700">

@@ -197,19 +197,12 @@ export default function NotificationBell() {
       {showDropdown && (
         <>
           {/* 배경 클릭 시 닫기 */}
-          <div
-            className="fixed inset-0 z-40"
+          <button
+            type="button"
+            className="fixed inset-0 z-40 cursor-default"
             onClick={() => setShowDropdown(false)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                setShowDropdown(false);
-              }
-            }}
-            role="button"
-            tabIndex={0}
             aria-label="알림 닫기"
-          ></div>
+          ></button>
 
           {/* 드롭다운 */}
           <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-96 overflow-y-auto">

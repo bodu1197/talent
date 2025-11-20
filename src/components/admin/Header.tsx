@@ -78,19 +78,12 @@ export default function AdminHeader() {
             {/* Dropdown Menu */}
             {showUserMenu && (
               <>
-                <div
-                  className="fixed inset-0 z-10"
+                <button
+                  className="fixed inset-0 z-10 cursor-default"
                   onClick={() => setShowUserMenu(false)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      setShowUserMenu(false);
-                    }
-                  }}
-                  role="button"
-                  tabIndex={0}
                   aria-label="메뉴 닫기"
-                ></div>
+                  type="button"
+                ></button>
                 <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-20">
                   <Link
                     href="/mypage/settings"

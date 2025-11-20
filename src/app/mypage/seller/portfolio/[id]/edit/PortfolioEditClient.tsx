@@ -229,10 +229,10 @@ export default function PortfolioEditClient({
       setLoading(true);
       setUploading(true);
 
+      // 새 이미지 파일 업로드
       let thumbnail_url: string;
       let image_urls: string[];
 
-      // 새 이미지 파일 업로드
       if (imageFiles.length > 0) {
         const supabase = createClient();
         const uploadedUrls: string[] = [];
@@ -457,7 +457,7 @@ export default function PortfolioEditClient({
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {existingImages.map((image, index) => (
-                    <div key={`existing-${image}-${index}`} className="relative">
+                    <div key={`existing-${image}`} className="relative">
                       <img
                         src={image}
                         alt={`Existing ${index + 1}`}
@@ -502,7 +502,7 @@ export default function PortfolioEditClient({
               {imagePreviews.length > 0 && (
                 <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
                   {imagePreviews.map((preview, index) => (
-                    <div key={`preview-${preview}-${index}`} className="relative">
+                    <div key={`preview-${preview}`} className="relative">
                       <img
                         src={preview}
                         alt={`Preview ${index + 1}`}

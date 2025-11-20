@@ -57,6 +57,13 @@ export default function ChatMessageArea({
   onFileSelect,
   onFileClear,
 }: ChatMessageAreaProps) {
+  // Helper function to get submit button text
+  const getSubmitButtonText = () => {
+    if (isUploading) return "업로드 중...";
+    if (isLoading) return "전송 중...";
+    return "전송";
+  };
+
   if (!selectedRoom) {
     return (
       <div className="flex-1 flex items-center justify-center text-gray-400">
@@ -253,7 +260,7 @@ export default function ChatMessageArea({
               disabled={(!newMessage.trim() && !selectedFile) || isLoading || isUploading}
               className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#0a2540] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {isUploading ? "업로드 중..." : isLoading ? "전송 중..." : "전송"}
+              {getSubmitButtonText()}
             </button>
           </div>
         </form>

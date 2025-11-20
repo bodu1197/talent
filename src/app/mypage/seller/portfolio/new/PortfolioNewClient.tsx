@@ -402,7 +402,7 @@ export default function PortfolioNewClient({
               {imagePreviews.length > 0 && (
                 <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
                   {imagePreviews.map((preview, index) => (
-                    <div key={`preview-${preview}-${index}`} className="relative">
+                    <div key={`preview-${preview}`} className="relative">
                       <img
                         src={preview}
                         alt={`Preview ${index + 1}`}

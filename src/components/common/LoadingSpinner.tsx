@@ -4,9 +4,8 @@ export default function LoadingSpinner({
   message?: string;
 }) {
   return (
-    <div
+    <output
       className="flex items-center justify-center py-12"
-      role="status"
       aria-live="polite"
     >
       <div className="text-center">
@@ -17,6 +16,6 @@ export default function LoadingSpinner({
         <p className="mt-4 text-gray-600">{message}</p>
         <span className="sr-only">{message}</span>
       </div>
-    </div>
+    </output>
   );
 }

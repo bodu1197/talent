@@ -236,7 +236,7 @@ export default function Step5Requirements({
                   index: number,
                 ) => (
                   <div
-                    key={index}
+                    key={`requirement-${req.question}-${index}`}
                     className="flex items-center justify-between bg-gray-50 p-4 rounded-lg border border-gray-200"
                   >
                     <div className="flex items-center gap-3">
@@ -397,7 +397,7 @@ export default function Step5Requirements({
                   <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
                     {formData.portfolio_data.images.map(
                       (file: File, index: number) => (
-                        <div key={index} className="relative">
+                        <div key={`portfolio-image-${file.name}-${index}`} className="relative">
                           <img
                             src={URL.createObjectURL(file)}
                             alt={`Preview ${index + 1}`}

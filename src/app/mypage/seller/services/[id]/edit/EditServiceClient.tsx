@@ -218,34 +218,51 @@ async function updateServiceDirectly(
   return serviceStatus;
 }
 
-// Helper: Update service category
-async function updateServiceCategory(
+// Helper: Update service category for revision
+async function updateRevisionCategory(
+  supabase: any,
+  revisionId: string,
+  categoryId: string
+): Promise<void> {
+  await supabase.from("service_revision_categories").insert({
+    revision_id: revisionId,
+    category_id: categoryId,
+  });
+}
+
+// Helper: Update service category directly
+async function updateDirectServiceCategory(
   supabase: any,
   serviceId: string,
   categoryId: string,
-  isRevision: boolean,
-  revisionId?: string,
   currentCategoryId?: string
 ): Promise<void> {
-  if (isRevision) {
-    await supabase.from("service_revision_categories").insert({
-      revision_id: revisionId,
-      category_id: categoryId,
-    });
-  } else {
-    if (categoryId && categoryId !== currentCategoryId) {
-      await supabase
-        .from("service_categories")
-        .delete()
-        .eq("service_id", serviceId);
+  if (categoryId && categoryId !== currentCategoryId) {
+    await supabase
+      .from("service_categories")
+      .delete()
+      .eq("service_id", serviceId);
 
-      await supabase.from("service_categories").insert({
-        service_id: serviceId,
-        category_id: categoryId,
-        is_primary: true,
-      });
-    }
+    await supabase.from("service_categories").insert({
+      service_id: serviceId,
+      category_id: categoryId,
+      is_primary: true,
+    });
   }
+}
+
+// Helper: Get authenticated user
+async function getAuthenticatedUser(supabase: any) {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    throw new Error("로그인이 필요합니다.");
+  }
+
+  return user;
 }
 
 export default function EditServiceClient({
@@ -484,12 +501,10 @@ export default function EditServiceClient({
     );
 
     if (formData.category) {
-      await updateServiceCategory(
+      await updateRevisionCategory(
         supabase,
-        service.id,
-        formData.category,
-        true,
-        revision.id
+        revision.id,
+        formData.category
       );
     }
 
@@ -510,12 +525,10 @@ export default function EditServiceClient({
     );
 
     if (formData.category) {
-      await updateServiceCategory(
+      await updateDirectServiceCategory(
         supabase,
         service.id,
         formData.category,
-        false,
-        undefined,
         service.service_categories?.[0]?.category_id
       );
     }
@@ -525,20 +538,6 @@ export default function EditServiceClient({
       : "서비스가 성공적으로 수정되었습니다!";
 
     toast.error(message);
-  }
-
-  // Helper: Get authenticated user
-  async function getAuthenticatedUser(supabase: any) {
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-
-    if (userError || !user) {
-      throw new Error("로그인이 필요합니다.");
-    }
-
-    return user;
   }
 
   const handleSubmit = async (e: React.FormEvent) => {

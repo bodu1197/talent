@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
 import { logger } from "@/lib/logger";
@@ -207,10 +207,13 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
     };
   }, []);
 
+  const value = useMemo(
+    () => ({ user, profile, loading, signOut, refreshProfile }),
+    [user, profile, loading]
+  );
+
   return (
-    <AuthContext.Provider
-      value={{ user, profile, loading, signOut, refreshProfile }}
-    >
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

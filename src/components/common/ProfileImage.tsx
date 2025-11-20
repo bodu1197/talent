@@ -34,8 +34,7 @@ export default function ProfileImage({
       <div
         className={`bg-gray-200 rounded-full ${className}`}
         style={{ width: `${size}px`, height: `${size}px` }}
-        role="img"
-        aria-label={alt}
+        aria-hidden="true"
       />
     );
   }
@@ -56,8 +55,7 @@ export default function ProfileImage({
       <div
         className={`bg-gray-200 rounded-full ${className}`}
         style={{ width: `${size}px`, height: `${size}px` }}
-        role="img"
-        aria-label={alt}
+        aria-hidden="true"
       />
     );
   }

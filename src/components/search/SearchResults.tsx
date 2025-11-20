@@ -33,8 +33,6 @@ export default function SearchResults({
     },
   ];
 
-  const totalResults = services.length + experts.length + portfolios.length;
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 검색 결과 헤더 */}

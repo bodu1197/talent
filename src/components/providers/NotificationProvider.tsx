@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react'
+import { createContext, useContext, useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from './AuthProvider'
 import { logger } from '@/lib/logger'
@@ -182,17 +182,20 @@ export default function NotificationProvider({ children }: Readonly<{ children: 
     }
   }, [user, supabase, handleInsertNotification, handleUpdateNotification])
 
+  const value = useMemo(
+    () => ({
+      notifications,
+      unreadCount,
+      loading,
+      markAsRead,
+      markAllAsRead,
+      refreshNotifications: fetchNotifications
+    }),
+    [notifications, unreadCount, loading, markAsRead, markAllAsRead, fetchNotifications]
+  )
+
   return (
-    <NotificationContext.Provider
-      value={{
-        notifications,
-        unreadCount,
-        loading,
-        markAsRead,
-        markAllAsRead,
-        refreshNotifications: fetchNotifications
-      }}
-    >
+    <NotificationContext.Provider value={value}>
       {/* 신호음 오디오 */}
       <audio
         ref={audioRef}

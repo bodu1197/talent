@@ -120,7 +120,7 @@ async function getRelatedServices(
   const categoryServices = await getServicesByCategory(categoryId, needed * 2);
   const viewedIds = validViews.map((v) => v.service_id);
   const filtered = categoryServices.filter((s) => !viewedIds.includes(s.id));
-  const shuffled = filtered.sort(() => Math.random() - 0.5);
+  const shuffled = filtered.toSorted(() => Math.random() - 0.5);
 
   return shuffled.slice(0, needed);
 }

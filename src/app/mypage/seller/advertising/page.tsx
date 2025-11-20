@@ -645,29 +645,24 @@ export default function AdvertisingPage() {
 
           {/* 모달 팝업 */}
           {isModalOpen && selectedService && (
-            <dialog
-              open
+            <div
               className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
               onClick={() => {
                 setIsModalOpen(false);
                 setSelectedService("");
               }}
-              onKeyDown={(e) => {
-                if (e.key === 'Escape') {
-                  e.preventDefault();
-                  setIsModalOpen(false);
-                  setSelectedService("");
-                }
-              }}
+              role="presentation"
             >
               <div
                 className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
-                onKeyDown={(e) => e.stopPropagation()}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="advertising-modal-title"
               >
                 {/* 모달 헤더 */}
                 <div className="sticky top-0 bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center rounded-t-2xl">
-                  <h2 className="text-2xl font-bold text-gray-900">
+                  <h2 id="advertising-modal-title" className="text-2xl font-bold text-gray-900">
                     {services.find((s) => s.id === selectedService)?.hasActiveAd
                       ? "광고 상세 정보"
                       : "광고 신청"}
@@ -1010,7 +1005,7 @@ export default function AdvertisingPage() {
                   })()}
                 </div>
               </div>
-            </dialog>
+            </div>
           )}
 
           {/* 서비스 없음 */}

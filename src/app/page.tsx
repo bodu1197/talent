@@ -201,7 +201,7 @@ function AIShowcaseSkeleton() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {[...new Array(10)].map((_, i) => (
             <div
-              key={i}
+              key={`trending-skeleton-${i}`}
               className="bg-gray-100 rounded-lg h-64 animate-pulse"
             ></div>
           ))}
@@ -222,7 +222,7 @@ function RecommendedSkeleton() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {[...new Array(15)].map((_, i) => (
             <div
-              key={i}
+              key={`recommended-skeleton-${i}`}
               className="bg-gray-100 rounded-lg h-64 animate-pulse"
             ></div>
           ))}
@@ -242,12 +242,12 @@ function PersonalizedSkeleton() {
         </div>
         <div className="space-y-10">
           {[...new Array(3)].map((_, i) => (
-            <div key={i}>
+            <div key={`personalized-category-${i}`}>
               <div className="h-6 bg-gray-200 rounded w-40 mb-4 animate-pulse"></div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                 {[...new Array(5)].map((_, j) => (
                   <div
-                    key={j}
+                    key={`personalized-skeleton-${i}-${j}`}
                     className="bg-gray-100 rounded-lg h-64 animate-pulse"
                   ></div>
                 ))}

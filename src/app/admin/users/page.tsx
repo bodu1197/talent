@@ -311,20 +311,14 @@ export default function AdminUsersPage() {
         <div
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
           onClick={() => setSelectedUser(null)}
-          onKeyDown={(e) => {
-            if (e.key === 'Escape') {
-              e.preventDefault();
-              setSelectedUser(null);
-            }
-          }}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="user-detail-title"
+          role="presentation"
         >
           <div
             className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="user-detail-title"
           >
             {/* 모달 헤더 */}
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">

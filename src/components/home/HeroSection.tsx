@@ -253,9 +253,9 @@ export default function HeroSection() {
 
               {/* 페이지네이션 도트 */}
               <div className="flex gap-2 mt-auto">
-                {slides.map((_, index) => (
+                {slides.map((slide, index) => (
                   <button
-                    key={index}
+                    key={slide.id}
                     onClick={() => changeSlide(index)}
                     className={`h-2 rounded-full bg-white/30 transition-all duration-300 hover:bg-white/50 ${
                       index === currentSlide ? "w-8 bg-white" : "w-2"

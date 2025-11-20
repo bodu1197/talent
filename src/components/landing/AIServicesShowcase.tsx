@@ -145,7 +145,7 @@ const Card: React.FC<CardProps> = ({ data, animationDelay }) => {
 
           <ul className="list-none mb-4 space-y-1">
             {listItems.map((item, index) => (
-              <li key={index} className="text-gray-600 pl-6 relative text-base group-hover:text-gray-900 transition-colors duration-300">
+              <li key={`list-item-${item}-${index}`} className="text-gray-600 pl-6 relative text-base group-hover:text-gray-900 transition-colors duration-300">
                 <span className={`absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-current ${currentTheme.bulletColor}`} />
                 {item}
               </li>

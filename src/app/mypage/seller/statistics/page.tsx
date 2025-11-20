@@ -111,7 +111,7 @@ export default async function SellerStatisticsPage() {
       })
     )
 
-    topServices = servicesWithStats.sort((a, b) => b.orders - a.orders).slice(0, 3)
+    topServices = servicesWithStats.toSorted((a, b) => b.orders - a.orders).slice(0, 3)
   }
 
   return <SellerStatisticsClient stats={stats} topServices={topServices} />

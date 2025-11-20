@@ -341,22 +341,15 @@ export default function Sidebar({ mode, profileData }: SidebarProps) {
             <div key={item.href} className="mb-1">
               {/* 메인 아이템 */}
               {item.children ? (
-                // 하위 메뉴가 있는 경우: div로 렌더링하고 클릭 시 확장/축소만
-                <div
-                  className={`flex items-center justify-between px-4 py-2.5 rounded-lg cursor-pointer transition-colors ${
+                // 하위 메뉴가 있는 경우: button로 렌더링하고 클릭 시 확장/축소만
+                <button
+                  type="button"
+                  className={`flex items-center justify-between px-4 py-2.5 rounded-lg cursor-pointer transition-colors w-full ${
                     isActive(item.href)
                       ? "bg-brand-primary text-white"
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
                   onClick={() => toggleExpand(item.href)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      toggleExpand(item.href);
-                    }
-                  }}
-                  role="button"
-                  tabIndex={0}
                   aria-expanded={expandedItems.has(item.href)}
                 >
                   <div className="flex items-center gap-3 flex-1">
@@ -375,7 +368,7 @@ export default function Sidebar({ mode, profileData }: SidebarProps) {
                       expandedItems.has(item.href) ? "rotate-180" : ""
                     }`}
                   />
-                </div>
+                </button>
               ) : (
                 // 하위 메뉴가 없는 경우: Link로 렌더링하여 정상 네비게이션
                 <Link

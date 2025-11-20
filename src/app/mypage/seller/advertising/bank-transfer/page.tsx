@@ -263,23 +263,15 @@ export default function BankTransferAdvertisingPage() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {services.map((service) => (
-                    <div
+                    <button
                       key={service.id}
+                      type="button"
                       onClick={() => {
                         setFormData({ ...formData, serviceId: service.id });
                         handleNext();
                       }}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          setFormData({ ...formData, serviceId: service.id });
-                          handleNext();
-                        }
-                      }}
-                      role="button"
-                      tabIndex={0}
                       aria-label={`${service.title} 선택`}
-                      className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                      className={`border-2 rounded-lg p-4 cursor-pointer transition-all text-left ${
                         formData.serviceId === service.id
                           ? "border-[#0f3460] bg-blue-50"
                           : "border-gray-200 hover:border-[#0f3460]"
@@ -297,7 +289,7 @@ export default function BankTransferAdvertisingPage() {
                           <h3 className="font-bold text-lg">{service.title}</h3>
                         </div>
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               )}
