@@ -135,7 +135,7 @@ export async function generateThumbnailWithText(
   const horizontalPadding = width * 0.1
   const maxTextWidth = width - (horizontalPadding * 2)
 
-  // 텍스트를 2줄로 분할
+  // 텍스트를 2줄로 분할 (개선된 로직)
   const words = textOptions.text.split(' ')
   const lines: string[] = []
   let currentLine = ''
@@ -144,10 +144,45 @@ export async function generateThumbnailWithText(
     const testLine = currentLine ? `${currentLine} ${word}` : word
     const metrics = ctx.measureText(testLine)
 
-    if (metrics.width > maxTextWidth && currentLine) {
-      // 현재 줄이 너무 길면 줄바꿈
-      lines.push(currentLine)
-      currentLine = word
+    if (metrics.width > maxTextWidth) {
+      // 단어 하나가 너무 긴 경우 강제로 자름
+      if (ctx.measureText(word).width > maxTextWidth) {
+        // 현재 줄이 있으면 먼저 push
+        if (currentLine) {
+          lines.push(currentLine)
+          currentLine = ''
+        }
+
+        // 긴 단어를 글자 단위로 쪼개서 넣기
+        let remainingWord = word
+        while (remainingWord) {
+          let sliceLength = 1
+          while (sliceLength <= remainingWord.length) {
+            const slice = remainingWord.substring(0, sliceLength)
+            if (ctx.measureText(slice).width > maxTextWidth) {
+              // 넘치기 직전까지 자름
+              const validSlice = remainingWord.substring(0, sliceLength - 1)
+              lines.push(validSlice)
+              remainingWord = remainingWord.substring(sliceLength - 1)
+              sliceLength = 1 // 리셋
+              break
+            }
+            if (sliceLength === remainingWord.length) {
+              // 남은 단어가 한 줄에 들어감
+              currentLine = remainingWord
+              remainingWord = ''
+              break
+            }
+            sliceLength++
+          }
+        }
+      } else {
+        // 일반적인 줄바꿈
+        if (currentLine) {
+          lines.push(currentLine)
+        }
+        currentLine = word
+      }
     } else {
       currentLine = testLine
     }

@@ -41,7 +41,7 @@ interface ServiceFormData {
 
 interface Props {
   readonly formData: ServiceFormData;
-  readonly setFormData: (data: ServiceFormData) => void;
+  readonly setFormData: React.Dispatch<React.SetStateAction<ServiceFormData>>;
   readonly categories: Category[];
 }
 
@@ -147,13 +147,23 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
 
   // Update final category when level 3 is selected
   useEffect(() => {
-    if (selectedLevel3) {
-      setFormData({ ...formData, category_ids: [selectedLevel3] });
-    } else if (selectedLevel2 && level3Categories.length === 0) {
-      // If level 2 selected but no level 3 exists, use level 2
-      setFormData({ ...formData, category_ids: [selectedLevel2] });
-    }
-  }, [selectedLevel3, selectedLevel2, level3Categories]);
+    // Always update category_ids with all selected levels to preserve hierarchy
+    const categories: string[] = [];
+    if (selectedLevel1) categories.push(selectedLevel1);
+    if (selectedLevel2) categories.push(selectedLevel2);
+    if (selectedLevel3) categories.push(selectedLevel3);
+
+    // Only update if different to avoid infinite loops
+    setFormData((prev: ServiceFormData) => {
+      const prevIds = prev.category_ids || [];
+      const isSame = prevIds.length === categories.length &&
+        prevIds.every((val: string, index: number) => val === categories[index]);
+
+      if (isSame) return prev;
+
+      return { ...prev, category_ids: categories };
+    });
+  }, [selectedLevel1, selectedLevel2, selectedLevel3, setFormData]);
 
   return (
     <div className="space-y-6">
@@ -266,7 +276,7 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
           id="service-title"
           type="text"
           value={formData.title}
-          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          onChange={(e) => setFormData((prev: ServiceFormData) => ({ ...prev, title: e.target.value }))}
           placeholder="예: 전문 로고 디자인 작업"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
           required

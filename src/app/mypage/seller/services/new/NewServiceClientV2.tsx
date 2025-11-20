@@ -83,8 +83,8 @@ export default function NewServiceClientV2({
   const handleNext = () => {
     // Step 1 validation: 카테고리, 제목, 설명, 썸네일 필수
     if (currentStep === 1) {
-      if (!formData.category_ids || formData.category_ids.length === 0) {
-        toast.error("카테고리를 선택해주세요.");
+      if (!formData.category_ids || formData.category_ids.length < 3) {
+        toast.error("3차 카테고리까지 모두 선택해주세요.");
         return;
       }
       if (!formData.title || formData.title.trim() === "") {
@@ -125,6 +125,7 @@ export default function NewServiceClientV2({
   };
 
   const handleSubmit = async () => {
+    if (loading) return;
     try {
       setLoading(true);
 
@@ -245,16 +246,16 @@ export default function NewServiceClientV2({
                     <div className="flex flex-col items-center flex-1">
                       <div
                         className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-colors ${currentStep >= step.number
-                            ? "bg-brand-primary text-white"
-                            : "bg-gray-200 text-gray-600"
+                          ? "bg-brand-primary text-white"
+                          : "bg-gray-200 text-gray-600"
                           }`}
                       >
                         {step.number}
                       </div>
                       <span
                         className={`text-sm mt-2 font-medium ${currentStep >= step.number
-                            ? "text-brand-primary"
-                            : "text-gray-500"
+                          ? "text-brand-primary"
+                          : "text-gray-500"
                           }`}
                       >
                         {step.title}
@@ -263,8 +264,8 @@ export default function NewServiceClientV2({
                     {index < steps.length - 1 && (
                       <div
                         className={`h-1 flex-1 mx-2 transition-colors ${currentStep > step.number
-                            ? "bg-brand-primary"
-                            : "bg-gray-200"
+                          ? "bg-brand-primary"
+                          : "bg-gray-200"
                           }`}
                       />
                     )}
