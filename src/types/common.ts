@@ -164,8 +164,8 @@ export interface Review {
   content: string
   is_visible: boolean
   moderated: boolean
-  reply?: string | null
-  replied_at?: string | null
+  seller_reply?: string | null
+  seller_reply_at?: string | null
   created_at: string
   updated_at: string
   buyer?: User

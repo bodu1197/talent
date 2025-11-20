@@ -139,8 +139,8 @@ export default function SellerReviewsClient({
                       key={filter}
                       onClick={() => setRatingFilter(filter)}
                       className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${ratingFilter === filter
-                          ? "bg-brand-primary text-white"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        ? "bg-brand-primary text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                         }`}
                     >
                       {filter === "all" ? "전체" : `${filter}점`}
@@ -183,7 +183,7 @@ export default function SellerReviewsClient({
                           )}
                         </div>
                       </div>
-                      {!review.reply && (
+                      {!review.seller_reply && (
                         <button
                           onClick={() => {
                             setSelectedReview(review);
@@ -198,15 +198,15 @@ export default function SellerReviewsClient({
 
                     <p className="text-gray-900 mb-3">{review.content}</p>
 
-                    {review.reply && (
+                    {review.seller_reply && (
                       <div className="mt-4 pl-4 border-l-4 border-brand-primary bg-blue-50 p-4 rounded">
                         <div className="text-sm font-medium text-gray-900 mb-2">
                           판매자 답변
                         </div>
-                        <p className="text-gray-700">{review.reply}</p>
+                        <p className="text-gray-700">{review.seller_reply}</p>
                         <div className="text-xs text-gray-500 mt-2">
-                          {review.replied_at
-                            ? new Date(review.replied_at).toLocaleDateString(
+                          {review.seller_reply_at
+                            ? new Date(review.seller_reply_at).toLocaleDateString(
                               "ko-KR",
                             )
                             : ""}
