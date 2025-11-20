@@ -422,14 +422,15 @@ export default function AdminAdvertisingPage() {
               setSelectedSubscription(null);
             }
           }}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="subscription-detail-title"
+          tabIndex={-1}
         >
           <div
             className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="subscription-detail-title"
           >
             <div className="px-6 py-4 border-b border-slate-200">
               <div className="flex items-center justify-between">

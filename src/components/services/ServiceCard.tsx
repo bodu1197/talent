@@ -87,26 +87,24 @@ export default function ServiceCard({ service, position, categoryId, page }: Ser
         {/* 추천 배지 */}
         {(service as any).is_advertised && (
           <div className="absolute top-2 right-2">
-            <div
-              className="px-2 py-1 bg-blue-600 text-white text-xs font-bold rounded shadow-lg"
-              role="status"
+            <span
+              className="px-2 py-1 bg-blue-600 text-white text-xs font-bold rounded shadow-lg inline-block"
               aria-label="추천"
             >
               추천
-            </div>
+            </span>
           </div>
         )}
         {/* 프리미엄 배지 */}
         {service.is_featured && (
           <div className="absolute top-2 left-2">
-            <div
-              className="px-2 py-1 bg-yellow-500 text-white text-xs font-bold rounded shadow-lg flex items-center gap-1"
-              role="status"
+            <span
+              className="px-2 py-1 bg-yellow-500 text-white text-xs font-bold rounded shadow-lg inline-flex items-center gap-1"
               aria-label="프리미엄 서비스"
             >
               <FaStar aria-hidden="true" />
               PREMIUM
-            </div>
+            </span>
           </div>
         )}
       </div>

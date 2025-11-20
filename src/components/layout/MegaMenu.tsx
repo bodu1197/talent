@@ -192,6 +192,8 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
           className="absolute left-0 right-0 bg-white border-b border-gray-200 shadow-lg z-50"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
+          role="navigation"
+          aria-label="카테고리 메가 메뉴"
         >
           <div className="container-1200 py-6">
             <div className="grid grid-cols-12 gap-8">
