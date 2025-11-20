@@ -196,6 +196,48 @@ export default function RegisterPage() {
     }
   }
 
+  // Helper: Perform user registration flow
+  async function performUserRegistration(
+    email: string,
+    password: string,
+    nickname: string,
+    tempProfileImage: string
+  ): Promise<boolean> {
+    // 1. Upload profile image to Supabase Storage
+    const uploadedProfileImage = await uploadProfileImage(tempProfileImage);
+
+    // 2. Register with Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          name: nickname,
+          profile_image: uploadedProfileImage || tempProfileImage,
+        },
+      },
+    });
+
+    if (authError) throw authError;
+
+    if (authData.user) {
+      // 3. Update user profile with permanent image
+      await updateUserProfile(authData.user.id, nickname, tempProfileImage);
+
+      // Reset attempts on success
+      rateLimiting.resetAttempts();
+
+      // Redirect based on session availability
+      if (authData.session) {
+        router.push("/");
+      } else {
+        router.push("/auth/login?registered=true");
+      }
+      return true;
+    }
+    return false;
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -214,37 +256,12 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      // 1. Upload profile image to Supabase Storage
-      const uploadedProfileImage = await uploadProfileImage(profileImage);
-
-      // 2. Register with Supabase Auth
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.password,
-        options: {
-          data: {
-            name: randomNickname,
-            profile_image: uploadedProfileImage || profileImage,
-          },
-        },
-      });
-
-      if (authError) throw authError;
-
-      if (authData.user) {
-        // 3. Update user profile with permanent image
-        await updateUserProfile(authData.user.id, randomNickname, profileImage);
-
-        // Reset attempts on success
-        rateLimiting.resetAttempts();
-
-        // Redirect based on session availability
-        if (authData.session) {
-          router.push("/");
-        } else {
-          router.push("/auth/login?registered=true");
-        }
-      }
+      await performUserRegistration(
+        formData.email,
+        formData.password,
+        randomNickname,
+        profileImage
+      );
     } catch (error: unknown) {
       handleRegistrationError(error);
     } finally {

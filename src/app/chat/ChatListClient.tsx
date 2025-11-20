@@ -69,6 +69,18 @@ interface Props {
   readonly sellerId: string | null;
 }
 
+// Helper: Filter rooms based on active tab
+function shouldShowRoom(
+  room: ChatRoom,
+  activeTab: "all" | "unread" | "deal" | "favorite"
+): boolean {
+  if (activeTab === "all") return true;
+  if (activeTab === "unread") return (room.unreadCount || 0) > 0;
+  if (activeTab === "deal") return room.has_active_order === true;
+  if (activeTab === "favorite") return room.is_favorite === true;
+  return true;
+}
+
 export default function ChatListClient({ userId, sellerId }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -534,13 +546,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
             </div>
           ) : (
             rooms
-              .filter((room) => {
-                if (activeTab === "all") return true;
-                if (activeTab === "unread") return (room.unreadCount || 0) > 0;
-                if (activeTab === "deal") return room.has_active_order === true;
-                if (activeTab === "favorite") return room.is_favorite === true;
-                return true;
-              })
+              .filter((room) => shouldShowRoom(room, activeTab))
               .map((room) => {
                 const otherUser = room.otherUser;
                 const otherUserName = room.otherUser?.name || "사용자";
@@ -703,16 +709,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
                 </div>
               ) : (
                 rooms
-                  .filter((room) => {
-                    if (activeTab === "all") return true;
-                    if (activeTab === "unread")
-                      return (room.unreadCount || 0) > 0;
-                    if (activeTab === "deal")
-                      return room.has_active_order === true;
-                    if (activeTab === "favorite")
-                      return room.is_favorite === true;
-                    return true;
-                  })
+                  .filter((room) => shouldShowRoom(room, activeTab))
                   .map((room) => {
                     const other = room.otherUser;
                     const displayName = room.otherUser?.name || "사용자";

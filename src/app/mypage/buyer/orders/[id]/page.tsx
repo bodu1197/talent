@@ -58,6 +58,52 @@ interface StatusHistory {
   actor: string;
 }
 
+// Helper functions extracted to reduce complexity
+function getStatusLabel(status: string): string {
+  switch (status) {
+    case "paid":
+      return "결제완료";
+    case "in_progress":
+      return "진행중";
+    case "delivered":
+      return "도착 확인 대기";
+    case "completed":
+      return "완료";
+    case "cancelled":
+      return "취소/환불";
+    case "refunded":
+      return "환불완료";
+    default:
+      return status;
+  }
+}
+
+function createStatusEntry(
+  status: string,
+  timestamp: string | null | undefined,
+  actor: string
+): StatusHistory | null {
+  if (!timestamp) return null;
+
+  return {
+    status,
+    date: new Date(timestamp).toLocaleString("ko-KR"),
+    actor,
+  };
+}
+
+function buildStatusHistory(order: OrderDetail): StatusHistory[] {
+  const entries = [
+    createStatusEntry("주문 접수", order.created_at, "시스템"),
+    createStatusEntry("결제 완료", order.paid_at, "구매자"),
+    createStatusEntry("작업 시작", order.started_at, "판매자"),
+    createStatusEntry("작업 완료", order.delivered_at, "판매자"),
+    createStatusEntry("구매 확정", order.completed_at, "구매자"),
+  ];
+
+  return entries.filter((entry): entry is StatusHistory => entry !== null);
+}
+
 export default function BuyerOrderDetailPage({ params }: PageProps) {
   const { id } = use(params);
   const { user } = useAuth();
@@ -211,53 +257,6 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
         </div>
       </MypageLayoutWrapper>
     );
-  }
-
-  const getStatusLabel = (status: string) => {
-    switch (status) {
-      case "paid":
-        return "결제완료";
-      case "in_progress":
-        return "진행중";
-      case "delivered":
-        return "도착 확인 대기";
-      case "completed":
-        return "완료";
-      case "cancelled":
-        return "취소/환불";
-      case "refunded":
-        return "환불완료";
-      default:
-        return status;
-    }
-  };
-
-  // Helper: Create status history entry
-  function createStatusEntry(
-    status: string,
-    timestamp: string | null | undefined,
-    actor: string
-  ): StatusHistory | null {
-    if (!timestamp) return null;
-
-    return {
-      status,
-      date: new Date(timestamp).toLocaleString("ko-KR"),
-      actor,
-    };
-  }
-
-  // Helper: Build complete status history
-  function buildStatusHistory(order: OrderDetail): StatusHistory[] {
-    const entries = [
-      createStatusEntry("주문 접수", order.created_at, "시스템"),
-      createStatusEntry("결제 완료", order.paid_at, "구매자"),
-      createStatusEntry("작업 시작", order.started_at, "판매자"),
-      createStatusEntry("작업 완료", order.delivered_at, "판매자"),
-      createStatusEntry("구매 확정", order.completed_at, "구매자"),
-    ];
-
-    return entries.filter((entry): entry is StatusHistory => entry !== null);
   }
 
   const statusHistory = buildStatusHistory(order);
