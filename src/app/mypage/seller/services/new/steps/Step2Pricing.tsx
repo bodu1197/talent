@@ -42,7 +42,7 @@ export default function Step2Pricing({ formData, setFormData }: Props) {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">가격 설정</h2>
+      <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">가격 설정</h2>
 
       {/* 서비스 가격 */}
       <div>
@@ -115,7 +115,7 @@ export default function Step2Pricing({ formData, setFormData }: Props) {
 
       {/* 가격 미리보기 */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">가격 요약</h3>
+        <h3 className="text-sm md:text-base font-bold text-gray-900 mb-4">가격 요약</h3>
         <div className="space-y-3">
           <div className="flex justify-between">
             <span className="text-gray-700">서비스 금액</span>

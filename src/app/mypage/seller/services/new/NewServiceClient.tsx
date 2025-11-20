@@ -394,7 +394,7 @@ export default function NewServiceClient({ sellerId }: Props) {
 
         {/* 페이지 헤더 */}
         <div className="mb-8">
-          <h1 className="text-xl font-bold text-gray-900">서비스 등록</h1>
+          <h1 className="text-base md:text-lg font-bold text-gray-900">서비스 등록</h1>
           <p className="text-gray-600 mt-1 text-sm">
             새로운 서비스를 등록하세요
           </p>
@@ -403,7 +403,7 @@ export default function NewServiceClient({ sellerId }: Props) {
         <form onSubmit={handleSubmit} className="max-w-4xl">
           {/* 기본 정보 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">기본 정보</h2>
+            <h2 className="text-sm md:text-base font-bold text-gray-900 mb-6">기본 정보</h2>
 
             <div className="space-y-4">
               {/* 썸네일 이미지 - 최상단 */}
@@ -423,11 +423,10 @@ export default function NewServiceClient({ sellerId }: Props) {
                       setUploadMode("file");
                       removeThumbnail();
                     }}
-                    className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
-                      uploadMode === "file"
+                    className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${uploadMode === "file"
                         ? "bg-brand-primary text-white"
                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
+                      }`}
                   >
                     <FaUpload className="mr-2 inline" />
                     파일 업로드
@@ -438,11 +437,10 @@ export default function NewServiceClient({ sellerId }: Props) {
                       setUploadMode("template");
                       removeThumbnail();
                     }}
-                    className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
-                      uploadMode === "template"
+                    className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${uploadMode === "template"
                         ? "bg-brand-primary text-white"
                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
+                      }`}
                   >
                     <FaPalette className="mr-2 inline" />
                     템플릿 사용
@@ -701,7 +699,7 @@ export default function NewServiceClient({ sellerId }: Props) {
 
           {/* 가격 및 작업 조건 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">
+            <h2 className="text-sm md:text-base font-bold text-gray-900 mb-6">
               가격 및 작업 조건
             </h2>
 
@@ -794,7 +792,7 @@ export default function NewServiceClient({ sellerId }: Props) {
 
           {/* 추가 정보 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">추가 정보</h2>
+            <h2 className="text-sm md:text-base font-bold text-gray-900 mb-6">추가 정보</h2>
 
             <div className="space-y-4">
               <div>

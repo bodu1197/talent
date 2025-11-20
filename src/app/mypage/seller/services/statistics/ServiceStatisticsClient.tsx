@@ -49,7 +49,7 @@ export default function ServiceStatisticsClient({
 
         {/* 페이지 헤더 */}
         <div className="mb-8">
-          <h1 className="text-xl font-bold text-gray-900">서비스 통계</h1>
+          <h1 className="text-base md:text-lg font-bold text-gray-900">서비스 통계</h1>
           <p className="text-gray-600 mt-1 text-sm">
             {stats.serviceName} - {stats.period}
           </p>
@@ -102,7 +102,7 @@ export default function ServiceStatisticsClient({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* 조회수 추이 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">
+            <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">
               일별 조회수
             </h2>
             <div className="space-y-2">
@@ -126,7 +126,7 @@ export default function ServiceStatisticsClient({
 
           {/* 평점 분포 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">평점 분포</h2>
+            <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">평점 분포</h2>
             <div className="flex items-center gap-4 mb-4">
               <div className="text-5xl font-bold text-gray-900">
                 {stats.avgRating}
@@ -171,7 +171,7 @@ export default function ServiceStatisticsClient({
 
         {/* 전환율 */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">전환율</h2>
+          <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">전환율</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center p-4 bg-gray-50 rounded-lg">
               <div className="text-sm text-gray-600 mb-2">조회 → 찜</div>

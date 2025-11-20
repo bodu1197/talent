@@ -148,7 +148,7 @@ export default function Step4Images({ formData, setFormData }: Props) {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">이미지</h2>
+      <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">이미지</h2>
 
       {/* 썸네일 이미지 */}
       <div>
@@ -166,11 +166,10 @@ export default function Step4Images({ formData, setFormData }: Props) {
                 removeThumbnail();
               }
             }}
-            className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
-              uploadMode === "file"
+            className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${uploadMode === "file"
                 ? "bg-brand-primary text-white border-brand-primary"
                 : "bg-white text-gray-700 border-gray-300 hover:border-brand-primary"
-            }`}
+              }`}
           >
             <FaUpload className="mr-2 inline" />
             파일 업로드
@@ -183,11 +182,10 @@ export default function Step4Images({ formData, setFormData }: Props) {
                 removeThumbnail();
               }
             }}
-            className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
-              uploadMode === "template"
+            className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${uploadMode === "template"
                 ? "bg-brand-primary text-white border-brand-primary"
                 : "bg-white text-gray-700 border-gray-300 hover:border-brand-primary"
-            }`}
+              }`}
           >
             <FaWandMagicSparkles className="mr-2 inline" />
             템플릿 생성

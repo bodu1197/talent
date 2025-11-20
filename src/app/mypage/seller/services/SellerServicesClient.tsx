@@ -89,7 +89,7 @@ export default function SellerServicesClient({
       logger.error("반려 메시지 삭제 실패:", err);
       toast.error(
         "삭제에 실패했습니다: " +
-          (err instanceof Error ? err.message : "알 수 없는 오류"),
+        (err instanceof Error ? err.message : "알 수 없는 오류"),
       );
     }
   }
@@ -130,7 +130,7 @@ export default function SellerServicesClient({
       logger.error("상태 변경 실패:", err);
       toast.error(
         "상태 변경에 실패했습니다: " +
-          (err instanceof Error ? err.message : "알 수 없는 오류"),
+        (err instanceof Error ? err.message : "알 수 없는 오류"),
       );
     }
   }
@@ -183,7 +183,7 @@ export default function SellerServicesClient({
       logger.error("서비스 삭제 실패:", err);
       toast.error(
         "삭제에 실패했습니다: " +
-          (err instanceof Error ? err.message : "알 수 없는 오류"),
+        (err instanceof Error ? err.message : "알 수 없는 오류"),
       );
     }
   }
@@ -252,7 +252,7 @@ export default function SellerServicesClient({
       <div className="py-8 px-4">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">서비스 관리</h1>
+            <h1 className="text-base md:text-lg font-bold text-gray-900">서비스 관리</h1>
             <p className="text-gray-600 mt-1 text-sm">내 서비스를 관리하세요</p>
           </div>
           <Link
@@ -269,20 +269,18 @@ export default function SellerServicesClient({
               <Link
                 key={tab.value}
                 href={`/mypage/seller/services?status=${tab.value}`}
-                className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
-                  statusFilter === tab.value
+                className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${statusFilter === tab.value
                     ? "border-brand-primary text-brand-primary"
                     : "border-transparent text-gray-600 hover:text-gray-900"
-                }`}
+                  }`}
               >
                 {tab.label}
                 {tab.count > 0 && (
                   <span
-                    className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                      statusFilter === tab.value
+                    className={`ml-2 px-2 py-0.5 rounded-full text-xs ${statusFilter === tab.value
                         ? "bg-brand-primary text-white"
                         : "bg-gray-200 text-gray-600"
-                    }`}
+                      }`}
                   >
                     {tab.count}
                   </span>
@@ -335,7 +333,7 @@ export default function SellerServicesClient({
                   {/* 오른쪽 내용 */}
                   <div className="flex-1 p-4 flex flex-col">
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="text-lg font-bold text-gray-900 flex-1">
+                      <h3 className="text-sm md:text-base font-bold text-gray-900 flex-1">
                         {service.title}
                       </h3>
                       <div className="flex gap-2">
@@ -405,32 +403,31 @@ export default function SellerServicesClient({
                         {/* 활성화/일시정지 버튼 - active 또는 inactive 상태일 때만 표시 */}
                         {(service.status === "active" ||
                           service.status === "inactive") && (
-                          <button
-                            onClick={() =>
-                              handleToggleStatus(service.id, service.status)
-                            }
-                            className={`px-4 py-2 border rounded-lg transition-colors text-sm font-medium ${
-                              service.status === "active"
-                                ? "border-yellow-400 bg-yellow-50 text-yellow-700 hover:bg-yellow-100"
-                                : "border-green-400 bg-green-50 text-green-700 hover:bg-green-100"
-                            }`}
-                          >
-                            {service.status === "active" ? (
-                              <FaPause
-                                className="mr-1 inline"
-                                aria-hidden="true"
-                              />
-                            ) : (
-                              <FaPlay
-                                className="mr-1 inline"
-                                aria-hidden="true"
-                              />
-                            )}
-                            {service.status === "active"
-                              ? "일시정지"
-                              : "활성화"}
-                          </button>
-                        )}
+                            <button
+                              onClick={() =>
+                                handleToggleStatus(service.id, service.status)
+                              }
+                              className={`px-4 py-2 border rounded-lg transition-colors text-sm font-medium ${service.status === "active"
+                                  ? "border-yellow-400 bg-yellow-50 text-yellow-700 hover:bg-yellow-100"
+                                  : "border-green-400 bg-green-50 text-green-700 hover:bg-green-100"
+                                }`}
+                            >
+                              {service.status === "active" ? (
+                                <FaPause
+                                  className="mr-1 inline"
+                                  aria-hidden="true"
+                                />
+                              ) : (
+                                <FaPlay
+                                  className="mr-1 inline"
+                                  aria-hidden="true"
+                                />
+                              )}
+                              {service.status === "active"
+                                ? "일시정지"
+                                : "활성화"}
+                            </button>
+                          )}
 
                         {/* 삭제 버튼 */}
                         <button

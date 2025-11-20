@@ -148,8 +148,8 @@ export default function Step5Requirements({
         const blob = response.ok
           ? await response.blob()
           : await (
-              await fetch(`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`)
-            ).blob();
+            await fetch(`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`)
+          ).blob();
 
         const file = new File([blob], `youtube-${videoId}.jpg`, {
           type: "image/jpeg",
@@ -210,13 +210,13 @@ export default function Step5Requirements({
         </h2>
       )}
       {showOnlyRequirements && (
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">고객 요청사항</h2>
+        <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">고객 요청사항</h2>
       )}
 
       {/* 요청사항 섹션 - showOnlyRequirements가 true일 때만 표시 */}
       {showOnlyRequirements && (
         <div className="pb-8 border-b border-gray-200">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">
+          <h3 className="text-sm md:text-base font-bold text-gray-900 mb-4">
             고객 요청사항{" "}
             <span className="text-gray-500 text-xs font-normal">
               (선택사항)
@@ -304,7 +304,7 @@ export default function Step5Requirements({
       {!showOnlyRequirements && (
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-bold text-gray-900">
+            <h3 className="text-sm md:text-base font-bold text-gray-900">
               포트폴리오 등록{" "}
               <span className="text-gray-500 text-xs font-normal">
                 (선택사항 - 권장)

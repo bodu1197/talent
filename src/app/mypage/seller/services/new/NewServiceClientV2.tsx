@@ -231,7 +231,7 @@ export default function NewServiceClientV2({
           <div className="py-8 px-4">
             {/* 헤더 */}
             <div className="mb-6">
-              <h1 className="text-xl font-bold text-gray-900">서비스 등록</h1>
+              <h1 className="text-base md:text-lg font-bold text-gray-900">서비스 등록</h1>
               <p className="text-gray-600 mt-1 text-sm">
                 새로운 서비스를 등록하세요
               </p>
@@ -244,31 +244,28 @@ export default function NewServiceClientV2({
                   <div key={step.number} className="flex items-center flex-1">
                     <div className="flex flex-col items-center flex-1">
                       <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-colors ${
-                          currentStep >= step.number
+                        className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-colors ${currentStep >= step.number
                             ? "bg-brand-primary text-white"
                             : "bg-gray-200 text-gray-600"
-                        }`}
+                          }`}
                       >
                         {step.number}
                       </div>
                       <span
-                        className={`text-sm mt-2 font-medium ${
-                          currentStep >= step.number
+                        className={`text-sm mt-2 font-medium ${currentStep >= step.number
                             ? "text-brand-primary"
                             : "text-gray-500"
-                        }`}
+                          }`}
                       >
                         {step.title}
                       </span>
                     </div>
                     {index < steps.length - 1 && (
                       <div
-                        className={`h-1 flex-1 mx-2 transition-colors ${
-                          currentStep > step.number
+                        className={`h-1 flex-1 mx-2 transition-colors ${currentStep > step.number
                             ? "bg-brand-primary"
                             : "bg-gray-200"
-                        }`}
+                          }`}
                       />
                     )}
                   </div>

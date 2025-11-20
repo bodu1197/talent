@@ -34,7 +34,7 @@ interface Props {
 export default function Step3Description({ formData, setFormData }: Props) {
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">서비스 설명</h2>
+      <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">서비스 설명</h2>
 
       {/* 서비스 상세 설명 */}
       <div>
@@ -73,7 +73,7 @@ export default function Step3Description({ formData, setFormData }: Props) {
 
       {/* 작성 가이드 */}
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">
+        <h3 className="text-sm md:text-base font-bold text-gray-900 mb-4">
           <FaLightbulb className="text-yellow-500 mr-2 inline" />
           좋은 서비스 설명 작성 팁
         </h3>
