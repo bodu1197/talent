@@ -48,3 +48,7 @@ passwords.txt
 .sonar/
 sonar-report.json
 eslint-report.json
+
+# Windows reserved filenames and temp files
+nul
+temp_issues.json

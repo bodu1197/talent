@@ -175,7 +175,14 @@ export default function NewServiceClientV2({
           category_id: cat_id,
         }));
 
-        await supabase.from("service_categories").insert(categoryInserts);
+        const { error: categoryError } = await supabase
+          .from("service_categories")
+          .insert(categoryInserts);
+
+        if (categoryError) {
+          logger.error("Category insertion error:", categoryError);
+          throw new Error("카테고리 저장에 실패했습니다.");
+        }
       }
 
       // 4. 포트폴리오 생성 (선택사항)
