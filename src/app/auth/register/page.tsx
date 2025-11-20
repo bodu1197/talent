@@ -14,20 +14,26 @@ import {
   RATE_LIMIT_CONFIG,
 } from "@/lib/auth/config";
 import { logger } from "@/lib/logger";
+import { usePasswordValidation } from "@/hooks/usePasswordValidation";
+import { useRateLimiting } from "@/hooks/useRateLimiting";
+import { PasswordRequirements } from "./components/PasswordRequirements";
+import {
+  isValidEmail,
+  validateRegistration,
+  type RegisterFormData,
+} from "./utils/register-utils";
 
 export default function RegisterPage() {
   const [randomNickname, setRandomNickname] = useState("");
   const [profileImage, setProfileImage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
-  const [registerAttempts, setRegisterAttempts] = useState(0);
-  const [lockoutUntil, setLockoutUntil] = useState<number | null>(null);
   const [emailCheckStatus, setEmailCheckStatus] = useState<
     "idle" | "checking" | "available" | "taken"
   >("idle");
   const [emailCheckMessage, setEmailCheckMessage] = useState<string>("");
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<RegisterFormData>({
     email: "",
     password: "",
     passwordConfirm: "",
@@ -40,19 +46,9 @@ export default function RegisterPage() {
   const router = useRouter();
   const supabase = createClient();
 
-  // 비밀번호 조건 검사
-  const passwordValidation = {
-    minLength: formData.password.length >= 8,
-    hasLetter: /[a-zA-Z]/.test(formData.password),
-    hasNumber: /\d/.test(formData.password),
-    hasSpecial: /[!@#$%^&*(),.?":{}|<>]/.test(formData.password),
-  };
-
-  const isPasswordValid =
-    passwordValidation.minLength &&
-    passwordValidation.hasLetter &&
-    passwordValidation.hasNumber &&
-    passwordValidation.hasSpecial;
+  // Custom hooks
+  const { passwordValidation, isPasswordValid } = usePasswordValidation(formData.password);
+  const rateLimiting = useRateLimiting(RATE_LIMIT_CONFIG.REGISTER);
 
   // 컴포넌트 마운트 시 랜덤 닉네임 생성
   useEffect(() => {
@@ -104,10 +100,6 @@ export default function RegisterPage() {
   }, [formData.email]);
 
   // Helper functions for email validation
-  function isValidEmail(email: string): boolean {
-    return email.length > 0 && email.includes("@");
-  }
-
   function resetEmailCheckStatus() {
     setEmailCheckStatus("idle");
     setEmailCheckMessage("");
@@ -123,36 +115,6 @@ export default function RegisterPage() {
     setRandomNickname(nickname);
     setProfileImage(generateProfileImage(nickname));
   };
-
-  // Validation helper functions
-  function validateRegistration(): string | null {
-    if (lockoutUntil && Date.now() < lockoutUntil) {
-      const remainingSeconds = Math.ceil((lockoutUntil - Date.now()) / 1000);
-      return `너무 많은 시도가 있었습니다. ${remainingSeconds}초 후 다시 시도해주세요.`;
-    }
-
-    if (emailCheckStatus === "taken") {
-      return "이미 사용 중인 이메일입니다. 다른 이메일을 사용해주세요.";
-    }
-
-    if (emailCheckStatus === "checking") {
-      return "이메일 확인 중입니다. 잠시만 기다려주세요.";
-    }
-
-    if (!isPasswordValid) {
-      return "비밀번호 조건을 모두 충족해주세요.";
-    }
-
-    if (formData.password !== formData.passwordConfirm) {
-      return "비밀번호가 일치하지 않습니다.";
-    }
-
-    if (!formData.agreeTerms || !formData.agreePrivacy) {
-      return "필수 약관에 동의해주세요.";
-    }
-
-    return null;
-  }
 
   // Profile image upload helper
   async function uploadProfileImage(imageUrl: string): Promise<string | null> {
@@ -222,12 +184,10 @@ export default function RegisterPage() {
   function handleRegistrationError(error: unknown) {
     logger.error("회원가입 실패:", error);
 
-    const newAttempts = registerAttempts + 1;
-    setRegisterAttempts(newAttempts);
+    rateLimiting.incrementAttempts();
 
-    if (newAttempts >= RATE_LIMIT_CONFIG.REGISTER.MAX_ATTEMPTS) {
-      setLockoutUntil(Date.now() + RATE_LIMIT_CONFIG.REGISTER.LOCKOUT_DURATION);
-      setError("너무 많은 시도가 있었습니다. 10분 후 다시 시도해주세요.");
+    if (rateLimiting.isLockedOut) {
+      setError(`너무 많은 시도가 있었습니다. ${rateLimiting.remainingSeconds}초 후 다시 시도해주세요.`);
     } else {
       const message = error instanceof Error
         ? error.message
@@ -239,7 +199,12 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const validationError = validateRegistration();
+    const validationError = validateRegistration(
+      formData,
+      isPasswordValid,
+      emailCheckStatus,
+      rateLimiting.lockoutUntil
+    );
     if (validationError) {
       setError(validationError);
       return;
@@ -271,8 +236,7 @@ export default function RegisterPage() {
         await updateUserProfile(authData.user.id, randomNickname, profileImage);
 
         // Reset attempts on success
-        setRegisterAttempts(0);
-        setLockoutUntil(null);
+        rateLimiting.resetAttempts();
 
         // Redirect based on session availability
         if (authData.session) {
@@ -580,34 +544,10 @@ export default function RegisterPage() {
                 </button>
               </div>
               {/* 비밀번호 조건 표시 */}
-              {formData.password && (
-                <div className="mt-2 space-y-1">
-                  <div
-                    className={`flex items-center gap-2 text-xs ${passwordValidation.minLength ? "text-green-600" : "text-gray-500"}`}
-                  >
-                    <span>{passwordValidation.minLength ? "✓" : "○"}</span>
-                    <span>8자 이상</span>
-                  </div>
-                  <div
-                    className={`flex items-center gap-2 text-xs ${passwordValidation.hasLetter ? "text-green-600" : "text-gray-500"}`}
-                  >
-                    <span>{passwordValidation.hasLetter ? "✓" : "○"}</span>
-                    <span>영문 포함</span>
-                  </div>
-                  <div
-                    className={`flex items-center gap-2 text-xs ${passwordValidation.hasNumber ? "text-green-600" : "text-gray-500"}`}
-                  >
-                    <span>{passwordValidation.hasNumber ? "✓" : "○"}</span>
-                    <span>숫자 포함</span>
-                  </div>
-                  <div
-                    className={`flex items-center gap-2 text-xs ${passwordValidation.hasSpecial ? "text-green-600" : "text-gray-500"}`}
-                  >
-                    <span>{passwordValidation.hasSpecial ? "✓" : "○"}</span>
-                    <span>특수문자 포함 (!@#$%^&* 등)</span>
-                  </div>
-                </div>
-              )}
+              <PasswordRequirements
+                validation={passwordValidation}
+                show={!!formData.password}
+              />
             </div>
 
             {/* 비밀번호 확인 */}
