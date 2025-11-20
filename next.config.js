@@ -5,7 +5,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  poweredByHeader: false, // Remove X-Powered-By header
+  poweredByHeader: false, // Remove X-Powered-By header - Force Rebuild
   images: {
     remotePatterns: [
       {
@@ -168,21 +168,21 @@ const shouldEnableSentry = process.env.SENTRY_ORG && process.env.SENTRY_PROJECT;
 
 module.exports = shouldEnableSentry
   ? withSentryConfig(
-      configWithBundleAnalyzer,
-      {
-        // Sentry 빌드 설정
-        silent: true,
-        org: process.env.SENTRY_ORG,
-        project: process.env.SENTRY_PROJECT,
-      },
-      {
-        // Sentry 업로드 설정
-        widenClientFileUpload: true,
-        transpileClientSDK: true,
-        tunnelRoute: "/monitoring",
-        hideSourceMaps: true,
-        disableLogger: true,
-        automaticVercelMonitors: true,
-      },
-    )
+    configWithBundleAnalyzer,
+    {
+      // Sentry 빌드 설정
+      silent: true,
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+    },
+    {
+      // Sentry 업로드 설정
+      widenClientFileUpload: true,
+      transpileClientSDK: true,
+      tunnelRoute: "/monitoring",
+      hideSourceMaps: true,
+      disableLogger: true,
+      automaticVercelMonitors: true,
+    },
+  )
   : configWithBundleAnalyzer;
