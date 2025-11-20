@@ -30,10 +30,10 @@ export default function Footer() {
             <div>
               <h4 className="text-gray-900 font-semibold mb-4">전문가 안내</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/expert/register" className="hover:text-brand-primary transition-colors">전문가 등록</Link></li>
-                <li><Link href="/seller/guide" className="hover:text-brand-primary transition-colors">판매자 가이드</Link></li>
-                <li><Link href="/seller/commission" className="hover:text-brand-primary transition-colors">수수료 안내</Link></li>
-                <li><Link href="/seller/settlement" className="hover:text-brand-primary transition-colors">정산 안내</Link></li>
+                <li><Link href="/mypage/seller/register" className="hover:text-brand-primary transition-colors">전문가 등록</Link></li>
+                <li><Link href="/help" className="hover:text-brand-primary transition-colors">판매자 가이드</Link></li>
+                <li><Link href="/help" className="hover:text-brand-primary transition-colors">수수료 안내</Link></li>
+                <li><Link href="/mypage/seller/earnings" className="hover:text-brand-primary transition-colors">정산 안내</Link></li>
               </ul>
             </div>
             <div>
