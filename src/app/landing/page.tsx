@@ -418,9 +418,9 @@ export default async function LandingPage() {
                 추천 IT 전문가
               </h3>
               <div className="flex md:grid md:grid-cols-5 gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory px-4 md:px-0 -mx-4 md:mx-0">
-                {experts.it.map((expert, index) => (
+                {experts.it.map((expert) => (
                   <div
-                    key={index}
+                    key={expert.name}
                     className="snap-start first:ml-4 md:first:ml-0 last:mr-4 md:last:mr-0"
                   >
                     <ExpertCard expert={expert} />
@@ -476,9 +476,9 @@ export default async function LandingPage() {
                 추천 디자인 전문가
               </h3>
               <div className="flex md:grid md:grid-cols-5 gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory px-4 md:px-0 -mx-4 md:mx-0">
-                {experts.design.map((expert, index) => (
+                {experts.design.map((expert) => (
                   <div
-                    key={index}
+                    key={expert.name}
                     className="snap-start first:ml-4 md:first:ml-0 last:mr-4 md:last:mr-0"
                   >
                     <ExpertCard expert={expert} />
@@ -536,9 +536,9 @@ export default async function LandingPage() {
                 추천 마케팅 전문가
               </h3>
               <div className="flex md:grid md:grid-cols-5 gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory px-4 md:px-0 -mx-4 md:mx-0">
-                {experts.marketing.map((expert, index) => (
+                {experts.marketing.map((expert) => (
                   <div
-                    key={index}
+                    key={expert.name}
                     className="snap-start first:ml-4 md:first:ml-0 last:mr-4 md:last:mr-0"
                   >
                     <ExpertCard expert={expert} />
@@ -679,9 +679,9 @@ export default async function LandingPage() {
                 주변 생활 서비스 전문가
               </h3>
               <div className="flex md:grid md:grid-cols-5 gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory px-4 md:px-0 -mx-4 md:mx-0">
-                {experts.life.map((expert, index) => (
+                {experts.life.map((expert) => (
                   <div
-                    key={index}
+                    key={expert.name}
                     className="snap-start first:ml-4 md:first:ml-0 last:mr-4 md:last:mr-0"
                   >
                     <ExpertCard expert={expert} />
@@ -764,9 +764,9 @@ export default async function LandingPage() {
                 실시간 추적 가능한 심부름 전문가
               </h3>
               <div className="flex md:grid md:grid-cols-5 gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory px-4 md:px-0 -mx-4 md:mx-0">
-                {experts.errand.map((expert, index) => (
+                {experts.errand.map((expert) => (
                   <div
-                    key={index}
+                    key={expert.name}
                     className="snap-start first:ml-4 md:first:ml-0 last:mr-4 md:last:mr-0"
                   >
                     <ExpertCard expert={expert} />

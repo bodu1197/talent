@@ -415,9 +415,9 @@ export default function RegisterPage() {
                   className={`input pr-10 ${
                     emailCheckStatus === "taken"
                       ? "border-red-500 focus:ring-red-500"
-                      : emailCheckStatus === "available"
+                      : (emailCheckStatus === "available"
                         ? "border-green-500 focus:ring-green-500"
-                        : ""
+                        : "")
                   }`}
                   placeholder="your@email.com"
                   required
@@ -486,9 +486,9 @@ export default function RegisterPage() {
                   className={`mt-1 text-xs ${
                     emailCheckStatus === "taken"
                       ? "text-red-600"
-                      : emailCheckStatus === "available"
+                      : (emailCheckStatus === "available"
                         ? "text-green-600"
-                        : "text-gray-500"
+                        : "text-gray-500")
                   }`}
                 >
                   {emailCheckMessage}
@@ -637,7 +637,11 @@ export default function RegisterPage() {
               {/* 비밀번호 일치 여부 표시 */}
               {formData.passwordConfirm && (
                 <div
-                  className={`mt-2 flex items-center gap-2 text-xs ${formData.password === formData.passwordConfirm ? "text-green-600" : "text-red-600"}`}
+                  className={`mt-2 flex items-center gap-2 text-xs ${
+                    formData.password === formData.passwordConfirm
+                      ? "text-green-600"
+                      : "text-red-600"
+                  }`}
                 >
                   <span>
                     {formData.password === formData.passwordConfirm ? "✓" : "✗"}
@@ -753,7 +757,7 @@ export default function RegisterPage() {
               {isLoading ? (
                 <span className="flex items-center justify-center">
                   <span className="spinner mr-2" />
-                  가입 중...
+                  {' '}가입 중...
                 </span>
               ) : (
                 "회원가입"

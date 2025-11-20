@@ -275,7 +275,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4].map((i) => (
               <div
-                key={i}
+                key={`ai-expert-${i}`}
                 className="bg-white rounded-xl p-6 border border-gray-200 hover:border-brand-primary hover:shadow-lg transition-all"
               >
                 <div className="flex items-center gap-3 mb-4">
@@ -290,7 +290,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
                 <div className="flex items-center gap-2 mb-3">
                   <div className="flex text-yellow-400">
                     {[...new Array(5)].map((_, idx) => (
-                      <FaStar key={idx} className="text-xs" />
+                      <FaStar key={`star-${idx}`} className="text-xs" />
                     ))}
                   </div>
                   <span className="text-sm font-semibold">4.9</span>

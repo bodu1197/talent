@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
+import { randomBytes } from 'node:crypto'
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,7 +30,7 @@ export async function POST(request: NextRequest) {
 
     // 파일 이름 생성 (타임스탬프 + 랜덤 문자열)
     const timestamp = Date.now()
-    const randomString = require('crypto').randomBytes(8).toString('hex')
+    const randomString = randomBytes(8).toString('hex')
     const fileExt = file.name.split('.').pop()
     const fileName = `${timestamp}_${randomString}.${fileExt}`
     const filePath = `${folder}/${fileName}`

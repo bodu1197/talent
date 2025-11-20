@@ -237,9 +237,9 @@ export default function AdminOrdersPage() {
 
       {/* 결과 카운트 */}
       <div className="text-sm text-gray-600">
-        총{" "}
+        총{' '}
         <span className="font-bold text-gray-900">{filteredOrders.length}</span>
-        건의 주문
+        {' '}건의 주문
       </div>
 
       {/* 주문 목록 */}

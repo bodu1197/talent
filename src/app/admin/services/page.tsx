@@ -221,11 +221,11 @@ export default function AdminServicesPage() {
 
       {/* 결과 카운트 */}
       <div className="text-sm text-gray-600">
-        총{" "}
+        총{' '}
         <span className="font-bold text-gray-900">
           {filteredServices.length}
         </span>
-        개의 서비스
+        {' '}개의 서비스
       </div>
 
       {/* 서비스 목록 */}

@@ -72,6 +72,22 @@ function shouldShowRoom(
   return true;
 }
 
+// Helper: Mark messages as read in background
+async function markMessagesReadInBackground(roomId: string): Promise<void> {
+  try {
+    await fetch("/api/chat/messages/mark-read", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ room_id: roomId }),
+    });
+  } catch (error) {
+    console.error(
+      "[ChatListClient] Mark as read error:",
+      JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+    );
+  }
+}
+
 export default function ChatListClient({ userId, sellerId }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -198,22 +214,6 @@ export default function ChatListClient({ userId, sellerId }: Props) {
       router.push(`/chat/${roomId}`);
     } else {
       setSelectedRoomId(roomId);
-    }
-  }
-
-  // Helper: Mark messages as read in background
-  async function markMessagesReadInBackground(roomId: string): Promise<void> {
-    try {
-      await fetch("/api/chat/messages/mark-read", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ room_id: roomId }),
-      });
-    } catch (error) {
-      console.error(
-        "[ChatListClient] Mark as read error:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
-      );
     }
   }
 
@@ -398,36 +398,42 @@ export default function ChatListClient({ userId, sellerId }: Props) {
   }, [selectedRoomId, loadMessages]);
 
   // Helper: Update room list with new message
-  const updateRoomWithNewMessage = useCallback((newMsg: Message) => {
-    const updatedRooms = rooms.map((room) => {
-      if (room.id === newMsg.room_id) {
-        return {
-          ...room,
-          unreadCount: (room.unreadCount || 0) + 1,
-          last_message_at: newMsg.created_at,
-        };
-      }
-      return room;
-    });
+  const updateRoomWithNewMessage = useCallback(
+    (newMsg: Message) => {
+      const updatedRooms = rooms.map((room) => {
+        if (room.id === newMsg.room_id) {
+          return {
+            ...room,
+            unreadCount: (room.unreadCount || 0) + 1,
+            last_message_at: newMsg.created_at,
+          };
+        }
+        return room;
+      });
 
-    // last_message_at 기준으로 재정렬
-    return updatedRooms.sort(
-      (a, b) =>
-        new Date(b.last_message_at).getTime() -
-        new Date(a.last_message_at).getTime(),
-    );
-  }, [rooms]);
+      // last_message_at 기준으로 재정렬
+      return updatedRooms.sort(
+        (a, b) =>
+          new Date(b.last_message_at).getTime() -
+          new Date(a.last_message_at).getTime(),
+      );
+    },
+    [rooms]
+  );
 
   // Handler for new chat messages
-  const handleNewChatMessage = useCallback(async (payload: unknown) => {
-    const newMsg = (payload as { new: Message }).new;
+  const handleNewChatMessage = useCallback(
+    async (payload: unknown) => {
+      const newMsg = (payload as { new: Message }).new;
 
-    // 내가 보낸 메시지가 아닌 경우에만 unreadCount 증가
-    if (newMsg.sender_id !== userId) {
-      // 해당 채팅방의 unreadCount 증가
-      setRooms(() => updateRoomWithNewMessage(newMsg));
-    }
-  }, [userId, updateRoomWithNewMessage]);
+      // 내가 보낸 메시지가 아닌 경우에만 unreadCount 증가
+      if (newMsg.sender_id !== userId) {
+        // 해당 채팅방의 unreadCount 증가
+        setRooms(() => updateRoomWithNewMessage(newMsg));
+      }
+    },
+    [userId, updateRoomWithNewMessage]
+  );
 
   // 채팅방 목록의 unreadCount 실시간 업데이트
   useEffect(() => {

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { paymentPrepareRateLimit, checkRateLimit } from '@/lib/rate-limit'
+import { randomBytes } from 'node:crypto'
 
 export async function POST(request: NextRequest) {
   try {
@@ -62,7 +63,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 주문 생성
-    const merchantUid = `order_${Date.now()}_${require('crypto').randomBytes(4).toString('hex')}`
+    const merchantUid = `order_${Date.now()}_${randomBytes(4).toString('hex')}`
 
     const { data: order, error: orderError } = await supabase
       .from('orders')

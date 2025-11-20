@@ -257,11 +257,11 @@ export default function AdminServiceRevisionsPage() {
 
       {/* 결과 카운트 */}
       <div className="text-sm text-gray-600">
-        총{" "}
+        총{' '}
         <span className="font-bold text-gray-900">
           {filteredRevisions.length}
         </span>
-        개의 수정 요청
+        {' '}개의 수정 요청
       </div>
 
       {/* 수정 요청 목록 */}

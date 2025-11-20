@@ -39,6 +39,11 @@ interface TaxInvoiceDetail {
   created_at: string;
 }
 
+// Helper: Handle print
+function handlePrint() {
+  globalThis.print();
+}
+
 export default function TaxInvoiceDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -75,10 +80,6 @@ export default function TaxInvoiceDetailPage() {
     } finally {
       setLoading(false);
     }
-  }
-
-  function handlePrint() {
-    globalThis.print();
   }
 
   if (loading) {

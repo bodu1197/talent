@@ -260,7 +260,7 @@ export default function LoginPage() {
               {isLoading ? (
                 <span className="flex items-center justify-center">
                   <span className="spinner mr-2" />
-                  로그인 중...
+                  {' '}로그인 중...
                 </span>
               ) : (
                 "로그인"

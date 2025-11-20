@@ -108,7 +108,7 @@ export default function RevisionDetailClient({ revision }: Props) {
               <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm">
                 원본
               </span>
-              현재 서비스
+              {' '}현재 서비스
             </h2>
 
             {/* 썸네일 */}
@@ -144,10 +144,9 @@ export default function RevisionDetailClient({ revision }: Props) {
                 {revision.service?.service_categories?.map(
                   (
                     sc: { category: { id: string; name: string } },
-                    idx: number,
                   ) => (
                     <span
-                      key={idx}
+                      key={sc.category?.id || sc.category?.name}
                       className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-sm"
                     >
                       {sc.category?.name}
@@ -186,7 +185,7 @@ export default function RevisionDetailClient({ revision }: Props) {
               <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded text-sm">
                 수정
               </span>
-              수정 요청 내용
+              {' '}수정 요청 내용
             </h2>
 
             {/* 썸네일 */}
@@ -222,10 +221,9 @@ export default function RevisionDetailClient({ revision }: Props) {
                 {revision.revision_categories?.map(
                   (
                     rc: { category: { id: string; name: string } },
-                    idx: number,
                   ) => (
                     <span
-                      key={idx}
+                      key={rc.category?.id || rc.category?.name}
                       className="px-2 py-1 bg-orange-50 text-orange-700 rounded text-sm font-medium"
                     >
                       {rc.category?.name}

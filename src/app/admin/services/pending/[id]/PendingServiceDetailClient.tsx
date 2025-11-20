@@ -178,9 +178,9 @@ export default function PendingServiceDetailClient({ service }: Props) {
           <div className="mb-4">
             <span className="text-sm text-gray-600 block mb-1">카테고리</span>
             <div className="flex flex-wrap gap-2">
-              {service.service_categories?.map((sc, idx) => (
+              {service.service_categories?.map((sc) => (
                 <span
-                  key={idx}
+                  key={sc.category?.id || sc.category?.name}
                   className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium"
                 >
                   {sc.category?.name}

@@ -9,8 +9,6 @@
  * 확인 후 이 파일을 삭제해도 됩니다.
  */
 
-// import { NextResponse } from "next/server"; // Unused - intentional test endpoint
-
 export async function GET() {
   // 의도적으로 에러 발생
   throw new Error(

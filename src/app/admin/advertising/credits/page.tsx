@@ -261,12 +261,14 @@ export default function AdminCreditsPage() {
         <div className="flex items-center justify-center py-12">
           <div className="text-slate-600">데이터를 불러오는 중...</div>
         </div>
-      ) : credits.length === 0 ? (
-        <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
-          <FaCoins className="text-slate-400 text-5xl mb-4 mx-auto" />
-          <p className="text-slate-600">크레딧 내역이 없습니다.</p>
-        </div>
       ) : (
+        <>
+          {credits.length === 0 ? (
+            <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
+              <FaCoins className="text-slate-400 text-5xl mb-4 mx-auto" />
+              <p className="text-slate-600">크레딧 내역이 없습니다.</p>
+            </div>
+          ) : (
         <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -358,10 +360,11 @@ export default function AdminCreditsPage() {
 
               <div className="px-6 py-4 space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                  <label htmlFor="seller-id" className="block text-sm font-medium text-slate-700 mb-1">
                     판매자 ID *
                   </label>
                   <input
+                    id="seller-id"
                     type="text"
                     value={grantForm.sellerId}
                     onChange={(e) =>
@@ -374,10 +377,11 @@ export default function AdminCreditsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                  <label htmlFor="credit-amount" className="block text-sm font-medium text-slate-700 mb-1">
                     금액 *
                   </label>
                   <input
+                    id="credit-amount"
                     type="number"
                     value={grantForm.amount}
                     onChange={(e) =>
@@ -394,10 +398,11 @@ export default function AdminCreditsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                  <label htmlFor="promotion-type" className="block text-sm font-medium text-slate-700 mb-1">
                     프로모션 타입
                   </label>
                   <select
+                    id="promotion-type"
                     value={grantForm.promotionType}
                     onChange={(e) =>
                       setGrantForm({
@@ -414,10 +419,11 @@ export default function AdminCreditsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                  <label htmlFor="credit-description" className="block text-sm font-medium text-slate-700 mb-1">
                     설명
                   </label>
                   <textarea
+                    id="credit-description"
                     value={grantForm.description}
                     onChange={(e) =>
                       setGrantForm({
@@ -581,6 +587,8 @@ export default function AdminCreditsPage() {
             </div>
           </div>
         </div>
+          )}
+        </>
       )}
     </div>
   );

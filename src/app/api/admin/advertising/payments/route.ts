@@ -324,7 +324,8 @@ export async function PATCH(request: NextRequest) {
     console.error('Failed to update payments:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
 
     const errorMessage = error instanceof Error ? error.message : 'Failed to update payments';
-    const statusCode = errorMessage === 'Unauthorized' ? 401 : errorMessage === 'Admin not found' ? 403 : 500;
+    const adminStatusCode = errorMessage === 'Admin not found' ? 403 : 500;
+    const statusCode = errorMessage === 'Unauthorized' ? 401 : adminStatusCode;
 
     return NextResponse.json(
       { error: errorMessage },

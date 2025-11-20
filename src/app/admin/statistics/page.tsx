@@ -280,9 +280,8 @@ export default function AdminStatisticsPage() {
                             year?: number;
                             month?: number;
                           },
-                          index: number,
                         ) => (
-                          <tr key={index} className="hover:bg-slate-50">
+                          <tr key={row.hour || row.date || `${row.year}-${row.month}` || Math.random().toString()} className="hover:bg-slate-50">
                             <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-900">
                               {period === "hour" &&
                                 row.hour &&

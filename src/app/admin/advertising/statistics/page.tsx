@@ -158,7 +158,7 @@ function PeriodFilter({
           <label className="block text-sm font-medium text-slate-700 mb-1">
             기간 단위
           </label>
-          <div className="flex gap-2">
+          <div className="flex gap-2" role="group" aria-label="기간 단위 선택">
             {periodButtons.map((btn) => (
               <button
                 key={btn.value}
@@ -177,10 +177,11 @@ function PeriodFilter({
 
         <form onSubmit={onSubmit} className="flex gap-2 items-end">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label htmlFor="stats-start-date" className="block text-sm font-medium text-slate-700 mb-1">
               시작일
             </label>
             <input
+              id="stats-start-date"
               type="date"
               value={startDate}
               onChange={(e) => onStartDateChange(e.target.value)}
@@ -188,10 +189,11 @@ function PeriodFilter({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label htmlFor="stats-end-date" className="block text-sm font-medium text-slate-700 mb-1">
               종료일
             </label>
             <input
+              id="stats-end-date"
               type="date"
               value={endDate}
               onChange={(e) => onEndDateChange(e.target.value)}
@@ -445,8 +447,8 @@ function RevenueByPeriodTable({
   revenue: Statistics["revenue"];
   period: string;
 }>) {
-  const periodLabel =
-    period === "day" ? "일별" : period === "month" ? "월별" : "연별";
+  const monthLabel = period === "month" ? "월별" : "연별";
+  const periodLabel = period === "day" ? "일별" : monthLabel;
 
   if (revenue.byPeriod.length === 0) {
     return (

@@ -123,7 +123,7 @@ export default function FAQPage() {
 
                 return (
                   <div
-                    key={itemIndex}
+                    key={key}
                     className="bg-white rounded-lg border border-gray-200 overflow-hidden"
                   >
                     <button

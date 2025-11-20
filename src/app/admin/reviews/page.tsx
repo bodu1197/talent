@@ -202,11 +202,11 @@ export default function AdminReviewsPage() {
 
       {/* 결과 카운트 */}
       <div className="text-sm text-gray-600">
-        총{" "}
+        총{' '}
         <span className="font-bold text-gray-900">
           {filteredReviews.length}
         </span>
-        개의 리뷰
+        {' '}개의 리뷰
       </div>
 
       {/* 리뷰 목록 */}

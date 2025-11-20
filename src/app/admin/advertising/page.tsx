@@ -253,10 +253,11 @@ export default function AdminAdvertisingPage() {
       <div className="bg-white rounded-lg border border-slate-200 p-4">
         <div className="flex flex-wrap gap-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label htmlFor="ad-status-filter" className="block text-sm font-medium text-slate-700 mb-1">
               상태
             </label>
             <select
+              id="ad-status-filter"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
@@ -270,10 +271,11 @@ export default function AdminAdvertisingPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label htmlFor="payment-method-filter" className="block text-sm font-medium text-slate-700 mb-1">
               결제 방법
             </label>
             <select
+              id="payment-method-filter"
               value={paymentFilter}
               onChange={(e) => setPaymentFilter(e.target.value)}
               className="px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
@@ -292,12 +294,14 @@ export default function AdminAdvertisingPage() {
         <div className="flex items-center justify-center py-12">
           <div className="text-slate-600">데이터를 불러오는 중...</div>
         </div>
-      ) : subscriptions.length === 0 ? (
-        <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
-          <FaBullhorn className="text-slate-400 text-5xl mb-4 inline-block" />
-          <p className="text-slate-600">광고 구독이 없습니다.</p>
-        </div>
       ) : (
+        <>
+          {subscriptions.length === 0 ? (
+            <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
+              <FaBullhorn className="text-slate-400 text-5xl mb-4 inline-block" />
+              <p className="text-slate-600">광고 구독이 없습니다.</p>
+            </div>
+          ) : (
         <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -403,6 +407,8 @@ export default function AdminAdvertisingPage() {
             </table>
           </div>
         </div>
+          )}
+        </>
       )}
 
       {/* Detail Modal */}

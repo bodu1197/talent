@@ -185,10 +185,11 @@ export default function AdminTaxInvoicesPage() {
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="invoice-search" className="block text-sm font-medium text-gray-700 mb-2">
               검색
             </label>
             <input
+              id="invoice-search"
               type="text"
               placeholder="계산서번호, 회사명, 사업자번호"
               value={searchTerm}
@@ -197,10 +198,11 @@ export default function AdminTaxInvoicesPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="invoice-date-from" className="block text-sm font-medium text-gray-700 mb-2">
               발행일 (시작)
             </label>
             <input
+              id="invoice-date-from"
               type="date"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
@@ -208,10 +210,11 @@ export default function AdminTaxInvoicesPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="invoice-date-to" className="block text-sm font-medium text-gray-700 mb-2">
               발행일 (종료)
             </label>
             <input
+              id="invoice-date-to"
               type="date"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
