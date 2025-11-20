@@ -259,9 +259,9 @@ function BuyerOrdersContent() {
         <>
           <Link
             href={`/mypage/buyer/orders/${order.id}`}
-            className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium whitespace-nowrap"
           >
-            <FaEye className="mr-2" />
+            <FaEye />
             수정 내역 확인
           </Link>
           <Link
@@ -279,23 +279,23 @@ function BuyerOrdersContent() {
         <>
           <Link
             href={`/mypage/buyer/orders/${order.id}`}
-            className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium whitespace-nowrap"
           >
-            <FaDownload className="mr-2" />
+            <FaDownload />
             다운로드
           </Link>
           <button
             onClick={() => handleConfirmOrder(order.id)}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium whitespace-nowrap"
           >
-            <FaCheck className="mr-2" />
+            <FaCheck />
             구매 확정
           </button>
           <button
             onClick={() => handleRequestRevision(order.id)}
-            className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors text-sm font-medium"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors text-sm font-medium whitespace-nowrap"
           >
-            <FaRedo className="mr-2" />
+            <FaRedo />
             수정 요청
           </button>
           <Link
@@ -338,9 +338,9 @@ function BuyerOrdersContent() {
           </Link>
           <Link
             href={`/mypage/buyer/reviews?order=${order.id}`}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium whitespace-nowrap"
           >
-            <FaStar className="mr-2" />
+            <FaStar />
             리뷰 작성
           </Link>
         </>
@@ -376,9 +376,9 @@ function BuyerOrdersContent() {
         : "-",
       daysLeft: order.delivery_date
         ? Math.ceil(
-            (new Date(order.delivery_date).getTime() - new Date().getTime()) /
-              (1000 * 60 * 60 * 24),
-          )
+          (new Date(order.delivery_date).getTime() - new Date().getTime()) /
+          (1000 * 60 * 60 * 24),
+        )
         : 0,
       requirements: order.requirements,
     };
@@ -422,20 +422,18 @@ function BuyerOrdersContent() {
                 onClick={() =>
                   setFilters({ ...filters, status: tab.value as OrderStatus })
                 }
-                className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
-                  filters.status === tab.value
+                className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${filters.status === tab.value
                     ? "border-brand-primary text-brand-primary"
                     : "border-transparent text-gray-600 hover:text-gray-900"
-                }`}
+                  }`}
               >
                 {tab.label}
                 {tab.count > 0 && (
                   <span
-                    className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                      filters.status === tab.value
+                    className={`ml-2 px-2 py-0.5 rounded-full text-xs ${filters.status === tab.value
                         ? "bg-brand-primary text-white"
                         : "bg-gray-200 text-gray-600"
-                    }`}
+                      }`}
                   >
                     {tab.count}
                   </span>
@@ -500,9 +498,9 @@ function BuyerOrdersContent() {
             <div className="lg:col-span-4 flex items-end">
               <button
                 onClick={resetFilters}
-                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                className="inline-flex items-center gap-2 px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium whitespace-nowrap"
               >
-                <FaRedo className="mr-2" />
+                <FaRedo />
                 초기화
               </button>
             </div>

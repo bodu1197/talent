@@ -39,9 +39,9 @@ export default function SettingsClient({
           </div>
           <button
             onClick={() => router.push("/mypage/settings/edit")}
-            className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium whitespace-nowrap"
           >
-            <FaEdit className="mr-2 inline" />
+            <FaEdit />
             수정
           </button>
         </div>
