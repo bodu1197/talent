@@ -37,11 +37,11 @@ export async function middleware(request: NextRequest) {
     response.headers.set("X-XSS-Protection", "1; mode=block");
 
     // CSP 설정 - nonce 기반으로 강화
-    // 'unsafe-inline', 'unsafe-eval' 제거, nonce 사용
+    // Tailwind CSS 인라인 스타일 허용을 위해 'unsafe-inline' 추가
     const cspHeader = `
       default-src 'self';
-      script-src 'self' 'nonce-${cspNonce}' 'strict-dynamic' https://vercel.live;
-      style-src 'self' 'nonce-${cspNonce}';
+      script-src 'self' 'nonce-${cspNonce}' 'strict-dynamic' 'unsafe-inline' https://vercel.live;
+      style-src 'self' 'nonce-${cspNonce}' 'unsafe-inline';
       style-src-attr 'unsafe-inline';
       img-src 'self' blob: data: https:;
       font-src 'self' data:;
