@@ -273,9 +273,9 @@ export default function AdvertisingPage() {
       <div className="bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* 헤더 섹션 */}
-          <div className="text-center mb-12">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">광고 관리</h1>
-            <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
+          <div className="mb-6">
+            <h1 className="text-base md:text-lg font-bold text-gray-900">광고 관리</h1>
+            <p className="text-gray-600 mt-2 text-sm md:text-base">
               더 많은 고객에게 서비스를 노출하고 매출을 증대시키세요
             </p>
           </div>
@@ -357,52 +357,44 @@ export default function AdvertisingPage() {
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-600">
-                      총 노출수
-                    </span>
-                    <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-                      <FaEye className="text-blue-600" />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div className="bg-white rounded-lg shadow p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs text-gray-600">총 노출수</p>
+                      <p className="text-lg font-bold text-gray-900">
+                        {dashboard.stats.totalImpressions.toLocaleString()}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">이번 달 기준</p>
                     </div>
+                    <FaEye className="text-2xl text-blue-500" />
                   </div>
-                  <div className="text-3xl font-bold text-gray-900">
-                    {dashboard.stats.totalImpressions.toLocaleString()}
-                  </div>
-                  <p className="text-xs md:text-sm text-gray-500 mt-1">이번 달 기준</p>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-600">
-                      총 클릭수
-                    </span>
-                    <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
-                      <FaMousePointer className="text-green-600" />
+                <div className="bg-white rounded-lg shadow p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs text-gray-600">총 클릭수</p>
+                      <p className="text-lg font-bold text-gray-900">
+                        {dashboard.stats.totalClicks.toLocaleString()}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">이번 달 기준</p>
                     </div>
+                    <FaMousePointer className="text-2xl text-green-500" />
                   </div>
-                  <div className="text-3xl font-bold text-gray-900">
-                    {dashboard.stats.totalClicks.toLocaleString()}
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">이번 달 기준</p>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-600">
-                      클릭률
-                    </span>
-                    <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
-                      <FaChartLine className="text-purple-600" />
+                <div className="bg-white rounded-lg shadow p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs text-gray-600">클릭률</p>
+                      <p className="text-lg font-bold text-gray-900">
+                        {dashboard.stats.ctr.toFixed(2)}%
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">CTR (Click Through Rate)</p>
                     </div>
+                    <FaChartLine className="text-2xl text-purple-500" />
                   </div>
-                  <div className="text-3xl font-bold text-gray-900">
-                    {dashboard.stats.ctr.toFixed(2)}%
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    CTR (Click Through Rate)
-                  </p>
                 </div>
               </div>
             </>
@@ -651,7 +643,13 @@ export default function AdvertisingPage() {
                 setIsModalOpen(false);
                 setSelectedService("");
               }}
-              role="presentation"
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') {
+                  setIsModalOpen(false);
+                  setSelectedService("");
+                }
+              }}
+              tabIndex={-1}
             >
               <div
                 className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
@@ -945,8 +943,8 @@ export default function AdvertisingPage() {
                                   setSelectedPaymentMethod("bank_transfer")
                                 }
                                 className={`border-2 rounded-lg p-4 cursor-pointer transition-all text-left w-full ${selectedPaymentMethod === "bank_transfer"
-                                    ? "border-brand-primary bg-blue-50"
-                                    : "border-gray-200 hover:border-gray-300"
+                                  ? "border-brand-primary bg-blue-50"
+                                  : "border-gray-200 hover:border-gray-300"
                                   }`}
                               >
                                 <div className="flex items-start gap-3">
