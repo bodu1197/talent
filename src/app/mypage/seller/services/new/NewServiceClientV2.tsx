@@ -211,7 +211,7 @@ export default function NewServiceClientV2({
         });
       }
 
-      toast.error("서비스가 등록되었습니다. 승인 후 공개됩니다.");
+      toast.success("서비스가 등록되었습니다. 승인 후 공개됩니다.");
       router.push("/mypage/seller/services");
       router.refresh();
     } catch (error) {

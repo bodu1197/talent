@@ -46,11 +46,12 @@ export default function Step2Pricing({ formData, setFormData }: Props) {
 
       {/* 서비스 가격 */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="service-price" className="block text-sm font-medium text-gray-700 mb-2">
           서비스 가격 <span className="text-red-500">*</span>
         </label>
         <div className="relative">
           <input
+            id="service-price"
             type="text"
             value={formatPrice(formData.price)}
             onChange={handlePriceChange}
@@ -67,11 +68,12 @@ export default function Step2Pricing({ formData, setFormData }: Props) {
 
       {/* 작업 기간 */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="service-delivery-days" className="block text-sm font-medium text-gray-700 mb-2">
           작업 기간 <span className="text-red-500">*</span>
         </label>
         <div className="relative">
           <input
+            id="service-delivery-days"
             type="number"
             value={formData.delivery_days}
             onChange={(e) => setFormData({ ...formData, delivery_days: e.target.value })}

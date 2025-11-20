@@ -182,7 +182,7 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
         throw new Error(error.error || "수정 완료 처리에 실패했습니다");
       }
 
-      toast.error("수정이 완료되었습니다.");
+      toast.success("수정이 완료되었습니다.");
       loadOrders();
       loadStatusCounts();
     } catch (err: unknown) {

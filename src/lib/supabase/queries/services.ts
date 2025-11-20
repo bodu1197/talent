@@ -392,9 +392,8 @@ export async function getActiveServices(limit?: number) {
     .eq("slug", "ai-services")
     .maybeSingle();
 
-  let excludeServiceIds: string[] = [];
-
   // 2. AI 카테고리 서비스 ID 조회
+  let excludeServiceIds: string[] = [];
   if (aiCategory) {
     const { data: aiServiceLinks } = await supabase
       .from("service_categories")

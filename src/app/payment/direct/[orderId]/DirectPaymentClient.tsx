@@ -94,7 +94,7 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
       }
 
       // 성공
-      toast.error("결제가 완료되었습니다! (테스트 모드)");
+      toast.success("결제가 완료되었습니다! (테스트 모드)");
       router.push(`/mypage/buyer/orders/${order.id}`);
       return;
 

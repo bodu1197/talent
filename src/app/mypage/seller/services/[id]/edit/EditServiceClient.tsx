@@ -362,7 +362,7 @@ export default function EditServiceClient({
       const previewUrl = URL.createObjectURL(blob);
       setThumbnailPreview(previewUrl);
 
-      toast.error("썸네일이 생성되었습니다!");
+      toast.success("썸네일이 생성되었습니다!");
     } catch (error) {
       logger.error("썸네일 생성 오류:", error);
       toast.error("썸네일 생성에 실패했습니다.");
@@ -493,7 +493,7 @@ export default function EditServiceClient({
       );
     }
 
-    toast.error("수정 요청이 제출되었습니다. 관리자 승인 후 반영됩니다.");
+    toast.success("수정 요청이 제출되었습니다. 관리자 승인 후 반영됩니다.");
   }
 
   // Helper: Process non-active service updates

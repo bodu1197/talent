@@ -95,7 +95,7 @@ export default function AdminWithdrawalsPage() {
 
       if (error) throw error;
 
-      toast.error("출금이 승인되었습니다.");
+      toast.success("출금이 승인되었습니다.");
       loadWithdrawals();
     } catch (error) {
       logger.error("Approval error:", error);

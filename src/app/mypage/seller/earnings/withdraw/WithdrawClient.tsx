@@ -80,7 +80,7 @@ export default function WithdrawClient({
 
       if (withdrawError) throw withdrawError;
 
-      toast.error("출금 신청이 완료되었습니다.");
+      toast.success("출금 신청이 완료되었습니다.");
       router.push("/mypage/seller/earnings");
       router.refresh();
     } catch (error: unknown) {

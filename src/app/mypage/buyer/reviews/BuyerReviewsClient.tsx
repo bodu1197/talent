@@ -83,7 +83,7 @@ export default function BuyerReviewsClient({
       setRating(5);
       setReviewContent("");
       refreshData();
-      toast.error("리뷰가 등록되었습니다");
+      toast.success("리뷰가 등록되었습니다");
     } catch (err: unknown) {
       logger.error("리뷰 등록 실패:", err);
       toast.error("리뷰 등록에 실패했습니다");

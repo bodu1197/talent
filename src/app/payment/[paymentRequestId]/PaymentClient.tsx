@@ -139,7 +139,7 @@ export default function PaymentClient({
       const { order } = await verifyResponse.json();
 
       // 5. 성공 페이지로 이동
-      toast.error("결제가 완료되었습니다!");
+      toast.success("결제가 완료되었습니다!");
       router.push(`/mypage/buyer/orders/${order.id}`);
     } catch (error) {
       console.error(

@@ -139,7 +139,7 @@ export default function Step4Images({ formData, setFormData }: Props) {
       const previewUrl = URL.createObjectURL(blob);
       setThumbnailPreview(previewUrl);
 
-      toast.error("썸네일이 생성되었습니다!");
+      toast.success("썸네일이 생성되었습니다!");
     } catch (error) {
       logger.error("썸네일 생성 오류:", error);
       toast.error("썸네일 생성에 실패했습니다.");
@@ -208,6 +208,7 @@ export default function Step4Images({ formData, setFormData }: Props) {
                   type="button"
                   onClick={removeThumbnail}
                   className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors text-sm"
+                  aria-label="썸네일 삭제"
                 >
                   <FaTimes className="mr-1 inline" />
                   삭제
@@ -251,6 +252,7 @@ export default function Step4Images({ formData, setFormData }: Props) {
                   type="button"
                   onClick={removeThumbnail}
                   className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors text-sm"
+                  aria-label="썸네일 다시 만들기"
                 >
                   <FaTimes className="mr-1 inline" />
                   다시 만들기

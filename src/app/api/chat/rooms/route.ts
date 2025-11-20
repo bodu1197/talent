@@ -197,13 +197,15 @@ export async function GET(_request: NextRequest) {
 
       // 진행 중인 주문이 있는지 확인
       // user1_id와 user2_id 중 어느 쪽이 buyer인지 확인해야 함
-      let hasActiveOrder = false;
+      let hasActiveOrder: boolean;
       if (room.service_id) {
         // 현재 사용자가 buyer인 경우
         const key1 = `${room.service_id}-${user.id}-${otherUserId}`;
         // 현재 사용자가 seller인 경우
         const key2 = `${room.service_id}-${otherUserId}-${user.id}`;
         hasActiveOrder = activeOrdersMap.has(key1) || activeOrdersMap.has(key2);
+      } else {
+        hasActiveOrder = false;
       }
 
       return {

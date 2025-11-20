@@ -229,7 +229,7 @@ export default function AdvertisingPage() {
         // 무통장 입금 페이지로 리다이렉트
         globalThis.location.href = `/mypage/seller/advertising/payments/${result.payment.id}`;
       } else {
-        toast.error("광고가 시작되었습니다!");
+        toast.success("광고가 시작되었습니다!");
         loadDashboard();
         setSelectedService("");
         setSelectedMonths(1);

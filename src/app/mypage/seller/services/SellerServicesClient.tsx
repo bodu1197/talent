@@ -84,7 +84,7 @@ export default function SellerServicesClient({
         }),
       );
 
-      toast.error("반려 메시지가 삭제되었습니다.");
+      toast.success("반려 메시지가 삭제되었습니다.");
     } catch (err: unknown) {
       logger.error("반려 메시지 삭제 실패:", err);
       toast.error(
@@ -178,7 +178,7 @@ export default function SellerServicesClient({
         ),
       );
 
-      toast.error("서비스가 성공적으로 삭제되었습니다.");
+      toast.success("서비스가 성공적으로 삭제되었습니다.");
     } catch (err: unknown) {
       logger.error("서비스 삭제 실패:", err);
       toast.error(

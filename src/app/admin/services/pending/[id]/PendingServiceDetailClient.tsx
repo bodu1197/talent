@@ -31,7 +31,7 @@ export default function PendingServiceDetailClient({ service }: Props) {
 
       if (error) throw error;
 
-      toast.error("서비스가 승인되었습니다.");
+      toast.success("서비스가 승인되었습니다.");
       router.push("/admin/services?status=pending");
     } catch (err: unknown) {
       logger.error("승인 실패:", err);

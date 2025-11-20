@@ -259,10 +259,11 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
 
       {/* 서비스 제목 */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="service-title" className="block text-sm font-medium text-gray-700 mb-2">
           서비스 제목 *
         </label>
         <input
+          id="service-title"
           type="text"
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}

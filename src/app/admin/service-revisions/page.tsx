@@ -94,7 +94,7 @@ export default function AdminServiceRevisionsPage() {
 
     try {
       await approveServiceRevision(revisionId);
-      toast.error("수정 요청이 승인되었습니다.");
+      toast.success("수정 요청이 승인되었습니다.");
       loadRevisions();
       loadStatusCounts();
     } catch (err: unknown) {

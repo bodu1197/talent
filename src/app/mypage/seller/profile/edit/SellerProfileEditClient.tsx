@@ -119,7 +119,7 @@ export default function SellerProfileEditClient({
 
       if (sellerError) throw sellerError;
 
-      toast.error("프로필이 저장되었습니다");
+      toast.success("프로필이 저장되었습니다");
       router.push("/mypage/seller/profile");
       router.refresh();
     } catch (error) {
@@ -210,10 +210,11 @@ export default function SellerProfileEditClient({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="seller-display-name" className="block text-sm font-medium text-gray-700 mb-2">
                   판매자명 (활동명) *
                 </label>
                 <input
+                  id="seller-display-name"
                   type="text"
                   value={profile.display_name || ""}
                   onChange={(e) =>
@@ -225,10 +226,11 @@ export default function SellerProfileEditClient({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="seller-bio" className="block text-sm font-medium text-gray-700 mb-2">
                   자기소개 *
                 </label>
                 <textarea
+                  id="seller-bio"
                   rows={6}
                   value={profile.bio || ""}
                   onChange={(e) =>
@@ -249,10 +251,11 @@ export default function SellerProfileEditClient({
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="seller-phone" className="block text-sm font-medium text-gray-700 mb-2">
                   전화번호 *
                 </label>
                 <input
+                  id="seller-phone"
                   type="tel"
                   value={profile.phone || ""}
                   onChange={(e) =>
@@ -262,8 +265,9 @@ export default function SellerProfileEditClient({
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 />
                 <div className="mt-2">
-                  <label className="flex items-center">
+                  <label htmlFor="seller-show-phone" className="flex items-center">
                     <input
+                      id="seller-show-phone"
                       type="checkbox"
                       checked={profile.show_phone || false}
                       onChange={(e) =>
@@ -279,10 +283,11 @@ export default function SellerProfileEditClient({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="seller-kakao-id" className="block text-sm font-medium text-gray-700 mb-2">
                   카카오톡 ID
                 </label>
                 <input
+                  id="seller-kakao-id"
                   type="text"
                   value={profile.kakao_id || ""}
                   onChange={(e) =>
@@ -293,10 +298,11 @@ export default function SellerProfileEditClient({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="seller-whatsapp" className="block text-sm font-medium text-gray-700 mb-2">
                   WhatsApp
                 </label>
                 <input
+                  id="seller-whatsapp"
                   type="text"
                   value={profile.whatsapp || ""}
                   onChange={(e) =>
@@ -307,10 +313,11 @@ export default function SellerProfileEditClient({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="seller-website" className="block text-sm font-medium text-gray-700 mb-2">
                   웹사이트
                 </label>
                 <input
+                  id="seller-website"
                   type="url"
                   value={profile.website || ""}
                   onChange={(e) =>
@@ -408,10 +415,11 @@ export default function SellerProfileEditClient({
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="seller-bank-name" className="block text-sm font-medium text-gray-700 mb-2">
                   은행명 *
                 </label>
                 <input
+                  id="seller-bank-name"
                   type="text"
                   value={profile.bank_name || ""}
                   onChange={(e) =>
@@ -423,10 +431,11 @@ export default function SellerProfileEditClient({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="seller-account-holder" className="block text-sm font-medium text-gray-700 mb-2">
                   예금주명 *
                 </label>
                 <input
+                  id="seller-account-holder"
                   type="text"
                   value={profile.account_holder || ""}
                   onChange={(e) =>
@@ -438,10 +447,11 @@ export default function SellerProfileEditClient({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="seller-account-number" className="block text-sm font-medium text-gray-700 mb-2">
                   계좌번호 *
                 </label>
                 <input
+                  id="seller-account-number"
                   type="text"
                   value={profile.account_number || ""}
                   onChange={(e) =>
@@ -453,8 +463,9 @@ export default function SellerProfileEditClient({
               </div>
 
               <div>
-                <label className="flex items-center">
+                <label htmlFor="seller-is-business" className="flex items-center">
                   <input
+                    id="seller-is-business"
                     type="checkbox"
                     checked={profile.is_business || false}
                     onChange={(e) =>
@@ -470,10 +481,11 @@ export default function SellerProfileEditClient({
 
               {profile.is_business && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="seller-business-number" className="block text-sm font-medium text-gray-700 mb-2">
                     사업자 번호
                   </label>
                   <input
+                    id="seller-business-number"
                     type="text"
                     value={profile.business_number || ""}
                     onChange={(e) =>
@@ -488,8 +500,9 @@ export default function SellerProfileEditClient({
               )}
 
               <div>
-                <label className="flex items-center">
+                <label htmlFor="seller-tax-invoice" className="flex items-center">
                   <input
+                    id="seller-tax-invoice"
                     type="checkbox"
                     checked={profile.tax_invoice_available || false}
                     onChange={(e) =>

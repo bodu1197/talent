@@ -79,22 +79,20 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
       }
 
       // buyers 테이블 확인
-      let isBuyer = false;
       const { data: buyerData } = await supabase
         .from("buyers")
         .select("id")
         .eq("user_id", userId)
         .maybeSingle();
-      isBuyer = !!buyerData;
+      const isBuyer = !!buyerData;
 
       // sellers 테이블 확인
-      let isSeller = false;
       const { data: sellerData } = await supabase
         .from("sellers")
         .select("id")
         .eq("user_id", userId)
         .maybeSingle();
-      isSeller = !!sellerData;
+      const isSeller = !!sellerData;
 
       // profiles 테이블의 user_id를 제외하고 userId를 id로 사용
       const {

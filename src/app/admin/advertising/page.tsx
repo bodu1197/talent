@@ -108,7 +108,7 @@ export default function AdminAdvertisingPage() {
 
       if (response.ok) {
         await fetchSubscriptions();
-        toast.error("상태가 변경되었습니다.");
+        toast.success("상태가 변경되었습니다.");
       } else {
         toast.error("상태 변경에 실패했습니다.");
       }

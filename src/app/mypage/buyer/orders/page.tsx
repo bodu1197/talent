@@ -135,7 +135,7 @@ function BuyerOrdersContent() {
         throw new Error(error.error || "구매 확정에 실패했습니다");
       }
 
-      toast.error("구매가 확정되었습니다.");
+      toast.success("구매가 확정되었습니다.");
       loadOrders();
       loadStatusCounts();
     } catch (err: unknown) {
@@ -166,7 +166,7 @@ function BuyerOrdersContent() {
         throw new Error(error.error || "수정 요청에 실패했습니다");
       }
 
-      toast.error("수정 요청이 전송되었습니다.");
+      toast.success("수정 요청이 전송되었습니다.");
       loadOrders();
     } catch (err: unknown) {
       logger.error("수정 요청 실패:", err);

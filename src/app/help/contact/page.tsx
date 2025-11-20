@@ -15,7 +15,7 @@ export default function ContactPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.error("문의가 접수되었습니다. 빠른 시일 내에 답변드리겠습니다.");
+    toast.success("문의가 접수되었습니다. 빠른 시일 내에 답변드리겠습니다.");
     setFormData({ name: "", email: "", category: "", title: "", content: "" });
   };
 

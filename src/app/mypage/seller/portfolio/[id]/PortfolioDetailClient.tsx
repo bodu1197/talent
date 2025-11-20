@@ -82,7 +82,7 @@ export default function PortfolioDetailClient({
         throw new Error("삭제 실패");
       }
 
-      toast.error("포트폴리오가 삭제되었습니다");
+      toast.success("포트폴리오가 삭제되었습니다");
       router.push("/mypage/seller/portfolio");
       router.refresh();
     } catch (error) {

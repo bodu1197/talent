@@ -118,7 +118,7 @@ export default function AdminCreditsPage() {
       });
 
       if (response.ok) {
-        toast.error("크레딧이 지급되었습니다.");
+        toast.success("크레딧이 지급되었습니다.");
         setShowGrantDialog(false);
         setGrantForm({
           sellerId: "",

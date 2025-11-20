@@ -150,7 +150,7 @@ export default function NewServiceClient({ sellerId }: Props) {
       const previewUrl = URL.createObjectURL(blob);
       setThumbnailPreview(previewUrl);
 
-      toast.error("썸네일이 생성되었습니다!");
+      toast.success("썸네일이 생성되었습니다!");
     } catch (error) {
       logger.error("썸네일 생성 오류:", error);
       toast.error("썸네일 생성에 실패했습니다.");

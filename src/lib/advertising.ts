@@ -572,10 +572,12 @@ export async function issueTaxInvoice(
     .order('invoice_number', { ascending: false })
     .limit(1);
 
-  let sequence = 1;
+  let sequence: number;
   if (existingInvoices && existingInvoices.length > 0) {
     const lastNumber = existingInvoices[0].invoice_number.split('-')[1];
     sequence = parseInt(lastNumber) + 1;
+  } else {
+    sequence = 1;
   }
 
   const invoiceNumber = `${dateStr}-${sequence.toString().padStart(4, '0')}`;

@@ -169,7 +169,7 @@ export default function SellerRegisterClient({
         });
         setIsVerified(true);
 
-        toast.error("본인인증이 완료되었습니다.");
+        toast.success("본인인증이 완료되었습니다.");
         globalThis.removeEventListener("message", handleMessage);
       } else if (event.data.type === "NICE_VERIFICATION_FAILED") {
         toast.error("본인인증에 실패했습니다. 다시 시도해주세요.");
@@ -284,7 +284,7 @@ export default function SellerRegisterClient({
         return;
       }
 
-      toast.error("판매자로 등록되었습니다! 서비스를 등록하세요.");
+      toast.success("판매자로 등록되었습니다! 서비스를 등록하세요.");
 
       router.push("/mypage/seller/dashboard");
       router.refresh();
@@ -313,38 +313,35 @@ export default function SellerRegisterClient({
   };
 
   const canProceed = () => {
-    let result = false;
     switch (currentStep) {
       case 1:
-        result =
+        return (
           isVerified &&
           !!formData.accountNumber &&
           !!formData.accountHolder &&
-          !!formData.bankName;
-        break;
+          !!formData.bankName
+        );
       case 2: {
         // 프로필 이미지: 새로 업로드했거나 기존 이미지가 있으면 통과
         const hasProfileImage =
           !!formData.profileImage || !!initialProfile?.profile_image;
-        result =
+        return (
           !!formData.displayName &&
           formData.bio.length >= 50 &&
-          hasProfileImage;
-        break;
+          hasProfileImage
+        );
       }
       case 3:
-        result = true; // 연락처는 선택사항
-        break;
+        return true; // 연락처는 선택사항
       case 4:
-        result =
+        return (
           formData.termsAgree &&
           formData.commissionAgree &&
-          formData.refundAgree;
-        break;
+          formData.refundAgree
+        );
       default:
-        result = false;
+        return false;
     }
-    return result;
   };
 
   return (

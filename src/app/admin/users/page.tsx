@@ -293,10 +293,11 @@ export default function AdminUsersPage() {
                       <button
                         onClick={() => setSelectedUser(user)}
                         className="text-brand-primary hover:text-brand-light mr-3 transition-colors"
+                        aria-label={`${user.name} 상세보기`}
                       >
                         상세보기
                       </button>
-                      <button className="text-red-600 hover:text-red-900 transition-colors">
+                      <button className="text-red-600 hover:text-red-900 transition-colors" aria-label={`${user.name} 삭제`}>
                         삭제
                       </button>
                     </td>

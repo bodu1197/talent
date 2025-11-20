@@ -146,7 +146,7 @@ export default function SellerEarningsClient({
         throw error;
       }
 
-      toast.error("출금 신청이 취소되었습니다.");
+      toast.success("출금 신청이 취소되었습니다.");
       globalThis.location.reload();
     } catch (error: unknown) {
       console.error(

@@ -788,7 +788,7 @@ function PaymentRequestModal({
       });
 
       if (response.ok) {
-        toast.error("결제 요청을 전송했습니다");
+        toast.success("결제 요청을 전송했습니다");
         onClose();
       } else {
         const error = await response.json();

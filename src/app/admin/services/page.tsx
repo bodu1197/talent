@@ -174,6 +174,9 @@ export default function AdminServicesPage() {
             <button
               key={tab.value}
               onClick={() => setStatusFilter(tab.value)}
+              role="tab"
+              aria-selected={statusFilter === tab.value}
+              aria-label={`${tab.label} (${tab.count}개)`}
               className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
                 statusFilter === tab.value
                   ? "border-brand-primary text-brand-primary"
@@ -201,7 +204,9 @@ export default function AdminServicesPage() {
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <div className="flex gap-4">
           <div className="flex-1">
+            <label htmlFor="admin-services-search" className="sr-only">서비스 검색</label>
             <input
+              id="admin-services-search"
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -212,6 +217,7 @@ export default function AdminServicesPage() {
           <button
             onClick={() => setSearchQuery("")}
             className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+            aria-label="검색 초기화"
           >
             <FaRedoAlt className="inline mr-2" />
             초기화
@@ -319,6 +325,7 @@ export default function AdminServicesPage() {
                         <a
                           href={`/admin/services/pending/${service.id}`}
                           className="px-3 py-1.5 bg-brand-primary text-white rounded hover:bg-[#1a4d8f] transition-colors font-medium inline-block text-xs"
+                          aria-label={`${service.title} 상세보기`}
                         >
                           <FaEye className="inline mr-1" />
                           상세보기
@@ -328,6 +335,7 @@ export default function AdminServicesPage() {
                             <a
                               href={`/admin/services/pending/${service.id}?action=approve`}
                               className="px-3 py-1.5 bg-green-600 text-white rounded hover:bg-green-700 transition-colors font-medium inline-block text-xs"
+                              aria-label={`${service.title} 승인`}
                             >
                               <FaCheck className="inline mr-1" />
                               승인
@@ -335,6 +343,7 @@ export default function AdminServicesPage() {
                             <a
                               href={`/admin/services/pending/${service.id}?action=reject`}
                               className="px-3 py-1.5 bg-red-600 text-white rounded hover:bg-red-700 transition-colors font-medium inline-block text-xs"
+                              aria-label={`${service.title} 반려`}
                             >
                               <FaTimes className="inline mr-1" />
                               반려

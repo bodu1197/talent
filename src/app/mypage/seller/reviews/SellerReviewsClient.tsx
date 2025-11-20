@@ -49,7 +49,7 @@ export default function SellerReviewsClient({
       setReplyContent("");
       setSelectedReview(null);
       router.refresh();
-      toast.error("답변이 등록되었습니다");
+      toast.success("답변이 등록되었습니다");
     } catch (err: unknown) {
       logger.error("답변 등록 실패:", err);
       toast.error(

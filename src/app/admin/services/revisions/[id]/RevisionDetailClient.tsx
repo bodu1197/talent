@@ -25,7 +25,7 @@ export default function RevisionDetailClient({ revision }: Props) {
 
     try {
       await approveServiceRevision(revision.id);
-      toast.error("수정 요청이 승인되었습니다.");
+      toast.success("수정 요청이 승인되었습니다.");
       router.push("/admin/services?status=revisions");
     } catch (err: unknown) {
       logger.error("수정 승인 실패:", err);

@@ -38,10 +38,11 @@ export default function Step3Description({ formData, setFormData }: Props) {
 
       {/* 서비스 상세 설명 */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="service-description" className="block text-sm font-medium text-gray-700 mb-2">
           서비스 상세 설명 <span className="text-red-500">*</span>
         </label>
         <textarea
+          id="service-description"
           value={formData.description}
           onChange={(e) =>
             setFormData({ ...formData, description: e.target.value })
@@ -119,6 +120,7 @@ export default function Step3Description({ formData, setFormData }: Props) {
         <div className="space-y-3">
           <div className="flex items-center gap-3">
             <input
+              id="service-commercial-use"
               type="checkbox"
               checked={formData.features?.commercial_use || false}
               onChange={(e) =>
@@ -132,10 +134,11 @@ export default function Step3Description({ formData, setFormData }: Props) {
               }
               className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
             />
-            <label className="text-sm text-gray-700">상업적 이용 가능</label>
+            <label htmlFor="service-commercial-use" className="text-sm text-gray-700">상업적 이용 가능</label>
           </div>
           <div className="flex items-center gap-3">
             <input
+              id="service-source-files"
               type="checkbox"
               checked={formData.features?.source_files || false}
               onChange={(e) =>
@@ -149,10 +152,11 @@ export default function Step3Description({ formData, setFormData }: Props) {
               }
               className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
             />
-            <label className="text-sm text-gray-700">원본 파일 제공</label>
+            <label htmlFor="service-source-files" className="text-sm text-gray-700">원본 파일 제공</label>
           </div>
           <div className="flex items-center gap-3">
             <input
+              id="service-express-delivery"
               type="checkbox"
               checked={formData.features?.express_delivery || false}
               onChange={(e) =>
@@ -166,7 +170,7 @@ export default function Step3Description({ formData, setFormData }: Props) {
               }
               className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
             />
-            <label className="text-sm text-gray-700">
+            <label htmlFor="service-express-delivery" className="text-sm text-gray-700">
               급행 작업 가능 (추가 비용)
             </label>
           </div>

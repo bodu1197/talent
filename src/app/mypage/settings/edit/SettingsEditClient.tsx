@@ -101,7 +101,7 @@ export default function SettingsEditClient({
       } = supabase.storage.from("profiles").getPublicUrl(filePath);
 
       setProfileImage(publicUrl);
-      toast.error("프로필 이미지가 업로드되었습니다.");
+      toast.success("프로필 이미지가 업로드되었습니다.");
     } catch (error) {
       console.error(
         "Image upload error:",
@@ -173,7 +173,7 @@ export default function SettingsEditClient({
         return;
       }
 
-      toast.error("프로필이 저장되었습니다.");
+      toast.success("프로필이 저장되었습니다.");
       router.push("/mypage/settings");
     } catch (error: unknown) {
       console.error(
@@ -214,7 +214,7 @@ export default function SettingsEditClient({
 
       if (error) throw error;
 
-      toast.error("비밀번호가 변경되었습니다.");
+      toast.success("비밀번호가 변경되었습니다.");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
@@ -257,7 +257,7 @@ export default function SettingsEditClient({
 
       if (error) throw error;
 
-      toast.error("알림 설정이 저장되었습니다.");
+      toast.success("알림 설정이 저장되었습니다.");
       router.push("/mypage/settings");
     } catch (error) {
       console.error(

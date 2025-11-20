@@ -321,7 +321,7 @@ export default function AdminAdvertisingPaymentsPage() {
 
       if (!response.ok) throw new Error("Failed to update");
 
-      toast.error("처리되었습니다");
+      toast.success("처리되었습니다");
       setSelectedIds(new Set());
       loadPayments();
     } catch (error) {
@@ -344,7 +344,7 @@ export default function AdminAdvertisingPaymentsPage() {
 
       if (!response.ok) throw new Error("Failed to update");
 
-      toast.error("상태가 업데이트되었습니다");
+      toast.success("상태가 업데이트되었습니다");
       setDetailPayment(null);
       setMemoText("");
       loadPayments();

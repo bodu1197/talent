@@ -298,7 +298,7 @@ export default function PortfolioEditClient({
         return;
       }
 
-      toast.error("포트폴리오가 수정되었습니다");
+      toast.success("포트폴리오가 수정되었습니다");
       router.push(`/mypage/seller/portfolio/${portfolio.id}`);
       router.refresh();
     } catch (error) {
@@ -351,10 +351,11 @@ export default function PortfolioEditClient({
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* 제목 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="portfolio-edit-title" className="block text-sm font-medium text-gray-700 mb-2">
                 제목 <span className="text-red-500">*</span>
               </label>
               <input
+                id="portfolio-edit-title"
                 type="text"
                 value={formData.title}
                 onChange={(e) =>
@@ -429,10 +430,11 @@ export default function PortfolioEditClient({
 
             {/* 설명 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="portfolio-edit-description" className="block text-sm font-medium text-gray-700 mb-2">
                 설명 <span className="text-red-500">*</span>
               </label>
               <textarea
+                id="portfolio-edit-description"
                 value={formData.description}
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
@@ -481,7 +483,7 @@ export default function PortfolioEditClient({
 
             {/* 새 이미지 업로드 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="portfolio-edit-new-images" className="block text-sm font-medium text-gray-700 mb-2">
                 새 이미지 추가{" "}
                 {existingImages.length === 0 && (
                   <span className="text-gray-500 text-xs">
@@ -490,6 +492,7 @@ export default function PortfolioEditClient({
                 )}
               </label>
               <input
+                id="portfolio-edit-new-images"
                 type="file"
                 accept="image/*"
                 multiple
@@ -525,10 +528,11 @@ export default function PortfolioEditClient({
 
             {/* 프로젝트 URL */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="portfolio-edit-project-url" className="block text-sm font-medium text-gray-700 mb-2">
                 프로젝트 URL
               </label>
               <input
+                id="portfolio-edit-project-url"
                 type="url"
                 value={formData.project_url}
                 onChange={(e) =>
@@ -541,13 +545,14 @@ export default function PortfolioEditClient({
 
             {/* YouTube URL */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="portfolio-edit-youtube-url" className="block text-sm font-medium text-gray-700 mb-2">
                 YouTube 영상 URL{" "}
                 <span className="text-gray-500 text-xs">
                   (영상이 포트폴리오에 삽입됩니다)
                 </span>
               </label>
               <input
+                id="portfolio-edit-youtube-url"
                 type="url"
                 value={formData.youtube_url}
                 onChange={(e) => handleYoutubeUrlChange(e.target.value)}
@@ -584,11 +589,12 @@ export default function PortfolioEditClient({
 
             {/* 태그 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="portfolio-edit-tag-input" className="block text-sm font-medium text-gray-700 mb-2">
                 태그
               </label>
               <div className="flex gap-2 mb-2">
                 <input
+                  id="portfolio-edit-tag-input"
                   type="text"
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
@@ -605,6 +611,7 @@ export default function PortfolioEditClient({
                   type="button"
                   onClick={handleAddTag}
                   className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                  aria-label="태그 추가"
                 >
                   추가
                 </button>
@@ -621,6 +628,7 @@ export default function PortfolioEditClient({
                         type="button"
                         onClick={() => handleRemoveTag(tag)}
                         className="hover:text-blue-900"
+                        aria-label={`${tag} 태그 제거`}
                       >
                         <FaTimes />
                       </button>
