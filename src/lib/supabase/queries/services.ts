@@ -216,9 +216,9 @@ export async function getServicesByCategory(
   }
 
   // 모든 서비스에 광고 여부 표시 (페이지네이션 전에 미리 표시)
-  allServices.forEach((service) => {
+  for (const service of allServices) {
     service.is_advertised = advertisedServiceIds.includes(service.id);
-  });
+  }
 
   logger.info("getServicesByCategory - 광고 통계", {
     advertisedIds: advertisedServiceIds,
@@ -278,16 +278,18 @@ export async function getServicesByCategory(
 
     // 서비스별 평균 별점 계산
     const ratingMap = new Map<string, { sum: number; count: number }>();
-    reviewStats?.forEach((review: { service_id: string; rating: number }) => {
-      const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
-      ratingMap.set(review.service_id, {
-        sum: current.sum + review.rating,
-        count: current.count + 1,
-      });
-    });
+    if (reviewStats) {
+      for (const review of reviewStats as { service_id: string; rating: number }[]) {
+        const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
+        ratingMap.set(review.service_id, {
+          sum: current.sum + review.rating,
+          count: current.count + 1,
+        });
+      }
+    }
 
     // 각 서비스에 대해 price_min, price_max 설정 (단일 가격 사용)
-    data.forEach((service) => {
+    for (const service of data) {
       service.price_min = service.price || 0;
       service.price_max = service.price || undefined;
 
@@ -303,7 +305,7 @@ export async function getServicesByCategory(
         service.rating = 0;
         service.review_count = 0;
       }
-    });
+    }
 
     // seller의 user 정보 추가 (profiles 테이블 사용)
     const userIds = data.map((s) => s.seller?.user_id).filter(Boolean);
@@ -380,15 +382,17 @@ export async function getSellerOtherServices(
       .eq("is_visible", true);
 
     const ratingMap = new Map<string, { sum: number; count: number }>();
-    reviewStats?.forEach((review: { service_id: string; rating: number }) => {
-      const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
-      ratingMap.set(review.service_id, {
-        sum: current.sum + review.rating,
-        count: current.count + 1,
-      });
-    });
+    if (reviewStats) {
+      for (const review of reviewStats as { service_id: string; rating: number }[]) {
+        const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
+        ratingMap.set(review.service_id, {
+          sum: current.sum + review.rating,
+          count: current.count + 1,
+        });
+      }
+    }
 
-    data.forEach((service) => {
+    for (const service of data) {
       service.order_count = service.orders_count || 0;
       const stats = ratingMap.get(service.id);
       if (stats && stats.count > 0) {
@@ -398,7 +402,7 @@ export async function getSellerOtherServices(
         service.rating = 0;
         service.review_count = 0;
       }
-    });
+    }
   }
 
   return data || [];
@@ -505,15 +509,17 @@ export async function getRecommendedServicesByCategory(
       .eq("is_visible", true);
 
     const ratingMap = new Map<string, { sum: number; count: number }>();
-    reviewStats?.forEach((review: { service_id: string; rating: number }) => {
-      const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
-      ratingMap.set(review.service_id, {
-        sum: current.sum + review.rating,
-        count: current.count + 1,
-      });
-    });
+    if (reviewStats) {
+      for (const review of reviewStats as { service_id: string; rating: number }[]) {
+        const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
+        ratingMap.set(review.service_id, {
+          sum: current.sum + review.rating,
+          count: current.count + 1,
+        });
+      }
+    }
 
-    combinedServices.forEach((service) => {
+    for (const service of combinedServices) {
       service.order_count = service.orders_count || 0;
       const stats = ratingMap.get(service.id);
       if (stats && stats.count > 0) {
@@ -523,7 +529,7 @@ export async function getRecommendedServicesByCategory(
         service.rating = 0;
         service.review_count = 0;
       }
-    });
+    }
   }
 
   return combinedServices;
@@ -605,15 +611,17 @@ export async function getActiveServices(limit?: number) {
 
     // 서비스별 평균 별점 계산
     const ratingMap = new Map<string, { sum: number; count: number }>();
-    reviewStats?.forEach((review: { service_id: string; rating: number }) => {
-      const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
-      ratingMap.set(review.service_id, {
-        sum: current.sum + review.rating,
-        count: current.count + 1,
-      });
-    });
+    if (reviewStats) {
+      for (const review of reviewStats as { service_id: string; rating: number }[]) {
+        const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
+        ratingMap.set(review.service_id, {
+          sum: current.sum + review.rating,
+          count: current.count + 1,
+        });
+      }
+    }
 
-    data.forEach((service) => {
+    for (const service of data) {
       service.price_min = service.price || 0;
       service.price_max = service.price || undefined;
 
@@ -629,7 +637,7 @@ export async function getActiveServices(limit?: number) {
         service.rating = 0;
         service.review_count = 0;
       }
-    });
+    }
   }
 
   return data || [];

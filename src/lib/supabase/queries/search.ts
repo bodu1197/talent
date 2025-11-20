@@ -54,13 +54,15 @@ export async function searchAll(query: string): Promise<SearchResult> {
     const promotedServices: any[] = [];
     const regularServices: any[] = [];
 
-    allServices?.forEach((service) => {
-      if (promotedServiceIds.has(service.id)) {
-        promotedServices.push(service);
-      } else {
-        regularServices.push(service);
+    if (allServices) {
+      for (const service of allServices) {
+        if (promotedServiceIds.has(service.id)) {
+          promotedServices.push(service);
+        } else {
+          regularServices.push(service);
+        }
       }
-    });
+    }
 
     // 4. 광고 서비스 랜덤 셔플 (Fisher-Yates)
     for (let i = promotedServices.length - 1; i > 0; i--) {

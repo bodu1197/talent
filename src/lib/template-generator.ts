@@ -83,9 +83,9 @@ export function createGradientBackground(
   }
 
   // 색상 추가
-  template.colors.forEach((color, index) => {
+  for (const [index, color] of template.colors.entries()) {
     gradient.addColorStop(index / (template.colors.length - 1), color)
-  })
+  }
 
   ctx.fillStyle = gradient
   ctx.fillRect(0, 0, width, height)
@@ -180,10 +180,10 @@ export async function generateThumbnailWithText(
   }
 
   // 각 줄 그리기
-  displayLines.forEach((line, index) => {
+  for (const [index, line] of displayLines.entries()) {
     const y = actualY + (index * lineHeight)
     ctx.fillText(line, actualX, y)
-  })
+  }
 
   // 3. Canvas를 Blob으로 변환
   return new Promise((resolve, reject) => {

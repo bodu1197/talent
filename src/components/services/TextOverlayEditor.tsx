@@ -173,10 +173,10 @@ export default function TextOverlayEditor({
       : baseY;
 
     // 각 줄 그리기
-    displayLines.forEach((line, index) => {
+    for (const [index, line] of displayLines.entries()) {
       const y = adjustedY + index * lineHeight;
       ctx.fillText(line, actualX, y);
-    });
+    }
   }
 
   const handleTextChange = (value: string) => {
