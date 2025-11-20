@@ -4,18 +4,9 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useChatUnreadCount } from "@/components/providers/ChatUnreadProvider";
-import {
-  FaSearch,
-  FaSpinner,
-  FaComments,
-  FaPaperclip,
-  FaTimes,
-  FaFileDownload,
-  FaStar,
-  FaRegStar,
-} from "react-icons/fa";
-import ProfileImage from "@/components/common/ProfileImage";
 import toast from "react-hot-toast";
+import ChatRoomList from "./components/ChatRoomList";
+import ChatMessageArea from "./components/ChatMessageArea";
 
 interface ChatRoom {
   id: string;
@@ -501,130 +492,23 @@ export default function ChatListClient({ userId, sellerId }: Props) {
   }, [selectedRoomId, userId, supabase]);
 
   const selectedRoom = rooms.find((r) => r.id === selectedRoomId);
-  const _isSeller = selectedRoom ? selectedRoom.seller_id === sellerId : false;
-  const _otherUser = selectedRoom?.otherUser || null;
 
   return (
     <div className="min-h-screen bg-gray-50 pt-16">
       {/* 모바일: 전체 화면 채팅방 목록 */}
       <div className="lg:hidden min-h-screen bg-white">
-        {/* 헤더 */}
-        <div className="px-4 py-4 border-b border-gray-200">
-          <h1 className="text-2xl font-bold mb-4">채팅</h1>
-
-          {/* 탭 */}
-          <div className="flex gap-2 overflow-x-auto">
-            <button
-              onClick={() => setActiveTab("all")}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
-                activeTab === "all"
-                  ? "bg-brand-primary text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
-              }`}
-            >
-              전체
-            </button>
-            <button
-              onClick={() => setActiveTab("unread")}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
-                activeTab === "unread"
-                  ? "bg-brand-primary text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
-              }`}
-            >
-              안 읽음
-            </button>
-          </div>
-        </div>
-
-        {/* 채팅방 목록 */}
-        <div className="overflow-y-auto pb-20">
-          {rooms.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-gray-500">
-              <FaComments className="text-4xl mb-4" />
-              <p>채팅 내역이 없습니다</p>
-            </div>
-          ) : (
-            rooms
-              .filter((room) => shouldShowRoom(room, activeTab))
-              .map((room) => {
-                const otherUser = room.otherUser;
-                const otherUserName = room.otherUser?.name || "사용자";
-
-                return (
-                  <button
-                    key={room.id}
-                    onClick={() => handleSelectRoom(room.id)}
-                    className="w-full px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors text-left"
-                  >
-                    <div className="flex items-center gap-3">
-                      {/* 프로필 이미지 */}
-                      <ProfileImage
-                        src={otherUser?.profile_image}
-                        alt={otherUserName}
-                        size={48}
-                        className="flex-shrink-0"
-                      />
-
-                      {/* 정보 */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-1">
-                          <div className="flex items-center gap-2 min-w-0">
-                            <h3 className="font-semibold text-sm truncate">
-                              {otherUserName}
-                            </h3>
-                            <button
-                              onClick={(e) => toggleFavorite(room.id, e)}
-                              className="flex-shrink-0 text-lg transition-colors"
-                              aria-label={
-                                room.is_favorite
-                                  ? "즐겨찾기 해제"
-                                  : "즐겨찾기 추가"
-                              }
-                            >
-                              {room.is_favorite ? (
-                                <FaStar
-                                  className="text-yellow-400"
-                                  aria-hidden="true"
-                                />
-                              ) : (
-                                <FaRegStar
-                                  className="text-gray-400"
-                                  aria-hidden="true"
-                                />
-                              )}
-                            </button>
-                          </div>
-                          {room.lastMessage && (
-                            <span className="text-xs text-gray-500 ml-2 flex-shrink-0">
-                              {new Date(
-                                room.lastMessage.created_at,
-                              ).toLocaleDateString("ko-KR", {
-                                month: "short",
-                                day: "numeric",
-                              })}
-                            </span>
-                          )}
-                        </div>
-                        {room.lastMessage && (
-                          <p className="text-sm text-gray-600 truncate">
-                            {room.lastMessage.message}
-                          </p>
-                        )}
-                      </div>
-
-                      {/* 안읽음 배지 */}
-                      {(room.unreadCount || 0) > 0 && (
-                        <div className="flex-shrink-0 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                          {room.unreadCount}
-                        </div>
-                      )}
-                    </div>
-                  </button>
-                );
-              })
-          )}
-        </div>
+        <ChatRoomList
+          rooms={rooms}
+          selectedRoomId={selectedRoomId}
+          activeTab={activeTab}
+          isCreatingRoom={isCreatingRoom}
+          isMobile={true}
+          showSearch={false}
+          onSelectRoom={handleSelectRoom}
+          onToggleFavorite={toggleFavorite}
+          onTabChange={setActiveTab}
+          filterRoom={shouldShowRoom}
+        />
       </div>
 
       {/* PC: 기존 레이아웃 */}
@@ -632,387 +516,35 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         <div className="flex h-[calc(100vh-120px)] bg-white shadow-lg rounded-lg overflow-hidden">
           {/* 왼쪽: 채팅방 목록 */}
           <div className="w-[350px] border-r border-gray-200 flex flex-col flex-shrink-0">
-            {/* 헤더 */}
-            <div className="px-4 py-4 border-b border-gray-200">
-              <h1 className="text-2xl font-bold mb-4">채팅</h1>
-
-              {/* 탭 */}
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setActiveTab("all")}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
-                    activeTab === "all"
-                      ? "bg-black text-white"
-                      : "bg-white text-gray-700 hover:bg-gray-100"
-                  }`}
-                >
-                  전체
-                </button>
-                <button
-                  onClick={() => setActiveTab("unread")}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
-                    activeTab === "unread"
-                      ? "bg-black text-white"
-                      : "bg-white text-gray-700 hover:bg-gray-100"
-                  }`}
-                >
-                  안 읽음
-                </button>
-                <button
-                  onClick={() => setActiveTab("deal")}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
-                    activeTab === "deal"
-                      ? "bg-black text-white"
-                      : "bg-white text-gray-700 hover:bg-gray-100"
-                  }`}
-                >
-                  거래 중
-                </button>
-                <button
-                  onClick={() => setActiveTab("favorite")}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
-                    activeTab === "favorite"
-                      ? "bg-black text-white"
-                      : "bg-white text-gray-700 hover:bg-gray-100"
-                  }`}
-                >
-                  즐겨찾기
-                </button>
-              </div>
-            </div>
-
-            {/* 검색 */}
-            <div className="px-4 py-3 border-b border-gray-200">
-              <div className="relative">
-                <input
-                  type="text"
-                  id="chat-search"
-                  name="chat-search"
-                  placeholder="검색해 보세요."
-                  className="w-full px-4 py-2 pr-10 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
-                />
-                <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              </div>
-            </div>
-
-            {/* 채팅방 목록 */}
-            <div className="flex-1 overflow-y-auto">
-              {isCreatingRoom ? (
-                <div className="p-8 text-center text-gray-500">
-                  <FaSpinner className="fa-spin text-4xl mb-3 inline-block" />
-                  <p>채팅방을 생성하는 중...</p>
-                </div>
-              ) : rooms.length === 0 ? (
-                <div className="p-8 text-center text-gray-500">
-                  <FaComments className="text-4xl mb-3 inline-block" />
-                  <p>채팅방이 없습니다</p>
-                </div>
-              ) : (
-                rooms
-                  .filter((room) => shouldShowRoom(room, activeTab))
-                  .map((room) => {
-                    const other = room.otherUser;
-                    const displayName = room.otherUser?.name || "사용자";
-
-                    return (
-                      <button
-                        key={room.id}
-                        onClick={() => handleSelectRoom(room.id)}
-                        className={`w-full p-4 border-b border-gray-100 hover:bg-gray-50 text-left transition-colors ${
-                          selectedRoomId === room.id
-                            ? "bg-gray-50 border-l-4 border-l-green-500"
-                            : ""
-                        }`}
-                      >
-                        <div className="flex items-start gap-3">
-                          {/* 프로필 아이콘 */}
-                          <ProfileImage
-                            src={other?.profile_image}
-                            alt={displayName}
-                            size={48}
-                            className="flex-shrink-0"
-                          />
-
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between mb-1">
-                              <div className="flex items-center gap-2 min-w-0">
-                                <h3 className="font-medium text-sm truncate">
-                                  {displayName}
-                                </h3>
-                                <button
-                                  onClick={(e) => toggleFavorite(room.id, e)}
-                                  className="flex-shrink-0 text-base transition-colors"
-                                  aria-label={
-                                    room.is_favorite
-                                      ? "즐겨찾기 해제"
-                                      : "즐겨찾기 추가"
-                                  }
-                                >
-                                  {room.is_favorite ? (
-                                    <FaStar
-                                      className="text-yellow-400"
-                                      aria-hidden="true"
-                                    />
-                                  ) : (
-                                    <FaRegStar
-                                      className="text-gray-400"
-                                      aria-hidden="true"
-                                    />
-                                  )}
-                                </button>
-                              </div>
-                              <span className="text-xs text-gray-400">
-                                {room.last_message_at
-                                  ? new Date(
-                                      room.last_message_at,
-                                    ).toLocaleDateString("ko-KR", {
-                                      month: "2-digit",
-                                      day: "2-digit",
-                                    })
-                                  : ""}
-                              </span>
-                            </div>
-                            {room.lastMessage && (
-                              <p className="text-sm text-gray-600 truncate">
-                                {room.lastMessage.message}
-                              </p>
-                            )}
-                          </div>
-
-                          {room.unreadCount ? (
-                            <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full flex-shrink-0">
-                              {room.unreadCount}
-                            </span>
-                          ) : null}
-                        </div>
-                      </button>
-                    );
-                  })
-              )}
-            </div>
+            <ChatRoomList
+              rooms={rooms}
+              selectedRoomId={selectedRoomId}
+              activeTab={activeTab}
+              isCreatingRoom={isCreatingRoom}
+              isMobile={false}
+              showSearch={true}
+              onSelectRoom={handleSelectRoom}
+              onToggleFavorite={toggleFavorite}
+              onTabChange={setActiveTab}
+              filterRoom={shouldShowRoom}
+            />
           </div>
 
           {/* 오른쪽: 채팅 메시지 */}
           <div className="flex-1 flex flex-col">
-            {selectedRoom ? (
-              <>
-                {/* 채팅방 헤더 */}
-                <div className="px-6 py-4 border-b border-gray-200 bg-white">
-                  {/* 서비스 정보 */}
-                  {selectedRoom.service && (
-                    <div className="flex items-center gap-2">
-                      {selectedRoom.service.thumbnail_url && (
-                        <img
-                          src={selectedRoom.service.thumbnail_url}
-                          alt={selectedRoom.service.title}
-                          className="w-12 h-12 object-cover rounded flex-shrink-0"
-                        />
-                      )}
-                      <p className="text-sm text-gray-700 font-medium">
-                        {selectedRoom.service.title}
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                {/* 메시지 목록 */}
-                <div className="flex-1 overflow-y-auto px-6 py-4 bg-gray-50">
-                  {messages.map((message) => {
-                    const isMine = message.sender_id === userId;
-                    const sender = message.sender;
-                    return (
-                      <div
-                        key={message.id}
-                        className={`flex items-start gap-2 mb-4 ${isMine ? "flex-row-reverse" : ""}`}
-                      >
-                        {!isMine && (
-                          <ProfileImage
-                            src={sender?.profile_image}
-                            alt={sender?.name || ""}
-                            size={32}
-                            className="flex-shrink-0"
-                          />
-                        )}
-
-                        <div
-                          className={`flex items-end gap-2 ${isMine ? "flex-row-reverse" : ""}`}
-                        >
-                          <div
-                            className={`max-w-md px-4 py-2 rounded-2xl ${
-                              isMine
-                                ? "bg-[#d4f4dd] text-gray-900"
-                                : "bg-white text-gray-900 border border-gray-200"
-                            }`}
-                          >
-                            {message.file_url && (
-                              <>
-                                {message.file_type?.startsWith("image/") ? (
-                                  // 이미지 파일인 경우
-                                  <a
-                                    href={message.file_url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="block mb-2"
-                                  >
-                                    <img
-                                      src={message.file_url}
-                                      alt={message.file_name || "이미지"}
-                                      className="max-w-full max-h-64 rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
-                                      loading="lazy"
-                                    />
-                                    <p className="text-xs text-gray-500 mt-1">
-                                      {message.file_name}
-                                      {message.file_size &&
-                                        ` • ${(message.file_size / 1024).toFixed(1)} KB`}
-                                    </p>
-                                  </a>
-                                ) : (
-                                  // 일반 파일인 경우
-                                  <a
-                                    href={message.file_url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-2 mb-2 p-2 bg-white/50 rounded-lg hover:bg-white/70 transition-colors"
-                                  >
-                                    <FaPaperclip className="text-blue-500" />
-                                    <div className="flex-1 min-w-0">
-                                      <p className="text-sm font-medium truncate">
-                                        {message.file_name || "첨부파일"}
-                                      </p>
-                                      {message.file_size && (
-                                        <p className="text-xs text-gray-500">
-                                          {(message.file_size / 1024).toFixed(
-                                            1,
-                                          )}{" "}
-                                          KB
-                                        </p>
-                                      )}
-                                    </div>
-                                    <FaFileDownload className="text-gray-400" />
-                                  </a>
-                                )}
-                              </>
-                            )}
-                            {message.message && (
-                              <p className="whitespace-pre-wrap break-words">
-                                {message.message}
-                              </p>
-                            )}
-                          </div>
-                          <span className="text-xs text-gray-400 whitespace-nowrap">
-                            {new Date(message.created_at).toLocaleTimeString(
-                              "ko-KR",
-                              {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: false,
-                              },
-                            )}
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* 입력 영역 */}
-                <div className="px-6 py-4 bg-white border-t border-gray-200">
-                  <form onSubmit={sendMessage} className="space-y-3">
-                    {/* 선택된 파일 표시 */}
-                    {selectedFile && (
-                      <div className="flex items-center gap-2 p-2 bg-blue-50 border border-blue-200 rounded-lg">
-                        <FaPaperclip className="text-blue-500" />
-                        <span className="flex-1 text-sm truncate">
-                          {selectedFile.name}
-                        </span>
-                        <span className="text-xs text-gray-500">
-                          {(selectedFile.size / 1024).toFixed(1)} KB
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => setSelectedFile(null)}
-                          className="text-red-500 hover:text-red-700"
-                          aria-label="첨부파일 삭제"
-                        >
-                          <FaTimes aria-hidden="true" />
-                        </button>
-                      </div>
-                    )}
-
-                    <div className="relative">
-                      <textarea
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" && !e.shiftKey) {
-                            e.preventDefault();
-                            sendMessage(e);
-                          }
-                        }}
-                        placeholder="메시지를 입력하세요. (Enter: 줄바꿈 / Ctrl+Enter: 전송)"
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                        rows={3}
-                        disabled={isLoading || isUploading}
-                      />
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <div className="flex gap-2">
-                        <button
-                          type="button"
-                          className="px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
-                        >
-                          자주 쓰는 문구
-                        </button>
-                        <button
-                          type="button"
-                          className="px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
-                        >
-                          결제 요청
-                        </button>
-                        <input
-                          type="file"
-                          id="file-input"
-                          className="hidden"
-                          onChange={handleFileSelect}
-                          disabled={isLoading || isUploading}
-                        />
-                        <label
-                          htmlFor="file-input"
-                          className="px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer inline-flex items-center gap-2"
-                        >
-                          <FaPaperclip />
-                          파일 첨부
-                        </label>
-                      </div>
-
-                      <button
-                        type="submit"
-                        disabled={
-                          (!newMessage.trim() && !selectedFile) ||
-                          isLoading ||
-                          isUploading
-                        }
-                        className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#0a2540] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                      >
-                        {isUploading
-                          ? "업로드 중..."
-                          : isLoading
-                            ? "전송 중..."
-                            : "전송"}
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </>
-            ) : (
-              <div className="flex-1 flex items-center justify-center text-gray-400">
-                <div className="text-center">
-                  <FaComments className="text-6xl mb-4 inline-block" />
-                  <p className="text-lg">채팅방을 선택해주세요</p>
-                </div>
-              </div>
-            )}
+            <ChatMessageArea
+              selectedRoom={selectedRoom || null}
+              messages={messages}
+              userId={userId}
+              newMessage={newMessage}
+              selectedFile={selectedFile}
+              isLoading={isLoading}
+              isUploading={isUploading}
+              onSendMessage={sendMessage}
+              onMessageChange={setNewMessage}
+              onFileSelect={handleFileSelect}
+              onFileClear={() => setSelectedFile(null)}
+            />
           </div>
         </div>
       </div>

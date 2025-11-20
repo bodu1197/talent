@@ -10,6 +10,9 @@ import ErrorState from "@/components/common/ErrorState";
 import { logger } from "@/lib/logger";
 import type { Order, Service, User, Seller, Deliverable } from "@/types/common";
 import toast from "react-hot-toast";
+import ConfirmModal from "../components/ConfirmModal";
+import CancelModal from "../components/CancelModal";
+import RevisionModal from "../components/RevisionModal";
 
 import {
   FaArrowLeft,
@@ -17,13 +20,8 @@ import {
   FaRedo,
   FaCheck,
   FaStar,
-  FaInfoCircle,
   FaUser,
-  FaBan,
   FaHeadset,
-  FaTimes,
-  FaExclamationTriangle,
-  FaCloudUploadAlt,
   FaFileAlt,
   FaDownload,
   FaUserCircle,
@@ -636,200 +634,32 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* 구매 확정 모달 */}
-        {showConfirmModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-md w-full p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">구매 확정</h2>
-                <button
-                  onClick={() => setShowConfirmModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <FaTimes className="text-2xl" />
-                </button>
-              </div>
+        {/* 모달 컴포넌트들 */}
+        <ConfirmModal
+          isOpen={showConfirmModal}
+          submitting={submitting}
+          onClose={() => setShowConfirmModal(false)}
+          onConfirm={handleConfirm}
+        />
 
-              <div className="mb-6">
-                <div className="bg-yellow-50 rounded-lg p-4 mb-4">
-                  <div className="flex items-start gap-2">
-                    <FaExclamationTriangle className="text-yellow-600 mt-1" />
-                    <div className="text-sm text-yellow-800">
-                      <p className="font-medium mb-1">구매 확정 전 확인사항</p>
-                      <ul className="list-disc list-inside space-y-1">
-                        <li>납품된 파일을 모두 확인하셨나요?</li>
-                        <li>요구사항이 충족되었나요?</li>
-                        <li>수정이 필요한 부분은 없나요?</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <p className="text-gray-700">
-                  구매 확정 시 판매자에게 대금이 정산되며, 이후에는 수정 요청이
-                  불가능합니다.
-                </p>
-              </div>
+        <CancelModal
+          isOpen={showCancelModal}
+          submitting={submitting}
+          cancelReason={cancelReason}
+          onClose={() => setShowCancelModal(false)}
+          onCancel={handleCancelOrder}
+          onReasonChange={setCancelReason}
+        />
 
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setShowConfirmModal(false)}
-                  disabled={submitting}
-                  className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
-                >
-                  취소
-                </button>
-                <button
-                  onClick={handleConfirm}
-                  disabled={submitting}
-                  className="flex-1 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium disabled:opacity-50"
-                >
-                  {submitting ? "처리 중..." : "확정하기"}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 취소 요청 모달 */}
-        {showCancelModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-md w-full p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">주문 취소 요청</h2>
-                <button
-                  onClick={() => setShowCancelModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <FaTimes className="text-2xl" />
-                </button>
-              </div>
-
-              <div className="space-y-4">
-                <div className="bg-red-50 rounded-lg p-4">
-                  <div className="flex items-start gap-2">
-                    <FaBan className="text-red-600 mt-1" />
-                    <div className="text-sm text-red-800">
-                      <p className="font-medium mb-1">취소 요청 안내</p>
-                      <ul className="list-disc list-inside space-y-1">
-                        <li>취소 요청 시 판매자에게 알림이 전송됩니다</li>
-                        <li>판매자 동의 후 취소가 확정됩니다</li>
-                        <li>결제가 완료된 경우 환불 절차가 진행됩니다</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    취소 사유 *
-                  </label>
-                  <textarea
-                    rows={4}
-                    value={cancelReason}
-                    onChange={(e) => setCancelReason(e.target.value)}
-                    placeholder="주문을 취소하려는 사유를 구체적으로 작성해주세요"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-                  ></textarea>
-                </div>
-
-                <div className="flex gap-3 pt-4">
-                  <button
-                    onClick={() => setShowCancelModal(false)}
-                    disabled={submitting}
-                    className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
-                  >
-                    닫기
-                  </button>
-                  <button
-                    onClick={handleCancelOrder}
-                    disabled={submitting}
-                    className="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:opacity-50"
-                  >
-                    {submitting ? "처리중..." : "취소 요청"}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 수정 요청 모달 */}
-        {showRevisionModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-2xl w-full p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">수정 요청</h2>
-                <button
-                  onClick={() => setShowRevisionModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <FaTimes className="text-2xl" />
-                </button>
-              </div>
-
-              <div className="space-y-4">
-                <div className="bg-blue-50 rounded-lg p-4">
-                  <div className="flex items-center gap-2 text-blue-900 mb-2">
-                    <FaInfoCircle />
-                    <span className="font-medium">
-                      남은 수정 횟수: {order.remaining_revisions || 0}회
-                    </span>
-                  </div>
-                  <p className="text-sm text-blue-700">
-                    수정 요청 시 판매자에게 알림이 전송됩니다.
-                  </p>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    수정 요청 사항 *
-                  </label>
-                  <textarea
-                    rows={6}
-                    value={revisionDetails}
-                    onChange={(e) => setRevisionDetails(e.target.value)}
-                    placeholder="수정이 필요한 부분을 구체적으로 작성해주세요"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-                  ></textarea>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    참고 파일 첨부 (선택)
-                  </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-brand-primary transition-colors cursor-pointer">
-                    <FaCloudUploadAlt className="text-gray-400 text-3xl mb-2" />
-                    <p className="text-gray-600 text-sm">클릭하여 파일 선택</p>
-                  </div>
-                </div>
-
-                <div className="flex gap-3 pt-4">
-                  <button
-                    onClick={() => setShowRevisionModal(false)}
-                    disabled={submitting}
-                    className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
-                  >
-                    취소
-                  </button>
-                  <button
-                    onClick={handleRevisionRequest}
-                    disabled={submitting}
-                    className="flex-1 px-6 py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors font-medium disabled:opacity-50"
-                  >
-                    {submitting ? (
-                      "전송 중..."
-                    ) : (
-                      <>
-                        <FaRedo className="mr-2" />
-                        수정 요청하기
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        <RevisionModal
+          isOpen={showRevisionModal}
+          submitting={submitting}
+          revisionDetails={revisionDetails}
+          remainingRevisions={order.remaining_revisions || 0}
+          onClose={() => setShowRevisionModal(false)}
+          onSubmit={handleRevisionRequest}
+          onDetailsChange={setRevisionDetails}
+        />
       </div>
     </MypageLayoutWrapper>
   );
