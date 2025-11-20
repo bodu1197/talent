@@ -270,16 +270,16 @@ export default function SellerServicesClient({
                 key={tab.value}
                 href={`/mypage/seller/services?status=${tab.value}`}
                 className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${statusFilter === tab.value
-                    ? "border-brand-primary text-brand-primary"
-                    : "border-transparent text-gray-600 hover:text-gray-900"
+                  ? "border-brand-primary text-brand-primary"
+                  : "border-transparent text-gray-600 hover:text-gray-900"
                   }`}
               >
                 {tab.label}
                 {tab.count > 0 && (
                   <span
                     className={`ml-2 px-2 py-0.5 rounded-full text-xs ${statusFilter === tab.value
-                        ? "bg-brand-primary text-white"
-                        : "bg-gray-200 text-gray-600"
+                      ? "bg-brand-primary text-white"
+                      : "bg-gray-200 text-gray-600"
                       }`}
                   >
                     {tab.count}
@@ -407,19 +407,19 @@ export default function SellerServicesClient({
                               onClick={() =>
                                 handleToggleStatus(service.id, service.status)
                               }
-                              className={`px-4 py-2 border rounded-lg transition-colors text-sm font-medium ${service.status === "active"
-                                  ? "border-yellow-400 bg-yellow-50 text-yellow-700 hover:bg-yellow-100"
-                                  : "border-green-400 bg-green-50 text-green-700 hover:bg-green-100"
+                              className={`px-4 py-2 border rounded-lg transition-colors text-sm font-medium flex items-center ${service.status === "active"
+                                ? "border-yellow-400 bg-yellow-50 text-yellow-700 hover:bg-yellow-100"
+                                : "border-green-400 bg-green-50 text-green-700 hover:bg-green-100"
                                 }`}
                             >
                               {service.status === "active" ? (
                                 <FaPause
-                                  className="mr-1 inline"
+                                  className="mr-1"
                                   aria-hidden="true"
                                 />
                               ) : (
                                 <FaPlay
-                                  className="mr-1 inline"
+                                  className="mr-1"
                                   aria-hidden="true"
                                 />
                               )}
@@ -434,9 +434,9 @@ export default function SellerServicesClient({
                           onClick={() =>
                             handleDeleteService(service.id, service.title)
                           }
-                          className="px-4 py-2 border border-red-300 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
+                          className="px-4 py-2 border border-red-300 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium flex items-center"
                         >
-                          <FaTrash className="mr-1 inline" aria-hidden="true" />
+                          <FaTrash className="mr-1" aria-hidden="true" />
                           삭제
                         </button>
                       </div>
@@ -476,9 +476,9 @@ export default function SellerServicesClient({
                           service._rejectedRevision &&
                           handleDismissRejection(service._rejectedRevision.id)
                         }
-                        className="ml-4 px-3 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors"
+                        className="ml-4 px-3 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors flex items-center"
                       >
-                        <FaTimes className="mr-1 inline" aria-hidden="true" />
+                        <FaTimes className="mr-1" aria-hidden="true" />
                         확인
                       </button>
                     </div>

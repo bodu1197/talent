@@ -109,16 +109,16 @@ export default function BuyerReviewsClient({
             <button
               onClick={() => setActiveTab("pending")}
               className={`flex-1 px-6 py-4 font-medium text-sm border-b-2 transition-colors ${activeTab === "pending"
-                  ? "border-brand-primary text-brand-primary"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
+                ? "border-brand-primary text-brand-primary"
+                : "border-transparent text-gray-600 hover:text-gray-900"
                 }`}
             >
               작성 가능
               {pendingReviews.length > 0 && (
                 <span
                   className={`ml-2 px-2 py-0.5 rounded-full text-xs ${activeTab === "pending"
-                      ? "bg-brand-primary text-white"
-                      : "bg-gray-200 text-gray-600"
+                    ? "bg-brand-primary text-white"
+                    : "bg-gray-200 text-gray-600"
                     }`}
                 >
                   {pendingReviews.length}
@@ -128,16 +128,16 @@ export default function BuyerReviewsClient({
             <button
               onClick={() => setActiveTab("written")}
               className={`flex-1 px-6 py-4 font-medium text-sm border-b-2 transition-colors ${activeTab === "written"
-                  ? "border-brand-primary text-brand-primary"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
+                ? "border-brand-primary text-brand-primary"
+                : "border-transparent text-gray-600 hover:text-gray-900"
                 }`}
             >
               작성한 리뷰
               {writtenReviews.length > 0 && (
                 <span
                   className={`ml-2 px-2 py-0.5 rounded-full text-xs ${activeTab === "written"
-                      ? "bg-brand-primary text-white"
-                      : "bg-gray-200 text-gray-600"
+                    ? "bg-brand-primary text-white"
+                    : "bg-gray-200 text-gray-600"
                     }`}
                 >
                   {writtenReviews.length}
@@ -198,16 +198,18 @@ export default function BuyerReviewsClient({
                         </span>
                       </div>
 
-                      <button
-                        onClick={() => {
-                          setSelectedOrder(order);
-                          setShowWriteModal(true);
-                        }}
-                        className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium"
-                      >
-                        <FaStar className="mr-2" />
-                        리뷰 작성
-                      </button>
+                      <div className="mt-4 flex justify-end">
+                        <button
+                          onClick={() => {
+                            setSelectedOrder(order);
+                            setShowWriteModal(true);
+                          }}
+                          className="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium text-sm"
+                        >
+                          <FaStar />
+                          리뷰 작성
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
