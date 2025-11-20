@@ -205,6 +205,13 @@ export default function SellerRegisterClient({
 
       // 1. 프로필 이미지 업로드
       let profileImageUrl = initialProfile?.profile_image || "";
+
+      // 이미지가 제거된 경우 (preview가 없음)
+      if (!profilePreview) {
+        profileImageUrl = "";
+      }
+
+      // 새 이미지가 업로드된 경우
       if (formData.profileImage) {
         const fileExt = formData.profileImage.name.split(".").pop();
         const fileName = `${userId}-profile.${fileExt}`;
@@ -322,13 +329,10 @@ export default function SellerRegisterClient({
           !!formData.bankName
         );
       case 2: {
-        // 프로필 이미지: 새로 업로드했거나 기존 이미지가 있으면 통과
-        const hasProfileImage =
-          !!formData.profileImage || !!initialProfile?.profile_image;
+        // 프로필 이미지: 필수가 아님 (제거 가능)
         return (
           !!formData.displayName &&
-          formData.bio.length >= 50 &&
-          hasProfileImage
+          formData.bio.length >= 50
         );
       }
       case 3:
@@ -373,8 +377,8 @@ export default function SellerRegisterClient({
               <div key={step} className="flex items-center flex-1">
                 <div
                   className={`flex items-center justify-center w-10 h-10 rounded-full font-bold ${currentStep >= step
-                      ? "bg-brand-primary text-white"
-                      : "bg-gray-200 text-gray-500"
+                    ? "bg-brand-primary text-white"
+                    : "bg-gray-200 text-gray-500"
                     }`}
                 >
                   {step}
@@ -461,8 +465,8 @@ export default function SellerRegisterClient({
                     disabled={isVerified}
                     aria-label="NICE 휴대폰 본인인증"
                     className={`w-full px-6 py-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${isVerified
-                        ? "bg-green-100 text-green-800 cursor-not-allowed"
-                        : "bg-brand-primary text-white hover:bg-[#1a4d8f]"
+                      ? "bg-green-100 text-green-800 cursor-not-allowed"
+                      : "bg-brand-primary text-white hover:bg-[#1a4d8f]"
                       }`}
                   >
                     {isVerified ? <FaCheckCircle /> : <FaShieldAlt />}
@@ -654,16 +658,22 @@ export default function SellerRegisterClient({
                           <button
                             type="button"
                             onClick={() => {
-                              setFormData({ ...formData, profileImage: null });
-                              setProfilePreview(
-                                initialProfile?.profile_image || null,
-                              );
+                              // 새 이미지를 올렸다가 취소하는 경우 -> 초기 이미지로 복구
+                              if (formData.profileImage && initialProfile?.profile_image) {
+                                setFormData({ ...formData, profileImage: null });
+                                setProfilePreview(initialProfile.profile_image);
+                              }
+                              // 기존 이미지를 삭제하거나, 새 이미지를 삭제하는 경우 -> 빈 상태로
+                              else {
+                                setFormData({ ...formData, profileImage: null });
+                                setProfilePreview(null);
+                              }
                             }}
                             aria-label="프로필 사진 변경 취소 또는 제거"
                             className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm"
                           >
                             <FaTimes className="mr-1 inline" />
-                            {formData.profileImage
+                            {formData.profileImage && initialProfile?.profile_image
                               ? "변경 취소"
                               : "이미지 제거"}
                           </button>
