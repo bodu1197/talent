@@ -1,6 +1,13 @@
 import { createClient as createBrowserClient } from "@/lib/supabase/client";
 import { createClient as createServerClient, createServiceRoleClient } from "@/lib/supabase/server";
 import { logger } from "@/lib/logger";
+import { cryptoShuffleArray, partitionArray } from "@/lib/utils/crypto-shuffle";
+import {
+  fetchAdvertisedServiceIds,
+  markAdvertisedServices,
+  enrichServicesWithReviewStats,
+  enrichServicesWithUserInfo,
+} from "./service-enrichment-helpers";
 
 // 한 번의 쿼리로 모든 하위 카테고리 ID 가져오기 (최적화)
 async function getAllDescendantCategories(
@@ -93,24 +100,10 @@ export async function getServiceById(serviceId: string) {
     .single();
 
   if (error) throw error;
+  if (!data) return data;
 
-  // seller의 user 정보를 별도로 조회 (profiles 테이블 사용)
-  if (data?.seller?.user_id) {
-    const { data: userData } = await supabase
-      .from("profiles")
-      .select("user_id, name, email, profile_image")
-      .eq("user_id", data.seller.user_id)
-      .single();
-
-    if (userData) {
-      data.seller.user = {
-        id: userData.user_id,
-        name: userData.name,
-        email: userData.email,
-        profile_image: userData.profile_image,
-      };
-    }
-  }
+  // Enrich with seller user information
+  await enrichServicesWithUserInfo(supabase, [data]);
 
   return data;
 }
@@ -138,20 +131,17 @@ export async function getServicesByCategory(
 ) {
   const supabase = useAuth ? await createServerClient() : createBrowserClient();
 
-  // 1. 먼저 카테고리 정보 조회 (level 확인)
+  // 1. Fetch category and determine hierarchy
   const { data: category } = await supabase
     .from("categories")
     .select("id, level")
     .eq("id", categoryId)
     .single();
 
-  if (!category) {
-    return [];
-  }
+  if (!category) return [];
 
+  // 2. Get all relevant category IDs (including descendants)
   let categoryIds = [categoryId];
-
-  // 2. 1차 또는 2차 카테고리인 경우, 모든 하위 카테고리 ID 가져오기
   if (category.level === 1 || category.level === 2) {
     const allDescendants = await getAllDescendantCategories(
       supabase,
@@ -161,29 +151,22 @@ export async function getServicesByCategory(
     categoryIds = [categoryId, ...allDescendants];
   }
 
-  // 3. 먼저 해당 카테고리의 service_id 목록 가져오기
+  // 3. Fetch service IDs for categories
   const { data: serviceLinks } = await supabase
     .from("service_categories")
     .select("service_id")
     .in("category_id", categoryIds);
 
   const serviceIds = serviceLinks?.map((sl) => sl.service_id) || [];
+  if (serviceIds.length === 0) return [];
 
-  if (serviceIds.length === 0) {
-    return [];
-  }
-
-  // 광고 서비스 ID 조회 - Service Role 클라이언트 사용하여 RLS 우회
+  // 4. Fetch advertised service IDs
   const serviceRoleClient = createServiceRoleClient();
-  const { data: advertisingData } = await serviceRoleClient
-    .from("advertising_subscriptions")
-    .select("service_id")
-    .eq("status", "active");
+  const advertisedServiceIds = await fetchAdvertisedServiceIds(
+    serviceRoleClient,
+  );
 
-  const advertisedServiceIds =
-    advertisingData?.map((ad) => ad.service_id) || [];
-
-  // 4. 서비스 조회 (페이지네이션 적용 전 모든 서비스 조회)
+  // 5. Fetch all services
   const { data: allServices, error } = await supabase
     .from("services")
     .select(
@@ -203,7 +186,7 @@ export async function getServicesByCategory(
     `,
     )
     .in("id", serviceIds)
-    .eq("status", "active") // 승인된 서비스만
+    .eq("status", "active")
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -211,14 +194,10 @@ export async function getServicesByCategory(
     throw error;
   }
 
-  if (!allServices || allServices.length === 0) {
-    return [];
-  }
+  if (!allServices || allServices.length === 0) return [];
 
-  // 모든 서비스에 광고 여부 표시 (페이지네이션 전에 미리 표시)
-  for (const service of allServices) {
-    service.is_advertised = advertisedServiceIds.includes(service.id);
-  }
+  // 6. Mark advertised services
+  markAdvertisedServices(allServices, advertisedServiceIds);
 
   logger.info("getServicesByCategory - 광고 통계", {
     advertisedIds: advertisedServiceIds,
@@ -231,112 +210,28 @@ export async function getServicesByCategory(
     },
   });
 
-  // 광고 서비스와 일반 서비스 분리
-  const advertisedServices = allServices.filter((s) =>
-    advertisedServiceIds.includes(s.id),
-  );
-  const regularServices = allServices.filter(
-    (s) => !advertisedServiceIds.includes(s.id),
+  // 7. Partition and shuffle services
+  const [advertisedServices, regularServices] = partitionArray(
+    allServices,
+    (s) => advertisedServiceIds.includes(s.id),
   );
 
-  // 광고 서비스 랜덤 셔플
-  for (let i = advertisedServices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [advertisedServices[i], advertisedServices[j]] = [
-      advertisedServices[j],
-      advertisedServices[i],
-    ];
-  }
+  cryptoShuffleArray(advertisedServices);
+  cryptoShuffleArray(regularServices);
 
-  // 일반 서비스 랜덤 셔플
-  for (let i = regularServices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [regularServices[i], regularServices[j]] = [
-      regularServices[j],
-      regularServices[i],
-    ];
-  }
-
-  // 광고 서비스(랜덤) + 일반 서비스(랜덤) 결합
+  // 8. Combine and paginate
   const combinedServices = [...advertisedServices, ...regularServices];
-
-  // 페이지네이션 적용 (1페이지 = 28개)
   const perPage = 28;
   const startIndex = (page - 1) * perPage;
-  const endIndex = startIndex + perPage;
-  const data = combinedServices.slice(startIndex, endIndex);
+  const data = combinedServices.slice(startIndex, startIndex + perPage);
 
-  // 데이터 매핑 및 seller user 정보 추가
-  if (data && data.length > 0) {
-    // 각 서비스에 대해 평균 별점 계산
-    const serviceIds = data.map((s) => s.id);
-    const { data: reviewStats } = await supabase
-      .from("reviews")
-      .select("service_id, rating")
-      .in("service_id", serviceIds)
-      .eq("is_visible", true);
+  if (data.length === 0) return [];
 
-    // 서비스별 평균 별점 계산
-    const ratingMap = new Map<string, { sum: number; count: number }>();
-    if (reviewStats) {
-      for (const review of reviewStats as { service_id: string; rating: number }[]) {
-        const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
-        ratingMap.set(review.service_id, {
-          sum: current.sum + review.rating,
-          count: current.count + 1,
-        });
-      }
-    }
+  // 9. Enrich with review stats and user info
+  await enrichServicesWithReviewStats(supabase, data);
+  await enrichServicesWithUserInfo(supabase, data);
 
-    // 각 서비스에 대해 price_min, price_max 설정 (단일 가격 사용)
-    for (const service of data) {
-      service.price_min = service.price || 0;
-      service.price_max = service.price || undefined;
-
-      // order_count 매핑
-      service.order_count = service.orders_count || 0;
-
-      // 평균 별점 및 리뷰 수 설정
-      const stats = ratingMap.get(service.id);
-      if (stats && stats.count > 0) {
-        service.rating = stats.sum / stats.count;
-        service.review_count = stats.count;
-      } else {
-        service.rating = 0;
-        service.review_count = 0;
-      }
-    }
-
-    // seller의 user 정보 추가 (profiles 테이블 사용)
-    const userIds = data.map((s) => s.seller?.user_id).filter(Boolean);
-
-    if (userIds.length > 0) {
-      const { data: usersData } = await supabase
-        .from("profiles")
-        .select("user_id, name, email, profile_image")
-        .in("user_id", userIds);
-
-      if (usersData) {
-        data.forEach((service) => {
-          if (service.seller?.user_id) {
-            const user = usersData.find(
-              (u) => u.user_id === service.seller.user_id,
-            );
-            if (user) {
-              service.seller.user = {
-                id: user.user_id,
-                name: user.name,
-                email: user.email,
-                profile_image: user.profile_image,
-              };
-            }
-          }
-        });
-      }
-    }
-  }
-
-  return data || [];
+  return data;
 }
 
 // 판매자의 다른 서비스 조회 (현재 서비스 제외)
@@ -467,33 +362,16 @@ export async function getRecommendedServicesByCategory(
     return [];
   }
 
-  // 광고 서비스와 일반 서비스 분리
-  const advertisedServices = allServices.filter((s) =>
-    advertisedServiceIds.includes(s.id),
-  );
-  const regularServices = allServices.filter(
-    (s) => !advertisedServiceIds.includes(s.id),
+  // Partition and shuffle with cryptographic randomness
+  const [advertisedServices, regularServices] = partitionArray(
+    allServices,
+    (s) => advertisedServiceIds.includes(s.id),
   );
 
-  // 광고 서비스 랜덤 셔플
-  for (let i = advertisedServices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [advertisedServices[i], advertisedServices[j]] = [
-      advertisedServices[j],
-      advertisedServices[i],
-    ];
-  }
+  cryptoShuffleArray(advertisedServices);
+  cryptoShuffleArray(regularServices);
 
-  // 일반 서비스 랜덤 셔플
-  for (let i = regularServices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [regularServices[i], regularServices[j]] = [
-      regularServices[j],
-      regularServices[i],
-    ];
-  }
-
-  // 광고 서비스(랜덤) + 일반 서비스(랜덤)
+  // Combine and limit
   const combinedServices = [...advertisedServices, ...regularServices].slice(
     0,
     limit,

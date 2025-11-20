@@ -1,5 +1,6 @@
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { logger } from "@/lib/logger";
+import { cryptoShuffleArray } from "@/lib/utils/crypto-shuffle";
 
 export interface SearchResult {
   services: any[];
@@ -64,14 +65,8 @@ export async function searchAll(query: string): Promise<SearchResult> {
       }
     }
 
-    // 4. 광고 서비스 랜덤 셔플 (Fisher-Yates)
-    for (let i = promotedServices.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [promotedServices[i], promotedServices[j]] = [
-        promotedServices[j],
-        promotedServices[i],
-      ];
-    }
+    // 4. 광고 서비스 랜덤 셔플 (cryptographically secure)
+    cryptoShuffleArray(promotedServices);
 
     // 5. 일반 서비스는 주문 수 기준으로 정렬
     regularServices.sort((a, b) => (b.orders_count || 0) - (a.orders_count || 0));
