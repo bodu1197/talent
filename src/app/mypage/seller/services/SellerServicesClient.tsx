@@ -347,9 +347,6 @@ export default function SellerServicesClient({
                       </div>
                     </div>
 
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                      {service.description}
-                    </p>
 
                     {/* 통계 정보 */}
                     <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
