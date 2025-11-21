@@ -50,12 +50,10 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: "10mb",
     },
-    // Turbopack 사용 비활성화 (webpack으로 빌드하여 source map 제어)
-    turbo: undefined,
   },
   // 프로덕션에서 Source Map 비활성화 (CSP eval 차단)
   productionBrowserSourceMaps: false,
-  // Webpack으로 빌드 (Source Map 제어를 위해)
+  // Webpack으로 빌드 (package.json에서 --webpack 플래그 사용)
   webpack: (config, { dev, isServer }) => {
     // 프로덕션 빌드에서 source map 완전 비활성화
     if (!dev) {
