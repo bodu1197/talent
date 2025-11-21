@@ -206,7 +206,7 @@ export default async function ServiceDetailPage({
         created_at
       ),
       service_categories(
-        category:categories(id, name, slug)
+        category:categories(id, name, slug, level)
       )
     `,
     )
@@ -256,6 +256,7 @@ export default async function ServiceDetailPage({
       id: string;
       name: string;
       slug: string;
+      level: number;
     };
   }
 
