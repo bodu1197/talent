@@ -265,17 +265,24 @@ export default async function ServiceDetailPage({
   // 카테고리 경로 가져오기 (1차 > 2차 > 3차)
   let categoryPath: Array<{ id: string; name: string; slug: string }> = [];
   if (categories.length > 0) {
-    // 첫 번째 카테고리의 전체 경로를 가져옴
-    categoryPath = await getCategoryPath(categories[0].id);
+    // ⭐ 수정: 레벨이 가장 높은 카테고리(3차 > 2차 > 1차)를 찾아서 사용
+    // 이전에는 [1차, 2차, 3차]가 모두 저장되어 categories[0]이 1차였음
+    const deepestCategory = categories.reduce((deepest: any, cat: any) => {
+      const deepestLevel = deepest?.level || 0;
+      const catLevel = cat?.level || 0;
+      return catLevel > deepestLevel ? cat : deepest;
+    }, categories[0]);
+
+    categoryPath = await getCategoryPath(deepestCategory.id);
   }
 
   // 실제 리뷰 데이터로 평균 별점 계산
   const averageRating =
     serviceReviews && serviceReviews.length > 0
       ? (
-          serviceReviews.reduce((sum, r) => sum + r.rating, 0) /
-          serviceReviews.length
-        ).toFixed(1)
+        serviceReviews.reduce((sum, r) => sum + r.rating, 0) /
+        serviceReviews.length
+      ).toFixed(1)
       : "0.0";
   const reviewCount = serviceReviews?.length || 0;
 
@@ -290,10 +297,10 @@ export default async function ServiceDetailPage({
   const recommendedServices =
     categories.length > 0
       ? await getRecommendedServicesByCategory(
-          categories[categories.length - 1].id,
-          service.id,
-          5,
-        )
+        categories[categories.length - 1].id,
+        service.id,
+        5,
+      )
       : [];
 
   return (
@@ -658,12 +665,12 @@ export default async function ServiceDetailPage({
                           key={star}
                           className={
                             star <=
-                            Math.round(
-                              serviceReviews.reduce(
-                                (sum, r) => sum + r.rating,
-                                0,
-                              ) / serviceReviews.length,
-                            )
+                              Math.round(
+                                serviceReviews.reduce(
+                                  (sum, r) => sum + r.rating,
+                                  0,
+                                ) / serviceReviews.length,
+                              )
                               ? "text-yellow-400"
                               : "text-gray-300"
                           }
@@ -693,7 +700,7 @@ export default async function ServiceDetailPage({
                           {/* 프로필 이미지 */}
                           <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden relative">
                             {Array.isArray(review.buyer) &&
-                            review.buyer[0]?.profile_image ? (
+                              review.buyer[0]?.profile_image ? (
                               <Image
                                 src={review.buyer[0].profile_image}
                                 alt={review.buyer[0].name}
@@ -724,11 +731,10 @@ export default async function ServiceDetailPage({
                           {[1, 2, 3, 4, 5].map((star) => (
                             <FaStar
                               key={star}
-                              className={`text-sm ${
-                                star <= review.rating
+                              className={`text-sm ${star <= review.rating
                                   ? "text-yellow-400"
                                   : "text-gray-300"
-                              }`}
+                                }`}
                             />
                           ))}
                         </div>
