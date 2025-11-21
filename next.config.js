@@ -51,7 +51,11 @@ const nextConfig = {
       bodySizeLimit: "10mb",
     },
   },
-  // Webpack 설정: 프로덕션에서 eval 사용 금지 (CSP 준수)
+  // Turbopack 설정 (Next.js 16+ 기본값)
+  // 빈 객체로 설정하여 webpack 설정 경고 제거
+  turbopack: {},
+  // Webpack 설정은 Turbopack이 비활성화될 때만 사용됨
+  // Turbopack은 기본적으로 eval을 사용하지 않으므로 CSP 안전
   webpack: (config, { dev, isServer }) => {
     // 프로덕션 빌드에서는 eval을 사용하지 않는 source map 사용
     if (!dev && !isServer) {
