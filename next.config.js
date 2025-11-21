@@ -50,22 +50,17 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: "10mb",
     },
+    // Turbopack 사용 비활성화 (webpack으로 빌드하여 source map 제어)
+    turbo: undefined,
   },
   // 프로덕션에서 Source Map 비활성화 (CSP eval 차단)
   productionBrowserSourceMaps: false,
-  // Turbopack 설정 (Next.js 16+ 기본값)
-  // 빈 객체로 설정하여 webpack 설정 경고 제거
-  turbopack: {},
-  // Webpack 설정은 Turbopack이 비활성화될 때만 사용됨
-  // Turbopack은 기본적으로 eval을 사용하지 않으므로 CSP 안전
+  // Webpack으로 빌드 (Source Map 제어를 위해)
   webpack: (config, { dev, isServer }) => {
     // 프로덕션 빌드에서 source map 완전 비활성화
     if (!dev) {
       config.devtool = false; // Source map 생성 안 함 (eval 사용 안 함)
     }
-
-    // 개발 환경에서는 기본 설정 유지 (빠른 디버깅)
-    // Next.js 기본값: 'cheap-module-source-map' (eval 사용 안 함)
 
     return config;
   },
