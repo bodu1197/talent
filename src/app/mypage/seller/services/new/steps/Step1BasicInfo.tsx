@@ -161,6 +161,7 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
 
       if (isSame) return prev;
 
+      console.log("📋 Step1: Updating category_ids to:", categories);
       return { ...prev, category_ids: categories };
     });
   }, [selectedLevel1, selectedLevel2, selectedLevel3, setFormData]);

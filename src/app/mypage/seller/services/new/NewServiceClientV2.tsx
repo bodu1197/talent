@@ -83,6 +83,8 @@ export default function NewServiceClientV2({
   const handleNext = () => {
     // Step 1 validation: 카테고리, 제목, 설명, 썸네일 필수
     if (currentStep === 1) {
+      console.log("📋 handleNext: Checking category_ids:", formData.category_ids);
+
       if (!formData.category_ids || formData.category_ids.length < 3) {
         toast.error("3차 카테고리까지 모두 선택해주세요.");
         return;
@@ -101,7 +103,7 @@ export default function NewServiceClientV2({
       }
     }
 
-    // Step 2 validation: 가격, 작업기간 필수
+    //Step 2 validation: 가격, 작업기간 필수
     if (currentStep === 2) {
       if (!formData.price || Number.parseInt(formData.price) < 5000) {
         toast.error("서비스 가격을 5,000원 이상으로 입력해주세요.");
@@ -169,11 +171,15 @@ export default function NewServiceClientV2({
       if (serviceError) throw serviceError;
 
       // 3. 카테고리 연결
+      console.log("📋 handleSubmit: About to save category_ids:", formData.category_ids);
+
       if (formData.category_ids.length > 0) {
         const categoryInserts = formData.category_ids.map((cat_id) => ({
           service_id: service.id,
           category_id: cat_id,
         }));
+
+        console.log("📋 handleSubmit: Category inserts:", categoryInserts);
 
         const { error: categoryError } = await supabase
           .from("service_categories")
@@ -183,6 +189,10 @@ export default function NewServiceClientV2({
           logger.error("Category insertion error:", categoryError);
           throw new Error("카테고리 저장에 실패했습니다.");
         }
+
+        console.log("✅ Categories saved successfully!");
+      } else {
+        console.warn("⚠️ No categories to save - category_ids is empty!");
       }
 
       // 4. 포트폴리오 생성 (선택사항)
