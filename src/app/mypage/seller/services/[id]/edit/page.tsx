@@ -45,37 +45,6 @@ async function fetchService(
   return service;
 }
 
-// Helper function to build category hierarchy
-function buildCategoryHierarchy(
-  currentCategory: { id: string; level: number; parent_id: string | null },
-  level2Cat?: { id: string; parent_id: string | null } | null
-) {
-  const hierarchy = {
-    level3: null as string | null,
-    level2: null as string | null,
-    level1: null as string | null
-  };
-
-  if (currentCategory.level === 3) {
-    hierarchy.level3 = currentCategory.id;
-    if (level2Cat) {
-      hierarchy.level2 = level2Cat.id;
-      if (level2Cat.parent_id) {
-        hierarchy.level1 = level2Cat.parent_id;
-      }
-    }
-  } else if (currentCategory.level === 2) {
-    hierarchy.level2 = currentCategory.id;
-    if (currentCategory.parent_id) {
-      hierarchy.level1 = currentCategory.parent_id;
-    }
-  } else if (currentCategory.level === 1) {
-    hierarchy.level1 = currentCategory.id;
-  }
-
-  return hierarchy;
-}
-
 // Helper function to fetch category hierarchy
 async function fetchCategoryHierarchy(
   supabase: Awaited<ReturnType<typeof createClient>>,
@@ -85,29 +54,29 @@ async function fetchCategoryHierarchy(
     return null;
   }
 
-  const categoryId = service.service_categories[0].category_id;
+  // Get all category IDs
+  const categoryIds = service.service_categories.map(sc => sc.category_id);
 
-  const { data: currentCategory } = await supabase
+  // Fetch all categories
+  const { data: categories } = await supabase
     .from('categories')
     .select('id, name, level, parent_id')
-    .eq('id', categoryId)
-    .single();
+    .in('id', categoryIds);
 
-  if (!currentCategory) {
+  if (!categories || categories.length === 0) {
     return null;
   }
 
-  let level2Cat = null;
-  if (currentCategory.level === 3 && currentCategory.parent_id) {
-    const { data } = await supabase
-      .from('categories')
-      .select('id, parent_id')
-      .eq('id', currentCategory.parent_id)
-      .single();
-    level2Cat = data;
-  }
+  // Find categories by level
+  const level1Cat = categories.find(c => c.level === 1);
+  const level2Cat = categories.find(c => c.level === 2);
+  const level3Cat = categories.find(c => c.level === 3);
 
-  return buildCategoryHierarchy(currentCategory, level2Cat);
+  return {
+    level1: level1Cat?.id || null,
+    level2: level2Cat?.id || null,
+    level3: level3Cat?.id || null
+  };
 }
 
 export default async function EditServicePage({ params }: { params: Promise<{ id: string }> }) {

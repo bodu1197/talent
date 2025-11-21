@@ -218,37 +218,43 @@ async function updateServiceDirectly(
   return serviceStatus;
 }
 
-// Helper: Update service category for revision
-async function updateRevisionCategory(
+// Helper: Update service categories for revision
+async function updateRevisionCategories(
   supabase: any,
   revisionId: string,
-  categoryId: string
+  categoryIds: string[]
 ): Promise<void> {
-  await supabase.from("service_revision_categories").insert({
+  if (categoryIds.length === 0) return;
+
+  const categoryInserts = categoryIds.map(catId => ({
     revision_id: revisionId,
-    category_id: categoryId,
-  });
+    category_id: catId,
+  }));
+
+  await supabase.from("service_revision_categories").insert(categoryInserts);
 }
 
-// Helper: Update service category directly
-async function updateDirectServiceCategory(
+// Helper: Update service categories directly
+async function updateDirectServiceCategories(
   supabase: any,
   serviceId: string,
-  categoryId: string,
-  currentCategoryId?: string
+  categoryIds: string[]
 ): Promise<void> {
-  if (categoryId && categoryId !== currentCategoryId) {
-    await supabase
-      .from("service_categories")
-      .delete()
-      .eq("service_id", serviceId);
+  if (categoryIds.length === 0) return;
 
-    await supabase.from("service_categories").insert({
-      service_id: serviceId,
-      category_id: categoryId,
-      is_primary: true,
-    });
-  }
+  // Delete existing categories
+  await supabase
+    .from("service_categories")
+    .delete()
+    .eq("service_id", serviceId);
+
+  // Insert all new categories
+  const categoryInserts = categoryIds.map(catId => ({
+    service_id: serviceId,
+    category_id: catId,
+  }));
+
+  await supabase.from("service_categories").insert(categoryInserts);
 }
 
 // Helper: Get authenticated user
@@ -297,7 +303,7 @@ export default function EditServiceClient({
 
   const [formData, setFormData] = useState({
     title: service.title || "",
-    category: service.service_categories?.[0]?.category_id || "",
+    category_ids: [] as string[],
     description: service.description || "",
     price: String(service.price || ""),
     deliveryDays: String(service.delivery_days || ""),
@@ -477,15 +483,22 @@ export default function EditServiceClient({
     fetchLevel3Categories();
   }, [selectedLevel2]);
 
-  // Update final category when level 3 is selected
+  // Update category_ids with all selected levels
   useEffect(() => {
-    if (selectedLevel3) {
-      setFormData({ ...formData, category: selectedLevel3 });
-    } else if (selectedLevel2 && level3Categories.length === 0) {
-      // If level 2 selected but no level 3 exists, use level 2
-      setFormData({ ...formData, category: selectedLevel2 });
-    }
-  }, [selectedLevel3, selectedLevel2, level3Categories]);
+    const categories: string[] = [];
+    if (selectedLevel1) categories.push(selectedLevel1);
+    if (selectedLevel2) categories.push(selectedLevel2);
+    if (selectedLevel3) categories.push(selectedLevel3);
+
+    setFormData(prev => {
+      const isSame = prev.category_ids.length === categories.length &&
+        prev.category_ids.every((val, index) => val === categories[index]);
+
+      if (isSame) return prev;
+
+      return { ...prev, category_ids: categories };
+    });
+  }, [selectedLevel1, selectedLevel2, selectedLevel3]);
 
   // Helper: Process active service updates
   async function processActiveServiceUpdate(
@@ -500,11 +513,11 @@ export default function EditServiceClient({
       thumbnail_url
     );
 
-    if (formData.category) {
-      await updateRevisionCategory(
+    if (formData.category_ids.length > 0) {
+      await updateRevisionCategories(
         supabase,
         revision.id,
-        formData.category
+        formData.category_ids
       );
     }
 
@@ -524,12 +537,11 @@ export default function EditServiceClient({
       thumbnail_url
     );
 
-    if (formData.category) {
-      await updateDirectServiceCategory(
+    if (formData.category_ids.length > 0) {
+      await updateDirectServiceCategories(
         supabase,
         service.id,
-        formData.category,
-        service.service_categories?.[0]?.category_id
+        formData.category_ids
       );
     }
 
@@ -537,7 +549,7 @@ export default function EditServiceClient({
       ? "서비스가 성공적으로 수정되었습니다. 관리자 승인 후 다시 활성화됩니다."
       : "서비스가 성공적으로 수정되었습니다!";
 
-    toast.error(message);
+    toast.success(message);
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
