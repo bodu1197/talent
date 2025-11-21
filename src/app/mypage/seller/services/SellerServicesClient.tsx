@@ -332,11 +332,11 @@ export default function SellerServicesClient({
 
                   {/* 오른쪽 내용 */}
                   <div className="flex-1 p-4 flex flex-col">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="text-sm md:text-base font-bold text-gray-900 flex-1">
+                    <div className="flex items-start justify-between mb-2 gap-4">
+                      <h3 className="text-sm md:text-base font-bold text-gray-900 flex-1 min-w-0 truncate">
                         {service.title}
                       </h3>
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 flex-shrink-0">
                         {getStatusBadge(service.status)}
                         {service.hasPendingRevision && (
                           <span className="px-3 py-1.5 bg-orange-100 text-orange-800 rounded-full text-xs font-medium flex items-center gap-1">
@@ -373,7 +373,7 @@ export default function SellerServicesClient({
                         </span>
                       </div>
 
-                      <div className="flex gap-2 flex-wrap">
+                      <div className="flex gap-2 flex-wrap flex-shrink-0">
                         <Link
                           href={`/mypage/seller/services/${service.id}/edit`}
                           className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
