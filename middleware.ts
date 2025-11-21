@@ -38,9 +38,10 @@ export async function middleware(request: NextRequest) {
 
     // CSP 설정 - nonce 기반으로 강화
     // Tailwind CSS 인라인 스타일 허용을 위해 'unsafe-inline' 추가
+    // unsafe-eval 제거: eval() 사용 차단으로 보안 강화
     const cspHeader = `
       default-src 'self';
-      script-src 'self' 'nonce-${cspNonce}' 'strict-dynamic' 'unsafe-inline' 'unsafe-eval' https://vercel.live;
+      script-src 'self' 'nonce-${cspNonce}' 'strict-dynamic' 'unsafe-inline' https://vercel.live;
       style-src 'self' 'nonce-${cspNonce}' 'unsafe-inline';
       style-src-attr 'unsafe-inline';
       img-src 'self' blob: data: https:;
