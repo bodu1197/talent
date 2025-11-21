@@ -291,8 +291,9 @@ export default function AdvertisingPage() {
                     <FaGift className="text-white text-xl" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-base md:text-lg font-bold text-blue-900 mb-2">
-                      무료 광고 프로모션 진행 중입니다! 🎉
+                    <h3 className="text-base md:text-lg font-bold text-blue-900 mb-2 flex items-center gap-2">
+                      무료 광고 프로모션 진행 중입니다!
+                      <FaGift className="text-blue-500" />
                     </h3>
                     <p className="text-sm md:text-base text-blue-700 mb-3">
                       현재{" "}
@@ -812,94 +813,96 @@ export default function AdvertisingPage() {
                             </select>
 
                             <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                              <div className="flex items-center justify-between mb-4">
-                                <div>
-                                  <h3 className="text-lg font-bold text-gray-900 mb-1">
-                                    광고 플랜
-                                  </h3>
-                                  <p className="text-sm text-gray-600">
-                                    카테고리 1페이지 완전 랜덤 노출
-                                  </p>
-                                </div>
-                                <div className="text-right">
-                                  <div className="text-3xl font-bold text-brand-primary">
-                                    {monthlySupplyPrice.toLocaleString()}원
-                                  </div>
-                                  <div className="text-sm text-gray-600">
-                                    / 월 (VAT 별도)
-                                  </div>
-                                </div>
+                              <div className="flex items-center gap-2 mb-1">
+                                <FaGift className="text-brand-primary" />
+                                <span className="text-brand-primary font-bold text-sm">
+                                  첫 광고 50% 할인
+                                </span>
                               </div>
-
-                              {/* VAT 정보 */}
-                              <div className="mb-4 p-3 bg-white border border-gray-200 rounded-lg">
-                                <div className="text-sm space-y-1">
-                                  <div className="flex justify-between">
-                                    <span className="text-gray-600">
-                                      공급가액 ({selectedMonths}개월)
-                                    </span>
-                                    <span className="font-bold text-gray-900">
-                                      {totalSupplyPrice.toLocaleString()}원
-                                    </span>
-                                  </div>
-                                  <div className="flex justify-between">
-                                    <span className="text-gray-600">
-                                      부가세 (10%)
-                                    </span>
-                                    <span className="font-bold text-gray-900">
-                                      {totalTaxAmount.toLocaleString()}원
-                                    </span>
-                                  </div>
-                                  <div className="flex justify-between pt-2 border-t border-gray-200">
-                                    <span className="font-bold text-gray-900">
-                                      총 결제금액
-                                    </span>
-                                    <span className="font-bold text-brand-primary text-lg">
-                                      {totalPrice.toLocaleString()}원
-                                    </span>
-                                  </div>
-                                </div>
+                              <h3 className="text-lg font-bold text-gray-900 mb-1">
+                                광고 플랜
+                              </h3>
+                              <p className="text-sm text-gray-600">
+                                카테고리 1페이지 완전 랜덤 노출
+                              </p>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-3xl font-bold text-brand-primary">
+                                {monthlySupplyPrice.toLocaleString()}원
                               </div>
-
-                              {discountRate > 0 && (
-                                <div className="mb-4 p-3 bg-green-100 border border-green-300 rounded-lg">
-                                  <div className="flex items-center gap-2 text-green-800">
-                                    <FaTag />
-                                    <span className="font-bold">
-                                      {discountRate}% 할인 적용!
-                                    </span>
-                                  </div>
-                                  <div className="text-sm text-green-700 mt-1">
-                                    {selectedMonths}개월 계약 시 공급가액{" "}
-                                    {totalSupplyPrice.toLocaleString()}원
-                                    <span className="ml-2 line-through text-green-600">
-                                      {(
-                                        200000 * selectedMonths
-                                      ).toLocaleString()}
-                                      원
-                                    </span>
-                                  </div>
-                                </div>
-                              )}
-
-                              <div className="grid grid-cols-2 gap-3 text-sm">
-                                <div className="flex items-center gap-2">
-                                  <FaCheckCircle className="text-green-600" />
-                                  <span>무제한 노출</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <FaCheckCircle className="text-green-600" />
-                                  <span>무제한 클릭</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <FaCheckCircle className="text-green-600" />
-                                  <span>실시간 통계</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <FaCheckCircle className="text-green-600" />
-                                  <span>공정한 랜덤 노출</span>
-                                </div>
+                              <div className="text-sm text-gray-600">
+                                / 월 (VAT 별도)
                               </div>
+                            </div>
+                          </div>
+
+                          {/* VAT 정보 */}
+                          <div className="mb-4 p-3 bg-white border border-gray-200 rounded-lg">
+                            <div className="text-sm space-y-1">
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">
+                                  공급가액 ({selectedMonths}개월)
+                                </span>
+                                <span className="font-bold text-gray-900">
+                                  {totalSupplyPrice.toLocaleString()}원
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">
+                                  부가세 (10%)
+                                </span>
+                                <span className="font-bold text-gray-900">
+                                  {totalTaxAmount.toLocaleString()}원
+                                </span>
+                              </div>
+                              <div className="flex justify-between pt-2 border-t border-gray-200">
+                                <span className="font-bold text-gray-900">
+                                  총 결제금액
+                                </span>
+                                <span className="font-bold text-brand-primary text-lg">
+                                  {totalPrice.toLocaleString()}원
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {discountRate > 0 && (
+                            <div className="mb-4 p-3 bg-green-100 border border-green-300 rounded-lg">
+                              <div className="flex items-center gap-2 text-green-800">
+                                <FaTag />
+                                <span className="font-bold">
+                                  {discountRate}% 할인 적용!
+                                </span>
+                              </div>
+                              <div className="text-sm text-green-700 mt-1">
+                                {selectedMonths}개월 계약 시 공급가액{" "}
+                                {totalSupplyPrice.toLocaleString()}원
+                                <span className="ml-2 line-through text-green-600">
+                                  {(
+                                    200000 * selectedMonths
+                                  ).toLocaleString()}
+                                  원
+                                </span>
+                              </div>
+                            </div>
+                          )}
+
+                          <div className="grid grid-cols-2 gap-3 text-sm">
+                            <div className="flex items-center gap-2">
+                              <FaCheckCircle className="text-green-600" />
+                              <span>무제한 노출</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <FaCheckCircle className="text-green-600" />
+                              <span>무제한 클릭</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <FaCheckCircle className="text-green-600" />
+                              <span>실시간 통계</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <FaCheckCircle className="text-green-600" />
+                              <span>공정한 랜덤 노출</span>
                             </div>
                           </div>
 
@@ -1003,10 +1006,12 @@ export default function AdvertisingPage() {
                 </div>
               </div>
             </div>
-          )}
+          )
+          }
 
           {/* 서비스 없음 */}
-          {services.length === 0 &&
+          {
+            services.length === 0 &&
             (!dashboard?.subscriptions ||
               dashboard.subscriptions.length === 0) && (
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
@@ -1023,9 +1028,10 @@ export default function AdvertisingPage() {
                   서비스 등록하기
                 </a>
               </div>
-            )}
-        </div>
-      </div>
-    </MypageLayoutWrapper>
+            )
+          }
+        </div >
+      </div >
+    </MypageLayoutWrapper >
   );
 }
