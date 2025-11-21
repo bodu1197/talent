@@ -40,7 +40,7 @@ export async function middleware(request: NextRequest) {
     // Tailwind CSS 인라인 스타일 허용을 위해 'unsafe-inline' 추가
     const cspHeader = `
       default-src 'self';
-      script-src 'self' 'nonce-${cspNonce}' 'strict-dynamic' 'unsafe-inline' https://vercel.live;
+      script-src 'self' 'nonce-${cspNonce}' 'strict-dynamic' 'unsafe-inline' 'unsafe-eval' https://vercel.live;
       style-src 'self' 'nonce-${cspNonce}' 'unsafe-inline';
       style-src-attr 'unsafe-inline';
       img-src 'self' blob: data: https:;

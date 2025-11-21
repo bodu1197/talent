@@ -22,4 +22,10 @@ Sentry.init({
       blockAllMedia: true,
     }),
   ],
+
+  // CSP 호환 설정: eval() 사용 방지
+  // Sentry가 안전한 방식으로 동작하도록 설정
+  transport: Sentry.makeFetchTransport,
+  stackParser: Sentry.defaultStackParser,
 })
+

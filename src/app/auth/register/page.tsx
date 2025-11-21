@@ -654,9 +654,9 @@ export default function RegisterPage() {
 
             {/* 랜덤 닉네임 및 프로필 이미지 */}
             <div className="bg-gray-50 p-4 rounded-lg">
-              <label htmlFor="profile-info" className="block text-sm font-medium text-gray-700 mb-3">
+              <div className="block text-sm font-medium text-gray-700 mb-3">
                 프로필 정보 (자동 생성)
-              </label>
+              </div>
               <div className="flex items-center gap-4">
                 {profileImage && (
                   <img

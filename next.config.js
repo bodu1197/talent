@@ -51,6 +51,18 @@ const nextConfig = {
       bodySizeLimit: "10mb",
     },
   },
+  // Webpack 설정: 프로덕션에서 eval 사용 금지 (CSP 준수)
+  webpack: (config, { dev, isServer }) => {
+    // 프로덕션 빌드에서는 eval을 사용하지 않는 source map 사용
+    if (!dev && !isServer) {
+      config.devtool = 'source-map'; // eval 없이 디버깅 가능
+    }
+
+    // 개발 환경에서는 기본 설정 유지 (빠른 디버깅)
+    // Next.js 기본값: 'cheap-module-source-map' (eval 사용 안 함)
+
+    return config;
+  },
   async headers() {
     // Security headers moved to src/proxy.ts
     return [
