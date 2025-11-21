@@ -208,7 +208,7 @@ export default function LoginPage() {
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="input"
+                className="input bg-gray-50 border border-gray-300 focus:bg-white"
                 placeholder="your@email.com"
                 required
               />
@@ -228,7 +228,7 @@ export default function LoginPage() {
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="input"
+                className="input bg-gray-50 border border-gray-300 focus:bg-white"
                 placeholder="••••••••"
                 required
               />
