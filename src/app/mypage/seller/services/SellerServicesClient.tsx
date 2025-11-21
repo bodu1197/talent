@@ -347,99 +347,99 @@ export default function SellerServicesClient({
                       </div>
                     </div>
 
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2 flex-1">
+                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
                       {service.description}
                     </p>
 
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4 text-sm text-gray-600">
-                        <span className="font-medium text-gray-900">
-                          {service.price?.toLocaleString()}원~
-                        </span>
-                        <span>
-                          <FaEye className="mr-1 inline" aria-hidden="true" />
-                          {service.view_count || 0}
-                        </span>
-                        <span>
-                          <FaHeart className="mr-1 inline" aria-hidden="true" />
-                          {service.favorite_count || 0}
-                        </span>
-                        <span>
-                          <FaShoppingCart
-                            className="mr-1 inline"
-                            aria-hidden="true"
-                          />
-                          {service.order_count || 0}
-                        </span>
-                      </div>
+                    {/* 통계 정보 */}
+                    <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                      <span className="font-medium text-gray-900">
+                        {service.price?.toLocaleString()}원~
+                      </span>
+                      <span>
+                        <FaEye className="mr-1 inline" aria-hidden="true" />
+                        {service.view_count || 0}
+                      </span>
+                      <span>
+                        <FaHeart className="mr-1 inline" aria-hidden="true" />
+                        {service.favorite_count || 0}
+                      </span>
+                      <span>
+                        <FaShoppingCart
+                          className="mr-1 inline"
+                          aria-hidden="true"
+                        />
+                        {service.order_count || 0}
+                      </span>
+                    </div>
 
-                      <div className="flex gap-2 flex-wrap flex-shrink-0">
-                        <Link
-                          href={`/mypage/seller/services/${service.id}/edit`}
-                          className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
-                        >
-                          <FaEdit className="mr-1 inline" aria-hidden="true" />
-                          수정
-                        </Link>
-                        <Link
-                          href={`/services/${service.id}`}
-                          target="_blank"
-                          className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
-                        >
-                          <FaEye className="mr-1 inline" aria-hidden="true" />
-                          보기
-                        </Link>
-                        <Link
-                          href={`/mypage/seller/services/statistics?id=${service.id}`}
-                          className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium"
-                        >
-                          <FaChartBar
-                            className="mr-1 inline"
-                            aria-hidden="true"
-                          />
-                          통계
-                        </Link>
+                    {/* 버튼 - 별도 행 */}
+                    <div className="flex gap-2 flex-wrap">
+                      <Link
+                        href={`/mypage/seller/services/${service.id}/edit`}
+                        className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                      >
+                        <FaEdit className="mr-1 inline" aria-hidden="true" />
+                        수정
+                      </Link>
+                      <Link
+                        href={`/services/${service.id}`}
+                        target="_blank"
+                        className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                      >
+                        <FaEye className="mr-1 inline" aria-hidden="true" />
+                        보기
+                      </Link>
+                      <Link
+                        href={`/mypage/seller/services/statistics?id=${service.id}`}
+                        className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium"
+                      >
+                        <FaChartBar
+                          className="mr-1 inline"
+                          aria-hidden="true"
+                        />
+                        통계
+                      </Link>
 
-                        {/* 활성화/일시정지 버튼 - active 또는 inactive 상태일 때만 표시 */}
-                        {(service.status === "active" ||
-                          service.status === "inactive") && (
-                            <button
-                              onClick={() =>
-                                handleToggleStatus(service.id, service.status)
-                              }
-                              className={`px-4 py-2 border rounded-lg transition-colors text-sm font-medium flex items-center ${service.status === "active"
-                                ? "border-yellow-400 bg-yellow-50 text-yellow-700 hover:bg-yellow-100"
-                                : "border-green-400 bg-green-50 text-green-700 hover:bg-green-100"
-                                }`}
-                            >
-                              {service.status === "active" ? (
-                                <FaPause
-                                  className="mr-1"
-                                  aria-hidden="true"
-                                />
-                              ) : (
-                                <FaPlay
-                                  className="mr-1"
-                                  aria-hidden="true"
-                                />
-                              )}
-                              {service.status === "active"
-                                ? "일시정지"
-                                : "활성화"}
-                            </button>
-                          )}
+                      {/* 활성화/일시정지 버튼 - active 또는 inactive 상태일 때만 표시 */}
+                      {(service.status === "active" ||
+                        service.status === "inactive") && (
+                          <button
+                            onClick={() =>
+                              handleToggleStatus(service.id, service.status)
+                            }
+                            className={`px-4 py-2 border rounded-lg transition-colors text-sm font-medium flex items-center ${service.status === "active"
+                              ? "border-yellow-400 bg-yellow-50 text-yellow-700 hover:bg-yellow-100"
+                              : "border-green-400 bg-green-50 text-green-700 hover:bg-green-100"
+                              }`}
+                          >
+                            {service.status === "active" ? (
+                              <FaPause
+                                className="mr-1"
+                                aria-hidden="true"
+                              />
+                            ) : (
+                              <FaPlay
+                                className="mr-1"
+                                aria-hidden="true"
+                              />
+                            )}
+                            {service.status === "active"
+                              ? "일시정지"
+                              : "활성화"}
+                          </button>
+                        )}
 
-                        {/* 삭제 버튼 */}
-                        <button
-                          onClick={() =>
-                            handleDeleteService(service.id, service.title)
-                          }
-                          className="px-4 py-2 border border-red-300 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium flex items-center"
-                        >
-                          <FaTrash className="mr-1" aria-hidden="true" />
-                          삭제
-                        </button>
-                      </div>
+                      {/* 삭제 버튼 */}
+                      <button
+                        onClick={() =>
+                          handleDeleteService(service.id, service.title)
+                        }
+                        className="px-4 py-2 border border-red-300 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium flex items-center"
+                      >
+                        <FaTrash className="mr-1" aria-hidden="true" />
+                        삭제
+                      </button>
                     </div>
                   </div>
                 </div>
