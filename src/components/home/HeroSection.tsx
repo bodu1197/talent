@@ -109,10 +109,12 @@ const slides: Slide[] = [
       [[135, 25, 2.8, 0.1, 5.0], [180, 30, 3.0, 0.08, 6.5], [225, 22, 2.6, 0.12, 4.5],
        [90, 18, 2.7, 0.1, 3.5], [270, 20, 2.9, 0.09, 4.0]].forEach(([angle, vel, mass, visc, time]) => {
         const pos = calculateSplatter(origin, angle, vel, mass, visc, time);
+        const x = Math.min(22.5, pos.x); // 오른쪽 200px 제한
+        const y = Math.max(0, Math.min(14.5, pos.y)); // 상단/하단 제한
         pattern.push({
           size: Math.max(280, Math.min(480, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.16 + visc * 0.08,
           blur: '2xl' as const,
         });
@@ -126,10 +128,12 @@ const slides: Slide[] = [
         const viscosity = 0.15 + Math.random() * 0.15;
         const time = 3.5 + Math.random() * 2.5;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(180, Math.min(350, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.18 + viscosity * 0.12,
           blur: i < 3 ? ('2xl' as const) : ('xl' as const),
         });
@@ -143,10 +147,12 @@ const slides: Slide[] = [
         const viscosity = 0.3 + Math.random() * 0.2;
         const time = 2.8 + Math.random() * 2.0;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(100, Math.min(200, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.24 + viscosity * 0.15,
           blur: 'lg' as const,
         });
@@ -160,10 +166,12 @@ const slides: Slide[] = [
         const viscosity = 0.5 + Math.random() * 0.2;
         const time = 2.2 + Math.random() * 1.5;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(50, Math.min(110, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.34 + viscosity * 0.15,
           blur: 'md' as const,
         });
@@ -177,10 +185,12 @@ const slides: Slide[] = [
         const viscosity = 0.7 + Math.random() * 0.2;
         const time = 1.8 + Math.random() * 1.2;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(10, Math.min(40, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.52 + viscosity * 0.2,
           blur: i < 4 ? ('sm' as const) : ('none' as const),
         });
@@ -209,10 +219,12 @@ const slides: Slide[] = [
       [[170, 28, 2.9, 0.08, 6.0], [175, 26, 3.0, 0.1, 5.5], [180, 32, 2.7, 0.09, 7.0],
        [165, 24, 2.8, 0.11, 5.0], [185, 22, 2.6, 0.1, 4.5]].forEach(([angle, vel, mass, visc, time]) => {
         const pos = calculateSplatter(origin, angle, vel, mass, visc, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(300, Math.min(500, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.15 + visc * 0.08,
           blur: '2xl' as const,
         });
@@ -226,10 +238,12 @@ const slides: Slide[] = [
         const viscosity = 0.14 + Math.random() * 0.16;
         const time = 4.0 + Math.random() * 2.0;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(200, Math.min(370, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.18 + viscosity * 0.12,
           blur: i < 3 ? ('2xl' as const) : ('xl' as const),
         });
@@ -243,10 +257,12 @@ const slides: Slide[] = [
         const viscosity = 0.28 + Math.random() * 0.22;
         const time = 3.0 + Math.random() * 1.8;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(110, Math.min(210, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.26 + viscosity * 0.15,
           blur: 'lg' as const,
         });
@@ -260,10 +276,12 @@ const slides: Slide[] = [
         const viscosity = 0.48 + Math.random() * 0.22;
         const time = 2.4 + Math.random() * 1.4;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(55, Math.min(115, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.36 + viscosity * 0.15,
           blur: 'md' as const,
         });
@@ -277,10 +295,12 @@ const slides: Slide[] = [
         const viscosity = 0.68 + Math.random() * 0.22;
         const time = 2.0 + Math.random() * 1.2;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(12, Math.min(42, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.56 + viscosity * 0.2,
           blur: i < 4 ? ('sm' as const) : ('none' as const),
         });
@@ -309,10 +329,12 @@ const slides: Slide[] = [
       [[45, 27, 2.7, 0.09, 5.5], [135, 25, 2.9, 0.1, 5.0], [225, 23, 2.8, 0.11, 6.0],
        [315, 26, 2.6, 0.08, 5.3], [90, 22, 2.7, 0.12, 4.5]].forEach(([angle, vel, mass, visc, time]) => {
         const pos = calculateSplatter(origin, angle, vel, mass, visc, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(290, Math.min(460, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.16 + visc * 0.08,
           blur: '2xl' as const,
         });
@@ -326,10 +348,12 @@ const slides: Slide[] = [
         const viscosity = 0.13 + Math.random() * 0.17;
         const time = 3.8 + Math.random() * 2.2;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(190, Math.min(360, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.18 + viscosity * 0.12,
           blur: i < 3 ? ('2xl' as const) : ('xl' as const),
         });
@@ -343,10 +367,12 @@ const slides: Slide[] = [
         const viscosity = 0.27 + Math.random() * 0.23;
         const time = 2.9 + Math.random() * 1.9;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(105, Math.min(205, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.25 + viscosity * 0.15,
           blur: 'lg' as const,
         });
@@ -360,10 +386,12 @@ const slides: Slide[] = [
         const viscosity = 0.5 + Math.random() * 0.25;
         const time = 2.3 + Math.random() * 1.5;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(52, Math.min(108, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.38 + viscosity * 0.15,
           blur: 'md' as const,
         });
@@ -377,10 +405,12 @@ const slides: Slide[] = [
         const viscosity = 0.65 + Math.random() * 0.25;
         const time = 1.9 + Math.random() * 1.3;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(11, Math.min(40, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.54 + viscosity * 0.2,
           blur: i < 4 ? ('sm' as const) : ('none' as const),
         });
@@ -409,10 +439,12 @@ const slides: Slide[] = [
       [[55, 28, 2.8, 0.09, 6.0], [60, 26, 2.9, 0.08, 6.5], [50, 24, 3.0, 0.1, 5.5],
        [65, 25, 2.7, 0.11, 5.8], [45, 27, 2.6, 0.09, 6.0]].forEach(([angle, vel, mass, visc, time]) => {
         const pos = calculateSplatter(origin, angle, vel, mass, visc, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(310, Math.min(490, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.15 + visc * 0.08,
           blur: '2xl' as const,
         });
@@ -426,10 +458,12 @@ const slides: Slide[] = [
         const viscosity = 0.14 + Math.random() * 0.16;
         const time = 4.2 + Math.random() * 2.0;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(210, Math.min(380, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.17 + viscosity * 0.12,
           blur: i < 3 ? ('2xl' as const) : ('xl' as const),
         });
@@ -443,10 +477,12 @@ const slides: Slide[] = [
         const viscosity = 0.26 + Math.random() * 0.22;
         const time = 3.2 + Math.random() * 1.8;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(110, Math.min(215, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.25 + viscosity * 0.15,
           blur: 'lg' as const,
         });
@@ -460,10 +496,12 @@ const slides: Slide[] = [
         const viscosity = 0.48 + Math.random() * 0.24;
         const time = 2.5 + Math.random() * 1.6;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(56, Math.min(118, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.37 + viscosity * 0.15,
           blur: 'md' as const,
         });
@@ -477,10 +515,12 @@ const slides: Slide[] = [
         const viscosity = 0.68 + Math.random() * 0.22;
         const time = 2.0 + Math.random() * 1.4;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
+        const x = Math.min(22.5, pos.x);
+        const y = Math.max(0, Math.min(14.5, pos.y));
         pattern.push({
           size: Math.max(13, Math.min(44, pos.size)),
-          top: `${pos.y}rem`,
-          left: `${pos.x}rem`,
+          top: `${y}rem`,
+          left: `${x}rem`,
           opacity: 0.55 + viscosity * 0.2,
           blur: i < 4 ? ('sm' as const) : ('none' as const),
         });
