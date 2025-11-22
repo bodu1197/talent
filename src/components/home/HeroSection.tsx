@@ -106,8 +106,8 @@ const slides: Slide[] = [
 
       // 거대 임팩트 (사방으로 튀김 - 큰 질량, 낮은 점도)
       // [각도, 속도, 질량, 점도, 시간]
-      [[135, 8, 2.8, 0.1, 1.2], [180, 7.5, 3.0, 0.08, 1.1], [225, 8.5, 2.6, 0.12, 1.3],
-       [90, 7, 2.7, 0.1, 1.0], [270, 6.5, 2.9, 0.09, 1.15]].forEach(([angle, vel, mass, visc, time]) => {
+      [[135, 25, 2.8, 0.1, 5.0], [180, 30, 3.0, 0.08, 6.5], [225, 22, 2.6, 0.12, 4.5],
+       [90, 18, 2.7, 0.1, 3.5], [270, 20, 2.9, 0.09, 4.0]].forEach(([angle, vel, mass, visc, time]) => {
         const pos = calculateSplatter(origin, angle, vel, mass, visc, time);
         pattern.push({
           size: Math.max(280, Math.min(480, pos.size)),
@@ -121,10 +121,10 @@ const slides: Slide[] = [
       // 큰 방울들 (다양한 방향)
       for (let i = 0; i < 6; i++) {
         const angle = Math.random() * 360;
-        const velocity = 5 + Math.random() * 3;
+        const velocity = 18 + Math.random() * 12;
         const mass = 1.5 + Math.random() * 0.8;
         const viscosity = 0.15 + Math.random() * 0.15;
-        const time = 0.8 + Math.random() * 0.5;
+        const time = 3.5 + Math.random() * 2.5;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
         pattern.push({
           size: Math.max(180, Math.min(350, pos.size)),
@@ -138,10 +138,10 @@ const slides: Slide[] = [
       // 중형 방울들
       for (let i = 0; i < 8; i++) {
         const angle = Math.random() * 360;
-        const velocity = 4 + Math.random() * 2.5;
+        const velocity = 12 + Math.random() * 10;
         const mass = 0.8 + Math.random() * 0.6;
         const viscosity = 0.3 + Math.random() * 0.2;
-        const time = 0.6 + Math.random() * 0.5;
+        const time = 2.8 + Math.random() * 2.0;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
         pattern.push({
           size: Math.max(100, Math.min(200, pos.size)),
@@ -155,10 +155,10 @@ const slides: Slide[] = [
       // 작은 방울들
       for (let i = 0; i < 6; i++) {
         const angle = Math.random() * 360;
-        const velocity = 3 + Math.random() * 2;
+        const velocity = 8 + Math.random() * 8;
         const mass = 0.4 + Math.random() * 0.4;
         const viscosity = 0.5 + Math.random() * 0.2;
-        const time = 0.4 + Math.random() * 0.4;
+        const time = 2.2 + Math.random() * 1.5;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
         pattern.push({
           size: Math.max(50, Math.min(110, pos.size)),
@@ -172,10 +172,10 @@ const slides: Slide[] = [
       // 좁쌀 디테일
       for (let i = 0; i < 8; i++) {
         const angle = Math.random() * 360;
-        const velocity = 2 + Math.random() * 1.5;
+        const velocity = 5 + Math.random() * 6;
         const mass = 0.2 + Math.random() * 0.25;
         const viscosity = 0.7 + Math.random() * 0.2;
-        const time = 0.3 + Math.random() * 0.3;
+        const time = 1.8 + Math.random() * 1.2;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
         pattern.push({
           size: Math.max(10, Math.min(40, pos.size)),
@@ -206,8 +206,8 @@ const slides: Slide[] = [
       const origin = CARD_CENTER;
 
       // 거대 임팩트 (주로 왼쪽 방향, 큰 질량)
-      [[170, 8, 2.9, 0.08, 1.4], [175, 7.5, 3.0, 0.1, 1.3], [180, 8.2, 2.7, 0.09, 1.5],
-       [165, 7, 2.8, 0.11, 1.2], [185, 6.8, 2.6, 0.1, 1.3]].forEach(([angle, vel, mass, visc, time]) => {
+      [[170, 28, 2.9, 0.08, 6.0], [175, 26, 3.0, 0.1, 5.5], [180, 32, 2.7, 0.09, 7.0],
+       [165, 24, 2.8, 0.11, 5.0], [185, 22, 2.6, 0.1, 4.5]].forEach(([angle, vel, mass, visc, time]) => {
         const pos = calculateSplatter(origin, angle, vel, mass, visc, time);
         pattern.push({
           size: Math.max(300, Math.min(500, pos.size)),
@@ -221,10 +221,10 @@ const slides: Slide[] = [
       // 큰 방울들 (왼쪽 강조, 다양한 각도)
       for (let i = 0; i < 6; i++) {
         const angle = 150 + Math.random() * 60; // 150-210도
-        const velocity = 5.5 + Math.random() * 3;
+        const velocity = 20 + Math.random() * 10;
         const mass = 1.6 + Math.random() * 0.8;
         const viscosity = 0.14 + Math.random() * 0.16;
-        const time = 0.9 + Math.random() * 0.5;
+        const time = 4.0 + Math.random() * 2.0;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
         pattern.push({
           size: Math.max(200, Math.min(370, pos.size)),
@@ -238,10 +238,10 @@ const slides: Slide[] = [
       // 중형 방울들
       for (let i = 0; i < 7; i++) {
         const angle = 140 + Math.random() * 80; // 140-220도
-        const velocity = 4 + Math.random() * 2.5;
+        const velocity = 14 + Math.random() * 8;
         const mass = 0.9 + Math.random() * 0.6;
         const viscosity = 0.28 + Math.random() * 0.22;
-        const time = 0.7 + Math.random() * 0.5;
+        const time = 3.0 + Math.random() * 1.8;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
         pattern.push({
           size: Math.max(110, Math.min(210, pos.size)),
@@ -255,10 +255,10 @@ const slides: Slide[] = [
       // 작은 방울들
       for (let i = 0; i < 5; i++) {
         const angle = 130 + Math.random() * 100; // 130-230도
-        const velocity = 3 + Math.random() * 2;
+        const velocity = 10 + Math.random() * 6;
         const mass = 0.45 + Math.random() * 0.4;
         const viscosity = 0.48 + Math.random() * 0.22;
-        const time = 0.5 + Math.random() * 0.4;
+        const time = 2.4 + Math.random() * 1.4;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
         pattern.push({
           size: Math.max(55, Math.min(115, pos.size)),
@@ -272,10 +272,10 @@ const slides: Slide[] = [
       // 좁쌀 디테일
       for (let i = 0; i < 7; i++) {
         const angle = 120 + Math.random() * 120; // 120-240도
-        const velocity = 2 + Math.random() * 1.8;
+        const velocity = 6 + Math.random() * 5;
         const mass = 0.22 + Math.random() * 0.28;
         const viscosity = 0.68 + Math.random() * 0.22;
-        const time = 0.35 + Math.random() * 0.35;
+        const time = 2.0 + Math.random() * 1.2;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
         pattern.push({
           size: Math.max(12, Math.min(42, pos.size)),
@@ -306,8 +306,8 @@ const slides: Slide[] = [
       const origin = CARD_CENTER;
 
       // 거대 임팩트 (사방팔방, 다양한 각도)
-      [[45, 8.5, 2.7, 0.09, 1.3], [135, 8, 2.9, 0.1, 1.2], [225, 7.5, 2.8, 0.11, 1.4],
-       [315, 8.2, 2.6, 0.08, 1.3], [90, 7, 2.7, 0.12, 1.1]].forEach(([angle, vel, mass, visc, time]) => {
+      [[45, 27, 2.7, 0.09, 5.5], [135, 25, 2.9, 0.1, 5.0], [225, 23, 2.8, 0.11, 6.0],
+       [315, 26, 2.6, 0.08, 5.3], [90, 22, 2.7, 0.12, 4.5]].forEach(([angle, vel, mass, visc, time]) => {
         const pos = calculateSplatter(origin, angle, vel, mass, visc, time);
         pattern.push({
           size: Math.max(290, Math.min(460, pos.size)),
@@ -321,10 +321,10 @@ const slides: Slide[] = [
       // 큰 방울들 (다방향 분산)
       for (let i = 0; i < 7; i++) {
         const angle = Math.random() * 360;
-        const velocity = 5 + Math.random() * 3.5;
+        const velocity = 19 + Math.random() * 11;
         const mass = 1.5 + Math.random() * 0.9;
         const viscosity = 0.13 + Math.random() * 0.17;
-        const time = 0.85 + Math.random() * 0.55;
+        const time = 3.8 + Math.random() * 2.2;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
         pattern.push({
           size: Math.max(190, Math.min(360, pos.size)),
@@ -338,10 +338,10 @@ const slides: Slide[] = [
       // 중형 방울들
       for (let i = 0; i < 8; i++) {
         const angle = Math.random() * 360;
-        const velocity = 3.5 + Math.random() * 2.8;
+        const velocity = 13 + Math.random() * 9;
         const mass = 0.85 + Math.random() * 0.65;
         const viscosity = 0.27 + Math.random() * 0.23;
-        const time = 0.65 + Math.random() * 0.5;
+        const time = 2.9 + Math.random() * 1.9;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
         pattern.push({
           size: Math.max(105, Math.min(205, pos.size)),
@@ -355,10 +355,10 @@ const slides: Slide[] = [
       // 작은 방울들
       for (let i = 0; i < 6; i++) {
         const angle = Math.random() * 360;
-        const velocity = 2.8 + Math.random() * 2.2;
+        const velocity = 9 + Math.random() * 7;
         const mass = 0.42 + Math.random() * 0.43;
         const viscosity = 0.5 + Math.random() * 0.25;
-        const time = 0.48 + Math.random() * 0.42;
+        const time = 2.3 + Math.random() * 1.5;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
         pattern.push({
           size: Math.max(52, Math.min(108, pos.size)),
@@ -372,10 +372,10 @@ const slides: Slide[] = [
       // 좁쌀 디테일
       for (let i = 0; i < 8; i++) {
         const angle = Math.random() * 360;
-        const velocity = 1.8 + Math.random() * 1.7;
+        const velocity = 5.5 + Math.random() * 5.5;
         const mass = 0.2 + Math.random() * 0.3;
         const viscosity = 0.65 + Math.random() * 0.25;
-        const time = 0.32 + Math.random() * 0.35;
+        const time = 1.9 + Math.random() * 1.3;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
         pattern.push({
           size: Math.max(11, Math.min(40, pos.size)),
@@ -406,8 +406,8 @@ const slides: Slide[] = [
       const origin = CARD_CENTER;
 
       // 거대 임팩트 (대각선 상승 - 45-75도)
-      [[55, 8.5, 2.8, 0.09, 1.4], [60, 8, 2.9, 0.08, 1.5], [50, 7.5, 3.0, 0.1, 1.3],
-       [65, 7.8, 2.7, 0.11, 1.35], [45, 8.2, 2.6, 0.09, 1.4]].forEach(([angle, vel, mass, visc, time]) => {
+      [[55, 28, 2.8, 0.09, 6.0], [60, 26, 2.9, 0.08, 6.5], [50, 24, 3.0, 0.1, 5.5],
+       [65, 25, 2.7, 0.11, 5.8], [45, 27, 2.6, 0.09, 6.0]].forEach(([angle, vel, mass, visc, time]) => {
         const pos = calculateSplatter(origin, angle, vel, mass, visc, time);
         pattern.push({
           size: Math.max(310, Math.min(490, pos.size)),
@@ -421,10 +421,10 @@ const slides: Slide[] = [
       // 큰 방울들 (포물선 궤적)
       for (let i = 0; i < 6; i++) {
         const angle = 40 + Math.random() * 40; // 40-80도
-        const velocity = 5.5 + Math.random() * 3;
+        const velocity = 20 + Math.random() * 10;
         const mass = 1.6 + Math.random() * 0.8;
         const viscosity = 0.14 + Math.random() * 0.16;
-        const time = 0.95 + Math.random() * 0.5;
+        const time = 4.2 + Math.random() * 2.0;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
         pattern.push({
           size: Math.max(210, Math.min(380, pos.size)),
@@ -438,10 +438,10 @@ const slides: Slide[] = [
       // 중형 방울들 (다양한 궤적)
       for (let i = 0; i < 7; i++) {
         const angle = 35 + Math.random() * 50; // 35-85도
-        const velocity = 4 + Math.random() * 2.5;
+        const velocity = 14 + Math.random() * 8;
         const mass = 0.9 + Math.random() * 0.6;
         const viscosity = 0.26 + Math.random() * 0.22;
-        const time = 0.7 + Math.random() * 0.5;
+        const time = 3.2 + Math.random() * 1.8;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
         pattern.push({
           size: Math.max(110, Math.min(215, pos.size)),
@@ -455,10 +455,10 @@ const slides: Slide[] = [
       // 작은 방울들
       for (let i = 0; i < 6; i++) {
         const angle = 30 + Math.random() * 60; // 30-90도
-        const velocity = 3 + Math.random() * 2;
+        const velocity = 10 + Math.random() * 6;
         const mass = 0.44 + Math.random() * 0.42;
         const viscosity = 0.48 + Math.random() * 0.24;
-        const time = 0.52 + Math.random() * 0.45;
+        const time = 2.5 + Math.random() * 1.6;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
         pattern.push({
           size: Math.max(56, Math.min(118, pos.size)),
@@ -472,10 +472,10 @@ const slides: Slide[] = [
       // 좁쌀 비말
       for (let i = 0; i < 7; i++) {
         const angle = 25 + Math.random() * 70; // 25-95도
-        const velocity = 2 + Math.random() * 1.8;
+        const velocity = 6 + Math.random() * 5.5;
         const mass = 0.21 + Math.random() * 0.29;
         const viscosity = 0.68 + Math.random() * 0.22;
-        const time = 0.36 + Math.random() * 0.38;
+        const time = 2.0 + Math.random() * 1.4;
         const pos = calculateSplatter(origin, angle, velocity, mass, viscosity, time);
         pattern.push({
           size: Math.max(13, Math.min(44, pos.size)),
