@@ -199,7 +199,7 @@ export default function HeroSection() {
           <div className="flex-1 w-full">
             <div className="mb-6 lg:mb-8">
               <h1
-                className={`mt-5 text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 lg:mb-4 transition-opacity duration-500 lg:min-h-[120px] leading-[1.6] whitespace-pre-line ${isTransitioning ? "opacity-0" : "opacity-100"}`}
+                className={`mt-25 text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 lg:mb-4 transition-opacity duration-500 lg:min-h-[120px] leading-[1.6] whitespace-pre-line ${isTransitioning ? "opacity-0" : "opacity-100"}`}
               >
                 {slide.title}
               </h1>
