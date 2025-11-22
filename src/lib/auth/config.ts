@@ -59,9 +59,10 @@ export function createOAuthState(data: Record<string, unknown>): string {
   const stateData = {
     ...data,
     timestamp: Date.now(),
-    nonce: require('crypto').randomBytes(8).toString('hex'),
+    nonce: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
   };
-  return btoa(JSON.stringify(stateData));
+  // 한글 등 유니코드 문자 처리를 위해 encodeURIComponent 사용
+  return btoa(encodeURIComponent(JSON.stringify(stateData)));
 }
 
 /**
@@ -76,7 +77,8 @@ export function parseOAuthState<T = Record<string, unknown>>(
   maxAge: number = 600000, // 10분
 ): T {
   try {
-    const decoded = JSON.parse(atob(state));
+    // 한글 등 유니코드 문자 처리를 위해 decodeURIComponent 사용
+    const decoded = JSON.parse(decodeURIComponent(atob(state)));
 
     // 타임스탬프 검증
     if (!decoded.timestamp || Date.now() - decoded.timestamp > maxAge) {
