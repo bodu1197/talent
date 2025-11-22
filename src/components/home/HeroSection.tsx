@@ -84,7 +84,8 @@ const getIconComponent = (iconName: string) => {
 };
 
 // 카드 중심 좌표 (오른쪽 카드 영역의 중앙)
-const CARD_CENTER = { x: 10, y: 2 };
+// 위로 100px (-6.25rem), 왼쪽으로 400px (-25rem) 이동
+const CARD_CENTER = { x: -15, y: -4.25 };
 
 // 물리 엔진으로 슬라이드 생성
 const slides: Slide[] = [
