@@ -4,36 +4,30 @@ import Image from "next/image";
 interface ReviewData {
   id: string;
   rating: number;
-  content: string;
+  comment: string;
   created_at: string;
-  buyer: {
-    display_name: string;
-    profile_image?: string;
-  };
-  service: {
+  buyer_id: string;
+  services: {
     id: string;
     title: string;
     thumbnail_url?: string;
-  };
+  } | null;
 }
 
 export default async function UserReviews() {
   const supabase = await createClient();
 
-  // 최근 리뷰 데이터 가져오기 (평점 4.5 이상, 최근 12개)
+  // 최근 리뷰 데이터 가져오기 (모든 공개 리뷰, 최근 12개)
   const { data: reviews } = await supabase
     .from("reviews")
     .select(
       `
       id,
       rating,
-      content,
+      comment,
       created_at,
-      buyer:buyer_profiles(
-        display_name,
-        profile_image
-      ),
-      service:services(
+      buyer_id,
+      services(
         id,
         title,
         thumbnail_url
@@ -41,7 +35,6 @@ export default async function UserReviews() {
     `,
     )
     .eq("is_visible", true)
-    .gte("rating", 4.5)
     .order("created_at", { ascending: false })
     .limit(12);
 
@@ -94,57 +87,48 @@ export default async function UserReviews() {
 
               {/* 리뷰 내용 */}
               <p className="text-gray-700 mb-4 line-clamp-3">
-                {review.content}
+                {review.comment}
               </p>
 
               {/* 서비스 정보 */}
-              <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-200">
-                {review.service.thumbnail_url && (
-                  <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
-                    <Image
-                      src={review.service.thumbnail_url}
-                      alt={review.service.title}
-                      fill
-                      className="object-cover"
-                    />
+              {review.services && (
+                <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-200">
+                  {review.services.thumbnail_url && (
+                    <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
+                      <Image
+                        src={review.services.thumbnail_url}
+                        alt={review.services.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">
+                      {review.services.title}
+                    </p>
                   </div>
-                )}
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">
-                    {review.service.title}
-                  </p>
                 </div>
-              </div>
+              )}
 
               {/* 작성자 정보 */}
               <div className="flex items-center gap-2">
-                {review.buyer.profile_image ? (
-                  <div className="relative w-8 h-8 rounded-full overflow-hidden">
-                    <Image
-                      src={review.buyer.profile_image}
-                      alt={review.buyer.display_name}
-                      fill
-                      className="object-cover"
+                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                  <svg
+                    className="w-5 h-5 text-blue-600"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clipRule="evenodd"
                     />
-                  </div>
-                ) : (
-                  <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
-                    <svg
-                      className="w-5 h-5 text-gray-600"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                )}
+                  </svg>
+                </div>
                 <div className="flex-1">
                   <p className="text-sm font-medium text-gray-900">
-                    {review.buyer.display_name}
+                    돌파구 고객
                   </p>
                   <p className="text-xs text-gray-500">
                     {new Date(review.created_at).toLocaleDateString("ko-KR", {
