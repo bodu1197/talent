@@ -220,10 +220,17 @@ export default function HeroSection() {
           {/* 오른쪽: 카드 + 페이지네이션 */}
           <div className="w-full lg:w-[382px] flex-shrink-0">
             <div
-              className={`relative ${slide.gradient} rounded-2xl p-5 sm:p-6 text-white shadow-2xl transition-all duration-500 h-[250px] sm:h-[298px] flex flex-col`}
+              className={`relative ${slide.gradient} p-5 sm:p-6 text-white shadow-2xl transition-all duration-500 h-[250px] sm:h-[298px] flex flex-col overflow-hidden`}
+              style={{
+                clipPath: "polygon(5% 0%, 15% 2%, 30% 0%, 45% 1%, 60% 0%, 75% 2%, 90% 1%, 97% 0%, 100% 5%, 99% 15%, 100% 30%, 98% 45%, 100% 60%, 99% 75%, 100% 90%, 98% 95%, 95% 100%, 80% 98%, 65% 100%, 50% 99%, 35% 100%, 20% 98%, 5% 100%, 2% 95%, 0% 85%, 1% 70%, 0% 55%, 2% 40%, 0% 25%, 1% 10%, 0% 5%)",
+                borderRadius: "30px"
+              }}
             >
-              {/* 장식 요소 */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-lg rotate-12"></div>
+              {/* 장식 요소 - 페인트 스플래시 효과 */}
+              <div className="absolute -top-3 right-12 w-16 h-16 bg-white/10 rounded-full blur-md"></div>
+              <div className="absolute bottom-8 -left-2 w-20 h-20 bg-white/10 rounded-full blur-md"></div>
+              <div className="absolute top-1/3 right-2 w-10 h-10 bg-white/10 rounded-full blur-sm"></div>
+              <div className="absolute bottom-1/4 left-1/4 w-12 h-12 bg-white/10 rounded-full blur-md opacity-60"></div>
 
               {/* 아이콘 */}
               <div
