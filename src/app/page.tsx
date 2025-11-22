@@ -59,13 +59,18 @@ export default async function HomePage() {
         <RecommendedServices aiCategoryIds={aiCategoryIds} />
       </Suspense>
 
-      {/* 판매자 등록 안내 섹션 (로그인 전 사용자에게 표시) */}
-      {!user && <SellerRegistrationGuide />}
+      {/* 로그인 전 사용자 전용 섹션 */}
+      {!user && (
+        <>
+          {/* 판매자 등록 안내 섹션 */}
+          <SellerRegistrationGuide />
 
-      {/* 사용자 리뷰 섹션 (Suspense로 감싸기) */}
-      <Suspense fallback={<ReviewsSkeleton />}>
-        <UserReviews />
-      </Suspense>
+          {/* 사용자 리뷰 섹션 */}
+          <Suspense fallback={<ReviewsSkeleton />}>
+            <UserReviews />
+          </Suspense>
+        </>
+      )}
 
       {/* 회원 맞춤 관심 카테고리 서비스 (Suspense로 감싸기) - 로그인 시에만 표시 */}
       {user && (
