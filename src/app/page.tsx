@@ -6,6 +6,8 @@ import HeroWithCategories from "@/components/common/HeroWithCategories";
 import AITalentShowcase from "@/components/home/AITalentShowcase";
 import RecommendedServices from "@/components/home/RecommendedServices";
 import PersonalizedServices from "@/components/home/PersonalizedServices";
+import SellerRegistrationGuide from "@/components/home/SellerRegistrationGuide";
+import UserReviews from "@/components/home/UserReviews";
 import { Service } from "@/types";
 
 const RecentVisitedCategories = dynamic(
@@ -55,6 +57,14 @@ export default async function HomePage() {
       {/* 추천 서비스 섹션 (Suspense로 감싸기) */}
       <Suspense fallback={<RecommendedSkeleton />}>
         <RecommendedServices aiCategoryIds={aiCategoryIds} />
+      </Suspense>
+
+      {/* 판매자 등록 안내 섹션 (로그인 전 사용자에게 표시) */}
+      {!user && <SellerRegistrationGuide />}
+
+      {/* 사용자 리뷰 섹션 (Suspense로 감싸기) */}
+      <Suspense fallback={<ReviewsSkeleton />}>
+        <UserReviews />
       </Suspense>
 
       {/* 회원 맞춤 관심 카테고리 서비스 (Suspense로 감싸기) - 로그인 시에만 표시 */}
@@ -251,6 +261,42 @@ function PersonalizedSkeleton() {
                     className="bg-gray-100 rounded-lg h-64 animate-pulse"
                   ></div>
                 ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ReviewsSkeleton() {
+  return (
+    <section className="py-16 bg-white">
+      <div className="container-1200">
+        <div className="text-center mb-12">
+          <div className="h-10 bg-gray-200 rounded w-64 mx-auto mb-4 animate-pulse"></div>
+          <div className="h-6 bg-gray-200 rounded w-96 mx-auto animate-pulse"></div>
+        </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...new Array(6)].map((_, i) => (
+            <div
+              key={`review-skeleton-${i}`}
+              className="bg-gray-50 rounded-xl p-6"
+            >
+              <div className="h-6 bg-gray-200 rounded w-32 mb-4 animate-pulse"></div>
+              <div className="space-y-2 mb-4">
+                <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+              </div>
+              <div className="h-12 bg-gray-200 rounded mb-4 animate-pulse"></div>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
+                <div className="flex-1">
+                  <div className="h-4 bg-gray-200 rounded w-24 mb-1 animate-pulse"></div>
+                  <div className="h-3 bg-gray-200 rounded w-32 animate-pulse"></div>
+                </div>
               </div>
             </div>
           ))}
