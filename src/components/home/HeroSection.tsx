@@ -65,23 +65,16 @@ const slides: Slide[] = [
     cardDescription:
       "당신이 번 돈, 한 푼도 떼지 않습니다. 다른 플랫폼의 15~20% 수수료는 이제 그만. 돌파구에서는 100% 당신의 것입니다.",
     splatterPattern: [
-      // 메인 배경 - 거대하고 부드러운 빛 (우측 상단 외곽으로 이동)
+      // 메인 배경 - 거대하고 부드러운 빛 (우측 상단)
       { size: 380, top: '-20%', right: '-25%', opacity: 0.4, blur: '3xl' },
       // 좌측 하단 외곽
       { size: 320, bottom: '-20%', left: '-15%', opacity: 0.3, blur: '3xl' },
 
-      // 중간 포인트 - 서로 겹치지 않게 중앙 빈 공간 배치
+      // 중간 포인트 - 중앙 빈 공간
       { size: 150, top: '10%', left: '10%', opacity: 0.5, blur: '2xl' },
-      { size: 140, bottom: '15%', right: '10%', opacity: 0.4, blur: '2xl' },
 
-      // 하이라이트 - 빈 틈새 공략
+      // 하이라이트 - 우측 빈 공간
       { size: 70, top: '40%', right: '35%', opacity: 0.6, blur: 'xl' },
-      { size: 50, bottom: '40%', left: '25%', opacity: 0.5, blur: 'lg' },
-
-      // 흩뿌려진 작은 입자들 (완전 분리)
-      { size: 20, top: '60%', left: '15%', opacity: 0.7, blur: 'md' },
-      { size: 15, top: '20%', right: '50%', opacity: 0.6, blur: 'sm' },
-      { size: 25, bottom: '10%', left: '45%', opacity: 0.5, blur: 'md' },
     ],
   },
   // Slide 2: 인디고/블루 - 신뢰와 공정함 (기회 균등)
@@ -97,19 +90,16 @@ const slides: Slide[] = [
     cardDescription:
       "신규든 베테랑이든, 모두에게 같은 기회. 알고리즘도, 편애도 없습니다. 오직 실력으로 승부하세요.",
     splatterPattern: [
-      // 대각선 흐름 - 거리를 더 벌림
+      // 대각선 흐름 - 상단 좌측
       { size: 400, top: '-30%', left: '-30%', opacity: 0.35, blur: '3xl' },
+      // 대각선 흐름 - 하단 우측
       { size: 350, bottom: '-30%', right: '-30%', opacity: 0.35, blur: '3xl' },
 
-      // 중심을 피해서 배치
+      // 중심 포인트
       { size: 180, top: '20%', right: '20%', opacity: 0.4, blur: '2xl' },
 
-      // 포인트 - 좌측 하단 빈 공간
+      // 하단 좌측 포인트
       { size: 100, bottom: '25%', left: '15%', opacity: 0.5, blur: 'xl' },
-
-      // 디테일 - 겹치지 않게 분산
-      { size: 30, top: '55%', right: '45%', opacity: 0.7, blur: 'md' },
-      { size: 20, bottom: '15%', left: '40%', opacity: 0.6, blur: 'sm' },
     ],
   },
   // Slide 3: 퍼플/보라 - 투명함과 고귀함 (숨은 비용 없음)
@@ -125,20 +115,16 @@ const slides: Slide[] = [
     cardDescription:
       "다른 곳처럼 결제 직전 수수료 추가? 없습니다. 보이는 가격이 최종 가격. 숨은 비용 없이 투명하게.",
     splatterPattern: [
-      // 중앙 아우라 대신 상단 중앙으로 이동하여 텍스트와 겹침 최소화
+      // 상단 중앙 아우라
       { size: 400, top: '-25%', left: '50%', opacity: 0.2, blur: '3xl', transform: 'translate(-50%, 0)' },
 
-      // 하단 양쪽으로 분산
+      // 하단 좌측 베이스
       { size: 180, bottom: '-10%', left: '5%', opacity: 0.4, blur: '2xl' },
+      // 하단 우측 베이스
       { size: 160, bottom: '-10%', right: '5%', opacity: 0.4, blur: '2xl' },
 
-      // 중간 빈 공간
+      // 중간 포인트
       { size: 90, top: '40%', left: '10%', opacity: 0.6, blur: 'xl' },
-      { size: 70, top: '45%', right: '10%', opacity: 0.5, blur: 'lg' },
-
-      // 반짝임 - 완전 분리
-      { size: 15, top: '20%', left: '80%', opacity: 0.8, blur: 'sm' },
-      { size: 15, bottom: '40%', right: '80%', opacity: 0.8, blur: 'sm' },
     ],
   },
   // Slide 4: 블루/스카이 - 희망과 시작 (지원금)
@@ -154,21 +140,16 @@ const slides: Slide[] = [
     cardDescription:
       "런칭 기념, 모든 전문가에게 최대 1,500만원 광고 크레딧 지원. 돌파구 내 광고로 첫 고객을 만나세요.",
     splatterPattern: [
-      // 상단에서 쏟아지는 축복 (더 위로)
+      // 상단 중앙 빛
       { size: 400, top: '-40%', left: '50%', opacity: 0.3, blur: '3xl', transform: 'translate(-50%, 0)' },
 
-      // 하단 양쪽 끝으로 밀어냄
+      // 하단 우측 베이스
       { size: 250, bottom: '-20%', right: '-20%', opacity: 0.4, blur: '2xl' },
+      // 하단 좌측 베이스
       { size: 200, bottom: '-20%', left: '-20%', opacity: 0.4, blur: '2xl' },
 
-      // 중간 팝업 - 서로 거리 두기
+      // 중간 팝업 포인트
       { size: 90, top: '35%', right: '20%', opacity: 0.6, blur: 'xl' },
-      { size: 80, top: '45%', left: '20%', opacity: 0.6, blur: 'lg' },
-
-      // 파티클 - 빈 공간 찾기
-      { size: 25, top: '15%', left: '25%', opacity: 0.7, blur: 'md' },
-      { size: 20, top: '20%', right: '30%', opacity: 0.7, blur: 'md' },
-      { size: 30, bottom: '25%', left: '50%', opacity: 0.6, blur: 'md', transform: 'translate(-50%, 0)' },
     ],
   },
 ];
