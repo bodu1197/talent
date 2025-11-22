@@ -697,13 +697,9 @@ export default function HeroSection() {
               );
             })}
 
-            {/* 메인 카드 - 완전히 숨김 */}
+            {/* 메인 카드 - 배경 없이 내용만 표시 */}
             <div
-              className="relative p-5 sm:p-6 transition-all duration-500 h-[250px] sm:h-[298px] flex flex-col rounded-3xl backdrop-blur-sm"
-              style={{
-                opacity: 0,
-                pointerEvents: 'none'
-              }}
+              className="relative p-5 sm:p-6 transition-all duration-500 h-[250px] sm:h-[298px] flex flex-col"
             >
               {/* 아이콘 */}
               <div
