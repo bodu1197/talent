@@ -697,13 +697,12 @@ export default function HeroSection() {
               );
             })}
 
-            {/* 메인 카드 - 매우 투명한 배경 */}
+            {/* 메인 카드 - 완전히 숨김 */}
             <div
               className="relative p-5 sm:p-6 transition-all duration-500 h-[250px] sm:h-[298px] flex flex-col rounded-3xl backdrop-blur-sm"
               style={{
-                background: `linear-gradient(135deg, ${slide.glowColor}15, ${slide.glowColor}08)`,
-                boxShadow: '0 4px 16px 0 rgba(0, 0, 0, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.1)'
+                opacity: 0,
+                pointerEvents: 'none'
               }}
             >
               {/* 아이콘 */}
