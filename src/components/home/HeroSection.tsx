@@ -298,46 +298,63 @@ export default function HeroSection() {
               style={{ backgroundColor: slide.glowColor }}
             />
 
-            {/* 메인 카드 */}
+            {/* 메인 카드 - 매우 투명한 배경 */}
             <div
-              className={`relative ${slide.gradient} p-5 sm:p-6 text-white transition-all duration-500 h-[250px] sm:h-[298px] flex flex-col rounded-3xl shadow-2xl`}
+              className="relative p-5 sm:p-6 transition-all duration-500 h-[250px] sm:h-[298px] flex flex-col rounded-3xl backdrop-blur-sm"
+              style={{
+                background: `linear-gradient(135deg, ${slide.glowColor}15, ${slide.glowColor}08)`,
+                boxShadow: '0 4px 16px 0 rgba(0, 0, 0, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.1)'
+              }}
             >
 
               {/* 아이콘 */}
               <div
                 className={`mb-4 transition-opacity duration-500 ${isTransitioning ? "opacity-0" : "opacity-100"}`}
               >
-                <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
+                <div
+                  className="w-14 h-14 rounded-full flex items-center justify-center text-white"
+                  style={{
+                    backgroundColor: `${slide.glowColor}60`,
+                    boxShadow: `0 0 20px ${slide.glowColor}40`
+                  }}
+                >
                   {getIconComponent(slide.icon)}
                 </div>
               </div>
 
               {/* 내용 */}
               <h3
-                className={`text-2xl font-bold mb-2 transition-opacity duration-500 ${isTransitioning ? "opacity-0" : "opacity-100"}`}
+                className={`text-2xl font-bold mb-2 transition-opacity duration-500 text-gray-900 ${isTransitioning ? "opacity-0" : "opacity-100"}`}
+                style={{ textShadow: '0 2px 4px rgba(255, 255, 255, 0.5)' }}
               >
                 {slide.cardTitle}
               </h3>
               <p
-                className={`text-lg mb-3 text-white/90 transition-opacity duration-500 ${isTransitioning ? "opacity-0" : "opacity-100"}`}
+                className={`text-lg mb-3 text-gray-800 transition-opacity duration-500 ${isTransitioning ? "opacity-0" : "opacity-100"}`}
+                style={{ textShadow: '0 1px 2px rgba(255, 255, 255, 0.5)' }}
               >
                 {slide.cardSubtitle}
               </p>
               <p
-                className={`text-sm text-white/80 leading-relaxed line-clamp-3 mb-6 transition-opacity duration-500 ${isTransitioning ? "opacity-0" : "opacity-100"}`}
+                className={`text-sm text-gray-700 leading-relaxed line-clamp-3 mb-6 transition-opacity duration-500 ${isTransitioning ? "opacity-0" : "opacity-100"}`}
+                style={{ textShadow: '0 1px 2px rgba(255, 255, 255, 0.5)' }}
               >
                 {slide.cardDescription}
               </p>
 
               {/* 페이지네이션 도트 */}
               <div className="flex gap-2 mt-auto">
-                {slides.map((slide, index) => (
+                {slides.map((s, index) => (
                   <button
-                    key={slide.id}
+                    key={s.id}
                     onClick={() => changeSlide(index)}
-                    className={`h-2 rounded-full bg-white/30 transition-all duration-300 hover:bg-white/50 ${
-                      index === currentSlide ? "w-8 bg-white" : "w-2"
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      index === currentSlide ? "w-8" : "w-2"
                     }`}
+                    style={{
+                      backgroundColor: index === currentSlide ? slide.glowColor : `${slide.glowColor}40`
+                    }}
                     aria-label={`슬라이드 ${index + 1}로 이동`}
                   />
                 ))}
