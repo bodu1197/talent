@@ -17,6 +17,7 @@ interface Slide {
   title: string;
   subtitle: string;
   gradient: string;
+  glowColor: string;
   icon: string;
   cardTitle: string;
   cardSubtitle: string;
@@ -40,6 +41,7 @@ const slides: Slide[] = [
     title: "당신이 번 돈,\n한 푼도 떼지 않습니다",
     subtitle: "수수료 0%. 당신의 재능이 온전히 당신의 수익으로.",
     gradient: "bg-pink-600",
+    glowColor: "#db2777",
     icon: "fa-sack-dollar",
     cardTitle: "수수료 0%",
     cardSubtitle: "판매자가 100% 가져갑니다",
@@ -51,6 +53,7 @@ const slides: Slide[] = [
     title: "첫날부터 공정하게,\n모두에게 같은 기회를",
     subtitle: "신규 판매자와 베테랑, 시작이 평등한 곳입니다.",
     gradient: "bg-indigo-600",
+    glowColor: "#4f46e5",
     icon: "fa-balance-scale",
     cardTitle: "판매 기회 균등",
     cardSubtitle: "모든 판매자에게 공평한 기회",
@@ -62,6 +65,7 @@ const slides: Slide[] = [
     title: "표시된 가격이 전부입니다\n숨은 비용 없습니다",
     subtitle: "구매 수수료 0원. 보이는 그대로 결제하세요.",
     gradient: "bg-purple-600",
+    glowColor: "#9333ea",
     icon: "fa-shield-alt",
     cardTitle: "구매 수수료 0원",
     cardSubtitle: "표시된 가격이 전부입니다",
@@ -73,6 +77,7 @@ const slides: Slide[] = [
     title: "시작하는 당신에게,\n1,500만원 드립니다",
     subtitle: "런칭 기념. 광고 크레딧으로 첫 고객을 만나세요.",
     gradient: "bg-blue-600",
+    glowColor: "#2563eb",
     icon: "fa-bullhorn",
     cardTitle: "런칭 기념 1,500만원",
     cardSubtitle: "시작하는 당신에게 드립니다",
@@ -218,19 +223,45 @@ export default function HeroSection() {
           </div>
 
           {/* 오른쪽: 카드 + 페이지네이션 */}
-          <div className="w-full lg:w-[382px] flex-shrink-0">
+          <div className="w-full lg:w-[382px] flex-shrink-0 relative">
+            {/* 물감 번짐 효과 레이어 1 - 가장 바깥쪽 */}
             <div
-              className={`relative ${slide.gradient} p-5 sm:p-6 text-white shadow-2xl transition-all duration-500 h-[250px] sm:h-[298px] flex flex-col overflow-hidden`}
+              className="absolute -inset-4 rounded-[50px] opacity-15 blur-3xl transition-all duration-500"
               style={{
-                clipPath: "polygon(5% 0%, 15% 2%, 30% 0%, 45% 1%, 60% 0%, 75% 2%, 90% 1%, 97% 0%, 100% 5%, 99% 15%, 100% 30%, 98% 45%, 100% 60%, 99% 75%, 100% 90%, 98% 95%, 95% 100%, 80% 98%, 65% 100%, 50% 99%, 35% 100%, 20% 98%, 5% 100%, 2% 95%, 0% 85%, 1% 70%, 0% 55%, 2% 40%, 0% 25%, 1% 10%, 0% 5%)",
-                borderRadius: "30px"
+                background: `radial-gradient(circle at 30% 40%, ${slide.glowColor}, transparent 70%)`,
+                transform: 'scale(1.15)'
+              }}
+            />
+            {/* 물감 번짐 효과 레이어 2 - 중간 */}
+            <div
+              className="absolute -inset-2 rounded-[45px] opacity-25 blur-2xl transition-all duration-500"
+              style={{
+                background: `radial-gradient(circle at 60% 50%, ${slide.glowColor}, transparent 65%)`,
+                transform: 'scale(1.08)'
+              }}
+            />
+            {/* 물감 번짐 효과 레이어 3 - 안쪽 */}
+            <div
+              className="absolute inset-0 rounded-[40px] opacity-30 blur-xl transition-all duration-500"
+              style={{
+                background: `radial-gradient(circle at 70% 60%, ${slide.glowColor}, transparent 60%)`,
+                transform: 'scale(1.03)'
+              }}
+            />
+
+            {/* 메인 카드 */}
+            <div
+              className={`relative ${slide.gradient} p-5 sm:p-6 text-white transition-all duration-500 h-[250px] sm:h-[298px] flex flex-col overflow-visible rounded-[35px]`}
+              style={{
+                filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15))',
+                boxShadow: `0 0 60px 15px ${slide.glowColor}40`
               }}
             >
-              {/* 장식 요소 - 페인트 스플래시 효과 */}
-              <div className="absolute -top-3 right-12 w-16 h-16 bg-white/10 rounded-full blur-md"></div>
-              <div className="absolute bottom-8 -left-2 w-20 h-20 bg-white/10 rounded-full blur-md"></div>
-              <div className="absolute top-1/3 right-2 w-10 h-10 bg-white/10 rounded-full blur-sm"></div>
-              <div className="absolute bottom-1/4 left-1/4 w-12 h-12 bg-white/10 rounded-full blur-md opacity-60"></div>
+              {/* 물감 번짐 장식 요소 */}
+              <div className="absolute -top-4 right-8 w-24 h-24 bg-white/15 rounded-full blur-xl"></div>
+              <div className="absolute -bottom-3 -left-3 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+              <div className="absolute top-1/3 -right-4 w-16 h-16 bg-white/20 rounded-full blur-lg"></div>
+              <div className="absolute bottom-1/4 left-1/3 w-20 h-20 bg-white/10 rounded-full blur-xl opacity-70"></div>
 
               {/* 아이콘 */}
               <div
