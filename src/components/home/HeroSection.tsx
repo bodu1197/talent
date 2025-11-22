@@ -65,22 +65,23 @@ const slides: Slide[] = [
     cardDescription:
       "당신이 번 돈, 한 푼도 떼지 않습니다. 다른 플랫폼의 15~20% 수수료는 이제 그만. 돌파구에서는 100% 당신의 것입니다.",
     splatterPattern: [
-      // 메인 배경 - 거대하고 부드러운 빛
-      { size: 400, top: '-10%', right: '-20%', opacity: 0.4, blur: '3xl' },
-      { size: 350, bottom: '-10%', left: '-10%', opacity: 0.3, blur: '3xl' },
+      // 메인 배경 - 거대하고 부드러운 빛 (우측 상단 외곽으로 이동)
+      { size: 380, top: '-20%', right: '-25%', opacity: 0.4, blur: '3xl' },
+      // 좌측 하단 외곽
+      { size: 320, bottom: '-20%', left: '-15%', opacity: 0.3, blur: '3xl' },
 
-      // 중간 포인트 - 색감의 깊이
-      { size: 200, top: '20%', left: '10%', opacity: 0.5, blur: '2xl' },
-      { size: 180, bottom: '30%', right: '5%', opacity: 0.4, blur: '2xl' },
+      // 중간 포인트 - 서로 겹치지 않게 중앙 빈 공간 배치
+      { size: 150, top: '10%', left: '10%', opacity: 0.5, blur: '2xl' },
+      { size: 140, bottom: '15%', right: '10%', opacity: 0.4, blur: '2xl' },
 
-      // 하이라이트 - 선명한 엣지 (약간의 긴장감)
-      { size: 80, top: '15%', right: '25%', opacity: 0.6, blur: 'xl' },
-      { size: 60, bottom: '25%', left: '20%', opacity: 0.5, blur: 'lg' },
+      // 하이라이트 - 빈 틈새 공략
+      { size: 70, top: '40%', right: '35%', opacity: 0.6, blur: 'xl' },
+      { size: 50, bottom: '40%', left: '25%', opacity: 0.5, blur: 'lg' },
 
-      // 흩뿌려진 작은 입자들 (생동감)
-      { size: 20, top: '40%', left: '40%', opacity: 0.7, blur: 'md' },
-      { size: 15, top: '25%', right: '40%', opacity: 0.6, blur: 'sm' },
-      { size: 25, bottom: '15%', left: '35%', opacity: 0.5, blur: 'md' },
+      // 흩뿌려진 작은 입자들 (완전 분리)
+      { size: 20, top: '60%', left: '15%', opacity: 0.7, blur: 'md' },
+      { size: 15, top: '20%', right: '50%', opacity: 0.6, blur: 'sm' },
+      { size: 25, bottom: '10%', left: '45%', opacity: 0.5, blur: 'md' },
     ],
   },
   // Slide 2: 인디고/블루 - 신뢰와 공정함 (기회 균등)
@@ -96,20 +97,19 @@ const slides: Slide[] = [
     cardDescription:
       "신규든 베테랑이든, 모두에게 같은 기회. 알고리즘도, 편애도 없습니다. 오직 실력으로 승부하세요.",
     splatterPattern: [
-      // 대각선 흐름 - 역동적인 상승 이미지
-      { size: 450, top: '-20%', left: '-20%', opacity: 0.35, blur: '3xl' },
-      { size: 400, bottom: '-20%', right: '-20%', opacity: 0.35, blur: '3xl' },
+      // 대각선 흐름 - 거리를 더 벌림
+      { size: 400, top: '-30%', left: '-30%', opacity: 0.35, blur: '3xl' },
+      { size: 350, bottom: '-30%', right: '-30%', opacity: 0.35, blur: '3xl' },
 
-      // 중심을 잡아주는 무게감
-      { size: 250, top: '30%', left: '50%', opacity: 0.4, blur: '2xl' },
+      // 중심을 피해서 배치
+      { size: 180, top: '20%', right: '20%', opacity: 0.4, blur: '2xl' },
 
-      // 포인트
-      { size: 120, top: '10%', right: '10%', opacity: 0.5, blur: 'xl' },
-      { size: 90, bottom: '20%', left: '10%', opacity: 0.6, blur: 'lg' },
+      // 포인트 - 좌측 하단 빈 공간
+      { size: 100, bottom: '25%', left: '15%', opacity: 0.5, blur: 'xl' },
 
-      // 디테일
-      { size: 30, top: '50%', right: '30%', opacity: 0.7, blur: 'md' },
-      { size: 20, bottom: '40%', left: '20%', opacity: 0.6, blur: 'sm' },
+      // 디테일 - 겹치지 않게 분산
+      { size: 30, top: '55%', right: '45%', opacity: 0.7, blur: 'md' },
+      { size: 20, bottom: '15%', left: '40%', opacity: 0.6, blur: 'sm' },
     ],
   },
   // Slide 3: 퍼플/보라 - 투명함과 고귀함 (숨은 비용 없음)
@@ -125,20 +125,20 @@ const slides: Slide[] = [
     cardDescription:
       "다른 곳처럼 결제 직전 수수료 추가? 없습니다. 보이는 가격이 최종 가격. 숨은 비용 없이 투명하게.",
     splatterPattern: [
-      // 중앙에서 퍼져나가는 아우라
-      { size: 500, top: '50%', left: '50%', opacity: 0.2, blur: '3xl', transform: 'translate(-50%, -50%)' },
+      // 중앙 아우라 대신 상단 중앙으로 이동하여 텍스트와 겹침 최소화
+      { size: 400, top: '-25%', left: '50%', opacity: 0.2, blur: '3xl', transform: 'translate(-50%, 0)' },
 
-      // 주변을 감싸는 위성들
-      { size: 220, top: '0%', left: '0%', opacity: 0.4, blur: '2xl' },
-      { size: 200, bottom: '0%', right: '0%', opacity: 0.4, blur: '2xl' },
+      // 하단 양쪽으로 분산
+      { size: 180, bottom: '-10%', left: '5%', opacity: 0.4, blur: '2xl' },
+      { size: 160, bottom: '-10%', right: '5%', opacity: 0.4, blur: '2xl' },
 
-      // 선명한 진실 (포인트)
-      { size: 100, top: '20%', right: '20%', opacity: 0.6, blur: 'xl' },
-      { size: 80, bottom: '30%', left: '30%', opacity: 0.5, blur: 'lg' },
+      // 중간 빈 공간
+      { size: 90, top: '40%', left: '10%', opacity: 0.6, blur: 'xl' },
+      { size: 70, top: '45%', right: '10%', opacity: 0.5, blur: 'lg' },
 
-      // 반짝임
-      { size: 15, top: '15%', left: '50%', opacity: 0.8, blur: 'sm', transform: 'translate(-50%, -50%)' },
-      { size: 15, bottom: '15%', right: '50%', opacity: 0.8, blur: 'sm', transform: 'translate(-50%, -50%)' },
+      // 반짝임 - 완전 분리
+      { size: 15, top: '20%', left: '80%', opacity: 0.8, blur: 'sm' },
+      { size: 15, bottom: '40%', right: '80%', opacity: 0.8, blur: 'sm' },
     ],
   },
   // Slide 4: 블루/스카이 - 희망과 시작 (지원금)
@@ -154,21 +154,21 @@ const slides: Slide[] = [
     cardDescription:
       "런칭 기념, 모든 전문가에게 최대 1,500만원 광고 크레딧 지원. 돌파구 내 광고로 첫 고객을 만나세요.",
     splatterPattern: [
-      // 상단에서 쏟아지는 축복 (빛)
-      { size: 450, top: '-30%', left: '50%', opacity: 0.3, blur: '3xl' },
+      // 상단에서 쏟아지는 축복 (더 위로)
+      { size: 400, top: '-40%', left: '50%', opacity: 0.3, blur: '3xl', transform: 'translate(-50%, 0)' },
 
-      // 하단을 받쳐주는 베이스
-      { size: 300, bottom: '-10%', right: '-10%', opacity: 0.4, blur: '2xl' },
-      { size: 250, bottom: '-10%', left: '-10%', opacity: 0.4, blur: '2xl' },
+      // 하단 양쪽 끝으로 밀어냄
+      { size: 250, bottom: '-20%', right: '-20%', opacity: 0.4, blur: '2xl' },
+      { size: 200, bottom: '-20%', left: '-20%', opacity: 0.4, blur: '2xl' },
 
-      // 팝업되는 에너지
-      { size: 110, top: '30%', right: '15%', opacity: 0.6, blur: 'xl' },
-      { size: 90, top: '40%', left: '15%', opacity: 0.6, blur: 'lg' },
+      // 중간 팝업 - 서로 거리 두기
+      { size: 90, top: '35%', right: '20%', opacity: 0.6, blur: 'xl' },
+      { size: 80, top: '45%', left: '20%', opacity: 0.6, blur: 'lg' },
 
-      // 파티클
-      { size: 25, top: '20%', left: '20%', opacity: 0.7, blur: 'md' },
-      { size: 20, top: '25%', right: '25%', opacity: 0.7, blur: 'md' },
-      { size: 30, bottom: '30%', left: '50%', opacity: 0.6, blur: 'md' },
+      // 파티클 - 빈 공간 찾기
+      { size: 25, top: '15%', left: '25%', opacity: 0.7, blur: 'md' },
+      { size: 20, top: '20%', right: '30%', opacity: 0.7, blur: 'md' },
+      { size: 30, bottom: '25%', left: '50%', opacity: 0.6, blur: 'md', transform: 'translate(-50%, 0)' },
     ],
   },
 ];
