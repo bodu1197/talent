@@ -197,7 +197,7 @@ export default function HeroSection() {
         <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 mb-2">
           {/* 왼쪽: 타이틀 + 검색 + 카테고리 */}
           <div className="flex-1 w-full">
-            <div className="mb-6 lg:mb-8 pt-24">
+            <div className="mb-6 lg:mb-8 pt-5">
               <h1
                 className={`text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 lg:mb-4 transition-opacity duration-500 lg:min-h-[120px] leading-[1.6] whitespace-pre-line ${isTransitioning ? "opacity-0" : "opacity-100"}`}
               >
