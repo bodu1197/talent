@@ -58,29 +58,36 @@ const slides: Slide[] = [
     cardSubtitle: "판매자가 100% 가져갑니다",
     cardDescription:
       "당신이 번 돈, 한 푼도 떼지 않습니다. 다른 플랫폼의 15~20% 수수료는 이제 그만. 돌파구에서는 100% 당신의 것입니다.",
-    // Jackson Pollock 액션 페인팅 스타일 - 격렬하고 무작위한 비산, 전체 영역 폭발적 활용
+    // Jackson Pollock 액션 페인팅 스타일 - 다양한 크기의 격렬한 비산
     splatterPattern: [
-      // 왼쪽 텍스트 영역 완전 침범 - 거대한 방울들
-      { size: 350, top: '-5rem', left: '-10rem', opacity: 0.18, blur: '2xl' },
-      { size: 280, top: '2rem', left: '-5rem', opacity: 0.22, blur: '2xl' },
-      { size: 240, top: '6rem', left: '5rem', opacity: 0.25, blur: 'xl' },
-      { size: 200, top: '10rem', left: '-8rem', opacity: 0.28, blur: 'xl' },
+      // 거대한 임팩트 (왼쪽 텍스트 침범)
+      { size: 420, top: '-6rem', left: '-12rem', opacity: 0.16, blur: '2xl' },
+      { size: 350, top: '4rem', left: '-8rem', opacity: 0.19, blur: '2xl' },
 
-      // 중앙 영역 - 큰 덩어리들
-      { size: 320, top: '-3rem', left: '30%', opacity: 0.2, blur: '2xl' },
-      { size: 260, top: '4rem', left: '40%', opacity: 0.24, blur: 'xl' },
-      { size: 190, top: '8rem', left: '35%', opacity: 0.28, blur: 'xl' },
+      // 큰 방울들
+      { size: 280, top: '8rem', left: '2rem', opacity: 0.22, blur: 'xl' },
+      { size: 320, top: '-2rem', left: '32%', opacity: 0.18, blur: '2xl' },
+      { size: 380, top: '-5rem', right: '-6rem', opacity: 0.17, blur: '2xl' },
+      { size: 260, top: '2rem', right: '-4rem', opacity: 0.21, blur: 'xl' },
 
-      // 오른쪽 카드 영역 - 대형 비산
-      { size: 380, top: '-6rem', right: '-5rem', opacity: 0.18, blur: '2xl' },
-      { size: 300, top: '1rem', right: '-8rem', opacity: 0.22, blur: '2xl' },
-      { size: 220, top: '5rem', right: '2rem', opacity: 0.26, blur: 'xl' },
-      { size: 180, top: '9rem', right: '-4rem', opacity: 0.3, blur: 'xl' },
+      // 중형 방울들
+      { size: 180, top: '6rem', left: '18rem', opacity: 0.26, blur: 'xl' },
+      { size: 150, top: '1rem', left: '45%', opacity: 0.3, blur: 'lg' },
+      { size: 140, top: '9rem', right: '1rem', opacity: 0.32, blur: 'lg' },
+      { size: 120, top: '4rem', right: '8rem', opacity: 0.35, blur: 'lg' },
 
-      // 중형 방울들 (리듬감)
-      { size: 150, top: '3rem', left: '15rem', opacity: 0.32, blur: 'lg' },
-      { size: 120, top: '7rem', left: '25rem', opacity: 0.35, blur: 'lg' },
-      { size: 140, top: '1rem', right: '10rem', opacity: 0.34, blur: 'lg' },
+      // 작은 방울들
+      { size: 80, top: '3rem', left: '12rem', opacity: 0.4, blur: 'md' },
+      { size: 65, top: '7rem', left: '28rem', opacity: 0.45, blur: 'md' },
+      { size: 55, top: '0rem', right: '12rem', opacity: 0.48, blur: 'md' },
+
+      // 좁쌀 디테일 (사방에 흩뿌려진)
+      { size: 25, top: '2rem', left: '8rem', opacity: 0.6, blur: 'sm' },
+      { size: 18, top: '5rem', left: '22rem', opacity: 0.65, blur: 'sm' },
+      { size: 22, top: '8rem', right: '5rem', opacity: 0.62, blur: 'sm' },
+      { size: 15, top: '1rem', right: '15rem', opacity: 0.68, blur: 'none' },
+      { size: 12, top: '6rem', left: '35%', opacity: 0.7, blur: 'none' },
+      { size: 10, top: '9rem', left: '10rem', opacity: 0.72, blur: 'none' },
     ],
   },
   {
@@ -94,25 +101,34 @@ const slides: Slide[] = [
     cardSubtitle: "모든 판매자에게 공평한 기회",
     cardDescription:
       "신규든 베테랑이든, 모두에게 같은 기회. 알고리즘도, 편애도 없습니다. 오직 실력으로 승부하세요.",
-    // Yves Klein 스타일 - 대담한 거대 덩어리, 공간을 압도적으로 지배
+    // Yves Klein 스타일 - 거대한 색면과 작은 비산의 극적 대비
     splatterPattern: [
-      // 왼쪽 텍스트 영역 - 초거대 덩어리로 완전 장악
-      { size: 450, top: '-8rem', left: '-15rem', opacity: 0.16, blur: '2xl' },
-      { size: 380, top: '3rem', left: '-8rem', opacity: 0.19, blur: '2xl' },
-      { size: 340, top: '8rem', left: '2rem', opacity: 0.22, blur: '2xl' },
+      // 초거대 임팩트 색면 (왼쪽 침범)
+      { size: 520, top: '-10rem', left: '-18rem', opacity: 0.14, blur: '2xl' },
+      { size: 460, top: '5rem', left: '-10rem', opacity: 0.16, blur: '2xl' },
 
-      // 중앙 영역 - 거대한 색면
-      { size: 420, top: '-4rem', left: '35%', opacity: 0.17, blur: '2xl' },
-      { size: 310, top: '6rem', left: '30%', opacity: 0.21, blur: 'xl' },
+      // 거대 덩어리들
+      { size: 400, top: '-5rem', left: '35%', opacity: 0.15, blur: '2xl' },
+      { size: 480, top: '-8rem', right: '-10rem', opacity: 0.14, blur: '2xl' },
+      { size: 380, top: '3rem', right: '-5rem', opacity: 0.17, blur: '2xl' },
 
-      // 오른쪽 카드 영역 - 압도적 크기
-      { size: 500, top: '-10rem', right: '-12rem', opacity: 0.15, blur: '2xl' },
-      { size: 400, top: '2rem', right: '-6rem', opacity: 0.18, blur: '2xl' },
-      { size: 280, top: '7rem', right: '1rem', opacity: 0.24, blur: 'xl' },
+      // 큰 방울들 (대비)
+      { size: 240, top: '9rem', left: '5rem', opacity: 0.22, blur: 'xl' },
+      { size: 200, top: '1rem', left: '25rem', opacity: 0.26, blur: 'xl' },
+      { size: 220, top: '8rem', right: '4rem', opacity: 0.24, blur: 'xl' },
 
-      // 중형 방울 (대비 효과)
-      { size: 180, top: '4rem', left: '20rem', opacity: 0.28, blur: 'lg' },
-      { size: 160, top: '1rem', right: '15rem', opacity: 0.3, blur: 'lg' },
+      // 중형 방울들
+      { size: 130, top: '5rem', left: '18rem', opacity: 0.32, blur: 'lg' },
+      { size: 110, top: '2rem', right: '12rem', opacity: 0.36, blur: 'lg' },
+
+      // 작은 방울들 (여백 강조)
+      { size: 70, top: '6rem', left: '30rem', opacity: 0.42, blur: 'md' },
+      { size: 55, top: '10rem', right: '8rem', opacity: 0.48, blur: 'md' },
+
+      // 좁쌀 디테일 (최소한으로)
+      { size: 28, top: '3rem', left: '15rem', opacity: 0.58, blur: 'sm' },
+      { size: 20, top: '7rem', right: '15rem', opacity: 0.65, blur: 'sm' },
+      { size: 15, top: '4rem', left: '40%', opacity: 0.7, blur: 'none' },
     ],
   },
   {
@@ -126,26 +142,33 @@ const slides: Slide[] = [
     cardSubtitle: "표시된 가격이 전부입니다",
     cardDescription:
       "다른 곳처럼 결제 직전 수수료 추가? 없습니다. 보이는 가격이 최종 가격. 숨은 비용 없이 투명하게.",
-    // Sam Francis 스타일 - 여백과 거대함의 대비, 우아하면서도 압도적
+    // Sam Francis 스타일 - 여백의 미학, 크고 작은 방울들의 우아한 배치
     splatterPattern: [
-      // 왼쪽 텍스트 영역 - 큰 방울들로 여백 강조
-      { size: 320, top: '-6rem', left: '-12rem', opacity: 0.2, blur: '2xl' },
-      { size: 260, top: '4rem', left: '-4rem', opacity: 0.24, blur: 'xl' },
-      { size: 220, top: '9rem', left: '8rem', opacity: 0.27, blur: 'xl' },
+      // 거대한 방울 (왼쪽 침범, 여백 만들기)
+      { size: 390, top: '-7rem', left: '-14rem', opacity: 0.18, blur: '2xl' },
+      { size: 340, top: '6rem', left: '-6rem', opacity: 0.2, blur: '2xl' },
 
-      // 중앙 영역 - 의도적 여백 (작은 방울만)
-      { size: 150, top: '2rem', left: '35%', opacity: 0.32, blur: 'lg' },
-      { size: 120, top: '6rem', left: '30%', opacity: 0.36, blur: 'lg' },
+      // 큰 방울들 (오른쪽 클러스터)
+      { size: 420, top: '-8rem', right: '-10rem', opacity: 0.17, blur: '2xl' },
+      { size: 320, top: '2rem', right: '-4rem', opacity: 0.19, blur: '2xl' },
+      { size: 260, top: '8rem', right: '2rem', opacity: 0.23, blur: 'xl' },
 
-      // 오른쪽 카드 영역 - 큰 방울들의 클러스터
-      { size: 380, top: '-7rem', right: '-8rem', opacity: 0.19, blur: '2xl' },
-      { size: 300, top: '1rem', right: '-5rem', opacity: 0.22, blur: 'xl' },
-      { size: 240, top: '6rem', right: '3rem', opacity: 0.25, blur: 'xl' },
-      { size: 180, top: '10rem', right: '-2rem', opacity: 0.29, blur: 'xl' },
+      // 중형 방울 (적절한 분산)
+      { size: 180, top: '10rem', left: '10rem', opacity: 0.28, blur: 'xl' },
+      { size: 150, top: '1rem', left: '28rem', opacity: 0.32, blur: 'lg' },
+      { size: 140, top: '5rem', right: '10rem', opacity: 0.34, blur: 'lg' },
 
-      // 작은 디테일 (여백과의 대비)
-      { size: 100, top: '3rem', left: '22rem', opacity: 0.38, blur: 'md' },
-      { size: 90, top: '7rem', right: '12rem', opacity: 0.4, blur: 'md' },
+      // 작은 방울 (여백 포인트)
+      { size: 85, top: '3rem', left: '18rem', opacity: 0.4, blur: 'md' },
+      { size: 70, top: '7rem', left: '35%', opacity: 0.45, blur: 'md' },
+      { size: 60, top: '11rem', right: '6rem', opacity: 0.48, blur: 'md' },
+
+      // 좁쌀 디테일 (여백 강조)
+      { size: 32, top: '2rem', left: '12rem', opacity: 0.58, blur: 'sm' },
+      { size: 24, top: '4rem', left: '32rem', opacity: 0.62, blur: 'sm' },
+      { size: 18, top: '9rem', right: '14rem', opacity: 0.68, blur: 'sm' },
+      { size: 14, top: '6rem', left: '25rem', opacity: 0.72, blur: 'none' },
+      { size: 10, top: '1rem', right: '18rem', opacity: 0.75, blur: 'none' },
     ],
   },
   {
@@ -159,33 +182,41 @@ const slides: Slide[] = [
     cardSubtitle: "시작하는 당신에게 드립니다",
     cardDescription:
       "런칭 기념, 모든 전문가에게 최대 1,500만원 광고 크레딧 지원. 돌파구 내 광고로 첫 고객을 만나세요.",
-    // 물리적 역학 기반 - 좌하단에서 강력하게 분사된 페인트, 역동적 포물선 궤적
-    // 거대한 방울은 멀리 폭발적으로 날아가고, 작은 방울은 가까이 떨어짐
+    // 물리적 역학 기반 - 포물선 궤적, 다양한 크기의 비산
+    // 큰 방울은 멀리 날아가고, 작은 방울은 가까이 떨어지는 실제 물리학
     splatterPattern: [
-      // 발사 지점 근처 (왼쪽 하단) - 폭발적 거대 덩어리
-      { size: 400, bottom: '-8rem', left: '-15rem', opacity: 0.17, blur: '2xl' },
-      { size: 340, bottom: '-2rem', left: '-8rem', opacity: 0.2, blur: '2xl' },
-      { size: 280, bottom: '2rem', left: '0rem', opacity: 0.23, blur: 'xl' },
+      // 발사 지점 (왼쪽 하단) - 거대한 초기 임팩트
+      { size: 480, bottom: '-10rem', left: '-18rem', opacity: 0.15, blur: '2xl' },
+      { size: 380, bottom: '-4rem', left: '-10rem', opacity: 0.18, blur: '2xl' },
 
-      // 중간 궤적 (왼쪽~중앙) - 상승하는 큰 방울들
-      { size: 360, top: '2rem', left: '10rem', opacity: 0.18, blur: '2xl' },
-      { size: 300, top: '0rem', left: '22rem', opacity: 0.21, blur: 'xl' },
-      { size: 240, top: '4rem', left: '18rem', opacity: 0.25, blur: 'xl' },
-      { size: 200, top: '6rem', left: '12rem', opacity: 0.28, blur: 'xl' },
+      // 초기 궤적 - 큰 방울들
+      { size: 320, bottom: '1rem', left: '-2rem', opacity: 0.21, blur: 'xl' },
+      { size: 400, top: '1rem', left: '12rem', opacity: 0.17, blur: '2xl' },
+      { size: 340, top: '-1rem', left: '24rem', opacity: 0.19, blur: '2xl' },
 
-      // 정점 부근 (중앙~우측) - 최고점 분산
-      { size: 320, top: '-5rem', left: '40%', opacity: 0.19, blur: '2xl' },
-      { size: 260, top: '-2rem', right: '10rem', opacity: 0.22, blur: 'xl' },
-      { size: 190, top: '1rem', right: '6rem', opacity: 0.26, blur: 'lg' },
+      // 중간 궤적 - 중형 방울들
+      { size: 260, top: '3rem', left: '20rem', opacity: 0.23, blur: 'xl' },
+      { size: 200, top: '5rem', left: '14rem', opacity: 0.27, blur: 'xl' },
+      { size: 180, top: '2rem', left: '35%', opacity: 0.29, blur: 'lg' },
 
-      // 하강 궤적 (오른쪽) - 중력 낙하
-      { size: 280, top: '4rem', right: '-3rem', opacity: 0.24, blur: 'xl' },
-      { size: 220, top: '7rem', right: '2rem', opacity: 0.28, blur: 'xl' },
-      { size: 170, top: '10rem', right: '-5rem', opacity: 0.32, blur: 'lg' },
+      // 정점 부근 - 작은 방울들이 분산
+      { size: 280, top: '-4rem', right: '8rem', opacity: 0.22, blur: 'xl' },
+      { size: 150, top: '-1rem', right: '12rem', opacity: 0.32, blur: 'lg' },
+      { size: 120, top: '1rem', right: '4rem', opacity: 0.36, blur: 'lg' },
 
-      // 비말 디테일 (궤적을 따라)
-      { size: 140, bottom: '5rem', left: '5rem', opacity: 0.35, blur: 'md' },
-      { size: 110, top: '8rem', left: '28rem', opacity: 0.38, blur: 'md' },
+      // 하강 궤적 - 중형과 작은 방울
+      { size: 240, top: '4rem', right: '-2rem', opacity: 0.25, blur: 'xl' },
+      { size: 180, top: '7rem', right: '1rem', opacity: 0.3, blur: 'lg' },
+      { size: 110, top: '9rem', right: '-4rem', opacity: 0.38, blur: 'md' },
+      { size: 80, top: '11rem', right: '3rem', opacity: 0.44, blur: 'md' },
+
+      // 좁쌀 비말 (궤적 전체에 흩뿌려진)
+      { size: 45, bottom: '3rem', left: '4rem', opacity: 0.52, blur: 'sm' },
+      { size: 35, top: '6rem', left: '18rem', opacity: 0.58, blur: 'sm' },
+      { size: 28, top: '3rem', left: '30rem', opacity: 0.62, blur: 'sm' },
+      { size: 20, top: '8rem', right: '8rem', opacity: 0.68, blur: 'sm' },
+      { size: 15, top: '5rem', right: '15rem', opacity: 0.72, blur: 'none' },
+      { size: 12, top: '10rem', left: '25rem', opacity: 0.75, blur: 'none' },
     ],
   },
 ];
