@@ -216,9 +216,9 @@ const slides: Slide[] = [
       const pattern: SplatterDrop[] = [];
       const origin = CARD_CENTER;
 
-      // 거대 임팩트 (주로 왼쪽 방향, 큰 질량)
-      [[170, 28, 2.9, 0.08, 6.0], [175, 26, 3.0, 0.1, 5.5], [180, 32, 2.7, 0.09, 7.0],
-       [165, 24, 2.8, 0.11, 5.0], [185, 22, 2.6, 0.1, 4.5]].forEach(([angle, vel, mass, visc, time]) => {
+      // 거대 임팩트 (좌우 180도 수평 분산, 큰 질량)
+      [[0, 28, 2.9, 0.08, 6.0], [45, 26, 3.0, 0.1, 5.5], [90, 32, 2.7, 0.09, 7.0],
+       [135, 24, 2.8, 0.11, 5.0], [180, 22, 2.6, 0.1, 4.5]].forEach(([angle, vel, mass, visc, time]) => {
         const pos = calculateSplatter(origin, angle, vel, mass, visc, time);
         const x = Math.min(8, pos.x); // 카드 영역 내 오른쪽 제한
         const y = Math.max(0, Math.min(7, pos.y)); // 히어로 영역 내 엄격 제한
@@ -231,9 +231,9 @@ const slides: Slide[] = [
         });
       });
 
-      // 큰 방울들 (왼쪽 강조, 다양한 각도)
+      // 큰 방울들 (좌우 180도 수평 분산)
       for (let i = 0; i < 6; i++) {
-        const angle = 150 + Math.random() * 60; // 150-210도
+        const angle = Math.random() * 180; // 0-180도
         const velocity = 20 + Math.random() * 10;
         const mass = 1.6 + Math.random() * 0.8;
         const viscosity = 0.14 + Math.random() * 0.16;
@@ -252,7 +252,7 @@ const slides: Slide[] = [
 
       // 중형 방울들
       for (let i = 0; i < 7; i++) {
-        const angle = 140 + Math.random() * 80; // 140-220도
+        const angle = Math.random() * 180; // 0-180도
         const velocity = 14 + Math.random() * 8;
         const mass = 0.9 + Math.random() * 0.6;
         const viscosity = 0.28 + Math.random() * 0.22;
@@ -271,7 +271,7 @@ const slides: Slide[] = [
 
       // 작은 방울들
       for (let i = 0; i < 5; i++) {
-        const angle = 130 + Math.random() * 100; // 130-230도
+        const angle = Math.random() * 180; // 0-180도
         const velocity = 10 + Math.random() * 6;
         const mass = 0.45 + Math.random() * 0.4;
         const viscosity = 0.48 + Math.random() * 0.22;
@@ -290,7 +290,7 @@ const slides: Slide[] = [
 
       // 좁쌀 디테일
       for (let i = 0; i < 7; i++) {
-        const angle = 120 + Math.random() * 120; // 120-240도
+        const angle = Math.random() * 180; // 0-180도
         const velocity = 6 + Math.random() * 5;
         const mass = 0.22 + Math.random() * 0.28;
         const viscosity = 0.68 + Math.random() * 0.22;
