@@ -224,44 +224,84 @@ export default function HeroSection() {
 
           {/* 오른쪽: 카드 + 페이지네이션 */}
           <div className="w-full lg:w-[382px] flex-shrink-0 relative">
-            {/* 물감 번짐 효과 레이어 1 - 가장 바깥쪽 */}
+            {/* 물감 비산 효과 - 큰 방울들 */}
             <div
-              className="absolute -inset-4 rounded-[50px] opacity-15 blur-3xl transition-all duration-500"
-              style={{
-                background: `radial-gradient(circle at 30% 40%, ${slide.glowColor}, transparent 70%)`,
-                transform: 'scale(1.15)'
-              }}
+              className="absolute -top-8 right-20 w-20 h-20 rounded-full opacity-40 blur-md transition-all duration-500"
+              style={{ backgroundColor: slide.glowColor }}
             />
-            {/* 물감 번짐 효과 레이어 2 - 중간 */}
             <div
-              className="absolute -inset-2 rounded-[45px] opacity-25 blur-2xl transition-all duration-500"
-              style={{
-                background: `radial-gradient(circle at 60% 50%, ${slide.glowColor}, transparent 65%)`,
-                transform: 'scale(1.08)'
-              }}
+              className="absolute -top-4 right-8 w-12 h-12 rounded-full opacity-50 blur-sm transition-all duration-500"
+              style={{ backgroundColor: slide.glowColor }}
             />
-            {/* 물감 번짐 효과 레이어 3 - 안쪽 */}
             <div
-              className="absolute inset-0 rounded-[40px] opacity-30 blur-xl transition-all duration-500"
-              style={{
-                background: `radial-gradient(circle at 70% 60%, ${slide.glowColor}, transparent 60%)`,
-                transform: 'scale(1.03)'
-              }}
+              className="absolute top-12 -right-6 w-16 h-16 rounded-full opacity-35 blur-md transition-all duration-500"
+              style={{ backgroundColor: slide.glowColor }}
+            />
+            <div
+              className="absolute -bottom-6 -left-8 w-24 h-24 rounded-full opacity-40 blur-lg transition-all duration-500"
+              style={{ backgroundColor: slide.glowColor }}
+            />
+            <div
+              className="absolute bottom-20 -left-4 w-14 h-14 rounded-full opacity-45 blur-sm transition-all duration-500"
+              style={{ backgroundColor: slide.glowColor }}
+            />
+
+            {/* 물감 비산 효과 - 중간 방울들 */}
+            <div
+              className="absolute -top-2 right-32 w-8 h-8 rounded-full opacity-60 transition-all duration-500"
+              style={{ backgroundColor: slide.glowColor }}
+            />
+            <div
+              className="absolute top-6 -right-2 w-6 h-6 rounded-full opacity-55 transition-all duration-500"
+              style={{ backgroundColor: slide.glowColor }}
+            />
+            <div
+              className="absolute top-28 -right-3 w-10 h-10 rounded-full opacity-50 blur-sm transition-all duration-500"
+              style={{ backgroundColor: slide.glowColor }}
+            />
+            <div
+              className="absolute -bottom-2 left-12 w-8 h-8 rounded-full opacity-60 transition-all duration-500"
+              style={{ backgroundColor: slide.glowColor }}
+            />
+            <div
+              className="absolute bottom-32 -left-2 w-6 h-6 rounded-full opacity-55 transition-all duration-500"
+              style={{ backgroundColor: slide.glowColor }}
+            />
+
+            {/* 물감 비산 효과 - 작은 방울들 */}
+            <div
+              className="absolute top-2 right-28 w-3 h-3 rounded-full opacity-70 transition-all duration-500"
+              style={{ backgroundColor: slide.glowColor }}
+            />
+            <div
+              className="absolute top-16 right-6 w-4 h-4 rounded-full opacity-65 transition-all duration-500"
+              style={{ backgroundColor: slide.glowColor }}
+            />
+            <div
+              className="absolute top-24 -right-1 w-3 h-3 rounded-full opacity-70 transition-all duration-500"
+              style={{ backgroundColor: slide.glowColor }}
+            />
+            <div
+              className="absolute bottom-12 left-8 w-4 h-4 rounded-full opacity-65 transition-all duration-500"
+              style={{ backgroundColor: slide.glowColor }}
+            />
+            <div
+              className="absolute bottom-24 -left-1 w-3 h-3 rounded-full opacity-70 transition-all duration-500"
+              style={{ backgroundColor: slide.glowColor }}
+            />
+            <div
+              className="absolute top-20 right-12 w-2 h-2 rounded-full opacity-75 transition-all duration-500"
+              style={{ backgroundColor: slide.glowColor }}
+            />
+            <div
+              className="absolute bottom-16 left-16 w-2 h-2 rounded-full opacity-75 transition-all duration-500"
+              style={{ backgroundColor: slide.glowColor }}
             />
 
             {/* 메인 카드 */}
             <div
-              className={`relative ${slide.gradient} p-5 sm:p-6 text-white transition-all duration-500 h-[250px] sm:h-[298px] flex flex-col overflow-visible rounded-[35px]`}
-              style={{
-                filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15))',
-                boxShadow: `0 0 60px 15px ${slide.glowColor}40`
-              }}
+              className={`relative ${slide.gradient} p-5 sm:p-6 text-white transition-all duration-500 h-[250px] sm:h-[298px] flex flex-col rounded-3xl shadow-2xl`}
             >
-              {/* 물감 번짐 장식 요소 */}
-              <div className="absolute -top-4 right-8 w-24 h-24 bg-white/15 rounded-full blur-xl"></div>
-              <div className="absolute -bottom-3 -left-3 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-              <div className="absolute top-1/3 -right-4 w-16 h-16 bg-white/20 rounded-full blur-lg"></div>
-              <div className="absolute bottom-1/4 left-1/3 w-20 h-20 bg-white/10 rounded-full blur-xl opacity-70"></div>
 
               {/* 아이콘 */}
               <div
