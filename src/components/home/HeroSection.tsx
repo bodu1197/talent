@@ -12,6 +12,16 @@ import {
   FaSearch,
 } from "react-icons/fa";
 
+interface SplatterDrop {
+  size: number;
+  top?: string;
+  bottom?: string;
+  left?: string;
+  right?: string;
+  opacity: number;
+  blur: 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+}
+
 interface Slide {
   id: number;
   title: string;
@@ -22,6 +32,7 @@ interface Slide {
   cardTitle: string;
   cardSubtitle: string;
   cardDescription: string;
+  splatterPattern: SplatterDrop[];
 }
 
 // Icon mapping helper
@@ -47,6 +58,20 @@ const slides: Slide[] = [
     cardSubtitle: "판매자가 100% 가져갑니다",
     cardDescription:
       "당신이 번 돈, 한 푼도 떼지 않습니다. 다른 플랫폼의 15~20% 수수료는 이제 그만. 돌파구에서는 100% 당신의 것입니다.",
+    // 폭발형 - 우측 상단에서 폭발하듯 사방으로
+    splatterPattern: [
+      { size: 24, top: '-2rem', right: '3rem', opacity: 0.4, blur: 'lg' },
+      { size: 20, top: '-1.5rem', right: '1rem', opacity: 0.5, blur: 'md' },
+      { size: 16, top: '0.5rem', right: '-1.5rem', opacity: 0.45, blur: 'md' },
+      { size: 14, top: '2rem', right: '-1rem', opacity: 0.5, blur: 'sm' },
+      { size: 10, top: '-0.5rem', right: '5rem', opacity: 0.6, blur: 'sm' },
+      { size: 8, top: '1rem', right: '4rem', opacity: 0.65, blur: 'none' },
+      { size: 6, top: '3rem', right: '2rem', opacity: 0.7, blur: 'none' },
+      { size: 12, top: '4rem', right: '-0.5rem', opacity: 0.55, blur: 'sm' },
+      { size: 4, top: '0.2rem', right: '6rem', opacity: 0.75, blur: 'none' },
+      { size: 3, top: '1.5rem', right: '5.5rem', opacity: 0.8, blur: 'none' },
+      { size: 2, top: '2.5rem', right: '3.5rem', opacity: 0.85, blur: 'none' },
+    ],
   },
   {
     id: 2,
@@ -59,6 +84,22 @@ const slides: Slide[] = [
     cardSubtitle: "모든 판매자에게 공평한 기회",
     cardDescription:
       "신규든 베테랑이든, 모두에게 같은 기회. 알고리즘도, 편애도 없습니다. 오직 실력으로 승부하세요.",
+    // 균등 분산형 - 사방으로 고르게 퍼진 형태
+    splatterPattern: [
+      { size: 18, top: '-1.5rem', right: '4rem', opacity: 0.45, blur: 'md' },
+      { size: 16, top: '-1rem', left: '2rem', opacity: 0.4, blur: 'md' },
+      { size: 14, bottom: '-1.5rem', right: '3rem', opacity: 0.42, blur: 'md' },
+      { size: 12, bottom: '-1rem', left: '3rem', opacity: 0.48, blur: 'sm' },
+      { size: 10, top: '3rem', right: '-1rem', opacity: 0.55, blur: 'sm' },
+      { size: 8, top: '5rem', left: '-0.5rem', opacity: 0.6, blur: 'none' },
+      { size: 8, bottom: '4rem', right: '-0.5rem', opacity: 0.58, blur: 'none' },
+      { size: 6, top: '2rem', left: '1rem', opacity: 0.65, blur: 'none' },
+      { size: 6, bottom: '3rem', right: '2rem', opacity: 0.68, blur: 'none' },
+      { size: 4, top: '1rem', right: '2.5rem', opacity: 0.72, blur: 'none' },
+      { size: 4, bottom: '2rem', left: '1.5rem', opacity: 0.75, blur: 'none' },
+      { size: 3, top: '4rem', right: '1.5rem', opacity: 0.78, blur: 'none' },
+      { size: 2, bottom: '5rem', left: '2.5rem', opacity: 0.8, blur: 'none' },
+    ],
   },
   {
     id: 3,
@@ -71,6 +112,22 @@ const slides: Slide[] = [
     cardSubtitle: "표시된 가격이 전부입니다",
     cardDescription:
       "다른 곳처럼 결제 직전 수수료 추가? 없습니다. 보이는 가격이 최종 가격. 숨은 비용 없이 투명하게.",
+    // 하강형 - 위에서 아래로 떨어지는 느낌
+    splatterPattern: [
+      { size: 22, top: '-2rem', left: '4rem', opacity: 0.38, blur: 'xl' },
+      { size: 18, top: '-1rem', left: '2rem', opacity: 0.45, blur: 'lg' },
+      { size: 16, top: '1rem', left: '5rem', opacity: 0.48, blur: 'md' },
+      { size: 14, top: '3rem', left: '1.5rem', opacity: 0.5, blur: 'md' },
+      { size: 12, top: '5rem', left: '3.5rem', opacity: 0.55, blur: 'sm' },
+      { size: 10, top: '7rem', left: '2rem', opacity: 0.58, blur: 'sm' },
+      { size: 8, top: '2rem', left: '6rem', opacity: 0.62, blur: 'none' },
+      { size: 8, top: '4rem', left: '0.5rem', opacity: 0.65, blur: 'none' },
+      { size: 6, top: '6rem', left: '4.5rem', opacity: 0.68, blur: 'none' },
+      { size: 6, top: '8rem', left: '1rem', opacity: 0.7, blur: 'none' },
+      { size: 4, top: '1.5rem', left: '3rem', opacity: 0.75, blur: 'none' },
+      { size: 3, top: '3.5rem', left: '5.5rem', opacity: 0.78, blur: 'none' },
+      { size: 2, top: '5.5rem', left: '2.5rem', opacity: 0.82, blur: 'none' },
+    ],
   },
   {
     id: 4,
@@ -83,6 +140,23 @@ const slides: Slide[] = [
     cardSubtitle: "시작하는 당신에게 드립니다",
     cardDescription:
       "런칭 기념, 모든 전문가에게 최대 1,500만원 광고 크레딧 지원. 돌파구 내 광고로 첫 고객을 만나세요.",
+    // 대각선형 - 좌하단에서 우상단으로 흩어진 형태
+    splatterPattern: [
+      { size: 24, bottom: '-2rem', left: '-2rem', opacity: 0.4, blur: 'xl' },
+      { size: 20, bottom: '-1rem', left: '1rem', opacity: 0.45, blur: 'lg' },
+      { size: 18, bottom: '1rem', left: '3rem', opacity: 0.48, blur: 'md' },
+      { size: 16, bottom: '3rem', left: '5rem', opacity: 0.5, blur: 'md' },
+      { size: 14, top: '6rem', right: '2rem', opacity: 0.52, blur: 'md' },
+      { size: 12, top: '4rem', right: '4rem', opacity: 0.55, blur: 'sm' },
+      { size: 10, top: '2rem', right: '6rem', opacity: 0.58, blur: 'sm' },
+      { size: 8, bottom: '2rem', left: '2rem', opacity: 0.62, blur: 'none' },
+      { size: 8, top: '5rem', right: '3rem', opacity: 0.65, blur: 'none' },
+      { size: 6, bottom: '4rem', left: '4rem', opacity: 0.68, blur: 'none' },
+      { size: 6, top: '3rem', right: '5rem', opacity: 0.7, blur: 'none' },
+      { size: 4, bottom: '5rem', left: '3.5rem', opacity: 0.73, blur: 'none' },
+      { size: 3, top: '1rem', right: '4.5rem', opacity: 0.76, blur: 'none' },
+      { size: 2, bottom: '3.5rem', left: '5.5rem', opacity: 0.8, blur: 'none' },
+    ],
   },
 ];
 
@@ -224,79 +298,34 @@ export default function HeroSection() {
 
           {/* 오른쪽: 카드 + 페이지네이션 */}
           <div className="w-full lg:w-[382px] flex-shrink-0 relative">
-            {/* 물감 비산 효과 - 큰 방울들 */}
-            <div
-              className="absolute -top-8 right-20 w-20 h-20 rounded-full opacity-40 blur-md transition-all duration-500"
-              style={{ backgroundColor: slide.glowColor }}
-            />
-            <div
-              className="absolute -top-4 right-8 w-12 h-12 rounded-full opacity-50 blur-sm transition-all duration-500"
-              style={{ backgroundColor: slide.glowColor }}
-            />
-            <div
-              className="absolute top-12 -right-6 w-16 h-16 rounded-full opacity-35 blur-md transition-all duration-500"
-              style={{ backgroundColor: slide.glowColor }}
-            />
-            <div
-              className="absolute -bottom-6 -left-8 w-24 h-24 rounded-full opacity-40 blur-lg transition-all duration-500"
-              style={{ backgroundColor: slide.glowColor }}
-            />
-            <div
-              className="absolute bottom-20 -left-4 w-14 h-14 rounded-full opacity-45 blur-sm transition-all duration-500"
-              style={{ backgroundColor: slide.glowColor }}
-            />
-
-            {/* 물감 비산 효과 - 중간 방울들 */}
-            <div
-              className="absolute -top-2 right-32 w-8 h-8 rounded-full opacity-60 transition-all duration-500"
-              style={{ backgroundColor: slide.glowColor }}
-            />
-            <div
-              className="absolute top-6 -right-2 w-6 h-6 rounded-full opacity-55 transition-all duration-500"
-              style={{ backgroundColor: slide.glowColor }}
-            />
-            <div
-              className="absolute top-28 -right-3 w-10 h-10 rounded-full opacity-50 blur-sm transition-all duration-500"
-              style={{ backgroundColor: slide.glowColor }}
-            />
-            <div
-              className="absolute -bottom-2 left-12 w-8 h-8 rounded-full opacity-60 transition-all duration-500"
-              style={{ backgroundColor: slide.glowColor }}
-            />
-            <div
-              className="absolute bottom-32 -left-2 w-6 h-6 rounded-full opacity-55 transition-all duration-500"
-              style={{ backgroundColor: slide.glowColor }}
-            />
-
-            {/* 물감 비산 효과 - 작은 방울들 */}
-            <div
-              className="absolute top-2 right-28 w-3 h-3 rounded-full opacity-70 transition-all duration-500"
-              style={{ backgroundColor: slide.glowColor }}
-            />
-            <div
-              className="absolute top-16 right-6 w-4 h-4 rounded-full opacity-65 transition-all duration-500"
-              style={{ backgroundColor: slide.glowColor }}
-            />
-            <div
-              className="absolute top-24 -right-1 w-3 h-3 rounded-full opacity-70 transition-all duration-500"
-              style={{ backgroundColor: slide.glowColor }}
-            />
-            <div
-              className="absolute bottom-12 left-8 w-4 h-4 rounded-full opacity-65 transition-all duration-500"
-              style={{ backgroundColor: slide.glowColor }}
-            />
-            <div
-              className="absolute bottom-24 -left-1 w-3 h-3 rounded-full opacity-70 transition-all duration-500"
-              style={{ backgroundColor: slide.glowColor }}
-            />
-            <div
-              className="absolute top-20 right-12 w-2 h-2 rounded-full opacity-75 transition-all duration-500"
-              style={{ backgroundColor: slide.glowColor }}
-            />
-            <div
-              className="absolute bottom-16 left-16 w-2 h-2 rounded-full opacity-75 transition-all duration-500"
-              style={{ backgroundColor: slide.glowColor }}
-            />
+            {/* 물감 비산 효과 - 동적 렌더링 */}
+            {slide.splatterPattern.map((drop, index) => {
+              const blurValues: Record<string, string> = {
+                'none': '0',
+                'sm': '4px',
+                'md': '8px',
+                'lg': '12px',
+                'xl': '16px',
+                '2xl': '24px',
+              };
+              return (
+                <div
+                  key={`splatter-${slide.id}-${index}`}
+                  className="absolute rounded-full transition-all duration-500"
+                  style={{
+                    width: `${drop.size}px`,
+                    height: `${drop.size}px`,
+                    top: drop.top,
+                    bottom: drop.bottom,
+                    left: drop.left,
+                    right: drop.right,
+                    opacity: drop.opacity,
+                    backgroundColor: slide.glowColor,
+                    filter: drop.blur !== 'none' ? `blur(${blurValues[drop.blur]})` : 'none',
+                  }}
+                />
+              );
+            })}
 
             {/* 메인 카드 - 매우 투명한 배경 */}
             <div
