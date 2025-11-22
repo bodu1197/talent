@@ -335,7 +335,7 @@ export default function HeroSection() {
                     backgroundColor: slide.glowColor,
                     filter: drop.blur !== 'none' ? `blur(${blurValues[drop.blur]})` : 'none',
                     transform: drop.transform,
-                    mixBlendMode: 'screen', // 빛나는 효과 추가
+                    // mixBlendMode: 'screen', // 흰 배경에서는 screen 모드가 보이지 않으므로 제거
                   }}
                 />
               );
