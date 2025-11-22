@@ -101,34 +101,37 @@ const slides: Slide[] = [
     cardSubtitle: "모든 판매자에게 공평한 기회",
     cardDescription:
       "신규든 베테랑이든, 모두에게 같은 기회. 알고리즘도, 편애도 없습니다. 오직 실력으로 승부하세요.",
-    // Yves Klein 스타일 - 거대한 색면과 작은 비산의 극적 대비
+    // Yves Klein 스타일 - 오른쪽→왼쪽 비산, 거리에 따라 크기 감소
     splatterPattern: [
-      // 초거대 임팩트 색면 (왼쪽 침범)
-      { size: 520, top: '-10rem', left: '-18rem', opacity: 0.14, blur: '2xl' },
-      { size: 460, top: '5rem', left: '-10rem', opacity: 0.16, blur: '2xl' },
+      // 오른쪽 카드 영역 - 발사 지점 (가장 큰 덩어리)
+      { size: 500, top: '-9rem', right: '-12rem', opacity: 0.14, blur: '2xl' },
+      { size: 450, top: '2rem', right: '-8rem', opacity: 0.16, blur: '2xl' },
+      { size: 400, top: '7rem', right: '-5rem', opacity: 0.17, blur: '2xl' },
 
-      // 거대 덩어리들
-      { size: 400, top: '-5rem', left: '35%', opacity: 0.15, blur: '2xl' },
-      { size: 480, top: '-8rem', right: '-10rem', opacity: 0.14, blur: '2xl' },
-      { size: 380, top: '3rem', right: '-5rem', opacity: 0.17, blur: '2xl' },
+      // 중간 영역 - 큰 방울들
+      { size: 320, top: '-4rem', right: '2rem', opacity: 0.19, blur: '2xl' },
+      { size: 280, top: '4rem', right: '5rem', opacity: 0.21, blur: 'xl' },
+      { size: 240, top: '9rem', right: '8rem', opacity: 0.24, blur: 'xl' },
+      { size: 350, top: '1rem', left: '40%', opacity: 0.18, blur: '2xl' },
 
-      // 큰 방울들 (대비)
-      { size: 240, top: '9rem', left: '5rem', opacity: 0.22, blur: 'xl' },
-      { size: 200, top: '1rem', left: '25rem', opacity: 0.26, blur: 'xl' },
-      { size: 220, top: '8rem', right: '4rem', opacity: 0.24, blur: 'xl' },
+      // 중앙~왼쪽 - 중형 방울들 (거리 멀어짐)
+      { size: 200, top: '6rem', left: '25rem', opacity: 0.26, blur: 'xl' },
+      { size: 170, top: '-1rem', left: '30rem', opacity: 0.29, blur: 'lg' },
+      { size: 140, top: '10rem', left: '18rem', opacity: 0.32, blur: 'lg' },
+      { size: 160, top: '3rem', left: '12rem', opacity: 0.3, blur: 'lg' },
 
-      // 중형 방울들
-      { size: 130, top: '5rem', left: '18rem', opacity: 0.32, blur: 'lg' },
-      { size: 110, top: '2rem', right: '12rem', opacity: 0.36, blur: 'lg' },
+      // 왼쪽 텍스트 영역 - 작은 방울들 (멀리 날아온)
+      { size: 110, top: '8rem', left: '5rem', opacity: 0.36, blur: 'md' },
+      { size: 85, top: '2rem', left: '2rem', opacity: 0.42, blur: 'md' },
+      { size: 70, top: '5rem', left: '-3rem', opacity: 0.46, blur: 'md' },
 
-      // 작은 방울들 (여백 강조)
-      { size: 70, top: '6rem', left: '30rem', opacity: 0.42, blur: 'md' },
-      { size: 55, top: '10rem', right: '8rem', opacity: 0.48, blur: 'md' },
-
-      // 좁쌀 디테일 (최소한으로)
-      { size: 28, top: '3rem', left: '15rem', opacity: 0.58, blur: 'sm' },
-      { size: 20, top: '7rem', right: '15rem', opacity: 0.65, blur: 'sm' },
-      { size: 15, top: '4rem', left: '40%', opacity: 0.7, blur: 'none' },
+      // 왼쪽 끝 - 좁쌀 비산 (가장 멀리)
+      { size: 45, top: '7rem', left: '-8rem', opacity: 0.54, blur: 'sm' },
+      { size: 35, top: '1rem', left: '-6rem', opacity: 0.58, blur: 'sm' },
+      { size: 28, top: '4rem', left: '-10rem', opacity: 0.62, blur: 'sm' },
+      { size: 20, top: '9rem', left: '-12rem', opacity: 0.68, blur: 'sm' },
+      { size: 15, top: '6rem', left: '-15rem', opacity: 0.72, blur: 'none' },
+      { size: 12, top: '3rem', left: '-14rem', opacity: 0.75, blur: 'none' },
     ],
   },
   {
