@@ -307,7 +307,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-[#E1E3E7] py-12">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
           {/* 헤더 */}
