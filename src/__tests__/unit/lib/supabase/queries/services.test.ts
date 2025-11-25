@@ -682,9 +682,11 @@ describe('Supabase Queries - Services', () => {
 
       const result = await getActiveServices();
 
-      expect(result[0].rating).toBe(4.5); // (5 + 4) / 2
-      expect(result[0].review_count).toBe(2);
-      expect(result[0].order_count).toBe(10);
+      expect(Array.isArray(result)).toBe(true);
+      const services = result as unknown[];
+      expect((services[0] as { rating: number }).rating).toBe(4.5); // (5 + 4) / 2
+      expect((services[0] as { review_count: number }).review_count).toBe(2);
+      expect((services[0] as { order_count: number }).order_count).toBe(10);
     });
   });
 });

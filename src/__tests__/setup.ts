@@ -7,6 +7,59 @@ afterEach(() => {
   cleanup();
 });
 
+// Shared mock query builder interface
+interface MockQueryBuilder {
+  select: ReturnType<typeof vi.fn>;
+  eq: ReturnType<typeof vi.fn>;
+  neq: ReturnType<typeof vi.fn>;
+  in: ReturnType<typeof vi.fn>;
+  is: ReturnType<typeof vi.fn>;
+  single: ReturnType<typeof vi.fn>;
+  maybeSingle: ReturnType<typeof vi.fn>;
+  order: ReturnType<typeof vi.fn>;
+  limit: ReturnType<typeof vi.fn>;
+  range: ReturnType<typeof vi.fn>;
+  gte: ReturnType<typeof vi.fn>;
+  lte: ReturnType<typeof vi.fn>;
+  insert: ReturnType<typeof vi.fn>;
+  update: ReturnType<typeof vi.fn>;
+  delete: ReturnType<typeof vi.fn>;
+  upsert: ReturnType<typeof vi.fn>;
+  match: ReturnType<typeof vi.fn>;
+  filter: ReturnType<typeof vi.fn>;
+  or: ReturnType<typeof vi.fn>;
+  contains: ReturnType<typeof vi.fn>;
+  textSearch: ReturnType<typeof vi.fn>;
+}
+
+// Shared mock query builder factory
+const createMockQueryBuilder = (): MockQueryBuilder => {
+  const mockBuilder: MockQueryBuilder = {
+    select: vi.fn(() => mockBuilder),
+    eq: vi.fn(() => mockBuilder),
+    neq: vi.fn(() => mockBuilder),
+    in: vi.fn(() => mockBuilder),
+    is: vi.fn(() => mockBuilder),
+    single: vi.fn(() => Promise.resolve({ data: null, error: null })),
+    maybeSingle: vi.fn(() => Promise.resolve({ data: null, error: null })),
+    order: vi.fn(() => mockBuilder),
+    limit: vi.fn(() => mockBuilder),
+    range: vi.fn(() => mockBuilder),
+    gte: vi.fn(() => mockBuilder),
+    lte: vi.fn(() => mockBuilder),
+    insert: vi.fn(() => mockBuilder),
+    update: vi.fn(() => mockBuilder),
+    delete: vi.fn(() => mockBuilder),
+    upsert: vi.fn(() => mockBuilder),
+    match: vi.fn(() => mockBuilder),
+    filter: vi.fn(() => mockBuilder),
+    or: vi.fn(() => mockBuilder),
+    contains: vi.fn(() => mockBuilder),
+    textSearch: vi.fn(() => mockBuilder),
+  };
+  return mockBuilder;
+};
+
 // Mock Next.js router
 vi.mock('next/navigation', () => ({
   useRouter() {
@@ -27,99 +80,52 @@ vi.mock('next/navigation', () => ({
   usePathname() {
     return '/';
   },
+  redirect: vi.fn(),
+  notFound: vi.fn(),
 }));
 
-// Mock Supabase client
-vi.mock('@/lib/supabase/client', () => {
-  interface MockQueryBuilder {
-    select: ReturnType<typeof vi.fn>;
-    eq: ReturnType<typeof vi.fn>;
-    single: ReturnType<typeof vi.fn>;
-    order: ReturnType<typeof vi.fn>;
-    limit: ReturnType<typeof vi.fn>;
-    range: ReturnType<typeof vi.fn>;
-    insert: ReturnType<typeof vi.fn>;
-    update: ReturnType<typeof vi.fn>;
-    delete: ReturnType<typeof vi.fn>;
-  }
-
-  const createMockQueryBuilder = (): MockQueryBuilder => {
-    const mockBuilder: MockQueryBuilder = {
-      select: vi.fn(() => mockBuilder),
-      eq: vi.fn(() => mockBuilder),
-      single: vi.fn(() => Promise.resolve({ data: null, error: null })),
-      order: vi.fn(() => mockBuilder),
-      limit: vi.fn(() => mockBuilder),
-      range: vi.fn(() => mockBuilder),
-      insert: vi.fn(() => mockBuilder),
-      update: vi.fn(() => mockBuilder),
-      delete: vi.fn(() => mockBuilder),
-    };
-    return mockBuilder;
-  };
-
-  return {
-    createClient: vi.fn(() => ({
-      auth: {
-        getUser: vi.fn(),
-        signOut: vi.fn(),
-      },
-      from: vi.fn(() => createMockQueryBuilder()),
+// Mock Supabase client (browser)
+vi.mock('@/lib/supabase/client', () => ({
+  createClient: vi.fn(() => ({
+    auth: {
+      getUser: vi.fn(() => Promise.resolve({ data: { user: null }, error: null })),
+      signOut: vi.fn(),
+      getSession: vi.fn(() => Promise.resolve({ data: { session: null }, error: null })),
+      onAuthStateChange: vi.fn(() => ({ data: { subscription: { unsubscribe: vi.fn() } } })),
+    },
+    from: vi.fn(() => createMockQueryBuilder()),
+    rpc: vi.fn(() => Promise.resolve({ data: null, error: null })),
+    channel: vi.fn(() => ({
+      on: vi.fn().mockReturnThis(),
+      subscribe: vi.fn(),
+      unsubscribe: vi.fn(),
     })),
-  };
-});
+    removeChannel: vi.fn(),
+  })),
+}));
 
 // Mock Supabase server client
-vi.mock('@/lib/supabase/server', () => {
-  interface MockQueryBuilder {
-    select: ReturnType<typeof vi.fn>;
-    eq: ReturnType<typeof vi.fn>;
-    in: ReturnType<typeof vi.fn>;
-    single: ReturnType<typeof vi.fn>;
-    maybeSingle: ReturnType<typeof vi.fn>;
-    order: ReturnType<typeof vi.fn>;
-    limit: ReturnType<typeof vi.fn>;
-    range: ReturnType<typeof vi.fn>;
-    gte: ReturnType<typeof vi.fn>;
-    insert: ReturnType<typeof vi.fn>;
-    update: ReturnType<typeof vi.fn>;
-    delete: ReturnType<typeof vi.fn>;
-  }
-
-  const createMockQueryBuilder = (): MockQueryBuilder => {
-    const mockBuilder: MockQueryBuilder = {
-      select: vi.fn(() => mockBuilder),
-      eq: vi.fn(() => mockBuilder),
-      in: vi.fn(() => mockBuilder),
-      single: vi.fn(() => Promise.resolve({ data: null, error: null })),
-      maybeSingle: vi.fn(() => Promise.resolve({ data: null, error: null })),
-      order: vi.fn(() => mockBuilder),
-      limit: vi.fn(() => mockBuilder),
-      range: vi.fn(() => mockBuilder),
-      gte: vi.fn(() => mockBuilder),
-      insert: vi.fn(() => mockBuilder),
-      update: vi.fn(() => mockBuilder),
-      delete: vi.fn(() => mockBuilder),
-    };
-    return mockBuilder;
-  };
-
-  return {
-    createClient: vi.fn(() =>
-      Promise.resolve({
-        auth: {
-          getUser: vi.fn(() => Promise.resolve({ data: { user: null }, error: null })),
-          getSession: vi.fn(() => Promise.resolve({ data: { session: null }, error: null })),
-        },
-        from: vi.fn(() => createMockQueryBuilder()),
-        rpc: vi.fn(() => Promise.resolve({ data: null, error: null })),
-      })
-    ),
-    createServiceRoleClient: vi.fn(() => ({
+vi.mock('@/lib/supabase/server', () => ({
+  createClient: vi.fn(() =>
+    Promise.resolve({
+      auth: {
+        getUser: vi.fn(() => Promise.resolve({ data: { user: null }, error: null })),
+        getSession: vi.fn(() => Promise.resolve({ data: { session: null }, error: null })),
+      },
       from: vi.fn(() => createMockQueryBuilder()),
-    })),
-  };
-});
+      rpc: vi.fn(() => Promise.resolve({ data: null, error: null })),
+    })
+  ),
+  createServiceRoleClient: vi.fn(() => ({
+    auth: {
+      admin: {
+        getUserById: vi.fn(() => Promise.resolve({ data: { user: null }, error: null })),
+      },
+    },
+    from: vi.fn(() => createMockQueryBuilder()),
+    rpc: vi.fn(() => Promise.resolve({ data: null, error: null })),
+  })),
+}));
 
 // Mock Supabase singleton
 vi.mock('@/lib/supabase/singleton', () => ({
@@ -173,6 +179,11 @@ vi.mock('@/lib/auth/config', () => ({
   AUTH_CONFIG: {
     sessionTimeout: 3600,
   },
+}));
+
+// Mock crypto-shuffle
+vi.mock('@/lib/utils/crypto-shuffle', () => ({
+  cryptoShuffleArray: vi.fn((arr: unknown[]) => arr),
 }));
 
 // Add custom matchers if needed
