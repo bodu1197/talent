@@ -32,8 +32,8 @@ import {
 } from 'react-icons/fa';
 
 interface PageProps {
-  params: Promise<{
-    id: string;
+  readonly params: Promise<{
+    readonly id: string;
   }>;
 }
 

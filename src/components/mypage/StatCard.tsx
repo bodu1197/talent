@@ -1,4 +1,4 @@
-import { IconType } from "react-icons";
+import { IconType } from 'react-icons';
 import {
   FaSpinner,
   FaBoxOpen,
@@ -8,43 +8,37 @@ import {
   FaDollarSign,
   FaUsers,
   FaClock,
-} from "react-icons/fa";
+} from 'react-icons/fa';
 
 interface StatCardProps {
-  title: string;
-  value: string | number;
-  icon: string;
-  color?: "blue" | "green" | "yellow" | "red" | "purple";
-  subtitle?: string;
+  readonly title: string;
+  readonly value: string | number;
+  readonly icon: string;
+  readonly color?: 'blue' | 'green' | 'yellow' | 'red' | 'purple';
+  readonly subtitle?: string;
 }
 
 const colorClasses = {
-  blue: "bg-blue-50 text-blue-600",
-  green: "bg-green-50 text-green-600",
-  yellow: "bg-yellow-50 text-yellow-600",
-  red: "bg-red-50 text-red-600",
-  purple: "bg-purple-50 text-purple-600",
+  blue: 'bg-blue-50 text-blue-600',
+  green: 'bg-green-50 text-green-600',
+  yellow: 'bg-yellow-50 text-yellow-600',
+  red: 'bg-red-50 text-red-600',
+  purple: 'bg-purple-50 text-purple-600',
 };
 
 // Icon mapping
 const iconComponents: Record<string, IconType> = {
-  "fa-spinner": FaSpinner,
-  "fa-box-open": FaBoxOpen,
-  "fa-star": FaStar,
-  "fa-shopping-cart": FaShoppingCart,
-  "fa-chart-line": FaChartLine,
-  "fa-dollar-sign": FaDollarSign,
-  "fa-users": FaUsers,
-  "fa-clock": FaClock,
+  'fa-spinner': FaSpinner,
+  'fa-box-open': FaBoxOpen,
+  'fa-star': FaStar,
+  'fa-shopping-cart': FaShoppingCart,
+  'fa-chart-line': FaChartLine,
+  'fa-dollar-sign': FaDollarSign,
+  'fa-users': FaUsers,
+  'fa-clock': FaClock,
 };
 
-export default function StatCard({
-  title,
-  value,
-  icon,
-  color = "blue",
-  subtitle,
-}: StatCardProps) {
+export default function StatCard({ title, value, icon, color = 'blue', subtitle }: StatCardProps) {
   const IconComponent = iconComponents[icon] || FaChartLine;
 
   return (

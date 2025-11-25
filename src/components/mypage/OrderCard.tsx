@@ -1,39 +1,39 @@
-import Image from "next/image";
-import Link from "next/link";
-import { FaImage, FaClock } from "react-icons/fa";
+import Image from 'next/image';
+import Link from 'next/link';
+import { FaImage, FaClock } from 'react-icons/fa';
 
 interface OrderCardProps {
-  order: {
-    id: string;
-    orderNumber: string | undefined;
-    title: string;
-    thumbnailUrl?: string | null;
-    buyerName?: string;
-    sellerName?: string;
-    status: string;
-    statusLabel: string;
-    statusColor: "red" | "yellow" | "blue" | "green" | "gray";
-    price: number;
-    orderDate: string;
-    expectedDeliveryDate?: string;
-    daysLeft?: number;
-    requirements?: string;
+  readonly order: {
+    readonly id: string;
+    readonly orderNumber: string | undefined;
+    readonly title: string;
+    readonly thumbnailUrl?: string | null;
+    readonly buyerName?: string;
+    readonly sellerName?: string;
+    readonly status: string;
+    readonly statusLabel: string;
+    readonly statusColor: 'red' | 'yellow' | 'blue' | 'green' | 'gray';
+    readonly price: number;
+    readonly orderDate: string;
+    readonly expectedDeliveryDate?: string;
+    readonly daysLeft?: number;
+    readonly requirements?: string;
   };
-  mode: "seller" | "buyer";
+  mode: 'seller' | 'buyer';
   actions?: React.ReactNode;
 }
 
 const statusColorClasses = {
-  red: "bg-red-100 text-red-700 border-red-200",
-  yellow: "bg-yellow-100 text-yellow-700 border-yellow-200",
-  blue: "bg-blue-100 text-blue-700 border-blue-200",
-  green: "bg-green-100 text-green-700 border-green-200",
-  gray: "bg-gray-100 text-gray-700 border-gray-200",
+  red: 'bg-red-100 text-red-700 border-red-200',
+  yellow: 'bg-yellow-100 text-yellow-700 border-yellow-200',
+  blue: 'bg-blue-100 text-blue-700 border-blue-200',
+  green: 'bg-green-100 text-green-700 border-green-200',
+  gray: 'bg-gray-100 text-gray-700 border-gray-200',
 };
 
 export default function OrderCard({ order, mode, actions }: OrderCardProps) {
-  const userName = mode === "seller" ? order.buyerName : order.sellerName;
-  const userLabel = mode === "seller" ? "구매자" : "판매자";
+  const userName = mode === 'seller' ? order.buyerName : order.sellerName;
+  const userLabel = mode === 'seller' ? '구매자' : '판매자';
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-6 hover:border-brand-primary transition-colors">
@@ -60,9 +60,7 @@ export default function OrderCard({ order, mode, actions }: OrderCardProps) {
           <div className="flex items-start justify-between mb-3">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-sm text-gray-500">
-                  #{order.orderNumber || "N/A"}
-                </span>
+                <span className="text-sm text-gray-500">#{order.orderNumber || 'N/A'}</span>
                 <Link
                   href={`/mypage/${mode}/orders/${order.id}`}
                   className="text-base font-bold text-gray-900 hover:text-brand-primary"
@@ -114,9 +112,7 @@ export default function OrderCard({ order, mode, actions }: OrderCardProps) {
           )}
 
           {/* 액션 버튼들 */}
-          {actions && (
-            <div className="flex items-center gap-2 mt-3">{actions}</div>
-          )}
+          {actions && <div className="flex items-center gap-2 mt-3">{actions}</div>}
         </div>
       </div>
     </div>

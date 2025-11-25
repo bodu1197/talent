@@ -1,12 +1,7 @@
-"use client";
+'use client';
 
-import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import {
-  FaShoppingCart,
-  FaSpinner,
-  FaCheckCircle,
-  FaWonSign,
-} from "react-icons/fa";
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
+import { FaShoppingCart, FaSpinner, FaCheckCircle, FaWonSign } from 'react-icons/fa';
 
 type Stats = {
   newOrders: number;
@@ -30,8 +25,8 @@ type Order = {
 };
 
 type Props = {
-  stats: Stats;
-  recentOrders: Order[];
+  readonly stats: Stats;
+  readonly recentOrders: Order[];
 };
 
 export default function Dashboard2Client({ stats, recentOrders }: Props) {
@@ -40,12 +35,8 @@ export default function Dashboard2Client({ stats, recentOrders }: Props) {
       <div className="py-8 px-4">
         {/* 페이지 헤더 */}
         <div className="mb-6">
-          <h1 className="text-xl font-bold text-gray-900">
-            판매 대시보드 2 (헤더/푸터 없음)
-          </h1>
-          <p className="text-gray-600 mt-1 text-sm">
-            판매 현황을 한눈에 확인하세요
-          </p>
+          <h1 className="text-xl font-bold text-gray-900">판매 대시보드 2 (헤더/푸터 없음)</h1>
+          <p className="text-gray-600 mt-1 text-sm">판매 현황을 한눈에 확인하세요</p>
         </div>
 
         {/* 통계 카드 */}
@@ -54,9 +45,7 @@ export default function Dashboard2Client({ stats, recentOrders }: Props) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">신규 주문</p>
-                <p className="text-lg font-bold text-gray-900">
-                  {stats.newOrders}건
-                </p>
+                <p className="text-lg font-bold text-gray-900">{stats.newOrders}건</p>
               </div>
               <FaShoppingCart className="text-2xl text-blue-500" />
             </div>
@@ -65,9 +54,7 @@ export default function Dashboard2Client({ stats, recentOrders }: Props) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">진행중</p>
-                <p className="text-lg font-bold text-gray-900">
-                  {stats.inProgressOrders}건
-                </p>
+                <p className="text-lg font-bold text-gray-900">{stats.inProgressOrders}건</p>
               </div>
               <FaSpinner className="text-2xl text-yellow-500" />
             </div>
@@ -76,9 +63,7 @@ export default function Dashboard2Client({ stats, recentOrders }: Props) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">완료된 주문</p>
-                <p className="text-lg font-bold text-gray-900">
-                  {stats.deliveredOrders}건
-                </p>
+                <p className="text-lg font-bold text-gray-900">{stats.deliveredOrders}건</p>
               </div>
               <FaCheckCircle className="text-2xl text-green-500" />
             </div>
@@ -131,28 +116,28 @@ export default function Dashboard2Client({ stats, recentOrders }: Props) {
                           #{order.order_number || order.id.slice(0, 8)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {order.service?.title || order.title || "-"}
+                          {order.service?.title || order.title || '-'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {order.buyer?.name || "-"}
+                          {order.buyer?.name || '-'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
                             className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                              order.status === "completed"
-                                ? "bg-green-100 text-green-800"
-                                : order.status === "in_progress"
-                                ? "bg-yellow-100 text-yellow-800"
-                                : "bg-gray-100 text-gray-800"
+                              order.status === 'completed'
+                                ? 'bg-green-100 text-green-800'
+                                : order.status === 'in_progress'
+                                  ? 'bg-yellow-100 text-yellow-800'
+                                  : 'bg-gray-100 text-gray-800'
                             }`}
                           >
-                            {order.status === "in_progress"
-                              ? "진행중"
-                              : order.status === "completed"
-                              ? "완료"
-                              : order.status === "paid"
-                              ? "결제완료"
-                              : order.status}
+                            {order.status === 'in_progress'
+                              ? '진행중'
+                              : order.status === 'completed'
+                                ? '완료'
+                                : order.status === 'paid'
+                                  ? '결제완료'
+                                  : order.status}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -164,9 +149,7 @@ export default function Dashboard2Client({ stats, recentOrders }: Props) {
                 </table>
               </div>
             ) : (
-              <p className="text-gray-500 text-center py-8">
-                최근 주문이 없습니다
-              </p>
+              <p className="text-gray-500 text-center py-8">최근 주문이 없습니다</p>
             )}
           </div>
         </div>

@@ -1,19 +1,22 @@
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
-import BankTransferClient from './BankTransferClient'
+import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
+import BankTransferClient from './BankTransferClient';
 
 export default async function BankTransferPage({
-  params
+  params,
 }: {
-  params: Promise<{ orderId: string }>
+  readonly params: Promise<{ orderId: string }>;
 }) {
-  const { orderId } = await params
-  const supabase = await createClient()
+  const { orderId } = await params;
+  const supabase = await createClient();
 
   // 사용자 인증 확인
-  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
   if (authError || !user) {
-    redirect('/login')
+    redirect('/login');
   }
 
   // 주문 정보 조회
@@ -21,21 +24,21 @@ export default async function BankTransferPage({
     .from('orders')
     .select('*')
     .eq('id', orderId)
-    .single()
+    .single();
 
   if (orderError || !order) {
-    redirect('/404')
+    redirect('/404');
   }
 
   // 본인 주문인지 확인
   if (order.buyer_id !== user.id) {
-    redirect('/404')
+    redirect('/404');
   }
 
   // 이미 결제된 주문인지 확인
   if (order.status !== 'pending_payment') {
-    redirect(`/mypage/buyer/orders/${orderId}`)
+    redirect(`/mypage/buyer/orders/${orderId}`);
   }
 
-  return <BankTransferClient order={order} />
+  return <BankTransferClient order={order} />;
 }

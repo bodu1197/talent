@@ -1,10 +1,12 @@
-import { redirect, notFound } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
-import EditServiceClient from './EditServiceClient'
+import { redirect, notFound } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server';
+import EditServiceClient from './EditServiceClient';
 
 // Helper function to authenticate and get seller
 async function authenticateAndGetSeller(supabase: Awaited<ReturnType<typeof createClient>>) {
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) {
     redirect('/auth/login');
   }
@@ -30,10 +32,12 @@ async function fetchService(
 ) {
   const { data: service, error } = await supabase
     .from('services')
-    .select(`
+    .select(
+      `
       *,
       service_categories(category_id)
-    `)
+    `
+    )
     .eq('id', id)
     .eq('seller_id', sellerId)
     .single();
@@ -48,14 +52,14 @@ async function fetchService(
 // Helper function to fetch category hierarchy
 async function fetchCategoryHierarchy(
   supabase: Awaited<ReturnType<typeof createClient>>,
-  service: { service_categories: Array<{ category_id: string }> }
+  service: { readonly service_categories: Array<{ category_id: string }> }
 ) {
   if (!service.service_categories || service.service_categories.length === 0) {
     return null;
   }
 
   // Get all category IDs
-  const categoryIds = service.service_categories.map(sc => sc.category_id);
+  const categoryIds = service.service_categories.map((sc) => sc.category_id);
 
   // Fetch all categories
   const { data: categories } = await supabase
@@ -68,18 +72,22 @@ async function fetchCategoryHierarchy(
   }
 
   // Find categories by level
-  const level1Cat = categories.find(c => c.level === 1);
-  const level2Cat = categories.find(c => c.level === 2);
-  const level3Cat = categories.find(c => c.level === 3);
+  const level1Cat = categories.find((c) => c.level === 1);
+  const level2Cat = categories.find((c) => c.level === 2);
+  const level3Cat = categories.find((c) => c.level === 3);
 
   return {
     level1: level1Cat?.id || null,
     level2: level2Cat?.id || null,
-    level3: level3Cat?.id || null
+    level3: level3Cat?.id || null,
   };
 }
 
-export default async function EditServicePage({ params }: { params: Promise<{ id: string }> }) {
+export default async function EditServicePage({
+  params,
+}: {
+  readonly params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
   const supabase = await createClient();
 
@@ -100,10 +108,12 @@ export default async function EditServicePage({ params }: { params: Promise<{ id
     .order('level', { ascending: true })
     .order('display_order', { ascending: true });
 
-  return <EditServiceClient
-    service={service}
-    sellerId={seller.id}
-    categories={categories || []}
-    categoryHierarchy={categoryHierarchy}
-  />;
+  return (
+    <EditServiceClient
+      service={service}
+      sellerId={seller.id}
+      categories={categories || []}
+      categoryHierarchy={categoryHierarchy}
+    />
+  );
 }

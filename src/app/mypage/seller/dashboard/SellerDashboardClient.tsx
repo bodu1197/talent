@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { prefetchSellerData } from "@/lib/prefetch/buyerPrefetch";
-import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import Link from "next/link";
+import { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { prefetchSellerData } from '@/lib/prefetch/buyerPrefetch';
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
+import Link from 'next/link';
 import {
   FaStore,
   FaChartLine,
@@ -15,7 +15,7 @@ import {
   FaSpinner,
   FaCheckCircle,
   FaWonSign,
-} from "react-icons/fa";
+} from 'react-icons/fa';
 
 type Stats = {
   newOrders: number;
@@ -40,19 +40,15 @@ type Order = {
 };
 
 type Props = {
-  stats: Stats;
-  recentOrders: Order[];
-  profileData: {
-    name: string;
-    profile_image?: string | null;
+  readonly stats: Stats;
+  readonly recentOrders: Order[];
+  readonly profileData: {
+    readonly name: string;
+    readonly profile_image?: string | null;
   } | null;
 };
 
-export default function SellerDashboardClient({
-  stats,
-  recentOrders,
-  profileData,
-}: Props) {
+export default function SellerDashboardClient({ stats, recentOrders, profileData }: Props) {
   const queryClient = useQueryClient();
 
   // 백그라운드에서 모든 판매자 페이지 데이터 프리페치
@@ -61,10 +57,7 @@ export default function SellerDashboardClient({
     if (stats) {
       const timer = setTimeout(() => {
         prefetchSellerData(queryClient).catch((err) =>
-          console.error(
-            "Operation error:",
-            JSON.stringify(err, Object.getOwnPropertyNames(err), 2),
-          ),
+          console.error('Operation error:', JSON.stringify(err, Object.getOwnPropertyNames(err), 2))
         );
       }, 500); // 대시보드 로딩 후 0.5초 뒤에 실행
 
@@ -88,8 +81,7 @@ export default function SellerDashboardClient({
                   판매자로 등록하고 서비스를 판매하세요
                 </h1>
                 <p className="text-gray-600">
-                  전문가로 등록하여 여러분의 재능을 공유하고 수익을 창출할 수
-                  있습니다
+                  전문가로 등록하여 여러분의 재능을 공유하고 수익을 창출할 수 있습니다
                 </p>
               </div>
 
@@ -97,30 +89,18 @@ export default function SellerDashboardClient({
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 <div className="bg-gray-50 rounded-lg p-4">
                   <FaChartLine className="text-2xl text-green-500 mb-2" />
-                  <h3 className="font-semibold text-gray-900 mb-1">
-                    수익 창출
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    전문 서비스로 안정적인 수입
-                  </p>
+                  <h3 className="font-semibold text-gray-900 mb-1">수익 창출</h3>
+                  <p className="text-sm text-gray-600">전문 서비스로 안정적인 수입</p>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-4">
                   <FaUsers className="text-2xl text-blue-500 mb-2" />
-                  <h3 className="font-semibold text-gray-900 mb-1">
-                    고객 관리
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    체계적인 주문 및 고객 관리
-                  </p>
+                  <h3 className="font-semibold text-gray-900 mb-1">고객 관리</h3>
+                  <p className="text-sm text-gray-600">체계적인 주문 및 고객 관리</p>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-4">
                   <FaCertificate className="text-2xl text-purple-500 mb-2" />
-                  <h3 className="font-semibold text-gray-900 mb-1">
-                    신뢰도 향상
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    리뷰와 평점으로 브랜드 구축
-                  </p>
+                  <h3 className="font-semibold text-gray-900 mb-1">신뢰도 향상</h3>
+                  <p className="text-sm text-gray-600">리뷰와 평점으로 브랜드 구축</p>
                 </div>
               </div>
 
@@ -136,8 +116,7 @@ export default function SellerDashboardClient({
               {/* 추가 정보 */}
               <div className="mt-8 pt-6 border-t border-gray-200">
                 <p className="text-sm text-gray-500">
-                  등록은 무료이며, 간단한 정보 입력만으로 바로 시작할 수
-                  있습니다
+                  등록은 무료이며, 간단한 정보 입력만으로 바로 시작할 수 있습니다
                 </p>
               </div>
             </div>
@@ -154,9 +133,7 @@ export default function SellerDashboardClient({
         {/* 페이지 헤더 */}
         <div className="mb-6">
           <h1 className="text-base md:text-lg font-bold text-gray-900">판매 대시보드</h1>
-          <p className="text-gray-600 mt-2 text-sm md:text-base">
-            판매 현황을 한눈에 확인하세요
-          </p>
+          <p className="text-gray-600 mt-2 text-sm md:text-base">판매 현황을 한눈에 확인하세요</p>
         </div>
 
         {/* 통계 카드 */}
@@ -165,9 +142,7 @@ export default function SellerDashboardClient({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">신규 주문</p>
-                <p className="text-lg font-bold text-gray-900">
-                  {stats?.newOrders || 0}건
-                </p>
+                <p className="text-lg font-bold text-gray-900">{stats?.newOrders || 0}건</p>
               </div>
               <FaShoppingCart className="text-2xl text-blue-500" />
             </div>
@@ -176,9 +151,7 @@ export default function SellerDashboardClient({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">진행중</p>
-                <p className="text-lg font-bold text-gray-900">
-                  {stats?.inProgressOrders || 0}건
-                </p>
+                <p className="text-lg font-bold text-gray-900">{stats?.inProgressOrders || 0}건</p>
               </div>
               <FaSpinner className="text-2xl text-yellow-500" />
             </div>
@@ -187,9 +160,7 @@ export default function SellerDashboardClient({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">완료된 주문</p>
-                <p className="text-lg font-bold text-gray-900">
-                  {stats?.completedOrders || 0}건
-                </p>
+                <p className="text-lg font-bold text-gray-900">{stats?.completedOrders || 0}건</p>
               </div>
               <FaCheckCircle className="text-2xl text-green-500" />
             </div>
@@ -242,26 +213,27 @@ export default function SellerDashboardClient({
                           #{order.order_number || order.id.slice(0, 8)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {order.service?.title || order.title || "-"}
+                          {order.service?.title || order.title || '-'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {order.buyer?.name || "-"}
+                          {order.buyer?.name || '-'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${order.status === "completed"
-                              ? "bg-green-100 text-green-800"
-                              : order.status === "in_progress"
-                                ? "bg-yellow-100 text-yellow-800"
-                                : "bg-gray-100 text-gray-800"
-                              }`}
+                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              order.status === 'completed'
+                                ? 'bg-green-100 text-green-800'
+                                : order.status === 'in_progress'
+                                  ? 'bg-yellow-100 text-yellow-800'
+                                  : 'bg-gray-100 text-gray-800'
+                            }`}
                           >
-                            {order.status === "in_progress"
-                              ? "진행중"
-                              : order.status === "completed"
-                                ? "완료"
-                                : order.status === "paid"
-                                  ? "결제완료"
+                            {order.status === 'in_progress'
+                              ? '진행중'
+                              : order.status === 'completed'
+                                ? '완료'
+                                : order.status === 'paid'
+                                  ? '결제완료'
                                   : order.status}
                           </span>
                         </td>
@@ -274,9 +246,7 @@ export default function SellerDashboardClient({
                 </table>
               </div>
             ) : (
-              <p className="text-gray-500 text-center py-8">
-                최근 주문이 없습니다
-              </p>
+              <p className="text-gray-500 text-center py-8">최근 주문이 없습니다</p>
             )}
           </div>
         </div>

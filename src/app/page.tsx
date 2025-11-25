@@ -75,7 +75,7 @@ export default async function HomePage() {
 }
 
 // AI 서비스 섹션 (서버 컴포넌트)
-async function AIServicesSection({ aiCategoryIds }: { aiCategoryIds: string[] }) {
+async function AIServicesSection({ aiCategoryIds }: { readonly aiCategoryIds: string[] }) {
   const { createClient, createServiceRoleClient } = await import('@/lib/supabase/server');
   const supabase = await createClient();
 

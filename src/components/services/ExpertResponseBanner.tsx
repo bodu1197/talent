@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { FaTimes } from "react-icons/fa";
+import { useState } from 'react';
+import { FaTimes } from 'react-icons/fa';
 
 interface Props {
-  avgResponseTime: string;
+  readonly avgResponseTime: string;
 }
 
 export default function ExpertResponseBanner({ avgResponseTime }: Props) {
@@ -17,10 +17,7 @@ export default function ExpertResponseBanner({ avgResponseTime }: Props) {
       <span className="text-sm text-green-700">
         ⚡ 첫 문의 응답이 평균 {avgResponseTime}로 빠릅니다.
       </span>
-      <button
-        onClick={() => setIsVisible(false)}
-        className="text-green-700 hover:text-green-800"
-      >
+      <button onClick={() => setIsVisible(false)} className="text-green-700 hover:text-green-800">
         <FaTimes className="text-sm" />
       </button>
     </div>

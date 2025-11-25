@@ -1,8 +1,8 @@
 import { PasswordValidation } from '@/hooks/usePasswordValidation';
 
 interface PasswordRequirementsProps {
-  validation: PasswordValidation;
-  show: boolean;
+  readonly validation: PasswordValidation;
+  readonly show: boolean;
 }
 
 export function PasswordRequirements({ validation, show }: PasswordRequirementsProps) {
@@ -20,9 +20,9 @@ export function PasswordRequirements({ validation, show }: PasswordRequirementsP
       {requirements.map(({ key, label, met }) => (
         <div
           key={key}
-          className={`flex items-center gap-2 text-xs ${met ? "text-green-600" : "text-gray-500"}`}
+          className={`flex items-center gap-2 text-xs ${met ? 'text-green-600' : 'text-gray-500'}`}
         >
-          <span>{met ? "✓" : "○"}</span>
+          <span>{met ? '✓' : '○'}</span>
           <span>{label}</span>
         </div>
       ))}

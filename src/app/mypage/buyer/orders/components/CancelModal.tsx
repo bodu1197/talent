@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { FaTimes, FaBan } from "react-icons/fa";
+import { FaTimes, FaBan } from 'react-icons/fa';
 
 interface CancelModalProps {
-  isOpen: boolean;
-  submitting: boolean;
-  cancelReason: string;
-  onClose: () => void;
-  onCancel: () => void;
-  onReasonChange: (reason: string) => void;
+  readonly isOpen: boolean;
+  readonly submitting: boolean;
+  readonly cancelReason: string;
+  readonly onClose: () => void;
+  readonly onCancel: () => void;
+  readonly onReasonChange: (reason: string) => void;
 }
 
 export default function CancelModal({
@@ -26,10 +26,7 @@ export default function CancelModal({
       <div className="bg-white rounded-lg max-w-md w-full p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-900">주문 취소 요청</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
-          >
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <FaTimes className="text-2xl" />
           </button>
         </div>
@@ -76,7 +73,7 @@ export default function CancelModal({
               disabled={submitting}
               className="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:opacity-50"
             >
-              {submitting ? "처리중..." : "취소 요청"}
+              {submitting ? '처리중...' : '취소 요청'}
             </button>
           </div>
         </div>

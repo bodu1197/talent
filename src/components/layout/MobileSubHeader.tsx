@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { FaArrowLeft } from "react-icons/fa";
+import { useRouter } from 'next/navigation';
+import { FaArrowLeft } from 'react-icons/fa';
 
 interface MobileSubHeaderProps {
-  title?: string;
+  readonly title?: string;
 }
 
 export default function MobileSubHeader({ title }: MobileSubHeaderProps) {
@@ -21,9 +21,7 @@ export default function MobileSubHeader({ title }: MobileSubHeaderProps) {
           <FaArrowLeft className="text-xl" />
         </button>
         {title && (
-          <h1 className="flex-1 text-center font-semibold text-gray-900 text-lg pr-10">
-            {title}
-          </h1>
+          <h1 className="flex-1 text-center font-semibold text-gray-900 text-lg pr-10">{title}</h1>
         )}
       </div>
     </header>

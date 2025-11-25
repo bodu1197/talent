@@ -1,28 +1,26 @@
-"use client";
+'use client';
 
-import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import { WithdrawalRequest } from "@/types/common";
-import { FaMoneyBillWave } from "react-icons/fa";
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
+import { WithdrawalRequest } from '@/types/common';
+import { FaMoneyBillWave } from 'react-icons/fa';
 
 interface WithdrawHistoryClientProps {
-  history: WithdrawalRequest[];
+  readonly history: WithdrawalRequest[];
 }
 
-export default function WithdrawHistoryClient({
-  history,
-}: WithdrawHistoryClientProps) {
+export default function WithdrawHistoryClient({ history }: WithdrawHistoryClientProps) {
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "pending":
-        return "대기중";
-      case "processing":
-        return "처리중";
-      case "completed":
-        return "완료";
-      case "rejected":
-        return "거부됨";
-      case "cancelled":
-        return "취소";
+      case 'pending':
+        return '대기중';
+      case 'processing':
+        return '처리중';
+      case 'completed':
+        return '완료';
+      case 'rejected':
+        return '거부됨';
+      case 'cancelled':
+        return '취소';
       default:
         return status;
     }
@@ -30,18 +28,18 @@ export default function WithdrawHistoryClient({
 
   const getStatusClass = (status: string) => {
     switch (status) {
-      case "completed":
-        return "bg-green-100 text-green-700";
-      case "pending":
-        return "bg-yellow-100 text-yellow-700";
-      case "processing":
-        return "bg-blue-100 text-blue-700";
-      case "rejected":
-        return "bg-red-100 text-red-700";
-      case "cancelled":
-        return "bg-gray-100 text-gray-700";
+      case 'completed':
+        return 'bg-green-100 text-green-700';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-700';
+      case 'processing':
+        return 'bg-blue-100 text-blue-700';
+      case 'rejected':
+        return 'bg-red-100 text-red-700';
+      case 'cancelled':
+        return 'bg-gray-100 text-gray-700';
       default:
-        return "bg-gray-100 text-gray-700";
+        return 'bg-gray-100 text-gray-700';
     }
   };
 
@@ -66,12 +64,8 @@ export default function WithdrawHistoryClient({
                 <th className="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-900">
                   계좌
                 </th>
-                <th className="px-6 py-3 text-right text-sm font-medium text-gray-900">
-                  금액
-                </th>
-                <th className="px-6 py-3 text-center text-sm font-medium text-gray-900">
-                  상태
-                </th>
+                <th className="px-6 py-3 text-right text-sm font-medium text-gray-900">금액</th>
+                <th className="px-6 py-3 text-center text-sm font-medium text-gray-900">상태</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -79,7 +73,7 @@ export default function WithdrawHistoryClient({
                 history.map((item) => (
                   <tr key={item.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 text-xs md:text-sm text-gray-600">
-                      {new Date(item.requested_at).toLocaleDateString("ko-KR")}
+                      {new Date(item.requested_at).toLocaleDateString('ko-KR')}
                     </td>
                     <td className="px-6 py-4 text-sm md:text-base text-gray-900">
                       {item.bank_name}
@@ -101,10 +95,7 @@ export default function WithdrawHistoryClient({
                 ))
               ) : (
                 <tr>
-                  <td
-                    colSpan={5}
-                    className="px-6 py-12 text-center text-gray-500"
-                  >
+                  <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
                     <FaMoneyBillWave className="text-4xl mb-4 text-gray-300 mx-auto" />
                     <p>출금 내역이 없습니다</p>
                   </td>

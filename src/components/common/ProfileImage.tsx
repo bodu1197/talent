@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Image from "next/image";
+import { useState } from 'react';
+import Image from 'next/image';
 
 interface ProfileImageProps {
   /** 프로필 이미지 URL */
-  src: string | null | undefined;
+  readonly src: string | null | undefined;
   /** 이미지 alt 텍스트 (접근성) */
-  alt: string;
+  readonly alt: string;
   /** 이미지 크기 (px) */
-  size?: number;
+  readonly size?: number;
   /** 추가 CSS 클래스 */
-  className?: string;
+  readonly className?: string;
 }
 
 /**
@@ -19,12 +19,7 @@ interface ProfileImageProps {
  * - onError fallback 제거 (기본 아이콘 표시 안 함)
  * - 이미지 로드 실패 시 빈 상태 유지 또는 재시도
  */
-export default function ProfileImage({
-  src,
-  alt,
-  size = 32,
-  className = "",
-}: ProfileImageProps) {
+export default function ProfileImage({ src, alt, size = 32, className = '' }: ProfileImageProps) {
   const [retryCount, setRetryCount] = useState(0);
   const [imageError, setImageError] = useState(false);
 

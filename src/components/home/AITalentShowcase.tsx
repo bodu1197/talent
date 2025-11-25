@@ -1,6 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
-import { FaRobot, FaCheckCircle, FaStar } from "react-icons/fa";
+import Image from 'next/image';
+import Link from 'next/link';
+import { FaRobot, FaCheckCircle, FaStar } from 'react-icons/fa';
 
 interface Service {
   id: string;
@@ -19,7 +19,7 @@ interface Service {
 }
 
 interface Props {
-  services: Service[];
+  readonly services: Service[];
 }
 
 export default function AITalentShowcase({ services = [] }: Props) {
@@ -28,12 +28,8 @@ export default function AITalentShowcase({ services = [] }: Props) {
       <div className="container-1200">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-mobile-lg lg:text-xl font-bold mb-2">
-              AI 재능 쇼케이스
-            </h2>
-            <p className="text-mobile-md text-gray-600">
-              AI 전문가들의 인기 서비스
-            </p>
+            <h2 className="text-mobile-lg lg:text-xl font-bold mb-2">AI 재능 쇼케이스</h2>
+            <p className="text-mobile-md text-gray-600">AI 전문가들의 인기 서비스</p>
           </div>
           <Link
             href="/categories/ai-services"
@@ -46,14 +42,10 @@ export default function AITalentShowcase({ services = [] }: Props) {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {/* 실제 AI 서비스 카드 */}
           {services.map((service) => (
-            <Link
-              key={service.id}
-              href={`/services/${service.id}`}
-              className="group relative"
-            >
+            <Link key={service.id} href={`/services/${service.id}`} className="group relative">
               <div
                 className="bg-gray-100 rounded-lg overflow-hidden w-full relative"
-                style={{ aspectRatio: "210/160" }}
+                style={{ aspectRatio: '210/160' }}
               >
                 {service.thumbnail_url ? (
                   <Image
@@ -84,7 +76,7 @@ export default function AITalentShowcase({ services = [] }: Props) {
                 {/* 판매자 */}
                 <div className="flex items-center gap-1 mb-1">
                   <div className="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center text-white text-[8px] font-bold">
-                    {service.seller?.display_name?.[0] || "S"}
+                    {service.seller?.display_name?.[0] || 'S'}
                   </div>
                   <span className="text-xs text-gray-600 truncate">
                     {service.seller?.display_name}

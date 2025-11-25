@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { FaTimes, FaInfoCircle, FaCloudUploadAlt, FaRedo } from "react-icons/fa";
+import { FaTimes, FaInfoCircle, FaCloudUploadAlt, FaRedo } from 'react-icons/fa';
 
 interface RevisionModalProps {
-  isOpen: boolean;
-  submitting: boolean;
-  revisionDetails: string;
-  remainingRevisions: number;
-  onClose: () => void;
-  onSubmit: () => void;
-  onDetailsChange: (details: string) => void;
+  readonly isOpen: boolean;
+  readonly submitting: boolean;
+  readonly revisionDetails: string;
+  readonly remainingRevisions: number;
+  readonly onClose: () => void;
+  readonly onSubmit: () => void;
+  readonly onDetailsChange: (details: string) => void;
 }
 
 export default function RevisionModal({
@@ -28,10 +28,7 @@ export default function RevisionModal({
       <div className="bg-white rounded-lg max-w-2xl w-full p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-900">수정 요청</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
-          >
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <FaTimes className="text-2xl" />
           </button>
         </div>
@@ -40,17 +37,16 @@ export default function RevisionModal({
           <div className="bg-blue-50 rounded-lg p-4">
             <div className="flex items-center gap-2 text-blue-900 mb-2">
               <FaInfoCircle />
-              <span className="font-medium">
-                남은 수정 횟수: {remainingRevisions}회
-              </span>
+              <span className="font-medium">남은 수정 횟수: {remainingRevisions}회</span>
             </div>
-            <p className="text-sm text-blue-700">
-              수정 요청 시 판매자에게 알림이 전송됩니다.
-            </p>
+            <p className="text-sm text-blue-700">수정 요청 시 판매자에게 알림이 전송됩니다.</p>
           </div>
 
           <div>
-            <label htmlFor="revision-details" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="revision-details"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               수정 요청 사항 *
             </label>
             <textarea
@@ -64,10 +60,16 @@ export default function RevisionModal({
           </div>
 
           <div>
-            <label htmlFor="revision-file-upload" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="revision-file-upload"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               참고 파일 첨부 (선택)
             </label>
-            <div id="revision-file-upload" className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-brand-primary transition-colors cursor-pointer">
+            <div
+              id="revision-file-upload"
+              className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-brand-primary transition-colors cursor-pointer"
+            >
               <FaCloudUploadAlt className="text-gray-400 text-3xl mb-2" />
               <p className="text-gray-600 text-sm">클릭하여 파일 선택</p>
             </div>
@@ -87,7 +89,7 @@ export default function RevisionModal({
               className="flex-1 px-6 py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors font-medium disabled:opacity-50 flex items-center justify-center"
             >
               {submitting ? (
-                "전송 중..."
+                '전송 중...'
               ) : (
                 <>
                   <FaRedo className="mr-2" />

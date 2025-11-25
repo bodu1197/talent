@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { FaTimes, FaExclamationTriangle } from "react-icons/fa";
+import { FaTimes, FaExclamationTriangle } from 'react-icons/fa';
 
 interface ConfirmModalProps {
-  isOpen: boolean;
-  submitting: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
+  readonly isOpen: boolean;
+  readonly submitting: boolean;
+  readonly onClose: () => void;
+  readonly onConfirm: () => void;
 }
 
 export default function ConfirmModal({
@@ -22,10 +22,7 @@ export default function ConfirmModal({
       <div className="bg-white rounded-lg max-w-md w-full p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-900">구매 확정</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
-          >
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <FaTimes className="text-2xl" />
           </button>
         </div>
@@ -45,8 +42,7 @@ export default function ConfirmModal({
             </div>
           </div>
           <p className="text-gray-700">
-            구매 확정 시 판매자에게 대금이 정산되며, 이후에는 수정 요청이
-            불가능합니다.
+            구매 확정 시 판매자에게 대금이 정산되며, 이후에는 수정 요청이 불가능합니다.
           </p>
         </div>
 
@@ -63,7 +59,7 @@ export default function ConfirmModal({
             disabled={submitting}
             className="flex-1 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium disabled:opacity-50"
           >
-            {submitting ? "처리 중..." : "확정하기"}
+            {submitting ? '처리 중...' : '확정하기'}
           </button>
         </div>
       </div>

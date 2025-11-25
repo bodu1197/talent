@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { FaSpinner, FaCommentDots } from "react-icons/fa";
-import toast from "react-hot-toast";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { FaSpinner, FaCommentDots } from 'react-icons/fa';
+import toast from 'react-hot-toast';
 
 interface Props {
-  sellerId: string;
-  serviceId: string;
+  readonly sellerId: string;
+  readonly serviceId: string;
 }
 
 export default function ContactSellerButton({ sellerId, serviceId }: Props) {
@@ -19,10 +19,10 @@ export default function ContactSellerButton({ sellerId, serviceId }: Props) {
       setIsLoading(true);
 
       // 채팅방 생성 또는 기존 채팅방 가져오기
-      const response = await fetch("/api/chat/rooms", {
-        method: "POST",
+      const response = await fetch('/api/chat/rooms', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           seller_id: sellerId,
@@ -34,10 +34,10 @@ export default function ContactSellerButton({ sellerId, serviceId }: Props) {
         const error = await response.json();
         if (response.status === 401) {
           // 로그인 필요
-          router.push("/auth/login?redirect=/services/" + serviceId);
+          router.push('/auth/login?redirect=/services/' + serviceId);
           return;
         }
-        throw new Error(error.error || "채팅방 생성 실패");
+        throw new Error(error.error || '채팅방 생성 실패');
       }
 
       const { room_id } = await response.json();
@@ -46,10 +46,10 @@ export default function ContactSellerButton({ sellerId, serviceId }: Props) {
       router.push(`/chat?room=${room_id}`);
     } catch (error) {
       console.error(
-        "Contact seller error:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+        'Contact seller error:',
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
       );
-      toast.error("문의 시작에 실패했습니다. 다시 시도해주세요.");
+      toast.error('문의 시작에 실패했습니다. 다시 시도해주세요.');
     } finally {
       setIsLoading(false);
     }

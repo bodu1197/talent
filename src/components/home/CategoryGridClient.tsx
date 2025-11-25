@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
+import { useState } from 'react';
+import Link from 'next/link';
 import {
   FaRobot,
   FaPalette,
@@ -28,7 +28,7 @@ import {
   FaCircle,
   FaMinus,
   FaTh,
-} from "react-icons/fa";
+} from 'react-icons/fa';
 
 interface Category {
   id: string;
@@ -54,7 +54,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   bullhorn: FaBullhorn,
   camera: FaCamera,
   language: FaLanguage,
-  "pen-fancy": FaPenFancy,
+  'pen-fancy': FaPenFancy,
   briefcase: FaBriefcase,
   book: FaBook,
   music: FaMusic,
@@ -62,16 +62,16 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   spa: FaSpa,
   bullseye: FaBullseye,
   star: FaStar,
-  "book-open": FaBookOpen,
+  'book-open': FaBookOpen,
   gavel: FaGavel,
   hammer: FaHammer,
-  "graduation-cap": FaGraduationCap,
-  "chart-line": FaChartLine,
+  'graduation-cap': FaGraduationCap,
+  'chart-line': FaChartLine,
   home: FaHome,
   motorcycle: FaMotorcycle,
 };
 
-function CategoryIcon({ icon, color }: { icon?: string; color: string }) {
+function CategoryIcon({ icon, color }: { readonly icon?: string; color: string }) {
   const iconClass = `${color}`;
   const IconComponent = (icon && ICON_MAP[icon]) || FaCircle;
   return <IconComponent className={iconClass} />;
@@ -110,9 +110,7 @@ export default function CategoryGridClient({
           <button
             onClick={() => setShowAllCategories(!showAllCategories)}
             className="flex flex-col items-center justify-center h-16 w-16 sm:h-18 sm:w-18 md:h-20 md:w-20 bg-gray-100 text-gray-500 hover:bg-brand-primary hover:text-white transition-all duration-200 cursor-pointer rounded-lg"
-            aria-label={
-              showAllCategories ? "카테고리 간략히 보기" : "모든 카테고리 보기"
-            }
+            aria-label={showAllCategories ? '카테고리 간략히 보기' : '모든 카테고리 보기'}
             aria-expanded={showAllCategories}
           >
             <div className="grid grid-cols-2 gap-1">
@@ -138,7 +136,7 @@ export default function CategoryGridClient({
               )}
             </div>
             <span className="text-xs font-medium mt-1">
-              {showAllCategories ? "간략히 보기" : "전체 보기"}
+              {showAllCategories ? '간략히 보기' : '전체 보기'}
             </span>
           </button>
         )}

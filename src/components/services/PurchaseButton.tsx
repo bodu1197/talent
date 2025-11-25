@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { FaSpinner } from "react-icons/fa";
-import toast from "react-hot-toast";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { FaSpinner } from 'react-icons/fa';
+import toast from 'react-hot-toast';
 
 interface PurchaseButtonProps {
-  sellerId: string;
-  serviceId: string;
-  currentUserId: string;
-  sellerUserId: string;
-  serviceTitle: string;
-  servicePrice: number;
-  deliveryDays: number;
-  revisionCount: number;
-  serviceDescription?: string;
+  readonly sellerId: string;
+  readonly serviceId: string;
+  readonly currentUserId: string;
+  readonly sellerUserId: string;
+  readonly serviceTitle: string;
+  readonly servicePrice: number;
+  readonly deliveryDays: number;
+  readonly revisionCount: number;
+  readonly serviceDescription?: string;
 }
 
 export default function PurchaseButton({
@@ -34,7 +34,7 @@ export default function PurchaseButton({
   const handlePurchase = async () => {
     // 자신의 서비스인 경우
     if (currentUserId === sellerUserId) {
-      toast.error("자신의 서비스는 구매할 수 없습니다");
+      toast.error('자신의 서비스는 구매할 수 없습니다');
       return;
     }
 
@@ -42,9 +42,9 @@ export default function PurchaseButton({
 
     try {
       // 바로 결제 준비 API 호출 (주문 생성)
-      const prepareResponse = await fetch("/api/payments/direct-purchase", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const prepareResponse = await fetch('/api/payments/direct-purchase', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           seller_id: sellerId,
           service_id: serviceId,
@@ -60,7 +60,7 @@ export default function PurchaseButton({
         const error = await prepareResponse.json();
         const errorMsg = error.details
           ? `${error.error}: ${error.details} (${error.code})`
-          : error.error || "결제 준비 실패";
+          : error.error || '결제 준비 실패';
         throw new Error(errorMsg);
       }
 
@@ -69,15 +69,8 @@ export default function PurchaseButton({
       // 결제 페이지로 이동
       router.push(`/payment/direct/${order_id}`);
     } catch (error) {
-      console.error(
-        "Purchase error:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
-      );
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "구매 진행 중 오류가 발생했습니다",
-      );
+      console.error('Purchase error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+      toast.error(error instanceof Error ? error.message : '구매 진행 중 오류가 발생했습니다');
     } finally {
       setIsLoading(false);
     }
@@ -95,7 +88,7 @@ export default function PurchaseButton({
           처리 중...
         </>
       ) : (
-        "구매하기"
+        '구매하기'
       )}
     </button>
   );

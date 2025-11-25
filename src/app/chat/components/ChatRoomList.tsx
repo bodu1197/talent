@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { FaComments, FaSpinner, FaSearch } from "react-icons/fa";
-import ChatRoomItem from "./ChatRoomItem";
+import { FaComments, FaSpinner, FaSearch } from 'react-icons/fa';
+import ChatRoomItem from './ChatRoomItem';
 
 interface ChatRoom {
   id: string;
@@ -32,19 +32,19 @@ interface ChatRoom {
   unreadCount?: number;
 }
 
-type TabType = "all" | "unread" | "deal" | "favorite";
+type TabType = 'all' | 'unread' | 'deal' | 'favorite';
 
 interface ChatRoomListProps {
-  rooms: ChatRoom[];
-  selectedRoomId: string | null;
-  activeTab: TabType;
-  isCreatingRoom?: boolean;
-  isMobile?: boolean;
-  showSearch?: boolean;
-  onSelectRoom: (roomId: string) => void;
-  onToggleFavorite: (roomId: string, e: React.MouseEvent) => void;
-  onTabChange: (tab: TabType) => void;
-  filterRoom: (room: ChatRoom, tab: TabType) => boolean;
+  readonly rooms: ChatRoom[];
+  readonly selectedRoomId: string | null;
+  readonly activeTab: TabType;
+  readonly isCreatingRoom?: boolean;
+  readonly isMobile?: boolean;
+  readonly showSearch?: boolean;
+  readonly onSelectRoom: (roomId: string) => void;
+  readonly onToggleFavorite: (roomId: string, e: React.MouseEvent) => void;
+  readonly onTabChange: (tab: TabType) => void;
+  readonly filterRoom: (room: ChatRoom, tab: TabType) => boolean;
 }
 
 export default function ChatRoomList({
@@ -60,10 +60,10 @@ export default function ChatRoomList({
   filterRoom,
 }: ChatRoomListProps) {
   const tabs: { id: TabType; label: string; showInMobile: boolean }[] = [
-    { id: "all", label: "전체", showInMobile: true },
-    { id: "unread", label: "안 읽음", showInMobile: true },
-    { id: "deal", label: "거래 중", showInMobile: false },
-    { id: "favorite", label: "즐겨찾기", showInMobile: false },
+    { id: 'all', label: '전체', showInMobile: true },
+    { id: 'unread', label: '안 읽음', showInMobile: true },
+    { id: 'deal', label: '거래 중', showInMobile: false },
+    { id: 'favorite', label: '즐겨찾기', showInMobile: false },
   ];
 
   const visibleTabs = tabs.filter((tab) => !isMobile || tab.showInMobile);
@@ -71,13 +71,11 @@ export default function ChatRoomList({
 
   const getTabClassName = (tabId: TabType) => {
     const baseClass =
-      "px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap";
-    const activeClass = isMobile
-      ? "bg-brand-primary text-white"
-      : "bg-black text-white";
+      'px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap';
+    const activeClass = isMobile ? 'bg-brand-primary text-white' : 'bg-black text-white';
     const inactiveClass = isMobile
-      ? "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
-      : "bg-white text-gray-700 hover:bg-gray-100";
+      ? 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
+      : 'bg-white text-gray-700 hover:bg-gray-100';
 
     return `${baseClass} ${activeTab === tabId ? activeClass : inactiveClass}`;
   };
@@ -89,7 +87,7 @@ export default function ChatRoomList({
         <h1 className="text-2xl font-bold mb-4">채팅</h1>
 
         {/* 탭 */}
-        <div className={`flex gap-2 ${isMobile ? "overflow-x-auto" : ""}`}>
+        <div className={`flex gap-2 ${isMobile ? 'overflow-x-auto' : ''}`}>
           {visibleTabs.map((tab) => (
             <button
               key={tab.id}
@@ -119,19 +117,18 @@ export default function ChatRoomList({
       )}
 
       {/* 채팅방 목록 */}
-      <div className={isMobile ? "overflow-y-auto pb-20" : "flex-1 overflow-y-auto"}>
+      <div className={isMobile ? 'overflow-y-auto pb-20' : 'flex-1 overflow-y-auto'}>
         {isCreatingRoom ? (
           <div className="p-8 text-center text-gray-500">
             <FaSpinner className="fa-spin text-4xl mb-3 inline-block" />
             <p>채팅방을 생성하는 중...</p>
           </div>
-        ) : (
-          rooms.length === 0 ? (
+        ) : rooms.length === 0 ? (
           <div
-            className={`text-center text-gray-500 ${isMobile ? "flex flex-col items-center justify-center py-12" : "p-8"}`}
+            className={`text-center text-gray-500 ${isMobile ? 'flex flex-col items-center justify-center py-12' : 'p-8'}`}
           >
-            <FaComments className={`text-4xl ${isMobile ? "mb-4" : "mb-3 inline-block"}`} />
-            <p>{isMobile ? "채팅 내역이 없습니다" : "채팅방이 없습니다"}</p>
+            <FaComments className={`text-4xl ${isMobile ? 'mb-4' : 'mb-3 inline-block'}`} />
+            <p>{isMobile ? '채팅 내역이 없습니다' : '채팅방이 없습니다'}</p>
           </div>
         ) : (
           filteredRooms.map((room) => (
@@ -144,7 +141,6 @@ export default function ChatRoomList({
               onToggleFavorite={onToggleFavorite}
             />
           ))
-          )
         )}
       </div>
     </>

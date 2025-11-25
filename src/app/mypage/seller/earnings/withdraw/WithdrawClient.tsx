@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
-import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import toast from "react-hot-toast";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
+import toast from 'react-hot-toast';
 
 interface WithdrawClientProps {
-  sellerData: {
-    id: string;
-    bank_name: string | null;
-    account_number: string | null;
-    account_holder: string | null;
+  readonly sellerData: {
+    readonly id: string;
+    readonly bank_name: string | null;
+    readonly account_number: string | null;
+    readonly account_holder: string | null;
   };
   profileData?: {
     name: string;
@@ -31,7 +31,7 @@ export default function WithdrawClient({
   availableBalance,
   pendingWithdrawal,
 }: WithdrawClientProps) {
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -45,50 +45,44 @@ export default function WithdrawClient({
 
     // Validation
     if (!withdrawAmount || withdrawAmount <= 0) {
-      setError("출금 금액을 입력해주세요.");
+      setError('출금 금액을 입력해주세요.');
       return;
     }
 
     if (withdrawAmount > availableBalance) {
-      setError("출금 가능 금액을 초과했습니다.");
+      setError('출금 가능 금액을 초과했습니다.');
       return;
     }
 
     if (withdrawAmount < 10000) {
-      setError("최소 출금 금액은 10,000원입니다.");
+      setError('최소 출금 금액은 10,000원입니다.');
       return;
     }
 
     if (!sellerData.bank_name || !sellerData.account_number) {
-      setError("계좌 정보를 먼저 등록해주세요.");
+      setError('계좌 정보를 먼저 등록해주세요.');
       return;
     }
 
     setIsLoading(true);
 
     try {
-      const { error: withdrawError } = await supabase
-        .from("withdrawal_requests")
-        .insert({
-          seller_id: sellerData.id,
-          amount: withdrawAmount,
-          bank_name: sellerData.bank_name,
-          account_number: sellerData.account_number,
-          account_holder: sellerData.account_holder,
-          status: "pending",
-        });
+      const { error: withdrawError } = await supabase.from('withdrawal_requests').insert({
+        seller_id: sellerData.id,
+        amount: withdrawAmount,
+        bank_name: sellerData.bank_name,
+        account_number: sellerData.account_number,
+        account_holder: sellerData.account_holder,
+        status: 'pending',
+      });
 
       if (withdrawError) throw withdrawError;
 
-      toast.success("출금 신청이 완료되었습니다.");
-      router.push("/mypage/seller/earnings");
+      toast.success('출금 신청이 완료되었습니다.');
+      router.push('/mypage/seller/earnings');
       router.refresh();
     } catch (error: unknown) {
-      setError(
-        error instanceof Error
-          ? error.message
-          : "출금 신청 중 오류가 발생했습니다.",
-      );
+      setError(error instanceof Error ? error.message : '출금 신청 중 오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }
@@ -138,10 +132,7 @@ export default function WithdrawClient({
             )}
           </div>
 
-          <form
-            onSubmit={handleWithdraw}
-            className="bg-white rounded-lg shadow p-6"
-          >
+          <form onSubmit={handleWithdraw} className="bg-white rounded-lg shadow p-6">
             <h2 className="text-base md:text-lg font-semibold mb-4">출금 신청</h2>
 
             {error && (
@@ -151,7 +142,10 @@ export default function WithdrawClient({
             )}
 
             <div className="mb-4">
-              <label htmlFor="withdraw-amount" className="block text-sm md:text-base font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="withdraw-amount"
+                className="block text-sm md:text-base font-medium text-gray-700 mb-2"
+              >
                 출금 금액
               </label>
               <input
@@ -165,9 +159,7 @@ export default function WithdrawClient({
                 max={availableBalance}
                 disabled={isLoading || !!pendingWithdrawal}
               />
-              <p className="text-xs text-gray-500 mt-1">
-                최소 출금 금액: 10,000원
-              </p>
+              <p className="text-xs text-gray-500 mt-1">최소 출금 금액: 10,000원</p>
             </div>
 
             <div className="flex gap-2">
@@ -180,12 +172,10 @@ export default function WithdrawClient({
               </button>
               <button
                 type="submit"
-                disabled={
-                  isLoading || !!pendingWithdrawal || !sellerData.bank_name
-                }
+                disabled={isLoading || !!pendingWithdrawal || !sellerData.bank_name}
                 className="flex-1 btn-ai py-3 disabled:opacity-50"
               >
-                {isLoading ? "신청 중..." : "출금 신청"}
+                {isLoading ? '신청 중...' : '출금 신청'}
               </button>
             </div>
           </form>

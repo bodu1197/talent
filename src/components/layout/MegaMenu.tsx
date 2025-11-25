@@ -7,7 +7,7 @@ import { FaRobot, FaChevronRight, FaFire } from 'react-icons/fa';
 import * as FaIcons from 'react-icons/fa';
 
 interface MegaMenuProps {
-  categories: CategoryItem[];
+  readonly categories: CategoryItem[];
 }
 
 export default function MegaMenu({ categories }: MegaMenuProps) {

@@ -1,22 +1,25 @@
-'use client'
+'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface CategorySortProps {
-  currentSort?: string
-  currentPrice?: string
+  readonly currentSort?: string;
+  readonly currentPrice?: string;
 }
 
-export default function CategorySort({ currentSort: _currentSort, currentPrice: _currentPrice }: CategorySortProps) {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const currentSort = searchParams.get('sort') || 'popular'
+export default function CategorySort({
+  currentSort: _currentSort,
+  currentPrice: _currentPrice,
+}: CategorySortProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentSort = searchParams.get('sort') || 'popular';
 
   const handleSortChange = (newSort: string) => {
-    const params = new URLSearchParams(searchParams)
-    params.set('sort', newSort)
-    router.push(`?${params.toString()}`)
-  }
+    const params = new URLSearchParams(searchParams);
+    params.set('sort', newSort);
+    router.push(`?${params.toString()}`);
+  };
 
   return (
     <div className="flex items-center gap-2 flex-shrink-0">
@@ -35,5 +38,5 @@ export default function CategorySort({ currentSort: _currentSort, currentPrice: 
         <option value="rating">평점순</option>
       </select>
     </div>
-  )
+  );
 }

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   FaBars,
   FaTimes,
@@ -26,10 +26,10 @@ import {
   FaChevronRight,
   FaEnvelope,
   FaUser,
-} from "react-icons/fa";
+} from 'react-icons/fa';
 
 interface MobileSidebarProps {
-  mode: "buyer" | "seller" | "admin";
+  readonly mode: 'buyer' | 'seller' | 'admin';
 }
 
 export default function MobileSidebar({ mode }: MobileSidebarProps) {
@@ -39,143 +39,139 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
   // ESC 키로 사이드바 닫기
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
+      if (e.key === 'Escape' && isOpen) {
         setIsOpen(false);
       }
     };
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen]);
 
   const buyerMenuItems = [
     {
       icon: FaHome,
-      label: "대시보드",
-      href: "/mypage/buyer/dashboard",
+      label: '대시보드',
+      href: '/mypage/buyer/dashboard',
     },
     {
       icon: FaShoppingCart,
-      label: "주문내역",
-      href: "/mypage/buyer/orders",
+      label: '주문내역',
+      href: '/mypage/buyer/orders',
     },
     {
       icon: FaFileAlt,
-      label: "견적 요청",
-      href: "/mypage/buyer/quotes",
+      label: '견적 요청',
+      href: '/mypage/buyer/quotes',
     },
     {
       icon: FaHeart,
-      label: "찜한 서비스",
-      href: "/mypage/buyer/favorites",
+      label: '찜한 서비스',
+      href: '/mypage/buyer/favorites',
     },
     {
       icon: FaStar,
-      label: "내 리뷰",
-      href: "/mypage/buyer/reviews",
+      label: '내 리뷰',
+      href: '/mypage/buyer/reviews',
     },
   ];
 
   const sellerMenuItems = [
     {
       icon: FaHome,
-      label: "대시보드",
-      href: "/mypage/seller/dashboard",
+      label: '대시보드',
+      href: '/mypage/seller/dashboard',
     },
     {
       icon: FaBox,
-      label: "내 서비스",
-      href: "/mypage/seller/services",
+      label: '내 서비스',
+      href: '/mypage/seller/services',
     },
     {
       icon: FaClipboardList,
-      label: "주문 관리",
-      href: "/mypage/seller/orders",
+      label: '주문 관리',
+      href: '/mypage/seller/orders',
     },
     {
       icon: FaChartLine,
-      label: "수익 관리",
-      href: "/mypage/seller/earnings",
+      label: '수익 관리',
+      href: '/mypage/seller/earnings',
     },
     {
       icon: FaChartBar,
-      label: "통계/분석",
-      href: "/mypage/seller/statistics",
+      label: '통계/분석',
+      href: '/mypage/seller/statistics',
     },
     {
       icon: FaFolder,
-      label: "포트폴리오",
-      href: "/mypage/seller/portfolio",
+      label: '포트폴리오',
+      href: '/mypage/seller/portfolio',
     },
     {
       icon: FaStar,
-      label: "리뷰 관리",
-      href: "/mypage/seller/reviews",
+      label: '리뷰 관리',
+      href: '/mypage/seller/reviews',
     },
   ];
 
   const adminMenuItems = [
     {
       icon: FaHome,
-      label: "대시보드",
-      href: "/admin/dashboard",
+      label: '대시보드',
+      href: '/admin/dashboard',
     },
     {
       icon: FaUsers,
-      label: "회원 관리",
-      href: "/admin/users",
+      label: '회원 관리',
+      href: '/admin/users',
     },
     {
       icon: FaBox,
-      label: "서비스 관리",
-      href: "/admin/services",
+      label: '서비스 관리',
+      href: '/admin/services',
     },
     {
       icon: FaFileInvoice,
-      label: "주문 관리",
-      href: "/admin/orders",
+      label: '주문 관리',
+      href: '/admin/orders',
     },
     {
       icon: FaTags,
-      label: "카테고리 관리",
-      href: "/admin/categories",
+      label: '카테고리 관리',
+      href: '/admin/categories',
     },
     {
       icon: FaDollarSign,
-      label: "정산 관리",
-      href: "/admin/settlements",
+      label: '정산 관리',
+      href: '/admin/settlements',
     },
     {
       icon: FaBullhorn,
-      label: "광고 관리",
-      href: "/admin/advertisements",
+      label: '광고 관리',
+      href: '/admin/advertisements',
     },
     {
       icon: FaQuestionCircle,
-      label: "문의 관리",
-      href: "/admin/inquiries",
+      label: '문의 관리',
+      href: '/admin/inquiries',
     },
     {
       icon: FaFlag,
-      label: "신고 관리",
-      href: "/admin/reports",
+      label: '신고 관리',
+      href: '/admin/reports',
     },
   ];
 
   const menuItems =
-    mode === "buyer"
-      ? buyerMenuItems
-      : mode === "seller"
-        ? sellerMenuItems
-        : adminMenuItems;
+    mode === 'buyer' ? buyerMenuItems : mode === 'seller' ? sellerMenuItems : adminMenuItems;
 
   const getModeLabel = () => {
     switch (mode) {
-      case "buyer":
-        return "구매자 페이지";
-      case "seller":
-        return "판매자 페이지";
-      case "admin":
-        return "관리자 페이지";
+      case 'buyer':
+        return '구매자 페이지';
+      case 'seller':
+        return '판매자 페이지';
+      case 'admin':
+        return '관리자 페이지';
     }
   };
 
@@ -203,7 +199,7 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
       {/* 드로어 사이드바 */}
       <aside
         className={`lg:hidden fixed top-0 left-0 h-full w-80 bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out overflow-y-auto ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
+          isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* 헤더 */}
@@ -224,8 +220,7 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
         {/* 메뉴 아이템 */}
         <nav className="p-4">
           {menuItems.map((item) => {
-            const isActive =
-              pathname === item.href || pathname.startsWith(item.href + "/");
+            const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
             const Icon = item.icon;
 
             return (
@@ -235,8 +230,8 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
                 onClick={() => setIsOpen(false)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all mb-2 ${
                   isActive
-                    ? "bg-brand-primary text-white shadow-md"
-                    : "text-gray-700 hover:bg-gray-100"
+                    ? 'bg-brand-primary text-white shadow-md'
+                    : 'text-gray-700 hover:bg-gray-100'
                 }`}
               >
                 <Icon className="text-lg w-5 text-center" />
@@ -253,9 +248,9 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
             href="/chat"
             onClick={() => setIsOpen(false)}
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all mb-2 ${
-              pathname.startsWith("/chat")
-                ? "bg-brand-primary text-white"
-                : "text-gray-700 hover:bg-gray-100"
+              pathname.startsWith('/chat')
+                ? 'bg-brand-primary text-white'
+                : 'text-gray-700 hover:bg-gray-100'
             }`}
           >
             <FaEnvelope className="text-lg w-5 text-center" />
@@ -266,9 +261,9 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
             href="/mypage/settings"
             onClick={() => setIsOpen(false)}
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all mb-2 ${
-              pathname === "/mypage/settings"
-                ? "bg-brand-primary text-white"
-                : "text-gray-700 hover:bg-gray-100"
+              pathname === '/mypage/settings'
+                ? 'bg-brand-primary text-white'
+                : 'text-gray-700 hover:bg-gray-100'
             }`}
           >
             <FaUser className="text-lg w-5 text-center" />

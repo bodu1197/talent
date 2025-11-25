@@ -1,52 +1,61 @@
-'use client'
+'use client';
 
-import { ReactNode, useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
-import Sidebar from './Sidebar'
-import MobileSidebar from './MobileSidebar'
+import { ReactNode, useState, useEffect } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import Sidebar from './Sidebar';
+import MobileSidebar from './MobileSidebar';
 
 interface MypageLayoutWrapperProps {
-  mode: 'seller' | 'buyer'
-  profileData?: {
-    name: string
-    profile_image?: string | null
-  } | null
-  children: ReactNode
+  readonly mode: 'seller' | 'buyer';
+  readonly profileData?: {
+    readonly name: string;
+    readonly profile_image?: string | null;
+  } | null;
+  children: ReactNode;
 }
 
-export default function MypageLayoutWrapper({ mode, profileData: initialProfileData, children }: MypageLayoutWrapperProps) {
-  const [profileData, setProfileData] = useState(initialProfileData)
+export default function MypageLayoutWrapper({
+  mode,
+  profileData: initialProfileData,
+  children,
+}: MypageLayoutWrapperProps) {
+  const [profileData, setProfileData] = useState(initialProfileData);
 
   // 자동으로 프로필 정보 로드
   useEffect(() => {
     // initialProfileData가 이미 있으면 사용 (dashboard에서 전달한 경우)
     if (initialProfileData !== undefined) {
-      setProfileData(initialProfileData)
-      return
+      setProfileData(initialProfileData);
+      return;
     }
 
     // profileData가 없으면 자동 로드
-    loadProfileData()
-  }, [mode, initialProfileData])
+    loadProfileData();
+  }, [mode, initialProfileData]);
 
   async function loadProfileData() {
     try {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
-      if (!user) return
+      if (!user) return;
 
       // Load from profiles table (unified source for both buyer and seller)
       const { data: profile } = await supabase
         .from('profiles')
         .select('name, profile_image')
         .eq('user_id', user.id)
-        .maybeSingle()
+        .maybeSingle();
 
-      setProfileData(profile)
+      setProfileData(profile);
     } catch (error) {
-      console.error('Failed to load profile data:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
-      setProfileData(null)
+      console.error(
+        'Failed to load profile data:',
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
+      );
+      setProfileData(null);
     }
   }
 
@@ -55,10 +64,8 @@ export default function MypageLayoutWrapper({ mode, profileData: initialProfileD
       <div className="flex w-full max-w-[1200px]">
         <MobileSidebar mode={mode} />
         <Sidebar mode={mode} profileData={profileData} />
-        <main className="flex-1 overflow-y-auto">
-          {children}
-        </main>
+        <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
     </div>
-  )
+  );
 }

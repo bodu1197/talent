@@ -1,31 +1,34 @@
-'use client'
+'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface CategoryFilterProps {
-  categoryId: string
-  isAI: boolean
+  readonly categoryId: string;
+  readonly isAI: boolean;
 }
 
-export default function CategoryFilter({ categoryId: _categoryId, isAI: _isAI }: CategoryFilterProps) {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const currentPrice = searchParams.get('price')
-  const _currentSort = searchParams.get('sort') || 'popular'
+export default function CategoryFilter({
+  categoryId: _categoryId,
+  isAI: _isAI,
+}: CategoryFilterProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentPrice = searchParams.get('price');
+  const _currentSort = searchParams.get('sort') || 'popular';
 
   const handlePriceChange = (priceRange: string) => {
-    const params = new URLSearchParams(searchParams)
+    const params = new URLSearchParams(searchParams);
     if (priceRange) {
-      params.set('price', priceRange)
+      params.set('price', priceRange);
     } else {
-      params.delete('price')
+      params.delete('price');
     }
-    router.push(`?${params.toString()}`)
-  }
+    router.push(`?${params.toString()}`);
+  };
 
   const handleReset = () => {
-    router.push('?')
-  }
+    router.push('?');
+  };
 
   return (
     <div className="flex items-center gap-6 flex-wrap">
@@ -104,5 +107,5 @@ export default function CategoryFilter({ categoryId: _categoryId, isAI: _isAI }:
         초기화
       </button>
     </div>
-  )
+  );
 }

@@ -1,10 +1,10 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import PaymentClient from "./PaymentClient";
+import { redirect } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server';
+import PaymentClient from './PaymentClient';
 
 interface PaymentPageProps {
-  params: Promise<{
-    paymentRequestId: string;
+  readonly params: Promise<{
+    readonly paymentRequestId: string;
   }>;
 }
 
@@ -16,12 +16,12 @@ export default async function PaymentPage({ params }: PaymentPageProps) {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/auth/login");
+    redirect('/auth/login');
   }
 
   // 결제 요청 정보 조회
   const { data: paymentRequest, error } = await supabase
-    .from("payment_requests")
+    .from('payment_requests')
     .select(
       `
       id,
@@ -37,22 +37,22 @@ export default async function PaymentPage({ params }: PaymentPageProps) {
       status,
       expires_at,
       created_at
-    `,
+    `
     )
-    .eq("id", paymentRequestId)
+    .eq('id', paymentRequestId)
     .single();
 
   if (error || !paymentRequest) {
-    redirect("/chat");
+    redirect('/chat');
   }
 
   // 구매자인지 확인
   if (paymentRequest.buyer_id !== user.id) {
-    redirect("/chat");
+    redirect('/chat');
   }
 
   // 수락된 상태인지 확인
-  if (paymentRequest.status !== "accepted") {
+  if (paymentRequest.status !== 'accepted') {
     redirect(`/chat/${paymentRequest.room_id}`);
   }
 
@@ -63,23 +63,17 @@ export default async function PaymentPage({ params }: PaymentPageProps) {
 
   // 판매자 정보 조회 (seller_profiles 뷰 사용)
   const { data: seller } = await supabase
-    .from("seller_profiles")
-    .select("id, business_name, display_name, profile_image, user_id")
-    .eq("id", paymentRequest.seller_id)
+    .from('seller_profiles')
+    .select('id, business_name, display_name, profile_image, user_id')
+    .eq('id', paymentRequest.seller_id)
     .single();
 
   // 구매자 정보 조회 (profiles 테이블 사용)
   const { data: buyer } = await supabase
-    .from("profiles")
-    .select("user_id, name, email, phone")
-    .eq("user_id", user.id)
+    .from('profiles')
+    .select('user_id, name, email, phone')
+    .eq('user_id', user.id)
     .single();
 
-  return (
-    <PaymentClient
-      paymentRequest={paymentRequest}
-      seller={seller}
-      buyer={buyer}
-    />
-  );
+  return <PaymentClient paymentRequest={paymentRequest} seller={seller} buyer={buyer} />;
 }

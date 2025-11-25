@@ -1,13 +1,13 @@
-import { FaExclamationCircle } from "react-icons/fa";
+import { FaExclamationCircle } from 'react-icons/fa';
 
 interface ErrorStateProps {
-  title?: string;
-  message: string;
-  retry?: () => void;
+  readonly title?: string;
+  readonly message: string;
+  readonly retry?: () => void;
 }
 
 export default function ErrorState({
-  title = "오류가 발생했습니다",
+  title = '오류가 발생했습니다',
   message,
   retry,
 }: ErrorStateProps) {

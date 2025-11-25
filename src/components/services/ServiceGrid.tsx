@@ -8,10 +8,10 @@ import { getServicesByCategory, getActiveServices } from '@/lib/supabase/queries
 import { logger } from '@/lib/logger';
 
 interface ServiceGridProps {
-  categoryId?: string;
-  sellerId?: string;
-  featured?: boolean;
-  columns?: 4 | 5; // 4열 (카테고리 페이지) 또는 5열 (메인 페이지)
+  readonly categoryId?: string;
+  readonly sellerId?: string;
+  readonly featured?: boolean;
+  readonly columns?: 4 | 5; // 4열 (카테고리 페이지) 또는 5열 (메인 페이지)
 }
 
 export default function ServiceGrid({
