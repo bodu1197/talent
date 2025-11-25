@@ -1,13 +1,13 @@
 // 성별 중립적인 랜덤 닉네임 생성기
-import { randomBytes } from 'node:crypto';
 
 /**
  * Get cryptographically secure random integer
+ * Uses Web Crypto API (works in both browser and Node.js)
  */
 function getSecureRandomInt(max: number): number {
-  const buffer = randomBytes(4);
-  const randomValue = buffer.readUInt32BE(0) / 0xffffffff;
-  return Math.floor(randomValue * max);
+  const array = new Uint32Array(1);
+  crypto.getRandomValues(array);
+  return array[0] % max;
 }
 
 const adjectives = [
