@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { checkAdminAuth } from '@/lib/admin/auth';
-import { PostgrestFilterBuilder } from '@supabase/postgrest-js';
 
 interface AnalyticsQuery {
   period: 'hour' | 'day' | 'month' | 'year';
@@ -39,12 +38,12 @@ function getQueryConfig(period: AnalyticsQuery['period']): StatsQueryConfig {
 }
 
 // Helper: Apply date filters to query
-function applyDateFilters<T extends Record<string, unknown>>(
-  query: PostgrestFilterBuilder<T, T, T[], string, unknown>,
+function applyDateFilters(
+  query: any, // eslint-disable-line @typescript-eslint/no-explicit-any
   startDate: string | null,
   endDate: string | null,
   dateColumn: string
-): PostgrestFilterBuilder<T, T, T[], string, unknown> {
+) {
   let filteredQuery = query;
   if (startDate) {
     filteredQuery = filteredQuery.gte(dateColumn, startDate);
@@ -56,10 +55,8 @@ function applyDateFilters<T extends Record<string, unknown>>(
 }
 
 // Helper: Apply path filter to query
-function applyPathFilter<T extends Record<string, unknown>>(
-  query: PostgrestFilterBuilder<T, T, T[], string, unknown>,
-  path: string | null
-): PostgrestFilterBuilder<T, T, T[], string, unknown> {
+function applyPathFilter(query: any, path: string | null) {
+  // eslint-disable-line @typescript-eslint/no-explicit-any
   return path ? query.eq('path', path) : query;
 }
 
