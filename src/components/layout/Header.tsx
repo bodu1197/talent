@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import ProfileImage from "@/components/common/ProfileImage";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/components/providers/AuthProvider";
-import ChatNotificationBadge from "@/components/chat/ChatNotificationBadge";
-import NotificationBell from "@/components/notifications/NotificationBell";
-import { useState } from "react";
+import ProfileImage from '@/components/common/ProfileImage';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/providers/AuthProvider';
+import ChatNotificationBadge from '@/components/chat/ChatNotificationBadge';
+import NotificationBell from '@/components/notifications/NotificationBell';
+import { useState } from 'react';
 import {
   FaStar,
   FaShoppingCart,
@@ -17,12 +17,12 @@ import {
   FaChevronDown,
   FaSearch,
   FaRegHeart,
-} from "react-icons/fa";
+} from 'react-icons/fa';
 
 export default function Header() {
   const { user, profile, loading, signOut } = useAuth();
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,16 +34,16 @@ export default function Header() {
   // 사용자 역할에 따른 마이페이지 URL
   const getMypageUrl = () => {
     if (!user) {
-      return "/auth/login";
+      return '/auth/login';
     }
 
     // seller 활동이 있으면 seller dashboard로
     if (profile?.is_seller) {
-      return "/mypage/seller/dashboard";
+      return '/mypage/seller/dashboard';
     }
 
     // 아니면 buyer dashboard로 (기본값)
-    return "/mypage/buyer/dashboard";
+    return '/mypage/buyer/dashboard';
   };
 
   return (
@@ -61,8 +61,42 @@ export default function Header() {
             </div>
             <span className="text-xl font-bold">돌파구</span>
           </Link>
-{/* 검색창 - PC에서만 표시 */}          <div className="hidden lg:block flex-1 max-w-md">            <form onSubmit={handleSearch} className="relative" autoComplete="off">              <input                type="text"                value={searchQuery}                onChange={(e) => setSearchQuery(e.target.value)}                placeholder="어떤 재능이 필요하신가요?"                autoComplete="off"                autoCorrect="off"                autoCapitalize="off"                spellCheck={false}                data-form-type="other"                data-lpignore="true"                role="searchbox"                aria-label="서비스 검색"                className="focus-visible:outline-none w-full px-4 py-2 pr-10 border-2 border-gray-300 rounded-full focus:rounded-full hover:border-gray-300 focus:outline-none focus:border-gray-300 focus:shadow-none transition-none text-gray-900 text-sm"                style={{                  WebkitAppearance: 'none',                  MozAppearance: 'none',                  appearance: 'none'                }}              />              <button                type="submit"                className="absolute right-2 top-1/2 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-brand-primary transition-colors rounded-full hover:bg-gray-100 active:scale-100 focus:outline-none isolate"                style={{                  transform: 'translate3d(0, -50%, 0)',                  backfaceVisibility: 'hidden',                  willChange: 'transform'                }}                aria-label="검색"              >                <FaSearch className="text-sm" />              </button>            </form>          </div>
-
+          {/* 검색창 - PC에서만 표시 */}{' '}
+          <div className="hidden lg:block flex-1 max-w-md">
+            {' '}
+            <form onSubmit={handleSearch} className="relative" autoComplete="off">
+              {' '}
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="어떤 재능이 필요하신가요?"
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck={false}
+                data-form-type="other"
+                data-lpignore="true"
+                role="searchbox"
+                aria-label="서비스 검색"
+                className="focus-visible:outline-none w-full px-4 py-2 pr-10 border-2 border-gray-300 rounded-full focus:rounded-full hover:border-gray-300 focus:outline-none focus:border-gray-300 focus:shadow-none transition-none text-gray-900 text-sm"
+                style={{ WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none' }}
+              />{' '}
+              <button
+                type="submit"
+                className="absolute right-2 top-1/2 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-brand-primary transition-colors rounded-full hover:bg-gray-100 active:scale-100 focus:outline-none isolate"
+                style={{
+                  transform: 'translate3d(0, -50%, 0)',
+                  backfaceVisibility: 'hidden',
+                  willChange: 'transform',
+                }}
+                aria-label="검색"
+              >
+                {' '}
+                <FaSearch className="text-sm" />{' '}
+              </button>{' '}
+            </form>{' '}
+          </div>
           {/* 모바일 버전 */}
           <div className="lg:hidden flex items-center space-x-2">
             {user ? (
@@ -75,7 +109,7 @@ export default function Header() {
                 >
                   <ProfileImage
                     src={profile?.profile_image}
-                    alt={profile?.name || "사용자 프로필"}
+                    alt={profile?.name || '사용자 프로필'}
                     size={32}
                   />
                 </Link>
@@ -91,7 +125,6 @@ export default function Header() {
               )
             )}
           </div>
-
           {/* PC 버전: 네비게이션 메뉴 */}
           <nav className="hidden lg:flex items-center space-x-6">
             {user ? (
@@ -116,10 +149,7 @@ export default function Header() {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg"
                       role="menuitem"
                     >
-                      <FaShoppingCart
-                        className="inline mr-2"
-                        aria-hidden="true"
-                      />
+                      <FaShoppingCart className="inline mr-2" aria-hidden="true" />
                       구매 관리
                     </Link>
                     <Link
@@ -158,15 +188,12 @@ export default function Header() {
                     {/* 프로필 이미지 */}
                     <ProfileImage
                       src={profile?.profile_image}
-                      alt={profile?.name || "사용자 프로필"}
+                      alt={profile?.name || '사용자 프로필'}
                       size={32}
                     />
 
                     {/* 드롭다운 아이콘 */}
-                    <FaChevronDown
-                      className="text-xs text-gray-400"
-                      aria-hidden="true"
-                    />
+                    <FaChevronDown className="text-xs text-gray-400" aria-hidden="true" />
                   </button>
 
                   {/* 드롭다운 메뉴 */}
@@ -179,10 +206,7 @@ export default function Header() {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg"
                       role="menuitem"
                     >
-                      <FaUserCircle
-                        className="inline mr-2"
-                        aria-hidden="true"
-                      />
+                      <FaUserCircle className="inline mr-2" aria-hidden="true" />
                       마이페이지
                     </Link>
                     <Link
@@ -197,53 +221,56 @@ export default function Header() {
                     <button
                       onClick={async () => {
                         await signOut();
-                        router.push("/auth/login");
+                        router.push('/auth/login');
                       }}
                       className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-b-lg"
                       role="menuitem"
                       aria-label="로그아웃"
                     >
-                      <FaSignOutAlt
-                        className="inline mr-2"
-                        aria-hidden="true"
-                      />
+                      <FaSignOutAlt className="inline mr-2" aria-hidden="true" />
                       로그아웃
                     </button>
                   </div>
                 </div>
               </>
-            ) : loading ? (
-              // 로딩 중 - 스켈레톤 UI (깜빡임 방지)
-              <div className="flex items-center space-x-4">
-                <div className="w-20 h-8 bg-gray-200 rounded animate-pulse"></div>
-                <div className="w-16 h-8 bg-gray-200 rounded animate-pulse"></div>
-                <div className="w-20 h-8 bg-gray-200 rounded animate-pulse"></div>
-              </div>
             ) : (
-              // 비로그인 상태
-              <>
-                <Link
-                  href="/expert/register"
-                  className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm"
-                  aria-label="전문가로 등록하기"
-                >
-                  전문가등록
-                </Link>
-                <Link
-                  href="/auth/login"
-                  className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm"
-                  aria-label="로그인 페이지로 이동"
-                >
-                  로그인
-                </Link>
-                <Link
-                  href="/auth/register"
-                  className="px-3 py-1.5 bg-brand-primary text-white rounded-lg hover:bg-brand-light hover:shadow-lg transition-all font-medium text-sm"
-                  aria-label="회원가입 페이지로 이동"
-                >
-                  회원가입
-                </Link>
-              </>
+              // 비로그인 또는 로딩 상태
+              (() => {
+                if (loading) {
+                  return (
+                    <div className="flex items-center space-x-4">
+                      <div className="w-20 h-8 bg-gray-200 rounded animate-pulse"></div>
+                      <div className="w-16 h-8 bg-gray-200 rounded animate-pulse"></div>
+                      <div className="w-20 h-8 bg-gray-200 rounded animate-pulse"></div>
+                    </div>
+                  );
+                }
+                return (
+                  <>
+                    <Link
+                      href="/expert/register"
+                      className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm"
+                      aria-label="전문가로 등록하기"
+                    >
+                      전문가등록
+                    </Link>
+                    <Link
+                      href="/auth/login"
+                      className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm"
+                      aria-label="로그인 페이지로 이동"
+                    >
+                      로그인
+                    </Link>
+                    <Link
+                      href="/auth/register"
+                      className="px-3 py-1.5 bg-brand-primary text-white rounded-lg hover:bg-brand-light hover:shadow-lg transition-all font-medium text-sm"
+                      aria-label="회원가입 페이지로 이동"
+                    >
+                      회원가입
+                    </Link>
+                  </>
+                );
+              })()
             )}
           </nav>
         </div>

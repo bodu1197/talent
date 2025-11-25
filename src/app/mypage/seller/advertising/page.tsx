@@ -224,12 +224,11 @@ export default function AdvertisingPage() {
       }
     } catch (error: unknown) {
       logger.error('광고 시작 실패:', error);
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : typeof error === 'string'
-            ? error
-            : '광고 시작에 실패했습니다';
+      const errorMessage = (() => {
+        if (error instanceof Error) return error.message;
+        if (typeof error === 'string') return error;
+        return '광고 시작에 실패했습니다';
+      })();
       toast.error(errorMessage);
       // 에러 후 데이터 새로고침하여 UI 동기화
       await loadDashboard();
@@ -482,13 +481,23 @@ export default function AdvertisingPage() {
                         {/* 상태 */}
                         <td className="py-3 px-4 text-center">
                           <div className="flex flex-col items-center gap-1">
-                            {service.hasActiveAd ? (
-                              service.adDetails?.status === 'pending_payment' ? (
-                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                  <span className="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span>{' '}
-                                  결제 대기중
-                                </span>
-                              ) : (
+                            {(() => {
+                              if (!service.hasActiveAd) {
+                                return (
+                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                                    미진행
+                                  </span>
+                                );
+                              }
+                              if (service.adDetails?.status === 'pending_payment') {
+                                return (
+                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    <span className="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span>{' '}
+                                    결제 대기중
+                                  </span>
+                                );
+                              }
+                              return (
                                 <>
                                   <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                     <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>{' '}
@@ -514,12 +523,8 @@ export default function AdvertisingPage() {
                                       </span>
                                     )}
                                 </>
-                              )
-                            ) : (
-                              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                                미진행
-                              </span>
-                            )}
+                              );
+                            })()}
                           </div>
                         </td>
 
@@ -540,18 +545,34 @@ export default function AdvertisingPage() {
 
                         {/* 신청 정보 */}
                         <td className="py-3 px-4 text-center">
-                          {service.hasActiveAd ? (
-                            service.adDetails?.status === 'pending_payment' ? (
-                              <button
-                                onClick={() => {
-                                  setSelectedService(service.id);
-                                  setIsModalOpen(true);
-                                }}
-                                className="px-4 py-2 bg-yellow-600 text-white text-sm rounded-lg hover:bg-yellow-700 transition-colors"
-                              >
-                                입금 확인
-                              </button>
-                            ) : (
+                          {(() => {
+                            if (!service.hasActiveAd) {
+                              return (
+                                <button
+                                  onClick={() => {
+                                    globalThis.location.href =
+                                      '/mypage/seller/advertising/bank-transfer';
+                                  }}
+                                  className="px-4 py-2 bg-brand-primary text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                                >
+                                  광고 신청
+                                </button>
+                              );
+                            }
+                            if (service.adDetails?.status === 'pending_payment') {
+                              return (
+                                <button
+                                  onClick={() => {
+                                    setSelectedService(service.id);
+                                    setIsModalOpen(true);
+                                  }}
+                                  className="px-4 py-2 bg-yellow-600 text-white text-sm rounded-lg hover:bg-yellow-700 transition-colors"
+                                >
+                                  입금 확인
+                                </button>
+                              );
+                            }
+                            return (
                               <button
                                 onClick={() => {
                                   setSelectedService(service.id);
@@ -561,18 +582,8 @@ export default function AdvertisingPage() {
                               >
                                 상세보기
                               </button>
-                            )
-                          ) : (
-                            <button
-                              onClick={() => {
-                                globalThis.location.href =
-                                  '/mypage/seller/advertising/bank-transfer';
-                              }}
-                              className="px-4 py-2 bg-brand-primary text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
-                            >
-                              광고 신청
-                            </button>
-                          )}
+                            );
+                          })()}
                         </td>
                       </tr>
                     ))}

@@ -1,6 +1,153 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
+import type { SupabaseClient } from '@supabase/supabase-js';
+
+// Helper: 데이터 맵 생성
+function createDataMaps(
+  sellersData: {
+    data: Array<{
+      user_id: string;
+      id: string;
+      business_name: string | null;
+      display_name: string | null;
+      profile_image: string | null;
+    }> | null;
+  },
+  usersData: {
+    data: Array<{ user_id: string; name: string | null; profile_image: string | null }> | null;
+  },
+  servicesData: { data: Array<{ id: string; title: string; thumbnail_url: string | null }> | null },
+  messagesData: {
+    data: Array<{ room_id: string; message: string; created_at: string; sender_id: string }> | null;
+  },
+  unreadData: { data: Array<{ room_id: string; id: string }> | null },
+  favoritesData: { data: Array<{ room_id: string }> | null },
+  ordersData: { data: Array<{ service_id: string; buyer_id: string; seller_id: string }> | null }
+) {
+  const sellersMap = new Map((sellersData.data || []).map((s) => [s.user_id, s]));
+  const usersMap = new Map((usersData.data || []).map((u) => [u.user_id, u]));
+  const servicesMap = new Map((servicesData.data || []).map((s) => [s.id, s]));
+
+  // 마지막 메시지 맵
+  const lastMessageMap = new Map<
+    string,
+    { room_id: string; message: string; created_at: string; sender_id: string }
+  >();
+  if (messagesData.data) {
+    for (const msg of messagesData.data) {
+      if (!lastMessageMap.has(msg.room_id)) {
+        lastMessageMap.set(msg.room_id, msg);
+      }
+    }
+  }
+
+  // 읽지 않은 메시지 수 맵
+  const unreadCountMap = new Map<string, number>();
+  if (unreadData.data) {
+    logger.info(`[Chat Rooms API] Total unread messages: ${unreadData.data.length}`);
+    for (const msg of unreadData.data) {
+      unreadCountMap.set(msg.room_id, (unreadCountMap.get(msg.room_id) || 0) + 1);
+    }
+    logger.info('[Chat Rooms API] Unread count map:', Object.fromEntries(unreadCountMap));
+  }
+
+  // 즐겨찾기 맵
+  const favoritesSet = new Set((favoritesData.data || []).map((f) => f.room_id));
+
+  // 진행 중인 주문 맵
+  const activeOrdersMap = new Map<string, boolean>();
+  if (ordersData.data) {
+    for (const order of ordersData.data) {
+      const key = `${order.service_id}-${order.buyer_id}-${order.seller_id}`;
+      activeOrdersMap.set(key, true);
+    }
+  }
+
+  return {
+    sellersMap,
+    usersMap,
+    servicesMap,
+    lastMessageMap,
+    unreadCountMap,
+    favoritesSet,
+    activeOrdersMap,
+  };
+}
+
+// Helper: 상대 사용자 정보 조회
+function getOtherUserInfo(
+  otherUserId: string,
+  sellersMap: Map<
+    string,
+    {
+      id: string;
+      display_name: string | null;
+      business_name: string | null;
+      profile_image: string | null;
+    }
+  >,
+  usersMap: Map<string, { name: string | null; profile_image: string | null }>
+) {
+  const sellerInfo = sellersMap.get(otherUserId);
+  const userInfo = usersMap.get(otherUserId);
+
+  if (sellerInfo) {
+    return {
+      id: otherUserId,
+      name: sellerInfo.display_name || sellerInfo.business_name || '판매자',
+      profile_image: sellerInfo.profile_image,
+      seller_id: sellerInfo.id,
+    };
+  }
+  if (userInfo) {
+    return {
+      id: otherUserId,
+      name: userInfo.name || '사용자',
+      profile_image: userInfo.profile_image || null,
+    };
+  }
+  return { id: otherUserId, name: '사용자', profile_image: null };
+}
+
+// Helper: 병렬 데이터 가져오기
+async function fetchRoomData(
+  supabase: SupabaseClient,
+  userId: string,
+  otherUserIds: string[],
+  serviceIds: string[],
+  roomIds: string[]
+) {
+  return Promise.all([
+    supabase
+      .from('seller_profiles')
+      .select('id, user_id, business_name, display_name, profile_image')
+      .in('user_id', otherUserIds),
+    supabase.from('profiles').select('user_id, name, profile_image').in('user_id', otherUserIds),
+    serviceIds.length > 0
+      ? supabase.from('services').select('id, title, thumbnail_url').in('id', serviceIds)
+      : Promise.resolve({ data: [] }),
+    supabase
+      .from('chat_messages')
+      .select('room_id, message, created_at, sender_id')
+      .in('room_id', roomIds)
+      .order('created_at', { ascending: false }),
+    supabase
+      .from('chat_messages')
+      .select('room_id, id')
+      .in('room_id', roomIds)
+      .eq('is_read', false)
+      .neq('sender_id', userId),
+    supabase.from('chat_favorites').select('room_id').eq('user_id', userId).in('room_id', roomIds),
+    serviceIds.length > 0
+      ? supabase
+          .from('orders')
+          .select('buyer_id, seller_id, service_id, status')
+          .in('service_id', serviceIds)
+          .not('status', 'in', '("completed","cancelled","refunded")')
+      : Promise.resolve({ data: [] }),
+  ]);
+}
 
 // 채팅방 목록 조회
 export async function GET(_request: NextRequest) {
@@ -62,130 +209,38 @@ export async function GET(_request: NextRequest) {
       unreadData,
       favoritesData,
       ordersData,
-    ] = await Promise.all([
-      // 판매자 정보 (seller_profiles 뷰 사용)
-      supabase
-        .from('seller_profiles')
-        .select('id, user_id, business_name, display_name, profile_image')
-        .in('user_id', otherUserIds),
-
-      // 사용자 정보 (profiles 테이블 사용)
-      supabase.from('profiles').select('user_id, name, profile_image').in('user_id', otherUserIds),
-
-      // 서비스 정보
-      serviceIds.length > 0
-        ? supabase.from('services').select('id, title, thumbnail_url').in('id', serviceIds)
-        : Promise.resolve({ data: [] }),
-
-      // 각 채팅방의 마지막 메시지 (서브쿼리 대신 모든 메시지 가져와서 클라이언트에서 필터링)
-      supabase
-        .from('chat_messages')
-        .select('room_id, message, created_at, sender_id')
-        .in('room_id', roomIds)
-        .order('created_at', { ascending: false }),
-
-      // 읽지 않은 메시지 수
-      supabase
-        .from('chat_messages')
-        .select('room_id, id')
-        .in('room_id', roomIds)
-        .eq('is_read', false)
-        .neq('sender_id', user.id),
-
-      // 즐겨찾기 정보
-      supabase
-        .from('chat_favorites')
-        .select('room_id')
-        .eq('user_id', user.id)
-        .in('room_id', roomIds),
-
-      // 진행 중인 주문 정보 (완료/취소/환불되지 않은 주문)
-      serviceIds.length > 0
-        ? supabase
-            .from('orders')
-            .select('buyer_id, seller_id, service_id, status')
-            .in('service_id', serviceIds)
-            .not('status', 'in', '("completed","cancelled","refunded")')
-        : Promise.resolve({ data: [] }),
-    ]);
+    ] = await fetchRoomData(supabase, user.id, otherUserIds, serviceIds, roomIds);
 
     // 데이터 맵 생성
-    const sellersMap = new Map((sellersData.data || []).map((s) => [s.user_id, s]));
-    const usersMap = new Map((usersData.data || []).map((u) => [u.user_id, u]));
-    const servicesMap = new Map((servicesData.data || []).map((s) => [s.id, s]));
-
-    // 마지막 메시지 맵 생성 (각 room의 첫 번째 메시지)
-    const lastMessageMap = new Map();
-    if (messagesData.data) {
-      for (const msg of messagesData.data) {
-        if (!lastMessageMap.has(msg.room_id)) {
-          lastMessageMap.set(msg.room_id, msg);
-        }
-      }
-    }
-
-    // 읽지 않은 메시지 수 맵 생성
-    const unreadCountMap = new Map();
-    if (unreadData.data) {
-      logger.info(`[Chat Rooms API] Total unread messages: ${unreadData.data.length}`);
-      for (const msg of unreadData.data) {
-        unreadCountMap.set(msg.room_id, (unreadCountMap.get(msg.room_id) || 0) + 1);
-      }
-      logger.info('[Chat Rooms API] Unread count map:', Object.fromEntries(unreadCountMap));
-    }
-
-    // 즐겨찾기 맵 생성
-    const favoritesSet = new Set((favoritesData.data || []).map((f) => f.room_id));
-
-    // 진행 중인 주문 맵 생성 (service_id + buyer_id + seller_id 조합으로 매칭)
-    const activeOrdersMap = new Map();
-    if (ordersData.data) {
-      for (const order of ordersData.data) {
-        const key = `${order.service_id}-${order.buyer_id}-${order.seller_id}`;
-        activeOrdersMap.set(key, true);
-      }
-    }
+    const {
+      sellersMap,
+      usersMap,
+      servicesMap,
+      lastMessageMap,
+      unreadCountMap,
+      favoritesSet,
+      activeOrdersMap,
+    } = createDataMaps(
+      sellersData,
+      usersData,
+      servicesData,
+      messagesData,
+      unreadData,
+      favoritesData,
+      ordersData
+    );
 
     // 데이터 조합
     const roomsWithMessages = rooms.map((room) => {
       const otherUserId = room.user1_id === user.id ? room.user2_id : room.user1_id;
-      const sellerInfo = sellersMap.get(otherUserId);
-      const userInfo = usersMap.get(otherUserId);
+      const otherUser = getOtherUserInfo(otherUserId, sellersMap, usersMap);
 
-      let otherUser;
-      if (sellerInfo) {
-        otherUser = {
-          id: otherUserId,
-          name: sellerInfo.display_name || sellerInfo.business_name || '판매자',
-          profile_image: sellerInfo.profile_image,
-          seller_id: sellerInfo.id,
-        };
-      } else if (userInfo) {
-        otherUser = {
-          id: otherUserId,
-          name: userInfo.name || '사용자',
-          profile_image: userInfo.profile_image || null,
-        };
-      } else {
-        otherUser = {
-          id: otherUserId,
-          name: '사용자',
-          profile_image: null,
-        };
-      }
-
-      // 진행 중인 주문이 있는지 확인
-      // user1_id와 user2_id 중 어느 쪽이 buyer인지 확인해야 함
-      let hasActiveOrder: boolean;
-      if (room.service_id) {
-        // 현재 사용자가 buyer인 경우
-        const key1 = `${room.service_id}-${user.id}-${otherUserId}`;
-        // 현재 사용자가 seller인 경우
-        const key2 = `${room.service_id}-${otherUserId}-${user.id}`;
-        hasActiveOrder = activeOrdersMap.has(key1) || activeOrdersMap.has(key2);
-      } else {
-        hasActiveOrder = false;
-      }
+      // 진행 중인 주문 확인
+      const key1 = `${room.service_id}-${user.id}-${otherUserId}`;
+      const key2 = `${room.service_id}-${otherUserId}-${user.id}`;
+      const hasActiveOrder = room.service_id
+        ? activeOrdersMap.has(key1) || activeOrdersMap.has(key2)
+        : false;
 
       return {
         ...room,

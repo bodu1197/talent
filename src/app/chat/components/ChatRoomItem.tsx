@@ -90,17 +90,21 @@ export default function ChatRoomItem({
             </div>
             {room.lastMessage && (
               <span className="text-xs text-gray-500 ml-2 flex-shrink-0">
-                {isMobile
-                  ? new Date(room.lastMessage.created_at).toLocaleDateString('ko-KR', {
+                {(() => {
+                  if (isMobile) {
+                    return new Date(room.lastMessage.created_at).toLocaleDateString('ko-KR', {
                       month: 'short',
                       day: 'numeric',
-                    })
-                  : room.last_message_at
-                    ? new Date(room.last_message_at).toLocaleDateString('ko-KR', {
-                        month: '2-digit',
-                        day: '2-digit',
-                      })
-                    : ''}
+                    });
+                  }
+                  if (room.last_message_at) {
+                    return new Date(room.last_message_at).toLocaleDateString('ko-KR', {
+                      month: '2-digit',
+                      day: '2-digit',
+                    });
+                  }
+                  return '';
+                })()}
               </span>
             )}
           </div>

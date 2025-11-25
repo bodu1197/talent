@@ -545,8 +545,11 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
                 disabled={loading}
                 className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
-                {/* eslint-disable-next-line sonarjs/no-nested-conditional */}
-                {uploading ? '이미지 업로드 중...' : loading ? '등록 중...' : '등록하기'}
+                {(() => {
+                  if (uploading) return '이미지 업로드 중...';
+                  if (loading) return '등록 중...';
+                  return '등록하기';
+                })()}
               </button>
             </div>
           </form>

@@ -483,15 +483,12 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
               <h3 className="font-bold text-gray-900 mb-4">현재 상태</h3>
               <div className="flex items-center justify-center py-4">
                 <span
-                  className={`px-6 py-3 rounded-lg font-bold text-lg ${
-                    order.status === 'delivered'
-                      ? 'bg-red-100 text-red-700'
-                      : order.status === 'in_progress'
-                        ? 'bg-yellow-100 text-yellow-700'
-                        : order.status === 'completed'
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-gray-100 text-gray-700'
-                  }`}
+                  className={`px-6 py-3 rounded-lg font-bold text-lg ${(() => {
+                    if (order.status === 'delivered') return 'bg-red-100 text-red-700';
+                    if (order.status === 'in_progress') return 'bg-yellow-100 text-yellow-700';
+                    if (order.status === 'completed') return 'bg-green-100 text-green-700';
+                    return 'bg-gray-100 text-gray-700';
+                  })()}`}
                 >
                   {getStatusLabel(order.status)}
                 </span>

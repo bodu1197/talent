@@ -2,8 +2,62 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import SellerServicesClient from './SellerServicesClient';
 import { logger } from '@/lib/logger';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 type ServiceStatus = 'all' | 'active' | 'inactive' | 'pending';
+
+interface RevisionData {
+  service_id: string;
+  id: string;
+  status: string;
+  admin_note?: string;
+  reviewed_at?: string;
+}
+
+// Helper: 서비스에 revision 및 주문 정보 추가
+function enrichServicesWithMetadata(
+  services: Record<string, unknown>[],
+  pendingRevisions: RevisionData[] | null,
+  rejectedRevisions: RevisionData[] | null,
+  activeOrders: { service_id: string }[] | null
+): void {
+  for (const service of services) {
+    const pendingRevision = pendingRevisions?.find((r) => r.service_id === service.id);
+    service.hasPendingRevision = !!pendingRevision;
+
+    const rejectedRevision = rejectedRevisions?.find((r) => r.service_id === service.id);
+    if (rejectedRevision) {
+      service.rejectedRevision = rejectedRevision;
+    }
+
+    const orderCount = activeOrders?.filter((o) => o.service_id === service.id).length || 0;
+    service.activeOrderCount = orderCount;
+  }
+}
+
+// Helper: 서비스 메타데이터 조회
+async function fetchServiceMetadata(supabase: SupabaseClient, serviceIds: string[]) {
+  const [{ data: pendingRevisions }, { data: rejectedRevisions }, { data: activeOrders }] =
+    await Promise.all([
+      supabase
+        .from('service_revisions')
+        .select('service_id, id, status')
+        .in('service_id', serviceIds)
+        .eq('status', 'pending'),
+      supabase
+        .from('service_revisions')
+        .select('service_id, id, status, admin_note, reviewed_at')
+        .in('service_id', serviceIds)
+        .eq('status', 'rejected')
+        .order('reviewed_at', { ascending: false }),
+      supabase
+        .from('orders')
+        .select('service_id')
+        .in('service_id', serviceIds)
+        .in('status', ['pending_payment', 'paid', 'in_progress', 'delivered']),
+    ]);
+  return { pendingRevisions, rejectedRevisions, activeOrders };
+}
 
 // 인증이 필요한 페이지이므로 동적 렌더링 강제
 export const dynamic = 'force-dynamic';
@@ -69,44 +123,16 @@ export default async function SellerServicesPage({
     // 각 서비스의 pending/rejected revision 및 진행중인 주문 조회
     if (services && services.length > 0) {
       const serviceIds = services.map((s) => s.id);
-
-      // pending revision 조회
-      const { data: pendingRevisions } = await supabase
-        .from('service_revisions')
-        .select('service_id, id, status')
-        .in('service_id', serviceIds)
-        .eq('status', 'pending');
-
-      // rejected revision 조회 (최신 것만)
-      const { data: rejectedRevisions } = await supabase
-        .from('service_revisions')
-        .select('service_id, id, status, admin_note, reviewed_at')
-        .in('service_id', serviceIds)
-        .eq('status', 'rejected')
-        .order('reviewed_at', { ascending: false });
-
-      // 진행중인 주문 수 조회 (pending_payment, paid, in_progress, delivered)
-      const { data: activeOrders } = await supabase
-        .from('orders')
-        .select('service_id')
-        .in('service_id', serviceIds)
-        .in('status', ['pending_payment', 'paid', 'in_progress', 'delivered']);
-
-      // 서비스에 revision 및 주문 정보 추가
-      for (const service of services as Record<string, unknown>[]) {
-        const pendingRevision = pendingRevisions?.find((r) => r.service_id === service.id);
-        service.hasPendingRevision = !!pendingRevision;
-
-        // 해당 서비스의 최신 rejected revision
-        const rejectedRevision = rejectedRevisions?.find((r) => r.service_id === service.id);
-        if (rejectedRevision) {
-          service.rejectedRevision = rejectedRevision;
-        }
-
-        // 진행중인 주문 수
-        const orderCount = activeOrders?.filter((o) => o.service_id === service.id).length || 0;
-        service.activeOrderCount = orderCount;
-      }
+      const { pendingRevisions, rejectedRevisions, activeOrders } = await fetchServiceMetadata(
+        supabase,
+        serviceIds
+      );
+      enrichServicesWithMetadata(
+        services as Record<string, unknown>[],
+        pendingRevisions,
+        rejectedRevisions,
+        activeOrders
+      );
     }
 
     // Count 조회

@@ -1,42 +1,31 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
-import {
-  generateRandomNickname,
-  generateProfileImage,
-} from "@/lib/utils/nickname-generator";
-import {
-  getSecureRedirectUrl,
-  createOAuthState,
-  RATE_LIMIT_CONFIG,
-} from "@/lib/auth/config";
-import { logger } from "@/lib/logger";
-import { usePasswordValidation } from "@/hooks/usePasswordValidation";
-import { useRateLimiting } from "@/hooks/useRateLimiting";
-import { PasswordRequirements } from "./components/PasswordRequirements";
-import {
-  isValidEmail,
-  validateRegistration,
-  type RegisterFormData,
-} from "./utils/register-utils";
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
+import { generateRandomNickname, generateProfileImage } from '@/lib/utils/nickname-generator';
+import { getSecureRedirectUrl, createOAuthState, RATE_LIMIT_CONFIG } from '@/lib/auth/config';
+import { logger } from '@/lib/logger';
+import { usePasswordValidation } from '@/hooks/usePasswordValidation';
+import { useRateLimiting } from '@/hooks/useRateLimiting';
+import { PasswordRequirements } from './components/PasswordRequirements';
+import { isValidEmail, validateRegistration, type RegisterFormData } from './utils/register-utils';
 
 export default function RegisterPage() {
-  const [randomNickname, setRandomNickname] = useState("");
-  const [profileImage, setProfileImage] = useState("");
+  const [randomNickname, setRandomNickname] = useState('');
+  const [profileImage, setProfileImage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
   const [emailCheckStatus, setEmailCheckStatus] = useState<
-    "idle" | "checking" | "available" | "taken"
-  >("idle");
-  const [emailCheckMessage, setEmailCheckMessage] = useState<string>("");
+    'idle' | 'checking' | 'available' | 'taken'
+  >('idle');
+  const [emailCheckMessage, setEmailCheckMessage] = useState<string>('');
 
   const [formData, setFormData] = useState<RegisterFormData>({
-    email: "",
-    password: "",
-    passwordConfirm: "",
+    email: '',
+    password: '',
+    passwordConfirm: '',
     agreeTerms: false,
     agreePrivacy: false,
     agreeMarketing: false,
@@ -66,27 +55,27 @@ export default function RegisterPage() {
         return;
       }
 
-      setEmailCheckStatus("checking");
-      setEmailCheckMessage("이메일 확인 중...");
+      setEmailCheckStatus('checking');
+      setEmailCheckMessage('이메일 확인 중...');
 
       try {
-        const response = await fetch("/api/auth/check-email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const response = await fetch('/api/auth/check-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email }),
         });
 
         const data = await response.json();
 
         if (!response.ok) {
-          logger.error("이메일 중복 체크 오류:", data.error);
+          logger.error('이메일 중복 체크 오류:', data.error);
           resetEmailCheckStatus();
           return;
         }
 
         updateEmailCheckStatus(data.available, data.message);
       } catch (err) {
-        logger.error("이메일 중복 체크 오류:", err);
+        logger.error('이메일 중복 체크 오류:', err);
         resetEmailCheckStatus();
       }
     };
@@ -101,12 +90,12 @@ export default function RegisterPage() {
 
   // Helper functions for email validation
   function resetEmailCheckStatus() {
-    setEmailCheckStatus("idle");
-    setEmailCheckMessage("");
+    setEmailCheckStatus('idle');
+    setEmailCheckMessage('');
   }
 
   function updateEmailCheckStatus(available: boolean, message: string) {
-    setEmailCheckStatus(available ? "available" : "taken");
+    setEmailCheckStatus(available ? 'available' : 'taken');
     setEmailCheckMessage(message);
   }
 
@@ -127,20 +116,20 @@ export default function RegisterPage() {
       const filePath = `profiles/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from("profiles")
+        .from('profiles')
         .upload(filePath, blob, {
-          contentType: "image/svg+xml",
+          contentType: 'image/svg+xml',
           upsert: true,
         });
 
       if (!uploadError) {
-        const { data: { publicUrl } } = supabase.storage
-          .from("profiles")
-          .getPublicUrl(filePath);
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from('profiles').getPublicUrl(filePath);
         return publicUrl;
       }
     } catch (uploadErr) {
-      logger.error("Profile image upload error:", uploadErr);
+      logger.error('Profile image upload error:', uploadErr);
     }
     return null;
   }
@@ -155,20 +144,20 @@ export default function RegisterPage() {
       const filePath = `profiles/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from("profiles")
+        .from('profiles')
         .upload(filePath, pngBlob, {
-          contentType: "image/png",
+          contentType: 'image/png',
           upsert: true,
         });
 
       if (!uploadError) {
-        const { data: { publicUrl } } = supabase.storage
-          .from("profiles")
-          .getPublicUrl(filePath);
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from('profiles').getPublicUrl(filePath);
 
-        await fetch("/api/users/profile", {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
+        await fetch('/api/users/profile', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             name: nickname,
             profile_image: publicUrl,
@@ -176,22 +165,22 @@ export default function RegisterPage() {
         });
       }
     } catch (err) {
-      logger.error("Profile image upload error:", err);
+      logger.error('Profile image upload error:', err);
     }
   }
 
   // Handle registration errors
   function handleRegistrationError(error: unknown) {
-    logger.error("회원가입 실패:", error);
+    logger.error('회원가입 실패:', error);
 
     rateLimiting.incrementAttempts();
 
     if (rateLimiting.isLockedOut) {
-      setError(`너무 많은 시도가 있었습니다. ${rateLimiting.remainingSeconds}초 후 다시 시도해주세요.`);
+      setError(
+        `너무 많은 시도가 있었습니다. ${rateLimiting.remainingSeconds}초 후 다시 시도해주세요.`
+      );
     } else {
-      const message = error instanceof Error
-        ? error.message
-        : "회원가입 중 오류가 발생했습니다.";
+      const message = error instanceof Error ? error.message : '회원가입 중 오류가 발생했습니다.';
       setError(message);
     }
   }
@@ -229,9 +218,9 @@ export default function RegisterPage() {
 
       // Redirect based on session availability
       if (authData.session) {
-        router.push("/");
+        router.push('/');
       } else {
-        router.push("/auth/login?registered=true");
+        router.push('/auth/login?registered=true');
       }
       return true;
     }
@@ -270,16 +259,13 @@ export default function RegisterPage() {
   };
 
   // SNS 로그인 핸들러
-  const handleSocialLogin = async (provider: "kakao" | "google" | "apple") => {
+  const handleSocialLogin = async (provider: 'kakao' | 'google' | 'apple') => {
     try {
       setIsLoading(true);
       setError(null);
 
       // OAuth 리다이렉트 URL 검증 (CRITICAL 보안)
-      const redirectUrl = getSecureRedirectUrl(
-        globalThis.location.origin,
-        "/auth/callback",
-      );
+      const redirectUrl = getSecureRedirectUrl(globalThis.location.origin, '/auth/callback');
 
       // state 파라미터로 안전하게 전달 (localStorage 대신)
       const state = createOAuthState({
@@ -296,11 +282,8 @@ export default function RegisterPage() {
 
       if (error) throw error;
     } catch (error: unknown) {
-      logger.error("SNS 로그인 실패:", error);
-      const message =
-        error instanceof Error
-          ? error.message
-          : "SNS 로그인 중 오류가 발생했습니다.";
+      logger.error('SNS 로그인 실패:', error);
+      const message = error instanceof Error ? error.message : 'SNS 로그인 중 오류가 발생했습니다.';
       setError(message);
       setIsLoading(false);
     }
@@ -315,16 +298,14 @@ export default function RegisterPage() {
             <h1 className="text-3xl font-bold mb-2">
               <span className="gradient-text">AI Talent Hub</span>
             </h1>
-            <p className="text-gray-600">
-              AI 재능 거래 플랫폼에 오신 것을 환영합니다
-            </p>
+            <p className="text-gray-600">AI 재능 거래 플랫폼에 오신 것을 환영합니다</p>
           </div>
 
           {/* SNS 간편 회원가입 */}
           <div className="space-y-3 mb-6">
             <button
               type="button"
-              onClick={() => handleSocialLogin("kakao")}
+              onClick={() => handleSocialLogin('kakao')}
               disabled={isLoading}
               className="w-full flex items-center justify-center gap-3 bg-[#FEE500] hover:bg-[#F5DC00] text-[#000000] font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50"
             >
@@ -336,7 +317,7 @@ export default function RegisterPage() {
 
             <button
               type="button"
-              onClick={() => handleSocialLogin("google")}
+              onClick={() => handleSocialLogin('google')}
               disabled={isLoading}
               className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 px-4 rounded-lg border border-gray-300 transition-colors disabled:opacity-50"
             >
@@ -380,26 +361,17 @@ export default function RegisterPage() {
               <div className="w-full border-t border-gray-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">
-                또는 이메일로 가입
-              </span>
+              <span className="px-4 bg-white text-gray-500">또는 이메일로 가입</span>
             </div>
           </div>
 
           {/* 회원가입 폼 */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">
-                {error}
-              </div>
-            )}
+            {error && <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">{error}</div>}
 
             {/* 이메일 */}
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                 이메일 *
               </label>
               <div className="relative">
@@ -409,19 +381,17 @@ export default function RegisterPage() {
                   type="email"
                   autoComplete="email"
                   value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                  className={`input pr-10 bg-gray-50 border border-gray-300 focus:bg-white ${emailCheckStatus === "taken"
-                    ? "border-red-500 focus:ring-red-500"
-                    : emailCheckStatus === "available"
-                      ? "border-green-500 focus:ring-green-500"
-                      : ""
-                    }`}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className={`input pr-10 bg-gray-50 border border-gray-300 focus:bg-white ${(() => {
+                    if (emailCheckStatus === 'taken') return 'border-red-500 focus:ring-red-500';
+                    if (emailCheckStatus === 'available')
+                      return 'border-green-500 focus:ring-green-500';
+                    return '';
+                  })()}`}
                   placeholder="your@email.com"
                   required
                 />
-                {emailCheckStatus === "checking" && (
+                {emailCheckStatus === 'checking' && (
                   <div className="absolute right-3 top-1/2 -translate-y-1/2">
                     <svg
                       className="animate-spin h-5 w-5 text-gray-400"
@@ -445,14 +415,9 @@ export default function RegisterPage() {
                     </svg>
                   </div>
                 )}
-                {emailCheckStatus === "available" && (
+                {emailCheckStatus === 'available' && (
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600">
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -462,14 +427,9 @@ export default function RegisterPage() {
                     </svg>
                   </div>
                 )}
-                {emailCheckStatus === "taken" && (
+                {emailCheckStatus === 'taken' && (
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 text-red-600">
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -482,12 +442,11 @@ export default function RegisterPage() {
               </div>
               {emailCheckMessage && (
                 <p
-                  className={`mt-1 text-xs ${emailCheckStatus === "taken"
-                    ? "text-red-600"
-                    : emailCheckStatus === "available"
-                      ? "text-green-600"
-                      : "text-gray-500"
-                    }`}
+                  className={`mt-1 text-xs ${(() => {
+                    if (emailCheckStatus === 'taken') return 'text-red-600';
+                    if (emailCheckStatus === 'available') return 'text-green-600';
+                    return 'text-gray-500';
+                  })()}`}
                 >
                   {emailCheckMessage}
                 </p>
@@ -496,22 +455,17 @@ export default function RegisterPage() {
 
             {/* 비밀번호 */}
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                 비밀번호 *
               </label>
               <div className="relative">
                 <input
                   id="password"
                   name="password"
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword ? 'text' : 'password'}
                   autoComplete="new-password"
                   value={formData.password}
-                  onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   className="input pr-10"
                   placeholder="••••••••"
                   required
@@ -522,12 +476,7 @@ export default function RegisterPage() {
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
                   {showPassword ? (
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -536,12 +485,7 @@ export default function RegisterPage() {
                       />
                     </svg>
                   ) : (
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -559,10 +503,7 @@ export default function RegisterPage() {
                 </button>
               </div>
               {/* 비밀번호 조건 표시 */}
-              <PasswordRequirements
-                validation={passwordValidation}
-                show={!!formData.password}
-              />
+              <PasswordRequirements validation={passwordValidation} show={!!formData.password} />
             </div>
 
             {/* 비밀번호 확인 */}
@@ -577,7 +518,7 @@ export default function RegisterPage() {
                 <input
                   id="passwordConfirm"
                   name="passwordConfirm"
-                  type={showPasswordConfirm ? "text" : "password"}
+                  type={showPasswordConfirm ? 'text' : 'password'}
                   autoComplete="new-password"
                   value={formData.passwordConfirm}
                   onChange={(e) =>
@@ -596,12 +537,7 @@ export default function RegisterPage() {
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
                   {showPasswordConfirm ? (
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -610,12 +546,7 @@ export default function RegisterPage() {
                       />
                     </svg>
                   ) : (
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -635,18 +566,13 @@ export default function RegisterPage() {
               {/* 비밀번호 일치 여부 표시 */}
               {formData.passwordConfirm && (
                 <div
-                  className={`mt-2 flex items-center gap-2 text-xs ${formData.password === formData.passwordConfirm
-                    ? "text-green-600"
-                    : "text-red-600"
-                    }`}
+                  className={`mt-2 flex items-center gap-2 text-xs ${formData.password === formData.passwordConfirm ? 'text-green-600' : 'text-red-600'}`}
                 >
-                  <span>
-                    {formData.password === formData.passwordConfirm ? "✓" : "✗"}
-                  </span>
+                  <span>{formData.password === formData.passwordConfirm ? '✓' : '✗'}</span>
                   <span>
                     {formData.password === formData.passwordConfirm
-                      ? "비밀번호가 일치합니다"
-                      : "비밀번호가 일치하지 않습니다"}
+                      ? '비밀번호가 일치합니다'
+                      : '비밀번호가 일치하지 않습니다'}
                   </span>
                 </div>
               )}
@@ -666,9 +592,7 @@ export default function RegisterPage() {
                   />
                 )}
                 <div className="flex-1">
-                  <p className="text-lg font-semibold text-gray-900">
-                    {randomNickname}
-                  </p>
+                  <p className="text-lg font-semibold text-gray-900">{randomNickname}</p>
                   <p className="text-xs text-gray-500">
                     회원가입 후 마이페이지에서 변경 가능합니다
                   </p>
@@ -692,16 +616,11 @@ export default function RegisterPage() {
                 <input
                   type="checkbox"
                   checked={formData.agreeTerms}
-                  onChange={(e) =>
-                    setFormData({ ...formData, agreeTerms: e.target.checked })
-                  }
+                  onChange={(e) => setFormData({ ...formData, agreeTerms: e.target.checked })}
                   className="mr-2"
                 />
                 <span className="text-sm text-gray-600">
-                  <Link
-                    href="/terms"
-                    className="text-primary-600 hover:underline"
-                  >
+                  <Link href="/terms" className="text-primary-600 hover:underline">
                     이용약관
                   </Link>
                   에 동의합니다 *
@@ -712,16 +631,11 @@ export default function RegisterPage() {
                 <input
                   type="checkbox"
                   checked={formData.agreePrivacy}
-                  onChange={(e) =>
-                    setFormData({ ...formData, agreePrivacy: e.target.checked })
-                  }
+                  onChange={(e) => setFormData({ ...formData, agreePrivacy: e.target.checked })}
                   className="mr-2"
                 />
                 <span className="text-sm text-gray-600">
-                  <Link
-                    href="/privacy"
-                    className="text-primary-600 hover:underline"
-                  >
+                  <Link href="/privacy" className="text-primary-600 hover:underline">
                     개인정보처리방침
                   </Link>
                   에 동의합니다 *
@@ -740,9 +654,7 @@ export default function RegisterPage() {
                   }
                   className="mr-2"
                 />
-                <span className="text-sm text-gray-600">
-                  마케팅 정보 수신에 동의합니다 (선택)
-                </span>
+                <span className="text-sm text-gray-600">마케팅 정보 수신에 동의합니다 (선택)</span>
               </label>
             </div>
 
@@ -753,11 +665,10 @@ export default function RegisterPage() {
             >
               {isLoading ? (
                 <span className="flex items-center justify-center">
-                  <span className="spinner mr-2" />
-                  {' '}가입 중...
+                  <span className="spinner mr-2" /> 가입 중...
                 </span>
               ) : (
-                "회원가입"
+                '회원가입'
               )}
             </button>
           </form>

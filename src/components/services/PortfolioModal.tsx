@@ -81,32 +81,39 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
           <FaTimes className="text-gray-700" aria-hidden="true" />
         </button>
 
-        {/* YouTube 영상 (우선 표시) */}
-        {youtubeVideoId ? (
-          <div className="w-full aspect-video bg-black overflow-hidden">
-            <iframe
-              width="100%"
-              height="100%"
-              src={`https://www.youtube.com/embed/${youtubeVideoId}`}
-              title={portfolio.title}
-              style={{ border: 0 }}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          </div>
-        ) : portfolio.thumbnail_url ? (
-          // YouTube가 없을 때만 썸네일 표시
-          <div className="w-full aspect-video bg-gray-100 overflow-hidden relative">
-            <Image
-              src={portfolio.thumbnail_url}
-              alt={portfolio.title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 80vw"
-              priority
-            />
-          </div>
-        ) : null}
+        {/* YouTube 영상 또는 썸네일 */}
+        {(() => {
+          if (youtubeVideoId) {
+            return (
+              <div className="w-full aspect-video bg-black overflow-hidden">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={`https://www.youtube.com/embed/${youtubeVideoId}`}
+                  title={portfolio.title}
+                  style={{ border: 0 }}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            );
+          }
+          if (portfolio.thumbnail_url) {
+            return (
+              <div className="w-full aspect-video bg-gray-100 overflow-hidden relative">
+                <Image
+                  src={portfolio.thumbnail_url}
+                  alt={portfolio.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 80vw"
+                  priority
+                />
+              </div>
+            );
+          }
+          return null;
+        })()}
 
         {/* 내용 */}
         <div className="p-8">

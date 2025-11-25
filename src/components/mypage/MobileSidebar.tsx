@@ -161,8 +161,17 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
     },
   ];
 
-  const menuItems =
-    mode === 'buyer' ? buyerMenuItems : mode === 'seller' ? sellerMenuItems : adminMenuItems;
+  const getMenuItems = () => {
+    switch (mode) {
+      case 'buyer':
+        return buyerMenuItems;
+      case 'seller':
+        return sellerMenuItems;
+      default:
+        return adminMenuItems;
+    }
+  };
+  const menuItems = getMenuItems();
 
   const getModeLabel = () => {
     switch (mode) {

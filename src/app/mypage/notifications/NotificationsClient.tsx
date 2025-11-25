@@ -338,11 +338,11 @@ export default function NotificationsClient({
             <div className="p-12 text-center">
               <FaRegBellSlash className="text-5xl text-gray-300 mx-auto mb-4" />
               <h3 className="text-lg font-bold text-gray-900 mb-2">
-                {filter === 'unread'
-                  ? '읽지 않은 알림이 없습니다'
-                  : filter === 'read'
-                    ? '읽은 알림이 없습니다'
-                    : '알림이 없습니다'}
+                {(() => {
+                  if (filter === 'unread') return '읽지 않은 알림이 없습니다';
+                  if (filter === 'read') return '읽은 알림이 없습니다';
+                  return '알림이 없습니다';
+                })()}
               </h3>
               <p className="text-gray-600">
                 {filter === 'all'

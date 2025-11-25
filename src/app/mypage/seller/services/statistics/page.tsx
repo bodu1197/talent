@@ -2,6 +2,78 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import ServiceStatisticsClient from './ServiceStatisticsClient';
 
+interface Order {
+  total_amount: number | null;
+  status: string;
+}
+
+interface Review {
+  rating: number;
+}
+
+interface ViewLog {
+  created_at: string;
+}
+
+// Helper: 완료된 주문의 매출 계산
+function calculateRevenue(orders: Order[] | null): number {
+  if (!orders) return 0;
+  return orders
+    .filter((o) => o.status === 'completed')
+    .reduce((sum, order) => sum + (order.total_amount || 0), 0);
+}
+
+// Helper: 리뷰 통계 계산
+function calculateReviewStats(reviews: Review[] | null): {
+  avgRating: number;
+  ratingPercentages: number[];
+} {
+  const ratingDistribution = [0, 0, 0, 0, 0];
+
+  if (!reviews || reviews.length === 0) {
+    return { avgRating: 0, ratingPercentages: [0, 0, 0, 0, 0] };
+  }
+
+  let sum = 0;
+  for (const review of reviews) {
+    sum += review.rating;
+    if (review.rating >= 1 && review.rating <= 5) {
+      ratingDistribution[review.rating - 1]++;
+    }
+  }
+
+  const avgRating = Math.round((sum / reviews.length) * 10) / 10;
+  const ratingPercentages = ratingDistribution.map((count) => (count / reviews.length) * 100);
+
+  return { avgRating, ratingPercentages };
+}
+
+// Helper: 일별 조회수 계산 (최근 7일)
+function calculateDailyViews(viewLogs: ViewLog[] | null): { date: string; views: number }[] {
+  const dailyViewsMap = new Map<string, number>();
+
+  if (viewLogs) {
+    for (const log of viewLogs) {
+      const date = new Date(log.created_at);
+      const dateStr = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
+      dailyViewsMap.set(dateStr, (dailyViewsMap.get(dateStr) || 0) + 1);
+    }
+  }
+
+  const dailyViews = [];
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    const dateStr = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
+    dailyViews.push({
+      date: dateStr,
+      views: dailyViewsMap.get(dateStr) || 0,
+    });
+  }
+
+  return dailyViews;
+}
+
 export default async function ServiceStatisticsPage({
   searchParams,
 }: {
@@ -49,75 +121,30 @@ export default async function ServiceStatisticsPage({
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-  const { data: orders } = await supabase
-    .from('orders')
-    .select('total_amount, created_at, status')
-    .eq('service_id', serviceId)
-    .gte('created_at', thirtyDaysAgo.toISOString());
-
-  // 매출 계산 (완료된 주문만)
-  const revenue =
-    orders
-      ?.filter((o) => o.status === 'completed')
-      .reduce((sum, order) => sum + (order.total_amount || 0), 0) || 0;
-
-  // 리뷰 통계
-  const { data: reviews } = await supabase
-    .from('reviews')
-    .select('rating')
-    .eq('service_id', serviceId);
-
-  const avgRating =
-    reviews && reviews.length > 0
-      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
-      : 0;
-
   // 일별 조회수 (최근 7일)
   const sevenDaysAgo = new Date();
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-  const { data: viewLogs } = await supabase
-    .from('service_view_logs')
-    .select('created_at')
-    .eq('service_id', serviceId)
-    .gte('created_at', sevenDaysAgo.toISOString())
-    .order('created_at', { ascending: true });
+  // 병렬 데이터 조회
+  const [{ data: orders }, { data: reviews }, { data: viewLogs }] = await Promise.all([
+    supabase
+      .from('orders')
+      .select('total_amount, created_at, status')
+      .eq('service_id', serviceId)
+      .gte('created_at', thirtyDaysAgo.toISOString()),
+    supabase.from('reviews').select('rating').eq('service_id', serviceId),
+    supabase
+      .from('service_view_logs')
+      .select('created_at')
+      .eq('service_id', serviceId)
+      .gte('created_at', sevenDaysAgo.toISOString())
+      .order('created_at', { ascending: true }),
+  ]);
 
-  // 일별 조회수 집계
-  const dailyViewsMap = new Map<string, number>();
-  if (viewLogs) {
-    for (const log of viewLogs) {
-      const date = new Date(log.created_at);
-      const dateStr = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
-      dailyViewsMap.set(dateStr, (dailyViewsMap.get(dateStr) || 0) + 1);
-    }
-  }
-
-  // 최근 7일 날짜 생성
-  const dailyViews = [];
-  for (let i = 6; i >= 0; i--) {
-    const date = new Date();
-    date.setDate(date.getDate() - i);
-    const dateStr = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
-    dailyViews.push({
-      date: dateStr,
-      views: dailyViewsMap.get(dateStr) || 0,
-    });
-  }
-
-  // 평점 분포 계산
-  const ratingDistribution = [0, 0, 0, 0, 0]; // 1-5점
-  if (reviews) {
-    for (const review of reviews) {
-      if (review.rating >= 1 && review.rating <= 5) {
-        ratingDistribution[review.rating - 1]++;
-      }
-    }
-  }
-
-  const ratingPercentages = ratingDistribution.map((count) =>
-    reviews && reviews.length > 0 ? (count / reviews.length) * 100 : 0
-  );
+  // 헬퍼 함수로 통계 계산
+  const revenue = calculateRevenue(orders);
+  const { avgRating, ratingPercentages } = calculateReviewStats(reviews);
+  const dailyViews = calculateDailyViews(viewLogs);
 
   const stats = {
     serviceName: service.title,
@@ -125,8 +152,8 @@ export default async function ServiceStatisticsPage({
     viewCount: service.view_count || 0,
     favoriteCount: service.favorite_count || 0,
     orderCount: service.order_count || 0,
-    revenue: revenue,
-    avgRating: Math.round(avgRating * 10) / 10,
+    revenue,
+    avgRating,
     reviewCount: reviews?.length || 0,
   };
 

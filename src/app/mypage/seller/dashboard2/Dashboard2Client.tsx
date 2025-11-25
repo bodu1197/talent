@@ -123,21 +123,20 @@ export default function Dashboard2Client({ stats, recentOrders }: Props) {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                              order.status === 'completed'
-                                ? 'bg-green-100 text-green-800'
-                                : order.status === 'in_progress'
-                                  ? 'bg-yellow-100 text-yellow-800'
-                                  : 'bg-gray-100 text-gray-800'
-                            }`}
+                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${(() => {
+                              if (order.status === 'completed')
+                                return 'bg-green-100 text-green-800';
+                              if (order.status === 'in_progress')
+                                return 'bg-yellow-100 text-yellow-800';
+                              return 'bg-gray-100 text-gray-800';
+                            })()}`}
                           >
-                            {order.status === 'in_progress'
-                              ? '진행중'
-                              : order.status === 'completed'
-                                ? '완료'
-                                : order.status === 'paid'
-                                  ? '결제완료'
-                                  : order.status}
+                            {(() => {
+                              if (order.status === 'in_progress') return '진행중';
+                              if (order.status === 'completed') return '완료';
+                              if (order.status === 'paid') return '결제완료';
+                              return order.status;
+                            })()}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
