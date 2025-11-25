@@ -401,12 +401,18 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
                   {/* 버튼 */}
                   <div className="flex gap-2 flex-shrink-0">
-                    <button className="px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs whitespace-nowrap">
+                    <Link
+                      href="/chat"
+                      className="px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs whitespace-nowrap"
+                    >
                       <FaRegComment className="mr-1 inline" /> 문의
-                    </button>
-                    <button className="px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs whitespace-nowrap">
+                    </Link>
+                    <Link
+                      href={`/experts/${service.seller.id}`}
+                      className="px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs whitespace-nowrap"
+                    >
                       <FaRegUser className="mr-1 inline" /> 프로필
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>
