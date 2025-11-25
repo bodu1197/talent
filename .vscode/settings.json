@@ -1,0 +1,30 @@
+{
+  "sonarlint.connectedMode.project": {
+    "connectionId": "sonarqube-local",
+    "projectKey": "talent"
+  },
+  "sonarlint.connectedMode.connections.sonarqube": [
+    {
+      "connectionId": "sonarqube-local",
+      "serverUrl": "http://localhost:9000",
+      "token": "${env:SONAR_TOKEN}"
+    }
+  ],
+  "sonarlint.rules": {
+    "typescript:S3776": {
+      "level": "on",
+      "parameters": {
+        "threshold": "15"
+      }
+    },
+    "typescript:S106": {
+      "level": "on"
+    }
+  },
+  "sonarlint.pathToNodeExecutable": "",
+  "sonarlint.output.showAnalyzerLogs": true,
+  "sonarlint.output.showVerboseLogs": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.sonarlint": "explicit"
+  }
+}
