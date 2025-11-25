@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FaSpinner } from 'react-icons/fa';
 import toast from 'react-hot-toast';
+import { logger } from '@/lib/logger';
 
 interface PurchaseButtonProps {
   readonly sellerId: string;
@@ -69,7 +70,7 @@ export default function PurchaseButton({
       // 결제 페이지로 이동
       router.push(`/payment/direct/${order_id}`);
     } catch (error) {
-      console.error('Purchase error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+      logger.error('Purchase error:', error);
       toast.error(error instanceof Error ? error.message : '구매 진행 중 오류가 발생했습니다');
     } finally {
       setIsLoading(false);

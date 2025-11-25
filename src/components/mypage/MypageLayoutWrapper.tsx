@@ -2,6 +2,7 @@
 
 import { ReactNode, useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import { logger } from '@/lib/logger';
 import Sidebar from './Sidebar';
 import MobileSidebar from './MobileSidebar';
 
@@ -51,10 +52,7 @@ export default function MypageLayoutWrapper({
 
       setProfileData(profile);
     } catch (error) {
-      console.error(
-        'Failed to load profile data:',
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-      );
+      logger.error('Failed to load profile data:', error);
       setProfileData(null);
     }
   }

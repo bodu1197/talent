@@ -1,19 +1,13 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Portfolio } from "@/types/common";
-import {
-  FaPlus,
-  FaImage,
-  FaLink,
-  FaBriefcase,
-  FaEye,
-  FaFolderOpen,
-} from "react-icons/fa";
-import toast from "react-hot-toast";
+import { useState } from 'react';
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
+import { logger } from '@/lib/logger';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Portfolio } from '@/types/common';
+import { FaPlus, FaImage, FaLink, FaBriefcase, FaEye, FaFolderOpen } from 'react-icons/fa';
+import toast from 'react-hot-toast';
 
 interface PortfolioWithService extends Portfolio {
   service?: {
@@ -26,34 +20,29 @@ interface Props {
   readonly portfolio: PortfolioWithService[];
 }
 
-export default function SellerPortfolioClient({
-  portfolio: initialPortfolio,
-}: Props) {
+export default function SellerPortfolioClient({ portfolio: initialPortfolio }: Props) {
   const router = useRouter();
   const [portfolio, setPortfolio] = useState(initialPortfolio);
   const [deleting, setDeleting] = useState<string | null>(null);
 
   async function handleDelete(itemId: string) {
-    if (!confirm("정말 삭제하시겠습니까?")) return;
+    if (!confirm('정말 삭제하시겠습니까?')) return;
 
     try {
       setDeleting(itemId);
       const response = await fetch(`/api/portfolio?itemId=${itemId}`, {
-        method: "DELETE",
+        method: 'DELETE',
       });
 
       if (!response.ok) {
-        throw new Error("삭제에 실패했습니다");
+        throw new Error('삭제에 실패했습니다');
       }
 
       setPortfolio(portfolio.filter((item) => item.id !== itemId));
       router.refresh();
     } catch (err: unknown) {
-      console.error(
-        "삭제 실패:",
-        JSON.stringify(err, Object.getOwnPropertyNames(err), 2),
-      );
-      toast.error("삭제에 실패했습니다");
+      logger.error('삭제 실패:', err);
+      toast.error('삭제에 실패했습니다');
     } finally {
       setDeleting(null);
     }
@@ -66,9 +55,7 @@ export default function SellerPortfolioClient({
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-base md:text-lg font-bold text-gray-900">포트폴리오</h1>
-              <p className="text-gray-600 mt-1 text-sm">
-                작업물을 등록하고 관리하세요
-              </p>
+              <p className="text-gray-600 mt-1 text-sm">작업물을 등록하고 관리하세요</p>
             </div>
             <Link
               href="/mypage/seller/portfolio/new"
@@ -87,10 +74,7 @@ export default function SellerPortfolioClient({
                 key={item.id}
                 className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-brand-primary transition-colors"
               >
-                <Link
-                  href={`/mypage/seller/portfolio/${item.id}`}
-                  className="block"
-                >
+                <Link href={`/mypage/seller/portfolio/${item.id}`} className="block">
                   <div className="aspect-[4/3] bg-gray-100 flex items-center justify-center relative">
                     {item.thumbnail_url ? (
                       <img
@@ -113,9 +97,7 @@ export default function SellerPortfolioClient({
                   <h3 className="text-sm md:text-base font-bold text-gray-900 mb-2">
                     {item.title}
                   </h3>
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                    {item.description}
-                  </p>
+                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">{item.description}</p>
                   {item.service && (
                     <div className="mb-3 p-2 bg-blue-50 border border-blue-200 rounded-lg">
                       <div className="flex items-center gap-2">
@@ -138,9 +120,7 @@ export default function SellerPortfolioClient({
                       <FaEye className="inline mr-1" />
                       {item.view_count || 0}
                     </span>
-                    <span>
-                      {new Date(item.created_at).toLocaleDateString("ko-KR")}
-                    </span>
+                    <span>{new Date(item.created_at).toLocaleDateString('ko-KR')}</span>
                   </div>
                   <div className="flex gap-2 mt-4">
                     <Link
@@ -154,7 +134,7 @@ export default function SellerPortfolioClient({
                       disabled={deleting === item.id}
                       className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
                     >
-                      {deleting === item.id ? "삭제중..." : "삭제"}
+                      {deleting === item.id ? '삭제중...' : '삭제'}
                     </button>
                   </div>
                 </div>

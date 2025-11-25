@@ -1,10 +1,11 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { prefetchBuyerData } from "@/lib/prefetch/buyerPrefetch";
-import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import Link from "next/link";
+import { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { prefetchBuyerData } from '@/lib/prefetch/buyerPrefetch';
+import { logger } from '@/lib/logger';
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
+import Link from 'next/link';
 import {
   FaBell,
   FaInfoCircle,
@@ -16,9 +17,9 @@ import {
   FaBoxOpen,
   FaStar,
   FaShoppingCart,
-} from "react-icons/fa";
+} from 'react-icons/fa';
 
-import type { Order, Service, Seller } from "@/types/common";
+import type { Order, Service, Seller } from '@/types/common';
 
 interface BuyerStats {
   inProgressOrders: number;
@@ -74,12 +75,7 @@ export default function BuyerDashboardClient({
   useEffect(() => {
     // 대시보드 렌더링 후 즉시 다른 페이지 데이터 미리 불러오기
     const timer = setTimeout(() => {
-      prefetchBuyerData(queryClient).catch((err) =>
-        console.error(
-          "Operation error:",
-          JSON.stringify(err, Object.getOwnPropertyNames(err), 2),
-        ),
-      );
+      prefetchBuyerData(queryClient).catch((err) => logger.error('Operation error:', err));
     }, 500); // 대시보드 로딩 후 0.5초 뒤에 실행
 
     return () => clearTimeout(timer);
@@ -90,32 +86,32 @@ export default function BuyerDashboardClient({
   if (stats?.deliveredOrders > 0) {
     alerts.push({
       id: 1,
-      type: "delivered",
+      type: 'delivered',
       message: `작업 완료 도착 ${stats.deliveredOrders}건 - 확인 필요`,
-      href: "/mypage/buyer/orders?status=delivered",
+      href: '/mypage/buyer/orders?status=delivered',
     });
   }
   if (stats?.pendingReviews > 0) {
     alerts.push({
       id: 2,
-      type: "review",
+      type: 'review',
       message: `리뷰 작성 가능 ${stats.pendingReviews}건`,
-      href: "/mypage/buyer/reviews?tab=pending",
+      href: '/mypage/buyer/reviews?tab=pending',
     });
   }
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "paid":
-        return "결제완료";
-      case "in_progress":
-        return "진행중";
-      case "delivered":
-        return "도착 확인 대기";
-      case "completed":
-        return "완료";
-      case "cancelled":
-        return "취소/환불";
+      case 'paid':
+        return '결제완료';
+      case 'in_progress':
+        return '진행중';
+      case 'delivered':
+        return '도착 확인 대기';
+      case 'completed':
+        return '완료';
+      case 'cancelled':
+        return '취소/환불';
       default:
         return status;
     }
@@ -124,8 +120,7 @@ export default function BuyerDashboardClient({
   const getDaysLeft = (deliveryDate: string | null | undefined) => {
     if (!deliveryDate) return null;
     const days = Math.ceil(
-      (new Date(deliveryDate).getTime() - new Date().getTime()) /
-      (1000 * 60 * 60 * 24),
+      (new Date(deliveryDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
     );
     return days > 0 ? days : null;
   };
@@ -145,9 +140,7 @@ export default function BuyerDashboardClient({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">진행중 주문</p>
-                <p className="text-lg font-bold text-gray-900">
-                  {stats?.inProgressOrders || 0}건
-                </p>
+                <p className="text-lg font-bold text-gray-900">{stats?.inProgressOrders || 0}건</p>
               </div>
               <FaSpinner className="text-2xl text-yellow-500" />
             </div>
@@ -156,9 +149,7 @@ export default function BuyerDashboardClient({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">도착 확인 대기</p>
-                <p className="text-lg font-bold text-gray-900">
-                  {stats?.deliveredOrders || 0}건
-                </p>
+                <p className="text-lg font-bold text-gray-900">{stats?.deliveredOrders || 0}건</p>
               </div>
               <FaBoxOpen className="text-2xl text-blue-500" />
             </div>
@@ -167,9 +158,7 @@ export default function BuyerDashboardClient({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">작성 가능 리뷰</p>
-                <p className="text-lg font-bold text-gray-900">
-                  {stats?.pendingReviews || 0}건
-                </p>
+                <p className="text-lg font-bold text-gray-900">{stats?.pendingReviews || 0}건</p>
               </div>
               <FaStar className="text-2xl text-purple-500" />
             </div>
@@ -178,9 +167,7 @@ export default function BuyerDashboardClient({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">이번달 구매</p>
-                <p className="text-lg font-bold text-gray-900">
-                  {stats?.monthlyPurchases || 0}건
-                </p>
+                <p className="text-lg font-bold text-gray-900">{stats?.monthlyPurchases || 0}건</p>
               </div>
               <FaShoppingCart className="text-2xl text-green-500" />
             </div>
@@ -265,27 +252,26 @@ export default function BuyerDashboardClient({
                               </span>
                             </div>
                             <div className="text-xs md:text-sm text-gray-600 mb-2">
-                              판매자: {order.seller?.name || "판매자"}
+                              판매자: {order.seller?.name || '판매자'}
                             </div>
                           </div>
                         </div>
 
                         <div className="flex items-center gap-3 mb-3">
                           <span
-                            className={`px-3 py-1 rounded-full text-xs font-medium ${order.status === "delivered"
-                              ? "bg-red-100 text-red-700"
-                              : "bg-yellow-100 text-yellow-700"
-                              }`}
+                            className={`px-3 py-1 rounded-full text-xs font-medium ${
+                              order.status === 'delivered'
+                                ? 'bg-red-100 text-red-700'
+                                : 'bg-yellow-100 text-yellow-700'
+                            }`}
                           >
                             {getStatusLabel(order.status)}
                           </span>
                           {daysLeft && (
-                            <span className="text-xs md:text-sm text-gray-600">
-                              D-{daysLeft}일
-                            </span>
+                            <span className="text-xs md:text-sm text-gray-600">D-{daysLeft}일</span>
                           )}
                           <span className="text-xs md:text-sm font-bold text-gray-900">
-                            {order.total_amount?.toLocaleString() || "0"}원
+                            {order.total_amount?.toLocaleString() || '0'}원
                           </span>
                         </div>
 
@@ -294,9 +280,7 @@ export default function BuyerDashboardClient({
                             href={`/mypage/buyer/orders/${order.id}`}
                             className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#0a2540] transition-colors text-xs md:text-sm font-medium"
                           >
-                            {order.status === "delivered"
-                              ? "확인하기"
-                              : "상세보기"}
+                            {order.status === 'delivered' ? '확인하기' : '상세보기'}
                           </Link>
                           <Link
                             href={`/chat?order=${order.id}`}

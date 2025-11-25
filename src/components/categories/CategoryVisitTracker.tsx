@@ -1,33 +1,33 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import { useAuth } from '@/components/providers/AuthProvider'
-import { logger } from '@/lib/logger'
+import { useEffect } from 'react';
+import { useAuth } from '@/components/providers/AuthProvider';
+import { logger } from '@/lib/logger';
 
 interface CategoryVisitTrackerProps {
-  categoryId: string
-  categoryName: string
-  categorySlug: string
-  isTopLevel: boolean // 1차 카테고리인지 확인
+  categoryId: string;
+  categoryName: string;
+  categorySlug: string;
+  isTopLevel: boolean; // 1차 카테고리인지 확인
 }
 
 export default function CategoryVisitTracker({
   categoryId,
   categoryName,
   categorySlug,
-  isTopLevel
+  isTopLevel,
 }: CategoryVisitTrackerProps) {
-  const { user } = useAuth()
+  const { user } = useAuth();
 
   useEffect(() => {
     // 로그인하지 않은 사용자는 추적 안 함
     if (!user) {
-      return
+      return;
     }
 
     // 1차 카테고리만 추적
     if (!isTopLevel) {
-      return
+      return;
     }
 
     // 방문 기록 저장
@@ -41,21 +41,21 @@ export default function CategoryVisitTracker({
           body: JSON.stringify({
             categoryId,
             categoryName,
-            categorySlug
-          })
-        })
+            categorySlug,
+          }),
+        });
 
         // 401 에러는 조용히 무시
         if (!response.ok && response.status !== 401) {
-          logger.error('Failed to track category visit:', response.status)
+          logger.error('Failed to track category visit:', response.status);
         }
       } catch (error) {
-        console.error('[VISIT TRACKER] Network error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
+        logger.error('[VISIT TRACKER] Network error:', error);
       }
-    }
+    };
 
-    trackVisit()
-  }, [user, categoryId, categoryName, categorySlug, isTopLevel])
+    trackVisit();
+  }, [user, categoryId, categoryName, categorySlug, isTopLevel]);
 
-  return null // UI 없음, 추적만 수행
+  return null; // UI 없음, 추적만 수행
 }

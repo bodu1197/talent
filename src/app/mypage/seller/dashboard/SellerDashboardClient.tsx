@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { prefetchSellerData } from '@/lib/prefetch/buyerPrefetch';
+import { logger } from '@/lib/logger';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import Link from 'next/link';
 import {
@@ -80,9 +81,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
     // 판매자 등록이 완료된 경우에만 프리페치
     if (stats) {
       const timer = setTimeout(() => {
-        prefetchSellerData(queryClient).catch((err) =>
-          console.error('Operation error:', JSON.stringify(err, Object.getOwnPropertyNames(err), 2))
-        );
+        prefetchSellerData(queryClient).catch((err) => logger.error('Operation error:', err));
       }, 500); // 대시보드 로딩 후 0.5초 뒤에 실행
 
       return () => clearTimeout(timer);

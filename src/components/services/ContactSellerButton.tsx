@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FaSpinner, FaCommentDots } from 'react-icons/fa';
 import toast from 'react-hot-toast';
+import { logger } from '@/lib/logger';
 
 interface Props {
   readonly sellerId: string;
@@ -45,10 +46,7 @@ export default function ContactSellerButton({ sellerId, serviceId }: Props) {
       // 채팅 메인 페이지로 이동 (해당 채팅방 선택된 상태)
       router.push(`/chat?room=${room_id}`);
     } catch (error) {
-      console.error(
-        'Contact seller error:',
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-      );
+      logger.error('Contact seller error:', error);
       toast.error('문의 시작에 실패했습니다. 다시 시도해주세요.');
     } finally {
       setIsLoading(false);

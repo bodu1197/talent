@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import { createClient } from '@/lib/supabase/client';
+import { logger } from '@/lib/logger';
 import { Order } from '@/types/common';
 import { FaMoneyBillWave, FaTimes, FaClock, FaReceipt } from 'react-icons/fa';
 import toast from 'react-hot-toast';
@@ -101,20 +102,14 @@ export default function SellerEarningsClient({
       });
 
       if (error) {
-        console.error(
-          'Withdrawal insert error:',
-          JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-        );
+        logger.error('Withdrawal insert error:', error);
         throw error;
       }
 
       toast.error('출금 신청이 완료되었습니다.\n영업일 기준 1-3일 내 처리됩니다.');
       globalThis.location.reload();
     } catch (error: unknown) {
-      console.error(
-        'Withdrawal request error:',
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-      );
+      logger.error('Withdrawal request error:', error);
       toast.error(
         '출금 신청에 실패했습니다.\n' + (error instanceof Error ? error.message : '알 수 없는 오류')
       );
@@ -146,10 +141,7 @@ export default function SellerEarningsClient({
       toast.success('출금 신청이 취소되었습니다.');
       globalThis.location.reload();
     } catch (error: unknown) {
-      console.error(
-        'Withdrawal cancel error:',
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-      );
+      logger.error('Withdrawal cancel error:', error);
       toast.error(
         '출금 신청 취소에 실패했습니다.\n' +
           (error instanceof Error ? error.message : '알 수 없는 오류')

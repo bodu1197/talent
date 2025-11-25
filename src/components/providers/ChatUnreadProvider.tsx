@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   createContext,
@@ -8,8 +8,9 @@ import {
   useCallback,
   useMemo,
   ReactNode,
-} from "react";
-import { createClient } from "@/lib/supabase/client";
+} from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface ChatMessage {
   id: string;
@@ -26,9 +27,7 @@ interface ChatUnreadContextType {
   decrementCount: (amount: number) => void;
 }
 
-const ChatUnreadContext = createContext<ChatUnreadContextType | undefined>(
-  undefined,
-);
+const ChatUnreadContext = createContext<ChatUnreadContextType | undefined>(undefined);
 
 export function ChatUnreadProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [unreadCount, setUnreadCount] = useState(0);
@@ -40,20 +39,14 @@ export function ChatUnreadProvider({ children }: Readonly<{ children: ReactNode 
   // 알림 권한 요청
   const requestNotificationPermission = useCallback(async () => {
     try {
-      if (
-        "Notification" in globalThis &&
-        Notification.permission === "default"
-      ) {
+      if ('Notification' in globalThis && Notification.permission === 'default') {
         const permission = await Notification.requestPermission();
-        setHasPermission(permission === "granted");
-      } else if ("Notification" in globalThis) {
-        setHasPermission(Notification.permission === "granted");
+        setHasPermission(permission === 'granted');
+      } else if ('Notification' in globalThis) {
+        setHasPermission(Notification.permission === 'granted');
       }
     } catch (error) {
-      console.error(
-        "Failed to request notification permission:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
-      );
+      logger.error('Failed to request notification permission:', error);
     }
   }, []);
 
@@ -75,32 +68,26 @@ export function ChatUnreadProvider({ children }: Readonly<{ children: ReactNode 
       gainNode.connect(audioContext.destination);
 
       oscillator.frequency.value = 800;
-      oscillator.type = "sine";
+      oscillator.type = 'sine';
 
       gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(
-        0.01,
-        audioContext.currentTime + 0.3,
-      );
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
 
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.3);
     } catch (error) {
-      console.error(
-        "Notification sound error:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
-      );
+      logger.error('Notification sound error:', error);
     }
   }, []);
 
   // 읽지 않은 메시지 수 조회
   const fetchUnreadCount = useCallback(async () => {
     try {
-      const response = await fetch("/api/chat/unread-count", {
-        cache: "no-store",
+      const response = await fetch('/api/chat/unread-count', {
+        cache: 'no-store',
         headers: {
-          "Cache-Control": "no-cache, no-store, must-revalidate",
-          Pragma: "no-cache",
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          Pragma: 'no-cache',
         },
       });
       if (response.ok) {
@@ -108,10 +95,7 @@ export function ChatUnreadProvider({ children }: Readonly<{ children: ReactNode 
         setUnreadCount(data.unreadCount || 0);
       }
     } catch (error) {
-      console.error(
-        "[ChatUnreadProvider] Failed to fetch unread count:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
-      );
+      logger.error('[ChatUnreadProvider] Failed to fetch unread count:', error);
     }
   }, []);
 
@@ -121,17 +105,14 @@ export function ChatUnreadProvider({ children }: Readonly<{ children: ReactNode 
 
     try {
       const { data: rooms } = await supabase
-        .from("chat_rooms")
-        .select("id")
+        .from('chat_rooms')
+        .select('id')
         .or(`user1_id.eq.${userId},user2_id.eq.${userId}`);
 
       const roomIds = rooms?.map((r) => r.id) || [];
       setMyRoomIds(roomIds);
     } catch (error) {
-      console.error(
-        "[ChatUnreadProvider] Failed to fetch rooms:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
-      );
+      logger.error('[ChatUnreadProvider] Failed to fetch rooms:', error);
     }
   }, [userId, supabase]);
 
@@ -167,34 +148,31 @@ export function ChatUnreadProvider({ children }: Readonly<{ children: ReactNode 
     const channel = supabase
       .channel(`chat_notifications_${userId}`)
       .on(
-        "postgres_changes",
+        'postgres_changes',
         {
-          event: "INSERT",
-          schema: "public",
-          table: "chat_messages",
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages',
         },
         async (payload) => {
           const newMessage = payload.new as ChatMessage;
 
           // 내 채팅방이면서 내가 보낸 메시지가 아닌 경우에만 알림
-          if (
-            myRoomIds.includes(newMessage.room_id) &&
-            newMessage.sender_id !== userId
-          ) {
+          if (myRoomIds.includes(newMessage.room_id) && newMessage.sender_id !== userId) {
             setUnreadCount((prev) => prev + 1);
 
             // 알림음 재생
             await playNotificationSound();
 
             // 브라우저 알림
-            if (hasPermission && "Notification" in globalThis) {
-              new Notification("새 메시지", {
-                body: "새로운 채팅 메시지가 도착했습니다.",
-                icon: "/favicon.ico",
+            if (hasPermission && 'Notification' in globalThis) {
+              new Notification('새 메시지', {
+                body: '새로운 채팅 메시지가 도착했습니다.',
+                icon: '/favicon.ico',
               });
             }
           }
-        },
+        }
       )
       .subscribe();
 
@@ -215,22 +193,16 @@ export function ChatUnreadProvider({ children }: Readonly<{ children: ReactNode 
       refreshCount: fetchUnreadCount,
       decrementCount,
     }),
-    [unreadCount, userId, fetchUnreadCount, decrementCount],
+    [unreadCount, userId, fetchUnreadCount, decrementCount]
   );
 
-  return (
-    <ChatUnreadContext.Provider value={value}>
-      {children}
-    </ChatUnreadContext.Provider>
-  );
+  return <ChatUnreadContext.Provider value={value}>{children}</ChatUnreadContext.Provider>;
 }
 
 export function useChatUnreadCount() {
   const context = useContext(ChatUnreadContext);
   if (context === undefined) {
-    throw new Error(
-      "useChatUnreadCount must be used within ChatUnreadProvider",
-    );
+    throw new Error('useChatUnreadCount must be used within ChatUnreadProvider');
   }
   return context;
 }

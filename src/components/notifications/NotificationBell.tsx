@@ -1,10 +1,11 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
-import { useAuth } from "@/components/providers/AuthProvider";
-import Link from "next/link";
-import { FaRegBell, FaRegBellSlash } from "react-icons/fa";
+import { useEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { useAuth } from '@/components/providers/AuthProvider';
+import { logger } from '@/lib/logger';
+import Link from 'next/link';
+import { FaRegBell, FaRegBellSlash } from 'react-icons/fa';
 
 interface Notification {
   id: string;
@@ -30,12 +31,12 @@ export default function NotificationBell() {
   // ESC 키로 드롭다운 닫기
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && showDropdown) {
+      if (e.key === 'Escape' && showDropdown) {
         setShowDropdown(false);
       }
     };
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
   }, [showDropdown]);
 
   // 알림 소리 재생 (Web Audio API 사용)
@@ -56,21 +57,15 @@ export default function NotificationBell() {
       gainNode.connect(audioContext.destination);
 
       oscillator.frequency.value = 800; // 800Hz
-      oscillator.type = "sine";
+      oscillator.type = 'sine';
 
       gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(
-        0.01,
-        audioContext.currentTime + 0.3,
-      );
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
 
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.3);
     } catch (err) {
-      console.error(
-        "Failed to play notification sound:",
-        JSON.stringify(err, Object.getOwnPropertyNames(err), 2),
-      );
+      logger.error('Failed to play notification sound:', err);
     }
   };
 
@@ -79,10 +74,10 @@ export default function NotificationBell() {
     if (!user) return;
 
     const { count, error } = await supabase
-      .from("notifications")
-      .select("*", { count: "exact", head: true })
-      .eq("user_id", user.id)
-      .eq("is_read", false);
+      .from('notifications')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', user.id)
+      .eq('is_read', false);
 
     if (!error && count !== null) {
       setUnreadCount(count);
@@ -94,10 +89,10 @@ export default function NotificationBell() {
     if (!user) return;
 
     const { data, error } = await supabase
-      .from("notifications")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
+      .from('notifications')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
       .limit(5);
 
     if (!error && data) {
@@ -114,13 +109,13 @@ export default function NotificationBell() {
 
     // 실시간 구독
     const channel = supabase
-      .channel("notifications")
+      .channel('notifications')
       .on(
-        "postgres_changes",
+        'postgres_changes',
         {
-          event: "INSERT",
-          schema: "public",
-          table: "notifications",
+          event: 'INSERT',
+          schema: 'public',
+          table: 'notifications',
           filter: `user_id=eq.${user.id}`,
         },
         (payload) => {
@@ -131,10 +126,8 @@ export default function NotificationBell() {
           setUnreadCount((prev) => prev + 1);
 
           // 알림 목록 업데이트
-          setNotifications((prev) =>
-            [payload.new as Notification, ...prev].slice(0, 5),
-          );
-        },
+          setNotifications((prev) => [payload.new as Notification, ...prev].slice(0, 5));
+        }
       )
       .subscribe();
 
@@ -145,14 +138,11 @@ export default function NotificationBell() {
 
   // 알림 읽음 처리
   const markAsRead = async (notificationId: string) => {
-    await supabase
-      .from("notifications")
-      .update({ is_read: true })
-      .eq("id", notificationId);
+    await supabase.from('notifications').update({ is_read: true }).eq('id', notificationId);
 
     setUnreadCount((prev) => Math.max(0, prev - 1));
     setNotifications((prev) =>
-      prev.map((n) => (n.id === notificationId ? { ...n, is_read: true } : n)),
+      prev.map((n) => (n.id === notificationId ? { ...n, is_read: true } : n))
     );
   };
 
@@ -161,10 +151,10 @@ export default function NotificationBell() {
     if (!user) return;
 
     await supabase
-      .from("notifications")
+      .from('notifications')
       .update({ is_read: true })
-      .eq("user_id", user.id)
-      .eq("is_read", false);
+      .eq('user_id', user.id)
+      .eq('is_read', false);
 
     setUnreadCount(0);
     setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
@@ -177,9 +167,7 @@ export default function NotificationBell() {
       <button
         onClick={() => setShowDropdown(!showDropdown)}
         className="relative text-gray-900 hover:text-brand-primary transition-colors"
-        aria-label={
-          unreadCount > 0 ? `알림 ${unreadCount}개 확인` : "알림 확인"
-        }
+        aria-label={unreadCount > 0 ? `알림 ${unreadCount}개 확인` : '알림 확인'}
         aria-expanded={showDropdown}
         aria-haspopup="true"
       >
@@ -189,7 +177,7 @@ export default function NotificationBell() {
             className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold"
             aria-label={`읽지 않은 알림 ${unreadCount}개`}
           >
-            {unreadCount > 9 ? "9+" : unreadCount}
+            {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
       </button>
@@ -221,10 +209,7 @@ export default function NotificationBell() {
 
             {notifications.length === 0 ? (
               <div className="p-8 text-center text-gray-500">
-                <FaRegBellSlash
-                  className="text-4xl mb-3 mx-auto"
-                  aria-hidden="true"
-                />
+                <FaRegBellSlash className="text-4xl mb-3 mx-auto" aria-hidden="true" />
                 <p>알림이 없습니다</p>
               </div>
             ) : (
@@ -232,46 +217,37 @@ export default function NotificationBell() {
                 {notifications.map((notification) => (
                   <Link
                     key={notification.id}
-                    href={notification.link || "#"}
+                    href={notification.link || '#'}
                     onClick={() => {
                       markAsRead(notification.id);
                       setShowDropdown(false);
                     }}
                     className={`block px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors ${
-                      notification.is_read ? "" : "bg-blue-50"
+                      notification.is_read ? '' : 'bg-blue-50'
                     }`}
                   >
                     <div className="flex items-start gap-3">
                       <div
                         className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${
-                          notification.is_read
-                            ? "bg-transparent"
-                            : "bg-blue-500"
+                          notification.is_read ? 'bg-transparent' : 'bg-blue-500'
                         }`}
                       ></div>
                       <div className="flex-1 min-w-0">
                         <h4
                           className={`text-sm font-medium mb-1 ${
-                            notification.is_read
-                              ? "text-gray-700"
-                              : "text-gray-900"
+                            notification.is_read ? 'text-gray-700' : 'text-gray-900'
                           }`}
                         >
                           {notification.title}
                         </h4>
-                        <p className="text-xs text-gray-600 mb-1">
-                          {notification.message}
-                        </p>
+                        <p className="text-xs text-gray-600 mb-1">{notification.message}</p>
                         <p className="text-xs text-gray-400">
-                          {new Date(notification.created_at).toLocaleString(
-                            "ko-KR",
-                            {
-                              month: "short",
-                              day: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            },
-                          )}
+                          {new Date(notification.created_at).toLocaleString('ko-KR', {
+                            month: 'short',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
                         </p>
                       </div>
                     </div>
