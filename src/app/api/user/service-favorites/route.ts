@@ -140,10 +140,11 @@ export async function GET(_request: NextRequest) {
         created_at,
         service:services!inner(
           *,
-          seller:sellers(
+          seller:seller_profiles(
             id,
             business_name,
             display_name,
+            profile_image,
             is_verified
           )
         )

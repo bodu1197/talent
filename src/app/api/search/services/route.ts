@@ -23,10 +23,11 @@ export async function GET(request: NextRequest) {
       .select(
         `
         *,
-        seller:sellers!inner(
+        seller:seller_profiles!inner(
           id,
           business_name,
           display_name,
+          profile_image,
           is_verified
         ),
         service_categories(

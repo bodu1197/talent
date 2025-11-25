@@ -164,9 +164,11 @@ export default async function RecentViewedServices() {
         price,
         thumbnail_url,
         orders_count,
-        seller:sellers(
+        seller:seller_profiles(
           id,
           business_name,
+          display_name,
+          profile_image,
           is_verified
         ),
         service_categories(
