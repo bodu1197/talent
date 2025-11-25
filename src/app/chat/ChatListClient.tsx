@@ -257,7 +257,7 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
     try {
       setIsUploading(true);
       const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const fileName = `${Date.now()}_${crypto.randomUUID().slice(0, 8)}.${fileExt}`;
       const filePath = `chat-files/${fileName}`;
 
       const { error } = await supabase.storage.from('uploads').upload(filePath, file);

@@ -260,7 +260,7 @@ export default function AdminStatisticsPage() {
                             row.hour ||
                             row.date ||
                             `${row.year}-${row.month}` ||
-                            Math.random().toString()
+                            `row-${row.total_views}-${row.unique_visitors}`
                           }
                           className="hover:bg-slate-50"
                         >

@@ -74,10 +74,12 @@ export default async function HomePage() {
   );
 }
 
-// 배열 랜덤 셔플 (Fisher-Yates)
+// 배열 랜덤 셔플 (Fisher-Yates) - crypto 기반 보안 강화
 function shuffleArray<T>(array: T[]): void {
   for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const arr = new Uint32Array(1);
+    crypto.getRandomValues(arr);
+    const j = Math.floor((arr[0] / 0xffffffff) * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
 }

@@ -7,8 +7,15 @@
  * @example isValidEmail("test@example.com") => true
  */
 export function isValidEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  return emailRegex.test(email)
+  // 정규식 대신 문자열 파싱으로 ReDoS 취약점 방지
+  if (!email || email.length > 254) return false;
+  const atIndex = email.indexOf('@');
+  const lastAtIndex = email.lastIndexOf('@');
+  if (atIndex < 1 || atIndex !== lastAtIndex) return false;
+  const [local, domain] = [email.slice(0, atIndex), email.slice(atIndex + 1)];
+  if (!local || !domain || local.length > 64) return false;
+  const dotIndex = domain.lastIndexOf('.');
+  return dotIndex > 0 && dotIndex < domain.length - 1 && !domain.includes(' ');
 }
 
 /**
@@ -16,8 +23,8 @@ export function isValidEmail(email: string): boolean {
  * @example isValidPhone("010-1234-5678") => true
  */
 export function isValidPhone(phone: string): boolean {
-  const phoneRegex = /^01\d-?\d{3,4}-?\d{4}$/
-  return phoneRegex.test(phone.replace(/\s/g, ''))
+  const phoneRegex = /^01\d-?\d{3,4}-?\d{4}$/;
+  return phoneRegex.test(phone.replace(/\s/g, ''));
 }
 
 /**
@@ -26,10 +33,10 @@ export function isValidPhone(phone: string): boolean {
  */
 export function isValidURL(url: string): boolean {
   try {
-    new URL(url)
-    return true
+    new URL(url);
+    return true;
   } catch {
-    return false
+    return false;
   }
 }
 
@@ -38,12 +45,12 @@ export function isValidURL(url: string): boolean {
  * @example isStrongPassword("Password123") => true
  */
 export function isStrongPassword(password: string): boolean {
-  const hasMinLength = password.length >= 8
-  const hasUpperCase = /[A-Z]/.test(password)
-  const hasLowerCase = /[a-z]/.test(password)
-  const hasNumber = /\d/.test(password)
+  const hasMinLength = password.length >= 8;
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumber = /\d/.test(password);
 
-  return hasMinLength && hasUpperCase && hasLowerCase && hasNumber
+  return hasMinLength && hasUpperCase && hasLowerCase && hasNumber;
 }
 
 /**
@@ -51,7 +58,7 @@ export function isStrongPassword(password: string): boolean {
  * @example isEmpty("  ") => true
  */
 export function isEmpty(value: string | null | undefined): boolean {
-  return !value || value.trim().length === 0
+  return !value || value.trim().length === 0;
 }
 
 /**
@@ -59,7 +66,7 @@ export function isEmpty(value: string | null | undefined): boolean {
  * @example isNumeric("123") => true
  */
 export function isNumeric(value: string): boolean {
-  return !isNaN(parseFloat(value)) && isFinite(Number(value))
+  return !isNaN(parseFloat(value)) && isFinite(Number(value));
 }
 
 /**
@@ -67,8 +74,8 @@ export function isNumeric(value: string): boolean {
  * @example isKorean("안녕하세요") => true
  */
 export function isKorean(value: string): boolean {
-  const koreanRegex = /^[가-힣\s]+$/
-  return koreanRegex.test(value)
+  const koreanRegex = /^[가-힣\s]+$/;
+  return koreanRegex.test(value);
 }
 
 /**
@@ -76,8 +83,8 @@ export function isKorean(value: string): boolean {
  * @example hasValidExtension("image.jpg", ["jpg", "png"]) => true
  */
 export function hasValidExtension(filename: string, allowedExtensions: string[]): boolean {
-  const extension = filename.split('.').pop()?.toLowerCase()
-  return extension ? allowedExtensions.includes(extension) : false
+  const extension = filename.split('.').pop()?.toLowerCase();
+  return extension ? allowedExtensions.includes(extension) : false;
 }
 
 /**
@@ -85,5 +92,5 @@ export function hasValidExtension(filename: string, allowedExtensions: string[])
  * @example isValidFileSize(1024 * 1024, 5 * 1024 * 1024) => true (1MB < 5MB)
  */
 export function isValidFileSize(fileSize: number, maxSize: number): boolean {
-  return fileSize <= maxSize
+  return fileSize <= maxSize;
 }

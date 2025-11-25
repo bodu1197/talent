@@ -69,15 +69,19 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
   const regularServices =
     recommendedData?.filter((s) => !advertisedServiceIds.includes(s.id)) || [];
 
-  // 광고 서비스 랜덤 셔플
+  // 광고 서비스 랜덤 셔플 (crypto 기반 보안 강화)
   for (let i = advertisedServices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const arr = new Uint32Array(1);
+    crypto.getRandomValues(arr);
+    const j = Math.floor((arr[0] / 0xffffffff) * (i + 1));
     [advertisedServices[i], advertisedServices[j]] = [advertisedServices[j], advertisedServices[i]];
   }
 
-  // 일반 서비스 랜덤 셔플
+  // 일반 서비스 랜덤 셔플 (crypto 기반 보안 강화)
   for (let i = regularServices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const arr = new Uint32Array(1);
+    crypto.getRandomValues(arr);
+    const j = Math.floor((arr[0] / 0xffffffff) * (i + 1));
     [regularServices[i], regularServices[j]] = [regularServices[j], regularServices[i]];
   }
 

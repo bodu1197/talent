@@ -79,7 +79,9 @@ export default function NewServiceClientV2({ sellerId, categories, profileData }
   const handleNext = () => {
     // Step 1 validation: 카테고리, 제목, 설명, 썸네일 필수
     if (currentStep === 1) {
-      console.log('📋 handleNext: Checking category_ids:', formData.category_ids);
+      logger.info('[NewService] handleNext: Checking category_ids', {
+        categoryIds: formData.category_ids,
+      });
 
       if (!formData.category_ids || formData.category_ids.length < 3) {
         toast.error('3차 카테고리까지 모두 선택해주세요.');
@@ -126,7 +128,7 @@ export default function NewServiceClientV2({ sellerId, categories, profileData }
   const uploadThumbnail = async (file: File): Promise<string> => {
     const supabase = createClient();
     const fileExt = file.name.split('.').pop();
-    const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const fileName = `${Date.now()}_${crypto.randomUUID().slice(0, 8)}.${fileExt}`;
     const filePath = `services/${fileName}`;
 
     const { error: uploadError } = await supabase.storage.from('services').upload(filePath, file);
@@ -163,10 +165,12 @@ export default function NewServiceClientV2({ sellerId, categories, profileData }
 
   // 카테고리 저장 헬퍼 함수
   const saveServiceCategories = async (serviceId: string) => {
-    console.log('📋 handleSubmit: About to save category_ids:', formData.category_ids);
+    logger.info('[NewService] handleSubmit: About to save category_ids', {
+      categoryIds: formData.category_ids,
+    });
 
     if (formData.category_ids.length === 0) {
-      console.warn('⚠️ No categories to save - category_ids is empty!');
+      logger.warn('[NewService] No categories to save - category_ids is empty');
       return;
     }
 
@@ -176,7 +180,7 @@ export default function NewServiceClientV2({ sellerId, categories, profileData }
       category_id: cat_id,
     }));
 
-    console.log('📋 handleSubmit: Category inserts:', categoryInserts);
+    logger.info('[NewService] handleSubmit: Category inserts', { categoryInserts });
 
     const { error: categoryError } = await supabase
       .from('service_categories')
@@ -187,7 +191,7 @@ export default function NewServiceClientV2({ sellerId, categories, profileData }
       throw new Error('카테고리 저장에 실패했습니다.');
     }
 
-    console.log('✅ Categories saved successfully!');
+    logger.info('[NewService] Categories saved successfully');
   };
 
   // 포트폴리오 이미지 업로드 헬퍼 함수
@@ -197,7 +201,7 @@ export default function NewServiceClientV2({ sellerId, categories, profileData }
 
     for (const file of images) {
       const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const fileName = `${Date.now()}_${crypto.randomUUID().slice(0, 8)}.${fileExt}`;
       const filePath = `portfolio/${fileName}`;
 
       const { error: uploadError } = await supabase.storage

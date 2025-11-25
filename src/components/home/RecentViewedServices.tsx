@@ -110,7 +110,12 @@ async function getRelatedServices(
   const categoryServices = await getServicesByCategory(categoryId, needed * 2);
   const viewedIds = validViews.map((v) => v.service_id);
   const filtered = categoryServices.filter((s) => !viewedIds.includes(s.id));
-  const shuffled = filtered.toSorted(() => Math.random() - 0.5);
+  // crypto 기반 셔플로 보안 강화
+  const shuffled = filtered.toSorted(() => {
+    const arr = new Uint32Array(1);
+    crypto.getRandomValues(arr);
+    return arr[0] / 0xffffffff - 0.5;
+  });
 
   return shuffled.slice(0, needed);
 }

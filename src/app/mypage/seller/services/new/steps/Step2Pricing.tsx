@@ -1,44 +1,46 @@
 interface ServiceFormData {
-  title: string
-  category_ids: string[]
-  price: string
-  delivery_days: string
-  revision_count: string
-  description: string
-  thumbnail_url: string
-  thumbnail_file: File | null
-  requirements: { question: string; required: boolean }[]
-  create_portfolio: boolean
+  title: string;
+  category_ids: string[];
+  price: string;
+  delivery_days: string;
+  revision_count: string;
+  description: string;
+  thumbnail_url: string;
+  thumbnail_file: File | null;
+  requirements: { question: string; required: boolean }[];
+  create_portfolio: boolean;
   portfolio_data: {
-    title: string
-    description: string
-    youtube_url: string
-    project_url: string
-    tags: string[]
-    images: File[]
-  }
+    title: string;
+    description: string;
+    youtube_url: string;
+    project_url: string;
+    tags: string[];
+    images: File[];
+  };
   features?: {
-    commercial_use?: boolean
-    source_files?: boolean
-    express_delivery?: boolean
-  }
+    commercial_use?: boolean;
+    source_files?: boolean;
+    express_delivery?: boolean;
+  };
 }
 
 interface Props {
-  readonly formData: ServiceFormData
-  readonly setFormData: (data: ServiceFormData) => void
+  readonly formData: ServiceFormData;
+  readonly setFormData: (data: ServiceFormData) => void;
 }
 
 export default function Step2Pricing({ formData, setFormData }: Props) {
   const formatPrice = (value: string) => {
-    const number = value.replace(/[^\d]/g, '')
-    return number.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-  }
+    const number = value.replace(/[^\d]/g, '');
+    // toLocaleString 사용으로 ReDoS 취약점 방지
+    const numValue = parseInt(number, 10);
+    return isNaN(numValue) ? '0' : numValue.toLocaleString('ko-KR');
+  };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^\d]/g, '')
-    setFormData({ ...formData, price: value })
-  }
+    const value = e.target.value.replace(/[^\d]/g, '');
+    setFormData({ ...formData, price: value });
+  };
 
   return (
     <div className="space-y-6">
@@ -61,14 +63,15 @@ export default function Step2Pricing({ formData, setFormData }: Props) {
           />
           <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">원</span>
         </div>
-        <p className="mt-2 text-sm text-gray-500">
-          최소 금액: 5,000원
-        </p>
+        <p className="mt-2 text-sm text-gray-500">최소 금액: 5,000원</p>
       </div>
 
       {/* 작업 기간 */}
       <div>
-        <label htmlFor="service-delivery-days" className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="service-delivery-days"
+          className="block text-sm font-medium text-gray-700 mb-2"
+        >
           작업 기간 <span className="text-red-500">*</span>
         </label>
         <div className="relative">
@@ -119,15 +122,11 @@ export default function Step2Pricing({ formData, setFormData }: Props) {
         <div className="space-y-3">
           <div className="flex justify-between">
             <span className="text-gray-700">서비스 금액</span>
-            <span className="font-bold text-gray-900">
-              {formatPrice(formData.price || '0')}원
-            </span>
+            <span className="font-bold text-gray-900">{formatPrice(formData.price || '0')}원</span>
           </div>
           <div className="flex justify-between text-sm text-gray-600">
             <span>운영자 커피값</span>
-            <span>
-              -1,000원
-            </span>
+            <span>-1,000원</span>
           </div>
           <div className="border-t border-blue-300 pt-3 flex justify-between">
             <span className="font-bold text-gray-900">예상 수익</span>
@@ -138,5 +137,5 @@ export default function Step2Pricing({ formData, setFormData }: Props) {
         </div>
       </div>
     </div>
-  )
+  );
 }

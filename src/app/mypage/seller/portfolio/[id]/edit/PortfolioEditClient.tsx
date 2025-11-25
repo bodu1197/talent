@@ -1,19 +1,13 @@
-"use client";
+'use client';
 
-import { useState, useMemo, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import { createClient } from "@/lib/supabase/client";
-import { logger } from "@/lib/logger";
-import Link from "next/link";
-import {
-  FaArrowLeft,
-  FaCheckCircle,
-  FaTimes,
-  FaSpinner,
-  FaYoutube,
-} from "react-icons/fa";
-import toast from "react-hot-toast";
+import { useState, useMemo, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
+import { createClient } from '@/lib/supabase/client';
+import { logger } from '@/lib/logger';
+import Link from 'next/link';
+import { FaArrowLeft, FaCheckCircle, FaTimes, FaSpinner, FaYoutube } from 'react-icons/fa';
+import toast from 'react-hot-toast';
 
 interface Portfolio {
   id: string;
@@ -66,21 +60,19 @@ export default function PortfolioEditClient({
   const [formData, setFormData] = useState({
     title: portfolio.title,
     description: portfolio.description,
-    category_id: portfolio.category_id || "",
-    thumbnail_url: portfolio.thumbnail_url || "",
+    category_id: portfolio.category_id || '',
+    thumbnail_url: portfolio.thumbnail_url || '',
     image_urls: portfolio.image_urls || [],
-    project_url: portfolio.project_url || "",
-    youtube_url: portfolio.youtube_url || "",
+    project_url: portfolio.project_url || '',
+    youtube_url: portfolio.youtube_url || '',
     service_ids: linkedServiceIds, // 다중 선택으로 변경
     tags: portfolio.tags || [],
   });
-  const [tagInput, setTagInput] = useState("");
+  const [tagInput, setTagInput] = useState('');
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [existingImages, setExistingImages] = useState<string[]>(
-    [portfolio.thumbnail_url, ...(portfolio.image_urls || [])].filter(
-      Boolean,
-    ) as string[],
+    [portfolio.thumbnail_url, ...(portfolio.image_urls || [])].filter(Boolean) as string[]
   );
   const [youtubeVideoId, setYoutubeVideoId] = useState(() => {
     if (portfolio.youtube_url) {
@@ -94,22 +86,25 @@ export default function PortfolioEditClient({
         if (match) return match[1];
       }
     }
-    return "";
+    return '';
   });
-  const [fetchingYoutubeThumbnail, setFetchingYoutubeThumbnail] =
-    useState(false);
+  const [fetchingYoutubeThumbnail, setFetchingYoutubeThumbnail] = useState(false);
 
   // Helper: Build child categories
-  const buildChildCategories = useCallback((parentId: string) => {
-    return categories
-      .filter((c) => c.parent_id === parentId)
-      .map((child) => ({
-        ...child,
-        children: categories.filter((c) => c.parent_id === child.id),
-      }));
-  }, [categories]);
+  const buildChildCategories = useCallback(
+    (parentId: string) => {
+      return categories
+        .filter((c) => c.parent_id === parentId)
+        .map((child) => ({
+          ...child,
+          children: categories.filter((c) => c.parent_id === child.id),
+        }));
+    },
+    [categories]
+  );
 
-  // 카테고리 계층 구조 생성
+  // 카테고리 계층 구조 생성 (향후 확장용)
+  // eslint-disable-next-line sonarjs/no-unused-vars
   const _categoryTree = useMemo(() => {
     const topLevel = categories.filter((c) => !c.parent_id);
     return topLevel.map((parent) => ({
@@ -138,7 +133,7 @@ export default function PortfolioEditClient({
     setFormData({ ...formData, youtube_url: url });
 
     if (!url) {
-      setYoutubeVideoId("");
+      setYoutubeVideoId('');
       return;
     }
 
@@ -158,7 +153,7 @@ export default function PortfolioEditClient({
         if (response.ok) {
           const blob = await response.blob();
           const file = new File([blob], `youtube-${videoId}.jpg`, {
-            type: "image/jpeg",
+            type: 'image/jpeg',
           });
           setImageFiles((prev) => [file, ...prev]);
           const preview = URL.createObjectURL(blob);
@@ -171,7 +166,7 @@ export default function PortfolioEditClient({
 
           // Blob을 File로 변환
           const file = new File([blob], `youtube-${videoId}.jpg`, {
-            type: "image/jpeg",
+            type: 'image/jpeg',
           });
 
           // 기존 이미지 파일 배열에 추가
@@ -182,12 +177,12 @@ export default function PortfolioEditClient({
           setImagePreviews((prev) => [preview, ...prev]);
         }
       } catch (error) {
-        logger.error("Failed to fetch YouTube thumbnail:", error);
+        logger.error('Failed to fetch YouTube thumbnail:', error);
       } finally {
         setFetchingYoutubeThumbnail(false);
       }
     } else {
-      setYoutubeVideoId("");
+      setYoutubeVideoId('');
     }
   };
 
@@ -221,7 +216,7 @@ export default function PortfolioEditClient({
     e.preventDefault();
 
     if (!formData.title || !formData.description) {
-      toast.error("제목과 설명을 입력해주세요");
+      toast.error('제목과 설명을 입력해주세요');
       return;
     }
 
@@ -239,43 +234,43 @@ export default function PortfolioEditClient({
 
         for (let i = 0; i < imageFiles.length; i++) {
           const file = imageFiles[i];
-          const fileExt = file.name.split(".").pop();
-          const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+          const fileExt = file.name.split('.').pop();
+          const fileName = `${Date.now()}_${crypto.randomUUID().slice(0, 8)}.${fileExt}`;
           const filePath = `portfolio/${fileName}`;
 
           // Supabase Storage에 직접 업로드
           const { error: uploadError } = await supabase.storage
-            .from("portfolio")
+            .from('portfolio')
             .upload(filePath, file, { upsert: false });
 
           if (uploadError) {
-            logger.error("Image upload failed:", uploadError);
+            logger.error('Image upload failed:', uploadError);
             throw new Error(`이미지 업로드 실패: ${uploadError.message}`);
           }
 
           // 공개 URL 가져오기
           const {
             data: { publicUrl },
-          } = supabase.storage.from("portfolio").getPublicUrl(filePath);
+          } = supabase.storage.from('portfolio').getPublicUrl(filePath);
 
           uploadedUrls.push(publicUrl);
         }
 
         // 기존 이미지와 새 이미지 합치기
         const allImages = [...existingImages, ...uploadedUrls];
-        thumbnail_url = allImages[0] || "";
+        thumbnail_url = allImages[0] || '';
         image_urls = allImages.slice(1);
       } else {
         // 새 이미지 업로드가 없는 경우, 기존 이미지만 사용
-        thumbnail_url = existingImages[0] || "";
+        thumbnail_url = existingImages[0] || '';
         image_urls = existingImages.slice(1);
       }
 
       setUploading(false);
 
       const response = await fetch(`/api/seller/portfolio/${portfolio.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
           thumbnail_url,
@@ -287,25 +282,22 @@ export default function PortfolioEditClient({
       const result = await response.json();
 
       if (!response.ok) {
-        logger.error("Portfolio update failed:", {
+        logger.error('Portfolio update failed:', {
           status: response.status,
           error: result.error,
           details: result.details,
         });
-        toast.error(
-          `수정 실패: ${result.details || result.error || "알 수 없는 오류"}`,
-        );
+        toast.error(`수정 실패: ${result.details || result.error || '알 수 없는 오류'}`);
         return;
       }
 
-      toast.success("포트폴리오가 수정되었습니다");
+      toast.success('포트폴리오가 수정되었습니다');
       router.push(`/mypage/seller/portfolio/${portfolio.id}`);
       router.refresh();
     } catch (error) {
-      logger.error("Portfolio update error:", error);
+      logger.error('Portfolio update error:', error);
       toast.error(
-        "수정에 실패했습니다: " +
-        (error instanceof Error ? error.message : "알 수 없는 오류"),
+        '수정에 실패했습니다: ' + (error instanceof Error ? error.message : '알 수 없는 오류')
       );
     } finally {
       setLoading(false);
@@ -319,7 +311,7 @@ export default function PortfolioEditClient({
         ...formData,
         tags: [...formData.tags, tagInput.trim()],
       });
-      setTagInput("");
+      setTagInput('');
     }
   };
 
@@ -343,24 +335,23 @@ export default function PortfolioEditClient({
               포트폴리오 상세
             </Link>
             <h1 className="text-base md:text-lg font-bold text-gray-900">포트폴리오 수정</h1>
-            <p className="text-gray-600 mt-1 text-sm">
-              작업물 정보를 수정하세요
-            </p>
+            <p className="text-gray-600 mt-1 text-sm">작업물 정보를 수정하세요</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* 제목 */}
             <div>
-              <label htmlFor="portfolio-edit-title" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="portfolio-edit-title"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 제목 <span className="text-red-500">*</span>
               </label>
               <input
                 id="portfolio-edit-title"
                 type="text"
                 value={formData.title}
-                onChange={(e) =>
-                  setFormData({ ...formData, title: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 placeholder="포트폴리오 제목을 입력하세요"
                 required
@@ -371,10 +362,9 @@ export default function PortfolioEditClient({
             {services.length > 0 && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  연동 서비스{" "}
+                  연동 서비스{' '}
                   <span className="text-gray-500 text-xs">
-                    (다중 선택 가능 - 선택한 서비스의 상세 페이지에 이
-                    포트폴리오가 표시됩니다)
+                    (다중 선택 가능 - 선택한 서비스의 상세 페이지에 이 포트폴리오가 표시됩니다)
                   </span>
                 </label>
                 <div className="border border-gray-300 rounded-lg p-4 space-y-3 max-h-64 overflow-y-auto">
@@ -390,30 +380,21 @@ export default function PortfolioEditClient({
                           if (e.target.checked) {
                             setFormData({
                               ...formData,
-                              service_ids: [
-                                ...formData.service_ids,
-                                service.id,
-                              ],
+                              service_ids: [...formData.service_ids, service.id],
                             });
                           } else {
                             setFormData({
                               ...formData,
-                              service_ids: formData.service_ids.filter(
-                                (id) => id !== service.id,
-                              ),
+                              service_ids: formData.service_ids.filter((id) => id !== service.id),
                             });
                           }
                         }}
                         className="mt-1 w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
                       />
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">
-                          {service.title}
-                        </p>
-                        {service.status === "pending" && (
-                          <p className="text-xs text-gray-500 mt-1">
-                            승인 대기중
-                          </p>
+                        <p className="text-sm font-medium text-gray-900">{service.title}</p>
+                        {service.status === 'pending' && (
+                          <p className="text-xs text-gray-500 mt-1">승인 대기중</p>
                         )}
                       </div>
                     </label>
@@ -430,15 +411,16 @@ export default function PortfolioEditClient({
 
             {/* 설명 */}
             <div>
-              <label htmlFor="portfolio-edit-description" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="portfolio-edit-description"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 설명 <span className="text-red-500">*</span>
               </label>
               <textarea
                 id="portfolio-edit-description"
                 value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={6}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 placeholder="프로젝트에 대한 자세한 설명을 입력하세요"
@@ -450,10 +432,8 @@ export default function PortfolioEditClient({
             {existingImages.length > 0 && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  기존 이미지{" "}
-                  <span className="text-gray-500 text-xs">
-                    (첫 이미지가 썸네일이 됩니다)
-                  </span>
+                  기존 이미지{' '}
+                  <span className="text-gray-500 text-xs">(첫 이미지가 썸네일이 됩니다)</span>
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {existingImages.map((image, index) => (
@@ -483,12 +463,13 @@ export default function PortfolioEditClient({
 
             {/* 새 이미지 업로드 */}
             <div>
-              <label htmlFor="portfolio-edit-new-images" className="block text-sm font-medium text-gray-700 mb-2">
-                새 이미지 추가{" "}
+              <label
+                htmlFor="portfolio-edit-new-images"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                새 이미지 추가{' '}
                 {existingImages.length === 0 && (
-                  <span className="text-gray-500 text-xs">
-                    (첫 이미지가 썸네일이 됩니다)
-                  </span>
+                  <span className="text-gray-500 text-xs">(첫 이미지가 썸네일이 됩니다)</span>
                 )}
               </label>
               <input
@@ -528,16 +509,17 @@ export default function PortfolioEditClient({
 
             {/* 프로젝트 URL */}
             <div>
-              <label htmlFor="portfolio-edit-project-url" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="portfolio-edit-project-url"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 프로젝트 URL
               </label>
               <input
                 id="portfolio-edit-project-url"
                 type="url"
                 value={formData.project_url}
-                onChange={(e) =>
-                  setFormData({ ...formData, project_url: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, project_url: e.target.value })}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 placeholder="https://example.com"
               />
@@ -545,11 +527,12 @@ export default function PortfolioEditClient({
 
             {/* YouTube URL */}
             <div>
-              <label htmlFor="portfolio-edit-youtube-url" className="block text-sm font-medium text-gray-700 mb-2">
-                YouTube 영상 URL{" "}
-                <span className="text-gray-500 text-xs">
-                  (영상이 포트폴리오에 삽입됩니다)
-                </span>
+              <label
+                htmlFor="portfolio-edit-youtube-url"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                YouTube 영상 URL{' '}
+                <span className="text-gray-500 text-xs">(영상이 포트폴리오에 삽입됩니다)</span>
               </label>
               <input
                 id="portfolio-edit-youtube-url"
@@ -589,7 +572,10 @@ export default function PortfolioEditClient({
 
             {/* 태그 */}
             <div>
-              <label htmlFor="portfolio-edit-tag-input" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="portfolio-edit-tag-input"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 태그
               </label>
               <div className="flex gap-2 mb-2">
@@ -599,7 +585,7 @@ export default function PortfolioEditClient({
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") {
+                    if (e.key === 'Enter') {
                       e.preventDefault();
                       handleAddTag();
                     }
@@ -652,11 +638,8 @@ export default function PortfolioEditClient({
                 disabled={loading}
                 className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
-                {uploading
-                  ? "이미지 업로드 중..."
-                  : loading
-                    ? "수정 중..."
-                    : "수정하기"}
+                {/* eslint-disable-next-line sonarjs/no-nested-conditional */}
+                {uploading ? '이미지 업로드 중...' : loading ? '수정 중...' : '수정하기'}
               </button>
             </div>
           </form>

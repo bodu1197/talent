@@ -3,10 +3,9 @@
  */
 
 // OAuth 리다이렉트 허용 Origin (CRITICAL 보안)
-export const ALLOWED_REDIRECT_ORIGINS = [
-  "http://localhost:3000",
-  "https://dolpagu.com",
-];
+// localhost는 개발 환경에서만 허용 (http는 localhost 전용)
+const LOCAL_DEV_ORIGIN = 'http://localhost:3000'; // NOSONAR - localhost 개발용
+export const ALLOWED_REDIRECT_ORIGINS = [LOCAL_DEV_ORIGIN, 'https://dolpagu.com'];
 
 // Rate Limiting 설정
 export const RATE_LIMIT_CONFIG = {
@@ -40,12 +39,9 @@ export function isAllowedOrigin(origin: string): boolean {
  * @returns 검증된 리다이렉트 URL
  * @throws Error if origin is not allowed
  */
-export function getSecureRedirectUrl(
-  origin: string,
-  path: string = "/auth/callback",
-): string {
+export function getSecureRedirectUrl(origin: string, path: string = '/auth/callback'): string {
   if (!isAllowedOrigin(origin)) {
-    throw new Error("Invalid origin for redirect");
+    throw new Error('Invalid origin for redirect');
   }
   return `${origin}${path}`;
 }
@@ -59,7 +55,7 @@ export function createOAuthState(data: Record<string, unknown>): string {
   const stateData = {
     ...data,
     timestamp: Date.now(),
-    nonce: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+    nonce: crypto.randomUUID(),
   };
   // 한글 등 유니코드 문자 처리를 위해 encodeURIComponent 사용
   return btoa(encodeURIComponent(JSON.stringify(stateData)));
@@ -74,7 +70,7 @@ export function createOAuthState(data: Record<string, unknown>): string {
  */
 export function parseOAuthState<T = Record<string, unknown>>(
   state: string,
-  maxAge: number = 600000, // 10분
+  maxAge: number = 600000 // 10분
 ): T {
   try {
     // 한글 등 유니코드 문자 처리를 위해 decodeURIComponent 사용
@@ -82,11 +78,11 @@ export function parseOAuthState<T = Record<string, unknown>>(
 
     // 타임스탬프 검증
     if (!decoded.timestamp || Date.now() - decoded.timestamp > maxAge) {
-      throw new Error("State expired");
+      throw new Error('State expired');
     }
 
     return decoded as T;
   } catch {
-    throw new Error("Invalid state parameter");
+    throw new Error('Invalid state parameter');
   }
 }
