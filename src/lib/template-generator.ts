@@ -185,7 +185,7 @@ function handleLongWord(
   }
   const wordChunks = splitLongWord(word, ctx, maxWidth);
   lines.push(...wordChunks.slice(0, -1));
-  return wordChunks[wordChunks.length - 1];
+  return wordChunks.at(-1) ?? '';
 }
 
 /**

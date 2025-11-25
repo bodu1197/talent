@@ -196,7 +196,7 @@ export async function getCategoryPath(
     return path;
   }
 
-  return (data || []) as CategoryItem[];
+  return data || [];
 }
 
 /**

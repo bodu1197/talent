@@ -387,8 +387,7 @@ export default function AdminAdvertisingPaymentsPage() {
 
   const pendingOver24h = payments.filter(
     (p) =>
-      p.status === 'pending' &&
-      new Date().getTime() - new Date(p.created_at).getTime() > 24 * 60 * 60 * 1000
+      p.status === 'pending' && Date.now() - new Date(p.created_at).getTime() > 24 * 60 * 60 * 1000
   ).length;
 
   return (
@@ -840,7 +839,7 @@ export default function AdminAdvertisingPaymentsPage() {
           >
             ‹
           </button>
-          {[...Array(Math.min(5, totalPages))].map((_, i) => (
+          {Array.from({ length: Math.min(5, totalPages) }, (_, i) => (
             <button
               key={`page-${i + 1}`}
               onClick={() => setCurrentPage(i + 1)}

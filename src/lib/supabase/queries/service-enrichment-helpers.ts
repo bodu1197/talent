@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 type Service = {
   id: string;
@@ -6,7 +6,7 @@ type Service = {
   orders_count?: number | null;
   is_advertised?: boolean;
   price_min?: number;
-  price_max?: number | undefined;
+  price_max?: number;
   order_count?: number;
   rating?: number;
   review_count?: number;
@@ -26,12 +26,12 @@ type Service = {
  * Fetch active advertising service IDs
  */
 export async function fetchAdvertisedServiceIds(
-  serviceRoleClient: SupabaseClient,
+  serviceRoleClient: SupabaseClient
 ): Promise<string[]> {
   const { data: advertisingData } = await serviceRoleClient
-    .from("advertising_subscriptions")
-    .select("service_id")
-    .eq("status", "active");
+    .from('advertising_subscriptions')
+    .select('service_id')
+    .eq('status', 'active');
 
   return advertisingData?.map((ad) => ad.service_id) || [];
 }
@@ -39,10 +39,7 @@ export async function fetchAdvertisedServiceIds(
 /**
  * Mark services with advertising status
  */
-export function markAdvertisedServices(
-  services: Service[],
-  advertisedServiceIds: string[],
-): void {
+export function markAdvertisedServices(services: Service[], advertisedServiceIds: string[]): void {
   for (const service of services) {
     service.is_advertised = advertisedServiceIds.includes(service.id);
   }
@@ -53,16 +50,16 @@ export function markAdvertisedServices(
  */
 export async function enrichServicesWithReviewStats(
   supabase: SupabaseClient,
-  services: Service[],
+  services: Service[]
 ): Promise<void> {
   if (services.length === 0) return;
 
   const serviceIds = services.map((s) => s.id);
   const { data: reviewStats } = await supabase
-    .from("reviews")
-    .select("service_id, rating")
-    .in("service_id", serviceIds)
-    .eq("is_visible", true);
+    .from('reviews')
+    .select('service_id, rating')
+    .in('service_id', serviceIds)
+    .eq('is_visible', true);
 
   // Build rating map
   const ratingMap = new Map<string, { sum: number; count: number }>();
@@ -104,7 +101,7 @@ export async function enrichServicesWithReviewStats(
  */
 export async function enrichServicesWithUserInfo(
   supabase: SupabaseClient,
-  services: Service[],
+  services: Service[]
 ): Promise<void> {
   if (services.length === 0) return;
 
@@ -113,9 +110,9 @@ export async function enrichServicesWithUserInfo(
   if (userIds.length === 0) return;
 
   const { data: usersData } = await supabase
-    .from("profiles")
-    .select("user_id, name, email, profile_image")
-    .in("user_id", userIds);
+    .from('profiles')
+    .select('user_id, name, email, profile_image')
+    .in('user_id', userIds);
 
   if (!usersData) return;
 

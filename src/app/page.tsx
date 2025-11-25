@@ -206,7 +206,7 @@ function AIShowcaseSkeleton() {
           <div className="h-5 bg-gray-200 rounded w-64 animate-pulse"></div>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {[...Array(10)].map((_, i) => (
+          {Array.from({ length: 10 }, (_, i) => (
             <div
               key={`trending-skeleton-${i}`}
               className="bg-gray-100 rounded-lg h-64 animate-pulse"
@@ -227,7 +227,7 @@ function RecommendedSkeleton() {
           <div className="h-5 bg-gray-200 rounded w-64 animate-pulse"></div>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {[...Array(15)].map((_, i) => (
+          {Array.from({ length: 15 }, (_, i) => (
             <div
               key={`recommended-skeleton-${i}`}
               className="bg-gray-100 rounded-lg h-64 animate-pulse"
@@ -248,11 +248,11 @@ function PersonalizedSkeleton() {
           <div className="h-5 bg-gray-200 rounded w-80 animate-pulse"></div>
         </div>
         <div className="space-y-10">
-          {[...Array(3)].map((_, i) => (
+          {Array.from({ length: 3 }, (_, i) => (
             <div key={`personalized-category-${i}`}>
               <div className="h-6 bg-gray-200 rounded w-40 mb-4 animate-pulse"></div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {[...Array(5)].map((_, j) => (
+                {Array.from({ length: 5 }, (_, j) => (
                   <div
                     key={`personalized-skeleton-${i}-${j}`}
                     className="bg-gray-100 rounded-lg h-64 animate-pulse"
@@ -276,7 +276,7 @@ function ReviewsSkeleton() {
           <div className="h-6 bg-gray-200 rounded w-96 mx-auto animate-pulse"></div>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(6)].map((_, i) => (
+          {Array.from({ length: 6 }, (_, i) => (
             <div key={`review-skeleton-${i}`} className="bg-gray-50 rounded-xl p-6">
               <div className="h-6 bg-gray-200 rounded w-32 mb-4 animate-pulse"></div>
               <div className="space-y-2 mb-4">

@@ -38,8 +38,9 @@ export async function POST(request: NextRequest) {
     }
 
     // user1_id와 user2_id 정렬 (user1_id <= user2_id)
-    const user1_id = order.buyer_id < order.seller_id ? order.buyer_id : order.seller_id;
-    const user2_id = order.buyer_id < order.seller_id ? order.seller_id : order.buyer_id;
+    // Note: Using ternary for string UUID comparison (Math.min/max don't work with strings)
+    const user1_id = order.buyer_id < order.seller_id ? order.buyer_id : order.seller_id; // NOSONAR - string comparison
+    const user2_id = order.buyer_id < order.seller_id ? order.seller_id : order.buyer_id; // NOSONAR - string comparison
 
     // 기존 채팅방 확인 (user1_id, user2_id, service_id로 확인)
     const { data: existingRoom } = await supabase

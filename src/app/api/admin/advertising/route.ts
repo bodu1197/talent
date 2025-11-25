@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status');
     const paymentMethod = searchParams.get('paymentMethod');
     const sortBy = searchParams.get('sortBy') || 'created_at';
-    const sortOrder = searchParams.get('sortOrder') === 'asc' ? true : false;
+    const sortOrder = searchParams.get('sortOrder') === 'asc';
 
     // 광고 구독 목록 조회 - seller 정보는 별도로 조회
     let query = supabase.from('advertising_subscriptions').select(`

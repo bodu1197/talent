@@ -737,7 +737,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                       type="tel"
                       value={formData.publicPhone}
                       onChange={(e) => {
-                        const value = e.target.value.replace(/[^0-9-]/g, '');
+                        const value = e.target.value.replaceAll(/[^0-9-]/g, '');
                         setFormData({ ...formData, publicPhone: value });
                       }}
                       placeholder="010-1234-5678"
@@ -799,7 +799,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                     type="tel"
                     value={formData.whatsapp}
                     onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, '');
+                      const value = e.target.value.replaceAll(/\D/g, '');
                       setFormData({ ...formData, whatsapp: value });
                     }}
                     placeholder="821012345678 (국가번호 포함, 하이픈 없이)"
@@ -873,6 +873,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                         })
                       }
                       className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary mt-0.5"
+                      aria-label="판매자 이용약관 동의"
                       required
                     />
                     <div className="flex-1">
@@ -897,6 +898,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                         })
                       }
                       className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary mt-0.5"
+                      aria-label="수수료 정책 확인"
                       required
                     />
                     <div className="flex-1">
@@ -921,6 +923,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                         })
                       }
                       className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary mt-0.5"
+                      aria-label="환불 정책 확인"
                       required
                     />
                     <div className="flex-1">

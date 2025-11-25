@@ -17,9 +17,9 @@ interface ProfileData {
 }
 
 interface Props {
-  profile: ProfileData | null;
-  userEmail: string;
-  isSeller: boolean;
+  readonly profile: ProfileData | null;
+  readonly userEmail: string;
+  readonly isSeller: boolean;
 }
 
 export default function SettingsEditClient({ profile, userEmail, isSeller }: Props) {
@@ -346,8 +346,14 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">이름</label>
+                    <label
+                      htmlFor="settings-name"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      이름
+                    </label>
                     <input
+                      id="settings-name"
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
@@ -356,8 +362,14 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">이메일</label>
+                    <label
+                      htmlFor="settings-email"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      이메일
+                    </label>
                     <input
+                      id="settings-email"
                       type="email"
                       value={userEmail}
                       disabled
@@ -367,8 +379,14 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">자기소개</label>
+                    <label
+                      htmlFor="settings-bio"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      자기소개
+                    </label>
                     <textarea
+                      id="settings-bio"
                       rows={4}
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}

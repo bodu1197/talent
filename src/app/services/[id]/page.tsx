@@ -288,7 +288,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
   // 같은 카테고리의 추천 서비스 조회 (현재 서비스 제외, 5개)
   const recommendedServices =
     categories.length > 0
-      ? await getRecommendedServicesByCategory(categories[categories.length - 1].id, service.id, 5)
+      ? await getRecommendedServicesByCategory(categories.at(-1)!.id, service.id, 5)
       : [];
 
   return (

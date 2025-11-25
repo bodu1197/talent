@@ -24,7 +24,7 @@ export function isValidEmail(email: string): boolean {
  */
 export function isValidPhone(phone: string): boolean {
   const phoneRegex = /^01\d-?\d{3,4}-?\d{4}$/;
-  return phoneRegex.test(phone.replace(/\s/g, ''));
+  return phoneRegex.test(phone.replaceAll(/\s/g, ''));
 }
 
 /**
@@ -66,7 +66,7 @@ export function isEmpty(value: string | null | undefined): boolean {
  * @example isNumeric("123") => true
  */
 export function isNumeric(value: string): boolean {
-  return !isNaN(parseFloat(value)) && isFinite(Number(value));
+  return !Number.isNaN(Number.parseFloat(value)) && Number.isFinite(Number(value));
 }
 
 /**

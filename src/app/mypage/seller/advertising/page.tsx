@@ -601,8 +601,16 @@ export default function AdvertisingPage() {
                 setIsModalOpen(false);
                 setSelectedService('');
               }}
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') {
+                  setIsModalOpen(false);
+                  setSelectedService('');
+                }
+              }}
+              role="presentation"
             >
-              <div
+              <dialog
+                open
                 className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
                 onKeyDown={(e) => {
@@ -611,8 +619,6 @@ export default function AdvertisingPage() {
                     setSelectedService('');
                   }
                 }}
-                role="dialog"
-                aria-modal="true"
                 tabIndex={-1}
                 aria-labelledby="advertising-modal-title"
               >
@@ -914,7 +920,7 @@ export default function AdvertisingPage() {
                     );
                   })()}
                 </div>
-              </div>
+              </dialog>
             </div>
           )}
 

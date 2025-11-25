@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '결제 기록 생성 실패' }, { status: 500 });
     }
 
-    const typedPayment = payment as Tables<'payments'>;
+    const typedPayment = payment;
 
     // 이미 존재하는 결제인 경우 (동시 요청으로 인한 중복)
     if (isExisting) {

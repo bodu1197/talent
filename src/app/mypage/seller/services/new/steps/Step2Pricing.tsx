@@ -31,14 +31,14 @@ interface Props {
 
 export default function Step2Pricing({ formData, setFormData }: Props) {
   const formatPrice = (value: string) => {
-    const number = value.replace(/[^\d]/g, '');
+    const number = value.replaceAll(/[^\d]/g, '');
     // toLocaleString 사용으로 ReDoS 취약점 방지
-    const numValue = parseInt(number, 10);
-    return isNaN(numValue) ? '0' : numValue.toLocaleString('ko-KR');
+    const numValue = Number.parseInt(number, 10);
+    return Number.isNaN(numValue) ? '0' : numValue.toLocaleString('ko-KR');
   };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^\d]/g, '');
+    const value = e.target.value.replaceAll(/[^\d]/g, '');
     setFormData({ ...formData, price: value });
   };
 

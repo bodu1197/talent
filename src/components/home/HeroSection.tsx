@@ -328,7 +328,7 @@ export default function HeroSection() {
                     right: drop.right,
                     opacity: drop.opacity,
                     backgroundColor: slide.glowColor,
-                    filter: drop.blur !== 'none' ? `blur(${blurValues[drop.blur]})` : 'none',
+                    filter: drop.blur === 'none' ? 'none' : `blur(${blurValues[drop.blur]})`,
                     transform: drop.transform,
                     // mixBlendMode: 'screen', // 흰 배경에서는 screen 모드가 보이지 않으므로 제거
                   }}

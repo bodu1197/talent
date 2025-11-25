@@ -97,7 +97,7 @@ export class SupabaseManager {
    */
   static getServiceRoleClient(): SupabaseClient {
     if (typeof window !== 'undefined') {
-      throw new Error('Service Role Client는 서버 사이드에서만 사용할 수 있습니다!');
+      throw new TypeError('Service Role Client는 서버 사이드에서만 사용할 수 있습니다!');
     }
 
     if (!this.serviceClient) {

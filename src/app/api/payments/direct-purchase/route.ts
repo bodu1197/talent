@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { PostgrestError } from '@supabase/supabase-js';
 import { directPurchaseRateLimit, checkRateLimit } from '@/lib/rate-limit';
 import { createOrderWithIdempotency } from '@/lib/transaction';
 import { randomBytes } from 'node:crypto';
@@ -108,7 +107,7 @@ export async function POST(request: NextRequest) {
 
     if (orderError) {
       // 보안: 서버 로그에만 상세 정보 기록, 클라이언트에는 일반 메시지만 반환
-      const pgError = orderError as PostgrestError;
+      const pgError = orderError;
       logger.error('Order creation error:', {
         message: pgError.message,
         code: pgError.code,

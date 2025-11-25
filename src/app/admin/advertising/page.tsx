@@ -392,8 +392,11 @@ export default function AdminAdvertisingPage() {
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
           onClick={() => setSelectedSubscription(null)}
+          onKeyDown={(e) => e.key === 'Escape' && setSelectedSubscription(null)}
+          role="presentation"
         >
-          <div
+          <dialog
+            open
             className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => {
@@ -403,8 +406,6 @@ export default function AdminAdvertisingPage() {
                 setSelectedSubscription(null);
               }
             }}
-            role="dialog"
-            aria-modal="true"
             aria-labelledby="subscription-detail-title"
             tabIndex={-1}
           >
@@ -518,7 +519,7 @@ export default function AdminAdvertisingPage() {
                 닫기
               </button>
             </div>
-          </div>
+          </dialog>
         </div>
       )}
     </div>

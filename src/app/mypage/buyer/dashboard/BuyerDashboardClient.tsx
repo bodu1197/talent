@@ -119,9 +119,7 @@ export default function BuyerDashboardClient({
 
   const getDaysLeft = (deliveryDate: string | null | undefined) => {
     if (!deliveryDate) return null;
-    const days = Math.ceil(
-      (new Date(deliveryDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
-    );
+    const days = Math.ceil((new Date(deliveryDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
     return days > 0 ? days : null;
   };
 

@@ -60,15 +60,16 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
     <div
       className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
       onClick={onClose}
+      onKeyDown={(e) => e.key === 'Escape' && onClose()}
+      role="presentation"
     >
-      <div
+      <dialog
+        open
         className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={(e) => {
           if (e.key === 'Escape') onClose();
         }}
-        role="dialog"
-        aria-modal="true"
         aria-labelledby="portfolio-title"
         tabIndex={-1}
       >
@@ -180,7 +181,7 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
             </div>
           )}
         </div>
-      </div>
+      </dialog>
     </div>
   );
 }

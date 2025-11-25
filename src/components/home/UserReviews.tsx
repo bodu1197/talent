@@ -64,7 +64,7 @@ export default async function UserReviews() {
             >
               {/* 별점 */}
               <div className="flex items-center mb-4">
-                {[...Array(5)].map((_, index) => (
+                {Array.from({ length: 5 }, (_, index) => (
                   <svg
                     key={`rating-star-${index}`}
                     className={`w-5 h-5 ${

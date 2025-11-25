@@ -1,5 +1,5 @@
 // 성별 중립적인 랜덤 닉네임 생성기
-import { randomBytes } from 'crypto';
+import { randomBytes } from 'node:crypto';
 
 /**
  * Get cryptographically secure random integer

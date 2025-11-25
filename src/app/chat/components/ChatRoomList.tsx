@@ -46,13 +46,13 @@ function ChatRoomContent({
   onSelectRoom,
   onToggleFavorite,
 }: {
-  isCreatingRoom: boolean;
-  rooms: ChatRoom[];
-  filteredRooms: ChatRoom[];
-  selectedRoomId: string | null;
-  isMobile: boolean;
-  onSelectRoom: (roomId: string) => void;
-  onToggleFavorite: (roomId: string, e: React.MouseEvent) => void;
+  readonly isCreatingRoom: boolean;
+  readonly rooms: ChatRoom[];
+  readonly filteredRooms: ChatRoom[];
+  readonly selectedRoomId: string | null;
+  readonly isMobile: boolean;
+  readonly onSelectRoom: (roomId: string) => void;
+  readonly onToggleFavorite: (roomId: string, e: React.MouseEvent) => void;
 }) {
   if (isCreatingRoom) {
     return (
