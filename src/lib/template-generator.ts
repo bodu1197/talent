@@ -131,6 +131,100 @@ export interface TextOverlayOptions {
   shadowColor?: string;
 }
 
+/**
+ * 긴 단어를 최대 너비에 맞게 글자 단위로 분할
+ */
+function splitLongWord(word: string, ctx: CanvasRenderingContext2D, maxWidth: number): string[] {
+  const chunks: string[] = [];
+  let remaining = word;
+
+  while (remaining) {
+    let sliceLength = 1;
+    let validSlice = '';
+
+    while (sliceLength <= remaining.length) {
+      const slice = remaining.substring(0, sliceLength);
+      if (ctx.measureText(slice).width > maxWidth) {
+        break;
+      }
+      validSlice = slice;
+      sliceLength++;
+    }
+
+    if (!validSlice) {
+      // 한 글자도 안 들어가는 경우 강제로 첫 글자 사용
+      validSlice = remaining[0];
+    }
+
+    chunks.push(validSlice);
+    remaining = remaining.substring(validSlice.length);
+  }
+
+  return chunks;
+}
+
+/**
+ * 텍스트를 여러 줄로 분할 (최대 너비 기준)
+ */
+function splitTextIntoLines(
+  text: string,
+  ctx: CanvasRenderingContext2D,
+  maxWidth: number
+): string[] {
+  const words = text.split(' ');
+  const lines: string[] = [];
+  let currentLine = '';
+
+  for (const word of words) {
+    const testLine = currentLine ? `${currentLine} ${word}` : word;
+    const metrics = ctx.measureText(testLine);
+
+    if (metrics.width > maxWidth) {
+      if (ctx.measureText(word).width > maxWidth) {
+        // 단어가 너무 긴 경우
+        if (currentLine) {
+          lines.push(currentLine);
+        }
+        const wordChunks = splitLongWord(word, ctx, maxWidth);
+        lines.push(...wordChunks.slice(0, -1));
+        currentLine = wordChunks[wordChunks.length - 1];
+      } else {
+        // 일반 줄바꿈
+        if (currentLine) {
+          lines.push(currentLine);
+        }
+        currentLine = word;
+      }
+    } else {
+      currentLine = testLine;
+    }
+  }
+
+  if (currentLine) {
+    lines.push(currentLine);
+  }
+
+  return lines;
+}
+
+/**
+ * 텍스트 정렬에 따라 X 좌표 계산
+ */
+function calculateTextX(
+  textAlign: CanvasTextAlign,
+  baseX: number,
+  width: number,
+  padding: number
+): number {
+  if (textAlign === 'left') {
+    return Math.max(baseX, padding);
+  }
+  if (textAlign === 'right') {
+    return Math.min(baseX, width - padding);
+  }
+  return baseX;
+}
+
 export async function generateThumbnailWithText(
   template: GradientTemplate,
   textOptions: TextOverlayOptions,
@@ -157,88 +251,28 @@ export async function generateThumbnailWithText(
   const horizontalPadding = width * 0.1;
   const maxTextWidth = width - horizontalPadding * 2;
 
-  // 텍스트를 2줄로 분할 (개선된 로직)
-  const words = textOptions.text.split(' ');
-  const lines: string[] = [];
-  let currentLine = '';
-
-  for (const word of words) {
-    const testLine = currentLine ? `${currentLine} ${word}` : word;
-    const metrics = ctx.measureText(testLine);
-
-    if (metrics.width > maxTextWidth) {
-      // 단어 하나가 너무 긴 경우 강제로 자름
-      if (ctx.measureText(word).width > maxTextWidth) {
-        // 현재 줄이 있으면 먼저 push
-        if (currentLine) {
-          lines.push(currentLine);
-          currentLine = '';
-        }
-
-        // 긴 단어를 글자 단위로 쪼개서 넣기
-        let remainingWord = word;
-        while (remainingWord) {
-          let sliceLength = 1;
-          while (sliceLength <= remainingWord.length) {
-            const slice = remainingWord.substring(0, sliceLength);
-            if (ctx.measureText(slice).width > maxTextWidth) {
-              // 넘치기 직전까지 자름
-              const validSlice = remainingWord.substring(0, sliceLength - 1);
-              lines.push(validSlice);
-              remainingWord = remainingWord.substring(sliceLength - 1);
-              break;
-            }
-            if (sliceLength === remainingWord.length) {
-              // 남은 단어가 한 줄에 들어감
-              currentLine = remainingWord;
-              remainingWord = '';
-              break;
-            }
-            sliceLength++;
-          }
-        }
-      } else {
-        // 일반적인 줄바꿈
-        if (currentLine) {
-          lines.push(currentLine);
-        }
-        currentLine = word;
-      }
-    } else {
-      currentLine = testLine;
-    }
-  }
-
-  if (currentLine) {
-    lines.push(currentLine);
-  }
-
-  // 최대 2줄까지만 표시
-  const displayLines = lines.slice(0, 2);
+  // 텍스트를 줄로 분할 (최대 2줄)
+  const allLines = splitTextIntoLines(textOptions.text, ctx, maxTextWidth);
+  const displayLines = allLines.slice(0, 2);
 
   // 실제 위치 계산
-  let actualX = textOptions.x * width;
+  const actualX = calculateTextX(
+    textOptions.textAlign,
+    textOptions.x * width,
+    width,
+    horizontalPadding
+  );
   let actualY = textOptions.y * height;
 
-  // textAlign에 따라 X 좌표 조정 (여백 고려)
-  if (textOptions.textAlign === 'left') {
-    actualX = Math.max(actualX, horizontalPadding);
-  } else if (textOptions.textAlign === 'right') {
-    actualX = Math.min(actualX, width - horizontalPadding);
-  }
-
-  // 2줄일 경우 줄 간격 설정
+  // 2줄일 경우 줄 간격 설정 및 Y 좌표 조정
   const lineHeight = textOptions.fontSize * 1.3;
-
   if (displayLines.length === 2) {
-    // 2줄이면 중앙 기준으로 위아래 배치
     actualY -= lineHeight / 2;
   }
 
   // 각 줄 그리기
   for (const [index, line] of displayLines.entries()) {
-    const y = actualY + index * lineHeight;
-    ctx.fillText(line, actualX, y);
+    ctx.fillText(line, actualX, actualY + index * lineHeight);
   }
 
   // 3. Canvas를 Blob으로 변환

@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Sidebar from "@/components/mypage/Sidebar";
-import MobileSidebar from "@/components/mypage/MobileSidebar";
-import { createClient } from "@/lib/supabase/client";
-import { logger } from "@/lib/logger";
-import toast from "react-hot-toast";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Sidebar from '@/components/mypage/Sidebar';
+import MobileSidebar from '@/components/mypage/MobileSidebar';
+import { createClient } from '@/lib/supabase/client';
+import { logger } from '@/lib/logger';
+import toast from 'react-hot-toast';
 
 // 단계별 컴포넌트
-import Step1BasicInfo from "./steps/Step1BasicInfo";
-import Step2Pricing from "./steps/Step2Pricing";
-import Step3Description from "./steps/Step3Description";
-import Step4Images from "./steps/Step4Images";
-import Step5Requirements from "./steps/Step5Requirements";
+import Step1BasicInfo from './steps/Step1BasicInfo';
+import Step2Pricing from './steps/Step2Pricing';
+import Step3Description from './steps/Step3Description';
+import Step4Images from './steps/Step4Images';
+import Step5Requirements from './steps/Step5Requirements';
 
 interface Category {
   id: string;
@@ -32,11 +32,7 @@ interface Props {
   } | null;
 }
 
-export default function NewServiceClientV2({
-  sellerId,
-  categories,
-  profileData,
-}: Props) {
+export default function NewServiceClientV2({ sellerId, categories, profileData }: Props) {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -44,19 +40,19 @@ export default function NewServiceClientV2({
   // 전체 폼 데이터
   const [formData, setFormData] = useState({
     // Step 1: 기본정보
-    title: "",
+    title: '',
     category_ids: [] as string[],
 
     // Step 2: 가격설정
-    price: "",
-    delivery_days: "",
-    revision_count: "0",
+    price: '',
+    delivery_days: '',
+    revision_count: '0',
 
     // Step 3: 서비스 설명
-    description: "",
+    description: '',
 
     // Step 4: 이미지
-    thumbnail_url: "",
+    thumbnail_url: '',
     thumbnail_file: null as File | null,
 
     // Step 5: 요청사항
@@ -65,40 +61,40 @@ export default function NewServiceClientV2({
     // 포트폴리오 (선택사항)
     create_portfolio: false,
     portfolio_data: {
-      title: "",
-      description: "",
-      youtube_url: "",
-      project_url: "",
+      title: '',
+      description: '',
+      youtube_url: '',
+      project_url: '',
       tags: [] as string[],
       images: [] as File[],
     },
   });
 
   const steps = [
-    { number: 1, title: "기본정보" },
-    { number: 2, title: "가격설정" },
-    { number: 3, title: "포트폴리오" },
+    { number: 1, title: '기본정보' },
+    { number: 2, title: '가격설정' },
+    { number: 3, title: '포트폴리오' },
   ];
 
   const handleNext = () => {
     // Step 1 validation: 카테고리, 제목, 설명, 썸네일 필수
     if (currentStep === 1) {
-      console.log("📋 handleNext: Checking category_ids:", formData.category_ids);
+      console.log('📋 handleNext: Checking category_ids:', formData.category_ids);
 
       if (!formData.category_ids || formData.category_ids.length < 3) {
-        toast.error("3차 카테고리까지 모두 선택해주세요.");
+        toast.error('3차 카테고리까지 모두 선택해주세요.');
         return;
       }
-      if (!formData.title || formData.title.trim() === "") {
-        toast.error("서비스 제목을 입력해주세요.");
+      if (!formData.title || formData.title.trim() === '') {
+        toast.error('서비스 제목을 입력해주세요.');
         return;
       }
-      if (!formData.description || formData.description.trim() === "") {
-        toast.error("서비스 설명을 입력해주세요.");
+      if (!formData.description || formData.description.trim() === '') {
+        toast.error('서비스 설명을 입력해주세요.');
         return;
       }
       if (!formData.thumbnail_file) {
-        toast.error("서비스 썸네일을 업로드하거나 생성해주세요.");
+        toast.error('서비스 썸네일을 업로드하거나 생성해주세요.');
         return;
       }
     }
@@ -106,11 +102,11 @@ export default function NewServiceClientV2({
     //Step 2 validation: 가격, 작업기간 필수
     if (currentStep === 2) {
       if (!formData.price || Number.parseInt(formData.price) < 5000) {
-        toast.error("서비스 가격을 5,000원 이상으로 입력해주세요.");
+        toast.error('서비스 가격을 5,000원 이상으로 입력해주세요.');
         return;
       }
       if (!formData.delivery_days || Number.parseInt(formData.delivery_days) < 1) {
-        toast.error("작업 기간을 1일 이상으로 입력해주세요.");
+        toast.error('작업 기간을 1일 이상으로 입력해주세요.');
         return;
       }
     }
@@ -126,115 +122,146 @@ export default function NewServiceClientV2({
     }
   };
 
+  // 썸네일 업로드 헬퍼 함수
+  const uploadThumbnail = async (file: File): Promise<string> => {
+    const supabase = createClient();
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const filePath = `services/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage.from('services').upload(filePath, file);
+
+    if (uploadError) throw uploadError;
+
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from('services').getPublicUrl(filePath);
+
+    return publicUrl;
+  };
+
+  // 서비스 생성 헬퍼 함수
+  const createService = async (thumbnailUrl: string) => {
+    const supabase = createClient();
+    const { data: service, error: serviceError } = await supabase
+      .from('services')
+      .insert({
+        seller_id: sellerId,
+        title: formData.title,
+        description: formData.description,
+        thumbnail_url: thumbnailUrl,
+        price: parseInt(formData.price),
+        delivery_days: parseInt(formData.delivery_days),
+        status: 'pending',
+      })
+      .select()
+      .single();
+
+    if (serviceError) throw serviceError;
+    return service;
+  };
+
+  // 카테고리 저장 헬퍼 함수
+  const saveServiceCategories = async (serviceId: string) => {
+    console.log('📋 handleSubmit: About to save category_ids:', formData.category_ids);
+
+    if (formData.category_ids.length === 0) {
+      console.warn('⚠️ No categories to save - category_ids is empty!');
+      return;
+    }
+
+    const supabase = createClient();
+    const categoryInserts = formData.category_ids.map((cat_id) => ({
+      service_id: serviceId,
+      category_id: cat_id,
+    }));
+
+    console.log('📋 handleSubmit: Category inserts:', categoryInserts);
+
+    const { error: categoryError } = await supabase
+      .from('service_categories')
+      .insert(categoryInserts);
+
+    if (categoryError) {
+      logger.error('Category insertion error:', categoryError);
+      throw new Error('카테고리 저장에 실패했습니다.');
+    }
+
+    console.log('✅ Categories saved successfully!');
+  };
+
+  // 포트폴리오 이미지 업로드 헬퍼 함수
+  const uploadPortfolioImages = async (images: File[]): Promise<string[]> => {
+    const supabase = createClient();
+    const imageUrls: string[] = [];
+
+    for (const file of images) {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = `portfolio/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('portfolio')
+        .upload(filePath, file);
+
+      if (!uploadError) {
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from('portfolio').getPublicUrl(filePath);
+        imageUrls.push(publicUrl);
+      }
+    }
+
+    return imageUrls;
+  };
+
+  // 포트폴리오 생성 헬퍼 함수
+  const createPortfolio = async (serviceId: string, thumbnailUrl: string) => {
+    if (!formData.create_portfolio || !formData.portfolio_data.title) {
+      return;
+    }
+
+    const portfolioImageUrls = await uploadPortfolioImages(formData.portfolio_data.images);
+    const supabase = createClient();
+
+    await supabase.from('seller_portfolio').insert({
+      seller_id: sellerId,
+      service_id: serviceId,
+      title: formData.portfolio_data.title,
+      description: formData.portfolio_data.description,
+      thumbnail_url: portfolioImageUrls[0] || thumbnailUrl,
+      image_urls: portfolioImageUrls.slice(1),
+      youtube_url: formData.portfolio_data.youtube_url || null,
+      project_url: formData.portfolio_data.project_url || null,
+      tags: formData.portfolio_data.tags,
+    });
+  };
+
   const handleSubmit = async () => {
     if (loading) return;
     try {
       setLoading(true);
 
-      const supabase = createClient();
-
       // 1. 썸네일 업로드
-      let thumbnail_url = "";
-      if (formData.thumbnail_file) {
-        const fileExt = formData.thumbnail_file.name.split(".").pop();
-        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
-        const filePath = `services/${fileName}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from("services")
-          .upload(filePath, formData.thumbnail_file);
-
-        if (uploadError) throw uploadError;
-
-        const {
-          data: { publicUrl },
-        } = supabase.storage.from("services").getPublicUrl(filePath);
-
-        thumbnail_url = publicUrl;
-      }
+      const thumbnailUrl = formData.thumbnail_file
+        ? await uploadThumbnail(formData.thumbnail_file)
+        : '';
 
       // 2. 서비스 생성
-      const { data: service, error: serviceError } = await supabase
-        .from("services")
-        .insert({
-          seller_id: sellerId,
-          title: formData.title,
-          description: formData.description,
-          thumbnail_url,
-          price: parseInt(formData.price),
-          delivery_days: parseInt(formData.delivery_days),
-          status: "pending",
-        })
-        .select()
-        .single();
-
-      if (serviceError) throw serviceError;
+      const service = await createService(thumbnailUrl);
 
       // 3. 카테고리 연결
-      console.log("📋 handleSubmit: About to save category_ids:", formData.category_ids);
-
-      if (formData.category_ids.length > 0) {
-        const categoryInserts = formData.category_ids.map((cat_id) => ({
-          service_id: service.id,
-          category_id: cat_id,
-        }));
-
-        console.log("📋 handleSubmit: Category inserts:", categoryInserts);
-
-        const { error: categoryError } = await supabase
-          .from("service_categories")
-          .insert(categoryInserts);
-
-        if (categoryError) {
-          logger.error("Category insertion error:", categoryError);
-          throw new Error("카테고리 저장에 실패했습니다.");
-        }
-
-        console.log("✅ Categories saved successfully!");
-      } else {
-        console.warn("⚠️ No categories to save - category_ids is empty!");
-      }
+      await saveServiceCategories(service.id);
 
       // 4. 포트폴리오 생성 (선택사항)
-      if (formData.create_portfolio && formData.portfolio_data.title) {
-        // 포트폴리오 이미지 업로드
-        const portfolioImageUrls: string[] = [];
-        for (const file of formData.portfolio_data.images) {
-          const fileExt = file.name.split(".").pop();
-          const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
-          const filePath = `portfolio/${fileName}`;
+      await createPortfolio(service.id, thumbnailUrl);
 
-          const { error: uploadError } = await supabase.storage
-            .from("portfolio")
-            .upload(filePath, file);
-
-          if (!uploadError) {
-            const {
-              data: { publicUrl },
-            } = supabase.storage.from("portfolio").getPublicUrl(filePath);
-            portfolioImageUrls.push(publicUrl);
-          }
-        }
-
-        await supabase.from("seller_portfolio").insert({
-          seller_id: sellerId,
-          service_id: service.id,
-          title: formData.portfolio_data.title,
-          description: formData.portfolio_data.description,
-          thumbnail_url: portfolioImageUrls[0] || thumbnail_url,
-          image_urls: portfolioImageUrls.slice(1),
-          youtube_url: formData.portfolio_data.youtube_url || null,
-          project_url: formData.portfolio_data.project_url || null,
-          tags: formData.portfolio_data.tags,
-        });
-      }
-
-      toast.success("서비스가 등록되었습니다. 승인 후 공개됩니다.");
-      router.push("/mypage/seller/services");
+      toast.success('서비스가 등록되었습니다. 승인 후 공개됩니다.');
+      router.push('/mypage/seller/services');
       router.refresh();
     } catch (error) {
-      logger.error("Service creation error:", error);
-      toast.error("서비스 등록에 실패했습니다.");
+      logger.error('Service creation error:', error);
+      toast.error('서비스 등록에 실패했습니다.');
     } finally {
       setLoading(false);
     }
@@ -250,9 +277,7 @@ export default function NewServiceClientV2({
             {/* 헤더 */}
             <div className="mb-6">
               <h1 className="text-base md:text-lg font-bold text-gray-900">서비스 등록</h1>
-              <p className="text-gray-600 mt-1 text-sm">
-                새로운 서비스를 등록하세요
-              </p>
+              <p className="text-gray-600 mt-1 text-sm">새로운 서비스를 등록하세요</p>
             </div>
 
             {/* 진행 단계 표시 */}
@@ -262,28 +287,27 @@ export default function NewServiceClientV2({
                   <div key={step.number} className="flex items-center flex-1">
                     <div className="flex flex-col items-center flex-1">
                       <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-colors ${currentStep >= step.number
-                          ? "bg-brand-primary text-white"
-                          : "bg-gray-200 text-gray-600"
-                          }`}
+                        className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-colors ${
+                          currentStep >= step.number
+                            ? 'bg-brand-primary text-white'
+                            : 'bg-gray-200 text-gray-600'
+                        }`}
                       >
                         {step.number}
                       </div>
                       <span
-                        className={`text-sm mt-2 font-medium ${currentStep >= step.number
-                          ? "text-brand-primary"
-                          : "text-gray-500"
-                          }`}
+                        className={`text-sm mt-2 font-medium ${
+                          currentStep >= step.number ? 'text-brand-primary' : 'text-gray-500'
+                        }`}
                       >
                         {step.title}
                       </span>
                     </div>
                     {index < steps.length - 1 && (
                       <div
-                        className={`h-1 flex-1 mx-2 transition-colors ${currentStep > step.number
-                          ? "bg-brand-primary"
-                          : "bg-gray-200"
-                          }`}
+                        className={`h-1 flex-1 mx-2 transition-colors ${
+                          currentStep > step.number ? 'bg-brand-primary' : 'bg-gray-200'
+                        }`}
                       />
                     )}
                   </div>
@@ -301,27 +325,16 @@ export default function NewServiceClientV2({
                     categories={categories}
                   />
                   <div className="border-t border-gray-200 pt-6">
-                    <Step3Description
-                      formData={formData}
-                      setFormData={setFormData}
-                    />
+                    <Step3Description formData={formData} setFormData={setFormData} />
                   </div>
                   <div className="border-t border-gray-200 pt-6">
-                    <Step4Images
-                      formData={formData}
-                      setFormData={setFormData}
-                    />
+                    <Step4Images formData={formData} setFormData={setFormData} />
                   </div>
                 </div>
               )}
-              {currentStep === 2 && (
-                <Step2Pricing formData={formData} setFormData={setFormData} />
-              )}
+              {currentStep === 2 && <Step2Pricing formData={formData} setFormData={setFormData} />}
               {currentStep === 3 && (
-                <Step5Requirements
-                  formData={formData}
-                  setFormData={setFormData}
-                />
+                <Step5Requirements formData={formData} setFormData={setFormData} />
               )}
             </div>
 
@@ -347,7 +360,7 @@ export default function NewServiceClientV2({
                   disabled={loading}
                   className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
-                  {loading ? "등록 중..." : "서비스 등록"}
+                  {loading ? '등록 중...' : '서비스 등록'}
                 </button>
               )}
             </div>
