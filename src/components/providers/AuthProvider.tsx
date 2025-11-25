@@ -48,6 +48,12 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
   const fetchProfile = async (userId: string) => {
     logger.debug('[AuthProvider] fetchProfile called for user:', { userId });
     try {
+      // auth.users에서 SNS 아바타 URL 가져오기
+      const {
+        data: { user: authUser },
+      } = await supabase.auth.getUser();
+      const snsAvatarUrl = authUser?.user_metadata?.avatar_url as string | undefined;
+
       // profiles 테이블에서 기본 정보 조회
       const { data: userData, error: userError } = await supabase
         .from('profiles')
@@ -62,11 +68,12 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
           hint: userError.hint,
           code: userError.code,
         });
-        // 에러 발생 시 기본 프로필 설정
+        // 에러 발생 시 기본 프로필 설정 (SNS 아바타 포함)
         setProfile({
           id: userId,
           email: '',
           name: 'User',
+          profile_image: snsAvatarUrl,
           email_verified: false,
           is_active: true,
           created_at: new Date().toISOString(),
@@ -97,9 +104,14 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
       // profiles 테이블의 user_id를 제외하고 userId를 id로 사용
       // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Destructuring to exclude user_id and id from profileFields
       const { user_id, id, ...profileFields } = userData as Record<string, unknown>;
+
+      // profile_image가 없으면 SNS 아바타 사용
+      const profileImage = (profileFields.profile_image as string) || snsAvatarUrl;
+
       const profileData = {
         ...profileFields,
         id: userId, // user의 id를 profile id로 사용
+        profile_image: profileImage,
         is_buyer: isBuyer,
         is_seller: isSeller,
       } as UserProfile;
@@ -107,6 +119,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
       logger.debug('[AuthProvider] Profile loaded successfully:', {
         isBuyer,
         isSeller,
+        hasProfileImage: !!profileImage,
       });
       setProfile(profileData);
     } catch (error: unknown) {
