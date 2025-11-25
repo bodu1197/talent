@@ -1,111 +1,108 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
+import { logger } from '@/lib/logger';
 
 interface TrackPageViewBody {
-  path: string
-  referrer?: string
+  path: string;
+  referrer?: string;
 }
 
 function getDeviceType(userAgent: string): 'desktop' | 'mobile' | 'tablet' | 'bot' {
-  const ua = userAgent.toLowerCase()
+  const ua = userAgent.toLowerCase();
 
   // Bot detection
   if (/bot|crawler|spider|crawling/i.test(ua)) {
-    return 'bot'
+    return 'bot';
   }
 
   // Mobile detection
   if (/mobile|android|iphone|ipod|blackberry|windows phone/i.test(ua)) {
-    return 'mobile'
+    return 'mobile';
   }
 
   // Tablet detection
   if (/tablet|ipad|playbook|silk/i.test(ua)) {
-    return 'tablet'
+    return 'tablet';
   }
 
-  return 'desktop'
+  return 'desktop';
 }
 
 function getClientIp(request: NextRequest): string | null {
   // Try various headers that might contain the real IP
-  const forwardedFor = request.headers.get('x-forwarded-for')
+  const forwardedFor = request.headers.get('x-forwarded-for');
   if (forwardedFor) {
-    return forwardedFor.split(',')[0].trim()
+    return forwardedFor.split(',')[0].trim();
   }
 
-  const realIp = request.headers.get('x-real-ip')
+  const realIp = request.headers.get('x-real-ip');
   if (realIp) {
-    return realIp
+    return realIp;
   }
 
-  return null
+  return null;
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient()
+    const supabase = await createClient();
 
     // Get optional user
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
     // Parse body
-    const body: TrackPageViewBody = await request.json()
-    const { path, referrer } = body
+    const body: TrackPageViewBody = await request.json();
+    const { path, referrer } = body;
 
     if (!path || typeof path !== 'string') {
-      return NextResponse.json(
-        { error: 'Path is required' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Path is required' }, { status: 400 });
     }
 
     // Get request metadata
-    const userAgent = request.headers.get('user-agent') || ''
-    const deviceType = getDeviceType(userAgent)
-    const ipAddress = getClientIp(request)
+    const userAgent = request.headers.get('user-agent') || '';
+    const deviceType = getDeviceType(userAgent);
+    const ipAddress = getClientIp(request);
 
     // Generate or get session ID from cookie
-    const cookies = request.cookies
-    let sessionId = cookies.get('analytics_session')?.value
+    const cookies = request.cookies;
+    let sessionId = cookies.get('analytics_session')?.value;
 
     if (!sessionId) {
-      sessionId = crypto.randomUUID()
+      sessionId = crypto.randomUUID();
     }
 
     // Insert page view (without geolocation for now - can add later with ip-api.com or similar)
-    const { error: insertError } = await supabase
-      .from('page_views')
-      .insert({
-        path,
-        user_id: user?.id || null,
-        session_id: sessionId,
-        ip_address: ipAddress,
-        user_agent: userAgent.substring(0, 500), // Limit length
-        referrer: referrer?.substring(0, 500) || null,
-        device_type: deviceType,
-        country: null // TODO: Add geolocation lookup if needed
-      })
+    const { error: insertError } = await supabase.from('page_views').insert({
+      path,
+      user_id: user?.id || null,
+      session_id: sessionId,
+      ip_address: ipAddress,
+      user_agent: userAgent.substring(0, 500), // Limit length
+      referrer: referrer?.substring(0, 500) || null,
+      device_type: deviceType,
+      country: null, // TODO: Add geolocation lookup if needed
+    });
 
     if (insertError) {
-      console.error('Failed to track page view:', insertError)
+      logger.error('Failed to track page view:', insertError);
       // Don't return error to client - silent failure for analytics
     }
 
     // Set session cookie (30 minutes expiry)
-    const response = NextResponse.json({ success: true })
+    const response = NextResponse.json({ success: true });
     response.cookies.set('analytics_session', sessionId, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 30 * 60 // 30 minutes
-    })
+      maxAge: 30 * 60, // 30 minutes
+    });
 
-    return response
-
+    return response;
   } catch (error) {
-    console.error('Analytics tracking error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
+    logger.error('Analytics tracking error:', error);
     // Return success even on error - analytics should never break the app
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true });
   }
 }

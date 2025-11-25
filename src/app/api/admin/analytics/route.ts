@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { checkAdminAuth } from '@/lib/admin/auth';
+import { logger } from '@/lib/logger';
 
 interface AnalyticsQuery {
   period: 'hour' | 'day' | 'month' | 'year';
@@ -55,8 +56,8 @@ function applyDateFilters(
 }
 
 // Helper: Apply path filter to query
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function applyPathFilter(query: any, path: string | null) {
-  // eslint-disable-line @typescript-eslint/no-explicit-any
   return path ? query.eq('path', path) : query;
 }
 
@@ -172,10 +173,7 @@ export async function GET(request: NextRequest) {
       data: stats,
     });
   } catch (error) {
-    console.error(
-      'Admin analytics error:',
-      JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-    );
+    logger.error('Admin analytics error:', error);
     return NextResponse.json({ error: 'Failed to fetch analytics data' }, { status: 500 });
   }
 }
@@ -216,7 +214,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ topPages });
   } catch (error) {
-    console.error('Top pages error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+    logger.error('Top pages error:', error);
     return NextResponse.json({ error: 'Failed to fetch top pages' }, { status: 500 });
   }
 }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceRoleClient } from '@/lib/supabase/server';
+import { logger } from '@/lib/logger';
 
 /**
  * 광고 클릭 기록 API
@@ -12,10 +13,7 @@ export async function POST(request: NextRequest) {
 
     // 입력 검증
     if (!serviceId) {
-      return NextResponse.json(
-        { error: 'serviceId is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'serviceId is required' }, { status: 400 });
     }
 
     const supabase = createServiceRoleClient();
@@ -49,12 +47,12 @@ export async function POST(request: NextRequest) {
         .from('advertising_impressions')
         .update({
           clicked: true,
-          clicked_at: new Date().toISOString()
+          clicked_at: new Date().toISOString(),
         })
         .eq('id', recentImpression.id);
 
       if (impressionError) {
-        console.error('Failed to update impression:', impressionError);
+        logger.error('Failed to update impression:', impressionError);
       }
     }
 
@@ -62,37 +60,29 @@ export async function POST(request: NextRequest) {
     const { error: updateError } = await supabase
       .from('advertising_subscriptions')
       .update({
-        total_clicks: subscription.total_clicks + 1
+        total_clicks: subscription.total_clicks + 1,
       })
       .eq('id', subscription.id);
 
     if (updateError) {
-      console.error('Failed to update subscription click stats:', updateError);
-      return NextResponse.json(
-        { error: 'Failed to update click stats' },
-        { status: 500 }
-      );
+      logger.error('Failed to update subscription click stats:', updateError);
+      return NextResponse.json({ error: 'Failed to update click stats' }, { status: 500 });
     }
 
     // CTR 계산
     const newClicks = subscription.total_clicks + 1;
-    const ctr = subscription.total_impressions > 0
-      ? (newClicks / subscription.total_impressions) * 100
-      : 0;
+    const ctr =
+      subscription.total_impressions > 0 ? (newClicks / subscription.total_impressions) * 100 : 0;
 
     return NextResponse.json({
       success: true,
       tracked: true,
       clickCount: newClicks,
       impressionCount: subscription.total_impressions,
-      ctr: Number(ctr.toFixed(2))
+      ctr: Number(ctr.toFixed(2)),
     });
-
   } catch (error) {
-    console.error('Click tracking error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    logger.error('Click tracking error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
