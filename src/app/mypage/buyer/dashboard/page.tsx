@@ -1,69 +1,108 @@
-import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
-import { getBuyerDashboardStats, getBuyerRecentOrders, getBuyerRecentFavorites, getBuyerBenefits } from '@/lib/supabase/queries/dashboard'
-import BuyerDashboardClient from './BuyerDashboardClient'
+import { redirect } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server';
+import {
+  getBuyerDashboardStats,
+  getBuyerRecentOrders,
+  getBuyerRecentFavorites,
+  getBuyerBenefits,
+} from '@/lib/supabase/queries/dashboard';
+import BuyerDashboardClient from './BuyerDashboardClient';
 
-// Server Component - 서버에서 데이터 로드
-export default async function BuyerDashboardPage() {
-  const supabase = await createClient()
+// Helper: Extract first element from Supabase array response
+function extractFirst<T>(arr: unknown): T | undefined {
+  return Array.isArray(arr) && arr.length > 0 ? (arr[0] as T) : undefined;
+}
 
-  // 사용자 정보 가져오기
-  const { data: { user } } = await supabase.auth.getUser()
+// Type for mapped favorite
+interface MappedFavorite {
+  id: string;
+  created_at: string;
+  service?: Record<string, unknown> & { seller?: unknown };
+}
 
-  if (!user) {
-    redirect('/auth/login')
-  }
+// Helper: Map favorites to expected type
+function mapFavorites(favorites: unknown[]): MappedFavorite[] {
+  return favorites.map((fav) => {
+    const favItem = fav as { id: string; created_at: string; service?: unknown[] };
+    const service = extractFirst<Record<string, unknown> & { seller?: unknown[] }>(favItem.service);
 
-  // 구매자 정보 가져오기 (없으면 자동 생성)
+    return {
+      id: favItem.id,
+      created_at: favItem.created_at,
+      service: service
+        ? {
+            ...service,
+            seller: extractFirst(service.seller),
+          }
+        : undefined,
+    };
+  });
+}
+
+// Helper: Ensure buyer record exists
+async function ensureBuyerExists(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string
+): Promise<void> {
   const { data: buyer } = await supabase
     .from('buyers')
     .select('id')
-    .eq('user_id', user.id)
-    .maybeSingle()
+    .eq('user_id', userId)
+    .maybeSingle();
 
-  // 구매자 레코드가 없으면 자동 생성
   if (!buyer) {
     const { error: createError } = await supabase
       .from('buyers')
-      .insert({ user_id: user.id })
+      .insert({ user_id: userId })
       .select('id')
-      .single()
+      .single();
 
     if (createError) {
-      throw new Error('구매자 생성 실패: ' + createError.message)
+      throw new Error('구매자 생성 실패: ' + createError.message);
     }
   }
+}
+
+// Server Component - 서버에서 데이터 로드
+export default async function BuyerDashboardPage() {
+  const supabase = await createClient();
+
+  // 사용자 정보 가져오기
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect('/auth/login');
+  }
+
+  // 구매자 정보 가져오기 (없으면 자동 생성)
+  await ensureBuyerExists(supabase, user.id);
 
   // 프로필 정보 가져오기 (profiles 테이블)
   const { data: profile } = await supabase
     .from('profiles')
     .select('name, profile_image')
     .eq('user_id', user.id)
-    .maybeSingle()
+    .maybeSingle();
 
   // 대시보드 데이터 서버에서 로드
-  // Note: orders.buyer_id references users.id, not buyers.id
   const [stats, recentOrders, favorites, benefits] = await Promise.all([
     getBuyerDashboardStats(user.id),
     getBuyerRecentOrders(user.id, 5),
     getBuyerRecentFavorites(user.id, 5),
-    getBuyerBenefits(user.id)
-  ])
+    getBuyerBenefits(user.id),
+  ]);
 
-  // Map Supabase array results to expected types
-  const mappedFavorites = (favorites as unknown[]).map((fav: unknown) => {
-    const favItem = fav as { id: string; created_at: string; service?: unknown[] }
-    return {
-      id: favItem.id,
-      created_at: favItem.created_at,
-      service: favItem.service?.[0] ? {
-        ...(favItem.service[0] as Record<string, unknown>),
-        seller: (favItem.service[0] as { seller?: unknown[] }).seller?.[0] || null
-      } : null
-    }
-  })
+  const mappedFavorites = mapFavorites(favorites as unknown[]);
 
-  // 클라이언트 컴포넌트에 데이터 전달
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return <BuyerDashboardClient stats={stats} recentOrders={recentOrders} favorites={mappedFavorites as any} benefits={benefits} profileData={profile} />
+  return (
+    <BuyerDashboardClient
+      stats={stats}
+      recentOrders={recentOrders}
+      favorites={mappedFavorites as Parameters<typeof BuyerDashboardClient>[0]['favorites']}
+      benefits={benefits}
+      profileData={profile}
+    />
+  );
 }
