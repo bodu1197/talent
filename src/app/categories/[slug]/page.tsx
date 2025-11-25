@@ -41,7 +41,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
 
   // category.id가 유효한지 확인
   if (!category.id) {
-    logger.error('[CategoryPage] category.id is invalid:', category.id, 'slug:', slug);
+    logger.error('[CategoryPage] category.id is invalid', { categoryId: category.id, slug });
     notFound();
   }
 
