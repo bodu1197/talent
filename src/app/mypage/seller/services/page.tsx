@@ -93,7 +93,7 @@ export default async function SellerServicesPage({
         .in('status', ['pending_payment', 'paid', 'in_progress', 'delivered']);
 
       // 서비스에 revision 및 주문 정보 추가
-      services.forEach((service: Record<string, unknown>) => {
+      for (const service of services as Record<string, unknown>[]) {
         const pendingRevision = pendingRevisions?.find((r) => r.service_id === service.id);
         service.hasPendingRevision = !!pendingRevision;
 
@@ -106,7 +106,7 @@ export default async function SellerServicesPage({
         // 진행중인 주문 수
         const orderCount = activeOrders?.filter((o) => o.service_id === service.id).length || 0;
         service.activeOrderCount = orderCount;
-      });
+      }
     }
 
     // Count 조회

@@ -1,18 +1,18 @@
-import { notFound } from "next/navigation";
+import { notFound } from 'next/navigation';
 import {
   getCategoryBySlug as getCategory,
   getCategoryPath,
   getCachedCategoriesTree,
   getAllCategoriesForBuild,
-} from "@/lib/categories";
-import { getServicesByCategory } from "@/lib/supabase/queries/services";
-import ServiceGrid from "@/components/categories/ServiceGrid";
-import CategoryFilter from "@/components/categories/CategoryFilter";
-import CategorySort from "@/components/categories/CategorySort";
-import CategorySidebar from "@/components/categories/CategorySidebar";
-import CategoryVisitTracker from "@/components/categories/CategoryVisitTracker";
-import Link from "next/link";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+} from '@/lib/categories';
+import { getServicesByCategory } from '@/lib/supabase/queries/services';
+import ServiceGrid from '@/components/categories/ServiceGrid';
+import CategoryFilter from '@/components/categories/CategoryFilter';
+import CategorySort from '@/components/categories/CategorySort';
+import CategorySidebar from '@/components/categories/CategorySidebar';
+import CategoryVisitTracker from '@/components/categories/CategoryVisitTracker';
+import Link from 'next/link';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 // ISR 캐싱: 광고 우선순위 테스트를 위해 일시적으로 비활성화
 export const revalidate = 0;
@@ -26,13 +26,10 @@ interface CategoryPageProps {
   }>;
 }
 
-export default async function CategoryPage({
-  params,
-  searchParams,
-}: CategoryPageProps) {
+export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
   const { slug } = await params;
   const { page: pageParam } = await searchParams;
-  const currentPage = Number.parseInt(pageParam || "1", 10);
+  const currentPage = Number.parseInt(pageParam || '1', 10);
 
   // 카테고리 찾기 (인증 불필요, 캐싱 가능)
   const category = await getCategory(slug, false);
@@ -43,12 +40,7 @@ export default async function CategoryPage({
 
   // category.id가 유효한지 확인
   if (!category.id) {
-    console.error(
-      "[CategoryPage] category.id is invalid:",
-      category.id,
-      "slug:",
-      slug,
-    );
+    console.error('[CategoryPage] category.id is invalid:', category.id, 'slug:', slug);
     notFound();
   }
 
@@ -86,19 +78,14 @@ export default async function CategoryPage({
                 <div className="flex items-center justify-between gap-4 mb-4">
                   {/* Breadcrumb */}
                   <nav className="flex items-center gap-2 text-sm flex-wrap">
-                    <Link
-                      href="/"
-                      className="text-gray-500 hover:text-gray-700"
-                    >
+                    <Link href="/" className="text-gray-500 hover:text-gray-700">
                       홈
                     </Link>
                     {categoryPath.map((cat, index) => (
                       <div key={cat.id} className="flex items-center gap-2">
                         <span className="text-gray-400">/</span>
                         {index === categoryPath.length - 1 ? (
-                          <span className="text-gray-900 font-medium">
-                            {cat.name}
-                          </span>
+                          <span className="text-gray-900 font-medium">{cat.name}</span>
                         ) : (
                           <Link
                             href={`/categories/${cat.slug}`}
@@ -116,10 +103,7 @@ export default async function CategoryPage({
                 </div>
 
                 {/* 필터 영역 */}
-                <CategoryFilter
-                  categoryId={category.id}
-                  isAI={category.is_ai || false}
-                />
+                <CategoryFilter categoryId={category.id} isAI={category.is_ai || false} />
               </div>
 
               {/* 서비스 그리드 */}
@@ -167,12 +151,12 @@ export async function generateStaticParams() {
   const paths: { slug: string }[] = [];
 
   const addPaths = (categories: typeof allCategories) => {
-    categories.forEach((category) => {
+    for (const category of categories) {
       paths.push({ slug: category.slug });
       if (category.children) {
         addPaths(category.children);
       }
-    });
+    }
   };
 
   addPaths(allCategories);

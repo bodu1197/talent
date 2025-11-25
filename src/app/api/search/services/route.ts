@@ -1,14 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { logger } from "@/lib/logger";
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
+import { logger } from '@/lib/logger';
 
 // 동적 라우트 (쿼리 파라미터 사용)
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const query = searchParams.get("q");
+    const query = searchParams.get('q');
 
     if (!query || query.trim().length === 0) {
       return NextResponse.json({ services: [] });
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 
     // 서비스 검색: title, search_keywords에서 검색
     const { data: services, error } = await supabase
-      .from("services")
+      .from('services')
       .select(
         `
         *,
@@ -32,38 +32,32 @@ export async function GET(request: NextRequest) {
         service_categories(
           category:categories(id, name, slug)
         )
-      `,
+      `
       )
-      .eq("status", "active")
+      .eq('status', 'active')
       .or(`title.ilike.${searchTerm},search_keywords.ilike.${searchTerm}`)
-      .order("created_at", { ascending: false })
+      .order('created_at', { ascending: false })
       .limit(50);
 
     if (error) {
-      logger.error("Search error:", error);
-      return NextResponse.json({ error: "Search failed" }, { status: 500 });
+      logger.error('Search error:', error);
+      return NextResponse.json({ error: 'Search failed' }, { status: 500 });
     }
 
     // 데이터 매핑
     if (services && services.length > 0) {
-      services.forEach((service) => {
+      for (const service of services) {
         service.price_min = service.price || 0;
         service.price_max = service.price || undefined;
         service.order_count = service.orders_count || 0;
-      });
+      }
     }
 
     const response = NextResponse.json({ services: services || [] });
-    response.headers.set(
-      "Cache-Control",
-      "public, s-maxage=30, stale-while-revalidate=60",
-    );
+    response.headers.set('Cache-Control', 'public, s-maxage=30, stale-while-revalidate=60');
     return response;
   } catch (error) {
-    logger.error("Search API error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
-    );
+    logger.error('Search API error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
-import Link from "next/link";
-import toast from "react-hot-toast";
+import Image from 'next/image';
+import { useEffect, useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
+import Link from 'next/link';
+import toast from 'react-hot-toast';
 
 import {
   FaArrowLeft,
@@ -22,7 +22,7 @@ import {
   FaRedo,
   FaHourglassHalf,
   FaChevronRight,
-} from "react-icons/fa";
+} from 'react-icons/fa';
 
 interface Message {
   id: string;
@@ -61,7 +61,7 @@ interface PaymentRequest {
   description: string | null;
   delivery_days: number;
   revision_count: number;
-  status: "pending" | "accepted" | "rejected" | "expired" | "paid";
+  status: 'pending' | 'accepted' | 'rejected' | 'expired' | 'paid';
   buyer_response: string | null;
   responded_at: string | null;
   order_id: string | null;
@@ -79,17 +79,11 @@ interface Props {
   readonly service: Service | null;
 }
 
-export default function DirectChatClient({
-  roomId,
-  userId,
-  isSeller,
-  otherUser,
-  service,
-}: Props) {
+export default function DirectChatClient({ roomId, userId, isSeller, otherUser, service }: Props) {
   const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
   const [paymentRequests, setPaymentRequests] = useState<PaymentRequest[]>([]);
-  const [newMessage, setNewMessage] = useState("");
+  const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPaymentRequestModal, setShowPaymentRequestModal] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -99,7 +93,7 @@ export default function DirectChatClient({
 
   // 알림음 초기화
   useEffect(() => {
-    audioRef.current = new Audio("/sounds/notification.mp3");
+    audioRef.current = new Audio('/sounds/notification.mp3');
     audioRef.current.volume = 0.5;
   }, []);
 
@@ -115,17 +109,17 @@ export default function DirectChatClient({
   // 읽지 않은 메시지를 읽음 처리
   const markMessagesAsRead = async () => {
     try {
-      await fetch("/api/chat/messages/mark-read", {
-        method: "POST",
+      await fetch('/api/chat/messages/mark-read', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ room_id: roomId }),
       });
     } catch (error) {
       console.error(
-        "[DirectChatClient] Mark messages as read error:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+        '[DirectChatClient] Mark messages as read error:',
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
       );
     }
   };
@@ -158,10 +152,10 @@ export default function DirectChatClient({
 
     setIsLoading(true);
     try {
-      const response = await fetch("/api/chat/messages", {
-        method: "POST",
+      const response = await fetch('/api/chat/messages', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           room_id: roomId,
@@ -172,21 +166,19 @@ export default function DirectChatClient({
       if (response.ok) {
         const data = await response.json();
         setMessages([...messages, data.message]);
-        setNewMessage("");
+        setNewMessage('');
         scrollToBottom();
       } else {
         const errorData = await response.json();
-        console.error("Send message failed:", response.status, errorData);
-        toast.error(
-          `메시지 전송 실패: ${errorData.error || "알 수 없는 오류"}`,
-        );
+        console.error('Send message failed:', response.status, errorData);
+        toast.error(`메시지 전송 실패: ${errorData.error || '알 수 없는 오류'}`);
       }
     } catch (error) {
       console.error(
-        "Send message error:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+        'Send message error:',
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
       );
-      toast.error("메시지 전송 중 오류가 발생했습니다.");
+      toast.error('메시지 전송 중 오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }
@@ -200,7 +192,7 @@ export default function DirectChatClient({
     }
 
     scrollTimeoutRef.current = setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
   };
 
@@ -216,22 +208,21 @@ export default function DirectChatClient({
   // 메시지와 결제 요청을 시간순으로 정렬한 타임라인 생성
   const getTimeline = () => {
     const timeline: Array<{
-      type: "message" | "payment";
+      type: 'message' | 'payment';
       data: Message | PaymentRequest;
       timestamp: string;
     }> = [];
 
-    messages.forEach((msg) => {
-      timeline.push({ type: "message", data: msg, timestamp: msg.created_at });
-    });
+    for (const msg of messages) {
+      timeline.push({ type: 'message', data: msg, timestamp: msg.created_at });
+    }
 
-    paymentRequests.forEach((req) => {
-      timeline.push({ type: "payment", data: req, timestamp: req.created_at });
-    });
+    for (const req of paymentRequests) {
+      timeline.push({ type: 'payment', data: req, timestamp: req.created_at });
+    }
 
     return timeline.sort(
-      (a, b) =>
-        new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
+      (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
     );
   };
 
@@ -246,11 +237,11 @@ export default function DirectChatClient({
     const channel = supabase
       .channel(`room:${roomId}`)
       .on(
-        "postgres_changes",
+        'postgres_changes',
         {
-          event: "INSERT",
-          schema: "public",
-          table: "chat_messages",
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages',
           filter: `room_id=eq.${roomId}`,
         },
         async (payload) => {
@@ -262,19 +253,19 @@ export default function DirectChatClient({
             // 새 메시지가 오면 즉시 읽음 처리
             await markMessagesAsRead();
           }
-        },
+        }
       )
       .on(
-        "postgres_changes",
+        'postgres_changes',
         {
-          event: "*",
-          schema: "public",
-          table: "payment_requests",
+          event: '*',
+          schema: 'public',
+          table: 'payment_requests',
           filter: `room_id=eq.${roomId}`,
         },
         () => {
           loadPaymentRequests();
-        },
+        }
       )
       .subscribe();
 
@@ -359,9 +350,7 @@ export default function DirectChatClient({
                 )}
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-gray-500 mb-1">문의 상품</p>
-                  <p className="font-medium text-gray-900 truncate">
-                    {service.title}
-                  </p>
+                  <p className="font-medium text-gray-900 truncate">{service.title}</p>
                 </div>
                 <FaChevronRight className="text-gray-400" />
               </Link>
@@ -378,13 +367,13 @@ export default function DirectChatClient({
               </div>
             ) : (
               getTimeline().map((item) => {
-                if (item.type === "message") {
+                if (item.type === 'message') {
                   const message = item.data as Message;
                   const isMine = message.sender_id === userId;
                   return (
                     <div
                       key={`msg-${message.id}`}
-                      className={`flex ${isMine ? "justify-end" : "justify-start"}`}
+                      className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}
                     >
                       <div className="flex items-end gap-2 max-w-md">
                         {!isMine && (
@@ -409,25 +398,18 @@ export default function DirectChatClient({
                         <div
                           className={`px-4 py-2 rounded-2xl ${
                             isMine
-                              ? "bg-brand-primary text-white rounded-br-sm"
-                              : "bg-white border border-gray-200 rounded-bl-sm"
+                              ? 'bg-brand-primary text-white rounded-br-sm'
+                              : 'bg-white border border-gray-200 rounded-bl-sm'
                           }`}
                         >
-                          <p className="whitespace-pre-wrap break-words">
-                            {message.message}
-                          </p>
+                          <p className="whitespace-pre-wrap break-words">{message.message}</p>
                           <p
-                            className={`text-xs mt-1 ${
-                              isMine ? "text-blue-100" : "text-gray-500"
-                            }`}
+                            className={`text-xs mt-1 ${isMine ? 'text-blue-100' : 'text-gray-500'}`}
                           >
-                            {new Date(message.created_at).toLocaleTimeString(
-                              "ko-KR",
-                              {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              },
-                            )}
+                            {new Date(message.created_at).toLocaleTimeString('ko-KR', {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
                           </p>
                         </div>
                       </div>
@@ -469,7 +451,9 @@ export default function DirectChatClient({
           )}
 
           <form onSubmit={sendMessage} className="flex gap-2">
-            <label htmlFor="message-input" className="sr-only">메시지 입력</label>
+            <label htmlFor="message-input" className="sr-only">
+              메시지 입력
+            </label>
             <input
               id="message-input"
               type="text"
@@ -522,54 +506,45 @@ function PaymentRequestCard({
 }>) {
   const [isProcessing, setIsProcessing] = useState(false);
   const isExpired = new Date(paymentRequest.expires_at) < new Date();
-  const isPending = paymentRequest.status === "pending" && !isExpired;
+  const isPending = paymentRequest.status === 'pending' && !isExpired;
   const canRespond = !isSeller && isPending;
 
-  const handleResponse = async (
-    action: "accept" | "reject",
-    reason?: string,
-  ) => {
+  const handleResponse = async (action: 'accept' | 'reject', reason?: string) => {
     if (isProcessing) return;
 
     setIsProcessing(true);
     try {
-      const response = await fetch(
-        `/api/payment-requests/${paymentRequest.id}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            action,
-            buyer_response: reason,
-          }),
-        },
-      );
+      const response = await fetch(`/api/payment-requests/${paymentRequest.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action,
+          buyer_response: reason,
+        }),
+      });
 
       if (response.ok) {
-        if (action === "accept") {
+        if (action === 'accept') {
           // 결제 페이지로 이동
           globalThis.location.href = `/payment/${paymentRequest.id}`;
         } else {
-          toast.error("결제 요청을 거부했습니다");
+          toast.error('결제 요청을 거부했습니다');
           onUpdate();
         }
       } else {
         const error = await response.json();
-        toast.error(`처리 실패: ${error.error || "알 수 없는 오류"}`);
+        toast.error(`처리 실패: ${error.error || '알 수 없는 오류'}`);
       }
     } catch (error) {
-      console.error(
-        "Response error:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
-      );
-      toast.error("처리 중 오류가 발생했습니다");
+      console.error('Response error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+      toast.error('처리 중 오류가 발생했습니다');
     } finally {
       setIsProcessing(false);
     }
   };
 
   const getStatusBadge = () => {
-    if (isExpired && paymentRequest.status === "pending") {
+    if (isExpired && paymentRequest.status === 'pending') {
       return (
         <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">
           만료됨
@@ -578,25 +553,25 @@ function PaymentRequestCard({
     }
 
     switch (paymentRequest.status) {
-      case "pending":
+      case 'pending':
         return (
           <span className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-medium">
             대기 중
           </span>
         );
-      case "accepted":
+      case 'accepted':
         return (
           <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
             수락됨
           </span>
         );
-      case "rejected":
+      case 'rejected':
         return (
           <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">
             거부됨
           </span>
         );
-      case "paid":
+      case 'paid':
         return (
           <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
             결제완료
@@ -619,15 +594,12 @@ function PaymentRequestCard({
             <div>
               <h3 className="font-bold text-gray-900">결제 요청</h3>
               <p className="text-xs text-gray-500">
-                {new Date(paymentRequest.created_at).toLocaleDateString(
-                  "ko-KR",
-                  {
-                    month: "short",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  },
-                )}
+                {new Date(paymentRequest.created_at).toLocaleDateString('ko-KR', {
+                  month: 'short',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
               </p>
             </div>
           </div>
@@ -636,9 +608,7 @@ function PaymentRequestCard({
 
         {/* 내용 */}
         <div className="bg-white rounded-lg p-4 mb-4">
-          <h4 className="font-bold text-lg text-gray-900 mb-2">
-            {paymentRequest.title}
-          </h4>
+          <h4 className="font-bold text-lg text-gray-900 mb-2">{paymentRequest.title}</h4>
 
           {paymentRequest.description && (
             <p className="text-sm text-gray-600 mb-3 whitespace-pre-wrap">
@@ -667,15 +637,12 @@ function PaymentRequestCard({
             <div className="mt-3 pt-3 border-t border-gray-200">
               <p className="text-xs text-gray-500">
                 <FaHourglassHalf className="mr-1 inline" />
-                {new Date(paymentRequest.expires_at).toLocaleDateString(
-                  "ko-KR",
-                  {
-                    month: "short",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  },
-                )}
+                {new Date(paymentRequest.expires_at).toLocaleDateString('ko-KR', {
+                  month: 'short',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
                 까지 유효
               </p>
             </div>
@@ -687,9 +654,9 @@ function PaymentRequestCard({
           <div className="flex gap-2">
             <button
               onClick={() => {
-                const reason = prompt("거부 사유를 입력해주세요 (선택사항):");
+                const reason = prompt('거부 사유를 입력해주세요 (선택사항):');
                 if (reason !== null) {
-                  handleResponse("reject", reason || undefined);
+                  handleResponse('reject', reason || undefined);
                 }
               }}
               disabled={isProcessing}
@@ -698,7 +665,7 @@ function PaymentRequestCard({
               거부
             </button>
             <button
-              onClick={() => handleResponse("accept")}
+              onClick={() => handleResponse('accept')}
               disabled={isProcessing}
               className="flex-1 px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium disabled:opacity-50"
             >
@@ -728,17 +695,12 @@ function PaymentRequestCard({
         )}
 
         {/* 거부 사유 표시 */}
-        {paymentRequest.status === "rejected" &&
-          paymentRequest.buyer_response && (
-            <div className="bg-red-50 rounded-lg p-3 border border-red-200">
-              <p className="text-xs font-medium text-red-900 mb-1">
-                거부 사유:
-              </p>
-              <p className="text-xs text-red-700">
-                {paymentRequest.buyer_response}
-              </p>
-            </div>
-          )}
+        {paymentRequest.status === 'rejected' && paymentRequest.buyer_response && (
+          <div className="bg-red-50 rounded-lg p-3 border border-red-200">
+            <p className="text-xs font-medium text-red-900 mb-1">거부 사유:</p>
+            <p className="text-xs text-red-700">{paymentRequest.buyer_response}</p>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -755,11 +717,11 @@ function PaymentRequestModal({
   onClose: () => void;
 }>) {
   const [formData, setFormData] = useState({
-    title: service?.title || "",
-    amount: "",
-    description: "",
-    deliveryDays: "7",
-    revisionCount: "2",
+    title: service?.title || '',
+    amount: '',
+    description: '',
+    deliveryDays: '7',
+    revisionCount: '2',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -767,15 +729,15 @@ function PaymentRequestModal({
     e.preventDefault();
 
     if (!formData.amount || Number.parseInt(formData.amount) < 1000) {
-      toast.error("최소 결제 금액은 1,000원입니다");
+      toast.error('최소 결제 금액은 1,000원입니다');
       return;
     }
 
     setIsSubmitting(true);
     try {
-      const response = await fetch("/api/payment-requests", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/payment-requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           room_id: roomId,
           service_id: service?.id,
@@ -788,18 +750,18 @@ function PaymentRequestModal({
       });
 
       if (response.ok) {
-        toast.success("결제 요청을 전송했습니다");
+        toast.success('결제 요청을 전송했습니다');
         onClose();
       } else {
         const error = await response.json();
-        toast.error(`결제 요청 실패: ${error.error || "알 수 없는 오류"}`);
+        toast.error(`결제 요청 실패: ${error.error || '알 수 없는 오류'}`);
       }
     } catch (error) {
       console.error(
-        "Payment request error:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+        'Payment request error:',
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
       );
-      toast.error("결제 요청 중 오류가 발생했습니다");
+      toast.error('결제 요청 중 오류가 발생했습니다');
     } finally {
       setIsSubmitting(false);
     }
@@ -810,10 +772,7 @@ function PaymentRequestModal({
       <div className="bg-white rounded-lg max-w-md w-full p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900">결제 요청</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
-          >
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <FaTimes className="text-xl" />
           </button>
         </div>
@@ -827,9 +786,7 @@ function PaymentRequestModal({
               id="payment-title"
               type="text"
               value={formData.title}
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               placeholder="작업 제목"
               required
@@ -837,16 +794,17 @@ function PaymentRequestModal({
           </div>
 
           <div>
-            <label htmlFor="payment-amount" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="payment-amount"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               결제 금액 (원) *
             </label>
             <input
               id="payment-amount"
               type="number"
               value={formData.amount}
-              onChange={(e) =>
-                setFormData({ ...formData, amount: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               placeholder="10000"
               min="1000"
@@ -857,15 +815,16 @@ function PaymentRequestModal({
           </div>
 
           <div>
-            <label htmlFor="payment-description" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="payment-description"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               작업 설명
             </label>
             <textarea
               id="payment-description"
               value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               rows={3}
               placeholder="작업 내용 및 요구사항"
@@ -874,16 +833,17 @@ function PaymentRequestModal({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="delivery-days" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="delivery-days"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 작업 기간 (일)
               </label>
               <input
                 id="delivery-days"
                 type="number"
                 value={formData.deliveryDays}
-                onChange={(e) =>
-                  setFormData({ ...formData, deliveryDays: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, deliveryDays: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 min="1"
                 max="365"
@@ -891,16 +851,17 @@ function PaymentRequestModal({
             </div>
 
             <div>
-              <label htmlFor="revision-count" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="revision-count"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 수정 횟수
               </label>
               <input
                 id="revision-count"
                 type="number"
                 value={formData.revisionCount}
-                onChange={(e) =>
-                  setFormData({ ...formData, revisionCount: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, revisionCount: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                 min="0"
                 max="10"
@@ -911,8 +872,8 @@ function PaymentRequestModal({
           <div className="bg-blue-50 rounded-lg p-4">
             <p className="text-sm text-blue-900">
               <FaInfoCircle className="mr-2 inline" />
-              구매자가 결제 요청을 수락하면 결제 페이지로 이동합니다. 결제
-              요청은 72시간 후 자동으로 만료됩니다.
+              구매자가 결제 요청을 수락하면 결제 페이지로 이동합니다. 결제 요청은 72시간 후 자동으로
+              만료됩니다.
             </p>
           </div>
 
@@ -936,7 +897,7 @@ function PaymentRequestModal({
                   전송 중...
                 </>
               ) : (
-                "결제 요청 전송"
+                '결제 요청 전송'
               )}
             </button>
           </div>

@@ -1,32 +1,29 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { useState, useEffect } from "react";
+import Image from 'next/image';
+import { useState, useEffect } from 'react';
 import {
   BACKGROUND_TEMPLATES,
   createTemplatePreview,
   type GradientTemplate,
-} from "@/lib/template-generator";
-import { FaPalette, FaCheck, FaInfoCircle } from "react-icons/fa";
+} from '@/lib/template-generator';
+import { FaPalette, FaCheck, FaInfoCircle } from 'react-icons/fa';
 
 interface Props {
   readonly onSelect: (template: GradientTemplate) => void;
   readonly selectedTemplateId?: string;
 }
 
-export default function TemplateSelector({
-  onSelect,
-  selectedTemplateId,
-}: Props) {
+export default function TemplateSelector({ onSelect, selectedTemplateId }: Props) {
   const [previews, setPreviews] = useState<Record<string, string>>({});
 
   // 템플릿 미리보기 생성
   useEffect(() => {
     const newPreviews: Record<string, string> = {};
 
-    BACKGROUND_TEMPLATES.forEach((template) => {
+    for (const template of BACKGROUND_TEMPLATES) {
       newPreviews[template.id] = createTemplatePreview(template, 200, 150);
-    });
+    }
 
     setPreviews(newPreviews);
   }, []);
@@ -36,9 +33,7 @@ export default function TemplateSelector({
       <div className="flex items-center gap-2">
         <FaPalette className="text-brand-primary" />
         <h3 className="font-semibold text-lg">배경 템플릿 선택</h3>
-        <span className="text-sm text-gray-500">
-          ({BACKGROUND_TEMPLATES.length}개)
-        </span>
+        <span className="text-sm text-gray-500">({BACKGROUND_TEMPLATES.length}개)</span>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -49,8 +44,8 @@ export default function TemplateSelector({
             onClick={() => onSelect(template)}
             className={`group relative rounded-lg overflow-hidden transition-all ${
               selectedTemplateId === template.id
-                ? "ring-4 ring-brand-primary shadow-lg scale-105"
-                : "hover:ring-2 hover:ring-brand-primary/50 hover:shadow-md"
+                ? 'ring-4 ring-brand-primary shadow-lg scale-105'
+                : 'hover:ring-2 hover:ring-brand-primary/50 hover:shadow-md'
             }`}
           >
             {/* 미리보기 이미지 */}
@@ -83,9 +78,7 @@ export default function TemplateSelector({
 
             {/* 템플릿 이름 */}
             <div className="p-2 bg-white">
-              <p className="text-xs font-medium text-gray-700 truncate">
-                {template.name}
-              </p>
+              <p className="text-xs font-medium text-gray-700 truncate">{template.name}</p>
             </div>
           </button>
         ))}
@@ -99,10 +92,7 @@ export default function TemplateSelector({
             <p className="font-medium mb-1">템플릿 사용 방법</p>
             <ul className="space-y-1 text-xs">
               <li>• 원하는 배경을 선택하세요</li>
-              <li>
-                • 선택 후 텍스트를 입력하여 맞춤형 썸네일을 만들 수 있습니다
-                (최대 25자)
-              </li>
+              <li>• 선택 후 텍스트를 입력하여 맞춤형 썸네일을 만들 수 있습니다 (최대 25자)</li>
               <li>• 최종 이미지는 652×488 픽셀로 자동 생성됩니다</li>
             </ul>
           </div>

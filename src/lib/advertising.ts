@@ -21,7 +21,10 @@ function getAdminClient() {
  */
 async function getCurrentUser() {
   const supabase = await SupabaseManager.getServerClient();
-  const { data: { user }, error } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
 
   if (error || !user) {
     throw new Error('인증이 필요합니다');
@@ -51,11 +54,7 @@ function validateAmount(amount: number): boolean {
 async function requireAdmin(userId: string) {
   const supabase = getAdminClient();
 
-  const { data: admin } = await supabase
-    .from('admins')
-    .select('id')
-    .eq('user_id', userId)
-    .single();
+  const { data: admin } = await supabase.from('admins').select('id').eq('user_id', userId).single();
 
   if (!admin) {
     throw new Error('관리자 권한이 필요합니다');
@@ -105,7 +104,7 @@ export async function grantLaunchPromotion(sellerId: string) {
       amount: LAUNCH_PROMO_AMOUNT,
       initial_amount: LAUNCH_PROMO_AMOUNT,
       promotion_type: 'launch_promo',
-      expires_at: expiresAt.toISOString()
+      expires_at: expiresAt.toISOString(),
     })
     .select()
     .single();
@@ -120,7 +119,7 @@ export async function grantLaunchPromotion(sellerId: string) {
     amount: LAUNCH_PROMO_AMOUNT,
     balance_after: LAUNCH_PROMO_AMOUNT,
     description: '런칭 프로모션 - 6개월 무료 광고 크레딧 (60만원)',
-    reference_type: 'promotion'
+    reference_type: 'promotion',
   });
 
   return credit;
@@ -187,7 +186,7 @@ export async function payWithCredit(
       .from('advertising_credits')
       .update({
         amount: credit.amount - useAmount,
-        used_amount: credit.used_amount + useAmount
+        used_amount: credit.used_amount + useAmount,
       })
       .eq('id', credit.id);
 
@@ -200,7 +199,7 @@ export async function payWithCredit(
       balance_after: credit.amount - useAmount,
       description: '광고 구독 월 결제 (10만원)',
       reference_type: 'subscription',
-      reference_id: subscriptionId
+      reference_id: subscriptionId,
     });
 
     remaining -= useAmount;
@@ -296,7 +295,7 @@ export async function startAdvertisingSubscription(
       monthly_price: monthlyPrice,
       payment_method: paymentMethod,
       next_billing_date: nextBillingDate.toISOString().split('T')[0],
-      status: paymentMethod === 'bank_transfer' ? 'pending_payment' : 'active'
+      status: paymentMethod === 'bank_transfer' ? 'pending_payment' : 'active',
     })
     .select()
     .single();
@@ -305,7 +304,14 @@ export async function startAdvertisingSubscription(
 
   // 무통장 입금 처리
   if (paymentMethod === 'bank_transfer') {
-    const payment = await requestBankTransferPayment(subscription.id, seller.id, supplyAmount, taxAmount, totalAmount, months);
+    const payment = await requestBankTransferPayment(
+      subscription.id,
+      seller.id,
+      supplyAmount,
+      taxAmount,
+      totalAmount,
+      months
+    );
     return { subscription, payment };
   }
 
@@ -352,7 +358,7 @@ export async function cancelSubscription(subscriptionId: string) {
     .from('advertising_subscriptions')
     .update({
       status: 'cancelled',
-      cancelled_at: new Date().toISOString()
+      cancelled_at: new Date().toISOString(),
     })
     .eq('id', subscriptionId);
 }
@@ -400,7 +406,7 @@ export async function requestBankTransferPayment(
       supply_amount: supplyAmount,
       tax_amount: taxAmount,
       payment_method: 'bank_transfer',
-      status: 'pending'
+      status: 'pending',
     })
     .select()
     .single();
@@ -410,7 +416,7 @@ export async function requestBankTransferPayment(
     .from('advertising_subscriptions')
     .update({
       status: 'pending_payment',
-      bank_transfer_deadline: deadline.toISOString()
+      bank_transfer_deadline: deadline.toISOString(),
     })
     .eq('id', subscriptionId);
 
@@ -430,7 +436,7 @@ export async function requestBankTransferPayment(
 입금자명: [이름-${payment!.id.slice(0, 8)}]
 ※ 입금 확인 후 세금계산서가 자동 발행됩니다.
     `.trim(),
-    link_url: `/mypage/seller/advertising/payments/${payment!.id}`
+    link_url: `/mypage/seller/advertising/payments/${payment!.id}`,
   });
 
   return payment;
@@ -473,7 +479,7 @@ export async function confirmBankTransferPayment(
       paid_at: now,
       confirmed_at: now,
       confirmed_by: adminId,
-      admin_memo: memo
+      admin_memo: memo,
     })
     .eq('id', paymentId);
 
@@ -489,7 +495,7 @@ export async function confirmBankTransferPayment(
       next_billing_date: nextBilling.toISOString().split('T')[0],
       bank_transfer_confirmed: true,
       bank_transfer_confirmed_at: now,
-      bank_transfer_confirmed_by: adminId
+      bank_transfer_confirmed_by: adminId,
     })
     .eq('id', payment.subscription_id);
 
@@ -510,7 +516,7 @@ export async function confirmBankTransferPayment(
       type: 'payment_confirmed',
       title: '광고 결제 확인 완료',
       content: `${payment.amount.toLocaleString()}원 입금이 확인되었습니다. 광고가 활성화되었으며 세금계산서가 발행되었습니다.`,
-      link_url: '/mypage/seller/tax-invoices'
+      link_url: '/mypage/seller/tax-invoices',
     });
   }
 
@@ -520,22 +526,21 @@ export async function confirmBankTransferPayment(
 /**
  * 세금계산서 발행
  */
-export async function issueTaxInvoice(
-  paymentId: string,
-  _issuedBy: string
-) {
+export async function issueTaxInvoice(paymentId: string, _issuedBy: string) {
   const supabase = getAdminClient();
 
   // 결제 정보 조회
   const { data: payment } = await supabase
     .from('advertising_payments')
-    .select(`
+    .select(
+      `
       *,
       subscription:advertising_subscriptions(
         id,
         service:services(title)
       )
-    `)
+    `
+    )
     .eq('id', paymentId)
     .single();
 
@@ -553,7 +558,9 @@ export async function issueTaxInvoice(
   // 공급받는자 정보 조회 (판매자) - payment.seller_id는 sellers.id
   const { data: buyerInfo } = await supabase
     .from('sellers')
-    .select('business_number, business_name, ceo_name, business_address, business_type, business_item, business_email')
+    .select(
+      'business_number, business_name, ceo_name, business_address, business_type, business_item, business_email'
+    )
     .eq('id', payment.seller_id)
     .single();
 
@@ -624,7 +631,7 @@ export async function issueTaxInvoice(
       item_quantity: 1,
       item_unit_price: payment.supply_amount,
 
-      remarks: `승인번호: ${invoiceNumber}`
+      remarks: `승인번호: ${invoiceNumber}`,
     })
     .select()
     .single();
@@ -676,7 +683,8 @@ export async function getServicesForCategoryPage(
   // 1. 해당 카테고리의 모든 활성 서비스 조회
   const { data: allServices } = await supabase
     .from('services')
-    .select(`
+    .select(
+      `
       *,
       seller:users!services_seller_id_fkey(id, name),
       active_subscription:advertising_subscriptions!left(
@@ -685,7 +693,8 @@ export async function getServicesForCategoryPage(
         expires_at
       ),
       service_categories!inner(category_id)
-    `)
+    `
+    )
     .eq('service_categories.category_id', categoryId)
     .eq('status', 'active')
     .is('deleted_at', null);
@@ -693,12 +702,12 @@ export async function getServicesForCategoryPage(
   if (!allServices) return { services: [], total: 0, page, pageSize, totalPages: 0 };
 
   // 2. 활성 광고 구분
-  const servicesWithAdStatus = allServices.map(service => ({
+  const servicesWithAdStatus = allServices.map((service) => ({
     ...service,
     is_advertised: !!(
       service.active_subscription?.status === 'active' &&
       new Date(service.active_subscription.expires_at) > new Date()
-    )
+    ),
   }));
 
   // 3. 완전 랜덤 섞기 (Fisher-Yates Shuffle)
@@ -709,24 +718,26 @@ export async function getServicesForCategoryPage(
   const pageServices = shuffled.slice(start, start + pageSize);
 
   // 5. 광고 노출 기록 (비동기)
-  pageServices
-    .filter(s => s.is_advertised)
-    .forEach((service, index) => {
-      recordImpression(
-        service.active_subscription.id,
-        service.id,
-        categoryId,
-        start + index + 1,
-        page
-      ).catch(err => console.error('Operation error:', JSON.stringify(err, Object.getOwnPropertyNames(err), 2)));
-    });
+  const advertisedServices = pageServices.filter((s) => s.is_advertised);
+  for (let index = 0; index < advertisedServices.length; index++) {
+    const service = advertisedServices[index];
+    recordImpression(
+      service.active_subscription.id,
+      service.id,
+      categoryId,
+      start + index + 1,
+      page
+    ).catch((err) =>
+      console.error('Operation error:', JSON.stringify(err, Object.getOwnPropertyNames(err), 2))
+    );
+  }
 
   return {
     services: pageServices,
     total: shuffled.length,
     page,
     pageSize,
-    totalPages: Math.ceil(shuffled.length / pageSize)
+    totalPages: Math.ceil(shuffled.length / pageSize),
   };
 }
 
@@ -747,7 +758,7 @@ async function recordImpression(
     service_id: serviceId,
     category_id: categoryId,
     position,
-    page_number: page
+    page_number: page,
   });
 
   // 구독 통계 업데이트
@@ -782,7 +793,7 @@ export async function recordClick(impressionId: string) {
     .from('advertising_impressions')
     .update({
       clicked: true,
-      clicked_at: now
+      clicked_at: now,
     })
     .eq('id', impressionId)
     .select()

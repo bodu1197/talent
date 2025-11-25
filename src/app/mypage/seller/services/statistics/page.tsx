@@ -85,11 +85,13 @@ export default async function ServiceStatisticsPage({
 
   // 일별 조회수 집계
   const dailyViewsMap = new Map<string, number>();
-  viewLogs?.forEach((log) => {
-    const date = new Date(log.created_at);
-    const dateStr = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
-    dailyViewsMap.set(dateStr, (dailyViewsMap.get(dateStr) || 0) + 1);
-  });
+  if (viewLogs) {
+    for (const log of viewLogs) {
+      const date = new Date(log.created_at);
+      const dateStr = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
+      dailyViewsMap.set(dateStr, (dailyViewsMap.get(dateStr) || 0) + 1);
+    }
+  }
 
   // 최근 7일 날짜 생성
   const dailyViews = [];
@@ -105,11 +107,13 @@ export default async function ServiceStatisticsPage({
 
   // 평점 분포 계산
   const ratingDistribution = [0, 0, 0, 0, 0]; // 1-5점
-  reviews?.forEach((review) => {
-    if (review.rating >= 1 && review.rating <= 5) {
-      ratingDistribution[review.rating - 1]++;
+  if (reviews) {
+    for (const review of reviews) {
+      if (review.rating >= 1 && review.rating <= 5) {
+        ratingDistribution[review.rating - 1]++;
+      }
     }
-  });
+  }
 
   const ratingPercentages = ratingDistribution.map((count) =>
     reviews && reviews.length > 0 ? (count / reviews.length) * 100 : 0

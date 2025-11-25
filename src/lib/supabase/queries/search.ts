@@ -1,11 +1,63 @@
-import { createClient as createServerClient } from "@/lib/supabase/server";
-import { logger } from "@/lib/logger";
-import { cryptoShuffleArray } from "@/lib/utils/crypto-shuffle";
+import { createClient as createServerClient } from '@/lib/supabase/server';
+import { logger } from '@/lib/logger';
+import { cryptoShuffleArray } from '@/lib/utils/crypto-shuffle';
+
+interface ServiceWithRating {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  thumbnail_url: string | null;
+  orders_count: number;
+  seller: {
+    id: string;
+    business_name: string;
+    display_name: string;
+    profile_image: string | null;
+    is_verified: boolean;
+  } | null;
+  order_count: number;
+  rating: number;
+  review_count: number;
+  is_promoted: boolean;
+}
+
+interface ExpertWithStats {
+  id: string;
+  user_id: string;
+  business_name: string;
+  display_name: string;
+  profile_image: string | null;
+  bio: string;
+  is_verified: boolean;
+  created_at: string;
+  service_count: number;
+  rating: number;
+  review_count: number;
+}
+
+interface PortfolioResult {
+  id: string;
+  seller_id: string;
+  title: string;
+  description: string;
+  thumbnail_url: string | null;
+  project_url: string | null;
+  tags: string[] | null;
+  created_at: string;
+  seller: {
+    id: string;
+    business_name: string;
+    display_name: string;
+    profile_image: string | null;
+    is_verified: boolean;
+  } | null;
+}
 
 export interface SearchResult {
-  services: any[];
-  experts: any[];
-  portfolios: any[];
+  services: ServiceWithRating[];
+  experts: ExpertWithStats[];
+  portfolios: PortfolioResult[];
 }
 
 /**
@@ -19,17 +71,15 @@ export async function searchAll(query: string): Promise<SearchResult> {
   try {
     // 1. 광고 중인 서비스 조회 (active 구독만)
     const { data: promotedSubscriptions } = await supabase
-      .from("advertising_subscriptions")
-      .select("service_id")
-      .eq("status", "active");
+      .from('advertising_subscriptions')
+      .select('service_id')
+      .eq('status', 'active');
 
-    const promotedServiceIds = new Set(
-      promotedSubscriptions?.map((p) => p.service_id) || []
-    );
+    const promotedServiceIds = new Set(promotedSubscriptions?.map((p) => p.service_id) || []);
 
     // 2. 모든 서비스 검색 (광고/일반 모두 포함)
     const { data: allServices } = await supabase
-      .from("services")
+      .from('services')
       .select(
         `
         id,
@@ -47,13 +97,13 @@ export async function searchAll(query: string): Promise<SearchResult> {
         )
       `
       )
-      .eq("status", "active")
+      .eq('status', 'active')
       .or(`title.ilike.${searchTerm},description.ilike.${searchTerm}`)
       .limit(50);
 
     // 3. 광고/일반 서비스 분류
-    const promotedServices: any[] = [];
-    const regularServices: any[] = [];
+    const promotedServices: Array<NonNullable<typeof allServices>[number]> = [];
+    const regularServices: Array<NonNullable<typeof allServices>[number]> = [];
 
     if (allServices) {
       for (const service of allServices) {
@@ -75,31 +125,37 @@ export async function searchAll(query: string): Promise<SearchResult> {
     const services = [...promotedServices, ...regularServices].slice(0, 20);
 
     // 서비스별 리뷰 통계 조회
-    let servicesWithRating: any[] = [];
+    let servicesWithRating: ServiceWithRating[] = [];
     if (services && services.length > 0) {
       const serviceIds = services.map((s) => s.id);
       const { data: reviewStats } = await supabase
-        .from("reviews")
-        .select("service_id, rating")
-        .in("service_id", serviceIds)
-        .eq("is_visible", true);
+        .from('reviews')
+        .select('service_id, rating')
+        .in('service_id', serviceIds)
+        .eq('is_visible', true);
 
       const ratingMap = new Map<string, { sum: number; count: number }>();
-      reviewStats?.forEach((review: { service_id: string; rating: number }) => {
-        const current = ratingMap.get(review.service_id) || {
-          sum: 0,
-          count: 0,
-        };
-        ratingMap.set(review.service_id, {
-          sum: current.sum + review.rating,
-          count: current.count + 1,
-        });
-      });
+      if (reviewStats) {
+        for (const review of reviewStats as { service_id: string; rating: number }[]) {
+          const current = ratingMap.get(review.service_id) || {
+            sum: 0,
+            count: 0,
+          };
+          ratingMap.set(review.service_id, {
+            sum: current.sum + review.rating,
+            count: current.count + 1,
+          });
+        }
+      }
 
       servicesWithRating = services.map((service) => {
         const stats = ratingMap.get(service.id);
+        // Supabase returns seller as an array, extract first element
+        const seller =
+          Array.isArray(service.seller) && service.seller.length > 0 ? service.seller[0] : null;
         return {
           ...service,
+          seller,
           order_count: service.orders_count || 0,
           rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
           review_count: stats?.count || 0,
@@ -110,7 +166,7 @@ export async function searchAll(query: string): Promise<SearchResult> {
 
     // 전문가 검색 (판매자 프로필)
     const { data: experts } = await supabase
-      .from("seller_profiles")
+      .from('seller_profiles')
       .select(
         `
         id,
@@ -129,23 +185,23 @@ export async function searchAll(query: string): Promise<SearchResult> {
       .limit(20);
 
     // 각 전문가의 서비스 수와 평균 평점 조회
-    let expertsWithStats: any[] = [];
+    let expertsWithStats: ExpertWithStats[] = [];
     if (experts && experts.length > 0) {
       expertsWithStats = await Promise.all(
         experts.map(async (expert) => {
           // 서비스 수 조회
           const { count: serviceCount } = await supabase
-            .from("services")
-            .select("*", { count: "exact", head: true })
-            .eq("seller_id", expert.id)
-            .eq("status", "active");
+            .from('services')
+            .select('*', { count: 'exact', head: true })
+            .eq('seller_id', expert.id)
+            .eq('status', 'active');
 
           // 평균 평점 조회
           const { data: expertServices } = await supabase
-            .from("services")
-            .select("id")
-            .eq("seller_id", expert.id)
-            .eq("status", "active");
+            .from('services')
+            .select('id')
+            .eq('seller_id', expert.id)
+            .eq('status', 'active');
 
           let avgRating = 0;
           let reviewCount = 0;
@@ -153,14 +209,13 @@ export async function searchAll(query: string): Promise<SearchResult> {
           if (expertServices && expertServices.length > 0) {
             const serviceIds = expertServices.map((s) => s.id);
             const { data: reviews } = await supabase
-              .from("reviews")
-              .select("rating")
-              .in("service_id", serviceIds)
-              .eq("is_visible", true);
+              .from('reviews')
+              .select('rating')
+              .in('service_id', serviceIds)
+              .eq('is_visible', true);
 
             if (reviews && reviews.length > 0) {
-              avgRating =
-                reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+              avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
               reviewCount = reviews.length;
             }
           }
@@ -177,7 +232,7 @@ export async function searchAll(query: string): Promise<SearchResult> {
 
     // 포트폴리오 검색
     const { data: portfolios } = await supabase
-      .from("seller_portfolio")
+      .from('seller_portfolio')
       .select(
         `
         id,
@@ -198,16 +253,26 @@ export async function searchAll(query: string): Promise<SearchResult> {
       `
       )
       .or(`title.ilike.${searchTerm},description.ilike.${searchTerm}`)
-      .order("created_at", { ascending: false })
+      .order('created_at', { ascending: false })
       .limit(20);
 
     return {
       services: servicesWithRating || [],
       experts: expertsWithStats || [],
-      portfolios: portfolios || [],
+      portfolios: (portfolios || []).map((portfolio) => {
+        // Supabase returns seller as an array, extract first element
+        const seller =
+          Array.isArray(portfolio.seller) && portfolio.seller.length > 0
+            ? portfolio.seller[0]
+            : null;
+        return {
+          ...portfolio,
+          seller,
+        };
+      }),
     };
   } catch (error) {
-    logger.error("Search error:", error);
+    logger.error('Search error:', error);
     return {
       services: [],
       experts: [],
@@ -225,7 +290,7 @@ export async function getRecommendedSearchTerms(limit: number = 10) {
   try {
     // 최종 카테고리(3차 또는 하위 카테고리)의 클릭 수 집계
     const { data: categoryClicks } = await supabase
-      .from("category_visits")
+      .from('category_visits')
       .select(
         `
         category_id,
@@ -237,7 +302,7 @@ export async function getRecommendedSearchTerms(limit: number = 10) {
         )
       `
       )
-      .order("visited_at", { ascending: false })
+      .order('visited_at', { ascending: false })
       .limit(1000);
 
     if (!categoryClicks || categoryClicks.length === 0) {
@@ -250,33 +315,33 @@ export async function getRecommendedSearchTerms(limit: number = 10) {
       { name: string; slug: string; count: number; level: number }
     >();
 
-    categoryClicks.forEach(
-      (click: {
-        category_id: string;
-        categories: {
-          id: string;
-          name: string;
-          slug: string;
-          level: number;
-        }[] | null;
-      }) => {
-        if (click.categories && Array.isArray(click.categories) && click.categories.length > 0) {
-          const category = click.categories[0];
-          const key = category.id;
-          const current = clickMap.get(key);
-          if (current) {
-            current.count += 1;
-          } else {
-            clickMap.set(key, {
-              name: category.name,
-              slug: category.slug,
-              count: 1,
-              level: category.level,
-            });
-          }
+    for (const click of categoryClicks as {
+      category_id: string;
+      categories:
+        | {
+            id: string;
+            name: string;
+            slug: string;
+            level: number;
+          }[]
+        | null;
+    }[]) {
+      if (click.categories && Array.isArray(click.categories) && click.categories.length > 0) {
+        const category = click.categories[0];
+        const key = category.id;
+        const current = clickMap.get(key);
+        if (current) {
+          current.count += 1;
+        } else {
+          clickMap.set(key, {
+            name: category.name,
+            slug: category.slug,
+            count: 1,
+            level: category.level,
+          });
         }
       }
-    );
+    }
 
     // 최종 카테고리(level 3)만 필터링하고 클릭 수 순으로 정렬
     const sortedCategories = Array.from(clickMap.values())
@@ -290,7 +355,7 @@ export async function getRecommendedSearchTerms(limit: number = 10) {
       count: cat.count,
     }));
   } catch (error) {
-    logger.error("Failed to get recommended search terms:", error);
+    logger.error('Failed to get recommended search terms:', error);
     return [];
   }
 }

@@ -155,16 +155,18 @@ async function AIServicesSection({ aiCategoryIds }: { readonly aiCategoryIds: st
         rating: number;
       }
       const ratingMap = new Map<string, { sum: number; count: number }>();
-      reviewStats?.forEach((review: ReviewStat) => {
-        const current = ratingMap.get(review.service_id) || {
-          sum: 0,
-          count: 0,
-        };
-        ratingMap.set(review.service_id, {
-          sum: current.sum + review.rating,
-          count: current.count + 1,
-        });
-      });
+      if (reviewStats) {
+        for (const review of reviewStats as ReviewStat[]) {
+          const current = ratingMap.get(review.service_id) || {
+            sum: 0,
+            count: 0,
+          };
+          ratingMap.set(review.service_id, {
+            sum: current.sum + review.rating,
+            count: current.count + 1,
+          });
+        }
+      }
 
       services = combinedServices.map((service) => {
         const stats = ratingMap.get(service.id);

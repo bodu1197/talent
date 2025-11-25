@@ -1,16 +1,9 @@
-import Image from "next/image";
-import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
-import { Service } from "@/types";
-import { getServicesByCategory } from "@/lib/supabase/queries/services";
-import {
-  FaEye,
-  FaFlag,
-  FaBox,
-  FaCheckCircle,
-  FaStar,
-  FaHistory,
-} from "react-icons/fa";
+import Image from 'next/image';
+import Link from 'next/link';
+import { createClient } from '@/lib/supabase/server';
+import { Service } from '@/types';
+import { getServicesByCategory } from '@/lib/supabase/queries/services';
+import { FaEye, FaFlag, FaBox, FaCheckCircle, FaStar, FaHistory } from 'react-icons/fa';
 
 // Supabase returns nested relations as arrays
 interface SupabaseServiceView {
@@ -51,12 +44,8 @@ interface ServiceItemDisplay {
 }
 
 // Helper: Filter valid service views
-function filterValidViews(
-  recentViews: SupabaseServiceView[] | null
-): SupabaseServiceView[] {
-  return (recentViews || []).filter(
-    (v) => v.service && v.service.length > 0,
-  );
+function filterValidViews(recentViews: SupabaseServiceView[] | null): SupabaseServiceView[] {
+  return (recentViews || []).filter((v) => v.service && v.service.length > 0);
 }
 
 // Helper: Calculate rating map from reviews
@@ -65,13 +54,15 @@ function calculateRatingMap(
 ): Map<string, { sum: number; count: number }> {
   const ratingMap = new Map<string, { sum: number; count: number }>();
 
-  reviewStats?.forEach((review) => {
-    const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
-    ratingMap.set(review.service_id, {
-      sum: current.sum + review.rating,
-      count: current.count + 1,
-    });
-  });
+  if (reviewStats) {
+    for (const review of reviewStats) {
+      const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
+      ratingMap.set(review.service_id, {
+        sum: current.sum + review.rating,
+        count: current.count + 1,
+      });
+    }
+  }
 
   return ratingMap;
 }
@@ -81,22 +72,21 @@ function addRatingsToServices(
   validViews: SupabaseServiceView[],
   ratingMap: Map<string, { sum: number; count: number }>
 ): void {
-  validViews.forEach((view) => {
+  for (const view of validViews) {
     if (view.service && view.service.length > 0) {
       const serviceData = view.service[0] as unknown as Service & {
         rating?: number;
         review_count?: number;
       };
       const stats = ratingMap.get(view.service_id);
-      serviceData.rating =
-        stats && stats.count > 0 ? stats.sum / stats.count : 0;
+      serviceData.rating = stats && stats.count > 0 ? stats.sum / stats.count : 0;
       serviceData.review_count = stats?.count || 0;
     }
-  });
+  }
 }
 
 // Helper: Get category ID from service
-function getCategoryIdFromService(service: any): string | null {
+function getCategoryIdFromService(service: SupabaseServiceView['service'][0]): string | null {
   const categories = service.service_categories;
   if (!categories || categories.length === 0) return null;
 
@@ -158,7 +148,7 @@ export default async function RecentViewedServices() {
 
   // 최근 본 서비스 조회
   const { data: recentViews } = await supabase
-    .from("service_views")
+    .from('service_views')
     .select(
       `
       service_id,
@@ -179,10 +169,10 @@ export default async function RecentViewedServices() {
           category:categories(id, name, slug)
         )
       )
-    `,
+    `
     )
-    .eq("user_id", user.id)
-    .order("viewed_at", { ascending: false })
+    .eq('user_id', user.id)
+    .order('viewed_at', { ascending: false })
     .limit(10);
 
   const validViews = filterValidViews(recentViews);
@@ -191,10 +181,10 @@ export default async function RecentViewedServices() {
   if (validViews.length > 0) {
     const serviceIds = validViews.map((v) => v.service_id);
     const { data: reviewStats } = await supabase
-      .from("reviews")
-      .select("service_id, rating")
-      .in("service_id", serviceIds)
-      .eq("is_visible", true);
+      .from('reviews')
+      .select('service_id, rating')
+      .in('service_id', serviceIds)
+      .eq('is_visible', true);
 
     const ratingMap = calculateRatingMap(reviewStats);
     addRatingsToServices(validViews, ratingMap);
@@ -221,8 +211,7 @@ export default async function RecentViewedServices() {
           {validViews.length > 0 && (
             <span className="text-sm text-gray-500">
               ({validViews.length}개)
-              {relatedServices.length > 0 &&
-                ` + 추천 ${relatedServices.length}개`}
+              {relatedServices.length > 0 && ` + 추천 ${relatedServices.length}개`}
             </span>
           )}
         </div>
@@ -251,7 +240,7 @@ export default async function RecentViewedServices() {
                 {/* 썸네일 */}
                 <div
                   className="bg-gray-100 rounded-lg overflow-hidden w-full relative"
-                  style={{ aspectRatio: "210/160" }}
+                  style={{ aspectRatio: '210/160' }}
                 >
                   {service.thumbnail_url ? (
                     <Image
@@ -283,7 +272,7 @@ export default async function RecentViewedServices() {
                   {/* 판매자 */}
                   <div className="flex items-center gap-1 mb-1">
                     <div className="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center text-white text-[8px] font-bold">
-                      {service.seller?.business_name?.[0] || "S"}
+                      {service.seller?.business_name?.[0] || 'S'}
                     </div>
                     <span className="text-xs text-gray-600 truncate">
                       {service.seller?.business_name}

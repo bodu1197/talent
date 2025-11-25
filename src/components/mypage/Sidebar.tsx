@@ -251,7 +251,7 @@ export default function Sidebar({ mode, profileData }: SidebarProps) {
   // Initialize with currently active parent items expanded
   const getInitialExpandedItems = () => {
     const expanded = new Set<string>();
-    navItems.forEach((item) => {
+    for (const item of navItems) {
       if (item.children) {
         const hasActiveChild = item.children.some((child) => {
           if (child.href === pathname) return true;
@@ -262,7 +262,7 @@ export default function Sidebar({ mode, profileData }: SidebarProps) {
           expanded.add(item.href);
         }
       }
-    });
+    }
     return expanded;
   };
 

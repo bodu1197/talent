@@ -1,55 +1,44 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
-import { logger } from '@/lib/logger'
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
+import { logger } from '@/lib/logger';
 
 // POST: 찜하기
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient()
+    const supabase = await createClient();
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = await request.json()
-    const { serviceId } = body
+    const body = await request.json();
+    const { serviceId } = body;
 
     if (!serviceId) {
-      return NextResponse.json(
-        { error: 'Missing serviceId' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Missing serviceId' }, { status: 400 });
     }
 
-    logger.debug('Adding service to favorites', { userId: user.id, serviceId })
+    logger.debug('Adding service to favorites', { userId: user.id, serviceId });
 
-    const { error } = await supabase
-      .from('service_favorites')
-      .insert({
-        user_id: user.id,
-        service_id: serviceId
-      })
+    const { error } = await supabase.from('service_favorites').insert({
+      user_id: user.id,
+      service_id: serviceId,
+    });
 
     if (error) {
       // 이미 찜한 경우
       if (error.code === '23505') {
-        logger.debug('Service already favorited', { serviceId })
-        return NextResponse.json(
-          { message: 'Already favorited' },
-          { status: 200 }
-        )
+        logger.debug('Service already favorited', { serviceId });
+        return NextResponse.json({ message: 'Already favorited' }, { status: 200 });
       }
 
-      logger.error('Failed to insert favorite', error)
-      return NextResponse.json(
-        { error: 'Failed to add favorite' },
-        { status: 500 }
-      )
+      logger.error('Failed to insert favorite', error);
+      return NextResponse.json({ error: 'Failed to add favorite' }, { status: 500 });
     }
 
     // wishlist_count 업데이트
@@ -57,66 +46,53 @@ export async function POST(request: NextRequest) {
       .from('services')
       .select('wishlist_count')
       .eq('id', serviceId)
-      .single()
+      .single();
 
     if (service) {
       await supabase
         .from('services')
         .update({ wishlist_count: (service.wishlist_count || 0) + 1 })
-        .eq('id', serviceId)
+        .eq('id', serviceId);
     }
 
-    logger.info('Service added to favorites', { userId: user.id, serviceId })
-    return NextResponse.json(
-      { message: 'Added to favorites' },
-      { status: 201 }
-    )
-
+    logger.info('Service added to favorites', { userId: user.id, serviceId });
+    return NextResponse.json({ message: 'Added to favorites' }, { status: 201 });
   } catch (error) {
-    logger.error('Favorite POST error', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    logger.error('Favorite POST error', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
 // DELETE: 찜 취소
 export async function DELETE(request: NextRequest) {
   try {
-    const supabase = await createClient()
+    const supabase = await createClient();
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { searchParams } = new URL(request.url)
-    const serviceId = searchParams.get('serviceId')
+    const { searchParams } = new URL(request.url);
+    const serviceId = searchParams.get('serviceId');
 
     if (!serviceId) {
-      return NextResponse.json(
-        { error: 'Missing serviceId' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Missing serviceId' }, { status: 400 });
     }
 
     const { error } = await supabase
       .from('service_favorites')
       .delete()
       .eq('user_id', user.id)
-      .eq('service_id', serviceId)
+      .eq('service_id', serviceId);
 
     if (error) {
-      logger.error('Failed to delete favorite', error)
-      return NextResponse.json(
-        { error: 'Failed to remove favorite' },
-        { status: 500 }
-      )
+      logger.error('Failed to delete favorite', error);
+      return NextResponse.json({ error: 'Failed to remove favorite' }, { status: 500 });
     }
 
     // wishlist_count 업데이트
@@ -124,48 +100,42 @@ export async function DELETE(request: NextRequest) {
       .from('services')
       .select('wishlist_count')
       .eq('id', serviceId)
-      .single()
+      .single();
 
     if (service && service.wishlist_count > 0) {
       await supabase
         .from('services')
         .update({ wishlist_count: service.wishlist_count - 1 })
-        .eq('id', serviceId)
+        .eq('id', serviceId);
     }
 
-    logger.info('Service removed from favorites', { userId: user.id, serviceId })
-    return NextResponse.json(
-      { message: 'Removed from favorites' },
-      { status: 200 }
-    )
-
+    logger.info('Service removed from favorites', { userId: user.id, serviceId });
+    return NextResponse.json({ message: 'Removed from favorites' }, { status: 200 });
   } catch (error) {
-    logger.error('Favorite DELETE error', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    logger.error('Favorite DELETE error', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
 // GET: 찜 목록 조회
 export async function GET(_request: NextRequest) {
   try {
-    const supabase = await createClient()
+    const supabase = await createClient();
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 한 번의 쿼리로 favorites와 services join
     const { data, error } = await supabase
       .from('service_favorites')
-      .select(`
+      .select(
+        `
         service_id,
         created_at,
         service:services!inner(
@@ -177,42 +147,39 @@ export async function GET(_request: NextRequest) {
             is_verified
           )
         )
-      `)
+      `
+      )
       .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
+      .order('created_at', { ascending: false });
 
     if (error) {
-      logger.error('Failed to fetch favorites', error)
+      logger.error('Failed to fetch favorites', error);
       return NextResponse.json(
         { error: 'Failed to fetch favorites', details: error.message },
         { status: 500 }
-      )
+      );
     }
 
     // orders_count를 order_count로 매핑
     if (data && data.length > 0) {
       interface ServiceWithOrdersCount {
-        orders_count?: number
-        order_count?: number
-        [key: string]: unknown
+        orders_count?: number;
+        order_count?: number;
+        [key: string]: unknown;
       }
 
-      data.forEach(item => {
+      for (const item of data) {
         if (item.service) {
-          const service = item.service as unknown as ServiceWithOrdersCount
-          service.order_count = service.orders_count || 0
+          const service = item.service as unknown as ServiceWithOrdersCount;
+          service.order_count = service.orders_count || 0;
         }
-      })
+      }
     }
 
-    logger.debug('Favorites fetched', { userId: user.id, count: data?.length || 0 })
-    return NextResponse.json({ data }, { status: 200 })
-
+    logger.debug('Favorites fetched', { userId: user.id, count: data?.length || 0 });
+    return NextResponse.json({ data }, { status: 200 });
   } catch (error) {
-    logger.error('Favorites GET error', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    logger.error('Favorites GET error', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

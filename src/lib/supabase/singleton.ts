@@ -1,14 +1,14 @@
-import { createBrowserClient, createServerClient, type CookieOptions } from '@supabase/ssr'
-import { createClient as createServiceClient } from '@supabase/supabase-js'
-import type { SupabaseClient } from '@supabase/supabase-js'
+import { createBrowserClient, createServerClient } from '@supabase/ssr';
+import { createClient as createServiceClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Supabase 클라이언트 싱글톤 매니저
  * 중복 생성을 방지하고 일관된 설정을 보장합니다
  */
 export class SupabaseManager {
-  private static browserClient: SupabaseClient | null = null
-  private static serviceClient: SupabaseClient | null = null
+  private static browserClient: SupabaseClient | null = null;
+  private static serviceClient: SupabaseClient | null = null;
 
   // 공통 설정
   private static readonly commonConfig = {
@@ -24,7 +24,7 @@ export class SupabaseManager {
         'x-application-name': 'talent-hub',
       },
     },
-  }
+  };
 
   /**
    * 브라우저 클라이언트 (클라이언트 컴포넌트용)
@@ -33,20 +33,18 @@ export class SupabaseManager {
   static getBrowserClient(): SupabaseClient {
     if (!this.browserClient) {
       // 환경 변수 검증
-      const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-      const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
       if (!url || !key) {
-        throw new Error('Missing Supabase environment variables. Please check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.')
+        throw new Error(
+          'Missing Supabase environment variables. Please check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.'
+        );
       }
 
-      this.browserClient = createBrowserClient(
-        url,
-        key,
-        this.commonConfig
-      )
+      this.browserClient = createBrowserClient(url, key, this.commonConfig);
     }
-    return this.browserClient
+    return this.browserClient;
   }
 
   /**
@@ -56,42 +54,40 @@ export class SupabaseManager {
    */
   static async getServerClient(): Promise<SupabaseClient> {
     // 환경 변수 검증
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!url || !key) {
-      throw new Error('Missing Supabase environment variables. Please check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.')
+      throw new Error(
+        'Missing Supabase environment variables. Please check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.'
+      );
     }
 
     // 동적 import를 사용하여 서버 전용 모듈 로드
-    const { cookies } = await import('next/headers')
-    const cookieStore = await cookies()
+    const { cookies } = await import('next/headers');
+    const cookieStore = await cookies();
 
-    return createServerClient(
-      url,
-      key,
-      {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll()
-          },
-          setAll(cookiesToSet) {
-            try {
-              cookiesToSet.forEach(({ name, value, options }) => {
-                cookieStore.set({ name, value, ...options })
-              })
-            } catch {
-              // Server Component에서 호출된 경우 무시
-              // 미들웨어에서 세션 새로고침을 처리합니다
+    return createServerClient(url, key, {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          try {
+            for (const { name, value, options } of cookiesToSet) {
+              cookieStore.set({ name, value, ...options });
             }
-          },
+          } catch {
+            // Server Component에서 호출된 경우 무시
+            // 미들웨어에서 세션 새로고침을 처리합니다
+          }
         },
-        auth: {
-          flowType: 'pkce',
-          storageKey: 'sb-auth-token',
-        },
-      }
-    )
+      },
+      auth: {
+        flowType: 'pkce',
+        storageKey: 'sb-auth-token',
+      },
+    });
   }
 
   /**
@@ -101,35 +97,31 @@ export class SupabaseManager {
    */
   static getServiceRoleClient(): SupabaseClient {
     if (typeof window !== 'undefined') {
-      throw new Error('Service Role Client는 서버 사이드에서만 사용할 수 있습니다!')
+      throw new Error('Service Role Client는 서버 사이드에서만 사용할 수 있습니다!');
     }
 
     if (!this.serviceClient) {
-      const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+      const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
       if (!serviceKey) {
-        throw new Error('SUPABASE_SERVICE_ROLE_KEY가 설정되지 않았습니다')
+        throw new Error('SUPABASE_SERVICE_ROLE_KEY가 설정되지 않았습니다');
       }
 
-      this.serviceClient = createServiceClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        serviceKey,
-        {
-          auth: {
-            autoRefreshToken: false,
-            persistSession: false,
-          },
-        }
-      )
+      this.serviceClient = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, serviceKey, {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false,
+        },
+      });
     }
-    return this.serviceClient
+    return this.serviceClient;
   }
 
   /**
    * 클라이언트 인스턴스 초기화 (테스트용)
    */
   static resetClients() {
-    this.browserClient = null
-    this.serviceClient = null
+    this.browserClient = null;
+    this.serviceClient = null;
   }
 }
 
@@ -137,16 +129,16 @@ export class SupabaseManager {
 export const createClient = () => {
   // 환경에 따라 적절한 클라이언트 반환
   if (typeof window !== 'undefined') {
-    return SupabaseManager.getBrowserClient()
+    return SupabaseManager.getBrowserClient();
   }
   // 서버 사이드에서는 async 함수를 통해 호출해야 함
-  throw new Error('서버 사이드에서는 createServerClient()를 사용하세요')
-}
+  throw new Error('서버 사이드에서는 createServerClient()를 사용하세요');
+};
 
 export const createServerClientHelper = async () => {
-  return SupabaseManager.getServerClient()
-}
+  return SupabaseManager.getServerClient();
+};
 
 export const createServiceRoleClient = () => {
-  return SupabaseManager.getServiceRoleClient()
-}
+  return SupabaseManager.getServiceRoleClient();
+};
