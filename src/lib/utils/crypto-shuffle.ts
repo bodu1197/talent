@@ -1,4 +1,4 @@
-import { randomBytes } from "crypto";
+import { randomBytes } from 'node:crypto';
 
 /**
  * Fisher-Yates shuffle with cryptographically secure random
@@ -21,10 +21,7 @@ export function cryptoShuffleArray<T>(array: T[]): T[] {
  * @param predicate Function to determine group
  * @returns Tuple of [matching, non-matching]
  */
-export function partitionArray<T>(
-  array: T[],
-  predicate: (item: T) => boolean,
-): [T[], T[]] {
+export function partitionArray<T>(array: T[], predicate: (item: T) => boolean): [T[], T[]] {
   const matching: T[] = [];
   const nonMatching: T[] = [];
 

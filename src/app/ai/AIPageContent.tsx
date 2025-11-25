@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { CategoryItem } from "@/lib/categories";
+import { useState } from 'react';
+import Link from 'next/link';
+import { CategoryItem } from '@/lib/categories';
 import {
   FaRobot,
   FaImage,
@@ -12,14 +12,14 @@ import {
   FaLightbulb,
   FaChartLine,
   FaMagic,
-} from "react-icons/fa";
+} from 'react-icons/fa';
 
 interface AIPageContentProps {
   readonly aiCategories: CategoryItem[];
 }
 
 export default function AIPageContent({ aiCategories }: AIPageContentProps) {
-  const [activeSection, setActiveSection] = useState("categories");
+  const [activeSection, setActiveSection] = useState('categories');
 
   // 섹션으로 스크롤
   const scrollToSection = (sectionId: string) => {
@@ -34,7 +34,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
 
       window.scrollTo({
         top: offsetPosition,
-        behavior: "smooth",
+        behavior: 'smooth',
       });
     }
   };
@@ -57,7 +57,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
                 href="#categories"
                 onClick={(e) => {
                   e.preventDefault();
-                  scrollToSection("categories");
+                  scrollToSection('categories');
                 }}
                 className="px-8 py-4 bg-white text-brand-primary rounded-lg font-semibold hover:bg-blue-50 transition-colors"
               >
@@ -67,7 +67,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
                 href="#experts"
                 onClick={(e) => {
                   e.preventDefault();
-                  scrollToSection("experts");
+                  scrollToSection('experts');
                 }}
                 className="px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-brand-primary transition-colors"
               >
@@ -83,31 +83,31 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
         <div className="container-1200">
           <div className="flex gap-8 py-4">
             <button
-              onClick={() => scrollToSection("categories")}
+              onClick={() => scrollToSection('categories')}
               className={`pb-2 font-medium transition-colors ${
-                activeSection === "categories"
-                  ? "text-brand-primary border-b-2 border-brand-primary"
-                  : "text-gray-600 hover:text-brand-primary"
+                activeSection === 'categories'
+                  ? 'text-brand-primary border-b-2 border-brand-primary'
+                  : 'text-gray-600 hover:text-brand-primary'
               }`}
             >
               AI 카테고리
             </button>
             <button
-              onClick={() => scrollToSection("cases")}
+              onClick={() => scrollToSection('cases')}
               className={`pb-2 font-medium transition-colors ${
-                activeSection === "cases"
-                  ? "text-brand-primary border-b-2 border-brand-primary"
-                  : "text-gray-600 hover:text-brand-primary"
+                activeSection === 'cases'
+                  ? 'text-brand-primary border-b-2 border-brand-primary'
+                  : 'text-gray-600 hover:text-brand-primary'
               }`}
             >
               AI 활용 사례
             </button>
             <button
-              onClick={() => scrollToSection("experts")}
+              onClick={() => scrollToSection('experts')}
               className={`pb-2 font-medium transition-colors ${
-                activeSection === "experts"
-                  ? "text-brand-primary border-b-2 border-brand-primary"
-                  : "text-gray-600 hover:text-brand-primary"
+                activeSection === 'experts'
+                  ? 'text-brand-primary border-b-2 border-brand-primary'
+                  : 'text-gray-600 hover:text-brand-primary'
               }`}
             >
               인기 AI 전문가
@@ -120,9 +120,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
       <section id="categories" className="py-16">
         <div className="container-1200">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">
-              AI로 다양한 작업을, 더 빠르게!
-            </h2>
+            <h2 className="text-3xl font-bold mb-4">AI로 다양한 작업을, 더 빠르게!</h2>
             <p className="text-gray-600 text-lg">
               원하는 AI 서비스를 선택하고 전문가와 함께 시작하세요
             </p>
@@ -144,7 +142,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
                       {category.name}
                     </h3>
                     <p className="text-sm text-gray-600 mb-3">
-                      {category.description || "AI 기술로 빠르고 효율적으로"}
+                      {category.description || 'AI 기술로 빠르고 효율적으로'}
                     </p>
                     {category.children && category.children.length > 0 && (
                       <div className="flex flex-wrap gap-2">
@@ -170,9 +168,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
       <section className="py-16 bg-brand-primary text-white">
         <div className="container-1200">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">
-              많은 분들이 이용한 AI 서비스
-            </h2>
+            <h2 className="text-3xl font-bold mb-4">많은 분들이 이용한 AI 서비스</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
@@ -209,8 +205,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
               <div className="p-6">
                 <h3 className="font-bold text-xl mb-2">미용실 마케팅 자동화</h3>
                 <p className="text-gray-600 mb-4">
-                  AI 모델로 예약 사이트 이미지를 하루 만에 제작, 촬영 비용 90%
-                  절감
+                  AI 모델로 예약 사이트 이미지를 하루 만에 제작, 촬영 비용 90% 절감
                 </p>
                 <Link
                   href="/categories/ai-image-generation"
@@ -226,9 +221,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
                 <FaBlog className="text-white text-[40px]" />
               </div>
               <div className="p-6">
-                <h3 className="font-bold text-xl mb-2">
-                  블로그 자동화로 정시 퇴근
-                </h3>
+                <h3 className="font-bold text-xl mb-2">블로그 자동화로 정시 퇴근</h3>
                 <p className="text-gray-600 mb-4">
                   AI 글쓰기로 블로그 상위 노출 달성, 업무 시간 70% 단축
                 </p>
@@ -267,9 +260,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
         <div className="container-1200">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">인기 AI 전문가</h2>
-            <p className="text-gray-600 text-lg">
-              검증된 AI 전문가와 함께 프로젝트를 시작하세요
-            </p>
+            <p className="text-gray-600 text-lg">검증된 AI 전문가와 함께 프로젝트를 시작하세요</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -289,7 +280,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
                 </div>
                 <div className="flex items-center gap-2 mb-3">
                   <div className="flex text-yellow-400">
-                    {[...new Array(5)].map((_, idx) => (
+                    {[...Array(5)].map((_, idx) => (
                       <FaStar key={`star-expert-${i}-${idx}`} className="text-xs" />
                     ))}
                   </div>
@@ -330,10 +321,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
               <p className="text-gray-600 text-sm mb-4">
                 반복적인 업무를 AI로 자동화하여 생산성을 높이는 방법
               </p>
-              <Link
-                href="#"
-                className="text-brand-primary text-sm font-semibold hover:underline"
-              >
+              <Link href="#" className="text-brand-primary text-sm font-semibold hover:underline">
                 자세히 보기 →
               </Link>
             </div>
@@ -342,16 +330,11 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
               <div className="w-12 h-12 bg-brand-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <FaChartLine className="text-brand-primary text-xl" />
               </div>
-              <h3 className="font-bold text-lg mb-2">
-                AI로 마케팅 효과 높이기
-              </h3>
+              <h3 className="font-bold text-lg mb-2">AI로 마케팅 효과 높이기</h3>
               <p className="text-gray-600 text-sm mb-4">
                 AI 기반 콘텐츠로 마케팅 ROI를 극대화하는 전략
               </p>
-              <Link
-                href="#"
-                className="text-brand-primary text-sm font-semibold hover:underline"
-              >
+              <Link href="#" className="text-brand-primary text-sm font-semibold hover:underline">
                 자세히 보기 →
               </Link>
             </div>
@@ -364,10 +347,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
               <p className="text-gray-600 text-sm mb-4">
                 ChatGPT, Midjourney 등 인기 AI 도구 사용 가이드
               </p>
-              <Link
-                href="#"
-                className="text-brand-primary text-sm font-semibold hover:underline"
-              >
+              <Link href="#" className="text-brand-primary text-sm font-semibold hover:underline">
                 자세히 보기 →
               </Link>
             </div>
@@ -378,12 +358,8 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
       {/* CTA 섹션 */}
       <section className="py-20 bg-brand-primary text-white">
         <div className="container-1200 text-center">
-          <h2 className="text-4xl font-bold mb-6">
-            지금 바로 AI 서비스를 시작하세요
-          </h2>
-          <p className="text-xl mb-8 text-blue-100">
-            전문가와 함께라면 AI가 더 쉽고 빠릅니다
-          </p>
+          <h2 className="text-4xl font-bold mb-6">지금 바로 AI 서비스를 시작하세요</h2>
+          <p className="text-xl mb-8 text-blue-100">전문가와 함께라면 AI가 더 쉽고 빠릅니다</p>
           <div className="max-w-2xl mx-auto">
             <div className="flex gap-4">
               <input

@@ -1,21 +1,16 @@
-// import { redirect } from "next/navigation";
-import { Suspense } from "react";
-import dynamic from "next/dynamic";
-import { createClient } from "@/lib/supabase/server";
-import HeroWithCategories from "@/components/common/HeroWithCategories";
-import AITalentShowcase from "@/components/home/AITalentShowcase";
-import RecommendedServices from "@/components/home/RecommendedServices";
-import PersonalizedServices from "@/components/home/PersonalizedServices";
-import SellerRegistrationGuide from "@/components/home/SellerRegistrationGuide";
-import UserReviews from "@/components/home/UserReviews";
-import { Service } from "@/types";
+import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
+import { createClient } from '@/lib/supabase/server';
+import HeroWithCategories from '@/components/common/HeroWithCategories';
+import AITalentShowcase from '@/components/home/AITalentShowcase';
+import RecommendedServices from '@/components/home/RecommendedServices';
+import PersonalizedServices from '@/components/home/PersonalizedServices';
+import SellerRegistrationGuide from '@/components/home/SellerRegistrationGuide';
+import UserReviews from '@/components/home/UserReviews';
+import { Service } from '@/types';
 
-const RecentVisitedCategories = dynamic(
-  () => import("@/components/home/RecentVisitedCategories"),
-);
-const RecentViewedServices = dynamic(
-  () => import("@/components/home/RecentViewedServices"),
-);
+const RecentVisitedCategories = dynamic(() => import('@/components/home/RecentVisitedCategories'));
+const RecentViewedServices = dynamic(() => import('@/components/home/RecentViewedServices'));
 
 // 캐싱 최적화: 60초마다 재생성
 export const revalidate = 60;
@@ -29,10 +24,7 @@ export default async function HomePage() {
   } = await supabase.auth.getUser();
 
   // AI 카테고리 한 번만 조회 (중복 제거)
-  const { data: aiCategories } = await supabase
-    .from("categories")
-    .select("id")
-    .eq("is_ai", true);
+  const { data: aiCategories } = await supabase.from('categories').select('id').eq('is_ai', true);
 
   const aiCategoryIds = aiCategories?.map((cat) => cat.id) || [];
 
@@ -83,12 +75,8 @@ export default async function HomePage() {
 }
 
 // AI 서비스 섹션 (서버 컴포넌트)
-async function AIServicesSection({
-  aiCategoryIds,
-}: {
-  aiCategoryIds: string[];
-}) {
-  const { createClient, createServiceRoleClient } = await import("@/lib/supabase/server");
+async function AIServicesSection({ aiCategoryIds }: { aiCategoryIds: string[] }) {
+  const { createClient, createServiceRoleClient } = await import('@/lib/supabase/server');
   const supabase = await createClient();
 
   let services: Service[] = [];
@@ -97,16 +85,15 @@ async function AIServicesSection({
     // 광고 서비스 ID 조회 - Service Role 클라이언트 사용하여 RLS 우회
     const serviceRoleClient = createServiceRoleClient();
     const { data: advertisingData } = await serviceRoleClient
-      .from("advertising_subscriptions")
-      .select("service_id")
-      .eq("status", "active");
+      .from('advertising_subscriptions')
+      .select('service_id')
+      .eq('status', 'active');
 
-    const advertisedServiceIds =
-      advertisingData?.map((ad) => ad.service_id) || [];
+    const advertisedServiceIds = advertisingData?.map((ad) => ad.service_id) || [];
 
     // AI 카테고리의 서비스 조회 (JOIN으로 한 번에)
     const { data: aiServices } = await supabase
-      .from("services")
+      .from('services')
       .select(
         `
         id,
@@ -124,21 +111,17 @@ async function AIServicesSection({
           is_verified
         ),
         service_categories!inner(category_id)
-      `,
+      `
       )
-      .in("service_categories.category_id", aiCategoryIds)
-      .eq("status", "active")
-      .order("created_at", { ascending: false })
+      .in('service_categories.category_id', aiCategoryIds)
+      .eq('status', 'active')
+      .order('created_at', { ascending: false })
       .limit(50); // 최적화: 1000 -> 50
 
     if (aiServices && aiServices.length > 0) {
       // 광고 서비스와 일반 서비스 분리
-      const advertisedServices = aiServices.filter((s) =>
-        advertisedServiceIds.includes(s.id),
-      );
-      const regularServices = aiServices.filter(
-        (s) => !advertisedServiceIds.includes(s.id),
-      );
+      const advertisedServices = aiServices.filter((s) => advertisedServiceIds.includes(s.id));
+      const regularServices = aiServices.filter((s) => !advertisedServiceIds.includes(s.id));
 
       // 광고 서비스 랜덤 셔플
       for (let i = advertisedServices.length - 1; i > 0; i--) {
@@ -152,25 +135,19 @@ async function AIServicesSection({
       // 일반 서비스 랜덤 셔플
       for (let i = regularServices.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [regularServices[i], regularServices[j]] = [
-          regularServices[j],
-          regularServices[i],
-        ];
+        [regularServices[i], regularServices[j]] = [regularServices[j], regularServices[i]];
       }
 
       // 광고 서비스(랜덤) + 일반 서비스(랜덤) (상위 15개)
-      const combinedServices = [
-        ...advertisedServices,
-        ...regularServices,
-      ].slice(0, 15);
+      const combinedServices = [...advertisedServices, ...regularServices].slice(0, 15);
 
       // 리뷰 통계 한 번에 조회
       const serviceIds = combinedServices.map((s) => s.id);
       const { data: reviewStats } = await supabase
-        .from("reviews")
-        .select("service_id, rating")
-        .in("service_id", serviceIds)
-        .eq("is_visible", true);
+        .from('reviews')
+        .select('service_id, rating')
+        .in('service_id', serviceIds)
+        .eq('is_visible', true);
 
       // 서비스별 평균 별점 계산
       interface ReviewStat {
@@ -214,7 +191,7 @@ function AIShowcaseSkeleton() {
           <div className="h-5 bg-gray-200 rounded w-64 animate-pulse"></div>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {[...new Array(10)].map((_, i) => (
+          {[...Array(10)].map((_, i) => (
             <div
               key={`trending-skeleton-${i}`}
               className="bg-gray-100 rounded-lg h-64 animate-pulse"
@@ -235,7 +212,7 @@ function RecommendedSkeleton() {
           <div className="h-5 bg-gray-200 rounded w-64 animate-pulse"></div>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {[...new Array(15)].map((_, i) => (
+          {[...Array(15)].map((_, i) => (
             <div
               key={`recommended-skeleton-${i}`}
               className="bg-gray-100 rounded-lg h-64 animate-pulse"
@@ -256,11 +233,11 @@ function PersonalizedSkeleton() {
           <div className="h-5 bg-gray-200 rounded w-80 animate-pulse"></div>
         </div>
         <div className="space-y-10">
-          {[...new Array(3)].map((_, i) => (
+          {[...Array(3)].map((_, i) => (
             <div key={`personalized-category-${i}`}>
               <div className="h-6 bg-gray-200 rounded w-40 mb-4 animate-pulse"></div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {[...new Array(5)].map((_, j) => (
+                {[...Array(5)].map((_, j) => (
                   <div
                     key={`personalized-skeleton-${i}-${j}`}
                     className="bg-gray-100 rounded-lg h-64 animate-pulse"
@@ -284,11 +261,8 @@ function ReviewsSkeleton() {
           <div className="h-6 bg-gray-200 rounded w-96 mx-auto animate-pulse"></div>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...new Array(6)].map((_, i) => (
-            <div
-              key={`review-skeleton-${i}`}
-              className="bg-gray-50 rounded-xl p-6"
-            >
+          {[...Array(6)].map((_, i) => (
+            <div key={`review-skeleton-${i}`} className="bg-gray-50 rounded-xl p-6">
               <div className="h-6 bg-gray-200 rounded w-32 mb-4 animate-pulse"></div>
               <div className="space-y-2 mb-4">
                 <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
