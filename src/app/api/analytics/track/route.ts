@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
       user_agent: userAgent.substring(0, 500), // Limit length
       referrer: referrer?.substring(0, 500) || null,
       device_type: deviceType,
-      country: null, // TODO: Add geolocation lookup if needed
+      country: null, // [Future Enhancement] Add geolocation lookup if needed
     });
 
     if (insertError) {

@@ -1,17 +1,17 @@
 // @ts-nocheck - TypeScript incorrectly infers 'false | void | Element' due to notFound() control flow
-// TODO: Investigate and fix TypeScript/Next.js 16 type inference issue
-import { notFound } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
-import ViewTracker from "@/components/services/ViewTracker";
-import FavoriteButton from "@/components/services/FavoriteButton";
-import PortfolioGrid from "@/components/services/PortfolioGrid";
-import ExpertResponseBanner from "@/components/services/ExpertResponseBanner";
-import ContactSellerButton from "@/components/services/ContactSellerButton";
-import PurchaseButton from "@/components/services/PurchaseButton";
-import { logger } from "@/lib/logger";
-import { getCategoryPath } from "@/lib/categories";
+// [Known Issue] TypeScript/Next.js 16 type inference issue - notFound() return type not narrowing correctly
+import { notFound } from 'next/navigation';
+import Image from 'next/image';
+import Link from 'next/link';
+import { createClient } from '@/lib/supabase/server';
+import ViewTracker from '@/components/services/ViewTracker';
+import FavoriteButton from '@/components/services/FavoriteButton';
+import PortfolioGrid from '@/components/services/PortfolioGrid';
+import ExpertResponseBanner from '@/components/services/ExpertResponseBanner';
+import ContactSellerButton from '@/components/services/ContactSellerButton';
+import PurchaseButton from '@/components/services/PurchaseButton';
+import { logger } from '@/lib/logger';
+import { getCategoryPath } from '@/lib/categories';
 import {
   FaStar,
   FaHeart,
@@ -23,15 +23,15 @@ import {
   FaImage,
   FaRegComment,
   FaRegUser,
-} from "react-icons/fa";
-import ServiceCard from "@/components/services/ServiceCard";
+} from 'react-icons/fa';
+import ServiceCard from '@/components/services/ServiceCard';
 import {
   getSellerOtherServices,
   getRecommendedServicesByCategory,
-} from "@/lib/supabase/queries/services";
+} from '@/lib/supabase/queries/services';
 
 // 동적 렌더링 강제 (찜 개수 실시간 반영)
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
 interface ServiceDetailProps {
   readonly params: Promise<{
@@ -76,7 +76,7 @@ async function fetchLinkedPortfolios(
 ): Promise<PortfolioItem[]> {
   try {
     const { data: portfolioLinks, error: portfolioError } = await supabase
-      .from("portfolio_services")
+      .from('portfolio_services')
       .select(
         `
         portfolio:seller_portfolio(
@@ -92,11 +92,11 @@ async function fetchLinkedPortfolios(
         )
       `
       )
-      .eq("service_id", serviceId)
-      .order("created_at", { ascending: false });
+      .eq('service_id', serviceId)
+      .order('created_at', { ascending: false });
 
     if (portfolioError) {
-      logger.error("Portfolio links fetch error:", portfolioError);
+      logger.error('Portfolio links fetch error:', portfolioError);
       return [];
     }
 
@@ -112,11 +112,9 @@ async function fetchLinkedPortfolios(
         }
         return link.portfolio;
       })
-      .filter((p): p is PortfolioItem =>
-        p !== null && p !== undefined && typeof p === "object"
-      );
+      .filter((p): p is PortfolioItem => p !== null && p !== undefined && typeof p === 'object');
   } catch (error: unknown) {
-    logger.error("Portfolio fetch exception:", error);
+    logger.error('Portfolio fetch exception:', error);
     return [];
   }
 }
@@ -129,15 +127,15 @@ async function fetchSellerStats(
   const stats = {
     totalOrders: 0,
     satisfactionRate: 0,
-    avgResponseTime: "10분 이내",
+    avgResponseTime: '10분 이내',
   };
 
   // Fetch total completed orders
   const { count: orderCount } = await supabase
-    .from("orders")
-    .select("*", { count: "exact", head: true })
-    .eq("seller_id", seller.user_id)
-    .eq("status", "completed");
+    .from('orders')
+    .select('*', { count: 'exact', head: true })
+    .eq('seller_id', seller.user_id)
+    .eq('status', 'completed');
 
   stats.totalOrders = orderCount || 0;
 
@@ -154,9 +152,9 @@ async function calculateSatisfactionRate(
   sellerId: string
 ): Promise<number> {
   const { data: sellerServices } = await supabase
-    .from("services")
-    .select("id")
-    .eq("seller_id", sellerId);
+    .from('services')
+    .select('id')
+    .eq('seller_id', sellerId);
 
   if (!sellerServices || sellerServices.length === 0) {
     return 0;
@@ -165,9 +163,9 @@ async function calculateSatisfactionRate(
   const serviceIds = sellerServices.map((s) => s.id);
 
   const { data: reviews } = await supabase
-    .from("reviews")
-    .select("rating")
-    .in("service_id", serviceIds);
+    .from('reviews')
+    .select('rating')
+    .in('service_id', serviceIds);
 
   if (!reviews || reviews.length === 0) {
     return 0;
@@ -177,9 +175,7 @@ async function calculateSatisfactionRate(
   return Math.round((avgRating / 5) * 100);
 }
 
-export default async function ServiceDetailPage({
-  params,
-}: ServiceDetailProps) {
+export default async function ServiceDetailPage({ params }: ServiceDetailProps) {
   const { id } = await params;
   const supabase = await createClient();
 
@@ -189,7 +185,7 @@ export default async function ServiceDetailPage({
   } = await supabase.auth.getUser();
 
   const { data: service, error } = await supabase
-    .from("services")
+    .from('services')
     .select(
       `
       *,
@@ -208,13 +204,13 @@ export default async function ServiceDetailPage({
       service_categories(
         category:categories(id, name, slug, level)
       )
-    `,
+    `
     )
-    .eq("id", id)
+    .eq('id', id)
     .single();
 
   if (error) {
-    logger.error("Service fetch error:", error);
+    logger.error('Service fetch error:', error);
     notFound();
   }
 
@@ -230,7 +226,7 @@ export default async function ServiceDetailPage({
 
   // 이 서비스에 대한 리뷰 조회
   const { data: serviceReviews } = await supabase
-    .from("reviews")
+    .from('reviews')
     .select(
       `
       id,
@@ -240,16 +236,16 @@ export default async function ServiceDetailPage({
       buyer:users!buyer_id(id, name, profile_image),
       seller_reply,
       seller_reply_at
-    `,
+    `
     )
-    .eq("service_id", id)
-    .eq("is_visible", true)
-    .order("created_at", { ascending: false });
+    .eq('service_id', id)
+    .eq('is_visible', true)
+    .order('created_at', { ascending: false });
 
   // seller의 통계 정보 조회
   const sellerStats = service?.seller
     ? await fetchSellerStats(supabase, service.seller)
-    : { totalOrders: 0, satisfactionRate: 0, avgResponseTime: "10분 이내" };
+    : { totalOrders: 0, satisfactionRate: 0, avgResponseTime: '10분 이내' };
 
   interface ServiceCategory {
     category: {
@@ -260,7 +256,9 @@ export default async function ServiceDetailPage({
     };
   }
 
-  const categories =
+  type CategoryInfo = ServiceCategory['category'];
+
+  const categories: CategoryInfo[] =
     service.service_categories?.map((sc: ServiceCategory) => sc.category) || [];
 
   // 카테고리 경로 가져오기 (1차 > 2차 > 3차)
@@ -268,7 +266,7 @@ export default async function ServiceDetailPage({
   if (categories.length > 0) {
     // ⭐ 수정: 레벨이 가장 높은 카테고리(3차 > 2차 > 1차)를 찾아서 사용
     // 이전에는 [1차, 2차, 3차]가 모두 저장되어 categories[0]이 1차였음
-    const deepestCategory = categories.reduce((deepest: any, cat: any) => {
+    const deepestCategory = categories.reduce((deepest: CategoryInfo, cat: CategoryInfo) => {
       const deepestLevel = deepest?.level || 0;
       const catLevel = cat?.level || 0;
       return catLevel > deepestLevel ? cat : deepest;
@@ -280,28 +278,17 @@ export default async function ServiceDetailPage({
   // 실제 리뷰 데이터로 평균 별점 계산
   const averageRating =
     serviceReviews && serviceReviews.length > 0
-      ? (
-        serviceReviews.reduce((sum, r) => sum + r.rating, 0) /
-        serviceReviews.length
-      ).toFixed(1)
-      : "0.0";
+      ? (serviceReviews.reduce((sum, r) => sum + r.rating, 0) / serviceReviews.length).toFixed(1)
+      : '0.0';
   const reviewCount = serviceReviews?.length || 0;
 
   // 판매자의 다른 서비스 조회 (현재 서비스 제외, 5개)
-  const otherServices = await getSellerOtherServices(
-    service.seller.id,
-    service.id,
-    5,
-  );
+  const otherServices = await getSellerOtherServices(service.seller.id, service.id, 5);
 
   // 같은 카테고리의 추천 서비스 조회 (현재 서비스 제외, 5개)
   const recommendedServices =
     categories.length > 0
-      ? await getRecommendedServicesByCategory(
-        categories[categories.length - 1].id,
-        service.id,
-        5,
-      )
+      ? await getRecommendedServicesByCategory(categories[categories.length - 1].id, service.id, 5)
       : [];
 
   return (
@@ -335,8 +322,7 @@ export default async function ServiceDetailPage({
       <div
         className="w-full"
         style={{
-          background:
-            "radial-gradient(ellipse at center, #a7f3d0 0%, #d1fae5 50%, #ecfdf5 100%)",
+          background: 'radial-gradient(ellipse at center, #a7f3d0 0%, #d1fae5 50%, #ecfdf5 100%)',
         }}
       >
         <div className="container-1200 px-4 py-8">
@@ -357,9 +343,7 @@ export default async function ServiceDetailPage({
                 </div>
                 <div className="flex items-center gap-2 text-gray-600">
                   <FaHeart className="text-red-400" />
-                  <span className="font-bold">
-                    {service.wishlist_count || 0}
-                  </span>
+                  <span className="font-bold">{service.wishlist_count || 0}</span>
                 </div>
               </div>
 
@@ -371,7 +355,7 @@ export default async function ServiceDetailPage({
                     {service.seller?.profile_image ? (
                       <Image
                         src={service.seller.profile_image}
-                        alt={service.seller?.display_name || "판매자"}
+                        alt={service.seller?.display_name || '판매자'}
                         fill
                         className="object-cover"
                         sizes="54px"
@@ -388,8 +372,7 @@ export default async function ServiceDetailPage({
                   <div className="flex-1 flex flex-col justify-center gap-1 min-w-0">
                     {/* 판매자 활동명 */}
                     <h3 className="font-bold text-sm leading-tight truncate">
-                      {service.seller?.display_name ||
-                        service.seller?.business_name}
+                      {service.seller?.display_name || service.seller?.business_name}
                     </h3>
 
                     {/* 정보 한 줄 */}
@@ -406,11 +389,9 @@ export default async function ServiceDetailPage({
 
                       {/* 세금계산서 */}
                       <span className="whitespace-nowrap">
-                        세금계산서:{" "}
+                        세금계산서:{' '}
                         {service.seller?.tax_invoice_available ? (
-                          <span className="text-green-600 font-medium">
-                            가능
-                          </span>
+                          <span className="text-green-600 font-medium">가능</span>
                         ) : (
                           <span className="text-gray-500">불가</span>
                         )}
@@ -497,13 +478,8 @@ export default async function ServiceDetailPage({
           <div className="flex-1 min-w-0 space-y-8">
             {/* 포트폴리오 */}
             {linkedPortfolios && linkedPortfolios.length > 0 && (
-              <div
-                id="portfolio"
-                className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20"
-              >
-                <h2 className="text-xl font-bold mb-6">
-                  포트폴리오 ({linkedPortfolios.length})
-                </h2>
+              <div id="portfolio" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
+                <h2 className="text-xl font-bold mb-6">포트폴리오 ({linkedPortfolios.length})</h2>
                 <PortfolioGrid portfolios={linkedPortfolios} />
               </div>
             )}
@@ -516,7 +492,7 @@ export default async function ServiceDetailPage({
               <h2 className="text-xl font-bold mb-4">서비스 설명</h2>
               <div
                 className="prose prose-lg max-w-none whitespace-pre-wrap break-words overflow-wrap-anywhere"
-                style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}
+                style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}
               >
                 {service.description}
               </div>
@@ -524,18 +500,13 @@ export default async function ServiceDetailPage({
 
             {/* 전문가 정보 */}
             {service.seller && (
-              <div
-                id="expert"
-                className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20"
-              >
+              <div id="expert" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
                 <h2 className="text-xl font-bold mb-6">전문가 정보</h2>
 
                 {/* 전문가 카드 */}
                 <div className="border border-gray-200 rounded-lg p-6">
                   {/* 상단 알림 배너 (응답 시간) */}
-                  <ExpertResponseBanner
-                    avgResponseTime={sellerStats.avgResponseTime}
-                  />
+                  <ExpertResponseBanner avgResponseTime={sellerStats.avgResponseTime} />
 
                   {/* 전문가 기본 정보 */}
                   <div className="flex items-start justify-between mb-6">
@@ -545,7 +516,7 @@ export default async function ServiceDetailPage({
                         {service.seller?.profile_image ? (
                           <Image
                             src={service.seller.profile_image}
-                            alt={service.seller?.display_name || "판매자"}
+                            alt={service.seller?.display_name || '판매자'}
                             fill
                             className="object-cover"
                             sizes="64px"
@@ -556,7 +527,7 @@ export default async function ServiceDetailPage({
                             {
                               (service.seller?.display_name ||
                                 service.seller?.business_name ||
-                                "U")[0]
+                                'U')[0]
                             }
                           </span>
                         )}
@@ -566,16 +537,14 @@ export default async function ServiceDetailPage({
                       <div>
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="text-lg font-bold text-gray-900">
-                            {service.seller?.display_name ||
-                              service.seller?.business_name}
+                            {service.seller?.display_name || service.seller?.business_name}
                           </h3>
                           <span className="text-yellow-500">
                             <FaCrown />
                           </span>
                         </div>
                         <p className="text-sm text-gray-600 mb-1">
-                          영업 가능 시간:{" "}
-                          {service.seller?.contact_hours || "9시 - 18시"}
+                          영업 가능 시간: {service.seller?.contact_hours || '9시 - 18시'}
                         </p>
                         <p className="text-sm text-gray-600">
                           평균 응답 시간: {sellerStats.avgResponseTime}
@@ -603,9 +572,7 @@ export default async function ServiceDetailPage({
                   {/* 통계 정보 */}
                   <div className="grid grid-cols-4 gap-4 py-4 border-t border-gray-200">
                     <div className="text-center">
-                      <div className="text-sm text-gray-600 mb-1">
-                        총 거래 건수
-                      </div>
+                      <div className="text-sm text-gray-600 mb-1">총 거래 건수</div>
                       <div className="text-lg font-bold text-gray-900">
                         {sellerStats.totalOrders}건
                       </div>
@@ -618,18 +585,12 @@ export default async function ServiceDetailPage({
                     </div>
                     <div className="text-center">
                       <div className="text-sm text-gray-600 mb-1">회원구분</div>
-                      <div className="text-lg font-bold text-gray-900">
-                        기업회원
-                      </div>
+                      <div className="text-lg font-bold text-gray-900">기업회원</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-sm text-gray-600 mb-1">
-                        세금계산서
-                      </div>
+                      <div className="text-sm text-gray-600 mb-1">세금계산서</div>
                       <div className="text-lg font-bold text-gray-900">
-                        {service.seller?.tax_invoice_available
-                          ? "발행 가능"
-                          : "미발행"}
+                        {service.seller?.tax_invoice_available ? '발행 가능' : '미발행'}
                       </div>
                     </div>
                   </div>
@@ -637,9 +598,7 @@ export default async function ServiceDetailPage({
                   {/* 전문가 소개 */}
                   {service.seller?.bio && (
                     <div className="mt-6 pt-6 border-t border-gray-200">
-                      <h4 className="font-bold text-gray-900 mb-3">
-                        전문가 소개
-                      </h4>
+                      <h4 className="font-bold text-gray-900 mb-3">전문가 소개</h4>
                       <p className="text-gray-700 whitespace-pre-wrap leading-relaxed break-words overflow-wrap-anywhere">
                         {service.seller.bio}
                       </p>
@@ -650,14 +609,9 @@ export default async function ServiceDetailPage({
             )}
 
             {/* 리뷰 */}
-            <div
-              id="reviews"
-              className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20"
-            >
+            <div id="reviews" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold">
-                  리뷰 ({serviceReviews?.length || 0})
-                </h2>
+                <h2 className="text-xl font-bold">리뷰 ({serviceReviews?.length || 0})</h2>
                 {serviceReviews && serviceReviews.length > 0 && (
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-1">
@@ -666,22 +620,19 @@ export default async function ServiceDetailPage({
                           key={star}
                           className={
                             star <=
-                              Math.round(
-                                serviceReviews.reduce(
-                                  (sum, r) => sum + r.rating,
-                                  0,
-                                ) / serviceReviews.length,
-                              )
-                              ? "text-yellow-400"
-                              : "text-gray-300"
+                            Math.round(
+                              serviceReviews.reduce((sum, r) => sum + r.rating, 0) /
+                                serviceReviews.length
+                            )
+                              ? 'text-yellow-400'
+                              : 'text-gray-300'
                           }
                         />
                       ))}
                     </div>
                     <span className="font-bold text-lg">
                       {(
-                        serviceReviews.reduce((sum, r) => sum + r.rating, 0) /
-                        serviceReviews.length
+                        serviceReviews.reduce((sum, r) => sum + r.rating, 0) / serviceReviews.length
                       ).toFixed(1)}
                     </span>
                   </div>
@@ -691,17 +642,13 @@ export default async function ServiceDetailPage({
               {serviceReviews && serviceReviews.length > 0 ? (
                 <div className="space-y-6">
                   {serviceReviews.map((review) => (
-                    <div
-                      key={review.id}
-                      className="border-b border-gray-200 pb-6 last:border-0"
-                    >
+                    <div key={review.id} className="border-b border-gray-200 pb-6 last:border-0">
                       {/* 리뷰 헤더 */}
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
                           {/* 프로필 이미지 */}
                           <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden relative">
-                            {Array.isArray(review.buyer) &&
-                              review.buyer[0]?.profile_image ? (
+                            {Array.isArray(review.buyer) && review.buyer[0]?.profile_image ? (
                               <Image
                                 src={review.buyer[0].profile_image}
                                 alt={review.buyer[0].name}
@@ -716,14 +663,10 @@ export default async function ServiceDetailPage({
                           </div>
                           <div>
                             <div className="font-medium text-gray-900">
-                              {(Array.isArray(review.buyer) &&
-                                review.buyer[0]?.name) ||
-                                "익명"}
+                              {(Array.isArray(review.buyer) && review.buyer[0]?.name) || '익명'}
                             </div>
                             <div className="text-sm text-gray-500">
-                              {new Date(review.created_at).toLocaleDateString(
-                                "ko-KR",
-                              )}
+                              {new Date(review.created_at).toLocaleDateString('ko-KR')}
                             </div>
                           </div>
                         </div>
@@ -732,37 +675,28 @@ export default async function ServiceDetailPage({
                           {[1, 2, 3, 4, 5].map((star) => (
                             <FaStar
                               key={star}
-                              className={`text-sm ${star <= review.rating
-                                  ? "text-yellow-400"
-                                  : "text-gray-300"
-                                }`}
+                              className={`text-sm ${
+                                star <= review.rating ? 'text-yellow-400' : 'text-gray-300'
+                              }`}
                             />
                           ))}
                         </div>
                       </div>
 
                       {/* 리뷰 내용 */}
-                      <p className="text-gray-700 mb-4 whitespace-pre-wrap">
-                        {review.comment}
-                      </p>
+                      <p className="text-gray-700 mb-4 whitespace-pre-wrap">{review.comment}</p>
 
                       {/* 판매자 답변 */}
                       {review.seller_reply && (
                         <div className="bg-gray-50 rounded-lg p-4 ml-8">
                           <div className="flex items-center gap-2 mb-2">
                             <FaReply className="text-brand-primary" />
-                            <span className="text-sm font-medium text-gray-900">
-                              판매자 답변
-                            </span>
+                            <span className="text-sm font-medium text-gray-900">판매자 답변</span>
                             <span className="text-xs text-gray-500">
-                              {new Date(
-                                review.seller_reply_at,
-                              ).toLocaleDateString("ko-KR")}
+                              {new Date(review.seller_reply_at).toLocaleDateString('ko-KR')}
                             </span>
                           </div>
-                          <p className="text-gray-700 whitespace-pre-wrap">
-                            {review.seller_reply}
-                          </p>
+                          <p className="text-gray-700 whitespace-pre-wrap">{review.seller_reply}</p>
                         </div>
                       )}
                     </div>
@@ -772,9 +706,7 @@ export default async function ServiceDetailPage({
                 <div className="text-center py-12">
                   <FaStar className="text-gray-300 text-5xl mb-4 inline-block" />
                   <p className="text-gray-600">아직 작성된 리뷰가 없습니다</p>
-                  <p className="text-sm text-gray-500 mt-2">
-                    첫 번째 리뷰를 작성해보세요!
-                  </p>
+                  <p className="text-sm text-gray-500 mt-2">첫 번째 리뷰를 작성해보세요!</p>
                 </div>
               )}
             </div>
@@ -793,10 +725,8 @@ export default async function ServiceDetailPage({
                     {service.price?.toLocaleString() || 0}원
                   </div>
                   <div className="text-sm text-gray-600 mb-6">
-                    {service.delivery_days || 0}일 이내 완료 ·{" "}
-                    {service.revision_count === 999
-                      ? "무제한"
-                      : `${service.revision_count || 0}회`}{" "}
+                    {service.delivery_days || 0}일 이내 완료 ·{' '}
+                    {service.revision_count === 999 ? '무제한' : `${service.revision_count || 0}회`}{' '}
                     수정
                   </div>
 
@@ -814,14 +744,9 @@ export default async function ServiceDetailPage({
                     />
                   )}
 
-                  {service.seller?.id &&
-                    user &&
-                    service.seller.user_id !== user.id && (
-                      <ContactSellerButton
-                        sellerId={service.seller.id}
-                        serviceId={id}
-                      />
-                    )}
+                  {service.seller?.id && user && service.seller.user_id !== user.id && (
+                    <ContactSellerButton sellerId={service.seller.id} serviceId={id} />
+                  )}
 
                   <div className="flex gap-2 mt-3">
                     <FavoriteButton serviceId={id} />

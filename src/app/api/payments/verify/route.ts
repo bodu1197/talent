@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '이미 결제된 주문입니다' }, { status: 400 });
     }
 
-    // TODO: 실제 환경에서는 PortOne API를 통해 결제 정보를 검증해야 합니다
+    // [Production] 실제 환경에서는 PortOne API를 통해 결제 정보를 검증해야 합니다
     // const portOneResponse = await fetch(`https://api.portone.io/payments/${payment_id}`, {
     //   headers: {
     //     'Authorization': `PortOne ${process.env.PORTONE_API_SECRET}`

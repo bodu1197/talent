@@ -84,11 +84,7 @@ export async function POST(request: NextRequest) {
       Date.now() + (delivery_days || service.delivery_days || 7) * 24 * 60 * 60 * 1000
     );
 
-    const {
-      data: order,
-      error: orderError,
-      isExisting: _isExisting,
-    } = await createOrderWithIdempotency(
+    const { data: order, error: orderError } = await createOrderWithIdempotency(
       supabase,
       {
         buyer_id: user.id,

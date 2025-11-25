@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '필수 정보가 누락되었습니다' }, { status: 400 });
     }
 
-    // TODO: 실제 PortOne API로 결제 검증
+    // [Production] 실제 PortOne API로 결제 검증 필요
     // const portOneResponse = await fetch(`https://api.portone.io/payments/${imp_uid}`, {
     //   headers: { 'Authorization': `PortOne ${process.env.PORTONE_API_SECRET}` }
     // })

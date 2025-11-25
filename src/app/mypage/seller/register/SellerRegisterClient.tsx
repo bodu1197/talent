@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
-import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import Link from "next/link";
+import Image from 'next/image';
+import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
+import Link from 'next/link';
 import {
   FaArrowLeft,
   FaShieldAlt,
@@ -15,8 +15,8 @@ import {
   FaCamera,
   FaCheck,
   FaSpinner,
-} from "react-icons/fa";
-import toast from "react-hot-toast";
+} from 'react-icons/fa';
+import toast from 'react-hot-toast';
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -58,15 +58,12 @@ interface Props {
   } | null;
 }
 
-export default function SellerRegisterClient({
-  userId,
-  initialProfile,
-}: Props) {
+export default function SellerRegisterClient({ userId, initialProfile }: Props) {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState<Step>(1);
   const [loading, setLoading] = useState(false);
   const [profilePreview, setProfilePreview] = useState<string | null>(
-    initialProfile?.profile_image || null,
+    initialProfile?.profile_image || null
   );
   const [isVerified, setIsVerified] = useState(false);
   const popupCheckIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -81,22 +78,22 @@ export default function SellerRegisterClient({
   }, []);
 
   const [formData, setFormData] = useState<SellerFormData>({
-    realName: "",
-    phone: "",
-    accountNumber: "",
-    accountHolder: "",
-    bankName: "",
-    businessNumber: "",
+    realName: '',
+    phone: '',
+    accountNumber: '',
+    accountHolder: '',
+    bankName: '',
+    businessNumber: '',
     isBusiness: false,
-    displayName: initialProfile?.name || "",
+    displayName: initialProfile?.name || '',
     profileImage: null,
-    bio: "",
-    publicPhone: "",
+    bio: '',
+    publicPhone: '',
     showPhone: false,
-    kakaoId: "",
-    kakaoOpenChat: "",
-    whatsapp: "",
-    website: "",
+    kakaoId: '',
+    kakaoOpenChat: '',
+    whatsapp: '',
+    website: '',
     preferredContact: [],
     termsAgree: false,
     commissionAgree: false,
@@ -107,11 +104,11 @@ export default function SellerRegisterClient({
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        toast.error("파일 크기는 5MB를 초과할 수 없습니다.");
+        toast.error('파일 크기는 5MB를 초과할 수 없습니다.');
         return;
       }
-      if (!file.type.startsWith("image/")) {
-        toast.error("이미지 파일만 업로드 가능합니다.");
+      if (!file.type.startsWith('image/')) {
+        toast.error('이미지 파일만 업로드 가능합니다.');
         return;
       }
       setFormData({ ...formData, profileImage: file });
@@ -149,9 +146,9 @@ export default function SellerRegisterClient({
     // 실제 환경에서는 /api/nice/request 엔드포인트로 인증 요청
     // 여기서는 시뮬레이션
     const popup = globalThis.open(
-      "/api/nice/verify",
-      "niceVerification",
-      `width=${width},height=${height},left=${left},top=${top},scrollbars=yes`,
+      '/api/nice/verify',
+      'niceVerification',
+      `width=${width},height=${height},left=${left},top=${top},scrollbars=yes`
     );
 
     // 팝업에서 메시지 받기 (본인인증 완료 시)
@@ -159,8 +156,8 @@ export default function SellerRegisterClient({
       // 보안을 위해 origin 체크 필요
       if (event.origin !== globalThis.location.origin) return;
 
-      if (event.data.type === "NICE_VERIFICATION_SUCCESS") {
-        const { name, phone, _birthDate, _gender } = event.data.data;
+      if (event.data.type === 'NICE_VERIFICATION_SUCCESS') {
+        const { name, phone } = event.data.data;
 
         setFormData({
           ...formData,
@@ -169,15 +166,15 @@ export default function SellerRegisterClient({
         });
         setIsVerified(true);
 
-        toast.success("본인인증이 완료되었습니다.");
-        globalThis.removeEventListener("message", handleMessage);
-      } else if (event.data.type === "NICE_VERIFICATION_FAILED") {
-        toast.error("본인인증에 실패했습니다. 다시 시도해주세요.");
-        globalThis.removeEventListener("message", handleMessage);
+        toast.success('본인인증이 완료되었습니다.');
+        globalThis.removeEventListener('message', handleMessage);
+      } else if (event.data.type === 'NICE_VERIFICATION_FAILED') {
+        toast.error('본인인증에 실패했습니다. 다시 시도해주세요.');
+        globalThis.removeEventListener('message', handleMessage);
       }
     };
 
-    globalThis.addEventListener("message", handleMessage);
+    globalThis.addEventListener('message', handleMessage);
 
     // 팝업이 닫혔는지 체크
     // Clear existing interval if any
@@ -192,7 +189,7 @@ export default function SellerRegisterClient({
           clearInterval(popupCheckIntervalRef.current);
           popupCheckIntervalRef.current = null;
         }
-        globalThis.removeEventListener("message", handleMessage);
+        globalThis.removeEventListener('message', handleMessage);
       }
     }, 500);
   };
@@ -204,52 +201,50 @@ export default function SellerRegisterClient({
       const supabase = createClient();
 
       // 1. 프로필 이미지 업로드
-      let profileImageUrl = initialProfile?.profile_image || "";
+      let profileImageUrl = initialProfile?.profile_image || '';
 
       // 이미지가 제거된 경우 (preview가 없음)
       if (!profilePreview) {
-        profileImageUrl = "";
+        profileImageUrl = '';
       }
 
       // 새 이미지가 업로드된 경우
       if (formData.profileImage) {
-        const fileExt = formData.profileImage.name.split(".").pop();
+        const fileExt = formData.profileImage.name.split('.').pop();
         const fileName = `${userId}-profile.${fileExt}`;
         const filePath = `seller-profiles/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
-          .from("profiles")
+          .from('profiles')
           .upload(filePath, formData.profileImage, { upsert: true });
 
         if (uploadError) {
-          toast.error(
-            "프로필 이미지 업로드에 실패했습니다: " + uploadError.message,
-          );
+          toast.error('프로필 이미지 업로드에 실패했습니다: ' + uploadError.message);
           setLoading(false);
           return;
         }
 
         const {
           data: { publicUrl },
-        } = supabase.storage.from("profiles").getPublicUrl(filePath);
+        } = supabase.storage.from('profiles').getPublicUrl(filePath);
 
         profileImageUrl = publicUrl;
       }
 
       // 2. profiles 테이블 업데이트 (display_name, profile_image, bio)
       const { error: profileError } = await supabase
-        .from("profiles")
+        .from('profiles')
         .update({
           name: formData.displayName,
           profile_image: profileImageUrl || null,
           bio: formData.bio,
           updated_at: new Date().toISOString(),
         })
-        .eq("user_id", userId);
+        .eq('user_id', userId);
 
       if (profileError) {
         toast.error(
-          `프로필 업데이트에 실패했습니다.\n\n에러: ${profileError.message}\n코드: ${profileError.code}`,
+          `프로필 업데이트에 실패했습니다.\n\n에러: ${profileError.message}\n코드: ${profileError.code}`
         );
         setLoading(false);
         return;
@@ -274,32 +269,29 @@ export default function SellerRegisterClient({
         is_business: formData.isBusiness,
         certificates: null,
         experience: null,
-        status: "pending_review",
+        status: 'pending_review',
       };
 
       const { error: sellerError } = await supabase
-        .from("sellers")
+        .from('sellers')
         .insert(insertData)
         .select()
         .single();
 
       if (sellerError) {
         toast.error(
-          `판매자 등록에 실패했습니다.\n\n에러: ${sellerError.message}\n코드: ${sellerError.code}\n\n관리자에게 문의해주세요.`,
+          `판매자 등록에 실패했습니다.\n\n에러: ${sellerError.message}\n코드: ${sellerError.code}\n\n관리자에게 문의해주세요.`
         );
         setLoading(false);
         return;
       }
 
-      toast.success("판매자로 등록되었습니다! 서비스를 등록하세요.");
+      toast.success('판매자로 등록되었습니다! 서비스를 등록하세요.');
 
-      router.push("/mypage/seller/dashboard");
+      router.push('/mypage/seller/dashboard');
       router.refresh();
     } catch (error: unknown) {
-      const message =
-        error instanceof Error
-          ? error.message
-          : "알 수 없는 오류가 발생했습니다";
+      const message = error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다';
       toast.error(`판매자 등록 중 오류가 발생했습니다.\n\n${message}`);
       setLoading(false);
     } finally {
@@ -323,26 +315,16 @@ export default function SellerRegisterClient({
     switch (currentStep) {
       case 1:
         return (
-          isVerified &&
-          !!formData.accountNumber &&
-          !!formData.accountHolder &&
-          !!formData.bankName
+          isVerified && !!formData.accountNumber && !!formData.accountHolder && !!formData.bankName
         );
       case 2: {
         // 프로필 이미지: 필수가 아님 (제거 가능)
-        return (
-          !!formData.displayName &&
-          formData.bio.length >= 50
-        );
+        return !!formData.displayName && formData.bio.length >= 50;
       }
       case 3:
         return true; // 연락처는 선택사항
       case 4:
-        return (
-          formData.termsAgree &&
-          formData.commissionAgree &&
-          formData.refundAgree
-        );
+        return formData.termsAgree && formData.commissionAgree && formData.refundAgree;
       default:
         return false;
     }
@@ -376,17 +358,19 @@ export default function SellerRegisterClient({
             {[1, 2, 3, 4].map((step) => (
               <div key={step} className="flex items-center flex-1">
                 <div
-                  className={`flex items-center justify-center w-10 h-10 rounded-full font-bold ${currentStep >= step
-                    ? "bg-brand-primary text-white"
-                    : "bg-gray-200 text-gray-500"
-                    }`}
+                  className={`flex items-center justify-center w-10 h-10 rounded-full font-bold ${
+                    currentStep >= step
+                      ? 'bg-brand-primary text-white'
+                      : 'bg-gray-200 text-gray-500'
+                  }`}
                 >
                   {step}
                 </div>
                 {step < 4 && (
                   <div
-                    className={`flex-1 h-1 mx-2 ${currentStep > step ? "bg-brand-primary" : "bg-gray-200"
-                      }`}
+                    className={`flex-1 h-1 mx-2 ${
+                      currentStep > step ? 'bg-brand-primary' : 'bg-gray-200'
+                    }`}
                   ></div>
                 )}
               </div>
@@ -394,38 +378,22 @@ export default function SellerRegisterClient({
           </div>
           <div className="flex justify-between mt-2 text-sm">
             <span
-              className={
-                currentStep === 1
-                  ? "text-brand-primary font-medium"
-                  : "text-gray-500"
-              }
+              className={currentStep === 1 ? 'text-brand-primary font-medium' : 'text-gray-500'}
             >
               신원인증
             </span>
             <span
-              className={
-                currentStep === 2
-                  ? "text-brand-primary font-medium"
-                  : "text-gray-500"
-              }
+              className={currentStep === 2 ? 'text-brand-primary font-medium' : 'text-gray-500'}
             >
               프로필
             </span>
             <span
-              className={
-                currentStep === 3
-                  ? "text-brand-primary font-medium"
-                  : "text-gray-500"
-              }
+              className={currentStep === 3 ? 'text-brand-primary font-medium' : 'text-gray-500'}
             >
               연락처
             </span>
             <span
-              className={
-                currentStep === 4
-                  ? "text-brand-primary font-medium"
-                  : "text-gray-500"
-              }
+              className={currentStep === 4 ? 'text-brand-primary font-medium' : 'text-gray-500'}
             >
               약관동의
             </span>
@@ -444,33 +412,30 @@ export default function SellerRegisterClient({
                   <div className="flex items-start gap-3">
                     <FaInfoCircle className="text-blue-500 mt-1" />
                     <div>
-                      <p className="text-sm font-medium text-blue-900">
-                        본인인증 안내
-                      </p>
+                      <p className="text-sm font-medium text-blue-900">본인인증 안내</p>
                       <p className="text-sm text-blue-700 mt-1">
-                        NICE 평가정보를 통한 휴대폰 본인인증이 필요합니다. 인증
-                        완료 시 실명과 휴대폰 번호가 자동으로 입력됩니다.
+                        NICE 평가정보를 통한 휴대폰 본인인증이 필요합니다. 인증 완료 시 실명과
+                        휴대폰 번호가 자동으로 입력됩니다.
                       </p>
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <div className="block text-sm font-medium text-gray-700 mb-2">
-                    본인인증 *
-                  </div>
+                  <div className="block text-sm font-medium text-gray-700 mb-2">본인인증 *</div>
                   <button
                     type="button"
                     onClick={handleNiceVerification}
                     disabled={isVerified}
                     aria-label="NICE 휴대폰 본인인증"
-                    className={`w-full px-6 py-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${isVerified
-                      ? "bg-green-100 text-green-800 cursor-not-allowed"
-                      : "bg-brand-primary text-white hover:bg-[#1a4d8f]"
-                      }`}
+                    className={`w-full px-6 py-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
+                      isVerified
+                        ? 'bg-green-100 text-green-800 cursor-not-allowed'
+                        : 'bg-brand-primary text-white hover:bg-[#1a4d8f]'
+                    }`}
                   >
                     {isVerified ? <FaCheckCircle /> : <FaShieldAlt />}
-                    {isVerified ? "본인인증 완료" : "NICE 휴대폰 본인인증"}
+                    {isVerified ? '본인인증 완료' : 'NICE 휴대폰 본인인증'}
                   </button>
                   {!isVerified && (
                     <p className="text-sm text-gray-500 mt-2">
@@ -484,17 +449,13 @@ export default function SellerRegisterClient({
                     <div className="flex items-start gap-3">
                       <FaCheckCircle className="text-green-600 mt-1" />
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-green-900 mb-2">
-                          인증 완료
-                        </p>
+                        <p className="text-sm font-medium text-green-900 mb-2">인증 완료</p>
                         <div className="space-y-1">
                           <p className="text-sm text-green-800">
-                            <span className="font-medium">이름:</span>{" "}
-                            {formData.realName}
+                            <span className="font-medium">이름:</span> {formData.realName}
                           </p>
                           <p className="text-sm text-green-800">
-                            <span className="font-medium">휴대폰:</span>{" "}
-                            {formData.phone}
+                            <span className="font-medium">휴대폰:</span> {formData.phone}
                           </p>
                         </div>
                       </div>
@@ -503,9 +464,7 @@ export default function SellerRegisterClient({
                 )}
 
                 <div className="border-t pt-4 mt-6">
-                  <h3 className="font-medium text-gray-900 mb-4">
-                    정산 계좌 정보
-                  </h3>
+                  <h3 className="font-medium text-gray-900 mb-4">정산 계좌 정보</h3>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -518,9 +477,7 @@ export default function SellerRegisterClient({
                       <select
                         id="bankName"
                         value={formData.bankName}
-                        onChange={(e) =>
-                          setFormData({ ...formData, bankName: e.target.value })
-                        }
+                        onChange={(e) => setFormData({ ...formData, bankName: e.target.value })}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                         required
                       >
@@ -537,7 +494,10 @@ export default function SellerRegisterClient({
                     </div>
 
                     <div>
-                      <label htmlFor="seller-account-holder" className="block text-sm font-medium text-gray-700 mb-2">
+                      <label
+                        htmlFor="seller-account-holder"
+                        className="block text-sm font-medium text-gray-700 mb-2"
+                      >
                         예금주명 *
                       </label>
                       <input
@@ -558,7 +518,10 @@ export default function SellerRegisterClient({
                   </div>
 
                   <div className="mt-4">
-                    <label htmlFor="seller-account-number" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="seller-account-number"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       계좌번호 *
                     </label>
                     <input
@@ -591,14 +554,15 @@ export default function SellerRegisterClient({
                       }
                       className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
                     />
-                    <span className="text-sm font-medium text-gray-700">
-                      사업자입니다
-                    </span>
+                    <span className="text-sm font-medium text-gray-700">사업자입니다</span>
                   </label>
 
                   {formData.isBusiness && (
                     <div>
-                      <label htmlFor="seller-business-number" className="block text-sm font-medium text-gray-700 mb-2">
+                      <label
+                        htmlFor="seller-business-number"
+                        className="block text-sm font-medium text-gray-700 mb-2"
+                      >
                         사업자 등록번호
                       </label>
                       <input
@@ -629,15 +593,12 @@ export default function SellerRegisterClient({
               </h2>
               <div className="space-y-4">
                 <div>
-                  <div className="block text-sm font-medium text-gray-700 mb-2">
-                    프로필 사진 *
-                  </div>
+                  <div className="block text-sm font-medium text-gray-700 mb-2">프로필 사진 *</div>
                   {initialProfile?.profile_image && !formData.profileImage && (
                     <div className="mb-3 bg-blue-50 border border-blue-200 rounded-lg p-3">
                       <p className="text-sm text-blue-800">
                         <FaInfoCircle className="mr-1 inline" />
-                        현재 회원 프로필 사진이 사용됩니다. 변경하려면 새 사진을
-                        업로드하세요.
+                        현재 회원 프로필 사진이 사용됩니다. 변경하려면 새 사진을 업로드하세요.
                       </p>
                     </div>
                   )}
@@ -674,19 +635,19 @@ export default function SellerRegisterClient({
                           >
                             <FaTimes className="mr-1 inline" />
                             {formData.profileImage && initialProfile?.profile_image
-                              ? "변경 취소"
-                              : "이미지 제거"}
+                              ? '변경 취소'
+                              : '이미지 제거'}
                           </button>
-                          {initialProfile?.profile_image &&
-                            formData.profileImage && (
-                              <p className="text-xs text-gray-500">
-                                기존 이미지로 되돌아갑니다
-                              </p>
-                            )}
+                          {initialProfile?.profile_image && formData.profileImage && (
+                            <p className="text-xs text-gray-500">기존 이미지로 되돌아갑니다</p>
+                          )}
                         </div>
                       </div>
                     ) : (
-                      <label htmlFor="seller-profile-image" className="inline-block px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer">
+                      <label
+                        htmlFor="seller-profile-image"
+                        className="inline-block px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer"
+                      >
                         <input
                           id="seller-profile-image"
                           type="file"
@@ -702,35 +663,35 @@ export default function SellerRegisterClient({
                 </div>
 
                 <div>
-                  <label htmlFor="seller-display-name" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="seller-display-name"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     판매자명 (활동명) *
                   </label>
                   <input
                     id="seller-display-name"
                     type="text"
                     value={formData.displayName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, displayName: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
                     placeholder="예: 디자이너 홍길동"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     required
                   />
-                  <p className="text-sm text-gray-500 mt-1">
-                    구매자에게 보여질 이름입니다
-                  </p>
+                  <p className="text-sm text-gray-500 mt-1">구매자에게 보여질 이름입니다</p>
                 </div>
 
                 <div>
-                  <label htmlFor="seller-bio" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="seller-bio"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     자기소개 * (최소 50자)
                   </label>
                   <textarea
                     id="seller-bio"
                     value={formData.bio}
-                    onChange={(e) =>
-                      setFormData({ ...formData, bio: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                     rows={6}
                     maxLength={300}
                     placeholder="자신의 전문 분야, 경력, 강점 등을 소개해주세요"
@@ -738,7 +699,7 @@ export default function SellerRegisterClient({
                     required
                   ></textarea>
                   <p
-                    className={`text-sm mt-1 ${formData.bio.length < 50 ? "text-red-600" : "text-gray-500"}`}
+                    className={`text-sm mt-1 ${formData.bio.length < 50 ? 'text-red-600' : 'text-gray-500'}`}
                   >
                     {formData.bio.length}/50자
                   </p>
@@ -768,9 +729,7 @@ export default function SellerRegisterClient({
                       }
                       className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
                     />
-                    <span className="text-sm font-medium text-gray-700">
-                      전화번호 공개
-                    </span>
+                    <span className="text-sm font-medium text-gray-700">전화번호 공개</span>
                   </label>
                   {formData.showPhone && (
                     <input
@@ -778,7 +737,7 @@ export default function SellerRegisterClient({
                       type="tel"
                       value={formData.publicPhone}
                       onChange={(e) => {
-                        const value = e.target.value.replace(/[^0-9-]/g, "");
+                        const value = e.target.value.replace(/[^0-9-]/g, '');
                         setFormData({ ...formData, publicPhone: value });
                       }}
                       placeholder="010-1234-5678"
@@ -790,23 +749,27 @@ export default function SellerRegisterClient({
                 </div>
 
                 <div>
-                  <label htmlFor="seller-kakao-id" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="seller-kakao-id"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     카카오톡 ID
                   </label>
                   <input
                     id="seller-kakao-id"
                     type="text"
                     value={formData.kakaoId}
-                    onChange={(e) =>
-                      setFormData({ ...formData, kakaoId: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, kakaoId: e.target.value })}
                     placeholder="kakaotalk_id"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="seller-kakao-openchat" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="seller-kakao-openchat"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     카카오톡 오픈채팅 링크
                   </label>
                   <input
@@ -825,7 +788,10 @@ export default function SellerRegisterClient({
                 </div>
 
                 <div>
-                  <label htmlFor="seller-whatsapp" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="seller-whatsapp"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     WhatsApp
                   </label>
                   <input
@@ -833,7 +799,7 @@ export default function SellerRegisterClient({
                     type="tel"
                     value={formData.whatsapp}
                     onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, "");
+                      const value = e.target.value.replace(/\D/g, '');
                       setFormData({ ...formData, whatsapp: value });
                     }}
                     placeholder="821012345678 (국가번호 포함, 하이픈 없이)"
@@ -846,16 +812,17 @@ export default function SellerRegisterClient({
                 </div>
 
                 <div>
-                  <label htmlFor="seller-website" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="seller-website"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     개인 웹사이트/블로그
                   </label>
                   <input
                     id="seller-website"
                     type="url"
                     value={formData.website}
-                    onChange={(e) =>
-                      setFormData({ ...formData, website: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, website: e.target.value })}
                     placeholder="https://..."
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   />
@@ -866,14 +833,12 @@ export default function SellerRegisterClient({
                     선호하는 연락 수단 (복수 선택 가능)
                   </div>
                   <div className="space-y-2">
-                    {[
-                      "플랫폼 메시지",
-                      "카카오톡",
-                      "WhatsApp",
-                      "이메일",
-                      "전화",
-                    ].map((contact) => (
-                      <label key={contact} htmlFor={`seller-contact-${contact}`} className="flex items-center gap-2">
+                    {['플랫폼 메시지', '카카오톡', 'WhatsApp', '이메일', '전화'].map((contact) => (
+                      <label
+                        key={contact}
+                        htmlFor={`seller-contact-${contact}`}
+                        className="flex items-center gap-2"
+                      >
                         <input
                           id={`seller-contact-${contact}`}
                           type="checkbox"
@@ -893,9 +858,7 @@ export default function SellerRegisterClient({
           {/* 4단계: 약관 동의 */}
           {currentStep === 4 && (
             <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">
-                4단계: 운영 정책 동의
-              </h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">4단계: 운영 정책 동의</h2>
               <div className="space-y-4">
                 <div className="border rounded-lg p-4">
                   <label htmlFor="seller-terms-agree" className="flex items-start gap-3">
@@ -913,9 +876,7 @@ export default function SellerRegisterClient({
                       required
                     />
                     <div className="flex-1">
-                      <span className="font-medium text-gray-900">
-                        판매자 이용약관 동의 (필수)
-                      </span>
+                      <span className="font-medium text-gray-900">판매자 이용약관 동의 (필수)</span>
                       <p className="text-sm text-gray-600 mt-1">
                         판매자로서 준수해야 할 규정과 책임사항에 동의합니다.
                       </p>
@@ -939,9 +900,7 @@ export default function SellerRegisterClient({
                       required
                     />
                     <div className="flex-1">
-                      <span className="font-medium text-gray-900">
-                        수수료 정책 확인 (필수)
-                      </span>
+                      <span className="font-medium text-gray-900">수수료 정책 확인 (필수)</span>
                       <p className="text-sm text-gray-600 mt-1">
                         거래 금액의 20% 플랫폼 수수료가 부과됩니다.
                       </p>
@@ -965,12 +924,9 @@ export default function SellerRegisterClient({
                       required
                     />
                     <div className="flex-1">
-                      <span className="font-medium text-gray-900">
-                        환불 정책 동의 (필수)
-                      </span>
+                      <span className="font-medium text-gray-900">환불 정책 동의 (필수)</span>
                       <p className="text-sm text-gray-600 mt-1">
-                        작업 시작 전 취소 시 전액 환불, 진행 중 환불은 협의를
-                        통해 결정됩니다.
+                        작업 시작 전 취소 시 전액 환불, 진행 중 환불은 협의를 통해 결정됩니다.
                       </p>
                     </div>
                   </label>

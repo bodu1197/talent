@@ -8,8 +8,11 @@ type OrderRow = Tables<'orders'>;
 type ServiceRow = Tables<'services'>;
 type ReviewRow = Tables<'reviews'>;
 
+// Type alias for common user info pattern
+type UserBasicInfo = Pick<UserRow, 'id' | 'name' | 'email'>;
+
 export interface OrderWithRelations extends OrderRow {
-  buyer: Pick<UserRow, 'id' | 'name' | 'email'> | null;
+  buyer: UserBasicInfo | null;
   seller: {
     id: string;
     name: string;
@@ -22,8 +25,8 @@ export interface OrderWithRelations extends OrderRow {
 }
 
 export interface ReviewWithRelations extends ReviewRow {
-  buyer: Pick<UserRow, 'id' | 'name' | 'email'> | null;
-  seller: Pick<UserRow, 'id' | 'name' | 'email'> | null;
+  buyer: UserBasicInfo | null;
+  seller: UserBasicInfo | null;
   service: Pick<ServiceRow, 'id' | 'title'> | null;
 }
 
@@ -34,7 +37,7 @@ export interface ServiceWithSeller extends ServiceRow {
     display_name: string | null;
     profile_image: string | null;
     user_id: string;
-    user?: Pick<UserRow, 'id' | 'name' | 'email'> | null;
+    user?: UserBasicInfo | null;
   } | null;
 }
 
@@ -60,7 +63,7 @@ export interface ServiceRevision {
     display_name: string | null;
     profile_image: string | null;
     user_id: string;
-    user: Pick<UserRow, 'id' | 'name' | 'email'> | null;
+    user: UserBasicInfo | null;
   } | null;
 }
 

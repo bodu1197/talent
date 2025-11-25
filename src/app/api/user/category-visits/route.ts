@@ -31,7 +31,6 @@ export async function POST(request: NextRequest) {
     // 4. 오늘 이미 방문했는지 확인
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const _todayStr = today.toISOString().split('T')[0]; // YYYY-MM-DD
 
     const { data: existing } = await supabase
       .from('category_visits')

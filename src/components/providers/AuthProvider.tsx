@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { createContext, useContext, useEffect, useState, useMemo } from "react";
-import { createClient } from "@/lib/supabase/client";
-import type { User } from "@supabase/supabase-js";
-import { logger } from "@/lib/logger";
-import { registerServiceWorker } from "@/lib/serviceWorker";
+import { createContext, useContext, useEffect, useState, useMemo } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import type { User } from '@supabase/supabase-js';
+import { logger } from '@/lib/logger';
+import { registerServiceWorker } from '@/lib/serviceWorker';
 
 type UserProfile = {
   id: string;
@@ -46,17 +46,17 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
 
   // 프로필 정보 가져오기 (profiles, buyers, sellers 테이블에서 조회)
   const fetchProfile = async (userId: string) => {
-    logger.debug("[AuthProvider] fetchProfile called for user:", { userId });
+    logger.debug('[AuthProvider] fetchProfile called for user:', { userId });
     try {
       // profiles 테이블에서 기본 정보 조회
       const { data: userData, error: userError } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("user_id", userId)
+        .from('profiles')
+        .select('*')
+        .eq('user_id', userId)
         .single();
 
       if (userError) {
-        logger.error("[AuthProvider] Profile fetch error:", userError, {
+        logger.error('[AuthProvider] Profile fetch error:', userError, {
           message: userError.message,
           details: userError.details,
           hint: userError.hint,
@@ -65,8 +65,8 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
         // 에러 발생 시 기본 프로필 설정
         setProfile({
           id: userId,
-          email: "",
-          name: "User",
+          email: '',
+          name: 'User',
           email_verified: false,
           is_active: true,
           created_at: new Date().toISOString(),
@@ -74,32 +74,29 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
           is_buyer: true,
           is_seller: false,
         });
-        logger.warn("[AuthProvider] Set fallback profile due to error");
+        logger.warn('[AuthProvider] Set fallback profile due to error');
         return;
       }
 
       // buyers 테이블 확인
       const { data: buyerData } = await supabase
-        .from("buyers")
-        .select("id")
-        .eq("user_id", userId)
+        .from('buyers')
+        .select('id')
+        .eq('user_id', userId)
         .maybeSingle();
       const isBuyer = !!buyerData;
 
       // sellers 테이블 확인
       const { data: sellerData } = await supabase
-        .from("sellers")
-        .select("id")
-        .eq("user_id", userId)
+        .from('sellers')
+        .select('id')
+        .eq('user_id', userId)
         .maybeSingle();
       const isSeller = !!sellerData;
 
       // profiles 테이블의 user_id를 제외하고 userId를 id로 사용
-      const {
-        user_id: _user_id,
-        id: _profile_id,
-        ...profileFields
-      } = userData as Record<string, unknown>;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Destructuring to exclude user_id and id from profileFields
+      const { user_id, id, ...profileFields } = userData as Record<string, unknown>;
       const profileData = {
         ...profileFields,
         id: userId, // user의 id를 profile id로 사용
@@ -107,19 +104,19 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
         is_seller: isSeller,
       } as UserProfile;
 
-      logger.debug("[AuthProvider] Profile loaded successfully:", {
+      logger.debug('[AuthProvider] Profile loaded successfully:', {
         isBuyer,
         isSeller,
       });
       setProfile(profileData);
     } catch (error: unknown) {
-      logger.error("[AuthProvider] Profile fetch error:", error);
+      logger.error('[AuthProvider] Profile fetch error:', error);
 
       // 에러 시 fallback 프로필 설정
       setProfile({
         id: userId,
-        email: "",
-        name: "User",
+        email: '',
+        name: 'User',
         email_verified: false,
         is_active: true,
         created_at: new Date().toISOString(),
@@ -127,7 +124,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
         is_buyer: true,
         is_seller: false,
       });
-      logger.warn("[AuthProvider] Set fallback profile due to exception");
+      logger.warn('[AuthProvider] Set fallback profile due to exception');
     }
   };
 
@@ -145,7 +142,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
       setUser(null);
       setProfile(null);
     } catch (error) {
-      logger.error("로그아웃 실패:", error);
+      logger.error('로그아웃 실패:', error);
     }
   };
 
@@ -190,7 +187,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (!mounted) return;
-      if (event === "INITIAL_SESSION") return;
+      if (event === 'INITIAL_SESSION') return;
 
       setUser(session?.user ?? null);
 
@@ -212,17 +209,13 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
     [user, profile, loading]
   );
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within AuthProvider");
+    throw new Error('useAuth must be used within AuthProvider');
   }
   return context;
 };

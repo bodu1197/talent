@@ -14,7 +14,6 @@ export default function CategoryFilter({
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentPrice = searchParams.get('price');
-  const _currentSort = searchParams.get('sort') || 'popular';
 
   const handlePriceChange = (priceRange: string) => {
     const params = new URLSearchParams(searchParams);

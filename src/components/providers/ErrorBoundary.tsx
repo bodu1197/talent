@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 export function ErrorBoundary({ children }: Readonly<{ children: React.ReactNode }>) {
   useEffect(() => {
@@ -10,12 +10,11 @@ export function ErrorBoundary({ children }: Readonly<{ children: React.ReactNode
 
       // Supabase LockManager 오류는 무시 (정상적인 동작)
       if (
-        error?.message?.includes("LockManager") ||
-        error?.message?.includes("lock:sb-") ||
+        error?.message?.includes('LockManager') ||
+        error?.message?.includes('lock:sb-') ||
         error?.isAcquireTimeout === true
       ) {
         event.preventDefault(); // 기본 에러 표시 방지
-        return;
       }
     };
 
@@ -25,24 +24,20 @@ export function ErrorBoundary({ children }: Readonly<{ children: React.ReactNode
 
       // Supabase LockManager 오류는 무시
       if (
-        error?.message?.includes("LockManager") ||
-        error?.message?.includes("lock:sb-") ||
+        error?.message?.includes('LockManager') ||
+        error?.message?.includes('lock:sb-') ||
         error?.isAcquireTimeout === true
       ) {
         event.preventDefault(); // 기본 에러 표시 방지
-        return;
       }
     };
 
-    globalThis.addEventListener("unhandledrejection", handleUnhandledRejection);
-    globalThis.addEventListener("error", handleError);
+    globalThis.addEventListener('unhandledrejection', handleUnhandledRejection);
+    globalThis.addEventListener('error', handleError);
 
     return () => {
-      globalThis.removeEventListener(
-        "unhandledrejection",
-        handleUnhandledRejection,
-      );
-      globalThis.removeEventListener("error", handleError);
+      globalThis.removeEventListener('unhandledrejection', handleUnhandledRejection);
+      globalThis.removeEventListener('error', handleError);
     };
   }, []);
 
