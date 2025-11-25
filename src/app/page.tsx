@@ -74,111 +74,122 @@ export default async function HomePage() {
   );
 }
 
+// 배열 랜덤 셔플 (Fisher-Yates)
+function shuffleArray<T>(array: T[]): void {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+// 리뷰 통계 맵 생성
+interface ReviewStat {
+  service_id: string;
+  rating: number;
+}
+
+function buildRatingMap(
+  reviewStats: ReviewStat[] | null
+): Map<string, { sum: number; count: number }> {
+  const ratingMap = new Map<string, { sum: number; count: number }>();
+  if (!reviewStats) return ratingMap;
+
+  for (const review of reviewStats) {
+    const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
+    ratingMap.set(review.service_id, {
+      sum: current.sum + review.rating,
+      count: current.count + 1,
+    });
+  }
+  return ratingMap;
+}
+
+// 서비스 최종 포맷 변환
+function formatServicesWithRating(
+  services: Array<{ id: string; orders_count?: number; [key: string]: unknown }>,
+  ratingMap: Map<string, { sum: number; count: number }>
+): Service[] {
+  return services.map((service) => {
+    const stats = ratingMap.get(service.id);
+    const rating = stats && stats.count > 0 ? stats.sum / stats.count : 0;
+    return {
+      ...service,
+      order_count: service.orders_count || 0,
+      rating,
+      review_count: stats?.count || 0,
+    } as unknown as Service;
+  });
+}
+
 // AI 서비스 섹션 (서버 컴포넌트)
 async function AIServicesSection({ aiCategoryIds }: { readonly aiCategoryIds: string[] }) {
+  if (aiCategoryIds.length === 0) {
+    return <AITalentShowcase services={[]} />;
+  }
+
   const { createClient, createServiceRoleClient } = await import('@/lib/supabase/server');
   const supabase = await createClient();
 
-  let services: Service[] = [];
+  // 광고 서비스 ID 조회 - Service Role 클라이언트 사용하여 RLS 우회
+  const serviceRoleClient = createServiceRoleClient();
+  const { data: advertisingData } = await serviceRoleClient
+    .from('advertising_subscriptions')
+    .select('service_id')
+    .eq('status', 'active');
 
-  if (aiCategoryIds.length > 0) {
-    // 광고 서비스 ID 조회 - Service Role 클라이언트 사용하여 RLS 우회
-    const serviceRoleClient = createServiceRoleClient();
-    const { data: advertisingData } = await serviceRoleClient
-      .from('advertising_subscriptions')
-      .select('service_id')
-      .eq('status', 'active');
+  const advertisedServiceIds = new Set(advertisingData?.map((ad) => ad.service_id) || []);
 
-    const advertisedServiceIds = advertisingData?.map((ad) => ad.service_id) || [];
-
-    // AI 카테고리의 서비스 조회 (JOIN으로 한 번에)
-    const { data: aiServices } = await supabase
-      .from('services')
-      .select(
-        `
-        id,
-        title,
-        description,
-        price,
-        thumbnail_url,
-        orders_count,
-        status,
-        seller:seller_profiles(
-          id,
-          business_name,
-          display_name,
-          profile_image,
-          is_verified
-        ),
-        service_categories!inner(category_id)
+  // AI 카테고리의 서비스 조회 (JOIN으로 한 번에)
+  const { data: aiServices } = await supabase
+    .from('services')
+    .select(
       `
-      )
-      .in('service_categories.category_id', aiCategoryIds)
-      .eq('status', 'active')
-      .order('created_at', { ascending: false })
-      .limit(50); // 최적화: 1000 -> 50
+      id,
+      title,
+      description,
+      price,
+      thumbnail_url,
+      orders_count,
+      status,
+      seller:seller_profiles(
+        id,
+        business_name,
+        display_name,
+        profile_image,
+        is_verified
+      ),
+      service_categories!inner(category_id)
+    `
+    )
+    .in('service_categories.category_id', aiCategoryIds)
+    .eq('status', 'active')
+    .order('created_at', { ascending: false })
+    .limit(50);
 
-    if (aiServices && aiServices.length > 0) {
-      // 광고 서비스와 일반 서비스 분리
-      const advertisedServices = aiServices.filter((s) => advertisedServiceIds.includes(s.id));
-      const regularServices = aiServices.filter((s) => !advertisedServiceIds.includes(s.id));
-
-      // 광고 서비스 랜덤 셔플
-      for (let i = advertisedServices.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [advertisedServices[i], advertisedServices[j]] = [
-          advertisedServices[j],
-          advertisedServices[i],
-        ];
-      }
-
-      // 일반 서비스 랜덤 셔플
-      for (let i = regularServices.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [regularServices[i], regularServices[j]] = [regularServices[j], regularServices[i]];
-      }
-
-      // 광고 서비스(랜덤) + 일반 서비스(랜덤) (상위 15개)
-      const combinedServices = [...advertisedServices, ...regularServices].slice(0, 15);
-
-      // 리뷰 통계 한 번에 조회
-      const serviceIds = combinedServices.map((s) => s.id);
-      const { data: reviewStats } = await supabase
-        .from('reviews')
-        .select('service_id, rating')
-        .in('service_id', serviceIds)
-        .eq('is_visible', true);
-
-      // 서비스별 평균 별점 계산
-      interface ReviewStat {
-        service_id: string;
-        rating: number;
-      }
-      const ratingMap = new Map<string, { sum: number; count: number }>();
-      if (reviewStats) {
-        for (const review of reviewStats as ReviewStat[]) {
-          const current = ratingMap.get(review.service_id) || {
-            sum: 0,
-            count: 0,
-          };
-          ratingMap.set(review.service_id, {
-            sum: current.sum + review.rating,
-            count: current.count + 1,
-          });
-        }
-      }
-
-      services = combinedServices.map((service) => {
-        const stats = ratingMap.get(service.id);
-        return {
-          ...service,
-          order_count: service.orders_count || 0,
-          rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
-          review_count: stats?.count || 0,
-        } as unknown as Service;
-      });
-    }
+  if (!aiServices || aiServices.length === 0) {
+    return <AITalentShowcase services={[]} />;
   }
+
+  // 광고 서비스와 일반 서비스 분리 및 셔플
+  const advertisedServices = aiServices.filter((s) => advertisedServiceIds.has(s.id));
+  const regularServices = aiServices.filter((s) => !advertisedServiceIds.has(s.id));
+
+  shuffleArray(advertisedServices);
+  shuffleArray(regularServices);
+
+  // 광고 서비스(랜덤) + 일반 서비스(랜덤) (상위 15개)
+  const combinedServices = [...advertisedServices, ...regularServices].slice(0, 15);
+
+  // 리뷰 통계 조회 및 서비스 포맷팅
+  const serviceIds = combinedServices.map((s) => s.id);
+  const { data: reviewStats } = await supabase
+    .from('reviews')
+    .select('service_id, rating')
+    .in('service_id', serviceIds)
+    .eq('is_visible', true);
+
+  const ratingMap = buildRatingMap(reviewStats as ReviewStat[] | null);
+  const services = formatServicesWithRating(combinedServices, ratingMap);
 
   return <AITalentShowcase services={services} />;
 }
