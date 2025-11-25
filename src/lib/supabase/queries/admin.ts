@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/client';
+import { logger } from '@/lib/logger';
 import type { Tables } from '@/types/database';
 
 // Types for query results with joins
@@ -363,10 +364,7 @@ export async function getAdminUsers(filters?: {
   const { data: profiles, error } = await query;
 
   if (error) {
-    console.error(
-      'getAdminUsers error:',
-      JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-    );
+    logger.error('getAdminUsers error:', error);
     return [];
   }
 
@@ -418,10 +416,7 @@ export async function getAdminUsersCount(role?: string) {
   const { count, error } = await query;
 
   if (error) {
-    console.error(
-      'getAdminUsersCount error:',
-      JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-    );
+    logger.error('getAdminUsersCount error:', error);
     return 0;
   }
   return count || 0;

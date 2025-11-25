@@ -3,6 +3,7 @@
 
 import { SupabaseManager } from '@/lib/supabase/singleton';
 import { cryptoShuffleArray } from './utils/crypto-shuffle';
+import { logger } from '@/lib/logger';
 
 const LAUNCH_PROMO_AMOUNT = 600000; // 런칭 프로모션 60만원
 const LAUNCH_PROMO_DURATION_MONTHS = 6;
@@ -727,9 +728,7 @@ export async function getServicesForCategoryPage(
       categoryId,
       start + index + 1,
       page
-    ).catch((err) =>
-      console.error('Operation error:', JSON.stringify(err, Object.getOwnPropertyNames(err), 2))
-    );
+    ).catch((err) => logger.error('Operation error:', err));
   }
 
   return {

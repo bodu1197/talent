@@ -1,5 +1,6 @@
-import { useState, useCallback } from "react";
-import toast from "react-hot-toast";
+import { useState, useCallback } from 'react';
+import toast from 'react-hot-toast';
+import { logger } from '@/lib/logger';
 
 /**
  * YouTube 썸네일 다운로드 및 관리 훅
@@ -17,7 +18,7 @@ import toast from "react-hot-toast";
  * ```
  */
 export function useYoutubeThumbnail() {
-  const [videoId, setVideoId] = useState("");
+  const [videoId, setVideoId] = useState('');
   const [loading, setLoading] = useState(false);
 
   /**
@@ -44,13 +45,13 @@ export function useYoutubeThumbnail() {
   const fetchThumbnail = useCallback(
     async (url: string) => {
       if (!url.trim()) {
-        setVideoId("");
+        setVideoId('');
         return null;
       }
 
       const id = extractVideoId(url);
       if (!id) {
-        toast.error("유효한 YouTube URL을 입력해주세요");
+        toast.error('유효한 YouTube URL을 입력해주세요');
         return null;
       }
 
@@ -85,24 +86,24 @@ export function useYoutubeThumbnail() {
           }
         }
 
-        toast.error("YouTube 썸네일을 가져올 수 없습니다");
+        toast.error('YouTube 썸네일을 가져올 수 없습니다');
         return null;
       } catch (error) {
-        console.error("YouTube thumbnail fetch error:", error);
-        toast.error("YouTube 썸네일을 가져오는 중 오류가 발생했습니다");
+        logger.error('YouTube thumbnail fetch error:', error);
+        toast.error('YouTube 썸네일을 가져오는 중 오류가 발생했습니다');
         return null;
       } finally {
         setLoading(false);
       }
     },
-    [extractVideoId],
+    [extractVideoId]
   );
 
   /**
    * 비디오 ID 초기화
    */
   const resetVideoId = useCallback(() => {
-    setVideoId("");
+    setVideoId('');
   }, []);
 
   return {
