@@ -294,6 +294,63 @@ function deduplicateCategories(categories: PersonalizedCategory[]): Personalized
 }
 
 /**
+ * Fallback: 직접 category_visits 테이블 쿼리
+ * RPC가 없을 때 사용
+ */
+async function fetchCategoryVisitsFallback(
+  supabase: SupabaseClient,
+  userId: string,
+  days: number,
+  limit: number
+): Promise<CategoryVisit[]> {
+  const daysAgo = new Date();
+  daysAgo.setDate(daysAgo.getDate() - days);
+
+  const { data, error } = await supabase
+    .from('category_visits')
+    .select('category_id, category_name, category_slug, visited_at')
+    .eq('user_id', userId)
+    .gte('visited_at', daysAgo.toISOString())
+    .order('visited_at', { ascending: false });
+
+  if (error || !data) {
+    logger.error('Fallback query failed:', error);
+    return [];
+  }
+
+  // 카테고리별 방문 횟수 집계
+  const categoryMap = new Map<
+    string,
+    { category_id: string; category_name: string; category_slug: string; visitCount: number }
+  >();
+
+  for (const visit of data) {
+    const existing = categoryMap.get(visit.category_id);
+    if (existing) {
+      existing.visitCount += 1;
+    } else {
+      categoryMap.set(visit.category_id, {
+        category_id: visit.category_id,
+        category_name: visit.category_name,
+        category_slug: visit.category_slug,
+        visitCount: 1,
+      });
+    }
+  }
+
+  // 방문 횟수 순으로 정렬 후 상위 limit개 반환
+  return Array.from(categoryMap.values())
+    .map((cat) => ({
+      category_id: cat.category_id,
+      category_name: cat.category_name,
+      category_slug: cat.category_slug,
+      visit_count: cat.visitCount,
+    }))
+    .sort((a, b) => b.visit_count - a.visit_count)
+    .slice(0, limit);
+}
+
+/**
  * 회원의 관심 카테고리 기반 개인화 서비스 추천
  * 최근 방문한 모든 카테고리의 서비스를 불러옴 (방문 횟수 순)
  */
@@ -316,13 +373,24 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
       { p_user_id: user.id, p_days: 30, p_limit: 3 }
     );
 
-    if (categoryError || !topCategories || topCategories.length === 0) {
+    // RPC 성공 시
+    let categoryData: CategoryVisit[] = [];
+
+    if (!categoryError && topCategories && topCategories.length > 0) {
+      categoryData = topCategories;
+    } else {
+      // RPC 실패 시 폴백으로 직접 쿼리
+      logger.warn('RPC failed, using fallback query:', categoryError?.message);
+      categoryData = await fetchCategoryVisitsFallback(supabase, user.id, 30, 3);
+    }
+
+    if (categoryData.length === 0) {
       return [];
     }
 
     // 각 카테고리별 서비스 조회 (병렬 처리)
     const categoriesWithServices = await Promise.all(
-      topCategories.map((category: CategoryVisit) => fetchCategoryServices(supabase, category))
+      categoryData.map((category: CategoryVisit) => fetchCategoryServices(supabase, category))
     );
 
     // 중복 카테고리 제거
