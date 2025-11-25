@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { logger } from '@/lib/logger';
 
 // GET /api/orders/seller/count - 판매자 주문 상태별 카운트
 export async function GET(_request: NextRequest) {
@@ -23,10 +24,7 @@ export async function GET(_request: NextRequest) {
       .eq('seller_id', user.id);
 
     if (error) {
-      console.error(
-        'Orders count fetch error:',
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-      );
+      logger.error('Orders count fetch error:', error);
       return NextResponse.json({ error: '주문 카운트를 불러올 수 없습니다' }, { status: 500 });
     }
 
@@ -52,10 +50,7 @@ export async function GET(_request: NextRequest) {
 
     return NextResponse.json({ counts });
   } catch (error) {
-    console.error(
-      'Seller orders count API error:',
-      JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-    );
+    logger.error('Seller orders count API error:', error);
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 });
   }
 }
