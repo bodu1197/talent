@@ -64,7 +64,7 @@ export async function getAllCategoriesTree(useAuth: boolean = true): Promise<Cat
     if (cat.parent_id && categoryMap.has(cat.parent_id)) {
       // 부모가 있으면 부모의 children에 추가
       const parent = categoryMap.get(cat.parent_id)!;
-      if (!parent.children) parent.children = [];
+      parent.children ??= [];
       parent.children.push(category);
     } else if (!cat.parent_id) {
       // 부모가 없으면 루트 카테고리
@@ -240,7 +240,7 @@ export async function getAllCategoriesForBuild(): Promise<CategoryItem[]> {
 
     if (cat.parent_id && categoryMap.has(cat.parent_id)) {
       const parent = categoryMap.get(cat.parent_id)!;
-      if (!parent.children) parent.children = [];
+      parent.children ??= [];
       parent.children.push(category);
     } else if (!cat.parent_id) {
       rootCategories.push(category);

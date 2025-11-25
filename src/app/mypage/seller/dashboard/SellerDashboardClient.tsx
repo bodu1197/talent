@@ -48,6 +48,30 @@ type Props = {
   } | null;
 };
 
+/**
+ * 주문 상태에 따른 배지 클래스 반환
+ */
+function getStatusBadgeClass(status: string): string {
+  const statusClasses: Record<string, string> = {
+    completed: 'bg-green-100 text-green-800',
+    in_progress: 'bg-yellow-100 text-yellow-800',
+  };
+  return statusClasses[status] || 'bg-gray-100 text-gray-800';
+}
+
+/**
+ * 주문 상태에 따른 표시 텍스트 반환
+ */
+function getStatusText(status: string): string {
+  const statusTexts: Record<string, string> = {
+    in_progress: '진행중',
+    completed: '완료',
+    paid: '결제완료',
+    delivered: '배송완료',
+  };
+  return statusTexts[status] || status;
+}
+
 export default function SellerDashboardClient({ stats, recentOrders, profileData }: Props) {
   const queryClient = useQueryClient();
 
@@ -220,21 +244,9 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                              order.status === 'completed'
-                                ? 'bg-green-100 text-green-800'
-                                : order.status === 'in_progress'
-                                  ? 'bg-yellow-100 text-yellow-800'
-                                  : 'bg-gray-100 text-gray-800'
-                            }`}
+                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeClass(order.status)}`}
                           >
-                            {order.status === 'in_progress'
-                              ? '진행중'
-                              : order.status === 'completed'
-                                ? '완료'
-                                : order.status === 'paid'
-                                  ? '결제완료'
-                                  : order.status}
+                            {getStatusText(order.status)}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">

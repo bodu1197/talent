@@ -1,11 +1,134 @@
 import { createClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
 
-export async function getBuyerDashboardStats(userId: string) {
+interface BuyerOrder {
+  status: string;
+  review_id: string | null;
+  created_at: string;
+}
+
+interface SellerOrder {
+  status: string;
+  total_amount: number | null;
+  created_at: string;
+}
+
+interface BuyerDashboardStats {
+  inProgressOrders: number;
+  deliveredOrders: number;
+  pendingReviews: number;
+  monthlyPurchases: number;
+}
+
+interface SellerDashboardStats {
+  newOrders: number;
+  inProgressOrders: number;
+  deliveredOrders: number;
+  completedOrders: number;
+  monthlyRevenue: number;
+}
+
+/**
+ * 이번 달 시작 날짜 ISO 문자열 반환
+ */
+function getMonthStartISO(): string {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+}
+
+/**
+ * 구매자 주문 상태 집계
+ */
+function calculateBuyerStats(orders: BuyerOrder[], monthStart: string): BuyerDashboardStats {
+  const stats: BuyerDashboardStats = {
+    inProgressOrders: 0,
+    deliveredOrders: 0,
+    pendingReviews: 0,
+    monthlyPurchases: 0,
+  };
+
+  for (const order of orders) {
+    switch (order.status) {
+      case 'in_progress':
+        stats.inProgressOrders++;
+        break;
+      case 'delivered':
+        stats.deliveredOrders++;
+        break;
+      case 'completed':
+        if (!order.review_id) stats.pendingReviews++;
+        if (order.created_at >= monthStart) stats.monthlyPurchases++;
+        break;
+    }
+  }
+
+  return stats;
+}
+
+/**
+ * 판매자 주문 상태 집계
+ */
+function calculateSellerStats(orders: SellerOrder[], monthStart: string): SellerDashboardStats {
+  const stats: SellerDashboardStats = {
+    newOrders: 0,
+    inProgressOrders: 0,
+    deliveredOrders: 0,
+    completedOrders: 0,
+    monthlyRevenue: 0,
+  };
+
+  for (const order of orders) {
+    switch (order.status) {
+      case 'paid':
+        stats.newOrders++;
+        break;
+      case 'in_progress':
+        stats.inProgressOrders++;
+        break;
+      case 'delivered':
+        stats.deliveredOrders++;
+        break;
+      case 'completed':
+        stats.completedOrders++;
+        if (order.created_at >= monthStart) {
+          stats.monthlyRevenue += order.total_amount || 0;
+        }
+        break;
+    }
+  }
+
+  return stats;
+}
+
+/**
+ * 기본 구매자 대시보드 통계 반환
+ */
+function getDefaultBuyerStats(): BuyerDashboardStats {
+  return {
+    inProgressOrders: 0,
+    deliveredOrders: 0,
+    pendingReviews: 0,
+    monthlyPurchases: 0,
+  };
+}
+
+/**
+ * 기본 판매자 대시보드 통계 반환
+ */
+function getDefaultSellerStats(): SellerDashboardStats {
+  return {
+    newOrders: 0,
+    inProgressOrders: 0,
+    deliveredOrders: 0,
+    completedOrders: 0,
+    monthlyRevenue: 0,
+  };
+}
+
+export async function getBuyerDashboardStats(userId: string): Promise<BuyerDashboardStats> {
   try {
     const supabase = await createClient();
 
-    // 단일 쿼리로 모든 주문 데이터 가져오기 (4개 쿼리 → 1개 쿼리로 최적화)
     const { data: orders, error } = await supabase
       .from('orders')
       .select('status, review_id, created_at')
@@ -13,52 +136,17 @@ export async function getBuyerDashboardStats(userId: string) {
 
     if (error) {
       logger.error('[getBuyerDashboardStats] Error:', error);
-      return {
-        inProgressOrders: 0,
-        deliveredOrders: 0,
-        pendingReviews: 0,
-        monthlyPurchases: 0,
-      };
+      return getDefaultBuyerStats();
     }
 
-    // JavaScript로 카운트 계산
-    const stats = {
-      inProgressOrders: 0,
-      deliveredOrders: 0,
-      pendingReviews: 0,
-      monthlyPurchases: 0,
-    };
-
-    const monthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString();
-
-    if (orders) {
-      for (const order of orders) {
-        if (order.status === 'in_progress') {
-          stats.inProgressOrders++;
-        } else if (order.status === 'delivered') {
-          stats.deliveredOrders++;
-        } else if (order.status === 'completed') {
-          // 리뷰가 없는 완료된 주문 = 대기중인 리뷰
-          if (!order.review_id) {
-            stats.pendingReviews++;
-          }
-          // 이번 달 완료된 주문
-          if (order.created_at >= monthStart) {
-            stats.monthlyPurchases++;
-          }
-        }
-      }
+    if (!orders) {
+      return getDefaultBuyerStats();
     }
 
-    return stats;
+    return calculateBuyerStats(orders, getMonthStartISO());
   } catch (error) {
     logger.error('[getBuyerDashboardStats] Unexpected error:', error);
-    return {
-      inProgressOrders: 0,
-      deliveredOrders: 0,
-      pendingReviews: 0,
-      monthlyPurchases: 0,
-    };
+    return getDefaultBuyerStats();
   }
 }
 
@@ -134,11 +222,9 @@ export async function getBuyerBenefits(_userId: string) {
   };
 }
 
-export async function getSellerDashboardStats(sellerUserId: string) {
+export async function getSellerDashboardStats(sellerUserId: string): Promise<SellerDashboardStats> {
   const supabase = await createClient();
 
-  // 단일 쿼리로 모든 주문 데이터 가져오기 (5개 쿼리 → 1개 쿼리로 최적화)
-  // Note: orders.seller_id actually references users.id (not sellers.id)
   const { data: orders, error } = await supabase
     .from('orders')
     .select('status, total_amount, created_at')
@@ -146,48 +232,19 @@ export async function getSellerDashboardStats(sellerUserId: string) {
 
   if (error) {
     logger.error('[getSellerDashboardStats] Error:', error);
-    return {
-      newOrders: 0,
-      inProgressOrders: 0,
-      deliveredOrders: 0,
-      completedOrders: 0,
-      monthlyRevenue: 0,
-    };
+    return getDefaultSellerStats();
   }
 
-  // JavaScript로 카운트 및 수익 계산
-  const stats = {
-    newOrders: 0,
-    inProgressOrders: 0,
-    deliveredOrders: 0,
-    completedOrders: 0,
-    monthlyRevenue: 0,
-  };
-
-  const monthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString();
-
-  if (orders) {
-    for (const order of orders) {
-      if (order.status === 'paid') stats.newOrders++;
-      else if (order.status === 'in_progress') stats.inProgressOrders++;
-      else if (order.status === 'delivered') stats.deliveredOrders++;
-      else if (order.status === 'completed') {
-        stats.completedOrders++;
-        // 이번 달 완료된 주문의 수익 계산
-        if (order.created_at >= monthStart) {
-          stats.monthlyRevenue += order.total_amount || 0;
-        }
-      }
-    }
+  if (!orders) {
+    return getDefaultSellerStats();
   }
 
-  return stats;
+  return calculateSellerStats(orders, getMonthStartISO());
 }
 
 export async function getSellerRecentOrders(sellerUserId: string, limit: number = 5) {
   const supabase = await createClient();
 
-  // Note: orders.seller_id actually references users.id (not sellers.id)
   const { data, error } = await supabase
     .from('orders')
     .select(

@@ -1,14 +1,18 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { Service } from "@/types";
-import { FaBox, FaStar, FaCheckCircle } from "react-icons/fa";
-import { usePathname } from "next/navigation";
+import { useEffect, useRef } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Service } from '@/types';
+import { FaBox, FaStar, FaCheckCircle } from 'react-icons/fa';
+
+// Service 타입에 is_advertised 속성 추가 (광고 서비스 여부)
+interface AdvertisedService extends Service {
+  is_advertised?: boolean;
+}
 
 interface ServiceCardProps {
-  readonly service: Service;
+  readonly service: AdvertisedService;
   readonly position?: number; // 카드의 위치 (광고 통계용)
   readonly categoryId?: string; // 현재 카테고리 ID
   readonly page?: number; // 현재 페이지
@@ -16,12 +20,11 @@ interface ServiceCardProps {
 
 export default function ServiceCard({ service, position, categoryId, page }: ServiceCardProps) {
   const impressionTracked = useRef(false);
-  const pathname = usePathname();
 
   // 노출 추적 (한 번만 실행)
   useEffect(() => {
     // is_advertised 플래그가 있는 서비스만 추적
-    if ((service as any).is_advertised && !impressionTracked.current && categoryId) {
+    if (service.is_advertised && !impressionTracked.current && categoryId) {
       impressionTracked.current = true;
 
       // 노출 기록 API 호출 (비동기, 오류 무시)
@@ -43,7 +46,7 @@ export default function ServiceCard({ service, position, categoryId, page }: Ser
   // 클릭 추적
   const handleClick = () => {
     // 광고 서비스인 경우에만 클릭 추적
-    if ((service as any).is_advertised) {
+    if (service.is_advertised) {
       // 클릭 기록 API 호출 (비동기, 오류 무시)
       fetch('/api/advertising/track/click', {
         method: 'POST',
@@ -67,7 +70,7 @@ export default function ServiceCard({ service, position, categoryId, page }: Ser
       {/* 썸네일 */}
       <div
         className="bg-gray-100 rounded-lg overflow-hidden w-full relative"
-        style={{ aspectRatio: "210/160" }}
+        style={{ aspectRatio: '210/160' }}
       >
         {service.thumbnail_url ? (
           <Image
@@ -85,7 +88,7 @@ export default function ServiceCard({ service, position, categoryId, page }: Ser
         )}
 
         {/* 추천 배지 */}
-        {(service as any).is_advertised && (
+        {service.is_advertised && (
           <div className="absolute top-2 right-2">
             <span
               className="px-2 py-1 bg-blue-600 text-white text-xs font-bold rounded shadow-lg inline-block"
@@ -117,16 +120,11 @@ export default function ServiceCard({ service, position, categoryId, page }: Ser
             className="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center text-white text-[8px] font-bold"
             aria-hidden="true"
           >
-            {service.seller?.display_name?.[0] || "S"}
+            {service.seller?.display_name?.[0] || 'S'}
           </div>
-          <span className="text-xs text-gray-600 truncate">
-            {service.seller?.display_name}
-          </span>
+          <span className="text-xs text-gray-600 truncate">{service.seller?.display_name}</span>
           {service.seller?.is_verified && (
-            <FaCheckCircle
-              className="text-[10px] text-blue-500"
-              aria-label="인증된 판매자"
-            />
+            <FaCheckCircle className="text-[10px] text-blue-500" aria-label="인증된 판매자" />
           )}
         </div>
 

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import {
   FaWonSign,
   FaChartLine,
@@ -9,7 +9,7 @@ import {
   FaCreditCard,
   FaUniversity,
   FaChartBar,
-} from "react-icons/fa";
+} from 'react-icons/fa';
 
 interface RevenueByPeriod {
   period: string;
@@ -57,14 +57,14 @@ interface Statistics {
   subscriptions: SubscriptionStats;
 }
 
-type Period = "day" | "month" | "year";
+type Period = 'day' | 'month' | 'year';
 
 export default function AdminAdvertisingStatisticsPage() {
   const [statistics, setStatistics] = useState<Statistics | null>(null);
   const [loading, setLoading] = useState(true);
-  const [period, setPeriod] = useState<Period>("month");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [period, setPeriod] = useState<Period>('month');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   useEffect(() => {
     fetchStatistics();
@@ -74,20 +74,18 @@ export default function AdminAdvertisingStatisticsPage() {
     try {
       setLoading(true);
       const params = new URLSearchParams({ period });
-      if (startDate) params.append("startDate", startDate);
-      if (endDate) params.append("endDate", endDate);
+      if (startDate) params.append('startDate', startDate);
+      if (endDate) params.append('endDate', endDate);
 
-      const response = await fetch(
-        `/api/admin/advertising/statistics?${params.toString()}`,
-      );
+      const response = await fetch(`/api/admin/advertising/statistics?${params.toString()}`);
       if (response.ok) {
         const data = await response.json();
         setStatistics(data);
       }
     } catch (error) {
       console.error(
-        "Failed to fetch statistics:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+        'Failed to fetch statistics:',
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
       );
     } finally {
       setLoading(false);
@@ -146,9 +144,9 @@ function PeriodFilter({
   onSubmit,
 }: PeriodFilterProps) {
   const periodButtons: Array<{ value: Period; label: string }> = [
-    { value: "day", label: "일별" },
-    { value: "month", label: "월별" },
-    { value: "year", label: "연별" },
+    { value: 'day', label: '일별' },
+    { value: 'month', label: '월별' },
+    { value: 'year', label: '연별' },
   ];
 
   return (
@@ -165,8 +163,8 @@ function PeriodFilter({
                 onClick={() => onPeriodChange(btn.value)}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                   period === btn.value
-                    ? "bg-[#0f3460] text-white"
-                    : "text-slate-700 hover:bg-slate-100"
+                    ? 'bg-[#0f3460] text-white'
+                    : 'text-slate-700 hover:bg-slate-100'
                 }`}
               >
                 {btn.label}
@@ -177,7 +175,10 @@ function PeriodFilter({
 
         <form onSubmit={onSubmit} className="flex gap-2 items-end">
           <div>
-            <label htmlFor="stats-start-date" className="block text-sm font-medium text-slate-700 mb-1">
+            <label
+              htmlFor="stats-start-date"
+              className="block text-sm font-medium text-slate-700 mb-1"
+            >
               시작일
             </label>
             <input
@@ -189,7 +190,10 @@ function PeriodFilter({
             />
           </div>
           <div>
-            <label htmlFor="stats-end-date" className="block text-sm font-medium text-slate-700 mb-1">
+            <label
+              htmlFor="stats-end-date"
+              className="block text-sm font-medium text-slate-700 mb-1"
+            >
               종료일
             </label>
             <input
@@ -240,11 +244,8 @@ function StatisticsContent({ loading, statistics }: StatisticsContentProps) {
       <SummaryCards statistics={statistics} />
       <PaymentMethodStats revenue={statistics.revenue} />
       <TopServicesTable services={statistics.performance.topServices} />
-      <RevenueByPeriodTable
-        revenue={statistics.revenue}
-        period={statistics.period}
-      />
-      <SubscriptionStats subscriptions={statistics.subscriptions} />
+      <RevenueByPeriodTable revenue={statistics.revenue} period={statistics.period} />
+      <SubscriptionStatsPanel subscriptions={statistics.subscriptions} />
     </>
   );
 }
@@ -269,9 +270,7 @@ function SummaryCards({ statistics }: Readonly<{ statistics: Statistics }>) {
       <div className="bg-white rounded-lg border border-slate-200 p-6">
         <div className="flex items-start justify-between">
           <div>
-            <p className="text-sm font-medium text-slate-600 mb-2">
-              월 예상 수익
-            </p>
+            <p className="text-sm font-medium text-slate-600 mb-2">월 예상 수익</p>
             <p className="text-3xl font-bold text-slate-900">
               ₩{statistics.subscriptions.monthlyRevenue.toLocaleString()}
             </p>
@@ -293,8 +292,8 @@ function SummaryCards({ statistics }: Readonly<{ statistics: Statistics }>) {
               {statistics.performance.ctr.toFixed(2)}%
             </p>
             <p className="text-sm text-slate-500 mt-1">
-              노출 {statistics.performance.totalImpressions.toLocaleString()} /
-              클릭 {statistics.performance.totalClicks.toLocaleString()}
+              노출 {statistics.performance.totalImpressions.toLocaleString()} / 클릭{' '}
+              {statistics.performance.totalClicks.toLocaleString()}
             </p>
           </div>
           <div className="rounded-lg bg-purple-50 p-3">
@@ -307,9 +306,9 @@ function SummaryCards({ statistics }: Readonly<{ statistics: Statistics }>) {
 }
 
 const PAYMENT_METHOD_CONFIG = {
-  credit: { label: "크레딧", icon: FaCoins },
-  card: { label: "카드", icon: FaCreditCard },
-  bank_transfer: { label: "무통장", icon: FaUniversity },
+  credit: { label: '크레딧', icon: FaCoins },
+  card: { label: '카드', icon: FaCreditCard },
+  bank_transfer: { label: '무통장', icon: FaUniversity },
 } as const;
 
 function getPaymentMethodConfig(method: string) {
@@ -324,7 +323,7 @@ function getPaymentMethodConfig(method: string) {
 function PaymentMethodStats({
   revenue,
 }: Readonly<{
-  revenue: Statistics["revenue"];
+  revenue: Statistics['revenue'];
 }>) {
   return (
     <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
@@ -334,9 +333,7 @@ function PaymentMethodStats({
       <div className="p-6">
         <div className="grid gap-4 md:grid-cols-3">
           {revenue.byPaymentMethod.length === 0 ? (
-            <div className="col-span-3 text-center py-8 text-slate-600">
-              결제 내역이 없습니다.
-            </div>
+            <div className="col-span-3 text-center py-8 text-slate-600">결제 내역이 없습니다.</div>
           ) : (
             revenue.byPaymentMethod.map((item) => {
               const config = getPaymentMethodConfig(item.method);
@@ -370,13 +367,9 @@ function TopServicesTable({ services }: Readonly<{ services: TopService[] }>) {
     return (
       <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
         <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-          <h2 className="text-xl font-bold text-slate-900">
-            Top 10 광고 서비스
-          </h2>
+          <h2 className="text-xl font-bold text-slate-900">Top 10 광고 서비스</h2>
         </div>
-        <div className="p-12 text-center text-slate-600">
-          광고 노출 데이터가 없습니다.
-        </div>
+        <div className="p-12 text-center text-slate-600">광고 노출 데이터가 없습니다.</div>
       </div>
     );
   }
@@ -444,23 +437,19 @@ function RevenueByPeriodTable({
   revenue,
   period,
 }: Readonly<{
-  revenue: Statistics["revenue"];
+  revenue: Statistics['revenue'];
   period: string;
 }>) {
-  const monthLabel = period === "month" ? "월별" : "연별";
-  const periodLabel = period === "day" ? "일별" : monthLabel;
+  const monthLabel = period === 'month' ? '월별' : '연별';
+  const periodLabel = period === 'day' ? '일별' : monthLabel;
 
   if (revenue.byPeriod.length === 0) {
     return (
       <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
         <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-          <h2 className="text-xl font-bold text-slate-900">
-            기간별 수익 ({periodLabel})
-          </h2>
+          <h2 className="text-xl font-bold text-slate-900">기간별 수익 ({periodLabel})</h2>
         </div>
-        <div className="p-12 text-center text-slate-600">
-          수익 데이터가 없습니다.
-        </div>
+        <div className="p-12 text-center text-slate-600">수익 데이터가 없습니다.</div>
       </div>
     );
   }
@@ -468,9 +457,7 @@ function RevenueByPeriodTable({
   return (
     <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
       <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-        <h2 className="text-xl font-bold text-slate-900">
-          기간별 수익 ({periodLabel})
-        </h2>
+        <h2 className="text-xl font-bold text-slate-900">기간별 수익 ({periodLabel})</h2>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
@@ -502,35 +489,35 @@ function RevenueByPeriodTable({
   );
 }
 
-function SubscriptionStats({
+function SubscriptionStatsPanel({
   subscriptions,
 }: Readonly<{
   subscriptions: SubscriptionStats;
 }>) {
   const stats = [
     {
-      label: "전체 구독",
+      label: '전체 구독',
       value: subscriptions.total,
-      bgColor: "bg-slate-50",
-      textColor: "text-slate-900",
+      bgColor: 'bg-slate-50',
+      textColor: 'text-slate-900',
     },
     {
-      label: "활성 구독",
+      label: '활성 구독',
       value: subscriptions.active,
-      bgColor: "bg-green-50",
-      textColor: "text-green-600",
+      bgColor: 'bg-green-50',
+      textColor: 'text-green-600',
     },
     {
-      label: "결제 대기",
+      label: '결제 대기',
       value: subscriptions.pending,
-      bgColor: "bg-yellow-50",
-      textColor: "text-yellow-600",
+      bgColor: 'bg-yellow-50',
+      textColor: 'text-yellow-600',
     },
     {
-      label: "취소됨",
+      label: '취소됨',
       value: subscriptions.cancelled,
-      bgColor: "bg-red-50",
-      textColor: "text-red-600",
+      bgColor: 'bg-red-50',
+      textColor: 'text-red-600',
     },
   ];
 
@@ -544,9 +531,7 @@ function SubscriptionStats({
           {stats.map((stat) => (
             <div key={stat.label} className={`${stat.bgColor} rounded-lg p-4`}>
               <p className="text-sm text-slate-600 mb-1">{stat.label}</p>
-              <p className={`text-2xl font-bold ${stat.textColor}`}>
-                {stat.value}
-              </p>
+              <p className={`text-2xl font-bold ${stat.textColor}`}>{stat.value}</p>
             </div>
           ))}
         </div>

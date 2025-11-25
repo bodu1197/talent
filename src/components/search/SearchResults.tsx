@@ -1,17 +1,46 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import ServiceCard from "@/components/services/ServiceCard";
-import { FaStar, FaCheckCircle, FaBriefcase } from "react-icons/fa";
+import { useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import ServiceCard from '@/components/services/ServiceCard';
+import { Service } from '@/types';
+import { FaStar, FaCheckCircle, FaBriefcase } from 'react-icons/fa';
 
-type TabType = "services" | "experts" | "portfolios";
+type TabType = 'services' | 'experts' | 'portfolios';
+
+// 전문가 검색 결과 타입
+interface ExpertResult {
+  id: string;
+  profile_image?: string | null;
+  display_name?: string;
+  business_name?: string;
+  is_verified?: boolean;
+  bio?: string;
+  rating: number;
+  review_count: number;
+  service_count: number;
+}
+
+// 포트폴리오 판매자 정보 타입
+interface PortfolioSeller {
+  profile_image?: string | null;
+  display_name?: string;
+  business_name?: string;
+}
+
+// 포트폴리오 검색 결과 타입
+interface PortfolioResult {
+  id: string;
+  title: string;
+  thumbnail_url?: string | null;
+  seller?: PortfolioSeller[];
+}
 
 interface SearchResultsProps {
-  readonly services: any[];
-  readonly experts: any[];
-  readonly portfolios: any[];
+  readonly services: Service[];
+  readonly experts: ExpertResult[];
+  readonly portfolios: PortfolioResult[];
   readonly query: string;
 }
 
@@ -21,14 +50,14 @@ export default function SearchResults({
   portfolios,
   query,
 }: SearchResultsProps) {
-  const [activeTab, setActiveTab] = useState<TabType>("services");
+  const [activeTab, setActiveTab] = useState<TabType>('services');
 
   const tabs = [
-    { id: "services" as TabType, label: "서비스", count: services.length },
-    { id: "experts" as TabType, label: "전문가", count: experts.length },
+    { id: 'services' as TabType, label: '서비스', count: services.length },
+    { id: 'experts' as TabType, label: '전문가', count: experts.length },
     {
-      id: "portfolios" as TabType,
-      label: "포트폴리오",
+      id: 'portfolios' as TabType,
+      label: '포트폴리오',
       count: portfolios.length,
     },
   ];
@@ -52,8 +81,8 @@ export default function SearchResults({
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 px-2 font-medium border-b-2 transition-colors ${
                   activeTab === tab.id
-                    ? "border-brand-primary text-brand-primary"
-                    : "border-transparent text-gray-600 hover:text-gray-900"
+                    ? 'border-brand-primary text-brand-primary'
+                    : 'border-transparent text-gray-600 hover:text-gray-900'
                 }`}
               >
                 {tab.label} ({tab.count})
@@ -65,7 +94,7 @@ export default function SearchResults({
 
       <div className="container-1200 px-4 py-8">
         {/* 서비스 탭 */}
-        {activeTab === "services" && (
+        {activeTab === 'services' && (
           <>
             {services.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -79,16 +108,14 @@ export default function SearchResults({
                 <h2 className="text-xl font-bold text-gray-900 mb-2">
                   서비스 검색 결과가 없습니다
                 </h2>
-                <p className="text-gray-600">
-                  다른 검색어로 다시 시도해보세요.
-                </p>
+                <p className="text-gray-600">다른 검색어로 다시 시도해보세요.</p>
               </div>
             )}
           </>
         )}
 
         {/* 전문가 탭 */}
-        {activeTab === "experts" && (
+        {activeTab === 'experts' && (
           <>
             {experts.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -109,7 +136,7 @@ export default function SearchResults({
                           />
                         ) : (
                           <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 text-2xl font-bold">
-                            {(expert.display_name || expert.business_name || "S")[0]}
+                            {(expert.display_name || expert.business_name || 'S')[0]}
                           </div>
                         )}
                         {expert.is_verified && (
@@ -123,9 +150,7 @@ export default function SearchResults({
                           {expert.display_name || expert.business_name}
                         </h3>
                         {expert.bio && (
-                          <p className="text-sm text-gray-600 mb-2 line-clamp-2">
-                            {expert.bio}
-                          </p>
+                          <p className="text-sm text-gray-600 mb-2 line-clamp-2">{expert.bio}</p>
                         )}
                         <div className="flex items-center gap-4 text-sm text-gray-500">
                           <div className="flex items-center gap-1">
@@ -146,25 +171,19 @@ export default function SearchResults({
                 <h2 className="text-xl font-bold text-gray-900 mb-2">
                   전문가 검색 결과가 없습니다
                 </h2>
-                <p className="text-gray-600">
-                  다른 검색어로 다시 시도해보세요.
-                </p>
+                <p className="text-gray-600">다른 검색어로 다시 시도해보세요.</p>
               </div>
             )}
           </>
         )}
 
         {/* 포트폴리오 탭 */}
-        {activeTab === "portfolios" && (
+        {activeTab === 'portfolios' && (
           <>
             {portfolios.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                 {portfolios.map((portfolio) => (
-                  <Link
-                    key={portfolio.id}
-                    href={`/portfolio/${portfolio.id}`}
-                    className="group"
-                  >
+                  <Link key={portfolio.id} href={`/portfolio/${portfolio.id}`} className="group">
                     <div className="bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow border border-gray-200">
                       <div className="relative aspect-[4/3]">
                         {portfolio.thumbnail_url ? (
@@ -185,24 +204,23 @@ export default function SearchResults({
                           {portfolio.title}
                         </h3>
                         <div className="flex items-center gap-2 text-xs text-gray-600">
-                          {Array.isArray(portfolio.seller) &&
-                          portfolio.seller.length > 0 ? (
+                          {Array.isArray(portfolio.seller) && portfolio.seller.length > 0 ? (
                             <>
                               {portfolio.seller[0].profile_image ? (
                                 <Image
                                   src={portfolio.seller[0].profile_image}
-                                  alt={portfolio.seller[0].display_name || ""}
+                                  alt={portfolio.seller[0].display_name || ''}
                                   width={20}
                                   height={20}
                                   className="rounded-full"
                                 />
                               ) : (
                                 <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs">
-                                  {(
-                                    portfolio.seller[0].display_name ||
-                                    portfolio.seller[0].business_name ||
-                                    "S"
-                                  )[0]}
+                                  {
+                                    (portfolio.seller[0].display_name ||
+                                      portfolio.seller[0].business_name ||
+                                      'S')[0]
+                                  }
                                 </div>
                               )}
                               <span className="truncate">
@@ -223,9 +241,7 @@ export default function SearchResults({
                 <h2 className="text-xl font-bold text-gray-900 mb-2">
                   포트폴리오 검색 결과가 없습니다
                 </h2>
-                <p className="text-gray-600">
-                  다른 검색어로 다시 시도해보세요.
-                </p>
+                <p className="text-gray-600">다른 검색어로 다시 시도해보세요.</p>
               </div>
             )}
           </>

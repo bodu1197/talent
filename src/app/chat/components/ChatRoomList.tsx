@@ -34,6 +34,62 @@ interface ChatRoom {
 
 type TabType = 'all' | 'unread' | 'deal' | 'favorite';
 
+/**
+ * 채팅방 목록 컨텐츠 컴포넌트 - 중첩 삼항 연산자 제거
+ */
+function ChatRoomContent({
+  isCreatingRoom,
+  rooms,
+  filteredRooms,
+  selectedRoomId,
+  isMobile,
+  onSelectRoom,
+  onToggleFavorite,
+}: {
+  isCreatingRoom: boolean;
+  rooms: ChatRoom[];
+  filteredRooms: ChatRoom[];
+  selectedRoomId: string | null;
+  isMobile: boolean;
+  onSelectRoom: (roomId: string) => void;
+  onToggleFavorite: (roomId: string, e: React.MouseEvent) => void;
+}) {
+  if (isCreatingRoom) {
+    return (
+      <div className="p-8 text-center text-gray-500">
+        <FaSpinner className="fa-spin text-4xl mb-3 inline-block" />
+        <p>채팅방을 생성하는 중...</p>
+      </div>
+    );
+  }
+
+  if (rooms.length === 0) {
+    return (
+      <div
+        className={`text-center text-gray-500 ${isMobile ? 'flex flex-col items-center justify-center py-12' : 'p-8'}`}
+      >
+        <FaComments className={`text-4xl ${isMobile ? 'mb-4' : 'mb-3 inline-block'}`} />
+        <p>{isMobile ? '채팅 내역이 없습니다' : '채팅방이 없습니다'}</p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {filteredRooms.map((room) => (
+        <ChatRoomItem
+          key={room.id}
+          room={room}
+          isSelected={selectedRoomId === room.id}
+          isMobile={isMobile}
+          onSelect={onSelectRoom}
+          onToggleFavorite={onToggleFavorite}
+        />
+      ))}
+    </>
+  );
+}
+
 interface ChatRoomListProps {
   readonly rooms: ChatRoom[];
   readonly selectedRoomId: string | null;
@@ -118,30 +174,15 @@ export default function ChatRoomList({
 
       {/* 채팅방 목록 */}
       <div className={isMobile ? 'overflow-y-auto pb-20' : 'flex-1 overflow-y-auto'}>
-        {isCreatingRoom ? (
-          <div className="p-8 text-center text-gray-500">
-            <FaSpinner className="fa-spin text-4xl mb-3 inline-block" />
-            <p>채팅방을 생성하는 중...</p>
-          </div>
-        ) : rooms.length === 0 ? (
-          <div
-            className={`text-center text-gray-500 ${isMobile ? 'flex flex-col items-center justify-center py-12' : 'p-8'}`}
-          >
-            <FaComments className={`text-4xl ${isMobile ? 'mb-4' : 'mb-3 inline-block'}`} />
-            <p>{isMobile ? '채팅 내역이 없습니다' : '채팅방이 없습니다'}</p>
-          </div>
-        ) : (
-          filteredRooms.map((room) => (
-            <ChatRoomItem
-              key={room.id}
-              room={room}
-              isSelected={selectedRoomId === room.id}
-              isMobile={isMobile}
-              onSelect={onSelectRoom}
-              onToggleFavorite={onToggleFavorite}
-            />
-          ))
-        )}
+        <ChatRoomContent
+          isCreatingRoom={isCreatingRoom}
+          rooms={rooms}
+          filteredRooms={filteredRooms}
+          selectedRoomId={selectedRoomId}
+          isMobile={isMobile}
+          onSelectRoom={onSelectRoom}
+          onToggleFavorite={onToggleFavorite}
+        />
       </div>
     </>
   );

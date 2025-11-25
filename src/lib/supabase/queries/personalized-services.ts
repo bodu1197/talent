@@ -2,6 +2,7 @@ import { createClient as createServerClient, createServiceRoleClient } from '@/l
 import { logger } from '@/lib/logger';
 import { cryptoShuffleArray } from '@/lib/utils/crypto-shuffle';
 import { Service } from '@/types';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Supabase에서 반환하는 부분 서비스 타입
@@ -26,12 +27,270 @@ interface PartialServiceFromDB {
   }>;
 }
 
+interface CategoryInfo {
+  id: string;
+  name: string;
+  slug: string;
+  level: number;
+  parent_id: string | null;
+}
+
+interface CategoryVisit {
+  category_id: string;
+  category_name: string;
+  category_slug: string;
+  visit_count: number;
+}
+
 export interface PersonalizedCategory {
   category_id: string;
   category_name: string;
   category_slug: string;
   visit_count: number;
   services: Service[];
+}
+
+/**
+ * 1차 카테고리(최상위) 찾기
+ */
+async function findTopLevelCategory(
+  supabase: SupabaseClient,
+  categoryInfo: CategoryInfo
+): Promise<CategoryInfo> {
+  if (categoryInfo.level === 1) {
+    return categoryInfo;
+  }
+
+  if (categoryInfo.level === 2) {
+    const { data: parent } = await supabase
+      .from('categories')
+      .select('id, name, slug, level, parent_id')
+      .eq('id', categoryInfo.parent_id)
+      .single();
+    return parent || categoryInfo;
+  }
+
+  // level === 3: 조부모(1차) 찾기
+  const { data: parent2nd } = await supabase
+    .from('categories')
+    .select('id, parent_id')
+    .eq('id', categoryInfo.parent_id)
+    .single();
+
+  if (!parent2nd?.parent_id) {
+    return categoryInfo;
+  }
+
+  const { data: grandparent } = await supabase
+    .from('categories')
+    .select('id, name, slug, level, parent_id')
+    .eq('id', parent2nd.parent_id)
+    .single();
+
+  return grandparent || categoryInfo;
+}
+
+/**
+ * 1차 카테고리의 모든 하위 카테고리 ID 수집
+ */
+async function collectAllCategoryIds(
+  supabase: SupabaseClient,
+  topLevelCategoryId: string
+): Promise<string[]> {
+  const allCategoryIds = [topLevelCategoryId];
+
+  // 2차 카테고리들
+  const { data: level2Categories } = await supabase
+    .from('categories')
+    .select('id')
+    .eq('parent_id', topLevelCategoryId);
+
+  const level2Ids = level2Categories?.map((c) => c.id) || [];
+  allCategoryIds.push(...level2Ids);
+
+  // 3차 카테고리들
+  if (level2Ids.length === 0) {
+    return allCategoryIds;
+  }
+
+  const { data: level3Categories } = await supabase
+    .from('categories')
+    .select('id')
+    .in('parent_id', level2Ids);
+
+  const level3Ids = level3Categories?.map((c) => c.id) || [];
+  allCategoryIds.push(...level3Ids);
+
+  return allCategoryIds;
+}
+
+/**
+ * 서비스별 평균 별점 계산
+ */
+function buildRatingMap(
+  reviewStats: Array<{ service_id: string; rating: number }> | null
+): Map<string, { sum: number; count: number }> {
+  const ratingMap = new Map<string, { sum: number; count: number }>();
+
+  if (!reviewStats) {
+    return ratingMap;
+  }
+
+  for (const review of reviewStats) {
+    const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
+    ratingMap.set(review.service_id, {
+      sum: current.sum + review.rating,
+      count: current.count + 1,
+    });
+  }
+
+  return ratingMap;
+}
+
+/**
+ * 서비스에 별점 정보 추가
+ */
+function applyRatingsToServices(
+  services: PartialServiceFromDB[],
+  ratingMap: Map<string, { sum: number; count: number }>
+): Service[] {
+  return services.map((service) => {
+    const stats = ratingMap.get(service.id);
+    return {
+      ...service,
+      rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
+      review_count: stats?.count || 0,
+      order_count: service.orders_count || 0,
+    } as unknown as Service;
+  });
+}
+
+/**
+ * 광고/일반 서비스 분리 및 셔플
+ */
+function separateAndShuffleServices(
+  services: PartialServiceFromDB[],
+  advertisedServiceIds: string[],
+  limit: number
+): PartialServiceFromDB[] {
+  const advertisedServices = services.filter((s) => advertisedServiceIds.includes(s.id));
+  const regularServices = services.filter((s) => !advertisedServiceIds.includes(s.id));
+
+  // 암호학적으로 안전한 랜덤 셔플
+  cryptoShuffleArray(advertisedServices);
+  cryptoShuffleArray(regularServices);
+
+  // 광고 서비스 우선, 그 다음 일반 서비스
+  return [...advertisedServices, ...regularServices].slice(0, limit);
+}
+
+/**
+ * 카테고리별 서비스 조회 및 처리
+ */
+async function fetchCategoryServices(
+  supabase: SupabaseClient,
+  category: CategoryVisit
+): Promise<PersonalizedCategory> {
+  const emptyResult: PersonalizedCategory = {
+    category_id: category.category_id,
+    category_name: category.category_name,
+    category_slug: category.category_slug,
+    visit_count: category.visit_count,
+    services: [],
+  };
+
+  // 카테고리 정보 조회
+  const { data: categoryInfo } = await supabase
+    .from('categories')
+    .select('id, name, slug, level, parent_id')
+    .eq('slug', category.category_slug)
+    .single();
+
+  if (!categoryInfo) {
+    return emptyResult;
+  }
+
+  // 1차 카테고리 찾기
+  const topLevelCategory = await findTopLevelCategory(supabase, categoryInfo as CategoryInfo);
+
+  // 모든 하위 카테고리 ID 수집
+  const allCategoryIds = await collectAllCategoryIds(supabase, topLevelCategory.id);
+
+  // 광고 서비스 ID 조회 (RLS 우회)
+  const serviceRoleClient = createServiceRoleClient();
+  const { data: advertisingData } = await serviceRoleClient
+    .from('advertising_subscriptions')
+    .select('service_id')
+    .eq('status', 'active');
+
+  const advertisedServiceIds = advertisingData?.map((ad) => ad.service_id) || [];
+
+  // 서비스 조회
+  const { data: services } = await supabase
+    .from('services')
+    .select(
+      `
+      id, title, description, price, thumbnail_url, orders_count,
+      seller:seller_profiles(id, business_name, display_name, profile_image, is_verified),
+      service_categories!inner(category_id)
+    `
+    )
+    .in('service_categories.category_id', allCategoryIds)
+    .eq('status', 'active')
+    .order('created_at', { ascending: false })
+    .limit(100);
+
+  const typedServices = (services || []) as PartialServiceFromDB[];
+
+  // 광고/일반 서비스 분리 및 셔플
+  const topServices = separateAndShuffleServices(typedServices, advertisedServiceIds, 5);
+
+  if (topServices.length === 0) {
+    return {
+      ...emptyResult,
+      category_id: topLevelCategory.id,
+      category_name: topLevelCategory.name,
+      category_slug: topLevelCategory.slug,
+    };
+  }
+
+  // 별점 정보 조회
+  const serviceIds = topServices.map((s) => s.id);
+  const { data: reviewStats } = await supabase
+    .from('reviews')
+    .select('service_id, rating')
+    .in('service_id', serviceIds)
+    .eq('is_visible', true);
+
+  // 별점 맵 생성 및 적용
+  const ratingMap = buildRatingMap(reviewStats as Array<{ service_id: string; rating: number }>);
+  const servicesWithRatings = applyRatingsToServices(topServices, ratingMap);
+
+  return {
+    category_id: topLevelCategory.id,
+    category_name: topLevelCategory.name,
+    category_slug: topLevelCategory.slug,
+    visit_count: category.visit_count,
+    services: servicesWithRatings,
+  };
+}
+
+/**
+ * 중복 카테고리 제거 및 병합
+ */
+function deduplicateCategories(categories: PersonalizedCategory[]): PersonalizedCategory[] {
+  const uniqueCategories = new Map<string, PersonalizedCategory>();
+
+  for (const cat of categories) {
+    const existing = uniqueCategories.get(cat.category_id);
+    if (existing) {
+      existing.visit_count += cat.visit_count;
+    } else {
+      uniqueCategories.set(cat.category_id, cat);
+    }
+  }
+
+  return Array.from(uniqueCategories.values());
 }
 
 /**
@@ -45,206 +304,29 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return [];
+
+  if (!user) {
+    return [];
+  }
 
   try {
-    // 1. 최근 방문한 카테고리 조회 (방문 횟수 우선, 최근 방문 순)
+    // 최근 방문한 카테고리 조회 (방문 횟수 우선, 최근 방문 순)
     const { data: topCategories, error: categoryError } = await supabase.rpc(
       'get_recent_category_visits',
-      {
-        p_user_id: user.id,
-        p_limit: 3, // 상위 3개만
-      }
+      { p_user_id: user.id, p_limit: 3 }
     );
 
     if (categoryError || !topCategories || topCategories.length === 0) {
       return [];
     }
 
-    // 2. 각 카테고리별로 서비스 조회 (병렬 처리)
+    // 각 카테고리별 서비스 조회 (병렬 처리)
     const categoriesWithServices = await Promise.all(
-      topCategories.map(
-        async (category: {
-          category_id: string;
-          category_name: string;
-          category_slug: string;
-          visit_count: number;
-        }) => {
-          // 카테고리 정보 조회 (level 포함)
-          const { data: categoryInfo } = await supabase
-            .from('categories')
-            .select('id, name, slug, level, parent_id')
-            .eq('slug', category.category_slug)
-            .single();
-
-          if (!categoryInfo) {
-            return {
-              category_id: category.category_id,
-              category_name: category.category_name,
-              category_slug: category.category_slug,
-              visit_count: category.visit_count,
-              services: [],
-            };
-          }
-
-          // 1차 카테고리 찾기
-          let topLevelCategory = categoryInfo;
-          if (categoryInfo.level === 2) {
-            // 2차 카테고리 → 부모(1차) 찾기
-            const { data: parent } = await supabase
-              .from('categories')
-              .select('id, name, slug, level, parent_id')
-              .eq('id', categoryInfo.parent_id)
-              .single();
-            if (parent) topLevelCategory = parent;
-          } else if (categoryInfo.level === 3) {
-            // 3차 카테고리 → 조부모(1차) 찾기
-            const { data: parent2nd } = await supabase
-              .from('categories')
-              .select('id, parent_id')
-              .eq('id', categoryInfo.parent_id)
-              .single();
-            if (parent2nd?.parent_id) {
-              const { data: grandparent } = await supabase
-                .from('categories')
-                .select('id, name, slug, level, parent_id')
-                .eq('id', parent2nd.parent_id)
-                .single();
-              if (grandparent) topLevelCategory = grandparent;
-            }
-          }
-
-          // 1차 카테고리의 모든 하위 카테고리 ID 수집
-          let allCategoryIds = [topLevelCategory.id];
-
-          // 2차 카테고리들
-          const { data: level2Categories } = await supabase
-            .from('categories')
-            .select('id')
-            .eq('parent_id', topLevelCategory.id);
-
-          const level2Ids = level2Categories?.map((c) => c.id) || [];
-          allCategoryIds = [...allCategoryIds, ...level2Ids];
-
-          // 3차 카테고리들
-          if (level2Ids.length > 0) {
-            const { data: level3Categories } = await supabase
-              .from('categories')
-              .select('id')
-              .in('parent_id', level2Ids);
-
-            const level3Ids = level3Categories?.map((c) => c.id) || [];
-            allCategoryIds = [...allCategoryIds, ...level3Ids];
-          }
-
-          // 광고 서비스 ID 조회 - Service Role 클라이언트 사용하여 RLS 우회
-          const serviceRoleClient = createServiceRoleClient();
-          const { data: advertisingData } = await serviceRoleClient
-            .from('advertising_subscriptions')
-            .select('service_id')
-            .eq('status', 'active');
-
-          const advertisedServiceIds = advertisingData?.map((ad) => ad.service_id) || [];
-
-          // 1차 카테고리의 모든 서비스 조회 (하위 포함)
-          const { data: services } = await supabase
-            .from('services')
-            .select(
-              `
-            id,
-            title,
-            description,
-            price,
-            thumbnail_url,
-            orders_count,
-            seller:seller_profiles(
-              id,
-              business_name,
-              display_name,
-              profile_image,
-              is_verified
-            ),
-            service_categories!inner(category_id)
-          `
-            )
-            .in('service_categories.category_id', allCategoryIds)
-            .eq('status', 'active')
-            .order('created_at', { ascending: false })
-            .limit(100); // 1차 카테고리 전체이므로 더 많이
-
-          // Type assertion: Supabase returns PartialServiceFromDB
-          const typedServices = (services || []) as PartialServiceFromDB[];
-
-          // 광고 서비스와 일반 서비스 분리
-          const advertisedServices = typedServices.filter((s) =>
-            advertisedServiceIds.includes(s.id)
-          );
-          const regularServices = typedServices.filter((s) => !advertisedServiceIds.includes(s.id));
-
-          // 광고 서비스 랜덤 셔플 (cryptographically secure)
-          cryptoShuffleArray(advertisedServices);
-
-          // 일반 서비스 랜덤 셔플 (cryptographically secure)
-          cryptoShuffleArray(regularServices);
-
-          // 광고 서비스(랜덤) + 일반 서비스(랜덤) (상위 5개)
-          const topServices = [...advertisedServices, ...regularServices].slice(0, 5);
-
-          if (topServices.length > 0) {
-            const serviceIdsForRating = topServices.map((s) => s.id);
-            const { data: reviewStats } = await supabase
-              .from('reviews')
-              .select('service_id, rating')
-              .in('service_id', serviceIdsForRating)
-              .eq('is_visible', true);
-
-            // 서비스별 평균 별점 계산
-            const ratingMap = new Map<string, { sum: number; count: number }>();
-            if (reviewStats) {
-              for (const review of reviewStats as { service_id: string; rating: number }[]) {
-                const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
-                ratingMap.set(review.service_id, {
-                  sum: current.sum + review.rating,
-                  count: current.count + 1,
-                });
-              }
-            }
-
-            // 각 서비스에 별점 추가 (타입 캐스팅: Service 타입으로 사용)
-            for (const service of topServices) {
-              const stats = ratingMap.get((service as PartialServiceFromDB).id);
-              // PartialServiceFromDB를 Service로 확장
-              const serviceWithRating = service as unknown as Service;
-              serviceWithRating.rating = stats && stats.count > 0 ? stats.sum / stats.count : 0;
-              serviceWithRating.review_count = stats?.count || 0;
-              serviceWithRating.order_count = (service as PartialServiceFromDB).orders_count || 0;
-            }
-          }
-
-          return {
-            category_id: topLevelCategory.id,
-            category_name: topLevelCategory.name,
-            category_slug: topLevelCategory.slug,
-            visit_count: category.visit_count,
-            services: topServices as unknown as Service[],
-          };
-        }
-      )
+      topCategories.map((category: CategoryVisit) => fetchCategoryServices(supabase, category))
     );
 
-    // 중복된 1차 카테고리 제거 (같은 1차 카테고리가 여러 번 나오지 않도록)
-    const uniqueCategories = new Map<string, PersonalizedCategory>();
-    for (const cat of categoriesWithServices) {
-      if (uniqueCategories.has(cat.category_id)) {
-        // 이미 있으면 visit_count 합산
-        const existing = uniqueCategories.get(cat.category_id)!;
-        existing.visit_count += cat.visit_count;
-      } else {
-        uniqueCategories.set(cat.category_id, cat);
-      }
-    }
-
-    return Array.from(uniqueCategories.values());
+    // 중복 카테고리 제거
+    return deduplicateCategories(categoriesWithServices);
   } catch (error) {
     logger.error('Failed to fetch personalized services:', error);
     return [];

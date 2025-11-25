@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useEffect, useState, useCallback } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
-import { useChatUnreadCount } from "@/components/providers/ChatUnreadProvider";
-import toast from "react-hot-toast";
-import ChatRoomList from "./components/ChatRoomList";
-import ChatMessageArea from "./components/ChatMessageArea";
+import { useEffect, useState, useCallback } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
+import { useChatUnreadCount } from '@/components/providers/ChatUnreadProvider';
+import toast from 'react-hot-toast';
+import ChatRoomList from './components/ChatRoomList';
+import ChatMessageArea from './components/ChatMessageArea';
 
 interface ChatRoom {
   id: string;
@@ -63,47 +63,43 @@ interface Props {
 // Helper: Filter rooms based on active tab
 function shouldShowRoom(
   room: ChatRoom,
-  activeTab: "all" | "unread" | "deal" | "favorite"
+  activeTab: 'all' | 'unread' | 'deal' | 'favorite'
 ): boolean {
-  if (activeTab === "all") return true;
-  if (activeTab === "unread") return (room.unreadCount || 0) > 0;
-  if (activeTab === "deal") return room.has_active_order === true;
-  if (activeTab === "favorite") return room.is_favorite === true;
+  if (activeTab === 'all') return true;
+  if (activeTab === 'unread') return (room.unreadCount || 0) > 0;
+  if (activeTab === 'deal') return room.has_active_order === true;
+  if (activeTab === 'favorite') return room.is_favorite === true;
   return true;
 }
 
 // Helper: Mark messages as read in background
 async function markMessagesReadInBackground(roomId: string): Promise<void> {
   try {
-    await fetch("/api/chat/messages/mark-read", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    await fetch('/api/chat/messages/mark-read', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ room_id: roomId }),
     });
   } catch (error) {
     console.error(
-      "[ChatListClient] Mark as read error:",
-      JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+      '[ChatListClient] Mark as read error:',
+      JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
     );
   }
 }
 
-export default function ChatListClient({ userId, sellerId }: Props) {
+export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const initialRoomId = searchParams.get("room");
-  const orderId = searchParams.get("order");
+  const initialRoomId = searchParams.get('room');
+  const orderId = searchParams.get('order');
 
   const [rooms, setRooms] = useState<ChatRoom[]>([]);
-  const [selectedRoomId, setSelectedRoomId] = useState<string | null>(
-    initialRoomId,
-  );
+  const [selectedRoomId, setSelectedRoomId] = useState<string | null>(initialRoomId);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [newMessage, setNewMessage] = useState("");
+  const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<
-    "all" | "unread" | "deal" | "favorite"
-  >("all");
+  const [activeTab, setActiveTab] = useState<'all' | 'unread' | 'deal' | 'favorite'>('all');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isCreatingRoom, setIsCreatingRoom] = useState(false);
@@ -113,21 +109,21 @@ export default function ChatListClient({ userId, sellerId }: Props) {
   // 채팅방 목록 로드
   const loadRooms = async () => {
     try {
-      const response = await fetch("/api/chat/rooms");
+      const response = await fetch('/api/chat/rooms');
       if (response.ok) {
         const data = await response.json();
         setRooms(data.rooms || []);
       } else {
         const error = await response.json();
         console.error(
-          "[ChatListClient] Failed to load rooms:",
-          JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+          '[ChatListClient] Failed to load rooms:',
+          JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
         );
       }
     } catch (error) {
       console.error(
-        "[ChatListClient] Load rooms error:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+        '[ChatListClient] Load rooms error:',
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
       );
     }
   };
@@ -136,9 +132,9 @@ export default function ChatListClient({ userId, sellerId }: Props) {
   const createRoomFromOrder = async (orderId: string) => {
     try {
       setIsCreatingRoom(true);
-      const response = await fetch("/api/chat/rooms/create-from-order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/chat/rooms/create-from-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ order_id: orderId }),
       });
 
@@ -149,14 +145,14 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         router.push(`/chat?room=${data.room.id}`); // URL 업데이트
       } else {
         const error = await response.json();
-        toast.error(error.error || "채팅방 생성에 실패했습니다");
+        toast.error(error.error || '채팅방 생성에 실패했습니다');
       }
     } catch (error) {
       console.error(
-        "Create room from order error:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+        'Create room from order error:',
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
       );
-      toast.error("채팅방 생성 중 오류가 발생했습니다");
+      toast.error('채팅방 생성 중 오류가 발생했습니다');
     } finally {
       setIsCreatingRoom(false);
     }
@@ -167,9 +163,9 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     e.stopPropagation(); // 채팅방 선택 이벤트 방지
 
     try {
-      const response = await fetch("/api/chat/favorites", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/chat/favorites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ room_id: roomId }),
       });
 
@@ -178,16 +174,14 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         // 로컬 상태 업데이트
         setRooms((prevRooms) =>
           prevRooms.map((room) =>
-            room.id === roomId
-              ? { ...room, is_favorite: data.is_favorite }
-              : room,
-          ),
+            room.id === roomId ? { ...room, is_favorite: data.is_favorite } : room
+          )
         );
       }
     } catch (error) {
       console.error(
-        "[ChatListClient] Toggle favorite error:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+        '[ChatListClient] Toggle favorite error:',
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
       );
     }
   };
@@ -198,9 +192,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     const unreadCount = currentRoom?.unreadCount || 0;
 
     setRooms((prevRooms) =>
-      prevRooms.map((room) =>
-        room.id === roomId ? { ...room, unreadCount: 0 } : room,
-      ),
+      prevRooms.map((room) => (room.id === roomId ? { ...room, unreadCount: 0 } : room))
     );
 
     return unreadCount;
@@ -237,17 +229,17 @@ export default function ChatListClient({ userId, sellerId }: Props) {
   // 읽지 않은 메시지를 읽음 처리
   const markMessagesAsRead = async (roomId: string) => {
     try {
-      await fetch("/api/chat/messages/mark-read", {
-        method: "POST",
+      await fetch('/api/chat/messages/mark-read', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ room_id: roomId }),
       });
     } catch (error) {
       console.error(
-        "[ChatListClient] Mark messages as read error:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+        '[ChatListClient] Mark messages as read error:',
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
       );
     }
   };
@@ -270,7 +262,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     if (file) {
       // 파일 크기 제한 (10MB)
       if (file.size > 10 * 1024 * 1024) {
-        toast.error("파일 크기는 10MB 이하만 가능합니다.");
+        toast.error('파일 크기는 10MB 이하만 가능합니다.');
         return;
       }
       setSelectedFile(file);
@@ -281,32 +273,27 @@ export default function ChatListClient({ userId, sellerId }: Props) {
   const uploadFile = async (file: File): Promise<string | null> => {
     try {
       setIsUploading(true);
-      const fileExt = file.name.split(".").pop();
+      const fileExt = file.name.split('.').pop();
       const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
       const filePath = `chat-files/${fileName}`;
 
-      const { error } = await supabase.storage
-        .from("uploads")
-        .upload(filePath, file);
+      const { error } = await supabase.storage.from('uploads').upload(filePath, file);
 
       if (error) {
         console.error(
-          "File upload error:",
-          JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+          'File upload error:',
+          JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
         );
         return null;
       }
 
       const {
         data: { publicUrl },
-      } = supabase.storage.from("uploads").getPublicUrl(filePath);
+      } = supabase.storage.from('uploads').getPublicUrl(filePath);
 
       return publicUrl;
     } catch (error) {
-      console.error(
-        "Upload error:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
-      );
+      console.error('Upload error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
       return null;
     } finally {
       setIsUploading(false);
@@ -316,13 +303,12 @@ export default function ChatListClient({ userId, sellerId }: Props) {
   // 메시지 전송
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if ((!newMessage.trim() && !selectedFile) || !selectedRoomId || isLoading)
-      return;
+    if ((!newMessage.trim() && !selectedFile) || !selectedRoomId || isLoading) return;
 
     const messageText = newMessage.trim();
     const fileToUpload = selectedFile;
     setIsLoading(true);
-    setNewMessage(""); // 입력창 즉시 비우기
+    setNewMessage(''); // 입력창 즉시 비우기
     setSelectedFile(null); // 파일 선택 초기화
 
     try {
@@ -341,12 +327,12 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         }
       }
 
-      const response = await fetch("/api/chat/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/chat/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           room_id: selectedRoomId,
-          message: messageText || "",
+          message: messageText || '',
           file_url: fileUrl || null,
           file_name: fileName || null,
           file_size: fileSize || null,
@@ -359,18 +345,16 @@ export default function ChatListClient({ userId, sellerId }: Props) {
         // loadRooms() 제거 - DB 재조회 방지, 실시간 구독으로 자동 업데이트
       } else {
         const errorData = await response.json();
-        toast.error(
-          `메시지 전송 실패: ${errorData.error || "알 수 없는 오류"}`,
-        );
+        toast.error(`메시지 전송 실패: ${errorData.error || '알 수 없는 오류'}`);
         setNewMessage(messageText); // 실패 시 메시지 복원
         setSelectedFile(fileToUpload); // 실패 시 파일 복원
       }
     } catch (error) {
       console.error(
-        "Send message error:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+        'Send message error:',
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
       );
-      toast.error("메시지 전송 중 오류가 발생했습니다.");
+      toast.error('메시지 전송 중 오류가 발생했습니다.');
       setNewMessage(messageText); // 실패 시 메시지 복원
       setSelectedFile(fileToUpload); // 실패 시 파일 복원
     } finally {
@@ -413,9 +397,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
 
       // last_message_at 기준으로 재정렬
       return updatedRooms.sort(
-        (a, b) =>
-          new Date(b.last_message_at).getTime() -
-          new Date(a.last_message_at).getTime(),
+        (a, b) => new Date(b.last_message_at).getTime() - new Date(a.last_message_at).getTime()
       );
     },
     [rooms]
@@ -440,13 +422,13 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     const channel = supabase
       .channel(`chat_list_updates_${userId}`)
       .on(
-        "postgres_changes",
+        'postgres_changes',
         {
-          event: "INSERT",
-          schema: "public",
-          table: "chat_messages",
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages',
         },
-        handleNewChatMessage,
+        handleNewChatMessage
       )
       .subscribe();
 
@@ -462,11 +444,11 @@ export default function ChatListClient({ userId, sellerId }: Props) {
     const channel = supabase
       .channel(`room:${selectedRoomId}`)
       .on(
-        "postgres_changes",
+        'postgres_changes',
         {
-          event: "INSERT",
-          schema: "public",
-          table: "chat_messages",
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages',
           filter: `room_id=eq.${selectedRoomId}`,
         },
         (payload) => {
@@ -488,7 +470,7 @@ export default function ChatListClient({ userId, sellerId }: Props) {
             },
           ]);
           // loadRooms() 제거 - DB 재조회 방지
-        },
+        }
       )
       .subscribe();
 
