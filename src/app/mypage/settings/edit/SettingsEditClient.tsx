@@ -86,7 +86,7 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
         });
 
       if (uploadError) {
-        console.error('Upload error:', uploadError);
+        logger.error('Upload error:', uploadError);
         throw uploadError;
       }
 
@@ -133,14 +133,12 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
       const result = await response.json();
 
       if (!response.ok) {
-        console.error('=== PROFILE UPDATE ERROR ===');
-        console.error('Status:', response.status);
-        console.error('Response:', result);
-        console.error(
-          'Error Message:',
-          result.error instanceof Error ? result.error.message : String(result.error)
-        );
-        console.error('Error Details:', result.details);
+        logger.error('Profile update error:', {
+          status: response.status,
+          response: result,
+          errorMessage: result.error instanceof Error ? result.error.message : String(result.error),
+          details: result.details,
+        });
 
         // 더 자세한 오류 메시지
         let errorMessage = '프로필 저장 중 오류가 발생했습니다.\n\n';

@@ -1,9 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
-import Link from "next/link";
-import { FaFileInvoice, FaCalendarCheck, FaWonSign } from "react-icons/fa";
+import { useEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import Link from 'next/link';
+import { FaFileInvoice, FaCalendarCheck, FaWonSign } from 'react-icons/fa';
+import { logger } from '@/lib/logger';
 
 interface TaxInvoice {
   id: string;
@@ -21,9 +22,9 @@ interface TaxInvoice {
 export default function AdminTaxInvoicesPage() {
   const [loading, setLoading] = useState(true);
   const [invoices, setInvoices] = useState<TaxInvoice[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [dateFrom, setDateFrom] = useState("");
-  const [dateTo, setDateTo] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
   const [stats, setStats] = useState({
     totalCount: 0,
     thisMonthAmount: 0,
@@ -40,21 +41,21 @@ export default function AdminTaxInvoicesPage() {
       const supabase = createClient();
 
       const query = supabase
-        .from("tax_invoices")
-        .select("*")
-        .order("issue_date", { ascending: false })
-        .order("created_at", { ascending: false });
+        .from('tax_invoices')
+        .select('*')
+        .order('issue_date', { ascending: false })
+        .order('created_at', { ascending: false });
 
       const { data, error } = await query;
 
       if (error) {
-        console.error("세금계산서 로딩 실패:", error);
+        logger.error('세금계산서 로딩 실패:', error);
         return;
       }
 
       setInvoices(data || []);
     } catch (error) {
-      console.error("세금계산서 로딩 중 오류:", error);
+      logger.error('세금계산서 로딩 중 오류:', error);
     } finally {
       setLoading(false);
     }
@@ -66,27 +67,23 @@ export default function AdminTaxInvoicesPage() {
 
       // 전체 건수
       const { count } = await supabase
-        .from("tax_invoices")
-        .select("*", { count: "exact", head: true });
+        .from('tax_invoices')
+        .select('*', { count: 'exact', head: true });
 
       // 이번 달 발행 금액
       const thisMonth = new Date();
       thisMonth.setDate(1);
       const { data: monthData } = await supabase
-        .from("tax_invoices")
-        .select("total_amount")
-        .gte("issue_date", thisMonth.toISOString().split("T")[0]);
+        .from('tax_invoices')
+        .select('total_amount')
+        .gte('issue_date', thisMonth.toISOString().split('T')[0]);
 
-      const thisMonthAmount =
-        monthData?.reduce((sum, inv) => sum + inv.total_amount, 0) || 0;
+      const thisMonthAmount = monthData?.reduce((sum, inv) => sum + inv.total_amount, 0) || 0;
 
       // 총 공급가액
-      const { data: allData } = await supabase
-        .from("tax_invoices")
-        .select("supply_amount");
+      const { data: allData } = await supabase.from('tax_invoices').select('supply_amount');
 
-      const totalSupplyAmount =
-        allData?.reduce((sum, inv) => sum + inv.supply_amount, 0) || 0;
+      const totalSupplyAmount = allData?.reduce((sum, inv) => sum + inv.supply_amount, 0) || 0;
 
       setStats({
         totalCount: count || 0,
@@ -94,7 +91,7 @@ export default function AdminTaxInvoicesPage() {
         totalSupplyAmount,
       });
     } catch (error) {
-      console.error("통계 로딩 실패:", error);
+      logger.error('통계 로딩 실패:', error);
     }
   }
 
@@ -102,9 +99,7 @@ export default function AdminTaxInvoicesPage() {
     const matchesSearch =
       !searchTerm ||
       invoice.invoice_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      invoice.buyer_company_name
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
+      invoice.buyer_company_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       invoice.buyer_business_number.includes(searchTerm);
 
     const matchesDateFrom = !dateFrom || invoice.issue_date >= dateFrom;
@@ -129,32 +124,24 @@ export default function AdminTaxInvoicesPage() {
       {/* 헤더 */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">세금계산서 관리</h1>
-        <p className="text-gray-600 mt-2">
-          광고 결제에 대한 세금계산서를 관리합니다
-        </p>
+        <p className="text-gray-600 mt-2">광고 결제에 대한 세금계산서를 관리합니다</p>
       </div>
 
       {/* 통계 카드 */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-600">
-              총 발행 건수
-            </span>
+            <span className="text-sm font-medium text-gray-600">총 발행 건수</span>
             <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
               <FaFileInvoice className="text-blue-600" />
             </div>
           </div>
-          <div className="text-3xl font-bold text-gray-900">
-            {stats.totalCount}건
-          </div>
+          <div className="text-3xl font-bold text-gray-900">{stats.totalCount}건</div>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-600">
-              이번 달 발행 금액
-            </span>
+            <span className="text-sm font-medium text-gray-600">이번 달 발행 금액</span>
             <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
               <FaCalendarCheck className="text-green-600" />
             </div>
@@ -167,9 +154,7 @@ export default function AdminTaxInvoicesPage() {
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-600">
-              총 공급가액
-            </span>
+            <span className="text-sm font-medium text-gray-600">총 공급가액</span>
             <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
               <FaWonSign className="text-purple-600" />
             </div>
@@ -185,7 +170,10 @@ export default function AdminTaxInvoicesPage() {
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label htmlFor="invoice-search" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="invoice-search"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               검색
             </label>
             <input
@@ -198,7 +186,10 @@ export default function AdminTaxInvoicesPage() {
             />
           </div>
           <div>
-            <label htmlFor="invoice-date-from" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="invoice-date-from"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               발행일 (시작)
             </label>
             <input
@@ -210,7 +201,10 @@ export default function AdminTaxInvoicesPage() {
             />
           </div>
           <div>
-            <label htmlFor="invoice-date-to" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="invoice-date-to"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               발행일 (종료)
             </label>
             <input
@@ -259,21 +253,15 @@ export default function AdminTaxInvoicesPage() {
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredInvoices.length === 0 ? (
                 <tr>
-                  <td
-                    colSpan={8}
-                    className="px-6 py-12 text-center text-gray-500"
-                  >
+                  <td colSpan={8} className="px-6 py-12 text-center text-gray-500">
                     {searchTerm || dateFrom || dateTo
-                      ? "검색 결과가 없습니다"
-                      : "발행된 세금계산서가 없습니다"}
+                      ? '검색 결과가 없습니다'
+                      : '발행된 세금계산서가 없습니다'}
                   </td>
                 </tr>
               ) : (
                 filteredInvoices.map((invoice) => (
-                  <tr
-                    key={invoice.id}
-                    className="hover:bg-gray-50 transition-colors"
-                  >
+                  <tr key={invoice.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
                         {invoice.invoice_number}
@@ -281,18 +269,14 @@ export default function AdminTaxInvoicesPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
-                        {new Date(invoice.issue_date).toLocaleDateString(
-                          "ko-KR",
-                        )}
+                        {new Date(invoice.issue_date).toLocaleDateString('ko-KR')}
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm font-medium text-gray-900">
                         {invoice.buyer_company_name}
                       </div>
-                      <div className="text-xs text-gray-500">
-                        {invoice.buyer_business_number}
-                      </div>
+                      <div className="text-xs text-gray-500">{invoice.buyer_business_number}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <div className="text-sm text-gray-900">
@@ -311,9 +295,7 @@ export default function AdminTaxInvoicesPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                        {invoice.status === "issued"
-                          ? "발행완료"
-                          : invoice.status}
+                        {invoice.status === 'issued' ? '발행완료' : invoice.status}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">

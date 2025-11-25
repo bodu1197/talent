@@ -1,10 +1,11 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import * as PortOne from "@portone/browser-sdk/v2";
-import { FaArrowLeft, FaCheck, FaSpinner, FaInfoCircle } from "react-icons/fa";
-import toast from "react-hot-toast";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import * as PortOne from '@portone/browser-sdk/v2';
+import { FaArrowLeft, FaCheck, FaSpinner, FaInfoCircle } from 'react-icons/fa';
+import toast from 'react-hot-toast';
+import { logger } from '@/lib/logger';
 
 interface PaymentRequest {
   id: string;
@@ -43,18 +44,14 @@ interface Props {
   readonly buyer: Buyer | null;
 }
 
-export default function PaymentClient({
-  paymentRequest,
-  seller,
-  buyer,
-}: Props) {
+export default function PaymentClient({ paymentRequest, seller, buyer }: Props) {
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const handlePayment = async () => {
     if (!agreedToTerms) {
-      toast.error("구매 조건을 확인하고 동의해주세요");
+      toast.error('구매 조건을 확인하고 동의해주세요');
       return;
     }
 
@@ -62,7 +59,7 @@ export default function PaymentClient({
 
     // 클라이언트 사이드 금액 검증
     if (paymentRequest.amount < 1000 || paymentRequest.amount > 100000000) {
-      toast.error("유효하지 않은 결제 금액입니다");
+      toast.error('유효하지 않은 결제 금액입니다');
       return;
     }
 
@@ -70,10 +67,10 @@ export default function PaymentClient({
 
     try {
       // 1. 결제 준비 (주문 ID 생성)
-      const prepareResponse = await fetch("/api/payments/prepare", {
-        method: "POST",
+      const prepareResponse = await fetch('/api/payments/prepare', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           payment_request_id: paymentRequest.id,
@@ -84,7 +81,7 @@ export default function PaymentClient({
 
       if (!prepareResponse.ok) {
         const error = await prepareResponse.json();
-        throw new Error(error.error || "결제 준비 실패");
+        throw new Error(error.error || '결제 준비 실패');
       }
 
       const { order_id, merchant_uid } = await prepareResponse.json();
@@ -95,11 +92,11 @@ export default function PaymentClient({
         paymentId: merchant_uid,
         orderName: paymentRequest.title,
         totalAmount: paymentRequest.amount,
-        currency: "CURRENCY_KRW",
-        channelKey: "channel-key-test", // 테스트 채널 키
-        payMethod: "CARD",
+        currency: 'CURRENCY_KRW',
+        channelKey: 'channel-key-test', // 테스트 채널 키
+        payMethod: 'CARD',
         customer: {
-          fullName: buyer?.name || "구매자",
+          fullName: buyer?.name || '구매자',
           phoneNumber: buyer?.phone || undefined,
           email: buyer?.email || undefined,
         },
@@ -121,9 +118,9 @@ export default function PaymentClient({
       }
 
       // 4. 결제 검증
-      const verifyResponse = await fetch("/api/payments/verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const verifyResponse = await fetch('/api/payments/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           payment_id: response?.paymentId,
           order_id,
@@ -133,27 +130,22 @@ export default function PaymentClient({
 
       if (!verifyResponse.ok) {
         const error = await verifyResponse.json();
-        throw new Error(error.error || "결제 검증 실패");
+        throw new Error(error.error || '결제 검증 실패');
       }
 
       const { order } = await verifyResponse.json();
 
       // 5. 성공 페이지로 이동
-      toast.success("결제가 완료되었습니다!");
+      toast.success('결제가 완료되었습니다!');
       router.push(`/mypage/buyer/orders/${order.id}`);
     } catch (error) {
-      console.error(
-        "Payment error:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
-      );
-      toast.error(
-        error instanceof Error ? error.message : "결제 중 오류가 발생했습니다",
-      );
+      logger.error('Payment error:', error);
+      toast.error(error instanceof Error ? error.message : '결제 중 오류가 발생했습니다');
       setIsProcessing(false);
     }
   };
 
-  const sellerName = seller?.display_name || seller?.business_name || "판매자";
+  const sellerName = seller?.display_name || seller?.business_name || '판매자';
 
   return (
     <div className="min-h-screen bg-gray-50 pt-16">
@@ -177,9 +169,7 @@ export default function PaymentClient({
           <div className="space-y-3">
             <div className="flex justify-between items-start">
               <span className="text-gray-600">상품명</span>
-              <span className="font-medium text-gray-900 text-right">
-                {paymentRequest.title}
-              </span>
+              <span className="font-medium text-gray-900 text-right">{paymentRequest.title}</span>
             </div>
 
             {paymentRequest.description && (
@@ -198,23 +188,17 @@ export default function PaymentClient({
 
             <div className="flex justify-between">
               <span className="text-gray-600">작업 기간</span>
-              <span className="text-gray-900">
-                {paymentRequest.delivery_days}일
-              </span>
+              <span className="text-gray-900">{paymentRequest.delivery_days}일</span>
             </div>
 
             <div className="flex justify-between">
               <span className="text-gray-600">수정 횟수</span>
-              <span className="text-gray-900">
-                {paymentRequest.revision_count}회
-              </span>
+              <span className="text-gray-900">{paymentRequest.revision_count}회</span>
             </div>
 
             <div className="pt-4 border-t border-gray-200">
               <div className="flex justify-between items-center">
-                <span className="text-lg font-bold text-gray-900">
-                  총 결제금액
-                </span>
+                <span className="text-lg font-bold text-gray-900">총 결제금액</span>
                 <span className="text-2xl font-bold text-brand-primary">
                   {paymentRequest.amount.toLocaleString()}원
                 </span>
@@ -230,38 +214,31 @@ export default function PaymentClient({
           <div className="space-y-3">
             <div className="flex justify-between">
               <span className="text-gray-600">이름</span>
-              <span className="text-gray-900">{buyer?.name || "-"}</span>
+              <span className="text-gray-900">{buyer?.name || '-'}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">이메일</span>
-              <span className="text-gray-900">{buyer?.email || "-"}</span>
+              <span className="text-gray-900">{buyer?.email || '-'}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">연락처</span>
-              <span className="text-gray-900">{buyer?.phone || "-"}</span>
+              <span className="text-gray-900">{buyer?.phone || '-'}</span>
             </div>
           </div>
         </div>
 
         {/* 구매 조건 동의 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
-            구매 조건 확인 및 동의
-          </h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-4">구매 조건 확인 및 동의</h2>
 
           <div className="space-y-3 mb-4">
             <div className="flex items-start gap-2 text-sm text-gray-600">
               <FaCheck className="text-green-600 mt-1" />
-              <span>
-                작업 완료 후 {paymentRequest.delivery_days}일 이내에 납품됩니다
-              </span>
+              <span>작업 완료 후 {paymentRequest.delivery_days}일 이내에 납품됩니다</span>
             </div>
             <div className="flex items-start gap-2 text-sm text-gray-600">
               <FaCheck className="text-green-600 mt-1" />
-              <span>
-                최대 {paymentRequest.revision_count}회까지 수정 요청이
-                가능합니다
-              </span>
+              <span>최대 {paymentRequest.revision_count}회까지 수정 요청이 가능합니다</span>
             </div>
             <div className="flex items-start gap-2 text-sm text-gray-600">
               <FaCheck className="text-green-600 mt-1" />

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 import {
   FaWonSign,
   FaChartLine,
@@ -83,10 +84,7 @@ export default function AdminAdvertisingStatisticsPage() {
         setStatistics(data);
       }
     } catch (error) {
-      console.error(
-        'Failed to fetch statistics:',
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-      );
+      logger.error('Failed to fetch statistics:', error);
     } finally {
       setLoading(false);
     }

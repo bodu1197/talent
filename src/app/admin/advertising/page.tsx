@@ -13,6 +13,7 @@ import {
   FaTimes,
 } from 'react-icons/fa';
 import toast from 'react-hot-toast';
+import { logger } from '@/lib/logger';
 
 interface Subscription {
   id: string;
@@ -74,10 +75,7 @@ export default function AdminAdvertisingPage() {
         setSummary(data.summary);
       }
     } catch (error) {
-      console.error(
-        'Failed to fetch subscriptions:',
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-      );
+      logger.error('Failed to fetch subscriptions:', error);
     } finally {
       setLoading(false);
     }
@@ -102,10 +100,7 @@ export default function AdminAdvertisingPage() {
         toast.error('상태 변경에 실패했습니다.');
       }
     } catch (error) {
-      console.error(
-        'Failed to update status:',
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-      );
+      logger.error('Failed to update status:', error);
       toast.error('상태 변경에 실패했습니다.');
     }
   };

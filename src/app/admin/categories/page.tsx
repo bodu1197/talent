@@ -1,15 +1,10 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import type { Category } from "@/types/common";
-import {
-  FaPlus,
-  FaFolder,
-  FaEdit,
-  FaTrash,
-  FaFolderOpen,
-} from "react-icons/fa";
-import toast from "react-hot-toast";
+import { useState, useEffect } from 'react';
+import type { Category } from '@/types/common';
+import { FaPlus, FaFolder, FaEdit, FaTrash, FaFolderOpen } from 'react-icons/fa';
+import toast from 'react-hot-toast';
+import { logger } from '@/lib/logger';
 
 interface CategoryFormData {
   name: string;
@@ -25,8 +20,8 @@ export default function AdminCategoriesPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [formData, setFormData] = useState<CategoryFormData>({
-    name: "",
-    slug: "",
+    name: '',
+    slug: '',
     parent_id: null,
     display_order: 0,
     is_active: true,
@@ -39,18 +34,13 @@ export default function AdminCategoriesPage() {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const response = await fetch(
-        "/api/admin/categories?includeInactive=true",
-      );
+      const response = await fetch('/api/admin/categories?includeInactive=true');
       if (response.ok) {
         const data = await response.json();
         setCategories(data.categories || []);
       }
     } catch (error) {
-      console.error(
-        "Failed to fetch categories:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
-      );
+      logger.error('Failed to fetch categories:', error);
     } finally {
       setLoading(false);
     }
@@ -59,8 +49,8 @@ export default function AdminCategoriesPage() {
   const handleCreate = () => {
     setEditingCategory(null);
     setFormData({
-      name: "",
-      slug: "",
+      name: '',
+      slug: '',
       parent_id: null,
       display_order: 0,
       is_active: true,
@@ -85,27 +75,27 @@ export default function AdminCategoriesPage() {
 
     try {
       if (editingCategory) {
-        const response = await fetch("/api/admin/categories", {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
+        const response = await fetch('/api/admin/categories', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: editingCategory.id, ...formData }),
         });
 
         if (!response.ok) {
           const error = await response.json();
-          toast.error(error.error || "Failed to update category");
+          toast.error(error.error || 'Failed to update category');
           return;
         }
       } else {
-        const response = await fetch("/api/admin/categories", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const response = await fetch('/api/admin/categories', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData),
         });
 
         if (!response.ok) {
           const error = await response.json();
-          toast.error(error.error || "Failed to create category");
+          toast.error(error.error || 'Failed to create category');
           return;
         }
       }
@@ -113,11 +103,8 @@ export default function AdminCategoriesPage() {
       setDialogOpen(false);
       fetchCategories();
     } catch (error) {
-      console.error(
-        "Failed to save category:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
-      );
-      toast.error("Failed to save category");
+      logger.error('Failed to save category:', error);
+      toast.error('Failed to save category');
     }
   };
 
@@ -128,22 +115,19 @@ export default function AdminCategoriesPage() {
 
     try {
       const response = await fetch(`/api/admin/categories?id=${category.id}`, {
-        method: "DELETE",
+        method: 'DELETE',
       });
 
       if (!response.ok) {
         const error = await response.json();
-        toast.error(error.error || "Failed to delete category");
+        toast.error(error.error || 'Failed to delete category');
         return;
       }
 
       fetchCategories();
     } catch (error) {
-      console.error(
-        "Failed to delete category:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
-      );
-      toast.error("Failed to delete category");
+      logger.error('Failed to delete category:', error);
+      toast.error('Failed to delete category');
     }
   };
 
@@ -162,12 +146,8 @@ export default function AdminCategoriesPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">
-            카테고리 관리
-          </h1>
-          <p className="text-slate-600">
-            서비스 카테고리를 추가, 수정, 삭제할 수 있습니다
-          </p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">카테고리 관리</h1>
+          <p className="text-slate-600">서비스 카테고리를 추가, 수정, 삭제할 수 있습니다</p>
         </div>
         <button
           onClick={handleCreate}
@@ -198,12 +178,8 @@ export default function AdminCategoriesPage() {
                         <FaFolder className="text-[#0f3460] text-lg" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-bold text-slate-900">
-                          {parent.name}
-                        </h3>
-                        <p className="text-sm text-slate-600 mt-1">
-                          /{parent.slug}
-                        </p>
+                        <h3 className="text-lg font-bold text-slate-900">{parent.name}</h3>
+                        <p className="text-sm text-slate-600 mt-1">/{parent.slug}</p>
                       </div>
                       {!parent.is_active && (
                         <span className="rounded-full bg-slate-200 px-3 py-1 text-xs font-medium text-slate-700">
@@ -241,12 +217,8 @@ export default function AdminCategoriesPage() {
                               <FaFolderOpen className="text-slate-600" />
                             </div>
                             <div>
-                              <p className="font-medium text-slate-900">
-                                {child.name}
-                              </p>
-                              <p className="text-sm text-slate-600">
-                                /{child.slug}
-                              </p>
+                              <p className="font-medium text-slate-900">{child.name}</p>
+                              <p className="text-sm text-slate-600">/{child.slug}</p>
                             </div>
                             {!child.is_active && (
                               <span className="rounded-full bg-slate-200 px-3 py-1 text-xs font-medium text-slate-700">
@@ -296,30 +268,25 @@ export default function AdminCategoriesPage() {
             <form onSubmit={handleSubmit}>
               <div className="px-6 py-4 border-b border-slate-200">
                 <h2 className="text-xl font-bold text-slate-900">
-                  {editingCategory ? "카테고리 수정" : "새 카테고리 추가"}
+                  {editingCategory ? '카테고리 수정' : '새 카테고리 추가'}
                 </h2>
                 <p className="text-sm text-slate-600 mt-1">
                   {editingCategory
-                    ? "카테고리 정보를 수정합니다."
-                    : "새로운 카테고리를 추가합니다."}
+                    ? '카테고리 정보를 수정합니다.'
+                    : '새로운 카테고리를 추가합니다.'}
                 </p>
               </div>
 
               <div className="px-6 py-4 space-y-4">
                 <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-slate-700 mb-1"
-                  >
+                  <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1">
                     카테고리 이름 *
                   </label>
                   <input
                     id="name"
                     type="text"
                     value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="예: IT·프로그래밍"
                     required
                     className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
@@ -327,38 +294,28 @@ export default function AdminCategoriesPage() {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="slug"
-                    className="block text-sm font-medium text-slate-700 mb-1"
-                  >
+                  <label htmlFor="slug" className="block text-sm font-medium text-slate-700 mb-1">
                     URL 슬러그 *
                   </label>
                   <input
                     id="slug"
                     type="text"
                     value={formData.slug}
-                    onChange={(e) =>
-                      setFormData({ ...formData, slug: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                     placeholder="예: it-programming"
                     required
                     className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
                   />
-                  <p className="text-xs text-slate-500 mt-1">
-                    영문, 숫자, 하이픈(-)만 사용 가능
-                  </p>
+                  <p className="text-xs text-slate-500 mt-1">영문, 숫자, 하이픈(-)만 사용 가능</p>
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="parent"
-                    className="block text-sm font-medium text-slate-700 mb-1"
-                  >
+                  <label htmlFor="parent" className="block text-sm font-medium text-slate-700 mb-1">
                     상위 카테고리
                   </label>
                   <select
                     id="parent"
-                    value={formData.parent_id || ""}
+                    value={formData.parent_id || ''}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
@@ -396,9 +353,7 @@ export default function AdminCategoriesPage() {
                     min="0"
                     className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0f3460]"
                   />
-                  <p className="text-xs text-slate-500 mt-1">
-                    숫자가 작을수록 먼저 표시됩니다
-                  </p>
+                  <p className="text-xs text-slate-500 mt-1">숫자가 작을수록 먼저 표시됩니다</p>
                 </div>
 
                 <div className="flex items-center justify-between rounded-lg border border-slate-200 p-4">
@@ -409,17 +364,13 @@ export default function AdminCategoriesPage() {
                     >
                       카테고리 활성화
                     </label>
-                    <p className="text-xs text-slate-500">
-                      비활성 시 사용자에게 표시되지 않습니다
-                    </p>
+                    <p className="text-xs text-slate-500">비활성 시 사용자에게 표시되지 않습니다</p>
                   </div>
                   <input
                     id="is_active"
                     type="checkbox"
                     checked={formData.is_active}
-                    onChange={(e) =>
-                      setFormData({ ...formData, is_active: e.target.checked })
-                    }
+                    onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
                     className="h-4 w-4 text-[#0f3460] focus:ring-[#0f3460] border-slate-300 rounded"
                   />
                 </div>
@@ -437,7 +388,7 @@ export default function AdminCategoriesPage() {
                   type="submit"
                   className="px-4 py-2 bg-[#0f3460] hover:bg-[#0f3460]/90 text-white rounded-md transition-colors"
                 >
-                  {editingCategory ? "수정" : "추가"}
+                  {editingCategory ? '수정' : '추가'}
                 </button>
               </div>
             </form>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { logger } from '@/lib/logger';
 
 interface Payment {
   id: string;
@@ -172,7 +173,7 @@ export default function AdminAdvertisingPaymentsPage() {
       setStats(data.stats || stats);
       setTotalPages(data.pagination?.totalPages || 1);
     } catch (error) {
-      console.error('결제 목록 로딩 실패:', error);
+      logger.error('결제 목록 로딩 실패:', error);
       toast.error('결제 목록을 불러올 수 없습니다');
     } finally {
       setLoading(false);
@@ -317,7 +318,7 @@ export default function AdminAdvertisingPaymentsPage() {
       setSelectedIds(new Set());
       loadPayments();
     } catch (error) {
-      console.error('일괄 처리 실패:', error);
+      logger.error('일괄 처리 실패:', error);
       toast.error('처리에 실패했습니다');
     }
   }
@@ -341,7 +342,7 @@ export default function AdminAdvertisingPaymentsPage() {
       setMemoText('');
       loadPayments();
     } catch (error) {
-      console.error('상태 업데이트 실패:', error);
+      logger.error('상태 업데이트 실패:', error);
       toast.error('업데이트에 실패했습니다');
     }
   }
