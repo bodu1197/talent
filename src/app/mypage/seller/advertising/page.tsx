@@ -595,26 +595,20 @@ export default function AdvertisingPage() {
 
           {/* 모달 팝업 */}
           {isModalOpen && selectedService && (
-            <div
-              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-              onClick={() => {
-                setIsModalOpen(false);
-                setSelectedService('');
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Escape') {
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+              <button
+                type="button"
+                className="absolute inset-0 bg-black bg-opacity-50 cursor-default"
+                onClick={() => {
                   setIsModalOpen(false);
                   setSelectedService('');
-                }
-              }}
-              tabIndex={0}
-              role="button"
-              aria-label="모달 닫기"
-            >
-              <dialog
-                open
-                className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-                onClick={(e) => e.stopPropagation()}
+                }}
+                aria-label="모달 닫기"
+              />
+              <div
+                className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+                role="dialog"
+                aria-modal="true"
                 aria-labelledby="advertising-modal-title"
               >
                 {/* 모달 헤더 */}
@@ -915,7 +909,7 @@ export default function AdvertisingPage() {
                     );
                   })()}
                 </div>
-              </dialog>
+              </div>
             </div>
           )}
 

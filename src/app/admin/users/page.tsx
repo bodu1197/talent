@@ -300,18 +300,17 @@ export default function AdminUsersPage() {
 
       {/* 사용자 상세 모달 */}
       {selectedUser && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-          onClick={() => setSelectedUser(null)}
-          onKeyDown={(e) => e.key === 'Escape' && setSelectedUser(null)}
-          tabIndex={0}
-          role="button"
-          aria-label="모달 닫기"
-        >
-          <dialog
-            open
-            className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <button
+            type="button"
+            className="absolute inset-0 bg-black bg-opacity-50 cursor-default"
+            onClick={() => setSelectedUser(null)}
+            aria-label="모달 닫기"
+          />
+          <div
+            className="relative bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            role="dialog"
+            aria-modal="true"
             aria-labelledby="user-detail-title"
           >
             {/* 모달 헤더 */}
@@ -404,7 +403,7 @@ export default function AdminUsersPage() {
                 수정
               </button>
             </div>
-          </dialog>
+          </div>
         </div>
       )}
     </div>

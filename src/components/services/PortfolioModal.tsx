@@ -57,18 +57,17 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
   const youtubeVideoId = getYoutubeVideoId(portfolio.youtube_url);
 
   return (
-    <div
-      className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
-      onClick={onClose}
-      onKeyDown={(e) => e.key === 'Escape' && onClose()}
-      tabIndex={0}
-      role="button"
-      aria-label="모달 닫기"
-    >
-      <dialog
-        open
-        className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
-        onClick={(e) => e.stopPropagation()}
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <button
+        type="button"
+        className="absolute inset-0 bg-black/60 cursor-default"
+        onClick={onClose}
+        aria-label="모달 닫기"
+      />
+      <div
+        className="relative bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+        role="dialog"
+        aria-modal="true"
         aria-labelledby="portfolio-title"
       >
         {/* 닫기 버튼 */}
@@ -179,7 +178,7 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
             </div>
           )}
         </div>
-      </dialog>
+      </div>
     </div>
   );
 }
