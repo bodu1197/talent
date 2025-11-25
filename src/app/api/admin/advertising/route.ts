@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { createServiceRoleClient } from "@/lib/supabase/singleton";
-import { checkAdminAuth } from "@/lib/admin/auth";
+import { NextRequest, NextResponse } from 'next/server';
+import { createServiceRoleClient } from '@/lib/supabase/singleton';
+import { checkAdminAuth } from '@/lib/admin/auth';
+import { logger } from '@/lib/logger';
 
 // GET - 광고 구독 목록 조회
 export async function GET(request: NextRequest) {
@@ -9,30 +10,30 @@ export async function GET(request: NextRequest) {
     if (!adminCheck.isAdmin) {
       return NextResponse.json(
         { error: adminCheck.error },
-        { status: adminCheck.error === "Unauthorized" ? 401 : 403 },
+        { status: adminCheck.error === 'Unauthorized' ? 401 : 403 }
       );
     }
 
     const supabase = createServiceRoleClient();
     const { searchParams } = new URL(request.url);
 
-    const status = searchParams.get("status");
-    const paymentMethod = searchParams.get("paymentMethod");
-    const sortBy = searchParams.get("sortBy") || "created_at";
-    const sortOrder = searchParams.get("sortOrder") === "asc" ? true : false;
+    const status = searchParams.get('status');
+    const paymentMethod = searchParams.get('paymentMethod');
+    const sortBy = searchParams.get('sortBy') || 'created_at';
+    const sortOrder = searchParams.get('sortOrder') === 'asc' ? true : false;
 
     // 광고 구독 목록 조회 - seller 정보는 별도로 조회
-    let query = supabase.from("advertising_subscriptions").select(`
+    let query = supabase.from('advertising_subscriptions').select(`
         *,
         service:services!advertising_subscriptions_service_id_fkey(title)
       `);
 
     // 필터 적용
     if (status) {
-      query = query.eq("status", status);
+      query = query.eq('status', status);
     }
     if (paymentMethod) {
-      query = query.eq("payment_method", paymentMethod);
+      query = query.eq('payment_method', paymentMethod);
     }
 
     // 정렬
@@ -61,22 +62,22 @@ export async function GET(request: NextRequest) {
 
     // seller 정보 조회 (seller_profiles 뷰)
     const { data: sellers } = await supabase
-      .from("seller_profiles")
-      .select("id, user_id, display_name, business_name, profile_image")
-      .in("id", sellerIds);
+      .from('seller_profiles')
+      .select('id, user_id, display_name, business_name, profile_image')
+      .in('id', sellerIds);
 
     // seller의 email과 name 정보 조회 (users 테이블)
     const sellerUserIds = sellers?.map((s) => s.user_id) || [];
     const { data: sellerUsers } = await supabase
-      .from("users")
-      .select("id, email")
-      .in("id", sellerUserIds);
+      .from('users')
+      .select('id, email')
+      .in('id', sellerUserIds);
 
     // seller의 name 정보 조회 (profiles 테이블)
     const { data: sellerProfiles } = await supabase
-      .from("profiles")
-      .select("user_id, name")
-      .in("user_id", sellerUserIds);
+      .from('profiles')
+      .select('user_id, name')
+      .in('user_id', sellerUserIds);
 
     // seller 맵 생성
     const sellerMap = new Map(
@@ -91,13 +92,13 @@ export async function GET(request: NextRequest) {
             user:
               user || profile
                 ? {
-                    email: user?.email || "이메일 없음",
-                    name: profile?.name || "이름 없음",
+                    email: user?.email || '이메일 없음',
+                    name: profile?.name || '이름 없음',
                   }
                 : null,
           },
         ];
-      }) || [],
+      }) || []
     );
 
     // Seller 정보를 subscription에 추가
@@ -108,23 +109,18 @@ export async function GET(request: NextRequest) {
 
     // 통계 계산
     const { data: stats } = await supabase
-      .from("advertising_subscriptions")
-      .select("status, payment_method, monthly_price, total_paid");
+      .from('advertising_subscriptions')
+      .select('status, payment_method, monthly_price, total_paid');
 
     const summary = {
       totalSubscriptions: stats?.length || 0,
-      activeSubscriptions:
-        stats?.filter((s) => s.status === "active").length || 0,
-      pendingPayments:
-        stats?.filter((s) => s.status === "pending_payment").length || 0,
-      cancelledSubscriptions:
-        stats?.filter((s) => s.status === "cancelled").length || 0,
-      totalRevenue:
-        stats?.reduce((sum, s) => sum + (s.total_paid || 0), 0) || 0,
+      activeSubscriptions: stats?.filter((s) => s.status === 'active').length || 0,
+      pendingPayments: stats?.filter((s) => s.status === 'pending_payment').length || 0,
+      cancelledSubscriptions: stats?.filter((s) => s.status === 'cancelled').length || 0,
+      totalRevenue: stats?.reduce((sum, s) => sum + (s.total_paid || 0), 0) || 0,
       monthlyRevenue:
-        stats
-          ?.filter((s) => s.status === "active")
-          .reduce((sum, s) => sum + s.monthly_price, 0) || 0,
+        stats?.filter((s) => s.status === 'active').reduce((sum, s) => sum + s.monthly_price, 0) ||
+        0,
     };
 
     return NextResponse.json({
@@ -132,13 +128,10 @@ export async function GET(request: NextRequest) {
       summary,
     });
   } catch (error) {
-    console.error(
-      "Failed to fetch advertising subscriptions:",
-      JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
-    );
+    logger.error('Failed to fetch advertising subscriptions:', error);
     return NextResponse.json(
-      { error: "Failed to fetch advertising subscriptions" },
-      { status: 500 },
+      { error: 'Failed to fetch advertising subscriptions' },
+      { status: 500 }
     );
   }
 }
@@ -150,7 +143,7 @@ export async function PATCH(request: NextRequest) {
     if (!adminCheck.isAdmin) {
       return NextResponse.json(
         { error: adminCheck.error },
-        { status: adminCheck.error === "Unauthorized" ? 401 : 403 },
+        { status: adminCheck.error === 'Unauthorized' ? 401 : 403 }
       );
     }
 
@@ -159,10 +152,7 @@ export async function PATCH(request: NextRequest) {
     const { subscriptionId, status } = body;
 
     if (!subscriptionId) {
-      return NextResponse.json(
-        { error: "Subscription ID is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Subscription ID is required' }, { status: 400 });
     }
 
     const updateData: Record<string, unknown> = {
@@ -172,17 +162,17 @@ export async function PATCH(request: NextRequest) {
     if (status) {
       updateData.status = status;
 
-      if (status === "cancelled") {
+      if (status === 'cancelled') {
         updateData.cancelled_at = new Date().toISOString();
-      } else if (status === "active") {
+      } else if (status === 'active') {
         updateData.cancelled_at = null;
       }
     }
 
     const { data: subscription, error } = await supabase
-      .from("advertising_subscriptions")
+      .from('advertising_subscriptions')
       .update(updateData)
-      .eq("id", subscriptionId)
+      .eq('id', subscriptionId)
       .select()
       .single();
 
@@ -190,14 +180,8 @@ export async function PATCH(request: NextRequest) {
 
     return NextResponse.json({ subscription });
   } catch (error) {
-    console.error(
-      "Failed to update subscription:",
-      JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
-    );
-    return NextResponse.json(
-      { error: "Failed to update subscription" },
-      { status: 500 },
-    );
+    logger.error('Failed to update subscription:', error);
+    return NextResponse.json({ error: 'Failed to update subscription' }, { status: 500 });
   }
 }
 
@@ -208,42 +192,33 @@ export async function DELETE(request: NextRequest) {
     if (!adminCheck.isAdmin) {
       return NextResponse.json(
         { error: adminCheck.error },
-        { status: adminCheck.error === "Unauthorized" ? 401 : 403 },
+        { status: adminCheck.error === 'Unauthorized' ? 401 : 403 }
       );
     }
 
     const supabase = createServiceRoleClient();
     const { searchParams } = new URL(request.url);
-    const subscriptionId = searchParams.get("id");
+    const subscriptionId = searchParams.get('id');
 
     if (!subscriptionId) {
-      return NextResponse.json(
-        { error: "Subscription ID is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Subscription ID is required' }, { status: 400 });
     }
 
     // 취소 상태로 변경 (실제 삭제하지 않음)
     const { error } = await supabase
-      .from("advertising_subscriptions")
+      .from('advertising_subscriptions')
       .update({
-        status: "cancelled",
+        status: 'cancelled',
         cancelled_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })
-      .eq("id", subscriptionId);
+      .eq('id', subscriptionId);
 
     if (error) throw error;
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error(
-      "Failed to cancel subscription:",
-      JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
-    );
-    return NextResponse.json(
-      { error: "Failed to cancel subscription" },
-      { status: 500 },
-    );
+    logger.error('Failed to cancel subscription:', error);
+    return NextResponse.json({ error: 'Failed to cancel subscription' }, { status: 500 });
   }
 }

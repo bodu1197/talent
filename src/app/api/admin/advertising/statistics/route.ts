@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { checkAdminAuth } from '@/lib/admin/auth';
+import { logger } from '@/lib/logger';
 
 interface StatsQuery {
   period: 'day' | 'month' | 'year';
@@ -258,10 +259,7 @@ export async function GET(request: NextRequest) {
       subscriptions: subscriptionStats,
     });
   } catch (error) {
-    console.error(
-      'Failed to fetch advertising statistics:',
-      JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-    );
+    logger.error('Failed to fetch advertising statistics:', error);
     return NextResponse.json({ error: 'Failed to fetch advertising statistics' }, { status: 500 });
   }
 }
