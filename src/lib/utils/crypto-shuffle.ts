@@ -1,4 +1,4 @@
-import { randomBytes } from 'node:crypto';
+import { randomBytes } from 'crypto';
 
 /**
  * Fisher-Yates shuffle with cryptographically secure random
