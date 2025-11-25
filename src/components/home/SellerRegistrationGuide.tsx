@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from 'next/link';
 
 export default function SellerRegistrationGuide() {
   return (
@@ -10,9 +10,7 @@ export default function SellerRegistrationGuide() {
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               돌파구 판매자가 되어보세요
             </h2>
-            <p className="text-lg text-gray-600">
-              당신의 재능을 공유하고 수익을 창출하세요
-            </p>
+            <p className="text-lg text-gray-600">당신의 재능을 공유하고 수익을 창출하세요</p>
           </div>
 
           {/* 혜택 카드들 */}
@@ -34,12 +32,8 @@ export default function SellerRegistrationGuide() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                수익 창출
-              </h3>
-              <p className="text-gray-600">
-                당신의 전문성으로 안정적인 수익을 만들어보세요
-              </p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">수익 창출</h3>
+              <p className="text-gray-600">당신의 전문성으로 안정적인 수익을 만들어보세요</p>
             </div>
 
             {/* 카드 2 */}
@@ -59,12 +53,8 @@ export default function SellerRegistrationGuide() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                넓은 고객층
-              </h3>
-              <p className="text-gray-600">
-                다양한 고객들과 연결되어 비즈니스를 확장하세요
-              </p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">넓은 고객층</h3>
+              <p className="text-gray-600">다양한 고객들과 연결되어 비즈니스를 확장하세요</p>
             </div>
 
             {/* 카드 3 */}
@@ -84,28 +74,19 @@ export default function SellerRegistrationGuide() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                안전한 거래
-              </h3>
-              <p className="text-gray-600">
-                신뢰할 수 있는 결제 시스템으로 안전하게 거래하세요
-              </p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">안전한 거래</h3>
+              <p className="text-gray-600">신뢰할 수 있는 결제 시스템으로 안전하게 거래하세요</p>
             </div>
           </div>
 
           {/* CTA 버튼 */}
           <div className="text-center">
             <Link
-              href="/auth/signup"
+              href="/auth/register"
               className="inline-flex items-center px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors shadow-lg hover:shadow-xl"
             >
               판매자로 시작하기
-              <svg
-                className="w-5 h-5 ml-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -114,9 +95,7 @@ export default function SellerRegistrationGuide() {
                 />
               </svg>
             </Link>
-            <p className="text-sm text-gray-500 mt-4">
-              가입 후 바로 서비스 등록이 가능합니다
-            </p>
+            <p className="text-sm text-gray-500 mt-4">가입 후 바로 서비스 등록이 가능합니다</p>
           </div>
         </div>
       </div>
