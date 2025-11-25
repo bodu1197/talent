@@ -7,6 +7,7 @@ import { Service } from '@/types';
 import { FaLock, FaHeart, FaBox, FaStar, FaCheckCircle, FaTimes, FaRegHeart } from 'react-icons/fa';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import toast from 'react-hot-toast';
+import { logger } from '@/lib/logger';
 
 interface FavoriteItem {
   service_id: string;
@@ -34,10 +35,7 @@ export default function FavoritesPage() {
           setFavorites(data || []);
         }
       } catch (error) {
-        console.error(
-          'Failed to fetch favorites:',
-          JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-        );
+        logger.error('Failed to fetch favorites:', error);
       } finally {
         setLoading(false);
       }
@@ -62,10 +60,7 @@ export default function FavoritesPage() {
         toast.error('찜 취소에 실패했습니다.');
       }
     } catch (error) {
-      console.error(
-        'Remove favorite error:',
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-      );
+      logger.error('Remove favorite error:', error);
       toast.error('오류가 발생했습니다.');
     }
   };

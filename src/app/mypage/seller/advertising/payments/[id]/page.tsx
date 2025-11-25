@@ -1,11 +1,12 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
-import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import { FaInfoCircle } from "react-icons/fa";
-import toast from "react-hot-toast";
+import { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
+import { FaInfoCircle } from 'react-icons/fa';
+import toast from 'react-hot-toast';
+import { logger } from '@/lib/logger';
 
 interface PaymentDetail {
   id: string;
@@ -43,25 +44,25 @@ export default function PaymentDetailPage() {
     try {
       const supabase = createClient();
       const { data } = await supabase
-        .from("advertising_payments")
+        .from('advertising_payments')
         .select(
           `
           *,
           subscription:advertising_subscriptions(
             service:services(title)
           )
-        `,
+        `
         )
-        .eq("id", paymentId)
+        .eq('id', paymentId)
         .single();
 
       if (data) {
         setPayment(data);
       }
     } catch (error) {
-      console.error("결제 정보 로딩 실패:", error);
-      toast.error("결제 정보를 불러올 수 없습니다");
-      router.push("/mypage/seller/advertising");
+      logger.error('결제 정보 로딩 실패:', error);
+      toast.error('결제 정보를 불러올 수 없습니다');
+      router.push('/mypage/seller/advertising');
     } finally {
       setLoading(false);
     }
@@ -102,30 +103,25 @@ export default function PaymentDetailPage() {
 
         {/* 상태 표시 */}
         <div className="mb-6">
-          {payment.status === "pending" && (
+          {payment.status === 'pending' && (
             <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
               <p className="text-yellow-800 font-medium">⏳ 입금 대기 중</p>
               <p className="text-yellow-700 text-sm mt-1">
-                아래 계좌로 입금해주세요. 관리자가 입금을 확인한 후 광고가
-                시작됩니다.
+                아래 계좌로 입금해주세요. 관리자가 입금을 확인한 후 광고가 시작됩니다.
               </p>
             </div>
           )}
-          {payment.status === "completed" && (
+          {payment.status === 'completed' && (
             <div className="bg-green-50 border-l-4 border-green-400 p-4">
               <p className="text-green-800 font-medium">✅ 입금 확인 완료</p>
-              <p className="text-green-700 text-sm mt-1">
-                광고가 활성화되었습니다
-              </p>
+              <p className="text-green-700 text-sm mt-1">광고가 활성화되었습니다</p>
             </div>
           )}
         </div>
 
         {/* 입금 정보 카드 */}
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-6">
-          <h2 className="text-2xl font-bold mb-6 text-gray-900">
-            입금 계좌 정보
-          </h2>
+          <h2 className="text-2xl font-bold mb-6 text-gray-900">입금 계좌 정보</h2>
 
           <div className="space-y-4">
             <div className="flex justify-between items-center border-b pb-4">
@@ -144,9 +140,7 @@ export default function PaymentDetailPage() {
 
             <div className="flex justify-between items-center border-b pb-4">
               <span className="text-gray-600">은행</span>
-              <span className="font-bold text-gray-900">
-                {process.env.NEXT_PUBLIC_BANK_NAME}
-              </span>
+              <span className="font-bold text-gray-900">{process.env.NEXT_PUBLIC_BANK_NAME}</span>
             </div>
 
             <div className="flex justify-between items-center border-b pb-4">
@@ -158,16 +152,13 @@ export default function PaymentDetailPage() {
 
             <div className="flex justify-between items-center border-b pb-4">
               <span className="text-gray-600">예금주</span>
-              <span className="font-bold text-gray-900">
-                {process.env.NEXT_PUBLIC_BANK_HOLDER}
-              </span>
+              <span className="font-bold text-gray-900">{process.env.NEXT_PUBLIC_BANK_HOLDER}</span>
             </div>
 
             <div className="flex justify-between items-center">
               <span className="text-gray-600">입금 기한</span>
               <span className="font-bold text-red-600">
-                {deadline.toLocaleDateString("ko-KR")}{" "}
-                {deadline.toLocaleTimeString("ko-KR")}
+                {deadline.toLocaleDateString('ko-KR')} {deadline.toLocaleTimeString('ko-KR')}
               </span>
             </div>
           </div>
@@ -175,8 +166,8 @@ export default function PaymentDetailPage() {
           <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-sm text-blue-800">
               <FaInfoCircle className="inline mr-2" />
-              입금 후 관리자가 확인하면 광고가 자동으로 시작됩니다. 입금
-              확인까지 1-2일 정도 소요될 수 있습니다.
+              입금 후 관리자가 확인하면 광고가 자동으로 시작됩니다. 입금 확인까지 1-2일 정도 소요될
+              수 있습니다.
             </p>
           </div>
         </div>

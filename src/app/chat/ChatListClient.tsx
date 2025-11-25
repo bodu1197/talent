@@ -7,6 +7,7 @@ import { useChatUnreadCount } from '@/components/providers/ChatUnreadProvider';
 import toast from 'react-hot-toast';
 import ChatRoomList from './components/ChatRoomList';
 import ChatMessageArea from './components/ChatMessageArea';
+import { logger } from '@/lib/logger';
 
 interface ChatRoom {
   id: string;
@@ -81,10 +82,7 @@ async function markMessagesReadInBackground(roomId: string): Promise<void> {
       body: JSON.stringify({ room_id: roomId }),
     });
   } catch (error) {
-    console.error(
-      '[ChatListClient] Mark as read error:',
-      JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-    );
+    logger.error('[ChatListClient] Mark as read error:', error);
   }
 }
 
@@ -115,16 +113,10 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
         setRooms(data.rooms || []);
       } else {
         const error = await response.json();
-        console.error(
-          '[ChatListClient] Failed to load rooms:',
-          JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-        );
+        logger.error('[ChatListClient] Failed to load rooms:', error);
       }
     } catch (error) {
-      console.error(
-        '[ChatListClient] Load rooms error:',
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-      );
+      logger.error('[ChatListClient] Load rooms error:', error);
     }
   };
 
@@ -148,10 +140,7 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
         toast.error(error.error || '채팅방 생성에 실패했습니다');
       }
     } catch (error) {
-      console.error(
-        'Create room from order error:',
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-      );
+      logger.error('Create room from order error:', error);
       toast.error('채팅방 생성 중 오류가 발생했습니다');
     } finally {
       setIsCreatingRoom(false);
@@ -179,10 +168,7 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
         );
       }
     } catch (error) {
-      console.error(
-        '[ChatListClient] Toggle favorite error:',
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-      );
+      logger.error('[ChatListClient] Toggle favorite error:', error);
     }
   };
 
@@ -237,10 +223,7 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
         body: JSON.stringify({ room_id: roomId }),
       });
     } catch (error) {
-      console.error(
-        '[ChatListClient] Mark messages as read error:',
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-      );
+      logger.error('[ChatListClient] Mark messages as read error:', error);
     }
   };
 
@@ -280,10 +263,7 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
       const { error } = await supabase.storage.from('uploads').upload(filePath, file);
 
       if (error) {
-        console.error(
-          'File upload error:',
-          JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-        );
+        logger.error('File upload error:', error);
         return null;
       }
 
@@ -293,7 +273,7 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
 
       return publicUrl;
     } catch (error) {
-      console.error('Upload error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+      logger.error('Upload error:', error);
       return null;
     } finally {
       setIsUploading(false);
@@ -350,10 +330,7 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
         setSelectedFile(fileToUpload); // 실패 시 파일 복원
       }
     } catch (error) {
-      console.error(
-        'Send message error:',
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-      );
+      logger.error('Send message error:', error);
       toast.error('메시지 전송 중 오류가 발생했습니다.');
       setNewMessage(messageText); // 실패 시 메시지 복원
       setSelectedFile(fileToUpload); // 실패 시 파일 복원

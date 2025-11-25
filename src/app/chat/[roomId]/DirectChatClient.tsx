@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import { logger } from '@/lib/logger';
 
 import {
   FaArrowLeft,
@@ -117,10 +118,7 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
         body: JSON.stringify({ room_id: roomId }),
       });
     } catch (error) {
-      console.error(
-        '[DirectChatClient] Mark messages as read error:',
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-      );
+      logger.error('[DirectChatClient] Mark messages as read error:', error);
     }
   };
 
@@ -170,14 +168,11 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
         scrollToBottom();
       } else {
         const errorData = await response.json();
-        console.error('Send message failed:', response.status, errorData);
+        logger.error('Send message failed:', response.status, errorData);
         toast.error(`메시지 전송 실패: ${errorData.error || '알 수 없는 오류'}`);
       }
     } catch (error) {
-      console.error(
-        'Send message error:',
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-      );
+      logger.error('Send message error:', error);
       toast.error('메시지 전송 중 오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
@@ -536,7 +531,7 @@ function PaymentRequestCard({
         toast.error(`처리 실패: ${error.error || '알 수 없는 오류'}`);
       }
     } catch (error) {
-      console.error('Response error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+      logger.error('Response error:', error);
       toast.error('처리 중 오류가 발생했습니다');
     } finally {
       setIsProcessing(false);
@@ -757,10 +752,7 @@ function PaymentRequestModal({
         toast.error(`결제 요청 실패: ${error.error || '알 수 없는 오류'}`);
       }
     } catch (error) {
-      console.error(
-        'Payment request error:',
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-      );
+      logger.error('Payment request error:', error);
       toast.error('결제 요청 중 오류가 발생했습니다');
     } finally {
       setIsSubmitting(false);

@@ -1,6 +1,7 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import SellerProfileEditClient from "./SellerProfileEditClient";
+import { redirect } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server';
+import SellerProfileEditClient from './SellerProfileEditClient';
+import { logger } from '@/lib/logger';
 
 export default async function SellerProfileEditPage() {
   const supabase = await createClient();
@@ -9,29 +10,29 @@ export default async function SellerProfileEditPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/auth/login");
+    redirect('/auth/login');
   }
 
   // sellers 테이블에서 판매자 정보 조회
   const { data: seller, error: sellerError } = await supabase
-    .from("sellers")
-    .select("*")
-    .eq("user_id", user.id)
+    .from('sellers')
+    .select('*')
+    .eq('user_id', user.id)
     .maybeSingle();
 
   if (sellerError) {
-    console.error("Seller fetch error:", sellerError);
+    logger.error('Seller fetch error:', sellerError);
   }
 
   if (!seller) {
-    redirect("/mypage/seller/register");
+    redirect('/mypage/seller/register');
   }
 
   // profiles 테이블에서 profile_image와 name(display_name) 조회
   const { data: profileData } = await supabase
-    .from("profiles")
-    .select("profile_image, name")
-    .eq("user_id", user.id)
+    .from('profiles')
+    .select('profile_image, name')
+    .eq('user_id', user.id)
     .single();
 
   // profiles 데이터를 seller에 추가
@@ -40,7 +41,7 @@ export default async function SellerProfileEditPage() {
   const profileWithData = {
     ...seller,
     profile_image: profileData?.profile_image || null,
-    display_name: profileData?.name || seller.name || "",
+    display_name: profileData?.name || seller.name || '',
   };
 
   return <SellerProfileEditClient profile={profileWithData} />;

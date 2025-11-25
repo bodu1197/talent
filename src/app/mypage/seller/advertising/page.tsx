@@ -20,6 +20,7 @@ import {
 } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
+import { logger } from '@/lib/logger';
 
 export default function AdvertisingPage() {
   const [loading, setLoading] = useState(true);
@@ -161,10 +162,7 @@ export default function AdvertisingPage() {
         toast.success('통계가 업데이트되었습니다');
       }
     } catch (error) {
-      console.error(
-        '대시보드 로딩 실패:',
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
-      );
+      logger.error('대시보드 로딩 실패:', error);
       if (isManualRefresh) {
         toast.error('통계 업데이트에 실패했습니다');
       }
@@ -225,7 +223,7 @@ export default function AdvertisingPage() {
         setSelectedMonths(1);
       }
     } catch (error: unknown) {
-      console.error('광고 시작 실패:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+      logger.error('광고 시작 실패:', error);
       const errorMessage =
         error instanceof Error
           ? error.message

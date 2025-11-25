@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useCallback } from "react";
-import { createClient } from "@/lib/supabase/client";
-import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import Link from "next/link";
+import { useState, useEffect, useCallback } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
+import Link from 'next/link';
 import {
   FaBell,
   FaRegBellSlash,
@@ -16,7 +16,8 @@ import {
   FaPlay,
   FaTruck,
   FaFilter,
-} from "react-icons/fa";
+} from 'react-icons/fa';
+import { logger } from '@/lib/logger';
 
 interface Notification {
   id: string;
@@ -42,7 +43,7 @@ interface Props {
   readonly isSeller: boolean;
 }
 
-type FilterType = "all" | "unread" | "read";
+type FilterType = 'all' | 'unread' | 'read';
 
 export default function NotificationsClient({
   initialNotifications,
@@ -50,43 +51,42 @@ export default function NotificationsClient({
   profileData,
   isSeller,
 }: Props) {
-  const [notifications, setNotifications] =
-    useState<Notification[]>(initialNotifications);
+  const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
   const [unreadCount, setUnreadCount] = useState(initialUnreadCount);
-  const [filter, setFilter] = useState<FilterType>("all");
+  const [filter, setFilter] = useState<FilterType>('all');
   const [loading, setLoading] = useState(false);
   const supabase = createClient();
 
   // 필터링된 알림 목록
   const filteredNotifications = notifications.filter((n) => {
-    if (filter === "unread") return !n.is_read;
-    if (filter === "read") return n.is_read;
+    if (filter === 'unread') return !n.is_read;
+    if (filter === 'read') return n.is_read;
     return true;
   });
 
   // 알림 타입별 아이콘 및 색상
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case "order_new":
-        return { icon: FaShoppingCart, color: "text-green-500" };
-      case "order_started":
-        return { icon: FaPlay, color: "text-blue-500" };
-      case "order_delivered":
-        return { icon: FaTruck, color: "text-purple-500" };
-      case "order_completed":
-        return { icon: FaCheckCircle, color: "text-green-500" };
-      case "order_revision_requested":
-        return { icon: FaUndo, color: "text-orange-500" };
-      case "order_revision_completed":
-        return { icon: FaCheckCircle, color: "text-blue-500" };
-      case "order_cancelled":
-        return { icon: FaTimes, color: "text-red-500" };
-      case "message_new":
-        return { icon: FaComment, color: "text-blue-500" };
-      case "review_new":
-        return { icon: FaStar, color: "text-yellow-500" };
+      case 'order_new':
+        return { icon: FaShoppingCart, color: 'text-green-500' };
+      case 'order_started':
+        return { icon: FaPlay, color: 'text-blue-500' };
+      case 'order_delivered':
+        return { icon: FaTruck, color: 'text-purple-500' };
+      case 'order_completed':
+        return { icon: FaCheckCircle, color: 'text-green-500' };
+      case 'order_revision_requested':
+        return { icon: FaUndo, color: 'text-orange-500' };
+      case 'order_revision_completed':
+        return { icon: FaCheckCircle, color: 'text-blue-500' };
+      case 'order_cancelled':
+        return { icon: FaTimes, color: 'text-red-500' };
+      case 'message_new':
+        return { icon: FaComment, color: 'text-blue-500' };
+      case 'review_new':
+        return { icon: FaStar, color: 'text-yellow-500' };
       default:
-        return { icon: FaBell, color: "text-gray-500" };
+        return { icon: FaBell, color: 'text-gray-500' };
     }
   };
 
@@ -96,20 +96,15 @@ export default function NotificationsClient({
     if (!notification || notification.is_read) return;
 
     const { error } = await supabase
-      .from("notifications")
+      .from('notifications')
       .update({ is_read: true })
-      .eq("id", notificationId);
+      .eq('id', notificationId);
 
     if (error) {
-      console.error(
-        "Failed to mark notification as read:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
-      );
+      logger.error('Failed to mark notification as read:', error);
     } else {
       setNotifications((prev) =>
-        prev.map((n) =>
-          n.id === notificationId ? { ...n, is_read: true } : n,
-        ),
+        prev.map((n) => (n.id === notificationId ? { ...n, is_read: true } : n))
       );
       setUnreadCount((prev) => Math.max(0, prev - 1));
     }
@@ -119,15 +114,12 @@ export default function NotificationsClient({
   const markAllAsRead = async () => {
     setLoading(true);
     const { error } = await supabase
-      .from("notifications")
+      .from('notifications')
       .update({ is_read: true })
-      .eq("is_read", false);
+      .eq('is_read', false);
 
     if (error) {
-      console.error(
-        "Failed to mark all notifications as read:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
-      );
+      logger.error('Failed to mark all notifications as read:', error);
     } else {
       setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
       setUnreadCount(0);
@@ -148,33 +140,31 @@ export default function NotificationsClient({
   const handleUpdateNotification = useCallback((payload: unknown) => {
     const updatedNotification = (payload as { new: Notification }).new;
     setNotifications((prev) =>
-      prev.map((n) =>
-        n.id === updatedNotification.id ? updatedNotification : n,
-      ),
+      prev.map((n) => (n.id === updatedNotification.id ? updatedNotification : n))
     );
   }, []);
 
   // 실시간 알림 구독
   useEffect(() => {
     const channel = supabase
-      .channel("notifications-page")
+      .channel('notifications-page')
       .on(
-        "postgres_changes",
+        'postgres_changes',
         {
-          event: "INSERT",
-          schema: "public",
-          table: "notifications",
+          event: 'INSERT',
+          schema: 'public',
+          table: 'notifications',
         },
-        handleInsertNotification,
+        handleInsertNotification
       )
       .on(
-        "postgres_changes",
+        'postgres_changes',
         {
-          event: "UPDATE",
-          schema: "public",
-          table: "notifications",
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'notifications',
         },
-        handleUpdateNotification,
+        handleUpdateNotification
       )
       .subscribe();
 
@@ -192,20 +182,20 @@ export default function NotificationsClient({
     const hours = Math.floor(diff / 3600000);
     const days = Math.floor(diff / 86400000);
 
-    if (minutes < 1) return "방금 전";
+    if (minutes < 1) return '방금 전';
     if (minutes < 60) return `${minutes}분 전`;
     if (hours < 24) return `${hours}시간 전`;
     if (days < 7) return `${days}일 전`;
 
-    return date.toLocaleDateString("ko-KR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+    return date.toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
   };
 
   return (
-    <MypageLayoutWrapper mode={isSeller ? "seller" : "buyer"} profileData={profileData}>
+    <MypageLayoutWrapper mode={isSeller ? 'seller' : 'buyer'} profileData={profileData}>
       <div className="py-8 px-4">
         {/* 헤더 */}
         <div className="mb-6">
@@ -214,9 +204,7 @@ export default function NotificationsClient({
             전체 알림
           </h1>
           <p className="text-gray-600 mt-2 text-sm md:text-base">
-            {unreadCount > 0
-              ? `읽지 않은 알림 ${unreadCount}개`
-              : "모든 알림을 확인했습니다"}
+            {unreadCount > 0 ? `읽지 않은 알림 ${unreadCount}개` : '모든 알림을 확인했습니다'}
           </p>
         </div>
 
@@ -227,29 +215,32 @@ export default function NotificationsClient({
             <div className="flex items-center gap-2">
               <FaFilter className="text-gray-400" />
               <button
-                onClick={() => setFilter("all")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === "all"
-                  ? "bg-brand-primary text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
+                onClick={() => setFilter('all')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  filter === 'all'
+                    ? 'bg-brand-primary text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
               >
                 전체 ({notifications.length})
               </button>
               <button
-                onClick={() => setFilter("unread")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === "unread"
-                  ? "bg-brand-primary text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
+                onClick={() => setFilter('unread')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  filter === 'unread'
+                    ? 'bg-brand-primary text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
               >
                 읽지 않음 ({unreadCount})
               </button>
               <button
-                onClick={() => setFilter("read")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === "read"
-                  ? "bg-brand-primary text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
+                onClick={() => setFilter('read')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  filter === 'read'
+                    ? 'bg-brand-primary text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
               >
                 읽음 ({notifications.length - unreadCount})
               </button>
@@ -262,7 +253,7 @@ export default function NotificationsClient({
                 disabled={loading}
                 className="px-4 py-2 text-sm font-medium text-brand-primary hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? "처리중..." : "모두 읽음 처리"}
+                {loading ? '처리중...' : '모두 읽음 처리'}
               </button>
             )}
           </div>
@@ -273,14 +264,13 @@ export default function NotificationsClient({
           {filteredNotifications.length > 0 ? (
             <div className="divide-y divide-gray-200">
               {filteredNotifications.map((notification) => {
-                const { icon: Icon, color } = getNotificationIcon(
-                  notification.type,
-                );
+                const { icon: Icon, color } = getNotificationIcon(notification.type);
                 return (
                   <div
                     key={notification.id}
-                    className={`${notification.is_read ? "bg-white" : "bg-blue-50"
-                      } hover:bg-gray-50 transition-colors`}
+                    className={`${
+                      notification.is_read ? 'bg-white' : 'bg-blue-50'
+                    } hover:bg-gray-50 transition-colors`}
                   >
                     {notification.link ? (
                       <Link
@@ -288,18 +278,15 @@ export default function NotificationsClient({
                         onClick={() => markAsRead(notification.id)}
                         className="flex items-start gap-4 p-4"
                       >
-                        <div
-                          className={`p-3 rounded-full bg-gray-100 flex-shrink-0 ${color}`}
-                        >
+                        <div className={`p-3 rounded-full bg-gray-100 flex-shrink-0 ${color}`}>
                           <Icon className="text-xl" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2 mb-1">
                             <h3
-                              className={`text-base font-bold ${notification.is_read
-                                ? "text-gray-700"
-                                : "text-gray-900"
-                                }`}
+                              className={`text-base font-bold ${
+                                notification.is_read ? 'text-gray-700' : 'text-gray-900'
+                              }`}
                             >
                               {notification.title}
                             </h3>
@@ -307,9 +294,7 @@ export default function NotificationsClient({
                               <span className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-2"></span>
                             )}
                           </div>
-                          <p className="text-sm text-gray-600 mb-2">
-                            {notification.message}
-                          </p>
+                          <p className="text-sm text-gray-600 mb-2">{notification.message}</p>
                           <p className="text-xs text-gray-400">
                             {formatDate(notification.created_at)}
                           </p>
@@ -317,18 +302,15 @@ export default function NotificationsClient({
                       </Link>
                     ) : (
                       <div className="flex items-start gap-4 p-4">
-                        <div
-                          className={`p-3 rounded-full bg-gray-100 flex-shrink-0 ${color}`}
-                        >
+                        <div className={`p-3 rounded-full bg-gray-100 flex-shrink-0 ${color}`}>
                           <Icon className="text-xl" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2 mb-1">
                             <h3
-                              className={`text-base font-bold ${notification.is_read
-                                ? "text-gray-700"
-                                : "text-gray-900"
-                                }`}
+                              className={`text-base font-bold ${
+                                notification.is_read ? 'text-gray-700' : 'text-gray-900'
+                              }`}
                             >
                               {notification.title}
                             </h3>
@@ -341,9 +323,7 @@ export default function NotificationsClient({
                               </button>
                             )}
                           </div>
-                          <p className="text-sm text-gray-600 mb-2">
-                            {notification.message}
-                          </p>
+                          <p className="text-sm text-gray-600 mb-2">{notification.message}</p>
                           <p className="text-xs text-gray-400">
                             {formatDate(notification.created_at)}
                           </p>
@@ -358,16 +338,16 @@ export default function NotificationsClient({
             <div className="p-12 text-center">
               <FaRegBellSlash className="text-5xl text-gray-300 mx-auto mb-4" />
               <h3 className="text-lg font-bold text-gray-900 mb-2">
-                {filter === "unread"
-                  ? "읽지 않은 알림이 없습니다"
-                  : filter === "read"
-                    ? "읽은 알림이 없습니다"
-                    : "알림이 없습니다"}
+                {filter === 'unread'
+                  ? '읽지 않은 알림이 없습니다'
+                  : filter === 'read'
+                    ? '읽은 알림이 없습니다'
+                    : '알림이 없습니다'}
               </h3>
               <p className="text-gray-600">
-                {filter === "all"
-                  ? "새로운 알림이 도착하면 여기에 표시됩니다"
-                  : "다른 필터를 선택해보세요"}
+                {filter === 'all'
+                  ? '새로운 알림이 도착하면 여기에 표시됩니다'
+                  : '다른 필터를 선택해보세요'}
               </p>
             </div>
           )}

@@ -13,6 +13,7 @@ import CategorySidebar from '@/components/categories/CategorySidebar';
 import CategoryVisitTracker from '@/components/categories/CategoryVisitTracker';
 import Link from 'next/link';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { logger } from '@/lib/logger';
 
 // ISR 캐싱: 광고 우선순위 테스트를 위해 일시적으로 비활성화
 export const revalidate = 0;
@@ -40,7 +41,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
 
   // category.id가 유효한지 확인
   if (!category.id) {
-    console.error('[CategoryPage] category.id is invalid:', category.id, 'slug:', slug);
+    logger.error('[CategoryPage] category.id is invalid:', category.id, 'slug:', slug);
     notFound();
   }
 
