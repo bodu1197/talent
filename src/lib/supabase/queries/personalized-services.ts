@@ -380,7 +380,7 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
       categoryData = topCategories;
     } else {
       // RPC 실패 시 폴백으로 직접 쿼리
-      logger.warn('RPC failed, using fallback query:', categoryError?.message);
+      logger.warn('RPC failed, using fallback query', { error: categoryError?.message });
       categoryData = await fetchCategoryVisitsFallback(supabase, user.id, 30, 3);
     }
 

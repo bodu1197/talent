@@ -94,8 +94,7 @@ export default function AdvertisingPage() {
           schema: 'public',
           table: 'advertising_subscriptions',
         },
-        (payload) => {
-          console.log('📡 Realtime update:', payload);
+        () => {
           // 변경된 데이터로 대시보드 새로고침
           loadDashboard();
         }
