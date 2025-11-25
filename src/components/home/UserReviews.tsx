@@ -1,5 +1,5 @@
-import { createClient } from "@/lib/supabase/server";
-import Image from "next/image";
+import { createClient } from '@/lib/supabase/server';
+import Image from 'next/image';
 
 interface ReviewData {
   id: string;
@@ -19,7 +19,7 @@ export default async function UserReviews() {
 
   // 최근 리뷰 데이터 가져오기 (모든 공개 리뷰, 최근 12개)
   const { data: reviews } = await supabase
-    .from("reviews")
+    .from('reviews')
     .select(
       `
       id,
@@ -32,10 +32,10 @@ export default async function UserReviews() {
         title,
         thumbnail_url
       )
-    `,
+    `
     )
-    .eq("is_visible", true)
-    .order("created_at", { ascending: false })
+    .eq('is_visible', true)
+    .order('created_at', { ascending: false })
     .limit(12);
 
   const reviewData = (reviews as unknown as ReviewData[]) || [];
@@ -52,9 +52,7 @@ export default async function UserReviews() {
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             고객들의 생생한 후기
           </h2>
-          <p className="text-lg text-gray-600">
-            돌파구를 이용한 고객들의 실제 경험을 확인해보세요
-          </p>
+          <p className="text-lg text-gray-600">돌파구를 이용한 고객들의 실제 경험을 확인해보세요</p>
         </div>
 
         {/* 리뷰 그리드 */}
@@ -68,11 +66,9 @@ export default async function UserReviews() {
               <div className="flex items-center mb-4">
                 {[...Array(5)].map((_, index) => (
                   <svg
-                    key={index}
+                    key={`rating-star-${index}`}
                     className={`w-5 h-5 ${
-                      index < review.rating
-                        ? "text-yellow-400"
-                        : "text-gray-300"
+                      index < review.rating ? 'text-yellow-400' : 'text-gray-300'
                     }`}
                     fill="currentColor"
                     viewBox="0 0 20 20"
@@ -86,9 +82,7 @@ export default async function UserReviews() {
               </div>
 
               {/* 리뷰 내용 */}
-              <p className="text-gray-700 mb-4 line-clamp-3">
-                {review.comment}
-              </p>
+              <p className="text-gray-700 mb-4 line-clamp-3">{review.comment}</p>
 
               {/* 서비스 정보 */}
               {review.services && (
@@ -114,11 +108,7 @@ export default async function UserReviews() {
               {/* 작성자 정보 */}
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-blue-600"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
@@ -127,14 +117,12 @@ export default async function UserReviews() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">
-                    돌파구 고객
-                  </p>
+                  <p className="text-sm font-medium text-gray-900">돌파구 고객</p>
                   <p className="text-xs text-gray-500">
-                    {new Date(review.created_at).toLocaleDateString("ko-KR", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
+                    {new Date(review.created_at).toLocaleDateString('ko-KR', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
                     })}
                   </p>
                 </div>
@@ -146,10 +134,8 @@ export default async function UserReviews() {
         {/* 더보기 안내 */}
         <div className="text-center mt-10">
           <p className="text-gray-600">
-            더 많은 후기가 궁금하신가요?{" "}
-            <span className="text-blue-600 font-semibold">
-              서비스 페이지에서 확인하세요
-            </span>
+            더 많은 후기가 궁금하신가요?{' '}
+            <span className="text-blue-600 font-semibold">서비스 페이지에서 확인하세요</span>
           </p>
         </div>
       </div>
