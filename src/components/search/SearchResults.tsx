@@ -4,10 +4,30 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ServiceCard from '@/components/services/ServiceCard';
-import { Service } from '@/types';
 import { FaStar, FaCheckCircle, FaBriefcase } from 'react-icons/fa';
 
 type TabType = 'services' | 'experts' | 'portfolios';
+
+// 검색 결과 서비스 타입 (ServiceWithRating과 호환)
+interface ServiceSearchResult {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  thumbnail_url: string | null;
+  orders_count: number;
+  seller: {
+    id: string;
+    business_name: string;
+    display_name: string;
+    profile_image: string | null;
+    is_verified: boolean;
+  } | null;
+  order_count: number;
+  rating: number;
+  review_count: number;
+  is_promoted: boolean;
+}
 
 // 전문가 검색 결과 타입
 interface ExpertResult {
@@ -24,9 +44,11 @@ interface ExpertResult {
 
 // 포트폴리오 판매자 정보 타입
 interface PortfolioSeller {
-  profile_image?: string | null;
-  display_name?: string;
-  business_name?: string;
+  id: string;
+  business_name: string;
+  display_name: string;
+  profile_image: string | null;
+  is_verified: boolean;
 }
 
 // 포트폴리오 검색 결과 타입
@@ -34,11 +56,11 @@ interface PortfolioResult {
   id: string;
   title: string;
   thumbnail_url?: string | null;
-  seller?: PortfolioSeller[];
+  seller: PortfolioSeller | null;
 }
 
 interface SearchResultsProps {
-  readonly services: Service[];
+  readonly services: ServiceSearchResult[];
   readonly experts: ExpertResult[];
   readonly portfolios: PortfolioResult[];
   readonly query: string;
@@ -130,7 +152,7 @@ export default function SearchResults({
                         {expert.profile_image ? (
                           <Image
                             src={expert.profile_image}
-                            alt={expert.display_name || expert.business_name}
+                            alt={expert.display_name || expert.business_name || '전문가'}
                             fill
                             className="rounded-full object-cover"
                           />
@@ -204,12 +226,12 @@ export default function SearchResults({
                           {portfolio.title}
                         </h3>
                         <div className="flex items-center gap-2 text-xs text-gray-600">
-                          {Array.isArray(portfolio.seller) && portfolio.seller.length > 0 ? (
+                          {portfolio.seller ? (
                             <>
-                              {portfolio.seller[0].profile_image ? (
+                              {portfolio.seller.profile_image ? (
                                 <Image
-                                  src={portfolio.seller[0].profile_image}
-                                  alt={portfolio.seller[0].display_name || ''}
+                                  src={portfolio.seller.profile_image}
+                                  alt={portfolio.seller.display_name || ''}
                                   width={20}
                                   height={20}
                                   className="rounded-full"
@@ -217,15 +239,14 @@ export default function SearchResults({
                               ) : (
                                 <div className="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center text-xs">
                                   {
-                                    (portfolio.seller[0].display_name ||
-                                      portfolio.seller[0].business_name ||
+                                    (portfolio.seller.display_name ||
+                                      portfolio.seller.business_name ||
                                       'S')[0]
                                   }
                                 </div>
                               )}
                               <span className="truncate">
-                                {portfolio.seller[0].display_name ||
-                                  portfolio.seller[0].business_name}
+                                {portfolio.seller.display_name || portfolio.seller.business_name}
                               </span>
                             </>
                           ) : null}

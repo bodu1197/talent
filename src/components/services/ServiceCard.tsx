@@ -3,16 +3,26 @@
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Service } from '@/types';
 import { FaBox, FaStar, FaCheckCircle } from 'react-icons/fa';
 
-// Service 타입에 is_advertised 속성 추가 (광고 서비스 여부)
-interface AdvertisedService extends Service {
+// ServiceCard가 실제로 사용하는 최소 필드만 정의
+interface ServiceCardData {
+  id: string;
+  title: string;
+  thumbnail_url?: string | null;
+  price?: number;
+  rating?: number;
+  is_featured?: boolean;
   is_advertised?: boolean;
+  is_promoted?: boolean; // 검색 결과에서 사용
+  seller?: {
+    display_name?: string;
+    is_verified?: boolean;
+  } | null;
 }
 
 interface ServiceCardProps {
-  readonly service: AdvertisedService;
+  readonly service: ServiceCardData;
   readonly position?: number; // 카드의 위치 (광고 통계용)
   readonly categoryId?: string; // 현재 카테고리 ID
   readonly page?: number; // 현재 페이지
@@ -21,10 +31,13 @@ interface ServiceCardProps {
 export default function ServiceCard({ service, position, categoryId, page }: ServiceCardProps) {
   const impressionTracked = useRef(false);
 
+  // 광고/추천 서비스 여부 (is_advertised 또는 is_promoted)
+  const isPromotedService = service.is_advertised || service.is_promoted;
+
   // 노출 추적 (한 번만 실행)
   useEffect(() => {
-    // is_advertised 플래그가 있는 서비스만 추적
-    if (service.is_advertised && !impressionTracked.current && categoryId) {
+    // 광고/추천 플래그가 있는 서비스만 추적
+    if (isPromotedService && !impressionTracked.current && categoryId) {
       impressionTracked.current = true;
 
       // 노출 기록 API 호출 (비동기, 오류 무시)
@@ -41,12 +54,12 @@ export default function ServiceCard({ service, position, categoryId, page }: Ser
         // 추적 실패는 조용히 무시 (사용자 경험에 영향 없음)
       });
     }
-  }, [service.id, categoryId, position, page]);
+  }, [service.id, categoryId, position, page, isPromotedService]);
 
   // 클릭 추적
   const handleClick = () => {
-    // 광고 서비스인 경우에만 클릭 추적
-    if (service.is_advertised) {
+    // 광고/추천 서비스인 경우에만 클릭 추적
+    if (isPromotedService) {
       // 클릭 기록 API 호출 (비동기, 오류 무시)
       fetch('/api/advertising/track/click', {
         method: 'POST',
@@ -88,7 +101,7 @@ export default function ServiceCard({ service, position, categoryId, page }: Ser
         )}
 
         {/* 추천 배지 */}
-        {service.is_advertised && (
+        {isPromotedService && (
           <div className="absolute top-2 right-2">
             <span
               className="px-2 py-1 bg-blue-600 text-white text-xs font-bold rounded shadow-lg inline-block"
