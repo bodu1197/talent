@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState, useRef, useEffect } from "react";
-import Link from "next/link";
-import { CategoryItem } from "@/lib/categories";
-import { FaRobot, FaChevronRight, FaFire } from "react-icons/fa";
-import * as FaIcons from "react-icons/fa";
+import { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
+import { CategoryItem } from '@/lib/categories';
+import { FaRobot, FaChevronRight, FaFire } from 'react-icons/fa';
+import * as FaIcons from 'react-icons/fa';
 
 interface MegaMenuProps {
   categories: CategoryItem[];
@@ -22,17 +22,14 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
 
     // fa- 접두사 제거 및 PascalCase 변환
     const iconKey =
-      "Fa" +
+      'Fa' +
       iconName
-        .split("-")
+        .split('-')
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join("");
+        .join('');
 
     const IconComponent = (
-      FaIcons as Record<
-        string,
-        React.ComponentType<{ className?: string; "aria-hidden"?: string }>
-      >
+      FaIcons as Record<string, React.ComponentType<{ className?: string; 'aria-hidden'?: string }>>
     )[iconKey];
 
     if (IconComponent) {
@@ -79,24 +76,21 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
   // 현재 활성 카테고리의 하위 카테고리 가져오기
-  const getActiveSubCategories = (): CategoryItem["children"] => {
+  const getActiveSubCategories = (): CategoryItem['children'] => {
     if (!activeCategory) return [];
     const category = categories.find((cat) => cat.id === activeCategory);
     return category?.children || [];
   };
 
   return (
-    <div
-      className="hidden lg:block fixed top-16 left-0 right-0 bg-white z-40"
-      ref={menuRef}
-    >
+    <div className="hidden lg:block fixed top-16 left-0 right-0 bg-white z-40" ref={menuRef}>
       {/* 메인 카테고리 바 */}
       <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="container-1200">
@@ -151,13 +145,8 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
 
                 {/* 서비스 수 순으로 상위 4개 표시 (AI, IT 제외) */}
                 {categories
-                  .filter(
-                    (cat) =>
-                      cat.id !== "ai-services" && cat.id !== "it-programming",
-                  )
-                  .sort(
-                    (a, b) => (b.service_count || 0) - (a.service_count || 0),
-                  )
+                  .filter((cat) => cat.id !== 'ai-services' && cat.id !== 'it-programming')
+                  .sort((a, b) => (b.service_count || 0) - (a.service_count || 0))
                   .slice(0, 4)
                   .map((cat) => (
                     <Link
@@ -188,11 +177,10 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
 
       {/* 메가 메뉴 드롭다운 */}
       {isOpen && (
-        <div
+        <nav
           className="absolute left-0 right-0 bg-white border-b border-gray-200 shadow-lg z-50"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          role="navigation"
           aria-label="카테고리 메가 메뉴"
         >
           <div className="container-1200 py-6">
@@ -206,8 +194,8 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                         href={`/categories/${category.slug}`}
                         className={`flex items-center justify-between px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
                           activeCategory === category.id
-                            ? "bg-gray-100 text-gray-800"
-                            : "text-gray-700 hover:bg-gray-50"
+                            ? 'bg-gray-100 text-gray-800'
+                            : 'text-gray-700 hover:bg-gray-50'
                         }`}
                         onMouseEnter={() => handleCategoryHover(category.id)}
                         onClick={handleCategoryClick}
@@ -225,10 +213,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                             </span>
                           )}
                         </div>
-                        <FaChevronRight
-                          className="text-xs text-gray-400"
-                          aria-hidden="true"
-                        />
+                        <FaChevronRight className="text-xs text-gray-400" aria-hidden="true" />
                       </Link>
                     </div>
                   ))}
@@ -241,10 +226,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                   <>
                     <div className="grid grid-cols-4 gap-4">
                       {getActiveSubCategories()?.map((subCategory) => (
-                        <div
-                          key={subCategory.id}
-                          className="flex flex-col gap-2"
-                        >
+                        <div key={subCategory.id} className="flex flex-col gap-2">
                           <h4 className="font-semibold text-sm">
                             <Link
                               href={`/categories/${subCategory.slug}`}
@@ -285,12 +267,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                     </h3>
                     <div className="grid grid-cols-4 gap-4">
                       {categories
-                        .flatMap(
-                          (cat) =>
-                            cat.children?.flatMap(
-                              (sub) => sub.children || [],
-                            ) || [],
-                        )
+                        .flatMap((cat) => cat.children?.flatMap((sub) => sub.children || []) || [])
                         .slice(0, 16)
                         .map((item) => (
                           <Link
@@ -308,7 +285,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
               </div>
             </div>
           </div>
-        </div>
+        </nav>
       )}
     </div>
   );

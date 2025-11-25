@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import Image from "next/image";
-import { FaTimes, FaExternalLinkAlt } from "react-icons/fa";
+import { useEffect } from 'react';
+import Image from 'next/image';
+import { FaTimes, FaExternalLinkAlt } from 'react-icons/fa';
 
 interface Portfolio {
   id: string;
@@ -25,14 +25,14 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
   // ESC 키로 모달 닫기
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === 'Escape') onClose();
     };
-    document.addEventListener("keydown", handleEscape);
-    document.body.style.overflow = "hidden";
+    document.addEventListener('keydown', handleEscape);
+    document.body.style.overflow = 'hidden';
 
     return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "auto";
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'auto';
     };
   }, [onClose]);
 
@@ -60,17 +60,17 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
     <div
       className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
       onClick={onClose}
-      onKeyDown={(e) => {
-        if (e.key === 'Escape') onClose();
-      }}
-      tabIndex={-1}
     >
       <div
         className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
         onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') onClose();
+        }}
         role="dialog"
         aria-modal="true"
         aria-labelledby="portfolio-title"
+        tabIndex={-1}
       >
         {/* 닫기 버튼 */}
         <button
@@ -111,7 +111,9 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
         {/* 내용 */}
         <div className="p-8">
           {/* 제목 */}
-          <h2 id="portfolio-title" className="text-3xl font-bold mb-4">{portfolio.title}</h2>
+          <h2 id="portfolio-title" className="text-3xl font-bold mb-4">
+            {portfolio.title}
+          </h2>
 
           {/* 설명 */}
           <div className="prose prose-lg max-w-none mb-6 whitespace-pre-wrap text-gray-700">

@@ -1,28 +1,26 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import {
   getAdminUsers,
   getAdminUsersCount,
   type AdminUserProfile,
-} from "@/lib/supabase/queries/admin";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
-import ErrorState from "@/components/common/ErrorState";
-import EmptyState from "@/components/common/EmptyState";
-import { logger } from "@/lib/logger";
-import { FaRedoAlt } from "react-icons/fa";
+} from '@/lib/supabase/queries/admin';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
+import ErrorState from '@/components/common/ErrorState';
+import EmptyState from '@/components/common/EmptyState';
+import { logger } from '@/lib/logger';
+import { FaRedoAlt } from 'react-icons/fa';
 
-type RoleFilter = "all" | "buyer" | "seller" | "admin";
+type RoleFilter = 'all' | 'buyer' | 'seller' | 'admin';
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<AdminUserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [roleFilter, setRoleFilter] = useState<RoleFilter>("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedUser, setSelectedUser] = useState<AdminUserProfile | null>(
-    null,
-  );
+  const [roleFilter, setRoleFilter] = useState<RoleFilter>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedUser, setSelectedUser] = useState<AdminUserProfile | null>(null);
   const [roleCounts, setRoleCounts] = useState({
     all: 0,
     buyer: 0,
@@ -38,12 +36,12 @@ export default function AdminUsersPage() {
   // ESC 키로 모달 닫기
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && selectedUser) {
+      if (e.key === 'Escape' && selectedUser) {
         setSelectedUser(null);
       }
     };
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
   }, [selectedUser]);
 
   async function loadUsers() {
@@ -51,17 +49,13 @@ export default function AdminUsersPage() {
       setLoading(true);
       setError(null);
       const data = await getAdminUsers({
-        role: roleFilter === "all" ? undefined : roleFilter,
+        role: roleFilter === 'all' ? undefined : roleFilter,
         searchQuery,
       });
       setUsers(data);
     } catch (err: unknown) {
-      logger.error("사용자 조회 실패:", err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "사용자 목록을 불러오는데 실패했습니다",
-      );
+      logger.error('사용자 조회 실패:', err);
+      setError(err instanceof Error ? err.message : '사용자 목록을 불러오는데 실패했습니다');
     } finally {
       setLoading(false);
     }
@@ -69,14 +63,12 @@ export default function AdminUsersPage() {
 
   async function loadRoleCounts() {
     try {
-      const [allCount, buyerCount, sellerCount, adminCount] = await Promise.all(
-        [
-          getAdminUsersCount(),
-          getAdminUsersCount("buyer"),
-          getAdminUsersCount("seller"),
-          getAdminUsersCount("admin"),
-        ],
-      );
+      const [allCount, buyerCount, sellerCount, adminCount] = await Promise.all([
+        getAdminUsersCount(),
+        getAdminUsersCount('buyer'),
+        getAdminUsersCount('seller'),
+        getAdminUsersCount('admin'),
+      ]);
 
       setRoleCounts({
         all: allCount,
@@ -85,29 +77,26 @@ export default function AdminUsersPage() {
         admin: adminCount,
       });
     } catch (err) {
-      logger.error("역할별 카운트 조회 실패:", err);
+      logger.error('역할별 카운트 조회 실패:', err);
     }
   }
 
   const filteredUsers = users.filter((user) => {
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      return (
-        user.name?.toLowerCase().includes(query) ||
-        user.email?.toLowerCase().includes(query)
-      );
+      return user.name?.toLowerCase().includes(query) || user.email?.toLowerCase().includes(query);
     }
     return true;
   });
 
   const getRoleLabel = (role: string) => {
     switch (role) {
-      case "buyer":
-        return "구매자";
-      case "seller":
-        return "판매자";
-      case "admin":
-        return "관리자";
+      case 'buyer':
+        return '구매자';
+      case 'seller':
+        return '판매자';
+      case 'admin':
+        return '관리자';
       default:
         return role;
     }
@@ -115,26 +104,26 @@ export default function AdminUsersPage() {
 
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
-      case "buyer":
-        return "bg-blue-100 text-blue-700";
-      case "seller":
-        return "bg-green-100 text-green-700";
-      case "admin":
-        return "bg-purple-100 text-purple-700";
+      case 'buyer':
+        return 'bg-blue-100 text-blue-700';
+      case 'seller':
+        return 'bg-green-100 text-green-700';
+      case 'admin':
+        return 'bg-purple-100 text-purple-700';
       default:
-        return "bg-gray-100 text-gray-700";
+        return 'bg-gray-100 text-gray-700';
     }
   };
 
   const tabs = [
-    { value: "all" as RoleFilter, label: "전체", count: roleCounts.all },
-    { value: "buyer" as RoleFilter, label: "구매자", count: roleCounts.buyer },
+    { value: 'all' as RoleFilter, label: '전체', count: roleCounts.all },
+    { value: 'buyer' as RoleFilter, label: '구매자', count: roleCounts.buyer },
     {
-      value: "seller" as RoleFilter,
-      label: "판매자",
+      value: 'seller' as RoleFilter,
+      label: '판매자',
       count: roleCounts.seller,
     },
-    { value: "admin" as RoleFilter, label: "관리자", count: roleCounts.admin },
+    { value: 'admin' as RoleFilter, label: '관리자', count: roleCounts.admin },
   ];
 
   if (loading) {
@@ -166,8 +155,8 @@ export default function AdminUsersPage() {
               tabIndex={roleFilter === tab.value ? 0 : -1}
               className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
                 roleFilter === tab.value
-                  ? "border-brand-primary text-brand-primary"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
+                  ? 'border-brand-primary text-brand-primary'
+                  : 'border-transparent text-gray-600 hover:text-gray-900'
               }`}
             >
               {tab.label}
@@ -175,8 +164,8 @@ export default function AdminUsersPage() {
                 <span
                   className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
                     roleFilter === tab.value
-                      ? "bg-brand-primary text-white"
-                      : "bg-gray-200 text-gray-600"
+                      ? 'bg-brand-primary text-white'
+                      : 'bg-gray-200 text-gray-600'
                   }`}
                 >
                   {tab.count}
@@ -191,7 +180,9 @@ export default function AdminUsersPage() {
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <div className="flex gap-4">
           <div className="flex-1">
-            <label htmlFor="user-search" className="sr-only">사용자 검색</label>
+            <label htmlFor="user-search" className="sr-only">
+              사용자 검색
+            </label>
             <input
               id="user-search"
               type="text"
@@ -202,7 +193,7 @@ export default function AdminUsersPage() {
             />
           </div>
           <button
-            onClick={() => setSearchQuery("")}
+            onClick={() => setSearchQuery('')}
             className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
           >
             <FaRedoAlt className="inline mr-2" />
@@ -254,14 +245,12 @@ export default function AdminUsersPage() {
                             />
                           ) : (
                             <div className="h-10 w-10 rounded-full bg-brand-primary flex items-center justify-center text-white font-bold">
-                              {user.name?.[0] || "U"}
+                              {user.name?.[0] || 'U'}
                             </div>
                           )}
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">
-                            {user.name}
-                          </div>
+                          <div className="text-sm font-medium text-gray-900">{user.name}</div>
                         </div>
                       </div>
                     </td>
@@ -276,7 +265,7 @@ export default function AdminUsersPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(user.created_at).toLocaleDateString("ko-KR")}
+                      {new Date(user.created_at).toLocaleDateString('ko-KR')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <button
@@ -286,7 +275,10 @@ export default function AdminUsersPage() {
                       >
                         상세보기
                       </button>
-                      <button className="text-red-600 hover:text-red-900 transition-colors" aria-label={`${user.name} 삭제`}>
+                      <button
+                        className="text-red-600 hover:text-red-900 transition-colors"
+                        aria-label={`${user.name} 삭제`}
+                      >
                         삭제
                       </button>
                     </td>
@@ -311,17 +303,17 @@ export default function AdminUsersPage() {
         <div
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
           onClick={() => setSelectedUser(null)}
-          onKeyDown={(e) => {
-            if (e.key === 'Escape') setSelectedUser(null);
-          }}
-          tabIndex={-1}
         >
           <div
             className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') setSelectedUser(null);
+            }}
             role="dialog"
             aria-modal="true"
             aria-labelledby="user-detail-title"
+            tabIndex={-1}
           >
             {/* 모달 헤더 */}
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
@@ -332,12 +324,7 @@ export default function AdminUsersPage() {
                 onClick={() => setSelectedUser(null)}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
               >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -361,14 +348,12 @@ export default function AdminUsersPage() {
                     />
                   ) : (
                     <div className="h-20 w-20 rounded-full bg-brand-primary flex items-center justify-center text-white font-bold text-2xl">
-                      {selectedUser.name?.[0] || "U"}
+                      {selectedUser.name?.[0] || 'U'}
                     </div>
                   )}
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-900">
-                    {selectedUser.name}
-                  </h3>
+                  <h3 className="text-2xl font-bold text-gray-900">{selectedUser.name}</h3>
                   <span
                     className={`inline-block mt-1 px-3 py-1 text-xs leading-5 font-semibold rounded-full ${getRoleBadgeColor(selectedUser.role)}`}
                   >
@@ -380,41 +365,29 @@ export default function AdminUsersPage() {
               {/* 기본 정보 */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <p className="block text-sm font-medium text-gray-500 mb-1">
-                    사용자 ID
-                  </p>
+                  <p className="block text-sm font-medium text-gray-500 mb-1">사용자 ID</p>
                   <p className="text-sm text-gray-900 font-mono bg-gray-50 px-3 py-2 rounded">
                     {selectedUser.id}
                   </p>
                 </div>
                 <div>
-                  <p className="block text-sm font-medium text-gray-500 mb-1">
-                    이메일
-                  </p>
+                  <p className="block text-sm font-medium text-gray-500 mb-1">이메일</p>
                   <p className="text-sm text-gray-900">{selectedUser.email}</p>
                 </div>
                 <div>
-                  <p className="block text-sm font-medium text-gray-500 mb-1">
-                    역할
-                  </p>
-                  <p className="text-sm text-gray-900">
-                    {getRoleLabel(selectedUser.role)}
-                  </p>
+                  <p className="block text-sm font-medium text-gray-500 mb-1">역할</p>
+                  <p className="text-sm text-gray-900">{getRoleLabel(selectedUser.role)}</p>
                 </div>
                 <div>
-                  <p className="block text-sm font-medium text-gray-500 mb-1">
-                    상태
-                  </p>
+                  <p className="block text-sm font-medium text-gray-500 mb-1">상태</p>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                    {selectedUser.status === "active" ? "활성" : "비활성"}
+                    {selectedUser.status === 'active' ? '활성' : '비활성'}
                   </span>
                 </div>
                 <div>
-                  <p className="block text-sm font-medium text-gray-500 mb-1">
-                    가입일
-                  </p>
+                  <p className="block text-sm font-medium text-gray-500 mb-1">가입일</p>
                   <p className="text-sm text-gray-900">
-                    {new Date(selectedUser.created_at).toLocaleString("ko-KR")}
+                    {new Date(selectedUser.created_at).toLocaleString('ko-KR')}
                   </p>
                 </div>
               </div>
