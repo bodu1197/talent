@@ -70,8 +70,8 @@ interface ServiceFormData {
   price: string;
   deliveryDays: string;
   revisionCount: string;
-  taxInvoiceAvailable: boolean;
-  searchKeywords: string;
+  taxInvoiceAvailable?: boolean;
+  searchKeywords?: string;
   category_ids: string[];
 }
 
