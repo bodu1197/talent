@@ -607,19 +607,14 @@ export default function AdvertisingPage() {
                   setSelectedService('');
                 }
               }}
-              role="presentation"
+              tabIndex={0}
+              role="button"
+              aria-label="모달 닫기"
             >
               <dialog
                 open
                 className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
-                onKeyDown={(e) => {
-                  if (e.key === 'Escape') {
-                    setIsModalOpen(false);
-                    setSelectedService('');
-                  }
-                }}
-                tabIndex={-1}
                 aria-labelledby="advertising-modal-title"
               >
                 {/* 모달 헤더 */}

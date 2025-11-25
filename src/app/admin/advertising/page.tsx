@@ -393,21 +393,15 @@ export default function AdminAdvertisingPage() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
           onClick={() => setSelectedSubscription(null)}
           onKeyDown={(e) => e.key === 'Escape' && setSelectedSubscription(null)}
-          role="presentation"
+          tabIndex={0}
+          role="button"
+          aria-label="모달 닫기"
         >
           <dialog
             open
             className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => {
-              e.stopPropagation();
-              if (e.key === 'Escape') {
-                e.preventDefault();
-                setSelectedSubscription(null);
-              }
-            }}
             aria-labelledby="subscription-detail-title"
-            tabIndex={-1}
           >
             <div className="px-6 py-4 border-b border-slate-200">
               <div className="flex items-center justify-between">

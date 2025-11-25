@@ -304,17 +304,15 @@ export default function AdminUsersPage() {
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
           onClick={() => setSelectedUser(null)}
           onKeyDown={(e) => e.key === 'Escape' && setSelectedUser(null)}
-          role="presentation"
+          tabIndex={0}
+          role="button"
+          aria-label="모달 닫기"
         >
           <dialog
             open
             className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => {
-              if (e.key === 'Escape') setSelectedUser(null);
-            }}
             aria-labelledby="user-detail-title"
-            tabIndex={-1}
           >
             {/* 모달 헤더 */}
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">

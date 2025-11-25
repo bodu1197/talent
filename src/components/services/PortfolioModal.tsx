@@ -61,17 +61,15 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
       className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
       onClick={onClose}
       onKeyDown={(e) => e.key === 'Escape' && onClose()}
-      role="presentation"
+      tabIndex={0}
+      role="button"
+      aria-label="모달 닫기"
     >
       <dialog
         open
         className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
         onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => {
-          if (e.key === 'Escape') onClose();
-        }}
         aria-labelledby="portfolio-title"
-        tabIndex={-1}
       >
         {/* 닫기 버튼 */}
         <button
