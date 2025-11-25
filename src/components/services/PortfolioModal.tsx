@@ -64,10 +64,9 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
         onClick={onClose}
         aria-label="모달 닫기"
       />
-      <div
+      <dialog
+        open
         className="relative bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-        role="dialog"
-        aria-modal="true"
         aria-labelledby="portfolio-title"
       >
         {/* 닫기 버튼 */}
@@ -178,7 +177,7 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
             </div>
           )}
         </div>
-      </div>
+      </dialog>
     </div>
   );
 }

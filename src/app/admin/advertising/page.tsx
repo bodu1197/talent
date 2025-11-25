@@ -396,10 +396,9 @@ export default function AdminAdvertisingPage() {
             onClick={() => setSelectedSubscription(null)}
             aria-label="모달 닫기"
           />
-          <div
+          <dialog
+            open
             className="relative bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto"
-            role="dialog"
-            aria-modal="true"
             aria-labelledby="subscription-detail-title"
           >
             <div className="px-6 py-4 border-b border-slate-200">
@@ -512,7 +511,7 @@ export default function AdminAdvertisingPage() {
                 닫기
               </button>
             </div>
-          </div>
+          </dialog>
         </div>
       )}
     </div>

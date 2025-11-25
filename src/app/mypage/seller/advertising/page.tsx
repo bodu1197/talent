@@ -605,10 +605,9 @@ export default function AdvertisingPage() {
                 }}
                 aria-label="모달 닫기"
               />
-              <div
+              <dialog
+                open
                 className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-                role="dialog"
-                aria-modal="true"
                 aria-labelledby="advertising-modal-title"
               >
                 {/* 모달 헤더 */}
@@ -909,7 +908,7 @@ export default function AdvertisingPage() {
                     );
                   })()}
                 </div>
-              </div>
+              </dialog>
             </div>
           )}
 

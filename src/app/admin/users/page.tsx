@@ -307,10 +307,9 @@ export default function AdminUsersPage() {
             onClick={() => setSelectedUser(null)}
             aria-label="모달 닫기"
           />
-          <div
+          <dialog
+            open
             className="relative bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-            role="dialog"
-            aria-modal="true"
             aria-labelledby="user-detail-title"
           >
             {/* 모달 헤더 */}
@@ -403,7 +402,7 @@ export default function AdminUsersPage() {
                 수정
               </button>
             </div>
-          </div>
+          </dialog>
         </div>
       )}
     </div>
