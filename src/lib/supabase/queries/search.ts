@@ -1,6 +1,15 @@
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
 import { cryptoShuffleArray } from '@/lib/utils/crypto-shuffle';
+import type { SupabaseClient } from '@supabase/supabase-js';
+
+interface SellerInfo {
+  id: string;
+  business_name: string;
+  display_name: string;
+  profile_image: string | null;
+  is_verified: boolean;
+}
 
 interface ServiceWithRating {
   id: string;
@@ -9,13 +18,7 @@ interface ServiceWithRating {
   price: number;
   thumbnail_url: string | null;
   orders_count: number;
-  seller: {
-    id: string;
-    business_name: string;
-    display_name: string;
-    profile_image: string | null;
-    is_verified: boolean;
-  } | null;
+  seller: SellerInfo | null;
   order_count: number;
   rating: number;
   review_count: number;
@@ -45,19 +48,185 @@ interface PortfolioResult {
   project_url: string | null;
   tags: string[] | null;
   created_at: string;
-  seller: {
-    id: string;
-    business_name: string;
-    display_name: string;
-    profile_image: string | null;
-    is_verified: boolean;
-  } | null;
+  seller: SellerInfo | null;
 }
 
 export interface SearchResult {
   services: ServiceWithRating[];
   experts: ExpertWithStats[];
   portfolios: PortfolioResult[];
+}
+
+// Helper: Build rating map from review stats
+function buildRatingMap(
+  reviewStats: Array<{ service_id: string; rating: number }> | null
+): Map<string, { sum: number; count: number }> {
+  const ratingMap = new Map<string, { sum: number; count: number }>();
+  if (!reviewStats) return ratingMap;
+
+  for (const review of reviewStats) {
+    const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
+    ratingMap.set(review.service_id, {
+      sum: current.sum + review.rating,
+      count: current.count + 1,
+    });
+  }
+  return ratingMap;
+}
+
+// Helper: Extract first seller from Supabase array response
+function extractSeller(seller: unknown): SellerInfo | null {
+  if (Array.isArray(seller) && seller.length > 0) {
+    return seller[0] as SellerInfo;
+  }
+  return null;
+}
+
+// Helper: Fetch expert stats (service count, rating, review count)
+async function fetchExpertStats(
+  supabase: SupabaseClient,
+  expertId: string
+): Promise<{ serviceCount: number; avgRating: number; reviewCount: number }> {
+  const { count: serviceCount } = await supabase
+    .from('services')
+    .select('*', { count: 'exact', head: true })
+    .eq('seller_id', expertId)
+    .eq('status', 'active');
+
+  const { data: expertServices } = await supabase
+    .from('services')
+    .select('id')
+    .eq('seller_id', expertId)
+    .eq('status', 'active');
+
+  if (!expertServices || expertServices.length === 0) {
+    return { serviceCount: serviceCount || 0, avgRating: 0, reviewCount: 0 };
+  }
+
+  const serviceIds = expertServices.map((s) => s.id);
+  const { data: reviews } = await supabase
+    .from('reviews')
+    .select('rating')
+    .in('service_id', serviceIds)
+    .eq('is_visible', true);
+
+  if (!reviews || reviews.length === 0) {
+    return { serviceCount: serviceCount || 0, avgRating: 0, reviewCount: 0 };
+  }
+
+  const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+  return { serviceCount: serviceCount || 0, avgRating, reviewCount: reviews.length };
+}
+
+// Helper: Classify services into promoted and regular
+function classifyServices<T extends { id: string }>(
+  services: T[] | null,
+  promotedIds: Set<string>
+): { promoted: T[]; regular: T[] } {
+  const promoted: T[] = [];
+  const regular: T[] = [];
+
+  if (!services) return { promoted, regular };
+
+  for (const service of services) {
+    if (promotedIds.has(service.id)) {
+      promoted.push(service);
+    } else {
+      regular.push(service);
+    }
+  }
+  return { promoted, regular };
+}
+
+// Helper: Format portfolios with extracted seller
+function formatPortfolios(
+  portfolios: Array<{
+    id: string;
+    seller_id: string;
+    title: string;
+    description: string;
+    thumbnail_url: string | null;
+    project_url: string | null;
+    tags: string[] | null;
+    created_at: string;
+    seller: unknown;
+  }> | null
+): PortfolioResult[] {
+  if (!portfolios) return [];
+  return portfolios.map((portfolio) => ({
+    ...portfolio,
+    seller: extractSeller(portfolio.seller),
+  }));
+}
+
+// Helper: Format experts with stats
+async function formatExpertsWithStats(
+  supabase: SupabaseClient,
+  experts: Array<{
+    id: string;
+    user_id: string;
+    business_name: string;
+    display_name: string;
+    profile_image: string | null;
+    bio: string;
+    is_verified: boolean;
+    created_at: string;
+  }> | null
+): Promise<ExpertWithStats[]> {
+  if (!experts || experts.length === 0) return [];
+
+  return Promise.all(
+    experts.map(async (expert) => {
+      const stats = await fetchExpertStats(supabase, expert.id);
+      return {
+        ...expert,
+        service_count: stats.serviceCount,
+        rating: stats.avgRating,
+        review_count: stats.reviewCount,
+      };
+    })
+  );
+}
+
+// Helper: Format services with rating data
+async function formatServicesWithRating(
+  supabase: SupabaseClient,
+  services: Array<{
+    id: string;
+    title: string;
+    description: string;
+    price: number;
+    thumbnail_url: string | null;
+    orders_count: number;
+    seller: unknown;
+  }>,
+  promotedServiceIds: Set<string>
+): Promise<ServiceWithRating[]> {
+  if (!services || services.length === 0) return [];
+
+  const serviceIds = services.map((s) => s.id);
+  const { data: reviewStats } = await supabase
+    .from('reviews')
+    .select('service_id, rating')
+    .in('service_id', serviceIds)
+    .eq('is_visible', true);
+
+  const ratingMap = buildRatingMap(
+    reviewStats as Array<{ service_id: string; rating: number }> | null
+  );
+
+  return services.map((service) => {
+    const stats = ratingMap.get(service.id);
+    const rating = stats && stats.count > 0 ? stats.sum / stats.count : 0;
+    return {
+      ...service,
+      seller: extractSeller(service.seller),
+      order_count: service.orders_count || 0,
+      rating,
+      review_count: stats?.count || 0,
+      is_promoted: promotedServiceIds.has(service.id),
+    };
+  });
 }
 
 /**
@@ -101,19 +270,11 @@ export async function searchAll(query: string): Promise<SearchResult> {
       .or(`title.ilike.${searchTerm},description.ilike.${searchTerm}`)
       .limit(50);
 
-    // 3. 광고/일반 서비스 분류
-    const promotedServices: Array<NonNullable<typeof allServices>[number]> = [];
-    const regularServices: Array<NonNullable<typeof allServices>[number]> = [];
-
-    if (allServices) {
-      for (const service of allServices) {
-        if (promotedServiceIds.has(service.id)) {
-          promotedServices.push(service);
-        } else {
-          regularServices.push(service);
-        }
-      }
-    }
+    // 3. 광고/일반 서비스 분류 (헬퍼 함수 사용)
+    const { promoted: promotedServices, regular: regularServices } = classifyServices(
+      allServices,
+      promotedServiceIds
+    );
 
     // 4. 광고 서비스 랜덤 셔플 (cryptographically secure)
     cryptoShuffleArray(promotedServices);
@@ -124,45 +285,12 @@ export async function searchAll(query: string): Promise<SearchResult> {
     // 6. 광고(랜덤) + 일반(주문순) 결합
     const services = [...promotedServices, ...regularServices].slice(0, 20);
 
-    // 서비스별 리뷰 통계 조회
-    let servicesWithRating: ServiceWithRating[] = [];
-    if (services && services.length > 0) {
-      const serviceIds = services.map((s) => s.id);
-      const { data: reviewStats } = await supabase
-        .from('reviews')
-        .select('service_id, rating')
-        .in('service_id', serviceIds)
-        .eq('is_visible', true);
-
-      const ratingMap = new Map<string, { sum: number; count: number }>();
-      if (reviewStats) {
-        for (const review of reviewStats as { service_id: string; rating: number }[]) {
-          const current = ratingMap.get(review.service_id) || {
-            sum: 0,
-            count: 0,
-          };
-          ratingMap.set(review.service_id, {
-            sum: current.sum + review.rating,
-            count: current.count + 1,
-          });
-        }
-      }
-
-      servicesWithRating = services.map((service) => {
-        const stats = ratingMap.get(service.id);
-        // Supabase returns seller as an array, extract first element
-        const seller =
-          Array.isArray(service.seller) && service.seller.length > 0 ? service.seller[0] : null;
-        return {
-          ...service,
-          seller,
-          order_count: service.orders_count || 0,
-          rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
-          review_count: stats?.count || 0,
-          is_promoted: promotedServiceIds.has(service.id),
-        };
-      });
-    }
+    // 서비스별 리뷰 통계 조회 및 포맷팅
+    const servicesWithRating = await formatServicesWithRating(
+      supabase,
+      services,
+      promotedServiceIds
+    );
 
     // 전문가 검색 (판매자 프로필)
     const { data: experts } = await supabase
@@ -184,51 +312,8 @@ export async function searchAll(query: string): Promise<SearchResult> {
       )
       .limit(20);
 
-    // 각 전문가의 서비스 수와 평균 평점 조회
-    let expertsWithStats: ExpertWithStats[] = [];
-    if (experts && experts.length > 0) {
-      expertsWithStats = await Promise.all(
-        experts.map(async (expert) => {
-          // 서비스 수 조회
-          const { count: serviceCount } = await supabase
-            .from('services')
-            .select('*', { count: 'exact', head: true })
-            .eq('seller_id', expert.id)
-            .eq('status', 'active');
-
-          // 평균 평점 조회
-          const { data: expertServices } = await supabase
-            .from('services')
-            .select('id')
-            .eq('seller_id', expert.id)
-            .eq('status', 'active');
-
-          let avgRating = 0;
-          let reviewCount = 0;
-
-          if (expertServices && expertServices.length > 0) {
-            const serviceIds = expertServices.map((s) => s.id);
-            const { data: reviews } = await supabase
-              .from('reviews')
-              .select('rating')
-              .in('service_id', serviceIds)
-              .eq('is_visible', true);
-
-            if (reviews && reviews.length > 0) {
-              avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
-              reviewCount = reviews.length;
-            }
-          }
-
-          return {
-            ...expert,
-            service_count: serviceCount || 0,
-            rating: avgRating,
-            review_count: reviewCount,
-          };
-        })
-      );
-    }
+    // 각 전문가의 서비스 수와 평균 평점 조회 (헬퍼 함수 사용)
+    const expertsWithStats = await formatExpertsWithStats(supabase, experts);
 
     // 포트폴리오 검색
     const { data: portfolios } = await supabase
@@ -257,19 +342,9 @@ export async function searchAll(query: string): Promise<SearchResult> {
       .limit(20);
 
     return {
-      services: servicesWithRating || [],
-      experts: expertsWithStats || [],
-      portfolios: (portfolios || []).map((portfolio) => {
-        // Supabase returns seller as an array, extract first element
-        const seller =
-          Array.isArray(portfolio.seller) && portfolio.seller.length > 0
-            ? portfolio.seller[0]
-            : null;
-        return {
-          ...portfolio,
-          seller,
-        };
-      }),
+      services: servicesWithRating,
+      experts: expertsWithStats,
+      portfolios: formatPortfolios(portfolios),
     };
   } catch (error) {
     logger.error('Search error:', error);
