@@ -164,6 +164,31 @@ function splitLongWord(word: string, ctx: CanvasRenderingContext2D, maxWidth: nu
 }
 
 /**
+ * 단어가 최대 너비를 초과하는지 확인
+ */
+function isWordTooLong(word: string, ctx: CanvasRenderingContext2D, maxWidth: number): boolean {
+  return ctx.measureText(word).width > maxWidth;
+}
+
+/**
+ * 긴 단어를 처리하여 줄에 추가
+ */
+function handleLongWord(
+  word: string,
+  ctx: CanvasRenderingContext2D,
+  maxWidth: number,
+  lines: string[],
+  currentLine: string
+): string {
+  if (currentLine) {
+    lines.push(currentLine);
+  }
+  const wordChunks = splitLongWord(word, ctx, maxWidth);
+  lines.push(...wordChunks.slice(0, -1));
+  return wordChunks[wordChunks.length - 1];
+}
+
+/**
  * 텍스트를 여러 줄로 분할 (최대 너비 기준)
  */
 function splitTextIntoLines(
@@ -177,17 +202,11 @@ function splitTextIntoLines(
 
   for (const word of words) {
     const testLine = currentLine ? `${currentLine} ${word}` : word;
-    const metrics = ctx.measureText(testLine);
+    const testWidth = ctx.measureText(testLine).width;
 
-    if (metrics.width > maxWidth) {
-      if (ctx.measureText(word).width > maxWidth) {
-        // 단어가 너무 긴 경우
-        if (currentLine) {
-          lines.push(currentLine);
-        }
-        const wordChunks = splitLongWord(word, ctx, maxWidth);
-        lines.push(...wordChunks.slice(0, -1));
-        currentLine = wordChunks[wordChunks.length - 1];
+    if (testWidth > maxWidth) {
+      if (isWordTooLong(word, ctx, maxWidth)) {
+        currentLine = handleLongWord(word, ctx, maxWidth, lines, currentLine);
       } else {
         // 일반 줄바꿈
         if (currentLine) {
