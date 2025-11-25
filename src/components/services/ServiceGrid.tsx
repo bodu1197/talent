@@ -1,14 +1,11 @@
 // @ts-nocheck - TypeScript void type inference issue with async functions
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import ServiceCard from "./ServiceCard";
-import { Service } from "@/types";
-import {
-  getServicesByCategory,
-  getActiveServices,
-} from "@/lib/supabase/queries/services";
-import { logger } from "@/lib/logger";
+import { useState, useEffect } from 'react';
+import ServiceCard from './ServiceCard';
+import { Service } from '@/types';
+import { getServicesByCategory, getActiveServices } from '@/lib/supabase/queries/services';
+import { logger } from '@/lib/logger';
 
 interface ServiceGridProps {
   categoryId?: string;
@@ -45,8 +42,8 @@ export default function ServiceGrid({
 
         setServices(data);
       } catch (err) {
-        logger.error("Failed to fetch services:", err);
-        setError("서비스를 불러오는데 실패했습니다.");
+        logger.error('Failed to fetch services:', err);
+        setError('서비스를 불러오는데 실패했습니다.');
         setServices([]);
       } finally {
         setLoading(false);
@@ -60,7 +57,7 @@ export default function ServiceGrid({
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {Array.from({ length: 8 }, (_, i) => (
-          <div key={i} className="skeleton h-96 rounded-xl"></div>
+          <div key={`service-skeleton-${i}`} className="skeleton h-96 rounded-xl"></div>
         ))}
       </div>
     );
@@ -70,10 +67,7 @@ export default function ServiceGrid({
     return (
       <div className="text-center py-12">
         <p className="text-red-600 mb-4">{error}</p>
-        <button
-          onClick={() => globalThis.location.reload()}
-          className="btn-primary"
-        >
+        <button onClick={() => globalThis.location.reload()} className="btn-primary">
           다시 시도
         </button>
       </div>
@@ -84,9 +78,7 @@ export default function ServiceGrid({
     return (
       <div className="text-center py-12">
         <p className="text-gray-500 text-lg">아직 등록된 서비스가 없습니다.</p>
-        <p className="text-gray-400 text-sm mt-2">
-          첫 번째 서비스를 등록해보세요!
-        </p>
+        <p className="text-gray-400 text-sm mt-2">첫 번째 서비스를 등록해보세요!</p>
       </div>
     );
   }
@@ -94,8 +86,8 @@ export default function ServiceGrid({
   // 컬럼 수에 따라 그리드 클래스 동적 설정
   const gridClass =
     columns === 5
-      ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
-      : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4";
+      ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4'
+      : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4';
 
   return (
     <div className={gridClass}>

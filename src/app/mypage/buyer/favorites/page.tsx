@@ -1,20 +1,12 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { useAuth } from "@/components/providers/AuthProvider";
-import { Service } from "@/types";
-import {
-  FaLock,
-  FaHeart,
-  FaBox,
-  FaStar,
-  FaCheckCircle,
-  FaTimes,
-  FaRegHeart,
-} from "react-icons/fa";
-import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import toast from "react-hot-toast";
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useAuth } from '@/components/providers/AuthProvider';
+import { Service } from '@/types';
+import { FaLock, FaHeart, FaBox, FaStar, FaCheckCircle, FaTimes, FaRegHeart } from 'react-icons/fa';
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
+import toast from 'react-hot-toast';
 
 interface FavoriteItem {
   service_id: string;
@@ -35,7 +27,7 @@ export default function FavoritesPage() {
       }
 
       try {
-        const response = await fetch("/api/user/service-favorites");
+        const response = await fetch('/api/user/service-favorites');
 
         if (response.ok) {
           const { data } = await response.json();
@@ -43,8 +35,8 @@ export default function FavoritesPage() {
         }
       } catch (error) {
         console.error(
-          "Failed to fetch favorites:",
-          JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+          'Failed to fetch favorites:',
+          JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
         );
       } finally {
         setLoading(false);
@@ -55,29 +47,26 @@ export default function FavoritesPage() {
   }, [user]);
 
   const handleRemoveFavorite = async (serviceId: string) => {
-    if (!confirm("찜 목록에서 제거하시겠습니까?")) {
+    if (!confirm('찜 목록에서 제거하시겠습니까?')) {
       return;
     }
 
     try {
-      const response = await fetch(
-        `/api/user/service-favorites?serviceId=${serviceId}`,
-        {
-          method: "DELETE",
-        },
-      );
+      const response = await fetch(`/api/user/service-favorites?serviceId=${serviceId}`, {
+        method: 'DELETE',
+      });
 
       if (response.ok) {
         setFavorites(favorites.filter((fav) => fav.service_id !== serviceId));
       } else {
-        toast.error("찜 취소에 실패했습니다.");
+        toast.error('찜 취소에 실패했습니다.');
       }
     } catch (error) {
       console.error(
-        "Remove favorite error:",
-        JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
+        'Remove favorite error:',
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
       );
-      toast.error("오류가 발생했습니다.");
+      toast.error('오류가 발생했습니다.');
     }
   };
 
@@ -88,9 +77,7 @@ export default function FavoritesPage() {
           <div className="max-w-md mx-auto text-center">
             <FaLock className="text-6xl text-gray-300 mb-4" />
             <h2 className="text-base md:text-lg font-bold mb-4">로그인이 필요합니다</h2>
-            <p className="text-gray-600 mb-6">
-              찜한 서비스를 확인하려면 로그인해주세요.
-            </p>
+            <p className="text-gray-600 mb-6">찜한 서비스를 확인하려면 로그인해주세요.</p>
             <Link
               href="/auth/login"
               className="inline-block px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors"
@@ -116,11 +103,8 @@ export default function FavoritesPage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-              <div key={i} className="animate-pulse">
-                <div
-                  className="bg-gray-200 rounded-lg"
-                  style={{ aspectRatio: "210/160" }}
-                ></div>
+              <div key={`favorite-skeleton-${i}`} className="animate-pulse">
+                <div className="bg-gray-200 rounded-lg" style={{ aspectRatio: '210/160' }}></div>
                 <div className="mt-2 space-y-2">
                   <div className="h-4 bg-gray-200 rounded"></div>
                   <div className="h-4 bg-gray-200 rounded w-2/3"></div>
@@ -141,23 +125,17 @@ export default function FavoritesPage() {
             <FaHeart className="text-red-500 text-2xl" />
             <h1 className="text-base md:text-lg font-bold">찜한 서비스</h1>
             {favorites.length > 0 && (
-              <span className="text-lg text-gray-500">
-                ({favorites.length}개)
-              </span>
+              <span className="text-lg text-gray-500">({favorites.length}개)</span>
             )}
           </div>
-          <p className="text-xs md:text-sm text-gray-600">
-            관심있는 서비스를 저장하고 관리하세요
-          </p>
+          <p className="text-xs md:text-sm text-gray-600">관심있는 서비스를 저장하고 관리하세요</p>
         </div>
 
         {favorites.length === 0 ? (
           <div className="text-center py-16">
             <FaRegHeart className="text-6xl text-gray-300 mb-4" />
             <h3 className="text-sm md:text-base font-bold mb-2">찜한 서비스가 없습니다</h3>
-            <p className="text-gray-600 mb-6">
-              마음에 드는 서비스를 찜해보세요
-            </p>
+            <p className="text-gray-600 mb-6">마음에 드는 서비스를 찜해보세요</p>
             <Link
               href="/"
               className="inline-block px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors"
@@ -186,7 +164,7 @@ export default function FavoritesPage() {
                     {/* 썸네일 */}
                     <div
                       className="bg-gray-100 rounded-lg overflow-hidden w-full relative"
-                      style={{ aspectRatio: "210/160" }}
+                      style={{ aspectRatio: '210/160' }}
                     >
                       {service.thumbnail_url ? (
                         <img
@@ -213,7 +191,7 @@ export default function FavoritesPage() {
                       {/* 판매자 */}
                       <div className="flex items-center gap-1 mb-1">
                         <div className="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center text-white text-[8px] font-bold">
-                          {service.seller?.display_name?.[0] || "S"}
+                          {service.seller?.display_name?.[0] || 'S'}
                         </div>
                         <span className="text-xs text-gray-600 truncate">
                           {service.seller?.display_name}
@@ -245,14 +223,11 @@ export default function FavoritesPage() {
                       {/* 찜한 날짜 */}
                       <div className="mt-1">
                         <span className="text-[10px] text-gray-400">
-                          {new Date(favorite.created_at).toLocaleDateString(
-                            "ko-KR",
-                            {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            },
-                          )}
+                          {new Date(favorite.created_at).toLocaleDateString('ko-KR', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })}
                         </span>
                       </div>
                     </div>
