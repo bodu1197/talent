@@ -312,10 +312,14 @@ export default function Step5Requirements({
             <div className="space-y-6 border border-gray-200 rounded-lg p-6 bg-white">
               {/* 포트폴리오 제목 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="portfolio-title"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   제목 <span className="text-gray-500 text-xs">(비어있으면 서비스 제목 사용)</span>
                 </label>
                 <input
+                  id="portfolio-title"
                   type="text"
                   value={formData.portfolio_data.title}
                   onChange={(e) =>
@@ -334,10 +338,14 @@ export default function Step5Requirements({
 
               {/* 설명 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="portfolio-description"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   설명 <span className="text-red-500">*</span>
                 </label>
                 <textarea
+                  id="portfolio-description"
                   value={formData.portfolio_data.description}
                   onChange={(e) =>
                     setFormData({
@@ -401,8 +409,14 @@ export default function Step5Requirements({
 
               {/* 프로젝트 URL */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">프로젝트 URL</label>
+                <label
+                  htmlFor="portfolio-project-url"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  프로젝트 URL
+                </label>
                 <input
+                  id="portfolio-project-url"
                   type="url"
                   value={formData.portfolio_data.project_url}
                   onChange={(e) =>

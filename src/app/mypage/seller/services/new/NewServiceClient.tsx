@@ -392,9 +392,9 @@ export default function NewServiceClient({ sellerId }: Props) {
             <div className="space-y-4">
               {/* 썸네일 이미지 - 최상단 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <p className="block text-sm font-medium text-gray-700 mb-2">
                   썸네일 이미지 * <span className="text-xs text-gray-500">(권장: 652×488px)</span>
-                </label>
+                </p>
 
                 {/* 업로드 방식 선택 */}
                 <div className="flex gap-2 mb-4">
@@ -530,10 +530,14 @@ export default function NewServiceClient({ sellerId }: Props) {
 
               {/* 서비스 제목 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="new-service-title"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   서비스 제목 *
                 </label>
                 <input
+                  id="new-service-title"
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
