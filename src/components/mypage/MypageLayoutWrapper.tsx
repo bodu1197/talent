@@ -58,7 +58,7 @@ export default function MypageLayoutWrapper({
   }
 
   return (
-    <div className="bg-black/10 flex justify-center">
+    <div className="bg-black/5 flex justify-center">
       <div className="flex w-full max-w-[1200px]">
         <MobileSidebar mode={mode} />
         <Sidebar mode={mode} profileData={profileData} />
