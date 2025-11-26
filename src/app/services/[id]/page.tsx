@@ -12,6 +12,7 @@ import ExpertResponseBanner from '@/components/services/ExpertResponseBanner';
 import ContactSellerButton from '@/components/services/ContactSellerButton';
 import PurchaseButton from '@/components/services/PurchaseButton';
 import MobileServiceHeader from '@/components/services/MobileServiceHeader';
+import MobileServiceBottomBar from '@/components/services/MobileServiceBottomBar';
 import { logger } from '@/lib/logger';
 import { getCategoryPath } from '@/lib/categories';
 import {
@@ -879,7 +880,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
       {/* 돌파구가 추천 서비스 */}
       {recommendedServices && recommendedServices.length > 0 && (
-        <div className="bg-gray-50 py-12">
+        <div className="bg-gray-50 py-12 pb-24 lg:pb-12">
           <div className="container-1200 px-4">
             <h2 className="text-2xl font-bold mb-6">돌파구가 추천 서비스</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -889,6 +890,16 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             </div>
           </div>
         </div>
+      )}
+
+      {/* 모바일 전용: 하단 고정 버튼 (찜/문의/구매) */}
+      {service.seller && (
+        <MobileServiceBottomBar
+          serviceId={id}
+          sellerId={service.seller.id}
+          sellerUserId={service.seller.user_id}
+          servicePrice={service.price || 0}
+        />
       )}
     </div>
   );
