@@ -80,8 +80,8 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
 
       <main
         className={(() => {
-          if (isMypagePage) return 'flex-1 pt-[60px] lg:pt-[102px] pb-16 lg:pb-0 w-full max-w-none';
-          if (isChatPage) return 'flex-1 pt-[60px] lg:pt-[60px] pb-16 lg:pb-0';
+          if (isMypagePage) return 'flex-1 pt-0 pb-16 lg:pb-0 w-full max-w-none';
+          if (isChatPage) return 'flex-1 pt-0 pb-16 lg:pb-0';
           if (isMainPage) return 'flex-1 pt-[60px] lg:pt-20 pb-16 lg:pb-0';
           if (isSearchPage) return 'flex-1 pt-0 lg:pt-[102px] pb-16 lg:pb-0';
           if (isServiceDetailPage) return 'flex-1 pt-0 lg:pt-[102px] pb-0 lg:pb-0';
