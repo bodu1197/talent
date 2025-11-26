@@ -608,10 +608,10 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   <ExpertResponseBanner avgResponseTime={sellerStats.avgResponseTime} />
 
                   {/* 전문가 기본 정보 */}
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="flex items-start gap-4">
+                  <div className="flex items-start justify-between mb-4 lg:mb-6">
+                    <div className="flex items-start gap-3 lg:gap-4">
                       {/* 프로필 이미지 */}
-                      <div className="w-16 h-16 rounded-full bg-brand-primary flex items-center justify-center text-white text-2xl font-bold flex-shrink-0 relative overflow-hidden">
+                      <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-full bg-brand-primary flex items-center justify-center text-white text-xl lg:text-2xl font-bold flex-shrink-0 relative overflow-hidden">
                         {service.seller?.profile_image ? (
                           <Image
                             src={service.seller.profile_image}
@@ -635,17 +635,17 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       {/* 이름 및 영업 시간 */}
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-lg font-bold text-gray-900">
+                          <h3 className="text-base lg:text-lg font-bold text-gray-900">
                             {service.seller?.display_name || service.seller?.business_name}
                           </h3>
                           <span className="text-yellow-500">
                             <FaCrown />
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600 mb-1">
+                        <p className="text-xs lg:text-sm text-gray-600 mb-1">
                           영업 가능 시간: {service.seller?.contact_hours || '9시 - 18시'}
                         </p>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-xs lg:text-sm text-gray-600">
                           평균 응답 시간: {sellerStats.avgResponseTime}
                         </p>
                         {/* PC: 인라인 버튼 */}
@@ -654,15 +654,6 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                             결제 전 전화상담 제공
                           </span>
                           <button className="text-xs px-2 py-1 border border-gray-300 text-gray-700 rounded hover:bg-gray-50">
-                            연락처 보기
-                          </button>
-                        </div>
-                        {/* 모바일: 전체 너비 버튼 */}
-                        <div className="lg:hidden mt-3 flex gap-2">
-                          <span className="flex-1 text-center text-xs px-2 py-2 bg-gray-100 text-gray-700 rounded">
-                            결제 전 전화상담 제공
-                          </span>
-                          <button className="flex-1 text-xs px-2 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50">
                             연락처 보기
                           </button>
                         </div>
@@ -700,8 +691,18 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                     </div>
                   </div>
 
+                  {/* 모바일: 버튼 영역 (전체 너비) */}
+                  <div className="lg:hidden flex gap-2 py-3 border-t border-gray-200">
+                    <span className="flex-1 text-center text-xs px-2 py-2.5 bg-gray-100 text-gray-700 rounded-lg">
+                      결제 전 전화상담 제공
+                    </span>
+                    <button className="flex-1 text-xs px-2 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
+                      연락처 보기
+                    </button>
+                  </div>
+
                   {/* 모바일: 통계 정보 */}
-                  <div className="lg:hidden grid grid-cols-4 gap-2 py-4 border-t border-gray-200">
+                  <div className="lg:hidden grid grid-cols-4 gap-2 py-3 border-t border-gray-200">
                     <div className="text-center">
                       <div className="text-xs text-gray-500 mb-1">총 거래</div>
                       <div className="text-sm font-bold text-gray-900">
