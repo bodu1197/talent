@@ -1,13 +1,9 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { useState, useRef, useEffect } from "react";
-import {
-  FaArrowLeft,
-  FaUniversity,
-  FaExclamationTriangle,
-} from "react-icons/fa";
-import toast from "react-hot-toast";
+import { useRouter } from 'next/navigation';
+import { useState, useRef, useEffect } from 'react';
+import { FaArrowLeft, FaUniversity, FaExclamationTriangle } from 'react-icons/fa';
+import toast from 'react-hot-toast';
 
 interface Order {
   id: string;
@@ -31,9 +27,9 @@ export default function BankTransferClient({ order }: Props) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const bankInfo = {
-    bankName: process.env.NEXT_PUBLIC_BANK_NAME || "국민은행",
-    accountNumber: process.env.NEXT_PUBLIC_BANK_ACCOUNT || "123-456-789012",
-    accountHolder: process.env.NEXT_PUBLIC_BANK_HOLDER || "돌파구",
+    bankName: process.env.NEXT_PUBLIC_BANK_NAME || '국민은행',
+    accountNumber: process.env.NEXT_PUBLIC_BANK_ACCOUNT || '123-456-789012',
+    accountHolder: process.env.NEXT_PUBLIC_BANK_HOLDER || '돌파구',
   };
 
   // Cleanup timeout on unmount
@@ -60,24 +56,22 @@ export default function BankTransferClient({ order }: Props) {
 
   const handleConfirmTransfer = async () => {
     // 주문 상태를 pending_bank_transfer로 변경
-    const response = await fetch("/api/payments/bank-transfer/request", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    const response = await fetch('/api/payments/bank-transfer/request', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ order_id: order.id }),
     });
 
     if (response.ok) {
-      toast.error(
-        "입금 대기 상태로 변경되었습니다.\n입금 확인 후 주문이 시작됩니다.",
-      );
+      toast.error('입금 대기 상태로 변경되었습니다.\n입금 확인 후 주문이 시작됩니다.');
       router.push(`/mypage/buyer/orders/${order.id}`);
     } else {
-      toast.error("오류가 발생했습니다.");
+      toast.error('오류가 발생했습니다.');
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-16">
+    <div className="min-h-screen bg-gray-50 pt-20">
       <div className="container mx-auto px-4 py-8 max-w-2xl">
         {/* 헤더 */}
         <div className="mb-6">
@@ -102,15 +96,11 @@ export default function BankTransferClient({ order }: Props) {
             <div className="space-y-4">
               <div>
                 <span className="text-sm text-gray-600 block mb-1">은행명</span>
-                <span className="text-xl font-bold text-gray-900">
-                  {bankInfo.bankName}
-                </span>
+                <span className="text-xl font-bold text-gray-900">{bankInfo.bankName}</span>
               </div>
 
               <div>
-                <span className="text-sm text-gray-600 block mb-1">
-                  계좌번호
-                </span>
+                <span className="text-sm text-gray-600 block mb-1">계좌번호</span>
                 <div className="flex items-center gap-2">
                   <span className="text-xl font-bold text-gray-900 font-mono">
                     {bankInfo.accountNumber}
@@ -119,22 +109,18 @@ export default function BankTransferClient({ order }: Props) {
                     onClick={handleCopyAccount}
                     className="px-3 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50"
                   >
-                    {isCopied ? "복사됨!" : "복사"}
+                    {isCopied ? '복사됨!' : '복사'}
                   </button>
                 </div>
               </div>
 
               <div>
                 <span className="text-sm text-gray-600 block mb-1">예금주</span>
-                <span className="text-xl font-bold text-gray-900">
-                  {bankInfo.accountHolder}
-                </span>
+                <span className="text-xl font-bold text-gray-900">{bankInfo.accountHolder}</span>
               </div>
 
               <div className="pt-4 border-t border-blue-300">
-                <span className="text-sm text-gray-600 block mb-1">
-                  입금 금액
-                </span>
+                <span className="text-sm text-gray-600 block mb-1">입금 금액</span>
                 <span className="text-2xl font-bold text-brand-primary">
                   {order.amount.toLocaleString()}원
                 </span>
@@ -151,9 +137,7 @@ export default function BankTransferClient({ order }: Props) {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">주문번호</span>
-                <span className="text-gray-900 font-mono text-xs">
-                  {order.merchant_uid}
-                </span>
+                <span className="text-gray-900 font-mono text-xs">{order.merchant_uid}</span>
               </div>
             </div>
           </div>
@@ -168,9 +152,7 @@ export default function BankTransferClient({ order }: Props) {
           <ul className="space-y-2 text-sm text-gray-700">
             <li className="flex gap-2">
               <span>•</span>
-              <span>
-                입금자명과 주문자명이 다를 경우 입금 확인이 지연될 수 있습니다
-              </span>
+              <span>입금자명과 주문자명이 다를 경우 입금 확인이 지연될 수 있습니다</span>
             </li>
             <li className="flex gap-2">
               <span>•</span>
@@ -195,9 +177,7 @@ export default function BankTransferClient({ order }: Props) {
           입금 완료 확인 요청
         </button>
 
-        <p className="text-center text-sm text-gray-500 mt-4">
-          입금 완료 후 위 버튼을 눌러주세요
-        </p>
+        <p className="text-center text-sm text-gray-500 mt-4">입금 완료 후 위 버튼을 눌러주세요</p>
       </div>
     </div>
   );

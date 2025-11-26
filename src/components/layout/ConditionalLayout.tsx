@@ -70,9 +70,9 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
 
       <main
         className={(() => {
-          if (isMypagePage) return 'flex-1 pt-16 lg:pt-[86px] pb-16 lg:pb-0 w-full max-w-none';
-          if (isMainPage) return 'flex-1 pt-[140px] lg:pt-16 pb-16 lg:pb-0';
-          return 'flex-1 pt-16 lg:pt-[86px] pb-16 lg:pb-0';
+          if (isMypagePage) return 'flex-1 pt-20 lg:pt-[102px] pb-16 lg:pb-0 w-full max-w-none';
+          if (isMainPage) return 'flex-1 pt-[156px] lg:pt-20 pb-16 lg:pb-0';
+          return 'flex-1 pt-20 lg:pt-[102px] pb-16 lg:pb-0';
         })()}
       >
         {children}

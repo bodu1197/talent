@@ -270,7 +270,7 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
   }, [roomId, userId]);
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50 pt-16">
+    <div className="flex flex-col h-screen bg-gray-50 pt-20">
       {/* 헤더 */}
       <div className="bg-white border-b shadow-sm">
         <div className="container mx-auto px-4 py-4">

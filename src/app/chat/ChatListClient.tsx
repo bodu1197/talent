@@ -459,7 +459,7 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
   const selectedRoom = rooms.find((r) => r.id === selectedRoomId);
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-16">
+    <div className="min-h-screen bg-gray-50 pt-20">
       {/* 모바일: 전체 화면 채팅방 목록 */}
       <div className="lg:hidden min-h-screen bg-white">
         <ChatRoomList

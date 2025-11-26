@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { getTopLevelCategories } from "@/lib/categories";
+import Link from 'next/link';
+import { getTopLevelCategories } from '@/lib/categories';
 import {
   FaRobot,
   FaLaptopCode,
@@ -8,15 +8,15 @@ import {
   FaVideo,
   FaBriefcase,
   FaThLarge,
-} from "react-icons/fa";
+} from 'react-icons/fa';
 
 // 카테고리 아이콘 매핑
 const categoryIcons: Record<string, React.ReactNode> = {
-  "ai-services": <FaRobot className="text-lg" aria-hidden="true" />,
-  "it-programming": <FaLaptopCode className="text-lg" aria-hidden="true" />,
+  'ai-services': <FaRobot className="text-lg" aria-hidden="true" />,
+  'it-programming': <FaLaptopCode className="text-lg" aria-hidden="true" />,
   design: <FaPalette className="text-lg" aria-hidden="true" />,
   marketing: <FaBullhorn className="text-lg" aria-hidden="true" />,
-  "video-photo": <FaVideo className="text-lg" aria-hidden="true" />,
+  'video-photo': <FaVideo className="text-lg" aria-hidden="true" />,
   business: <FaBriefcase className="text-lg" aria-hidden="true" />,
 };
 
@@ -24,7 +24,7 @@ export default async function CategoryBar() {
   const topLevelCategories = await getTopLevelCategories();
 
   return (
-    <div className="bg-white border-b border-gray-200 fixed top-16 left-0 right-0 z-40">
+    <div className="bg-white border-b border-gray-200 fixed top-20 left-0 right-0 z-40">
       <div className="container-1200 px-4 sm:px-6 lg:px-8">
         {/* PC: 가로 스크롤 카테고리 */}
         <div className="hidden lg:flex items-center gap-6 overflow-x-auto py-3 scrollbar-hide">
@@ -72,12 +72,8 @@ export default async function CategoryBar() {
               className="flex flex-col items-center gap-1 p-2 text-gray-700 hover:text-brand-primary hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-brand-primary focus:outline-none"
               aria-label={`${category.name} 카테고리로 이동`}
             >
-              {categoryIcons[category.slug] || (
-                <FaThLarge className="text-xl" aria-hidden="true" />
-              )}
-              <span className="text-xs font-medium text-center line-clamp-1">
-                {category.name}
-              </span>
+              {categoryIcons[category.slug] || <FaThLarge className="text-xl" aria-hidden="true" />}
+              <span className="text-xs font-medium text-center line-clamp-1">{category.name}</span>
             </Link>
           ))}
         </div>
