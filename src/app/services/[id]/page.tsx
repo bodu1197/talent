@@ -504,32 +504,10 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         </div>
       </div>
 
-      {/* 모바일 전용: 제목 및 정보 영역 */}
-      <div className="lg:hidden bg-white px-4 py-4">
-        {/* 제목 */}
-        <h1 className="text-lg font-bold text-gray-900 mb-3">{service.title}</h1>
-
-        {/* 가격 */}
-        <div className="text-xl font-bold text-brand-primary mb-3">
-          {service.price?.toLocaleString() || 0}원
-        </div>
-
-        {/* 통계 */}
-        <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
-          <div className="flex items-center gap-1">
-            <FaStar className="text-yellow-400" />
-            <span className="font-medium">{averageRating}</span>
-            <span>({reviewCount})</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <FaHeart className="text-red-400" />
-            <span>{service.wishlist_count || 0}</span>
-          </div>
-        </div>
-
-        {/* 판매자 정보 */}
-        {service.seller && (
-          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+      {/* 모바일 전용: 전문가 카드 (썸네일 바로 아래) */}
+      {service.seller && (
+        <div className="lg:hidden bg-white px-4 py-3 border-b border-gray-100">
+          <div className="flex items-center gap-3">
             <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden flex-shrink-0 relative">
               {service.seller?.profile_image ? (
                 <Image
@@ -562,7 +540,33 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
               프로필
             </Link>
           </div>
-        )}
+        </div>
+      )}
+
+      {/* 모바일 전용: 평점 별표 */}
+      <div className="lg:hidden bg-white px-4 py-3 border-b border-gray-100">
+        <div className="flex items-center gap-1">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <FaStar
+              key={star}
+              className={`text-lg ${star <= Math.round(Number(averageRating)) ? 'text-yellow-400' : 'text-gray-300'}`}
+            />
+          ))}
+          <span className="ml-2 font-bold text-gray-900">{averageRating}</span>
+          <span className="text-gray-500">({reviewCount})</span>
+          <div className="ml-4 flex items-center gap-1 text-gray-500">
+            <FaHeart className="text-red-400" />
+            <span>{service.wishlist_count || 0}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 모바일 전용: 제목 및 가격 */}
+      <div className="lg:hidden bg-white px-4 py-4">
+        <h1 className="text-lg font-bold text-gray-900 mb-2">{service.title}</h1>
+        <div className="text-xl font-bold text-brand-primary">
+          {service.price?.toLocaleString() || 0}원
+        </div>
       </div>
 
       {/* 메인 컨텐츠 영역 */}
