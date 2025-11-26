@@ -113,8 +113,8 @@ export default function MobileSearchContent({ categories }: MobileSearchContentP
 
   return (
     <div className="lg:hidden bg-white min-h-screen pb-20">
-      {/* 1. 검색창 섹션 */}
-      <div className="px-4 pt-4 pb-6">
+      {/* 1. 검색창 섹션 - MobileSearchBar와 100% 동일 */}
+      <div className="bg-white pt-2 pb-4 px-3">
         <form onSubmit={handleSearch} className="relative" autoComplete="off">
           <input
             type="text"
@@ -130,7 +130,6 @@ export default function MobileSearchContent({ categories }: MobileSearchContentP
             role="searchbox"
             aria-label="서비스 검색"
             className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-full bg-gray-50 focus:bg-white focus:border-gray-300 focus:outline-none transition-colors text-gray-900 text-sm"
-            autoFocus
           />
           <button
             type="submit"
