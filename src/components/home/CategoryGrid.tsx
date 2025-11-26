@@ -103,7 +103,7 @@ export default async function CategoryGrid() {
                   >
                     <CategoryIcon icon={category.icon} />
                   </div>
-                  <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-bold text-mobile-sm text-center w-[76px] whitespace-nowrap px-0">
+                  <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-bold text-xs text-center w-[76px] whitespace-nowrap px-0">
                     {category.name}
                   </div>
                 </Link>
@@ -123,7 +123,7 @@ export default async function CategoryGrid() {
                   >
                     <CategoryIcon icon={category.icon} />
                   </div>
-                  <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-bold text-mobile-sm text-center w-[76px] whitespace-nowrap px-0">
+                  <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-bold text-xs text-center w-[76px] whitespace-nowrap px-0">
                     {category.name}
                   </div>
                 </Link>
