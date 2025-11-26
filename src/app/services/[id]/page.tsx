@@ -175,6 +175,7 @@ async function calculateSatisfactionRate(
   return Math.round((avgRating / 5) * 100);
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export default async function ServiceDetailPage({ params }: ServiceDetailProps) {
   const { id } = await params;
   const supabase = await createClient();
@@ -736,11 +737,11 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                     수정
                   </div>
 
-                  {service.seller?.id && user && (
+                  {service.seller?.id && (
                     <PurchaseButton
                       sellerId={service.seller.id}
                       serviceId={id}
-                      currentUserId={user.id}
+                      currentUserId={user?.id}
                       sellerUserId={service.seller.user_id}
                       serviceTitle={service.title}
                       servicePrice={service.price || 0}
@@ -750,7 +751,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                     />
                   )}
 
-                  {service.seller?.id && user && service.seller.user_id !== user.id && (
+                  {service.seller?.id && (!user || service.seller.user_id !== user.id) && (
                     <ContactSellerButton sellerId={service.seller.id} serviceId={id} />
                   )}
 

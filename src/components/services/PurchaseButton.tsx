@@ -9,7 +9,7 @@ import { logger } from '@/lib/logger';
 interface PurchaseButtonProps {
   readonly sellerId: string;
   readonly serviceId: string;
-  readonly currentUserId: string;
+  readonly currentUserId?: string | null;
   readonly sellerUserId: string;
   readonly serviceTitle: string;
   readonly servicePrice: number;
@@ -33,6 +33,12 @@ export default function PurchaseButton({
   const [isLoading, setIsLoading] = useState(false);
 
   const handlePurchase = async () => {
+    // 비로그인 상태면 로그인 페이지로 이동
+    if (!currentUserId) {
+      router.push(`/auth/login?redirect=/services/${serviceId}`);
+      return;
+    }
+
     // 자신의 서비스인 경우
     if (currentUserId === sellerUserId) {
       toast.error('자신의 서비스는 구매할 수 없습니다');
