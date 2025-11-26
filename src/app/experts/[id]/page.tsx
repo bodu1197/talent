@@ -13,6 +13,51 @@ interface ExpertDetailProps {
   }>;
 }
 
+interface ReviewData {
+  service_id: string;
+  rating: number;
+}
+
+interface ReviewStats {
+  rating: number;
+  count: number;
+}
+
+// Helper: Calculate review stats from raw reviews
+function calculateReviewStats(reviews: ReviewData[]): Record<string, ReviewStats> {
+  const grouped: Record<string, number[]> = {};
+
+  for (const r of reviews) {
+    if (!grouped[r.service_id]) grouped[r.service_id] = [];
+    grouped[r.service_id].push(r.rating);
+  }
+
+  const stats: Record<string, ReviewStats> = {};
+  for (const [serviceId, ratings] of Object.entries(grouped)) {
+    stats[serviceId] = {
+      rating: ratings.reduce((a, b) => a + b, 0) / ratings.length,
+      count: ratings.length,
+    };
+  }
+
+  return stats;
+}
+
+// Helper: Calculate overall rating from review stats
+function calculateOverallRating(reviewStats: Record<string, ReviewStats>): {
+  avgRating: number;
+  totalReviews: number;
+} {
+  const allRatings = Object.values(reviewStats);
+  const totalReviews = allRatings.reduce((sum, s) => sum + s.count, 0);
+  const avgRating =
+    totalReviews > 0
+      ? allRatings.reduce((sum, s) => sum + s.rating * s.count, 0) / totalReviews
+      : 0;
+
+  return { avgRating, totalReviews };
+}
+
 export default async function ExpertDetailPage({ params }: ExpertDetailProps) {
   const { id } = await params;
   const supabase = await createClient();
@@ -64,7 +109,7 @@ export default async function ExpertDetailPage({ params }: ExpertDetailProps) {
 
   // 서비스별 리뷰 통계 조회
   const serviceIds = services?.map((s) => s.id) || [];
-  const reviewStats: Record<string, { rating: number; count: number }> = {};
+  let reviewStats: Record<string, ReviewStats> = {};
 
   if (serviceIds.length > 0) {
     const { data: reviews } = await supabase
@@ -73,28 +118,12 @@ export default async function ExpertDetailPage({ params }: ExpertDetailProps) {
       .in('service_id', serviceIds);
 
     if (reviews) {
-      const grouped: Record<string, number[]> = {};
-      reviews.forEach((r) => {
-        if (!grouped[r.service_id]) grouped[r.service_id] = [];
-        grouped[r.service_id].push(r.rating);
-      });
-
-      Object.entries(grouped).forEach(([serviceId, ratings]) => {
-        reviewStats[serviceId] = {
-          rating: ratings.reduce((a, b) => a + b, 0) / ratings.length,
-          count: ratings.length,
-        };
-      });
+      reviewStats = calculateReviewStats(reviews);
     }
   }
 
   // 전체 리뷰 통계 계산
-  const allRatings = Object.values(reviewStats);
-  const totalReviews = allRatings.reduce((sum, s) => sum + s.count, 0);
-  const avgRating =
-    totalReviews > 0
-      ? allRatings.reduce((sum, s) => sum + s.rating * s.count, 0) / totalReviews
-      : 0;
+  const { avgRating, totalReviews } = calculateOverallRating(reviewStats);
 
   // 총 주문 수
   const { count: totalOrders } = await supabase

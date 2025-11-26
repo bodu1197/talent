@@ -26,9 +26,9 @@ const LOG_LEVELS: Record<LogLevel, number> = {
 };
 
 class Logger {
-  private level: LogLevel;
-  private isDevelopment: boolean;
-  private isClient: boolean;
+  private readonly level: LogLevel;
+  private readonly isDevelopment: boolean;
+  private readonly isClient: boolean;
 
   constructor() {
     // 환경 변수에서 로그 레벨 가져오기
@@ -36,7 +36,7 @@ class Logger {
     this.level = envLevel in LOG_LEVELS ? envLevel : 'info';
 
     this.isDevelopment = process.env.NODE_ENV === 'development';
-    this.isClient = typeof window !== 'undefined';
+    this.isClient = globalThis.window !== undefined;
 
     // 프로덕션 환경에서는 최소 warn 레벨
     if (!this.isDevelopment && LOG_LEVELS[this.level] < LOG_LEVELS.warn) {
@@ -56,7 +56,7 @@ class Logger {
     return `${prefix} ${message}`;
   }
 
-  private sanitizeData(data: LogMetadata | unknown): LogMetadata | unknown {
+  private sanitizeData(data: unknown): unknown {
     if (!data) return data;
 
     // 민감한 정보 필드 목록
@@ -120,7 +120,7 @@ class Logger {
     console.warn(this.formatMessage('warn', message), sanitized || '');
   }
 
-  error(message: string, error?: Error | unknown, data?: LogMetadata) {
+  error(message: string, error?: unknown, data?: LogMetadata) {
     if (!this.shouldLog('error')) return;
 
     const sanitized = this.sanitizeData(data);

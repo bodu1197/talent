@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import Link from "next/link";
-import { logger } from "@/lib/logger";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
+import Link from 'next/link';
+import { logger } from '@/lib/logger';
 import {
   FaArrowLeft,
   FaEdit,
@@ -13,8 +13,8 @@ import {
   FaCalendar,
   FaYoutube,
   FaExternalLinkAlt,
-} from "react-icons/fa";
-import toast from "react-hot-toast";
+} from 'react-icons/fa';
+import toast from 'react-hot-toast';
 
 interface Portfolio {
   id: string;
@@ -37,19 +37,15 @@ interface Props {
   readonly sellerId: string;
 }
 
-export default function PortfolioDetailClient({
-  portfolio,
-  sellerId: _sellerId,
-}: Props) {
+export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }: Props) {
   const router = useRouter();
   const [deleting, setDeleting] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // 썸네일 + 추가 이미지 배열
-  const allImages = [
-    portfolio.thumbnail_url,
-    ...(portfolio.image_urls || []),
-  ].filter(Boolean) as string[];
+  const allImages = [portfolio.thumbnail_url, ...(portfolio.image_urls || [])].filter(
+    Boolean
+  ) as string[];
 
   // YouTube 비디오 ID 추출
   const getYoutubeVideoId = (url: string | null): string | null => {
@@ -60,7 +56,7 @@ export default function PortfolioDetailClient({
       /youtube\.com\/v\/([^&\n?#]+)/,
     ];
     for (const pattern of patterns) {
-      const match = url.match(pattern);
+      const match = pattern.exec(url);
       if (match) return match[1];
     }
     return null;
@@ -69,25 +65,25 @@ export default function PortfolioDetailClient({
   const youtubeVideoId = getYoutubeVideoId(portfolio.youtube_url);
 
   const handleDelete = async () => {
-    if (!confirm("정말 삭제하시겠습니까?")) return;
+    if (!confirm('정말 삭제하시겠습니까?')) return;
 
     try {
       setDeleting(true);
 
       const response = await fetch(`/api/seller/portfolio/${portfolio.id}`, {
-        method: "DELETE",
+        method: 'DELETE',
       });
 
       if (!response.ok) {
-        throw new Error("삭제 실패");
+        throw new Error('삭제 실패');
       }
 
-      toast.success("포트폴리오가 삭제되었습니다");
-      router.push("/mypage/seller/portfolio");
+      toast.success('포트폴리오가 삭제되었습니다');
+      router.push('/mypage/seller/portfolio');
       router.refresh();
     } catch (error) {
-      logger.error("Portfolio delete error:", error);
-      toast.error("삭제에 실패했습니다");
+      logger.error('Portfolio delete error:', error);
+      toast.error('삭제에 실패했습니다');
     } finally {
       setDeleting(false);
     }
@@ -121,14 +117,12 @@ export default function PortfolioDetailClient({
                   className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
                   <FaTrash className="inline mr-2" />
-                  {deleting ? "삭제 중..." : "삭제"}
+                  {deleting ? '삭제 중...' : '삭제'}
                 </button>
               </div>
             </div>
 
-            <h1 className="text-base md:text-lg font-bold text-gray-900">
-              {portfolio.title}
-            </h1>
+            <h1 className="text-base md:text-lg font-bold text-gray-900">{portfolio.title}</h1>
             <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
               <span>
                 <FaEye className="inline mr-1" />
@@ -136,7 +130,7 @@ export default function PortfolioDetailClient({
               </span>
               <span>
                 <FaCalendar className="inline mr-1" />
-                {new Date(portfolio.created_at).toLocaleDateString("ko-KR")}
+                {new Date(portfolio.created_at).toLocaleDateString('ko-KR')}
               </span>
             </div>
           </div>
@@ -162,10 +156,11 @@ export default function PortfolioDetailClient({
                         <button
                           key={`image-${image}`}
                           onClick={() => setCurrentImageIndex(index)}
-                          className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${currentImageIndex === index
-                              ? "border-brand-primary ring-2 ring-brand-primary ring-opacity-50"
-                              : "border-gray-300 hover:border-gray-400"
-                            }`}
+                          className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                            currentImageIndex === index
+                              ? 'border-brand-primary ring-2 ring-brand-primary ring-opacity-50'
+                              : 'border-gray-300 hover:border-gray-400'
+                          }`}
                         >
                           <img
                             src={image}
@@ -204,9 +199,7 @@ export default function PortfolioDetailClient({
 
           {/* 설명 */}
           <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-            <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">
-              프로젝트 설명
-            </h2>
+            <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">프로젝트 설명</h2>
             <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
               {portfolio.description}
             </p>
@@ -215,9 +208,7 @@ export default function PortfolioDetailClient({
           {/* 프로젝트 URL */}
           {portfolio.project_url && (
             <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-              <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">
-                프로젝트 링크
-              </h2>
+              <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">프로젝트 링크</h2>
               <a
                 href={portfolio.project_url}
                 target="_blank"

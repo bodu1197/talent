@@ -48,10 +48,7 @@ export default function AdminServiceRevisionsPage() {
       setLoading(true);
       setError(null);
       const data = await getServiceRevisions({
-        status:
-          statusFilter === 'all'
-            ? undefined
-            : (statusFilter as 'pending' | 'approved' | 'rejected'),
+        status: statusFilter === 'all' ? undefined : statusFilter,
         searchQuery,
       });
       setRevisions(data);

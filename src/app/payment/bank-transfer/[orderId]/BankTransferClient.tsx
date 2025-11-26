@@ -18,7 +18,7 @@ interface Order {
 }
 
 interface Props {
-  order: Order;
+  readonly order: Order;
 }
 
 export default function BankTransferClient({ order }: Props) {

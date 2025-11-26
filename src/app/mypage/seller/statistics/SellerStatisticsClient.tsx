@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import { FaChartLine } from "react-icons/fa";
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
+import { FaChartLine } from 'react-icons/fa';
 
 interface StatisticsData {
   todayViews: number;
@@ -20,8 +20,8 @@ interface ServiceStats {
 }
 
 interface Props {
-  stats: StatisticsData;
-  topServices: ServiceStats[];
+  readonly stats: StatisticsData;
+  readonly topServices: readonly ServiceStats[];
 }
 
 export default function SellerStatisticsClient({ stats, topServices }: Props) {
@@ -39,21 +39,15 @@ export default function SellerStatisticsClient({ stats, topServices }: Props) {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs md:text-sm text-gray-600">오늘</span>
-                <span className="text-lg font-bold text-gray-900">
-                  {stats.todayViews}
-                </span>
+                <span className="text-lg font-bold text-gray-900">{stats.todayViews}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs md:text-sm text-gray-600">이번 주</span>
-                <span className="text-lg font-bold text-gray-900">
-                  {stats.weeklyViews}
-                </span>
+                <span className="text-lg font-bold text-gray-900">{stats.weeklyViews}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs md:text-sm text-gray-600">이번 달</span>
-                <span className="text-lg font-bold text-gray-900">
-                  {stats.monthlyViews}
-                </span>
+                <span className="text-lg font-bold text-gray-900">{stats.monthlyViews}</span>
               </div>
             </div>
           </div>
@@ -63,21 +57,15 @@ export default function SellerStatisticsClient({ stats, topServices }: Props) {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs md:text-sm text-gray-600">오늘</span>
-                <span className="text-lg font-bold text-brand-primary">
-                  {stats.todayOrders}
-                </span>
+                <span className="text-lg font-bold text-brand-primary">{stats.todayOrders}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs md:text-sm text-gray-600">이번 주</span>
-                <span className="text-lg font-bold text-brand-primary">
-                  {stats.weeklyOrders}
-                </span>
+                <span className="text-lg font-bold text-brand-primary">{stats.weeklyOrders}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs md:text-sm text-gray-600">이번 달</span>
-                <span className="text-lg font-bold text-brand-primary">
-                  {stats.monthlyOrders}
-                </span>
+                <span className="text-lg font-bold text-brand-primary">{stats.monthlyOrders}</span>
               </div>
             </div>
           </div>
@@ -90,7 +78,7 @@ export default function SellerStatisticsClient({ stats, topServices }: Props) {
                 <span className="text-lg font-bold text-green-600">
                   {stats.todayViews > 0
                     ? ((stats.todayOrders / stats.todayViews) * 100).toFixed(1)
-                    : "0.0"}
+                    : '0.0'}
                   %
                 </span>
               </div>
@@ -98,10 +86,8 @@ export default function SellerStatisticsClient({ stats, topServices }: Props) {
                 <span className="text-xs md:text-sm text-gray-600">이번 주</span>
                 <span className="text-lg font-bold text-green-600">
                   {stats.weeklyViews > 0
-                    ? ((stats.weeklyOrders / stats.weeklyViews) * 100).toFixed(
-                      1,
-                    )
-                    : "0.0"}
+                    ? ((stats.weeklyOrders / stats.weeklyViews) * 100).toFixed(1)
+                    : '0.0'}
                   %
                 </span>
               </div>
@@ -109,11 +95,8 @@ export default function SellerStatisticsClient({ stats, topServices }: Props) {
                 <span className="text-xs md:text-sm text-gray-600">이번 달</span>
                 <span className="text-lg font-bold text-green-600">
                   {stats.monthlyViews > 0
-                    ? (
-                      (stats.monthlyOrders / stats.monthlyViews) *
-                      100
-                    ).toFixed(1)
-                    : "0.0"}
+                    ? ((stats.monthlyOrders / stats.monthlyViews) * 100).toFixed(1)
+                    : '0.0'}
                   %
                 </span>
               </div>
@@ -133,9 +116,7 @@ export default function SellerStatisticsClient({ stats, topServices }: Props) {
                   className="flex items-center justify-between p-4 bg-gray-50 rounded-lg card-interactive"
                 >
                   <div>
-                    <div className="font-medium text-gray-900">
-                      {service.name}
-                    </div>
+                    <div className="font-medium text-gray-900">{service.name}</div>
                     <div className="text-sm text-gray-600">
                       조회 {service.views} • 주문 {service.orders}
                     </div>
@@ -143,7 +124,7 @@ export default function SellerStatisticsClient({ stats, topServices }: Props) {
                   <div className="text-lg font-bold text-brand-primary">
                     {service.views > 0
                       ? ((service.orders / service.views) * 100).toFixed(1)
-                      : "0.0"}
+                      : '0.0'}
                     %
                   </div>
                 </div>

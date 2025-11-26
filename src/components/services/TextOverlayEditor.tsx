@@ -309,7 +309,7 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
           onChange={(e) =>
             setTextStyle((prev) => ({
               ...prev,
-              fontSize: parseInt(e.target.value),
+              fontSize: Number.parseInt(e.target.value),
             }))
           }
           className="w-full"
@@ -363,7 +363,7 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
           onChange={(e) =>
             setTextStyle((prev) => ({
               ...prev,
-              shadowBlur: parseInt(e.target.value),
+              shadowBlur: Number.parseInt(e.target.value),
             }))
           }
           className="w-full"

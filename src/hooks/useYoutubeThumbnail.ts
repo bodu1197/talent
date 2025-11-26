@@ -32,7 +32,7 @@ export function useYoutubeThumbnail() {
     ];
 
     for (const pattern of patterns) {
-      const match = url.match(pattern);
+      const match = pattern.exec(url);
       if (match) return match[1];
     }
 

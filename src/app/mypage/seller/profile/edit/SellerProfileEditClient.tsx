@@ -138,9 +138,9 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
             <div className="space-y-4">
               {/* 프로필 이미지 업로드 */}
               <div>
-                <label className="block text-sm md:text-base font-medium text-gray-700 mb-2">
+                <span className="block text-sm md:text-base font-medium text-gray-700 mb-2">
                   프로필 사진
-                </label>
+                </span>
                 <div className="flex items-center gap-4">
                   {/* 현재 프로필 이미지 또는 기본 아바타 */}
                   {profilePreview ? (
@@ -314,10 +314,10 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <fieldset>
+                <legend className="block text-sm font-medium text-gray-700 mb-2">
                   연락 가능 시간
-                </label>
+                </legend>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label
@@ -376,7 +376,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                 <p className="mt-1 text-xs md:text-sm text-gray-500">
                   구매자가 연락 가능한 시간대를 선택해주세요
                 </p>
-              </div>
+              </fieldset>
             </div>
           </div>
 

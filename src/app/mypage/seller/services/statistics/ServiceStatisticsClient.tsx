@@ -1,30 +1,24 @@
-"use client";
+'use client';
 
-import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import Link from "next/link";
-import {
-  FaArrowLeft,
-  FaEye,
-  FaHeart,
-  FaShoppingCart,
-  FaStar,
-} from "react-icons/fa";
-import { FaSackDollar } from "react-icons/fa6";
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
+import Link from 'next/link';
+import { FaArrowLeft, FaEye, FaHeart, FaShoppingCart, FaStar } from 'react-icons/fa';
+import { FaSackDollar } from 'react-icons/fa6';
 
 interface Props {
-  stats: {
-    serviceName: string;
-    period: string;
-    viewCount: number;
-    favoriteCount: number;
-    orderCount: number;
-    revenue: number;
-    avgRating: number;
-    reviewCount: number;
+  readonly stats: {
+    readonly serviceName: string;
+    readonly period: string;
+    readonly viewCount: number;
+    readonly favoriteCount: number;
+    readonly orderCount: number;
+    readonly revenue: number;
+    readonly avgRating: number;
+    readonly reviewCount: number;
   };
-  dailyViews: Array<{ date: string; views: number }>;
-  ratingPercentages: number[];
-  serviceId?: string;
+  readonly dailyViews: ReadonlyArray<{ readonly date: string; readonly views: number }>;
+  readonly ratingPercentages: readonly number[];
+  readonly serviceId?: string;
 }
 
 export default function ServiceStatisticsClient({
@@ -62,9 +56,7 @@ export default function ServiceStatisticsClient({
               <span className="text-gray-600 text-sm">조회수</span>
               <FaEye className="text-blue-500 text-xl" />
             </div>
-            <div className="text-3xl font-bold text-gray-900">
-              {stats.viewCount}
-            </div>
+            <div className="text-3xl font-bold text-gray-900">{stats.viewCount}</div>
           </div>
 
           <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -72,9 +64,7 @@ export default function ServiceStatisticsClient({
               <span className="text-gray-600 text-sm">찜</span>
               <FaHeart className="text-red-500 text-xl" />
             </div>
-            <div className="text-3xl font-bold text-gray-900">
-              {stats.favoriteCount}
-            </div>
+            <div className="text-3xl font-bold text-gray-900">{stats.favoriteCount}</div>
           </div>
 
           <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -82,9 +72,7 @@ export default function ServiceStatisticsClient({
               <span className="text-gray-600 text-sm">주문 수</span>
               <FaShoppingCart className="text-green-500 text-xl" />
             </div>
-            <div className="text-3xl font-bold text-gray-900">
-              {stats.orderCount}
-            </div>
+            <div className="text-3xl font-bold text-gray-900">{stats.orderCount}</div>
           </div>
 
           <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -102,9 +90,7 @@ export default function ServiceStatisticsClient({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* 조회수 추이 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">
-              일별 조회수
-            </h2>
+            <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">일별 조회수</h2>
             <div className="space-y-2">
               {dailyViews.map((day) => (
                 <div key={day.date} className="flex items-center gap-3">
@@ -114,9 +100,7 @@ export default function ServiceStatisticsClient({
                       className="bg-brand-primary h-full rounded-full flex items-center justify-end pr-2"
                       style={{ width: `${(day.views / 25) * 100}%` }}
                     >
-                      <span className="text-xs text-white font-medium">
-                        {day.views}
-                      </span>
+                      <span className="text-xs text-white font-medium">{day.views}</span>
                     </div>
                   </div>
                 </div>
@@ -128,21 +112,17 @@ export default function ServiceStatisticsClient({
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">평점 분포</h2>
             <div className="flex items-center gap-4 mb-4">
-              <div className="text-5xl font-bold text-gray-900">
-                {stats.avgRating}
-              </div>
+              <div className="text-5xl font-bold text-gray-900">{stats.avgRating}</div>
               <div>
                 <div className="flex items-center gap-1 mb-1">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <FaStar
                       key={star}
-                      className={`${star <= Math.floor(stats.avgRating) ? "text-yellow-400" : "text-gray-300"}`}
+                      className={`${star <= Math.floor(stats.avgRating) ? 'text-yellow-400' : 'text-gray-300'}`}
                     />
                   ))}
                 </div>
-                <div className="text-sm text-gray-600">
-                  {stats.reviewCount}개의 리뷰
-                </div>
+                <div className="text-sm text-gray-600">{stats.reviewCount}개의 리뷰</div>
               </div>
             </div>
             <div className="space-y-2">
@@ -150,9 +130,7 @@ export default function ServiceStatisticsClient({
                 const percentage = ratingPercentages[rating - 1] || 0;
                 return (
                   <div key={rating} className="flex items-center gap-3">
-                    <span className="text-sm text-gray-600 w-12">
-                      {rating}점
-                    </span>
+                    <span className="text-sm text-gray-600 w-12">{rating}점</span>
                     <div className="flex-1 bg-gray-100 rounded-full h-4 overflow-hidden">
                       <div
                         className="bg-yellow-400 h-full rounded-full"

@@ -13,15 +13,15 @@ interface WithdrawClientProps {
     readonly account_number: string | null;
     readonly account_holder: string | null;
   };
-  profileData?: {
-    name: string;
-    profile_image?: string | null;
+  readonly profileData?: {
+    readonly name: string;
+    readonly profile_image?: string | null;
   } | null;
-  availableBalance: number;
-  pendingWithdrawal: {
-    id: string;
-    amount: number;
-    created_at: string;
+  readonly availableBalance: number;
+  readonly pendingWithdrawal: {
+    readonly id: string;
+    readonly amount: number;
+    readonly created_at: string;
   } | null;
 }
 

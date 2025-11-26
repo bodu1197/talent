@@ -12,7 +12,7 @@ interface MypageLayoutWrapperProps {
     readonly name: string;
     readonly profile_image?: string | null;
   } | null;
-  children: ReactNode;
+  readonly children: ReactNode;
 }
 
 export default function MypageLayoutWrapper({

@@ -308,9 +308,9 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                 <h2 className="text-xl font-bold text-gray-900 mb-6">프로필 설정</h2>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <span className="block text-sm font-medium text-gray-700 mb-2">
                       프로필 이미지
-                    </label>
+                    </span>
                     <div className="flex items-center gap-4">
                       {profileImage ? (
                         <img
@@ -411,10 +411,14 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                 <h2 className="text-xl font-bold text-gray-900 mb-6">계정 보안</h2>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="current-password"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       현재 비밀번호
                     </label>
                     <input
+                      id="current-password"
                       type="password"
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
@@ -423,10 +427,14 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="new-password"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       새 비밀번호
                     </label>
                     <input
+                      id="new-password"
                       type="password"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
@@ -435,10 +443,14 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="confirm-password"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       비밀번호 확인
                     </label>
                     <input
+                      id="confirm-password"
                       type="password"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
@@ -461,14 +473,18 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-6">알림 설정</h2>
                 <div className="space-y-4">
-                  <label className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                    <div>
-                      <div className="font-medium text-gray-900">주문 알림</div>
-                      <div className="text-sm text-gray-600">
+                  <label
+                    htmlFor="order-notification"
+                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg cursor-pointer"
+                  >
+                    <span>
+                      <span className="font-medium text-gray-900 block">주문 알림</span>
+                      <span className="text-sm text-gray-600">
                         새 주문이 들어오면 알림을 받습니다
-                      </div>
-                    </div>
+                      </span>
+                    </span>
                     <input
+                      id="order-notification"
                       type="checkbox"
                       checked={orderNotification}
                       onChange={(e) => setOrderNotification(e.target.checked)}
@@ -476,12 +492,18 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                     />
                   </label>
 
-                  <label className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                    <div>
-                      <div className="font-medium text-gray-900">메시지 알림</div>
-                      <div className="text-sm text-gray-600">새 메시지가 오면 알림을 받습니다</div>
-                    </div>
+                  <label
+                    htmlFor="message-notification"
+                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg cursor-pointer"
+                  >
+                    <span>
+                      <span className="font-medium text-gray-900 block">메시지 알림</span>
+                      <span className="text-sm text-gray-600">
+                        새 메시지가 오면 알림을 받습니다
+                      </span>
+                    </span>
                     <input
+                      id="message-notification"
                       type="checkbox"
                       checked={messageNotification}
                       onChange={(e) => setMessageNotification(e.target.checked)}
@@ -489,14 +511,18 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                     />
                   </label>
 
-                  <label className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                    <div>
-                      <div className="font-medium text-gray-900">리뷰 알림</div>
-                      <div className="text-sm text-gray-600">
+                  <label
+                    htmlFor="review-notification"
+                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg cursor-pointer"
+                  >
+                    <span>
+                      <span className="font-medium text-gray-900 block">리뷰 알림</span>
+                      <span className="text-sm text-gray-600">
                         새 리뷰가 등록되면 알림을 받습니다
-                      </div>
-                    </div>
+                      </span>
+                    </span>
                     <input
+                      id="review-notification"
                       type="checkbox"
                       checked={reviewNotification}
                       onChange={(e) => setReviewNotification(e.target.checked)}

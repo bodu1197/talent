@@ -208,14 +208,10 @@ export default function NotificationProvider({
 
   return (
     <NotificationContext.Provider value={value}>
-      {/* 신호음 오디오 */}
-      <audio
-        ref={audioRef}
-        src="/sounds/notification.mp3"
-        preload="auto"
-        aria-label="Notification sound"
-        tabIndex={-1}
-      />
+      {/* 신호음 오디오 - 순수 효과음이므로 캡션 불필요 */}
+      <audio ref={audioRef} src="/sounds/notification.mp3" preload="auto" tabIndex={-1}>
+        <track kind="descriptions" src="" label="No audio descriptions available" />
+      </audio>
       {children}
     </NotificationContext.Provider>
   );

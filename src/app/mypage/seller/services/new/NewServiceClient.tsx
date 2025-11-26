@@ -1,19 +1,16 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
-import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
-import { logger } from "@/lib/logger";
-import TemplateSelector from "@/components/services/TemplateSelector";
-import toast from "react-hot-toast";
+import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
+import Link from 'next/link';
+import { createClient } from '@/lib/supabase/client';
+import { logger } from '@/lib/logger';
+import TemplateSelector from '@/components/services/TemplateSelector';
+import toast from 'react-hot-toast';
 
-import { FaWandMagicSparkles } from "react-icons/fa6";
-import {
-  type GradientTemplate,
-  generateThumbnailWithText,
-} from "@/lib/template-generator";
+import { FaWandMagicSparkles } from 'react-icons/fa6';
+import { type GradientTemplate, generateThumbnailWithText } from '@/lib/template-generator';
 import {
   FaArrowLeft,
   FaUpload,
@@ -22,18 +19,13 @@ import {
   FaCheck,
   FaCloudUploadAlt,
   FaSpinner,
-} from "react-icons/fa";
+} from 'react-icons/fa';
 
 // Dynamic import for TextOverlayEditor - only loads when template mode is selected
-const TextOverlayEditor = dynamic(
-  () => import("@/components/services/TextOverlayEditor"),
-  {
-    loading: () => (
-      <div className="py-8 text-center text-gray-500">Loading editor...</div>
-    ),
-    ssr: false,
-  },
-);
+const TextOverlayEditor = dynamic(() => import('@/components/services/TextOverlayEditor'), {
+  loading: () => <div className="py-8 text-center text-gray-500">Loading editor...</div>,
+  ssr: false,
+});
 
 interface Category {
   id: string;
@@ -56,7 +48,6 @@ interface TextStyleConfig {
 
 interface Props {
   readonly sellerId: string;
-  readonly categories: Category[];
 }
 
 export default function NewServiceClient({ sellerId }: Props) {
@@ -64,38 +55,37 @@ export default function NewServiceClient({ sellerId }: Props) {
   const [level2Categories, setLevel2Categories] = useState<Category[]>([]);
   const [level3Categories, setLevel3Categories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedLevel1, setSelectedLevel1] = useState("");
-  const [selectedLevel2, setSelectedLevel2] = useState("");
-  const [selectedLevel3, setSelectedLevel3] = useState("");
+  const [selectedLevel1, setSelectedLevel1] = useState('');
+  const [selectedLevel2, setSelectedLevel2] = useState('');
+  const [selectedLevel3, setSelectedLevel3] = useState('');
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
 
   // 템플릿 관련 상태
-  const [uploadMode, setUploadMode] = useState<"file" | "template">("file");
-  const [selectedTemplate, setSelectedTemplate] =
-    useState<GradientTemplate | null>(null);
+  const [uploadMode, setUploadMode] = useState<'file' | 'template'>('file');
+  const [selectedTemplate, setSelectedTemplate] = useState<GradientTemplate | null>(null);
   const [textStyle, setTextStyle] = useState<TextStyleConfig | null>(null);
 
   const [formData, setFormData] = useState({
-    title: "",
-    category: "",
-    description: "",
-    price: "",
-    deliveryDays: "",
-    revisionCount: "0",
+    title: '',
+    category: '',
+    description: '',
+    price: '',
+    deliveryDays: '',
+    revisionCount: '0',
     taxInvoiceAvailable: false,
-    searchKeywords: "",
+    searchKeywords: '',
   });
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        toast.error("파일 크기는 5MB를 초과할 수 없습니다.");
+        toast.error('파일 크기는 5MB를 초과할 수 없습니다.');
         return;
       }
-      if (!file.type.startsWith("image/")) {
-        toast.error("이미지 파일만 업로드 가능합니다.");
+      if (!file.type.startsWith('image/')) {
+        toast.error('이미지 파일만 업로드 가능합니다.');
         return;
       }
       setThumbnailFile(file);
@@ -117,7 +107,7 @@ export default function NewServiceClient({ sellerId }: Props) {
   // 템플릿 기반 썸네일 생성
   const generateTemplateThumbnail = async () => {
     if (!selectedTemplate || !textStyle?.text.trim()) {
-      toast.error("템플릿과 텍스트를 입력해주세요.");
+      toast.error('템플릿과 텍스트를 입력해주세요.');
       return;
     }
 
@@ -129,20 +119,20 @@ export default function NewServiceClient({ sellerId }: Props) {
           x: textStyle.x,
           y: textStyle.y,
           fontSize: textStyle.fontSize,
-          fontFamily: "Noto Sans KR, sans-serif",
+          fontFamily: 'Noto Sans KR, sans-serif',
           color: textStyle.color,
           textAlign: textStyle.textAlign,
           fontWeight: textStyle.fontWeight,
           shadowBlur: textStyle.shadowBlur,
-          shadowColor: "rgba(0,0,0,0.5)",
+          shadowColor: 'rgba(0,0,0,0.5)',
         },
         652,
-        488,
+        488
       );
 
       // Blob을 File로 변환
       const file = new File([blob], `thumbnail-${Date.now()}.jpg`, {
-        type: "image/jpeg",
+        type: 'image/jpeg',
       });
       setThumbnailFile(file);
 
@@ -150,10 +140,10 @@ export default function NewServiceClient({ sellerId }: Props) {
       const previewUrl = URL.createObjectURL(blob);
       setThumbnailPreview(previewUrl);
 
-      toast.success("썸네일이 생성되었습니다!");
+      toast.success('썸네일이 생성되었습니다!');
     } catch (error) {
-      logger.error("썸네일 생성 오류:", error);
-      toast.error("썸네일 생성에 실패했습니다.");
+      logger.error('썸네일 생성 오류:', error);
+      toast.error('썸네일 생성에 실패했습니다.');
     }
   };
 
@@ -163,19 +153,19 @@ export default function NewServiceClient({ sellerId }: Props) {
       try {
         const supabase = createClient();
         const { data, error } = await supabase
-          .from("categories")
-          .select("id, name, slug, level, parent_id")
-          .eq("is_active", true)
-          .eq("level", 1)
-          .order("display_order", { ascending: true });
+          .from('categories')
+          .select('id, name, slug, level, parent_id')
+          .eq('is_active', true)
+          .eq('level', 1)
+          .order('display_order', { ascending: true });
 
         if (error) {
-          logger.error("1차 카테고리 로딩 오류:", error);
+          logger.error('1차 카테고리 로딩 오류:', error);
         } else {
           setLevel1Categories(data || []);
         }
       } catch (error) {
-        logger.error("1차 카테고리 로딩 실패:", error);
+        logger.error('1차 카테고리 로딩 실패:', error);
       } finally {
         setLoading(false);
       }
@@ -188,9 +178,9 @@ export default function NewServiceClient({ sellerId }: Props) {
   useEffect(() => {
     if (!selectedLevel1) {
       setLevel2Categories([]);
-      setSelectedLevel2("");
+      setSelectedLevel2('');
       setLevel3Categories([]);
-      setSelectedLevel3("");
+      setSelectedLevel3('');
       return;
     }
 
@@ -198,19 +188,19 @@ export default function NewServiceClient({ sellerId }: Props) {
       try {
         const supabase = createClient();
         const { data, error } = await supabase
-          .from("categories")
-          .select("id, name, slug, level, parent_id")
-          .eq("is_active", true)
-          .eq("parent_id", selectedLevel1)
-          .order("display_order", { ascending: true });
+          .from('categories')
+          .select('id, name, slug, level, parent_id')
+          .eq('is_active', true)
+          .eq('parent_id', selectedLevel1)
+          .order('display_order', { ascending: true });
 
         if (error) {
-          logger.error("2차 카테고리 로딩 오류:", error);
+          logger.error('2차 카테고리 로딩 오류:', error);
         } else {
           setLevel2Categories(data || []);
         }
       } catch (error) {
-        logger.error("2차 카테고리 로딩 실패:", error);
+        logger.error('2차 카테고리 로딩 실패:', error);
       }
     }
 
@@ -221,7 +211,7 @@ export default function NewServiceClient({ sellerId }: Props) {
   useEffect(() => {
     if (!selectedLevel2) {
       setLevel3Categories([]);
-      setSelectedLevel3("");
+      setSelectedLevel3('');
       return;
     }
 
@@ -229,19 +219,19 @@ export default function NewServiceClient({ sellerId }: Props) {
       try {
         const supabase = createClient();
         const { data, error } = await supabase
-          .from("categories")
-          .select("id, name, slug, level, parent_id")
-          .eq("is_active", true)
-          .eq("parent_id", selectedLevel2)
-          .order("display_order", { ascending: true });
+          .from('categories')
+          .select('id, name, slug, level, parent_id')
+          .eq('is_active', true)
+          .eq('parent_id', selectedLevel2)
+          .order('display_order', { ascending: true });
 
         if (error) {
-          logger.error("3차 카테고리 로딩 오류:", error);
+          logger.error('3차 카테고리 로딩 오류:', error);
         } else {
           setLevel3Categories(data || []);
         }
       } catch (error) {
-        logger.error("3차 카테고리 로딩 실패:", error);
+        logger.error('3차 카테고리 로딩 실패:', error);
       }
     }
 
@@ -259,7 +249,7 @@ export default function NewServiceClient({ sellerId }: Props) {
       setFormData((prev) => ({ ...prev, category: selectedLevel1 }));
     } else {
       // Reset category if nothing selected
-      setFormData((prev) => ({ ...prev, category: "" }));
+      setFormData((prev) => ({ ...prev, category: '' }));
     }
   }, [selectedLevel3, selectedLevel2, selectedLevel1]);
 
@@ -267,20 +257,20 @@ export default function NewServiceClient({ sellerId }: Props) {
     e.preventDefault();
 
     // 템플릿 모드에서 썸네일을 생성하지 않은 경우 체크
-    if (uploadMode === "template" && selectedTemplate && !thumbnailFile) {
+    if (uploadMode === 'template' && selectedTemplate && !thumbnailFile) {
       toast.error(
-        '템플릿을 선택하셨습니다.\n"썸네일 생성하기" 버튼을 눌러 썸네일을 먼저 생성해주세요.',
+        '템플릿을 선택하셨습니다.\n"썸네일 생성하기" 버튼을 눌러 썸네일을 먼저 생성해주세요.'
       );
       return;
     }
 
     if (!thumbnailFile) {
-      toast.error("썸네일 이미지를 선택해주세요.");
+      toast.error('썸네일 이미지를 선택해주세요.');
       return;
     }
 
     if (!formData.category) {
-      toast.error("카테고리를 선택해주세요.");
+      toast.error('카테고리를 선택해주세요.');
       return;
     }
 
@@ -295,40 +285,40 @@ export default function NewServiceClient({ sellerId }: Props) {
         error: userError,
       } = await supabase.auth.getUser();
       if (userError || !user) {
-        toast.error("로그인이 필요합니다.");
+        toast.error('로그인이 필요합니다.');
         return;
       }
 
       // 2. Upload thumbnail
-      const fileExt = thumbnailFile.name.split(".").pop();
+      const fileExt = thumbnailFile.name.split('.').pop();
       const fileName = `${user.id}-${Date.now()}.${fileExt}`;
       const filePath = `service-thumbnails/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from("services")
+        .from('services')
         .upload(filePath, thumbnailFile);
 
       if (uploadError) {
-        logger.error("Thumbnail upload error:", uploadError);
-        toast.error("썸네일 업로드에 실패했습니다.");
+        logger.error('Thumbnail upload error:', uploadError);
+        toast.error('썸네일 업로드에 실패했습니다.');
         return;
       }
 
       // 3. Get thumbnail public URL
       const {
         data: { publicUrl },
-      } = supabase.storage.from("services").getPublicUrl(filePath);
+      } = supabase.storage.from('services').getPublicUrl(filePath);
 
       // 4. Create slug from title
       const slug = formData.title
         .toLowerCase()
-        .replace(/[^a-z0-9가-힣]/g, "-")
-        .replace(/-+/g, "-")
+        .replaceAll(/[^a-z0-9가-힣]/g, '-')
+        .replaceAll(/-+/g, '-')
         .substring(0, 100);
 
       // 5. Insert service
       const { data: service, error: serviceError } = await supabase
-        .from("services")
+        .from('services')
         .insert({
           seller_id: sellerId,
           title: formData.title,
@@ -337,42 +327,38 @@ export default function NewServiceClient({ sellerId }: Props) {
           price: Math.max(1000, Number.parseInt(formData.price) || 1000),
           delivery_days: Math.max(1, Number.parseInt(formData.deliveryDays) || 7),
           revision_count:
-            formData.revisionCount === "unlimited"
+            formData.revisionCount === 'unlimited'
               ? 999
               : Math.max(0, Number.parseInt(formData.revisionCount) || 0),
           thumbnail_url: publicUrl,
           search_keywords: formData.searchKeywords || null,
-          status: "pending",
+          status: 'pending',
         })
         .select()
         .single();
 
       if (serviceError) {
-        logger.error("Service insert error:", serviceError);
-        toast.error("서비스 등록에 실패했습니다: " + serviceError.message);
+        logger.error('Service insert error:', serviceError);
+        toast.error('서비스 등록에 실패했습니다: ' + serviceError.message);
         return;
       }
 
       // 6. Insert service category
-      const { error: categoryError } = await supabase
-        .from("service_categories")
-        .insert({
-          service_id: service.id,
-          category_id: formData.category,
-          is_primary: true,
-        });
+      const { error: categoryError } = await supabase.from('service_categories').insert({
+        service_id: service.id,
+        category_id: formData.category,
+        is_primary: true,
+      });
 
       if (categoryError) {
-        logger.error("Category insert error:", categoryError);
+        logger.error('Category insert error:', categoryError);
       }
 
-      toast.error(
-        "서비스가 성공적으로 등록되었습니다!\n관리자 승인 후 판매가 시작됩니다.",
-      );
-      globalThis.location.href = "/mypage/seller/services";
+      toast.error('서비스가 성공적으로 등록되었습니다!\n관리자 승인 후 판매가 시작됩니다.');
+      globalThis.location.href = '/mypage/seller/services';
     } catch (error) {
-      logger.error("Service registration error:", error);
-      toast.error("서비스 등록 중 오류가 발생했습니다.");
+      logger.error('Service registration error:', error);
+      toast.error('서비스 등록 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);
     }
@@ -395,9 +381,7 @@ export default function NewServiceClient({ sellerId }: Props) {
         {/* 페이지 헤더 */}
         <div className="mb-8">
           <h1 className="text-base md:text-lg font-bold text-gray-900">서비스 등록</h1>
-          <p className="text-gray-600 mt-1 text-sm">
-            새로운 서비스를 등록하세요
-          </p>
+          <p className="text-gray-600 mt-1 text-sm">새로운 서비스를 등록하세요</p>
         </div>
 
         <form onSubmit={handleSubmit} className="max-w-4xl">
@@ -409,10 +393,7 @@ export default function NewServiceClient({ sellerId }: Props) {
               {/* 썸네일 이미지 - 최상단 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  썸네일 이미지 *{" "}
-                  <span className="text-xs text-gray-500">
-                    (권장: 652×488px)
-                  </span>
+                  썸네일 이미지 * <span className="text-xs text-gray-500">(권장: 652×488px)</span>
                 </label>
 
                 {/* 업로드 방식 선택 */}
@@ -420,13 +401,14 @@ export default function NewServiceClient({ sellerId }: Props) {
                   <button
                     type="button"
                     onClick={() => {
-                      setUploadMode("file");
+                      setUploadMode('file');
                       removeThumbnail();
                     }}
-                    className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${uploadMode === "file"
-                        ? "bg-brand-primary text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                      }`}
+                    className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
+                      uploadMode === 'file'
+                        ? 'bg-brand-primary text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
                   >
                     <FaUpload className="mr-2 inline" />
                     파일 업로드
@@ -434,13 +416,14 @@ export default function NewServiceClient({ sellerId }: Props) {
                   <button
                     type="button"
                     onClick={() => {
-                      setUploadMode("template");
+                      setUploadMode('template');
                       removeThumbnail();
                     }}
-                    className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${uploadMode === "template"
-                        ? "bg-brand-primary text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                      }`}
+                    className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
+                      uploadMode === 'template'
+                        ? 'bg-brand-primary text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
                   >
                     <FaPalette className="mr-2 inline" />
                     템플릿 사용
@@ -448,7 +431,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                 </div>
 
                 {/* 파일 업로드 모드 */}
-                {uploadMode === "file" && (
+                {uploadMode === 'file' && (
                   <div className="space-y-3">
                     {thumbnailPreview ? (
                       <div className="relative">
@@ -475,22 +458,18 @@ export default function NewServiceClient({ sellerId }: Props) {
                           className="hidden"
                         />
                         <FaCloudUploadAlt className="text-gray-400 text-4xl mb-3 inline-block" />
-                        <p className="text-gray-600 font-medium">
-                          클릭하여 이미지 선택
-                        </p>
+                        <p className="text-gray-600 font-medium">클릭하여 이미지 선택</p>
                         <p className="text-sm text-gray-500 mt-2">
                           권장 크기: 652×488px (최대 5MB)
                         </p>
-                        <p className="text-xs text-gray-400 mt-1">
-                          JPG, PNG, GIF 형식 지원
-                        </p>
+                        <p className="text-xs text-gray-400 mt-1">JPG, PNG, GIF 형식 지원</p>
                       </label>
                     )}
                   </div>
                 )}
 
                 {/* 템플릿 모드 */}
-                {uploadMode === "template" && (
+                {uploadMode === 'template' && (
                   <div className="space-y-6">
                     {thumbnailPreview ? (
                       <div className="relative">
@@ -498,7 +477,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                           src={thumbnailPreview}
                           alt="생성된 썸네일"
                           className="w-full rounded-lg border-2 border-green-500"
-                          style={{ aspectRatio: "652/488" }}
+                          style={{ aspectRatio: '652/488' }}
                         />
                         <button
                           type="button"
@@ -557,9 +536,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                 <input
                   type="text"
                   value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="예: 전문 로고 디자인 작업"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   required
@@ -567,9 +544,7 @@ export default function NewServiceClient({ sellerId }: Props) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  카테고리 *
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">카테고리 *</label>
                 <div className="space-y-3">
                   {/* 1차 카테고리 */}
                   <select
@@ -581,9 +556,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                     aria-label="1차 카테고리"
                   >
                     <option value="">
-                      {loading
-                        ? "1차 카테고리 로딩 중..."
-                        : "1차 카테고리 선택"}
+                      {loading ? '1차 카테고리 로딩 중...' : '1차 카테고리 선택'}
                     </option>
                     {level1Categories.map((category) => (
                       <option key={category.id} value={category.id}>
@@ -631,11 +604,8 @@ export default function NewServiceClient({ sellerId }: Props) {
                   {/* 선택된 카테고리 경로 표시 */}
                   {(selectedLevel1 || selectedLevel2 || selectedLevel3) && (
                     <div className="text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded">
-                      <span className="font-medium">선택된 카테고리:</span>{" "}
-                      {
-                        level1Categories.find((c) => c.id === selectedLevel1)
-                          ?.name
-                      }
+                      <span className="font-medium">선택된 카테고리:</span>{' '}
+                      {level1Categories.find((c) => c.id === selectedLevel1)?.name}
                       {selectedLevel2 &&
                         ` > ${level2Categories.find((c) => c.id === selectedLevel2)?.name}`}
                       {selectedLevel3 &&
@@ -651,9 +621,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                 </label>
                 <textarea
                   value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={6}
                   placeholder="서비스에 대해 자세히 설명해주세요"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
@@ -662,16 +630,14 @@ export default function NewServiceClient({ sellerId }: Props) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  검색 키워드
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">검색 키워드</label>
                 <input
                   type="text"
                   maxLength={100}
                   value={formData.searchKeywords}
                   onChange={(e) => {
                     // 한글, 영문, 숫자, 띄어쓰기만 허용 (특수문자, 이모지 제거)
-                    const value = e.target.value.replace(/[^\w가-힣\s]/g, "");
+                    const value = e.target.value.replaceAll(/[^\w가-힣\s]/g, '');
                     setFormData({ ...formData, searchKeywords: value });
                   }}
                   placeholder="로고 디자인 브랜딩 CI 기업"
@@ -679,18 +645,16 @@ export default function NewServiceClient({ sellerId }: Props) {
                 />
                 <div className="mt-2 text-sm text-gray-600 space-y-1">
                   <p>
-                    • 검색 키워드는 서비스 설명에 노출되지 않지만, 서비스 제목,
-                    서비스 타입과 함께 검색 대상 단어로 사용됩니다.
+                    • 검색 키워드는 서비스 설명에 노출되지 않지만, 서비스 제목, 서비스 타입과 함께
+                    검색 대상 단어로 사용됩니다.
                   </p>
                   <p>
-                    • 띄어쓰기로 구분하여 여러 키워드를 입력할 수 있으며, 최대
-                    100글자까지 입력 가능합니다. 특수문자 및 이모지는 입력할 수
-                    없습니다.
+                    • 띄어쓰기로 구분하여 여러 키워드를 입력할 수 있으며, 최대 100글자까지 입력
+                    가능합니다. 특수문자 및 이모지는 입력할 수 없습니다.
                   </p>
                   <p>
-                    • 서비스와 연관된 짧은 단어를 여러 개 입력하는 것이 검색
-                    노출 향상에 도움이 됩니다. (다만, 동일 키워드 중복 입력은
-                    검색 결과와 무관합니다.)
+                    • 서비스와 연관된 짧은 단어를 여러 개 입력하는 것이 검색 노출 향상에 도움이
+                    됩니다. (다만, 동일 키워드 중복 입력은 검색 결과와 무관합니다.)
                   </p>
                 </div>
               </div>
@@ -699,9 +663,7 @@ export default function NewServiceClient({ sellerId }: Props) {
 
           {/* 가격 및 작업 조건 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-            <h2 className="text-sm md:text-base font-bold text-gray-900 mb-6">
-              가격 및 작업 조건
-            </h2>
+            <h2 className="text-sm md:text-base font-bold text-gray-900 mb-6">가격 및 작업 조건</h2>
 
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -715,16 +677,11 @@ export default function NewServiceClient({ sellerId }: Props) {
                     max="10000000"
                     value={formData.price}
                     onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, "");
+                      const value = e.target.value.replaceAll(/\D/g, '');
                       setFormData({ ...formData, price: value });
                     }}
                     onKeyDown={(e) => {
-                      if (
-                        e.key === "-" ||
-                        e.key === "+" ||
-                        e.key === "e" ||
-                        e.key === "E"
-                      ) {
+                      if (e.key === '-' || e.key === '+' || e.key === 'e' || e.key === 'E') {
                         e.preventDefault();
                       }
                     }}
@@ -744,16 +701,11 @@ export default function NewServiceClient({ sellerId }: Props) {
                     max="365"
                     value={formData.deliveryDays}
                     onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, "");
+                      const value = e.target.value.replaceAll(/\D/g, '');
                       setFormData({ ...formData, deliveryDays: value });
                     }}
                     onKeyDown={(e) => {
-                      if (
-                        e.key === "-" ||
-                        e.key === "+" ||
-                        e.key === "e" ||
-                        e.key === "E"
-                      ) {
+                      if (e.key === '-' || e.key === '+' || e.key === 'e' || e.key === 'E') {
                         e.preventDefault();
                       }
                     }}
@@ -774,9 +726,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                 <select
                   id="revisionCount"
                   value={formData.revisionCount}
-                  onChange={(e) =>
-                    setFormData({ ...formData, revisionCount: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, revisionCount: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   required
                 >
@@ -801,9 +751,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                     type="checkbox"
                     className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
                   />
-                  <span className="text-sm text-gray-700">
-                    빠른 작업 가능 (24시간 이내 시작)
-                  </span>
+                  <span className="text-sm text-gray-700">빠른 작업 가능 (24시간 이내 시작)</span>
                 </label>
               </div>
 
@@ -820,9 +768,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                     }
                     className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
                   />
-                  <span className="text-sm text-gray-700">
-                    세금계산서 발행 가능
-                  </span>
+                  <span className="text-sm text-gray-700">세금계산서 발행 가능</span>
                 </label>
                 <p className="text-xs text-gray-500 mt-1 ml-6">
                   체크 시 구매자에게 세금계산서 발행이 가능함을 표시합니다.
@@ -835,9 +781,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                     type="checkbox"
                     className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
                   />
-                  <span className="text-sm text-gray-700">
-                    상업적 이용 가능
-                  </span>
+                  <span className="text-sm text-gray-700">상업적 이용 가능</span>
                 </label>
               </div>
 

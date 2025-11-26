@@ -128,8 +128,8 @@ export default function RegisterPage() {
         } = supabase.storage.from('profiles').getPublicUrl(filePath);
         return publicUrl;
       }
-    } catch (uploadErr) {
-      logger.error('Profile image upload error:', uploadErr);
+    } catch (error_) {
+      logger.error('Profile image upload error:', error_);
     }
     return null;
   }

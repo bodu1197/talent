@@ -82,7 +82,7 @@ export default function PortfolioEditClient({
         /youtube\.com\/v\/([^&\n?#]+)/,
       ];
       for (const pattern of patterns) {
-        const match = portfolio.youtube_url.match(pattern);
+        const match = pattern.exec(portfolio.youtube_url);
         if (match) return match[1];
       }
     }
@@ -122,7 +122,7 @@ export default function PortfolioEditClient({
     ];
 
     for (const pattern of patterns) {
-      const match = url.match(pattern);
+      const match = pattern.exec(url);
       if (match) return match[1];
     }
     return null;
@@ -232,8 +232,7 @@ export default function PortfolioEditClient({
         const supabase = createClient();
         const uploadedUrls: string[] = [];
 
-        for (let i = 0; i < imageFiles.length; i++) {
-          const file = imageFiles[i];
+        for (const file of imageFiles) {
           const fileExt = file.name.split('.').pop();
           const fileName = `${Date.now()}_${crypto.randomUUID().slice(0, 8)}.${fileExt}`;
           const filePath = `portfolio/${fileName}`;

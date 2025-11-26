@@ -21,16 +21,16 @@ interface SellerEarningsClientProps {
       readonly created_at: string;
     } | null;
   };
-  transactions: Order[];
-  sellerData: {
-    id: string;
-    bank_name: string;
-    account_number: string;
-    account_holder: string;
+  readonly transactions: Order[];
+  readonly sellerData: {
+    readonly id: string;
+    readonly bank_name: string;
+    readonly account_number: string;
+    readonly account_holder: string;
   };
-  profileData?: {
-    name: string;
-    profile_image?: string | null;
+  readonly profileData?: {
+    readonly name: string;
+    readonly profile_image?: string | null;
   } | null;
 }
 

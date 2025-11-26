@@ -19,8 +19,8 @@ interface OrderCardProps {
     readonly daysLeft?: number;
     readonly requirements?: string;
   };
-  mode: 'seller' | 'buyer';
-  actions?: React.ReactNode;
+  readonly mode: 'seller' | 'buyer';
+  readonly actions?: React.ReactNode;
 }
 
 const statusColorClasses = {

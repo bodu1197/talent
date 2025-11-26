@@ -47,7 +47,7 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
     ];
 
     for (const pattern of patterns) {
-      const match = url.match(pattern);
+      const match = pattern.exec(url);
       if (match) return match[1];
     }
 
@@ -131,12 +131,12 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {portfolio.image_urls.map((url: string, idx: number) => (
                   <div
-                    key={`portfolio-image-${idx}`}
+                    key={url}
                     className="aspect-square bg-gray-100 rounded-lg overflow-hidden relative"
                   >
                     <Image
                       src={url}
-                      alt={`${portfolio.title} - ${idx + 1}`}
+                      alt={`${portfolio.title} 추가 이미지 ${idx + 1}`}
                       fill
                       className="object-cover hover:scale-105 transition-transform"
                       sizes="(max-width: 768px) 50vw, 33vw"

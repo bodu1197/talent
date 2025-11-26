@@ -571,7 +571,7 @@ export async function issueTaxInvoice(paymentId: string, _issuedBy: string) {
 
   // 승인번호 생성 (YYYYMMDD-시퀀스)
   const today = new Date();
-  const dateStr = today.toISOString().split('T')[0].replace(/-/g, '');
+  const dateStr = today.toISOString().split('T')[0].replaceAll('-', '');
 
   const { data: existingInvoices } = await supabase
     .from('tax_invoices')
@@ -583,7 +583,7 @@ export async function issueTaxInvoice(paymentId: string, _issuedBy: string) {
   let sequence: number;
   if (existingInvoices && existingInvoices.length > 0) {
     const lastNumber = existingInvoices[0].invoice_number.split('-')[1];
-    sequence = parseInt(lastNumber) + 1;
+    sequence = Number.parseInt(lastNumber) + 1;
   } else {
     sequence = 1;
   }

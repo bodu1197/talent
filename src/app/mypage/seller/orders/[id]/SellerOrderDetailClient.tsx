@@ -347,7 +347,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                         <span className="text-gray-600">남은 기간:</span>
                         <span className="ml-2 font-medium text-red-600">
                           {order.delivery_date && typeof order.delivery_date === 'string'
-                            ? `D-${Math.ceil((new Date(order.delivery_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))}일`
+                            ? `D-${Math.ceil((new Date(order.delivery_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24))}일`
                             : '-'}
                         </span>
                       </div>

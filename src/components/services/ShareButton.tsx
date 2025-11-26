@@ -13,7 +13,7 @@ export default function ShareButton({ serviceId, serviceTitle }: ShareButtonProp
   const [copied, setCopied] = useState(false);
 
   const handleShare = async () => {
-    const shareUrl = `${window.location.origin}/services/${serviceId}`;
+    const shareUrl = `${globalThis.location.origin}/services/${serviceId}`;
     const shareData = {
       title: serviceTitle,
       text: `${serviceTitle} - 돌파구`,
@@ -59,7 +59,7 @@ export default function ShareButton({ serviceId, serviceTitle }: ShareButtonProp
       } catch {
         toast.error('링크 복사에 실패했습니다');
       }
-      document.body.removeChild(textArea);
+      textArea.remove();
     }
   };
 

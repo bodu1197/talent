@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { logger } from "@/lib/logger";
-import { FaTimes, FaPlus, FaInfoCircle, FaSpinner } from "react-icons/fa";
-import { FaYoutube } from "react-icons/fa6";
-import toast from "react-hot-toast";
+import { useState } from 'react';
+import { logger } from '@/lib/logger';
+import { FaTimes, FaPlus, FaInfoCircle, FaSpinner } from 'react-icons/fa';
+import { FaYoutube } from 'react-icons/fa6';
+import toast from 'react-hot-toast';
 
 interface ServiceFormData {
   title: string;
@@ -43,16 +43,16 @@ export default function Step5Requirements({
   setFormData,
   showOnlyRequirements = false,
 }: Props) {
-  const [newQuestion, setNewQuestion] = useState("");
+  const [newQuestion, setNewQuestion] = useState('');
   const [newQuestionRequired, setNewQuestionRequired] = useState(false);
-  const [tagInput, setTagInput] = useState("");
-  const [youtubeVideoId, setYoutubeVideoId] = useState("");
+  const [tagInput, setTagInput] = useState('');
+  const [youtubeVideoId, setYoutubeVideoId] = useState('');
   const [fetchingThumbnail, setFetchingThumbnail] = useState(false);
 
   // 요청사항 추가
   const addRequirement = () => {
     if (!newQuestion.trim()) {
-      toast.error("질문을 입력해주세요");
+      toast.error('질문을 입력해주세요');
       return;
     }
 
@@ -63,7 +63,7 @@ export default function Step5Requirements({
         { question: newQuestion, required: newQuestionRequired },
       ],
     });
-    setNewQuestion("");
+    setNewQuestion('');
     setNewQuestionRequired(false);
   };
 
@@ -79,7 +79,7 @@ export default function Step5Requirements({
   const addTag = () => {
     if (!tagInput.trim()) return;
     if (formData.portfolio_data.tags.includes(tagInput.trim())) {
-      toast.error("이미 추가된 태그입니다");
+      toast.error('이미 추가된 태그입니다');
       return;
     }
 
@@ -90,7 +90,7 @@ export default function Step5Requirements({
         tags: [...formData.portfolio_data.tags, tagInput.trim()],
       },
     });
-    setTagInput("");
+    setTagInput('');
   };
 
   // 태그 삭제
@@ -113,7 +113,7 @@ export default function Step5Requirements({
     ];
 
     for (const pattern of patterns) {
-      const match = url.match(pattern);
+      const match = pattern.exec(url);
       if (match) return match[1];
     }
     return null;
@@ -130,7 +130,7 @@ export default function Step5Requirements({
     });
 
     if (!url) {
-      setYoutubeVideoId("");
+      setYoutubeVideoId('');
       return;
     }
 
@@ -147,12 +147,10 @@ export default function Step5Requirements({
 
         const blob = response.ok
           ? await response.blob()
-          : await (
-            await fetch(`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`)
-          ).blob();
+          : await (await fetch(`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`)).blob();
 
         const file = new File([blob], `youtube-${videoId}.jpg`, {
-          type: "image/jpeg",
+          type: 'image/jpeg',
         });
 
         setFormData({
@@ -164,19 +162,17 @@ export default function Step5Requirements({
           },
         });
       } catch (error) {
-        logger.error("Failed to fetch YouTube thumbnail:", error);
+        logger.error('Failed to fetch YouTube thumbnail:', error);
       } finally {
         setFetchingThumbnail(false);
       }
     } else {
-      setYoutubeVideoId("");
+      setYoutubeVideoId('');
     }
   };
 
   // 포트폴리오 이미지 추가
-  const handlePortfolioImageChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handlePortfolioImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
@@ -195,9 +191,7 @@ export default function Step5Requirements({
       ...formData,
       portfolio_data: {
         ...formData.portfolio_data,
-        images: formData.portfolio_data.images.filter(
-          (_, i: number) => i !== index,
-        ),
+        images: formData.portfolio_data.images.filter((_, i: number) => i !== index),
       },
     });
   };
@@ -205,9 +199,7 @@ export default function Step5Requirements({
   return (
     <div className="space-y-8">
       {!showOnlyRequirements && (
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">
-          포트폴리오 등록
-        </h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">포트폴리오 등록</h2>
       )}
       {showOnlyRequirements && (
         <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">고객 요청사항</h2>
@@ -217,24 +209,18 @@ export default function Step5Requirements({
       {showOnlyRequirements && (
         <div className="pb-8 border-b border-gray-200">
           <h3 className="text-sm md:text-base font-bold text-gray-900 mb-4">
-            고객 요청사항{" "}
-            <span className="text-gray-500 text-xs font-normal">
-              (선택사항)
-            </span>
+            고객 요청사항 <span className="text-gray-500 text-xs font-normal">(선택사항)</span>
           </h3>
           <p className="text-sm text-gray-600 mb-4">
-            주문 시 고객에게 받을 정보나 질문을 추가하세요. 작업에 필요한 정보를
-            미리 받으면 원활한 진행이 가능합니다.
+            주문 시 고객에게 받을 정보나 질문을 추가하세요. 작업에 필요한 정보를 미리 받으면 원활한
+            진행이 가능합니다.
           </p>
 
           {/* 요청사항 목록 */}
           {formData.requirements && formData.requirements.length > 0 && (
             <div className="mb-4 space-y-2">
               {formData.requirements.map(
-                (
-                  req: { question: string; required: boolean },
-                  index: number,
-                ) => (
+                (req: { question: string; required: boolean }, index: number) => (
                   <div
                     key={`requirement-${req.question}-${index}`}
                     className="flex items-center justify-between bg-gray-50 p-4 rounded-lg border border-gray-200"
@@ -255,7 +241,7 @@ export default function Step5Requirements({
                       <FaTimes />
                     </button>
                   </div>
-                ),
+                )
               )}
             </div>
           )}
@@ -267,7 +253,7 @@ export default function Step5Requirements({
               value={newQuestion}
               onChange={(e) => setNewQuestion(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (e.key === 'Enter') {
                   e.preventDefault();
                   addRequirement();
                 }
@@ -283,9 +269,7 @@ export default function Step5Requirements({
                   onChange={(e) => setNewQuestionRequired(e.target.checked)}
                   className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
                 />
-                <span className="text-sm text-gray-700">
-                  필수 항목으로 설정
-                </span>
+                <span className="text-sm text-gray-700">필수 항목으로 설정</span>
               </label>
               <button
                 type="button"
@@ -305,10 +289,8 @@ export default function Step5Requirements({
         <div>
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm md:text-base font-bold text-gray-900">
-              포트폴리오 등록{" "}
-              <span className="text-gray-500 text-xs font-normal">
-                (선택사항 - 권장)
-              </span>
+              포트폴리오 등록{' '}
+              <span className="text-gray-500 text-xs font-normal">(선택사항 - 권장)</span>
             </h3>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -322,9 +304,7 @@ export default function Step5Requirements({
                 }
                 className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
               />
-              <span className="text-sm font-medium text-gray-700">
-                포트폴리오 함께 등록하기
-              </span>
+              <span className="text-sm font-medium text-gray-700">포트폴리오 함께 등록하기</span>
             </label>
           </div>
 
@@ -333,10 +313,7 @@ export default function Step5Requirements({
               {/* 포트폴리오 제목 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  제목{" "}
-                  <span className="text-gray-500 text-xs">
-                    (비어있으면 서비스 제목 사용)
-                  </span>
+                  제목 <span className="text-gray-500 text-xs">(비어있으면 서비스 제목 사용)</span>
                 </label>
                 <input
                   type="text"
@@ -381,10 +358,8 @@ export default function Step5Requirements({
               {/* 이미지 업로드 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  이미지 업로드{" "}
-                  <span className="text-gray-500 text-xs">
-                    (첫 이미지가 썸네일이 됩니다)
-                  </span>
+                  이미지 업로드{' '}
+                  <span className="text-gray-500 text-xs">(첫 이미지가 썸네일이 됩니다)</span>
                 </label>
                 <input
                   type="file"
@@ -395,38 +370,34 @@ export default function Step5Requirements({
                 />
                 {formData.portfolio_data.images.length > 0 && (
                   <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {formData.portfolio_data.images.map(
-                      (file: File, index: number) => (
-                        <div key={`portfolio-image-${file.name}-${index}`} className="relative">
-                          <img
-                            src={URL.createObjectURL(file)}
-                            alt={`Preview ${index + 1}`}
-                            className="w-full h-32 object-cover rounded-lg"
-                          />
-                          {index === 0 && (
-                            <span className="absolute top-2 left-2 bg-brand-primary text-white text-xs px-2 py-1 rounded">
-                              썸네일
-                            </span>
-                          )}
-                          <button
-                            type="button"
-                            onClick={() => removePortfolioImage(index)}
-                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
-                          >
-                            <FaTimes className="text-xs" />
-                          </button>
-                        </div>
-                      ),
-                    )}
+                    {formData.portfolio_data.images.map((file: File, index: number) => (
+                      <div key={`portfolio-image-${file.name}-${index}`} className="relative">
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={`Preview ${index + 1}`}
+                          className="w-full h-32 object-cover rounded-lg"
+                        />
+                        {index === 0 && (
+                          <span className="absolute top-2 left-2 bg-brand-primary text-white text-xs px-2 py-1 rounded">
+                            썸네일
+                          </span>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => removePortfolioImage(index)}
+                          className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                        >
+                          <FaTimes className="text-xs" />
+                        </button>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
 
               {/* 프로젝트 URL */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  프로젝트 URL
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">프로젝트 URL</label>
                 <input
                   type="url"
                   value={formData.portfolio_data.project_url}
@@ -447,10 +418,8 @@ export default function Step5Requirements({
               {/* YouTube URL */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  YouTube 영상 URL{" "}
-                  <span className="text-gray-500 text-xs">
-                    (영상이 포트폴리오에 삽입됩니다)
-                  </span>
+                  YouTube 영상 URL{' '}
+                  <span className="text-gray-500 text-xs">(영상이 포트폴리오에 삽입됩니다)</span>
                 </label>
                 <input
                   type="url"
@@ -489,16 +458,14 @@ export default function Step5Requirements({
 
               {/* 태그 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  태그
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">태그</label>
                 <div className="flex gap-2 mb-2">
                   <input
                     type="text"
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") {
+                      if (e.key === 'Enter') {
                         e.preventDefault();
                         addTag();
                       }
@@ -539,14 +506,11 @@ export default function Step5Requirements({
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
               <p className="text-blue-900 mb-2">
                 <FaInfoCircle className="mr-2 inline" />
-                <strong>
-                  포트폴리오를 등록하면 서비스 신뢰도가 높아집니다!
-                </strong>
+                <strong>포트폴리오를 등록하면 서비스 신뢰도가 높아집니다!</strong>
               </p>
               <p className="text-sm text-blue-800">
-                작업 샘플이나 이전 프로젝트를 보여주면 고객이 서비스를 선택하는
-                데 큰 도움이 됩니다. 위의 체크박스를 선택하여 포트폴리오를 함께
-                등록하세요.
+                작업 샘플이나 이전 프로젝트를 보여주면 고객이 서비스를 선택하는 데 큰 도움이 됩니다.
+                위의 체크박스를 선택하여 포트폴리오를 함께 등록하세요.
               </p>
             </div>
           )}

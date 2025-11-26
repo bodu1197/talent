@@ -44,9 +44,9 @@ interface Buyer {
 }
 
 interface Props {
-  order: Order;
-  seller: Seller | null;
-  buyer: Buyer | null;
+  readonly order: Order;
+  readonly seller: Seller | null;
+  readonly buyer: Buyer | null;
 }
 
 export default function DirectPaymentClient({ order, seller, buyer }: Props) {

@@ -1,27 +1,27 @@
-"use client";
+'use client';
 
-import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import OrderCard from "@/components/mypage/OrderCard";
-import Link from "next/link";
-import { useAuth } from "@/components/providers/AuthProvider";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
-import EmptyState from "@/components/common/EmptyState";
-import ErrorState from "@/components/common/ErrorState";
-import { logger } from "@/lib/logger";
-import type { Order, Service, Seller } from "@/types/common";
-import { FaEye, FaDownload, FaCheck, FaRedo, FaStar } from "react-icons/fa";
-import toast from "react-hot-toast";
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
+import OrderCard from '@/components/mypage/OrderCard';
+import Link from 'next/link';
+import { useAuth } from '@/components/providers/AuthProvider';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
+import EmptyState from '@/components/common/EmptyState';
+import ErrorState from '@/components/common/ErrorState';
+import { logger } from '@/lib/logger';
+import type { Order, Service, Seller } from '@/types/common';
+import { FaEye, FaDownload, FaCheck, FaRedo, FaStar } from 'react-icons/fa';
+import toast from 'react-hot-toast';
 
 type OrderStatus =
-  | "all"
-  | "paid"
-  | "in_progress"
-  | "revision"
-  | "delivered"
-  | "completed"
-  | "cancelled";
+  | 'all'
+  | 'paid'
+  | 'in_progress'
+  | 'revision'
+  | 'delivered'
+  | 'completed'
+  | 'cancelled';
 
 interface OrderFilter {
   status: OrderStatus;
@@ -42,7 +42,7 @@ interface BuyerOrderListItem extends Order {
 function BuyerOrdersContent() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
-  const statusFromUrl = (searchParams.get("status") as OrderStatus) || "all";
+  const statusFromUrl = (searchParams.get('status') as OrderStatus) || 'all';
 
   const [orders, setOrders] = useState<BuyerOrderListItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,9 +59,9 @@ function BuyerOrdersContent() {
 
   const [filters, setFilters] = useState<OrderFilter>({
     status: statusFromUrl,
-    searchQuery: "",
-    startDate: "",
-    endDate: "",
+    searchQuery: '',
+    startDate: '',
+    endDate: '',
   });
 
   useEffect(() => {
@@ -80,24 +80,19 @@ function BuyerOrdersContent() {
       setLoading(true);
       setError(null);
 
-      const statusParam =
-        filters.status === "all" ? "" : `?status=${filters.status}`;
+      const statusParam = filters.status === 'all' ? '' : `?status=${filters.status}`;
       const response = await fetch(`/api/orders/buyer${statusParam}`);
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "주문 목록을 불러올 수 없습니다");
+        throw new Error(error.error || '주문 목록을 불러올 수 없습니다');
       }
 
       const { orders } = await response.json();
       setOrders(orders);
     } catch (err: unknown) {
-      logger.error("주문 조회 실패:", err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "주문 내역을 불러오는데 실패했습니다",
-      );
+      logger.error('주문 조회 실패:', err);
+      setError(err instanceof Error ? err.message : '주문 내역을 불러오는데 실패했습니다');
     } finally {
       setLoading(false);
     }
@@ -105,156 +100,145 @@ function BuyerOrdersContent() {
 
   async function loadStatusCounts() {
     try {
-      const response = await fetch("/api/orders/buyer/count");
+      const response = await fetch('/api/orders/buyer/count');
 
       if (!response.ok) {
-        throw new Error("카운트 조회 실패");
+        throw new Error('카운트 조회 실패');
       }
 
       const { counts } = await response.json();
       setStatusCounts(counts);
     } catch (err) {
-      logger.error("상태별 카운트 조회 실패:", err);
+      logger.error('상태별 카운트 조회 실패:', err);
     }
   }
 
   async function handleConfirmOrder(orderId: string) {
-    if (!confirm("구매를 확정하시겠습니까?\n확정 후에는 취소할 수 없습니다.")) {
+    if (!confirm('구매를 확정하시겠습니까?\n확정 후에는 취소할 수 없습니다.')) {
       return;
     }
 
     try {
       const response = await fetch(`/api/orders/${orderId}/status`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: "completed" }),
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'completed' }),
       });
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "구매 확정에 실패했습니다");
+        throw new Error(error.error || '구매 확정에 실패했습니다');
       }
 
-      toast.success("구매가 확정되었습니다.");
+      toast.success('구매가 확정되었습니다.');
       loadOrders();
       loadStatusCounts();
     } catch (err: unknown) {
-      logger.error("구매 확정 실패:", err);
-      toast.error(
-        err instanceof Error ? err.message : "구매 확정에 실패했습니다",
-      );
+      logger.error('구매 확정 실패:', err);
+      toast.error(err instanceof Error ? err.message : '구매 확정에 실패했습니다');
     }
   }
 
   async function handleRequestRevision(orderId: string) {
-    const reason = prompt("수정 요청 사유를 입력해주세요:");
+    const reason = prompt('수정 요청 사유를 입력해주세요:');
 
-    if (!reason || reason.trim() === "") {
-      toast.error("수정 요청 사유를 입력해주세요");
+    if (!reason || reason.trim() === '') {
+      toast.error('수정 요청 사유를 입력해주세요');
       return;
     }
 
     try {
       const response = await fetch(`/api/orders/${orderId}/revision`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason }),
       });
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "수정 요청에 실패했습니다");
+        throw new Error(error.error || '수정 요청에 실패했습니다');
       }
 
-      toast.success("수정 요청이 전송되었습니다.");
+      toast.success('수정 요청이 전송되었습니다.');
       loadOrders();
     } catch (err: unknown) {
-      logger.error("수정 요청 실패:", err);
-      toast.error(
-        err instanceof Error ? err.message : "수정 요청에 실패했습니다",
-      );
+      logger.error('수정 요청 실패:', err);
+      toast.error(err instanceof Error ? err.message : '수정 요청에 실패했습니다');
     }
   }
 
   const filteredOrders = orders.filter((order) => {
     if (filters.searchQuery) {
       const query = filters.searchQuery.toLowerCase();
-      const matchesSellerName = order.seller?.name
-        ?.toLowerCase()
-        .includes(query);
-      const matchesOrderNumber = order.order_number
-        ?.toLowerCase()
-        .includes(query);
+      const matchesSellerName = order.seller?.name?.toLowerCase().includes(query);
+      const matchesOrderNumber = order.order_number?.toLowerCase().includes(query);
       const matchesTitle = order.title?.toLowerCase().includes(query);
-      if (!matchesSellerName && !matchesOrderNumber && !matchesTitle)
-        return false;
+      if (!matchesSellerName && !matchesOrderNumber && !matchesTitle) return false;
     }
     return true;
   });
 
   const tabs = [
-    { value: "all", label: "전체", count: statusCounts.all },
-    { value: "paid", label: "결제완료", count: statusCounts.paid },
-    { value: "in_progress", label: "진행중", count: statusCounts.in_progress },
-    { value: "revision", label: "수정 요청", count: statusCounts.revision },
+    { value: 'all', label: '전체', count: statusCounts.all },
+    { value: 'paid', label: '결제완료', count: statusCounts.paid },
+    { value: 'in_progress', label: '진행중', count: statusCounts.in_progress },
+    { value: 'revision', label: '수정 요청', count: statusCounts.revision },
     {
-      value: "delivered",
-      label: "도착 확인 대기",
+      value: 'delivered',
+      label: '도착 확인 대기',
       count: statusCounts.delivered,
     },
-    { value: "completed", label: "완료", count: statusCounts.completed },
-    { value: "cancelled", label: "취소/환불", count: statusCounts.cancelled },
+    { value: 'completed', label: '완료', count: statusCounts.completed },
+    { value: 'cancelled', label: '취소/환불', count: statusCounts.cancelled },
   ];
 
   const resetFilters = () => {
     setFilters({
-      status: "all",
-      searchQuery: "",
-      startDate: "",
-      endDate: "",
+      status: 'all',
+      searchQuery: '',
+      startDate: '',
+      endDate: '',
     });
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "paid":
-        return "결제완료";
-      case "in_progress":
-        return "진행중";
-      case "revision":
-        return "수정 요청";
-      case "delivered":
-        return "도착 확인 대기";
-      case "completed":
-        return "완료";
-      case "cancelled":
-        return "취소/환불";
-      case "refunded":
-        return "환불완료";
+      case 'paid':
+        return '결제완료';
+      case 'in_progress':
+        return '진행중';
+      case 'revision':
+        return '수정 요청';
+      case 'delivered':
+        return '도착 확인 대기';
+      case 'completed':
+        return '완료';
+      case 'cancelled':
+        return '취소/환불';
+      case 'refunded':
+        return '환불완료';
       default:
         return status;
     }
   };
 
-  const getStatusColor = (
-    status: string,
-  ): "red" | "yellow" | "green" | "gray" => {
+  const getStatusColor = (status: string): 'red' | 'yellow' | 'green' | 'gray' => {
     switch (status) {
-      case "delivered":
-        return "red";
-      case "revision":
-        return "red";
-      case "in_progress":
-        return "yellow";
-      case "completed":
-        return "green";
+      case 'delivered':
+        return 'red';
+      case 'revision':
+        return 'red';
+      case 'in_progress':
+        return 'yellow';
+      case 'completed':
+        return 'green';
       default:
-        return "gray";
+        return 'gray';
     }
   };
 
   const getActionButtons = (order: BuyerOrderListItem) => {
-    if (order.status === "revision") {
+    if (order.status === 'revision') {
       return (
         <>
           <Link
@@ -274,7 +258,7 @@ function BuyerOrdersContent() {
       );
     }
 
-    if (order.status === "delivered") {
+    if (order.status === 'delivered') {
       return (
         <>
           <Link
@@ -308,7 +292,7 @@ function BuyerOrdersContent() {
       );
     }
 
-    if (order.status === "in_progress") {
+    if (order.status === 'in_progress') {
       return (
         <>
           <Link
@@ -327,7 +311,7 @@ function BuyerOrdersContent() {
       );
     }
 
-    if (order.status === "completed") {
+    if (order.status === 'completed') {
       return (
         <>
           <Link
@@ -348,14 +332,12 @@ function BuyerOrdersContent() {
     }
 
     return (
-      <>
-        <Link
-          href={`/mypage/buyer/orders/${order.id}`}
-          className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium"
-        >
-          상세보기
-        </Link>
-      </>
+      <Link
+        href={`/mypage/buyer/orders/${order.id}`}
+        className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium"
+      >
+        상세보기
+      </Link>
     );
   };
 
@@ -363,22 +345,19 @@ function BuyerOrdersContent() {
     return {
       id: order.id,
       orderNumber: order.order_number,
-      title: order.title || order.service?.title || "제목 없음",
+      title: order.title || order.service?.title || '제목 없음',
       thumbnailUrl: order.service?.thumbnail_url,
       sellerName: order.seller?.name,
       status: order.status,
       statusLabel: getStatusLabel(order.status),
       statusColor: getStatusColor(order.status),
       price: order.total_amount,
-      orderDate: new Date(order.created_at).toLocaleString("ko-KR"),
+      orderDate: new Date(order.created_at).toLocaleString('ko-KR'),
       expectedDeliveryDate: order.delivery_date
-        ? new Date(order.delivery_date).toLocaleDateString("ko-KR")
-        : "-",
+        ? new Date(order.delivery_date).toLocaleDateString('ko-KR')
+        : '-',
       daysLeft: order.delivery_date
-        ? Math.ceil(
-          (new Date(order.delivery_date).getTime() - new Date().getTime()) /
-          (1000 * 60 * 60 * 24),
-        )
+        ? Math.ceil((new Date(order.delivery_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
         : 0,
       requirements: order.requirements,
     };
@@ -419,21 +398,21 @@ function BuyerOrdersContent() {
             {tabs.map((tab) => (
               <button
                 key={tab.value}
-                onClick={() =>
-                  setFilters({ ...filters, status: tab.value as OrderStatus })
-                }
-                className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${filters.status === tab.value
-                  ? "border-brand-primary text-brand-primary"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
-                  }`}
+                onClick={() => setFilters({ ...filters, status: tab.value as OrderStatus })}
+                className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
+                  filters.status === tab.value
+                    ? 'border-brand-primary text-brand-primary'
+                    : 'border-transparent text-gray-600 hover:text-gray-900'
+                }`}
               >
                 {tab.label}
                 {tab.count > 0 && (
                   <span
-                    className={`ml-2 px-2 py-0.5 rounded-full text-xs ${filters.status === tab.value
-                      ? "bg-brand-primary text-white"
-                      : "bg-gray-200 text-gray-600"
-                      }`}
+                    className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
+                      filters.status === tab.value
+                        ? 'bg-brand-primary text-white'
+                        : 'bg-gray-200 text-gray-600'
+                    }`}
                   >
                     {tab.count}
                   </span>
@@ -448,16 +427,17 @@ function BuyerOrdersContent() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* 검색 */}
             <div className="lg:col-span-2">
-              <label htmlFor="order-search" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="order-search"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 판매자명 / 주문번호 검색
               </label>
               <input
                 id="order-search"
                 type="text"
                 value={filters.searchQuery}
-                onChange={(e) =>
-                  setFilters({ ...filters, searchQuery: e.target.value })
-                }
+                onChange={(e) => setFilters({ ...filters, searchQuery: e.target.value })}
                 placeholder="검색어를 입력하세요"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               />
@@ -465,31 +445,33 @@ function BuyerOrdersContent() {
 
             {/* 기간 검색 */}
             <div>
-              <label htmlFor="order-start-date" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="order-start-date"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 시작일
               </label>
               <input
                 id="order-start-date"
                 type="date"
                 value={filters.startDate}
-                onChange={(e) =>
-                  setFilters({ ...filters, startDate: e.target.value })
-                }
+                onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               />
             </div>
 
             <div>
-              <label htmlFor="order-end-date" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="order-end-date"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 종료일
               </label>
               <input
                 id="order-end-date"
                 type="date"
                 value={filters.endDate}
-                onChange={(e) =>
-                  setFilters({ ...filters, endDate: e.target.value })
-                }
+                onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               />
             </div>
@@ -509,11 +491,7 @@ function BuyerOrdersContent() {
 
         {/* 결과 카운트 */}
         <div className="mb-4 text-sm text-gray-600">
-          총{' '}
-          <span className="font-bold text-gray-900">
-            {filteredOrders.length}
-          </span>
-          {' '}건의 주문
+          총 <span className="font-bold text-gray-900">{filteredOrders.length}</span> 건의 주문
         </div>
 
         {/* 주문 목록 */}
@@ -533,8 +511,8 @@ function BuyerOrdersContent() {
               title="주문 내역이 없습니다"
               description="서비스를 구매하고 주문 내역을 확인해보세요"
               action={{
-                label: "서비스 둘러보기",
-                href: "/",
+                label: '서비스 둘러보기',
+                href: '/',
               }}
             />
           )}

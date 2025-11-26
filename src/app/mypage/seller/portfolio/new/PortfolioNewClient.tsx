@@ -80,7 +80,7 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
     ];
 
     for (const pattern of patterns) {
-      const match = url.match(pattern);
+      const match = pattern.exec(url);
       if (match) return match[1];
     }
     return null;
@@ -185,8 +185,7 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
         const supabase = createClient();
         const uploadedUrls: string[] = [];
 
-        for (let i = 0; i < imageFiles.length; i++) {
-          const file = imageFiles[i];
+        for (const file of imageFiles) {
           const fileExt = file.name.split('.').pop();
           const fileName = `${Date.now()}_${crypto.randomUUID().slice(0, 8)}.${fileExt}`;
           const filePath = `portfolio/${fileName}`;

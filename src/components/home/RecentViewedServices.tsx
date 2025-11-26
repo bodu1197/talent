@@ -108,8 +108,8 @@ async function getRelatedServices(
   if (!categoryId) return [];
 
   const categoryServices = await getServicesByCategory(categoryId, needed * 2);
-  const viewedIds = validViews.map((v) => v.service_id);
-  const filtered = categoryServices.filter((s) => !viewedIds.includes(s.id));
+  const viewedIds = new Set(validViews.map((v) => v.service_id));
+  const filtered = categoryServices.filter((s) => !viewedIds.has(s.id));
   // crypto 기반 셔플로 보안 강화
   const shuffled = filtered.toSorted(() => {
     const arr = new Uint32Array(1);

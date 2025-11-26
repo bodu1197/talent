@@ -86,7 +86,6 @@ interface ServiceRevision {
 interface Props {
   readonly service: ServiceData;
   readonly sellerId: string;
-  readonly categories: Category[];
   readonly categoryHierarchy?: {
     level1: string | null;
     level2: string | null;

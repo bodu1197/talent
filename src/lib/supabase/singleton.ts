@@ -96,7 +96,7 @@ export class SupabaseManager {
    * 서버 사이드에서만 사용해야 합니다!
    */
   static getServiceRoleClient(): SupabaseClient {
-    if (typeof window !== 'undefined') {
+    if (globalThis.window !== undefined) {
       throw new TypeError('Service Role Client는 서버 사이드에서만 사용할 수 있습니다!');
     }
 
@@ -128,7 +128,7 @@ export class SupabaseManager {
 // 편의를 위한 기존 함수명 유지 (기존 코드와의 호환성)
 export const createClient = () => {
   // 환경에 따라 적절한 클라이언트 반환
-  if (typeof window !== 'undefined') {
+  if (globalThis.window !== undefined) {
     return SupabaseManager.getBrowserClient();
   }
   // 서버 사이드에서는 async 함수를 통해 호출해야 함
