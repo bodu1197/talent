@@ -28,6 +28,7 @@ import {
   FaMotorcycle,
   FaRunning,
   FaCircle,
+  FaPlus,
 } from 'react-icons/fa';
 
 interface CategoryItem {
@@ -98,7 +99,7 @@ const bgColors = [
 ];
 
 // 생활서비스 카테고리 slugs
-const LIFE_SERVICE_SLUGS = ['errands', 'beauty-fashion', 'home-repair'];
+const LIFE_SERVICE_SLUGS = ['errands', 'beauty-fashion', 'home-repair', 'living-services'];
 
 export default function MobileSearchContent({ categories }: MobileSearchContentProps) {
   const router = useRouter();
@@ -108,9 +109,7 @@ export default function MobileSearchContent({ categories }: MobileSearchContentP
   };
 
   // 생활서비스 카테고리 필터링 (하위 카테고리 포함)
-  const lifeServiceCategories = categories.filter((cat) =>
-    LIFE_SERVICE_SLUGS.includes(cat.slug)
-  );
+  const lifeServiceCategories = categories.filter((cat) => LIFE_SERVICE_SLUGS.includes(cat.slug));
 
   return (
     <div className="lg:hidden bg-white min-h-screen pb-20">
@@ -121,18 +120,25 @@ export default function MobileSearchContent({ categories }: MobileSearchContentP
       <div className="px-3 pb-6">
         <h3 className="font-semibold text-gray-900 mb-3">추천 검색어</h3>
         <div className="flex flex-wrap gap-2">
-          {['로고 디자인', 'AI 이미지', '영상 편집', '번역', '블로그 작성', 'PPT 디자인', '웹 개발', '앱 개발'].map(
-            (keyword) => (
-              <button
-                key={keyword}
-                type="button"
-                className="px-3 py-1.5 bg-gray-100 rounded-full text-sm hover:bg-gray-200 hover:text-brand-primary transition-colors"
-                onClick={() => handleKeywordSearch(keyword)}
-              >
-                {keyword}
-              </button>
-            )
-          )}
+          {[
+            '로고 디자인',
+            'AI 이미지',
+            '영상 편집',
+            '번역',
+            '블로그 작성',
+            'PPT 디자인',
+            '웹 개발',
+            '앱 개발',
+          ].map((keyword) => (
+            <button
+              key={keyword}
+              type="button"
+              className="px-3 py-1.5 bg-gray-100 rounded-full text-sm hover:bg-gray-200 hover:text-brand-primary transition-colors"
+              onClick={() => handleKeywordSearch(keyword)}
+            >
+              {keyword}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -146,10 +152,7 @@ export default function MobileSearchContent({ categories }: MobileSearchContentP
               className={`rounded-xl p-4 ${bgColors[index % bgColors.length]}`}
             >
               {/* 카테고리 헤더 */}
-              <Link
-                href={`/categories/${category.slug}`}
-                className="flex items-center gap-3 mb-3"
-              >
+              <Link href={`/categories/${category.slug}`} className="flex items-center gap-3 mb-3">
                 <div
                   className={`text-2xl h-10 w-10 flex items-center justify-center rounded-full bg-white ${brightColors[index % brightColors.length]}`}
                 >
@@ -197,6 +200,15 @@ export default function MobileSearchContent({ categories }: MobileSearchContentP
               </span>
             </Link>
           ))}
+          {/* + 상세보기 아이콘 */}
+          <Link href="/categories" className="flex flex-col items-center group">
+            <div className="text-2xl mb-1 h-12 w-12 flex items-center justify-center rounded-full bg-gray-100 text-gray-400 group-hover:text-brand-primary transition-all duration-200">
+              <FaPlus />
+            </div>
+            <span className="text-xs text-gray-700 text-center font-medium group-hover:text-brand-primary">
+              상세보기
+            </span>
+          </Link>
         </div>
       </div>
     </div>
