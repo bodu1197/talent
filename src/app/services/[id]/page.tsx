@@ -754,11 +754,11 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                     <ContactSellerButton sellerId={service.seller.id} serviceId={id} />
                   )}
 
-                  <div className="flex gap-2 mt-3">
+                  <div className="flex flex-col gap-2 mt-3">
                     <FavoriteButton serviceId={id} />
-                    <button className="flex-1 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 flex flex-col items-center justify-center gap-1">
-                      <FaShare className="text-lg" />
-                      <span className="text-sm">공유</span>
+                    <button className="w-full py-3 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center justify-center gap-2">
+                      <FaShare />
+                      <span>공유</span>
                     </button>
                   </div>
                 </div>
