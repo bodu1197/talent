@@ -208,14 +208,6 @@ export default async function UserReviews() {
             </div>
           ))}
         </div>
-
-        {/* 더보기 안내 */}
-        <div className="text-center mt-6 md:mt-10">
-          <p className="text-sm md:text-base text-gray-600">
-            더 많은 후기가 궁금하신가요?{' '}
-            <span className="text-blue-600 font-semibold">서비스 페이지에서 확인하세요</span>
-          </p>
-        </div>
       </div>
     </section>
   );
