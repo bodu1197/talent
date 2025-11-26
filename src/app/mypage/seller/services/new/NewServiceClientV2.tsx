@@ -103,11 +103,11 @@ export default function NewServiceClientV2({ sellerId, categories, profileData }
 
     //Step 2 validation: 가격, 작업기간 필수
     if (currentStep === 2) {
-      if (!formData.price || Number.Number.parseInt(formData.price) < 5000) {
+      if (!formData.price || Number.parseInt(formData.price) < 5000) {
         toast.error('서비스 가격을 5,000원 이상으로 입력해주세요.');
         return;
       }
-      if (!formData.delivery_days || Number.Number.parseInt(formData.delivery_days) < 1) {
+      if (!formData.delivery_days || Number.parseInt(formData.delivery_days) < 1) {
         toast.error('작업 기간을 1일 이상으로 입력해주세요.');
         return;
       }
