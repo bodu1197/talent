@@ -468,7 +468,6 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
           activeTab={activeTab}
           isCreatingRoom={isCreatingRoom}
           isMobile={true}
-          showSearch={false}
           onSelectRoom={handleSelectRoom}
           onToggleFavorite={toggleFavorite}
           onTabChange={setActiveTab}
@@ -487,7 +486,6 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
               activeTab={activeTab}
               isCreatingRoom={isCreatingRoom}
               isMobile={false}
-              showSearch={true}
               onSelectRoom={handleSelectRoom}
               onToggleFavorite={toggleFavorite}
               onTabChange={setActiveTab}

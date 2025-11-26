@@ -96,7 +96,6 @@ interface ChatRoomListProps {
   readonly activeTab: TabType;
   readonly isCreatingRoom?: boolean;
   readonly isMobile?: boolean;
-  readonly showSearch?: boolean;
   readonly onSelectRoom: (roomId: string) => void;
   readonly onToggleFavorite: (roomId: string, e: React.MouseEvent) => void;
   readonly onTabChange: (tab: TabType) => void;
@@ -109,7 +108,6 @@ export default function ChatRoomList({
   activeTab,
   isCreatingRoom = false,
   isMobile = false,
-  showSearch = false,
   onSelectRoom,
   onToggleFavorite,
   onTabChange,
@@ -152,21 +150,19 @@ export default function ChatRoomList({
         </div>
       </div>
 
-      {/* 검색 (PC 전용) */}
-      {showSearch && !isMobile && (
-        <div className="px-4 py-3 border-b border-gray-200">
-          <div className="relative">
-            <input
-              type="text"
-              id="chat-search"
-              name="chat-search"
-              placeholder="검색해 보세요."
-              className="w-full px-4 py-2 pr-10 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
-            />
-            <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          </div>
+      {/* 검색 */}
+      <div className="px-4 py-3 border-b border-gray-200">
+        <div className="relative">
+          <input
+            type="text"
+            id="chat-search"
+            name="chat-search"
+            placeholder="검색해 보세요."
+            className="w-full px-4 py-2 pr-10 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
+          />
+          <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
         </div>
-      )}
+      </div>
 
       {/* 채팅방 목록 */}
       <div className={isMobile ? 'overflow-y-auto pb-20' : 'flex-1 overflow-y-auto'}>
