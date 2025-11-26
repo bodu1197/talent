@@ -117,14 +117,14 @@ export default function MobileBottomNav() {
                 id="search-mobile"
                 name="search"
                 type="text"
-                placeholder="찾으시는 재능을 검색해보세요"
-                className="w-full px-4 py-2 pr-10 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                placeholder="어떤 재능이 필요하신가요?"
+                className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-full bg-gray-50 focus:bg-white focus:border-gray-300 focus:outline-none transition-colors text-gray-900 text-sm"
                 autoComplete="off"
                 autoFocus
                 aria-label="서비스 검색"
               />
-              <button aria-label="검색 실행" className="absolute right-3 top-1/2 -translate-y-1/2">
-                <FaSearch className="text-gray-500" aria-hidden="true" />
+              <button aria-label="검색 실행" className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-brand-primary transition-colors rounded-full">
+                <FaSearch className="text-base" aria-hidden="true" />
               </button>
             </div>
           </div>
