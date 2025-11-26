@@ -1,9 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { FaSearch } from 'react-icons/fa';
+import MobileSearchBar from '@/components/home/MobileSearchBar';
 import {
   FaRobot,
   FaPalette,
@@ -103,14 +102,6 @@ const LIFE_SERVICE_SLUGS = ['errands', 'beauty-fashion', 'home-repair'];
 
 export default function MobileSearchContent({ categories }: MobileSearchContentProps) {
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-    }
-  };
 
   const handleKeywordSearch = (keyword: string) => {
     router.push(`/search?q=${encodeURIComponent(keyword)}`);
@@ -123,33 +114,8 @@ export default function MobileSearchContent({ categories }: MobileSearchContentP
 
   return (
     <div className="lg:hidden bg-white min-h-screen pb-20">
-      {/* 1. 검색창 섹션 - MobileSearchBar와 100% 동일 */}
-      <div className="bg-white pt-2 pb-4 px-3">
-        <form onSubmit={handleSearch} className="relative" autoComplete="off">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="어떤 재능이 필요하신가요?"
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-            spellCheck={false}
-            data-form-type="other"
-            data-lpignore="true"
-            role="searchbox"
-            aria-label="서비스 검색"
-            className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-full bg-gray-50 focus:bg-white focus:border-gray-300 focus:outline-none transition-colors text-gray-900 text-sm"
-          />
-          <button
-            type="submit"
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-brand-primary transition-colors rounded-full"
-            aria-label="검색"
-          >
-            <FaSearch className="text-base" />
-          </button>
-        </form>
-      </div>
+      {/* 1. 검색창 섹션 - MobileSearchBar 컴포넌트 그대로 사용 */}
+      <MobileSearchBar />
 
       {/* 2. 추천 검색어 섹션 */}
       <div className="px-3 pb-6">
