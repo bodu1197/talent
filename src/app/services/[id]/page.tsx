@@ -658,37 +658,55 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       </div>
                     </div>
 
-                    {/* 문의하기 버튼 */}
-                    <Link
-                      href="/chat"
-                      className="px-6 py-2 border border-brand-primary text-brand-primary rounded-lg hover:bg-brand-primary hover:text-white transition-colors font-medium"
-                    >
-                      문의하기
-                    </Link>
+                    {/* 오른쪽: 통계 정보 (문의하기 버튼 대체) */}
+                    <div className="hidden lg:grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+                      <div className="text-right">
+                        <span className="text-gray-500">총 거래</span>
+                        <span className="ml-2 font-bold text-gray-900">
+                          {sellerStats.totalOrders}건
+                        </span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-gray-500">만족도</span>
+                        <span className="ml-2 font-bold text-gray-900">
+                          {sellerStats.satisfactionRate}%
+                        </span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-gray-500">회원구분</span>
+                        <span className="ml-2 font-bold text-gray-900">기업회원</span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-gray-500">세금계산서</span>
+                        <span className="ml-2 font-bold text-gray-900">
+                          {service.seller?.tax_invoice_available ? '발행가능' : '불가능'}
+                        </span>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* 통계 정보 */}
-                  <div className="grid grid-cols-4 gap-4 py-4 border-t border-gray-200">
+                  {/* 모바일: 통계 정보 */}
+                  <div className="lg:hidden grid grid-cols-4 gap-2 py-4 border-t border-gray-200">
                     <div className="text-center">
-                      <div className="text-sm text-gray-600 mb-1">총 거래 건수</div>
-                      <div className="text-lg font-bold text-gray-900">
+                      <div className="text-xs text-gray-500 mb-1">총 거래</div>
+                      <div className="text-sm font-bold text-gray-900">
                         {sellerStats.totalOrders}건
                       </div>
                     </div>
                     <div className="text-center">
-                      <div className="text-sm text-gray-600 mb-1">만족도</div>
-                      <div className="text-lg font-bold text-gray-900">
+                      <div className="text-xs text-gray-500 mb-1">만족도</div>
+                      <div className="text-sm font-bold text-gray-900">
                         {sellerStats.satisfactionRate}%
                       </div>
                     </div>
                     <div className="text-center">
-                      <div className="text-sm text-gray-600 mb-1">회원구분</div>
-                      <div className="text-lg font-bold text-gray-900">기업회원</div>
+                      <div className="text-xs text-gray-500 mb-1">회원구분</div>
+                      <div className="text-sm font-bold text-gray-900">기업</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-sm text-gray-600 mb-1">세금계산서</div>
-                      <div className="text-lg font-bold text-gray-900">
-                        {service.seller?.tax_invoice_available ? '발행 가능' : '미발행'}
+                      <div className="text-xs text-gray-500 mb-1">세금계산서</div>
+                      <div className="text-sm font-bold text-gray-900">
+                        {service.seller?.tax_invoice_available ? '가능' : '불가'}
                       </div>
                     </div>
                   </div>
