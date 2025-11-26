@@ -88,7 +88,7 @@ export default function CategoryGridClient({
 
   return (
     <>
-      <div className="hidden lg:flex flex-wrap gap-x-4 gap-y-4 items-center justify-center">
+      <div className="hidden lg:flex flex-wrap gap-x-3 sm:gap-x-6 md:gap-x-8 gap-y-3 sm:gap-y-4 items-center justify-between">
         {categoriesInFirstRow.map((category, index) => (
           <Link
             key={category.id}
@@ -143,7 +143,7 @@ export default function CategoryGridClient({
       </div>
 
       {showAllCategories && remainingCategories.length > 0 && (
-        <div className="hidden lg:flex flex-wrap gap-x-4 gap-y-4 items-center justify-center mt-4">
+        <div className="hidden lg:flex flex-wrap gap-x-8 gap-y-4 items-center mt-4">
           {remainingCategories.map((category, index) => (
             <Link
               key={category.id}
