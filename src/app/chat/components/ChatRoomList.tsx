@@ -95,6 +95,8 @@ interface ChatRoomListProps {
   readonly selectedRoomId: string | null;
   readonly activeTab: TabType;
   readonly searchQuery: string;
+  readonly searchMatchingRoomIds?: string[];
+  readonly isSearching?: boolean;
   readonly isCreatingRoom?: boolean;
   readonly isMobile?: boolean;
   readonly onSelectRoom: (roomId: string) => void;
@@ -109,6 +111,8 @@ export default function ChatRoomList({
   selectedRoomId,
   activeTab,
   searchQuery,
+  searchMatchingRoomIds = [],
+  isSearching = false,
   isCreatingRoom = false,
   isMobile = false,
   onSelectRoom,
@@ -142,6 +146,9 @@ export default function ChatRoomList({
 
     // 서비스 제목 검색
     if (room.service?.title?.toLowerCase().includes(query)) return true;
+
+    // API 검색 결과에 포함된 경우 (전체 대화 내용 검색)
+    if (searchMatchingRoomIds.includes(room.id)) return true;
 
     return false;
   });
@@ -183,10 +190,14 @@ export default function ChatRoomList({
             name="chat-search"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="이름, 메시지, 서비스명 검색"
+            placeholder="이름, 대화 내용, 서비스명 검색"
             className="w-full px-4 py-2 pr-10 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
           />
-          <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          {isSearching ? (
+            <FaSpinner className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 animate-spin" />
+          ) : (
+            <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          )}
         </div>
       </div>
 

@@ -99,6 +99,8 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'all' | 'unread' | 'deal' | 'favorite'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchMatchingRoomIds, setSearchMatchingRoomIds] = useState<string[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isCreatingRoom, setIsCreatingRoom] = useState(false);
@@ -120,6 +122,32 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
       logger.error('[ChatListClient] Load rooms error:', error);
     }
   };
+
+  // 전체 대화 내용에서 검색 (디바운스 적용)
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setSearchMatchingRoomIds([]);
+      setIsSearching(false);
+      return;
+    }
+
+    setIsSearching(true);
+    const debounceTimer = setTimeout(async () => {
+      try {
+        const response = await fetch(`/api/chat/search?q=${encodeURIComponent(searchQuery)}`);
+        if (response.ok) {
+          const data = await response.json();
+          setSearchMatchingRoomIds(data.roomIds || []);
+        }
+      } catch (error) {
+        logger.error('[ChatListClient] Search error:', error);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 300); // 300ms 디바운스
+
+    return () => clearTimeout(debounceTimer);
+  }, [searchQuery]);
 
   // 주문으로부터 채팅방 생성 또는 찾기
   const createRoomFromOrder = async (orderId: string) => {
@@ -468,6 +496,8 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
           selectedRoomId={selectedRoomId}
           activeTab={activeTab}
           searchQuery={searchQuery}
+          searchMatchingRoomIds={searchMatchingRoomIds}
+          isSearching={isSearching}
           isCreatingRoom={isCreatingRoom}
           isMobile={true}
           onSelectRoom={handleSelectRoom}
@@ -488,6 +518,8 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
               selectedRoomId={selectedRoomId}
               activeTab={activeTab}
               searchQuery={searchQuery}
+              searchMatchingRoomIds={searchMatchingRoomIds}
+              isSearching={isSearching}
               isCreatingRoom={isCreatingRoom}
               isMobile={false}
               onSelectRoom={handleSelectRoom}
