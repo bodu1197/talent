@@ -186,26 +186,26 @@ export default function SellerEarningsClient({
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="text-sm md:text-base text-gray-600 mb-2">출금 가능 금액</div>
-            <div className="text-2xl font-bold text-brand-primary">
+            <div className="text-sm text-gray-600 mb-2">출금 가능 금액</div>
+            <div className="text-lg font-bold text-gray-900">
               {earnings?.available_balance?.toLocaleString() || '0'}원
             </div>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="text-sm text-gray-600 mb-2">정산 대기중</div>
-            <div className="text-2xl font-bold text-yellow-600">
+            <div className="text-lg font-bold text-gray-900">
               {earnings?.pending_balance?.toLocaleString() || '0'}원
             </div>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="text-sm text-gray-600 mb-2">출금 완료</div>
-            <div className="text-2xl font-bold text-gray-900">
+            <div className="text-lg font-bold text-gray-900">
               {earnings?.total_withdrawn?.toLocaleString() || '0'}원
             </div>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="text-sm text-gray-600 mb-2">총 수익</div>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-lg font-bold text-gray-900">
               {earnings?.total_earned?.toLocaleString() || '0'}원
             </div>
           </div>
