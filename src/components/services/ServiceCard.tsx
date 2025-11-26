@@ -26,9 +26,16 @@ interface ServiceCardProps {
   readonly position?: number; // 카드의 위치 (광고 통계용)
   readonly categoryId?: string; // 현재 카테고리 ID
   readonly page?: number; // 현재 페이지
+  readonly priority?: boolean; // LCP 최적화를 위한 이미지 우선 로딩
 }
 
-export default function ServiceCard({ service, position, categoryId, page }: ServiceCardProps) {
+export default function ServiceCard({
+  service,
+  position,
+  categoryId,
+  page,
+  priority = false,
+}: ServiceCardProps) {
   const impressionTracked = useRef(false);
 
   // 광고/추천 서비스 여부 (is_advertised 또는 is_promoted)
@@ -92,7 +99,8 @@ export default function ServiceCard({ service, position, categoryId, page }: Ser
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-200"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            loading="lazy"
+            priority={priority}
+            loading={priority ? undefined : 'lazy'}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-100">

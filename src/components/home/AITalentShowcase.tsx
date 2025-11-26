@@ -41,7 +41,7 @@ export default function AITalentShowcase({ services = [] }: Props) {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {/* 실제 AI 서비스 카드 */}
-          {services.map((service) => (
+          {services.map((service, index) => (
             <Link key={service.id} href={`/services/${service.id}`} className="group relative">
               <div
                 className="bg-gray-100 rounded-lg overflow-hidden w-full relative"
@@ -54,7 +54,8 @@ export default function AITalentShowcase({ services = [] }: Props) {
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-200"
                     sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
-                    loading="lazy"
+                    priority={index < 5}
+                    loading={index < 5 ? undefined : 'lazy'}
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gray-100">
