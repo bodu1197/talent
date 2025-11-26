@@ -598,11 +598,11 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
             {/* 전문가 정보 */}
             {service.seller && (
-              <div id="expert" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
-                <h2 className="text-xl font-bold mb-6">전문가 정보</h2>
+              <div id="expert" className="bg-white rounded-xl shadow-sm p-3 lg:p-6 scroll-mt-20">
+                <h2 className="text-xl font-bold mb-4 lg:mb-6">전문가 정보</h2>
 
                 {/* 전문가 카드 */}
-                <div className="border border-gray-200 rounded-lg p-6">
+                <div className="border border-gray-200 rounded-lg p-3 lg:p-6">
                   {/* 상단 알림 배너 (응답 시간) */}
                   <ExpertResponseBanner avgResponseTime={sellerStats.avgResponseTime} />
 
