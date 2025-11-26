@@ -1,4 +1,4 @@
-import { FaLightbulb, FaCheck } from "react-icons/fa";
+import { FaLightbulb, FaCheck } from 'react-icons/fa';
 
 interface ServiceFormData {
   title: string;
@@ -38,15 +38,16 @@ export default function Step3Description({ formData, setFormData }: Props) {
 
       {/* 서비스 상세 설명 */}
       <div>
-        <label htmlFor="service-description" className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="service-description"
+          className="block text-sm font-medium text-gray-700 mb-2"
+        >
           서비스 상세 설명 <span className="text-red-500">*</span>
         </label>
         <textarea
           id="service-description"
           value={formData.description}
-          onChange={(e) =>
-            setFormData({ ...formData, description: e.target.value })
-          }
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           rows={12}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent resize-none"
           placeholder="서비스에 대한 자세한 설명을 입력하세요.
@@ -64,7 +65,7 @@ export default function Step3Description({ formData, setFormData }: Props) {
         <div className="mt-2 flex justify-between text-sm">
           <p className="text-gray-500">최소 100자 이상 작성해주세요</p>
           <p
-            className={`${formData.description.length >= 100 ? "text-green-600" : "text-gray-500"}`}
+            className={`${formData.description.length >= 100 ? 'text-green-600' : 'text-gray-500'}`}
           >
             {formData.description.length} / 최소 100자
           </p>
@@ -81,8 +82,7 @@ export default function Step3Description({ formData, setFormData }: Props) {
           <li className="flex items-start gap-2">
             <FaCheck className="text-green-600 mt-1" />
             <span>
-              <strong>명확한 범위:</strong> 어떤 작업을 해드리는지 구체적으로
-              명시
+              <strong>명확한 범위:</strong> 어떤 작업을 해드리는지 구체적으로 명시
             </span>
           </li>
           <li className="flex items-start gap-2">
@@ -113,10 +113,10 @@ export default function Step3Description({ formData, setFormData }: Props) {
       </div>
 
       {/* 서비스 특징 (선택사항) */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+      <fieldset>
+        <legend className="block text-sm font-medium text-gray-700 mb-2">
           서비스 특징 <span className="text-gray-500 text-xs">(선택사항)</span>
-        </label>
+        </legend>
         <div className="space-y-3">
           <div className="flex items-center gap-3">
             <input
@@ -134,7 +134,9 @@ export default function Step3Description({ formData, setFormData }: Props) {
               }
               className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
             />
-            <label htmlFor="service-commercial-use" className="text-sm text-gray-700">상업적 이용 가능</label>
+            <label htmlFor="service-commercial-use" className="text-sm text-gray-700">
+              상업적 이용 가능
+            </label>
           </div>
           <div className="flex items-center gap-3">
             <input
@@ -152,7 +154,9 @@ export default function Step3Description({ formData, setFormData }: Props) {
               }
               className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
             />
-            <label htmlFor="service-source-files" className="text-sm text-gray-700">원본 파일 제공</label>
+            <label htmlFor="service-source-files" className="text-sm text-gray-700">
+              원본 파일 제공
+            </label>
           </div>
           <div className="flex items-center gap-3">
             <input
@@ -175,7 +179,7 @@ export default function Step3Description({ formData, setFormData }: Props) {
             </label>
           </div>
         </div>
-      </div>
+      </fieldset>
     </div>
   );
 }

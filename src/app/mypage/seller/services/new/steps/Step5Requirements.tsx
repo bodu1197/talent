@@ -357,11 +357,15 @@ export default function Step5Requirements({
 
               {/* 이미지 업로드 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="portfolio-images"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   이미지 업로드{' '}
                   <span className="text-gray-500 text-xs">(첫 이미지가 썸네일이 됩니다)</span>
                 </label>
                 <input
+                  id="portfolio-images"
                   type="file"
                   accept="image/*"
                   multiple
@@ -417,11 +421,15 @@ export default function Step5Requirements({
 
               {/* YouTube URL */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="portfolio-youtube-url"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   YouTube 영상 URL{' '}
                   <span className="text-gray-500 text-xs">(영상이 포트폴리오에 삽입됩니다)</span>
                 </label>
                 <input
+                  id="portfolio-youtube-url"
                   type="url"
                   value={formData.portfolio_data.youtube_url}
                   onChange={(e) => handleYoutubeUrlChange(e.target.value)}
@@ -458,9 +466,15 @@ export default function Step5Requirements({
 
               {/* 태그 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">태그</label>
+                <label
+                  htmlFor="portfolio-tag-input"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  태그
+                </label>
                 <div className="flex gap-2 mb-2">
                   <input
+                    id="portfolio-tag-input"
                     type="text"
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}

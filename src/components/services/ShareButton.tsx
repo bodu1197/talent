@@ -44,22 +44,8 @@ export default function ShareButton({ serviceId, serviceTitle }: ShareButtonProp
       toast.success('링크가 복사되었습니다');
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // 클립보드 API 실패 시 대체 방법
-      const textArea = document.createElement('textarea');
-      textArea.value = url;
-      textArea.style.position = 'fixed';
-      textArea.style.left = '-9999px';
-      document.body.appendChild(textArea);
-      textArea.select();
-      try {
-        document.execCommand('copy');
-        setCopied(true);
-        toast.success('링크가 복사되었습니다');
-        setTimeout(() => setCopied(false), 2000);
-      } catch {
-        toast.error('링크 복사에 실패했습니다');
-      }
-      textArea.remove();
+      // 클립보드 API 실패 (HTTPS가 아니거나 권한 없음)
+      toast.error('링크 복사에 실패했습니다. URL을 수동으로 복사해주세요.');
     }
   };
 

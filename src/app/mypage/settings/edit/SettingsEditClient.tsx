@@ -473,16 +473,13 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-6">알림 설정</h2>
                 <div className="space-y-4">
-                  <label
-                    htmlFor="order-notification"
-                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg cursor-pointer"
-                  >
-                    <span>
+                  <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                    <label htmlFor="order-notification" className="cursor-pointer flex-1">
                       <span className="font-medium text-gray-900 block">주문 알림</span>
                       <span className="text-sm text-gray-600">
                         새 주문이 들어오면 알림을 받습니다
                       </span>
-                    </span>
+                    </label>
                     <input
                       id="order-notification"
                       type="checkbox"
@@ -490,18 +487,15 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                       onChange={(e) => setOrderNotification(e.target.checked)}
                       className="w-5 h-5 text-brand-primary"
                     />
-                  </label>
+                  </div>
 
-                  <label
-                    htmlFor="message-notification"
-                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg cursor-pointer"
-                  >
-                    <span>
+                  <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                    <label htmlFor="message-notification" className="cursor-pointer flex-1">
                       <span className="font-medium text-gray-900 block">메시지 알림</span>
                       <span className="text-sm text-gray-600">
                         새 메시지가 오면 알림을 받습니다
                       </span>
-                    </span>
+                    </label>
                     <input
                       id="message-notification"
                       type="checkbox"
@@ -509,18 +503,15 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                       onChange={(e) => setMessageNotification(e.target.checked)}
                       className="w-5 h-5 text-brand-primary"
                     />
-                  </label>
+                  </div>
 
-                  <label
-                    htmlFor="review-notification"
-                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg cursor-pointer"
-                  >
-                    <span>
+                  <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                    <label htmlFor="review-notification" className="cursor-pointer flex-1">
                       <span className="font-medium text-gray-900 block">리뷰 알림</span>
                       <span className="text-sm text-gray-600">
                         새 리뷰가 등록되면 알림을 받습니다
                       </span>
-                    </span>
+                    </label>
                     <input
                       id="review-notification"
                       type="checkbox"
@@ -528,7 +519,7 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                       onChange={(e) => setReviewNotification(e.target.checked)}
                       className="w-5 h-5 text-brand-primary"
                     />
-                  </label>
+                  </div>
 
                   <button
                     onClick={handleSaveNotifications}

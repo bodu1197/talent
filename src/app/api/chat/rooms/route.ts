@@ -302,8 +302,7 @@ export async function POST(request: NextRequest) {
     }
 
     // user1_id와 user2_id 정렬 (user1_id <= user2_id)
-    const user1_id = user.id < otherUserId ? user.id : otherUserId;
-    const user2_id = user.id < otherUserId ? otherUserId : user.id;
+    const [user1_id, user2_id] = [user.id, otherUserId].sort();
 
     // 기존 채팅방 확인 (user1_id, user2_id, service_id로 확인)
     let query = supabase

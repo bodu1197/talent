@@ -170,11 +170,12 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
       <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">기본 정보</h2>
 
       {/* 카테고리 선택 - 맨 처음으로 이동 */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">카테고리 *</label>
+      <fieldset>
+        <legend className="block text-sm font-medium text-gray-700 mb-2">카테고리 *</legend>
         <div className="space-y-3">
           {/* 1차 카테고리 */}
           <select
+            id="step1-category-level1"
             value={selectedLevel1}
             onChange={(e) => setSelectedLevel1(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0f3460] focus:border-transparent"
@@ -255,7 +256,7 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
             </div>
           )}
         </div>
-      </div>
+      </fieldset>
 
       {/* 서비스 제목 */}
       <div>

@@ -543,11 +543,12 @@ export default function NewServiceClient({ sellerId }: Props) {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">카테고리 *</label>
+              <fieldset>
+                <legend className="block text-sm font-medium text-gray-700 mb-2">카테고리 *</legend>
                 <div className="space-y-3">
                   {/* 1차 카테고리 */}
                   <select
+                    id="category-level1"
                     value={selectedLevel1}
                     onChange={(e) => setSelectedLevel1(e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
@@ -568,6 +569,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                   {/* 2차 카테고리 */}
                   {selectedLevel1 && level2Categories.length > 0 && (
                     <select
+                      id="category-level2"
                       value={selectedLevel2}
                       onChange={(e) => setSelectedLevel2(e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
@@ -586,6 +588,7 @@ export default function NewServiceClient({ sellerId }: Props) {
                   {/* 3차 카테고리 */}
                   {selectedLevel2 && level3Categories.length > 0 && (
                     <select
+                      id="category-level3"
                       value={selectedLevel3}
                       onChange={(e) => setSelectedLevel3(e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
@@ -613,13 +616,17 @@ export default function NewServiceClient({ sellerId }: Props) {
                     </div>
                   )}
                 </div>
-              </div>
+              </fieldset>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="service-description"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   서비스 설명 *
                 </label>
                 <textarea
+                  id="service-description"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={6}
@@ -630,8 +637,14 @@ export default function NewServiceClient({ sellerId }: Props) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">검색 키워드</label>
+                <label
+                  htmlFor="search-keywords"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  검색 키워드
+                </label>
                 <input
+                  id="search-keywords"
                   type="text"
                   maxLength={100}
                   value={formData.searchKeywords}
@@ -668,10 +681,14 @@ export default function NewServiceClient({ sellerId }: Props) {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="service-price"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     가격 (원) *
                   </label>
                   <input
+                    id="service-price"
                     type="number"
                     min="1000"
                     max="10000000"
@@ -692,10 +709,14 @@ export default function NewServiceClient({ sellerId }: Props) {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="delivery-days"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     작업 기간 (일) *
                   </label>
                   <input
+                    id="delivery-days"
                     type="number"
                     min="1"
                     max="365"
