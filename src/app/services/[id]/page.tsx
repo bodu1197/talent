@@ -298,7 +298,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       <ViewTracker serviceId={id} />
 
       {/* 상단 네비게이션 (Breadcrumb) */}
-      <nav className="bg-white border-b mt-16">
+      <nav className="bg-white border-b mt-20">
         <div className="container-1200 px-4 py-4">
           <div className="flex items-center gap-2 text-sm">
             <Link href="/" className="text-gray-500 hover:text-gray-700">
@@ -721,7 +721,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
           {/* 오른쪽: 가격, 안전거래 */}
           <div className="w-full lg:w-[350px] flex-shrink-0">
-            <div className="sticky top-12 space-y-6">
+            <div className="sticky top-20 space-y-6">
               {/* 가격 정보 */}
               <div
                 id="price"
