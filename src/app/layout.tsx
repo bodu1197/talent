@@ -13,9 +13,10 @@ import ConditionalMegaMenuWrapper from '@/components/layout/ConditionalMegaMenuW
 import { PageViewTracker } from '@/components/analytics/PageViewTracker';
 
 // Optimized font loading with next/font
+// 실제 사용되는 weight만 로드하여 preload 경고 방지
 const notoSansKR = Noto_Sans_KR({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
   preload: true,
   fallback: ['system-ui', 'arial'],
