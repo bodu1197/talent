@@ -115,14 +115,13 @@ export default function ChatRoomList({
   onTabChange,
   filterRoom,
 }: ChatRoomListProps) {
-  const tabs: { id: TabType; label: string; showInMobile: boolean }[] = [
-    { id: 'all', label: '전체', showInMobile: true },
-    { id: 'unread', label: '안 읽음', showInMobile: true },
-    { id: 'deal', label: '거래 중', showInMobile: false },
-    { id: 'favorite', label: '즐겨찾기', showInMobile: false },
+  const tabs: { id: TabType; label: string }[] = [
+    { id: 'all', label: '전체' },
+    { id: 'unread', label: '안 읽음' },
+    { id: 'deal', label: '거래 중' },
+    { id: 'favorite', label: '즐겨찾기' },
   ];
 
-  const visibleTabs = tabs.filter((tab) => !isMobile || tab.showInMobile);
   const filteredRooms = rooms.filter((room) => filterRoom(room, activeTab));
 
   const getTabClassName = (tabId: TabType) => {
@@ -138,13 +137,10 @@ export default function ChatRoomList({
 
   return (
     <>
-      {/* 헤더 */}
+      {/* 헤더 - 탭 버튼 */}
       <div className="px-4 py-4 border-b border-gray-200">
-        <h1 className="text-2xl font-bold mb-4">채팅</h1>
-
-        {/* 탭 */}
         <div className={`flex gap-2 ${isMobile ? 'overflow-x-auto' : ''}`}>
-          {visibleTabs.map((tab) => (
+          {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
