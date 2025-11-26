@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function SellerRegistrationGuide() {
   return (
-    <section className="py-8 md:py-16 bg-gradient-to-br from-blue-50 to-indigo-50">
+    <section className="py-4 md:py-16 bg-gradient-to-br from-blue-50 to-indigo-50">
       <div className="container-1200">
         <div className="max-w-6xl mx-auto">
           {/* 제목 */}

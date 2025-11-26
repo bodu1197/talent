@@ -119,7 +119,7 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
   });
 
   return (
-    <section className="py-8 bg-gray-50">
+    <section className="py-4 lg:py-8 bg-gray-50">
       <div className="container-1200">
         <div className="flex justify-between items-center mb-8">
           <div>

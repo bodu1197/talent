@@ -24,7 +24,7 @@ interface Props {
 
 export default function AITalentShowcase({ services = [] }: Props) {
   return (
-    <section className="py-8 bg-white">
+    <section className="py-4 lg:py-8 bg-white">
       <div className="container-1200">
         <div className="flex items-center justify-between mb-8">
           <div>

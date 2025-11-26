@@ -46,7 +46,7 @@ export default async function UserReviews() {
   }
 
   return (
-    <section className="py-8 md:py-16 bg-white">
+    <section className="py-4 md:py-16 bg-white">
       <div className="container-1200">
         {/* 제목 */}
         <div className="text-center mb-6 md:mb-12">

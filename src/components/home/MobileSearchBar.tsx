@@ -16,7 +16,7 @@ export default function MobileSearchBar() {
   };
 
   return (
-    <div className="lg:hidden bg-white pt-2 pb-4 px-3">
+    <div className="lg:hidden bg-white pt-1 pb-2 px-3">
       <form onSubmit={handleSearch} className="relative" autoComplete="off">
         <input
           type="text"

@@ -85,9 +85,8 @@ export default async function CategoryGrid() {
   ];
 
   return (
-    <section className="py-8 bg-white">
+    <section className="pt-2 pb-4 lg:py-8 bg-white">
       <div className="container-1200">
-        <div className="flex items-center justify-between mb-4">{/* Removed h2 title */}</div>
 
         {/* 모바일: 2줄 가로 스크롤 */}
         <div className="lg:hidden">
