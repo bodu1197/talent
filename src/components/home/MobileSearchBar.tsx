@@ -35,7 +35,12 @@ export default function MobileSearchBar() {
         />
         <button
           type="submit"
-          className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-brand-primary transition-colors rounded-full"
+          className="absolute right-3 top-1/2 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-brand-primary transition-colors rounded-full active:scale-100 focus:outline-none isolate"
+          style={{
+            transform: 'translate3d(0, -50%, 0)',
+            backfaceVisibility: 'hidden',
+            willChange: 'transform',
+          }}
           aria-label="검색"
         >
           <FaSearch className="text-base" />
