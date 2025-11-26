@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
@@ -10,15 +9,12 @@ import {
   FaSearch,
   FaHeart,
   FaUser,
-  FaArrowLeft,
-  FaTimes,
   FaRegComments,
 } from 'react-icons/fa';
 
 export default function MobileBottomNav() {
   const pathname = usePathname();
   const { user } = useAuth();
-  const [showSearch, setShowSearch] = useState(false);
   const { unreadCount } = useChatUnreadCount();
 
   const isActive = (path: string) => pathname === path;
@@ -42,14 +38,17 @@ export default function MobileBottomNav() {
           </Link>
 
           {/* 검색 */}
-          <button
-            onClick={() => setShowSearch(true)}
-            className="flex flex-col items-center justify-center space-y-1 text-gray-500 transition-colors active:text-brand-primary"
-            aria-label="검색 열기"
+          <Link
+            href="/search"
+            className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
+              pathname === '/search' ? 'text-brand-primary' : 'text-gray-500'
+            }`}
+            aria-label="검색 페이지로 이동"
+            aria-current={pathname === '/search' ? 'page' : undefined}
           >
             <FaSearch className="text-xl" aria-hidden="true" />
             <span className="text-xs font-medium">검색</span>
-          </button>
+          </Link>
 
           {/* 찜목록 */}
           <Link
@@ -101,74 +100,6 @@ export default function MobileBottomNav() {
           </Link>
         </div>
       </nav>
-
-      {/* 모바일 검색 오버레이 */}
-      {showSearch && (
-        <div className="fixed inset-0 bg-white z-50 lg:hidden">
-          <div className="flex items-center p-4 border-b border-gray-200">
-            <button aria-label="검색 닫기" onClick={() => setShowSearch(false)} className="mr-4">
-              <FaArrowLeft className="text-xl" aria-hidden="true" />
-            </button>
-            <div className="flex-1 relative">
-              <label htmlFor="search-mobile" className="sr-only">
-                서비스 검색
-              </label>
-              <input
-                id="search-mobile"
-                name="search"
-                type="text"
-                placeholder="어떤 재능이 필요하신가요?"
-                className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-full bg-gray-50 focus:bg-white focus:border-gray-300 focus:outline-none transition-colors text-gray-900 text-sm"
-                autoComplete="off"
-                autoFocus
-                aria-label="서비스 검색"
-              />
-              <button aria-label="검색 실행" className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-brand-primary transition-colors rounded-full">
-                <FaSearch className="text-base" aria-hidden="true" />
-              </button>
-            </div>
-          </div>
-
-          <div className="p-4">
-            <h3 className="font-semibold mb-4">인기 검색어</h3>
-            <div className="flex flex-wrap gap-2">
-              {['로고 디자인', 'AI 이미지', '영상 편집', '번역', '블로그 작성', 'PPT 디자인'].map(
-                (keyword) => (
-                  <button
-                    key={keyword}
-                    className="px-3 py-1.5 bg-gray-100 rounded-full text-sm hover:bg-gray-200 hover:text-brand-primary"
-                    onClick={() => {
-                      // 검색 실행
-                      setShowSearch(false);
-                    }}
-                    aria-label={`${keyword} 검색하기`}
-                  >
-                    {keyword}
-                  </button>
-                )
-              )}
-            </div>
-
-            <div className="mt-8">
-              <h3 className="font-semibold mb-4">최근 검색</h3>
-              <ul className="space-y-3">
-                <li className="flex items-center justify-between">
-                  <span className="text-gray-600">웹 개발</span>
-                  <button aria-label="웹 개발 검색 기록 삭제" className="text-gray-400">
-                    <FaTimes className="text-sm" aria-hidden="true" />
-                  </button>
-                </li>
-                <li className="flex items-center justify-between">
-                  <span className="text-gray-600">로고 디자인</span>
-                  <button aria-label="로고 디자인 검색 기록 삭제" className="text-gray-400">
-                    <FaTimes className="text-sm" aria-hidden="true" />
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }

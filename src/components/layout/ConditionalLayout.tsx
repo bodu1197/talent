@@ -21,11 +21,14 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
   // 메인 페이지 확인 (모바일에서 헤더/검색 표시) - 랜딩 페이지도 포함
   const isMainPage = pathname === '/' || pathname === '/landing';
 
+  // 검색 페이지 확인 (모바일에서 자체 UI 사용)
+  const isSearchPage = pathname === '/search';
+
   // mypage 페이지 확인
   const isMypagePage = pathname?.startsWith('/mypage');
 
-  // 서브 페이지 확인 (모바일에서 뒤로가기 헤더 표시)
-  const isSubPage = !hideLayout && !isMainPage && !isMypagePage;
+  // 서브 페이지 확인 (모바일에서 뒤로가기 헤더 표시) - 검색 페이지 제외
+  const isSubPage = !hideLayout && !isMainPage && !isMypagePage && !isSearchPage;
 
   // Admin은 자체 레이아웃을 사용하므로 children만 반환
   if (pathname?.startsWith('/admin')) {
@@ -72,6 +75,7 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
         className={(() => {
           if (isMypagePage) return 'flex-1 pt-[60px] lg:pt-[102px] pb-16 lg:pb-0 w-full max-w-none';
           if (isMainPage) return 'flex-1 pt-[60px] lg:pt-20 pb-16 lg:pb-0';
+          if (isSearchPage) return 'flex-1 pt-0 lg:pt-[102px] pb-16 lg:pb-0';
           return 'flex-1 pt-[60px] lg:pt-[102px] pb-16 lg:pb-0';
         })()}
       >
