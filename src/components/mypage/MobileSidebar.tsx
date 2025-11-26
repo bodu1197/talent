@@ -30,6 +30,7 @@ import {
 
 interface MobileSidebarProps {
   readonly mode: 'buyer' | 'seller' | 'admin';
+  readonly isRegisteredSeller?: boolean;
 }
 
 export default function MobileSidebar({ mode }: MobileSidebarProps) {

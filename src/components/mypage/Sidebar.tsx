@@ -59,6 +59,7 @@ interface SidebarProps {
     readonly name: string;
     readonly profile_image?: string | null;
   } | null;
+  readonly isRegisteredSeller?: boolean;
 }
 
 const sellerNavItems: NavItem[] = [
@@ -244,9 +245,13 @@ const buyerNavItems: NavItem[] = [
   },
 ];
 
-export default function Sidebar({ mode, profileData }: SidebarProps) {
+export default function Sidebar({ mode, profileData, isRegisteredSeller }: SidebarProps) {
   const pathname = usePathname();
-  const navItems = mode === 'seller' ? sellerNavItems : buyerNavItems;
+
+  // 판매자 모드에서 등록 완료 시 "판매자 등록" 메뉴 숨김
+  const navItems = (mode === 'seller' ? sellerNavItems : buyerNavItems).filter(
+    (item) => !(mode === 'seller' && isRegisteredSeller && item.href === '/mypage/seller/register')
+  );
 
   // Initialize with currently active parent items expanded
   const getInitialExpandedItems = () => {
