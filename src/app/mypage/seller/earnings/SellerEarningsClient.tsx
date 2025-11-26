@@ -255,36 +255,40 @@ export default function SellerEarningsClient({
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-900">
+                <th className="px-3 py-3 text-left text-sm font-medium text-gray-900 whitespace-nowrap">
                   날짜
                 </th>
-                <th className="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-900">
+                <th className="px-3 py-3 text-left text-sm font-medium text-gray-900 whitespace-nowrap">
                   구분
                 </th>
-                <th className="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-900">
+                <th className="px-3 py-3 text-left text-sm font-medium text-gray-900 whitespace-nowrap">
                   주문번호
                 </th>
-                <th className="px-6 py-3 text-right text-sm font-medium text-gray-900">금액</th>
-                <th className="px-6 py-3 text-center text-sm font-medium text-gray-900">상태</th>
+                <th className="px-3 py-3 text-right text-sm font-medium text-gray-900 whitespace-nowrap">
+                  금액
+                </th>
+                <th className="px-3 py-3 text-center text-sm font-medium text-gray-900 whitespace-nowrap">
+                  상태
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {transactions.length > 0 ? (
                 transactions.map((tx) => (
                   <tr key={tx.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-xs md:text-sm text-gray-600">
+                    <td className="px-3 py-4 text-sm text-gray-600 whitespace-nowrap">
                       {new Date(tx.updated_at || tx.created_at).toLocaleDateString('ko-KR')}
                     </td>
-                    <td className="px-6 py-4 text-sm md:text-base text-gray-900">
+                    <td className="px-3 py-4 text-sm text-gray-900">
                       {tx.service?.title || '판매 수익'}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-3 py-4 text-sm text-gray-600 whitespace-nowrap">
                       #{tx.order_number || tx.id.slice(0, 8)}
                     </td>
-                    <td className="px-6 py-4 text-sm md:text-base font-medium text-right text-green-600">
+                    <td className="px-3 py-4 text-sm font-medium text-right text-green-600 whitespace-nowrap">
                       +{(tx.total_amount || 0).toLocaleString()}원
                     </td>
-                    <td className="px-6 py-4 text-center">
+                    <td className="px-3 py-4 text-center whitespace-nowrap">
                       <span
                         className={`px-2 py-1 rounded text-xs font-medium ${getStatusClass(tx.status)}`}
                       >
@@ -295,7 +299,7 @@ export default function SellerEarningsClient({
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                  <td colSpan={5} className="px-3 py-12 text-center text-gray-500">
                     <FaReceipt className="text-4xl mb-4 text-gray-300 mx-auto" />
                     <p>정산 내역이 없습니다</p>
                   </td>
