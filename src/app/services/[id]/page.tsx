@@ -898,7 +898,6 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
           serviceId={id}
           sellerId={service.seller.id}
           sellerUserId={service.seller.user_id}
-          servicePrice={service.price || 0}
         />
       )}
     </div>

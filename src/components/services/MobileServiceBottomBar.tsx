@@ -10,7 +10,6 @@ interface MobileServiceBottomBarProps {
   serviceId: string;
   sellerId: string;
   sellerUserId: string;
-  servicePrice: number;
   initialIsFavorite?: boolean;
 }
 
@@ -18,7 +17,6 @@ export default function MobileServiceBottomBar({
   serviceId,
   sellerId,
   sellerUserId,
-  servicePrice,
   initialIsFavorite = false,
 }: MobileServiceBottomBarProps) {
   const router = useRouter();
@@ -89,14 +87,14 @@ export default function MobileServiceBottomBar({
   };
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 z-50 safe-area-bottom">
-      <div className="flex items-center gap-3">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
+      <div className="flex items-center">
         {/* 찜 버튼 */}
         <button
           type="button"
           onClick={handleFavorite}
           disabled={isLoading}
-          className="flex flex-col items-center justify-center w-14 h-12 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
+          className="flex flex-col items-center justify-center w-14 h-12 border-r border-gray-200 hover:bg-gray-50 transition-colors"
           aria-label={isFavorite ? '찜 해제' : '찜하기'}
         >
           {isFavorite ? (
@@ -110,7 +108,7 @@ export default function MobileServiceBottomBar({
         <button
           type="button"
           onClick={handleContact}
-          className="flex items-center justify-center gap-2 flex-1 h-12 rounded-lg border border-brand-primary text-brand-primary font-semibold hover:bg-brand-primary/5 transition-colors"
+          className="flex items-center justify-center gap-2 flex-1 h-12 border-r border-gray-200 text-brand-primary font-semibold hover:bg-brand-primary/5 transition-colors"
         >
           <FaCommentDots />
           문의하기
@@ -120,9 +118,9 @@ export default function MobileServiceBottomBar({
         <button
           type="button"
           onClick={handlePurchase}
-          className="flex items-center justify-center flex-1 h-12 rounded-lg bg-brand-primary text-white font-semibold hover:bg-brand-dark transition-colors"
+          className="flex items-center justify-center flex-1 h-12 bg-brand-primary text-white font-semibold hover:bg-brand-dark transition-colors"
         >
-          {servicePrice.toLocaleString()}원 구매하기
+          구매하기
         </button>
       </div>
     </div>
