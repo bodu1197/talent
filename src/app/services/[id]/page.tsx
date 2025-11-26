@@ -11,6 +11,7 @@ import PortfolioGrid from '@/components/services/PortfolioGrid';
 import ExpertResponseBanner from '@/components/services/ExpertResponseBanner';
 import ContactSellerButton from '@/components/services/ContactSellerButton';
 import PurchaseButton from '@/components/services/PurchaseButton';
+import MobileServiceHeader from '@/components/services/MobileServiceHeader';
 import { logger } from '@/lib/logger';
 import { getCategoryPath } from '@/lib/categories';
 import {
@@ -297,8 +298,32 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       {/* 조회수 추적 */}
       <ViewTracker serviceId={id} />
 
-      {/* 상단 네비게이션 (Breadcrumb) */}
-      <nav className="bg-white border-b mt-20">
+      {/* 모바일 전용: 풀 넓이 썸네일 + 헤더 오버레이 */}
+      <div className="lg:hidden relative w-full" style={{ aspectRatio: '16/10' }}>
+        {service.thumbnail_url ? (
+          <Image
+            src={service.thumbnail_url}
+            alt={service.title}
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-200 text-gray-400">
+            <FaImage className="text-[60px]" />
+          </div>
+        )}
+        {/* 모바일 헤더 오버레이 */}
+        <MobileServiceHeader
+          serviceId={id}
+          serviceTitle={service.title}
+          sellerPhone={service.seller?.phone}
+        />
+      </div>
+
+      {/* PC 전용: 상단 네비게이션 (Breadcrumb) */}
+      <nav className="hidden lg:block bg-white border-b mt-20">
         <div className="container-1200 px-4 py-4">
           <div className="flex items-center gap-2 text-sm">
             <Link href="/" className="text-gray-500 hover:text-gray-700">
@@ -319,9 +344,9 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         </div>
       </nav>
 
-      {/* 제목 및 판매자 프로필 영역 - 전체 가로 배경 */}
+      {/* PC 전용: 제목 및 판매자 프로필 영역 - 전체 가로 배경 */}
       <div
-        className="w-full"
+        className="hidden lg:block w-full"
         style={{
           background: 'radial-gradient(ellipse at center, #a7f3d0 0%, #d1fae5 50%, #ecfdf5 100%)',
         }}
@@ -478,8 +503,69 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         </div>
       </div>
 
+      {/* 모바일 전용: 제목 및 정보 영역 */}
+      <div className="lg:hidden bg-white px-4 py-4">
+        {/* 제목 */}
+        <h1 className="text-lg font-bold text-gray-900 mb-3">{service.title}</h1>
+
+        {/* 가격 */}
+        <div className="text-xl font-bold text-brand-primary mb-3">
+          {service.price?.toLocaleString() || 0}원
+        </div>
+
+        {/* 통계 */}
+        <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
+          <div className="flex items-center gap-1">
+            <FaStar className="text-yellow-400" />
+            <span className="font-medium">{averageRating}</span>
+            <span>({reviewCount})</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <FaHeart className="text-red-400" />
+            <span>{service.wishlist_count || 0}</span>
+          </div>
+        </div>
+
+        {/* 판매자 정보 */}
+        {service.seller && (
+          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+            <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden flex-shrink-0 relative">
+              {service.seller?.profile_image ? (
+                <Image
+                  src={service.seller.profile_image}
+                  alt={service.seller?.display_name || '판매자'}
+                  fill
+                  className="object-cover"
+                  sizes="48px"
+                  loading="lazy"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-gray-400">
+                  <FaUser className="text-lg" />
+                </div>
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="font-semibold text-gray-900 truncate">
+                {service.seller?.display_name || service.seller?.business_name}
+              </div>
+              <div className="text-xs text-gray-500">
+                {service.delivery_days || 0}일 이내 완료 · 수정{' '}
+                {service.revision_count === 999 ? '무제한' : `${service.revision_count || 0}회`}
+              </div>
+            </div>
+            <Link
+              href={`/experts/${service.seller.id}`}
+              className="px-3 py-1.5 text-xs border border-gray-300 rounded-lg hover:bg-gray-100"
+            >
+              프로필
+            </Link>
+          </div>
+        )}
+      </div>
+
       {/* 메인 컨텐츠 영역 */}
-      <div className="container-1200 px-4 pb-8 pt-5">
+      <div className="container-1200 px-4 pb-8 pt-5 lg:pt-5">
         <div className="flex flex-col lg:flex-row gap-5">
           {/* 왼쪽: 서비스 설명 */}
           <div className="flex-1 min-w-0 space-y-8">

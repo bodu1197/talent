@@ -24,11 +24,15 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
   // 검색 페이지 확인 (모바일에서 자체 UI 사용)
   const isSearchPage = pathname === '/search';
 
+  // 서비스 상세 페이지 확인 (모바일에서 헤더/푸터/하단탭 숨기기)
+  const isServiceDetailPage = pathname?.startsWith('/services/') && pathname !== '/services';
+
   // mypage 페이지 확인
   const isMypagePage = pathname?.startsWith('/mypage');
 
-  // 서브 페이지 확인 (모바일에서 뒤로가기 헤더 표시) - 검색 페이지 제외
-  const isSubPage = !hideLayout && !isMainPage && !isMypagePage && !isSearchPage;
+  // 서브 페이지 확인 (모바일에서 뒤로가기 헤더 표시) - 검색 페이지, 서비스 상세 페이지 제외
+  const isSubPage =
+    !hideLayout && !isMainPage && !isMypagePage && !isSearchPage && !isServiceDetailPage;
 
   // Admin은 자체 레이아웃을 사용하므로 children만 반환
   if (pathname?.startsWith('/admin')) {
@@ -76,6 +80,7 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
           if (isMypagePage) return 'flex-1 pt-[60px] lg:pt-[102px] pb-16 lg:pb-0 w-full max-w-none';
           if (isMainPage) return 'flex-1 pt-[60px] lg:pt-20 pb-16 lg:pb-0';
           if (isSearchPage) return 'flex-1 pt-0 lg:pt-[102px] pb-16 lg:pb-0';
+          if (isServiceDetailPage) return 'flex-1 pt-0 lg:pt-[102px] pb-0 lg:pb-0';
           return 'flex-1 pt-[60px] lg:pt-[102px] pb-16 lg:pb-0';
         })()}
       >
@@ -93,7 +98,8 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
           <Footer />
         </div>
       )}
-      <MobileBottomNav />
+      {/* 모바일 하단 네비: 서비스 상세 페이지에서는 숨김 */}
+      {!isServiceDetailPage && <MobileBottomNav />}
     </>
   );
 }
