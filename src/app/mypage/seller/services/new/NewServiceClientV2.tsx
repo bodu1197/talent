@@ -15,24 +15,15 @@ import Step3Description from './steps/Step3Description';
 import Step4Images from './steps/Step4Images';
 import Step5Requirements from './steps/Step5Requirements';
 
-interface Category {
-  id: string;
-  name: string;
-  slug: string;
-  level: number;
-  parent_id: string | null;
-}
-
 interface Props {
   readonly sellerId: string;
-  readonly categories: Category[];
   readonly profileData?: {
     name: string;
     profile_image?: string | null;
   } | null;
 }
 
-export default function NewServiceClientV2({ sellerId, categories, profileData }: Props) {
+export default function NewServiceClientV2({ sellerId, profileData }: Props) {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -323,11 +314,7 @@ export default function NewServiceClientV2({ sellerId, categories, profileData }
             <div className="bg-white rounded-lg shadow p-6">
               {currentStep === 1 && (
                 <div className="space-y-6">
-                  <Step1BasicInfo
-                    formData={formData}
-                    setFormData={setFormData}
-                    categories={categories}
-                  />
+                  <Step1BasicInfo formData={formData} setFormData={setFormData} />
                   <div className="border-t border-gray-200 pt-6">
                     <Step3Description formData={formData} setFormData={setFormData} />
                   </div>

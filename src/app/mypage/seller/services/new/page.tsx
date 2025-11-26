@@ -1,13 +1,15 @@
-import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
-import NewServiceClientV2 from './NewServiceClientV2'
+import { redirect } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server';
+import NewServiceClientV2 from './NewServiceClientV2';
 
 export default async function NewServicePage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/auth/login')
+    redirect('/auth/login');
   }
 
   // Get seller info
@@ -15,10 +17,10 @@ export default async function NewServicePage() {
     .from('sellers')
     .select('id')
     .eq('user_id', user.id)
-    .maybeSingle()
+    .maybeSingle();
 
   if (!seller) {
-    redirect('/mypage/seller/register')
+    redirect('/mypage/seller/register');
   }
 
   // Get profile data
@@ -26,14 +28,7 @@ export default async function NewServicePage() {
     .from('profiles')
     .select('name, profile_image')
     .eq('user_id', user.id)
-    .maybeSingle()
+    .maybeSingle();
 
-  // Load categories
-  const { data: categories } = await supabase
-    .from('categories')
-    .select('*')
-    .order('level', { ascending: true })
-    .order('name', { ascending: true })
-
-  return <NewServiceClientV2 sellerId={seller.id} categories={categories || []} profileData={profile} />
+  return <NewServiceClientV2 sellerId={seller.id} profileData={profile} />;
 }
