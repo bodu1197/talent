@@ -22,8 +22,8 @@ export default function MobileBottomNav() {
   return (
     <>
       {/* 모바일 하단 네비게이션 - 모바일에서만 표시 */}
-      <nav className="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-200 lg:hidden z-50 shadow-lg pb-[env(safe-area-inset-bottom)]">
-        <div className="grid grid-cols-5 h-16 max-w-full mx-auto">
+      <nav className="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-200 lg:hidden z-[9999] shadow-lg pb-[env(safe-area-inset-bottom)]" style={{ touchAction: 'manipulation' }}>
+        <div className="grid grid-cols-5 h-16 max-w-full mx-auto" style={{ touchAction: 'manipulation' }}>
           {/* 홈 */}
           <Link
             href="/"
