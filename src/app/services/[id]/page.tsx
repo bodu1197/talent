@@ -910,10 +910,21 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
       {/* 이 전문가의 다른 서비스예요 */}
       {otherServices && otherServices.length > 0 && (
-        <div className="bg-white py-12">
+        <div className="bg-white py-6 lg:py-12">
           <div className="container-1200 px-4">
-            <h2 className="text-2xl font-bold mb-6">이 전문가의 다른 서비스예요</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <h2 className="text-lg lg:text-2xl font-bold mb-4 lg:mb-6">
+              이 전문가의 다른 서비스예요
+            </h2>
+            {/* 모바일: 가로 스크롤 */}
+            <div className="lg:hidden flex gap-3 overflow-x-auto scrollbar-hide -mx-4 px-4 pb-2">
+              {otherServices.map((service) => (
+                <div key={service.id} className="flex-shrink-0 w-40">
+                  <ServiceCard service={service} />
+                </div>
+              ))}
+            </div>
+            {/* PC: 그리드 */}
+            <div className="hidden lg:grid grid-cols-5 gap-4">
               {otherServices.map((service) => (
                 <ServiceCard key={service.id} service={service} />
               ))}
@@ -924,10 +935,19 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
       {/* 돌파구가 추천 서비스 */}
       {recommendedServices && recommendedServices.length > 0 && (
-        <div className="bg-gray-50 py-12 pb-24 lg:pb-12">
+        <div className="bg-gray-50 py-6 lg:py-12 pb-20 lg:pb-12">
           <div className="container-1200 px-4">
-            <h2 className="text-2xl font-bold mb-6">돌파구가 추천 서비스</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <h2 className="text-lg lg:text-2xl font-bold mb-4 lg:mb-6">돌파구가 추천 서비스</h2>
+            {/* 모바일: 가로 스크롤 */}
+            <div className="lg:hidden flex gap-3 overflow-x-auto scrollbar-hide -mx-4 px-4 pb-2">
+              {recommendedServices.map((service) => (
+                <div key={service.id} className="flex-shrink-0 w-40">
+                  <ServiceCard service={service} />
+                </div>
+              ))}
+            </div>
+            {/* PC: 그리드 */}
+            <div className="hidden lg:grid grid-cols-5 gap-4">
               {recommendedServices.map((service) => (
                 <ServiceCard key={service.id} service={service} />
               ))}
