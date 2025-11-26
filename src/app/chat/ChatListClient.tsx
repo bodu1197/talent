@@ -540,6 +540,7 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
               selectedFile={selectedFile}
               isLoading={isLoading}
               isUploading={isUploading}
+              isSeller={selectedRoom?.seller_id !== null}
               onSendMessage={sendMessage}
               onMessageChange={setNewMessage}
               onFileSelect={handleFileSelect}
