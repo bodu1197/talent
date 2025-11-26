@@ -2,7 +2,7 @@
 
 import ProfileImage from '@/components/common/ProfileImage';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
 import ChatNotificationBadge from '@/components/chat/ChatNotificationBadge';
 import NotificationBell from '@/components/notifications/NotificationBell';
@@ -22,7 +22,11 @@ import {
 export default function Header() {
   const { user, profile, loading, signOut } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState('');
+
+  // 메인 페이지에서는 헤더 검색창 숨김 (하단에 별도 검색 섹션 있음)
+  const isHomePage = pathname === '/';
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,8 +65,8 @@ export default function Header() {
             </div>
             <span className="text-xl font-bold">돌파구</span>
           </Link>
-          {/* 검색창 - PC에서만 표시 */}{' '}
-          <div className="hidden lg:block flex-1 max-w-md">
+          {/* 검색창 - PC에서만 표시 (메인 페이지 제외) */}
+          <div className={`flex-1 max-w-md ${isHomePage ? 'hidden' : 'hidden lg:block'}`}>
             {' '}
             <form onSubmit={handleSearch} className="relative" autoComplete="off">
               {' '}
