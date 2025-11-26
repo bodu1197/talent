@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import ViewTracker from '@/components/services/ViewTracker';
 import FavoriteButton from '@/components/services/FavoriteButton';
+import ShareButton from '@/components/services/ShareButton';
 import PortfolioGrid from '@/components/services/PortfolioGrid';
 import ExpertResponseBanner from '@/components/services/ExpertResponseBanner';
 import ContactSellerButton from '@/components/services/ContactSellerButton';
@@ -18,7 +19,6 @@ import {
   FaUser,
   FaCrown,
   FaReply,
-  FaShare,
   FaShieldAlt,
   FaImage,
   FaRegComment,
@@ -757,10 +757,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
                   <div className="flex flex-col gap-2 mt-3">
                     <FavoriteButton serviceId={id} />
-                    <button className="w-full py-3 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center justify-center gap-2">
-                      <FaShare />
-                      <span>공유</span>
-                    </button>
+                    <ShareButton serviceId={id} serviceTitle={service.title} />
                   </div>
                 </div>
               </div>
