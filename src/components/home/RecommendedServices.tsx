@@ -119,28 +119,16 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
   });
 
   return (
-    <section className="py-6 md:py-8 bg-gray-50">
+    <section className="py-8 bg-gray-50">
       <div className="container-1200">
-        <div className="flex justify-between items-center mb-4 md:mb-8">
+        <div className="flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-base md:text-xl font-bold mb-1 md:mb-2">추천 서비스</h2>
-            <p className="text-xs md:text-sm text-gray-600">
-              믿을 수 있는 검증된 전문가들의 서비스
-            </p>
+            <h2 className="text-mobile-lg lg:text-xl font-bold mb-2">추천 서비스</h2>
+            <p className="text-mobile-md text-gray-600">믿을 수 있는 검증된 전문가들의 서비스</p>
           </div>
         </div>
 
-        {/* 모바일: 가로 스크롤 */}
-        <div className="md:hidden flex gap-3 overflow-x-auto pb-4 scrollbar-hide -mx-3 px-3 snap-x snap-mandatory">
-          {recommendedServices.map((service) => (
-            <div key={service.id} className="flex-shrink-0 w-[160px] snap-start">
-              <ServiceCard service={service} />
-            </div>
-          ))}
-        </div>
-
-        {/* PC: 그리드 */}
-        <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {recommendedServices.map((service) => (
             <ServiceCard key={service.id} service={service} />
           ))}
