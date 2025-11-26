@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface ReviewData {
   id: string;
@@ -60,9 +61,10 @@ export default async function UserReviews() {
         {/* 모바일: 가로 스크롤 */}
         <div className="md:hidden flex gap-3 overflow-x-auto pb-4 scrollbar-hide -mx-3 px-3 snap-x snap-mandatory">
           {reviewData.map((review) => (
-            <div
+            <Link
               key={review.id}
-              className="bg-gray-50 rounded-xl p-4 flex-shrink-0 w-[260px] snap-start"
+              href={review.services ? `/services/${review.services.id}` : '#'}
+              className="bg-gray-50 rounded-xl p-4 flex-shrink-0 w-[260px] snap-start block"
             >
               {/* 별점 */}
               <div className="flex items-center mb-3">
@@ -129,16 +131,17 @@ export default async function UserReviews() {
                   </p>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
         {/* PC: 리뷰 그리드 */}
         <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {reviewData.map((review) => (
-            <div
+            <Link
               key={review.id}
-              className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow"
+              href={review.services ? `/services/${review.services.id}` : '#'}
+              className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow block"
             >
               {/* 별점 */}
               <div className="flex items-center mb-4">
@@ -205,7 +208,7 @@ export default async function UserReviews() {
                   </p>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
