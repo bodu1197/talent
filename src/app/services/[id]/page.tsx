@@ -182,36 +182,38 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
   const { id } = await params;
   const supabase = await createClient();
 
-  // 현재 로그인한 사용자 확인
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const { data: service, error } = await supabase
-    .from('services')
-    .select(
+  // 1단계: 사용자 정보와 서비스 정보를 병렬로 조회
+  const [userResult, serviceResult] = await Promise.all([
+    supabase.auth.getUser(),
+    supabase
+      .from('services')
+      .select(
+        `
+        *,
+        seller:seller_profiles(
+          id,
+          business_name,
+          display_name,
+          profile_image,
+          contact_hours,
+          tax_invoice_available,
+          is_business,
+          user_id,
+          bio,
+          phone,
+          created_at
+        ),
+        service_categories(
+          category:categories(id, name, slug, level)
+        )
       `
-      *,
-      seller:seller_profiles(
-        id,
-        business_name,
-        display_name,
-        profile_image,
-        contact_hours,
-        tax_invoice_available,
-        is_business,
-        user_id,
-        bio,
-        phone,
-        created_at
-      ),
-      service_categories(
-        category:categories(id, name, slug, level)
       )
-    `
-    )
-    .eq('id', id)
-    .single();
+      .eq('id', id)
+      .single(),
+  ]);
+
+  const user = userResult.data?.user;
+  const { data: service, error } = serviceResult;
 
   if (error) {
     logger.error('Service fetch error:', error);
@@ -222,35 +224,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
     notFound();
   }
 
-  // 이 서비스와 연결된 포트폴리오 조회 (portfolio_services 중간 테이블 사용)
-  const linkedPortfolios = await fetchLinkedPortfolios(supabase, id);
-
-  // seller_profiles 뷰에서 이미 display_name과 profile_image를 포함한 모든 정보를 가져왔으므로
-  // 추가 조회가 필요 없음
-
-  // 이 서비스에 대한 리뷰 조회
-  const { data: serviceReviews } = await supabase
-    .from('reviews')
-    .select(
-      `
-      id,
-      rating,
-      comment,
-      created_at,
-      buyer:users!buyer_id(id, name, profile_image),
-      seller_reply,
-      seller_reply_at
-    `
-    )
-    .eq('service_id', id)
-    .eq('is_visible', true)
-    .order('created_at', { ascending: false });
-
-  // seller의 통계 정보 조회
-  const sellerStats = service?.seller
-    ? await fetchSellerStats(supabase, service.seller)
-    : { totalOrders: 0, satisfactionRate: 0, avgResponseTime: '10분 이내' };
-
+  // 카테고리 정보 추출 (병렬 쿼리에 필요)
   interface ServiceCategory {
     category: {
       id: string;
@@ -265,19 +239,60 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
   const categories: CategoryInfo[] =
     service.service_categories?.map((sc: ServiceCategory) => sc.category) || [];
 
-  // 카테고리 경로 가져오기 (1차 > 2차 > 3차)
-  let categoryPath: Array<{ id: string; name: string; slug: string }> = [];
-  if (categories.length > 0) {
-    // ⭐ 수정: 레벨이 가장 높은 카테고리(3차 > 2차 > 1차)를 찾아서 사용
-    // 이전에는 [1차, 2차, 3차]가 모두 저장되어 categories[0]이 1차였음
-    const deepestCategory = categories.reduce((deepest: CategoryInfo, cat: CategoryInfo) => {
-      const deepestLevel = deepest?.level || 0;
-      const catLevel = cat?.level || 0;
-      return catLevel > deepestLevel ? cat : deepest;
-    }, categories[0]);
+  const deepestCategory = categories.reduce((deepest: CategoryInfo | null, cat: CategoryInfo) => {
+    const deepestLevel = deepest?.level || 0;
+    const catLevel = cat?.level || 0;
+    return catLevel > deepestLevel ? cat : deepest;
+  }, categories[0] || null);
 
-    categoryPath = await getCategoryPath(deepestCategory.id);
-  }
+  // 2단계: 모든 추가 데이터를 병렬로 조회
+  const [
+    linkedPortfolios,
+    reviewsResult,
+    sellerStats,
+    categoryPath,
+    otherServices,
+    recommendedServices,
+  ] = await Promise.all([
+    // 포트폴리오 조회
+    fetchLinkedPortfolios(supabase, id),
+
+    // 리뷰 조회
+    supabase
+      .from('reviews')
+      .select(
+        `
+        id,
+        rating,
+        comment,
+        created_at,
+        buyer:users!buyer_id(id, name, profile_image),
+        seller_reply,
+        seller_reply_at
+      `
+      )
+      .eq('service_id', id)
+      .eq('is_visible', true)
+      .order('created_at', { ascending: false }),
+
+    // 판매자 통계 조회
+    service?.seller
+      ? fetchSellerStats(supabase, service.seller)
+      : Promise.resolve({ totalOrders: 0, satisfactionRate: 0, avgResponseTime: '10분 이내' }),
+
+    // 카테고리 경로 조회
+    deepestCategory ? getCategoryPath(deepestCategory.id) : Promise.resolve([]),
+
+    // 판매자의 다른 서비스 조회
+    getSellerOtherServices(service.seller.id, service.id, 5),
+
+    // 같은 카테고리 추천 서비스 조회
+    deepestCategory
+      ? getRecommendedServicesByCategory(deepestCategory.id, service.id, 10)
+      : Promise.resolve([]),
+  ]);
+
+  const serviceReviews = reviewsResult.data;
 
   // 실제 리뷰 데이터로 평균 별점 계산
   const averageRating =
@@ -286,14 +301,6 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       : '0.0';
   const reviewCount = serviceReviews?.length || 0;
 
-  // 판매자의 다른 서비스 조회 (현재 서비스 제외, 5개)
-  const otherServices = await getSellerOtherServices(service.seller.id, service.id, 5);
-
-  // 같은 카테고리의 추천 서비스 조회 (현재 서비스 제외, 10개, 광고 우선 랜덤)
-  const deepestCategory = categories.at(-1);
-  const recommendedServices = deepestCategory
-    ? await getRecommendedServicesByCategory(deepestCategory.id, service.id, 10)
-    : [];
   const categoryName = deepestCategory?.name || '관련';
 
   return (
