@@ -33,7 +33,7 @@ export default function Step2Pricing({ formData, setFormData }: Props) {
   const formatPrice = (value: string) => {
     const number = value.replaceAll(/[^\d]/g, '');
     // toLocaleString 사용으로 ReDoS 취약점 방지
-    const numValue = Number.Number.parseInt(number, 10);
+    const numValue = Number.parseInt(number, 10);
     return Number.isNaN(numValue) ? '0' : numValue.toLocaleString('ko-KR');
   };
 
