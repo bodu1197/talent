@@ -99,7 +99,7 @@ const bgColors = [
 ];
 
 // 생활서비스 카테고리 slugs
-const LIFE_SERVICE_SLUGS = ['errands', 'beauty-fashion', 'home-repair', 'living-services'];
+const LIFE_SERVICE_SLUGS = ['errands', 'beauty-fashion', 'living-services'];
 
 export default function MobileSearchContent({ categories }: MobileSearchContentProps) {
   const router = useRouter();
