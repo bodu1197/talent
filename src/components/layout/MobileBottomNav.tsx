@@ -87,17 +87,17 @@ export default function MobileBottomNav() {
             <span className="text-xs font-medium">메시지</span>
           </Link>
 
-          {/* 마이페이지 */}
+          {/* 마이페이지 / 로그인 */}
           <Link
             href={user ? '/mypage/buyer/dashboard' : '/auth/login'}
             className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
-              pathname.startsWith('/mypage') ? 'text-brand-primary' : 'text-gray-500'
+              pathname.startsWith('/mypage') || pathname === '/auth/login' ? 'text-brand-primary' : 'text-gray-500'
             }`}
-            aria-label="마이페이지로 이동"
+            aria-label={user ? '마이페이지로 이동' : '로그인 페이지로 이동'}
             aria-current={pathname.startsWith('/mypage') ? 'page' : undefined}
           >
             <FaUser className="text-xl" aria-hidden="true" />
-            <span className="text-xs font-medium">마이페이지</span>
+            <span className="text-xs font-medium">{user ? '마이페이지' : '로그인'}</span>
           </Link>
         </div>
       </nav>
