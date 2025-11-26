@@ -199,6 +199,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         profile_image,
         contact_hours,
         tax_invoice_available,
+        is_business,
         user_id,
         bio,
         phone,
@@ -647,11 +648,21 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                         <p className="text-sm text-gray-600">
                           평균 응답 시간: {sellerStats.avgResponseTime}
                         </p>
-                        <div className="mt-2 flex gap-2">
+                        {/* PC: 인라인 버튼 */}
+                        <div className="hidden lg:flex mt-2 gap-2">
                           <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
                             결제 전 전화상담 제공
                           </span>
                           <button className="text-xs px-2 py-1 border border-gray-300 text-gray-700 rounded hover:bg-gray-50">
+                            연락처 보기
+                          </button>
+                        </div>
+                        {/* 모바일: 전체 너비 버튼 */}
+                        <div className="lg:hidden mt-3 flex gap-2">
+                          <span className="flex-1 text-center text-xs px-2 py-2 bg-gray-100 text-gray-700 rounded">
+                            결제 전 전화상담 제공
+                          </span>
+                          <button className="flex-1 text-xs px-2 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50">
                             연락처 보기
                           </button>
                         </div>
@@ -674,12 +685,16 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       </div>
                       <div className="text-right">
                         <span className="text-gray-500">회원구분</span>
-                        <span className="ml-2 font-bold text-gray-900">기업회원</span>
+                        <span className="ml-2 font-bold text-gray-900">
+                          {service.seller?.is_business ? '기업회원' : '개인회원'}
+                        </span>
                       </div>
                       <div className="text-right">
                         <span className="text-gray-500">세금계산서</span>
                         <span className="ml-2 font-bold text-gray-900">
-                          {service.seller?.tax_invoice_available ? '발행가능' : '불가능'}
+                          {service.seller?.is_business || service.seller?.tax_invoice_available
+                            ? '발행가능'
+                            : '불가능'}
                         </span>
                       </div>
                     </div>
@@ -701,12 +716,16 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                     </div>
                     <div className="text-center">
                       <div className="text-xs text-gray-500 mb-1">회원구분</div>
-                      <div className="text-sm font-bold text-gray-900">기업</div>
+                      <div className="text-sm font-bold text-gray-900">
+                        {service.seller?.is_business ? '기업' : '개인'}
+                      </div>
                     </div>
                     <div className="text-center">
                       <div className="text-xs text-gray-500 mb-1">세금계산서</div>
                       <div className="text-sm font-bold text-gray-900">
-                        {service.seller?.tax_invoice_available ? '가능' : '불가'}
+                        {service.seller?.is_business || service.seller?.tax_invoice_available
+                          ? '가능'
+                          : '불가'}
                       </div>
                     </div>
                   </div>
