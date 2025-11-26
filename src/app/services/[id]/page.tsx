@@ -806,8 +806,8 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             </div>
           </div>
 
-          {/* 오른쪽: 가격, 안전거래 */}
-          <div className="w-full lg:w-[350px] flex-shrink-0">
+          {/* 오른쪽: 가격, 안전거래 (모바일에서 숨김 - 하단바로 이동) */}
+          <div className="hidden lg:block w-full lg:w-[350px] flex-shrink-0">
             <div className="sticky top-20 space-y-6">
               {/* 가격 정보 */}
               <div
