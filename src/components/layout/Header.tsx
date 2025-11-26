@@ -101,34 +101,23 @@ export default function Header() {
               </button>{' '}
             </form>{' '}
           </div>
-          {/* 모바일 버전 */}
-          <div className="lg:hidden flex items-center space-x-2">
-            {user ? (
-              <>
-                <NotificationBell />
-                <Link
-                  href={getMypageUrl()}
-                  className="flex items-center space-x-2"
-                  aria-label="마이페이지로 이동"
-                >
-                  <ProfileImage
-                    src={profile?.profile_image}
-                    alt={profile?.name || '사용자 프로필'}
-                    size={32}
-                  />
-                </Link>
-              </>
-            ) : (
-              !loading && (
-                <Link
-                  href="/auth/login"
-                  className="px-3 py-1.5 bg-brand-primary text-white rounded-lg text-sm font-medium"
-                >
-                  로그인
-                </Link>
-              )
-            )}
-          </div>
+          {/* 모바일 버전 - 로그인 사용자만 표시 */}
+          {user && (
+            <div className="lg:hidden flex items-center space-x-2">
+              <NotificationBell />
+              <Link
+                href={getMypageUrl()}
+                className="flex items-center space-x-2"
+                aria-label="마이페이지로 이동"
+              >
+                <ProfileImage
+                  src={profile?.profile_image}
+                  alt={profile?.name || '사용자 프로필'}
+                  size={32}
+                />
+              </Link>
+            </div>
+          )}
           {/* PC 버전: 네비게이션 메뉴 */}
           <nav className="hidden lg:flex items-center space-x-6">
             {user ? (
