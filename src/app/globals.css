@@ -83,7 +83,6 @@ body {
   margin-right: auto;
   padding-left: 16px;
   padding-right: 16px;
-  overflow-x: hidden;
 }
 
 @media (max-width: 640px) {
