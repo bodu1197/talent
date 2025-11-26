@@ -130,7 +130,7 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {recommendedServices.map((service, index) => (
-            <ServiceCard key={service.id} service={service} priority={index < 5} />
+            <ServiceCard key={service.id} service={service} priority={index < 15} />
           ))}
         </div>
       </div>
