@@ -577,8 +577,10 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
           <div className="flex-1 min-w-0 space-y-8">
             {/* 포트폴리오 */}
             {linkedPortfolios && linkedPortfolios.length > 0 && (
-              <div id="portfolio" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
-                <h2 className="text-xl font-bold mb-6">포트폴리오 ({linkedPortfolios.length})</h2>
+              <div id="portfolio" className="bg-white rounded-xl shadow-sm p-3 lg:p-6 scroll-mt-20">
+                <h2 className="text-xl font-bold mb-4 lg:mb-6">
+                  포트폴리오 ({linkedPortfolios.length})
+                </h2>
                 <PortfolioGrid portfolios={linkedPortfolios} />
               </div>
             )}
@@ -586,9 +588,9 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             {/* 서비스 설명 */}
             <div
               id="description"
-              className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20 overflow-hidden"
+              className="bg-white rounded-xl shadow-sm p-3 lg:p-6 scroll-mt-20 overflow-hidden"
             >
-              <h2 className="text-xl font-bold mb-4">서비스 설명</h2>
+              <h2 className="text-xl font-bold mb-3 lg:mb-4">서비스 설명</h2>
               <div
                 className="prose prose-lg max-w-none whitespace-pre-wrap break-words overflow-wrap-anywhere"
                 style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}
@@ -745,8 +747,8 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             )}
 
             {/* 리뷰 */}
-            <div id="reviews" className="bg-white rounded-xl shadow-sm p-6 scroll-mt-20">
-              <div className="flex items-center justify-between mb-6">
+            <div id="reviews" className="bg-white rounded-xl shadow-sm p-3 lg:p-6 scroll-mt-20">
+              <div className="flex items-center justify-between mb-4 lg:mb-6">
                 <h2 className="text-xl font-bold">리뷰 ({serviceReviews?.length || 0})</h2>
                 {serviceReviews && serviceReviews.length > 0 && (
                   <div className="flex items-center gap-2">
