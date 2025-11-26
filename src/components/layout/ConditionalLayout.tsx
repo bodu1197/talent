@@ -30,6 +30,9 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
   // mypage 페이지 확인
   const isMypagePage = pathname?.startsWith('/mypage');
 
+  // 채팅 페이지 확인 (메가메뉴 숨김)
+  const isChatPage = pathname?.startsWith('/chat');
+
   // 서브 페이지 확인 (모바일에서 뒤로가기 헤더 표시) - 검색 페이지, 서비스 상세 페이지 제외
   const isSubPage =
     !hideLayout && !isMainPage && !isMypagePage && !isSearchPage && !isServiceDetailPage;
@@ -46,8 +49,8 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
 
   return (
     <>
-      {/* Mypage: 헤더만 표시 (메가메뉴, 검색바 없음) */}
-      {isMypagePage && (
+      {/* Mypage/Chat: 헤더만 표시 (메가메뉴 없음) */}
+      {(isMypagePage || isChatPage) && (
         <>
           <div className="hidden lg:block">
             <Header />
@@ -59,7 +62,7 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
       )}
 
       {/* 일반 페이지: 헤더 + 검색바 + 메가메뉴 */}
-      {!isMypagePage && (
+      {!isMypagePage && !isChatPage && (
         <>
           {/* PC: 항상 일반 헤더 표시 */}
           <div className="hidden lg:block">
@@ -78,6 +81,7 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
       <main
         className={(() => {
           if (isMypagePage) return 'flex-1 pt-[60px] lg:pt-[102px] pb-16 lg:pb-0 w-full max-w-none';
+          if (isChatPage) return 'flex-1 pt-[60px] lg:pt-[60px] pb-16 lg:pb-0';
           if (isMainPage) return 'flex-1 pt-[60px] lg:pt-20 pb-16 lg:pb-0';
           if (isSearchPage) return 'flex-1 pt-0 lg:pt-[102px] pb-16 lg:pb-0';
           if (isServiceDetailPage) return 'flex-1 pt-0 lg:pt-[102px] pb-0 lg:pb-0';
