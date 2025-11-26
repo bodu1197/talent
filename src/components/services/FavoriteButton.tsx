@@ -100,16 +100,16 @@ export default function FavoriteButton({ serviceId, className = '' }: FavoriteBu
     <button
       onClick={handleToggleFavorite}
       disabled={loading}
-      className={`flex-1 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
+      className={`flex-1 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex flex-col items-center justify-center gap-1 ${className}`}
       aria-label={isFavorited ? '찜 취소하기' : '찜하기'}
       aria-pressed={isFavorited}
     >
       {isFavorited ? (
-        <FaHeart className="text-red-500" aria-hidden="true" />
+        <FaHeart className="text-red-500 text-lg" aria-hidden="true" />
       ) : (
-        <FaRegHeart aria-hidden="true" />
-      )}{' '}
-      <span>{isFavorited ? '찜 취소' : '찜하기'}</span>
+        <FaRegHeart className="text-lg" aria-hidden="true" />
+      )}
+      <span className="text-sm">{isFavorited ? '찜 취소' : '찜하기'}</span>
     </button>
   );
 }
