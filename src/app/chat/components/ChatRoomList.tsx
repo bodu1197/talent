@@ -94,11 +94,13 @@ interface ChatRoomListProps {
   readonly rooms: ChatRoom[];
   readonly selectedRoomId: string | null;
   readonly activeTab: TabType;
+  readonly searchQuery: string;
   readonly isCreatingRoom?: boolean;
   readonly isMobile?: boolean;
   readonly onSelectRoom: (roomId: string) => void;
   readonly onToggleFavorite: (roomId: string, e: React.MouseEvent) => void;
   readonly onTabChange: (tab: TabType) => void;
+  readonly onSearchChange: (query: string) => void;
   readonly filterRoom: (room: ChatRoom, tab: TabType) => boolean;
 }
 
@@ -106,11 +108,13 @@ export default function ChatRoomList({
   rooms,
   selectedRoomId,
   activeTab,
+  searchQuery,
   isCreatingRoom = false,
   isMobile = false,
   onSelectRoom,
   onToggleFavorite,
   onTabChange,
+  onSearchChange,
   filterRoom,
 }: ChatRoomListProps) {
   const tabs: { id: TabType; label: string }[] = [
@@ -120,7 +124,27 @@ export default function ChatRoomList({
     { id: 'favorite', label: '즐겨찾기' },
   ];
 
-  const filteredRooms = rooms.filter((room) => filterRoom(room, activeTab));
+  // 탭 필터링 + 검색 필터링 적용
+  const filteredRooms = rooms.filter((room) => {
+    // 먼저 탭 필터 적용
+    if (!filterRoom(room, activeTab)) return false;
+
+    // 검색어가 없으면 통과
+    if (!searchQuery.trim()) return true;
+
+    const query = searchQuery.toLowerCase();
+
+    // 상대방 이름 검색
+    if (room.otherUser?.name?.toLowerCase().includes(query)) return true;
+
+    // 마지막 메시지 내용 검색
+    if (room.lastMessage?.message?.toLowerCase().includes(query)) return true;
+
+    // 서비스 제목 검색
+    if (room.service?.title?.toLowerCase().includes(query)) return true;
+
+    return false;
+  });
 
   const getTabClassName = (tabId: TabType) => {
     const baseClass =
@@ -157,7 +181,9 @@ export default function ChatRoomList({
             type="text"
             id="chat-search"
             name="chat-search"
-            placeholder="검색해 보세요."
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+            placeholder="이름, 메시지, 서비스명 검색"
             className="w-full px-4 py-2 pr-10 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
           />
           <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />

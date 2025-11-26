@@ -98,6 +98,7 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'all' | 'unread' | 'deal' | 'favorite'>('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isCreatingRoom, setIsCreatingRoom] = useState(false);
@@ -466,11 +467,13 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
           rooms={rooms}
           selectedRoomId={selectedRoomId}
           activeTab={activeTab}
+          searchQuery={searchQuery}
           isCreatingRoom={isCreatingRoom}
           isMobile={true}
           onSelectRoom={handleSelectRoom}
           onToggleFavorite={toggleFavorite}
           onTabChange={setActiveTab}
+          onSearchChange={setSearchQuery}
           filterRoom={shouldShowRoom}
         />
       </div>
@@ -484,11 +487,13 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
               rooms={rooms}
               selectedRoomId={selectedRoomId}
               activeTab={activeTab}
+              searchQuery={searchQuery}
               isCreatingRoom={isCreatingRoom}
               isMobile={false}
               onSelectRoom={handleSelectRoom}
               onToggleFavorite={toggleFavorite}
               onTabChange={setActiveTab}
+              onSearchChange={setSearchQuery}
               filterRoom={shouldShowRoom}
             />
           </div>
