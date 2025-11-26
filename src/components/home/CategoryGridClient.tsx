@@ -71,7 +71,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   motorcycle: FaMotorcycle,
 };
 
-function CategoryIcon({ icon, color }: { readonly icon?: string; readonly color: string }) {
+function CategoryIcon({ icon, color }: { icon?: string; color: string }) {
   const iconClass = `${color}`;
   const IconComponent = (icon && ICON_MAP[icon]) || FaCircle;
   return <IconComponent className={iconClass} />;
