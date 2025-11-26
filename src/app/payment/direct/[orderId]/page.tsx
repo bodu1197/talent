@@ -16,7 +16,7 @@ export default async function DirectPaymentPage({ params }: DirectPaymentPagePro
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/login');
+    redirect('/auth/login');
   }
 
   // 주문 정보 조회

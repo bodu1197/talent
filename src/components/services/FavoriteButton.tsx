@@ -49,7 +49,7 @@ export default function FavoriteButton({ serviceId, className = '' }: FavoriteBu
     // 로그인 체크
     if (!user) {
       if (confirm('로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?')) {
-        router.push('/login');
+        router.push('/auth/login');
       }
       return;
     }

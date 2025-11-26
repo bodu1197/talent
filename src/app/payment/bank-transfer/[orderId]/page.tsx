@@ -16,7 +16,7 @@ export default async function BankTransferPage({
     error: authError,
   } = await supabase.auth.getUser();
   if (authError || !user) {
-    redirect('/login');
+    redirect('/auth/login');
   }
 
   // 주문 정보 조회
