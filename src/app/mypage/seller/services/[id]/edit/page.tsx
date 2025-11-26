@@ -100,19 +100,10 @@ export default async function EditServicePage({
   // Fetch category hierarchy
   const categoryHierarchy = await fetchCategoryHierarchy(supabase, service);
 
-  // Fetch all categories
-  const { data: categories } = await supabase
-    .from('categories')
-    .select('*')
-    .eq('is_active', true)
-    .order('level', { ascending: true })
-    .order('display_order', { ascending: true });
-
   return (
     <EditServiceClient
       service={service}
       sellerId={seller.id}
-      categories={categories || []}
       categoryHierarchy={categoryHierarchy}
     />
   );
