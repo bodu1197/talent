@@ -52,10 +52,36 @@ const nextConfig = {
     },
     // CSS 최적화 - 불필요한 preload 경고 방지
     optimizeCss: true,
+    // react-icons 트리쉐이킹 최적화 - 1.3MB → ~50KB 절감
+    optimizePackageImports: [
+      'react-icons',
+      'react-icons/fa',
+      'react-icons/fa6',
+      'react-icons/fi',
+      'react-icons/hi',
+      'react-icons/hi2',
+      'react-icons/md',
+      'react-icons/io',
+      'react-icons/io5',
+      'react-icons/bi',
+      'react-icons/ai',
+      'react-icons/bs',
+      'react-icons/ri',
+      'react-icons/tb',
+      'react-icons/cg',
+      'react-icons/gr',
+      'react-icons/vsc',
+      'react-icons/lu',
+      'react-icons/pi',
+      'react-icons/si',
+      'lucide-react',
+    ],
   },
   // 프로덕션에서 Source Map 비활성화 (CSP eval 차단)
   productionBrowserSourceMaps: false,
-  // Webpack으로 빌드 (package.json에서 --webpack 플래그 사용)
+  // Turbopack 설정 (Next.js 16 기본값)
+  turbopack: {},
+  // Webpack 빌드 설정 (폴백용)
   webpack: (config, { dev, isServer }) => {
     // 프로덕션 빌드에서 source map 완전 비활성화
     if (!dev) {
