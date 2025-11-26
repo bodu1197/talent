@@ -36,6 +36,7 @@ interface CategoryItem {
   name: string;
   slug: string;
   icon?: string;
+  children?: CategoryItem[];
 }
 
 interface MobileSearchContentProps {
@@ -88,8 +89,17 @@ const brightColors = [
   'text-fuchsia-500',
 ];
 
+const bgColors = [
+  'bg-red-50',
+  'bg-blue-50',
+  'bg-green-50',
+  'bg-yellow-50',
+  'bg-purple-50',
+  'bg-pink-50',
+];
+
 // 생활서비스 카테고리 slugs
-const LIFE_SERVICE_SLUGS = ['errands', 'home-repair', 'beauty-fashion', 'events', 'sports-leisure'];
+const LIFE_SERVICE_SLUGS = ['errands', 'beauty-fashion', 'home-repair'];
 
 export default function MobileSearchContent({ categories }: MobileSearchContentProps) {
   const router = useRouter();
@@ -106,7 +116,7 @@ export default function MobileSearchContent({ categories }: MobileSearchContentP
     router.push(`/search?q=${encodeURIComponent(keyword)}`);
   };
 
-  // 생활서비스 카테고리 필터링
+  // 생활서비스 카테고리 필터링 (하위 카테고리 포함)
   const lifeServiceCategories = categories.filter((cat) =>
     LIFE_SERVICE_SLUGS.includes(cat.slug)
   );
@@ -142,7 +152,7 @@ export default function MobileSearchContent({ categories }: MobileSearchContentP
       </div>
 
       {/* 2. 추천 검색어 섹션 */}
-      <div className="px-4 pb-6">
+      <div className="px-3 pb-6">
         <h3 className="font-semibold text-gray-900 mb-3">추천 검색어</h3>
         <div className="flex flex-wrap gap-2">
           {['로고 디자인', 'AI 이미지', '영상 편집', '번역', '블로그 작성', 'PPT 디자인', '웹 개발', '앱 개발'].map(
@@ -160,31 +170,49 @@ export default function MobileSearchContent({ categories }: MobileSearchContentP
         </div>
       </div>
 
-      {/* 3. 내주변 생활서비스 섹션 */}
-      <div className="px-4 pb-6">
-        <h3 className="font-semibold text-gray-900 mb-3">내주변 생활서비스</h3>
-        <div className="grid grid-cols-5 gap-2">
+      {/* 3. 내주변 전문가 섹션 - 카드 형태 */}
+      <div className="px-3 pb-6">
+        <h3 className="font-semibold text-gray-900 mb-3">내주변 전문가</h3>
+        <div className="space-y-3">
           {lifeServiceCategories.map((category, index) => (
-            <Link
+            <div
               key={category.id}
-              href={`/categories/${category.slug}`}
-              className="flex flex-col items-center group"
+              className={`rounded-xl p-4 ${bgColors[index % bgColors.length]}`}
             >
-              <div
-                className={`text-2xl mb-1 h-12 w-12 flex items-center justify-center rounded-full bg-gray-50 transition-all duration-200 ${brightColors[index % brightColors.length]} group-hover:text-brand-primary`}
+              {/* 카테고리 헤더 */}
+              <Link
+                href={`/categories/${category.slug}`}
+                className="flex items-center gap-3 mb-3"
               >
-                <CategoryIcon icon={category.icon} />
-              </div>
-              <span className="text-xs text-gray-700 text-center font-medium group-hover:text-brand-primary">
-                {category.name}
-              </span>
-            </Link>
+                <div
+                  className={`text-2xl h-10 w-10 flex items-center justify-center rounded-full bg-white ${brightColors[index % brightColors.length]}`}
+                >
+                  <CategoryIcon icon={category.icon} />
+                </div>
+                <span className="font-semibold text-gray-900">{category.name}</span>
+              </Link>
+
+              {/* 하위 카테고리 */}
+              {category.children && category.children.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {category.children.map((child) => (
+                    <Link
+                      key={child.id}
+                      href={`/categories/${child.slug}`}
+                      className="px-3 py-1.5 bg-white rounded-full text-sm text-gray-700 hover:text-brand-primary transition-colors"
+                    >
+                      {child.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </div>
 
       {/* 4. 전체 카테고리 섹션 */}
-      <div className="px-4 pb-6">
+      <div className="px-3 pb-6">
         <h3 className="font-semibold text-gray-900 mb-3">전체 카테고리</h3>
         <div className="grid grid-cols-4 gap-3">
           {categories.map((category, index) => (
