@@ -289,11 +289,12 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
   // 판매자의 다른 서비스 조회 (현재 서비스 제외, 5개)
   const otherServices = await getSellerOtherServices(service.seller.id, service.id, 5);
 
-  // 같은 카테고리의 추천 서비스 조회 (현재 서비스 제외, 5개)
-  const recommendedServices =
-    categories.length > 0
-      ? await getRecommendedServicesByCategory(categories.at(-1)!.id, service.id, 5)
-      : [];
+  // 같은 카테고리의 추천 서비스 조회 (현재 서비스 제외, 10개, 광고 우선 랜덤)
+  const deepestCategory = categories.at(-1);
+  const recommendedServices = deepestCategory
+    ? await getRecommendedServicesByCategory(deepestCategory.id, service.id, 10)
+    : [];
+  const categoryName = deepestCategory?.name || '관련';
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -933,23 +934,25 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         </div>
       )}
 
-      {/* 돌파구가 추천 서비스 */}
+      {/* 같은 카테고리 추천 서비스 (광고 우선 랜덤 10개) */}
       {recommendedServices && recommendedServices.length > 0 && (
         <div className="bg-gray-50 py-6 lg:py-12 pb-20 lg:pb-12">
           <div className="container-1200 px-4">
-            <h2 className="text-lg lg:text-2xl font-bold mb-4 lg:mb-6">돌파구가 추천 서비스</h2>
+            <h2 className="text-lg lg:text-2xl font-bold mb-4 lg:mb-6">
+              {categoryName} 분야의 다른 서비스
+            </h2>
             {/* 모바일: 가로 스크롤 */}
             <div className="lg:hidden flex gap-3 overflow-x-auto scrollbar-hide -mx-4 px-4 pb-2">
-              {recommendedServices.map((service) => (
-                <div key={service.id} className="flex-shrink-0 w-40">
-                  <ServiceCard service={service} />
+              {recommendedServices.map((recService) => (
+                <div key={recService.id} className="flex-shrink-0 w-40">
+                  <ServiceCard service={recService} />
                 </div>
               ))}
             </div>
             {/* PC: 그리드 */}
             <div className="hidden lg:grid grid-cols-5 gap-4">
-              {recommendedServices.map((service) => (
-                <ServiceCard key={service.id} service={service} />
+              {recommendedServices.map((recService) => (
+                <ServiceCard key={recService.id} service={recService} />
               ))}
             </div>
           </div>
