@@ -263,7 +263,7 @@ export default function NewServiceClientV2({ sellerId, profileData }: Props) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-start pt-20 lg:pt-[102px] absolute inset-0 top-[102px]">
+    <div className="min-h-screen bg-black/10 flex justify-center items-start pt-20 lg:pt-[102px] absolute inset-0 top-[102px]">
       <div className="flex w-full max-w-[1200px]">
         <MobileSidebar mode="seller" />
         <Sidebar mode="seller" profileData={profileData} />
