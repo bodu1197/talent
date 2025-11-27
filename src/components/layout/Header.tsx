@@ -151,7 +151,7 @@ export default function Header() {
                   className="text-gray-900 hover:text-red-500 transition-colors"
                   aria-label="찜한 서비스"
                 >
-                  <Heart className="w-5 h-5" />
+                  <Heart className="w-6 h-6" />
                 </Link>
 
                 {/* 채팅 */}
