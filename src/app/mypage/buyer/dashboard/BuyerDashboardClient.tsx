@@ -133,7 +133,7 @@ export default function BuyerDashboardClient({
         </div>
 
         {/* 통계 카드 */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-4 lg:mb-6">
           <div className="bg-white rounded-lg shadow p-3 lg:p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -182,7 +182,7 @@ export default function BuyerDashboardClient({
 
         {/* 알림 */}
         {alerts.length > 0 && (
-          <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6 mb-6">
+          <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-4 lg:mb-6">
             <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
               <Bell className="w-4 h-4 lg:w-5 lg:h-5 text-red-500" />
               확인 필요
@@ -206,7 +206,7 @@ export default function BuyerDashboardClient({
         )}
 
         {/* 진행중인 주문 */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6 mb-6">
+        <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-4 lg:mb-6">
           <div className="flex items-center justify-between mb-3 lg:mb-4">
             <h2 className="text-sm lg:text-base font-semibold text-gray-900 flex items-center gap-2">
               <Package className="w-4 h-4 lg:w-5 lg:h-5 text-purple-500" />
@@ -357,7 +357,7 @@ export default function BuyerDashboardClient({
         </div>
 
         {/* 최근 찜한 서비스 */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
+        <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
           <div className="flex items-center justify-between mb-3 lg:mb-4">
             <h2 className="text-sm lg:text-base font-semibold text-gray-900 flex items-center gap-2">
               <Heart className="w-4 h-4 lg:w-5 lg:h-5 text-red-500 fill-current" />

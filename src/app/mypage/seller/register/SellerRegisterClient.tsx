@@ -325,7 +325,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
     <MypageLayoutWrapper mode="buyer">
       <div className="py-4 px-4 lg:py-8 lg:px-6">
         {/* 상단 네비게이션 */}
-        <div className="mb-6">
+        <div className="mb-4 lg:mb-6">
           <Link
             href="/mypage"
             className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
@@ -336,7 +336,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
         </div>
 
         {/* 페이지 헤더 */}
-        <div className="mb-8">
+        <div className="mb-4 lg:mb-6">
           <h1 className="text-base lg:text-lg font-semibold text-gray-900">판매자 등록</h1>
           <p className="text-gray-600 mt-1 text-xs lg:text-sm">
             재능을 판매하기 위해 판매자 정보를 입력해주세요
@@ -344,7 +344,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
         </div>
 
         {/* 진행 단계 표시 */}
-        <div className="max-w-4xl mb-8">
+        <div className="max-w-4xl mb-4 lg:mb-6">
           <div className="flex items-center justify-between">
             {[1, 2, 3, 4].map((step) => (
               <div key={step} className="flex items-center flex-1">
@@ -394,8 +394,8 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
         <div className="max-w-4xl">
           {/* 1단계: 신원 인증 */}
           {currentStep === 1 && (
-            <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6 mb-6">
-              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-4 lg:mb-6">
+              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
                 1단계: 신원 인증
               </h2>
               <div className="space-y-4">
@@ -584,8 +584,8 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
 
           {/* 2단계: 판매자 프로필 */}
           {currentStep === 2 && (
-            <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6 mb-6">
-              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-4 lg:mb-6">
+              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
                 2단계: 판매자 프로필
               </h2>
               <div className="space-y-4">
@@ -711,8 +711,8 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
 
           {/* 3단계: 연락처 정보 */}
           {currentStep === 3 && (
-            <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6 mb-6">
-              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-4 lg:mb-6">
+              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
                 3단계: 연락처 정보 (선택)
               </h2>
               <div className="space-y-4">
@@ -858,8 +858,8 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
 
           {/* 4단계: 약관 동의 */}
           {currentStep === 4 && (
-            <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6 mb-6">
-              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-4 lg:mb-6">
+              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
                 4단계: 운영 정책 동의
               </h2>
               <div className="space-y-4">

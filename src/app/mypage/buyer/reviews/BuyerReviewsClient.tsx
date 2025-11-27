@@ -89,7 +89,7 @@ export default function BuyerReviewsClient({
         </div>
 
         {/* 탭 네비게이션 */}
-        <div className="bg-white rounded-lg border border-gray-200 mb-6">
+        <div className="bg-white rounded-lg border border-gray-200 mb-4 lg:mb-6">
           <div className="flex items-center">
             <button
               onClick={() => setActiveTab('pending')}
@@ -227,7 +227,7 @@ export default function BuyerReviewsClient({
                 </div>
               ))
             ) : (
-              <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
+              <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 text-center">
                 <Star className="w-10 h-10 text-gray-300 mx-auto mb-3" />
                 <p className="text-gray-600 text-sm">작성 가능한 리뷰가 없습니다</p>
               </div>
@@ -300,7 +300,7 @@ export default function BuyerReviewsClient({
 
                   {/* PC 레이아웃 */}
                   <div className="hidden lg:block">
-                    <div className="flex gap-4 mb-4">
+                    <div className="flex gap-4 mb-3 lg:mb-4">
                       <div className="w-20 h-20 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
                         {review.service?.thumbnail_url ? (
                           <img
@@ -338,9 +338,9 @@ export default function BuyerReviewsClient({
                             ? new Date(review.created_at).toLocaleDateString('ko-KR')
                             : '-'}
                         </div>
-                        <p className="text-gray-700 mb-4">{review.comment || ''}</p>
+                        <p className="text-gray-700 mb-3 lg:mb-4">{review.comment || ''}</p>
                         {review.seller_reply && (
-                          <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                          <div className="bg-gray-50 rounded-lg p-3 lg:p-4 mb-3 lg:mb-4">
                             <div className="flex items-center gap-2 mb-2">
                               <Reply className="w-4 h-4 text-brand-primary" />
                               <span className="text-sm font-medium text-gray-900">판매자 답변</span>
@@ -360,7 +360,7 @@ export default function BuyerReviewsClient({
                 </div>
               ))
             ) : (
-              <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
+              <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 text-center">
                 <Star className="w-10 h-10 text-gray-300 mx-auto mb-3" />
                 <p className="text-gray-600 text-sm">작성한 리뷰가 없습니다</p>
               </div>
@@ -371,8 +371,8 @@ export default function BuyerReviewsClient({
         {/* 리뷰 작성 모달 */}
         {showWriteModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-2xl w-full p-6">
-              <div className="flex items-center justify-between mb-6">
+            <div className="bg-white rounded-lg max-w-2xl w-full p-3 lg:p-4">
+              <div className="flex items-center justify-between mb-3 lg:mb-4">
                 <h2 className="text-base md:text-lg font-semibold text-gray-900">리뷰 작성</h2>
                 <button
                   onClick={() => setShowWriteModal(false)}

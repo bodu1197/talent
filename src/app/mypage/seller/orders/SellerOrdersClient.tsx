@@ -416,7 +416,7 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
         </div>
 
         {/* 탭 네비게이션 */}
-        <div className="bg-white rounded-lg border border-gray-200 mb-6">
+        <div className="bg-white rounded-lg border border-gray-200 mb-4 lg:mb-6">
           <div className="flex items-center overflow-x-auto">
             {tabs.map((tab) => (
               <button

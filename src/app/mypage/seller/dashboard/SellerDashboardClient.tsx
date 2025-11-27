@@ -97,11 +97,11 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
   if (!stats) {
     return (
       <MypageLayoutWrapper mode="seller" profileData={profileData}>
-        <div className="py-8 px-4">
+        <div className="py-4 px-4 lg:py-8 lg:px-6">
           <div className="max-w-3xl mx-auto">
             {/* 판매자 등록 안내 카드 */}
-            <div className="bg-white rounded-lg shadow-lg p-8 text-center">
-              <div className="mb-6">
+            <div className="bg-white rounded-lg shadow p-3 lg:p-4 text-center">
+              <div className="mb-4 lg:mb-6">
                 <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-full mb-4">
                   <Store className="w-10 h-10 text-brand-primary" />
                 </div>
@@ -114,21 +114,27 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
               </div>
 
               {/* 혜택 리스트 */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <TrendingUp className="w-7 h-7 text-green-500 mb-2" />
-                  <h3 className="font-semibold text-gray-900 mb-1">수익 창출</h3>
-                  <p className="text-sm text-gray-600">전문 서비스로 안정적인 수입</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 lg:gap-4 mb-4 lg:mb-6">
+                <div className="bg-gray-50 rounded-lg p-3 lg:p-4">
+                  <TrendingUp className="w-6 h-6 lg:w-7 lg:h-7 text-green-500 mb-2" />
+                  <h3 className="text-sm lg:text-base font-semibold text-gray-900 mb-1">
+                    수익 창출
+                  </h3>
+                  <p className="text-xs lg:text-sm text-gray-600">전문 서비스로 안정적인 수입</p>
                 </div>
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <Users className="w-7 h-7 text-blue-500 mb-2" />
-                  <h3 className="font-semibold text-gray-900 mb-1">고객 관리</h3>
-                  <p className="text-sm text-gray-600">체계적인 주문 및 고객 관리</p>
+                <div className="bg-gray-50 rounded-lg p-3 lg:p-4">
+                  <Users className="w-6 h-6 lg:w-7 lg:h-7 text-blue-500 mb-2" />
+                  <h3 className="text-sm lg:text-base font-semibold text-gray-900 mb-1">
+                    고객 관리
+                  </h3>
+                  <p className="text-xs lg:text-sm text-gray-600">체계적인 주문 및 고객 관리</p>
                 </div>
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <Award className="w-7 h-7 text-purple-500 mb-2" />
-                  <h3 className="font-semibold text-gray-900 mb-1">신뢰도 향상</h3>
-                  <p className="text-sm text-gray-600">리뷰와 평점으로 브랜드 구축</p>
+                <div className="bg-gray-50 rounded-lg p-3 lg:p-4">
+                  <Award className="w-6 h-6 lg:w-7 lg:h-7 text-purple-500 mb-2" />
+                  <h3 className="text-sm lg:text-base font-semibold text-gray-900 mb-1">
+                    신뢰도 향상
+                  </h3>
+                  <p className="text-xs lg:text-sm text-gray-600">리뷰와 평점으로 브랜드 구축</p>
                 </div>
               </div>
 
@@ -142,7 +148,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
               </Link>
 
               {/* 추가 정보 */}
-              <div className="mt-8 pt-6 border-t border-gray-200">
+              <div className="mt-4 lg:mt-6 pt-4 lg:pt-6 border-t border-gray-200">
                 <p className="text-sm text-gray-500">
                   등록은 무료이며, 간단한 정보 입력만으로 바로 시작할 수 있습니다
                 </p>
@@ -165,7 +171,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
         </div>
 
         {/* 통계 카드 */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-4 lg:mb-6">
           <div className="bg-white rounded-lg shadow p-3 lg:p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -213,8 +219,8 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
         </div>
 
         {/* 최근 주문 */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="px-4 py-3 lg:px-6 lg:py-4 border-b border-gray-200 flex items-center justify-between">
+        <div className="bg-white rounded-lg shadow p-3 lg:p-4">
+          <div className="flex items-center justify-between mb-3 lg:mb-4">
             <h2 className="text-sm lg:text-base font-semibold text-gray-900">최근 주문</h2>
             <Link
               href="/mypage/seller/orders"
@@ -223,7 +229,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
               전체 보기 <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
-          <div className="p-4 lg:p-6">
+          <div>
             {recentOrders.length > 0 ? (
               <div className="space-y-4">
                 {recentOrders.map((order) => (

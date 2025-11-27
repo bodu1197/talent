@@ -98,7 +98,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
               <div className="text-sm text-gray-600">{initialReviews.length}개의 리뷰</div>
             </div>
 
-            <div className="mt-6 space-y-2">
+            <div className="mt-4 lg:mt-6 space-y-2">
               {[5, 4, 3, 2, 1].map((rating) => (
                 <div key={rating} className="flex items-center gap-2">
                   <span className="text-sm w-8">{rating}점</span>
@@ -119,7 +119,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
           </div>
 
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-4">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-3 lg:mb-4">
               <div className="flex gap-2 overflow-x-auto">
                 {(['all', '5', '4', '3', '2', '1'] as RatingFilter[]).map((filter) => (
                   <button
@@ -144,7 +144,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
                     key={review.id}
                     className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4"
                   >
-                    <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-start justify-between mb-3 lg:mb-4">
                       <div>
                         <div className="flex items-center gap-2 mb-2">
                           <div className="flex gap-1">
@@ -180,7 +180,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
                     <p className="text-gray-900 mb-3">{review.content}</p>
 
                     {review.seller_reply && (
-                      <div className="mt-4 pl-4 border-l-4 border-brand-primary bg-blue-50 p-4 rounded">
+                      <div className="mt-3 lg:mt-4 pl-3 lg:pl-4 border-l-4 border-brand-primary bg-blue-50 p-3 lg:p-4 rounded">
                         <div className="text-sm font-medium text-gray-900 mb-2">판매자 답변</div>
                         <p className="text-gray-700">{review.seller_reply}</p>
                         <div className="text-xs text-gray-500 mt-2">
@@ -205,9 +205,9 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
 
         {showReplyModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-2xl w-full p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-base md:text-lg font-semibold text-gray-900">리뷰 답변</h2>
+            <div className="bg-white rounded-lg max-w-2xl w-full p-3 lg:p-4">
+              <div className="flex items-center justify-between mb-3 lg:mb-4">
+                <h2 className="text-sm lg:text-base font-semibold text-gray-900">리뷰 답변</h2>
                 <button
                   onClick={() => {
                     setShowReplyModal(false);
@@ -221,7 +221,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
               </div>
 
               {selectedReview && (
-                <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+                <div className="mb-3 lg:mb-4 p-3 lg:p-4 bg-gray-50 rounded-lg">
                   <div className="flex gap-1 mb-2">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <Star

@@ -184,7 +184,7 @@ export default function SellerEarningsClient({
           <p className="text-gray-600 mt-1 text-sm">판매 수익을 관리하세요</p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-4 lg:mb-6">
           <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
             <div className="text-xs text-gray-600 mb-1">출금 가능 금액</div>
             <div className="text-base lg:text-lg font-semibold text-gray-900">
@@ -246,10 +246,10 @@ export default function SellerEarningsClient({
           )}
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200">
-          <div className="px-4 py-3 border-b border-gray-200">
-            <h2 className="text-sm lg:text-base font-semibold text-gray-900">정산 내역</h2>
-          </div>
+        <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+          <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
+            정산 내역
+          </h2>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[500px]">
               <thead className="bg-gray-50">

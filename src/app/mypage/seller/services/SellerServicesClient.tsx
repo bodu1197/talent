@@ -247,7 +247,7 @@ export default function SellerServicesClient({
           </Link>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 mb-6">
+        <div className="bg-white rounded-lg border border-gray-200 mb-4 lg:mb-6">
           <div className="flex items-center overflow-x-auto">
             {tabs.map((tab) => (
               <Link
@@ -276,7 +276,7 @@ export default function SellerServicesClient({
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-4">
+        <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-4 lg:mb-6">
           <input
             type="text"
             value={searchQuery}
@@ -522,7 +522,7 @@ export default function SellerServicesClient({
 
                   {/* 반려 메시지 (PC) */}
                   {service._rejectedRevision && (
-                    <div className="mt-3 mx-4 mb-4 p-4 bg-red-50 border-l-4 border-red-500 rounded">
+                    <div className="mt-3 mx-3 mb-3 p-3 lg:mx-4 lg:mb-4 lg:p-4 bg-red-50 border-l-4 border-red-500 rounded">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">

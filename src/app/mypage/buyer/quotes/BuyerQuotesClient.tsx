@@ -92,7 +92,7 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
               </div>
             ))
           ) : (
-            <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
+            <div className="bg-white border border-gray-200 rounded-lg p-3 lg:p-4 text-center">
               <FileText className="w-10 h-10 text-gray-300 mx-auto mb-3" />
               <p className="text-gray-500 mb-3 text-sm">등록한 견적 요청이 없습니다</p>
               <button

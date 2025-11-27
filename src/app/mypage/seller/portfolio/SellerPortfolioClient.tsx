@@ -143,7 +143,7 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
               </div>
             ))
           ) : (
-            <div className="col-span-full bg-white border border-gray-200 rounded-lg p-8 text-center">
+            <div className="col-span-full bg-white border border-gray-200 rounded-lg p-3 lg:p-4 text-center">
               <FolderOpen className="text-gray-300 w-10 h-10 lg:w-12 lg:h-12 mb-3 mx-auto" />
               <p className="text-gray-500 mb-3 text-sm">등록된 포트폴리오가 없습니다</p>
               <Link
