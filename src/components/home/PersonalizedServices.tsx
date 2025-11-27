@@ -71,8 +71,8 @@ export default async function PersonalizedServices() {
 
               {/* 서비스 카드 그리드 */}
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {category.services.map((service, serviceIndex) => (
-                  <ServiceCard key={service.id} service={service} priority={serviceIndex < 10} />
+                {category.services.map((service) => (
+                  <ServiceCard key={service.id} service={service} />
                 ))}
               </div>
             </div>

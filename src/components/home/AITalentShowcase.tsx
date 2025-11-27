@@ -54,8 +54,8 @@ export default function AITalentShowcase({ services = [] }: Props) {
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-200"
                     sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
-                    priority={index < 10}
-                    loading={index < 10 ? undefined : 'lazy'}
+                    priority={index < 4}
+                    loading={index < 4 ? undefined : 'lazy'}
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gray-100">
@@ -82,9 +82,7 @@ export default function AITalentShowcase({ services = [] }: Props) {
                   <span className="text-xs text-gray-600 truncate">
                     {service.seller?.display_name}
                   </span>
-                  {service.seller?.is_verified && (
-                    <CheckCircle className="w-3 h-3 text-blue-500" />
-                  )}
+                  {service.seller?.is_verified && <CheckCircle className="w-3 h-3 text-blue-500" />}
                 </div>
 
                 {/* 제목 */}
