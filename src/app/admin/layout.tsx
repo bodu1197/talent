@@ -1,23 +1,22 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
-import { useAuth } from "@/components/providers/AuthProvider";
-import { createClient } from "@/lib/supabase/client";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
-import { logger } from "@/lib/logger";
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+import { useAuth } from '@/components/providers/AuthProvider';
+import { createClient } from '@/lib/supabase/client';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { logger } from '@/lib/logger';
 
-const AdminSidebar = dynamic(() => import("@/components/admin/Sidebar"), {
+const AdminSidebar = dynamic(() => import('@/components/admin/Sidebar'), {
   ssr: false,
 });
-const AdminHeader = dynamic(() => import("@/components/admin/Header"), {
+const AdminHeader = dynamic(() => import('@/components/admin/Header'), {
   ssr: false,
 });
-const MobileBottomNav = dynamic(
-  () => import("@/components/layout/MobileBottomNav"),
-  { ssr: false },
-);
+const MobileBottomNav = dynamic(() => import('@/components/layout/MobileBottomNav'), {
+  ssr: false,
+});
 
 export default function AdminLayout({
   children,
@@ -37,29 +36,29 @@ export default function AdminLayout({
     if (loading) return;
 
     if (!user) {
-      router.push("/auth/login");
+      router.push('/auth/login');
       return;
     }
 
     try {
       const supabase = createClient();
       const { data, error } = await supabase
-        .from("admins")
-        .select("role")
-        .eq("user_id", user.id)
-        .eq("role", "super_admin")
+        .from('admins')
+        .select('role')
+        .eq('user_id', user.id)
+        .eq('role', 'super_admin')
         .single();
 
       if (error || !data) {
-        logger.error("관리자 권한 확인 실패:", error);
-        router.push("/");
+        logger.error('관리자 권한 확인 실패:', error);
+        router.push('/');
         return;
       }
 
       setIsAdmin(true);
     } catch (err) {
-      logger.error("관리자 확인 중 오류:", err);
-      router.push("/");
+      logger.error('관리자 확인 중 오류:', err);
+      router.push('/');
     } finally {
       setChecking(false);
     }
@@ -75,7 +74,7 @@ export default function AdminLayout({
 
   return (
     <>
-      <div className="fixed inset-0 bg-gray-50 flex pb-16 lg:pb-0">
+      <div className="fixed inset-0 bg-black/[0.02] flex pb-16 lg:pb-0">
         <AdminSidebar />
         <div className="flex-1 flex flex-col overflow-hidden">
           <AdminHeader />
