@@ -125,9 +125,9 @@ export default function BuyerDashboardClient({
 
   return (
     <MypageLayoutWrapper mode="buyer" profileData={profileData}>
-      <div className="py-8 px-4">
+      <div className="py-4 lg:py-8 px-3 lg:px-4">
         {/* 페이지 헤더 */}
-        <div className="mb-6 lg:mb-8">
+        <div className="mb-4 lg:mb-8">
           <h1 className="text-base md:text-lg font-semibold text-gray-900">구매 대시보드</h1>
           <p className="text-gray-600 mt-2 text-sm md:text-base">주문 현황을 확인하세요</p>
         </div>
@@ -138,7 +138,9 @@ export default function BuyerDashboardClient({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">진행중 주문</p>
-                <p className="text-lg font-semibold text-gray-900">{stats?.inProgressOrders || 0}건</p>
+                <p className="text-lg font-semibold text-gray-900">
+                  {stats?.inProgressOrders || 0}건
+                </p>
               </div>
               <Loader2 className="w-7 h-7 text-yellow-500 animate-spin" />
             </div>
@@ -147,7 +149,9 @@ export default function BuyerDashboardClient({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">도착 확인 대기</p>
-                <p className="text-lg font-semibold text-gray-900">{stats?.deliveredOrders || 0}건</p>
+                <p className="text-lg font-semibold text-gray-900">
+                  {stats?.deliveredOrders || 0}건
+                </p>
               </div>
               <PackageOpen className="w-7 h-7 text-blue-500" />
             </div>
@@ -156,7 +160,9 @@ export default function BuyerDashboardClient({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">작성 가능 리뷰</p>
-                <p className="text-lg font-semibold text-gray-900">{stats?.pendingReviews || 0}건</p>
+                <p className="text-lg font-semibold text-gray-900">
+                  {stats?.pendingReviews || 0}건
+                </p>
               </div>
               <Star className="w-7 h-7 text-purple-500" />
             </div>
@@ -165,7 +171,9 @@ export default function BuyerDashboardClient({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">이번달 구매</p>
-                <p className="text-lg font-semibold text-gray-900">{stats?.monthlyPurchases || 0}건</p>
+                <p className="text-lg font-semibold text-gray-900">
+                  {stats?.monthlyPurchases || 0}건
+                </p>
               </div>
               <ShoppingCart className="w-7 h-7 text-green-500" />
             </div>

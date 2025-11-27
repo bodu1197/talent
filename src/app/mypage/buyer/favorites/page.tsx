@@ -114,8 +114,8 @@ export default function FavoritesPage() {
 
   return (
     <MypageLayoutWrapper mode="buyer">
-      <div className="py-8 px-4">
-        <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
+      <div className="py-4 lg:py-8 px-3 lg:px-4">
+        <div className="mb-4 lg:mb-8">
           <div className="flex items-center gap-3 mb-2">
             <Heart className="w-7 h-7 text-red-500 fill-current" />
             <h1 className="text-base md:text-lg font-semibold">찜한 서비스</h1>

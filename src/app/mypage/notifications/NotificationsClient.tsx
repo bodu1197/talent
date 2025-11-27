@@ -196,9 +196,9 @@ export default function NotificationsClient({
 
   return (
     <MypageLayoutWrapper mode={isSeller ? 'seller' : 'buyer'} profileData={profileData}>
-      <div className="py-8 px-4">
+      <div className="py-4 lg:py-8 px-3 lg:px-4">
         {/* 헤더 */}
-        <div className="mb-6">
+        <div className="mb-4 lg:mb-6">
           <h1 className="text-base md:text-lg font-semibold text-gray-900 flex items-center gap-2">
             <Bell className="w-5 h-5 text-brand-primary" />
             전체 알림

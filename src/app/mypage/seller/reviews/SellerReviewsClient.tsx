@@ -1,44 +1,42 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import { createReviewReply } from "@/lib/supabase/mutations/reviews";
-import EmptyState from "@/components/common/EmptyState";
-import { useRouter } from "next/navigation";
-import { logger } from "@/lib/logger";
-import { Review } from "@/types/common";
-import { Star, X } from "lucide-react";
-import toast from "react-hot-toast";
+import { useState } from 'react';
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
+import { createReviewReply } from '@/lib/supabase/mutations/reviews';
+import EmptyState from '@/components/common/EmptyState';
+import { useRouter } from 'next/navigation';
+import { logger } from '@/lib/logger';
+import { Review } from '@/types/common';
+import { Star, X } from 'lucide-react';
+import toast from 'react-hot-toast';
 
-type RatingFilter = "all" | "5" | "4" | "3" | "2" | "1";
+type RatingFilter = 'all' | '5' | '4' | '3' | '2' | '1';
 
 interface Props {
   readonly reviews: Review[];
 }
 
-export default function SellerReviewsClient({
-  reviews: initialReviews,
-}: Props) {
+export default function SellerReviewsClient({ reviews: initialReviews }: Props) {
   const router = useRouter();
-  const [ratingFilter, setRatingFilter] = useState<RatingFilter>("all");
+  const [ratingFilter, setRatingFilter] = useState<RatingFilter>('all');
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [replyContent, setReplyContent] = useState("");
+  const [replyContent, setReplyContent] = useState('');
 
   const filteredReviews = initialReviews.filter((review) => {
-    if (ratingFilter === "all") return true;
+    if (ratingFilter === 'all') return true;
     return review.rating === Number.parseInt(ratingFilter);
   });
 
   async function handleReplySubmit() {
     if (!replyContent.trim()) {
-      toast.error("답변 내용을 입력해주세요");
+      toast.error('답변 내용을 입력해주세요');
       return;
     }
 
     if (!selectedReview) {
-      toast.error("선택된 리뷰가 없습니다");
+      toast.error('선택된 리뷰가 없습니다');
       return;
     }
 
@@ -46,15 +44,14 @@ export default function SellerReviewsClient({
       setSubmitting(true);
       await createReviewReply(selectedReview.id, replyContent);
       setShowReplyModal(false);
-      setReplyContent("");
+      setReplyContent('');
       setSelectedReview(null);
       router.refresh();
-      toast.success("답변이 등록되었습니다");
+      toast.success('답변이 등록되었습니다');
     } catch (err: unknown) {
-      logger.error("답변 등록 실패:", err);
+      logger.error('답변 등록 실패:', err);
       toast.error(
-        "답변 등록에 실패했습니다: " +
-        (err instanceof Error ? err.message : "알 수 없는 오류"),
+        '답변 등록에 실패했습니다: ' + (err instanceof Error ? err.message : '알 수 없는 오류')
       );
     } finally {
       setSubmitting(false);
@@ -63,11 +60,8 @@ export default function SellerReviewsClient({
 
   const avgRating =
     initialReviews.length > 0
-      ? (
-        initialReviews.reduce((sum, r) => sum + r.rating, 0) /
-        initialReviews.length
-      ).toFixed(1)
-      : "0.0";
+      ? (initialReviews.reduce((sum, r) => sum + r.rating, 0) / initialReviews.length).toFixed(1)
+      : '0.0';
 
   const ratingCounts = {
     5: initialReviews.filter((r) => r.rating === 5).length,
@@ -79,8 +73,8 @@ export default function SellerReviewsClient({
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-8 px-4">
-        <div className="mb-8">
+      <div className="py-4 lg:py-8 px-3 lg:px-4">
+        <div className="mb-4 lg:mb-8">
           <h1 className="text-base md:text-lg font-semibold text-gray-900">받은 리뷰</h1>
           <p className="text-gray-600 mt-1 text-sm md:text-base">
             고객들이 남긴 리뷰를 확인하고 답변하세요
@@ -90,24 +84,18 @@ export default function SellerReviewsClient({
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
           <div className="lg:col-span-1 bg-white rounded-lg border border-gray-200 p-6">
             <div className="text-center">
-              <div className="text-5xl font-semibold text-gray-900 mb-2">
-                {avgRating}
-              </div>
+              <div className="text-5xl font-semibold text-gray-900 mb-2">{avgRating}</div>
               <div className="flex items-center justify-center gap-1 mb-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <Star
                     key={star}
                     className={
-                      Number.parseFloat(avgRating) >= star
-                        ? "text-yellow-400"
-                        : "text-gray-300"
+                      Number.parseFloat(avgRating) >= star ? 'text-yellow-400' : 'text-gray-300'
                     }
                   />
                 ))}
               </div>
-              <div className="text-sm text-gray-600">
-                {initialReviews.length}개의 리뷰
-              </div>
+              <div className="text-sm text-gray-600">{initialReviews.length}개의 리뷰</div>
             </div>
 
             <div className="mt-6 space-y-2">
@@ -133,30 +121,26 @@ export default function SellerReviewsClient({
           <div className="lg:col-span-3">
             <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
               <div className="flex gap-2 overflow-x-auto">
-                {(["all", "5", "4", "3", "2", "1"] as RatingFilter[]).map(
-                  (filter) => (
-                    <button
-                      key={filter}
-                      onClick={() => setRatingFilter(filter)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${ratingFilter === filter
-                        ? "bg-brand-primary text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                        }`}
-                    >
-                      {filter === "all" ? "전체" : `${filter}점`}
-                    </button>
-                  ),
-                )}
+                {(['all', '5', '4', '3', '2', '1'] as RatingFilter[]).map((filter) => (
+                  <button
+                    key={filter}
+                    onClick={() => setRatingFilter(filter)}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${
+                      ratingFilter === filter
+                        ? 'bg-brand-primary text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {filter === 'all' ? '전체' : `${filter}점`}
+                  </button>
+                ))}
               </div>
             </div>
 
             <div className="space-y-4">
               {filteredReviews.length > 0 ? (
                 filteredReviews.map((review) => (
-                  <div
-                    key={review.id}
-                    className="bg-white rounded-lg border border-gray-200 p-6"
-                  >
+                  <div key={review.id} className="bg-white rounded-lg border border-gray-200 p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div>
                         <div className="flex items-center gap-2 mb-2">
@@ -165,22 +149,16 @@ export default function SellerReviewsClient({
                               <Star
                                 key={star}
                                 className={
-                                  review.rating >= star
-                                    ? "text-yellow-400"
-                                    : "text-gray-300"
+                                  review.rating >= star ? 'text-yellow-400' : 'text-gray-300'
                                 }
                               />
                             ))}
                           </div>
-                          <span className="font-semibold text-gray-900">
-                            {review.rating}.0
-                          </span>
+                          <span className="font-semibold text-gray-900">{review.rating}.0</span>
                         </div>
                         <div className="text-sm text-gray-600">
-                          {review.buyer?.name || "구매자"} •{" "}
-                          {new Date(review.created_at).toLocaleDateString(
-                            "ko-KR",
-                          )}
+                          {review.buyer?.name || '구매자'} •{' '}
+                          {new Date(review.created_at).toLocaleDateString('ko-KR')}
                         </div>
                       </div>
                       {!review.seller_reply && (
@@ -200,16 +178,12 @@ export default function SellerReviewsClient({
 
                     {review.seller_reply && (
                       <div className="mt-4 pl-4 border-l-4 border-brand-primary bg-blue-50 p-4 rounded">
-                        <div className="text-sm font-medium text-gray-900 mb-2">
-                          판매자 답변
-                        </div>
+                        <div className="text-sm font-medium text-gray-900 mb-2">판매자 답변</div>
                         <p className="text-gray-700">{review.seller_reply}</p>
                         <div className="text-xs text-gray-500 mt-2">
                           {review.seller_reply_at
-                            ? new Date(review.seller_reply_at).toLocaleDateString(
-                              "ko-KR",
-                            )
-                            : ""}
+                            ? new Date(review.seller_reply_at).toLocaleDateString('ko-KR')
+                            : ''}
                         </div>
                       </div>
                     )}
@@ -234,7 +208,7 @@ export default function SellerReviewsClient({
                 <button
                   onClick={() => {
                     setShowReplyModal(false);
-                    setReplyContent("");
+                    setReplyContent('');
                     setSelectedReview(null);
                   }}
                   className="text-gray-400 hover:text-gray-600"
@@ -250,9 +224,7 @@ export default function SellerReviewsClient({
                       <Star
                         key={star}
                         className={
-                          selectedReview.rating >= star
-                            ? "text-yellow-400"
-                            : "text-gray-300"
+                          selectedReview.rating >= star ? 'text-yellow-400' : 'text-gray-300'
                         }
                       />
                     ))}
@@ -273,7 +245,7 @@ export default function SellerReviewsClient({
                 <button
                   onClick={() => {
                     setShowReplyModal(false);
-                    setReplyContent("");
+                    setReplyContent('');
                     setSelectedReview(null);
                   }}
                   disabled={submitting}
@@ -286,7 +258,7 @@ export default function SellerReviewsClient({
                   disabled={submitting || !replyContent.trim()}
                   className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {submitting ? "등록중..." : "답변 등록"}
+                  {submitting ? '등록중...' : '답변 등록'}
                 </button>
               </div>
             </div>

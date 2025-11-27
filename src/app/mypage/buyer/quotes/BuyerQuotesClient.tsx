@@ -27,8 +27,8 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
 
   return (
     <MypageLayoutWrapper mode="buyer">
-      <div className="py-8 px-4">
-        <div className="mb-8">
+      <div className="py-4 lg:py-8 px-3 lg:px-4">
+        <div className="mb-4 lg:mb-8">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-base md:text-lg font-semibold text-gray-900">견적 요청 내역</h1>

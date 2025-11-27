@@ -157,9 +157,9 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
   // 판매자 등록 완료 - 정상 대시보드 표시
   return (
     <MypageLayoutWrapper mode="seller" profileData={profileData}>
-      <div className="py-8 px-4">
+      <div className="py-4 lg:py-8 px-3 lg:px-4">
         {/* 페이지 헤더 */}
-        <div className="mb-6">
+        <div className="mb-4 lg:mb-6">
           <h1 className="text-base md:text-lg font-semibold text-gray-900">판매 대시보드</h1>
           <p className="text-gray-600 mt-2 text-sm md:text-base">판매 현황을 한눈에 확인하세요</p>
         </div>

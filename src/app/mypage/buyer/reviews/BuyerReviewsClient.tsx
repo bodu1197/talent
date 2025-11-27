@@ -81,9 +81,9 @@ export default function BuyerReviewsClient({
 
   return (
     <MypageLayoutWrapper mode="buyer">
-      <div className="py-8 px-4">
+      <div className="py-4 lg:py-8 px-3 lg:px-4">
         {/* 페이지 헤더 */}
-        <div className="mb-8">
+        <div className="mb-4 lg:mb-8">
           <h1 className="text-base md:text-lg font-semibold text-gray-900">리뷰 관리</h1>
           <p className="text-gray-600 mt-1 text-xs md:text-sm">서비스 리뷰를 작성하고 관리하세요</p>
         </div>

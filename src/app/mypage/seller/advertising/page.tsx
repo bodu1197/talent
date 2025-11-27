@@ -5,7 +5,19 @@ import { createClient } from '@/lib/supabase/client';
 import { startAdvertisingSubscription } from '@/lib/advertising';
 import type { AdvertisingDashboard } from '@/types/advertising';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
-import { Gift, CheckCircle, Eye, MousePointer, TrendingUp, Megaphone, List, Tag, Rocket, Plus, RefreshCw } from 'lucide-react';
+import {
+  Gift,
+  CheckCircle,
+  Eye,
+  MousePointer,
+  TrendingUp,
+  Megaphone,
+  List,
+  Tag,
+  Rocket,
+  Plus,
+  RefreshCw,
+} from 'lucide-react';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
 import { logger } from '@/lib/logger';
@@ -242,9 +254,9 @@ export default function AdvertisingPage() {
   return (
     <MypageLayoutWrapper mode="seller">
       <div className="bg-gray-50 min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 lg:py-12">
           {/* 헤더 섹션 */}
-          <div className="mb-6">
+          <div className="mb-4 lg:mb-6">
             <h1 className="text-base md:text-lg font-semibold text-gray-900">광고 관리</h1>
             <p className="text-gray-600 mt-2 text-sm md:text-base">
               더 많은 고객에게 서비스를 노출하고 매출을 증대시키세요
@@ -308,7 +320,9 @@ export default function AdvertisingPage() {
                   className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   title="통계 새로고침 (자동: 30초마다)"
                 >
-                  <RefreshCw className={`w-4 h-4 text-gray-600 ${refreshing ? 'animate-spin' : ''}`} />
+                  <RefreshCw
+                    className={`w-4 h-4 text-gray-600 ${refreshing ? 'animate-spin' : ''}`}
+                  />
                   {refreshing ? '업데이트 중...' : '새로고침'}
                 </button>
               </div>
@@ -735,7 +749,9 @@ export default function AdvertisingPage() {
                                   첫 광고 50% 할인
                                 </span>
                               </div>
-                              <h3 className="text-lg font-semibold text-gray-900 mb-1">광고 플랜</h3>
+                              <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                                광고 플랜
+                              </h3>
                               <p className="text-sm text-gray-600">
                                 카테고리 1페이지 완전 랜덤 노출
                               </p>
@@ -832,7 +848,9 @@ export default function AdvertisingPage() {
                                     className="mt-1"
                                   />
                                   <div className="flex-1">
-                                    <div className="font-semibold text-gray-900 mb-1">카드 결제</div>
+                                    <div className="font-semibold text-gray-900 mb-1">
+                                      카드 결제
+                                    </div>
                                     <div className="text-sm text-gray-600">즉시 광고 시작</div>
                                     <div className="text-xs text-orange-600 font-medium mt-1">
                                       준비 중
@@ -861,7 +879,9 @@ export default function AdvertisingPage() {
                                     className="mt-1"
                                   />
                                   <div className="flex-1">
-                                    <div className="font-semibold text-gray-900 mb-1">무통장 입금</div>
+                                    <div className="font-semibold text-gray-900 mb-1">
+                                      무통장 입금
+                                    </div>
                                     <div className="text-sm text-gray-600">승인 후 광고 시작</div>
                                     <div className="text-xs text-gray-500 mt-1">1-2일 소요</div>
                                   </div>
@@ -904,7 +924,9 @@ export default function AdvertisingPage() {
             (!dashboard?.subscriptions || dashboard.subscriptions.length === 0) && (
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
                 <Megaphone className="w-16 h-16 text-gray-300 mb-4 mx-auto" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">광고할 서비스가 없습니다</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  광고할 서비스가 없습니다
+                </h3>
                 <p className="text-gray-600 mb-6">먼저 서비스를 등록해주세요</p>
                 <a
                   href="/mypage/seller/services/new"

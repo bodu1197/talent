@@ -232,8 +232,8 @@ export default function SellerServicesClient({
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-8 px-4">
-        <div className="mb-8 flex items-center justify-between">
+      <div className="py-4 lg:py-8 px-3 lg:px-4">
+        <div className="mb-4 lg:mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-base md:text-lg font-semibold text-gray-900">서비스 관리</h1>
             <p className="text-gray-600 mt-1 text-sm">내 서비스를 관리하세요</p>

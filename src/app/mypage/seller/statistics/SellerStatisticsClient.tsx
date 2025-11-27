@@ -27,8 +27,8 @@ interface Props {
 export default function SellerStatisticsClient({ stats, topServices }: Props) {
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-8 px-4">
-        <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
+      <div className="py-4 lg:py-8 px-3 lg:px-4">
+        <div className="mb-4 lg:mb-8">
           <h1 className="text-base md:text-lg font-semibold text-gray-900">통계/분석</h1>
           <p className="text-gray-600 mt-1 text-sm md:text-base">판매 통계를 확인하세요</p>
         </div>
@@ -57,15 +57,21 @@ export default function SellerStatisticsClient({ stats, topServices }: Props) {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs md:text-sm text-gray-600">오늘</span>
-                <span className="text-lg font-semibold text-brand-primary">{stats.todayOrders}</span>
+                <span className="text-lg font-semibold text-brand-primary">
+                  {stats.todayOrders}
+                </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs md:text-sm text-gray-600">이번 주</span>
-                <span className="text-lg font-semibold text-brand-primary">{stats.weeklyOrders}</span>
+                <span className="text-lg font-semibold text-brand-primary">
+                  {stats.weeklyOrders}
+                </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs md:text-sm text-gray-600">이번 달</span>
-                <span className="text-lg font-semibold text-brand-primary">{stats.monthlyOrders}</span>
+                <span className="text-lg font-semibold text-brand-primary">
+                  {stats.monthlyOrders}
+                </span>
               </div>
             </div>
           </div>

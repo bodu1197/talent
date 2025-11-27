@@ -25,8 +25,8 @@ export default function SettingsClient({ profile, userEmail, isSeller }: Props) 
 
   return (
     <MypageLayoutWrapper mode={isSeller ? 'seller' : 'buyer'}>
-      <div className="py-8 px-4">
-        <div className="mb-8 flex items-center justify-between">
+      <div className="py-4 lg:py-8 px-3 lg:px-4">
+        <div className="mb-4 lg:mb-8 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
             <h1 className="text-base md:text-lg font-semibold text-gray-900">설정</h1>
             <p className="text-gray-600 mt-2 text-sm md:text-base">
@@ -42,9 +42,9 @@ export default function SettingsClient({ profile, userEmail, isSeller }: Props) 
           </button>
         </div>
 
-        <div className="flex gap-6">
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
           {/* 탭 메뉴 */}
-          <div className="w-64 bg-white rounded-lg border border-gray-200 p-4">
+          <div className="w-full lg:w-64 bg-white rounded-lg border border-gray-200 p-4">
             <button
               onClick={() => setActiveTab('profile')}
               className={`w-full px-4 py-2 rounded-lg text-left transition-colors ${
@@ -84,7 +84,9 @@ export default function SettingsClient({ profile, userEmail, isSeller }: Props) 
           <div className="flex-1">
             {activeTab === 'profile' && (
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">프로필 정보</h2>
+                <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">
+                  프로필 정보
+                </h2>
                 <div className="space-y-4">
                   <div>
                     <span className="block text-sm font-medium text-gray-700 mb-2">

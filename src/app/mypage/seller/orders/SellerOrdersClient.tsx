@@ -408,9 +408,9 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-8 px-4">
+      <div className="py-4 lg:py-8 px-3 lg:px-4">
         {/* 페이지 헤더 */}
-        <div className="mb-8">
+        <div className="mb-4 lg:mb-8">
           <h1 className="text-base md:text-lg font-semibold text-gray-900">주문 관리</h1>
           <p className="text-gray-600 mt-2 text-sm md:text-base">전체 주문 내역을 관리하세요</p>
         </div>
