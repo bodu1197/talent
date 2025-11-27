@@ -260,15 +260,15 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
         <>
           <Link
             href={`/mypage/seller/orders/${order.id}`}
-            className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium"
+            className="px-3 py-1.5 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-xs font-medium"
           >
-            주문 확인
+            확인
           </Link>
           <Link
             href={`/chat?order=${order.id}`}
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+            className="px-3 py-1.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-xs font-medium"
           >
-            메시지
+            채팅
           </Link>
         </>
       );
@@ -279,15 +279,15 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
         <>
           <Link
             href={`/mypage/seller/orders/${order.id}`}
-            className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium"
+            className="px-3 py-1.5 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-xs font-medium"
           >
-            상세보기
+            상세
           </Link>
           <Link
             href={`/chat?order=${order.id}`}
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+            className="px-3 py-1.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-xs font-medium"
           >
-            메시지
+            채팅
           </Link>
         </>
       );
@@ -299,28 +299,28 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
         <>
           <Link
             href={`/mypage/seller/orders/${order.id}`}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium whitespace-nowrap"
+            className="inline-flex items-center gap-1 px-3 py-1.5 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-xs font-medium whitespace-nowrap"
           >
-            <Eye aria-hidden="true" className="w-4 h-4" />
-            <span>수정 요청 확인</span>
+            <Eye aria-hidden="true" className="w-3 h-3" />
+            <span>수정확인</span>
             {revisionCount > 0 && (
-              <span className="px-2 py-0.5 bg-red-500 text-white text-xs rounded-full">
-                {revisionCount}차
+              <span className="px-1.5 py-0.5 bg-red-500 text-white text-xs rounded-full">
+                {revisionCount}
               </span>
             )}
           </Link>
           <button
             onClick={() => handleCompleteRevision(order.id)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium whitespace-nowrap"
+            className="inline-flex items-center gap-1 px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs font-medium whitespace-nowrap"
           >
-            <Check aria-hidden="true" className="w-4 h-4" />
-            수정 완료
+            <Check aria-hidden="true" className="w-3 h-3" />
+            완료
           </button>
           <Link
             href={`/chat?order=${order.id}`}
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+            className="px-3 py-1.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-xs font-medium"
           >
-            메시지
+            채팅
           </Link>
         </>
       );
@@ -331,15 +331,15 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
         <>
           <Link
             href={`/mypage/seller/orders/${order.id}`}
-            className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium"
+            className="px-3 py-1.5 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-xs font-medium"
           >
-            상세보기
+            상세
           </Link>
           <Link
             href={`/chat?order=${order.id}`}
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+            className="px-3 py-1.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-xs font-medium"
           >
-            메시지
+            채팅
           </Link>
         </>
       );
@@ -349,15 +349,15 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
       <>
         <Link
           href={`/mypage/seller/orders/${order.id}`}
-          className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium"
+          className="px-3 py-1.5 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-xs font-medium"
         >
-          상세보기
+          상세
         </Link>
         <Link
           href={`/chat?order=${order.id}`}
-          className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+          className="px-3 py-1.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-xs font-medium"
         >
-          메시지
+          채팅
         </Link>
       </>
     );

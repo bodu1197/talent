@@ -81,14 +81,11 @@ export default function OrderCard({ order, mode, actions }: OrderCardProps) {
           </div>
         )}
 
-        {/* 하단: 사용자 + 금액 + 버튼 */}
+        {/* 하단: 금액 + 버튼 */}
         <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-          <div className="flex items-center gap-2 text-xs text-gray-600">
-            <span>
-              {userLabel}: {userName}
-            </span>
-            <span className="font-semibold text-gray-900">{order.price.toLocaleString()}원</span>
-          </div>
+          <span className="text-xs font-semibold text-gray-900">
+            {order.price.toLocaleString()}원
+          </span>
           {actions && <div className="flex items-center gap-1.5 flex-shrink-0">{actions}</div>}
         </div>
       </div>
