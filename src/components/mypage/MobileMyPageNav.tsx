@@ -82,21 +82,23 @@ export default function MobileMyPageNav({ currentRole, onRoleChange, isSeller: _
       </div>
 
       {/* 메뉴 그리드 */}
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-4 gap-2">
         {menuItems.map((item) => {
           const isActive = pathname.startsWith(item.href);
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center p-3 rounded-xl transition-colors ${
+              className={`flex flex-col items-center px-1 py-2.5 rounded-xl transition-colors ${
                 isActive
                   ? 'bg-brand-primary/10 text-brand-primary'
                   : 'bg-white text-gray-600 hover:bg-gray-50'
               }`}
             >
               {item.icon}
-              <span className="text-xs mt-1.5 font-medium text-center">{item.label}</span>
+              <span className="text-xs mt-1 font-medium text-center whitespace-nowrap">
+                {item.label}
+              </span>
             </Link>
           );
         })}
