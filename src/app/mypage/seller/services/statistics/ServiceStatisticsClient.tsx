@@ -100,7 +100,7 @@ export default function ServiceStatisticsClient({
               <span className="text-gray-600 text-xs lg:text-sm">매출</span>
               <DollarSign className="text-purple-500 w-4 h-4 lg:w-5 lg:h-5" />
             </div>
-            <div className="text-lg lg:text-2xl font-semibold text-gray-900">
+            <div className="text-base lg:text-xl font-semibold text-gray-900">
               {stats.revenue.toLocaleString()}원
             </div>
           </div>
