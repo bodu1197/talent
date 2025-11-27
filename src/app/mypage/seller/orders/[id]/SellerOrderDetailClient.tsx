@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import Link from 'next/link';
 import { updateOrderStatus, cancelOrder } from '@/lib/supabase/mutations/orders';
@@ -74,6 +75,7 @@ interface OrderData {
 }
 
 export default function SellerOrderDetailClient({ orderId }: Props) {
+  const router = useRouter();
   const [order, setOrder] = useState<OrderData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
