@@ -179,7 +179,9 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">진행중</p>
-                <p className="text-lg font-semibold text-gray-900">{stats?.inProgressOrders || 0}건</p>
+                <p className="text-lg font-semibold text-gray-900">
+                  {stats?.inProgressOrders || 0}건
+                </p>
               </div>
               <Loader2 className="w-7 h-7 text-yellow-500 animate-spin" />
             </div>
@@ -188,7 +190,9 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">완료된 주문</p>
-                <p className="text-lg font-semibold text-gray-900">{stats?.completedOrders || 0}건</p>
+                <p className="text-lg font-semibold text-gray-900">
+                  {stats?.completedOrders || 0}건
+                </p>
               </div>
               <CheckCircle className="w-7 h-7 text-green-500" />
             </div>
@@ -223,11 +227,11 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
                 {recentOrders.map((order) => (
                   <div
                     key={order.id}
-                    className="border border-gray-200 rounded-lg p-4 hover:border-brand-primary transition-colors"
+                    className="border border-gray-200 rounded-lg p-3 hover:border-brand-primary transition-colors"
                   >
-                    <div className="flex gap-4">
-                      {/* 썸네일 */}
-                      <div className="w-20 h-20 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
+                    {/* 상단: 썸네일 + 서비스명 + 상태 */}
+                    <div className="flex gap-3 mb-2">
+                      <div className="w-12 h-12 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
                         {order.service?.thumbnail_url ? (
                           <img
                             src={order.service.thumbnail_url}
@@ -235,13 +239,14 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <ImageIcon className="text-gray-400 w-6 h-6" />
+                          <ImageIcon className="text-gray-400 w-5 h-5" />
                         )}
                       </div>
-
-                      {/* 정보 */}
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="text-sm font-medium text-gray-900 truncate">
+                          {order.service?.title || order.title || '-'}
+                        </div>
+                        <div className="flex items-center gap-2 mt-1">
                           <span className="text-xs text-gray-500">
                             #{order.order_number || order.id.slice(0, 8)}
                           </span>
@@ -251,26 +256,23 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
                             {getStatusText(order.status)}
                           </span>
                         </div>
-                        <div className="text-sm font-medium text-gray-900 truncate mb-1">
-                          {order.service?.title || order.title || '-'}
-                        </div>
-                        <div className="flex items-center gap-3 text-xs text-gray-600">
-                          <span>구매자: {order.buyer?.name || '-'}</span>
-                          <span className="font-medium text-gray-900">
-                            {(order.total_amount || 0).toLocaleString()}원
-                          </span>
-                        </div>
                       </div>
+                    </div>
 
-                      {/* 버튼 */}
-                      <div className="flex-shrink-0 flex items-center">
-                        <Link
-                          href={`/mypage/seller/orders/${order.id}`}
-                          className="px-3 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#0a2540] transition-colors text-xs font-medium"
-                        >
-                          상세보기
-                        </Link>
+                    {/* 하단: 구매자 + 금액 + 버튼 */}
+                    <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                      <div className="flex items-center gap-3 text-xs text-gray-600">
+                        <span>구매자: {order.buyer?.name || '-'}</span>
+                        <span className="font-semibold text-gray-900">
+                          {(order.total_amount || 0).toLocaleString()}원
+                        </span>
                       </div>
+                      <Link
+                        href={`/mypage/seller/orders/${order.id}`}
+                        className="px-3 py-1.5 bg-brand-primary text-white rounded-lg hover:bg-[#0a2540] transition-colors text-xs font-medium"
+                      >
+                        상세
+                      </Link>
                     </div>
                   </div>
                 ))}

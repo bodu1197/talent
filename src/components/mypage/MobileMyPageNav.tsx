@@ -89,7 +89,7 @@ export default function MobileMyPageNav({ currentRole, onRoleChange, isSeller: _
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center px-1 py-2.5 rounded-xl transition-colors ${
+              className={`flex flex-col items-center py-2.5 rounded-xl transition-colors ${
                 isActive
                   ? 'bg-brand-primary/10 text-brand-primary'
                   : 'bg-white text-gray-600 hover:bg-gray-50'
