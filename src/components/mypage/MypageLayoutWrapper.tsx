@@ -138,14 +138,14 @@ export default function MypageLayoutWrapper({
         <main className="flex-1 overflow-y-auto">
           {/* 모바일: 서브페이지 헤더 (대시보드가 아닌 경우) */}
           {!isDashboard && (
-            <div className="lg:hidden px-4 pt-4">
+            <div className="lg:hidden">
               <MobileMyPageHeader title={getPageTitle()} backHref={getBackHref()} />
             </div>
           )}
 
           {/* 모바일: 대시보드에서 네비게이션 메뉴 표시 */}
           {isDashboard && (
-            <div className="lg:hidden px-4 pt-4">
+            <div className="lg:hidden">
               <MobileMyPageNav
                 currentRole={mode}
                 onRoleChange={handleRoleChange}

@@ -36,28 +36,26 @@ export default function SellerProfileClient({ profile }: Props) {
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-4 lg:py-8 px-3 lg:px-4">
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
         {/* 페이지 헤더 */}
-        <div className="mb-4 lg:mb-8 flex items-center justify-between">
+        <div className="mb-4 lg:mb-6 flex items-center justify-between gap-2">
           <div>
-            <h1 className="text-base md:text-lg font-semibold text-gray-900">판매자 정보</h1>
-            <p className="text-gray-600 mt-1 text-sm md:text-base">
-              판매자 프로필 및 정산 정보를 확인하세요
-            </p>
+            <h1 className="text-base lg:text-lg font-semibold text-gray-900">판매자 정보</h1>
+            <p className="text-gray-600 mt-1 text-sm">판매자 프로필 및 정산 정보를 확인하세요</p>
           </div>
           <button
             onClick={() => router.push('/mypage/seller/profile/edit')}
-            className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+            className="px-3 py-1.5 lg:px-4 lg:py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-xs lg:text-sm font-medium"
           >
-            <Pencil className="w-4 h-4 mr-2 inline" />
+            <Pencil className="w-3 h-3 lg:w-4 lg:h-4 mr-1 inline" />
             수정
           </button>
         </div>
 
-        <div className="max-w-4xl space-y-6">
+        <div className="max-w-4xl space-y-4 lg:space-y-6">
           {/* 프로필 정보 */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">프로필 정보</h2>
+          <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+            <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-4">프로필 정보</h2>
 
             <div className="space-y-4">
               <div>
@@ -101,8 +99,8 @@ export default function SellerProfileClient({ profile }: Props) {
           </div>
 
           {/* 연락처 정보 */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">연락처 정보</h2>
+          <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+            <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-4">연락처 정보</h2>
 
             <div className="space-y-4">
               <div>
@@ -194,8 +192,8 @@ export default function SellerProfileClient({ profile }: Props) {
           </div>
 
           {/* 정산 정보 */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">정산 정보</h2>
+          <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+            <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-4">정산 정보</h2>
 
             <div className="space-y-4">
               <div>

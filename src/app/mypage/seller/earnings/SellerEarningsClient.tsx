@@ -178,54 +178,54 @@ export default function SellerEarningsClient({
 
   return (
     <MypageLayoutWrapper mode="seller" profileData={profileData}>
-      <div className="py-4 lg:py-8 px-3 lg:px-4">
-        <div className="mb-4 lg:mb-8">
-          <h1 className="text-base md:text-lg font-semibold text-gray-900">수익 관리</h1>
-          <p className="text-gray-600 mt-1 text-sm md:text-base">판매 수익을 관리하세요</p>
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
+        <div className="mb-4 lg:mb-6">
+          <h1 className="text-base lg:text-lg font-semibold text-gray-900">수익 관리</h1>
+          <p className="text-gray-600 mt-1 text-sm">판매 수익을 관리하세요</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="text-sm text-gray-600 mb-2">출금 가능 금액</div>
-            <div className="text-lg font-semibold text-gray-900">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-6">
+          <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+            <div className="text-xs text-gray-600 mb-1">출금 가능 금액</div>
+            <div className="text-base lg:text-lg font-semibold text-gray-900">
               {earnings?.available_balance?.toLocaleString() || '0'}원
             </div>
           </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="text-sm text-gray-600 mb-2">정산 대기중</div>
-            <div className="text-lg font-semibold text-gray-900">
+          <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+            <div className="text-xs text-gray-600 mb-1">정산 대기중</div>
+            <div className="text-base lg:text-lg font-semibold text-gray-900">
               {earnings?.pending_balance?.toLocaleString() || '0'}원
             </div>
           </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="text-sm text-gray-600 mb-2">출금 완료</div>
-            <div className="text-lg font-semibold text-gray-900">
+          <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+            <div className="text-xs text-gray-600 mb-1">출금 완료</div>
+            <div className="text-base lg:text-lg font-semibold text-gray-900">
               {earnings?.total_withdrawn?.toLocaleString() || '0'}원
             </div>
           </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="text-sm text-gray-600 mb-2">총 수익</div>
-            <div className="text-lg font-semibold text-gray-900">
+          <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+            <div className="text-xs text-gray-600 mb-1">총 수익</div>
+            <div className="text-base lg:text-lg font-semibold text-gray-900">
               {earnings?.total_earned?.toLocaleString() || '0'}원
             </div>
           </div>
         </div>
 
-        <div className="mb-6 flex gap-4">
+        <div className="mb-4 lg:mb-6 flex flex-wrap gap-2 lg:gap-4">
           {hasPendingWithdrawal ? (
             <>
               <button
                 onClick={handleCancelWithdrawal}
                 disabled={loading}
-                className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
-                <X className="inline mr-2 w-5 h-5" />
-                {loading ? '처리 중...' : '출금 신청 취소'}
+                <X className="inline mr-1 w-4 h-4" />
+                {loading ? '처리 중...' : '취소'}
               </button>
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-3 flex items-center gap-2">
-                <Clock className="text-yellow-600 w-5 h-5" />
-                <p className="text-xs md:text-sm text-yellow-800">
-                  출금 신청 대기 중 ({earnings.pending_withdrawal?.amount?.toLocaleString()}원)
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-2 flex items-center gap-2">
+                <Clock className="text-yellow-600 w-4 h-4" />
+                <p className="text-xs text-yellow-800">
+                  대기 중 ({earnings.pending_withdrawal?.amount?.toLocaleString()}원)
                 </p>
               </div>
             </>
@@ -234,79 +234,79 @@ export default function SellerEarningsClient({
               <button
                 onClick={handleWithdrawRequest}
                 disabled={earnings.available_balance <= 0 || loading}
-                className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
-                <Banknote className="inline mr-2 w-5 h-5" />
+                <Banknote className="inline mr-1 w-4 h-4" />
                 {loading ? '처리 중...' : '출금 신청'}
               </button>
               {earnings.available_balance <= 0 && (
-                <p className="text-xs md:text-sm text-gray-500 self-center">
-                  출금 가능 금액이 없습니다
-                </p>
+                <p className="text-xs text-gray-500 self-center">출금 가능 금액이 없습니다</p>
               )}
             </>
           )}
         </div>
 
         <div className="bg-white rounded-lg border border-gray-200">
-          <div className="p-4 border-b border-gray-200">
-            <h2 className="text-base md:text-lg font-semibold text-gray-900">정산 내역</h2>
+          <div className="px-4 py-3 border-b border-gray-200">
+            <h2 className="text-sm lg:text-base font-semibold text-gray-900">정산 내역</h2>
           </div>
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-3 py-3 text-left text-sm font-medium text-gray-900 whitespace-nowrap">
-                  날짜
-                </th>
-                <th className="px-3 py-3 text-left text-sm font-medium text-gray-900 whitespace-nowrap">
-                  구분
-                </th>
-                <th className="px-3 py-3 text-left text-sm font-medium text-gray-900 whitespace-nowrap">
-                  주문번호
-                </th>
-                <th className="px-3 py-3 text-right text-sm font-medium text-gray-900 whitespace-nowrap">
-                  금액
-                </th>
-                <th className="px-3 py-3 text-center text-sm font-medium text-gray-900 whitespace-nowrap">
-                  상태
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {transactions.length > 0 ? (
-                transactions.map((tx) => (
-                  <tr key={tx.id} className="hover:bg-gray-50">
-                    <td className="px-3 py-4 text-sm text-gray-600 whitespace-nowrap">
-                      {new Date(tx.updated_at || tx.created_at).toLocaleDateString('ko-KR')}
-                    </td>
-                    <td className="px-3 py-4 text-sm text-gray-900">
-                      {tx.service?.title || '판매 수익'}
-                    </td>
-                    <td className="px-3 py-4 text-sm text-gray-600 whitespace-nowrap">
-                      #{tx.order_number || tx.id.slice(0, 8)}
-                    </td>
-                    <td className="px-3 py-4 text-sm font-medium text-right text-green-600 whitespace-nowrap">
-                      +{(tx.total_amount || 0).toLocaleString()}원
-                    </td>
-                    <td className="px-3 py-4 text-center whitespace-nowrap">
-                      <span
-                        className={`px-2 py-1 rounded text-xs font-medium ${getStatusClass(tx.status)}`}
-                      >
-                        {getStatusLabel(tx.status)}
-                      </span>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[500px]">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-3 py-3 text-left text-sm font-medium text-gray-900 whitespace-nowrap">
+                    날짜
+                  </th>
+                  <th className="px-3 py-3 text-left text-sm font-medium text-gray-900 whitespace-nowrap">
+                    구분
+                  </th>
+                  <th className="px-3 py-3 text-left text-sm font-medium text-gray-900 whitespace-nowrap">
+                    주문번호
+                  </th>
+                  <th className="px-3 py-3 text-right text-sm font-medium text-gray-900 whitespace-nowrap">
+                    금액
+                  </th>
+                  <th className="px-3 py-3 text-center text-sm font-medium text-gray-900 whitespace-nowrap">
+                    상태
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {transactions.length > 0 ? (
+                  transactions.map((tx) => (
+                    <tr key={tx.id} className="hover:bg-gray-50">
+                      <td className="px-3 py-4 text-sm text-gray-600 whitespace-nowrap">
+                        {new Date(tx.updated_at || tx.created_at).toLocaleDateString('ko-KR')}
+                      </td>
+                      <td className="px-3 py-4 text-sm text-gray-900">
+                        {tx.service?.title || '판매 수익'}
+                      </td>
+                      <td className="px-3 py-4 text-sm text-gray-600 whitespace-nowrap">
+                        #{tx.order_number || tx.id.slice(0, 8)}
+                      </td>
+                      <td className="px-3 py-4 text-sm font-medium text-right text-green-600 whitespace-nowrap">
+                        +{(tx.total_amount || 0).toLocaleString()}원
+                      </td>
+                      <td className="px-3 py-4 text-center whitespace-nowrap">
+                        <span
+                          className={`px-2 py-1 rounded text-xs font-medium ${getStatusClass(tx.status)}`}
+                        >
+                          {getStatusLabel(tx.status)}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={5} className="px-3 py-12 text-center text-gray-500">
+                      <Receipt className="w-10 h-10 mb-4 text-gray-300 mx-auto" />
+                      <p>정산 내역이 없습니다</p>
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={5} className="px-3 py-12 text-center text-gray-500">
-                    <Receipt className="w-10 h-10 mb-4 text-gray-300 mx-auto" />
-                    <p>정산 내역이 없습니다</p>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </MypageLayoutWrapper>

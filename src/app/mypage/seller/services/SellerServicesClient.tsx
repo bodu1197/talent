@@ -232,17 +232,18 @@ export default function SellerServicesClient({
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-4 lg:py-8 px-3 lg:px-4">
-        <div className="mb-4 lg:mb-8 flex items-center justify-between">
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
+        <div className="mb-4 lg:mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-base md:text-lg font-semibold text-gray-900">서비스 관리</h1>
+            <h1 className="text-base lg:text-lg font-semibold text-gray-900">서비스 관리</h1>
             <p className="text-gray-600 mt-1 text-sm">내 서비스를 관리하세요</p>
           </div>
           <Link
             href="/mypage/seller/services/new"
-            className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+            className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium"
           >
-            <Plus className="w-4 h-4 mr-2 inline" aria-hidden="true" />새 서비스 등록
+            <Plus className="w-4 h-4 mr-1 inline" aria-hidden="true" />
+            등록
           </Link>
         </div>
 
@@ -275,13 +276,13 @@ export default function SellerServicesClient({
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
+        <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-4">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="서비스 검색..."
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm"
           />
         </div>
 

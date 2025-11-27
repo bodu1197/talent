@@ -50,24 +50,24 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-4 lg:py-8 px-3 lg:px-4">
-        <div className="mb-4 lg:mb-8">
-          <div className="flex items-center justify-between">
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
+        <div className="mb-4 lg:mb-6">
+          <div className="flex items-center justify-between gap-2">
             <div>
-              <h1 className="text-base md:text-lg font-semibold text-gray-900">포트폴리오</h1>
+              <h1 className="text-base lg:text-lg font-semibold text-gray-900">포트폴리오</h1>
               <p className="text-gray-600 mt-1 text-sm">작업물을 등록하고 관리하세요</p>
             </div>
             <Link
               href="/mypage/seller/portfolio/new"
-              className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+              className="px-3 py-1.5 lg:px-4 lg:py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-xs lg:text-sm font-medium whitespace-nowrap"
             >
-              <Plus className="inline w-4 h-4 mr-2" />
-              포트폴리오 등록
+              <Plus className="inline w-3 h-3 lg:w-4 lg:h-4 mr-1" />
+              <span className="hidden sm:inline">포트폴리오 </span>등록
             </Link>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
           {portfolio.length > 0 ? (
             portfolio.map((item) => (
               <div
@@ -93,11 +93,13 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
                     )}
                   </div>
                 </Link>
-                <div className="p-4">
-                  <h3 className="text-sm md:text-base font-semibold text-gray-900 mb-2">
+                <div className="p-3 lg:p-4">
+                  <h3 className="text-sm font-semibold text-gray-900 mb-1 lg:mb-2 truncate">
                     {item.title}
                   </h3>
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">{item.description}</p>
+                  <p className="text-xs lg:text-sm text-gray-600 mb-2 lg:mb-3 line-clamp-2">
+                    {item.description}
+                  </p>
                   {item.service && (
                     <div className="mb-3 p-2 bg-blue-50 border border-blue-200 rounded-lg">
                       <div className="flex items-center gap-2">
@@ -115,24 +117,24 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
                       </div>
                     </div>
                   )}
-                  <div className="flex items-center justify-between text-sm text-gray-600">
+                  <div className="flex items-center justify-between text-xs lg:text-sm text-gray-600">
                     <span>
-                      <Eye className="inline w-4 h-4 mr-1" />
+                      <Eye className="inline w-3 h-3 lg:w-4 lg:h-4 mr-1" />
                       {item.view_count || 0}
                     </span>
                     <span>{new Date(item.created_at).toLocaleDateString('ko-KR')}</span>
                   </div>
-                  <div className="flex gap-2 mt-4">
+                  <div className="flex gap-2 mt-3 lg:mt-4">
                     <Link
                       href={`/mypage/seller/portfolio/${item.id}/edit`}
-                      className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-center"
+                      className="flex-1 px-3 py-1.5 lg:px-4 lg:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-xs lg:text-sm font-medium text-center"
                     >
                       수정
                     </Link>
                     <button
                       onClick={() => handleDelete(item.id)}
                       disabled={deleting === item.id}
-                      className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
+                      className="flex-1 px-3 py-1.5 lg:px-4 lg:py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-xs lg:text-sm font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
                     >
                       {deleting === item.id ? '삭제중...' : '삭제'}
                     </button>
@@ -141,15 +143,15 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
               </div>
             ))
           ) : (
-            <div className="col-span-full bg-white border border-gray-200 rounded-lg p-12 text-center">
-              <FolderOpen className="text-gray-300 w-16 h-16 mb-4 mx-auto" />
-              <p className="text-gray-500 mb-4">등록된 포트폴리오가 없습니다</p>
+            <div className="col-span-full bg-white border border-gray-200 rounded-lg p-8 text-center">
+              <FolderOpen className="text-gray-300 w-10 h-10 lg:w-12 lg:h-12 mb-3 mx-auto" />
+              <p className="text-gray-500 mb-3 text-sm">등록된 포트폴리오가 없습니다</p>
               <Link
                 href="/mypage/seller/portfolio/new"
-                className="inline-flex items-center px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+                className="inline-flex items-center px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium"
               >
-                <Plus className="inline w-4 h-4 mr-2" />
-                포트폴리오 등록
+                <Plus className="inline w-4 h-4 mr-1" />
+                등록
               </Link>
             </div>
           )}

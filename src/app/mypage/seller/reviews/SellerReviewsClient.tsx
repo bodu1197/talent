@@ -73,18 +73,18 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-4 lg:py-8 px-3 lg:px-4">
-        <div className="mb-4 lg:mb-8">
-          <h1 className="text-base md:text-lg font-semibold text-gray-900">받은 리뷰</h1>
-          <p className="text-gray-600 mt-1 text-sm md:text-base">
-            고객들이 남긴 리뷰를 확인하고 답변하세요
-          </p>
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
+        <div className="mb-4 lg:mb-6">
+          <h1 className="text-base lg:text-lg font-semibold text-gray-900">받은 리뷰</h1>
+          <p className="text-gray-600 mt-1 text-sm">고객들이 남긴 리뷰를 확인하고 답변하세요</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
-          <div className="lg:col-span-1 bg-white rounded-lg border border-gray-200 p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-6 mb-6">
+          <div className="lg:col-span-1 bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
             <div className="text-center">
-              <div className="text-5xl font-semibold text-gray-900 mb-2">{avgRating}</div>
+              <div className="text-3xl lg:text-5xl font-semibold text-gray-900 mb-2">
+                {avgRating}
+              </div>
               <div className="flex items-center justify-center gap-1 mb-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <Star
@@ -119,13 +119,13 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
           </div>
 
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-4">
               <div className="flex gap-2 overflow-x-auto">
                 {(['all', '5', '4', '3', '2', '1'] as RatingFilter[]).map((filter) => (
                   <button
                     key={filter}
                     onClick={() => setRatingFilter(filter)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap ${
                       ratingFilter === filter
                         ? 'bg-brand-primary text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -137,10 +137,13 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               {filteredReviews.length > 0 ? (
                 filteredReviews.map((review) => (
-                  <div key={review.id} className="bg-white rounded-lg border border-gray-200 p-6">
+                  <div
+                    key={review.id}
+                    className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6"
+                  >
                     <div className="flex items-start justify-between mb-4">
                       <div>
                         <div className="flex items-center gap-2 mb-2">
@@ -167,9 +170,9 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
                             setSelectedReview(review);
                             setShowReplyModal(true);
                           }}
-                          className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm"
+                          className="px-3 py-1.5 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-xs font-medium"
                         >
-                          답변하기
+                          답변
                         </button>
                       )}
                     </div>

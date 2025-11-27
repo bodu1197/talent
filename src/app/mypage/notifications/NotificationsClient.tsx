@@ -196,27 +196,27 @@ export default function NotificationsClient({
 
   return (
     <MypageLayoutWrapper mode={isSeller ? 'seller' : 'buyer'} profileData={profileData}>
-      <div className="py-4 lg:py-8 px-3 lg:px-4">
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
         {/* 헤더 */}
         <div className="mb-4 lg:mb-6">
-          <h1 className="text-base md:text-lg font-semibold text-gray-900 flex items-center gap-2">
-            <Bell className="w-5 h-5 text-brand-primary" />
+          <h1 className="text-base lg:text-lg font-semibold text-gray-900 flex items-center gap-2">
+            <Bell className="w-4 h-4 lg:w-5 lg:h-5 text-brand-primary" />
             전체 알림
           </h1>
-          <p className="text-gray-600 mt-2 text-sm md:text-base">
+          <p className="text-gray-600 mt-1 text-sm">
             {unreadCount > 0 ? `읽지 않은 알림 ${unreadCount}개` : '모든 알림을 확인했습니다'}
           </p>
         </div>
 
         {/* 필터 및 액션 버튼 */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-4 lg:mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             {/* 필터 */}
-            <div className="flex items-center gap-2">
-              <Filter className="w-4 h-4 text-gray-400" />
+            <div className="flex items-center gap-1.5 lg:gap-2 overflow-x-auto">
+              <Filter className="w-3 h-3 lg:w-4 lg:h-4 text-gray-400 flex-shrink-0" />
               <button
                 onClick={() => setFilter('all')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-2.5 py-1.5 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-colors whitespace-nowrap ${
                   filter === 'all'
                     ? 'bg-brand-primary text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -226,17 +226,17 @@ export default function NotificationsClient({
               </button>
               <button
                 onClick={() => setFilter('unread')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-2.5 py-1.5 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-colors whitespace-nowrap ${
                   filter === 'unread'
                     ? 'bg-brand-primary text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                읽지 않음 ({unreadCount})
+                안읽음 ({unreadCount})
               </button>
               <button
                 onClick={() => setFilter('read')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-2.5 py-1.5 lg:px-4 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-colors whitespace-nowrap ${
                   filter === 'read'
                     ? 'bg-brand-primary text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -251,9 +251,9 @@ export default function NotificationsClient({
               <button
                 onClick={markAllAsRead}
                 disabled={loading}
-                className="px-4 py-2 text-sm font-medium text-brand-primary hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-3 py-1.5 text-xs lg:text-sm font-medium text-brand-primary hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? '처리중...' : '모두 읽음 처리'}
+                {loading ? '처리중...' : '모두 읽음'}
               </button>
             )}
           </div>
@@ -276,39 +276,45 @@ export default function NotificationsClient({
                       <Link
                         href={notification.link}
                         onClick={() => markAsRead(notification.id)}
-                        className="flex items-start gap-4 p-4"
+                        className="flex items-start gap-3 p-3 lg:p-4"
                       >
-                        <div className={`p-3 rounded-full bg-gray-100 flex-shrink-0 ${color}`}>
-                          <Icon className="w-6 h-6" />
+                        <div
+                          className={`p-2 lg:p-3 rounded-full bg-gray-100 flex-shrink-0 ${color}`}
+                        >
+                          <Icon className="w-4 h-4 lg:w-5 lg:h-5" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-start justify-between gap-2 mb-1">
+                          <div className="flex items-start justify-between gap-2 mb-0.5">
                             <h3
-                              className={`text-base font-semibold ${
+                              className={`text-sm font-medium ${
                                 notification.is_read ? 'text-gray-700' : 'text-gray-900'
                               }`}
                             >
                               {notification.title}
                             </h3>
                             {!notification.is_read && (
-                              <span className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-2"></span>
+                              <span className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1.5"></span>
                             )}
                           </div>
-                          <p className="text-sm text-gray-600 mb-2">{notification.message}</p>
+                          <p className="text-xs text-gray-600 mb-1 line-clamp-2">
+                            {notification.message}
+                          </p>
                           <p className="text-xs text-gray-400">
                             {formatDate(notification.created_at)}
                           </p>
                         </div>
                       </Link>
                     ) : (
-                      <div className="flex items-start gap-4 p-4">
-                        <div className={`p-3 rounded-full bg-gray-100 flex-shrink-0 ${color}`}>
-                          <Icon className="w-6 h-6" />
+                      <div className="flex items-start gap-3 p-3 lg:p-4">
+                        <div
+                          className={`p-2 lg:p-3 rounded-full bg-gray-100 flex-shrink-0 ${color}`}
+                        >
+                          <Icon className="w-4 h-4 lg:w-5 lg:h-5" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-start justify-between gap-2 mb-1">
+                          <div className="flex items-start justify-between gap-2 mb-0.5">
                             <h3
-                              className={`text-base font-semibold ${
+                              className={`text-sm font-medium ${
                                 notification.is_read ? 'text-gray-700' : 'text-gray-900'
                               }`}
                             >
@@ -323,7 +329,9 @@ export default function NotificationsClient({
                               </button>
                             )}
                           </div>
-                          <p className="text-sm text-gray-600 mb-2">{notification.message}</p>
+                          <p className="text-xs text-gray-600 mb-1 line-clamp-2">
+                            {notification.message}
+                          </p>
                           <p className="text-xs text-gray-400">
                             {formatDate(notification.created_at)}
                           </p>
@@ -335,16 +343,16 @@ export default function NotificationsClient({
               })}
             </div>
           ) : (
-            <div className="p-12 text-center">
-              <BellOff className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <div className="p-8 text-center">
+              <BellOff className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+              <h3 className="text-sm font-medium text-gray-900 mb-1">
                 {(() => {
                   if (filter === 'unread') return '읽지 않은 알림이 없습니다';
                   if (filter === 'read') return '읽은 알림이 없습니다';
                   return '알림이 없습니다';
                 })()}
               </h3>
-              <p className="text-gray-600">
+              <p className="text-xs text-gray-600">
                 {filter === 'all'
                   ? '새로운 알림이 도착하면 여기에 표시됩니다'
                   : '다른 필터를 선택해보세요'}

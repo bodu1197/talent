@@ -114,28 +114,28 @@ export default function FavoritesPage() {
 
   return (
     <MypageLayoutWrapper mode="buyer">
-      <div className="py-4 lg:py-8 px-3 lg:px-4">
-        <div className="mb-4 lg:mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <Heart className="w-7 h-7 text-red-500 fill-current" />
-            <h1 className="text-base md:text-lg font-semibold">찜한 서비스</h1>
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
+        <div className="mb-4 lg:mb-6">
+          <div className="flex items-center gap-2 mb-1">
+            <Heart className="w-5 h-5 lg:w-6 lg:h-6 text-red-500 fill-current" />
+            <h1 className="text-base lg:text-lg font-semibold">찜한 서비스</h1>
             {favorites.length > 0 && (
-              <span className="text-lg text-gray-500">({favorites.length}개)</span>
+              <span className="text-sm text-gray-500">({favorites.length}개)</span>
             )}
           </div>
-          <p className="text-xs md:text-sm text-gray-600">관심있는 서비스를 저장하고 관리하세요</p>
+          <p className="text-sm text-gray-600">관심있는 서비스를 저장하고 관리하세요</p>
         </div>
 
         {favorites.length === 0 ? (
-          <div className="text-center py-16">
-            <Heart className="w-16 h-16 text-gray-300 mb-4" />
-            <h3 className="text-sm md:text-base font-semibold mb-2">찜한 서비스가 없습니다</h3>
-            <p className="text-gray-600 mb-6">마음에 드는 서비스를 찜해보세요</p>
+          <div className="text-center py-8 bg-white rounded-lg border border-gray-200">
+            <Heart className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+            <h3 className="text-sm font-medium mb-1">찜한 서비스가 없습니다</h3>
+            <p className="text-xs text-gray-600 mb-4">마음에 드는 서비스를 찜해보세요</p>
             <Link
               href="/"
-              className="inline-block px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors"
+              className="inline-block px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium"
             >
-              서비스 둘러보기
+              둘러보기
             </Link>
           </div>
         ) : (

@@ -408,11 +408,11 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-4 lg:py-8 px-3 lg:px-4">
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
         {/* 페이지 헤더 */}
-        <div className="mb-4 lg:mb-8">
-          <h1 className="text-base md:text-lg font-semibold text-gray-900">주문 관리</h1>
-          <p className="text-gray-600 mt-2 text-sm md:text-base">전체 주문 내역을 관리하세요</p>
+        <div className="mb-4 lg:mb-6">
+          <h1 className="text-base lg:text-lg font-semibold text-gray-900">주문 관리</h1>
+          <p className="text-gray-600 mt-1 text-sm">전체 주문 내역을 관리하세요</p>
         </div>
 
         {/* 탭 네비게이션 */}
@@ -446,8 +446,8 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
         </div>
 
         {/* 검색 및 필터 */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6 mb-4 lg:mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
             {/* 검색 */}
             <div className="lg:col-span-2">
               <label

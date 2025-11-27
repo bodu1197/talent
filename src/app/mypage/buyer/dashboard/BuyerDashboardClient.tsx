@@ -125,82 +125,80 @@ export default function BuyerDashboardClient({
 
   return (
     <MypageLayoutWrapper mode="buyer" profileData={profileData}>
-      <div className="py-4 lg:py-8 px-3 lg:px-4">
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
         {/* 페이지 헤더 */}
-        <div className="mb-4 lg:mb-8">
-          <h1 className="text-base md:text-lg font-semibold text-gray-900">구매 대시보드</h1>
-          <p className="text-gray-600 mt-2 text-sm md:text-base">주문 현황을 확인하세요</p>
+        <div className="mb-4 lg:mb-6">
+          <h1 className="text-base lg:text-lg font-semibold text-gray-900">구매 대시보드</h1>
+          <p className="text-gray-600 mt-1 text-sm">주문 현황을 확인하세요</p>
         </div>
 
         {/* 통계 카드 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white rounded-lg shadow p-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-6">
+          <div className="bg-white rounded-lg shadow p-3 lg:p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">진행중 주문</p>
-                <p className="text-lg font-semibold text-gray-900">
+                <p className="text-base lg:text-lg font-semibold text-gray-900">
                   {stats?.inProgressOrders || 0}건
                 </p>
               </div>
-              <Loader2 className="w-7 h-7 text-yellow-500 animate-spin" />
+              <Loader2 className="w-6 h-6 lg:w-7 lg:h-7 text-yellow-500 animate-spin" />
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow p-4">
+          <div className="bg-white rounded-lg shadow p-3 lg:p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">도착 확인 대기</p>
-                <p className="text-lg font-semibold text-gray-900">
+                <p className="text-base lg:text-lg font-semibold text-gray-900">
                   {stats?.deliveredOrders || 0}건
                 </p>
               </div>
-              <PackageOpen className="w-7 h-7 text-blue-500" />
+              <PackageOpen className="w-6 h-6 lg:w-7 lg:h-7 text-blue-500" />
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow p-4">
+          <div className="bg-white rounded-lg shadow p-3 lg:p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">작성 가능 리뷰</p>
-                <p className="text-lg font-semibold text-gray-900">
+                <p className="text-base lg:text-lg font-semibold text-gray-900">
                   {stats?.pendingReviews || 0}건
                 </p>
               </div>
-              <Star className="w-7 h-7 text-purple-500" />
+              <Star className="w-6 h-6 lg:w-7 lg:h-7 text-purple-500" />
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow p-4">
+          <div className="bg-white rounded-lg shadow p-3 lg:p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">이번달 구매</p>
-                <p className="text-lg font-semibold text-gray-900">
+                <p className="text-base lg:text-lg font-semibold text-gray-900">
                   {stats?.monthlyPurchases || 0}건
                 </p>
               </div>
-              <ShoppingCart className="w-7 h-7 text-green-500" />
+              <ShoppingCart className="w-6 h-6 lg:w-7 lg:h-7 text-green-500" />
             </div>
           </div>
         </div>
 
         {/* 알림 */}
         {alerts.length > 0 && (
-          <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
-            <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <Bell className="w-5 h-5 text-red-500" />
+          <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6 mb-6">
+            <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <Bell className="w-4 h-4 lg:w-5 lg:h-5 text-red-500" />
               확인 필요
             </h2>
-            <div className="space-y-3">
+            <div className="space-y-2">
               {alerts.map((alert) => (
                 <Link
                   key={alert.id}
                   href={alert.href}
-                  className="flex items-center justify-between p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                  className="flex items-center justify-between p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
                 >
-                  <div className="flex items-center gap-3">
-                    <Info className="w-5 h-5 text-blue-500" />
-                    <span className="text-sm md:text-base text-gray-900 font-medium">
-                      {alert.message}
-                    </span>
+                  <div className="flex items-center gap-2">
+                    <Info className="w-4 h-4 text-blue-500" />
+                    <span className="text-sm text-gray-900 font-medium">{alert.message}</span>
                   </div>
-                  <ArrowRight className="w-5 h-5 text-gray-400" />
+                  <ArrowRight className="w-4 h-4 text-gray-400" />
                 </Link>
               ))}
             </div>
@@ -208,92 +206,144 @@ export default function BuyerDashboardClient({
         )}
 
         {/* 진행중인 주문 */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base md:text-lg font-semibold text-gray-900 flex items-center gap-2">
-              <Package className="w-5 h-5 text-purple-500" />
+        <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6 mb-6">
+          <div className="flex items-center justify-between mb-3 lg:mb-4">
+            <h2 className="text-sm lg:text-base font-semibold text-gray-900 flex items-center gap-2">
+              <Package className="w-4 h-4 lg:w-5 lg:h-5 text-purple-500" />
               진행중인 주문
             </h2>
             <Link
               href="/mypage/buyer/orders"
-              className="text-xs md:text-sm text-brand-primary hover:underline flex items-center gap-1"
+              className="text-xs text-brand-primary hover:underline flex items-center gap-1"
             >
               전체 보기 <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {recentOrders.length > 0 ? (
               recentOrders.map((order) => {
                 const daysLeft = getDaysLeft(order.delivery_date);
                 return (
                   <div
                     key={order.id}
-                    className="border border-gray-200 rounded-lg p-4 hover:border-brand-primary transition-colors"
+                    className="border border-gray-200 rounded-lg p-3 lg:p-4 hover:border-brand-primary transition-colors"
                   >
-                    <div className="flex gap-4">
-                      {/* 썸네일 */}
-                      <div className="w-24 h-24 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center">
-                        {order.service?.thumbnail_url ? (
-                          <img
-                            src={order.service.thumbnail_url}
-                            alt={order.title || order.service.title}
-                            className="w-full h-full object-cover rounded-lg"
-                          />
-                        ) : (
-                          <ImageIcon className="w-7 h-7 text-gray-400" />
-                        )}
-                      </div>
-
-                      {/* 정보 */}
-                      <div className="flex-1">
-                        <div className="flex items-start justify-between mb-2">
-                          <div>
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="text-xs md:text-sm text-gray-500">
-                                #{order.order_number || order.id.slice(0, 8)}
-                              </span>
-                              <span className="text-sm md:text-base font-semibold text-gray-900">
-                                {order.title || order.service?.title}
-                              </span>
-                            </div>
-                            <div className="text-xs md:text-sm text-gray-600 mb-2">
-                              판매자: {order.seller?.name || '판매자'}
-                            </div>
+                    {/* 모바일 레이아웃 */}
+                    <div className="lg:hidden">
+                      <div className="flex gap-3 mb-2">
+                        <div className="w-14 h-14 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
+                          {order.service?.thumbnail_url ? (
+                            <img
+                              src={order.service.thumbnail_url}
+                              alt={order.title || order.service.title}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <ImageIcon className="w-5 h-5 text-gray-400" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-medium text-gray-900 truncate">
+                            {order.title || order.service?.title}
+                          </div>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-xs text-gray-500">
+                              #{order.order_number || order.id.slice(0, 8)}
+                            </span>
+                            <span
+                              className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                                order.status === 'delivered'
+                                  ? 'bg-red-100 text-red-700'
+                                  : 'bg-yellow-100 text-yellow-700'
+                              }`}
+                            >
+                              {getStatusLabel(order.status)}
+                            </span>
                           </div>
                         </div>
-
-                        <div className="flex items-center gap-3 mb-3">
-                          <span
-                            className={`px-3 py-1 rounded-full text-xs font-medium ${
-                              order.status === 'delivered'
-                                ? 'bg-red-100 text-red-700'
-                                : 'bg-yellow-100 text-yellow-700'
-                            }`}
-                          >
-                            {getStatusLabel(order.status)}
-                          </span>
-                          {daysLeft && (
-                            <span className="text-xs md:text-sm text-gray-600">D-{daysLeft}일</span>
-                          )}
-                          <span className="text-xs md:text-sm font-semibold text-gray-900">
+                      </div>
+                      <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                        <div className="flex items-center gap-2 text-xs text-gray-600">
+                          <span>{order.seller?.name || '판매자'}</span>
+                          <span className="font-semibold text-gray-900">
                             {order.total_amount?.toLocaleString() || '0'}원
                           </span>
                         </div>
-
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5">
                           <Link
                             href={`/mypage/buyer/orders/${order.id}`}
-                            className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#0a2540] transition-colors text-xs md:text-sm font-medium"
+                            className="px-3 py-1.5 bg-brand-primary text-white rounded-lg hover:bg-[#0a2540] transition-colors text-xs font-medium"
                           >
-                            {order.status === 'delivered' ? '확인하기' : '상세보기'}
+                            {order.status === 'delivered' ? '확인' : '상세'}
                           </Link>
                           <Link
                             href={`/chat?order=${order.id}`}
-                            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-xs md:text-sm font-medium"
+                            className="px-3 py-1.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-xs font-medium"
                           >
                             메시지
                           </Link>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* PC 레이아웃 */}
+                    <div className="hidden lg:block">
+                      <div className="flex gap-4">
+                        <div className="w-20 h-20 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
+                          {order.service?.thumbnail_url ? (
+                            <img
+                              src={order.service.thumbnail_url}
+                              alt={order.title || order.service.title}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <ImageIcon className="w-6 h-6 text-gray-400" />
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-sm text-gray-500">
+                              #{order.order_number || order.id.slice(0, 8)}
+                            </span>
+                            <span className="text-sm font-semibold text-gray-900">
+                              {order.title || order.service?.title}
+                            </span>
+                          </div>
+                          <div className="text-sm text-gray-600 mb-2">
+                            판매자: {order.seller?.name || '판매자'}
+                          </div>
+                          <div className="flex items-center gap-3 mb-3">
+                            <span
+                              className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                                order.status === 'delivered'
+                                  ? 'bg-red-100 text-red-700'
+                                  : 'bg-yellow-100 text-yellow-700'
+                              }`}
+                            >
+                              {getStatusLabel(order.status)}
+                            </span>
+                            {daysLeft && (
+                              <span className="text-sm text-gray-600">D-{daysLeft}일</span>
+                            )}
+                            <span className="text-sm font-semibold text-gray-900">
+                              {order.total_amount?.toLocaleString() || '0'}원
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Link
+                              href={`/mypage/buyer/orders/${order.id}`}
+                              className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#0a2540] transition-colors text-sm font-medium"
+                            >
+                              {order.status === 'delivered' ? '확인하기' : '상세보기'}
+                            </Link>
+                            <Link
+                              href={`/chat?order=${order.id}`}
+                              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                            >
+                              메시지
+                            </Link>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -301,28 +351,26 @@ export default function BuyerDashboardClient({
                 );
               })
             ) : (
-              <div className="text-center py-8 text-sm md:text-base text-gray-500">
-                진행중인 주문이 없습니다
-              </div>
+              <div className="text-center py-8 text-sm text-gray-500">진행중인 주문이 없습니다</div>
             )}
           </div>
         </div>
 
         {/* 최근 찜한 서비스 */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base md:text-lg font-semibold text-gray-900 flex items-center gap-2">
-              <Heart className="w-5 h-5 text-red-500 fill-current" />
+        <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
+          <div className="flex items-center justify-between mb-3 lg:mb-4">
+            <h2 className="text-sm lg:text-base font-semibold text-gray-900 flex items-center gap-2">
+              <Heart className="w-4 h-4 lg:w-5 lg:h-5 text-red-500 fill-current" />
               최근 찜한 서비스
             </h2>
             <Link
               href="/mypage/buyer/favorites"
-              className="text-xs md:text-sm text-brand-primary hover:underline"
+              className="text-xs text-brand-primary hover:underline"
             >
               전체 보기
             </Link>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {favorites.length > 0 ? (
               favorites.map((item) => (
                 <Link
@@ -331,20 +379,14 @@ export default function BuyerDashboardClient({
                   className="flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
                 >
                   <div>
-                    <div className="font-medium text-sm md:text-base text-gray-900">
-                      {item.service?.title}
-                    </div>
-                    <div className="text-xs md:text-sm text-gray-600">
-                      {item.service?.seller?.name}
-                    </div>
+                    <div className="font-medium text-sm text-gray-900">{item.service?.title}</div>
+                    <div className="text-xs text-gray-600">{item.service?.seller?.name}</div>
                   </div>
-                  <ArrowRight className="w-5 h-5 text-gray-400" />
+                  <ArrowRight className="w-4 h-4 text-gray-400" />
                 </Link>
               ))
             ) : (
-              <div className="text-center py-8 text-sm md:text-base text-gray-500">
-                찜한 서비스가 없습니다
-              </div>
+              <div className="text-center py-6 text-sm text-gray-500">찜한 서비스가 없습니다</div>
             )}
           </div>
         </div>

@@ -157,71 +157,73 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
   // 판매자 등록 완료 - 정상 대시보드 표시
   return (
     <MypageLayoutWrapper mode="seller" profileData={profileData}>
-      <div className="py-4 lg:py-8 px-3 lg:px-4">
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
         {/* 페이지 헤더 */}
         <div className="mb-4 lg:mb-6">
-          <h1 className="text-base md:text-lg font-semibold text-gray-900">판매 대시보드</h1>
-          <p className="text-gray-600 mt-2 text-sm md:text-base">판매 현황을 한눈에 확인하세요</p>
+          <h1 className="text-base lg:text-lg font-semibold text-gray-900">판매 대시보드</h1>
+          <p className="text-gray-600 mt-1 text-sm">판매 현황을 한눈에 확인하세요</p>
         </div>
 
         {/* 통계 카드 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white rounded-lg shadow p-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-6">
+          <div className="bg-white rounded-lg shadow p-3 lg:p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">신규 주문</p>
-                <p className="text-lg font-semibold text-gray-900">{stats?.newOrders || 0}건</p>
+                <p className="text-base lg:text-lg font-semibold text-gray-900">
+                  {stats?.newOrders || 0}건
+                </p>
               </div>
-              <ShoppingCart className="w-7 h-7 text-blue-500" />
+              <ShoppingCart className="w-6 h-6 lg:w-7 lg:h-7 text-blue-500" />
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow p-4">
+          <div className="bg-white rounded-lg shadow p-3 lg:p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">진행중</p>
-                <p className="text-lg font-semibold text-gray-900">
+                <p className="text-base lg:text-lg font-semibold text-gray-900">
                   {stats?.inProgressOrders || 0}건
                 </p>
               </div>
-              <Loader2 className="w-7 h-7 text-yellow-500 animate-spin" />
+              <Loader2 className="w-6 h-6 lg:w-7 lg:h-7 text-yellow-500 animate-spin" />
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow p-4">
+          <div className="bg-white rounded-lg shadow p-3 lg:p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">완료된 주문</p>
-                <p className="text-lg font-semibold text-gray-900">
+                <p className="text-base lg:text-lg font-semibold text-gray-900">
                   {stats?.completedOrders || 0}건
                 </p>
               </div>
-              <CheckCircle className="w-7 h-7 text-green-500" />
+              <CheckCircle className="w-6 h-6 lg:w-7 lg:h-7 text-green-500" />
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow p-4">
+          <div className="bg-white rounded-lg shadow p-3 lg:p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">이번달 수익</p>
-                <p className="text-lg font-semibold text-gray-900">
+                <p className="text-base lg:text-lg font-semibold text-gray-900">
                   {(stats?.monthlyRevenue || 0).toLocaleString()}원
                 </p>
               </div>
-              <DollarSign className="w-7 h-7 text-purple-500" />
+              <DollarSign className="w-6 h-6 lg:w-7 lg:h-7 text-purple-500" />
             </div>
           </div>
         </div>
 
         {/* 최근 주문 */}
         <div className="bg-white rounded-lg shadow">
-          <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-            <h2 className="text-base md:text-lg font-semibold text-gray-900">최근 주문</h2>
+          <div className="px-4 py-3 lg:px-6 lg:py-4 border-b border-gray-200 flex items-center justify-between">
+            <h2 className="text-sm lg:text-base font-semibold text-gray-900">최근 주문</h2>
             <Link
               href="/mypage/seller/orders"
-              className="text-xs md:text-sm text-brand-primary hover:underline flex items-center gap-1"
+              className="text-xs text-brand-primary hover:underline flex items-center gap-1"
             >
               전체 보기 <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
-          <div className="p-6">
+          <div className="p-4 lg:p-6">
             {recentOrders.length > 0 ? (
               <div className="space-y-4">
                 {recentOrders.map((order) => (
@@ -271,7 +273,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
                         </div>
                         <Link
                           href={`/mypage/seller/orders/${order.id}`}
-                          className="px-2 py-1 bg-brand-primary text-white rounded-lg hover:bg-[#0a2540] transition-colors text-xs font-medium"
+                          className="px-3 py-1.5 bg-brand-primary text-white rounded-lg hover:bg-[#0a2540] transition-colors text-xs font-medium"
                         >
                           상세
                         </Link>

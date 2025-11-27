@@ -257,8 +257,8 @@ export default function AdvertisingPage() {
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 lg:py-12">
           {/* 헤더 섹션 */}
           <div className="mb-4 lg:mb-6">
-            <h1 className="text-base md:text-lg font-semibold text-gray-900">광고 관리</h1>
-            <p className="text-gray-600 mt-2 text-sm md:text-base">
+            <h1 className="text-base lg:text-lg font-semibold text-gray-900">광고 관리</h1>
+            <p className="text-gray-600 mt-1 text-sm">
               더 많은 고객에게 서비스를 노출하고 매출을 증대시키세요
             </p>
           </div>
@@ -327,43 +327,43 @@ export default function AdvertisingPage() {
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                <div className="bg-white rounded-lg shadow p-4">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 lg:gap-4 mb-4 lg:mb-6">
+                <div className="bg-white rounded-lg shadow p-3 lg:p-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-xs text-gray-600">총 노출수</p>
-                      <p className="text-lg font-semibold text-gray-900">
+                      <p className="text-base lg:text-lg font-semibold text-gray-900">
                         {dashboard.stats.totalImpressions.toLocaleString()}
                       </p>
                       <p className="text-xs text-gray-500 mt-1">이번 달 기준</p>
                     </div>
-                    <Eye className="w-7 h-7 text-blue-500" />
+                    <Eye className="w-6 h-6 lg:w-7 lg:h-7 text-blue-500" />
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg shadow p-4">
+                <div className="bg-white rounded-lg shadow p-3 lg:p-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-xs text-gray-600">총 클릭수</p>
-                      <p className="text-lg font-semibold text-gray-900">
+                      <p className="text-base lg:text-lg font-semibold text-gray-900">
                         {dashboard.stats.totalClicks.toLocaleString()}
                       </p>
                       <p className="text-xs text-gray-500 mt-1">이번 달 기준</p>
                     </div>
-                    <MousePointer className="w-7 h-7 text-green-500" />
+                    <MousePointer className="w-6 h-6 lg:w-7 lg:h-7 text-green-500" />
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg shadow p-4">
+                <div className="bg-white rounded-lg shadow p-3 lg:p-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-xs text-gray-600">클릭률</p>
-                      <p className="text-lg font-semibold text-gray-900">
+                      <p className="text-base lg:text-lg font-semibold text-gray-900">
                         {dashboard.stats.ctr.toFixed(2)}%
                       </p>
                       <p className="text-xs text-gray-500 mt-1">CTR (Click Through Rate)</p>
                     </div>
-                    <TrendingUp className="w-7 h-7 text-purple-500" />
+                    <TrendingUp className="w-6 h-6 lg:w-7 lg:h-7 text-purple-500" />
                   </div>
                 </div>
               </div>
