@@ -94,16 +94,16 @@ export default function MypageLayoutWrapper({
 
   // 서브페이지 제목 매핑
   const getPageTitle = () => {
-    if (pathname.includes('/orders')) return '주문관리';
-    if (pathname.includes('/favorites')) return '찜한서비스';
-    if (pathname.includes('/reviews')) return '리뷰관리';
-    if (pathname.includes('/quotes')) return '견적요청';
-    if (pathname.includes('/services')) return '서비스관리';
-    if (pathname.includes('/earnings')) return '정산관리';
+    if (pathname.includes('/orders')) return '주문 관리';
+    if (pathname.includes('/favorites')) return '찜한 서비스';
+    if (pathname.includes('/reviews')) return '리뷰 관리';
+    if (pathname.includes('/quotes')) return '견적 요청';
+    if (pathname.includes('/services')) return '서비스 관리';
+    if (pathname.includes('/earnings')) return '정산 관리';
     if (pathname.includes('/statistics')) return '통계';
     if (pathname.includes('/portfolio')) return '포트폴리오';
     if (pathname.includes('/profile')) return '프로필';
-    if (pathname.includes('/advertising')) return '광고관리';
+    if (pathname.includes('/advertising')) return '광고 관리';
     if (pathname.includes('/notifications')) return '알림';
     if (pathname.includes('/settings')) return '설정';
     return '마이페이지';

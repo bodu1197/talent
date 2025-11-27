@@ -118,7 +118,7 @@ export default function Header() {
                     className="px-3 py-2 text-gray-700 hover:text-brand-primary transition-colors"
                     aria-label="주문 관리"
                   >
-                    <span className="text-sm font-medium">주문관리</span>
+                    <span className="text-sm font-medium">주문 관리</span>
                   </button>
 
                   {/* 드롭다운 메뉴 */}

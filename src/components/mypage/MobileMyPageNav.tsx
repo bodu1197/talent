@@ -24,23 +24,23 @@ interface MenuItem {
 }
 
 const buyerMenuItems: MenuItem[] = [
-  { label: '주문내역', href: '/mypage/buyer/orders', icon: <ShoppingBag className="w-6 h-6" /> },
-  { label: '찜한서비스', href: '/mypage/buyer/favorites', icon: <Heart className="w-6 h-6" /> },
-  { label: '리뷰관리', href: '/mypage/buyer/reviews', icon: <Star className="w-6 h-6" /> },
-  { label: '견적요청', href: '/mypage/buyer/quotes', icon: <FileText className="w-6 h-6" /> },
+  { label: '주문 내역', href: '/mypage/buyer/orders', icon: <ShoppingBag className="w-6 h-6" /> },
+  { label: '찜한 서비스', href: '/mypage/buyer/favorites', icon: <Heart className="w-6 h-6" /> },
+  { label: '리뷰 관리', href: '/mypage/buyer/reviews', icon: <Star className="w-6 h-6" /> },
+  { label: '견적 요청', href: '/mypage/buyer/quotes', icon: <FileText className="w-6 h-6" /> },
   { label: '알림', href: '/mypage/notifications', icon: <Bell className="w-6 h-6" /> },
   { label: '설정', href: '/mypage/settings', icon: <Settings className="w-6 h-6" /> },
 ];
 
 const sellerMenuItems: MenuItem[] = [
-  { label: '서비스관리', href: '/mypage/seller/services', icon: <Package className="w-6 h-6" /> },
-  { label: '주문관리', href: '/mypage/seller/orders', icon: <ShoppingBag className="w-6 h-6" /> },
-  { label: '정산관리', href: '/mypage/seller/earnings', icon: <Wallet className="w-6 h-6" /> },
+  { label: '서비스 관리', href: '/mypage/seller/services', icon: <Package className="w-6 h-6" /> },
+  { label: '주문 관리', href: '/mypage/seller/orders', icon: <ShoppingBag className="w-6 h-6" /> },
+  { label: '정산 관리', href: '/mypage/seller/earnings', icon: <Wallet className="w-6 h-6" /> },
   { label: '통계', href: '/mypage/seller/statistics', icon: <BarChart3 className="w-6 h-6" /> },
   { label: '포트폴리오', href: '/mypage/seller/portfolio', icon: <Image className="w-6 h-6" /> },
-  { label: '리뷰관리', href: '/mypage/seller/reviews', icon: <Star className="w-6 h-6" /> },
+  { label: '리뷰 관리', href: '/mypage/seller/reviews', icon: <Star className="w-6 h-6" /> },
   {
-    label: '광고관리',
+    label: '광고 관리',
     href: '/mypage/seller/advertising',
     icon: <Megaphone className="w-6 h-6" />,
   },
