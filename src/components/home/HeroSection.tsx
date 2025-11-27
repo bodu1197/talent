@@ -3,14 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import {
-  Bot,
-  Banknote,
-  Scale,
-  Shield,
-  Megaphone,
-  Search,
-} from 'lucide-react';
+import { Bot, Banknote, Scale, Shield, Megaphone, Search } from 'lucide-react';
 
 interface SplatterDrop {
   size: number;
@@ -270,8 +263,7 @@ export default function HeroSection() {
                 href="/categories/ai-services"
                 className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-blue-50 text-brand-primary rounded-full font-medium hover:bg-blue-100 transition-colors flex items-center gap-2"
               >
-                <Bot className="w-4 h-4" />{' '}
-                <span className="hidden sm:inline">AI 서비스</span>
+                <Bot className="w-4 h-4" /> <span className="hidden sm:inline">AI 서비스</span>
                 <span className="sm:hidden">AI</span>
               </Link>
               <Link
@@ -354,12 +346,12 @@ export default function HeroSection() {
               </div>
 
               {/* 내용 */}
-              <h3
+              <h2
                 className={`text-2xl font-semibold mb-2 transition-opacity duration-500 text-gray-900 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
                 style={{ textShadow: '0 2px 4px rgba(255, 255, 255, 0.5)' }}
               >
                 {slide.cardTitle}
-              </h3>
+              </h2>
               <p
                 className={`text-lg mb-3 text-gray-800 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
                 style={{ textShadow: '0 1px 2px rgba(255, 255, 255, 0.5)' }}

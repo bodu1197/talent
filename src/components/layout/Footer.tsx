@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="container-1200 py-12">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <h4 className="text-gray-900 font-semibold mb-4">회사 소개</h4>
+              <p className="text-gray-900 font-semibold mb-4">회사 소개</p>
               <ul className="space-y-2 text-sm">
                 <li>
                   <Link href="/about" className="hover:text-brand-primary transition-colors">
@@ -34,7 +34,7 @@ export default function Footer() {
               </ul>
             </div>
             <div>
-              <h4 className="text-gray-900 font-semibold mb-4">의뢰인 안내</h4>
+              <p className="text-gray-900 font-semibold mb-4">의뢰인 안내</p>
               <ul className="space-y-2 text-sm">
                 <li>
                   <Link href="/buyer/guide" className="hover:text-brand-primary transition-colors">
@@ -65,7 +65,7 @@ export default function Footer() {
               </ul>
             </div>
             <div>
-              <h4 className="text-gray-900 font-semibold mb-4">전문가 안내</h4>
+              <p className="text-gray-900 font-semibold mb-4">전문가 안내</p>
               <ul className="space-y-2 text-sm">
                 <li>
                   <Link
@@ -96,7 +96,7 @@ export default function Footer() {
               </ul>
             </div>
             <div>
-              <h4 className="text-gray-900 font-semibold mb-4">고객센터</h4>
+              <p className="text-gray-900 font-semibold mb-4">고객센터</p>
               <ul className="space-y-2 text-sm">
                 <li>
                   <Link href="/help" className="hover:text-brand-primary transition-colors">
