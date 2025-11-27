@@ -41,10 +41,8 @@ export default async function HomePage() {
         </>
       )}
 
-      {/* AI 재능 쇼케이스 (Suspense로 감싸기) */}
-      <Suspense fallback={<AIShowcaseSkeleton />}>
-        <AIServicesSection aiCategoryIds={aiCategoryIds} />
-      </Suspense>
+      {/* AI 재능 쇼케이스 (LCP 최적화: Suspense 제거 - 초기 HTML에 이미지 포함) */}
+      <AIServicesSection aiCategoryIds={aiCategoryIds} />
 
       {/* 추천 서비스 섹션 (Suspense로 감싸기) */}
       <Suspense fallback={<RecommendedSkeleton />}>
@@ -197,27 +195,6 @@ async function AIServicesSection({ aiCategoryIds }: { readonly aiCategoryIds: st
 }
 
 // 스켈레톤 로딩 컴포넌트
-function AIShowcaseSkeleton() {
-  return (
-    <section className="py-8 bg-white">
-      <div className="container-1200">
-        <div className="mb-8">
-          <div className="h-8 bg-gray-200 rounded w-48 mb-2 animate-pulse"></div>
-          <div className="h-5 bg-gray-200 rounded w-64 animate-pulse"></div>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {Array.from({ length: 10 }, (_, i) => (
-            <div
-              key={`trending-skeleton-${i}`}
-              className="bg-gray-100 rounded-lg h-64 animate-pulse"
-            ></div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function RecommendedSkeleton() {
   return (
     <section className="py-8 bg-gray-50">
