@@ -45,7 +45,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
       <section className="relative bg-brand-primary text-white py-20">
         <div className="container-1200">
           <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-[40px] font-bold mb-6">
+            <h1 className="text-[40px] font-semibold mb-6">
               AI로 새로운 가능성을 <br />
               <span className="text-blue-200">이어주는 돌파구 AI 서비스</span>
             </h1>
@@ -120,7 +120,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
       <section id="categories" className="py-16">
         <div className="container-1200">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">AI로 다양한 작업을, 더 빠르게!</h2>
+            <h2 className="text-3xl font-semibold mb-4">AI로 다양한 작업을, 더 빠르게!</h2>
             <p className="text-gray-600 text-lg">
               원하는 AI 서비스를 선택하고 전문가와 함께 시작하세요
             </p>
@@ -168,19 +168,19 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
       <section className="py-16 bg-brand-primary text-white">
         <div className="container-1200">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">많은 분들이 이용한 AI 서비스</h2>
+            <h2 className="text-3xl font-semibold mb-4">많은 분들이 이용한 AI 서비스</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="text-[40px] font-bold mb-2">1,000+</div>
+              <div className="text-[40px] font-semibold mb-2">1,000+</div>
               <div className="text-blue-200 text-lg">AI 전문 서비스</div>
             </div>
             <div className="text-center">
-              <div className="text-[40px] font-bold mb-2">10,000+</div>
+              <div className="text-[40px] font-semibold mb-2">10,000+</div>
               <div className="text-blue-200 text-lg">완료된 AI 프로젝트</div>
             </div>
             <div className="text-center">
-              <div className="text-[40px] font-bold mb-2">98%</div>
+              <div className="text-[40px] font-semibold mb-2">98%</div>
               <div className="text-blue-200 text-lg">고객 만족도</div>
             </div>
           </div>
@@ -191,7 +191,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
       <section id="cases" className="py-16 bg-gray-50">
         <div className="container-1200">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">AI 활용 사례</h2>
+            <h2 className="text-3xl font-semibold mb-4">AI 활용 사례</h2>
             <p className="text-gray-600 text-lg">
               실제 비즈니스에서 AI를 어떻게 활용했는지 확인하세요
             </p>
@@ -203,7 +203,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
                 <Image className="w-10 h-10 text-white" />
               </div>
               <div className="p-6">
-                <h3 className="font-bold text-xl mb-2">미용실 마케팅 자동화</h3>
+                <h3 className="font-semibold text-xl mb-2">미용실 마케팅 자동화</h3>
                 <p className="text-gray-600 mb-4">
                   AI 모델로 예약 사이트 이미지를 하루 만에 제작, 촬영 비용 90% 절감
                 </p>
@@ -221,7 +221,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
                 <FileText className="w-10 h-10 text-white" />
               </div>
               <div className="p-6">
-                <h3 className="font-bold text-xl mb-2">블로그 자동화로 정시 퇴근</h3>
+                <h3 className="font-semibold text-xl mb-2">블로그 자동화로 정시 퇴근</h3>
                 <p className="text-gray-600 mb-4">
                   AI 글쓰기로 블로그 상위 노출 달성, 업무 시간 70% 단축
                 </p>
@@ -239,7 +239,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
                 <Video className="w-10 h-10 text-white" />
               </div>
               <div className="p-6">
-                <h3 className="font-bold text-xl mb-2">촬영 없이 영상 제작</h3>
+                <h3 className="font-semibold text-xl mb-2">촬영 없이 영상 제작</h3>
                 <p className="text-gray-600 mb-4">
                   AI 영상 생성으로 제품 소개 영상을 3일 만에 완성
                 </p>
@@ -259,7 +259,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
       <section id="experts" className="py-16">
         <div className="container-1200">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">인기 AI 전문가</h2>
+            <h2 className="text-3xl font-semibold mb-4">인기 AI 전문가</h2>
             <p className="text-gray-600 text-lg">검증된 AI 전문가와 함께 프로젝트를 시작하세요</p>
           </div>
 
@@ -270,7 +270,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
                 className="bg-white rounded-xl p-6 border border-gray-200 hover:border-brand-primary hover:shadow-lg transition-all"
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                  <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
                     AI
                   </div>
                   <div>
@@ -306,7 +306,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
       <section className="py-16 bg-gray-50">
         <div className="container-1200">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">AI 활용 가이드</h2>
+            <h2 className="text-3xl font-semibold mb-4">AI 활용 가이드</h2>
             <p className="text-gray-600 text-lg">
               AI를 비즈니스에 효과적으로 활용하는 방법을 알아보세요
             </p>
@@ -317,7 +317,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
               <div className="w-12 h-12 bg-brand-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <Lightbulb className="w-6 h-6 text-brand-primary" />
               </div>
-              <h3 className="font-bold text-lg mb-2">AI로 업무 자동화하기</h3>
+              <h3 className="font-semibold text-lg mb-2">AI로 업무 자동화하기</h3>
               <p className="text-gray-600 text-sm mb-4">
                 반복적인 업무를 AI로 자동화하여 생산성을 높이는 방법
               </p>
@@ -330,7 +330,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
               <div className="w-12 h-12 bg-brand-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <TrendingUp className="w-6 h-6 text-brand-primary" />
               </div>
-              <h3 className="font-bold text-lg mb-2">AI로 마케팅 효과 높이기</h3>
+              <h3 className="font-semibold text-lg mb-2">AI로 마케팅 효과 높이기</h3>
               <p className="text-gray-600 text-sm mb-4">
                 AI 기반 콘텐츠로 마케팅 ROI를 극대화하는 전략
               </p>
@@ -343,7 +343,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
               <div className="w-12 h-12 bg-brand-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <Wand2 className="w-6 h-6 text-brand-primary" />
               </div>
-              <h3 className="font-bold text-lg mb-2">AI 도구 완벽 활용법</h3>
+              <h3 className="font-semibold text-lg mb-2">AI 도구 완벽 활용법</h3>
               <p className="text-gray-600 text-sm mb-4">
                 ChatGPT, Midjourney 등 인기 AI 도구 사용 가이드
               </p>
@@ -358,7 +358,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
       {/* CTA 섹션 */}
       <section className="py-20 bg-brand-primary text-white">
         <div className="container-1200 text-center">
-          <h2 className="text-4xl font-bold mb-6">지금 바로 AI 서비스를 시작하세요</h2>
+          <h2 className="text-4xl font-semibold mb-6">지금 바로 AI 서비스를 시작하세요</h2>
           <p className="text-xl mb-8 text-blue-100">전문가와 함께라면 AI가 더 쉽고 빠릅니다</p>
           <div className="max-w-2xl mx-auto">
             <div className="flex gap-4">

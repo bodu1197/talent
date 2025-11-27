@@ -179,7 +179,7 @@ export default function AdminServiceRevisionsPage() {
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">서비스 수정 요청 관리</h1>
+        <h1 className="text-3xl font-semibold text-gray-900">서비스 수정 요청 관리</h1>
         <p className="text-gray-600 mt-1">판매자의 서비스 수정 요청을 검토하세요</p>
       </div>
 
@@ -237,7 +237,7 @@ export default function AdminServiceRevisionsPage() {
 
       {/* 결과 카운트 */}
       <div className="text-sm text-gray-600">
-        총 <span className="font-bold text-gray-900">{filteredRevisions.length}</span> 개의 수정
+        총 <span className="font-semibold text-gray-900">{filteredRevisions.length}</span> 개의 수정
         요청
       </div>
 

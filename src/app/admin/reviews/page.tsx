@@ -101,7 +101,7 @@ export default function AdminReviewsPage() {
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">리뷰 관리</h1>
+        <h1 className="text-3xl font-semibold text-gray-900">리뷰 관리</h1>
         <p className="text-gray-600 mt-1">전체 리뷰를 관리하세요</p>
       </div>
 
@@ -109,7 +109,7 @@ export default function AdminReviewsPage() {
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <div className="flex items-center gap-8">
           <div className="text-center">
-            <div className="text-5xl font-bold text-gray-900 mb-2">
+            <div className="text-5xl font-semibold text-gray-900 mb-2">
               {avgRating.toFixed(1)}
             </div>
             <div className="flex items-center justify-center gap-1 mb-2">
@@ -203,7 +203,7 @@ export default function AdminReviewsPage() {
       {/* 결과 카운트 */}
       <div className="text-sm text-gray-600">
         총{' '}
-        <span className="font-bold text-gray-900">
+        <span className="font-semibold text-gray-900">
           {filteredReviews.length}
         </span>
         {' '}개의 리뷰
@@ -219,7 +219,7 @@ export default function AdminReviewsPage() {
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-brand-primary rounded-full flex items-center justify-center text-white font-bold">
+                  <div className="w-10 h-10 bg-brand-primary rounded-full flex items-center justify-center text-white font-semibold">
                     {(review.buyer?.name || "구매자")[0]}
                   </div>
                   <div>

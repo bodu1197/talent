@@ -69,7 +69,7 @@ export default function BecomeSellerForm({ userId }: Props) {
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-md mx-auto">
         <div className="bg-white rounded-lg shadow-md p-8">
-          <h1 className="text-base md:text-lg font-bold text-gray-900 mb-2">판매자 되기</h1>
+          <h1 className="text-base md:text-lg font-semibold text-gray-900 mb-2">판매자 되기</h1>
           <p className="text-sm md:text-base text-gray-600 mb-6">판매자명을 입력하세요</p>
 
           {error && (

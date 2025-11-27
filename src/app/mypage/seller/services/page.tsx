@@ -176,7 +176,7 @@ export default async function SellerServicesPage({
     return (
       <div className="p-8">
         <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-          <h2 className="text-xl font-bold text-red-900 mb-4">오류가 발생했습니다</h2>
+          <h2 className="text-xl font-semibold text-red-900 mb-4">오류가 발생했습니다</h2>
           <p className="text-red-700 mb-4">
             {error instanceof Error ? error.message : '서비스 목록을 불러올 수 없습니다'}
           </p>

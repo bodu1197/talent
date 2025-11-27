@@ -105,7 +105,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
                 <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-full mb-4">
                   <Store className="w-10 h-10 text-brand-primary" />
                 </div>
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                <h1 className="text-2xl font-semibold text-gray-900 mb-2">
                   판매자로 등록하고 서비스를 판매하세요
                 </h1>
                 <p className="text-gray-600">
@@ -160,7 +160,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
       <div className="py-8 px-4">
         {/* 페이지 헤더 */}
         <div className="mb-6">
-          <h1 className="text-base md:text-lg font-bold text-gray-900">판매 대시보드</h1>
+          <h1 className="text-base md:text-lg font-semibold text-gray-900">판매 대시보드</h1>
           <p className="text-gray-600 mt-2 text-sm md:text-base">판매 현황을 한눈에 확인하세요</p>
         </div>
 
@@ -170,7 +170,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">신규 주문</p>
-                <p className="text-lg font-bold text-gray-900">{stats?.newOrders || 0}건</p>
+                <p className="text-lg font-semibold text-gray-900">{stats?.newOrders || 0}건</p>
               </div>
               <ShoppingCart className="w-7 h-7 text-blue-500" />
             </div>
@@ -179,7 +179,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">진행중</p>
-                <p className="text-lg font-bold text-gray-900">{stats?.inProgressOrders || 0}건</p>
+                <p className="text-lg font-semibold text-gray-900">{stats?.inProgressOrders || 0}건</p>
               </div>
               <Loader2 className="w-7 h-7 text-yellow-500 animate-spin" />
             </div>
@@ -188,7 +188,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">완료된 주문</p>
-                <p className="text-lg font-bold text-gray-900">{stats?.completedOrders || 0}건</p>
+                <p className="text-lg font-semibold text-gray-900">{stats?.completedOrders || 0}건</p>
               </div>
               <CheckCircle className="w-7 h-7 text-green-500" />
             </div>
@@ -197,7 +197,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">이번달 수익</p>
-                <p className="text-lg font-bold text-gray-900">
+                <p className="text-lg font-semibold text-gray-900">
                   {(stats?.monthlyRevenue || 0).toLocaleString()}원
                 </p>
               </div>
@@ -209,7 +209,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
         {/* 최근 주문 */}
         <div className="bg-white rounded-lg shadow">
           <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-            <h2 className="text-base md:text-lg font-bold text-gray-900">최근 주문</h2>
+            <h2 className="text-base md:text-lg font-semibold text-gray-900">최근 주문</h2>
             <Link
               href="/mypage/seller/orders"
               className="text-xs md:text-sm text-brand-primary hover:underline flex items-center gap-1"

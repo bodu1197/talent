@@ -138,7 +138,7 @@ export default function Step4Images({ formData, setFormData }: Props) {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">이미지</h2>
+      <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">이미지</h2>
 
       {/* 썸네일 이미지 */}
       <div>

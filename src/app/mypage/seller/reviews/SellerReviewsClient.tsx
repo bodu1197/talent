@@ -81,7 +81,7 @@ export default function SellerReviewsClient({
     <MypageLayoutWrapper mode="seller">
       <div className="py-8 px-4">
         <div className="mb-8">
-          <h1 className="text-base md:text-lg font-bold text-gray-900">받은 리뷰</h1>
+          <h1 className="text-base md:text-lg font-semibold text-gray-900">받은 리뷰</h1>
           <p className="text-gray-600 mt-1 text-sm md:text-base">
             고객들이 남긴 리뷰를 확인하고 답변하세요
           </p>
@@ -90,7 +90,7 @@ export default function SellerReviewsClient({
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
           <div className="lg:col-span-1 bg-white rounded-lg border border-gray-200 p-6">
             <div className="text-center">
-              <div className="text-5xl font-bold text-gray-900 mb-2">
+              <div className="text-5xl font-semibold text-gray-900 mb-2">
                 {avgRating}
               </div>
               <div className="flex items-center justify-center gap-1 mb-2">
@@ -172,7 +172,7 @@ export default function SellerReviewsClient({
                               />
                             ))}
                           </div>
-                          <span className="font-bold text-gray-900">
+                          <span className="font-semibold text-gray-900">
                             {review.rating}.0
                           </span>
                         </div>
@@ -230,7 +230,7 @@ export default function SellerReviewsClient({
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg max-w-2xl w-full p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-base md:text-lg font-bold text-gray-900">리뷰 답변</h2>
+                <h2 className="text-base md:text-lg font-semibold text-gray-900">리뷰 답변</h2>
                 <button
                   onClick={() => {
                     setShowReplyModal(false);

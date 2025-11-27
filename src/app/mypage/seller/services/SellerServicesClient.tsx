@@ -252,7 +252,7 @@ export default function SellerServicesClient({
       <div className="py-8 px-4">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-base md:text-lg font-bold text-gray-900">서비스 관리</h1>
+            <h1 className="text-base md:text-lg font-semibold text-gray-900">서비스 관리</h1>
             <p className="text-gray-600 mt-1 text-sm">내 서비스를 관리하세요</p>
           </div>
           <Link
@@ -301,7 +301,7 @@ export default function SellerServicesClient({
         </div>
 
         <div className="mb-4 text-sm text-gray-600">
-          총 <span className="font-bold text-gray-900">
+          총 <span className="font-semibold text-gray-900">
             {filteredServices.length}
           </span> 개의 서비스
         </div>
@@ -333,7 +333,7 @@ export default function SellerServicesClient({
                   {/* 오른쪽 내용 */}
                   <div className="flex-1 p-4 flex flex-col">
                     <div className="flex items-start justify-between mb-2 gap-4">
-                      <h3 className="text-sm md:text-base font-bold text-gray-900 flex-1 min-w-0 truncate">
+                      <h3 className="text-sm md:text-base font-semibold text-gray-900 flex-1 min-w-0 truncate">
                         {service.title}
                       </h3>
                       <div className="flex gap-2 flex-shrink-0">
@@ -451,7 +451,7 @@ export default function SellerServicesClient({
                             className="w-4 h-4 text-red-500"
                             aria-hidden="true"
                           />
-                          <span className="font-bold text-red-800">
+                          <span className="font-semibold text-red-800">
                             수정 요청이 반려되었습니다
                           </span>
                           {service._rejectedRevision.reviewed_at && (

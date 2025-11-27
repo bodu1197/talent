@@ -50,7 +50,7 @@ export default async function UserReviews() {
       <div className="container-1200">
         {/* 제목 */}
         <div className="text-center mb-6 md:mb-12">
-          <h2 className="text-xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 md:mb-4">
+          <h2 className="text-xl md:text-3xl lg:text-4xl font-semibold text-gray-900 mb-2 md:mb-4">
             고객들의 생생한 후기
           </h2>
           <p className="text-sm md:text-lg text-gray-600">

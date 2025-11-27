@@ -146,7 +146,7 @@ export default function AdminCategoriesPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">카테고리 관리</h1>
+          <h1 className="text-3xl font-semibold text-slate-900 mb-2">카테고리 관리</h1>
           <p className="text-slate-600">서비스 카테고리를 추가, 수정, 삭제할 수 있습니다</p>
         </div>
         <button
@@ -178,7 +178,7 @@ export default function AdminCategoriesPage() {
                         <Folder className="text-[#0f3460] w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-bold text-slate-900">{parent.name}</h3>
+                        <h3 className="text-lg font-semibold text-slate-900">{parent.name}</h3>
                         <p className="text-sm text-slate-600 mt-1">/{parent.slug}</p>
                       </div>
                       {!parent.is_active && (
@@ -267,7 +267,7 @@ export default function AdminCategoriesPage() {
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
             <form onSubmit={handleSubmit}>
               <div className="px-6 py-4 border-b border-slate-200">
-                <h2 className="text-xl font-bold text-slate-900">
+                <h2 className="text-xl font-semibold text-slate-900">
                   {editingCategory ? '카테고리 수정' : '새 카테고리 추가'}
                 </h2>
                 <p className="text-sm text-slate-600 mt-1">

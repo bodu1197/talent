@@ -168,7 +168,7 @@ export default async function ExpertDetailPage({ params }: ExpertDetailProps) {
                   priority
                 />
               ) : (
-                <div className="w-32 h-32 bg-brand-primary rounded-full flex items-center justify-center text-white text-4xl font-bold">
+                <div className="w-32 h-32 bg-brand-primary rounded-full flex items-center justify-center text-white text-4xl font-semibold">
                   {displayName[0]}
                 </div>
               )}
@@ -182,7 +182,7 @@ export default async function ExpertDetailPage({ params }: ExpertDetailProps) {
             {/* 프로필 정보 */}
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-2xl font-bold">{displayName}</h1>
+                <h1 className="text-2xl font-semibold">{displayName}</h1>
                 {seller.is_verified && (
                   <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">
                     인증됨
@@ -196,17 +196,17 @@ export default async function ExpertDetailPage({ params }: ExpertDetailProps) {
               <div className="flex flex-wrap gap-6 text-sm">
                 <div className="flex items-center gap-2">
                   <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                  <span className="font-bold">{avgRating.toFixed(1)}</span>
+                  <span className="font-semibold">{avgRating.toFixed(1)}</span>
                   <span className="text-gray-500">({totalReviews} 리뷰)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Briefcase className="w-4 h-4 text-gray-400" />
-                  <span className="font-bold">{services?.length || 0}</span>
+                  <span className="font-semibold">{services?.length || 0}</span>
                   <span className="text-gray-500">서비스</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <User className="w-4 h-4 text-gray-400" />
-                  <span className="font-bold">{totalOrders || 0}</span>
+                  <span className="font-semibold">{totalOrders || 0}</span>
                   <span className="text-gray-500">거래 완료</span>
                 </div>
               </div>
@@ -236,7 +236,7 @@ export default async function ExpertDetailPage({ params }: ExpertDetailProps) {
 
       {/* 서비스 목록 */}
       <div className="container-1200 px-4 py-8">
-        <h2 className="text-xl font-bold mb-6">
+        <h2 className="text-xl font-semibold mb-6">
           {displayName}님의 서비스 ({servicesWithStats.length})
         </h2>
 
@@ -249,7 +249,7 @@ export default async function ExpertDetailPage({ params }: ExpertDetailProps) {
         ) : (
           <div className="text-center py-20 bg-white rounded-lg">
             <Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-gray-900 mb-2">등록된 서비스가 없습니다</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">등록된 서비스가 없습니다</h3>
             <p className="text-gray-600">아직 등록된 서비스가 없습니다.</p>
           </div>
         )}

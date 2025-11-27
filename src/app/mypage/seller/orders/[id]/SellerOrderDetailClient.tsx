@@ -276,7 +276,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
         <div className="mb-8">
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-xl font-bold text-gray-900">주문 상세</h1>
+              <h1 className="text-xl font-semibold text-gray-900">주문 상세</h1>
               <p className="text-gray-600 mt-1 text-sm">
                 주문 번호: #{order.order_number || order.id.slice(0, 8)}
               </p>
@@ -307,7 +307,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
           <div className="lg:col-span-2 space-y-6">
             {/* 주문 정보 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">주문 정보</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">주문 정보</h2>
 
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
@@ -323,7 +323,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                     )}
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg font-bold text-gray-900 mb-2">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
                       {order.title || order.service?.title || '서비스 제목 없음'}
                     </h3>
                     <div className="grid grid-cols-2 gap-3 text-sm">
@@ -359,7 +359,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
 
             {/* 요구사항 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">구매자 요구사항</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">구매자 요구사항</h2>
               <div className="bg-gray-50 rounded-lg p-4 mb-4">
                 <p className="text-gray-700 whitespace-pre-wrap">
                   {order.requirements || '요구사항이 없습니다'}
@@ -380,7 +380,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
 
             {/* 납품 파일 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">납품 파일</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">납품 파일</h2>
               {order.deliverables && order.deliverables.length > 0 ? (
                 <div className="space-y-3">
                   {order.deliverables.map((file) => (
@@ -418,7 +418,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
 
             {/* 상태 이력 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">상태 이력</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">상태 이력</h2>
               <div className="space-y-3">
                 {statusHistory.map((history, index) => (
                   <div
@@ -444,10 +444,10 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
           <div className="space-y-6">
             {/* 현재 상태 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="font-bold text-gray-900 mb-4">현재 상태</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">현재 상태</h3>
               <div className="flex items-center justify-center py-4">
                 <span
-                  className={`px-6 py-3 rounded-lg font-bold text-lg ${getStatusColor(order.status)}`}
+                  className={`px-6 py-3 rounded-lg font-semibold text-lg ${getStatusColor(order.status)}`}
                 >
                   {getStatusLabel(order.status)}
                 </span>
@@ -456,9 +456,9 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
 
             {/* 구매자 정보 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="font-bold text-gray-900 mb-4">구매자 정보</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">구매자 정보</h3>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center text-white font-bold">
+                <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center text-white font-semibold">
                   {(order.buyer?.name || '구매자')[0] || 'U'}
                 </div>
                 <div>
@@ -477,7 +477,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
 
             {/* 결제 정보 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="font-bold text-gray-900 mb-4">결제 정보</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">결제 정보</h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">주문 금액</span>
@@ -486,8 +486,8 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                   </span>
                 </div>
                 <div className="flex items-center justify-between pt-3 border-t border-gray-200">
-                  <span className="font-bold text-gray-900">최종 금액</span>
-                  <span className="font-bold text-brand-primary text-lg">
+                  <span className="font-semibold text-gray-900">최종 금액</span>
+                  <span className="font-semibold text-brand-primary text-lg">
                     {order.total_amount?.toLocaleString() || '0'}원
                   </span>
                 </div>
@@ -502,14 +502,14 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
 
             {/* 빠른 액션 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="font-bold text-gray-900 mb-4">빠른 액션</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">빠른 액션</h3>
               <div className="space-y-2">
                 {/* 결제 완료 상태일 때: 접수 버튼 표시 */}
                 {order.status === 'paid' && (
                   <button
                     onClick={handleAcceptOrder}
                     disabled={submitting}
-                    className="w-full px-4 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-4 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {submitting ? (
                       <>
@@ -529,7 +529,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                 {order.status === 'in_progress' && (
                   <button
                     onClick={() => setShowDeliveryModal(true)}
-                    className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-bold text-lg"
+                    className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold text-lg"
                   >
                     <Upload className="mr-2 inline w-5 h-5" />
                     납품하기
@@ -557,7 +557,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg max-w-md w-full p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">주문 취소 요청</h2>
+                <h2 className="text-2xl font-semibold text-gray-900">주문 취소 요청</h2>
                 <button
                   onClick={() => setShowCancelModal(false)}
                   className="text-gray-400 hover:text-gray-600"
@@ -624,7 +624,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg max-w-2xl w-full p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">납품하기</h2>
+                <h2 className="text-2xl font-semibold text-gray-900">납품하기</h2>
                 <button
                   onClick={() => setShowDeliveryModal(false)}
                   className="text-gray-400 hover:text-gray-600"

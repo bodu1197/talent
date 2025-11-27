@@ -92,7 +92,7 @@ export default function WithdrawClient({
     <MypageLayoutWrapper mode="seller" profileData={profileData}>
       <div className="py-8 px-4">
         <div className="max-w-2xl mx-auto">
-          <h1 className="text-base md:text-lg font-bold mb-6">출금 신청</h1>
+          <h1 className="text-base md:text-lg font-semibold mb-6">출금 신청</h1>
 
           {/* Pending withdrawal notice */}
           {pendingWithdrawal && (
@@ -108,7 +108,7 @@ export default function WithdrawClient({
 
           <div className="bg-white rounded-lg shadow p-6 mb-6">
             <h2 className="text-base md:text-lg font-semibold mb-4">출금 가능 금액</h2>
-            <p className="text-3xl font-bold text-primary-600">
+            <p className="text-3xl font-semibold text-primary-600">
               {availableBalance.toLocaleString()}원
             </p>
           </div>

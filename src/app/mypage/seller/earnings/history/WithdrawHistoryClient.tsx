@@ -47,7 +47,7 @@ export default function WithdrawHistoryClient({ history }: WithdrawHistoryClient
     <MypageLayoutWrapper mode="seller">
       <div className="py-8 px-4">
         <div className="mb-8">
-          <h1 className="text-base md:text-lg font-bold text-gray-900">출금 내역</h1>
+          <h1 className="text-base md:text-lg font-semibold text-gray-900">출금 내역</h1>
           <p className="text-gray-600 mt-1 text-sm md:text-base">출금 이력을 확인하세요</p>
         </div>
 

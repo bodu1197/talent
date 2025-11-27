@@ -209,7 +209,7 @@ export default function HeroSection() {
           <div className="flex-1 w-full">
             <div className="mb-6 lg:mb-8 pt-5">
               <h1
-                className={`text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 lg:mb-4 transition-opacity duration-500 lg:min-h-[120px] leading-[1.6] whitespace-pre-line ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+                className={`text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 mb-3 lg:mb-4 transition-opacity duration-500 lg:min-h-[120px] leading-[1.6] whitespace-pre-line ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
               >
                 {slide.title}
               </h1>
@@ -355,7 +355,7 @@ export default function HeroSection() {
 
               {/* 내용 */}
               <h3
-                className={`text-2xl font-bold mb-2 transition-opacity duration-500 text-gray-900 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+                className={`text-2xl font-semibold mb-2 transition-opacity duration-500 text-gray-900 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
                 style={{ textShadow: '0 2px 4px rgba(255, 255, 255, 0.5)' }}
               >
                 {slide.cardTitle}

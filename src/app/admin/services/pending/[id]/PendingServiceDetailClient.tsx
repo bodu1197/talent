@@ -77,7 +77,7 @@ export default function PendingServiceDetailClient({ service }: Props) {
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-semibold text-gray-900 mb-2">
               {isResubmission ? "재신청 서비스 검토" : "신규 서비스 검토"}
             </h1>
             <p className="text-gray-600">
@@ -97,7 +97,7 @@ export default function PendingServiceDetailClient({ service }: Props) {
 
         {/* 서비스 정보 */}
         <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-          <h2 className="text-xl font-bold mb-4">등록 정보</h2>
+          <h2 className="text-xl font-semibold mb-4">등록 정보</h2>
 
           {/* 재신청 알림 */}
           {isResubmission && (
@@ -146,7 +146,7 @@ export default function PendingServiceDetailClient({ service }: Props) {
 
         {/* 서비스 상세 */}
         <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-          <h2 className="text-xl font-bold mb-4">서비스 상세</h2>
+          <h2 className="text-xl font-semibold mb-4">서비스 상세</h2>
 
           {/* 썸네일 */}
           {service.thumbnail_url && (
@@ -193,7 +193,7 @@ export default function PendingServiceDetailClient({ service }: Props) {
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
               <span className="text-sm text-gray-600 block mb-1">가격</span>
-              <p className="text-xl font-bold">
+              <p className="text-xl font-semibold">
                 {service.price?.toLocaleString()}원
               </p>
             </div>
@@ -201,13 +201,13 @@ export default function PendingServiceDetailClient({ service }: Props) {
               <span className="text-sm text-gray-600 block mb-1">
                 작업 기간
               </span>
-              <p className="text-xl font-bold">{service.delivery_days}일</p>
+              <p className="text-xl font-semibold">{service.delivery_days}일</p>
             </div>
             <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
               <span className="text-sm text-gray-600 block mb-1">
                 수정 횟수
               </span>
-              <p className="text-xl font-bold">
+              <p className="text-xl font-semibold">
                 {service.revision_count === 999
                   ? "무제한"
                   : `${service.revision_count}회`}

@@ -108,7 +108,7 @@ export default function AdminDashboardPage() {
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">대시보드</h1>
+        <h1 className="text-3xl font-semibold text-gray-900">대시보드</h1>
         <p className="text-gray-600 mt-1">
           플랫폼 전체 현황을 한눈에 확인하세요
         </p>
@@ -123,7 +123,7 @@ export default function AdminDashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">전체 회원</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">
+              <p className="text-2xl font-semibold text-gray-900 mt-1">
                 {stats?.totalUsers.toLocaleString()}
               </p>
             </div>
@@ -137,7 +137,7 @@ export default function AdminDashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">오늘 매출</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">
+              <p className="text-2xl font-semibold text-gray-900 mt-1">
                 {stats?.todayRevenue.toLocaleString()}원
               </p>
             </div>
@@ -154,7 +154,7 @@ export default function AdminDashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">진행중 주문</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">
+              <p className="text-2xl font-semibold text-gray-900 mt-1">
                 {stats?.inProgressOrders}
               </p>
             </div>
@@ -171,7 +171,7 @@ export default function AdminDashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">대기중 신고</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">
+              <p className="text-2xl font-semibold text-gray-900 mt-1">
                 {stats?.pendingReports}
               </p>
             </div>
@@ -188,7 +188,7 @@ export default function AdminDashboardPage() {
           <h3 className="text-sm font-medium text-gray-600 mb-2">
             이번달 매출
           </h3>
-          <p className="text-2xl font-bold text-gray-900">
+          <p className="text-2xl font-semibold text-gray-900">
             {stats?.monthlyRevenue.toLocaleString()}원
           </p>
         </div>
@@ -196,13 +196,13 @@ export default function AdminDashboardPage() {
           <h3 className="text-sm font-medium text-gray-600 mb-2">
             이번달 주문
           </h3>
-          <p className="text-2xl font-bold text-gray-900">
+          <p className="text-2xl font-semibold text-gray-900">
             {stats?.monthlyOrderCount.toLocaleString()}건
           </p>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <h3 className="text-sm font-medium text-gray-600 mb-2">총 서비스</h3>
-          <p className="text-2xl font-bold text-gray-900">
+          <p className="text-2xl font-semibold text-gray-900">
             {stats?.totalServices.toLocaleString()}개
           </p>
         </div>
@@ -212,7 +212,7 @@ export default function AdminDashboardPage() {
         {/* 최근 주문 */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-gray-900">최근 주문</h2>
+            <h2 className="text-lg font-semibold text-gray-900">최근 주문</h2>
             <Link
               href="/admin/orders"
               className="text-sm text-brand-primary hover:underline"
@@ -260,7 +260,7 @@ export default function AdminDashboardPage() {
         {/* 최근 가입 회원 */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-gray-900">최근 가입 회원</h2>
+            <h2 className="text-lg font-semibold text-gray-900">최근 가입 회원</h2>
             <Link
               href="/admin/users"
               className="text-sm text-brand-primary hover:underline"

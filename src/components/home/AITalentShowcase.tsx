@@ -28,7 +28,7 @@ export default function AITalentShowcase({ services = [] }: Props) {
       <div className="container-1200">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-mobile-lg lg:text-xl font-bold mb-2">AI 재능 쇼케이스</h2>
+            <h2 className="text-mobile-lg lg:text-xl font-semibold mb-2">AI 재능 쇼케이스</h2>
             <p className="text-mobile-md text-gray-600">AI 전문가들의 인기 서비스</p>
           </div>
           <Link
@@ -76,7 +76,7 @@ export default function AITalentShowcase({ services = [] }: Props) {
               <div className="mt-2">
                 {/* 판매자 */}
                 <div className="flex items-center gap-1 mb-1">
-                  <div className="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center text-white text-[8px] font-bold">
+                  <div className="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center text-white text-[8px] font-semibold">
                     {service.seller?.display_name?.[0] || 'S'}
                   </div>
                   <span className="text-xs text-gray-600 truncate">
@@ -101,7 +101,7 @@ export default function AITalentShowcase({ services = [] }: Props) {
                 </div>
 
                 {/* 가격 */}
-                <p className="text-brand-primary font-bold text-sm">
+                <p className="text-brand-primary font-semibold text-sm">
                   {(service.price || 0).toLocaleString()}원
                 </p>
               </div>

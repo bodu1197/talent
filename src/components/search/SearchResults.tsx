@@ -127,7 +127,7 @@ export default function SearchResults({
             ) : (
               <div className="text-center py-20">
                 <Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <h2 className="text-xl font-bold text-gray-900 mb-2">
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">
                   서비스 검색 결과가 없습니다
                 </h2>
                 <p className="text-gray-600">다른 검색어로 다시 시도해보세요.</p>
@@ -157,7 +157,7 @@ export default function SearchResults({
                             className="rounded-full object-cover"
                           />
                         ) : (
-                          <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 text-2xl font-bold">
+                          <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 text-2xl font-semibold">
                             {(expert.display_name || expert.business_name || 'S')[0]}
                           </div>
                         )}
@@ -168,7 +168,7 @@ export default function SearchResults({
                         )}
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-bold text-lg mb-1">
+                        <h3 className="font-semibold text-lg mb-1">
                           {expert.display_name || expert.business_name}
                         </h3>
                         {expert.bio && (
@@ -190,7 +190,7 @@ export default function SearchResults({
             ) : (
               <div className="text-center py-20">
                 <Star className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <h2 className="text-xl font-bold text-gray-900 mb-2">
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">
                   전문가 검색 결과가 없습니다
                 </h2>
                 <p className="text-gray-600">다른 검색어로 다시 시도해보세요.</p>
@@ -259,7 +259,7 @@ export default function SearchResults({
             ) : (
               <div className="text-center py-20">
                 <Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <h2 className="text-xl font-bold text-gray-900 mb-2">
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">
                   포트폴리오 검색 결과가 없습니다
                 </h2>
                 <p className="text-gray-600">다른 검색어로 다시 시도해보세요.</p>

@@ -82,27 +82,27 @@ export default function BankTransferClient({ order }: Props) {
             <ArrowLeft className="w-4 h-4" />
             <span>뒤로가기</span>
           </button>
-          <h1 className="text-2xl font-bold text-gray-900">무통장 입금 안내</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">무통장 입금 안내</h1>
         </div>
 
         {/* 입금 정보 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-4">
           <div className="flex items-center gap-2 mb-4">
             <Landmark className="w-7 h-7 text-brand-primary" />
-            <h2 className="text-lg font-bold text-gray-900">입금 계좌 정보</h2>
+            <h2 className="text-lg font-semibold text-gray-900">입금 계좌 정보</h2>
           </div>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-4">
             <div className="space-y-4">
               <div>
                 <span className="text-sm text-gray-600 block mb-1">은행명</span>
-                <span className="text-xl font-bold text-gray-900">{bankInfo.bankName}</span>
+                <span className="text-xl font-semibold text-gray-900">{bankInfo.bankName}</span>
               </div>
 
               <div>
                 <span className="text-sm text-gray-600 block mb-1">계좌번호</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-xl font-bold text-gray-900 font-mono">
+                  <span className="text-xl font-semibold text-gray-900 font-mono">
                     {bankInfo.accountNumber}
                   </span>
                   <button
@@ -116,12 +116,12 @@ export default function BankTransferClient({ order }: Props) {
 
               <div>
                 <span className="text-sm text-gray-600 block mb-1">예금주</span>
-                <span className="text-xl font-bold text-gray-900">{bankInfo.accountHolder}</span>
+                <span className="text-xl font-semibold text-gray-900">{bankInfo.accountHolder}</span>
               </div>
 
               <div className="pt-4 border-t border-blue-300">
                 <span className="text-sm text-gray-600 block mb-1">입금 금액</span>
-                <span className="text-2xl font-bold text-brand-primary">
+                <span className="text-2xl font-semibold text-brand-primary">
                   {order.amount.toLocaleString()}원
                 </span>
               </div>
@@ -145,7 +145,7 @@ export default function BankTransferClient({ order }: Props) {
 
         {/* 안내 사항 */}
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-          <h3 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
+          <h3 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
             <AlertTriangle className="w-5 h-5 text-yellow-600" />
             입금 전 확인사항
           </h3>
@@ -172,7 +172,7 @@ export default function BankTransferClient({ order }: Props) {
         {/* 버튼 */}
         <button
           onClick={handleConfirmTransfer}
-          className="w-full py-4 bg-brand-primary text-white rounded-lg font-bold text-lg hover:bg-[#1a4d8f] transition-colors"
+          className="w-full py-4 bg-brand-primary text-white rounded-lg font-semibold text-lg hover:bg-[#1a4d8f] transition-colors"
         >
           입금 완료 확인 요청
         </button>

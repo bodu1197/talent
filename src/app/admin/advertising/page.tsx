@@ -137,7 +137,7 @@ export default function AdminAdvertisingPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">광고 관리</h1>
+          <h1 className="text-3xl font-semibold text-slate-900 mb-2">광고 관리</h1>
           <p className="text-slate-600">판매자들의 광고 구독을 관리합니다</p>
         </div>
         <div className="flex gap-2">
@@ -148,7 +148,7 @@ export default function AdminAdvertisingPage() {
             <Banknote className="w-5 h-5" />
             무통장 입금 확인
             {summary && summary.pendingPayments > 0 && (
-              <span className="bg-white text-red-600 rounded-full px-2 py-0.5 text-xs font-bold">
+              <span className="bg-white text-red-600 rounded-full px-2 py-0.5 text-xs font-semibold">
                 {summary.pendingPayments}
               </span>
             )}
@@ -175,7 +175,7 @@ export default function AdminAdvertisingPage() {
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600 mb-2">총 수익</p>
-                <p className="text-3xl font-bold text-slate-900">
+                <p className="text-3xl font-semibold text-slate-900">
                   ₩{summary.totalRevenue.toLocaleString()}
                 </p>
               </div>
@@ -189,7 +189,7 @@ export default function AdminAdvertisingPage() {
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600 mb-2">활성 광고</p>
-                <p className="text-3xl font-bold text-slate-900">{summary.activeSubscriptions}</p>
+                <p className="text-3xl font-semibold text-slate-900">{summary.activeSubscriptions}</p>
                 <p className="text-sm text-slate-500 mt-1">
                   월 ₩{summary.monthlyRevenue.toLocaleString()}
                 </p>
@@ -204,7 +204,7 @@ export default function AdminAdvertisingPage() {
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600 mb-2">결제 대기</p>
-                <p className="text-3xl font-bold text-slate-900">{summary.pendingPayments}</p>
+                <p className="text-3xl font-semibold text-slate-900">{summary.pendingPayments}</p>
               </div>
               <div className="rounded-lg bg-yellow-50 p-3">
                 <Clock className="w-6 h-6 text-yellow-600" />
@@ -394,7 +394,7 @@ export default function AdminAdvertisingPage() {
           >
             <div className="px-6 py-4 border-b border-slate-200">
               <div className="flex items-center justify-between">
-                <h2 id="subscription-detail-title" className="text-xl font-bold text-slate-900">
+                <h2 id="subscription-detail-title" className="text-xl font-semibold text-slate-900">
                   광고 상세 정보
                 </h2>
                 <button

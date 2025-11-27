@@ -7,7 +7,7 @@ export default function SellerRegistrationGuide() {
         <div className="max-w-6xl mx-auto">
           {/* 제목 */}
           <div className="text-center mb-6 md:mb-12">
-            <h2 className="text-xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 md:mb-4">
+            <h2 className="text-xl md:text-3xl lg:text-4xl font-semibold text-gray-900 mb-2 md:mb-4">
               돌파구 판매자가 되어보세요
             </h2>
             <p className="text-sm md:text-lg text-gray-600">

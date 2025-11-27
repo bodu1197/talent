@@ -44,7 +44,7 @@ export default function Step2Pricing({ formData, setFormData }: Props) {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">가격 설정</h2>
+      <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">가격 설정</h2>
 
       {/* 서비스 가격 */}
       <div>
@@ -118,19 +118,19 @@ export default function Step2Pricing({ formData, setFormData }: Props) {
 
       {/* 가격 미리보기 */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
-        <h3 className="text-sm md:text-base font-bold text-gray-900 mb-4">가격 요약</h3>
+        <h3 className="text-sm md:text-base font-semibold text-gray-900 mb-4">가격 요약</h3>
         <div className="space-y-3">
           <div className="flex justify-between">
             <span className="text-gray-700">서비스 금액</span>
-            <span className="font-bold text-gray-900">{formatPrice(formData.price || '0')}원</span>
+            <span className="font-semibold text-gray-900">{formatPrice(formData.price || '0')}원</span>
           </div>
           <div className="flex justify-between text-sm text-gray-600">
             <span>운영자 커피값</span>
             <span>-1,000원</span>
           </div>
           <div className="border-t border-blue-300 pt-3 flex justify-between">
-            <span className="font-bold text-gray-900">예상 수익</span>
-            <span className="font-bold text-brand-primary text-lg">
+            <span className="font-semibold text-gray-900">예상 수익</span>
+            <span className="font-semibold text-brand-primary text-lg">
               {formatPrice(Math.max(0, Number.parseInt(formData.price || '0') - 1000).toString())}원
             </span>
           </div>

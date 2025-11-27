@@ -607,14 +607,14 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
 
         {/* 페이지 헤더 */}
         <div className="mb-8">
-          <h1 className="text-base md:text-lg font-bold text-gray-900">서비스 수정</h1>
+          <h1 className="text-base md:text-lg font-semibold text-gray-900">서비스 수정</h1>
           <p className="text-gray-600 mt-1 text-sm">서비스 정보를 수정하세요</p>
         </div>
 
         <form onSubmit={handleSubmit} className="max-w-4xl">
           {/* 기본 정보 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-            <h2 className="text-sm md:text-base font-bold text-gray-900 mb-6">기본 정보</h2>
+            <h2 className="text-sm md:text-base font-semibold text-gray-900 mb-6">기본 정보</h2>
 
             <div className="space-y-4">
               {/* 썸네일 이미지 - 최상단 */}
@@ -917,7 +917,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
 
           {/* 가격 및 작업 조건 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-            <h2 className="text-sm md:text-base font-bold text-gray-900 mb-6">가격 및 작업 조건</h2>
+            <h2 className="text-sm md:text-base font-semibold text-gray-900 mb-6">가격 및 작업 조건</h2>
 
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -984,7 +984,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
 
           {/* 추가 정보 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-            <h2 className="text-sm md:text-base font-bold text-gray-900 mb-6">추가 정보</h2>
+            <h2 className="text-sm md:text-base font-semibold text-gray-900 mb-6">추가 정보</h2>
 
             <div className="space-y-4">
               <div>

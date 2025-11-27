@@ -50,7 +50,7 @@ export default function StatCard({ title, value, icon, color = 'blue', subtitle 
           <IconComponent className="w-5 h-5" aria-hidden="true" />
         </div>
       </div>
-      <div className="text-lg font-bold text-gray-900 mb-1">{value}</div>
+      <div className="text-lg font-semibold text-gray-900 mb-1">{value}</div>
       {subtitle && <div className="text-sm text-gray-500">{subtitle}</div>}
     </div>
   );

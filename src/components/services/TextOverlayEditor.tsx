@@ -379,7 +379,7 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
         <div className="flex items-start gap-3">
           <Lightbulb className="w-6 h-6 text-blue-600 mt-0.5" />
           <div>
-            <p className="font-bold text-blue-900 mb-1">중요!</p>
+            <p className="font-semibold text-blue-900 mb-1">중요!</p>
             <p className="text-sm text-blue-800">
               편집이 완료되면 반드시 아래 <strong>"썸네일 생성하기"</strong> 버튼을 눌러주세요.
               버튼을 누르지 않으면 썸네일이 저장되지 않습니다.

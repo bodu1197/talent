@@ -162,7 +162,7 @@ export default function BankTransferAdvertisingPage() {
               {[1, 2, 3, 4, 5, 6].map((s) => (
                 <div key={s} className="flex items-center flex-1">
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
+                    className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
                       step >= s ? 'bg-[#0f3460] text-white' : 'bg-gray-300 text-gray-600'
                     }`}
                   >
@@ -177,29 +177,29 @@ export default function BankTransferAdvertisingPage() {
               ))}
             </div>
             <div className="flex justify-between mt-2 text-sm">
-              <span className={step >= 1 ? 'text-[#0f3460] font-bold' : 'text-gray-500'}>
+              <span className={step >= 1 ? 'text-[#0f3460] font-semibold' : 'text-gray-500'}>
                 재능 선택
               </span>
-              <span className={step >= 2 ? 'text-[#0f3460] font-bold' : 'text-gray-500'}>
+              <span className={step >= 2 ? 'text-[#0f3460] font-semibold' : 'text-gray-500'}>
                 광고 상품
               </span>
-              <span className={step >= 3 ? 'text-[#0f3460] font-bold' : 'text-gray-500'}>
+              <span className={step >= 3 ? 'text-[#0f3460] font-semibold' : 'text-gray-500'}>
                 정보 입력
               </span>
-              <span className={step >= 4 ? 'text-[#0f3460] font-bold' : 'text-gray-500'}>
+              <span className={step >= 4 ? 'text-[#0f3460] font-semibold' : 'text-gray-500'}>
                 입금 정보
               </span>
-              <span className={step >= 5 ? 'text-[#0f3460] font-bold' : 'text-gray-500'}>
+              <span className={step >= 5 ? 'text-[#0f3460] font-semibold' : 'text-gray-500'}>
                 입금 확인
               </span>
-              <span className={step >= 6 ? 'text-[#0f3460] font-bold' : 'text-gray-500'}>완료</span>
+              <span className={step >= 6 ? 'text-[#0f3460] font-semibold' : 'text-gray-500'}>완료</span>
             </div>
           </div>
 
           {/* Step 1: Service Selection */}
           {step === 1 && (
             <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-2xl font-bold mb-6">광고할 재능을 선택하세요</h2>
+              <h2 className="text-2xl font-semibold mb-6">광고할 재능을 선택하세요</h2>
 
               {services.length === 0 ? (
                 <div className="text-center py-12">
@@ -234,7 +234,7 @@ export default function BankTransferAdvertisingPage() {
                           />
                         )}
                         <div>
-                          <h3 className="font-bold text-lg">{service.title}</h3>
+                          <h3 className="font-semibold text-lg">{service.title}</h3>
                         </div>
                       </div>
                     </button>
@@ -247,7 +247,7 @@ export default function BankTransferAdvertisingPage() {
           {/* Step 2: Package Selection */}
           {step === 2 && (
             <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-2xl font-bold mb-6">광고 상품을 선택하세요</h2>
+              <h2 className="text-2xl font-semibold mb-6">광고 상품을 선택하세요</h2>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {Object.entries(PACKAGES).map(([key, pkg]) => (
@@ -268,8 +268,8 @@ export default function BankTransferAdvertisingPage() {
                         : 'border-gray-200 hover:border-[#0f3460]'
                     }`}
                   >
-                    <h3 className="text-xl font-bold mb-2">{pkg.name}</h3>
-                    <p className="text-3xl font-bold text-[#0f3460] mb-4">
+                    <h3 className="text-xl font-semibold mb-2">{pkg.name}</h3>
+                    <p className="text-3xl font-semibold text-[#0f3460] mb-4">
                       {pkg.price.toLocaleString()}원
                       <span className="text-sm text-gray-600">/월</span>
                     </p>
@@ -304,11 +304,11 @@ export default function BankTransferAdvertisingPage() {
           {/* Step 3: Information Input */}
           {step === 3 && (
             <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-2xl font-bold mb-6">입금자 정보를 입력하세요</h2>
+              <h2 className="text-2xl font-semibold mb-6">입금자 정보를 입력하세요</h2>
 
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="depositor-name" className="block text-sm font-bold mb-2">
+                  <label htmlFor="depositor-name" className="block text-sm font-semibold mb-2">
                     입금자명 *
                   </label>
                   <input
@@ -327,7 +327,7 @@ export default function BankTransferAdvertisingPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="depositor-phone" className="block text-sm font-bold mb-2">
+                  <label htmlFor="depositor-phone" className="block text-sm font-semibold mb-2">
                     연락처 *
                   </label>
                   <input
@@ -341,7 +341,7 @@ export default function BankTransferAdvertisingPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="depositor-email" className="block text-sm font-bold mb-2">
+                  <label htmlFor="depositor-email" className="block text-sm font-semibold mb-2">
                     이메일 *
                   </label>
                   <input
@@ -355,7 +355,7 @@ export default function BankTransferAdvertisingPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="business-registration" className="block text-sm font-bold mb-2">
+                  <label htmlFor="business-registration" className="block text-sm font-semibold mb-2">
                     사업자 등록번호 (선택)
                   </label>
                   <input
@@ -419,25 +419,25 @@ export default function BankTransferAdvertisingPage() {
           {/* Step 4: Deposit Information */}
           {step === 4 && (
             <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-2xl font-bold mb-6">입금 정보</h2>
+              <h2 className="text-2xl font-semibold mb-6">입금 정보</h2>
 
               <div className="bg-blue-50 border-2 border-[#0f3460] rounded-lg p-6 mb-6">
-                <h3 className="font-bold text-lg mb-4">계좌 정보</h3>
+                <h3 className="font-semibold text-lg mb-4">계좌 정보</h3>
                 <div className="space-y-2">
                   <p>
-                    <span className="font-bold">은행:</span> {BANK_ACCOUNT.bank}
+                    <span className="font-semibold">은행:</span> {BANK_ACCOUNT.bank}
                   </p>
                   <p>
-                    <span className="font-bold">계좌번호:</span> {BANK_ACCOUNT.account}
+                    <span className="font-semibold">계좌번호:</span> {BANK_ACCOUNT.account}
                   </p>
                   <p>
-                    <span className="font-bold">예금주:</span> {BANK_ACCOUNT.holder}
+                    <span className="font-semibold">예금주:</span> {BANK_ACCOUNT.holder}
                   </p>
                 </div>
               </div>
 
               <div className="bg-gray-50 rounded-lg p-6">
-                <h3 className="font-bold text-lg mb-4">주문 요약</h3>
+                <h3 className="font-semibold text-lg mb-4">주문 요약</h3>
                 <div className="space-y-2">
                   <p>
                     <span className="text-gray-600">상품:</span>{' '}
@@ -445,7 +445,7 @@ export default function BankTransferAdvertisingPage() {
                   </p>
                   <p>
                     <span className="text-gray-600">금액:</span>{' '}
-                    <span className="text-2xl font-bold text-[#0f3460]">
+                    <span className="text-2xl font-semibold text-[#0f3460]">
                       {formData.depositAmount.toLocaleString()}원
                     </span>
                   </p>
@@ -481,11 +481,11 @@ export default function BankTransferAdvertisingPage() {
           {/* Step 5: Deposit Confirmation */}
           {step === 5 && (
             <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-2xl font-bold mb-6">입금 확인 정보를 입력하세요</h2>
+              <h2 className="text-2xl font-semibold mb-6">입금 확인 정보를 입력하세요</h2>
 
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="deposit-bank" className="block text-sm font-bold mb-2">
+                  <label htmlFor="deposit-bank" className="block text-sm font-semibold mb-2">
                     입금 은행 *
                   </label>
                   <select
@@ -507,7 +507,7 @@ export default function BankTransferAdvertisingPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="deposit-date" className="block text-sm font-bold mb-2">
+                  <label htmlFor="deposit-date" className="block text-sm font-semibold mb-2">
                     입금 날짜 *
                   </label>
                   <input
@@ -520,7 +520,7 @@ export default function BankTransferAdvertisingPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="deposit-time" className="block text-sm font-bold mb-2">
+                  <label htmlFor="deposit-time" className="block text-sm font-semibold mb-2">
                     입금 시간 *
                   </label>
                   <input
@@ -533,7 +533,7 @@ export default function BankTransferAdvertisingPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="deposit-amount" className="block text-sm font-bold mb-2">
+                  <label htmlFor="deposit-amount" className="block text-sm font-semibold mb-2">
                     입금 금액 확인 *
                   </label>
                   <input
@@ -546,7 +546,7 @@ export default function BankTransferAdvertisingPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="receipt-upload" className="block text-sm font-bold mb-2">
+                  <label htmlFor="receipt-upload" className="block text-sm font-semibold mb-2">
                     입금증 첨부 (선택)
                   </label>
                   <input
@@ -605,7 +605,7 @@ export default function BankTransferAdvertisingPage() {
                 </svg>
               </div>
 
-              <h2 className="text-2xl font-bold mb-4">입금 확인 요청이 완료되었습니다</h2>
+              <h2 className="text-2xl font-semibold mb-4">입금 확인 요청이 완료되었습니다</h2>
 
               <p className="text-gray-600 mb-6">
                 관리자가 입금을 확인한 후 광고가 활성화됩니다.
@@ -614,7 +614,7 @@ export default function BankTransferAdvertisingPage() {
               </p>
 
               <div className="bg-gray-50 rounded-lg p-6 mb-6">
-                <h3 className="font-bold mb-2">다음 단계</h3>
+                <h3 className="font-semibold mb-2">다음 단계</h3>
                 <ul className="text-sm text-gray-600 space-y-1 text-left max-w-md mx-auto">
                   <li>1. 관리자가 입금 확인</li>
                   <li>2. 광고 활성화</li>

@@ -251,7 +251,7 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
       <div className="py-8 px-4">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">설정 수정</h1>
+            <h1 className="text-xl font-semibold text-gray-900">설정 수정</h1>
             <p className="text-gray-600 mt-1 text-sm">계정 및 알림 설정을 수정하세요</p>
           </div>
           <button
@@ -305,7 +305,7 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
           <div className="flex-1">
             {activeTab === 'profile' && (
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-6">프로필 설정</h2>
+                <h2 className="text-xl font-semibold text-gray-900 mb-6">프로필 설정</h2>
                 <div className="space-y-4">
                   <div>
                     <span className="block text-sm font-medium text-gray-700 mb-2">
@@ -319,7 +319,7 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                           className="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
                         />
                       ) : (
-                        <div className="w-20 h-20 bg-brand-primary rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                        <div className="w-20 h-20 bg-brand-primary rounded-full flex items-center justify-center text-white text-2xl font-semibold">
                           {name?.[0] || profile?.name?.[0] || 'U'}
                         </div>
                       )}
@@ -408,7 +408,7 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
 
             {activeTab === 'account' && (
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-6">계정 보안</h2>
+                <h2 className="text-xl font-semibold text-gray-900 mb-6">계정 보안</h2>
                 <div className="space-y-4">
                   <div>
                     <label
@@ -471,7 +471,7 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
 
             {activeTab === 'notifications' && (
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-6">알림 설정</h2>
+                <h2 className="text-xl font-semibold text-gray-900 mb-6">알림 설정</h2>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                     <label htmlFor="order-notification" className="cursor-pointer flex-1">

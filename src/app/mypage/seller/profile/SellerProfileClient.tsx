@@ -40,7 +40,7 @@ export default function SellerProfileClient({ profile }: Props) {
         {/* 페이지 헤더 */}
         <div className="mb-6 lg:mb-8 pt-12 lg:pt-0 flex items-center justify-between">
           <div>
-            <h1 className="text-base md:text-lg font-bold text-gray-900">판매자 정보</h1>
+            <h1 className="text-base md:text-lg font-semibold text-gray-900">판매자 정보</h1>
             <p className="text-gray-600 mt-1 text-sm md:text-base">
               판매자 프로필 및 정산 정보를 확인하세요
             </p>
@@ -57,7 +57,7 @@ export default function SellerProfileClient({ profile }: Props) {
         <div className="max-w-4xl space-y-6">
           {/* 프로필 정보 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">
+            <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">
               프로필 정보
             </h2>
 
@@ -104,7 +104,7 @@ export default function SellerProfileClient({ profile }: Props) {
 
           {/* 연락처 정보 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">
+            <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">
               연락처 정보
             </h2>
 
@@ -212,7 +212,7 @@ export default function SellerProfileClient({ profile }: Props) {
 
           {/* 정산 정보 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">정산 정보</h2>
+            <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">정산 정보</h2>
 
             <div className="space-y-4">
               <div>

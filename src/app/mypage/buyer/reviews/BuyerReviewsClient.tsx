@@ -84,7 +84,7 @@ export default function BuyerReviewsClient({
       <div className="py-8 px-4">
         {/* 페이지 헤더 */}
         <div className="mb-8">
-          <h1 className="text-base md:text-lg font-bold text-gray-900">리뷰 관리</h1>
+          <h1 className="text-base md:text-lg font-semibold text-gray-900">리뷰 관리</h1>
           <p className="text-gray-600 mt-1 text-xs md:text-sm">서비스 리뷰를 작성하고 관리하세요</p>
         </div>
 
@@ -158,7 +158,7 @@ export default function BuyerReviewsClient({
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <h3 className="text-sm md:text-base font-bold text-gray-900 mb-1">
+                          <h3 className="text-sm md:text-base font-semibold text-gray-900 mb-1">
                             {order.title || order.service?.title}
                           </h3>
                           <div className="text-sm text-gray-600">
@@ -175,7 +175,7 @@ export default function BuyerReviewsClient({
                             ? new Date(order.completed_at).toLocaleDateString('ko-KR')
                             : '-'}
                         </span>
-                        <span className="text-sm font-bold text-gray-900">
+                        <span className="text-sm font-semibold text-gray-900">
                           {order.total_amount?.toLocaleString() || '0'}원
                         </span>
                       </div>
@@ -227,7 +227,7 @@ export default function BuyerReviewsClient({
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <h3 className="text-sm md:text-base font-bold text-gray-900 mb-1">
+                          <h3 className="text-sm md:text-base font-semibold text-gray-900 mb-1">
                             {review.service?.title}
                           </h3>
                           <div className="text-sm text-gray-600">
@@ -288,7 +288,7 @@ export default function BuyerReviewsClient({
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg max-w-2xl w-full p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-base md:text-lg font-bold text-gray-900">리뷰 작성</h2>
+                <h2 className="text-base md:text-lg font-semibold text-gray-900">리뷰 작성</h2>
                 <button
                   onClick={() => setShowWriteModal(false)}
                   className="text-gray-400 hover:text-gray-600"

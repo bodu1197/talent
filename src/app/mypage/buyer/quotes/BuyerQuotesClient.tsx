@@ -31,7 +31,7 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-base md:text-lg font-bold text-gray-900">견적 요청 내역</h1>
+              <h1 className="text-base md:text-lg font-semibold text-gray-900">견적 요청 내역</h1>
               <p className="text-gray-600 mt-1 text-xs md:text-sm">맞춤 견적 요청을 관리하세요</p>
             </div>
             <button
@@ -52,7 +52,7 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <h3 className="text-sm md:text-base font-bold text-gray-900">
+                      <h3 className="text-sm md:text-base font-semibold text-gray-900">
                         {quote.title}
                       </h3>
                       <span
@@ -74,7 +74,7 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
                   </div>
                   {(quote.response_count || 0) > 0 && (
                     <div className="text-right">
-                      <div className="text-2xl font-bold text-brand-primary">
+                      <div className="text-2xl font-semibold text-brand-primary">
                         {quote.response_count}
                       </div>
                       <div className="text-sm text-gray-600">답변</div>

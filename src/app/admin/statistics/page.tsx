@@ -71,7 +71,7 @@ export default function AdminStatisticsPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">사이트 통계</h1>
+        <h1 className="text-3xl font-semibold text-slate-900 mb-2">사이트 통계</h1>
         <p className="text-slate-600">방문자 통계 및 페이지 뷰 분석</p>
       </div>
 
@@ -125,7 +125,7 @@ export default function AdminStatisticsPage() {
               <div className="flex items-start justify-between">
                 <div>
                   <p className="text-sm font-medium text-slate-600 mb-2">총 페이지 뷰</p>
-                  <p className="text-3xl font-bold text-slate-900">
+                  <p className="text-3xl font-semibold text-slate-900">
                     {analytics?.summary.totalViews.toLocaleString() || '0'}
                   </p>
                 </div>
@@ -139,7 +139,7 @@ export default function AdminStatisticsPage() {
               <div className="flex items-start justify-between">
                 <div>
                   <p className="text-sm font-medium text-slate-600 mb-2">고유 방문자</p>
-                  <p className="text-3xl font-bold text-slate-900">
+                  <p className="text-3xl font-semibold text-slate-900">
                     {analytics?.summary.totalUniqueVisitors.toLocaleString() || '0'}
                   </p>
                 </div>
@@ -153,7 +153,7 @@ export default function AdminStatisticsPage() {
               <div className="flex items-start justify-between">
                 <div>
                   <p className="text-sm font-medium text-slate-600 mb-2">일평균 뷰</p>
-                  <p className="text-3xl font-bold text-slate-900">
+                  <p className="text-3xl font-semibold text-slate-900">
                     {analytics?.summary.avgViewsPerDay.toLocaleString() || '0'}
                   </p>
                 </div>
@@ -167,7 +167,7 @@ export default function AdminStatisticsPage() {
           {/* Device Stats */}
           <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
             <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-              <h2 className="text-xl font-bold text-slate-900">기기별 통계</h2>
+              <h2 className="text-xl font-semibold text-slate-900">기기별 통계</h2>
             </div>
             <div className="p-6">
               <div className="grid gap-4 md:grid-cols-3">
@@ -177,7 +177,7 @@ export default function AdminStatisticsPage() {
                   </div>
                   <div>
                     <p className="text-sm text-slate-600">데스크톱</p>
-                    <p className="text-2xl font-bold text-slate-900">
+                    <p className="text-2xl font-semibold text-slate-900">
                       {deviceStats.desktop.toLocaleString()}
                     </p>
                   </div>
@@ -189,7 +189,7 @@ export default function AdminStatisticsPage() {
                   </div>
                   <div>
                     <p className="text-sm text-slate-600">모바일</p>
-                    <p className="text-2xl font-bold text-slate-900">
+                    <p className="text-2xl font-semibold text-slate-900">
                       {deviceStats.mobile.toLocaleString()}
                     </p>
                   </div>
@@ -201,7 +201,7 @@ export default function AdminStatisticsPage() {
                   </div>
                   <div>
                     <p className="text-sm text-slate-600">태블릿</p>
-                    <p className="text-2xl font-bold text-slate-900">
+                    <p className="text-2xl font-semibold text-slate-900">
                       {deviceStats.tablet.toLocaleString()}
                     </p>
                   </div>
@@ -214,7 +214,7 @@ export default function AdminStatisticsPage() {
           {analytics?.data && analytics.data.length > 0 ? (
             <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
               <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-                <h2 className="text-xl font-bold text-slate-900">
+                <h2 className="text-xl font-semibold text-slate-900">
                   {period === 'hour' && '시간별 상세 통계'}
                   {period === 'day' && '일별 상세 통계'}
                   {period === 'month' && '월별 상세 통계'}

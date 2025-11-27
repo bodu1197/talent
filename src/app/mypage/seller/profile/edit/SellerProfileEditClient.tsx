@@ -125,7 +125,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
     <MypageLayoutWrapper mode="seller">
       <div className="py-8 px-4">
         <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
-          <h1 className="text-base md:text-lg font-bold text-gray-900">판매자 정보 수정</h1>
+          <h1 className="text-base md:text-lg font-semibold text-gray-900">판매자 정보 수정</h1>
           <p className="text-gray-600 mt-1 text-sm md:text-base">
             판매자 프로필 및 정산 정보를 수정하세요
           </p>
@@ -133,7 +133,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
 
         <form onSubmit={handleSubmit} className="max-w-4xl space-y-6">
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">프로필 정보</h2>
+            <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">프로필 정보</h2>
 
             <div className="space-y-4">
               {/* 프로필 이미지 업로드 */}
@@ -232,7 +232,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
           </div>
 
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">연락처 정보</h2>
+            <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">연락처 정보</h2>
 
             <div className="space-y-4">
               <div>
@@ -381,7 +381,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
           </div>
 
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">정산 정보</h2>
+            <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">정산 정보</h2>
 
             <div className="space-y-4">
               <div>

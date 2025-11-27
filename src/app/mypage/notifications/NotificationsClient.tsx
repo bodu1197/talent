@@ -199,7 +199,7 @@ export default function NotificationsClient({
       <div className="py-8 px-4">
         {/* 헤더 */}
         <div className="mb-6">
-          <h1 className="text-base md:text-lg font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-base md:text-lg font-semibold text-gray-900 flex items-center gap-2">
             <Bell className="w-5 h-5 text-brand-primary" />
             전체 알림
           </h1>
@@ -284,7 +284,7 @@ export default function NotificationsClient({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2 mb-1">
                             <h3
-                              className={`text-base font-bold ${
+                              className={`text-base font-semibold ${
                                 notification.is_read ? 'text-gray-700' : 'text-gray-900'
                               }`}
                             >
@@ -308,7 +308,7 @@ export default function NotificationsClient({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2 mb-1">
                             <h3
-                              className={`text-base font-bold ${
+                              className={`text-base font-semibold ${
                                 notification.is_read ? 'text-gray-700' : 'text-gray-900'
                               }`}
                             >
@@ -337,7 +337,7 @@ export default function NotificationsClient({
           ) : (
             <div className="p-12 text-center">
               <BellOff className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-bold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 {(() => {
                   if (filter === 'unread') return '읽지 않은 알림이 없습니다';
                   if (filter === 'read') return '읽은 알림이 없습니다';

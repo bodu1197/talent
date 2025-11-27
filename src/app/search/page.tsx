@@ -27,7 +27,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           <div className="container-1200 px-4">
             <div className="text-center py-20">
               <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              <h1 className="text-2xl font-semibold text-gray-900 mb-2">
                 검색어를 입력해주세요
               </h1>
               <p className="text-gray-600">
@@ -52,7 +52,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         <div className="container-1200 px-4">
           <div className="text-center py-20">
             <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-2">
               검색 결과가 없습니다
             </h2>
             <p className="text-gray-600 mb-6">

@@ -274,7 +274,7 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
       <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8 mx-auto">
         <div className="max-w-3xl">
           <div className="mb-8">
-            <h1 className="text-base md:text-lg font-bold text-gray-900">포트폴리오 등록</h1>
+            <h1 className="text-base md:text-lg font-semibold text-gray-900">포트폴리오 등록</h1>
             <p className="text-gray-600 mt-1 text-sm">작업물을 등록하여 고객에게 보여주세요</p>
           </div>
 

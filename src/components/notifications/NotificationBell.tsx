@@ -174,7 +174,7 @@ export default function NotificationBell() {
         <Bell className="w-5 h-5" aria-hidden="true" />
         {unreadCount > 0 && (
           <span
-            className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold"
+            className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-semibold"
             aria-label={`읽지 않은 알림 ${unreadCount}개`}
           >
             {unreadCount > 9 ? '9+' : unreadCount}
@@ -195,7 +195,7 @@ export default function NotificationBell() {
           {/* 드롭다운 */}
           <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-96 overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
-              <h3 className="font-bold text-gray-900">알림</h3>
+              <h3 className="font-semibold text-gray-900">알림</h3>
               {unreadCount > 0 && (
                 <button
                   onClick={markAllAsRead}

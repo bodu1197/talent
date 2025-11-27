@@ -126,7 +126,7 @@ export default function TaxInvoiceDetailPage() {
       <div className="bg-white rounded-xl shadow-sm border-2 border-gray-300 p-8 print:shadow-none print:border-black">
         {/* 제목 */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2">세 금 계 산 서</h1>
+          <h1 className="text-3xl font-semibold mb-2">세 금 계 산 서</h1>
           <p className="text-sm text-gray-600">(공급받는자 보관용)</p>
         </div>
 
@@ -145,7 +145,7 @@ export default function TaxInvoiceDetailPage() {
         <div className="grid grid-cols-2 gap-6 mb-8">
           {/* 공급자 (좌측) */}
           <div className="border-2 border-gray-300 p-4">
-            <h3 className="text-lg font-bold mb-3 pb-2 border-b border-gray-300">공급자</h3>
+            <h3 className="text-lg font-semibold mb-3 pb-2 border-b border-gray-300">공급자</h3>
             <div className="space-y-2 text-sm">
               <div className="grid grid-cols-3 gap-2">
                 <span className="font-medium text-gray-600">사업자번호</span>
@@ -153,7 +153,7 @@ export default function TaxInvoiceDetailPage() {
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <span className="font-medium text-gray-600">상호</span>
-                <span className="col-span-2 font-bold">{invoice.supplier_company_name}</span>
+                <span className="col-span-2 font-semibold">{invoice.supplier_company_name}</span>
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <span className="font-medium text-gray-600">대표자</span>
@@ -168,7 +168,7 @@ export default function TaxInvoiceDetailPage() {
 
           {/* 공급받는자 (우측) */}
           <div className="border-2 border-gray-300 p-4">
-            <h3 className="text-lg font-bold mb-3 pb-2 border-b border-gray-300">공급받는자</h3>
+            <h3 className="text-lg font-semibold mb-3 pb-2 border-b border-gray-300">공급받는자</h3>
             <div className="space-y-2 text-sm">
               <div className="grid grid-cols-3 gap-2">
                 <span className="font-medium text-gray-600">사업자번호</span>
@@ -176,7 +176,7 @@ export default function TaxInvoiceDetailPage() {
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <span className="font-medium text-gray-600">상호</span>
-                <span className="col-span-2 font-bold">{invoice.buyer_company_name}</span>
+                <span className="col-span-2 font-semibold">{invoice.buyer_company_name}</span>
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <span className="font-medium text-gray-600">대표자</span>
@@ -239,19 +239,19 @@ export default function TaxInvoiceDetailPage() {
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
               <div className="text-sm text-gray-600 mb-2">공급가액</div>
-              <div className="text-2xl font-bold text-gray-900">
+              <div className="text-2xl font-semibold text-gray-900">
                 {invoice.supply_amount.toLocaleString()}원
               </div>
             </div>
             <div>
               <div className="text-sm text-gray-600 mb-2">세액 (10%)</div>
-              <div className="text-2xl font-bold text-gray-900">
+              <div className="text-2xl font-semibold text-gray-900">
                 {invoice.tax_amount.toLocaleString()}원
               </div>
             </div>
             <div className="bg-blue-50 rounded-lg p-3">
               <div className="text-sm text-gray-600 mb-2">합계금액</div>
-              <div className="text-3xl font-bold text-brand-primary">
+              <div className="text-3xl font-semibold text-brand-primary">
                 {invoice.total_amount.toLocaleString()}원
               </div>
             </div>

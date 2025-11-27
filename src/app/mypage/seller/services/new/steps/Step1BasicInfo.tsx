@@ -167,7 +167,7 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">기본 정보</h2>
+      <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">기본 정보</h2>
 
       {/* 카테고리 선택 - 맨 처음으로 이동 */}
       <fieldset>

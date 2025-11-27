@@ -99,7 +99,7 @@ export default function PaymentDetailPage() {
   return (
     <MypageLayoutWrapper mode="seller">
       <div className="container mx-auto p-6 max-w-4xl">
-        <h1 className="text-3xl font-bold mb-8">무통장 입금 안내</h1>
+        <h1 className="text-3xl font-semibold mb-8">무통장 입금 안내</h1>
 
         {/* 상태 표시 */}
         <div className="mb-6">
@@ -121,43 +121,43 @@ export default function PaymentDetailPage() {
 
         {/* 입금 정보 카드 */}
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-6">
-          <h2 className="text-2xl font-bold mb-6 text-gray-900">입금 계좌 정보</h2>
+          <h2 className="text-2xl font-semibold mb-6 text-gray-900">입금 계좌 정보</h2>
 
           <div className="space-y-4">
             <div className="flex justify-between items-center border-b pb-4">
               <span className="text-gray-600">서비스</span>
-              <span className="font-bold text-gray-900">
+              <span className="font-semibold text-gray-900">
                 {payment.subscription?.service?.title}
               </span>
             </div>
 
             <div className="flex justify-between items-center border-b pb-4">
               <span className="text-gray-600">입금 금액</span>
-              <span className="text-3xl font-bold text-brand-primary">
+              <span className="text-3xl font-semibold text-brand-primary">
                 {payment.amount.toLocaleString()}원
               </span>
             </div>
 
             <div className="flex justify-between items-center border-b pb-4">
               <span className="text-gray-600">은행</span>
-              <span className="font-bold text-gray-900">{process.env.NEXT_PUBLIC_BANK_NAME}</span>
+              <span className="font-semibold text-gray-900">{process.env.NEXT_PUBLIC_BANK_NAME}</span>
             </div>
 
             <div className="flex justify-between items-center border-b pb-4">
               <span className="text-gray-600">계좌번호</span>
-              <span className="font-mono font-bold text-gray-900">
+              <span className="font-mono font-semibold text-gray-900">
                 {process.env.NEXT_PUBLIC_BANK_ACCOUNT}
               </span>
             </div>
 
             <div className="flex justify-between items-center border-b pb-4">
               <span className="text-gray-600">예금주</span>
-              <span className="font-bold text-gray-900">{process.env.NEXT_PUBLIC_BANK_HOLDER}</span>
+              <span className="font-semibold text-gray-900">{process.env.NEXT_PUBLIC_BANK_HOLDER}</span>
             </div>
 
             <div className="flex justify-between items-center">
               <span className="text-gray-600">입금 기한</span>
-              <span className="font-bold text-red-600">
+              <span className="font-semibold text-red-600">
                 {deadline.toLocaleDateString('ko-KR')} {deadline.toLocaleTimeString('ko-KR')}
               </span>
             </div>

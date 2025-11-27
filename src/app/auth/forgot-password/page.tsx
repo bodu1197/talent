@@ -78,7 +78,7 @@ export default function ForgotPasswordPage() {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* 헤더 */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold mb-2">
+            <h1 className="text-3xl font-semibold mb-2">
               <span className="text-brand-primary">비밀번호 찾기</span>
             </h1>
             <p className="text-gray-600">가입하신 이메일 주소를 입력해주세요</p>

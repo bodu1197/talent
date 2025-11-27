@@ -50,7 +50,7 @@ export default async function CategoriesPage() {
       <div className="hidden lg:block min-h-screen bg-gray-50 py-8 lg:py-12">
         <div className="container-1200 px-4">
           <div className="mb-8">
-            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">전체 카테고리</h1>
+            <h1 className="text-2xl lg:text-3xl font-semibold text-gray-900 mb-2">전체 카테고리</h1>
             <p className="text-gray-600">필요한 서비스를 카테고리별로 찾아보세요</p>
           </div>
 

@@ -214,7 +214,7 @@ export default async function RecentViewedServices() {
       <div className="container-1200">
         <div className="flex items-center gap-3 mb-6">
           <Eye className="w-5 h-5 text-brand-primary" />
-          <h2 className="text-xl font-bold text-gray-900">최근 본 서비스</h2>
+          <h2 className="text-xl font-semibold text-gray-900">최근 본 서비스</h2>
           {validViews.length > 0 && (
             <span className="text-sm text-gray-500">
               ({validViews.length}개)
@@ -237,7 +237,7 @@ export default async function RecentViewedServices() {
                 {/* 최근 본 서비스 표시 (처음 3개만 깃발) */}
                 {isRecentView && viewIndex < 3 && (
                   <div className="absolute top-2 left-2 z-10">
-                    <div className="px-2 py-1 bg-red-500 text-white text-xs font-bold rounded shadow-lg flex items-center gap-1">
+                    <div className="px-2 py-1 bg-red-500 text-white text-xs font-semibold rounded shadow-lg flex items-center gap-1">
                       <Flag className="w-3 h-3" />
                       금방 봄
                     </div>
@@ -267,7 +267,7 @@ export default async function RecentViewedServices() {
                   {/* 최근 본 서비스 오버레이 (4번째부터는 작은 배지) */}
                   {isRecentView && viewIndex >= 3 && (
                     <div className="absolute top-2 right-2">
-                      <div className="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
+                      <div className="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-semibold">
                         <Eye className="w-3 h-3" />
                       </div>
                     </div>
@@ -278,7 +278,7 @@ export default async function RecentViewedServices() {
                 <div className="mt-2">
                   {/* 판매자 */}
                   <div className="flex items-center gap-1 mb-1">
-                    <div className="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center text-white text-[8px] font-bold">
+                    <div className="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center text-white text-[8px] font-semibold">
                       {service.seller?.business_name?.[0] || 'S'}
                     </div>
                     <span className="text-xs text-gray-600 truncate">
@@ -303,7 +303,7 @@ export default async function RecentViewedServices() {
                   </div>
 
                   {/* 가격 */}
-                  <p className="text-brand-primary font-bold text-sm">
+                  <p className="text-brand-primary font-semibold text-sm">
                     {(service.price || 0).toLocaleString()}원
                   </p>
 

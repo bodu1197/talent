@@ -269,7 +269,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
         <div className="mb-8">
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">주문 상세</h1>
+              <h1 className="text-3xl font-semibold text-gray-900 mb-2">주문 상세</h1>
               <p className="text-gray-600">주문 번호: #{order.order_number || id}</p>
             </div>
             <div className="flex items-center gap-3">
@@ -317,7 +317,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
           <div className="lg:col-span-2 space-y-6">
             {/* 주문 정보 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">주문 정보</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">주문 정보</h2>
 
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
@@ -333,7 +333,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                     )}
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg font-bold text-gray-900 mb-2">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
                       {order.title || order.service?.title}
                     </h3>
                     <div className="grid grid-cols-2 gap-3 text-sm">
@@ -367,7 +367,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
 
             {/* 내 요구사항 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">내 요구사항</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">내 요구사항</h2>
               <div className="bg-gray-50 rounded-lg p-4 mb-4">
                 <p className="text-gray-700 whitespace-pre-wrap">
                   {order.requirements || '요구사항이 없습니다'}
@@ -388,7 +388,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
 
             {/* 납품 파일 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 납품 파일
                 {order.deliverables && order.deliverables.length > 0 && (
                   <span className="ml-2 text-sm font-normal text-gray-600">
@@ -454,7 +454,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
 
             {/* 상태 이력 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">진행 상태</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">진행 상태</h2>
               <div className="space-y-3">
                 {statusHistory.map((history, index) => (
                   <div
@@ -480,10 +480,10 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
           <div className="space-y-6">
             {/* 현재 상태 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="font-bold text-gray-900 mb-4">현재 상태</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">현재 상태</h3>
               <div className="flex items-center justify-center py-4">
                 <span
-                  className={`px-6 py-3 rounded-lg font-bold text-lg ${(() => {
+                  className={`px-6 py-3 rounded-lg font-semibold text-lg ${(() => {
                     if (order.status === 'delivered') return 'bg-red-100 text-red-700';
                     if (order.status === 'in_progress') return 'bg-yellow-100 text-yellow-700';
                     if (order.status === 'completed') return 'bg-green-100 text-green-700';
@@ -505,9 +505,9 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
 
             {/* 판매자 정보 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="font-bold text-gray-900 mb-4">판매자 정보</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">판매자 정보</h3>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center text-white font-bold">
+                <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center text-white font-semibold">
                   {order.seller?.name?.[0] || 'S'}
                 </div>
                 <div>
@@ -536,7 +536,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
 
             {/* 결제 정보 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="font-bold text-gray-900 mb-4">결제 정보</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">결제 정보</h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">주문 금액</span>
@@ -545,8 +545,8 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                   </span>
                 </div>
                 <div className="flex items-center justify-between pt-3 border-t border-gray-200">
-                  <span className="font-bold text-gray-900">결제 금액</span>
-                  <span className="font-bold text-brand-primary text-lg">
+                  <span className="font-semibold text-gray-900">결제 금액</span>
+                  <span className="font-semibold text-brand-primary text-lg">
                     {order.total_amount?.toLocaleString() || '0'}원
                   </span>
                 </div>
@@ -564,7 +564,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
 
             {/* 빠른 액션 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="font-bold text-gray-900 mb-4">빠른 액션</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">빠른 액션</h3>
               <div className="space-y-2">
                 <button
                   onClick={() => setShowCancelModal(true)}

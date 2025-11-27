@@ -108,7 +108,7 @@ export default function FAQPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <h1 className="text-3xl font-bold mb-8">자주 묻는 질문</h1>
+      <h1 className="text-3xl font-semibold mb-8">자주 묻는 질문</h1>
 
       <div className="max-w-4xl">
         {faqs.map((category, categoryIndex) => (
@@ -131,7 +131,7 @@ export default function FAQPage() {
                       className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
                     >
                       <div className="flex items-start gap-3 text-left">
-                        <span className="text-brand-primary font-bold">Q.</span>
+                        <span className="text-brand-primary font-semibold">Q.</span>
                         <span className="font-semibold">{item.question}</span>
                       </div>
                       <ChevronDown
@@ -141,7 +141,7 @@ export default function FAQPage() {
                     {isOpen && (
                       <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
                         <div className="flex items-start gap-3">
-                          <span className="text-gray-500 font-bold">A.</span>
+                          <span className="text-gray-500 font-semibold">A.</span>
                           <p className="text-gray-700">{item.answer}</p>
                         </div>
                       </div>
@@ -156,7 +156,7 @@ export default function FAQPage() {
 
       {/* 추가 문의 */}
       <div className="mt-12 bg-brand-primary bg-opacity-5 rounded-lg p-8 text-center max-w-4xl">
-        <h3 className="text-xl font-bold mb-4">
+        <h3 className="text-xl font-semibold mb-4">
           원하는 답변을 찾지 못하셨나요?
         </h3>
         <p className="text-gray-600 mb-6">1:1 문의를 통해 직접 질문해주세요.</p>

@@ -100,7 +100,7 @@ export default function CategoryGridClient({
             >
               <CategoryIcon icon={category.icon} color="" />
             </div>
-            <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-bold text-xs sm:text-sm md:text-[15px] text-center">
+            <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-semibold text-xs sm:text-sm md:text-[15px] text-center">
               {category.name}
             </div>
           </Link>
@@ -155,7 +155,7 @@ export default function CategoryGridClient({
               >
                 <CategoryIcon icon={category.icon} color="" />
               </div>
-              <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-bold text-[15px]">
+              <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-semibold text-[15px]">
                 {category.name}
               </div>
             </Link>

@@ -13,7 +13,7 @@ export default function HelpPage() {
   return (
     <div className="container-1200 py-16">
       <div className="text-center mb-12">
-        <h1 className="text-3xl font-bold mb-4">고객센터</h1>
+        <h1 className="text-3xl font-semibold mb-4">고객센터</h1>
         <p className="text-gray-600">무엇을 도와드릴까요?</p>
       </div>
 
@@ -46,7 +46,7 @@ export default function HelpPage() {
           <div className="w-16 h-16 bg-brand-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-opacity-20 transition-colors">
             <CircleHelp className="w-8 h-8 text-brand-primary" />
           </div>
-          <h3 className="font-bold text-lg mb-2">자주 묻는 질문</h3>
+          <h3 className="font-semibold text-lg mb-2">자주 묻는 질문</h3>
           <p className="text-sm text-gray-600">FAQ를 확인해보세요</p>
         </Link>
 
@@ -57,7 +57,7 @@ export default function HelpPage() {
           <div className="w-16 h-16 bg-brand-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-opacity-20 transition-colors">
             <Megaphone className="w-8 h-8 text-brand-primary" />
           </div>
-          <h3 className="font-bold text-lg mb-2">공지사항</h3>
+          <h3 className="font-semibold text-lg mb-2">공지사항</h3>
           <p className="text-sm text-gray-600">최신 소식을 확인하세요</p>
         </Link>
 
@@ -68,7 +68,7 @@ export default function HelpPage() {
           <div className="w-16 h-16 bg-brand-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-opacity-20 transition-colors">
             <MessageSquare className="w-8 h-8 text-brand-primary" />
           </div>
-          <h3 className="font-bold text-lg mb-2">1:1 문의</h3>
+          <h3 className="font-semibold text-lg mb-2">1:1 문의</h3>
           <p className="text-sm text-gray-600">직접 문의하기</p>
         </Link>
 
@@ -76,7 +76,7 @@ export default function HelpPage() {
           <div className="w-16 h-16 bg-brand-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
             <Phone className="w-8 h-8 text-brand-primary" />
           </div>
-          <h3 className="font-bold text-lg mb-2">전화 상담</h3>
+          <h3 className="font-semibold text-lg mb-2">전화 상담</h3>
           <p className="text-sm text-gray-600 mb-2">1234-5678</p>
           <p className="text-xs text-gray-500">평일 09:00 - 18:00</p>
         </div>
@@ -84,10 +84,10 @@ export default function HelpPage() {
 
       {/* 카테고리별 도움말 */}
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl font-bold mb-6">카테고리별 도움말</h2>
+        <h2 className="text-2xl font-semibold mb-6">카테고리별 도움말</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="font-bold mb-4 flex items-center gap-2">
+            <h3 className="font-semibold mb-4 flex items-center gap-2">
               <ShoppingBag className="w-5 h-5 text-brand-primary" />
               구매자 가이드
             </h3>
@@ -114,7 +114,7 @@ export default function HelpPage() {
           </div>
 
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="font-bold mb-4 flex items-center gap-2">
+            <h3 className="font-semibold mb-4 flex items-center gap-2">
               <Store className="w-5 h-5 text-brand-primary" />
               판매자 가이드
             </h3>

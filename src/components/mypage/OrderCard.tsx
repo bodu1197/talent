@@ -63,7 +63,7 @@ export default function OrderCard({ order, mode, actions }: OrderCardProps) {
                 <span className="text-sm text-gray-500">#{order.orderNumber || 'N/A'}</span>
                 <Link
                   href={`/mypage/${mode}/orders/${order.id}`}
-                  className="text-base font-bold text-gray-900 hover:text-brand-primary"
+                  className="text-base font-semibold text-gray-900 hover:text-brand-primary"
                 >
                   {order.title}
                 </Link>
@@ -96,7 +96,7 @@ export default function OrderCard({ order, mode, actions }: OrderCardProps) {
                     예상완료: {order.expectedDeliveryDate}
                   </span>
                 )}
-                <span className="text-sm font-bold text-gray-900">
+                <span className="text-sm font-semibold text-gray-900">
                   {order.price.toLocaleString()}원
                 </span>
               </div>

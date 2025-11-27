@@ -25,13 +25,13 @@ export default function BuyerGuidePage() {
         </div>
 
         <div className="bg-white rounded-lg shadow-sm p-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">
+          <h1 className="text-3xl font-semibold text-gray-900 mb-6">
             구매자 이용 가이드
           </h1>
 
           <div className="prose max-w-none">
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
                 서비스 구매 방법
               </h2>
               <ol className="list-decimal list-inside space-y-2 text-gray-700">
@@ -44,7 +44,7 @@ export default function BuyerGuidePage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
                 주문 후 진행 절차
               </h2>
               <ul className="list-disc list-inside space-y-2 text-gray-700">
@@ -59,12 +59,12 @@ export default function BuyerGuidePage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
                 자주 묻는 질문
               </h2>
               <div className="space-y-4">
                 <div>
-                  <h3 className="font-bold text-gray-900 mb-2">
+                  <h3 className="font-semibold text-gray-900 mb-2">
                     Q. 결제 후 취소가 가능한가요?
                   </h3>
                   <p className="text-gray-700">
@@ -73,7 +73,7 @@ export default function BuyerGuidePage() {
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-900 mb-2">
+                  <h3 className="font-semibold text-gray-900 mb-2">
                     Q. 판매자와 어떻게 소통하나요?
                   </h3>
                   <p className="text-gray-700">

@@ -305,7 +305,7 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
                 </div>
 
                 <div>
-                  <h1 className="font-bold text-lg">{otherUser.name}</h1>
+                  <h1 className="font-semibold text-lg">{otherUser.name}</h1>
                   {service && (
                     <Link
                       href={`/services/${service.id}`}
@@ -587,7 +587,7 @@ function PaymentRequestCard({
               <FileText className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h3 className="font-bold text-gray-900">결제 요청</h3>
+              <h3 className="font-semibold text-gray-900">결제 요청</h3>
               <p className="text-xs text-gray-500">
                 {new Date(paymentRequest.created_at).toLocaleDateString('ko-KR', {
                   month: 'short',
@@ -603,7 +603,7 @@ function PaymentRequestCard({
 
         {/* 내용 */}
         <div className="bg-white rounded-lg p-4 mb-4">
-          <h4 className="font-bold text-lg text-gray-900 mb-2">{paymentRequest.title}</h4>
+          <h4 className="font-semibold text-lg text-gray-900 mb-2">{paymentRequest.title}</h4>
 
           {paymentRequest.description && (
             <p className="text-sm text-gray-600 mb-3 whitespace-pre-wrap">
@@ -612,7 +612,7 @@ function PaymentRequestCard({
           )}
 
           <div className="flex items-baseline gap-2 mb-3">
-            <span className="text-2xl font-bold text-green-600">
+            <span className="text-2xl font-semibold text-green-600">
               {paymentRequest.amount.toLocaleString()}원
             </span>
           </div>
@@ -763,7 +763,7 @@ function PaymentRequestModal({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg max-w-md w-full p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-gray-900">결제 요청</h2>
+          <h2 className="text-xl font-semibold text-gray-900">결제 요청</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <X className="w-5 h-5" />
           </button>

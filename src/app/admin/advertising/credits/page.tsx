@@ -155,7 +155,7 @@ export default function AdminCreditsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">크레딧 관리</h1>
+          <h1 className="text-3xl font-semibold text-slate-900 mb-2">크레딧 관리</h1>
           <p className="text-slate-600">판매자 광고 크레딧을 관리합니다</p>
         </div>
         <button
@@ -174,7 +174,7 @@ export default function AdminCreditsPage() {
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600 mb-2">총 지급액</p>
-                <p className="text-3xl font-bold text-slate-900">
+                <p className="text-3xl font-semibold text-slate-900">
                   ₩{summary.totalIssued.toLocaleString()}
                 </p>
               </div>
@@ -188,7 +188,7 @@ export default function AdminCreditsPage() {
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600 mb-2">총 사용액</p>
-                <p className="text-3xl font-bold text-slate-900">
+                <p className="text-3xl font-semibold text-slate-900">
                   ₩{summary.totalUsed.toLocaleString()}
                 </p>
               </div>
@@ -202,7 +202,7 @@ export default function AdminCreditsPage() {
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600 mb-2">총 잔액</p>
-                <p className="text-3xl font-bold text-slate-900">
+                <p className="text-3xl font-semibold text-slate-900">
                   ₩{summary.totalRemaining.toLocaleString()}
                 </p>
               </div>
@@ -216,7 +216,7 @@ export default function AdminCreditsPage() {
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600 mb-2">보유자 수</p>
-                <p className="text-3xl font-bold text-slate-900">{summary.totalHolders}</p>
+                <p className="text-3xl font-semibold text-slate-900">{summary.totalHolders}</p>
               </div>
               <div className="rounded-lg bg-purple-50 p-3">
                 <Users className="text-purple-600 w-6 h-6" />
@@ -318,7 +318,7 @@ export default function AdminCreditsPage() {
               <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
                 <form onSubmit={handleGrantCredit}>
                   <div className="px-6 py-4 border-b border-slate-200">
-                    <h2 className="text-xl font-bold text-slate-900">크레딧 지급</h2>
+                    <h2 className="text-xl font-semibold text-slate-900">크레딧 지급</h2>
                     <p className="text-sm text-slate-600 mt-1">
                       판매자에게 광고 크레딧을 지급합니다.
                     </p>
@@ -440,7 +440,7 @@ export default function AdminCreditsPage() {
                 <div className="px-6 py-4 border-b border-slate-200">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h2 className="text-xl font-bold text-slate-900">크레딧 상세 내역</h2>
+                      <h2 className="text-xl font-semibold text-slate-900">크레딧 상세 내역</h2>
                       <p className="text-sm text-slate-600 mt-1">
                         {selectedCredit.seller?.full_name} ({selectedCredit.seller?.email})
                       </p>
@@ -459,19 +459,19 @@ export default function AdminCreditsPage() {
                   <div className="grid grid-cols-3 gap-4">
                     <div className="bg-slate-50 rounded-lg p-4">
                       <p className="text-sm font-medium text-slate-600 mb-1">초기 지급액</p>
-                      <p className="text-xl font-bold text-slate-900">
+                      <p className="text-xl font-semibold text-slate-900">
                         ₩{selectedCredit.initial_amount.toLocaleString()}
                       </p>
                     </div>
                     <div className="bg-slate-50 rounded-lg p-4">
                       <p className="text-sm font-medium text-slate-600 mb-1">사용액</p>
-                      <p className="text-xl font-bold text-red-600">
+                      <p className="text-xl font-semibold text-red-600">
                         ₩{selectedCredit.used_amount.toLocaleString()}
                       </p>
                     </div>
                     <div className="bg-slate-50 rounded-lg p-4">
                       <p className="text-sm font-medium text-slate-600 mb-1">잔액</p>
-                      <p className="text-xl font-bold text-green-600">
+                      <p className="text-xl font-semibold text-green-600">
                         ₩{selectedCredit.amount.toLocaleString()}
                       </p>
                     </div>
@@ -479,7 +479,7 @@ export default function AdminCreditsPage() {
 
                   {/* Transactions */}
                   <div>
-                    <h3 className="text-lg font-bold text-slate-900 mb-3">거래 내역</h3>
+                    <h3 className="text-lg font-semibold text-slate-900 mb-3">거래 내역</h3>
                     {transactions.length === 0 ? (
                       <p className="text-slate-600 text-center py-8">거래 내역이 없습니다.</p>
                     ) : (

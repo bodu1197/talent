@@ -116,7 +116,7 @@ export default function AdminAdvertisingStatisticsPage() {
 function PageHeader() {
   return (
     <div>
-      <h1 className="text-3xl font-bold text-slate-900 mb-2">광고 통계</h1>
+      <h1 className="text-3xl font-semibold text-slate-900 mb-2">광고 통계</h1>
       <p className="text-slate-600">광고 수익 및 성과 분석</p>
     </div>
   );
@@ -255,7 +255,7 @@ function SummaryCards({ statistics }: Readonly<{ statistics: Statistics }>) {
         <div className="flex items-start justify-between">
           <div>
             <p className="text-sm font-medium text-slate-600 mb-2">총 수익</p>
-            <p className="text-3xl font-bold text-slate-900">
+            <p className="text-3xl font-semibold text-slate-900">
               ₩{statistics.revenue.total.toLocaleString()}
             </p>
           </div>
@@ -269,7 +269,7 @@ function SummaryCards({ statistics }: Readonly<{ statistics: Statistics }>) {
         <div className="flex items-start justify-between">
           <div>
             <p className="text-sm font-medium text-slate-600 mb-2">월 예상 수익</p>
-            <p className="text-3xl font-bold text-slate-900">
+            <p className="text-3xl font-semibold text-slate-900">
               ₩{statistics.subscriptions.monthlyRevenue.toLocaleString()}
             </p>
             <p className="text-sm text-slate-500 mt-1">
@@ -286,7 +286,7 @@ function SummaryCards({ statistics }: Readonly<{ statistics: Statistics }>) {
         <div className="flex items-start justify-between">
           <div>
             <p className="text-sm font-medium text-slate-600 mb-2">평균 CTR</p>
-            <p className="text-3xl font-bold text-slate-900">
+            <p className="text-3xl font-semibold text-slate-900">
               {statistics.performance.ctr.toFixed(2)}%
             </p>
             <p className="text-sm text-slate-500 mt-1">
@@ -326,7 +326,7 @@ function PaymentMethodStats({
   return (
     <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
       <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-        <h2 className="text-xl font-bold text-slate-900">결제 방법별 수익</h2>
+        <h2 className="text-xl font-semibold text-slate-900">결제 방법별 수익</h2>
       </div>
       <div className="p-6">
         <div className="grid gap-4 md:grid-cols-3">
@@ -346,7 +346,7 @@ function PaymentMethodStats({
                   </div>
                   <div>
                     <p className="text-sm text-slate-600">{config.label}</p>
-                    <p className="text-2xl font-bold text-slate-900">
+                    <p className="text-2xl font-semibold text-slate-900">
                       ₩{item.amount.toLocaleString()}
                     </p>
                   </div>
@@ -365,7 +365,7 @@ function TopServicesTable({ services }: Readonly<{ services: TopService[] }>) {
     return (
       <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
         <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-          <h2 className="text-xl font-bold text-slate-900">Top 10 광고 서비스</h2>
+          <h2 className="text-xl font-semibold text-slate-900">Top 10 광고 서비스</h2>
         </div>
         <div className="p-12 text-center text-slate-600">광고 노출 데이터가 없습니다.</div>
       </div>
@@ -375,7 +375,7 @@ function TopServicesTable({ services }: Readonly<{ services: TopService[] }>) {
   return (
     <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
       <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-        <h2 className="text-xl font-bold text-slate-900">Top 10 광고 서비스</h2>
+        <h2 className="text-xl font-semibold text-slate-900">Top 10 광고 서비스</h2>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
@@ -445,7 +445,7 @@ function RevenueByPeriodTable({
     return (
       <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
         <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-          <h2 className="text-xl font-bold text-slate-900">기간별 수익 ({periodLabel})</h2>
+          <h2 className="text-xl font-semibold text-slate-900">기간별 수익 ({periodLabel})</h2>
         </div>
         <div className="p-12 text-center text-slate-600">수익 데이터가 없습니다.</div>
       </div>
@@ -455,7 +455,7 @@ function RevenueByPeriodTable({
   return (
     <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
       <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-        <h2 className="text-xl font-bold text-slate-900">기간별 수익 ({periodLabel})</h2>
+        <h2 className="text-xl font-semibold text-slate-900">기간별 수익 ({periodLabel})</h2>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
@@ -522,14 +522,14 @@ function SubscriptionStatsPanel({
   return (
     <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
       <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-        <h2 className="text-xl font-bold text-slate-900">구독 현황</h2>
+        <h2 className="text-xl font-semibold text-slate-900">구독 현황</h2>
       </div>
       <div className="p-6">
         <div className="grid gap-4 md:grid-cols-4">
           {stats.map((stat) => (
             <div key={stat.label} className={`${stat.bgColor} rounded-lg p-4`}>
               <p className="text-sm text-slate-600 mb-1">{stat.label}</p>
-              <p className={`text-2xl font-bold ${stat.textColor}`}>{stat.value}</p>
+              <p className={`text-2xl font-semibold ${stat.textColor}`}>{stat.value}</p>
             </div>
           ))}
         </div>

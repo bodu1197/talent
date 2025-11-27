@@ -115,7 +115,7 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
         {/* 내용 */}
         <div className="p-8">
           {/* 제목 */}
-          <h2 id="portfolio-title" className="text-3xl font-bold mb-4">
+          <h2 id="portfolio-title" className="text-3xl font-semibold mb-4">
             {portfolio.title}
           </h2>
 
@@ -127,7 +127,7 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
           {/* 추가 이미지 */}
           {portfolio.image_urls && portfolio.image_urls.length > 0 && (
             <div className="mb-6">
-              <h3 className="text-lg font-bold mb-3">추가 이미지</h3>
+              <h3 className="text-lg font-semibold mb-3">추가 이미지</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {portfolio.image_urls.map((url: string, idx: number) => (
                   <div

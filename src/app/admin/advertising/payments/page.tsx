@@ -421,7 +421,7 @@ export default function AdminAdvertisingPaymentsPage() {
                 ⏳
               </div>
             </div>
-            <div className="text-4xl font-bold text-gray-900 mb-2">{stats.pending.count}</div>
+            <div className="text-4xl font-semibold text-gray-900 mb-2">{stats.pending.count}</div>
             <div className="text-sm text-gray-600">
               총 {stats.pending.total.toLocaleString()}원
               <span className="inline-block ml-1 px-2 py-0.5 bg-[#d4edda] text-[#155724] rounded-xl text-xs font-semibold">
@@ -437,7 +437,7 @@ export default function AdminAdvertisingPaymentsPage() {
                 ✓
               </div>
             </div>
-            <div className="text-4xl font-bold text-gray-900 mb-2">{stats.confirmed.count}</div>
+            <div className="text-4xl font-semibold text-gray-900 mb-2">{stats.confirmed.count}</div>
             <div className="text-sm text-gray-600">
               총 {stats.confirmed.total.toLocaleString()}원
               <span className="inline-block ml-1 px-2 py-0.5 bg-[#d4edda] text-[#155724] rounded-xl text-xs font-semibold">
@@ -453,7 +453,7 @@ export default function AdminAdvertisingPaymentsPage() {
                 ✅
               </div>
             </div>
-            <div className="text-4xl font-bold text-gray-900 mb-2">{stats.completed.count}</div>
+            <div className="text-4xl font-semibold text-gray-900 mb-2">{stats.completed.count}</div>
             <div className="text-sm text-gray-600">
               총 {stats.completed.total.toLocaleString()}원
               <span className="inline-block ml-1 px-2 py-0.5 bg-[#d4edda] text-[#155724] rounded-xl text-xs font-semibold">
@@ -469,7 +469,7 @@ export default function AdminAdvertisingPaymentsPage() {
                 ❌
               </div>
             </div>
-            <div className="text-4xl font-bold text-gray-900 mb-2">{stats.cancelled.count}</div>
+            <div className="text-4xl font-semibold text-gray-900 mb-2">{stats.cancelled.count}</div>
             <div className="text-sm text-gray-600">
               총 {stats.cancelled.total.toLocaleString()}원
               <span className="inline-block ml-1 px-2 py-0.5 bg-[#f8d7da] text-[#721c24] rounded-xl text-xs font-semibold">

@@ -333,7 +333,7 @@ export default function PortfolioEditClient({
               <ArrowLeft className="inline w-4 h-4 mr-2" />
               포트폴리오 상세
             </Link>
-            <h1 className="text-base md:text-lg font-bold text-gray-900">포트폴리오 수정</h1>
+            <h1 className="text-base md:text-lg font-semibold text-gray-900">포트폴리오 수정</h1>
             <p className="text-gray-600 mt-1 text-sm">작업물 정보를 수정하세요</p>
           </div>
 

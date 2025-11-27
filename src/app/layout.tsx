@@ -16,7 +16,7 @@ import { PageViewTracker } from '@/components/analytics/PageViewTracker';
 // 실제 사용되는 weight만 로드하여 preload 경고 방지
 const notoSansKR = Noto_Sans_KR({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600'],
   display: 'swap',
   preload: true,
   fallback: ['system-ui', 'arial'],

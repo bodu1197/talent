@@ -245,7 +245,7 @@ export default function AdvertisingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* 헤더 섹션 */}
           <div className="mb-6">
-            <h1 className="text-base md:text-lg font-bold text-gray-900">광고 관리</h1>
+            <h1 className="text-base md:text-lg font-semibold text-gray-900">광고 관리</h1>
             <p className="text-gray-600 mt-2 text-sm md:text-base">
               더 많은 고객에게 서비스를 노출하고 매출을 증대시키세요
             </p>
@@ -259,7 +259,7 @@ export default function AdvertisingPage() {
                   <Gift className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-base md:text-lg font-bold text-blue-900 mb-2 flex items-center gap-2">
+                  <h3 className="text-base md:text-lg font-semibold text-blue-900 mb-2 flex items-center gap-2">
                     무료 광고 프로모션 진행 중입니다!
                     <Gift className="w-5 h-5 text-blue-500" />
                   </h3>
@@ -301,7 +301,7 @@ export default function AdvertisingPage() {
             <>
               {/* 통계 헤더 with 새로고침 버튼 */}
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-base md:text-lg font-bold text-gray-900">광고 성과 통계</h2>
+                <h2 className="text-base md:text-lg font-semibold text-gray-900">광고 성과 통계</h2>
                 <button
                   onClick={() => loadDashboard(true)}
                   disabled={refreshing}
@@ -318,7 +318,7 @@ export default function AdvertisingPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-xs text-gray-600">총 노출수</p>
-                      <p className="text-lg font-bold text-gray-900">
+                      <p className="text-lg font-semibold text-gray-900">
                         {dashboard.stats.totalImpressions.toLocaleString()}
                       </p>
                       <p className="text-xs text-gray-500 mt-1">이번 달 기준</p>
@@ -331,7 +331,7 @@ export default function AdvertisingPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-xs text-gray-600">총 클릭수</p>
-                      <p className="text-lg font-bold text-gray-900">
+                      <p className="text-lg font-semibold text-gray-900">
                         {dashboard.stats.totalClicks.toLocaleString()}
                       </p>
                       <p className="text-xs text-gray-500 mt-1">이번 달 기준</p>
@@ -344,7 +344,7 @@ export default function AdvertisingPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-xs text-gray-600">클릭률</p>
-                      <p className="text-lg font-bold text-gray-900">
+                      <p className="text-lg font-semibold text-gray-900">
                         {dashboard.stats.ctr.toFixed(2)}%
                       </p>
                       <p className="text-xs text-gray-500 mt-1">CTR (Click Through Rate)</p>
@@ -359,7 +359,7 @@ export default function AdvertisingPage() {
           {/* 활성 광고 섹션 */}
           {dashboard?.subscriptions && dashboard.subscriptions.length > 0 && (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
-              <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+              <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-6 flex items-center gap-3">
                 <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                   <Megaphone className="w-5 h-5 text-green-600" />
                 </div>
@@ -373,7 +373,7 @@ export default function AdvertisingPage() {
                   >
                     <div className="flex justify-between items-start mb-4">
                       <div>
-                        <h3 className="text-lg font-bold text-gray-900">{sub.serviceName}</h3>
+                        <h3 className="text-lg font-semibold text-gray-900">{sub.serviceName}</h3>
                         <span className="inline-flex items-center px-3 py-1 mt-2 rounded-full text-xs font-medium bg-green-100 text-green-800">
                           <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>{' '}
                           광고 진행중
@@ -383,25 +383,25 @@ export default function AdvertisingPage() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div>
                         <div className="text-gray-500 mb-1">월 결제액</div>
-                        <div className="font-bold text-gray-900">
+                        <div className="font-semibold text-gray-900">
                           {sub.monthlyPrice.toLocaleString()}원
                         </div>
                       </div>
                       <div>
                         <div className="text-gray-500 mb-1">다음 결제일</div>
-                        <div className="font-bold text-gray-900">
+                        <div className="font-semibold text-gray-900">
                           {new Date(sub.nextBillingDate).toLocaleDateString('ko-KR')}
                         </div>
                       </div>
                       <div>
                         <div className="text-gray-500 mb-1">노출수</div>
-                        <div className="font-bold text-blue-600">
+                        <div className="font-semibold text-blue-600">
                           {sub.totalImpressions.toLocaleString()}회
                         </div>
                       </div>
                       <div>
                         <div className="text-gray-500 mb-1">클릭수</div>
-                        <div className="font-bold text-green-600">
+                        <div className="font-semibold text-green-600">
                           {sub.totalClicks.toLocaleString()}회 ({sub.ctr.toFixed(2)}%)
                         </div>
                       </div>
@@ -415,7 +415,7 @@ export default function AdvertisingPage() {
           {/* 서비스 광고 관리 테이블 */}
           {services.length > 0 && (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-              <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+              <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-6 flex items-center gap-3">
                 <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                   <List className="w-5 h-5 text-blue-600" />
                 </div>
@@ -601,7 +601,7 @@ export default function AdvertisingPage() {
                 <div className="sticky top-0 bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center rounded-t-2xl">
                   <h2
                     id="advertising-modal-title"
-                    className="text-base md:text-lg font-bold text-gray-900"
+                    className="text-base md:text-lg font-semibold text-gray-900"
                   >
                     {services.find((s) => s.id === selectedService)?.hasActiveAd
                       ? '광고 상세 정보'
@@ -635,19 +635,19 @@ export default function AdvertisingPage() {
                     if (service.hasActiveAd && service.adDetails) {
                       return (
                         <div>
-                          <h3 className="text-base md:text-lg font-bold text-gray-900 mb-4">
+                          <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-4">
                             {service.title}
                           </h3>
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div className="bg-white p-4 rounded-lg">
                               <div className="text-sm text-gray-600 mb-1">월 결제액</div>
-                              <div className="text-2xl font-bold text-gray-900">
+                              <div className="text-2xl font-semibold text-gray-900">
                                 {service.adDetails.monthlyPrice.toLocaleString()}원
                               </div>
                             </div>
                             <div className="bg-white p-4 rounded-lg">
                               <div className="text-sm text-gray-600 mb-1">다음 결제일</div>
-                              <div className="text-lg font-bold text-gray-900">
+                              <div className="text-lg font-semibold text-gray-900">
                                 {new Date(service.adDetails.nextBillingDate).toLocaleDateString(
                                   'ko-KR'
                                 )}
@@ -655,25 +655,25 @@ export default function AdvertisingPage() {
                             </div>
                             <div className="bg-white p-4 rounded-lg">
                               <div className="text-sm text-gray-600 mb-1">광고 시작일</div>
-                              <div className="text-lg font-bold text-gray-900">
+                              <div className="text-lg font-semibold text-gray-900">
                                 {new Date(service.adDetails.createdAt).toLocaleDateString('ko-KR')}
                               </div>
                             </div>
                             <div className="bg-white p-4 rounded-lg">
                               <div className="text-sm text-gray-600 mb-1">총 노출 수</div>
-                              <div className="text-2xl font-bold text-blue-600">
+                              <div className="text-2xl font-semibold text-blue-600">
                                 {service.adDetails.totalImpressions.toLocaleString()}회
                               </div>
                             </div>
                             <div className="bg-white p-4 rounded-lg">
                               <div className="text-sm text-gray-600 mb-1">총 클릭 수</div>
-                              <div className="text-2xl font-bold text-green-600">
+                              <div className="text-2xl font-semibold text-green-600">
                                 {service.adDetails.totalClicks.toLocaleString()}회
                               </div>
                             </div>
                             <div className="bg-white p-4 rounded-lg">
                               <div className="text-sm text-gray-600 mb-1">클릭률 (CTR)</div>
-                              <div className="text-2xl font-bold text-purple-600">
+                              <div className="text-2xl font-semibold text-purple-600">
                                 {service.adDetails.ctr.toFixed(2)}%
                               </div>
                             </div>
@@ -685,7 +685,7 @@ export default function AdvertisingPage() {
                     // 광고 신청 폼
                     return (
                       <div>
-                        <h3 className="text-base md:text-lg font-bold text-gray-900 mb-4">
+                        <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-4">
                           {service.title}
                         </h3>
 
@@ -696,7 +696,7 @@ export default function AdvertisingPage() {
                               htmlFor="contract-period"
                               className="block text-sm font-medium text-gray-700 mb-2"
                             >
-                              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold mr-2">
+                              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-semibold mr-2">
                                 1
                               </span>{' '}
                               계약 기간을 선택하세요
@@ -731,17 +731,17 @@ export default function AdvertisingPage() {
                             <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                               <div className="flex items-center gap-2 mb-1">
                                 <Gift className="w-4 h-4 text-brand-primary" />
-                                <span className="text-brand-primary font-bold text-sm">
+                                <span className="text-brand-primary font-semibold text-sm">
                                   첫 광고 50% 할인
                                 </span>
                               </div>
-                              <h3 className="text-lg font-bold text-gray-900 mb-1">광고 플랜</h3>
+                              <h3 className="text-lg font-semibold text-gray-900 mb-1">광고 플랜</h3>
                               <p className="text-sm text-gray-600">
                                 카테고리 1페이지 완전 랜덤 노출
                               </p>
                             </div>
                             <div className="text-right">
-                              <div className="text-3xl font-bold text-brand-primary">
+                              <div className="text-3xl font-semibold text-brand-primary">
                                 {monthlySupplyPrice.toLocaleString()}원
                               </div>
                               <div className="text-sm text-gray-600">/ 월 (VAT 별도)</div>
@@ -755,19 +755,19 @@ export default function AdvertisingPage() {
                                 <span className="text-gray-600">
                                   공급가액 ({selectedMonths}개월)
                                 </span>
-                                <span className="font-bold text-gray-900">
+                                <span className="font-semibold text-gray-900">
                                   {totalSupplyPrice.toLocaleString()}원
                                 </span>
                               </div>
                               <div className="flex justify-between">
                                 <span className="text-gray-600">부가세 (10%)</span>
-                                <span className="font-bold text-gray-900">
+                                <span className="font-semibold text-gray-900">
                                   {totalTaxAmount.toLocaleString()}원
                                 </span>
                               </div>
                               <div className="flex justify-between pt-2 border-t border-gray-200">
-                                <span className="font-bold text-gray-900">총 결제금액</span>
-                                <span className="font-bold text-brand-primary text-lg">
+                                <span className="font-semibold text-gray-900">총 결제금액</span>
+                                <span className="font-semibold text-brand-primary text-lg">
                                   {totalPrice.toLocaleString()}원
                                 </span>
                               </div>
@@ -778,7 +778,7 @@ export default function AdvertisingPage() {
                             <div className="mb-4 p-3 bg-green-100 border border-green-300 rounded-lg">
                               <div className="flex items-center gap-2 text-green-800">
                                 <Tag className="w-4 h-4" />
-                                <span className="font-bold">{discountRate}% 할인 적용!</span>
+                                <span className="font-semibold">{discountRate}% 할인 적용!</span>
                               </div>
                               <div className="text-sm text-green-700 mt-1">
                                 {selectedMonths}개월 계약 시 공급가액{' '}
@@ -815,7 +815,7 @@ export default function AdvertisingPage() {
                               htmlFor="payment-method"
                               className="block text-sm font-medium text-gray-700 mb-2"
                             >
-                              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold mr-2">
+                              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-semibold mr-2">
                                 2
                               </span>{' '}
                               결제 방식을 선택하세요
@@ -832,7 +832,7 @@ export default function AdvertisingPage() {
                                     className="mt-1"
                                   />
                                   <div className="flex-1">
-                                    <div className="font-bold text-gray-900 mb-1">카드 결제</div>
+                                    <div className="font-semibold text-gray-900 mb-1">카드 결제</div>
                                     <div className="text-sm text-gray-600">즉시 광고 시작</div>
                                     <div className="text-xs text-orange-600 font-medium mt-1">
                                       준비 중
@@ -861,7 +861,7 @@ export default function AdvertisingPage() {
                                     className="mt-1"
                                   />
                                   <div className="flex-1">
-                                    <div className="font-bold text-gray-900 mb-1">무통장 입금</div>
+                                    <div className="font-semibold text-gray-900 mb-1">무통장 입금</div>
                                     <div className="text-sm text-gray-600">승인 후 광고 시작</div>
                                     <div className="text-xs text-gray-500 mt-1">1-2일 소요</div>
                                   </div>
@@ -875,7 +875,7 @@ export default function AdvertisingPage() {
                             <button
                               onClick={handleStartAdvertising}
                               disabled={purchasing}
-                              className="w-full bg-brand-primary text-white py-4 rounded-lg font-bold hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl disabled:shadow-none text-lg"
+                              className="w-full bg-brand-primary text-white py-4 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl disabled:shadow-none text-lg"
                             >
                               {purchasing ? (
                                 <span className="flex items-center justify-center gap-2">
@@ -904,7 +904,7 @@ export default function AdvertisingPage() {
             (!dashboard?.subscriptions || dashboard.subscriptions.length === 0) && (
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
                 <Megaphone className="w-16 h-16 text-gray-300 mb-4 mx-auto" />
-                <h3 className="text-xl font-bold text-gray-900 mb-2">광고할 서비스가 없습니다</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">광고할 서비스가 없습니다</h3>
                 <p className="text-gray-600 mb-6">먼저 서비스를 등록해주세요</p>
                 <a
                   href="/mypage/seller/services/new"

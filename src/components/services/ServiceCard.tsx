@@ -112,7 +112,7 @@ export default function ServiceCard({
         {isPromotedService && (
           <div className="absolute top-2 right-2">
             <span
-              className="px-2 py-1 bg-blue-600 text-white text-xs font-bold rounded shadow-lg inline-block"
+              className="px-2 py-1 bg-blue-600 text-white text-xs font-semibold rounded shadow-lg inline-block"
               aria-label="추천"
             >
               추천
@@ -123,7 +123,7 @@ export default function ServiceCard({
         {service.is_featured && (
           <div className="absolute top-2 left-2">
             <span
-              className="px-2 py-1 bg-yellow-500 text-white text-xs font-bold rounded shadow-lg inline-flex items-center gap-1"
+              className="px-2 py-1 bg-yellow-500 text-white text-xs font-semibold rounded shadow-lg inline-flex items-center gap-1"
               aria-label="프리미엄 서비스"
             >
               <Star className="w-3 h-3 fill-current" aria-hidden="true" />
@@ -138,7 +138,7 @@ export default function ServiceCard({
         {/* 판매자 */}
         <div className="flex items-center gap-1 mb-1">
           <div
-            className="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center text-white text-[8px] font-bold"
+            className="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center text-white text-[8px] font-semibold"
             aria-hidden="true"
           >
             {service.seller?.display_name?.[0] || 'S'}
@@ -164,7 +164,7 @@ export default function ServiceCard({
         </div>
 
         {/* 가격 */}
-        <p className="text-brand-primary font-bold text-sm">
+        <p className="text-brand-primary font-semibold text-sm">
           <span className="sr-only">가격</span>
           {(service.price || 0).toLocaleString()}원
         </p>

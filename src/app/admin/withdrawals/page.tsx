@@ -181,26 +181,26 @@ export default function AdminWithdrawalsPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">출금 관리</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">출금 관리</h1>
         <p className="text-gray-600 mt-1">판매자 출금 요청을 관리하세요</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="text-sm text-gray-600 mb-2">대기 중인 출금 요청</div>
-          <div className="text-2xl font-bold text-yellow-600">
+          <div className="text-2xl font-semibold text-yellow-600">
             {pendingCount}건
           </div>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="text-sm text-gray-600 mb-2">대기 중인 출금 금액</div>
-          <div className="text-2xl font-bold text-brand-primary">
+          <div className="text-2xl font-semibold text-brand-primary">
             {totalPendingAmount.toLocaleString()}원
           </div>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="text-sm text-gray-600 mb-2">전체 요청</div>
-          <div className="text-2xl font-bold text-gray-900">
+          <div className="text-2xl font-semibold text-gray-900">
             {withdrawals.length}건
           </div>
         </div>
@@ -251,7 +251,7 @@ export default function AdminWithdrawalsPage() {
 
       <div className="bg-white rounded-lg border border-gray-200">
         <div className="p-4 border-b border-gray-200">
-          <h2 className="text-lg font-bold text-gray-900">출금 요청 목록</h2>
+          <h2 className="text-lg font-semibold text-gray-900">출금 요청 목록</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">

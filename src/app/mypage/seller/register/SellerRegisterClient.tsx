@@ -346,7 +346,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
 
         {/* 페이지 헤더 */}
         <div className="mb-8">
-          <h1 className="text-xl font-bold text-gray-900">판매자 등록</h1>
+          <h1 className="text-xl font-semibold text-gray-900">판매자 등록</h1>
           <p className="text-gray-600 mt-1 text-sm">
             재능을 판매하기 위해 판매자 정보를 입력해주세요
           </p>
@@ -358,7 +358,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
             {[1, 2, 3, 4].map((step) => (
               <div key={step} className="flex items-center flex-1">
                 <div
-                  className={`flex items-center justify-center w-10 h-10 rounded-full font-bold ${
+                  className={`flex items-center justify-center w-10 h-10 rounded-full font-semibold ${
                     currentStep >= step
                       ? 'bg-brand-primary text-white'
                       : 'bg-gray-200 text-gray-500'
@@ -404,7 +404,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
           {/* 1단계: 신원 인증 */}
           {currentStep === 1 && (
             <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-              <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">
+              <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">
                 1단계: 신원 인증
               </h2>
               <div className="space-y-4">
@@ -588,7 +588,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
           {/* 2단계: 판매자 프로필 */}
           {currentStep === 2 && (
             <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-              <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">
+              <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">
                 2단계: 판매자 프로필
               </h2>
               <div className="space-y-4">
@@ -711,7 +711,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
           {/* 3단계: 연락처 정보 */}
           {currentStep === 3 && (
             <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-              <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">
+              <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">
                 3단계: 연락처 정보 (선택)
               </h2>
               <div className="space-y-4">
@@ -858,7 +858,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
           {/* 4단계: 약관 동의 */}
           {currentStep === 4 && (
             <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">4단계: 운영 정책 동의</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">4단계: 운영 정책 동의</h2>
               <div className="space-y-4">
                 <div className="border rounded-lg p-4">
                   <label htmlFor="seller-terms-agree" className="flex items-start gap-3">

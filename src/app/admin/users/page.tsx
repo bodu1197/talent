@@ -138,7 +138,7 @@ export default function AdminUsersPage() {
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">사용자 관리</h1>
+        <h1 className="text-3xl font-semibold text-gray-900">사용자 관리</h1>
         <p className="text-gray-600 mt-1">전체 회원을 관리하세요</p>
       </div>
 
@@ -204,7 +204,7 @@ export default function AdminUsersPage() {
 
       {/* 결과 카운트 */}
       <div className="text-sm text-gray-600">
-        총 <span className="font-bold text-gray-900">{filteredUsers.length}</span> 명의 사용자
+        총 <span className="font-semibold text-gray-900">{filteredUsers.length}</span> 명의 사용자
       </div>
 
       {/* 사용자 목록 */}
@@ -244,7 +244,7 @@ export default function AdminUsersPage() {
                               alt={user.name}
                             />
                           ) : (
-                            <div className="h-10 w-10 rounded-full bg-brand-primary flex items-center justify-center text-white font-bold">
+                            <div className="h-10 w-10 rounded-full bg-brand-primary flex items-center justify-center text-white font-semibold">
                               {user.name?.[0] || 'U'}
                             </div>
                           )}
@@ -314,7 +314,7 @@ export default function AdminUsersPage() {
           >
             {/* 모달 헤더 */}
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-              <h2 id="user-detail-title" className="text-xl font-bold text-gray-900">
+              <h2 id="user-detail-title" className="text-xl font-semibold text-gray-900">
                 사용자 상세 정보
               </h2>
               <button
@@ -344,13 +344,13 @@ export default function AdminUsersPage() {
                       alt={selectedUser.name}
                     />
                   ) : (
-                    <div className="h-20 w-20 rounded-full bg-brand-primary flex items-center justify-center text-white font-bold text-2xl">
+                    <div className="h-20 w-20 rounded-full bg-brand-primary flex items-center justify-center text-white font-semibold text-2xl">
                       {selectedUser.name?.[0] || 'U'}
                     </div>
                   )}
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-900">{selectedUser.name}</h3>
+                  <h3 className="text-2xl font-semibold text-gray-900">{selectedUser.name}</h3>
                   <span
                     className={`inline-block mt-1 px-3 py-1 text-xs leading-5 font-semibold rounded-full ${getRoleBadgeColor(selectedUser.role)}`}
                   >

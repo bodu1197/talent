@@ -215,7 +215,7 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
         {/* 헤더 */}
         <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-brand-primary text-white">
           <div>
-            <div className="font-bold text-lg">{getModeLabel()}</div>
+            <div className="font-semibold text-lg">{getModeLabel()}</div>
             <div className="text-sm opacity-90">메뉴</div>
           </div>
           <button

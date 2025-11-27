@@ -16,7 +16,7 @@ export default async function PersonalizedServices() {
             <div>
               <div className="flex items-center gap-2">
                 <Heart className="w-5 h-5 text-brand-primary fill-current" />
-                <h2 className="text-2xl font-bold text-gray-900">회원님의 관심 카테고리</h2>
+                <h2 className="text-2xl font-semibold text-gray-900">회원님의 관심 카테고리</h2>
               </div>
               <p className="text-sm text-gray-600 mt-1">방문한 카테고리에 서비스가 없습니다</p>
             </div>
@@ -38,7 +38,7 @@ export default async function PersonalizedServices() {
           <div>
             <div className="flex items-center gap-2">
               <Heart className="w-5 h-5 text-brand-primary fill-current" />
-              <h2 className="text-2xl font-bold text-gray-900">회원님의 관심 카테고리</h2>
+              <h2 className="text-2xl font-semibold text-gray-900">회원님의 관심 카테고리</h2>
             </div>
             <p className="text-sm text-gray-600 mt-1">
               자주 방문하시는 카테고리의 추천 서비스입니다
@@ -53,7 +53,7 @@ export default async function PersonalizedServices() {
               {/* 카테고리 헤더 */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <h3 className="text-xl font-bold text-gray-900">{category.category_name}</h3>
+                  <h3 className="text-xl font-semibold text-gray-900">{category.category_name}</h3>
                   {category.visit_count > 1 && (
                     <span className="px-2 py-1 bg-brand-primary text-white text-xs rounded-full">
                       {category.visit_count}회 방문

@@ -93,7 +93,7 @@ export default async function PendingServiceDetailPage({
     return (
       <div className="p-8">
         <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-          <h2 className="text-xl font-bold text-red-900 mb-4">
+          <h2 className="text-xl font-semibold text-red-900 mb-4">
             오류가 발생했습니다
           </h2>
           <p className="text-red-700">{errorMessage}</p>

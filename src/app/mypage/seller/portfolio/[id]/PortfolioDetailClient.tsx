@@ -122,7 +122,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
               </div>
             </div>
 
-            <h1 className="text-base md:text-lg font-bold text-gray-900">{portfolio.title}</h1>
+            <h1 className="text-base md:text-lg font-semibold text-gray-900">{portfolio.title}</h1>
             <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
               <span>
                 <Eye className="inline w-4 h-4 mr-1" />
@@ -179,7 +179,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
           {/* YouTube 영상 */}
           {youtubeVideoId && (
             <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-              <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">
+              <h2 className="text-sm md:text-base font-semibold text-gray-900 mb-4">
                 <Youtube className="inline w-4 h-4 text-red-600 mr-2" />
                 프로젝트 영상
               </h2>
@@ -199,7 +199,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
 
           {/* 설명 */}
           <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-            <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">프로젝트 설명</h2>
+            <h2 className="text-sm md:text-base font-semibold text-gray-900 mb-4">프로젝트 설명</h2>
             <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
               {portfolio.description}
             </p>
@@ -208,7 +208,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
           {/* 프로젝트 URL */}
           {portfolio.project_url && (
             <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-              <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">프로젝트 링크</h2>
+              <h2 className="text-sm md:text-base font-semibold text-gray-900 mb-4">프로젝트 링크</h2>
               <a
                 href={portfolio.project_url}
                 target="_blank"
@@ -224,7 +224,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
           {/* 태그 */}
           {portfolio.tags && portfolio.tags.length > 0 && (
             <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">태그</h2>
+              <h2 className="text-sm md:text-base font-semibold text-gray-900 mb-4">태그</h2>
               <div className="flex flex-wrap gap-2">
                 {portfolio.tags.map((tag, index) => (
                   <span

@@ -179,7 +179,7 @@ export default function AdminOrdersPage() {
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">주문 관리</h1>
+        <h1 className="text-3xl font-semibold text-gray-900">주문 관리</h1>
         <p className="text-gray-600 mt-1">전체 주문 내역을 관리하세요</p>
       </div>
 
@@ -238,7 +238,7 @@ export default function AdminOrdersPage() {
       {/* 결과 카운트 */}
       <div className="text-sm text-gray-600">
         총{' '}
-        <span className="font-bold text-gray-900">{filteredOrders.length}</span>
+        <span className="font-semibold text-gray-900">{filteredOrders.length}</span>
         {' '}건의 주문
       </div>
 

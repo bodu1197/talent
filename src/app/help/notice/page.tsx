@@ -41,7 +41,7 @@ const notices = [
 export default function NoticePage() {
   return (
     <div className="container-1200 py-16">
-      <h1 className="text-3xl font-bold mb-8">공지사항</h1>
+      <h1 className="text-3xl font-semibold mb-8">공지사항</h1>
 
       <div className="max-w-4xl">
         {/* 공지사항 목록 */}

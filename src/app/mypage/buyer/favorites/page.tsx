@@ -71,7 +71,7 @@ export default function FavoritesPage() {
         <div className="py-8 px-4">
           <div className="max-w-md mx-auto text-center">
             <Lock className="w-16 h-16 text-gray-300 mb-4" />
-            <h2 className="text-base md:text-lg font-bold mb-4">로그인이 필요합니다</h2>
+            <h2 className="text-base md:text-lg font-semibold mb-4">로그인이 필요합니다</h2>
             <p className="text-gray-600 mb-6">찜한 서비스를 확인하려면 로그인해주세요.</p>
             <Link
               href="/auth/login"
@@ -90,7 +90,7 @@ export default function FavoritesPage() {
       <MypageLayoutWrapper mode="buyer">
         <div className="py-8 px-4">
           <div className="mb-6 lg:mb-8">
-            <h1 className="text-base md:text-lg font-bold mb-2">찜한 서비스</h1>
+            <h1 className="text-base md:text-lg font-semibold mb-2">찜한 서비스</h1>
             <p className="text-xs md:text-sm text-gray-600">
               관심있는 서비스를 저장하고 관리하세요
             </p>
@@ -118,7 +118,7 @@ export default function FavoritesPage() {
         <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
           <div className="flex items-center gap-3 mb-2">
             <Heart className="w-7 h-7 text-red-500 fill-current" />
-            <h1 className="text-base md:text-lg font-bold">찜한 서비스</h1>
+            <h1 className="text-base md:text-lg font-semibold">찜한 서비스</h1>
             {favorites.length > 0 && (
               <span className="text-lg text-gray-500">({favorites.length}개)</span>
             )}
@@ -129,7 +129,7 @@ export default function FavoritesPage() {
         {favorites.length === 0 ? (
           <div className="text-center py-16">
             <Heart className="w-16 h-16 text-gray-300 mb-4" />
-            <h3 className="text-sm md:text-base font-bold mb-2">찜한 서비스가 없습니다</h3>
+            <h3 className="text-sm md:text-base font-semibold mb-2">찜한 서비스가 없습니다</h3>
             <p className="text-gray-600 mb-6">마음에 드는 서비스를 찜해보세요</p>
             <Link
               href="/"
@@ -185,7 +185,7 @@ export default function FavoritesPage() {
                     <div className="mt-2">
                       {/* 판매자 */}
                       <div className="flex items-center gap-1 mb-1">
-                        <div className="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center text-white text-[8px] font-bold">
+                        <div className="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center text-white text-[8px] font-semibold">
                           {service.seller?.display_name?.[0] || 'S'}
                         </div>
                         <span className="text-xs text-gray-600 truncate">
@@ -211,7 +211,7 @@ export default function FavoritesPage() {
                       </div>
 
                       {/* 가격 */}
-                      <p className="text-brand-primary font-bold text-sm">
+                      <p className="text-brand-primary font-semibold text-sm">
                         {(service.price || 0).toLocaleString()}원
                       </p>
 

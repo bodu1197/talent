@@ -21,7 +21,7 @@ export default function ContactPage() {
 
   return (
     <div className="container-1200 py-16">
-      <h1 className="text-3xl font-bold mb-8">1:1 문의</h1>
+      <h1 className="text-3xl font-semibold mb-8">1:1 문의</h1>
 
       <div className="max-w-4xl">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -165,7 +165,7 @@ export default function ContactPage() {
           <div className="space-y-6">
             {/* 운영 시간 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="font-bold mb-4 flex items-center gap-2">
+              <h3 className="font-semibold mb-4 flex items-center gap-2">
                 <Clock className="w-5 h-5 text-brand-primary" />
                 운영 시간
               </h3>
@@ -188,7 +188,7 @@ export default function ContactPage() {
 
             {/* 연락처 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="font-bold mb-4 flex items-center gap-2">
+              <h3 className="font-semibold mb-4 flex items-center gap-2">
                 <Phone className="w-5 h-5 text-brand-primary" />
                 연락처
               </h3>
@@ -208,7 +208,7 @@ export default function ContactPage() {
 
             {/* 유의사항 */}
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-              <h3 className="font-bold mb-3 flex items-center gap-2 text-sm">
+              <h3 className="font-semibold mb-3 flex items-center gap-2 text-sm">
                 <AlertCircle className="w-4 h-4 text-yellow-600" />
                 유의사항
               </h3>

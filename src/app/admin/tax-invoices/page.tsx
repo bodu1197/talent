@@ -123,7 +123,7 @@ export default function AdminTaxInvoicesPage() {
     <div className="space-y-6">
       {/* 헤더 */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">세금계산서 관리</h1>
+        <h1 className="text-3xl font-semibold text-gray-900">세금계산서 관리</h1>
         <p className="text-gray-600 mt-2">광고 결제에 대한 세금계산서를 관리합니다</p>
       </div>
 
@@ -136,7 +136,7 @@ export default function AdminTaxInvoicesPage() {
               <FileText className="w-5 h-5 text-blue-600" />
             </div>
           </div>
-          <div className="text-3xl font-bold text-gray-900">{stats.totalCount}건</div>
+          <div className="text-3xl font-semibold text-gray-900">{stats.totalCount}건</div>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -146,7 +146,7 @@ export default function AdminTaxInvoicesPage() {
               <CalendarCheck className="w-5 h-5 text-green-600" />
             </div>
           </div>
-          <div className="text-3xl font-bold text-gray-900">
+          <div className="text-3xl font-semibold text-gray-900">
             {stats.thisMonthAmount.toLocaleString()}원
           </div>
           <p className="text-xs text-gray-500 mt-1">VAT 포함</p>
@@ -159,7 +159,7 @@ export default function AdminTaxInvoicesPage() {
               <CircleDollarSign className="w-5 h-5 text-purple-600" />
             </div>
           </div>
-          <div className="text-3xl font-bold text-gray-900">
+          <div className="text-3xl font-semibold text-gray-900">
             {stats.totalSupplyAmount.toLocaleString()}원
           </div>
           <p className="text-xs text-gray-500 mt-1">VAT 별도</p>
@@ -289,7 +289,7 @@ export default function AdminTaxInvoicesPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <div className="text-sm font-bold text-gray-900">
+                      <div className="text-sm font-semibold text-gray-900">
                         {invoice.total_amount.toLocaleString()}원
                       </div>
                     </td>

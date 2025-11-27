@@ -28,7 +28,7 @@ export default function SettingsClient({ profile, userEmail, isSeller }: Props) 
       <div className="py-8 px-4">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-base md:text-lg font-bold text-gray-900">설정</h1>
+            <h1 className="text-base md:text-lg font-semibold text-gray-900">설정</h1>
             <p className="text-gray-600 mt-2 text-sm md:text-base">
               계정 및 알림 설정을 확인하세요
             </p>
@@ -84,7 +84,7 @@ export default function SettingsClient({ profile, userEmail, isSeller }: Props) 
           <div className="flex-1">
             {activeTab === 'profile' && (
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">프로필 정보</h2>
+                <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">프로필 정보</h2>
                 <div className="space-y-4">
                   <div>
                     <span className="block text-sm font-medium text-gray-700 mb-2">
@@ -98,7 +98,7 @@ export default function SettingsClient({ profile, userEmail, isSeller }: Props) 
                           className="w-20 h-20 rounded-full object-cover"
                         />
                       ) : (
-                        <div className="w-20 h-20 bg-brand-primary rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                        <div className="w-20 h-20 bg-brand-primary rounded-full flex items-center justify-center text-white text-2xl font-semibold">
                           {profile?.name?.[0] || 'U'}
                         </div>
                       )}
@@ -127,7 +127,7 @@ export default function SettingsClient({ profile, userEmail, isSeller }: Props) 
 
             {activeTab === 'account' && (
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">계정 보안</h2>
+                <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">계정 보안</h2>
                 <div className="space-y-4">
                   <div>
                     <span className="block text-sm font-medium text-gray-700 mb-2">비밀번호</span>
@@ -150,7 +150,7 @@ export default function SettingsClient({ profile, userEmail, isSeller }: Props) 
 
             {activeTab === 'notifications' && (
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-base md:text-lg font-bold text-gray-900 mb-6">알림 설정</h2>
+                <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">알림 설정</h2>
                 <div className="space-y-4">
                   <div className="p-4 border border-gray-200 rounded-lg">
                     <div className="flex items-center justify-between">

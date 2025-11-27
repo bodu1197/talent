@@ -16,13 +16,13 @@ export default function HowToOrderPage() {
         </div>
 
         <div className="bg-white rounded-lg shadow-sm p-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">
+          <h1 className="text-3xl font-semibold text-gray-900 mb-6">
             주문 방법 안내
           </h1>
 
           <div className="prose max-w-none">
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
                 처음 주문하시나요?
               </h2>
               <p className="text-gray-700 mb-4">
@@ -32,13 +32,13 @@ export default function HowToOrderPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-6">
                 상세 주문 가이드
               </h2>
 
               <div className="space-y-6">
                 <div className="border-l-4 border-brand-primary pl-4">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     STEP 1. 회원가입 및 로그인
                   </h3>
                   <p className="text-gray-700 mb-2">
@@ -51,7 +51,7 @@ export default function HowToOrderPage() {
                 </div>
 
                 <div className="border-l-4 border-brand-primary pl-4">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     STEP 2. 원하는 서비스 찾기
                   </h3>
                   <p className="text-gray-700 mb-2">
@@ -66,7 +66,7 @@ export default function HowToOrderPage() {
                 </div>
 
                 <div className="border-l-4 border-brand-primary pl-4">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     STEP 3. 서비스 상세 정보 확인
                   </h3>
                   <p className="text-gray-700 mb-2">
@@ -82,7 +82,7 @@ export default function HowToOrderPage() {
                 </div>
 
                 <div className="border-l-4 border-brand-primary pl-4">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     STEP 4. 옵션 선택 및 주문서 작성
                   </h3>
                   <p className="text-gray-700 mb-2">
@@ -97,7 +97,7 @@ export default function HowToOrderPage() {
                 </div>
 
                 <div className="border-l-4 border-brand-primary pl-4">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     STEP 5. 결제하기
                   </h3>
                   <p className="text-gray-700 mb-2">
@@ -112,7 +112,7 @@ export default function HowToOrderPage() {
                 </div>
 
                 <div className="border-l-4 border-brand-primary pl-4">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     STEP 6. 판매자와 소통
                   </h3>
                   <p className="text-gray-700 mb-2">
@@ -126,7 +126,7 @@ export default function HowToOrderPage() {
                 </div>
 
                 <div className="border-l-4 border-brand-primary pl-4">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     STEP 7. 작업물 받기 및 확인
                   </h3>
                   <p className="text-gray-700 mb-2">
@@ -141,7 +141,7 @@ export default function HowToOrderPage() {
                 </div>
 
                 <div className="border-l-4 border-brand-primary pl-4">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     STEP 8. 리뷰 작성
                   </h3>
                   <p className="text-gray-700 mb-2">
@@ -157,7 +157,7 @@ export default function HowToOrderPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
                 주문 시 유의사항
               </h2>
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
@@ -172,7 +172,7 @@ export default function HowToOrderPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
                 도움이 필요하신가요?
               </h2>
               <p className="text-gray-700 mb-4">

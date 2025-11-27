@@ -159,12 +159,12 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
             <ArrowLeft className="w-4 h-4" />
             <span>뒤로가기</span>
           </button>
-          <h1 className="text-2xl font-bold text-gray-900">결제하기</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">결제하기</h1>
         </div>
 
         {/* 주문 정보 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-4">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">주문 정보</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">주문 정보</h2>
 
           <div className="space-y-3">
             <div className="flex justify-between items-start">
@@ -198,8 +198,8 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
 
             <div className="pt-4 border-t border-gray-200">
               <div className="flex justify-between items-center">
-                <span className="text-lg font-bold text-gray-900">총 결제금액</span>
-                <span className="text-2xl font-bold text-brand-primary">
+                <span className="text-lg font-semibold text-gray-900">총 결제금액</span>
+                <span className="text-2xl font-semibold text-brand-primary">
                   {paymentRequest.amount.toLocaleString()}원
                 </span>
               </div>
@@ -209,7 +209,7 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
 
         {/* 구매자 정보 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-4">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">구매자 정보</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">구매자 정보</h2>
 
           <div className="space-y-3">
             <div className="flex justify-between">
@@ -229,7 +229,7 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
 
         {/* 구매 조건 동의 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">구매 조건 확인 및 동의</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">구매 조건 확인 및 동의</h2>
 
           <div className="space-y-3 mb-4">
             <div className="flex items-start gap-2 text-sm text-gray-600">
@@ -263,7 +263,7 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
         <button
           onClick={handlePayment}
           disabled={!agreedToTerms || isProcessing}
-          className="w-full py-4 bg-brand-primary text-white rounded-lg font-bold text-lg hover:bg-[#1a4d8f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-4 bg-brand-primary text-white rounded-lg font-semibold text-lg hover:bg-[#1a4d8f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isProcessing ? (
             <>

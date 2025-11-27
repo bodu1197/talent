@@ -365,7 +365,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
           <div className="flex flex-col lg:flex-row gap-5">
             {/* 왼쪽: 제목, 통계, 판매자 카드 */}
             <div className="flex-1">
-              <h1 className="text-2xl font-bold mb-6">{service.title}</h1>
+              <h1 className="text-2xl font-semibold mb-6">{service.title}</h1>
 
               {/* 통계 */}
               <div className="flex items-center gap-6 py-3 mb-6 text-sm relative z-10">
@@ -374,12 +374,12 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star key={star} className="w-4 h-4 text-yellow-400 fill-current" />
                   ))}
-                  <span className="font-bold ml-1">{averageRating}</span>
+                  <span className="font-semibold ml-1">{averageRating}</span>
                   <span className="text-gray-500">({reviewCount})</span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-600">
                   <Heart className="w-4 h-4 text-red-400 fill-current" />
-                  <span className="font-bold">{service.wishlist_count || 0}</span>
+                  <span className="font-semibold">{service.wishlist_count || 0}</span>
                 </div>
               </div>
 
@@ -407,7 +407,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   {/* 정보 영역 */}
                   <div className="flex-1 flex flex-col justify-center gap-1 min-w-0">
                     {/* 판매자 활동명 */}
-                    <h3 className="font-bold text-sm leading-tight truncate">
+                    <h3 className="font-semibold text-sm leading-tight truncate">
                       {service.seller?.display_name || service.seller?.business_name}
                     </h3>
 
@@ -561,7 +561,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
               className={`w-5 h-5 ${star <= Math.round(Number(averageRating)) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
             />
           ))}
-          <span className="ml-2 font-bold text-gray-900">{averageRating}</span>
+          <span className="ml-2 font-semibold text-gray-900">{averageRating}</span>
           <span className="text-gray-500">({reviewCount})</span>
           <div className="ml-4 flex items-center gap-1 text-gray-500">
             <Heart className="w-4 h-4 text-red-400 fill-current" />
@@ -572,8 +572,8 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
       {/* 모바일 전용: 제목 및 가격 */}
       <div className="lg:hidden bg-white px-4 py-4">
-        <h1 className="text-lg font-bold text-gray-900 mb-2">{service.title}</h1>
-        <div className="text-xl font-bold text-brand-primary">
+        <h1 className="text-lg font-semibold text-gray-900 mb-2">{service.title}</h1>
+        <div className="text-xl font-semibold text-brand-primary">
           {service.price?.toLocaleString() || 0}원
         </div>
       </div>
@@ -586,7 +586,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             {/* 포트폴리오 */}
             {linkedPortfolios && linkedPortfolios.length > 0 && (
               <div id="portfolio" className="bg-white rounded-xl shadow-sm p-3 lg:p-6 scroll-mt-20">
-                <h2 className="text-xl font-bold mb-4 lg:mb-6">
+                <h2 className="text-xl font-semibold mb-4 lg:mb-6">
                   포트폴리오 ({linkedPortfolios.length})
                 </h2>
                 <PortfolioGrid portfolios={linkedPortfolios} />
@@ -598,7 +598,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
               id="description"
               className="bg-white rounded-xl shadow-sm p-3 lg:p-6 scroll-mt-20 overflow-hidden"
             >
-              <h2 className="text-xl font-bold mb-3 lg:mb-4">서비스 설명</h2>
+              <h2 className="text-xl font-semibold mb-3 lg:mb-4">서비스 설명</h2>
               <div
                 className="prose prose-lg max-w-none whitespace-pre-wrap break-words overflow-wrap-anywhere"
                 style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}
@@ -610,7 +610,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             {/* 전문가 정보 */}
             {service.seller && (
               <div id="expert" className="bg-white rounded-xl shadow-sm p-3 lg:p-6 scroll-mt-20">
-                <h2 className="text-xl font-bold mb-4 lg:mb-6">전문가 정보</h2>
+                <h2 className="text-xl font-semibold mb-4 lg:mb-6">전문가 정보</h2>
 
                 {/* 전문가 카드 */}
                 <div className="border border-gray-200 rounded-lg p-3 lg:p-6">
@@ -621,7 +621,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   <div className="flex items-start justify-between mb-4 lg:mb-6">
                     <div className="flex items-start gap-3 lg:gap-4">
                       {/* 프로필 이미지 */}
-                      <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-full bg-brand-primary flex items-center justify-center text-white text-xl lg:text-2xl font-bold flex-shrink-0 relative overflow-hidden">
+                      <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-full bg-brand-primary flex items-center justify-center text-white text-xl lg:text-2xl font-semibold flex-shrink-0 relative overflow-hidden">
                         {service.seller?.profile_image ? (
                           <Image
                             src={service.seller.profile_image}
@@ -645,7 +645,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       {/* 이름 및 영업 시간 */}
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-base lg:text-lg font-bold text-gray-900">
+                          <h3 className="text-base lg:text-lg font-semibold text-gray-900">
                             {service.seller?.display_name || service.seller?.business_name}
                           </h3>
                           <span className="text-yellow-500">
@@ -674,25 +674,25 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                     <div className="hidden lg:grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
                       <div className="text-right">
                         <span className="text-gray-500">총 거래</span>
-                        <span className="ml-2 font-bold text-gray-900">
+                        <span className="ml-2 font-semibold text-gray-900">
                           {sellerStats.totalOrders}건
                         </span>
                       </div>
                       <div className="text-right">
                         <span className="text-gray-500">만족도</span>
-                        <span className="ml-2 font-bold text-gray-900">
+                        <span className="ml-2 font-semibold text-gray-900">
                           {sellerStats.satisfactionRate}%
                         </span>
                       </div>
                       <div className="text-right">
                         <span className="text-gray-500">회원구분</span>
-                        <span className="ml-2 font-bold text-gray-900">
+                        <span className="ml-2 font-semibold text-gray-900">
                           {service.seller?.is_business ? '기업회원' : '개인회원'}
                         </span>
                       </div>
                       <div className="text-right">
                         <span className="text-gray-500">세금계산서</span>
-                        <span className="ml-2 font-bold text-gray-900">
+                        <span className="ml-2 font-semibold text-gray-900">
                           {service.seller?.is_business || service.seller?.tax_invoice_available
                             ? '발행가능'
                             : '불가능'}
@@ -715,25 +715,25 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   <div className="lg:hidden grid grid-cols-4 gap-2 py-3 border-t border-gray-200">
                     <div className="text-center">
                       <div className="text-xs text-gray-500 mb-1">총 거래</div>
-                      <div className="text-sm font-bold text-gray-900">
+                      <div className="text-sm font-semibold text-gray-900">
                         {sellerStats.totalOrders}건
                       </div>
                     </div>
                     <div className="text-center">
                       <div className="text-xs text-gray-500 mb-1">만족도</div>
-                      <div className="text-sm font-bold text-gray-900">
+                      <div className="text-sm font-semibold text-gray-900">
                         {sellerStats.satisfactionRate}%
                       </div>
                     </div>
                     <div className="text-center">
                       <div className="text-xs text-gray-500 mb-1">회원구분</div>
-                      <div className="text-sm font-bold text-gray-900">
+                      <div className="text-sm font-semibold text-gray-900">
                         {service.seller?.is_business ? '기업' : '개인'}
                       </div>
                     </div>
                     <div className="text-center">
                       <div className="text-xs text-gray-500 mb-1">세금계산서</div>
-                      <div className="text-sm font-bold text-gray-900">
+                      <div className="text-sm font-semibold text-gray-900">
                         {service.seller?.is_business || service.seller?.tax_invoice_available
                           ? '가능'
                           : '불가'}
@@ -744,7 +744,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   {/* 전문가 소개 */}
                   {service.seller?.bio && (
                     <div className="mt-6 pt-6 border-t border-gray-200">
-                      <h4 className="font-bold text-gray-900 mb-3">전문가 소개</h4>
+                      <h4 className="font-semibold text-gray-900 mb-3">전문가 소개</h4>
                       <p className="text-gray-700 whitespace-pre-wrap leading-relaxed break-words overflow-wrap-anywhere">
                         {service.seller.bio}
                       </p>
@@ -757,7 +757,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             {/* 리뷰 */}
             <div id="reviews" className="bg-white rounded-xl shadow-sm p-3 lg:p-6 scroll-mt-20">
               <div className="flex items-center justify-between mb-4 lg:mb-6">
-                <h2 className="text-xl font-bold">리뷰 ({serviceReviews?.length || 0})</h2>
+                <h2 className="text-xl font-semibold">리뷰 ({serviceReviews?.length || 0})</h2>
                 {serviceReviews && serviceReviews.length > 0 && (
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-1">
@@ -776,7 +776,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                         />
                       ))}
                     </div>
-                    <span className="font-bold text-lg">
+                    <span className="font-semibold text-lg">
                       {(
                         serviceReviews.reduce((sum, r) => sum + r.rating, 0) / serviceReviews.length
                       ).toFixed(1)}
@@ -867,7 +867,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                 className="bg-white rounded-xl shadow-sm overflow-hidden scroll-mt-20"
               >
                 <div className="p-6">
-                  <div className="text-2xl font-bold mb-1">
+                  <div className="text-2xl font-semibold mb-1">
                     {service.price?.toLocaleString() || 0}원
                   </div>
                   <div className="text-sm text-gray-600 mb-6">
@@ -904,7 +904,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
               {/* 안전거래 배지 */}
               <div className="bg-blue-50 rounded-xl p-4 text-center">
                 <Shield className="w-7 h-7 text-brand-primary mb-2 inline-block" />
-                <h4 className="font-bold mb-1">100% 안전거래</h4>
+                <h4 className="font-semibold mb-1">100% 안전거래</h4>
                 <p className="text-xs text-gray-600">
                   에스크로 결제 시스템으로
                   <br />
@@ -920,7 +920,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       {otherServices && otherServices.length > 0 && (
         <div className="bg-white py-6 lg:py-12">
           <div className="container-1200 px-4">
-            <h2 className="text-lg lg:text-2xl font-bold mb-4 lg:mb-6">
+            <h2 className="text-lg lg:text-2xl font-semibold mb-4 lg:mb-6">
               이 전문가의 다른 서비스예요
             </h2>
             {/* 모바일: 가로 스크롤 */}
@@ -945,7 +945,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       {recommendedServices && recommendedServices.length > 0 && (
         <div className="bg-gray-50 py-6 lg:py-12 pb-20 lg:pb-12">
           <div className="container-1200 px-4">
-            <h2 className="text-lg lg:text-2xl font-bold mb-4 lg:mb-6">
+            <h2 className="text-lg lg:text-2xl font-semibold mb-4 lg:mb-6">
               {categoryName} 분야의 다른 서비스
             </h2>
             {/* 모바일: 가로 스크롤 */}

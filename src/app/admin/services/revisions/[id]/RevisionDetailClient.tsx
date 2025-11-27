@@ -59,7 +59,7 @@ export default function RevisionDetailClient({ revision }: Props) {
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-semibold text-gray-900 mb-2">
               서비스 수정 요청 상세
             </h1>
             <p className="text-gray-600">
@@ -77,7 +77,7 @@ export default function RevisionDetailClient({ revision }: Props) {
 
         {/* 수정 요청 정보 */}
         <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-          <h2 className="text-xl font-bold mb-4">수정 요청 정보</h2>
+          <h2 className="text-xl font-semibold mb-4">수정 요청 정보</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <span className="text-sm text-gray-600">판매자</span>
@@ -104,7 +104,7 @@ export default function RevisionDetailClient({ revision }: Props) {
         <div className="grid grid-cols-2 gap-6 mb-6">
           {/* 원본 서비스 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
               <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm">
                 원본
               </span>
@@ -181,7 +181,7 @@ export default function RevisionDetailClient({ revision }: Props) {
 
           {/* 수정된 서비스 */}
           <div className="bg-white rounded-lg border-2 border-orange-200 p-6">
-            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
               <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded text-sm">
                 수정
               </span>

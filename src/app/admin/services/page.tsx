@@ -163,7 +163,7 @@ export default function AdminServicesPage() {
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">서비스 관리</h1>
+        <h1 className="text-3xl font-semibold text-gray-900">서비스 관리</h1>
         <p className="text-gray-600 mt-1">신규 서비스 등록 요청을 검토하세요</p>
       </div>
 
@@ -228,7 +228,7 @@ export default function AdminServicesPage() {
       {/* 결과 카운트 */}
       <div className="text-sm text-gray-600">
         총{' '}
-        <span className="font-bold text-gray-900">
+        <span className="font-semibold text-gray-900">
           {filteredServices.length}
         </span>
         {' '}개의 서비스

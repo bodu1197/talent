@@ -128,7 +128,7 @@ export default function BuyerDashboardClient({
       <div className="py-8 px-4">
         {/* 페이지 헤더 */}
         <div className="mb-6 lg:mb-8">
-          <h1 className="text-base md:text-lg font-bold text-gray-900">구매 대시보드</h1>
+          <h1 className="text-base md:text-lg font-semibold text-gray-900">구매 대시보드</h1>
           <p className="text-gray-600 mt-2 text-sm md:text-base">주문 현황을 확인하세요</p>
         </div>
 
@@ -138,7 +138,7 @@ export default function BuyerDashboardClient({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">진행중 주문</p>
-                <p className="text-lg font-bold text-gray-900">{stats?.inProgressOrders || 0}건</p>
+                <p className="text-lg font-semibold text-gray-900">{stats?.inProgressOrders || 0}건</p>
               </div>
               <Loader2 className="w-7 h-7 text-yellow-500 animate-spin" />
             </div>
@@ -147,7 +147,7 @@ export default function BuyerDashboardClient({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">도착 확인 대기</p>
-                <p className="text-lg font-bold text-gray-900">{stats?.deliveredOrders || 0}건</p>
+                <p className="text-lg font-semibold text-gray-900">{stats?.deliveredOrders || 0}건</p>
               </div>
               <PackageOpen className="w-7 h-7 text-blue-500" />
             </div>
@@ -156,7 +156,7 @@ export default function BuyerDashboardClient({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">작성 가능 리뷰</p>
-                <p className="text-lg font-bold text-gray-900">{stats?.pendingReviews || 0}건</p>
+                <p className="text-lg font-semibold text-gray-900">{stats?.pendingReviews || 0}건</p>
               </div>
               <Star className="w-7 h-7 text-purple-500" />
             </div>
@@ -165,7 +165,7 @@ export default function BuyerDashboardClient({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">이번달 구매</p>
-                <p className="text-lg font-bold text-gray-900">{stats?.monthlyPurchases || 0}건</p>
+                <p className="text-lg font-semibold text-gray-900">{stats?.monthlyPurchases || 0}건</p>
               </div>
               <ShoppingCart className="w-7 h-7 text-green-500" />
             </div>
@@ -175,7 +175,7 @@ export default function BuyerDashboardClient({
         {/* 알림 */}
         {alerts.length > 0 && (
           <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
-            <h2 className="text-base md:text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Bell className="w-5 h-5 text-red-500" />
               확인 필요
             </h2>
@@ -202,7 +202,7 @@ export default function BuyerDashboardClient({
         {/* 진행중인 주문 */}
         <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base md:text-lg font-bold text-gray-900 flex items-center gap-2">
+            <h2 className="text-base md:text-lg font-semibold text-gray-900 flex items-center gap-2">
               <Package className="w-5 h-5 text-purple-500" />
               진행중인 주문
             </h2>
@@ -245,7 +245,7 @@ export default function BuyerDashboardClient({
                               <span className="text-xs md:text-sm text-gray-500">
                                 #{order.order_number || order.id.slice(0, 8)}
                               </span>
-                              <span className="text-sm md:text-base font-bold text-gray-900">
+                              <span className="text-sm md:text-base font-semibold text-gray-900">
                                 {order.title || order.service?.title}
                               </span>
                             </div>
@@ -268,7 +268,7 @@ export default function BuyerDashboardClient({
                           {daysLeft && (
                             <span className="text-xs md:text-sm text-gray-600">D-{daysLeft}일</span>
                           )}
-                          <span className="text-xs md:text-sm font-bold text-gray-900">
+                          <span className="text-xs md:text-sm font-semibold text-gray-900">
                             {order.total_amount?.toLocaleString() || '0'}원
                           </span>
                         </div>
@@ -303,7 +303,7 @@ export default function BuyerDashboardClient({
         {/* 최근 찜한 서비스 */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base md:text-lg font-bold text-gray-900 flex items-center gap-2">
+            <h2 className="text-base md:text-lg font-semibold text-gray-900 flex items-center gap-2">
               <Heart className="w-5 h-5 text-red-500 fill-current" />
               최근 찜한 서비스
             </h2>

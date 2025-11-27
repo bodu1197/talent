@@ -35,7 +35,7 @@ export default function Dashboard2Client({ stats, recentOrders }: Props) {
       <div className="py-8 px-4">
         {/* 페이지 헤더 */}
         <div className="mb-6">
-          <h1 className="text-xl font-bold text-gray-900">판매 대시보드 2 (헤더/푸터 없음)</h1>
+          <h1 className="text-xl font-semibold text-gray-900">판매 대시보드 2 (헤더/푸터 없음)</h1>
           <p className="text-gray-600 mt-1 text-sm">판매 현황을 한눈에 확인하세요</p>
         </div>
 
@@ -45,7 +45,7 @@ export default function Dashboard2Client({ stats, recentOrders }: Props) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">신규 주문</p>
-                <p className="text-lg font-bold text-gray-900">{stats.newOrders}건</p>
+                <p className="text-lg font-semibold text-gray-900">{stats.newOrders}건</p>
               </div>
               <ShoppingCart className="w-7 h-7 text-blue-500" />
             </div>
@@ -54,7 +54,7 @@ export default function Dashboard2Client({ stats, recentOrders }: Props) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">진행중</p>
-                <p className="text-lg font-bold text-gray-900">{stats.inProgressOrders}건</p>
+                <p className="text-lg font-semibold text-gray-900">{stats.inProgressOrders}건</p>
               </div>
               <Loader2 className="w-7 h-7 text-yellow-500" />
             </div>
@@ -63,7 +63,7 @@ export default function Dashboard2Client({ stats, recentOrders }: Props) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">완료된 주문</p>
-                <p className="text-lg font-bold text-gray-900">{stats.deliveredOrders}건</p>
+                <p className="text-lg font-semibold text-gray-900">{stats.deliveredOrders}건</p>
               </div>
               <CheckCircle className="w-7 h-7 text-green-500" />
             </div>
@@ -72,7 +72,7 @@ export default function Dashboard2Client({ stats, recentOrders }: Props) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600">이번달 수익</p>
-                <p className="text-lg font-bold text-gray-900">
+                <p className="text-lg font-semibold text-gray-900">
                   {stats.monthlyRevenue.toLocaleString()}원
                 </p>
               </div>

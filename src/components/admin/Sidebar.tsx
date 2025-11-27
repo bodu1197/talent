@@ -134,7 +134,7 @@ export default function AdminSidebar() {
         {!collapsed && (
           <div className="flex items-center gap-2">
             <Shield className="w-5 h-5" />
-            <span className="font-bold text-lg">Admin</span>
+            <span className="font-semibold text-lg">Admin</span>
           </div>
         )}
         <button
@@ -169,7 +169,7 @@ export default function AdminSidebar() {
                 <>
                   <span className="flex-1">{item.name}</span>
                   {badgeCount > 0 && (
-                    <span className="px-2 py-0.5 bg-red-500 text-white text-xs font-bold rounded-full min-w-[20px] text-center">
+                    <span className="px-2 py-0.5 bg-red-500 text-white text-xs font-semibold rounded-full min-w-[20px] text-center">
                       {badgeCount > 99 ? "99+" : badgeCount}
                     </span>
                   )}
