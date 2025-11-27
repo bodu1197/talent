@@ -9,21 +9,21 @@ import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
 
 import {
-  FaArrowLeft,
-  FaUser,
-  FaComments,
-  FaSpinner,
-  FaTimes,
-  FaInfoCircle,
-  FaCheck,
-  FaClock,
-  FaPaperPlane,
-  FaFileInvoiceDollar,
-  FaMoneyBillWave,
-  FaRedo,
-  FaHourglassHalf,
-  FaChevronRight,
-} from 'react-icons/fa';
+  ArrowLeft,
+  User,
+  MessageCircle,
+  Loader2,
+  X,
+  Info,
+  Check,
+  Clock,
+  Send,
+  FileText,
+  DollarSign,
+  RotateCw,
+  Hourglass,
+  ChevronRight,
+} from 'lucide-react';
 
 interface Message {
   id: string;
@@ -282,7 +282,7 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                 aria-label="뒤로가기"
               >
-                <FaArrowLeft className="text-gray-700" />
+                <ArrowLeft className="w-5 h-5 text-gray-700" />
               </button>
 
               <div className="flex items-center gap-3">
@@ -299,7 +299,7 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-400">
-                      <FaUser />
+                      <User className="w-5 h-5" />
                     </div>
                   )}
                 </div>
@@ -347,7 +347,7 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
                   <p className="text-sm text-gray-500 mb-1">문의 상품</p>
                   <p className="font-medium text-gray-900 truncate">{service.title}</p>
                 </div>
-                <FaChevronRight className="text-gray-400" />
+                <ChevronRight className="w-5 h-5 text-gray-400" />
               </Link>
             </div>
           )}
@@ -356,7 +356,7 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
           <div className="space-y-4">
             {getTimeline().length === 0 ? (
               <div className="text-center py-12 text-gray-500">
-                <FaComments className="text-4xl mb-3 inline-block" />
+                <MessageCircle className="w-10 h-10 mb-3 inline-block" />
                 <p>아직 메시지가 없습니다</p>
                 <p className="text-sm mt-1">첫 메시지를 보내보세요!</p>
               </div>
@@ -384,7 +384,7 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
                               />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
-                                <FaUser />
+                                <User className="w-4 h-4" />
                               </div>
                             )}
                           </div>
@@ -439,7 +439,7 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
                 onClick={() => setShowPaymentRequestModal(true)}
                 className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2 text-sm font-medium"
               >
-                <FaMoneyBillWave />
+                <DollarSign className="w-4 h-4" />
                 <span>결제 요청</span>
               </button>
             </div>
@@ -464,10 +464,10 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
               className="px-6 py-3 bg-brand-primary text-white rounded-full hover:bg-[#1a4d8f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               {isLoading ? (
-                <FaSpinner className="fa-spin" />
+                <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <>
-                  <FaPaperPlane />
+                  <Send className="w-5 h-5" />
                   <span className="hidden sm:inline">전송</span>
                 </>
               )}
@@ -584,7 +584,7 @@ function PaymentRequestCard({
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-2">
             <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center">
-              <FaFileInvoiceDollar className="text-white text-lg" />
+              <FileText className="w-5 h-5 text-white" />
             </div>
             <div>
               <h3 className="font-bold text-gray-900">결제 요청</h3>
@@ -619,11 +619,11 @@ function PaymentRequestCard({
 
           <div className="grid grid-cols-2 gap-2 text-sm">
             <div className="flex items-center gap-2 text-gray-600">
-              <FaClock className="text-gray-400" />
+              <Clock className="w-4 h-4 text-gray-400" />
               <span>작업 기간: {paymentRequest.delivery_days}일</span>
             </div>
             <div className="flex items-center gap-2 text-gray-600">
-              <FaRedo className="text-gray-400" />
+              <RotateCw className="w-4 h-4 text-gray-400" />
               <span>수정: {paymentRequest.revision_count}회</span>
             </div>
           </div>
@@ -631,7 +631,7 @@ function PaymentRequestCard({
           {isPending && (
             <div className="mt-3 pt-3 border-t border-gray-200">
               <p className="text-xs text-gray-500">
-                <FaHourglassHalf className="mr-1 inline" />
+                <Hourglass className="w-3 h-3 mr-1 inline" />
                 {new Date(paymentRequest.expires_at).toLocaleDateString('ko-KR', {
                   month: 'short',
                   day: 'numeric',
@@ -666,12 +666,12 @@ function PaymentRequestCard({
             >
               {isProcessing ? (
                 <>
-                  <FaSpinner className="fa-spin mr-2 inline" />
+                  <Loader2 className="w-4 h-4 mr-2 inline animate-spin" />
                   처리 중...
                 </>
               ) : (
                 <>
-                  <FaCheck className="mr-2 inline" />
+                  <Check className="w-4 h-4 mr-2 inline" />
                   수락 및 결제
                 </>
               )}
@@ -683,7 +683,7 @@ function PaymentRequestCard({
         {isSeller && isPending && (
           <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
             <p className="text-xs text-blue-700">
-              <FaInfoCircle className="mr-1 inline" />
+              <Info className="w-3 h-3 mr-1 inline" />
               구매자의 응답을 기다리고 있습니다
             </p>
           </div>
@@ -765,7 +765,7 @@ function PaymentRequestModal({
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900">결제 요청</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <FaTimes className="text-xl" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
@@ -863,7 +863,7 @@ function PaymentRequestModal({
 
           <div className="bg-blue-50 rounded-lg p-4">
             <p className="text-sm text-blue-900">
-              <FaInfoCircle className="mr-2 inline" />
+              <Info className="w-4 h-4 mr-2 inline" />
               구매자가 결제 요청을 수락하면 결제 페이지로 이동합니다. 결제 요청은 72시간 후 자동으로
               만료됩니다.
             </p>
@@ -885,7 +885,7 @@ function PaymentRequestModal({
             >
               {isSubmitting ? (
                 <>
-                  <FaSpinner className="fa-spin mr-2 inline" />
+                  <Loader2 className="w-4 h-4 mr-2 inline animate-spin" />
                   전송 중...
                 </>
               ) : (

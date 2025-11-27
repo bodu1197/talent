@@ -11,7 +11,7 @@ import ErrorState from '@/components/common/ErrorState';
 import { logger } from '@/lib/logger';
 import { createClient } from '@/lib/supabase/client';
 import type { Order, Service, User } from '@/types/common';
-import { FaEye, FaCheck, FaRedoAlt, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { Eye, Check, RotateCcw, ChevronLeft, ChevronRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 type OrderStatus =
@@ -301,7 +301,7 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
             href={`/mypage/seller/orders/${order.id}`}
             className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium whitespace-nowrap"
           >
-            <FaEye aria-hidden="true" />
+            <Eye aria-hidden="true" className="w-4 h-4" />
             <span>수정 요청 확인</span>
             {revisionCount > 0 && (
               <span className="px-2 py-0.5 bg-red-500 text-white text-xs rounded-full">
@@ -313,7 +313,7 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
             onClick={() => handleCompleteRevision(order.id)}
             className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium whitespace-nowrap"
           >
-            <FaCheck aria-hidden="true" />
+            <Check aria-hidden="true" className="w-4 h-4" />
             수정 완료
           </button>
           <Link
@@ -540,7 +540,7 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
                 onClick={resetFilters}
                 className="inline-flex items-center gap-2 w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium whitespace-nowrap"
               >
-                <FaRedoAlt aria-hidden="true" />
+                <RotateCcw aria-hidden="true" className="w-4 h-4" />
                 초기화
               </button>
             </div>
@@ -576,7 +576,7 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
         {filteredOrders.length > 0 && (
           <div className="mt-8 flex items-center justify-center gap-2">
             <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
-              <FaChevronLeft aria-hidden="true" />
+              <ChevronLeft aria-hidden="true" className="w-4 h-4" />
             </button>
             <button className="px-4 py-2 bg-brand-primary text-white rounded-lg">1</button>
             <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
@@ -586,7 +586,7 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
               3
             </button>
             <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-              <FaChevronRight aria-hidden="true" />
+              <ChevronRight aria-hidden="true" className="w-4 h-4" />
             </button>
           </div>
         )}

@@ -8,16 +8,16 @@ import ChatNotificationBadge from '@/components/chat/ChatNotificationBadge';
 import NotificationBell from '@/components/notifications/NotificationBell';
 import { useState } from 'react';
 import {
-  FaStar,
-  FaShoppingCart,
-  FaBox,
-  FaUserCircle,
-  FaCog,
-  FaSignOutAlt,
-  FaChevronDown,
-  FaSearch,
-  FaRegHeart,
-} from 'react-icons/fa';
+  Star,
+  ShoppingCart,
+  Package,
+  UserCircle,
+  Settings,
+  LogOut,
+  ChevronDown,
+  Search,
+  Heart,
+} from 'lucide-react';
 
 export default function Header() {
   const { user, profile, loading, signOut } = useAuth();
@@ -61,7 +61,7 @@ export default function Header() {
             aria-label="돌파구 홈으로 이동"
           >
             <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
-              <FaStar className="text-white text-sm" aria-hidden="true" />
+              <Star className="w-4 h-4 text-white fill-current" aria-hidden="true" />
             </div>
             <span className="text-xl font-bold">돌파구</span>
           </Link>
@@ -97,7 +97,7 @@ export default function Header() {
                 aria-label="검색"
               >
                 {' '}
-                <FaSearch className="text-sm" />{' '}
+                <Search className="w-4 h-4" />{' '}
               </button>{' '}
             </form>{' '}
           </div>
@@ -142,7 +142,7 @@ export default function Header() {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg"
                       role="menuitem"
                     >
-                      <FaShoppingCart className="inline mr-2" aria-hidden="true" />
+                      <ShoppingCart className="inline w-4 h-4 mr-2" aria-hidden="true" />
                       구매 관리
                     </Link>
                     <Link
@@ -150,7 +150,7 @@ export default function Header() {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-b-lg"
                       role="menuitem"
                     >
-                      <FaBox className="inline mr-2" aria-hidden="true" />
+                      <Package className="inline w-4 h-4 mr-2" aria-hidden="true" />
                       판매 관리
                     </Link>
                   </div>
@@ -162,7 +162,7 @@ export default function Header() {
                   className="text-gray-900 hover:text-red-500 transition-colors"
                   aria-label="찜한 서비스"
                 >
-                  <FaRegHeart className="text-xl" />
+                  <Heart className="w-5 h-5" />
                 </Link>
 
                 {/* 채팅 */}
@@ -186,7 +186,7 @@ export default function Header() {
                     />
 
                     {/* 드롭다운 아이콘 */}
-                    <FaChevronDown className="text-xs text-gray-400" aria-hidden="true" />
+                    <ChevronDown className="w-3 h-3 text-gray-400" aria-hidden="true" />
                   </button>
 
                   {/* 드롭다운 메뉴 */}
@@ -199,7 +199,7 @@ export default function Header() {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg"
                       role="menuitem"
                     >
-                      <FaUserCircle className="inline mr-2" aria-hidden="true" />
+                      <UserCircle className="inline w-4 h-4 mr-2" aria-hidden="true" />
                       마이페이지
                     </Link>
                     <Link
@@ -207,7 +207,7 @@ export default function Header() {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                       role="menuitem"
                     >
-                      <FaCog className="inline mr-2" aria-hidden="true" />
+                      <Settings className="inline w-4 h-4 mr-2" aria-hidden="true" />
                       설정
                     </Link>
                     <hr className="border-gray-200" />
@@ -220,7 +220,7 @@ export default function Header() {
                       role="menuitem"
                       aria-label="로그아웃"
                     >
-                      <FaSignOutAlt className="inline mr-2" aria-hidden="true" />
+                      <LogOut className="inline w-4 h-4 mr-2" aria-hidden="true" />
                       로그아웃
                     </button>
                   </div>

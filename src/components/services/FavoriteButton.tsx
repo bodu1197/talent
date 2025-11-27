@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
 import { logger } from '@/lib/logger';
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { Heart } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface FavoriteButtonProps {
@@ -105,9 +105,9 @@ export default function FavoriteButton({ serviceId, className = '' }: FavoriteBu
       aria-pressed={isFavorited}
     >
       {isFavorited ? (
-        <FaHeart className="text-red-500" aria-hidden="true" />
+        <Heart className="w-5 h-5 text-red-500 fill-current" aria-hidden="true" />
       ) : (
-        <FaRegHeart aria-hidden="true" />
+        <Heart className="w-5 h-5" aria-hidden="true" />
       )}
       <span>{isFavorited ? '찜 취소' : '찜하기'}</span>
     </button>

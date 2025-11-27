@@ -3,20 +3,20 @@
 import Link from "next/link";
 import { useAuth } from "@/components/providers/AuthProvider";
 import {
-  FaUser,
-  FaTh,
-  FaRobot,
-  FaCode,
-  FaPalette,
-  FaBullhorn,
-  FaUserPlus,
-  FaQuestionCircle,
-  FaEnvelope,
-  FaInfoCircle,
-  FaFileContract,
-  FaShieldAlt,
-  FaChevronRight,
-} from "react-icons/fa";
+  User,
+  LayoutGrid,
+  Bot,
+  Code,
+  Palette,
+  Megaphone,
+  UserPlus,
+  CircleHelp,
+  Mail,
+  Info,
+  FileText,
+  ShieldCheck,
+  ChevronRight,
+} from "lucide-react";
 
 export default function MenuPage() {
   const { user, signOut } = useAuth();
@@ -25,37 +25,37 @@ export default function MenuPage() {
     {
       title: "서비스",
       items: [
-        { name: "전체 카테고리", href: "/categories", icon: FaTh },
-        { name: "AI 서비스", href: "/categories/ai-services", icon: FaRobot },
+        { name: "전체 카테고리", href: "/categories", icon: LayoutGrid },
+        { name: "AI 서비스", href: "/categories/ai-services", icon: Bot },
         {
           name: "IT/프로그래밍",
           href: "/categories/it-programming",
-          icon: FaCode,
+          icon: Code,
         },
-        { name: "디자인", href: "/categories/design", icon: FaPalette },
-        { name: "마케팅", href: "/categories/marketing", icon: FaBullhorn },
+        { name: "디자인", href: "/categories/design", icon: Palette },
+        { name: "마케팅", href: "/categories/marketing", icon: Megaphone },
       ],
     },
     {
       title: "전문가",
       items: [
-        { name: "전문가 등록", href: "/expert/register", icon: FaUserPlus },
+        { name: "전문가 등록", href: "/expert/register", icon: UserPlus },
       ],
     },
     {
       title: "고객센터",
       items: [
-        { name: "공지사항", href: "/help/notice", icon: FaBullhorn },
-        { name: "자주 묻는 질문", href: "/help/faq", icon: FaQuestionCircle },
-        { name: "문의하기", href: "/help/contact", icon: FaEnvelope },
+        { name: "공지사항", href: "/help/notice", icon: Megaphone },
+        { name: "자주 묻는 질문", href: "/help/faq", icon: CircleHelp },
+        { name: "문의하기", href: "/help/contact", icon: Mail },
       ],
     },
     {
       title: "정보",
       items: [
-        { name: "서비스 소개", href: "/about", icon: FaInfoCircle },
-        { name: "이용약관", href: "/terms", icon: FaFileContract },
-        { name: "개인정보처리방침", href: "/privacy", icon: FaShieldAlt },
+        { name: "서비스 소개", href: "/about", icon: Info },
+        { name: "이용약관", href: "/terms", icon: FileText },
+        { name: "개인정보처리방침", href: "/privacy", icon: ShieldCheck },
       ],
     },
   ];
@@ -69,7 +69,7 @@ export default function MenuPage() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-                  <FaUser className="text-2xl text-gray-600" />
+                  <User className="w-7 h-7 text-gray-600" />
                 </div>
                 <div>
                   <p className="font-semibold text-lg">{user.email}</p>
@@ -133,10 +133,10 @@ export default function MenuPage() {
                       className="flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors"
                     >
                       <div className="flex items-center gap-3">
-                        <IconComponent className="text-gray-600 w-5" />
+                        <IconComponent className="w-5 h-5 text-gray-600" />
                         <span className="text-gray-900">{item.name}</span>
                       </div>
-                      <FaChevronRight className="text-gray-400 text-sm" />
+                      <ChevronRight className="w-4 h-4 text-gray-400" />
                     </Link>
                   );
                 })}

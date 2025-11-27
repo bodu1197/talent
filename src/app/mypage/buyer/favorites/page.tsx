@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { Service } from '@/types';
-import { FaLock, FaHeart, FaBox, FaStar, FaCheckCircle, FaTimes, FaRegHeart } from 'react-icons/fa';
+import { Lock, Heart, Package, Star, CheckCircle, X } from 'lucide-react';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
@@ -70,7 +70,7 @@ export default function FavoritesPage() {
       <MypageLayoutWrapper mode="buyer">
         <div className="py-8 px-4">
           <div className="max-w-md mx-auto text-center">
-            <FaLock className="text-6xl text-gray-300 mb-4" />
+            <Lock className="w-16 h-16 text-gray-300 mb-4" />
             <h2 className="text-base md:text-lg font-bold mb-4">로그인이 필요합니다</h2>
             <p className="text-gray-600 mb-6">찜한 서비스를 확인하려면 로그인해주세요.</p>
             <Link
@@ -117,7 +117,7 @@ export default function FavoritesPage() {
       <div className="py-8 px-4">
         <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
           <div className="flex items-center gap-3 mb-2">
-            <FaHeart className="text-red-500 text-2xl" />
+            <Heart className="w-7 h-7 text-red-500 fill-current" />
             <h1 className="text-base md:text-lg font-bold">찜한 서비스</h1>
             {favorites.length > 0 && (
               <span className="text-lg text-gray-500">({favorites.length}개)</span>
@@ -128,7 +128,7 @@ export default function FavoritesPage() {
 
         {favorites.length === 0 ? (
           <div className="text-center py-16">
-            <FaRegHeart className="text-6xl text-gray-300 mb-4" />
+            <Heart className="w-16 h-16 text-gray-300 mb-4" />
             <h3 className="text-sm md:text-base font-bold mb-2">찜한 서비스가 없습니다</h3>
             <p className="text-gray-600 mb-6">마음에 드는 서비스를 찜해보세요</p>
             <Link
@@ -152,7 +152,7 @@ export default function FavoritesPage() {
                     className="absolute top-2 right-2 z-10 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-red-500 hover:text-white transition-colors opacity-0 group-hover:opacity-100"
                     title="찜 취소"
                   >
-                    <FaTimes />
+                    <X className="w-4 h-4" />
                   </button>
 
                   <Link href={`/services/${service.id}`} className="block">
@@ -169,14 +169,14 @@ export default function FavoritesPage() {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                          <FaBox className="text-4xl text-gray-400" />
+                          <Package className="w-10 h-10 text-gray-400" />
                         </div>
                       )}
 
                       {/* 찜 아이콘 표시 */}
                       <div className="absolute top-2 left-2">
                         <div className="px-2 py-1 bg-red-500 text-white text-xs rounded shadow-lg">
-                          <FaHeart />
+                          <Heart className="w-3 h-3 fill-current" />
                         </div>
                       </div>
                     </div>
@@ -192,7 +192,7 @@ export default function FavoritesPage() {
                           {service.seller?.display_name}
                         </span>
                         {service.seller?.is_verified && (
-                          <FaCheckCircle className="text-[10px] text-blue-500" />
+                          <CheckCircle className="w-3 h-3 text-blue-500" />
                         )}
                       </div>
 
@@ -204,7 +204,7 @@ export default function FavoritesPage() {
                       {/* 평점 및 주문 수 */}
                       <div className="flex items-center gap-2 text-xs text-gray-600 mb-1">
                         <span className="flex items-center gap-1">
-                          <FaStar className="text-yellow-400" />
+                          <Star className="w-3 h-3 text-yellow-400 fill-current" />
                           {(service.rating || 0).toFixed(1)}
                         </span>
                         <span>({service.order_count || 0})</span>

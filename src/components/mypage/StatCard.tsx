@@ -1,14 +1,13 @@
-import { IconType } from 'react-icons';
 import {
-  FaSpinner,
-  FaBoxOpen,
-  FaStar,
-  FaShoppingCart,
-  FaChartLine,
-  FaDollarSign,
-  FaUsers,
-  FaClock,
-} from 'react-icons/fa';
+  Loader2,
+  PackageOpen,
+  Star,
+  ShoppingCart,
+  TrendingUp,
+  DollarSign,
+  Users,
+  Clock,
+} from 'lucide-react';
 
 interface StatCardProps {
   readonly title: string;
@@ -27,19 +26,19 @@ const colorClasses = {
 };
 
 // Icon mapping
-const iconComponents: Record<string, IconType> = {
-  'fa-spinner': FaSpinner,
-  'fa-box-open': FaBoxOpen,
-  'fa-star': FaStar,
-  'fa-shopping-cart': FaShoppingCart,
-  'fa-chart-line': FaChartLine,
-  'fa-dollar-sign': FaDollarSign,
-  'fa-users': FaUsers,
-  'fa-clock': FaClock,
+const iconComponents: Record<string, React.ComponentType<{ className?: string }>> = {
+  'fa-spinner': Loader2,
+  'fa-box-open': PackageOpen,
+  'fa-star': Star,
+  'fa-shopping-cart': ShoppingCart,
+  'fa-chart-line': TrendingUp,
+  'fa-dollar-sign': DollarSign,
+  'fa-users': Users,
+  'fa-clock': Clock,
 };
 
 export default function StatCard({ title, value, icon, color = 'blue', subtitle }: StatCardProps) {
-  const IconComponent = iconComponents[icon] || FaChartLine;
+  const IconComponent = iconComponents[icon] || TrendingUp;
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6 card-interactive">
@@ -48,7 +47,7 @@ export default function StatCard({ title, value, icon, color = 'blue', subtitle 
         <div
           className={`w-10 h-10 rounded-lg ${colorClasses[color]} flex items-center justify-center click-bounce`}
         >
-          <IconComponent className="text-lg" aria-hidden="true" />
+          <IconComponent className="w-5 h-5" aria-hidden="true" />
         </div>
       </div>
       <div className="text-lg font-bold text-gray-900 mb-1">{value}</div>

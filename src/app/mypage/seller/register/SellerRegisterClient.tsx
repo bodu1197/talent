@@ -7,15 +7,15 @@ import { createClient } from '@/lib/supabase/client';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import Link from 'next/link';
 import {
-  FaArrowLeft,
-  FaShieldAlt,
-  FaCheckCircle,
-  FaInfoCircle,
-  FaTimes,
-  FaCamera,
-  FaCheck,
-  FaSpinner,
-} from 'react-icons/fa';
+  ArrowLeft,
+  ShieldCheck,
+  CheckCircle,
+  Info,
+  X,
+  Camera,
+  Check,
+  Loader2,
+} from 'lucide-react';
 import toast from 'react-hot-toast';
 
 type Step = 1 | 2 | 3 | 4;
@@ -339,7 +339,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
             href="/mypage"
             className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
           >
-            <FaArrowLeft />
+            <ArrowLeft className="w-4 h-4" />
             <span>마이페이지로</span>
           </Link>
         </div>
@@ -410,7 +410,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
               <div className="space-y-4">
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                   <div className="flex items-start gap-3">
-                    <FaInfoCircle className="text-blue-500 mt-1" />
+                    <Info className="w-4 h-4 text-blue-500 mt-1" />
                     <div>
                       <p className="text-sm font-medium text-blue-900">본인인증 안내</p>
                       <p className="text-sm text-blue-700 mt-1">
@@ -434,7 +434,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                         : 'bg-brand-primary text-white hover:bg-[#1a4d8f]'
                     }`}
                   >
-                    {isVerified ? <FaCheckCircle /> : <FaShieldAlt />}
+                    {isVerified ? <CheckCircle className="w-5 h-5" /> : <ShieldCheck className="w-5 h-5" />}
                     {isVerified ? '본인인증 완료' : 'NICE 휴대폰 본인인증'}
                   </button>
                   {!isVerified && (
@@ -447,7 +447,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                 {isVerified && (
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                     <div className="flex items-start gap-3">
-                      <FaCheckCircle className="text-green-600 mt-1" />
+                      <CheckCircle className="w-4 h-4 text-green-600 mt-1" />
                       <div className="flex-1">
                         <p className="text-sm font-medium text-green-900 mb-2">인증 완료</p>
                         <div className="space-y-1">
@@ -597,7 +597,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                   {initialProfile?.profile_image && !formData.profileImage && (
                     <div className="mb-3 bg-blue-50 border border-blue-200 rounded-lg p-3">
                       <p className="text-sm text-blue-800">
-                        <FaInfoCircle className="mr-1 inline" />
+                        <Info className="w-3 h-3 mr-1 inline" />
                         현재 회원 프로필 사진이 사용됩니다. 변경하려면 새 사진을 업로드하세요.
                       </p>
                     </div>
@@ -633,7 +633,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                             aria-label="프로필 사진 변경 취소 또는 제거"
                             className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm"
                           >
-                            <FaTimes className="mr-1 inline" />
+                            <X className="w-3 h-3 mr-1 inline" />
                             {formData.profileImage && initialProfile?.profile_image
                               ? '변경 취소'
                               : '이미지 제거'}
@@ -655,7 +655,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                           onChange={handleProfileImageChange}
                           className="hidden"
                         />
-                        <FaCamera className="mr-2 inline" />
+                        <Camera className="w-4 h-4 mr-2 inline" />
                         프로필 사진 선택
                       </label>
                     )}
@@ -946,7 +946,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                 onClick={prevStep}
                 className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
               >
-                <FaArrowLeft className="mr-2 inline" />
+                <ArrowLeft className="w-4 h-4 mr-2 inline" />
                 이전
               </button>
             )}
@@ -959,7 +959,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                 className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 다음
-                <FaArrowLeft className="ml-2 inline transform rotate-180" />
+                <ArrowLeft className="w-4 h-4 ml-2 inline transform rotate-180" />
               </button>
             ) : (
               <button
@@ -970,12 +970,12 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
               >
                 {loading ? (
                   <>
-                    <FaSpinner className="fa-spin mr-2 inline" />
+                    <Loader2 className="w-4 h-4 animate-spin mr-2 inline" />
                     등록 중...
                   </>
                 ) : (
                   <>
-                    <FaCheck className="mr-2 inline" />
+                    <Check className="w-4 h-4 mr-2 inline" />
                     판매자 등록 완료
                   </>
                 )}

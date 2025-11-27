@@ -3,31 +3,31 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import {
-  FaRobot,
-  FaPalette,
-  FaCut,
-  FaCode,
-  FaBullhorn,
-  FaCamera,
-  FaLanguage,
-  FaPenFancy,
-  FaBriefcase,
-  FaBook,
-  FaMusic,
-  FaCalendar,
-  FaSpa,
-  FaBullseye,
-  FaStar,
-  FaBookOpen,
-  FaGavel,
-  FaHammer,
-  FaGraduationCap,
-  FaChartLine,
-  FaHome,
-  FaMotorcycle,
-  FaRunning,
-  FaCircle,
-} from 'react-icons/fa';
+  Bot,
+  Palette,
+  Scissors,
+  Code,
+  Megaphone,
+  Camera,
+  Languages,
+  PenTool,
+  Briefcase,
+  BookOpen,
+  Music,
+  Calendar,
+  Sparkles,
+  Target,
+  Star,
+  Library,
+  Gavel,
+  Hammer,
+  GraduationCap,
+  TrendingUp,
+  Home,
+  Bike,
+  PersonStanding,
+  Circle,
+} from 'lucide-react';
 
 interface CategoryItem {
   id: string;
@@ -41,35 +41,35 @@ interface MobileCategoryBrowserProps {
   categories: CategoryItem[];
 }
 
-const ICON_MAP: Record<string, React.ComponentType> = {
-  robot: FaRobot,
-  palette: FaPalette,
-  scissors: FaCut,
-  code: FaCode,
-  bullhorn: FaBullhorn,
-  camera: FaCamera,
-  language: FaLanguage,
-  'pen-fancy': FaPenFancy,
-  briefcase: FaBriefcase,
-  book: FaBook,
-  music: FaMusic,
-  calendar: FaCalendar,
-  spa: FaSpa,
-  bullseye: FaBullseye,
-  star: FaStar,
-  'book-open': FaBookOpen,
-  gavel: FaGavel,
-  hammer: FaHammer,
-  'graduation-cap': FaGraduationCap,
-  'chart-line': FaChartLine,
-  home: FaHome,
-  motorcycle: FaMotorcycle,
-  running: FaRunning,
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+  robot: Bot,
+  palette: Palette,
+  scissors: Scissors,
+  code: Code,
+  bullhorn: Megaphone,
+  camera: Camera,
+  language: Languages,
+  'pen-fancy': PenTool,
+  briefcase: Briefcase,
+  book: BookOpen,
+  music: Music,
+  calendar: Calendar,
+  spa: Sparkles,
+  bullseye: Target,
+  star: Star,
+  'book-open': Library,
+  gavel: Gavel,
+  hammer: Hammer,
+  'graduation-cap': GraduationCap,
+  'chart-line': TrendingUp,
+  home: Home,
+  motorcycle: Bike,
+  running: PersonStanding,
 };
 
 function CategoryIcon({ icon }: Readonly<{ icon?: string }>) {
-  const IconComponent = (icon && ICON_MAP[icon]) || FaCircle;
-  return <IconComponent />;
+  const IconComponent = (icon && ICON_MAP[icon]) || Circle;
+  return <IconComponent className="w-5 h-5" />;
 }
 
 export default function MobileCategoryBrowser({ categories }: MobileCategoryBrowserProps) {

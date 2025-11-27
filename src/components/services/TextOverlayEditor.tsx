@@ -3,17 +3,17 @@
 import { useState, useEffect, useRef } from 'react';
 import { type GradientTemplate, createGradientBackground } from '@/lib/template-generator';
 import {
-  FaEye,
-  FaFont,
-  FaKeyboard,
-  FaMapMarkerAlt,
-  FaPalette,
-  FaTextHeight,
-  FaBold,
-  FaAdjust,
-  FaLightbulb,
-  FaCheck,
-} from 'react-icons/fa';
+  Eye,
+  Type,
+  Keyboard,
+  MapPin,
+  Palette,
+  TextQuote,
+  Bold,
+  SlidersHorizontal,
+  Lightbulb,
+  Check,
+} from 'lucide-react';
 
 interface TextStyle {
   text: string;
@@ -183,7 +183,7 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
       {/* 미리보기 */}
       <div className="space-y-2">
         <h3 className="font-semibold text-lg flex items-center gap-2">
-          <FaEye className="text-brand-primary" />
+          <Eye className="w-5 h-5 text-brand-primary" />
           미리보기
         </h3>
         <div className="relative border-2 border-gray-300 rounded-lg overflow-hidden bg-gray-100">
@@ -194,7 +194,7 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
       {/* 텍스트 입력 */}
       <div className="space-y-2">
         <label className="block font-semibold flex items-center gap-2">
-          <FaFont className="text-brand-primary" />
+          <Type className="w-5 h-5 text-brand-primary" />
           텍스트 입력
           <span className="text-sm text-gray-500 font-normal">({textStyle.text.length}/25자)</span>
         </label>
@@ -214,7 +214,7 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
         />
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
           <p className="text-sm text-blue-900 font-medium mb-1">
-            <FaKeyboard className="mr-1 inline" />
+            <Keyboard className="w-4 h-4 mr-1 inline" />
             줄바꿈 방법
           </p>
           <p className="text-xs text-blue-800">
@@ -232,7 +232,7 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
       {/* 위치 프리셋 */}
       <div className="space-y-2">
         <label className="block font-semibold flex items-center gap-2">
-          <FaMapMarkerAlt className="text-brand-primary" />
+          <MapPin className="w-5 h-5 text-brand-primary" />
           텍스트 위치
         </label>
         <div className="grid grid-cols-3 gap-2">
@@ -263,7 +263,7 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
       {/* 텍스트 색상 */}
       <div className="space-y-2">
         <label className="block font-semibold flex items-center gap-2">
-          <FaPalette className="text-brand-primary" />
+          <Palette className="w-5 h-5 text-brand-primary" />
           텍스트 색상
         </label>
         <div className="grid grid-cols-5 gap-2">
@@ -281,8 +281,8 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
             >
               {textStyle.color === color.value && (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <FaCheck
-                    className={`text-xl ${
+                  <Check
+                    className={`w-6 h-6 ${
                       color.value === '#ffffff' ? 'text-gray-800' : 'text-white'
                     }`}
                   />
@@ -296,7 +296,7 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
       {/* 텍스트 크기 */}
       <div className="space-y-2">
         <label className="block font-semibold flex items-center gap-2">
-          <FaTextHeight className="text-brand-primary" />
+          <TextQuote className="w-5 h-5 text-brand-primary" />
           텍스트 크기
           <span className="text-sm text-gray-500 font-normal">({textStyle.fontSize}px)</span>
         </label>
@@ -323,7 +323,7 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
       {/* 텍스트 굵기 */}
       <div className="space-y-2">
         <label className="block font-semibold flex items-center gap-2">
-          <FaBold className="text-brand-primary" />
+          <Bold className="w-5 h-5 text-brand-primary" />
           텍스트 굵기
         </label>
         <div className="grid grid-cols-3 gap-2">
@@ -351,7 +351,7 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
       {/* 그림자 */}
       <div className="space-y-2">
         <label className="block font-semibold flex items-center gap-2">
-          <FaAdjust className="text-brand-primary" />
+          <SlidersHorizontal className="w-5 h-5 text-brand-primary" />
           텍스트 그림자
         </label>
         <input
@@ -377,7 +377,7 @@ export default function TextOverlayEditor({ template, onTextChange, initialText 
       {/* 중요 안내 */}
       <div className="mt-6 p-4 bg-blue-50 border-2 border-blue-300 rounded-lg">
         <div className="flex items-start gap-3">
-          <FaLightbulb className="text-blue-600 text-xl mt-0.5" />
+          <Lightbulb className="w-6 h-6 text-blue-600 mt-0.5" />
           <div>
             <p className="font-bold text-blue-900 mb-1">중요!</p>
             <p className="text-sm text-blue-800">

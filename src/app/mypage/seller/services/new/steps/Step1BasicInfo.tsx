@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { logger } from '@/lib/logger';
-import { FaFolderTree } from 'react-icons/fa6';
+import { FolderTree } from 'lucide-react';
 
 interface Category {
   id: string;
@@ -230,7 +230,7 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
           {/* 선택된 카테고리 경로 표시 */}
           {(selectedLevel1 || selectedLevel2 || selectedLevel3) && (
             <div className="text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded">
-              <FaFolderTree className="mr-2 inline" />
+              <FolderTree className="w-4 h-4 mr-2 inline" />
               선택된 경로:{' '}
               {selectedLevel1 && (
                 <span className="font-medium">

@@ -9,7 +9,7 @@ import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ErrorState from "@/components/common/ErrorState";
 import EmptyState from "@/components/common/EmptyState";
 import { logger } from "@/lib/logger";
-import { FaStar, FaRedoAlt, FaReply } from "react-icons/fa";
+import { Star, RefreshCw, Reply } from "lucide-react";
 
 type RatingFilter = "all" | "5" | "4" | "3" | "2" | "1";
 
@@ -114,9 +114,9 @@ export default function AdminReviewsPage() {
             </div>
             <div className="flex items-center justify-center gap-1 mb-2">
               {[1, 2, 3, 4, 5].map((star) => (
-                <FaStar
+                <Star
                   key={star}
-                  className={`${star <= Math.floor(avgRating) ? "text-yellow-400" : "text-gray-300"} text-xl`}
+                  className={`w-5 h-5 ${star <= Math.floor(avgRating) ? "text-yellow-400 fill-current" : "text-gray-300"}`}
                 />
               ))}
             </div>
@@ -194,7 +194,7 @@ export default function AdminReviewsPage() {
             onClick={() => setSearchQuery("")}
             className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
           >
-            <FaRedoAlt className="inline mr-2" />
+            <RefreshCw className="w-4 h-4 inline mr-2" />
             초기화
           </button>
         </div>
@@ -237,9 +237,9 @@ export default function AdminReviewsPage() {
                 </div>
                 <div className="flex items-center gap-1">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <FaStar
+                    <Star
                       key={star}
-                      className={`${star <= (review.rating ?? 0) ? "text-yellow-400" : "text-gray-300"}`}
+                      className={`w-4 h-4 ${star <= (review.rating ?? 0) ? "text-yellow-400 fill-current" : "text-gray-300"}`}
                     />
                   ))}
                 </div>
@@ -256,7 +256,7 @@ export default function AdminReviewsPage() {
               {review.seller_reply && (
                 <div className="bg-gray-50 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <FaReply className="text-brand-primary" />
+                    <Reply className="w-4 h-4 text-brand-primary" />
                     <span className="text-sm font-medium text-gray-900">
                       판매자 답변
                     </span>

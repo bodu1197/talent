@@ -4,31 +4,31 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { CategoryItem } from '@/lib/categories';
 import {
-  FaRobot,
-  FaPalette,
-  FaCut,
-  FaCode,
-  FaBullhorn,
-  FaCamera,
-  FaLanguage,
-  FaPenFancy,
-  FaBriefcase,
-  FaBook,
-  FaMusic,
-  FaCalendar,
-  FaSpa,
-  FaBullseye,
-  FaStar,
-  FaBookOpen,
-  FaGavel,
-  FaHammer,
-  FaGraduationCap,
-  FaChartLine,
-  FaHome,
-  FaMotorcycle,
-  FaCircle,
-  FaChevronRight,
-} from 'react-icons/fa';
+  Bot,
+  Palette,
+  Scissors,
+  Code,
+  Megaphone,
+  Camera,
+  Languages,
+  PenTool,
+  Briefcase,
+  BookOpen,
+  Music,
+  Calendar,
+  Sparkles,
+  Target,
+  Star,
+  Library,
+  Gavel,
+  Hammer,
+  GraduationCap,
+  TrendingUp,
+  Home,
+  Bike,
+  Circle,
+  ChevronRight,
+} from 'lucide-react';
 
 interface CategorySidebarProps {
   readonly categories: CategoryItem[];
@@ -36,35 +36,34 @@ interface CategorySidebarProps {
   readonly categoryPath: CategoryItem[];
 }
 
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+  robot: Bot,
+  palette: Palette,
+  scissors: Scissors,
+  code: Code,
+  bullhorn: Megaphone,
+  camera: Camera,
+  language: Languages,
+  'pen-fancy': PenTool,
+  briefcase: Briefcase,
+  book: BookOpen,
+  music: Music,
+  calendar: Calendar,
+  spa: Sparkles,
+  bullseye: Target,
+  star: Star,
+  'book-open': Library,
+  gavel: Gavel,
+  hammer: Hammer,
+  'graduation-cap': GraduationCap,
+  'chart-line': TrendingUp,
+  home: Home,
+  motorcycle: Bike,
+};
+
 function getCategoryIcon(icon?: string) {
-  if (!icon) return <FaCircle />;
-
-  const iconMap: Record<string, React.ReactElement> = {
-    robot: <FaRobot />,
-    palette: <FaPalette />,
-    scissors: <FaCut />,
-    code: <FaCode />,
-    bullhorn: <FaBullhorn />,
-    camera: <FaCamera />,
-    language: <FaLanguage />,
-    'pen-fancy': <FaPenFancy />,
-    briefcase: <FaBriefcase />,
-    book: <FaBook />,
-    music: <FaMusic />,
-    calendar: <FaCalendar />,
-    spa: <FaSpa />,
-    bullseye: <FaBullseye />,
-    star: <FaStar />,
-    'book-open': <FaBookOpen />,
-    gavel: <FaGavel />,
-    hammer: <FaHammer />,
-    'graduation-cap': <FaGraduationCap />,
-    'chart-line': <FaChartLine />,
-    home: <FaHome />,
-    motorcycle: <FaMotorcycle />,
-  };
-
-  return iconMap[icon] || <FaCircle />;
+  const IconComponent = (icon && ICON_MAP[icon]) || Circle;
+  return <IconComponent className="w-5 h-5" />;
 }
 
 export default function CategorySidebar({
@@ -118,8 +117,8 @@ export default function CategorySidebar({
                   <span>{category1.name}</span>
                 </div>
                 {category1.children && category1.children.length > 0 && (
-                  <FaChevronRight
-                    className={`text-xs text-gray-400 transition-transform duration-200 ${
+                  <ChevronRight
+                    className={`w-3 h-3 text-gray-400 transition-transform duration-200 ${
                       expandedCategories.has(category1.id) ? 'rotate-90' : ''
                     }`}
                   />
@@ -152,8 +151,8 @@ export default function CategorySidebar({
                       >
                         <span>{category2.name}</span>
                         {category2.children && category2.children.length > 0 && (
-                          <FaChevronRight
-                            className={`text-xs text-gray-400 transition-transform duration-200 ${
+                          <ChevronRight
+                            className={`w-3 h-3 text-gray-400 transition-transform duration-200 ${
                               expandedCategories.has(category2.id) ? 'rotate-90' : ''
                             }`}
                           />

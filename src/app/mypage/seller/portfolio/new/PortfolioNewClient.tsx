@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import { createClient } from '@/lib/supabase/client';
 import { logger } from '@/lib/logger';
-import { FaCheckCircle, FaTimes, FaSpinner, FaYoutube } from 'react-icons/fa';
+import { CheckCircle, X, Loader2, Youtube } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface Category {
@@ -342,7 +342,7 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
                 </div>
                 {formData.service_ids.length > 0 && (
                   <p className="mt-2 text-sm text-gray-600">
-                    <FaCheckCircle className="inline text-green-600 mr-1" />
+                    <CheckCircle className="inline w-4 h-4 text-green-600 mr-1" />
                     {formData.service_ids.length}개의 서비스에 연결됩니다
                   </p>
                 )}
@@ -405,7 +405,7 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
                         className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
                         aria-label={`이미지 ${index + 1} 제거`}
                       >
-                        <FaTimes className="text-xs" />
+                        <X className="w-3 h-3" />
                       </button>
                     </div>
                   ))}
@@ -451,14 +451,14 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
               />
               {fetchingYoutubeThumbnail && (
                 <p className="mt-2 text-sm text-gray-600">
-                  <FaSpinner className="inline mr-2 animate-spin" />
+                  <Loader2 className="inline w-4 h-4 mr-2 animate-spin" />
                   YouTube 썸네일을 가져오는 중...
                 </p>
               )}
               {youtubeVideoId && (
                 <div className="mt-4 bg-gray-50 border border-gray-200 rounded-lg p-4">
                   <p className="text-sm text-gray-700 mb-2">
-                    <FaYoutube className="inline text-red-600 mr-2" />
+                    <Youtube className="inline w-4 h-4 text-red-600 mr-2" />
                     YouTube 영상 미리보기
                   </p>
                   <div className="aspect-video bg-black rounded-lg overflow-hidden">
@@ -522,7 +522,7 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
                         className="hover:text-blue-900"
                         aria-label={`${tag} 태그 제거`}
                       >
-                        <FaTimes />
+                        <X className="w-3 h-3" />
                       </button>
                     </span>
                   ))}

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { FaHeart, FaRegHeart, FaCommentDots } from 'react-icons/fa';
+import { Heart, MessageCircle } from 'lucide-react';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { createClient } from '@/lib/supabase/client';
 
@@ -98,9 +98,9 @@ export default function MobileServiceBottomBar({
           aria-label={isFavorite ? '찜 해제' : '찜하기'}
         >
           {isFavorite ? (
-            <FaHeart className="text-xl text-red-500" />
+            <Heart className="w-6 h-6 text-red-500 fill-current" />
           ) : (
-            <FaRegHeart className="text-xl text-gray-500" />
+            <Heart className="w-6 h-6 text-gray-500" />
           )}
         </button>
 
@@ -110,7 +110,7 @@ export default function MobileServiceBottomBar({
           onClick={handleContact}
           className="flex items-center justify-center gap-2 flex-1 h-12 border-r border-gray-200 text-brand-primary font-semibold hover:bg-brand-primary/5 transition-colors"
         >
-          <FaCommentDots />
+          <MessageCircle className="w-5 h-5" />
           문의하기
         </button>
 

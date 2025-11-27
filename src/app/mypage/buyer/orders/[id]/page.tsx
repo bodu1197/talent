@@ -15,21 +15,21 @@ import CancelModal from '../components/CancelModal';
 import RevisionModal from '../components/RevisionModal';
 
 import {
-  FaArrowLeft,
-  FaComment,
-  FaRedo,
-  FaCheck,
-  FaStar,
-  FaUser,
-  FaHeadset,
-  FaFileAlt,
-  FaDownload,
-  FaUserCircle,
-  FaImage,
-  FaInfoCircle,
-  FaExclamationTriangle,
-  FaBan,
-} from 'react-icons/fa';
+  ArrowLeft,
+  MessageSquare,
+  RotateCcw,
+  Check,
+  Star,
+  User as UserIcon,
+  Headphones,
+  FileText,
+  Download,
+  UserCircle,
+  ImageIcon,
+  Info,
+  AlertTriangle,
+  Ban,
+} from 'lucide-react';
 
 interface PageProps {
   readonly params: Promise<{
@@ -260,7 +260,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
             href="/mypage/buyer/orders"
             className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
           >
-            <FaArrowLeft />
+            <ArrowLeft className="w-4 h-4" />
             <span>주문 목록으로</span>
           </Link>
         </div>
@@ -278,7 +278,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                 disabled={creatingChat}
                 className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
               >
-                <FaComment className="mr-2" />
+                <MessageSquare className="w-4 h-4 mr-2" />
                 {creatingChat ? '로딩 중...' : '메시지'}
               </button>
               {order.status === 'delivered' && (
@@ -287,14 +287,14 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                     onClick={() => setShowRevisionModal(true)}
                     className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors font-medium"
                   >
-                    <FaRedo className="mr-2" />
+                    <RotateCcw className="w-4 h-4 mr-2" />
                     수정 요청
                   </button>
                   <button
                     onClick={() => setShowConfirmModal(true)}
                     className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
                   >
-                    <FaCheck className="mr-2" />
+                    <Check className="w-4 h-4 mr-2" />
                     구매 확정
                   </button>
                 </>
@@ -304,7 +304,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                   href={`/mypage/buyer/reviews?order=${id}`}
                   className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
                 >
-                  <FaStar className="mr-2" />
+                  <Star className="w-4 h-4 mr-2" />
                   리뷰 작성
                 </Link>
               )}
@@ -329,7 +329,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                         className="w-full h-full object-cover rounded-lg"
                       />
                     ) : (
-                      <FaImage className="text-gray-400 text-3xl" />
+                      <ImageIcon className="w-8 h-8 text-gray-400" />
                     )}
                   </div>
                   <div className="flex-1">
@@ -376,7 +376,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
               {order.buyer_note && (
                 <div className="bg-blue-50 rounded-lg p-4">
                   <div className="flex items-start gap-2">
-                    <FaInfoCircle className="text-blue-600 mt-1" />
+                    <Info className="w-4 h-4 text-blue-600 mt-1" />
                     <div>
                       <div className="font-medium text-blue-900 mb-1">추가 메모</div>
                       <p className="text-blue-700">{order.buyer_note}</p>
@@ -400,7 +400,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
               {order.seller_message && (
                 <div className="bg-green-50 rounded-lg p-4 mb-4">
                   <div className="flex items-start gap-2">
-                    <FaUserCircle className="text-green-600 mt-1" />
+                    <UserCircle className="w-4 h-4 text-green-600 mt-1" />
                     <div>
                       <div className="font-medium text-green-900 mb-1">판매자 메시지</div>
                       <p className="text-green-700">{order.seller_message}</p>
@@ -417,7 +417,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                       className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                     >
                       <div className="flex items-center gap-3">
-                        <FaFileAlt className="text-blue-500 text-2xl" />
+                        <FileText className="w-7 h-7 text-blue-500" />
                         <div>
                           <div className="font-medium text-gray-900">{file.file_name}</div>
                           <div className="text-sm text-gray-600">
@@ -434,7 +434,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                         download
                         className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors"
                       >
-                        <FaDownload className="mr-2" />
+                        <Download className="w-4 h-4 mr-2" />
                         다운로드
                       </a>
                     </div>
@@ -442,7 +442,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
 
                   {order.status === 'delivered' && (
                     <button className="w-full px-4 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium">
-                      <FaDownload className="mr-2" />
+                      <Download className="w-4 h-4 mr-2" />
                       전체 다운로드
                     </button>
                   )}
@@ -462,7 +462,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                     className="flex items-start gap-3 pb-3 border-b border-gray-200 last:border-0"
                   >
                     <div className="w-8 h-8 bg-brand-primary rounded-full flex items-center justify-center flex-shrink-0">
-                      <FaCheck className="text-white text-sm" />
+                      <Check className="w-4 h-4 text-white" />
                     </div>
                     <div className="flex-1">
                       <div className="font-medium text-gray-900">{history.status}</div>
@@ -495,8 +495,8 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
               </div>
               {order.status === 'delivered' && (
                 <div className="mt-4 p-3 bg-yellow-50 rounded-lg">
-                  <p className="text-sm text-yellow-800 text-center">
-                    <FaExclamationTriangle className="mr-2" />
+                  <p className="text-sm text-yellow-800 text-center flex items-center justify-center gap-2">
+                    <AlertTriangle className="w-4 h-4" />
                     구매 확정을 해주세요
                   </p>
                 </div>
@@ -521,14 +521,14 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                   disabled={creatingChat}
                   className="w-full px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium disabled:opacity-50"
                 >
-                  <FaComment className="mr-2" />
+                  <MessageSquare className="w-4 h-4 mr-2" />
                   {creatingChat ? '로딩 중...' : '메시지 보내기'}
                 </button>
                 <Link
                   href={`/seller/${order.seller_id}`}
                   className="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-center block"
                 >
-                  <FaUser className="mr-2" />
+                  <UserIcon className="w-4 h-4 mr-2" />
                   프로필 보기
                 </Link>
               </div>
@@ -570,11 +570,11 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                   onClick={() => setShowCancelModal(true)}
                   className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
                 >
-                  <FaBan className="mr-2" />
+                  <Ban className="w-4 h-4 mr-2" />
                   취소 요청
                 </button>
                 <button className="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
-                  <FaHeadset className="mr-2" />
+                  <Headphones className="w-4 h-4 mr-2" />
                   고객센터 문의
                 </button>
               </div>

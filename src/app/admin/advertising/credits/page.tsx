@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FaPlus, FaCoins, FaArrowDown, FaWallet, FaUsers, FaEye, FaTimes } from 'react-icons/fa';
+import { Plus, Coins, ArrowDown, Wallet, Users, Eye, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
 
@@ -162,7 +162,7 @@ export default function AdminCreditsPage() {
           onClick={() => setShowGrantDialog(true)}
           className="px-4 py-2 bg-[#0f3460] text-white rounded-md font-medium hover:bg-[#0f3460]/90 transition-colors flex items-center gap-2"
         >
-          <FaPlus />
+          <Plus className="w-4 h-4" />
           크레딧 지급
         </button>
       </div>
@@ -179,7 +179,7 @@ export default function AdminCreditsPage() {
                 </p>
               </div>
               <div className="rounded-lg bg-blue-50 p-3">
-                <FaCoins className="text-[#0f3460] text-xl" />
+                <Coins className="text-[#0f3460] w-6 h-6" />
               </div>
             </div>
           </div>
@@ -193,7 +193,7 @@ export default function AdminCreditsPage() {
                 </p>
               </div>
               <div className="rounded-lg bg-red-50 p-3">
-                <FaArrowDown className="text-red-600 text-xl" />
+                <ArrowDown className="text-red-600 w-6 h-6" />
               </div>
             </div>
           </div>
@@ -207,7 +207,7 @@ export default function AdminCreditsPage() {
                 </p>
               </div>
               <div className="rounded-lg bg-green-50 p-3">
-                <FaWallet className="text-green-600 text-xl" />
+                <Wallet className="text-green-600 w-6 h-6" />
               </div>
             </div>
           </div>
@@ -219,7 +219,7 @@ export default function AdminCreditsPage() {
                 <p className="text-3xl font-bold text-slate-900">{summary.totalHolders}</p>
               </div>
               <div className="rounded-lg bg-purple-50 p-3">
-                <FaUsers className="text-purple-600 text-xl" />
+                <Users className="text-purple-600 w-6 h-6" />
               </div>
             </div>
           </div>
@@ -235,7 +235,7 @@ export default function AdminCreditsPage() {
         <>
           {credits.length === 0 ? (
             <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
-              <FaCoins className="text-slate-400 text-5xl mb-4 mx-auto" />
+              <Coins className="text-slate-400 w-12 h-12 mb-4 mx-auto" />
               <p className="text-slate-600">크레딧 내역이 없습니다.</p>
             </div>
           ) : (
@@ -301,7 +301,7 @@ export default function AdminCreditsPage() {
                             className="text-[#0f3460] hover:text-[#0f3460]/80"
                             title="상세 보기"
                           >
-                            <FaEye />
+                            <Eye className="w-4 h-4" />
                           </button>
                         </td>
                       </tr>
@@ -449,7 +449,7 @@ export default function AdminCreditsPage() {
                       onClick={() => setSelectedCredit(null)}
                       className="text-slate-400 hover:text-slate-600"
                     >
-                      <FaTimes className="text-xl" />
+                      <X className="w-6 h-6" />
                     </button>
                   </div>
                 </div>

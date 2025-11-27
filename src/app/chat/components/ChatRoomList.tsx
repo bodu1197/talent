@@ -1,6 +1,6 @@
 'use client';
 
-import { FaComments, FaSpinner, FaSearch } from 'react-icons/fa';
+import { MessageCircle, Loader2, Search } from 'lucide-react';
 import ChatRoomItem from './ChatRoomItem';
 
 interface ChatRoom {
@@ -57,7 +57,7 @@ function ChatRoomContent({
   if (isCreatingRoom) {
     return (
       <div className="p-8 text-center text-gray-500">
-        <FaSpinner className="fa-spin text-4xl mb-3 inline-block" />
+        <Loader2 className="w-10 h-10 mb-3 inline-block animate-spin" />
         <p>채팅방을 생성하는 중...</p>
       </div>
     );
@@ -68,7 +68,7 @@ function ChatRoomContent({
       <div
         className={`text-center text-gray-500 ${isMobile ? 'flex flex-col items-center justify-center py-12' : 'p-8'}`}
       >
-        <FaComments className={`text-4xl ${isMobile ? 'mb-4' : 'mb-3 inline-block'}`} />
+        <MessageCircle className={`w-10 h-10 ${isMobile ? 'mb-4' : 'mb-3 inline-block'}`} />
         <p>{isMobile ? '채팅 내역이 없습니다' : '채팅방이 없습니다'}</p>
       </div>
     );
@@ -194,9 +194,9 @@ export default function ChatRoomList({
             className="w-full px-4 py-2 pr-10 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
           />
           {isSearching ? (
-            <FaSpinner className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 animate-spin" />
+            <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 animate-spin" />
           ) : (
-            <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
           )}
         </div>
       </div>

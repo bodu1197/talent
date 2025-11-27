@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FaArrowLeft } from "react-icons/fa";
+import { ArrowLeft } from "lucide-react";
 
 export default function HowToOrderPage() {
   return (
@@ -10,7 +10,7 @@ export default function HowToOrderPage() {
             href="/"
             className="text-brand-primary hover:underline flex items-center gap-2"
           >
-            <FaArrowLeft />
+            <ArrowLeft className="w-4 h-4" />
             홈으로
           </Link>
         </div>

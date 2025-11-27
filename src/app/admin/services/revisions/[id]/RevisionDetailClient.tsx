@@ -8,7 +8,7 @@ import {
   type ServiceDetailWithCategories,
 } from "@/lib/supabase/queries/admin";
 import { logger } from "@/lib/logger";
-import { FaArrowLeft, FaTimes, FaCheck } from "react-icons/fa";
+import { ArrowLeft, X, Check } from "lucide-react";
 import toast from "react-hot-toast";
 
 interface Props {
@@ -70,7 +70,7 @@ export default function RevisionDetailClient({ revision }: Props) {
             onClick={() => router.back()}
             className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
           >
-            <FaArrowLeft className="inline mr-2" />
+            <ArrowLeft className="w-4 h-4 inline mr-2" />
             돌아가기
           </button>
         </div>
@@ -263,14 +263,14 @@ export default function RevisionDetailClient({ revision }: Props) {
             onClick={handleReject}
             className="px-8 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
           >
-            <FaTimes className="inline mr-2" />
+            <X className="w-4 h-4 inline mr-2" />
             반려
           </button>
           <button
             onClick={handleApprove}
             className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
           >
-            <FaCheck className="inline mr-2" />
+            <Check className="w-4 h-4 inline mr-2" />
             승인
           </button>
         </div>

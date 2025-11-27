@@ -14,14 +14,7 @@ import {
   rejectServiceRevision,
   type ServiceRevision,
 } from '@/lib/supabase/queries/admin';
-import {
-  FaRedoAlt,
-  FaExternalLinkAlt,
-  FaInfoCircle,
-  FaEye,
-  FaCheck,
-  FaTimes,
-} from 'react-icons/fa';
+import { RefreshCw, ExternalLink, Info, Eye, Check, X } from 'lucide-react';
 
 type RevisionStatus = 'all' | 'pending' | 'approved' | 'rejected';
 
@@ -236,7 +229,7 @@ export default function AdminServiceRevisionsPage() {
             onClick={() => setSearchQuery('')}
             className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
           >
-            <FaRedoAlt className="inline mr-2" />
+            <RefreshCw className="w-4 h-4 inline mr-2" />
             초기화
           </button>
         </div>
@@ -298,7 +291,7 @@ export default function AdminServiceRevisionsPage() {
                             className="text-sm font-medium text-brand-primary hover:underline"
                           >
                             {revision.service?.title}
-                            <FaExternalLinkAlt className="inline ml-2 text-xs" />
+                            <ExternalLink className="w-3 h-3 inline ml-2" />
                           </a>
                           <div className="text-xs text-gray-500">
                             현재 상태: {revision.service?.status}
@@ -322,7 +315,7 @@ export default function AdminServiceRevisionsPage() {
                       )}
                       {revision.revision_note && (
                         <div className="text-xs text-blue-600 mt-1">
-                          <FaInfoCircle className="inline mr-1" />
+                          <Info className="w-3 h-3 inline mr-1" />
                           {revision.revision_note}
                         </div>
                       )}
@@ -356,7 +349,7 @@ export default function AdminServiceRevisionsPage() {
                           href={`/admin/services/revisions/${revision.id}`}
                           className="px-3 py-1.5 bg-brand-primary text-white rounded hover:bg-[#1a4d8f] transition-colors font-medium inline-block text-xs"
                         >
-                          <FaEye className="inline mr-1" />
+                          <Eye className="w-3 h-3 inline mr-1" />
                           상세보기
                         </a>
                         {revision.status === 'pending' && (
@@ -365,14 +358,14 @@ export default function AdminServiceRevisionsPage() {
                               href={`/admin/services/revisions/${revision.id}?action=approve`}
                               className="px-3 py-1.5 bg-green-600 text-white rounded hover:bg-green-700 transition-colors font-medium inline-block text-xs"
                             >
-                              <FaCheck className="inline mr-1" />
+                              <Check className="w-3 h-3 inline mr-1" />
                               승인
                             </a>
                             <a
                               href={`/admin/services/revisions/${revision.id}?action=reject`}
                               className="px-3 py-1.5 bg-red-600 text-white rounded hover:bg-red-700 transition-colors font-medium inline-block text-xs"
                             >
-                              <FaTimes className="inline mr-1" />
+                              <X className="w-3 h-3 inline mr-1" />
                               반려
                             </a>
                           </>

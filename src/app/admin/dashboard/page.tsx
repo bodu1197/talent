@@ -12,7 +12,7 @@ import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ErrorState from "@/components/common/ErrorState";
 import Link from "next/link";
 import { logger } from "@/lib/logger";
-import { FaUsers, FaWonSign, FaShoppingCart, FaFlag } from "react-icons/fa";
+import { Users, CircleDollarSign, ShoppingCart, Flag } from "lucide-react";
 
 interface DashboardStats {
   totalUsers: number;
@@ -128,7 +128,7 @@ export default function AdminDashboardPage() {
               </p>
             </div>
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <FaUsers className="text-blue-600 text-xl" />
+              <Users className="w-5 h-5 text-blue-600" />
             </div>
           </div>
         </Link>
@@ -142,7 +142,7 @@ export default function AdminDashboardPage() {
               </p>
             </div>
             <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-              <FaWonSign className="text-green-600 text-xl" />
+              <CircleDollarSign className="w-5 h-5 text-green-600" />
             </div>
           </div>
         </div>
@@ -159,7 +159,7 @@ export default function AdminDashboardPage() {
               </p>
             </div>
             <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-              <FaShoppingCart className="text-purple-600 text-xl" />
+              <ShoppingCart className="w-5 h-5 text-purple-600" />
             </div>
           </div>
         </Link>
@@ -176,7 +176,7 @@ export default function AdminDashboardPage() {
               </p>
             </div>
             <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-              <FaFlag className="text-red-600 text-xl" />
+              <Flag className="w-5 h-5 text-red-600" />
             </div>
           </div>
         </Link>

@@ -1,4 +1,4 @@
-import { FaExclamationCircle } from 'react-icons/fa';
+import { AlertCircle } from 'lucide-react';
 
 interface ErrorStateProps {
   readonly title?: string;
@@ -13,7 +13,7 @@ export default function ErrorState({
 }: ErrorStateProps) {
   return (
     <div className="text-center py-12">
-      <FaExclamationCircle className="text-6xl text-red-500 mb-4 mx-auto" />
+      <AlertCircle className="w-16 h-16 text-red-500 mb-4 mx-auto" />
       <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
       <p className="text-gray-600 mb-6">{message}</p>
       {retry && (

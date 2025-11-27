@@ -10,7 +10,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorState from '@/components/common/ErrorState';
 import EmptyState from '@/components/common/EmptyState';
 import { logger } from '@/lib/logger';
-import { FaRedoAlt } from 'react-icons/fa';
+import { RefreshCw } from 'lucide-react';
 
 type RoleFilter = 'all' | 'buyer' | 'seller' | 'admin';
 
@@ -196,7 +196,7 @@ export default function AdminUsersPage() {
             onClick={() => setSearchQuery('')}
             className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
           >
-            <FaRedoAlt className="inline mr-2" />
+            <RefreshCw className="w-4 h-4 inline mr-2" />
             초기화
           </button>
         </div>

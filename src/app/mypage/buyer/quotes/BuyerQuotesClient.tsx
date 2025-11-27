@@ -3,7 +3,7 @@
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import Link from 'next/link';
 import { Quote } from '@/types/common';
-import { FaPlus, FaFileAlt } from 'react-icons/fa';
+import { Plus, FileText } from 'lucide-react';
 
 interface BuyerQuotesClientProps {
   readonly quotes: Quote[];
@@ -39,7 +39,7 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
               className="px-6 py-3 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed font-medium"
               title="견적 요청 기능은 준비 중입니다"
             >
-              <FaPlus className="mr-2" />
+              <Plus className="w-4 h-4 mr-2" />
               견적 요청하기 (준비중)
             </button>
           </div>
@@ -93,14 +93,14 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
             ))
           ) : (
             <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
-              <FaFileAlt className="text-gray-300 text-4xl mb-4" />
+              <FileText className="w-10 h-10 text-gray-300 mb-4" />
               <p className="text-gray-500 mb-4">등록한 견적 요청이 없습니다</p>
               <button
                 disabled
                 className="inline-flex items-center px-6 py-3 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed font-medium"
                 title="견적 요청 기능은 준비 중입니다"
               >
-                <FaPlus className="mr-2" />
+                <Plus className="w-4 h-4 mr-2" />
                 견적 요청하기 (준비중)
               </button>
             </div>

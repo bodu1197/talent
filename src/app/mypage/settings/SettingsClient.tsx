@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
-import { FaEdit, FaUser, FaKey, FaBell } from 'react-icons/fa';
+import { Edit, User, Key, Bell } from 'lucide-react';
 
 interface ProfileData {
   name: string;
@@ -37,7 +37,7 @@ export default function SettingsClient({ profile, userEmail, isSeller }: Props) 
             onClick={() => router.push('/mypage/settings/edit')}
             className="inline-flex items-center gap-2 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium whitespace-nowrap"
           >
-            <FaEdit />
+            <Edit className="w-4 h-4" />
             수정
           </button>
         </div>
@@ -53,7 +53,7 @@ export default function SettingsClient({ profile, userEmail, isSeller }: Props) 
                   : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
-              <FaUser className="mr-2 inline" />
+              <User className="mr-2 inline w-4 h-4" />
               프로필
             </button>
             <button
@@ -64,7 +64,7 @@ export default function SettingsClient({ profile, userEmail, isSeller }: Props) 
                   : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
-              <FaKey className="mr-2 inline" />
+              <Key className="mr-2 inline w-4 h-4" />
               계정 보안
             </button>
             <button
@@ -75,7 +75,7 @@ export default function SettingsClient({ profile, userEmail, isSeller }: Props) 
                   : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
-              <FaBell className="mr-2 inline" />
+              <Bell className="mr-2 inline w-4 h-4" />
               알림 설정
             </button>
           </div>

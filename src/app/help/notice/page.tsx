@@ -1,4 +1,4 @@
-import { FaStar, FaChevronRight, FaChevronLeft } from 'react-icons/fa';
+import { Star, ChevronRight, ChevronLeft } from 'lucide-react';
 
 const notices = [
   {
@@ -71,7 +71,7 @@ export default function NoticePage() {
               {/* 제목 */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  {notice.important && <FaStar className="text-yellow-500 flex-shrink-0" />}
+                  {notice.important && <Star className="w-4 h-4 text-yellow-500 fill-current flex-shrink-0" />}
                   <h3 className="font-semibold truncate">{notice.title}</h3>
                 </div>
               </div>
@@ -80,7 +80,7 @@ export default function NoticePage() {
               <div className="flex-shrink-0 text-sm text-gray-500">{notice.date}</div>
 
               {/* 화살표 */}
-              <FaChevronRight className="text-gray-400 flex-shrink-0" />
+              <ChevronRight className="w-4 h-4 text-gray-400 flex-shrink-0" />
             </div>
           ))}
         </div>
@@ -88,7 +88,7 @@ export default function NoticePage() {
         {/* 페이지네이션 */}
         <div className="flex justify-center gap-2 mt-8">
           <button className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50">
-            <FaChevronLeft />
+            <ChevronLeft className="w-4 h-4" />
           </button>
           <button className="w-10 h-10 flex items-center justify-center bg-brand-primary text-white rounded">
             1
@@ -100,7 +100,7 @@ export default function NoticePage() {
             3
           </button>
           <button className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50">
-            <FaChevronRight />
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </div>

@@ -6,7 +6,7 @@ import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import { createReview } from '@/lib/supabase/mutations/reviews';
 import { logger } from '@/lib/logger';
 import { Order } from '@/types/common';
-import { FaStar, FaImage, FaReply, FaInfoCircle, FaCheck, FaTimes } from 'react-icons/fa';
+import { Star, ImageIcon, Reply, Info, Check, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface BuyerReviewsClientProps {
@@ -151,7 +151,7 @@ export default function BuyerReviewsClient({
                           className="w-full h-full object-cover rounded-lg"
                         />
                       ) : (
-                        <FaImage className="text-gray-400 text-2xl" />
+                        <ImageIcon className="w-7 h-7 text-gray-400" />
                       )}
                     </div>
 
@@ -188,7 +188,7 @@ export default function BuyerReviewsClient({
                           }}
                           className="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium text-sm"
                         >
-                          <FaStar />
+                          <Star className="w-4 h-4" />
                           리뷰 작성
                         </button>
                       </div>
@@ -198,7 +198,7 @@ export default function BuyerReviewsClient({
               ))
             ) : (
               <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
-                <FaStar className="text-gray-300 text-5xl mb-4" />
+                <Star className="w-12 h-12 text-gray-300 mb-4" />
                 <p className="text-gray-600 text-lg">작성 가능한 리뷰가 없습니다</p>
               </div>
             )}
@@ -220,7 +220,7 @@ export default function BuyerReviewsClient({
                           className="w-full h-full object-cover rounded-lg"
                         />
                       ) : (
-                        <FaImage className="text-gray-400 text-2xl" />
+                        <ImageIcon className="w-7 h-7 text-gray-400" />
                       )}
                     </div>
 
@@ -237,9 +237,9 @@ export default function BuyerReviewsClient({
                         </div>
                         <div className="flex items-center gap-1">
                           {[1, 2, 3, 4, 5].map((star) => (
-                            <FaStar
+                            <Star
                               key={star}
-                              className={`${star <= (review.rating || 0) ? 'text-yellow-400' : 'text-gray-300'}`}
+                              className={`w-4 h-4 ${star <= (review.rating || 0) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
                             />
                           ))}
                         </div>
@@ -257,7 +257,7 @@ export default function BuyerReviewsClient({
                       {review.seller_reply && (
                         <div className="bg-gray-50 rounded-lg p-4 mb-4">
                           <div className="flex items-center gap-2 mb-2">
-                            <FaReply className="text-brand-primary" />
+                            <Reply className="w-4 h-4 text-brand-primary" />
                             <span className="text-sm font-medium text-gray-900">판매자 답변</span>
                           </div>
                           <p className="text-gray-700">{review.seller_reply}</p>
@@ -267,8 +267,8 @@ export default function BuyerReviewsClient({
                   </div>
 
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                    <p className="text-sm text-blue-800">
-                      <FaInfoCircle className="mr-2" />
+                    <p className="text-sm text-blue-800 flex items-center gap-2">
+                      <Info className="w-4 h-4" />
                       작성된 리뷰는 수정 및 삭제가 불가능합니다
                     </p>
                   </div>
@@ -276,7 +276,7 @@ export default function BuyerReviewsClient({
               ))
             ) : (
               <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
-                <FaStar className="text-gray-300 text-5xl mb-4" />
+                <Star className="w-12 h-12 text-gray-300 mb-4" />
                 <p className="text-gray-600 text-lg">작성한 리뷰가 없습니다</p>
               </div>
             )}
@@ -293,7 +293,7 @@ export default function BuyerReviewsClient({
                   onClick={() => setShowWriteModal(false)}
                   className="text-gray-400 hover:text-gray-600"
                 >
-                  <FaTimes className="text-2xl" />
+                  <X className="w-7 h-7" />
                 </button>
               </div>
 
@@ -313,8 +313,8 @@ export default function BuyerReviewsClient({
                         onClick={() => setRating(star)}
                         className="transition-colors"
                       >
-                        <FaStar
-                          className={`text-3xl ${star <= rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                        <Star
+                          className={`w-8 h-8 ${star <= rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
                         />
                       </button>
                     ))}
@@ -341,7 +341,7 @@ export default function BuyerReviewsClient({
 
                 <div className="bg-blue-50 rounded-lg p-4">
                   <div className="flex items-start gap-2">
-                    <FaInfoCircle className="text-blue-600 mt-1" />
+                    <Info className="w-4 h-4 text-blue-600 mt-1" />
                     <div className="text-sm text-blue-700">
                       <p className="font-medium mb-1">리뷰 작성 안내</p>
                       <ul className="list-disc list-inside space-y-1">
@@ -374,7 +374,7 @@ export default function BuyerReviewsClient({
                       '등록 중...'
                     ) : (
                       <>
-                        <FaCheck className="mr-2" />
+                        <Check className="w-4 h-4 mr-2" />
                         리뷰 등록
                       </>
                     )}

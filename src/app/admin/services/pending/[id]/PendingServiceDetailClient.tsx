@@ -5,11 +5,11 @@ import { createClient } from "@/lib/supabase/client";
 import { logger } from "@/lib/logger";
 import type { ServiceDetailWithCategories } from "@/lib/supabase/queries/admin";
 import {
-  FaArrowLeft,
-  FaExclamationTriangle,
-  FaTimes,
-  FaCheck,
-} from "react-icons/fa";
+  ArrowLeft,
+  AlertTriangle,
+  X,
+  Check,
+} from "lucide-react";
 import toast from "react-hot-toast";
 
 interface Props {
@@ -90,7 +90,7 @@ export default function PendingServiceDetailClient({ service }: Props) {
             onClick={() => router.back()}
             className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
           >
-            <FaArrowLeft className="inline mr-2" />
+            <ArrowLeft className="w-4 h-4 inline mr-2" />
             돌아가기
           </button>
         </div>
@@ -103,7 +103,7 @@ export default function PendingServiceDetailClient({ service }: Props) {
           {isResubmission && (
             <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
               <div className="flex items-center gap-2 text-yellow-800">
-                <FaExclamationTriangle />
+                <AlertTriangle className="w-4 h-4" />
                 <span className="font-medium">
                   이 서비스는 이전에 반려되어 재신청된 서비스입니다.
                 </span>
@@ -222,14 +222,14 @@ export default function PendingServiceDetailClient({ service }: Props) {
             onClick={handleReject}
             className="px-8 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
           >
-            <FaTimes className="inline mr-2" />
+            <X className="w-4 h-4 inline mr-2" />
             반려
           </button>
           <button
             onClick={handleApprove}
             className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
           >
-            <FaCheck className="inline mr-2" />
+            <Check className="w-4 h-4 inline mr-2" />
             승인
           </button>
         </div>

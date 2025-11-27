@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FaClock, FaPhone, FaExclamationCircle } from "react-icons/fa";
+import { Clock, Phone, AlertCircle } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function ContactPage() {
@@ -166,7 +166,7 @@ export default function ContactPage() {
             {/* 운영 시간 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h3 className="font-bold mb-4 flex items-center gap-2">
-                <FaClock className="text-brand-primary" />
+                <Clock className="w-5 h-5 text-brand-primary" />
                 운영 시간
               </h3>
               <div className="space-y-2 text-sm text-gray-600">
@@ -189,7 +189,7 @@ export default function ContactPage() {
             {/* 연락처 */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h3 className="font-bold mb-4 flex items-center gap-2">
-                <FaPhone className="text-brand-primary" />
+                <Phone className="w-5 h-5 text-brand-primary" />
                 연락처
               </h3>
               <div className="space-y-3 text-sm">
@@ -209,7 +209,7 @@ export default function ContactPage() {
             {/* 유의사항 */}
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
               <h3 className="font-bold mb-3 flex items-center gap-2 text-sm">
-                <FaExclamationCircle className="text-yellow-600" />
+                <AlertCircle className="w-4 h-4 text-yellow-600" />
                 유의사항
               </h3>
               <ul className="space-y-2 text-xs text-gray-700">

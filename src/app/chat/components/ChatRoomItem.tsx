@@ -1,6 +1,6 @@
 'use client';
 
-import { FaStar, FaRegStar } from 'react-icons/fa';
+import { Star } from 'lucide-react';
 import ProfileImage from '@/components/common/ProfileImage';
 
 interface ChatRoom {
@@ -82,9 +82,9 @@ export default function ChatRoomItem({
                 aria-label={room.is_favorite ? '즐겨찾기 해제' : '즐겨찾기 추가'}
               >
                 {room.is_favorite ? (
-                  <FaStar className="text-yellow-400" aria-hidden="true" />
+                  <Star className="w-5 h-5 text-yellow-400 fill-current" aria-hidden="true" />
                 ) : (
-                  <FaRegStar className="text-gray-400" aria-hidden="true" />
+                  <Star className="w-5 h-5 text-gray-400" aria-hidden="true" />
                 )}
               </button>
             </div>

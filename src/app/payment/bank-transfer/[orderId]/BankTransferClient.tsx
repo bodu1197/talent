@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
-import { FaArrowLeft, FaUniversity, FaExclamationTriangle } from 'react-icons/fa';
+import { ArrowLeft, Landmark, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface Order {
@@ -79,7 +79,7 @@ export default function BankTransferClient({ order }: Props) {
             onClick={() => router.back()}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4"
           >
-            <FaArrowLeft />
+            <ArrowLeft className="w-4 h-4" />
             <span>뒤로가기</span>
           </button>
           <h1 className="text-2xl font-bold text-gray-900">무통장 입금 안내</h1>
@@ -88,7 +88,7 @@ export default function BankTransferClient({ order }: Props) {
         {/* 입금 정보 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-4">
           <div className="flex items-center gap-2 mb-4">
-            <FaUniversity className="text-2xl text-brand-primary" />
+            <Landmark className="w-7 h-7 text-brand-primary" />
             <h2 className="text-lg font-bold text-gray-900">입금 계좌 정보</h2>
           </div>
 
@@ -146,7 +146,7 @@ export default function BankTransferClient({ order }: Props) {
         {/* 안내 사항 */}
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
           <h3 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
-            <FaExclamationTriangle className="text-yellow-600" />
+            <AlertTriangle className="w-5 h-5 text-yellow-600" />
             입금 전 확인사항
           </h3>
           <ul className="space-y-2 text-sm text-gray-700">

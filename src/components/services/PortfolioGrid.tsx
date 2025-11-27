@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { FaImage, FaExpandAlt } from 'react-icons/fa';
+import { ImageIcon, Maximize2 } from 'lucide-react';
 
 // Dynamic import for PortfolioModal - only loads when needed
 const PortfolioModal = dynamic(() => import('./PortfolioModal'), {
@@ -55,7 +55,7 @@ export default function PortfolioGrid({ portfolios }: Props) {
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-400">
-                <FaImage className="text-4xl" />
+                <ImageIcon className="w-10 h-10" />
               </div>
             )}
 
@@ -63,7 +63,7 @@ export default function PortfolioGrid({ portfolios }: Props) {
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
               <h3 className="text-white font-bold text-sm line-clamp-2 mb-1">{portfolio.title}</h3>
               <div className="flex items-center gap-1 text-white/80 text-xs">
-                <FaExpandAlt />
+                <Maximize2 className="w-3 h-3" />
                 <span>자세히 보기</span>
               </div>
             </div>

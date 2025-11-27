@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaRobot, FaCheckCircle, FaStar } from 'react-icons/fa';
+import { Bot, CheckCircle, Star } from 'lucide-react';
 
 interface Service {
   id: string;
@@ -59,14 +59,14 @@ export default function AITalentShowcase({ services = [] }: Props) {
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                    <FaRobot className="text-4xl text-gray-400" />
+                    <Bot className="w-10 h-10 text-gray-400" />
                   </div>
                 )}
 
                 {/* AI 배지 */}
                 <div className="absolute top-2 left-2">
                   <div className="px-2 py-1 bg-purple-500 text-white text-xs rounded shadow-lg flex items-center gap-1">
-                    <FaRobot />
+                    <Bot className="w-3 h-3" />
                     AI
                   </div>
                 </div>
@@ -83,7 +83,7 @@ export default function AITalentShowcase({ services = [] }: Props) {
                     {service.seller?.display_name}
                   </span>
                   {service.seller?.is_verified && (
-                    <FaCheckCircle className="text-[10px] text-blue-500" />
+                    <CheckCircle className="w-3 h-3 text-blue-500" />
                   )}
                 </div>
 
@@ -95,7 +95,7 @@ export default function AITalentShowcase({ services = [] }: Props) {
                 {/* 평점 */}
                 <div className="flex items-center gap-2 text-xs text-gray-600 mb-1">
                   <span className="flex items-center gap-1">
-                    <FaStar className="text-yellow-400" />
+                    <Star className="w-3 h-3 text-yellow-400 fill-current" />
                     {(service.rating || 0).toFixed(1)}
                   </span>
                 </div>

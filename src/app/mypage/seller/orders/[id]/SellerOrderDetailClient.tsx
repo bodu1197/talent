@@ -10,21 +10,21 @@ import ErrorState from '@/components/common/ErrorState';
 import toast from 'react-hot-toast';
 
 import {
-  FaArrowLeft,
-  FaComment,
-  FaUpload,
-  FaImage,
-  FaFileAlt,
-  FaDownload,
-  FaInfoCircle,
-  FaCheck,
-  FaSpinner,
-  FaCheckCircle,
-  FaBan,
-  FaHeadset,
-  FaTimes,
-  FaCloudUploadAlt,
-} from 'react-icons/fa';
+  ArrowLeft,
+  MessageCircle,
+  Upload,
+  ImageIcon,
+  FileText,
+  Download,
+  Info,
+  Check,
+  Loader2,
+  CheckCircle,
+  Ban,
+  Headset,
+  X,
+  CloudUpload,
+} from 'lucide-react';
 
 interface Props {
   readonly orderId: string;
@@ -267,7 +267,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
             href="/mypage/seller/orders"
             className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
           >
-            <FaArrowLeft />
+            <ArrowLeft className="w-4 h-4" />
             <span>주문 목록으로</span>
           </Link>
         </div>
@@ -286,7 +286,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                 href={`/chat?order=${orderId}`}
                 className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
               >
-                <FaComment className="mr-2 inline" />
+                <MessageCircle className="mr-2 inline w-4 h-4" />
                 메시지
               </Link>
               {order.status === 'in_progress' && (
@@ -294,7 +294,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                   onClick={() => setShowDeliveryModal(true)}
                   className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
                 >
-                  <FaUpload className="mr-2 inline" />
+                  <Upload className="mr-2 inline w-4 h-4" />
                   납품하기
                 </button>
               )}
@@ -319,7 +319,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                         className="w-full h-full object-cover rounded-lg"
                       />
                     ) : (
-                      <FaImage className="text-gray-400 text-3xl" />
+                      <ImageIcon className="text-gray-400 w-8 h-8" />
                     )}
                   </div>
                   <div className="flex-1">
@@ -368,7 +368,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
               {order.buyer_note && (
                 <div className="bg-blue-50 rounded-lg p-4">
                   <div className="flex items-start gap-2">
-                    <FaInfoCircle className="text-blue-600 mt-1" />
+                    <Info className="text-blue-600 mt-1 w-5 h-5" />
                     <div>
                       <div className="font-medium text-blue-900 mb-1">추가 메모</div>
                       <p className="text-blue-700">{order.buyer_note}</p>
@@ -389,7 +389,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                       className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
                     >
                       <div className="flex items-center gap-3">
-                        <FaFileAlt className="text-blue-500 text-2xl" />
+                        <FileText className="text-blue-500 w-7 h-7" />
                         <div>
                           <div className="font-medium text-gray-900">{file.file_name}</div>
                           <div className="text-sm text-gray-600">
@@ -405,7 +405,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                         download
                         className="px-4 py-2 text-brand-primary hover:bg-blue-50 rounded-lg transition-colors"
                       >
-                        <FaDownload className="mr-2 inline" />
+                        <Download className="mr-2 inline w-4 h-4" />
                         다운로드
                       </a>
                     </div>
@@ -426,7 +426,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                     className="flex items-start gap-3 pb-3 border-b border-gray-200 last:border-0"
                   >
                     <div className="w-8 h-8 bg-brand-primary rounded-full flex items-center justify-center flex-shrink-0">
-                      <FaCheck className="text-white text-sm" />
+                      <Check className="text-white w-4 h-4" />
                     </div>
                     <div className="flex-1">
                       <div className="font-medium text-gray-900">{history.status}</div>
@@ -470,7 +470,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                 href={`/chat?order=${orderId}`}
                 className="w-full px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium text-center block"
               >
-                <FaComment className="mr-2 inline" />
+                <MessageCircle className="mr-2 inline w-4 h-4" />
                 메시지 보내기
               </Link>
             </div>
@@ -513,12 +513,12 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                   >
                     {submitting ? (
                       <>
-                        <FaSpinner className="fa-spin mr-2 inline" />
+                        <Loader2 className="animate-spin mr-2 inline w-5 h-5" />
                         처리 중...
                       </>
                     ) : (
                       <>
-                        <FaCheckCircle className="mr-2 inline" />
+                        <CheckCircle className="mr-2 inline w-5 h-5" />
                         주문 접수하기
                       </>
                     )}
@@ -531,7 +531,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                     onClick={() => setShowDeliveryModal(true)}
                     className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-bold text-lg"
                   >
-                    <FaUpload className="mr-2 inline" />
+                    <Upload className="mr-2 inline w-5 h-5" />
                     납품하기
                   </button>
                 )}
@@ -540,11 +540,11 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                   onClick={() => setShowCancelModal(true)}
                   className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
                 >
-                  <FaBan className="mr-2 inline" />
+                  <Ban className="mr-2 inline w-4 h-4" />
                   취소 요청
                 </button>
                 <button className="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
-                  <FaHeadset className="mr-2 inline" />
+                  <Headset className="mr-2 inline w-4 h-4" />
                   고객센터 문의
                 </button>
               </div>
@@ -562,14 +562,14 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                   onClick={() => setShowCancelModal(false)}
                   className="text-gray-400 hover:text-gray-600"
                 >
-                  <FaTimes className="text-2xl" />
+                  <X className="w-7 h-7" />
                 </button>
               </div>
 
               <div className="space-y-4">
                 <div className="bg-red-50 rounded-lg p-4">
                   <div className="flex items-start gap-2">
-                    <FaBan className="text-red-600 mt-1" />
+                    <Ban className="text-red-600 mt-1 w-5 h-5" />
                     <div className="text-sm text-red-800">
                       <p className="font-medium mb-1">취소 요청 안내</p>
                       <ul className="list-disc list-inside space-y-1">
@@ -629,7 +629,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                   onClick={() => setShowDeliveryModal(false)}
                   className="text-gray-400 hover:text-gray-600"
                 >
-                  <FaTimes className="text-2xl" />
+                  <X className="w-7 h-7" />
                 </button>
               </div>
 
@@ -645,7 +645,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                     id="seller-delivery-file-upload"
                     className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-brand-primary transition-colors cursor-pointer"
                   >
-                    <FaCloudUploadAlt className="text-gray-400 text-4xl mb-3 inline-block" />
+                    <CloudUpload className="text-gray-400 w-10 h-10 mb-3 inline-block" />
                     <p className="text-gray-600">클릭하여 파일 선택 또는 드래그 앤 드롭</p>
                     <p className="text-sm text-gray-500 mt-2">최대 100MB</p>
                   </div>

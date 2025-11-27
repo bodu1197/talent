@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
-import { FaInfoCircle } from 'react-icons/fa';
+import { Info } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
 
@@ -165,7 +165,7 @@ export default function PaymentDetailPage() {
 
           <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-sm text-blue-800">
-              <FaInfoCircle className="inline mr-2" />
+              <Info className="w-4 h-4 inline mr-2" />
               입금 후 관리자가 확인하면 광고가 자동으로 시작됩니다. 입금 확인까지 1-2일 정도 소요될
               수 있습니다.
             </p>

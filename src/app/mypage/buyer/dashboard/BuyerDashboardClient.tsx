@@ -7,17 +7,17 @@ import { logger } from '@/lib/logger';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import Link from 'next/link';
 import {
-  FaBell,
-  FaInfoCircle,
-  FaArrowRight,
-  FaBox,
-  FaHeart,
-  FaImage,
-  FaSpinner,
-  FaBoxOpen,
-  FaStar,
-  FaShoppingCart,
-} from 'react-icons/fa';
+  Bell,
+  Info,
+  ArrowRight,
+  Package,
+  Heart,
+  ImageIcon,
+  Loader2,
+  PackageOpen,
+  Star,
+  ShoppingCart,
+} from 'lucide-react';
 
 import type { Order, Service, Seller } from '@/types/common';
 
@@ -140,7 +140,7 @@ export default function BuyerDashboardClient({
                 <p className="text-xs text-gray-600">진행중 주문</p>
                 <p className="text-lg font-bold text-gray-900">{stats?.inProgressOrders || 0}건</p>
               </div>
-              <FaSpinner className="text-2xl text-yellow-500" />
+              <Loader2 className="w-7 h-7 text-yellow-500 animate-spin" />
             </div>
           </div>
           <div className="bg-white rounded-lg shadow p-4">
@@ -149,7 +149,7 @@ export default function BuyerDashboardClient({
                 <p className="text-xs text-gray-600">도착 확인 대기</p>
                 <p className="text-lg font-bold text-gray-900">{stats?.deliveredOrders || 0}건</p>
               </div>
-              <FaBoxOpen className="text-2xl text-blue-500" />
+              <PackageOpen className="w-7 h-7 text-blue-500" />
             </div>
           </div>
           <div className="bg-white rounded-lg shadow p-4">
@@ -158,7 +158,7 @@ export default function BuyerDashboardClient({
                 <p className="text-xs text-gray-600">작성 가능 리뷰</p>
                 <p className="text-lg font-bold text-gray-900">{stats?.pendingReviews || 0}건</p>
               </div>
-              <FaStar className="text-2xl text-purple-500" />
+              <Star className="w-7 h-7 text-purple-500" />
             </div>
           </div>
           <div className="bg-white rounded-lg shadow p-4">
@@ -167,7 +167,7 @@ export default function BuyerDashboardClient({
                 <p className="text-xs text-gray-600">이번달 구매</p>
                 <p className="text-lg font-bold text-gray-900">{stats?.monthlyPurchases || 0}건</p>
               </div>
-              <FaShoppingCart className="text-2xl text-green-500" />
+              <ShoppingCart className="w-7 h-7 text-green-500" />
             </div>
           </div>
         </div>
@@ -176,7 +176,7 @@ export default function BuyerDashboardClient({
         {alerts.length > 0 && (
           <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
             <h2 className="text-base md:text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <FaBell className="text-red-500" />
+              <Bell className="w-5 h-5 text-red-500" />
               확인 필요
             </h2>
             <div className="space-y-3">
@@ -187,12 +187,12 @@ export default function BuyerDashboardClient({
                   className="flex items-center justify-between p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <FaInfoCircle className="text-blue-500" />
+                    <Info className="w-5 h-5 text-blue-500" />
                     <span className="text-sm md:text-base text-gray-900 font-medium">
                       {alert.message}
                     </span>
                   </div>
-                  <FaArrowRight className="text-gray-400" />
+                  <ArrowRight className="w-5 h-5 text-gray-400" />
                 </Link>
               ))}
             </div>
@@ -203,14 +203,14 @@ export default function BuyerDashboardClient({
         <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-base md:text-lg font-bold text-gray-900 flex items-center gap-2">
-              <FaBox className="text-purple-500" />
+              <Package className="w-5 h-5 text-purple-500" />
               진행중인 주문
             </h2>
             <Link
               href="/mypage/buyer/orders"
               className="text-xs md:text-sm text-brand-primary hover:underline flex items-center gap-1"
             >
-              전체 보기 <FaArrowRight className="text-xs" />
+              전체 보기 <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
 
@@ -233,7 +233,7 @@ export default function BuyerDashboardClient({
                             className="w-full h-full object-cover rounded-lg"
                           />
                         ) : (
-                          <FaImage className="text-gray-400 text-2xl" />
+                          <ImageIcon className="w-7 h-7 text-gray-400" />
                         )}
                       </div>
 
@@ -304,7 +304,7 @@ export default function BuyerDashboardClient({
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-base md:text-lg font-bold text-gray-900 flex items-center gap-2">
-              <FaHeart className="text-red-500" />
+              <Heart className="w-5 h-5 text-red-500 fill-current" />
               최근 찜한 서비스
             </h2>
             <Link
@@ -330,7 +330,7 @@ export default function BuyerDashboardClient({
                       {item.service?.seller?.name}
                     </div>
                   </div>
-                  <FaArrowRight className="text-gray-400" />
+                  <ArrowRight className="w-5 h-5 text-gray-400" />
                 </Link>
               ))
             ) : (

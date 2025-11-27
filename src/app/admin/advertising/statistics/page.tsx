@@ -3,14 +3,14 @@
 import { useState, useEffect } from 'react';
 import { logger } from '@/lib/logger';
 import {
-  FaWonSign,
-  FaChartLine,
-  FaMousePointer,
-  FaCoins,
-  FaCreditCard,
-  FaUniversity,
-  FaChartBar,
-} from 'react-icons/fa';
+  DollarSign,
+  TrendingUp,
+  MousePointer,
+  Coins,
+  CreditCard,
+  Building2,
+  BarChart3,
+} from 'lucide-react';
 
 interface RevenueByPeriod {
   period: string;
@@ -231,7 +231,7 @@ function StatisticsContent({ loading, statistics }: StatisticsContentProps) {
   if (!statistics) {
     return (
       <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
-        <FaChartBar className="text-slate-400 text-5xl mb-4 mx-auto" />
+        <BarChart3 className="text-slate-400 w-12 h-12 mb-4 mx-auto" />
         <p className="text-slate-600">통계 데이터가 없습니다.</p>
       </div>
     );
@@ -260,7 +260,7 @@ function SummaryCards({ statistics }: Readonly<{ statistics: Statistics }>) {
             </p>
           </div>
           <div className="rounded-lg bg-blue-50 p-3">
-            <FaWonSign className="text-[#0f3460] text-xl" />
+            <DollarSign className="text-[#0f3460] w-6 h-6" />
           </div>
         </div>
       </div>
@@ -277,7 +277,7 @@ function SummaryCards({ statistics }: Readonly<{ statistics: Statistics }>) {
             </p>
           </div>
           <div className="rounded-lg bg-green-50 p-3">
-            <FaChartLine className="text-green-600 text-xl" />
+            <TrendingUp className="text-green-600 w-6 h-6" />
           </div>
         </div>
       </div>
@@ -295,7 +295,7 @@ function SummaryCards({ statistics }: Readonly<{ statistics: Statistics }>) {
             </p>
           </div>
           <div className="rounded-lg bg-purple-50 p-3">
-            <FaMousePointer className="text-purple-600 text-xl" />
+            <MousePointer className="text-purple-600 w-6 h-6" />
           </div>
         </div>
       </div>
@@ -304,16 +304,16 @@ function SummaryCards({ statistics }: Readonly<{ statistics: Statistics }>) {
 }
 
 const PAYMENT_METHOD_CONFIG = {
-  credit: { label: '크레딧', icon: FaCoins },
-  card: { label: '카드', icon: FaCreditCard },
-  bank_transfer: { label: '무통장', icon: FaUniversity },
+  credit: { label: '크레딧', icon: Coins },
+  card: { label: '카드', icon: CreditCard },
+  bank_transfer: { label: '무통장', icon: Building2 },
 } as const;
 
 function getPaymentMethodConfig(method: string) {
   return (
     PAYMENT_METHOD_CONFIG[method as keyof typeof PAYMENT_METHOD_CONFIG] || {
       label: method,
-      icon: FaCoins,
+      icon: Coins,
     }
   );
 }
@@ -342,7 +342,7 @@ function PaymentMethodStats({
                   className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white p-4"
                 >
                   <div className="rounded-lg bg-slate-50 p-3">
-                    <IconComponent className="text-slate-700 text-xl" />
+                    <IconComponent className="text-slate-700 w-6 h-6" />
                   </div>
                   <div>
                     <p className="text-sm text-slate-600">{config.label}</p>

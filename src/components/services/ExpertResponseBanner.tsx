@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { FaTimes } from 'react-icons/fa';
+import { X } from 'lucide-react';
 
 interface Props {
   readonly avgResponseTime: string;
@@ -18,7 +18,7 @@ export default function ExpertResponseBanner({ avgResponseTime }: Props) {
         ⚡ 첫 문의 응답이 평균 {avgResponseTime}로 빠릅니다.
       </span>
       <button onClick={() => setIsVisible(false)} className="text-green-700 hover:text-green-800">
-        <FaTimes className="text-sm" />
+        <X className="w-4 h-4" />
       </button>
     </div>
   );

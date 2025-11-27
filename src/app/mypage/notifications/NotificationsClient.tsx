@@ -5,18 +5,18 @@ import { createClient } from '@/lib/supabase/client';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import Link from 'next/link';
 import {
-  FaBell,
-  FaRegBellSlash,
-  FaCheckCircle,
-  FaUndo,
-  FaTimes,
-  FaComment,
-  FaStar,
-  FaShoppingCart,
-  FaPlay,
-  FaTruck,
-  FaFilter,
-} from 'react-icons/fa';
+  Bell,
+  BellOff,
+  CheckCircle,
+  Undo,
+  X,
+  MessageCircle,
+  Star,
+  ShoppingCart,
+  Play,
+  Truck,
+  Filter,
+} from 'lucide-react';
 import { logger } from '@/lib/logger';
 
 interface Notification {
@@ -68,25 +68,25 @@ export default function NotificationsClient({
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case 'order_new':
-        return { icon: FaShoppingCart, color: 'text-green-500' };
+        return { icon: ShoppingCart, color: 'text-green-500' };
       case 'order_started':
-        return { icon: FaPlay, color: 'text-blue-500' };
+        return { icon: Play, color: 'text-blue-500' };
       case 'order_delivered':
-        return { icon: FaTruck, color: 'text-purple-500' };
+        return { icon: Truck, color: 'text-purple-500' };
       case 'order_completed':
-        return { icon: FaCheckCircle, color: 'text-green-500' };
+        return { icon: CheckCircle, color: 'text-green-500' };
       case 'order_revision_requested':
-        return { icon: FaUndo, color: 'text-orange-500' };
+        return { icon: Undo, color: 'text-orange-500' };
       case 'order_revision_completed':
-        return { icon: FaCheckCircle, color: 'text-blue-500' };
+        return { icon: CheckCircle, color: 'text-blue-500' };
       case 'order_cancelled':
-        return { icon: FaTimes, color: 'text-red-500' };
+        return { icon: X, color: 'text-red-500' };
       case 'message_new':
-        return { icon: FaComment, color: 'text-blue-500' };
+        return { icon: MessageCircle, color: 'text-blue-500' };
       case 'review_new':
-        return { icon: FaStar, color: 'text-yellow-500' };
+        return { icon: Star, color: 'text-yellow-500' };
       default:
-        return { icon: FaBell, color: 'text-gray-500' };
+        return { icon: Bell, color: 'text-gray-500' };
     }
   };
 
@@ -200,7 +200,7 @@ export default function NotificationsClient({
         {/* 헤더 */}
         <div className="mb-6">
           <h1 className="text-base md:text-lg font-bold text-gray-900 flex items-center gap-2">
-            <FaBell className="text-brand-primary" />
+            <Bell className="w-5 h-5 text-brand-primary" />
             전체 알림
           </h1>
           <p className="text-gray-600 mt-2 text-sm md:text-base">
@@ -213,7 +213,7 @@ export default function NotificationsClient({
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             {/* 필터 */}
             <div className="flex items-center gap-2">
-              <FaFilter className="text-gray-400" />
+              <Filter className="w-4 h-4 text-gray-400" />
               <button
                 onClick={() => setFilter('all')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
@@ -279,7 +279,7 @@ export default function NotificationsClient({
                         className="flex items-start gap-4 p-4"
                       >
                         <div className={`p-3 rounded-full bg-gray-100 flex-shrink-0 ${color}`}>
-                          <Icon className="text-xl" />
+                          <Icon className="w-6 h-6" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2 mb-1">
@@ -303,7 +303,7 @@ export default function NotificationsClient({
                     ) : (
                       <div className="flex items-start gap-4 p-4">
                         <div className={`p-3 rounded-full bg-gray-100 flex-shrink-0 ${color}`}>
-                          <Icon className="text-xl" />
+                          <Icon className="w-6 h-6" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2 mb-1">
@@ -336,7 +336,7 @@ export default function NotificationsClient({
             </div>
           ) : (
             <div className="p-12 text-center">
-              <FaRegBellSlash className="text-5xl text-gray-300 mx-auto mb-4" />
+              <BellOff className="w-12 h-12 text-gray-300 mx-auto mb-4" />
               <h3 className="text-lg font-bold text-gray-900 mb-2">
                 {(() => {
                   if (filter === 'unread') return '읽지 않은 알림이 없습니다';

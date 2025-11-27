@@ -6,65 +6,65 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { logger } from "@/lib/logger";
 import {
-  FaChartLine,
-  FaUsers,
-  FaBriefcase,
-  FaEdit,
-  FaShoppingCart,
-  FaMoneyBillWave,
-  FaWallet,
-  FaBullhorn,
-  FaFileInvoice,
-  FaStar,
-  FaFlag,
-  FaGavel,
-  FaFolder,
-  FaChartPie,
-  FaHistory,
-  FaCog,
-  FaShieldAlt,
-  FaAngleLeft,
-  FaAngleRight,
-  FaHome,
-} from "react-icons/fa";
+  TrendingUp,
+  Users,
+  Briefcase,
+  Edit,
+  ShoppingCart,
+  Banknote,
+  Wallet,
+  Megaphone,
+  FileText,
+  Star,
+  Flag,
+  Gavel,
+  Folder,
+  PieChart,
+  History,
+  Settings,
+  Shield,
+  ChevronLeft,
+  ChevronRight,
+  Home,
+} from "lucide-react";
 
 const menuItems = [
-  { name: "대시보드", path: "/admin/dashboard", icon: FaChartLine },
-  { name: "사용자 관리", path: "/admin/users", icon: FaUsers },
+  { name: "대시보드", path: "/admin/dashboard", icon: TrendingUp },
+  { name: "사용자 관리", path: "/admin/users", icon: Users },
   {
     name: "서비스 관리",
     path: "/admin/services",
-    icon: FaBriefcase,
+    icon: Briefcase,
     badge: "pendingServices",
   },
   {
     name: "수정 요청 관리",
     path: "/admin/service-revisions",
-    icon: FaEdit,
+    icon: Edit,
     badge: "pendingRevisions",
   },
-  { name: "주문 관리", path: "/admin/orders", icon: FaShoppingCart },
-  { name: "정산 관리", path: "/admin/settlements", icon: FaMoneyBillWave },
+  { name: "주문 관리", path: "/admin/orders", icon: ShoppingCart },
+  { name: "정산 관리", path: "/admin/settlements", icon: Banknote },
   {
     name: "출금 관리",
     path: "/admin/withdrawals",
-    icon: FaWallet,
+    icon: Wallet,
     badge: "pendingWithdrawals",
   },
   {
     name: "광고 관리",
     path: "/admin/advertising",
-    icon: FaBullhorn,
+    icon: Megaphone,
     badge: "pendingPayments",
   },
-  { name: "세금계산서", path: "/admin/tax-invoices", icon: FaFileInvoice },
-  { name: "리뷰 관리", path: "/admin/reviews", icon: FaStar },
-  { name: "신고 관리", path: "/admin/reports", icon: FaFlag },
-  { name: "분쟁 관리", path: "/admin/disputes", icon: FaGavel },
-  { name: "카테고리 관리", path: "/admin/categories", icon: FaFolder },
-  { name: "통계 분석", path: "/admin/statistics", icon: FaChartPie },
-  { name: "활동 로그", path: "/admin/logs", icon: FaHistory },
-  { name: "시스템 설정", path: "/admin/settings", icon: FaCog },
+  { name: "세금계산서", path: "/admin/tax-invoices", icon: FileText },
+  { name: "리뷰 관리", path: "/admin/reviews", icon: Star },
+  { name: "신고 관리", path: "/admin/reports", icon: Flag },
+  { name: "분쟁 관리", path: "/admin/disputes", icon: Gavel },
+  { name: "카테고리 관리", path: "/admin/categories", icon: Folder },
+  { name: "통계 분석", path: "/admin/statistics", icon: PieChart },
+  { name: "활동 로그", path: "/admin/logs", icon: History },
+  { name: "시스템 설정", path: "/admin/settings", icon: Settings },
 ];
 
 export default function AdminSidebar() {
@@ -133,7 +133,7 @@ export default function AdminSidebar() {
       <div className="h-16 flex items-center justify-between px-4 border-b border-white/10">
         {!collapsed && (
           <div className="flex items-center gap-2">
-            <FaShieldAlt className="text-xl" />
+            <Shield className="w-5 h-5" />
             <span className="font-bold text-lg">Admin</span>
           </div>
         )}
@@ -141,7 +141,7 @@ export default function AdminSidebar() {
           onClick={() => setCollapsed(!collapsed)}
           className="p-2 hover:bg-white/10 rounded transition-colors"
         >
-          {collapsed ? <FaAngleRight /> : <FaAngleLeft />}
+          {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
         </button>
       </div>
 
@@ -190,7 +190,7 @@ export default function AdminSidebar() {
             href="/"
             className="flex items-center gap-2 p-2 hover:bg-white/10 rounded transition-colors"
           >
-            <FaHome />
+            <Home className="w-4 h-4" />
             <span className="text-sm">사이트로 이동</span>
           </Link>
         )}

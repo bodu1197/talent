@@ -1,4 +1,4 @@
-import { FaLightbulb, FaCheck } from 'react-icons/fa';
+import { Lightbulb, Check } from 'lucide-react';
 
 interface ServiceFormData {
   title: string;
@@ -75,36 +75,36 @@ export default function Step3Description({ formData, setFormData }: Props) {
       {/* 작성 가이드 */}
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
         <h3 className="text-sm md:text-base font-bold text-gray-900 mb-4">
-          <FaLightbulb className="text-yellow-500 mr-2 inline" />
+          <Lightbulb className="text-yellow-500 w-4 h-4 mr-2 inline" />
           좋은 서비스 설명 작성 팁
         </h3>
         <ul className="space-y-2 text-sm text-gray-700">
           <li className="flex items-start gap-2">
-            <FaCheck className="text-green-600 mt-1" />
+            <Check className="text-green-600 w-4 h-4 mt-1" />
             <span>
               <strong>명확한 범위:</strong> 어떤 작업을 해드리는지 구체적으로 명시
             </span>
           </li>
           <li className="flex items-start gap-2">
-            <FaCheck className="text-green-600 mt-1" />
+            <Check className="text-green-600 w-4 h-4 mt-1" />
             <span>
               <strong>작업 프로세스:</strong> 어떤 순서로 진행되는지 설명
             </span>
           </li>
           <li className="flex items-start gap-2">
-            <FaCheck className="text-green-600 mt-1" />
+            <Check className="text-green-600 w-4 h-4 mt-1" />
             <span>
               <strong>준비 사항:</strong> 고객이 제공해야 할 자료나 정보
             </span>
           </li>
           <li className="flex items-start gap-2">
-            <FaCheck className="text-green-600 mt-1" />
+            <Check className="text-green-600 w-4 h-4 mt-1" />
             <span>
               <strong>결과물 형식:</strong> 최종 파일 형식이나 전달 방법
             </span>
           </li>
           <li className="flex items-start gap-2">
-            <FaCheck className="text-green-600 mt-1" />
+            <Check className="text-green-600 w-4 h-4 mt-1" />
             <span>
               <strong>추가 비용:</strong> 기본 가격에 포함되지 않는 항목 안내
             </span>

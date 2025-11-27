@@ -12,7 +12,7 @@ import CategorySort from '@/components/categories/CategorySort';
 import CategorySidebar from '@/components/categories/CategorySidebar';
 import CategoryVisitTracker from '@/components/categories/CategoryVisitTracker';
 import Link from 'next/link';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { logger } from '@/lib/logger';
 
 // ISR 캐싱: 광고 우선순위 테스트를 위해 일시적으로 비활성화
@@ -124,7 +124,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                       href={`/categories/${slug}?page=${currentPage - 1}`}
                       className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
                     >
-                      <FaChevronLeft />
+                      <ChevronLeft className="w-4 h-4" />
                     </Link>
                   )}
                   <span className="px-4 py-2 bg-brand-primary text-white rounded-lg">
@@ -134,7 +134,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                     href={`/categories/${slug}?page=${currentPage + 1}`}
                     className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
                   >
-                    <FaChevronRight />
+                    <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>
               )}

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ServiceCard from '@/components/services/ServiceCard';
-import { FaStar, FaCheckCircle, FaBriefcase } from 'react-icons/fa';
+import { Star, CheckCircle, Briefcase } from 'lucide-react';
 
 type TabType = 'services' | 'experts' | 'portfolios';
 
@@ -126,7 +126,7 @@ export default function SearchResults({
               </div>
             ) : (
               <div className="text-center py-20">
-                <FaBriefcase className="text-6xl text-gray-300 mx-auto mb-4" />
+                <Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <h2 className="text-xl font-bold text-gray-900 mb-2">
                   서비스 검색 결과가 없습니다
                 </h2>
@@ -163,7 +163,7 @@ export default function SearchResults({
                         )}
                         {expert.is_verified && (
                           <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-1">
-                            <FaCheckCircle className="text-white text-xs" />
+                            <CheckCircle className="w-3 h-3 text-white" />
                           </div>
                         )}
                       </div>
@@ -176,7 +176,7 @@ export default function SearchResults({
                         )}
                         <div className="flex items-center gap-4 text-sm text-gray-500">
                           <div className="flex items-center gap-1">
-                            <FaStar className="text-yellow-400" />
+                            <Star className="w-4 h-4 text-yellow-400 fill-current" />
                             <span>{expert.rating.toFixed(1)}</span>
                             <span>({expert.review_count})</span>
                           </div>
@@ -189,7 +189,7 @@ export default function SearchResults({
               </div>
             ) : (
               <div className="text-center py-20">
-                <FaStar className="text-6xl text-gray-300 mx-auto mb-4" />
+                <Star className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <h2 className="text-xl font-bold text-gray-900 mb-2">
                   전문가 검색 결과가 없습니다
                 </h2>
@@ -217,7 +217,7 @@ export default function SearchResults({
                           />
                         ) : (
                           <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                            <FaBriefcase className="text-4xl text-gray-400" />
+                            <Briefcase className="w-10 h-10 text-gray-400" />
                           </div>
                         )}
                       </div>
@@ -258,7 +258,7 @@ export default function SearchResults({
               </div>
             ) : (
               <div className="text-center py-20">
-                <FaBriefcase className="text-6xl text-gray-300 mx-auto mb-4" />
+                <Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <h2 className="text-xl font-bold text-gray-900 mb-2">
                   포트폴리오 검색 결과가 없습니다
                 </h2>

@@ -11,7 +11,7 @@ import EmptyState from '@/components/common/EmptyState';
 import ErrorState from '@/components/common/ErrorState';
 import { logger } from '@/lib/logger';
 import type { Order, Service, Seller } from '@/types/common';
-import { FaEye, FaDownload, FaCheck, FaRedo, FaStar } from 'react-icons/fa';
+import { Eye, Download, Check, RotateCcw, Star } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 type OrderStatus =
@@ -245,7 +245,7 @@ function BuyerOrdersContent() {
             href={`/mypage/buyer/orders/${order.id}`}
             className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium whitespace-nowrap"
           >
-            <FaEye />
+            <Eye className="w-4 h-4" />
             수정 내역 확인
           </Link>
           <Link
@@ -265,21 +265,21 @@ function BuyerOrdersContent() {
             href={`/mypage/buyer/orders/${order.id}`}
             className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium whitespace-nowrap"
           >
-            <FaDownload />
+            <Download className="w-4 h-4" />
             다운로드
           </Link>
           <button
             onClick={() => handleConfirmOrder(order.id)}
             className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium whitespace-nowrap"
           >
-            <FaCheck />
+            <Check className="w-4 h-4" />
             구매 확정
           </button>
           <button
             onClick={() => handleRequestRevision(order.id)}
             className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors text-sm font-medium whitespace-nowrap"
           >
-            <FaRedo />
+            <RotateCcw className="w-4 h-4" />
             수정 요청
           </button>
           <Link
@@ -324,7 +324,7 @@ function BuyerOrdersContent() {
             href={`/mypage/buyer/reviews?order=${order.id}`}
             className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium whitespace-nowrap"
           >
-            <FaStar />
+            <Star className="w-4 h-4" />
             리뷰 작성
           </Link>
         </>
@@ -482,7 +482,7 @@ function BuyerOrdersContent() {
                 onClick={resetFilters}
                 className="inline-flex items-center gap-2 px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium whitespace-nowrap"
               >
-                <FaRedo />
+                <RotateCcw className="w-4 h-4" />
                 초기화
               </button>
             </div>

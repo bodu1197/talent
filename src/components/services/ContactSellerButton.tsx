@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { FaSpinner, FaCommentDots } from 'react-icons/fa';
+import { Loader2, MessageCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
 
@@ -61,12 +61,12 @@ export default function ContactSellerButton({ sellerId, serviceId }: Props) {
     >
       {isLoading ? (
         <span>
-          <FaSpinner className="fa-spin mr-2 inline" />
+          <Loader2 className="w-4 h-4 mr-2 inline animate-spin" />
           처리 중...
         </span>
       ) : (
         <span>
-          <FaCommentDots className="mr-2 inline" />
+          <MessageCircle className="w-4 h-4 mr-2 inline" />
           전문가에게 문의하기
         </span>
       )}

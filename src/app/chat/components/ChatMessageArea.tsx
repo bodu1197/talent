@@ -2,14 +2,14 @@
 
 import { useState } from 'react';
 import {
-  FaComments,
-  FaPaperclip,
-  FaTimes,
-  FaFileDownload,
-  FaMoneyBillWave,
-  FaSpinner,
-  FaInfoCircle,
-} from 'react-icons/fa';
+  MessageCircle,
+  Paperclip,
+  X,
+  Download,
+  DollarSign,
+  Loader2,
+  Info,
+} from 'lucide-react';
 import ProfileImage from '@/components/common/ProfileImage';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
@@ -85,7 +85,7 @@ export default function ChatMessageArea({
     return (
       <div className="flex-1 flex items-center justify-center text-gray-400">
         <div className="text-center">
-          <FaComments className="text-6xl mb-4 inline-block" />
+          <MessageCircle className="w-16 h-16 mb-4 inline-block" />
           <p className="text-lg">채팅방을 선택해주세요</p>
         </div>
       </div>
@@ -167,7 +167,7 @@ export default function ChatMessageArea({
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 mb-2 p-2 bg-white/50 rounded-lg hover:bg-white/70 transition-colors"
                         >
-                          <FaPaperclip className="text-blue-500" />
+                          <Paperclip className="w-4 h-4 text-blue-500" />
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium truncate">
                               {message.file_name || '첨부파일'}
@@ -178,7 +178,7 @@ export default function ChatMessageArea({
                               </p>
                             )}
                           </div>
-                          <FaFileDownload className="text-gray-400" />
+                          <Download className="w-4 h-4 text-gray-400" />
                         </a>
                       )}
                     </>
@@ -206,7 +206,7 @@ export default function ChatMessageArea({
           {/* 선택된 파일 표시 */}
           {selectedFile && (
             <div className="flex items-center gap-2 p-2 bg-blue-50 border border-blue-200 rounded-lg">
-              <FaPaperclip className="text-blue-500" />
+              <Paperclip className="w-4 h-4 text-blue-500" />
               <span className="flex-1 text-sm truncate">{selectedFile.name}</span>
               <span className="text-xs text-gray-500">
                 {(selectedFile.size / 1024).toFixed(1)} KB
@@ -217,7 +217,7 @@ export default function ChatMessageArea({
                 className="text-red-500 hover:text-red-700"
                 aria-label="첨부파일 삭제"
               >
-                <FaTimes aria-hidden="true" />
+                <X className="w-4 h-4" aria-hidden="true" />
               </button>
             </div>
           )}
@@ -253,7 +253,7 @@ export default function ChatMessageArea({
                   onClick={() => setShowPaymentRequestModal(true)}
                   className="px-4 py-2 text-sm text-white bg-green-600 border border-green-600 rounded-lg hover:bg-green-700 flex items-center gap-2"
                 >
-                  <FaMoneyBillWave />
+                  <DollarSign className="w-4 h-4" />
                   결제 요청
                 </button>
               )}
@@ -268,7 +268,7 @@ export default function ChatMessageArea({
                 htmlFor="file-input"
                 className="px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer inline-flex items-center gap-2"
               >
-                <FaPaperclip />
+                <Paperclip className="w-4 h-4" />
                 파일 첨부
               </label>
             </div>
@@ -360,7 +360,7 @@ function PaymentRequestModal({
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900">결제 요청</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <FaTimes className="text-xl" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
@@ -458,7 +458,7 @@ function PaymentRequestModal({
 
           <div className="bg-blue-50 rounded-lg p-4">
             <p className="text-sm text-blue-900">
-              <FaInfoCircle className="mr-2 inline" />
+              <Info className="w-4 h-4 mr-2 inline" />
               구매자가 결제 요청을 수락하면 결제 페이지로 이동합니다. 결제 요청은 72시간 후 자동으로
               만료됩니다.
             </p>
@@ -480,7 +480,7 @@ function PaymentRequestModal({
             >
               {isSubmitting ? (
                 <>
-                  <FaSpinner className="fa-spin mr-2 inline" />
+                  <Loader2 className="w-4 h-4 mr-2 inline animate-spin" />
                   전송 중...
                 </>
               ) : (

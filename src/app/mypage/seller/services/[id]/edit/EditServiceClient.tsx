@@ -10,20 +10,20 @@ import { logger } from '@/lib/logger';
 import TemplateSelector from '@/components/services/TemplateSelector';
 import toast from 'react-hot-toast';
 
-import { FaWandMagicSparkles } from 'react-icons/fa6';
+import { Sparkles } from 'lucide-react';
 import { type GradientTemplate, generateThumbnailWithText } from '@/lib/template-generator';
 import {
-  FaArrowLeft,
-  FaUpload,
-  FaPalette,
-  FaTimes,
-  FaCheck,
-  FaCloudUploadAlt,
-  FaUndo,
-  FaTrash,
-  FaInfoCircle,
-  FaSpinner,
-} from 'react-icons/fa';
+  ArrowLeft,
+  Upload,
+  Palette,
+  X,
+  Check,
+  CloudUpload,
+  Undo,
+  Trash2,
+  Info,
+  Loader2,
+} from 'lucide-react';
 
 // Dynamic import for TextOverlayEditor - only loads when template mode is selected
 const TextOverlayEditor = dynamic(() => import('@/components/services/TextOverlayEditor'), {
@@ -600,7 +600,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
             href="/mypage/seller/services"
             className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
           >
-            <FaArrowLeft />
+            <ArrowLeft className="w-4 h-4" />
             <span>서비스 관리로</span>
           </Link>
         </div>
@@ -641,7 +641,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
-                    <FaUpload className="mr-2 inline" />
+                    <Upload className="w-4 h-4 mr-2 inline" />
                     파일 업로드
                   </button>
                   <button
@@ -659,7 +659,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
-                    <FaPalette className="mr-2 inline" />
+                    <Palette className="w-4 h-4 mr-2 inline" />
                     템플릿 사용
                   </button>
                 </div>
@@ -682,7 +682,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                               onClick={cancelNewThumbnail}
                               className="bg-gray-500 text-white px-3 py-1 rounded-lg hover:bg-gray-600 transition-colors text-sm"
                             >
-                              <FaUndo className="mr-1 inline" />
+                              <Undo className="w-3 h-3 mr-1 inline" />
                               취소
                             </button>
                           )}
@@ -692,7 +692,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                             onClick={deleteThumbnail}
                             className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors text-sm"
                           >
-                            <FaTrash className="mr-1 inline" />
+                            <Trash2 className="w-3 h-3 mr-1 inline" />
                             삭제
                           </button>
                         </div>
@@ -705,7 +705,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                           onChange={handleThumbnailChange}
                           className="hidden"
                         />
-                        <FaCloudUploadAlt className="text-gray-400 text-4xl mb-3 inline-block" />
+                        <CloudUpload className="text-gray-400 w-10 h-10 mb-3 inline-block" />
                         <p className="text-gray-600 font-medium">클릭하여 이미지 선택</p>
                         <p className="text-sm text-gray-500 mt-2">
                           권장 크기: 652×488px (최대 5MB)
@@ -728,7 +728,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                     {originalThumbnailUrl && !thumbnailFile && (
                       <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
                         <div className="flex items-start gap-3">
-                          <FaInfoCircle className="text-amber-600 mt-0.5" />
+                          <Info className="text-amber-600 w-4 h-4 mt-0.5" />
                           <div className="flex-1">
                             <p className="text-sm font-medium text-amber-900 mb-1">
                               기존 이미지 교체
@@ -760,11 +760,11 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                           }}
                           className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors text-sm"
                         >
-                          <FaTimes className="mr-1 inline" />
+                          <X className="w-3 h-3 mr-1 inline" />
                           다시 만들기
                         </button>
                         <div className="absolute top-2 left-2 bg-green-500 text-white px-3 py-1 rounded-lg text-sm">
-                          <FaCheck className="mr-1 inline" />
+                          <Check className="w-3 h-3 mr-1 inline" />
                           생성 완료
                         </div>
                       </div>
@@ -792,7 +792,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                                 disabled={!textStyle?.text?.trim()}
                                 className="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
                               >
-                                <FaWandMagicSparkles className="mr-2 inline" />
+                                <Sparkles className="w-4 h-4 mr-2 inline" />
                                 썸네일 생성하기 (652×488px)
                               </button>
                             </div>
@@ -1034,12 +1034,12 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
             >
               {loading ? (
                 <>
-                  <FaSpinner className="fa-spin mr-2 inline" />
+                  <Loader2 className="w-4 h-4 animate-spin mr-2 inline" />
                   등록 중...
                 </>
               ) : (
                 <>
-                  <FaCheck className="mr-2 inline" />
+                  <Check className="w-4 h-4 mr-2 inline" />
                   서비스 등록
                 </>
               )}

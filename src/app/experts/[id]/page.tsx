@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import ServiceCard from '@/components/services/ServiceCard';
-import { FaStar, FaCheckCircle, FaBriefcase, FaUser, FaEnvelope } from 'react-icons/fa';
+import { Star, CheckCircle, Briefcase, User, Mail } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -174,7 +174,7 @@ export default async function ExpertDetailPage({ params }: ExpertDetailProps) {
               )}
               {seller.is_verified && (
                 <div className="absolute bottom-1 right-1 bg-blue-500 rounded-full p-2">
-                  <FaCheckCircle className="text-white text-lg" />
+                  <CheckCircle className="w-5 h-5 text-white" />
                 </div>
               )}
             </div>
@@ -195,17 +195,17 @@ export default async function ExpertDetailPage({ params }: ExpertDetailProps) {
               {/* 통계 */}
               <div className="flex flex-wrap gap-6 text-sm">
                 <div className="flex items-center gap-2">
-                  <FaStar className="text-yellow-400" />
+                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
                   <span className="font-bold">{avgRating.toFixed(1)}</span>
                   <span className="text-gray-500">({totalReviews} 리뷰)</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <FaBriefcase className="text-gray-400" />
+                  <Briefcase className="w-4 h-4 text-gray-400" />
                   <span className="font-bold">{services?.length || 0}</span>
                   <span className="text-gray-500">서비스</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <FaUser className="text-gray-400" />
+                  <User className="w-4 h-4 text-gray-400" />
                   <span className="font-bold">{totalOrders || 0}</span>
                   <span className="text-gray-500">거래 완료</span>
                 </div>
@@ -226,7 +226,7 @@ export default async function ExpertDetailPage({ params }: ExpertDetailProps) {
                 href="/chat"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium"
               >
-                <FaEnvelope />
+                <Mail className="w-4 h-4" />
                 문의하기
               </Link>
             </div>
@@ -248,7 +248,7 @@ export default async function ExpertDetailPage({ params }: ExpertDetailProps) {
           </div>
         ) : (
           <div className="text-center py-20 bg-white rounded-lg">
-            <FaBriefcase className="text-6xl text-gray-300 mx-auto mb-4" />
+            <Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-xl font-bold text-gray-900 mb-2">등록된 서비스가 없습니다</h3>
             <p className="text-gray-600">아직 등록된 서비스가 없습니다.</p>
           </div>

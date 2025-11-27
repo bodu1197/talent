@@ -1,23 +1,23 @@
 import Link from 'next/link';
 import { getTopLevelCategories } from '@/lib/categories';
 import {
-  FaRobot,
-  FaLaptopCode,
-  FaPalette,
-  FaBullhorn,
-  FaVideo,
-  FaBriefcase,
-  FaThLarge,
-} from 'react-icons/fa';
+  Bot,
+  Laptop,
+  Palette,
+  Megaphone,
+  Video,
+  Briefcase,
+  LayoutGrid,
+} from 'lucide-react';
 
 // 카테고리 아이콘 매핑
 const categoryIcons: Record<string, React.ReactNode> = {
-  'ai-services': <FaRobot className="text-lg" aria-hidden="true" />,
-  'it-programming': <FaLaptopCode className="text-lg" aria-hidden="true" />,
-  design: <FaPalette className="text-lg" aria-hidden="true" />,
-  marketing: <FaBullhorn className="text-lg" aria-hidden="true" />,
-  'video-photo': <FaVideo className="text-lg" aria-hidden="true" />,
-  business: <FaBriefcase className="text-lg" aria-hidden="true" />,
+  'ai-services': <Bot className="w-5 h-5" aria-hidden="true" />,
+  'it-programming': <Laptop className="w-5 h-5" aria-hidden="true" />,
+  design: <Palette className="w-5 h-5" aria-hidden="true" />,
+  marketing: <Megaphone className="w-5 h-5" aria-hidden="true" />,
+  'video-photo': <Video className="w-5 h-5" aria-hidden="true" />,
+  business: <Briefcase className="w-5 h-5" aria-hidden="true" />,
 };
 
 export default async function CategoryBar() {
@@ -34,7 +34,7 @@ export default async function CategoryBar() {
             className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-brand-primary hover:bg-gray-50 rounded-lg transition-colors whitespace-nowrap font-medium focus:ring-2 focus:ring-brand-primary focus:outline-none"
             aria-label="전체 카테고리 보기"
           >
-            <FaThLarge className="text-lg" aria-hidden="true" />
+            <LayoutGrid className="w-5 h-5" aria-hidden="true" />
             <span>전체 카테고리</span>
           </Link>
 
@@ -60,7 +60,7 @@ export default async function CategoryBar() {
             className="flex flex-col items-center gap-1 p-2 text-gray-700 hover:text-brand-primary hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-brand-primary focus:outline-none"
             aria-label="전체 카테고리 보기"
           >
-            <FaThLarge className="text-xl" aria-hidden="true" />
+            <LayoutGrid className="w-5 h-5" aria-hidden="true" />
             <span className="text-xs font-medium text-center">전체</span>
           </Link>
 
@@ -72,7 +72,7 @@ export default async function CategoryBar() {
               className="flex flex-col items-center gap-1 p-2 text-gray-700 hover:text-brand-primary hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-brand-primary focus:outline-none"
               aria-label={`${category.name} 카테고리로 이동`}
             >
-              {categoryIcons[category.slug] || <FaThLarge className="text-xl" aria-hidden="true" />}
+              {categoryIcons[category.slug] || <LayoutGrid className="w-5 h-5" aria-hidden="true" />}
               <span className="text-xs font-medium text-center line-clamp-1">{category.name}</span>
             </Link>
           ))}

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { FaArrowLeft, FaPrint } from 'react-icons/fa';
+import { ArrowLeft, Printer } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
 
@@ -110,14 +110,14 @@ export default function TaxInvoiceDetailPage() {
           onClick={() => router.push('/admin/tax-invoices')}
           className="px-4 py-2 text-gray-600 hover:text-gray-900 flex items-center gap-2"
         >
-          <FaArrowLeft />
+          <ArrowLeft className="w-4 h-4" />
           목록으로
         </button>
         <button
           onClick={handlePrint}
           className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
         >
-          <FaPrint />
+          <Printer className="w-4 h-4" />
           인쇄하기
         </button>
       </div>

@@ -2,8 +2,7 @@
 
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import Link from 'next/link';
-import { FaArrowLeft, FaEye, FaHeart, FaShoppingCart, FaStar } from 'react-icons/fa';
-import { FaSackDollar } from 'react-icons/fa6';
+import { ArrowLeft, Eye, Heart, ShoppingCart, Star, DollarSign } from 'lucide-react';
 
 interface Props {
   readonly stats: {
@@ -36,7 +35,7 @@ export default function ServiceStatisticsClient({
             href="/mypage/seller/services"
             className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
           >
-            <FaArrowLeft />
+            <ArrowLeft className="w-4 h-4" />
             <span>서비스 관리로</span>
           </Link>
         </div>
@@ -54,7 +53,7 @@ export default function ServiceStatisticsClient({
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-gray-600 text-sm">조회수</span>
-              <FaEye className="text-blue-500 text-xl" />
+              <Eye className="text-blue-500 w-6 h-6" />
             </div>
             <div className="text-3xl font-bold text-gray-900">{stats.viewCount}</div>
           </div>
@@ -62,7 +61,7 @@ export default function ServiceStatisticsClient({
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-gray-600 text-sm">찜</span>
-              <FaHeart className="text-red-500 text-xl" />
+              <Heart className="text-red-500 w-6 h-6" />
             </div>
             <div className="text-3xl font-bold text-gray-900">{stats.favoriteCount}</div>
           </div>
@@ -70,7 +69,7 @@ export default function ServiceStatisticsClient({
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-gray-600 text-sm">주문 수</span>
-              <FaShoppingCart className="text-green-500 text-xl" />
+              <ShoppingCart className="text-green-500 w-6 h-6" />
             </div>
             <div className="text-3xl font-bold text-gray-900">{stats.orderCount}</div>
           </div>
@@ -78,7 +77,7 @@ export default function ServiceStatisticsClient({
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-gray-600 text-sm">매출</span>
-              <FaSackDollar className="text-purple-500 text-xl" />
+              <DollarSign className="text-purple-500 w-6 h-6" />
             </div>
             <div className="text-3xl font-bold text-gray-900">
               {stats.revenue.toLocaleString()}원
@@ -116,9 +115,9 @@ export default function ServiceStatisticsClient({
               <div>
                 <div className="flex items-center gap-1 mb-1">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <FaStar
+                    <Star
                       key={star}
-                      className={`${star <= Math.floor(stats.avgRating) ? 'text-yellow-400' : 'text-gray-300'}`}
+                      className={`w-4 h-4 ${star <= Math.floor(stats.avgRating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
                     />
                   ))}
                 </div>

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { Service } from '@/types';
 import { getServicesByCategory } from '@/lib/supabase/queries/services';
-import { FaEye, FaFlag, FaBox, FaCheckCircle, FaStar, FaHistory } from 'react-icons/fa';
+import { Eye, Flag, Package, CheckCircle, Star, History } from 'lucide-react';
 
 // Supabase returns nested relations as arrays
 interface SupabaseServiceView {
@@ -213,7 +213,7 @@ export default async function RecentViewedServices() {
     <section className="py-8 bg-white border-t border-gray-200">
       <div className="container-1200">
         <div className="flex items-center gap-3 mb-6">
-          <FaEye className="text-brand-primary text-xl" />
+          <Eye className="w-5 h-5 text-brand-primary" />
           <h2 className="text-xl font-bold text-gray-900">최근 본 서비스</h2>
           {validViews.length > 0 && (
             <span className="text-sm text-gray-500">
@@ -238,7 +238,7 @@ export default async function RecentViewedServices() {
                 {isRecentView && viewIndex < 3 && (
                   <div className="absolute top-2 left-2 z-10">
                     <div className="px-2 py-1 bg-red-500 text-white text-xs font-bold rounded shadow-lg flex items-center gap-1">
-                      <FaFlag />
+                      <Flag className="w-3 h-3" />
                       금방 봄
                     </div>
                   </div>
@@ -260,7 +260,7 @@ export default async function RecentViewedServices() {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                      <FaBox className="text-4xl text-gray-400" />
+                      <Package className="w-10 h-10 text-gray-400" />
                     </div>
                   )}
 
@@ -268,7 +268,7 @@ export default async function RecentViewedServices() {
                   {isRecentView && viewIndex >= 3 && (
                     <div className="absolute top-2 right-2">
                       <div className="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
-                        <FaEye />
+                        <Eye className="w-3 h-3" />
                       </div>
                     </div>
                   )}
@@ -285,7 +285,7 @@ export default async function RecentViewedServices() {
                       {service.seller?.business_name}
                     </span>
                     {service.seller?.is_verified && (
-                      <FaCheckCircle className="text-[10px] text-blue-500" />
+                      <CheckCircle className="w-3 h-3 text-blue-500" />
                     )}
                   </div>
 
@@ -297,7 +297,7 @@ export default async function RecentViewedServices() {
                   {/* 평점 */}
                   <div className="flex items-center gap-2 text-xs text-gray-600 mb-1">
                     <span className="flex items-center gap-1">
-                      <FaStar className="text-yellow-400" />
+                      <Star className="w-3 h-3 text-yellow-400 fill-current" />
                       {(service.rating || 0).toFixed(1)}
                     </span>
                   </div>
@@ -328,7 +328,7 @@ export default async function RecentViewedServices() {
               href="/mypage/buyer/history"
               className="inline-flex items-center gap-2 px-6 py-3 border border-brand-primary text-brand-primary rounded-lg hover:bg-brand-primary hover:text-white transition-colors"
             >
-              <FaHistory />
+              <History className="w-4 h-4" />
               전체 방문 기록 보기
             </Link>
           </div>

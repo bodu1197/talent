@@ -5,44 +5,44 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  FaChartLine,
-  FaBox,
-  FaShoppingBag,
-  FaFolderOpen,
-  FaStar,
-  FaDollarSign,
-  FaBullhorn,
-  FaIdCard,
-  FaChartBar,
-  FaUserPlus,
-  FaUserCircle,
-  FaChartPie,
-  FaShoppingCart,
-  FaFileInvoice,
-  FaHeart,
-  FaUser,
-  FaChevronDown,
-  FaChevronRight,
-} from 'react-icons/fa';
+  TrendingUp,
+  Package,
+  ShoppingBag,
+  FolderOpen,
+  Star,
+  DollarSign,
+  Megaphone,
+  IdCard,
+  BarChart3,
+  UserPlus,
+  UserCircle,
+  PieChart,
+  ShoppingCart,
+  FileText,
+  Heart,
+  User,
+  ChevronDown,
+  ChevronRight,
+} from 'lucide-react';
 
 // Icon mapping helper
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  'fa-chart-line': FaChartLine,
-  'fa-box': FaBox,
-  'fa-shopping-bag': FaShoppingBag,
-  'fa-folder-open': FaFolderOpen,
-  'fa-star': FaStar,
-  'fa-sack-dollar': FaDollarSign,
-  'fa-bullhorn': FaBullhorn,
-  'fa-id-card': FaIdCard,
-  'fa-chart-bar': FaChartBar,
-  'fa-user-plus': FaUserPlus,
-  'fa-user-circle': FaUserCircle,
-  'fa-chart-pie': FaChartPie,
-  'fa-shopping-cart': FaShoppingCart,
-  'fa-file-invoice': FaFileInvoice,
-  'fa-heart': FaHeart,
-  'fa-user': FaUser,
+  'fa-chart-line': TrendingUp,
+  'fa-box': Package,
+  'fa-shopping-bag': ShoppingBag,
+  'fa-folder-open': FolderOpen,
+  'fa-star': Star,
+  'fa-sack-dollar': DollarSign,
+  'fa-bullhorn': Megaphone,
+  'fa-id-card': IdCard,
+  'fa-chart-bar': BarChart3,
+  'fa-user-plus': UserPlus,
+  'fa-user-circle': UserCircle,
+  'fa-chart-pie': PieChart,
+  'fa-shopping-cart': ShoppingCart,
+  'fa-file-invoice': FileText,
+  'fa-heart': Heart,
+  'fa-user': User,
 };
 
 interface NavItem {
@@ -311,7 +311,7 @@ export default function Sidebar({ mode, profileData, isRegisteredSeller }: Sideb
                 {mode === 'seller' ? '전문가 프로필' : '프로필 설정'}
               </p>
             </div>
-            <FaChevronRight className="text-gray-400 text-sm" />
+            <ChevronRight className="w-4 h-4 text-gray-400" />
           </Link>
         </div>
 
@@ -321,9 +321,9 @@ export default function Sidebar({ mode, profileData, isRegisteredSeller }: Sideb
             href={mode === 'seller' ? '/mypage/buyer/dashboard' : '/mypage/seller/dashboard'}
             className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-sm font-medium click-pop btn-ripple"
           >
-            {mode === 'seller' ? <FaShoppingCart /> : <FaShoppingBag />}
+            {mode === 'seller' ? <ShoppingCart className="w-4 h-4" /> : <ShoppingBag className="w-4 h-4" />}
             <span>{mode === 'seller' ? '구매자 페이지로' : '판매자 페이지로'}</span>
-            <FaChevronRight className="text-xs" />
+            <ChevronRight className="w-3 h-3" />
           </Link>
         </div>
 
@@ -345,8 +345,8 @@ export default function Sidebar({ mode, profileData, isRegisteredSeller }: Sideb
                   aria-expanded={expandedItems.has(item.href)}
                 >
                   <div className="flex items-center gap-3 flex-1">
-                    {React.createElement(iconMap[item.icon] || FaUser, {
-                      className: 'text-base',
+                    {React.createElement(iconMap[item.icon] || User, {
+                      className: 'w-4 h-4',
                     })}
                     <span className="text-sm font-medium">{item.label}</span>
                     {item.badge !== undefined && item.badge > 0 && (
@@ -355,8 +355,8 @@ export default function Sidebar({ mode, profileData, isRegisteredSeller }: Sideb
                       </span>
                     )}
                   </div>
-                  <FaChevronDown
-                    className={`text-xs transition-transform duration-200 ${
+                  <ChevronDown
+                    className={`w-3 h-3 transition-transform duration-200 ${
                       expandedItems.has(item.href) ? 'rotate-180' : ''
                     }`}
                   />
@@ -372,8 +372,8 @@ export default function Sidebar({ mode, profileData, isRegisteredSeller }: Sideb
                   }`}
                 >
                   <div className="flex items-center gap-3 flex-1">
-                    {React.createElement(iconMap[item.icon] || FaUser, {
-                      className: 'text-base',
+                    {React.createElement(iconMap[item.icon] || User, {
+                      className: 'w-4 h-4',
                     })}
                     <span className="text-sm font-medium">{item.label}</span>
                     {item.badge !== undefined && item.badge > 0 && (

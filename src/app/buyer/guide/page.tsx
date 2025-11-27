@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { FaArrowLeft } from "react-icons/fa";
+import { ArrowLeft } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "구매자 이용 가이드 - 돌파구 | 수수료 0원으로 서비스 구매하기",
@@ -19,7 +19,7 @@ export default function BuyerGuidePage() {
             href="/"
             className="text-brand-primary hover:underline flex items-center gap-2"
           >
-            <FaArrowLeft />
+            <ArrowLeft className="w-4 h-4" />
             홈으로
           </Link>
         </div>

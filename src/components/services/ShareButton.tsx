@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { FaShare, FaCheck } from 'react-icons/fa';
+import { Share2, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface ShareButtonProps {
@@ -56,12 +56,12 @@ export default function ShareButton({ serviceId, serviceTitle }: ShareButtonProp
     >
       {copied ? (
         <>
-          <FaCheck className="text-green-500" />
+          <Check className="w-4 h-4 text-green-500" />
           <span>복사됨</span>
         </>
       ) : (
         <>
-          <FaShare />
+          <Share2 className="w-4 h-4" />
           <span>공유</span>
         </>
       )}

@@ -4,15 +4,15 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { CategoryItem } from '@/lib/categories';
 import {
-  FaRobot,
-  FaImage,
-  FaBlog,
-  FaVideo,
-  FaStar,
-  FaLightbulb,
-  FaChartLine,
-  FaMagic,
-} from 'react-icons/fa';
+  Bot,
+  Image,
+  FileText,
+  Video,
+  Star,
+  Lightbulb,
+  TrendingUp,
+  Wand2,
+} from 'lucide-react';
 
 interface AIPageContentProps {
   readonly aiCategories: CategoryItem[];
@@ -135,7 +135,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
               >
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-brand-primary transition-colors">
-                    <FaRobot className="text-brand-primary text-xl group-hover:text-white" />
+                    <Bot className="w-6 h-6 text-brand-primary group-hover:text-white" />
                   </div>
                   <div className="flex-1">
                     <h3 className="font-semibold text-lg mb-2 group-hover:text-brand-primary">
@@ -200,7 +200,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
               <div className="h-48 bg-blue-500 flex items-center justify-center">
-                <FaImage className="text-white text-[40px]" />
+                <Image className="w-10 h-10 text-white" />
               </div>
               <div className="p-6">
                 <h3 className="font-bold text-xl mb-2">미용실 마케팅 자동화</h3>
@@ -218,7 +218,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
 
             <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
               <div className="h-48 bg-purple-500 flex items-center justify-center">
-                <FaBlog className="text-white text-[40px]" />
+                <FileText className="w-10 h-10 text-white" />
               </div>
               <div className="p-6">
                 <h3 className="font-bold text-xl mb-2">블로그 자동화로 정시 퇴근</h3>
@@ -236,7 +236,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
 
             <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
               <div className="h-48 bg-green-500 flex items-center justify-center">
-                <FaVideo className="text-white text-[40px]" />
+                <Video className="w-10 h-10 text-white" />
               </div>
               <div className="p-6">
                 <h3 className="font-bold text-xl mb-2">촬영 없이 영상 제작</h3>
@@ -281,7 +281,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
                 <div className="flex items-center gap-2 mb-3">
                   <div className="flex text-yellow-400">
                     {Array.from({ length: 5 }, (_, idx) => (
-                      <FaStar key={`star-expert-${i}-${idx}`} className="text-xs" />
+                      <Star key={`star-expert-${i}-${idx}`} className="w-3 h-3 fill-current" />
                     ))}
                   </div>
                   <span className="text-sm font-semibold">4.9</span>
@@ -315,7 +315,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl p-6 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-brand-primary/10 rounded-lg flex items-center justify-center mb-4">
-                <FaLightbulb className="text-brand-primary text-xl" />
+                <Lightbulb className="w-6 h-6 text-brand-primary" />
               </div>
               <h3 className="font-bold text-lg mb-2">AI로 업무 자동화하기</h3>
               <p className="text-gray-600 text-sm mb-4">
@@ -328,7 +328,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
 
             <div className="bg-white rounded-xl p-6 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-brand-primary/10 rounded-lg flex items-center justify-center mb-4">
-                <FaChartLine className="text-brand-primary text-xl" />
+                <TrendingUp className="w-6 h-6 text-brand-primary" />
               </div>
               <h3 className="font-bold text-lg mb-2">AI로 마케팅 효과 높이기</h3>
               <p className="text-gray-600 text-sm mb-4">
@@ -341,7 +341,7 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
 
             <div className="bg-white rounded-xl p-6 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-brand-primary/10 rounded-lg flex items-center justify-center mb-4">
-                <FaMagic className="text-brand-primary text-xl" />
+                <Wand2 className="w-6 h-6 text-brand-primary" />
               </div>
               <h3 className="font-bold text-lg mb-2">AI 도구 완벽 활용법</h3>
               <p className="text-gray-600 text-sm mb-4">

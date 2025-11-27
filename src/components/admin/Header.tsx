@@ -5,14 +5,14 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
-  FaSearch,
-  FaBell,
-  FaPlus,
-  FaChevronDown,
-  FaUser,
-  FaCog,
-  FaSignOutAlt,
-} from "react-icons/fa";
+  Search,
+  Bell,
+  Plus,
+  ChevronDown,
+  User,
+  Settings,
+  LogOut,
+} from "lucide-react";
 
 export default function AdminHeader() {
   const { user, signOut } = useAuth();
@@ -36,7 +36,7 @@ export default function AdminHeader() {
         {/* Search Bar */}
         <div className="flex-1 max-w-2xl">
           <div className="relative">
-            <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
               placeholder="사용자, 서비스, 주문 검색..."
@@ -49,12 +49,12 @@ export default function AdminHeader() {
         <div className="flex items-center gap-4 ml-6">
           {/* Notifications */}
           <button className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors">
-            <FaBell className="text-gray-600 text-xl" />
+            <Bell className="w-5 h-5 text-gray-600" />
           </button>
 
           {/* Quick Actions */}
           <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-            <FaPlus className="text-gray-600 text-xl" />
+            <Plus className="w-5 h-5 text-gray-600" />
           </button>
 
           {/* User Menu */}
@@ -72,7 +72,7 @@ export default function AdminHeader() {
                 </div>
                 <div className="text-xs text-gray-500">관리자</div>
               </div>
-              <FaChevronDown className="text-gray-400 text-sm" />
+              <ChevronDown className="w-4 h-4 text-gray-400" />
             </button>
 
             {/* Dropdown Menu */}
@@ -89,13 +89,13 @@ export default function AdminHeader() {
                     href="/mypage/settings"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >
-                    <FaUser className="w-5 inline-block mr-2" /> 프로필
+                    <User className="w-4 h-4 inline-block mr-2" /> 프로필
                   </Link>
                   <Link
                     href="/admin/settings"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >
-                    <FaCog className="w-5 inline-block mr-2" /> 설정
+                    <Settings className="w-4 h-4 inline-block mr-2" /> 설정
                   </Link>
                   <hr className="my-2" />
                   <button
@@ -105,7 +105,7 @@ export default function AdminHeader() {
                     }}
                     className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
                   >
-                    <FaSignOutAlt className="w-5 inline-block mr-2" /> 로그아웃
+                    <LogOut className="w-4 h-4 inline-block mr-2" /> 로그아웃
                   </button>
                 </div>
               </>

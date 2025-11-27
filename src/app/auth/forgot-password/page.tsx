@@ -5,7 +5,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { logger } from "@/lib/logger";
 import { getSecureRedirectUrl, RATE_LIMIT_CONFIG } from "@/lib/auth/config";
-import { FaCheckCircle, FaSpinner } from "react-icons/fa";
+import { CheckCircle, Loader2 } from "lucide-react";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -87,7 +87,7 @@ export default function ForgotPasswordPage() {
           {success ? (
             <div className="text-center">
               <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                <FaCheckCircle className="text-green-600 text-4xl mb-3 mx-auto" />
+                <CheckCircle className="w-10 h-10 text-green-600 mb-3 mx-auto" />
                 <p className="text-green-800 font-medium mb-2">
                   이메일 전송 완료
                 </p>
@@ -139,7 +139,7 @@ export default function ForgotPasswordPage() {
               >
                 {isLoading ? (
                   <span className="flex items-center justify-center">
-                    <FaSpinner className="animate-spin mr-2" />
+                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
                     전송 중...
                   </span>
                 ) : (

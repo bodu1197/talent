@@ -7,14 +7,14 @@ import { useAuth } from '@/components/providers/AuthProvider';
 import ChatNotificationBadge from '@/components/chat/ChatNotificationBadge';
 import NotificationBell from '@/components/notifications/NotificationBell';
 import {
-  FaShoppingCart,
-  FaBox,
-  FaUserCircle,
-  FaCog,
-  FaSignOutAlt,
-  FaChevronDown,
-  FaHeart as FaRegHeart,
-} from 'react-icons/fa';
+  ShoppingCart,
+  Package,
+  UserCircle,
+  Settings,
+  LogOut,
+  ChevronDown,
+  Heart,
+} from 'lucide-react';
 
 export default function HeaderClient() {
   const { user, profile, loading, signOut } = useAuth();
@@ -90,7 +90,7 @@ export default function HeaderClient() {
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg"
                   role="menuitem"
                 >
-                  <FaShoppingCart className="inline mr-2" aria-hidden="true" />
+                  <ShoppingCart className="w-4 h-4 inline mr-2" aria-hidden="true" />
                   구매 관리
                 </Link>
                 <Link
@@ -98,7 +98,7 @@ export default function HeaderClient() {
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-b-lg"
                   role="menuitem"
                 >
-                  <FaBox className="inline mr-2" aria-hidden="true" />
+                  <Package className="w-4 h-4 inline mr-2" aria-hidden="true" />
                   판매 관리
                 </Link>
               </div>
@@ -110,7 +110,7 @@ export default function HeaderClient() {
               className="text-gray-900 hover:text-red-500 transition-colors"
               aria-label="찜한 서비스"
             >
-              <FaRegHeart className="text-xl" />
+              <Heart className="w-5 h-5" />
             </Link>
 
             {/* 채팅 */}
@@ -134,7 +134,7 @@ export default function HeaderClient() {
                 />
 
                 {/* 드롭다운 아이콘 */}
-                <FaChevronDown className="text-xs text-gray-400" aria-hidden="true" />
+                <ChevronDown className="w-3 h-3 text-gray-400" aria-hidden="true" />
               </button>
 
               {/* 드롭다운 메뉴 */}
@@ -147,7 +147,7 @@ export default function HeaderClient() {
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg"
                   role="menuitem"
                 >
-                  <FaUserCircle className="inline mr-2" aria-hidden="true" />
+                  <UserCircle className="w-4 h-4 inline mr-2" aria-hidden="true" />
                   마이페이지
                 </Link>
                 <Link
@@ -155,7 +155,7 @@ export default function HeaderClient() {
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                   role="menuitem"
                 >
-                  <FaCog className="inline mr-2" aria-hidden="true" />
+                  <Settings className="w-4 h-4 inline mr-2" aria-hidden="true" />
                   설정
                 </Link>
                 <hr className="border-gray-200" />
@@ -168,7 +168,7 @@ export default function HeaderClient() {
                   role="menuitem"
                   aria-label="로그아웃"
                 >
-                  <FaSignOutAlt className="inline mr-2" aria-hidden="true" />
+                  <LogOut className="w-4 h-4 inline mr-2" aria-hidden="true" />
                   로그아웃
                 </button>
               </div>

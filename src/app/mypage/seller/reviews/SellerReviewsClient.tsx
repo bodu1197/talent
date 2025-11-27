@@ -7,7 +7,7 @@ import EmptyState from "@/components/common/EmptyState";
 import { useRouter } from "next/navigation";
 import { logger } from "@/lib/logger";
 import { Review } from "@/types/common";
-import { FaStar, FaTimes } from "react-icons/fa";
+import { Star, X } from "lucide-react";
 import toast from "react-hot-toast";
 
 type RatingFilter = "all" | "5" | "4" | "3" | "2" | "1";
@@ -95,7 +95,7 @@ export default function SellerReviewsClient({
               </div>
               <div className="flex items-center justify-center gap-1 mb-2">
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <FaStar
+                  <Star
                     key={star}
                     className={
                       Number.parseFloat(avgRating) >= star
@@ -162,7 +162,7 @@ export default function SellerReviewsClient({
                         <div className="flex items-center gap-2 mb-2">
                           <div className="flex gap-1">
                             {[1, 2, 3, 4, 5].map((star) => (
-                              <FaStar
+                              <Star
                                 key={star}
                                 className={
                                   review.rating >= star
@@ -239,7 +239,7 @@ export default function SellerReviewsClient({
                   }}
                   className="text-gray-400 hover:text-gray-600"
                 >
-                  <FaTimes className="text-2xl" />
+                  <X className="w-6 h-6" />
                 </button>
               </div>
 
@@ -247,7 +247,7 @@ export default function SellerReviewsClient({
                 <div className="mb-4 p-4 bg-gray-50 rounded-lg">
                   <div className="flex gap-1 mb-2">
                     {[1, 2, 3, 4, 5].map((star) => (
-                      <FaStar
+                      <Star
                         key={star}
                         className={
                           selectedReview.rating >= star

@@ -2,16 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import {
-  FaMoneyBillWave,
-  FaBullhorn,
-  FaClock,
-  FaWonSign,
-  FaEye,
-  FaBan,
-  FaCheckCircle,
-  FaTimes,
-} from 'react-icons/fa';
+import { Banknote, Megaphone, Clock, CircleDollarSign, Eye, Ban, CheckCircle, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
 
@@ -154,7 +145,7 @@ export default function AdminAdvertisingPage() {
             href="/admin/advertising/payments"
             className="px-4 py-2 bg-red-600 text-white rounded-md font-medium hover:bg-red-700 transition-colors flex items-center gap-2"
           >
-            <FaMoneyBillWave />
+            <Banknote className="w-5 h-5" />
             무통장 입금 확인
             {summary && summary.pendingPayments > 0 && (
               <span className="bg-white text-red-600 rounded-full px-2 py-0.5 text-xs font-bold">
@@ -189,7 +180,7 @@ export default function AdminAdvertisingPage() {
                 </p>
               </div>
               <div className="rounded-lg bg-blue-50 p-3">
-                <FaWonSign className="text-[#0f3460] text-xl" />
+                <CircleDollarSign className="w-6 h-6 text-[#0f3460]" />
               </div>
             </div>
           </div>
@@ -204,7 +195,7 @@ export default function AdminAdvertisingPage() {
                 </p>
               </div>
               <div className="rounded-lg bg-green-50 p-3">
-                <FaBullhorn className="text-green-600 text-xl" />
+                <Megaphone className="w-6 h-6 text-green-600" />
               </div>
             </div>
           </div>
@@ -216,7 +207,7 @@ export default function AdminAdvertisingPage() {
                 <p className="text-3xl font-bold text-slate-900">{summary.pendingPayments}</p>
               </div>
               <div className="rounded-lg bg-yellow-50 p-3">
-                <FaClock className="text-yellow-600 text-xl" />
+                <Clock className="w-6 h-6 text-yellow-600" />
               </div>
             </div>
           </div>
@@ -278,7 +269,7 @@ export default function AdminAdvertisingPage() {
         <>
           {subscriptions.length === 0 ? (
             <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
-              <FaBullhorn className="text-slate-400 text-5xl mb-4 inline-block" />
+              <Megaphone className="w-12 h-12 text-slate-400 mb-4 inline-block" />
               <p className="text-slate-600">광고 구독이 없습니다.</p>
             </div>
           ) : (
@@ -355,7 +346,7 @@ export default function AdminAdvertisingPage() {
                               className="text-[#0f3460] hover:text-[#0f3460]/80"
                               title="상세 보기"
                             >
-                              <FaEye />
+                              <Eye className="w-4 h-4" />
                             </button>
                             {sub.status === 'active' && (
                               <button
@@ -363,7 +354,7 @@ export default function AdminAdvertisingPage() {
                                 className="text-red-600 hover:text-red-700"
                                 title="취소"
                               >
-                                <FaBan />
+                                <Ban className="w-4 h-4" />
                               </button>
                             )}
                             {sub.status === 'cancelled' && (
@@ -372,7 +363,7 @@ export default function AdminAdvertisingPage() {
                                 className="text-green-600 hover:text-green-700"
                                 title="활성화"
                               >
-                                <FaCheckCircle />
+                                <CheckCircle className="w-4 h-4" />
                               </button>
                             )}
                           </div>
@@ -410,7 +401,7 @@ export default function AdminAdvertisingPage() {
                   onClick={() => setSelectedSubscription(null)}
                   className="text-slate-400 hover:text-slate-600"
                 >
-                  <FaTimes className="text-xl" />
+                  <X className="w-6 h-6" />
                 </button>
               </div>
             </div>

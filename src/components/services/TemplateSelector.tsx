@@ -7,7 +7,7 @@ import {
   createTemplatePreview,
   type GradientTemplate,
 } from '@/lib/template-generator';
-import { FaPalette, FaCheck, FaInfoCircle } from 'react-icons/fa';
+import { Palette, Check, Info } from 'lucide-react';
 
 interface Props {
   readonly onSelect: (template: GradientTemplate) => void;
@@ -31,7 +31,7 @@ export default function TemplateSelector({ onSelect, selectedTemplateId }: Props
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
-        <FaPalette className="text-brand-primary" />
+        <Palette className="w-5 h-5 text-brand-primary" />
         <h3 className="font-semibold text-lg">배경 템플릿 선택</h3>
         <span className="text-sm text-gray-500">({BACKGROUND_TEMPLATES.length}개)</span>
       </div>
@@ -67,7 +67,7 @@ export default function TemplateSelector({ onSelect, selectedTemplateId }: Props
               {selectedTemplateId === template.id && (
                 <div className="absolute inset-0 bg-brand-primary/20 flex items-center justify-center">
                   <div className="w-12 h-12 rounded-full bg-brand-primary text-white flex items-center justify-center">
-                    <FaCheck className="text-2xl" />
+                    <Check className="w-7 h-7" />
                   </div>
                 </div>
               )}
@@ -87,7 +87,7 @@ export default function TemplateSelector({ onSelect, selectedTemplateId }: Props
       {/* 안내 문구 */}
       <div className="mt-4 p-4 bg-blue-50 rounded-lg">
         <div className="flex items-start gap-2">
-          <FaInfoCircle className="text-blue-500 mt-0.5" />
+          <Info className="w-4 h-4 text-blue-500 mt-0.5" />
           <div className="text-sm text-gray-700">
             <p className="font-medium mb-1">템플릿 사용 방법</p>
             <ul className="space-y-1 text-xs">

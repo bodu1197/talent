@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import { createClient } from '@/lib/supabase/client';
-import { FaArrowLeft, FaCheckCircle, FaCheck } from 'react-icons/fa';
+import { ArrowLeft, CheckCircle, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
 
@@ -134,7 +134,7 @@ export default function AdvertisingChargePage() {
               onClick={() => router.back()}
               className="text-gray-600 hover:text-gray-900 mb-4"
             >
-              <FaArrowLeft className="inline mr-2" />
+              <ArrowLeft className="w-4 h-4 inline mr-2" />
               뒤로 가기
             </button>
             <h1 className="text-base md:text-lg font-bold text-gray-900">광고 크레딧 충전</h1>
@@ -177,7 +177,7 @@ export default function AdvertisingChargePage() {
                 </div>
                 {selectedPackage === pkg.amount && (
                   <div className="absolute top-4 right-4">
-                    <FaCheckCircle className="text-brand-primary text-xl" />
+                    <CheckCircle className="w-6 h-6 text-brand-primary" />
                   </div>
                 )}
               </button>
@@ -189,19 +189,19 @@ export default function AdvertisingChargePage() {
             <h3 className="font-bold text-base md:text-lg mb-4">광고 서비스 안내</h3>
             <div className="space-y-3 text-xs md:text-sm text-gray-700">
               <div className="flex items-start gap-2">
-                <FaCheck className="text-green-600 mt-1" />
+                <Check className="w-4 h-4 text-green-600 mt-1" />
                 <span>월 100,000원 정액제 광고 구독</span>
               </div>
               <div className="flex items-start gap-2">
-                <FaCheck className="text-green-600 mt-1" />
+                <Check className="w-4 h-4 text-green-600 mt-1" />
                 <span>카테고리 1페이지 완전 랜덤 노출</span>
               </div>
               <div className="flex items-start gap-2">
-                <FaCheck className="text-green-600 mt-1" />
+                <Check className="w-4 h-4 text-green-600 mt-1" />
                 <span>무제한 노출 및 클릭</span>
               </div>
               <div className="flex items-start gap-2">
-                <FaCheck className="text-green-600 mt-1" />
+                <Check className="w-4 h-4 text-green-600 mt-1" />
                 <span>모든 광고 100% 공평한 기회</span>
               </div>
             </div>

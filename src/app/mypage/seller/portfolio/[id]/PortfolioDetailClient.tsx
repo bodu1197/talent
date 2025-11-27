@@ -6,14 +6,14 @@ import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import Link from 'next/link';
 import { logger } from '@/lib/logger';
 import {
-  FaArrowLeft,
-  FaEdit,
-  FaTrash,
-  FaEye,
-  FaCalendar,
-  FaYoutube,
-  FaExternalLinkAlt,
-} from 'react-icons/fa';
+  ArrowLeft,
+  Pencil,
+  Trash2,
+  Eye,
+  Calendar,
+  Youtube,
+  ExternalLink,
+} from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface Portfolio {
@@ -100,7 +100,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
                 href="/mypage/seller/portfolio"
                 className="text-gray-600 hover:text-brand-primary transition-colors"
               >
-                <FaArrowLeft className="inline mr-2" />
+                <ArrowLeft className="inline w-4 h-4 mr-2" />
                 포트폴리오 목록
               </Link>
               <div className="flex gap-2">
@@ -108,7 +108,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
                   href={`/mypage/seller/portfolio/${portfolio.id}/edit`}
                   className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
                 >
-                  <FaEdit className="inline mr-2" />
+                  <Pencil className="inline w-4 h-4 mr-2" />
                   수정
                 </Link>
                 <button
@@ -116,7 +116,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
                   disabled={deleting}
                   className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
-                  <FaTrash className="inline mr-2" />
+                  <Trash2 className="inline w-4 h-4 mr-2" />
                   {deleting ? '삭제 중...' : '삭제'}
                 </button>
               </div>
@@ -125,11 +125,11 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
             <h1 className="text-base md:text-lg font-bold text-gray-900">{portfolio.title}</h1>
             <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
               <span>
-                <FaEye className="inline mr-1" />
+                <Eye className="inline w-4 h-4 mr-1" />
                 {portfolio.view_count || 0} 조회
               </span>
               <span>
-                <FaCalendar className="inline mr-1" />
+                <Calendar className="inline w-4 h-4 mr-1" />
                 {new Date(portfolio.created_at).toLocaleDateString('ko-KR')}
               </span>
             </div>
@@ -180,7 +180,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
           {youtubeVideoId && (
             <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
               <h2 className="text-sm md:text-base font-bold text-gray-900 mb-4">
-                <FaYoutube className="inline text-red-600 mr-2" />
+                <Youtube className="inline w-4 h-4 text-red-600 mr-2" />
                 프로젝트 영상
               </h2>
               <div className="aspect-video bg-black rounded-lg overflow-hidden">
@@ -215,7 +215,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
                 rel="noopener noreferrer"
                 className="text-brand-primary hover:underline break-all"
               >
-                <FaExternalLinkAlt className="inline mr-2" />
+                <ExternalLink className="inline w-4 h-4 mr-2" />
                 {portfolio.project_url}
               </a>
             </div>

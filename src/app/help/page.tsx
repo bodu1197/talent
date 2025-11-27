@@ -1,13 +1,13 @@
 import Link from "next/link";
 import {
-  FaSearch,
-  FaQuestionCircle,
-  FaBullhorn,
-  FaComments,
-  FaPhone,
-  FaShoppingBag,
-  FaStore,
-} from "react-icons/fa";
+  Search,
+  CircleHelp,
+  Megaphone,
+  MessageSquare,
+  Phone,
+  ShoppingBag,
+  Store,
+} from "lucide-react";
 
 export default function HelpPage() {
   return (
@@ -32,7 +32,7 @@ export default function HelpPage() {
             aria-label="검색"
             className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-primary"
           >
-            <FaSearch className="text-xl" />
+            <Search className="w-5 h-5" />
           </button>
         </div>
       </div>
@@ -44,7 +44,7 @@ export default function HelpPage() {
           className="bg-white rounded-lg border border-gray-200 p-8 text-center hover:border-brand-primary hover:shadow-lg transition-all group"
         >
           <div className="w-16 h-16 bg-brand-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-opacity-20 transition-colors">
-            <FaQuestionCircle className="text-brand-primary text-3xl" />
+            <CircleHelp className="w-8 h-8 text-brand-primary" />
           </div>
           <h3 className="font-bold text-lg mb-2">자주 묻는 질문</h3>
           <p className="text-sm text-gray-600">FAQ를 확인해보세요</p>
@@ -55,7 +55,7 @@ export default function HelpPage() {
           className="bg-white rounded-lg border border-gray-200 p-8 text-center hover:border-brand-primary hover:shadow-lg transition-all group"
         >
           <div className="w-16 h-16 bg-brand-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-opacity-20 transition-colors">
-            <FaBullhorn className="text-brand-primary text-3xl" />
+            <Megaphone className="w-8 h-8 text-brand-primary" />
           </div>
           <h3 className="font-bold text-lg mb-2">공지사항</h3>
           <p className="text-sm text-gray-600">최신 소식을 확인하세요</p>
@@ -66,7 +66,7 @@ export default function HelpPage() {
           className="bg-white rounded-lg border border-gray-200 p-8 text-center hover:border-brand-primary hover:shadow-lg transition-all group"
         >
           <div className="w-16 h-16 bg-brand-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-opacity-20 transition-colors">
-            <FaComments className="text-brand-primary text-3xl" />
+            <MessageSquare className="w-8 h-8 text-brand-primary" />
           </div>
           <h3 className="font-bold text-lg mb-2">1:1 문의</h3>
           <p className="text-sm text-gray-600">직접 문의하기</p>
@@ -74,7 +74,7 @@ export default function HelpPage() {
 
         <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
           <div className="w-16 h-16 bg-brand-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <FaPhone className="text-brand-primary text-3xl" />
+            <Phone className="w-8 h-8 text-brand-primary" />
           </div>
           <h3 className="font-bold text-lg mb-2">전화 상담</h3>
           <p className="text-sm text-gray-600 mb-2">1234-5678</p>
@@ -88,7 +88,7 @@ export default function HelpPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h3 className="font-bold mb-4 flex items-center gap-2">
-              <FaShoppingBag className="text-brand-primary" />
+              <ShoppingBag className="w-5 h-5 text-brand-primary" />
               구매자 가이드
             </h3>
             <ul className="space-y-2 text-sm text-gray-600">
@@ -115,7 +115,7 @@ export default function HelpPage() {
 
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h3 className="font-bold mb-4 flex items-center gap-2">
-              <FaStore className="text-brand-primary" />
+              <Store className="w-5 h-5 text-brand-primary" />
               판매자 가이드
             </h3>
             <ul className="space-y-2 text-sm text-gray-600">

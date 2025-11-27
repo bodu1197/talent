@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ServiceCard from '@/components/services/ServiceCard';
 import { Service } from '@/types';
-import { FaInbox } from 'react-icons/fa';
+import { Inbox } from 'lucide-react';
 
 interface ServiceGridProps {
   readonly initialServices: Service[];
@@ -70,7 +70,7 @@ export default function ServiceGrid({ initialServices, categoryId, page }: Servi
   if (services.length === 0) {
     return (
       <div className="col-span-full text-center py-12">
-        <FaInbox className="text-4xl text-gray-300 mb-4 mx-auto" />
+        <Inbox className="w-10 h-10 text-gray-300 mb-4 mx-auto" />
         <p className="text-gray-500">해당 조건의 서비스가 없습니다.</p>
       </div>
     );

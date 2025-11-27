@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import Image from 'next/image';
-import { FaTimes, FaExternalLinkAlt } from 'react-icons/fa';
+import { X, ExternalLink } from 'lucide-react';
 
 interface Portfolio {
   id: string;
@@ -75,7 +75,7 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
           className="absolute top-4 right-4 z-10 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-colors"
           aria-label="포트폴리오 닫기"
         >
-          <FaTimes className="text-gray-700" aria-hidden="true" />
+          <X className="w-5 h-5 text-gray-700" aria-hidden="true" />
         </button>
 
         {/* YouTube 영상 또는 썸네일 */}
@@ -157,7 +157,7 @@ export default function PortfolioModal({ portfolio, onClose }: Props) {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-brand-primary font-medium"
               >
-                <FaExternalLinkAlt />
+                <ExternalLink className="w-4 h-4" />
                 <span>프로젝트 보기</span>
               </a>
             </div>

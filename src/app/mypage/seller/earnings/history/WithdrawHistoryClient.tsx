@@ -2,7 +2,7 @@
 
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import { WithdrawalRequest } from '@/types/common';
-import { FaMoneyBillWave } from 'react-icons/fa';
+import { Banknote } from 'lucide-react';
 
 interface WithdrawHistoryClientProps {
   readonly history: WithdrawalRequest[];
@@ -96,7 +96,7 @@ export default function WithdrawHistoryClient({ history }: WithdrawHistoryClient
               ) : (
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
-                    <FaMoneyBillWave className="text-4xl mb-4 text-gray-300 mx-auto" />
+                    <Banknote className="w-10 h-10 mb-4 text-gray-300 mx-auto" />
                     <p>출금 내역이 없습니다</p>
                   </td>
                 </tr>

@@ -3,12 +3,63 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { CategoryItem } from '@/lib/categories';
-import { FaRobot, FaChevronRight, FaFire } from 'react-icons/fa';
-import * as FaIcons from 'react-icons/fa';
+import {
+  Bot,
+  ChevronRight,
+  Flame,
+  Palette,
+  Scissors,
+  Code,
+  Megaphone,
+  Camera,
+  Languages,
+  PenTool,
+  Briefcase,
+  BookOpen,
+  Music,
+  Calendar,
+  Sparkles,
+  Target,
+  Star,
+  Library,
+  Gavel,
+  Hammer,
+  GraduationCap,
+  TrendingUp,
+  Home,
+  Bike,
+  Circle,
+} from 'lucide-react';
 
 interface MegaMenuProps {
   readonly categories: CategoryItem[];
 }
+
+// 아이콘 매핑 테이블 (O(1) 접근)
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+  robot: Bot,
+  palette: Palette,
+  scissors: Scissors,
+  code: Code,
+  bullhorn: Megaphone,
+  camera: Camera,
+  language: Languages,
+  'pen-fancy': PenTool,
+  briefcase: Briefcase,
+  book: BookOpen,
+  music: Music,
+  calendar: Calendar,
+  spa: Sparkles,
+  bullseye: Target,
+  star: Star,
+  'book-open': Library,
+  gavel: Gavel,
+  hammer: Hammer,
+  'graduation-cap': GraduationCap,
+  'chart-line': TrendingUp,
+  home: Home,
+  motorcycle: Bike,
+};
 
 export default function MegaMenu({ categories }: MegaMenuProps) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -20,22 +71,8 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
   const renderIcon = (iconName?: string) => {
     if (!iconName) return null;
 
-    // fa- 접두사 제거 및 PascalCase 변환
-    const iconKey =
-      'Fa' +
-      iconName
-        .split('-')
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join('');
-
-    const IconComponent = (
-      FaIcons as Record<string, React.ComponentType<{ className?: string; 'aria-hidden'?: string }>>
-    )[iconKey];
-
-    if (IconComponent) {
-      return <IconComponent className="text-lg" aria-hidden="true" />;
-    }
-    return null;
+    const IconComponent = ICON_MAP[iconName] || Circle;
+    return <IconComponent className="w-5 h-5" aria-hidden="true" />;
   };
 
   // 마우스 벗어날 때 지연 후 닫기
@@ -130,7 +167,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                   onClick={handleCategoryClick}
                   aria-label="AI 서비스 카테고리 보기"
                 >
-                  <FaRobot aria-hidden="true" /> AI 서비스
+                  <Bot className="w-4 h-4" aria-hidden="true" /> AI 서비스
                 </Link>
 
                 {/* IT/프로그래밍 (고정) */}
@@ -168,7 +205,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
               className="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg hover:shadow-lg transition-all font-medium text-sm mr-4"
               aria-label="AI Hub 페이지로 이동"
             >
-              <FaRobot aria-hidden="true" />
+              <Bot className="w-4 h-4" aria-hidden="true" />
               <span>AI Hub</span>
             </Link>
           </nav>
@@ -213,7 +250,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                             </span>
                           )}
                         </div>
-                        <FaChevronRight className="text-xs text-gray-400" aria-hidden="true" />
+                        <ChevronRight className="w-3 h-3 text-gray-400" aria-hidden="true" />
                       </Link>
                     </div>
                   ))}
@@ -263,7 +300,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                 {!activeCategory && (
                   <div>
                     <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                      <FaFire className="text-red-500" /> 인기 카테고리
+                      <Flame className="w-5 h-5 text-red-500" /> 인기 카테고리
                     </h3>
                     <div className="grid grid-cols-4 gap-4">
                       {categories

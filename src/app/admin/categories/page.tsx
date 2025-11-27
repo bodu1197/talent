@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import type { Category } from '@/types/common';
-import { FaPlus, FaFolder, FaEdit, FaTrash, FaFolderOpen } from 'react-icons/fa';
+import { Plus, Folder, Edit, Trash2, FolderOpen } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
 
@@ -153,7 +153,7 @@ export default function AdminCategoriesPage() {
           onClick={handleCreate}
           className="px-4 py-2 bg-[#0f3460] hover:bg-[#0f3460]/90 text-white rounded-md font-medium flex items-center gap-2 transition-colors"
         >
-          <FaPlus />새 카테고리
+          <Plus className="w-4 h-4" />새 카테고리
         </button>
       </div>
 
@@ -175,7 +175,7 @@ export default function AdminCategoriesPage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="rounded-lg bg-white p-2 border border-slate-200">
-                        <FaFolder className="text-[#0f3460] text-lg" />
+                        <Folder className="text-[#0f3460] w-5 h-5" />
                       </div>
                       <div>
                         <h3 className="text-lg font-bold text-slate-900">{parent.name}</h3>
@@ -192,13 +192,13 @@ export default function AdminCategoriesPage() {
                         onClick={() => handleEdit(parent)}
                         className="px-3 py-2 border border-slate-200 rounded-md hover:bg-slate-50 transition-colors"
                       >
-                        <FaEdit className="text-slate-700" />
+                        <Edit className="text-slate-700 w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDelete(parent)}
                         className="px-3 py-2 border border-slate-200 rounded-md hover:bg-red-50 text-red-600 hover:text-red-700 transition-colors"
                       >
-                        <FaTrash />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
@@ -214,7 +214,7 @@ export default function AdminCategoriesPage() {
                         >
                           <div className="flex items-center gap-3">
                             <div className="rounded-lg bg-slate-50 p-2">
-                              <FaFolderOpen className="text-slate-600" />
+                              <FolderOpen className="text-slate-600 w-4 h-4" />
                             </div>
                             <div>
                               <p className="font-medium text-slate-900">{child.name}</p>
@@ -231,13 +231,13 @@ export default function AdminCategoriesPage() {
                               onClick={() => handleEdit(child)}
                               className="px-3 py-2 border border-slate-200 rounded-md hover:bg-slate-50 transition-colors"
                             >
-                              <FaEdit className="text-slate-700" />
+                              <Edit className="text-slate-700 w-4 h-4" />
                             </button>
                             <button
                               onClick={() => handleDelete(child)}
                               className="px-3 py-2 border border-slate-200 rounded-md hover:bg-red-50 text-red-600 hover:text-red-700 transition-colors"
                             >
-                              <FaTrash />
+                              <Trash2 className="w-4 h-4" />
                             </button>
                           </div>
                         </div>
@@ -251,7 +251,7 @@ export default function AdminCategoriesPage() {
 
           {parentCategories.length === 0 && (
             <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
-              <FaFolder className="text-slate-400 text-5xl mb-4 mx-auto" />
+              <Folder className="text-slate-400 w-12 h-12 mb-4 mx-auto" />
               <p className="text-slate-600">등록된 카테고리가 없습니다.</p>
               <p className="text-sm text-slate-500 mt-2">
                 새 카테고리 버튼을 눌러 카테고리를 추가하세요.

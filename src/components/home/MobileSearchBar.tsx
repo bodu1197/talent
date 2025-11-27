@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { FaSearch } from 'react-icons/fa';
+import { Search } from 'lucide-react';
 
 export default function MobileSearchBar() {
   const router = useRouter();
@@ -43,7 +43,7 @@ export default function MobileSearchBar() {
           }}
           aria-label="검색"
         >
-          <FaSearch className="text-base" />
+          <Search className="w-4 h-4" />
         </button>
       </form>
     </div>

@@ -7,18 +7,18 @@ import { logger } from '@/lib/logger';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import Link from 'next/link';
 import {
-  FaStore,
-  FaChartLine,
-  FaUsers,
-  FaCertificate,
-  FaRocket,
-  FaShoppingCart,
-  FaSpinner,
-  FaCheckCircle,
-  FaWonSign,
-  FaImage,
-  FaArrowRight,
-} from 'react-icons/fa';
+  Store,
+  TrendingUp,
+  Users,
+  Award,
+  Rocket,
+  ShoppingCart,
+  Loader2,
+  CheckCircle,
+  DollarSign,
+  ImageIcon,
+  ArrowRight,
+} from 'lucide-react';
 
 type Stats = {
   newOrders: number;
@@ -103,7 +103,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
             <div className="bg-white rounded-lg shadow-lg p-8 text-center">
               <div className="mb-6">
                 <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-full mb-4">
-                  <FaStore className="text-4xl text-brand-primary" />
+                  <Store className="w-10 h-10 text-brand-primary" />
                 </div>
                 <h1 className="text-2xl font-bold text-gray-900 mb-2">
                   판매자로 등록하고 서비스를 판매하세요
@@ -116,17 +116,17 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
               {/* 혜택 리스트 */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 <div className="bg-gray-50 rounded-lg p-4">
-                  <FaChartLine className="text-2xl text-green-500 mb-2" />
+                  <TrendingUp className="w-7 h-7 text-green-500 mb-2" />
                   <h3 className="font-semibold text-gray-900 mb-1">수익 창출</h3>
                   <p className="text-sm text-gray-600">전문 서비스로 안정적인 수입</p>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-4">
-                  <FaUsers className="text-2xl text-blue-500 mb-2" />
+                  <Users className="w-7 h-7 text-blue-500 mb-2" />
                   <h3 className="font-semibold text-gray-900 mb-1">고객 관리</h3>
                   <p className="text-sm text-gray-600">체계적인 주문 및 고객 관리</p>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-4">
-                  <FaCertificate className="text-2xl text-purple-500 mb-2" />
+                  <Award className="w-7 h-7 text-purple-500 mb-2" />
                   <h3 className="font-semibold text-gray-900 mb-1">신뢰도 향상</h3>
                   <p className="text-sm text-gray-600">리뷰와 평점으로 브랜드 구축</p>
                 </div>
@@ -137,7 +137,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
                 href="/mypage/seller/register"
                 className="inline-flex items-center px-8 py-4 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-lg font-semibold shadow-md hover:shadow-lg"
               >
-                <FaRocket className="inline mr-3" />
+                <Rocket className="inline mr-3 w-5 h-5" />
                 판매자 등록하기
               </Link>
 
@@ -172,7 +172,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
                 <p className="text-xs text-gray-600">신규 주문</p>
                 <p className="text-lg font-bold text-gray-900">{stats?.newOrders || 0}건</p>
               </div>
-              <FaShoppingCart className="text-2xl text-blue-500" />
+              <ShoppingCart className="w-7 h-7 text-blue-500" />
             </div>
           </div>
           <div className="bg-white rounded-lg shadow p-4">
@@ -181,7 +181,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
                 <p className="text-xs text-gray-600">진행중</p>
                 <p className="text-lg font-bold text-gray-900">{stats?.inProgressOrders || 0}건</p>
               </div>
-              <FaSpinner className="text-2xl text-yellow-500" />
+              <Loader2 className="w-7 h-7 text-yellow-500 animate-spin" />
             </div>
           </div>
           <div className="bg-white rounded-lg shadow p-4">
@@ -190,7 +190,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
                 <p className="text-xs text-gray-600">완료된 주문</p>
                 <p className="text-lg font-bold text-gray-900">{stats?.completedOrders || 0}건</p>
               </div>
-              <FaCheckCircle className="text-2xl text-green-500" />
+              <CheckCircle className="w-7 h-7 text-green-500" />
             </div>
           </div>
           <div className="bg-white rounded-lg shadow p-4">
@@ -201,7 +201,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
                   {(stats?.monthlyRevenue || 0).toLocaleString()}원
                 </p>
               </div>
-              <FaWonSign className="text-2xl text-purple-500" />
+              <DollarSign className="w-7 h-7 text-purple-500" />
             </div>
           </div>
         </div>
@@ -214,7 +214,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
               href="/mypage/seller/orders"
               className="text-xs md:text-sm text-brand-primary hover:underline flex items-center gap-1"
             >
-              전체 보기 <FaArrowRight className="text-xs" />
+              전체 보기 <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
           <div className="p-6">
@@ -235,7 +235,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <FaImage className="text-gray-400 text-xl" />
+                          <ImageIcon className="text-gray-400 w-6 h-6" />
                         )}
                       </div>
 

@@ -5,19 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import { startAdvertisingSubscription } from '@/lib/advertising';
 import type { AdvertisingDashboard } from '@/types/advertising';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
-import {
-  FaGift,
-  FaCheckCircle,
-  FaEye,
-  FaMousePointer,
-  FaChartLine,
-  FaBullhorn,
-  FaList,
-  FaTag,
-  FaRocket,
-  FaPlus,
-  FaSync,
-} from 'react-icons/fa';
+import { Gift, CheckCircle, Eye, MousePointer, TrendingUp, Megaphone, List, Tag, Rocket, Plus, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
 import { logger } from '@/lib/logger';
@@ -268,12 +256,12 @@ export default function AdvertisingPage() {
             <div className="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6 shadow-sm">
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0 w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                  <FaGift className="text-white text-xl" />
+                  <Gift className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
                   <h3 className="text-base md:text-lg font-bold text-blue-900 mb-2 flex items-center gap-2">
                     무료 광고 프로모션 진행 중입니다!
-                    <FaGift className="text-blue-500" />
+                    <Gift className="w-5 h-5 text-blue-500" />
                   </h3>
                   <p className="text-sm md:text-base text-blue-700 mb-3">
                     현재 {services.filter((s) => s.adDetails?.isFreePromotion).length}
@@ -294,7 +282,7 @@ export default function AdvertisingPage() {
                             key={service.id}
                             className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm border border-blue-200"
                           >
-                            <FaCheckCircle className="text-green-500" />
+                            <CheckCircle className="w-4 h-4 text-green-500" />
                             <span className="font-medium text-gray-900">{service.title}</span>
                             <span className="text-sm text-blue-600 font-semibold">
                               ({daysLeft > 0 ? `${daysLeft}일 남음` : '종료'})
@@ -320,7 +308,7 @@ export default function AdvertisingPage() {
                   className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   title="통계 새로고침 (자동: 30초마다)"
                 >
-                  <FaSync className={`text-gray-600 ${refreshing ? 'animate-spin' : ''}`} />
+                  <RefreshCw className={`w-4 h-4 text-gray-600 ${refreshing ? 'animate-spin' : ''}`} />
                   {refreshing ? '업데이트 중...' : '새로고침'}
                 </button>
               </div>
@@ -335,7 +323,7 @@ export default function AdvertisingPage() {
                       </p>
                       <p className="text-xs text-gray-500 mt-1">이번 달 기준</p>
                     </div>
-                    <FaEye className="text-2xl text-blue-500" />
+                    <Eye className="w-7 h-7 text-blue-500" />
                   </div>
                 </div>
 
@@ -348,7 +336,7 @@ export default function AdvertisingPage() {
                       </p>
                       <p className="text-xs text-gray-500 mt-1">이번 달 기준</p>
                     </div>
-                    <FaMousePointer className="text-2xl text-green-500" />
+                    <MousePointer className="w-7 h-7 text-green-500" />
                   </div>
                 </div>
 
@@ -361,7 +349,7 @@ export default function AdvertisingPage() {
                       </p>
                       <p className="text-xs text-gray-500 mt-1">CTR (Click Through Rate)</p>
                     </div>
-                    <FaChartLine className="text-2xl text-purple-500" />
+                    <TrendingUp className="w-7 h-7 text-purple-500" />
                   </div>
                 </div>
               </div>
@@ -373,7 +361,7 @@ export default function AdvertisingPage() {
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
               <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                 <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                  <FaBullhorn className="text-green-600" />
+                  <Megaphone className="w-5 h-5 text-green-600" />
                 </div>
                 활성 광고
               </h2>
@@ -429,7 +417,7 @@ export default function AdvertisingPage() {
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
               <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                 <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <FaList className="text-blue-600" />
+                  <List className="w-5 h-5 text-blue-600" />
                 </div>
                 서비스 광고 관리
               </h2>
@@ -505,7 +493,7 @@ export default function AdvertisingPage() {
                                   {service.adDetails?.isFreePromotion &&
                                     service.adDetails?.promotionEndDate && (
                                       <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-1">
-                                        <FaGift className="mr-1 text-xs" />
+                                        <Gift className="w-3 h-3 mr-1" />
                                         무료 프로모션 (
                                         {(() => {
                                           const endDate = new Date(
@@ -742,7 +730,7 @@ export default function AdvertisingPage() {
 
                             <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                               <div className="flex items-center gap-2 mb-1">
-                                <FaGift className="text-brand-primary" />
+                                <Gift className="w-4 h-4 text-brand-primary" />
                                 <span className="text-brand-primary font-bold text-sm">
                                   첫 광고 50% 할인
                                 </span>
@@ -789,7 +777,7 @@ export default function AdvertisingPage() {
                           {discountRate > 0 && (
                             <div className="mb-4 p-3 bg-green-100 border border-green-300 rounded-lg">
                               <div className="flex items-center gap-2 text-green-800">
-                                <FaTag />
+                                <Tag className="w-4 h-4" />
                                 <span className="font-bold">{discountRate}% 할인 적용!</span>
                               </div>
                               <div className="text-sm text-green-700 mt-1">
@@ -804,19 +792,19 @@ export default function AdvertisingPage() {
 
                           <div className="grid grid-cols-2 gap-3 text-sm">
                             <div className="flex items-center gap-2">
-                              <FaCheckCircle className="text-green-600" />
+                              <CheckCircle className="w-4 h-4 text-green-600" />
                               <span>무제한 노출</span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <FaCheckCircle className="text-green-600" />
+                              <CheckCircle className="w-4 h-4 text-green-600" />
                               <span>무제한 클릭</span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <FaCheckCircle className="text-green-600" />
+                              <CheckCircle className="w-4 h-4 text-green-600" />
                               <span>실시간 통계</span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <FaCheckCircle className="text-green-600" />
+                              <CheckCircle className="w-4 h-4 text-green-600" />
                               <span>공정한 랜덤 노출</span>
                             </div>
                           </div>
@@ -896,7 +884,7 @@ export default function AdvertisingPage() {
                                 </span>
                               ) : (
                                 <>
-                                  <FaRocket className="inline mr-2" />
+                                  <Rocket className="w-5 h-5 inline mr-2" />
                                   광고 시작하기
                                 </>
                               )}
@@ -915,14 +903,14 @@ export default function AdvertisingPage() {
           {services.length === 0 &&
             (!dashboard?.subscriptions || dashboard.subscriptions.length === 0) && (
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
-                <FaBullhorn className="text-gray-300 text-6xl mb-4 mx-auto" />
+                <Megaphone className="w-16 h-16 text-gray-300 mb-4 mx-auto" />
                 <h3 className="text-xl font-bold text-gray-900 mb-2">광고할 서비스가 없습니다</h3>
                 <p className="text-gray-600 mb-6">먼저 서비스를 등록해주세요</p>
                 <a
                   href="/mypage/seller/services/new"
                   className="inline-flex items-center px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
                 >
-                  <FaPlus className="inline mr-2" />
+                  <Plus className="w-4 h-4 inline mr-2" />
                   서비스 등록하기
                 </a>
               </div>

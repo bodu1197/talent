@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import ServiceCard from '@/components/services/ServiceCard';
 import { getPersonalizedServicesByInterest } from '@/lib/supabase/queries/personalized-services';
-import { FaHeart, FaChevronRight } from 'react-icons/fa';
+import { Heart, ChevronRight } from 'lucide-react';
 
 export default async function PersonalizedServices() {
   // 회원의 관심 카테고리 기반 서비스 조회
@@ -15,7 +15,7 @@ export default async function PersonalizedServices() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <div className="flex items-center gap-2">
-                <FaHeart className="text-brand-primary" />
+                <Heart className="w-5 h-5 text-brand-primary fill-current" />
                 <h2 className="text-2xl font-bold text-gray-900">회원님의 관심 카테고리</h2>
               </div>
               <p className="text-sm text-gray-600 mt-1">방문한 카테고리에 서비스가 없습니다</p>
@@ -37,7 +37,7 @@ export default async function PersonalizedServices() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <div className="flex items-center gap-2">
-              <FaHeart className="text-brand-primary" />
+              <Heart className="w-5 h-5 text-brand-primary fill-current" />
               <h2 className="text-2xl font-bold text-gray-900">회원님의 관심 카테고리</h2>
             </div>
             <p className="text-sm text-gray-600 mt-1">
@@ -65,7 +65,7 @@ export default async function PersonalizedServices() {
                   className="text-sm text-brand-primary hover:underline flex items-center gap-1"
                 >
                   더보기
-                  <FaChevronRight className="text-xs" />
+                  <ChevronRight className="w-3 h-3" />
                 </Link>
               </div>
 

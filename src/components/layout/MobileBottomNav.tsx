@@ -5,12 +5,12 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useChatUnreadCount } from '@/components/providers/ChatUnreadProvider';
 import {
-  FaHome,
-  FaSearch,
-  FaHeart,
-  FaUser,
-  FaRegComments,
-} from 'react-icons/fa';
+  Home,
+  Search,
+  Heart,
+  User,
+  MessageCircle,
+} from 'lucide-react';
 
 export default function MobileBottomNav() {
   const pathname = usePathname();
@@ -33,7 +33,7 @@ export default function MobileBottomNav() {
             aria-label="홈으로 이동"
             aria-current={isActive('/') ? 'page' : undefined}
           >
-            <FaHome className="text-xl" aria-hidden="true" />
+            <Home className="w-5 h-5" aria-hidden="true" />
             <span className="text-xs font-medium">홈</span>
           </Link>
 
@@ -46,7 +46,7 @@ export default function MobileBottomNav() {
             aria-label="검색 페이지로 이동"
             aria-current={pathname === '/search' ? 'page' : undefined}
           >
-            <FaSearch className="text-xl" aria-hidden="true" />
+            <Search className="w-5 h-5" aria-hidden="true" />
             <span className="text-xs font-medium">검색</span>
           </Link>
 
@@ -59,7 +59,7 @@ export default function MobileBottomNav() {
             aria-label="찜목록 보기"
             aria-current={pathname === '/mypage/buyer/favorites' ? 'page' : undefined}
           >
-            <FaHeart className="text-xl" aria-hidden="true" />
+            <Heart className="w-5 h-5" aria-hidden="true" />
             <span className="text-xs font-medium">찜목록</span>
           </Link>
 
@@ -73,7 +73,7 @@ export default function MobileBottomNav() {
             aria-current={pathname.startsWith('/chat') ? 'page' : undefined}
           >
             <div className="relative">
-              <FaRegComments className="text-xl" aria-hidden="true" />
+              <MessageCircle className="w-5 h-5" aria-hidden="true" />
               {unreadCount > 0 && (
                 <span
                   className="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center"
@@ -95,7 +95,7 @@ export default function MobileBottomNav() {
             aria-label={user ? '마이페이지로 이동' : '로그인 페이지로 이동'}
             aria-current={pathname.startsWith('/mypage') ? 'page' : undefined}
           >
-            <FaUser className="text-xl" aria-hidden="true" />
+            <User className="w-5 h-5" aria-hidden="true" />
             <span className="text-xs font-medium">{user ? '마이페이지' : '로그인'}</span>
           </Link>
         </div>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getRecentVisitedCategoriesServer } from "@/lib/supabase/queries/category-visits";
-import { FaHistory } from "react-icons/fa";
+import { History } from "lucide-react";
 
 export default async function RecentVisitedCategories() {
   // 최근 방문한 카테고리 조회 (서버에서 직접)
@@ -15,7 +15,7 @@ export default async function RecentVisitedCategories() {
     <section className="py-6 bg-gray-50 border-b border-gray-200">
       <div className="container-1200">
         <div className="flex items-center gap-3 mb-4">
-          <FaHistory className="text-brand-primary" />
+          <History className="w-5 h-5 text-brand-primary" />
           <h2 className="text-lg font-bold text-gray-900">
             최근 방문한 카테고리
           </h2>

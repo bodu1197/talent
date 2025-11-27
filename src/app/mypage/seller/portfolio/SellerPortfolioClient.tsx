@@ -6,7 +6,7 @@ import { logger } from '@/lib/logger';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Portfolio } from '@/types/common';
-import { FaPlus, FaImage, FaLink, FaBriefcase, FaEye, FaFolderOpen } from 'react-icons/fa';
+import { Plus, ImageIcon, Link2, Briefcase, Eye, FolderOpen } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface PortfolioWithService extends Portfolio {
@@ -61,7 +61,7 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
               href="/mypage/seller/portfolio/new"
               className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
             >
-              <FaPlus className="inline mr-2" />
+              <Plus className="inline w-4 h-4 mr-2" />
               포트폴리오 등록
             </Link>
           </div>
@@ -83,11 +83,11 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <FaImage className="text-gray-400 text-4xl" />
+                      <ImageIcon className="text-gray-400 w-10 h-10" />
                     )}
                     {item.service && (
                       <div className="absolute top-2 right-2 bg-brand-primary text-white text-xs px-2 py-1 rounded-md flex items-center gap-1">
-                        <FaLink />
+                        <Link2 className="w-3 h-3" />
                         <span>서비스 연동</span>
                       </div>
                     )}
@@ -101,7 +101,7 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
                   {item.service && (
                     <div className="mb-3 p-2 bg-blue-50 border border-blue-200 rounded-lg">
                       <div className="flex items-center gap-2">
-                        <FaBriefcase className="text-brand-primary text-sm" />
+                        <Briefcase className="text-brand-primary w-4 h-4" />
                         <div className="flex-1 min-w-0">
                           <p className="text-xs text-gray-600">연동된 서비스</p>
                           <Link
@@ -117,7 +117,7 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
                   )}
                   <div className="flex items-center justify-between text-sm text-gray-600">
                     <span>
-                      <FaEye className="inline mr-1" />
+                      <Eye className="inline w-4 h-4 mr-1" />
                       {item.view_count || 0}
                     </span>
                     <span>{new Date(item.created_at).toLocaleDateString('ko-KR')}</span>
@@ -142,13 +142,13 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
             ))
           ) : (
             <div className="col-span-full bg-white border border-gray-200 rounded-lg p-12 text-center">
-              <FaFolderOpen className="text-gray-300 text-6xl mb-4 mx-auto" />
+              <FolderOpen className="text-gray-300 w-16 h-16 mb-4 mx-auto" />
               <p className="text-gray-500 mb-4">등록된 포트폴리오가 없습니다</p>
               <Link
                 href="/mypage/seller/portfolio/new"
                 className="inline-flex items-center px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
               >
-                <FaPlus className="inline mr-2" />
+                <Plus className="inline w-4 h-4 mr-2" />
                 포트폴리오 등록
               </Link>
             </div>

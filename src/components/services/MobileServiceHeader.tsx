@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { FaArrowLeft, FaPhone, FaShareAlt } from 'react-icons/fa';
+import { ArrowLeft, Phone, Share2 } from 'lucide-react';
 
 interface MobileServiceHeaderProps {
   serviceId: string;
@@ -60,7 +60,7 @@ export default function MobileServiceHeader({
         className="w-10 h-10 flex items-center justify-center bg-black/40 rounded-full text-white hover:bg-black/60 transition-colors"
         aria-label="뒤로가기"
       >
-        <FaArrowLeft className="text-lg" />
+        <ArrowLeft className="w-5 h-5" />
       </button>
 
       {/* 오른쪽 버튼들 */}
@@ -72,7 +72,7 @@ export default function MobileServiceHeader({
           className="w-10 h-10 flex items-center justify-center bg-black/40 rounded-full text-white hover:bg-black/60 transition-colors"
           aria-label="전화하기"
         >
-          <FaPhone className="text-lg" />
+          <Phone className="w-5 h-5" />
         </button>
 
         {/* 공유 버튼 */}
@@ -82,7 +82,7 @@ export default function MobileServiceHeader({
           className="w-10 h-10 flex items-center justify-center bg-black/40 rounded-full text-white hover:bg-black/60 transition-colors"
           aria-label="공유하기"
         >
-          <FaShareAlt className="text-lg" />
+          <Share2 className="w-5 h-5" />
         </button>
       </div>
     </div>

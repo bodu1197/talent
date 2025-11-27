@@ -2,23 +2,21 @@
 
 import Link from "next/link";
 import {
-  FaMoneyBillWave,
-  FaChartLine,
-  FaSadTear,
-  FaFrown,
-  FaStar,
-  FaTimesCircle,
-  FaTired,
-  FaSadCry,
-  FaCheckCircle,
-  FaSmile,
-  FaMoneyBillAlt,
-  FaGrinStars,
-  FaBolt,
-  FaBullhorn,
-  FaClock,
-  FaLightbulb,
-} from "react-icons/fa";
+  Banknote,
+  TrendingUp,
+  Frown,
+  Star,
+  XCircle,
+  Meh,
+  CheckCircle,
+  Smile,
+  CircleDollarSign,
+  Sparkles,
+  Zap,
+  Megaphone,
+  Clock,
+  Lightbulb,
+} from "lucide-react";
 
 export default function ExpertRegisterPage() {
   return (
@@ -62,7 +60,7 @@ export default function ExpertRegisterPage() {
           <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             <div className="bg-white border-2 border-gray-200 p-6 rounded-lg">
               <div className="text-brand-primary font-bold text-lg mb-3 flex items-center gap-2">
-                <FaMoneyBillWave /> 수수료 스트레스
+                <Banknote className="w-5 h-5" /> 수수료 스트레스
               </div>
               <div className="space-y-2 text-gray-700 text-sm">
                 <p>• "20% 수수료를 내고 나면 남는게 별로 없어요..."</p>
@@ -73,7 +71,7 @@ export default function ExpertRegisterPage() {
 
             <div className="bg-white border-2 border-gray-200 p-6 rounded-lg">
               <div className="text-brand-primary font-bold text-lg mb-3 flex items-center gap-2">
-                <FaChartLine /> 가격 부담의 악순환
+                <TrendingUp className="w-5 h-5" /> 가격 부담의 악순환
               </div>
               <div className="space-y-2 text-gray-700 text-sm">
                 <p>• "수수료 때문에 가격을 올려야 하는데..."</p>
@@ -84,7 +82,7 @@ export default function ExpertRegisterPage() {
 
             <div className="bg-white border-2 border-gray-200 p-6 rounded-lg">
               <div className="text-brand-primary font-bold text-lg mb-3 flex items-center gap-2">
-                <FaSadTear /> 억울한 손실
+                <Frown className="w-5 h-5" /> 억울한 손실
               </div>
               <div className="space-y-2 text-gray-700 text-sm">
                 <p>• "내가 번 돈인데 왜 이렇게 많이 떼가죠?"</p>
@@ -95,7 +93,7 @@ export default function ExpertRegisterPage() {
 
             <div className="bg-white border-2 border-gray-200 p-6 rounded-lg">
               <div className="text-brand-primary font-bold text-lg mb-3 flex items-center gap-2">
-                <FaFrown /> 가격 경쟁력 상실
+                <Meh className="w-5 h-5" /> 가격 경쟁력 상실
               </div>
               <div className="space-y-2 text-gray-700 text-sm">
                 <p>• "수수료 포함하면 고객한테 너무 비싸요"</p>
@@ -107,7 +105,7 @@ export default function ExpertRegisterPage() {
 
           <div className="bg-brand-primary text-white p-8 rounded-lg mt-8 max-w-5xl mx-auto text-center">
             <div className="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
-              <FaStar /> 해결책은 간단합니다
+              <Star className="w-6 h-6" /> 해결책은 간단합니다
             </div>
             <div className="text-xl mb-6">수수료 0원 플랫폼으로 옮기세요!</div>
             <div className="grid md:grid-cols-3 gap-4 mt-6">
@@ -147,40 +145,40 @@ export default function ExpertRegisterPage() {
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <div className="bg-gray-100 p-8 rounded-lg">
               <div className="text-gray-500 font-bold text-sm mb-4 flex items-center gap-2">
-                <FaTimesCircle /> 타 플랫폼 (수수료 20%)
+                <XCircle className="w-4 h-4" /> 타 플랫폼 (수수료 20%)
               </div>
               <div className="space-y-3 text-gray-700">
                 <p className="flex items-center gap-2">
-                  <FaTired /> 수수료 때문에 가격을 높게 책정
+                  <Meh className="w-4 h-4" /> 수수료 때문에 가격을 높게 책정
                 </p>
                 <p className="flex items-center gap-2">
-                  <FaChartLine /> 높은 가격 → 주문 감소
+                  <TrendingUp className="w-4 h-4" /> 높은 가격 → 주문 감소
                 </p>
                 <p className="flex items-center gap-2">
-                  <FaMoneyBillWave /> 적은 주문 + 수수료 차감 = 낮은 수익
+                  <Banknote className="w-4 h-4" /> 적은 주문 + 수수료 차감 = 낮은 수익
                 </p>
                 <p className="flex items-center gap-2">
-                  <FaSadCry /> 스트레스만 쌓이고 포기하고 싶음
+                  <Frown className="w-4 h-4" /> 스트레스만 쌓이고 포기하고 싶음
                 </p>
               </div>
             </div>
 
             <div className="bg-brand-primary text-white p-8 rounded-lg">
               <div className="text-yellow-400 font-bold text-sm mb-4 flex items-center gap-2">
-                <FaCheckCircle /> 우리 플랫폼 (수수료 0%)
+                <CheckCircle className="w-4 h-4" /> 우리 플랫폼 (수수료 0%)
               </div>
               <div className="space-y-3">
                 <p className="flex items-center gap-2">
-                  <FaSmile /> 수수료 걱정 없이 합리적 가격 책정
+                  <Smile className="w-4 h-4" /> 수수료 걱정 없이 합리적 가격 책정
                 </p>
                 <p className="flex items-center gap-2">
-                  <FaChartLine /> 경쟁력 있는 가격 → 주문 증가
+                  <TrendingUp className="w-4 h-4" /> 경쟁력 있는 가격 → 주문 증가
                 </p>
                 <p className="flex items-center gap-2">
-                  <FaMoneyBillAlt /> 많은 주문 × 수수료 0원 = 최고 수익
+                  <CircleDollarSign className="w-4 h-4" /> 많은 주문 × 수수료 0원 = 최고 수익
                 </p>
                 <p className="flex items-center gap-2">
-                  <FaGrinStars /> 더 많이 벌고 더 행복해짐!
+                  <Sparkles className="w-4 h-4" /> 더 많이 벌고 더 행복해짐!
                 </p>
               </div>
             </div>
@@ -202,8 +200,8 @@ export default function ExpertRegisterPage() {
 
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white text-2xl">
-                <FaMoneyBillAlt />
+              <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white">
+                <CircleDollarSign className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">
                 수수료 0원
@@ -217,8 +215,8 @@ export default function ExpertRegisterPage() {
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white text-2xl">
-                <FaBolt />
+              <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white">
+                <Zap className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">
                 빠른 정산
@@ -232,8 +230,8 @@ export default function ExpertRegisterPage() {
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white text-2xl">
-                <FaBullhorn />
+              <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white">
+                <Megaphone className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">
                 적극적 마케팅
@@ -247,8 +245,8 @@ export default function ExpertRegisterPage() {
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white text-2xl">
-                <FaChartLine />
+              <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white">
+                <TrendingUp className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">
                 성장 지원
@@ -262,8 +260,8 @@ export default function ExpertRegisterPage() {
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white text-2xl">
-                <FaClock />
+              <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white">
+                <Clock className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">
                 3분 만에 시작
@@ -277,8 +275,8 @@ export default function ExpertRegisterPage() {
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white text-2xl">
-                <FaCheckCircle />
+              <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white">
+                <CheckCircle className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">
                 안전한 거래
@@ -323,7 +321,7 @@ export default function ExpertRegisterPage() {
                 3배로 늘었고요."
               </p>
               <div className="bg-brand-primary/10 p-3 rounded text-sm text-brand-primary flex items-center gap-2">
-                <FaLightbulb /> 저렴한 가격으로 더 많이 벌어요
+                <Lightbulb className="w-4 h-4" /> 저렴한 가격으로 더 많이 벌어요
               </div>
             </div>
 
@@ -343,7 +341,7 @@ export default function ExpertRegisterPage() {
                 일하는게 즐거워졌습니다!"
               </p>
               <div className="bg-brand-primary/10 p-3 rounded text-sm text-brand-primary flex items-center gap-2">
-                <FaLightbulb /> 스트레스 없이 일에 집중해요
+                <Lightbulb className="w-4 h-4" /> 스트레스 없이 일에 집중해요
               </div>
             </div>
 
@@ -363,7 +361,7 @@ export default function ExpertRegisterPage() {
                 생겼고, 주문이 밀려들어요!"
               </p>
               <div className="bg-brand-primary/10 p-3 rounded text-sm text-brand-primary flex items-center gap-2">
-                <FaLightbulb /> 가격 경쟁력으로 시장 장악
+                <Lightbulb className="w-4 h-4" /> 가격 경쟁력으로 시장 장악
               </div>
             </div>
           </div>

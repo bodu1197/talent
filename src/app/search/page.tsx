@@ -3,7 +3,7 @@ import { searchAll } from "@/lib/supabase/queries/search";
 import SearchResults from "@/components/search/SearchResults";
 import MobileSearchContent from "@/components/search/MobileSearchContent";
 import { getTopLevelCategories } from "@/lib/categories";
-import { FaSearch } from "react-icons/fa";
+import { Search } from "lucide-react";
 
 interface SearchPageProps {
   readonly searchParams: Promise<{ q?: string }>;
@@ -26,7 +26,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         <div className="hidden lg:block min-h-screen bg-gray-50 py-12" style={{ marginTop: '2rem' }}>
           <div className="container-1200 px-4">
             <div className="text-center py-20">
-              <FaSearch className="text-6xl text-gray-300 mx-auto mb-4" />
+              <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <h1 className="text-2xl font-bold text-gray-900 mb-2">
                 검색어를 입력해주세요
               </h1>
@@ -51,7 +51,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       <div className="min-h-screen bg-gray-50 py-12" style={{ marginTop: '2rem' }}>
         <div className="container-1200 px-4">
           <div className="text-center py-20">
-            <FaSearch className="text-6xl text-gray-300 mx-auto mb-4" />
+            <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               검색 결과가 없습니다
             </h2>

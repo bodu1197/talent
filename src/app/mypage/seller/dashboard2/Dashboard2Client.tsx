@@ -1,7 +1,7 @@
 'use client';
 
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
-import { FaShoppingCart, FaSpinner, FaCheckCircle, FaWonSign } from 'react-icons/fa';
+import { ShoppingCart, Loader2, CheckCircle, CircleDollarSign } from 'lucide-react';
 
 type Stats = {
   newOrders: number;
@@ -47,7 +47,7 @@ export default function Dashboard2Client({ stats, recentOrders }: Props) {
                 <p className="text-xs text-gray-600">신규 주문</p>
                 <p className="text-lg font-bold text-gray-900">{stats.newOrders}건</p>
               </div>
-              <FaShoppingCart className="text-2xl text-blue-500" />
+              <ShoppingCart className="w-7 h-7 text-blue-500" />
             </div>
           </div>
           <div className="bg-white rounded-lg shadow p-4">
@@ -56,7 +56,7 @@ export default function Dashboard2Client({ stats, recentOrders }: Props) {
                 <p className="text-xs text-gray-600">진행중</p>
                 <p className="text-lg font-bold text-gray-900">{stats.inProgressOrders}건</p>
               </div>
-              <FaSpinner className="text-2xl text-yellow-500" />
+              <Loader2 className="w-7 h-7 text-yellow-500" />
             </div>
           </div>
           <div className="bg-white rounded-lg shadow p-4">
@@ -65,7 +65,7 @@ export default function Dashboard2Client({ stats, recentOrders }: Props) {
                 <p className="text-xs text-gray-600">완료된 주문</p>
                 <p className="text-lg font-bold text-gray-900">{stats.deliveredOrders}건</p>
               </div>
-              <FaCheckCircle className="text-2xl text-green-500" />
+              <CheckCircle className="w-7 h-7 text-green-500" />
             </div>
           </div>
           <div className="bg-white rounded-lg shadow p-4">
@@ -76,7 +76,7 @@ export default function Dashboard2Client({ stats, recentOrders }: Props) {
                   {stats.monthlyRevenue.toLocaleString()}원
                 </p>
               </div>
-              <FaWonSign className="text-2xl text-purple-500" />
+              <CircleDollarSign className="w-7 h-7 text-purple-500" />
             </div>
           </div>
         </div>

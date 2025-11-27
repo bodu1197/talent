@@ -16,16 +16,16 @@ import MobileServiceBottomBar from '@/components/services/MobileServiceBottomBar
 import { logger } from '@/lib/logger';
 import { getCategoryPath } from '@/lib/categories';
 import {
-  FaStar,
-  FaHeart,
-  FaUser,
-  FaCrown,
-  FaReply,
-  FaShieldAlt,
-  FaImage,
-  FaRegComment,
-  FaRegUser,
-} from 'react-icons/fa';
+  Star,
+  Heart,
+  User,
+  Crown,
+  Reply,
+  Shield,
+  Image as ImageIcon,
+  MessageCircle,
+  UserCircle,
+} from 'lucide-react';
 import ServiceCard from '@/components/services/ServiceCard';
 import {
   getSellerOtherServices,
@@ -321,7 +321,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-200 text-gray-400">
-            <FaImage className="text-[60px]" />
+            <ImageIcon className="w-16 h-16" />
           </div>
         )}
         {/* 모바일 헤더 오버레이 */}
@@ -372,13 +372,13 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                 <div className="flex items-center gap-2">
                   {/* 별점 5개 표시 */}
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <FaStar key={star} className="text-yellow-400" />
+                    <Star key={star} className="w-4 h-4 text-yellow-400 fill-current" />
                   ))}
                   <span className="font-bold ml-1">{averageRating}</span>
                   <span className="text-gray-500">({reviewCount})</span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-600">
-                  <FaHeart className="text-red-400" />
+                  <Heart className="w-4 h-4 text-red-400 fill-current" />
                   <span className="font-bold">{service.wishlist_count || 0}</span>
                 </div>
               </div>
@@ -399,7 +399,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-400">
-                        <FaUser className="text-xl" />
+                        <User className="w-6 h-6" />
                       </div>
                     )}
                   </div>
@@ -441,13 +441,13 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       href="/chat"
                       className="px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs whitespace-nowrap"
                     >
-                      <FaRegComment className="mr-1 inline" /> 문의
+                      <MessageCircle className="w-3 h-3 mr-1 inline" /> 문의
                     </Link>
                     <Link
                       href={`/experts/${service.seller.id}`}
                       className="px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-xs whitespace-nowrap"
                     >
-                      <FaRegUser className="mr-1 inline" /> 프로필
+                      <UserCircle className="w-3 h-3 mr-1 inline" /> 프로필
                     </Link>
                   </div>
                 </div>
@@ -503,7 +503,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                     />
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                      <FaImage className="text-[40px]" />
+                      <ImageIcon className="w-10 h-10" />
                     </div>
                   )}
                 </div>
@@ -529,7 +529,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-400">
-                  <FaUser className="text-lg" />
+                  <User className="w-5 h-5" />
                 </div>
               )}
             </div>
@@ -556,15 +556,15 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       <div className="lg:hidden bg-white px-4 py-3 border-b border-gray-100">
         <div className="flex items-center gap-1">
           {[1, 2, 3, 4, 5].map((star) => (
-            <FaStar
+            <Star
               key={star}
-              className={`text-lg ${star <= Math.round(Number(averageRating)) ? 'text-yellow-400' : 'text-gray-300'}`}
+              className={`w-5 h-5 ${star <= Math.round(Number(averageRating)) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
             />
           ))}
           <span className="ml-2 font-bold text-gray-900">{averageRating}</span>
           <span className="text-gray-500">({reviewCount})</span>
           <div className="ml-4 flex items-center gap-1 text-gray-500">
-            <FaHeart className="text-red-400" />
+            <Heart className="w-4 h-4 text-red-400 fill-current" />
             <span>{service.wishlist_count || 0}</span>
           </div>
         </div>
@@ -649,7 +649,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                             {service.seller?.display_name || service.seller?.business_name}
                           </h3>
                           <span className="text-yellow-500">
-                            <FaCrown />
+                            <Crown className="w-4 h-4" />
                           </span>
                         </div>
                         <p className="text-xs lg:text-sm text-gray-600 mb-1">
@@ -762,17 +762,17 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-1">
                       {[1, 2, 3, 4, 5].map((star) => (
-                        <FaStar
+                        <Star
                           key={star}
-                          className={
+                          className={`w-4 h-4 ${
                             star <=
                             Math.round(
                               serviceReviews.reduce((sum, r) => sum + r.rating, 0) /
                                 serviceReviews.length
                             )
-                              ? 'text-yellow-400'
+                              ? 'text-yellow-400 fill-current'
                               : 'text-gray-300'
-                          }
+                          }`}
                         />
                       ))}
                     </div>
@@ -804,7 +804,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                                 loading="lazy"
                               />
                             ) : (
-                              <FaUser className="text-gray-400" />
+                              <User className="w-5 h-5 text-gray-400" />
                             )}
                           </div>
                           <div>
@@ -819,10 +819,10 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                         {/* 별점 */}
                         <div className="flex items-center gap-1">
                           {[1, 2, 3, 4, 5].map((star) => (
-                            <FaStar
+                            <Star
                               key={star}
-                              className={`text-sm ${
-                                star <= review.rating ? 'text-yellow-400' : 'text-gray-300'
+                              className={`w-4 h-4 ${
+                                star <= review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
                               }`}
                             />
                           ))}
@@ -836,7 +836,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       {review.seller_reply && (
                         <div className="bg-gray-50 rounded-lg p-4 ml-8">
                           <div className="flex items-center gap-2 mb-2">
-                            <FaReply className="text-brand-primary" />
+                            <Reply className="w-4 h-4 text-brand-primary" />
                             <span className="text-sm font-medium text-gray-900">판매자 답변</span>
                             <span className="text-xs text-gray-500">
                               {new Date(review.seller_reply_at).toLocaleDateString('ko-KR')}
@@ -850,7 +850,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <FaStar className="text-gray-300 text-5xl mb-4 inline-block" />
+                  <Star className="w-12 h-12 text-gray-300 mb-4 inline-block" />
                   <p className="text-gray-600">아직 작성된 리뷰가 없습니다</p>
                   <p className="text-sm text-gray-500 mt-2">첫 번째 리뷰를 작성해보세요!</p>
                 </div>
@@ -903,7 +903,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
               {/* 안전거래 배지 */}
               <div className="bg-blue-50 rounded-xl p-4 text-center">
-                <FaShieldAlt className="text-2xl text-brand-primary mb-2 inline-block" />
+                <Shield className="w-7 h-7 text-brand-primary mb-2 inline-block" />
                 <h4 className="font-bold mb-1">100% 안전거래</h4>
                 <p className="text-xs text-gray-600">
                   에스크로 결제 시스템으로

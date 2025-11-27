@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaImage, FaClock } from 'react-icons/fa';
+import { ImageIcon, Clock } from 'lucide-react';
 
 interface OrderCardProps {
   readonly order: {
@@ -50,7 +50,7 @@ export default function OrderCard({ order, mode, actions }: OrderCardProps) {
               loading="lazy"
             />
           ) : (
-            <FaImage className="text-gray-400 text-2xl" aria-hidden="true" />
+            <ImageIcon className="w-8 h-8 text-gray-400" aria-hidden="true" />
           )}
         </div>
 
@@ -87,7 +87,7 @@ export default function OrderCard({ order, mode, actions }: OrderCardProps) {
                 </span>
                 {order.daysLeft !== undefined && order.daysLeft > 0 && (
                   <span className="text-sm text-gray-600 flex items-center gap-1">
-                    <FaClock className="text-xs" aria-hidden="true" />
+                    <Clock className="w-3 h-3" aria-hidden="true" />
                     D-{order.daysLeft}일
                   </span>
                 )}

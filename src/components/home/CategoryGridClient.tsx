@@ -3,32 +3,32 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import {
-  FaRobot,
-  FaPalette,
-  FaCut,
-  FaCode,
-  FaBullhorn,
-  FaCamera,
-  FaLanguage,
-  FaPenFancy,
-  FaBriefcase,
-  FaBook,
-  FaMusic,
-  FaCalendar,
-  FaSpa,
-  FaBullseye,
-  FaStar,
-  FaBookOpen,
-  FaGavel,
-  FaHammer,
-  FaGraduationCap,
-  FaChartLine,
-  FaHome,
-  FaMotorcycle,
-  FaCircle,
-  FaMinus,
-  FaTh,
-} from 'react-icons/fa';
+  Bot,
+  Palette,
+  Scissors,
+  Code,
+  Megaphone,
+  Camera,
+  Languages,
+  PenTool,
+  Briefcase,
+  BookOpen,
+  Music,
+  Calendar,
+  Sparkles,
+  Target,
+  Star,
+  Library,
+  Gavel,
+  Hammer,
+  GraduationCap,
+  TrendingUp,
+  Home,
+  Bike,
+  Circle,
+  Minus,
+  LayoutGrid,
+} from 'lucide-react';
 
 interface Category {
   id: string;
@@ -47,33 +47,33 @@ interface Props {
 
 // Icon mapping using lookup table for O(1) access
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  robot: FaRobot,
-  palette: FaPalette,
-  scissors: FaCut,
-  code: FaCode,
-  bullhorn: FaBullhorn,
-  camera: FaCamera,
-  language: FaLanguage,
-  'pen-fancy': FaPenFancy,
-  briefcase: FaBriefcase,
-  book: FaBook,
-  music: FaMusic,
-  calendar: FaCalendar,
-  spa: FaSpa,
-  bullseye: FaBullseye,
-  star: FaStar,
-  'book-open': FaBookOpen,
-  gavel: FaGavel,
-  hammer: FaHammer,
-  'graduation-cap': FaGraduationCap,
-  'chart-line': FaChartLine,
-  home: FaHome,
-  motorcycle: FaMotorcycle,
+  robot: Bot,
+  palette: Palette,
+  scissors: Scissors,
+  code: Code,
+  bullhorn: Megaphone,
+  camera: Camera,
+  language: Languages,
+  'pen-fancy': PenTool,
+  briefcase: Briefcase,
+  book: BookOpen,
+  music: Music,
+  calendar: Calendar,
+  spa: Sparkles,
+  bullseye: Target,
+  star: Star,
+  'book-open': Library,
+  gavel: Gavel,
+  hammer: Hammer,
+  'graduation-cap': GraduationCap,
+  'chart-line': TrendingUp,
+  home: Home,
+  motorcycle: Bike,
 };
 
 function CategoryIcon({ icon, color }: { icon?: string; color: string }) {
   const iconClass = `${color}`;
-  const IconComponent = (icon && ICON_MAP[icon]) || FaCircle;
+  const IconComponent = (icon && ICON_MAP[icon]) || Circle;
   return <IconComponent className={iconClass} />;
 }
 
@@ -115,24 +115,24 @@ export default function CategoryGridClient({
           >
             <div className="grid grid-cols-2 gap-1">
               {showAllCategories ? (
-                <FaMinus className="text-lg" aria-hidden="true" />
+                <Minus className="w-5 h-5" aria-hidden="true" />
               ) : (
-                <FaTh className="text-lg" aria-hidden="true" />
+                <LayoutGrid className="w-5 h-5" aria-hidden="true" />
               )}
               {showAllCategories ? (
-                <FaMinus className="text-lg" aria-hidden="true" />
+                <Minus className="w-5 h-5" aria-hidden="true" />
               ) : (
-                <FaTh className="text-lg" aria-hidden="true" />
+                <LayoutGrid className="w-5 h-5" aria-hidden="true" />
               )}
               {showAllCategories ? (
-                <FaMinus className="text-lg" aria-hidden="true" />
+                <Minus className="w-5 h-5" aria-hidden="true" />
               ) : (
-                <FaTh className="text-lg" aria-hidden="true" />
+                <LayoutGrid className="w-5 h-5" aria-hidden="true" />
               )}
               {showAllCategories ? (
-                <FaMinus className="text-lg" aria-hidden="true" />
+                <Minus className="w-5 h-5" aria-hidden="true" />
               ) : (
-                <FaTh className="text-lg" aria-hidden="true" />
+                <LayoutGrid className="w-5 h-5" aria-hidden="true" />
               )}
             </div>
             <span className="text-xs font-medium mt-1">

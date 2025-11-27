@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FaSearch } from "react-icons/fa";
+import { Search } from "lucide-react";
 
 export default function TestSearchPage() {
   const [searchQuery1, setSearchQuery1] = useState("");
@@ -34,7 +34,7 @@ export default function TestSearchPage() {
               type="submit"
               className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-blue-600 transition-colors rounded-full hover:bg-gray-100"
             >
-              <FaSearch className="text-lg" />
+              <Search className="w-5 h-5" />
             </button>
           </form>
         </div>
@@ -57,7 +57,7 @@ export default function TestSearchPage() {
               type="submit"
               className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-blue-600 transition-colors rounded-full hover:bg-gray-100"
             >
-              <FaSearch className="text-lg" />
+              <Search className="w-5 h-5" />
             </button>
           </form>
         </div>
@@ -80,7 +80,7 @@ export default function TestSearchPage() {
               type="submit"
               className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-blue-600 transition-colors rounded-full hover:bg-gray-100"
             >
-              <FaSearch className="text-lg" />
+              <Search className="w-5 h-5" />
             </button>
           </form>
         </div>
@@ -103,7 +103,7 @@ export default function TestSearchPage() {
               type="submit"
               className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-blue-600 transition-colors rounded-full hover:bg-gray-100"
             >
-              <FaSearch className="text-lg" />
+              <Search className="w-5 h-5" />
             </button>
           </form>
         </div>

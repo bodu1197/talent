@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import { createClient } from '@/lib/supabase/client';
-import { FaTimes, FaUser, FaKey, FaBell } from 'react-icons/fa';
+import { X, User, Key, Bell } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
 
@@ -258,7 +258,7 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
             onClick={() => router.push('/mypage/settings')}
             className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
           >
-            <FaTimes className="mr-2 inline" />
+            <X className="w-4 h-4 mr-2 inline" />
             취소
           </button>
         </div>
@@ -274,7 +274,7 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                   : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
-              <FaUser className="mr-2 inline" />
+              <User className="w-4 h-4 mr-2 inline" />
               프로필
             </button>
             <button
@@ -285,7 +285,7 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                   : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
-              <FaKey className="mr-2 inline" />
+              <Key className="w-4 h-4 mr-2 inline" />
               계정 보안
             </button>
             <button
@@ -296,7 +296,7 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                   : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
-              <FaBell className="mr-2 inline" />
+              <Bell className="w-4 h-4 mr-2 inline" />
               알림 설정
             </button>
           </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { FaTimes, FaBan } from 'react-icons/fa';
+import { X, Ban } from 'lucide-react';
 
 interface CancelModalProps {
   readonly isOpen: boolean;
@@ -27,14 +27,14 @@ export default function CancelModal({
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-900">주문 취소 요청</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <FaTimes className="text-2xl" />
+            <X className="w-7 h-7" />
           </button>
         </div>
 
         <div className="space-y-4">
           <div className="bg-red-50 rounded-lg p-4">
             <div className="flex items-start gap-2">
-              <FaBan className="text-red-600 mt-1" />
+              <Ban className="w-5 h-5 text-red-600 mt-1 flex-shrink-0" />
               <div className="text-sm text-red-800">
                 <p className="font-medium mb-1">취소 요청 안내</p>
                 <ul className="list-disc list-inside space-y-1">

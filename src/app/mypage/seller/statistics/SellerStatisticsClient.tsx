@@ -1,7 +1,7 @@
 'use client';
 
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
-import { FaChartLine } from 'react-icons/fa';
+import { TrendingUp } from 'lucide-react';
 
 interface StatisticsData {
   todayViews: number;
@@ -132,7 +132,7 @@ export default function SellerStatisticsClient({ stats, topServices }: Props) {
             </div>
           ) : (
             <div className="text-center py-8 text-gray-500">
-              <FaChartLine className="text-4xl mb-2 mx-auto" />
+              <TrendingUp className="w-10 h-10 mb-2 mx-auto" />
               <p>아직 통계 데이터가 없습니다</p>
             </div>
           )}

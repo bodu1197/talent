@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 export default function FooterMobileBusinessInfo() {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,9 +16,9 @@ export default function FooterMobileBusinessInfo() {
       >
         <span>돌파구 사업자정보</span>
         {isOpen ? (
-          <FaChevronUp className="text-mobile-sm text-gray-600 transition-transform" />
+          <ChevronUp className="w-4 h-4 text-gray-600 transition-transform" />
         ) : (
-          <FaChevronDown className="text-mobile-sm text-gray-600 transition-transform" />
+          <ChevronDown className="w-4 h-4 text-gray-600 transition-transform" />
         )}
       </button>
 

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import * as PortOne from '@portone/browser-sdk/v2';
-import { FaArrowLeft, FaCheck, FaSpinner, FaInfoCircle } from 'react-icons/fa';
+import { ArrowLeft, Check, Loader2, Info } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
 
@@ -156,7 +156,7 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
             onClick={() => router.back()}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4"
           >
-            <FaArrowLeft />
+            <ArrowLeft className="w-4 h-4" />
             <span>뒤로가기</span>
           </button>
           <h1 className="text-2xl font-bold text-gray-900">결제하기</h1>
@@ -233,15 +233,15 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
 
           <div className="space-y-3 mb-4">
             <div className="flex items-start gap-2 text-sm text-gray-600">
-              <FaCheck className="text-green-600 mt-1" />
+              <Check className="w-4 h-4 text-green-600 mt-1 flex-shrink-0" />
               <span>작업 완료 후 {paymentRequest.delivery_days}일 이내에 납품됩니다</span>
             </div>
             <div className="flex items-start gap-2 text-sm text-gray-600">
-              <FaCheck className="text-green-600 mt-1" />
+              <Check className="w-4 h-4 text-green-600 mt-1 flex-shrink-0" />
               <span>최대 {paymentRequest.revision_count}회까지 수정 요청이 가능합니다</span>
             </div>
             <div className="flex items-start gap-2 text-sm text-gray-600">
-              <FaCheck className="text-green-600 mt-1" />
+              <Check className="w-4 h-4 text-green-600 mt-1 flex-shrink-0" />
               <span>결제 후 환불은 판매자와 협의가 필요합니다</span>
             </div>
           </div>
@@ -267,7 +267,7 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
         >
           {isProcessing ? (
             <>
-              <FaSpinner className="fa-spin mr-2 inline" />
+              <Loader2 className="w-4 h-4 mr-2 inline animate-spin" />
               결제 처리 중...
             </>
           ) : (
@@ -278,7 +278,7 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
         {/* 안내 메시지 */}
         <div className="mt-6 bg-blue-50 rounded-lg p-4 border border-blue-200">
           <p className="text-sm text-blue-900">
-            <FaInfoCircle className="mr-2 inline" />
+            <Info className="w-4 h-4 mr-2 inline" />
             결제 후 작업이 시작되며, 판매자와의 소통은 채팅을 통해 진행됩니다.
           </p>
         </div>

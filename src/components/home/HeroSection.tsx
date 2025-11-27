@@ -4,13 +4,13 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
-  FaRobot,
-  FaMoneyBillWave,
-  FaBalanceScale,
-  FaShieldAlt,
-  FaBullhorn,
-  FaSearch,
-} from 'react-icons/fa';
+  Bot,
+  Banknote,
+  Scale,
+  Shield,
+  Megaphone,
+  Search,
+} from 'lucide-react';
 
 interface SplatterDrop {
   size: number;
@@ -39,10 +39,10 @@ interface Slide {
 // Icon mapping helper
 const getIconComponent = (iconName: string) => {
   const iconMap: Record<string, React.ReactNode> = {
-    'fa-sack-dollar': <FaMoneyBillWave className="text-2xl" />,
-    'fa-balance-scale': <FaBalanceScale className="text-2xl" />,
-    'fa-shield-alt': <FaShieldAlt className="text-2xl" />,
-    'fa-bullhorn': <FaBullhorn className="text-2xl" />,
+    'fa-sack-dollar': <Banknote className="w-6 h-6" />,
+    'fa-balance-scale': <Scale className="w-6 h-6" />,
+    'fa-shield-alt': <Shield className="w-6 h-6" />,
+    'fa-bullhorn': <Megaphone className="w-6 h-6" />,
   };
   return iconMap[iconName] || null;
 };
@@ -259,7 +259,7 @@ export default function HeroSection() {
                   }}
                   aria-label="검색"
                 >
-                  <FaSearch className="text-lg" />
+                  <Search className="w-5 h-5" />
                 </button>
               </form>
             </div>
@@ -270,7 +270,7 @@ export default function HeroSection() {
                 href="/categories/ai-services"
                 className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-blue-50 text-brand-primary rounded-full font-medium hover:bg-blue-100 transition-colors flex items-center gap-2"
               >
-                <FaRobot className="text-sm sm:text-base" />{' '}
+                <Bot className="w-4 h-4" />{' '}
                 <span className="hidden sm:inline">AI 서비스</span>
                 <span className="sm:hidden">AI</span>
               </Link>

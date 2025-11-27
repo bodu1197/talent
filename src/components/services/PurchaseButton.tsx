@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { FaSpinner } from 'react-icons/fa';
+import { Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
 
@@ -91,7 +91,7 @@ export default function PurchaseButton({
     >
       {isLoading ? (
         <>
-          <FaSpinner className="fa-spin mr-2 inline" />
+          <Loader2 className="w-4 h-4 mr-2 inline animate-spin" />
           처리 중...
         </>
       ) : (

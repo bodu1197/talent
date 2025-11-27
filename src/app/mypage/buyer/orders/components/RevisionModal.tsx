@@ -1,6 +1,6 @@
 'use client';
 
-import { FaTimes, FaInfoCircle, FaCloudUploadAlt, FaRedo } from 'react-icons/fa';
+import { X, Info, CloudUpload, RotateCcw } from 'lucide-react';
 
 interface RevisionModalProps {
   readonly isOpen: boolean;
@@ -29,14 +29,14 @@ export default function RevisionModal({
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-900">수정 요청</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <FaTimes className="text-2xl" />
+            <X className="w-7 h-7" />
           </button>
         </div>
 
         <div className="space-y-4">
           <div className="bg-blue-50 rounded-lg p-4">
             <div className="flex items-center gap-2 text-blue-900 mb-2">
-              <FaInfoCircle />
+              <Info className="w-5 h-5" />
               <span className="font-medium">남은 수정 횟수: {remainingRevisions}회</span>
             </div>
             <p className="text-sm text-blue-700">수정 요청 시 판매자에게 알림이 전송됩니다.</p>
@@ -70,7 +70,7 @@ export default function RevisionModal({
               id="revision-file-upload"
               className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-brand-primary transition-colors cursor-pointer"
             >
-              <FaCloudUploadAlt className="text-gray-400 text-3xl mb-2" />
+              <CloudUpload className="w-8 h-8 text-gray-400 mb-2 mx-auto" />
               <p className="text-gray-600 text-sm">클릭하여 파일 선택</p>
             </div>
           </div>
@@ -92,7 +92,7 @@ export default function RevisionModal({
                 '전송 중...'
               ) : (
                 <>
-                  <FaRedo className="mr-2" />
+                  <RotateCcw className="w-4 h-4 mr-2" />
                   수정 요청하기
                 </>
               )}

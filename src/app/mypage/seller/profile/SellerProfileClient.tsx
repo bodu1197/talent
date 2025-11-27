@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import MypageLayoutWrapper from "@/components/mypage/MypageLayoutWrapper";
-import { FaEdit, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { Pencil, CheckCircle, XCircle } from "lucide-react";
 
 interface SellerProfile {
   id: string;
@@ -49,7 +49,7 @@ export default function SellerProfileClient({ profile }: Props) {
             onClick={() => router.push("/mypage/seller/profile/edit")}
             className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
           >
-            <FaEdit className="mr-2 inline" />
+            <Pencil className="w-4 h-4 mr-2 inline" />
             수정
           </button>
         </div>
@@ -257,12 +257,12 @@ export default function SellerProfileClient({ profile }: Props) {
                 <p className="text-sm md:text-base text-gray-900">
                   {profile.tax_invoice_available ? (
                     <span className="text-sm md:text-base text-green-600">
-                      <FaCheckCircle className="mr-1 inline" />
+                      <CheckCircle className="w-4 h-4 mr-1 inline" />
                       발행 가능
                     </span>
                   ) : (
                     <span className="text-sm md:text-base text-gray-500">
-                      <FaTimesCircle className="mr-1 inline" />
+                      <XCircle className="w-4 h-4 mr-1 inline" />
                       발행 불가
                     </span>
                   )}

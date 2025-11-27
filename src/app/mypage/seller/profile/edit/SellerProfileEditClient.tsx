@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import { logger } from '@/lib/logger';
 import type { Seller } from '@/types/common';
-import { FaCamera, FaTimes } from 'react-icons/fa';
+import { Camera, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
 
@@ -162,7 +162,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                         className="absolute -top-2 -right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
                         title="이미지 제거"
                       >
-                        <FaTimes />
+                        <X className="w-4 h-4" />
                       </button>
                     </div>
                   ) : (
@@ -179,7 +179,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                       htmlFor="profile-image-upload"
                       className="inline-flex items-center px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors cursor-pointer"
                     >
-                      <FaCamera className="mr-2" />
+                      <Camera className="w-4 h-4 mr-2" />
                       사진 업로드
                     </label>
                     <input

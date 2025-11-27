@@ -5,7 +5,7 @@ import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import { createClient } from '@/lib/supabase/client';
 import { logger } from '@/lib/logger';
 import { Order } from '@/types/common';
-import { FaMoneyBillWave, FaTimes, FaClock, FaReceipt } from 'react-icons/fa';
+import { Banknote, X, Clock, Receipt } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface SellerEarningsClientProps {
@@ -219,11 +219,11 @@ export default function SellerEarningsClient({
                 disabled={loading}
                 className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
-                <FaTimes className="inline mr-2" />
+                <X className="inline mr-2 w-5 h-5" />
                 {loading ? '처리 중...' : '출금 신청 취소'}
               </button>
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-3 flex items-center gap-2">
-                <FaClock className="text-yellow-600" />
+                <Clock className="text-yellow-600 w-5 h-5" />
                 <p className="text-xs md:text-sm text-yellow-800">
                   출금 신청 대기 중 ({earnings.pending_withdrawal?.amount?.toLocaleString()}원)
                 </p>
@@ -236,7 +236,7 @@ export default function SellerEarningsClient({
                 disabled={earnings.available_balance <= 0 || loading}
                 className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
-                <FaMoneyBillWave className="inline mr-2" />
+                <Banknote className="inline mr-2 w-5 h-5" />
                 {loading ? '처리 중...' : '출금 신청'}
               </button>
               {earnings.available_balance <= 0 && (
@@ -300,7 +300,7 @@ export default function SellerEarningsClient({
               ) : (
                 <tr>
                   <td colSpan={5} className="px-3 py-12 text-center text-gray-500">
-                    <FaReceipt className="text-4xl mb-4 text-gray-300 mx-auto" />
+                    <Receipt className="w-10 h-10 mb-4 text-gray-300 mx-auto" />
                     <p>정산 내역이 없습니다</p>
                   </td>
                 </tr>

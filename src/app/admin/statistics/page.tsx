@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FaEye, FaUsers, FaChartLine, FaDesktop, FaMobileAlt, FaTabletAlt } from 'react-icons/fa';
+import { Eye, Users, TrendingUp, Monitor, Smartphone, Tablet } from 'lucide-react';
 import { logger } from '@/lib/logger';
 
 interface AnalyticsStats {
@@ -130,7 +130,7 @@ export default function AdminStatisticsPage() {
                   </p>
                 </div>
                 <div className="rounded-lg bg-blue-50 p-3">
-                  <FaEye className="text-[#0f3460] text-xl" />
+                  <Eye className="w-6 h-6 text-[#0f3460]" />
                 </div>
               </div>
             </div>
@@ -144,7 +144,7 @@ export default function AdminStatisticsPage() {
                   </p>
                 </div>
                 <div className="rounded-lg bg-blue-50 p-3">
-                  <FaUsers className="text-[#0f3460] text-xl" />
+                  <Users className="w-6 h-6 text-[#0f3460]" />
                 </div>
               </div>
             </div>
@@ -158,7 +158,7 @@ export default function AdminStatisticsPage() {
                   </p>
                 </div>
                 <div className="rounded-lg bg-blue-50 p-3">
-                  <FaChartLine className="text-[#0f3460] text-xl" />
+                  <TrendingUp className="w-6 h-6 text-[#0f3460]" />
                 </div>
               </div>
             </div>
@@ -173,7 +173,7 @@ export default function AdminStatisticsPage() {
               <div className="grid gap-4 md:grid-cols-3">
                 <div className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white p-4">
                   <div className="rounded-lg bg-slate-50 p-3">
-                    <FaDesktop className="text-slate-700 text-xl" />
+                    <Monitor className="w-6 h-6 text-slate-700" />
                   </div>
                   <div>
                     <p className="text-sm text-slate-600">데스크톱</p>
@@ -185,7 +185,7 @@ export default function AdminStatisticsPage() {
 
                 <div className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white p-4">
                   <div className="rounded-lg bg-slate-50 p-3">
-                    <FaMobileAlt className="text-slate-700 text-xl" />
+                    <Smartphone className="w-6 h-6 text-slate-700" />
                   </div>
                   <div>
                     <p className="text-sm text-slate-600">모바일</p>
@@ -197,7 +197,7 @@ export default function AdminStatisticsPage() {
 
                 <div className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white p-4">
                   <div className="rounded-lg bg-slate-50 p-3">
-                    <FaTabletAlt className="text-slate-700 text-xl" />
+                    <Tablet className="w-6 h-6 text-slate-700" />
                   </div>
                   <div>
                     <p className="text-sm text-slate-600">태블릿</p>
@@ -301,7 +301,7 @@ export default function AdminStatisticsPage() {
             </div>
           ) : (
             <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
-              <FaEye className="text-slate-400 text-5xl mb-4 mx-auto" />
+              <Eye className="w-12 h-12 text-slate-400 mb-4 mx-auto" />
               <p className="text-slate-600">아직 수집된 통계 데이터가 없습니다.</p>
               <p className="text-sm text-slate-500 mt-2">
                 사용자가 사이트를 방문하면 자동으로 데이터가 수집됩니다.

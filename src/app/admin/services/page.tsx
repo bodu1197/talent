@@ -11,12 +11,12 @@ import ErrorState from "@/components/common/ErrorState";
 import EmptyState from "@/components/common/EmptyState";
 import { logger } from "@/lib/logger";
 import {
-  FaRedoAlt,
-  FaExternalLinkAlt,
-  FaEye,
-  FaCheck,
-  FaTimes,
-} from "react-icons/fa";
+  RefreshCw,
+  ExternalLink,
+  Eye,
+  Check,
+  X,
+} from "lucide-react";
 
 type ServiceStatus = "all" | "pending" | "approved" | "rejected";
 
@@ -219,7 +219,7 @@ export default function AdminServicesPage() {
             className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
             aria-label="검색 초기화"
           >
-            <FaRedoAlt className="inline mr-2" />
+            <RefreshCw className="w-4 h-4 inline mr-2" />
             초기화
           </button>
         </div>
@@ -281,7 +281,7 @@ export default function AdminServicesPage() {
                             className="text-sm font-medium text-brand-primary hover:underline"
                           >
                             {service.title}
-                            <FaExternalLinkAlt className="inline ml-2 text-xs" />
+                            <ExternalLink className="w-3 h-3 inline ml-2" />
                           </a>
                           {service.description && (
                             <div className="text-xs text-gray-500 line-clamp-2 mt-1">
@@ -327,7 +327,7 @@ export default function AdminServicesPage() {
                           className="px-3 py-1.5 bg-brand-primary text-white rounded hover:bg-[#1a4d8f] transition-colors font-medium inline-block text-xs"
                           aria-label={`${service.title} 상세보기`}
                         >
-                          <FaEye className="inline mr-1" />
+                          <Eye className="w-3 h-3 inline mr-1" />
                           상세보기
                         </a>
                         {service.status === "pending" && (
@@ -337,7 +337,7 @@ export default function AdminServicesPage() {
                               className="px-3 py-1.5 bg-green-600 text-white rounded hover:bg-green-700 transition-colors font-medium inline-block text-xs"
                               aria-label={`${service.title} 승인`}
                             >
-                              <FaCheck className="inline mr-1" />
+                              <Check className="w-3 h-3 inline mr-1" />
                               승인
                             </a>
                             <a
@@ -345,7 +345,7 @@ export default function AdminServicesPage() {
                               className="px-3 py-1.5 bg-red-600 text-white rounded hover:bg-red-700 transition-colors font-medium inline-block text-xs"
                               aria-label={`${service.title} 반려`}
                             >
-                              <FaTimes className="inline mr-1" />
+                              <X className="w-3 h-3 inline mr-1" />
                               반려
                             </a>
                           </>

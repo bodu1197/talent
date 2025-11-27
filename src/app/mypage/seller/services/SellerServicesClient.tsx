@@ -10,23 +10,23 @@ import type { Service } from "@/types/common";
 import toast from "react-hot-toast";
 
 import {
-  FaCheckCircle,
-  FaClock,
-  FaTimesCircle,
-  FaPlus,
-  FaImage,
-  FaEye,
-  FaHeart,
-  FaShoppingCart,
-  FaEdit,
-  FaChartBar,
-  FaPause,
-  FaPlay,
-  FaTrash,
-  FaHourglassHalf,
-  FaExclamationCircle,
-  FaTimes,
-} from "react-icons/fa";
+  CheckCircle,
+  Clock,
+  XCircle,
+  Plus,
+  Image,
+  Eye,
+  Heart,
+  ShoppingCart,
+  Pencil,
+  BarChart3,
+  Pause,
+  Play,
+  Trash2,
+  Hourglass,
+  AlertCircle,
+  X,
+} from "lucide-react";
 
 type ServiceStatus = "all" | "active" | "inactive" | "pending";
 
@@ -208,7 +208,7 @@ export default function SellerServicesClient({
       case "active":
         return (
           <span className="px-3 py-1.5 bg-green-100 text-green-700 rounded-full text-xs font-medium flex items-center gap-1">
-            <FaCheckCircle aria-hidden="true" />
+            <CheckCircle className="w-3 h-3" aria-hidden="true" />
             활성
           </span>
         );
@@ -221,14 +221,14 @@ export default function SellerServicesClient({
       case "pending":
         return (
           <span className="px-3 py-1.5 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium flex items-center gap-1">
-            <FaClock aria-hidden="true" />
+            <Clock className="w-3 h-3" aria-hidden="true" />
             검토중
           </span>
         );
       case "rejected":
         return (
           <span className="px-3 py-1.5 bg-red-100 text-red-700 rounded-full text-xs font-medium flex items-center gap-1">
-            <FaTimesCircle aria-hidden="true" />
+            <XCircle className="w-3 h-3" aria-hidden="true" />
             반려됨
           </span>
         );
@@ -259,7 +259,7 @@ export default function SellerServicesClient({
             href="/mypage/seller/services/new"
             className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
           >
-            <FaPlus className="mr-2 inline" aria-hidden="true" />새 서비스 등록
+            <Plus className="w-4 h-4 mr-2 inline" aria-hidden="true" />새 서비스 등록
           </Link>
         </div>
 
@@ -323,8 +323,8 @@ export default function SellerServicesClient({
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <FaImage
-                        className="text-gray-400 text-3xl"
+                      <Image
+                        className="w-8 h-8 text-gray-400"
                         aria-hidden="true"
                       />
                     )}
@@ -340,7 +340,7 @@ export default function SellerServicesClient({
                         {getStatusBadge(service.status)}
                         {service.hasPendingRevision && (
                           <span className="px-3 py-1.5 bg-orange-100 text-orange-800 rounded-full text-xs font-medium flex items-center gap-1">
-                            <FaHourglassHalf aria-hidden="true" />
+                            <Hourglass className="w-3 h-3" aria-hidden="true" />
                             승인 대기중
                           </span>
                         )}
@@ -354,16 +354,16 @@ export default function SellerServicesClient({
                         {service.price?.toLocaleString()}원~
                       </span>
                       <span>
-                        <FaEye className="mr-1 inline" aria-hidden="true" />
+                        <Eye className="w-4 h-4 mr-1 inline" aria-hidden="true" />
                         {service.view_count || 0}
                       </span>
                       <span>
-                        <FaHeart className="mr-1 inline" aria-hidden="true" />
+                        <Heart className="w-4 h-4 mr-1 inline" aria-hidden="true" />
                         {service.favorite_count || 0}
                       </span>
                       <span>
-                        <FaShoppingCart
-                          className="mr-1 inline"
+                        <ShoppingCart
+                          className="w-4 h-4 mr-1 inline"
                           aria-hidden="true"
                         />
                         {service.order_count || 0}
@@ -376,7 +376,7 @@ export default function SellerServicesClient({
                         href={`/mypage/seller/services/${service.id}/edit`}
                         className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
                       >
-                        <FaEdit className="mr-1 inline" aria-hidden="true" />
+                        <Pencil className="w-4 h-4 mr-1 inline" aria-hidden="true" />
                         수정
                       </Link>
                       <Link
@@ -384,15 +384,15 @@ export default function SellerServicesClient({
                         target="_blank"
                         className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
                       >
-                        <FaEye className="mr-1 inline" aria-hidden="true" />
+                        <Eye className="w-4 h-4 mr-1 inline" aria-hidden="true" />
                         보기
                       </Link>
                       <Link
                         href={`/mypage/seller/services/statistics?id=${service.id}`}
                         className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-sm font-medium"
                       >
-                        <FaChartBar
-                          className="mr-1 inline"
+                        <BarChart3
+                          className="w-4 h-4 mr-1 inline"
                           aria-hidden="true"
                         />
                         통계
@@ -411,13 +411,13 @@ export default function SellerServicesClient({
                               }`}
                           >
                             {service.status === "active" ? (
-                              <FaPause
-                                className="mr-1"
+                              <Pause
+                                className="w-4 h-4 mr-1"
                                 aria-hidden="true"
                               />
                             ) : (
-                              <FaPlay
-                                className="mr-1"
+                              <Play
+                                className="w-4 h-4 mr-1"
                                 aria-hidden="true"
                               />
                             )}
@@ -434,7 +434,7 @@ export default function SellerServicesClient({
                         }
                         className="px-4 py-2 border border-red-300 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium flex items-center"
                       >
-                        <FaTrash className="mr-1" aria-hidden="true" />
+                        <Trash2 className="w-4 h-4 mr-1" aria-hidden="true" />
                         삭제
                       </button>
                     </div>
@@ -447,8 +447,8 @@ export default function SellerServicesClient({
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <FaExclamationCircle
-                            className="text-red-500"
+                          <AlertCircle
+                            className="w-4 h-4 text-red-500"
                             aria-hidden="true"
                           />
                           <span className="font-bold text-red-800">
@@ -475,7 +475,7 @@ export default function SellerServicesClient({
                         }
                         className="ml-4 px-3 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors flex items-center"
                       >
-                        <FaTimes className="mr-1" aria-hidden="true" />
+                        <X className="w-3 h-3 mr-1" aria-hidden="true" />
                         확인
                       </button>
                     </div>

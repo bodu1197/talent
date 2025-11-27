@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { logger } from "@/lib/logger";
-import { FaInbox } from "react-icons/fa";
+import { Inbox } from "lucide-react";
 import toast from "react-hot-toast";
 
 interface Withdrawal {
@@ -336,7 +336,7 @@ export default function AdminWithdrawalsPage() {
                     colSpan={6}
                     className="px-6 py-12 text-center text-gray-500"
                   >
-                    <FaInbox className="text-4xl mb-4 text-gray-300 mx-auto" />
+                    <Inbox className="w-10 h-10 mb-4 text-gray-300 mx-auto" />
                     <p>출금 요청이 없습니다</p>
                   </td>
                 </tr>

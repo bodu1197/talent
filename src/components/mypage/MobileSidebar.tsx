@@ -4,29 +4,29 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  FaBars,
-  FaTimes,
-  FaHome,
-  FaShoppingCart,
-  FaFileAlt,
-  FaHeart,
-  FaStar,
-  FaBox,
-  FaClipboardList,
-  FaChartLine,
-  FaChartBar,
-  FaFolder,
-  FaUsers,
-  FaFileInvoice,
-  FaTags,
-  FaDollarSign,
-  FaBullhorn,
-  FaQuestionCircle,
-  FaFlag,
-  FaChevronRight,
-  FaEnvelope,
-  FaUser,
-} from 'react-icons/fa';
+  Menu,
+  X,
+  Home,
+  ShoppingCart,
+  FileText,
+  Heart,
+  Star,
+  Package,
+  ClipboardList,
+  TrendingUp,
+  BarChart3,
+  Folder,
+  Users,
+  Receipt,
+  Tags,
+  DollarSign,
+  Megaphone,
+  HelpCircle,
+  Flag,
+  ChevronRight,
+  Mail,
+  User,
+} from 'lucide-react';
 
 interface MobileSidebarProps {
   readonly mode: 'buyer' | 'seller' | 'admin';
@@ -50,27 +50,27 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
 
   const buyerMenuItems = [
     {
-      icon: FaHome,
+      icon: Home,
       label: '대시보드',
       href: '/mypage/buyer/dashboard',
     },
     {
-      icon: FaShoppingCart,
+      icon: ShoppingCart,
       label: '주문내역',
       href: '/mypage/buyer/orders',
     },
     {
-      icon: FaFileAlt,
+      icon: FileText,
       label: '견적 요청',
       href: '/mypage/buyer/quotes',
     },
     {
-      icon: FaHeart,
+      icon: Heart,
       label: '찜한 서비스',
       href: '/mypage/buyer/favorites',
     },
     {
-      icon: FaStar,
+      icon: Star,
       label: '내 리뷰',
       href: '/mypage/buyer/reviews',
     },
@@ -78,37 +78,37 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
 
   const sellerMenuItems = [
     {
-      icon: FaHome,
+      icon: Home,
       label: '대시보드',
       href: '/mypage/seller/dashboard',
     },
     {
-      icon: FaBox,
+      icon: Package,
       label: '내 서비스',
       href: '/mypage/seller/services',
     },
     {
-      icon: FaClipboardList,
+      icon: ClipboardList,
       label: '주문 관리',
       href: '/mypage/seller/orders',
     },
     {
-      icon: FaChartLine,
+      icon: TrendingUp,
       label: '수익 관리',
       href: '/mypage/seller/earnings',
     },
     {
-      icon: FaChartBar,
+      icon: BarChart3,
       label: '통계/분석',
       href: '/mypage/seller/statistics',
     },
     {
-      icon: FaFolder,
+      icon: Folder,
       label: '포트폴리오',
       href: '/mypage/seller/portfolio',
     },
     {
-      icon: FaStar,
+      icon: Star,
       label: '리뷰 관리',
       href: '/mypage/seller/reviews',
     },
@@ -116,47 +116,47 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
 
   const adminMenuItems = [
     {
-      icon: FaHome,
+      icon: Home,
       label: '대시보드',
       href: '/admin/dashboard',
     },
     {
-      icon: FaUsers,
+      icon: Users,
       label: '회원 관리',
       href: '/admin/users',
     },
     {
-      icon: FaBox,
+      icon: Package,
       label: '서비스 관리',
       href: '/admin/services',
     },
     {
-      icon: FaFileInvoice,
+      icon: Receipt,
       label: '주문 관리',
       href: '/admin/orders',
     },
     {
-      icon: FaTags,
+      icon: Tags,
       label: '카테고리 관리',
       href: '/admin/categories',
     },
     {
-      icon: FaDollarSign,
+      icon: DollarSign,
       label: '정산 관리',
       href: '/admin/settlements',
     },
     {
-      icon: FaBullhorn,
+      icon: Megaphone,
       label: '광고 관리',
       href: '/admin/advertisements',
     },
     {
-      icon: FaQuestionCircle,
+      icon: HelpCircle,
       label: '문의 관리',
       href: '/admin/inquiries',
     },
     {
-      icon: FaFlag,
+      icon: Flag,
       label: '신고 관리',
       href: '/admin/reports',
     },
@@ -193,7 +193,7 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
         className="lg:hidden fixed top-4 left-4 z-40 p-2 bg-white rounded-lg shadow-md hover:bg-gray-50 transition-colors"
         aria-label="메뉴 열기"
       >
-        <FaBars className="text-xl text-gray-700" />
+        <Menu className="w-5 h-5 text-gray-700" />
       </button>
 
       {/* 오버레이 */}
@@ -223,7 +223,7 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
             className="p-2 hover:bg-white/10 rounded-lg transition-colors"
             aria-label="메뉴 닫기"
           >
-            <FaTimes className="text-xl" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
@@ -244,9 +244,9 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
               >
-                <Icon className="text-lg w-5 text-center" />
+                <Icon className="w-5 h-5" />
                 <span className="font-medium">{item.label}</span>
-                {isActive && <FaChevronRight className="ml-auto text-sm" />}
+                {isActive && <ChevronRight className="ml-auto w-4 h-4" />}
               </Link>
             );
           })}
@@ -263,7 +263,7 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
                 : 'text-gray-700 hover:bg-gray-100'
             }`}
           >
-            <FaEnvelope className="text-lg w-5 text-center" />
+            <Mail className="w-5 h-5" />
             <span className="font-medium">메시지</span>
           </Link>
 
@@ -276,7 +276,7 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
                 : 'text-gray-700 hover:bg-gray-100'
             }`}
           >
-            <FaUser className="text-lg w-5 text-center" />
+            <User className="w-5 h-5" />
             <span className="font-medium">프로필 설정</span>
           </Link>
 
@@ -285,7 +285,7 @@ export default function MobileSidebar({ mode }: MobileSidebarProps) {
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
           >
-            <FaHome className="text-lg w-5 text-center" />
+            <Home className="w-5 h-5" />
             <span className="font-medium">홈으로</span>
           </Link>
         </div>

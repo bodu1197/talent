@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FaChevronDown } from "react-icons/fa";
+import { ChevronDown } from "lucide-react";
 
 const faqs = [
   {
@@ -134,8 +134,8 @@ export default function FAQPage() {
                         <span className="text-brand-primary font-bold">Q.</span>
                         <span className="font-semibold">{item.question}</span>
                       </div>
-                      <FaChevronDown
-                        className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
+                      <ChevronDown
+                        className={`w-5 h-5 transition-transform ${isOpen ? "rotate-180" : ""}`}
                       />
                     </button>
                     {isOpen && (

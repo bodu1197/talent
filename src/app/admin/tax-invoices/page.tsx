@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
-import { FaFileInvoice, FaCalendarCheck, FaWonSign } from 'react-icons/fa';
+import { FileText, CalendarCheck, CircleDollarSign } from 'lucide-react';
 import { logger } from '@/lib/logger';
 
 interface TaxInvoice {
@@ -133,7 +133,7 @@ export default function AdminTaxInvoicesPage() {
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-gray-600">총 발행 건수</span>
             <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-              <FaFileInvoice className="text-blue-600" />
+              <FileText className="w-5 h-5 text-blue-600" />
             </div>
           </div>
           <div className="text-3xl font-bold text-gray-900">{stats.totalCount}건</div>
@@ -143,7 +143,7 @@ export default function AdminTaxInvoicesPage() {
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-gray-600">이번 달 발행 금액</span>
             <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
-              <FaCalendarCheck className="text-green-600" />
+              <CalendarCheck className="w-5 h-5 text-green-600" />
             </div>
           </div>
           <div className="text-3xl font-bold text-gray-900">
@@ -156,7 +156,7 @@ export default function AdminTaxInvoicesPage() {
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-gray-600">총 공급가액</span>
             <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
-              <FaWonSign className="text-purple-600" />
+              <CircleDollarSign className="w-5 h-5 text-purple-600" />
             </div>
           </div>
           <div className="text-3xl font-bold text-gray-900">

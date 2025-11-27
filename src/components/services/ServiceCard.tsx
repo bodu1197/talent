@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaBox, FaStar, FaCheckCircle } from 'react-icons/fa';
+import { Package, Star, CheckCircle } from 'lucide-react';
 
 // ServiceCard가 실제로 사용하는 최소 필드만 정의
 interface ServiceCardData {
@@ -104,7 +104,7 @@ export default function ServiceCard({
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-100">
-            <FaBox className="text-4xl text-gray-400" aria-hidden="true" />
+            <Package className="w-10 h-10 text-gray-400" aria-hidden="true" />
           </div>
         )}
 
@@ -126,7 +126,7 @@ export default function ServiceCard({
               className="px-2 py-1 bg-yellow-500 text-white text-xs font-bold rounded shadow-lg inline-flex items-center gap-1"
               aria-label="프리미엄 서비스"
             >
-              <FaStar aria-hidden="true" />
+              <Star className="w-3 h-3 fill-current" aria-hidden="true" />
               PREMIUM
             </span>
           </div>
@@ -145,7 +145,7 @@ export default function ServiceCard({
           </div>
           <span className="text-xs text-gray-600 truncate">{service.seller?.display_name}</span>
           {service.seller?.is_verified && (
-            <FaCheckCircle className="text-[10px] text-blue-500" aria-label="인증된 판매자" />
+            <CheckCircle className="w-3 h-3 text-blue-500" aria-label="인증된 판매자" />
           )}
         </div>
 
@@ -157,7 +157,7 @@ export default function ServiceCard({
         {/* 평점 및 주문 수 */}
         <div className="flex items-center gap-2 text-xs text-gray-600 mb-1">
           <span className="flex items-center gap-1">
-            <FaStar className="text-yellow-400" aria-hidden="true" />
+            <Star className="w-3 h-3 text-yellow-400 fill-current" aria-hidden="true" />
             <span className="sr-only">평점</span>
             {(service.rating || 0).toFixed(1)}
           </span>
