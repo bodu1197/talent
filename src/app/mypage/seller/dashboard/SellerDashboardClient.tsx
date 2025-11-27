@@ -227,52 +227,106 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
                 {recentOrders.map((order) => (
                   <div
                     key={order.id}
-                    className="border border-gray-200 rounded-lg p-3 hover:border-brand-primary transition-colors"
+                    className="border border-gray-200 rounded-lg p-3 lg:p-4 hover:border-brand-primary transition-colors"
                   >
-                    {/* 상단: 썸네일 + 서비스명 + 상태 */}
-                    <div className="flex gap-3 mb-2">
-                      <div className="w-12 h-12 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
-                        {order.service?.thumbnail_url ? (
-                          <img
-                            src={order.service.thumbnail_url}
-                            alt={order.service.title}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <ImageIcon className="text-gray-400 w-5 h-5" />
-                        )}
+                    {/* 모바일 레이아웃 */}
+                    <div className="lg:hidden">
+                      {/* 상단: 썸네일 + 서비스명 + 상태 */}
+                      <div className="flex gap-3 mb-2">
+                        <div className="w-12 h-12 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
+                          {order.service?.thumbnail_url ? (
+                            <img
+                              src={order.service.thumbnail_url}
+                              alt={order.service.title}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <ImageIcon className="text-gray-400 w-5 h-5" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-medium text-gray-900 truncate">
+                            {order.service?.title || order.title || '-'}
+                          </div>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-xs text-gray-500">
+                              #{order.order_number || order.id.slice(0, 8)}
+                            </span>
+                            <span
+                              className={`px-2 py-0.5 rounded-full text-xs font-medium ${getStatusBadgeClass(order.status)}`}
+                            >
+                              {getStatusText(order.status)}
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium text-gray-900 truncate">
-                          {order.service?.title || order.title || '-'}
-                        </div>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="text-xs text-gray-500">
-                            #{order.order_number || order.id.slice(0, 8)}
-                          </span>
-                          <span
-                            className={`px-2 py-0.5 rounded-full text-xs font-medium ${getStatusBadgeClass(order.status)}`}
-                          >
-                            {getStatusText(order.status)}
+
+                      {/* 하단: 구매자 + 금액 + 버튼 */}
+                      <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                        <div className="flex items-center gap-3 text-xs text-gray-600">
+                          <span>구매자: {order.buyer?.name || '-'}</span>
+                          <span className="font-semibold text-gray-900">
+                            {(order.total_amount || 0).toLocaleString()}원
                           </span>
                         </div>
+                        <Link
+                          href={`/mypage/seller/orders/${order.id}`}
+                          className="px-2 py-1 bg-brand-primary text-white rounded-lg hover:bg-[#0a2540] transition-colors text-xs font-medium"
+                        >
+                          상세
+                        </Link>
                       </div>
                     </div>
 
-                    {/* 하단: 구매자 + 금액 + 버튼 */}
-                    <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                      <div className="flex items-center gap-3 text-xs text-gray-600">
-                        <span>구매자: {order.buyer?.name || '-'}</span>
-                        <span className="font-semibold text-gray-900">
-                          {(order.total_amount || 0).toLocaleString()}원
-                        </span>
+                    {/* PC 레이아웃 (원래대로) */}
+                    <div className="hidden lg:block">
+                      <div className="flex gap-4">
+                        {/* 썸네일 */}
+                        <div className="w-20 h-20 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
+                          {order.service?.thumbnail_url ? (
+                            <img
+                              src={order.service.thumbnail_url}
+                              alt={order.service.title}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <ImageIcon className="text-gray-400 w-6 h-6" />
+                          )}
+                        </div>
+
+                        {/* 정보 */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-xs text-gray-500">
+                              #{order.order_number || order.id.slice(0, 8)}
+                            </span>
+                            <span
+                              className={`px-2 py-0.5 rounded-full text-xs font-medium ${getStatusBadgeClass(order.status)}`}
+                            >
+                              {getStatusText(order.status)}
+                            </span>
+                          </div>
+                          <div className="text-sm font-medium text-gray-900 truncate mb-1">
+                            {order.service?.title || order.title || '-'}
+                          </div>
+                          <div className="flex items-center gap-3 text-xs text-gray-600">
+                            <span>구매자: {order.buyer?.name || '-'}</span>
+                            <span className="font-medium text-gray-900">
+                              {(order.total_amount || 0).toLocaleString()}원
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* 버튼 */}
+                        <div className="flex-shrink-0 flex items-center">
+                          <Link
+                            href={`/mypage/seller/orders/${order.id}`}
+                            className="px-3 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#0a2540] transition-colors text-xs font-medium"
+                          >
+                            상세보기
+                          </Link>
+                        </div>
                       </div>
-                      <Link
-                        href={`/mypage/seller/orders/${order.id}`}
-                        className="px-3 py-1.5 bg-brand-primary text-white rounded-lg hover:bg-[#0a2540] transition-colors text-xs font-medium"
-                      >
-                        상세
-                      </Link>
                     </div>
                   </div>
                 ))}
