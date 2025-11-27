@@ -17,7 +17,7 @@ import { PageViewTracker } from '@/components/analytics/PageViewTracker';
 const notoSansKR = Noto_Sans_KR({
   subsets: ['latin'],
   weight: ['400', '500', '600'],
-  display: 'swap',
+  display: 'optional', // CLS 방지: 폰트 로딩 시 레이아웃 변경 없음
   preload: true,
   fallback: ['system-ui', 'arial'],
   adjustFontFallback: true,
