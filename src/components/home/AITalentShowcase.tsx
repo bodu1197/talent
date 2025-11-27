@@ -26,17 +26,9 @@ export default function AITalentShowcase({ services = [] }: Props) {
   return (
     <section className="py-4 lg:py-8 bg-white">
       <div className="container-1200">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h2 className="text-mobile-lg lg:text-xl font-semibold mb-2">AI 재능 쇼케이스</h2>
-            <p className="text-mobile-md text-gray-600">AI 전문가들의 인기 서비스</p>
-          </div>
-          <Link
-            href="/categories/ai-services"
-            className="hidden md:block px-4 py-2 border border-brand-primary text-brand-primary rounded-lg hover:bg-gray-50 transition-colors text-mobile-md lg:text-base"
-          >
-            전체보기
-          </Link>
+        <div className="mb-8">
+          <h2 className="text-mobile-lg lg:text-xl font-semibold mb-2">AI 재능 쇼케이스</h2>
+          <p className="text-mobile-md text-gray-600">AI 전문가들의 인기 서비스</p>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">

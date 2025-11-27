@@ -96,57 +96,59 @@ export default function CategoryGridClient({
 
   return (
     <>
-      <div className="hidden lg:flex flex-wrap gap-x-2 gap-y-2 items-center justify-between">
+      <div className="hidden lg:flex flex-wrap gap-x-8 gap-y-4 items-start justify-start">
         {categoriesInFirstRow.map((category, index) => (
           <Link
             key={category.id}
             href={`/categories/${category.slug}`}
-            className="flex flex-col items-center group cursor-pointer"
+            className="flex flex-col items-center group cursor-pointer w-[72px]"
           >
             <div
               className={`flex items-center justify-center transition-all duration-200 ${brightColors[index % brightColors.length]} group-hover:text-brand-primary`}
             >
               <CategoryIcon icon={category.icon} color="" size="w-12 h-12" />
             </div>
-            <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-semibold text-sm lg:text-[15px] text-center mt-1">
+            <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-semibold text-sm text-center mt-1 whitespace-nowrap">
               {category.name}
             </div>
           </Link>
         ))}
 
         {hasMoreCategories && (
-          <button
-            onClick={() => setShowAllCategories(!showAllCategories)}
-            className="flex flex-col items-center justify-center h-14 w-14 bg-gray-100 text-gray-500 hover:bg-brand-primary hover:text-white transition-all duration-200 cursor-pointer rounded-lg"
-            aria-label={showAllCategories ? '카테고리 간략히 보기' : '모든 카테고리 보기'}
-            aria-expanded={showAllCategories}
-          >
-            {showAllCategories ? (
-              <Minus className="w-6 h-6" aria-hidden="true" />
-            ) : (
-              <LayoutGrid className="w-6 h-6" aria-hidden="true" />
-            )}
-            <span className="text-[10px] font-medium mt-0.5">
+          <div className="flex flex-col items-center w-[72px]">
+            <button
+              onClick={() => setShowAllCategories(!showAllCategories)}
+              className="flex flex-col items-center justify-center h-12 w-12 bg-gray-100 text-gray-500 hover:bg-brand-primary hover:text-white transition-all duration-200 cursor-pointer rounded-lg"
+              aria-label={showAllCategories ? '카테고리 간략히 보기' : '모든 카테고리 보기'}
+              aria-expanded={showAllCategories}
+            >
+              {showAllCategories ? (
+                <Minus className="w-6 h-6" aria-hidden="true" />
+              ) : (
+                <LayoutGrid className="w-6 h-6" aria-hidden="true" />
+              )}
+            </button>
+            <span className="text-gray-500 text-sm font-semibold mt-1">
               {showAllCategories ? '접기' : '더보기'}
             </span>
-          </button>
+          </div>
         )}
       </div>
 
       {showAllCategories && remainingCategories.length > 0 && (
-        <div className="hidden lg:flex flex-wrap gap-x-2 gap-y-2 items-center justify-between mt-3">
+        <div className="hidden lg:flex flex-wrap gap-x-8 gap-y-4 items-start justify-start mt-4">
           {remainingCategories.map((category, index) => (
             <Link
               key={category.id}
               href={`/categories/${category.slug}`}
-              className="flex flex-col items-center group cursor-pointer"
+              className="flex flex-col items-center group cursor-pointer w-[72px]"
             >
               <div
                 className={`flex items-center justify-center transition-all duration-200 ${brightColors[(index + initialVisibleCount) % brightColors.length]} group-hover:text-brand-primary`}
               >
                 <CategoryIcon icon={category.icon} color="" size="w-12 h-12" />
               </div>
-              <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-semibold text-sm lg:text-[15px] text-center mt-1">
+              <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-semibold text-sm text-center mt-1 whitespace-nowrap">
                 {category.name}
               </div>
             </Link>
