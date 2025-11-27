@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Sidebar from '@/components/mypage/Sidebar';
-import MobileMyPageHeader from '@/components/mypage/MobileMyPageHeader';
+import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
+import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { logger } from '@/lib/logger';
 import toast from 'react-hot-toast';
+import { ArrowLeft, Loader2, Check } from 'lucide-react';
 
 // 단계별 컴포넌트
 import Step1BasicInfo from './steps/Step1BasicInfo';
@@ -263,104 +264,126 @@ export default function NewServiceClientV2({ sellerId, profileData }: Props) {
   };
 
   return (
-    <div className="min-h-screen bg-black/5 flex justify-center items-start pt-20 lg:pt-[102px] absolute inset-0 top-[102px]">
-      <div className="flex w-full max-w-[1200px]">
-        <Sidebar mode="seller" profileData={profileData} />
-        <main className="flex-1 overflow-y-auto">
-          <div className="py-8 px-4">
-            {/* 모바일 헤더 */}
-            <div className="lg:hidden mb-4">
-              <MobileMyPageHeader title="서비스 등록" backHref="/mypage/seller/services" />
-            </div>
-            {/* PC 헤더 */}
-            <div className="hidden lg:block mb-6">
-              <h1 className="text-base md:text-lg font-semibold text-gray-900">서비스 등록</h1>
-              <p className="text-gray-600 mt-1 text-sm">새로운 서비스를 등록하세요</p>
-            </div>
+    <MypageLayoutWrapper mode="seller" profileData={profileData}>
+      <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
+        {/* 상단 네비게이션 */}
+        <div className="mb-4 lg:mb-6">
+          <Link
+            href="/mypage/seller/services"
+            className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span className="text-sm lg:text-base">서비스 관리로</span>
+          </Link>
+        </div>
 
-            {/* 진행 단계 표시 */}
-            <div className="mb-6">
-              <div className="flex items-center justify-between">
-                {steps.map((step, index) => (
-                  <div key={step.number} className="flex items-center flex-1">
-                    <div className="flex flex-col items-center flex-1">
-                      <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${
-                          currentStep >= step.number
-                            ? 'bg-brand-primary text-white'
-                            : 'bg-gray-200 text-gray-600'
-                        }`}
-                      >
-                        {step.number}
-                      </div>
-                      <span
-                        className={`text-sm mt-2 font-medium ${
-                          currentStep >= step.number ? 'text-brand-primary' : 'text-gray-500'
-                        }`}
-                      >
-                        {step.title}
-                      </span>
-                    </div>
-                    {index < steps.length - 1 && (
-                      <div
-                        className={`h-1 flex-1 mx-2 transition-colors ${
-                          currentStep > step.number ? 'bg-brand-primary' : 'bg-gray-200'
-                        }`}
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
+        {/* 페이지 헤더 */}
+        <div className="mb-4 lg:mb-6">
+          <h1 className="text-base lg:text-lg font-semibold text-gray-900">서비스 등록</h1>
+          <p className="text-gray-600 mt-1 text-sm">새로운 서비스를 등록하세요</p>
+        </div>
 
-            {/* 단계별 컨텐츠 */}
-            <div className="bg-white rounded-lg shadow p-6">
-              {currentStep === 1 && (
-                <div className="space-y-6">
-                  <Step1BasicInfo formData={formData} setFormData={setFormData} />
-                  <div className="border-t border-gray-200 pt-6">
-                    <Step3Description formData={formData} setFormData={setFormData} />
+        {/* 진행 단계 표시 */}
+        <div className="max-w-4xl mb-4 lg:mb-6">
+          <div className="flex items-start">
+            {steps.map((step, index) => (
+              <div key={step.number} className="flex items-center flex-1">
+                <div className="flex flex-col items-center">
+                  <div
+                    className={`flex items-center justify-center w-8 h-8 lg:w-10 lg:h-10 rounded-full font-semibold text-sm lg:text-base ${
+                      currentStep >= step.number
+                        ? 'bg-brand-primary text-white'
+                        : 'bg-gray-200 text-gray-500'
+                    }`}
+                  >
+                    {step.number}
                   </div>
-                  <div className="border-t border-gray-200 pt-6">
-                    <Step4Images formData={formData} setFormData={setFormData} />
-                  </div>
+                  <span
+                    className={`mt-1 text-xs lg:text-sm whitespace-nowrap ${
+                      currentStep === step.number
+                        ? 'text-brand-primary font-medium'
+                        : 'text-gray-500'
+                    }`}
+                  >
+                    {step.title}
+                  </span>
                 </div>
-              )}
-              {currentStep === 2 && <Step2Pricing formData={formData} setFormData={setFormData} />}
-              {currentStep === 3 && (
-                <Step5Requirements formData={formData} setFormData={setFormData} />
-              )}
-            </div>
+                {index < steps.length - 1 && (
+                  <div
+                    className={`flex-1 h-0.5 lg:h-1 mx-1 lg:mx-2 mt-4 lg:mt-5 ${
+                      currentStep > step.number ? 'bg-brand-primary' : 'bg-gray-200'
+                    }`}
+                  ></div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
 
-            {/* 네비게이션 버튼 */}
-            <div className="flex justify-between mt-6">
+        {/* 단계별 컨텐츠 */}
+        <div className="max-w-4xl">
+          <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-6 mb-4 lg:mb-6">
+            {currentStep === 1 && (
+              <div className="space-y-4 lg:space-y-6">
+                <Step1BasicInfo formData={formData} setFormData={setFormData} />
+                <div className="border-t border-gray-200 pt-4 lg:pt-6">
+                  <Step3Description formData={formData} setFormData={setFormData} />
+                </div>
+                <div className="border-t border-gray-200 pt-4 lg:pt-6">
+                  <Step4Images formData={formData} setFormData={setFormData} />
+                </div>
+              </div>
+            )}
+            {currentStep === 2 && <Step2Pricing formData={formData} setFormData={setFormData} />}
+            {currentStep === 3 && (
+              <Step5Requirements formData={formData} setFormData={setFormData} />
+            )}
+          </div>
+
+          {/* 네비게이션 버튼 */}
+          <div className="flex gap-2 lg:gap-3">
+            {currentStep > 1 && (
               <button
+                type="button"
                 onClick={handlePrev}
-                disabled={currentStep === 1}
-                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-2 lg:px-6 lg:py-3 text-sm lg:text-base border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
               >
+                <ArrowLeft className="w-4 h-4 mr-2 inline" />
                 이전
               </button>
-              {currentStep < 3 ? (
-                <button
-                  onClick={handleNext}
-                  className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
-                >
-                  다음
-                </button>
-              ) : (
-                <button
-                  onClick={handleSubmit}
-                  disabled={loading}
-                  className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
-                >
-                  {loading ? '등록 중...' : '서비스 등록'}
-                </button>
-              )}
-            </div>
+            )}
+            {currentStep < 3 ? (
+              <button
+                type="button"
+                onClick={handleNext}
+                className="flex-1 px-4 py-2 lg:px-6 lg:py-3 text-sm lg:text-base bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+              >
+                다음
+                <ArrowLeft className="w-4 h-4 ml-2 inline transform rotate-180" />
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={loading}
+                className="flex-1 px-4 py-2 lg:px-6 lg:py-3 text-sm lg:text-base bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin mr-2 inline" />
+                    등록 중...
+                  </>
+                ) : (
+                  <>
+                    <Check className="w-4 h-4 mr-2 inline" />
+                    서비스 등록
+                  </>
+                )}
+              </button>
+            )}
           </div>
-        </main>
+        </div>
       </div>
-    </div>
+    </MypageLayoutWrapper>
   );
 }

@@ -345,49 +345,41 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
 
         {/* 진행 단계 표시 */}
         <div className="max-w-4xl mb-4 lg:mb-6">
-          <div className="flex items-center justify-between">
-            {[1, 2, 3, 4].map((step) => (
+          <div className="flex items-start">
+            {[
+              { step: 1, label: '인증' },
+              { step: 2, label: '프로필' },
+              { step: 3, label: '연락처' },
+              { step: 4, label: '약관' },
+            ].map(({ step, label }) => (
               <div key={step} className="flex items-center flex-1">
-                <div
-                  className={`flex items-center justify-center w-10 h-10 rounded-full font-semibold ${
-                    currentStep >= step
-                      ? 'bg-brand-primary text-white'
-                      : 'bg-gray-200 text-gray-500'
-                  }`}
-                >
-                  {step}
+                <div className="flex flex-col items-center">
+                  <div
+                    className={`flex items-center justify-center w-8 h-8 lg:w-10 lg:h-10 rounded-full font-semibold text-sm lg:text-base ${
+                      currentStep >= step
+                        ? 'bg-brand-primary text-white'
+                        : 'bg-gray-200 text-gray-500'
+                    }`}
+                  >
+                    {step}
+                  </div>
+                  <span
+                    className={`mt-1 text-xs lg:text-sm whitespace-nowrap ${
+                      currentStep === step ? 'text-brand-primary font-medium' : 'text-gray-500'
+                    }`}
+                  >
+                    {label}
+                  </span>
                 </div>
                 {step < 4 && (
                   <div
-                    className={`flex-1 h-1 mx-2 ${
+                    className={`flex-1 h-0.5 lg:h-1 mx-1 lg:mx-2 mt-4 lg:mt-5 ${
                       currentStep > step ? 'bg-brand-primary' : 'bg-gray-200'
                     }`}
                   ></div>
                 )}
               </div>
             ))}
-          </div>
-          <div className="flex justify-between mt-2 text-sm">
-            <span
-              className={currentStep === 1 ? 'text-brand-primary font-medium' : 'text-gray-500'}
-            >
-              신원인증
-            </span>
-            <span
-              className={currentStep === 2 ? 'text-brand-primary font-medium' : 'text-gray-500'}
-            >
-              프로필
-            </span>
-            <span
-              className={currentStep === 3 ? 'text-brand-primary font-medium' : 'text-gray-500'}
-            >
-              연락처
-            </span>
-            <span
-              className={currentStep === 4 ? 'text-brand-primary font-medium' : 'text-gray-500'}
-            >
-              약관동의
-            </span>
           </div>
         </div>
 

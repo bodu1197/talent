@@ -127,20 +127,18 @@ export default function AdvertisingChargePage() {
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-8 px-4">
+      <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
         <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
+          <div className="mb-4 lg:mb-6">
             <button
               onClick={() => router.back()}
-              className="text-gray-600 hover:text-gray-900 mb-4"
+              className="text-gray-600 hover:text-gray-900 mb-3 lg:mb-4 flex items-center gap-2"
             >
-              <ArrowLeft className="w-4 h-4 inline mr-2" />
-              뒤로 가기
+              <ArrowLeft className="w-4 h-4" />
+              <span className="text-sm lg:text-base">뒤로 가기</span>
             </button>
-            <h1 className="text-base md:text-lg font-semibold text-gray-900">광고 크레딧 충전</h1>
-            <p className="text-sm md:text-base text-gray-600 mt-2">
-              서비스를 홍보할 광고 크레딧을 구매하세요
-            </p>
+            <h1 className="text-base lg:text-lg font-semibold text-gray-900">광고 크레딧 충전</h1>
+            <p className="text-sm text-gray-600 mt-1">서비스를 홍보할 광고 크레딧을 구매하세요</p>
           </div>
 
           {/* 크레딧 패키지 선택 */}
