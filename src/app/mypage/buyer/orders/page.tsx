@@ -376,7 +376,7 @@ function BuyerOrdersContent() {
   if (loading) {
     return (
       <MypageLayoutWrapper mode="buyer">
-        <div className="py-8 px-4">
+        <div className="py-4 px-4 lg:py-8 lg:px-6">
           <LoadingSpinner message="주문 내역을 불러오는 중..." />
         </div>
       </MypageLayoutWrapper>
@@ -386,7 +386,7 @@ function BuyerOrdersContent() {
   if (error) {
     return (
       <MypageLayoutWrapper mode="buyer">
-        <div className="py-8 px-4">
+        <div className="py-4 px-4 lg:py-8 lg:px-6">
           <ErrorState message={error} retry={loadOrders} />
         </div>
       </MypageLayoutWrapper>
@@ -395,11 +395,11 @@ function BuyerOrdersContent() {
 
   return (
     <MypageLayoutWrapper mode="buyer">
-      <div className="py-8 px-4">
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
         {/* 페이지 헤더 */}
-        <div className="mb-8">
-          <h1 className="text-base md:text-lg font-semibold text-gray-900 mb-2">주문 내역</h1>
-          <p className="text-gray-600 text-sm md:text-base">주문 내역을 확인하세요</p>
+        <div className="mb-4 lg:mb-6">
+          <h1 className="text-base lg:text-lg font-semibold text-gray-900">주문 내역</h1>
+          <p className="text-gray-600 mt-1 text-sm">주문 내역을 확인하세요</p>
         </div>
 
         {/* 탭 네비게이션 */}
@@ -433,8 +433,8 @@ function BuyerOrdersContent() {
         </div>
 
         {/* 검색 및 필터 */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-4 lg:mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
             {/* 검색 */}
             <div className="lg:col-span-2">
               <label
@@ -537,7 +537,7 @@ export default function BuyerOrdersPage() {
     <Suspense
       fallback={
         <MypageLayoutWrapper mode="buyer">
-          <div className="py-8 px-4">
+          <div className="py-4 px-4 lg:py-8 lg:px-6">
             <LoadingSpinner message="페이지 로딩 중..." />
           </div>
         </MypageLayoutWrapper>

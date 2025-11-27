@@ -6,16 +6,7 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import Link from 'next/link';
-import {
-  ArrowLeft,
-  ShieldCheck,
-  CheckCircle,
-  Info,
-  X,
-  Camera,
-  Check,
-  Loader2,
-} from 'lucide-react';
+import { ArrowLeft, ShieldCheck, CheckCircle, Info, X, Camera, Check, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 type Step = 1 | 2 | 3 | 4;
@@ -332,7 +323,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
 
   return (
     <MypageLayoutWrapper mode="buyer">
-      <div className="py-8 px-4">
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
         {/* 상단 네비게이션 */}
         <div className="mb-6">
           <Link
@@ -346,8 +337,8 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
 
         {/* 페이지 헤더 */}
         <div className="mb-8">
-          <h1 className="text-xl font-semibold text-gray-900">판매자 등록</h1>
-          <p className="text-gray-600 mt-1 text-sm">
+          <h1 className="text-base lg:text-lg font-semibold text-gray-900">판매자 등록</h1>
+          <p className="text-gray-600 mt-1 text-xs lg:text-sm">
             재능을 판매하기 위해 판매자 정보를 입력해주세요
           </p>
         </div>
@@ -403,17 +394,17 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
         <div className="max-w-4xl">
           {/* 1단계: 신원 인증 */}
           {currentStep === 1 && (
-            <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-              <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6 mb-6">
+              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-6">
                 1단계: 신원 인증
               </h2>
               <div className="space-y-4">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 lg:p-4 mb-4">
                   <div className="flex items-start gap-3">
-                    <Info className="w-4 h-4 text-blue-500 mt-1" />
+                    <Info className="w-4 h-4 text-blue-500 mt-1 flex-shrink-0" />
                     <div>
-                      <p className="text-sm font-medium text-blue-900">본인인증 안내</p>
-                      <p className="text-sm text-blue-700 mt-1">
+                      <p className="text-xs lg:text-sm font-medium text-blue-900">본인인증 안내</p>
+                      <p className="text-xs lg:text-sm text-blue-700 mt-1">
                         NICE 평가정보를 통한 휴대폰 본인인증이 필요합니다. 인증 완료 시 실명과
                         휴대폰 번호가 자동으로 입력됩니다.
                       </p>
@@ -428,33 +419,39 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                     onClick={handleNiceVerification}
                     disabled={isVerified}
                     aria-label="NICE 휴대폰 본인인증"
-                    className={`w-full px-6 py-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
+                    className={`w-full px-4 py-2.5 text-sm lg:px-6 lg:py-3 lg:text-base rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
                       isVerified
                         ? 'bg-green-100 text-green-800 cursor-not-allowed'
                         : 'bg-brand-primary text-white hover:bg-[#1a4d8f]'
                     }`}
                   >
-                    {isVerified ? <CheckCircle className="w-5 h-5" /> : <ShieldCheck className="w-5 h-5" />}
+                    {isVerified ? (
+                      <CheckCircle className="w-5 h-5" />
+                    ) : (
+                      <ShieldCheck className="w-5 h-5" />
+                    )}
                     {isVerified ? '본인인증 완료' : 'NICE 휴대폰 본인인증'}
                   </button>
                   {!isVerified && (
-                    <p className="text-sm text-gray-500 mt-2">
+                    <p className="text-xs lg:text-sm text-gray-500 mt-2">
                       클릭하여 NICE 평가정보 본인인증을 진행해주세요
                     </p>
                   )}
                 </div>
 
                 {isVerified && (
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3 lg:p-4">
                     <div className="flex items-start gap-3">
-                      <CheckCircle className="w-4 h-4 text-green-600 mt-1" />
+                      <CheckCircle className="w-4 h-4 text-green-600 mt-1 flex-shrink-0" />
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-green-900 mb-2">인증 완료</p>
+                        <p className="text-xs lg:text-sm font-medium text-green-900 mb-2">
+                          인증 완료
+                        </p>
                         <div className="space-y-1">
-                          <p className="text-sm text-green-800">
+                          <p className="text-xs lg:text-sm text-green-800">
                             <span className="font-medium">이름:</span> {formData.realName}
                           </p>
-                          <p className="text-sm text-green-800">
+                          <p className="text-xs lg:text-sm text-green-800">
                             <span className="font-medium">휴대폰:</span> {formData.phone}
                           </p>
                         </div>
@@ -587,16 +584,16 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
 
           {/* 2단계: 판매자 프로필 */}
           {currentStep === 2 && (
-            <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-              <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6 mb-6">
+              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-6">
                 2단계: 판매자 프로필
               </h2>
               <div className="space-y-4">
                 <div>
                   <div className="block text-sm font-medium text-gray-700 mb-2">프로필 사진 *</div>
                   {initialProfile?.profile_image && !formData.profileImage && (
-                    <div className="mb-3 bg-blue-50 border border-blue-200 rounded-lg p-3">
-                      <p className="text-sm text-blue-800">
+                    <div className="mb-3 bg-blue-50 border border-blue-200 rounded-lg p-2 lg:p-3">
+                      <p className="text-xs lg:text-sm text-blue-800">
                         <Info className="w-3 h-3 mr-1 inline" />
                         현재 회원 프로필 사진이 사용됩니다. 변경하려면 새 사진을 업로드하세요.
                       </p>
@@ -631,7 +628,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                               }
                             }}
                             aria-label="프로필 사진 변경 취소 또는 제거"
-                            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm"
+                            className="px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm font-medium bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
                           >
                             <X className="w-3 h-3 mr-1 inline" />
                             {formData.profileImage && initialProfile?.profile_image
@@ -639,14 +636,16 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                               : '이미지 제거'}
                           </button>
                           {initialProfile?.profile_image && formData.profileImage && (
-                            <p className="text-xs text-gray-500">기존 이미지로 되돌아갑니다</p>
+                            <p className="text-xs lg:text-sm text-gray-500">
+                              기존 이미지로 되돌아갑니다
+                            </p>
                           )}
                         </div>
                       </div>
                     ) : (
                       <label
                         htmlFor="seller-profile-image"
-                        className="inline-block px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer"
+                        className="inline-block px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm font-medium bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer"
                       >
                         <input
                           id="seller-profile-image"
@@ -678,7 +677,9 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                     required
                   />
-                  <p className="text-sm text-gray-500 mt-1">구매자에게 보여질 이름입니다</p>
+                  <p className="text-xs lg:text-sm text-gray-500 mt-1">
+                    구매자에게 보여질 이름입니다
+                  </p>
                 </div>
 
                 <div>
@@ -699,7 +700,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                     required
                   ></textarea>
                   <p
-                    className={`text-sm mt-1 ${formData.bio.length < 50 ? 'text-red-600' : 'text-gray-500'}`}
+                    className={`text-xs lg:text-sm mt-1 ${formData.bio.length < 50 ? 'text-red-600' : 'text-gray-500'}`}
                   >
                     {formData.bio.length}/50자
                   </p>
@@ -710,8 +711,8 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
 
           {/* 3단계: 연락처 정보 */}
           {currentStep === 3 && (
-            <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-              <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6 mb-6">
+              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-6">
                 3단계: 연락처 정보 (선택)
               </h2>
               <div className="space-y-4">
@@ -829,9 +830,9 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                 </div>
 
                 <div>
-                  <div className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     선호하는 연락 수단 (복수 선택 가능)
-                  </div>
+                  </label>
                   <div className="space-y-2">
                     {['플랫폼 메시지', '카카오톡', 'WhatsApp', '이메일', '전화'].map((contact) => (
                       <label
@@ -857,10 +858,12 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
 
           {/* 4단계: 약관 동의 */}
           {currentStep === 4 && (
-            <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">4단계: 운영 정책 동의</h2>
+            <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6 mb-6">
+              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-6">
+                4단계: 운영 정책 동의
+              </h2>
               <div className="space-y-4">
-                <div className="border rounded-lg p-4">
+                <div className="border rounded-lg p-3 lg:p-4">
                   <label htmlFor="seller-terms-agree" className="flex items-start gap-3">
                     <input
                       id="seller-terms-agree"
@@ -872,20 +875,22 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                           termsAgree: e.target.checked,
                         })
                       }
-                      className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary mt-0.5"
+                      className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary mt-0.5 flex-shrink-0"
                       aria-label="판매자 이용약관 동의"
                       required
                     />
                     <div className="flex-1">
-                      <span className="font-medium text-gray-900">판매자 이용약관 동의 (필수)</span>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <span className="text-sm font-medium text-gray-900">
+                        판매자 이용약관 동의 (필수)
+                      </span>
+                      <p className="text-xs lg:text-sm text-gray-600 mt-1">
                         판매자로서 준수해야 할 규정과 책임사항에 동의합니다.
                       </p>
                     </div>
                   </label>
                 </div>
 
-                <div className="border rounded-lg p-4">
+                <div className="border rounded-lg p-3 lg:p-4">
                   <label htmlFor="seller-commission-agree" className="flex items-start gap-3">
                     <input
                       id="seller-commission-agree"
@@ -897,20 +902,22 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                           commissionAgree: e.target.checked,
                         })
                       }
-                      className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary mt-0.5"
+                      className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary mt-0.5 flex-shrink-0"
                       aria-label="수수료 정책 확인"
                       required
                     />
                     <div className="flex-1">
-                      <span className="font-medium text-gray-900">수수료 정책 확인 (필수)</span>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <span className="text-sm font-medium text-gray-900">
+                        수수료 정책 확인 (필수)
+                      </span>
+                      <p className="text-xs lg:text-sm text-gray-600 mt-1">
                         거래 금액의 20% 플랫폼 수수료가 부과됩니다.
                       </p>
                     </div>
                   </label>
                 </div>
 
-                <div className="border rounded-lg p-4">
+                <div className="border rounded-lg p-3 lg:p-4">
                   <label htmlFor="seller-refund-agree" className="flex items-start gap-3">
                     <input
                       id="seller-refund-agree"
@@ -922,13 +929,15 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                           refundAgree: e.target.checked,
                         })
                       }
-                      className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary mt-0.5"
+                      className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary mt-0.5 flex-shrink-0"
                       aria-label="환불 정책 확인"
                       required
                     />
                     <div className="flex-1">
-                      <span className="font-medium text-gray-900">환불 정책 동의 (필수)</span>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <span className="text-sm font-medium text-gray-900">
+                        환불 정책 동의 (필수)
+                      </span>
+                      <p className="text-xs lg:text-sm text-gray-600 mt-1">
                         작업 시작 전 취소 시 전액 환불, 진행 중 환불은 협의를 통해 결정됩니다.
                       </p>
                     </div>
@@ -939,12 +948,12 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
           )}
 
           {/* 네비게이션 버튼 */}
-          <div className="flex gap-3">
+          <div className="flex gap-3 lg:gap-4">
             {currentStep > 1 && (
               <button
                 type="button"
                 onClick={prevStep}
-                className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                className="flex-1 px-4 py-2.5 text-sm lg:px-6 lg:py-3 lg:text-base border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
               >
                 <ArrowLeft className="w-4 h-4 mr-2 inline" />
                 이전
@@ -956,7 +965,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                 type="button"
                 onClick={nextStep}
                 disabled={!canProceed()}
-                className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-2.5 text-sm lg:px-6 lg:py-3 lg:text-base bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 다음
                 <ArrowLeft className="w-4 h-4 ml-2 inline transform rotate-180" />
@@ -966,7 +975,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                 type="button"
                 onClick={handleSubmit}
                 disabled={!canProceed() || loading}
-                className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-2.5 text-sm lg:px-6 lg:py-3 lg:text-base bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>

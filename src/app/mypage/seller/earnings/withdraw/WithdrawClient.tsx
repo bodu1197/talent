@@ -90,53 +90,47 @@ export default function WithdrawClient({
 
   return (
     <MypageLayoutWrapper mode="seller" profileData={profileData}>
-      <div className="py-8 px-4">
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
         <div className="max-w-2xl mx-auto">
-          <h1 className="text-base md:text-lg font-semibold mb-6">출금 신청</h1>
+          <h1 className="text-base lg:text-lg font-semibold mb-4 lg:mb-6">출금 신청</h1>
 
           {/* Pending withdrawal notice */}
           {pendingWithdrawal && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-              <p className="text-sm md:text-base text-yellow-800 font-medium">
-                대기 중인 출금 신청이 있습니다.
-              </p>
-              <p className="text-xs md:text-sm text-yellow-700 mt-1">
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 lg:p-4 mb-4 lg:mb-6">
+              <p className="text-sm text-yellow-800 font-medium">대기 중인 출금 신청이 있습니다.</p>
+              <p className="text-xs text-yellow-700 mt-1">
                 금액: {pendingWithdrawal.amount.toLocaleString()}원
               </p>
             </div>
           )}
 
-          <div className="bg-white rounded-lg shadow p-6 mb-6">
-            <h2 className="text-base md:text-lg font-semibold mb-4">출금 가능 금액</h2>
-            <p className="text-3xl font-semibold text-primary-600">
+          <div className="bg-white rounded-lg shadow p-3 lg:p-4 mb-4 lg:mb-6">
+            <h2 className="text-sm lg:text-base font-semibold mb-3 lg:mb-4">출금 가능 금액</h2>
+            <p className="text-2xl lg:text-3xl font-semibold text-primary-600">
               {availableBalance.toLocaleString()}원
             </p>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6 mb-6">
-            <h2 className="text-base md:text-lg font-semibold mb-4">계좌 정보</h2>
+          <div className="bg-white rounded-lg shadow p-3 lg:p-4 mb-4 lg:mb-6">
+            <h2 className="text-sm lg:text-base font-semibold mb-3 lg:mb-4">계좌 정보</h2>
             {sellerData.bank_name && sellerData.account_number ? (
               <div className="space-y-2">
-                <p className="text-sm md:text-base text-gray-600">은행: {sellerData.bank_name}</p>
-                <p className="text-sm md:text-base text-gray-600">
-                  계좌번호: {sellerData.account_number}
-                </p>
-                <p className="text-sm md:text-base text-gray-600">
-                  예금주: {sellerData.account_holder}
-                </p>
+                <p className="text-sm text-gray-600">은행: {sellerData.bank_name}</p>
+                <p className="text-sm text-gray-600">계좌번호: {sellerData.account_number}</p>
+                <p className="text-sm text-gray-600">예금주: {sellerData.account_holder}</p>
               </div>
             ) : (
-              <div className="text-sm md:text-base text-red-600">
+              <div className="text-sm text-red-600">
                 계좌 정보가 등록되지 않았습니다. 프로필 설정에서 등록해주세요.
               </div>
             )}
           </div>
 
-          <form onSubmit={handleWithdraw} className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-base md:text-lg font-semibold mb-4">출금 신청</h2>
+          <form onSubmit={handleWithdraw} className="bg-white rounded-lg shadow p-3 lg:p-4">
+            <h2 className="text-sm lg:text-base font-semibold mb-3 lg:mb-4">출금 신청</h2>
 
             {error && (
-              <div className="bg-red-50 text-red-600 p-3 rounded-lg text-xs md:text-sm mb-4">
+              <div className="bg-red-50 text-red-600 p-3 rounded-lg text-xs lg:text-sm mb-4">
                 {error}
               </div>
             )}
@@ -144,7 +138,7 @@ export default function WithdrawClient({
             <div className="mb-4">
               <label
                 htmlFor="withdraw-amount"
-                className="block text-sm md:text-base font-medium text-gray-700 mb-2"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 출금 금액
               </label>
@@ -162,18 +156,18 @@ export default function WithdrawClient({
               <p className="text-xs text-gray-500 mt-1">최소 출금 금액: 10,000원</p>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-2 lg:gap-3">
               <button
                 type="button"
                 onClick={() => router.back()}
-                className="flex-1 btn-secondary py-3"
+                className="flex-1 btn-secondary px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm font-medium"
               >
                 취소
               </button>
               <button
                 type="submit"
                 disabled={isLoading || !!pendingWithdrawal || !sellerData.bank_name}
-                className="flex-1 btn-ai py-3 disabled:opacity-50"
+                className="flex-1 btn-ai px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm font-medium disabled:opacity-50"
               >
                 {isLoading ? '신청 중...' : '출금 신청'}
               </button>

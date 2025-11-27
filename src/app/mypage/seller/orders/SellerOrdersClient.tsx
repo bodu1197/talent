@@ -446,7 +446,7 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
         </div>
 
         {/* 검색 및 필터 */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6 mb-4 lg:mb-6">
+        <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-4 lg:mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
             {/* 검색 */}
             <div className="lg:col-span-2">

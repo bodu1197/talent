@@ -232,7 +232,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
   if (loading) {
     return (
       <MypageLayoutWrapper mode="buyer">
-        <div className="py-8 px-4">
+        <div className="py-4 px-4 lg:py-8 lg:px-6">
           <LoadingSpinner message="주문 정보를 불러오는 중..." />
         </div>
       </MypageLayoutWrapper>
@@ -242,7 +242,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
   if (error || !order) {
     return (
       <MypageLayoutWrapper mode="buyer">
-        <div className="py-8 px-4">
+        <div className="py-4 px-4 lg:py-8 lg:px-6">
           <ErrorState message={error || '주문을 찾을 수 없습니다'} retry={loadOrder} />
         </div>
       </MypageLayoutWrapper>
@@ -253,48 +253,52 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
 
   return (
     <MypageLayoutWrapper mode="buyer">
-      <div className="py-8 px-4">
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
         {/* 상단 네비게이션 */}
-        <div className="mb-6">
+        <div className="mb-4 lg:mb-6">
           <Link
             href="/mypage/buyer/orders"
             className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>주문 목록으로</span>
+            <ArrowLeft className="w-4 h-4 lg:w-5 lg:h-5" />
+            <span className="text-sm lg:text-base">주문 목록으로</span>
           </Link>
         </div>
 
         {/* 페이지 헤더 */}
-        <div className="mb-8">
-          <div className="flex items-start justify-between">
+        <div className="mb-4 lg:mb-8">
+          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-semibold text-gray-900 mb-2">주문 상세</h1>
-              <p className="text-gray-600">주문 번호: #{order.order_number || id}</p>
+              <h1 className="text-base lg:text-xl font-semibold text-gray-900 mb-1 lg:mb-2">
+                주문 상세
+              </h1>
+              <p className="text-gray-600 text-xs lg:text-sm">
+                주문 번호: #{order.order_number || id}
+              </p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2 lg:gap-3">
               <button
                 onClick={handleCreateChat}
                 disabled={creatingChat}
-                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+                className="px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
               >
-                <MessageSquare className="w-4 h-4 mr-2" />
+                <MessageSquare className="w-3 h-3 lg:w-4 lg:h-4 mr-1.5" />
                 {creatingChat ? '로딩 중...' : '메시지'}
               </button>
               {order.status === 'delivered' && (
                 <>
                   <button
                     onClick={() => setShowRevisionModal(true)}
-                    className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors font-medium"
+                    className="px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors font-medium"
                   >
-                    <RotateCcw className="w-4 h-4 mr-2" />
+                    <RotateCcw className="w-3 h-3 lg:w-4 lg:h-4 mr-1.5" />
                     수정 요청
                   </button>
                   <button
                     onClick={() => setShowConfirmModal(true)}
-                    className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                    className="px-4 py-2 text-sm lg:px-6 lg:py-2 lg:text-base bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
                   >
-                    <Check className="w-4 h-4 mr-2" />
+                    <Check className="w-4 h-4 lg:w-5 lg:h-5 mr-1.5" />
                     구매 확정
                   </button>
                 </>
@@ -302,9 +306,9 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
               {order.status === 'completed' && (
                 <Link
                   href={`/mypage/buyer/reviews?order=${id}`}
-                  className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
+                  className="px-4 py-2 text-sm lg:px-6 lg:py-2 lg:text-base bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
                 >
-                  <Star className="w-4 h-4 mr-2" />
+                  <Star className="w-4 h-4 lg:w-5 lg:h-5 mr-1.5" />
                   리뷰 작성
                 </Link>
               )}
@@ -312,16 +316,18 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8">
           {/* 왼쪽: 주요 정보 */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 lg:space-y-6">
             {/* 주문 정보 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">주문 정보</h2>
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
+                주문 정보
+              </h2>
 
-              <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-32 h-32 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center">
+              <div className="space-y-3 lg:space-y-4">
+                <div className="flex items-start gap-3 lg:gap-4">
+                  <div className="w-20 h-20 lg:w-32 lg:h-32 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center">
                     {order.service?.thumbnail_url ? (
                       <img
                         src={order.service.thumbnail_url}
@@ -329,14 +335,14 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                         className="w-full h-full object-cover rounded-lg"
                       />
                     ) : (
-                      <ImageIcon className="w-8 h-8 text-gray-400" />
+                      <ImageIcon className="w-6 h-6 lg:w-8 lg:h-8 text-gray-400" />
                     )}
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm lg:text-lg font-semibold text-gray-900 mb-2 break-words">
                       {order.title || order.service?.title}
                     </h3>
-                    <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-3 text-xs lg:text-sm">
                       <div>
                         <span className="text-gray-600">패키지:</span>
                         <span className="ml-2 font-medium">{order.package_type || 'standard'}</span>
@@ -366,20 +372,24 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
             </div>
 
             {/* 내 요구사항 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">내 요구사항</h2>
-              <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                <p className="text-gray-700 whitespace-pre-wrap">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
+                내 요구사항
+              </h2>
+              <div className="bg-gray-50 rounded-lg p-3 lg:p-4 mb-3 lg:mb-4">
+                <p className="text-gray-700 whitespace-pre-wrap text-xs lg:text-sm">
                   {order.requirements || '요구사항이 없습니다'}
                 </p>
               </div>
               {order.buyer_note && (
-                <div className="bg-blue-50 rounded-lg p-4">
+                <div className="bg-blue-50 rounded-lg p-3 lg:p-4">
                   <div className="flex items-start gap-2">
-                    <Info className="w-4 h-4 text-blue-600 mt-1" />
+                    <Info className="w-4 h-4 lg:w-5 lg:h-5 text-blue-600 mt-1" />
                     <div>
-                      <div className="font-medium text-blue-900 mb-1">추가 메모</div>
-                      <p className="text-blue-700">{order.buyer_note}</p>
+                      <div className="font-medium text-blue-900 mb-1 text-xs lg:text-sm">
+                        추가 메모
+                      </div>
+                      <p className="text-blue-700 text-xs lg:text-sm">{order.buyer_note}</p>
                     </div>
                   </div>
                 </div>
@@ -387,40 +397,44 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
             </div>
 
             {/* 납품 파일 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
                 납품 파일
                 {order.deliverables && order.deliverables.length > 0 && (
-                  <span className="ml-2 text-sm font-normal text-gray-600">
+                  <span className="ml-2 text-xs lg:text-sm font-normal text-gray-600">
                     ({order.deliverables.length}개)
                   </span>
                 )}
               </h2>
 
               {order.seller_message && (
-                <div className="bg-green-50 rounded-lg p-4 mb-4">
+                <div className="bg-green-50 rounded-lg p-3 lg:p-4 mb-3 lg:mb-4">
                   <div className="flex items-start gap-2">
-                    <UserCircle className="w-4 h-4 text-green-600 mt-1" />
+                    <UserCircle className="w-4 h-4 lg:w-5 lg:h-5 text-green-600 mt-1" />
                     <div>
-                      <div className="font-medium text-green-900 mb-1">판매자 메시지</div>
-                      <p className="text-green-700">{order.seller_message}</p>
+                      <div className="font-medium text-green-900 mb-1 text-xs lg:text-sm">
+                        판매자 메시지
+                      </div>
+                      <p className="text-green-700 text-xs lg:text-sm">{order.seller_message}</p>
                     </div>
                   </div>
                 </div>
               )}
 
               {order.deliverables && order.deliverables.length > 0 ? (
-                <div className="space-y-3">
+                <div className="space-y-2 lg:space-y-3">
                   {order.deliverables.map((file: Deliverable, _index: number) => (
                     <div
                       key={file.id || `deliverable-${file.file_name}`}
-                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                      className="flex items-center justify-between p-3 lg:p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors gap-2"
                     >
-                      <div className="flex items-center gap-3">
-                        <FileText className="w-7 h-7 text-blue-500" />
-                        <div>
-                          <div className="font-medium text-gray-900">{file.file_name}</div>
-                          <div className="text-sm text-gray-600">
+                      <div className="flex items-center gap-2 lg:gap-3 min-w-0 flex-1">
+                        <FileText className="w-5 h-5 lg:w-7 lg:h-7 text-blue-500 flex-shrink-0" />
+                        <div className="min-w-0">
+                          <div className="font-medium text-gray-900 text-xs lg:text-sm truncate">
+                            {file.file_name}
+                          </div>
+                          <div className="text-xs lg:text-sm text-gray-600">
                             {file.file_size ? (file.file_size / 1024 / 1024).toFixed(2) : '0.00'}
                             MB •
                             {file.uploaded_at
@@ -432,41 +446,48 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                       <a
                         href={file.file_url || '#'}
                         download
-                        className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors"
+                        className="px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors flex-shrink-0"
                       >
-                        <Download className="w-4 h-4 mr-2" />
-                        다운로드
+                        <Download className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
+                        <span className="hidden sm:inline">다운로드</span>
+                        <span className="sm:hidden">다운</span>
                       </a>
                     </div>
                   ))}
 
                   {order.status === 'delivered' && (
-                    <button className="w-full px-4 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium">
-                      <Download className="w-4 h-4 mr-2" />
+                    <button className="w-full px-4 py-2 lg:px-4 lg:py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium text-xs lg:text-sm">
+                      <Download className="w-3 h-3 lg:w-4 lg:h-4 mr-1.5" />
                       전체 다운로드
                     </button>
                   )}
                 </div>
               ) : (
-                <div className="text-center py-8 text-gray-500">아직 납품한 파일이 없습니다</div>
+                <div className="text-center py-6 lg:py-8 text-gray-500 text-xs lg:text-sm">
+                  아직 납품한 파일이 없습니다
+                </div>
               )}
             </div>
 
             {/* 상태 이력 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">진행 상태</h2>
-              <div className="space-y-3">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
+                진행 상태
+              </h2>
+              <div className="space-y-2 lg:space-y-3">
                 {statusHistory.map((history, index) => (
                   <div
                     key={`status-${history.status}-${index}`}
-                    className="flex items-start gap-3 pb-3 border-b border-gray-200 last:border-0"
+                    className="flex items-start gap-2 lg:gap-3 pb-2 lg:pb-3 border-b border-gray-200 last:border-0"
                   >
-                    <div className="w-8 h-8 bg-brand-primary rounded-full flex items-center justify-center flex-shrink-0">
-                      <Check className="w-4 h-4 text-white" />
+                    <div className="w-6 h-6 lg:w-8 lg:h-8 bg-brand-primary rounded-full flex items-center justify-center flex-shrink-0">
+                      <Check className="w-3 h-3 lg:w-4 lg:h-4 text-white" />
                     </div>
                     <div className="flex-1">
-                      <div className="font-medium text-gray-900">{history.status}</div>
-                      <div className="text-sm text-gray-600">
+                      <div className="font-medium text-gray-900 text-xs lg:text-sm">
+                        {history.status}
+                      </div>
+                      <div className="text-xs lg:text-sm text-gray-600">
                         {history.date} • {history.actor}
                       </div>
                     </div>
@@ -477,13 +498,15 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
           </div>
 
           {/* 오른쪽: 사이드바 */}
-          <div className="space-y-6">
+          <div className="space-y-4 lg:space-y-6">
             {/* 현재 상태 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">현재 상태</h3>
-              <div className="flex items-center justify-center py-4">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+              <h3 className="font-semibold text-gray-900 mb-3 lg:mb-4 text-xs lg:text-base">
+                현재 상태
+              </h3>
+              <div className="flex items-center justify-center py-3 lg:py-4">
                 <span
-                  className={`px-6 py-3 rounded-lg font-semibold text-lg ${(() => {
+                  className={`px-4 py-2 lg:px-6 lg:py-3 rounded-lg font-semibold text-sm lg:text-lg ${(() => {
                     if (order.status === 'delivered') return 'bg-red-100 text-red-700';
                     if (order.status === 'in_progress') return 'bg-yellow-100 text-yellow-700';
                     if (order.status === 'completed') return 'bg-green-100 text-green-700';
@@ -494,9 +517,9 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                 </span>
               </div>
               {order.status === 'delivered' && (
-                <div className="mt-4 p-3 bg-yellow-50 rounded-lg">
-                  <p className="text-sm text-yellow-800 text-center flex items-center justify-center gap-2">
-                    <AlertTriangle className="w-4 h-4" />
+                <div className="mt-3 lg:mt-4 p-2 lg:p-3 bg-yellow-50 rounded-lg">
+                  <p className="text-xs lg:text-sm text-yellow-800 text-center flex items-center justify-center gap-2">
+                    <AlertTriangle className="w-3 h-3 lg:w-4 lg:h-4" />
                     구매 확정을 해주세요
                   </p>
                 </div>
@@ -504,53 +527,59 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
             </div>
 
             {/* 판매자 정보 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">판매자 정보</h3>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center text-white font-semibold">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+              <h3 className="font-semibold text-gray-900 mb-3 lg:mb-4 text-xs lg:text-base">
+                판매자 정보
+              </h3>
+              <div className="flex items-center gap-2 lg:gap-3 mb-3 lg:mb-4">
+                <div className="w-10 h-10 lg:w-12 lg:h-12 bg-brand-primary rounded-full flex items-center justify-center text-white font-semibold text-sm lg:text-base">
                   {order.seller?.name?.[0] || 'S'}
                 </div>
                 <div>
-                  <div className="font-medium text-gray-900">{order.seller?.name || '판매자'}</div>
-                  <div className="text-sm text-gray-600">판매자</div>
+                  <div className="font-medium text-gray-900 text-xs lg:text-sm">
+                    {order.seller?.name || '판매자'}
+                  </div>
+                  <div className="text-xs lg:text-sm text-gray-600">판매자</div>
                 </div>
               </div>
               <div className="space-y-2">
                 <button
                   onClick={handleCreateChat}
                   disabled={creatingChat}
-                  className="w-full px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium disabled:opacity-50"
+                  className="w-full px-3 py-1.5 lg:px-4 lg:py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium text-xs lg:text-sm disabled:opacity-50"
                 >
-                  <MessageSquare className="w-4 h-4 mr-2" />
+                  <MessageSquare className="w-3 h-3 lg:w-4 lg:h-4 mr-1.5" />
                   {creatingChat ? '로딩 중...' : '메시지 보내기'}
                 </button>
                 <Link
                   href={`/seller/${order.seller_id}`}
-                  className="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-center block"
+                  className="w-full px-3 py-1.5 lg:px-4 lg:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-center block text-xs lg:text-sm"
                 >
-                  <UserIcon className="w-4 h-4 mr-2" />
+                  <UserIcon className="w-3 h-3 lg:w-4 lg:h-4 mr-1.5" />
                   프로필 보기
                 </Link>
               </div>
             </div>
 
             {/* 결제 정보 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">결제 정보</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+              <h3 className="font-semibold text-gray-900 mb-3 lg:mb-4 text-xs lg:text-base">
+                결제 정보
+              </h3>
+              <div className="space-y-2 lg:space-y-3">
+                <div className="flex items-center justify-between text-xs lg:text-sm">
                   <span className="text-gray-600">주문 금액</span>
                   <span className="font-medium">
                     {order.total_amount?.toLocaleString() || '0'}원
                   </span>
                 </div>
-                <div className="flex items-center justify-between pt-3 border-t border-gray-200">
-                  <span className="font-semibold text-gray-900">결제 금액</span>
-                  <span className="font-semibold text-brand-primary text-lg">
+                <div className="flex items-center justify-between pt-2 lg:pt-3 border-t border-gray-200">
+                  <span className="font-semibold text-gray-900 text-xs lg:text-sm">결제 금액</span>
+                  <span className="font-semibold text-brand-primary text-sm lg:text-lg">
                     {order.total_amount?.toLocaleString() || '0'}원
                   </span>
                 </div>
-                <div className="pt-3 border-t border-gray-200 text-sm text-gray-600">
+                <div className="pt-2 lg:pt-3 border-t border-gray-200 text-xs lg:text-sm text-gray-600 space-y-1">
                   <div>주문일: {new Date(order.created_at).toLocaleString('ko-KR')}</div>
                   {order.paid_at && (
                     <div>결제일: {new Date(order.paid_at).toLocaleString('ko-KR')}</div>
@@ -563,18 +592,20 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
             </div>
 
             {/* 빠른 액션 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">빠른 액션</h3>
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+              <h3 className="font-semibold text-gray-900 mb-3 lg:mb-4 text-xs lg:text-base">
+                빠른 액션
+              </h3>
               <div className="space-y-2">
                 <button
                   onClick={() => setShowCancelModal(true)}
-                  className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+                  className="w-full px-3 py-1.5 lg:px-4 lg:py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium text-xs lg:text-sm"
                 >
-                  <Ban className="w-4 h-4 mr-2" />
+                  <Ban className="w-3 h-3 lg:w-4 lg:h-4 mr-1.5" />
                   취소 요청
                 </button>
-                <button className="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
-                  <Headphones className="w-4 h-4 mr-2" />
+                <button className="w-full px-3 py-1.5 lg:px-4 lg:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-xs lg:text-sm">
+                  <Headphones className="w-3 h-3 lg:w-4 lg:h-4 mr-1.5" />
                   고객센터 문의
                 </button>
               </div>

@@ -83,7 +83,7 @@ export default function SettingsClient({ profile, userEmail, isSeller }: Props) 
           {/* 설정 내용 */}
           <div className="flex-1">
             {activeTab === 'profile' && (
-              <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
+              <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
                 <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-4">
                   프로필 정보
                 </h2>
@@ -128,7 +128,7 @@ export default function SettingsClient({ profile, userEmail, isSeller }: Props) 
             )}
 
             {activeTab === 'account' && (
-              <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
+              <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
                 <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-4">계정 보안</h2>
                 <div className="space-y-4">
                   <div>
@@ -151,7 +151,7 @@ export default function SettingsClient({ profile, userEmail, isSeller }: Props) 
             )}
 
             {activeTab === 'notifications' && (
-              <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
+              <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
                 <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-4">알림 설정</h2>
                 <div className="space-y-3">
                   <div className="p-3 border border-gray-200 rounded-lg">

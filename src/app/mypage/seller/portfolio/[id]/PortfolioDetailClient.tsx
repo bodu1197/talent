@@ -5,15 +5,7 @@ import { useRouter } from 'next/navigation';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import Link from 'next/link';
 import { logger } from '@/lib/logger';
-import {
-  ArrowLeft,
-  Pencil,
-  Trash2,
-  Eye,
-  Calendar,
-  Youtube,
-  ExternalLink,
-} from 'lucide-react';
+import { ArrowLeft, Pencil, Trash2, Eye, Calendar, Youtube, ExternalLink } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface Portfolio {
@@ -91,45 +83,45 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="w-full max-w-[1200px] px-4 py-4 sm:py-6 lg:py-8 mx-auto">
+      <div className="w-full max-w-[1200px] py-4 px-4 lg:py-8 lg:px-6 mx-auto">
         <div className="max-w-4xl mx-auto">
           {/* 헤더 */}
-          <div className="mb-8">
+          <div className="mb-6 lg:mb-8">
             <div className="flex items-center justify-between mb-4">
               <Link
                 href="/mypage/seller/portfolio"
                 className="text-gray-600 hover:text-brand-primary transition-colors"
               >
-                <ArrowLeft className="inline w-4 h-4 mr-2" />
+                <ArrowLeft className="inline w-4 h-4 lg:w-5 lg:h-5 mr-2" />
                 포트폴리오 목록
               </Link>
               <div className="flex gap-2">
                 <Link
                   href={`/mypage/seller/portfolio/${portfolio.id}/edit`}
-                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                  className="px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm font-medium border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                 >
-                  <Pencil className="inline w-4 h-4 mr-2" />
+                  <Pencil className="inline w-4 h-4 lg:w-5 lg:h-5 mr-2" />
                   수정
                 </Link>
                 <button
                   onClick={handleDelete}
                   disabled={deleting}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  className="px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm font-medium bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
-                  <Trash2 className="inline w-4 h-4 mr-2" />
+                  <Trash2 className="inline w-4 h-4 lg:w-5 lg:h-5 mr-2" />
                   {deleting ? '삭제 중...' : '삭제'}
                 </button>
               </div>
             </div>
 
-            <h1 className="text-base md:text-lg font-semibold text-gray-900">{portfolio.title}</h1>
+            <h1 className="text-base lg:text-lg font-semibold text-gray-900">{portfolio.title}</h1>
             <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
               <span>
-                <Eye className="inline w-4 h-4 mr-1" />
+                <Eye className="inline w-4 h-4 lg:w-5 lg:h-5 mr-1" />
                 {portfolio.view_count || 0} 조회
               </span>
               <span>
-                <Calendar className="inline w-4 h-4 mr-1" />
+                <Calendar className="inline w-4 h-4 lg:w-5 lg:h-5 mr-1" />
                 {new Date(portfolio.created_at).toLocaleDateString('ko-KR')}
               </span>
             </div>
@@ -137,7 +129,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
 
           {/* 이미지 갤러리 */}
           {allImages.length > 0 && (
-            <div className="mb-8">
+            <div className="mb-6 lg:mb-8">
               <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
                 {/* 메인 이미지 */}
                 <div className="aspect-[16/9] bg-gray-100 flex items-center justify-center">
@@ -150,7 +142,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
 
                 {/* 썸네일 네비게이션 */}
                 {allImages.length > 1 && (
-                  <div className="p-4 bg-gray-50 border-t border-gray-200">
+                  <div className="p-4 lg:p-6 bg-gray-50 border-t border-gray-200">
                     <div className="flex gap-2 overflow-x-auto">
                       {allImages.map((image, index) => (
                         <button
@@ -178,9 +170,9 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
 
           {/* YouTube 영상 */}
           {youtubeVideoId && (
-            <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-              <h2 className="text-sm md:text-base font-semibold text-gray-900 mb-4">
-                <Youtube className="inline w-4 h-4 text-red-600 mr-2" />
+            <div className="bg-white border border-gray-200 rounded-lg p-4 lg:p-6 mb-6">
+              <h2 className="text-base lg:text-lg font-semibold text-gray-900 mb-4">
+                <Youtube className="inline w-4 h-4 lg:w-5 lg:h-5 text-red-600 mr-2" />
                 프로젝트 영상
               </h2>
               <div className="aspect-video bg-black rounded-lg overflow-hidden">
@@ -198,8 +190,8 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
           )}
 
           {/* 설명 */}
-          <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-            <h2 className="text-sm md:text-base font-semibold text-gray-900 mb-4">프로젝트 설명</h2>
+          <div className="bg-white border border-gray-200 rounded-lg p-4 lg:p-6 mb-6">
+            <h2 className="text-base lg:text-lg font-semibold text-gray-900 mb-4">프로젝트 설명</h2>
             <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
               {portfolio.description}
             </p>
@@ -207,15 +199,17 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
 
           {/* 프로젝트 URL */}
           {portfolio.project_url && (
-            <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-              <h2 className="text-sm md:text-base font-semibold text-gray-900 mb-4">프로젝트 링크</h2>
+            <div className="bg-white border border-gray-200 rounded-lg p-4 lg:p-6 mb-6">
+              <h2 className="text-base lg:text-lg font-semibold text-gray-900 mb-4">
+                프로젝트 링크
+              </h2>
               <a
                 href={portfolio.project_url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-brand-primary hover:underline break-all"
               >
-                <ExternalLink className="inline w-4 h-4 mr-2" />
+                <ExternalLink className="inline w-4 h-4 lg:w-5 lg:h-5 mr-2" />
                 {portfolio.project_url}
               </a>
             </div>
@@ -223,8 +217,8 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
 
           {/* 태그 */}
           {portfolio.tags && portfolio.tags.length > 0 && (
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h2 className="text-sm md:text-base font-semibold text-gray-900 mb-4">태그</h2>
+            <div className="bg-white border border-gray-200 rounded-lg p-4 lg:p-6">
+              <h2 className="text-base lg:text-lg font-semibold text-gray-900 mb-4">태그</h2>
               <div className="flex flex-wrap gap-2">
                 {portfolio.tags.map((tag, index) => (
                   <span

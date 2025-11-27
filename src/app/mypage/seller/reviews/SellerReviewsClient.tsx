@@ -79,8 +79,8 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
           <p className="text-gray-600 mt-1 text-sm">고객들이 남긴 리뷰를 확인하고 답변하세요</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-6 mb-6">
-          <div className="lg:col-span-1 bg-white rounded-lg border border-gray-200 p-4 lg:p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 lg:gap-4 mb-4 lg:mb-6">
+          <div className="lg:col-span-1 bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
             <div className="text-center">
               <div className="text-3xl lg:text-5xl font-semibold text-gray-900 mb-2">
                 {avgRating}
@@ -142,7 +142,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
                 filteredReviews.map((review) => (
                   <div
                     key={review.id}
-                    className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6"
+                    className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4"
                   >
                     <div className="flex items-start justify-between mb-4">
                       <div>

@@ -248,27 +248,27 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
 
   return (
     <MypageLayoutWrapper mode={isSeller ? 'seller' : 'buyer'}>
-      <div className="py-8 px-4">
-        <div className="mb-8 flex items-center justify-between">
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
+        <div className="mb-4 lg:mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-gray-900">설정 수정</h1>
-            <p className="text-gray-600 mt-1 text-sm">계정 및 알림 설정을 수정하세요</p>
+            <h1 className="text-base lg:text-lg font-semibold text-gray-900">설정 수정</h1>
+            <p className="text-gray-600 mt-1 text-xs lg:text-sm">계정 및 알림 설정을 수정하세요</p>
           </div>
           <button
             onClick={() => router.push('/mypage/settings')}
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className="px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm font-medium border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
           >
             <X className="w-4 h-4 mr-2 inline" />
             취소
           </button>
         </div>
 
-        <div className="flex gap-6">
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
           {/* 탭 메뉴 */}
-          <div className="w-64 bg-white rounded-lg border border-gray-200 p-4">
+          <div className="lg:w-56 bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
             <button
               onClick={() => setActiveTab('profile')}
-              className={`w-full px-4 py-2 rounded-lg text-left transition-colors ${
+              className={`w-full px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm font-medium rounded-lg text-left transition-colors ${
                 activeTab === 'profile'
                   ? 'bg-brand-primary text-white'
                   : 'text-gray-700 hover:bg-gray-100'
@@ -279,7 +279,7 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
             </button>
             <button
               onClick={() => setActiveTab('account')}
-              className={`w-full px-4 py-2 rounded-lg text-left transition-colors mt-2 ${
+              className={`w-full px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm font-medium rounded-lg text-left transition-colors mt-2 ${
                 activeTab === 'account'
                   ? 'bg-brand-primary text-white'
                   : 'text-gray-700 hover:bg-gray-100'
@@ -290,7 +290,7 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
             </button>
             <button
               onClick={() => setActiveTab('notifications')}
-              className={`w-full px-4 py-2 rounded-lg text-left transition-colors mt-2 ${
+              className={`w-full px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm font-medium rounded-lg text-left transition-colors mt-2 ${
                 activeTab === 'notifications'
                   ? 'bg-brand-primary text-white'
                   : 'text-gray-700 hover:bg-gray-100'
@@ -304,8 +304,10 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
           {/* 설정 내용 */}
           <div className="flex-1">
             {activeTab === 'profile' && (
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-6">프로필 설정</h2>
+              <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+                <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
+                  프로필 설정
+                </h2>
                 <div className="space-y-4">
                   <div>
                     <span className="block text-sm font-medium text-gray-700 mb-2">
@@ -334,13 +336,13 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                         />
                         <label
                           htmlFor="profile-image-upload"
-                          className={`inline-block px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm cursor-pointer ${
+                          className={`inline-block px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer ${
                             uploading ? 'opacity-50 cursor-not-allowed' : ''
                           }`}
                         >
                           {uploading ? '업로드 중...' : '변경'}
                         </label>
-                        <p className="text-xs text-gray-500 mt-1">JPG, PNG (최대 5MB)</p>
+                        <p className="text-xs lg:text-sm text-gray-500 mt-1">JPG, PNG (최대 5MB)</p>
                       </div>
                     </div>
                   </div>
@@ -375,7 +377,9 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                       disabled
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed"
                     />
-                    <p className="mt-1 text-xs text-gray-500">이메일 주소는 변경할 수 없습니다</p>
+                    <p className="mt-1 text-xs lg:text-sm text-gray-500">
+                      이메일 주소는 변경할 수 없습니다
+                    </p>
                   </div>
 
                   <div>
@@ -398,7 +402,7 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                   <button
                     onClick={handleSaveProfile}
                     disabled={isLoading}
-                    className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-4 py-2.5 text-sm lg:px-6 lg:py-3 lg:text-base bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isLoading ? '저장 중...' : '저장'}
                   </button>
@@ -407,8 +411,10 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
             )}
 
             {activeTab === 'account' && (
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-6">계정 보안</h2>
+              <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+                <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
+                  계정 보안
+                </h2>
                 <div className="space-y-4">
                   <div>
                     <label
@@ -461,7 +467,7 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                   <button
                     onClick={handleChangePassword}
                     disabled={isLoading}
-                    className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-4 py-2.5 text-sm lg:px-6 lg:py-3 lg:text-base bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isLoading ? '변경 중...' : '비밀번호 변경'}
                   </button>
@@ -470,13 +476,15 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
             )}
 
             {activeTab === 'notifications' && (
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-6">알림 설정</h2>
+              <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+                <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
+                  알림 설정
+                </h2>
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                  <div className="flex items-center justify-between p-3 lg:p-4 border border-gray-200 rounded-lg">
                     <label htmlFor="order-notification" className="cursor-pointer flex-1">
-                      <span className="font-medium text-gray-900 block">주문 알림</span>
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm font-medium text-gray-900 block">주문 알림</span>
+                      <span className="text-xs lg:text-sm text-gray-600">
                         새 주문이 들어오면 알림을 받습니다
                       </span>
                     </label>
@@ -485,14 +493,14 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                       type="checkbox"
                       checked={orderNotification}
                       onChange={(e) => setOrderNotification(e.target.checked)}
-                      className="w-5 h-5 text-brand-primary"
+                      className="w-5 h-5 text-brand-primary flex-shrink-0"
                     />
                   </div>
 
-                  <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                  <div className="flex items-center justify-between p-3 lg:p-4 border border-gray-200 rounded-lg">
                     <label htmlFor="message-notification" className="cursor-pointer flex-1">
-                      <span className="font-medium text-gray-900 block">메시지 알림</span>
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm font-medium text-gray-900 block">메시지 알림</span>
+                      <span className="text-xs lg:text-sm text-gray-600">
                         새 메시지가 오면 알림을 받습니다
                       </span>
                     </label>
@@ -501,14 +509,14 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                       type="checkbox"
                       checked={messageNotification}
                       onChange={(e) => setMessageNotification(e.target.checked)}
-                      className="w-5 h-5 text-brand-primary"
+                      className="w-5 h-5 text-brand-primary flex-shrink-0"
                     />
                   </div>
 
-                  <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                  <div className="flex items-center justify-between p-3 lg:p-4 border border-gray-200 rounded-lg">
                     <label htmlFor="review-notification" className="cursor-pointer flex-1">
-                      <span className="font-medium text-gray-900 block">리뷰 알림</span>
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm font-medium text-gray-900 block">리뷰 알림</span>
+                      <span className="text-xs lg:text-sm text-gray-600">
                         새 리뷰가 등록되면 알림을 받습니다
                       </span>
                     </label>
@@ -517,14 +525,14 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
                       type="checkbox"
                       checked={reviewNotification}
                       onChange={(e) => setReviewNotification(e.target.checked)}
-                      className="w-5 h-5 text-brand-primary"
+                      className="w-5 h-5 text-brand-primary flex-shrink-0"
                     />
                   </div>
 
                   <button
                     onClick={handleSaveNotifications}
                     disabled={isLoading}
-                    className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-4 py-2.5 text-sm lg:px-6 lg:py-3 lg:text-base bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isLoading ? '저장 중...' : '저장'}
                   </button>

@@ -323,17 +323,17 @@ export default function PortfolioEditClient({
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-8 px-4">
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
         <div className="max-w-3xl">
-          <div className="mb-8">
+          <div className="mb-6 lg:mb-8">
             <Link
               href={`/mypage/seller/portfolio/${portfolio.id}`}
               className="text-gray-600 hover:text-brand-primary transition-colors mb-4 inline-block"
             >
-              <ArrowLeft className="inline w-4 h-4 mr-2" />
+              <ArrowLeft className="inline w-4 h-4 lg:w-5 lg:h-5 mr-2" />
               포트폴리오 상세
             </Link>
-            <h1 className="text-base md:text-lg font-semibold text-gray-900">포트폴리오 수정</h1>
+            <h1 className="text-base lg:text-lg font-semibold text-gray-900">포트폴리오 수정</h1>
             <p className="text-gray-600 mt-1 text-sm">작업물 정보를 수정하세요</p>
           </div>
 
@@ -366,7 +366,7 @@ export default function PortfolioEditClient({
                     (다중 선택 가능 - 선택한 서비스의 상세 페이지에 이 포트폴리오가 표시됩니다)
                   </span>
                 </label>
-                <div className="border border-gray-300 rounded-lg p-4 space-y-3 max-h-64 overflow-y-auto">
+                <div className="border border-gray-300 rounded-lg p-4 lg:p-6 space-y-3 max-h-64 overflow-y-auto">
                   {services.map((service) => (
                     <label
                       key={service.id}
@@ -401,7 +401,7 @@ export default function PortfolioEditClient({
                 </div>
                 {formData.service_ids.length > 0 && (
                   <p className="mt-2 text-sm text-gray-600">
-                    <CheckCircle className="inline w-4 h-4 text-green-600 mr-1" />
+                    <CheckCircle className="inline w-4 h-4 lg:w-5 lg:h-5 text-green-600 mr-1" />
                     {formData.service_ids.length}개의 서비스에 연결됩니다
                   </p>
                 )}
@@ -434,7 +434,7 @@ export default function PortfolioEditClient({
                   기존 이미지{' '}
                   <span className="text-gray-500 text-xs">(첫 이미지가 썸네일이 됩니다)</span>
                 </label>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                   {existingImages.map((image, index) => (
                     <div key={`existing-${image}`} className="relative">
                       <img
@@ -452,7 +452,7 @@ export default function PortfolioEditClient({
                         onClick={() => handleRemoveExistingImage(index)}
                         className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
                       >
-                        <X className="w-3 h-3" />
+                        <X className="w-4 h-4 lg:w-5 lg:h-5" />
                       </button>
                     </div>
                   ))}
@@ -480,7 +480,7 @@ export default function PortfolioEditClient({
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
               />
               {imagePreviews.length > 0 && (
-                <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-4">
                   {imagePreviews.map((preview, index) => (
                     <div key={`preview-${preview}`} className="relative">
                       <img
@@ -498,7 +498,7 @@ export default function PortfolioEditClient({
                         onClick={() => handleRemoveNewImage(index)}
                         className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
                       >
-                        <X className="w-3 h-3" />
+                        <X className="w-4 h-4 lg:w-5 lg:h-5" />
                       </button>
                     </div>
                   ))}
@@ -544,14 +544,14 @@ export default function PortfolioEditClient({
               />
               {fetchingYoutubeThumbnail && (
                 <p className="mt-2 text-sm text-gray-600">
-                  <Loader2 className="inline w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className="inline w-4 h-4 lg:w-5 lg:h-5 mr-2 animate-spin" />
                   YouTube 썸네일을 가져오는 중...
                 </p>
               )}
               {youtubeVideoId && (
-                <div className="mt-4 bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <div className="mt-4 bg-gray-50 border border-gray-200 rounded-lg p-4 lg:p-6">
                   <p className="text-sm text-gray-700 mb-2">
-                    <Youtube className="inline w-4 h-4 text-red-600 mr-2" />
+                    <Youtube className="inline w-4 h-4 lg:w-5 lg:h-5 text-red-600 mr-2" />
                     YouTube 영상 미리보기
                   </p>
                   <div className="aspect-video bg-black rounded-lg overflow-hidden">
@@ -595,7 +595,7 @@ export default function PortfolioEditClient({
                 <button
                   type="button"
                   onClick={handleAddTag}
-                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                  className="px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm font-medium bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
                   aria-label="태그 추가"
                 >
                   추가
@@ -615,7 +615,7 @@ export default function PortfolioEditClient({
                         className="hover:text-blue-900"
                         aria-label={`${tag} 태그 제거`}
                       >
-                        <X className="w-3 h-3" />
+                        <X className="w-4 h-4 lg:w-5 lg:h-5" />
                       </button>
                     </span>
                   ))}
@@ -628,14 +628,14 @@ export default function PortfolioEditClient({
               <button
                 type="button"
                 onClick={() => router.back()}
-                className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                className="flex-1 px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm font-medium border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 취소
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
+                className="flex-1 px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm font-medium bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
                 {(() => {
                   if (uploading) return '이미지 업로드 중...';

@@ -25,18 +25,18 @@ export default function RevisionModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-2xl w-full p-6">
+      <div className="bg-white rounded-lg max-w-sm lg:max-w-md w-full p-4 lg:p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-semibold text-gray-900">수정 요청</h2>
+          <h2 className="text-base lg:text-lg font-semibold text-gray-900">수정 요청</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <X className="w-7 h-7" />
+            <X className="w-5 h-5 lg:w-6 lg:h-6" />
           </button>
         </div>
 
         <div className="space-y-4">
           <div className="bg-blue-50 rounded-lg p-4">
             <div className="flex items-center gap-2 text-blue-900 mb-2">
-              <Info className="w-5 h-5" />
+              <Info className="w-5 h-5 lg:w-6 lg:h-6" />
               <span className="font-medium">남은 수정 횟수: {remainingRevisions}회</span>
             </div>
             <p className="text-sm text-blue-700">수정 요청 시 판매자에게 알림이 전송됩니다.</p>
@@ -70,7 +70,7 @@ export default function RevisionModal({
               id="revision-file-upload"
               className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-brand-primary transition-colors cursor-pointer"
             >
-              <CloudUpload className="w-8 h-8 text-gray-400 mb-2 mx-auto" />
+              <CloudUpload className="w-5 h-5 lg:w-6 lg:h-6 text-gray-400 mb-2 mx-auto" />
               <p className="text-gray-600 text-sm">클릭하여 파일 선택</p>
             </div>
           </div>
@@ -79,20 +79,20 @@ export default function RevisionModal({
             <button
               onClick={onClose}
               disabled={submitting}
-              className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+              className="flex-1 px-4 py-2 text-sm lg:px-6 lg:py-3 lg:text-base border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
             >
               취소
             </button>
             <button
               onClick={onSubmit}
               disabled={submitting}
-              className="flex-1 px-6 py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors font-medium disabled:opacity-50 flex items-center justify-center"
+              className="flex-1 px-4 py-2 text-sm lg:px-6 lg:py-3 lg:text-base bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors font-medium disabled:opacity-50 flex items-center justify-center"
             >
               {submitting ? (
                 '전송 중...'
               ) : (
                 <>
-                  <RotateCcw className="w-4 h-4 mr-2" />
+                  <RotateCcw className="w-5 h-5 lg:w-6 lg:h-6 mr-2" />
                   수정 요청하기
                 </>
               )}

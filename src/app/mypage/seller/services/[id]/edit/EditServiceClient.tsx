@@ -593,30 +593,32 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-8 px-4">
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
         {/* 상단 네비게이션 */}
-        <div className="mb-6">
+        <div className="mb-4 lg:mb-6">
           <Link
             href="/mypage/seller/services"
             className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>서비스 관리로</span>
+            <span className="text-sm lg:text-base">서비스 관리로</span>
           </Link>
         </div>
 
         {/* 페이지 헤더 */}
-        <div className="mb-8">
-          <h1 className="text-base md:text-lg font-semibold text-gray-900">서비스 수정</h1>
+        <div className="mb-6 lg:mb-8">
+          <h1 className="text-base lg:text-lg font-semibold text-gray-900">서비스 수정</h1>
           <p className="text-gray-600 mt-1 text-sm">서비스 정보를 수정하세요</p>
         </div>
 
         <form onSubmit={handleSubmit} className="max-w-4xl">
           {/* 기본 정보 */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-            <h2 className="text-sm md:text-base font-semibold text-gray-900 mb-6">기본 정보</h2>
+          <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6 mb-4 lg:mb-6">
+            <h2 className="text-base lg:text-lg font-semibold text-gray-900 mb-4 lg:mb-6">
+              기본 정보
+            </h2>
 
-            <div className="space-y-4">
+            <div className="space-y-3 lg:space-y-4">
               {/* 썸네일 이미지 - 최상단 */}
               <div>
                 <div className="block text-sm font-medium text-gray-700 mb-2">
@@ -625,7 +627,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                 </div>
 
                 {/* 업로드 방식 선택 */}
-                <div className="flex gap-2 mb-4">
+                <div className="flex gap-2 mb-3 lg:mb-4">
                   <button
                     type="button"
                     onClick={() => {
@@ -635,13 +637,13 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                       setSelectedTemplate(null);
                       setTextStyle(null);
                     }}
-                    className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
+                    className={`flex-1 px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm font-medium rounded-lg transition-all ${
                       uploadMode === 'file'
                         ? 'bg-brand-primary text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
-                    <Upload className="w-4 h-4 mr-2 inline" />
+                    <Upload className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2 inline" />
                     파일 업로드
                   </button>
                   <button
@@ -653,13 +655,13 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                       setSelectedTemplate(null);
                       setTextStyle(null);
                     }}
-                    className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
+                    className={`flex-1 px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm font-medium rounded-lg transition-all ${
                       uploadMode === 'template'
                         ? 'bg-brand-primary text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
-                    <Palette className="w-4 h-4 mr-2 inline" />
+                    <Palette className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2 inline" />
                     템플릿 사용
                   </button>
                 </div>
@@ -680,7 +682,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                             <button
                               type="button"
                               onClick={cancelNewThumbnail}
-                              className="bg-gray-500 text-white px-3 py-1 rounded-lg hover:bg-gray-600 transition-colors text-sm"
+                              className="bg-gray-500 text-white px-3 py-1.5 text-xs lg:px-3 lg:py-1 lg:text-sm rounded-lg hover:bg-gray-600 transition-colors font-medium"
                             >
                               <Undo className="w-3 h-3 mr-1 inline" />
                               취소
@@ -690,7 +692,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                           <button
                             type="button"
                             onClick={deleteThumbnail}
-                            className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors text-sm"
+                            className="bg-red-500 text-white px-3 py-1.5 text-xs lg:px-3 lg:py-1 lg:text-sm rounded-lg hover:bg-red-600 transition-colors font-medium"
                           >
                             <Trash2 className="w-3 h-3 mr-1 inline" />
                             삭제
@@ -758,12 +760,12 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                             setSelectedTemplate(null);
                             setTextStyle(null);
                           }}
-                          className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors text-sm"
+                          className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1.5 text-xs lg:px-3 lg:py-1 lg:text-sm rounded-lg hover:bg-red-600 transition-colors font-medium"
                         >
                           <X className="w-3 h-3 mr-1 inline" />
                           다시 만들기
                         </button>
-                        <div className="absolute top-2 left-2 bg-green-500 text-white px-3 py-1 rounded-lg text-sm">
+                        <div className="absolute top-2 left-2 bg-green-500 text-white px-3 py-1.5 text-xs lg:px-3 lg:py-1 lg:text-sm rounded-lg font-medium">
                           <Check className="w-3 h-3 mr-1 inline" />
                           생성 완료
                         </div>
@@ -785,14 +787,14 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                             />
 
                             {/* 생성 버튼 */}
-                            <div className="mt-6">
+                            <div className="mt-4 lg:mt-6">
                               <button
                                 type="button"
                                 onClick={generateTemplateThumbnail}
                                 disabled={!textStyle?.text?.trim()}
-                                className="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+                                className="w-full px-4 py-2 lg:px-6 lg:py-3 text-sm lg:text-base bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
                               >
-                                <Sparkles className="w-4 h-4 mr-2 inline" />
+                                <Sparkles className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2 inline" />
                                 썸네일 생성하기 (652×488px)
                               </button>
                             </div>
@@ -916,11 +918,13 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
           </div>
 
           {/* 가격 및 작업 조건 */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-            <h2 className="text-sm md:text-base font-semibold text-gray-900 mb-6">가격 및 작업 조건</h2>
+          <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6 mb-4 lg:mb-6">
+            <h2 className="text-base lg:text-lg font-semibold text-gray-900 mb-4 lg:mb-6">
+              가격 및 작업 조건
+            </h2>
 
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-3 lg:space-y-4">
+              <div className="grid grid-cols-2 gap-3 lg:gap-4">
                 <div>
                   <label
                     htmlFor="service-price"
@@ -983,10 +987,12 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
           </div>
 
           {/* 추가 정보 */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-            <h2 className="text-sm md:text-base font-semibold text-gray-900 mb-6">추가 정보</h2>
+          <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6 mb-4 lg:mb-6">
+            <h2 className="text-base lg:text-lg font-semibold text-gray-900 mb-4 lg:mb-6">
+              추가 정보
+            </h2>
 
-            <div className="space-y-4">
+            <div className="space-y-3 lg:space-y-4">
               <div>
                 <label className="flex items-center gap-2">
                   <input
@@ -1020,26 +1026,26 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
           </div>
 
           {/* 제출 버튼 */}
-          <div className="flex gap-3">
+          <div className="flex gap-2 lg:gap-3">
             <Link
               href="/mypage/seller/services"
-              className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-center"
+              className="flex-1 px-4 py-2 lg:px-6 lg:py-3 text-sm lg:text-base border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-center"
             >
               취소
             </Link>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="flex-1 px-4 py-2 lg:px-6 lg:py-3 text-sm lg:text-base bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin mr-2 inline" />
+                  <Loader2 className="w-3 h-3 lg:w-4 lg:h-4 animate-spin mr-1 lg:mr-2 inline" />
                   등록 중...
                 </>
               ) : (
                 <>
-                  <Check className="w-4 h-4 mr-2 inline" />
+                  <Check className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2 inline" />
                   서비스 등록
                 </>
               )}

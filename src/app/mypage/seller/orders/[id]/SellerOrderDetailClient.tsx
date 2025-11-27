@@ -211,7 +211,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
   if (loading) {
     return (
       <MypageLayoutWrapper mode="seller">
-        <div className="py-8 px-4">
+        <div className="py-4 px-4 lg:py-8 lg:px-6">
           <LoadingSpinner message="주문 정보를 불러오는 중..." />
         </div>
       </MypageLayoutWrapper>
@@ -221,7 +221,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
   if (error || !order) {
     return (
       <MypageLayoutWrapper mode="seller">
-        <div className="py-8 px-4">
+        <div className="py-4 px-4 lg:py-8 lg:px-6">
           <ErrorState message={error || '주문을 찾을 수 없습니다'} retry={loadOrder} />
         </div>
       </MypageLayoutWrapper>
@@ -260,41 +260,41 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-8 px-4">
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
         {/* 상단 네비게이션 */}
-        <div className="mb-6">
+        <div className="mb-4 lg:mb-6">
           <Link
             href="/mypage/seller/orders"
             className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>주문 목록으로</span>
+            <ArrowLeft className="w-4 h-4 lg:w-5 lg:h-5" />
+            <span className="text-sm lg:text-base">주문 목록으로</span>
           </Link>
         </div>
 
         {/* 페이지 헤더 */}
-        <div className="mb-8">
-          <div className="flex items-start justify-between">
+        <div className="mb-4 lg:mb-8">
+          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
             <div>
-              <h1 className="text-xl font-semibold text-gray-900">주문 상세</h1>
-              <p className="text-gray-600 mt-1 text-sm">
+              <h1 className="text-base lg:text-xl font-semibold text-gray-900">주문 상세</h1>
+              <p className="text-gray-600 mt-1 text-xs lg:text-sm">
                 주문 번호: #{order.order_number || order.id.slice(0, 8)}
               </p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2 lg:gap-3">
               <Link
                 href={`/chat?order=${orderId}`}
-                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                className="px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
               >
-                <MessageCircle className="mr-2 inline w-4 h-4" />
+                <MessageCircle className="mr-1.5 inline w-4 h-4 lg:w-5 lg:h-5" />
                 메시지
               </Link>
               {order.status === 'in_progress' && (
                 <button
                   onClick={() => setShowDeliveryModal(true)}
-                  className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
+                  className="px-4 py-2 text-sm lg:px-6 lg:py-2 lg:text-base bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium"
                 >
-                  <Upload className="mr-2 inline w-4 h-4" />
+                  <Upload className="mr-1.5 inline w-4 h-4 lg:w-5 lg:h-5" />
                   납품하기
                 </button>
               )}
@@ -302,16 +302,18 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8">
           {/* 왼쪽: 주요 정보 */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 lg:space-y-6">
             {/* 주문 정보 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">주문 정보</h2>
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
+                주문 정보
+              </h2>
 
-              <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-32 h-32 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center">
+              <div className="space-y-3 lg:space-y-4">
+                <div className="flex items-start gap-3 lg:gap-4">
+                  <div className="w-20 h-20 lg:w-32 lg:h-32 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center">
                     {order.service?.thumbnail_url ? (
                       <img
                         src={order.service.thumbnail_url}
@@ -319,14 +321,14 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                         className="w-full h-full object-cover rounded-lg"
                       />
                     ) : (
-                      <ImageIcon className="text-gray-400 w-8 h-8" />
+                      <ImageIcon className="text-gray-400 w-6 h-6 lg:w-8 lg:h-8" />
                     )}
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm lg:text-lg font-semibold text-gray-900 mb-2 break-words">
                       {order.title || order.service?.title || '서비스 제목 없음'}
                     </h3>
-                    <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-3 text-xs lg:text-sm">
                       <div>
                         <span className="text-gray-600">패키지:</span>
                         <span className="ml-2 font-medium">{order.package || 'standard'}</span>
@@ -358,20 +360,24 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
             </div>
 
             {/* 요구사항 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">구매자 요구사항</h2>
-              <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                <p className="text-gray-700 whitespace-pre-wrap">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
+                구매자 요구사항
+              </h2>
+              <div className="bg-gray-50 rounded-lg p-3 lg:p-4 mb-3 lg:mb-4">
+                <p className="text-gray-700 whitespace-pre-wrap text-xs lg:text-sm">
                   {order.requirements || '요구사항이 없습니다'}
                 </p>
               </div>
               {order.buyer_note && (
-                <div className="bg-blue-50 rounded-lg p-4">
+                <div className="bg-blue-50 rounded-lg p-3 lg:p-4">
                   <div className="flex items-start gap-2">
-                    <Info className="text-blue-600 mt-1 w-5 h-5" />
+                    <Info className="text-blue-600 mt-1 w-4 h-4 lg:w-5 lg:h-5" />
                     <div>
-                      <div className="font-medium text-blue-900 mb-1">추가 메모</div>
-                      <p className="text-blue-700">{order.buyer_note}</p>
+                      <div className="font-medium text-blue-900 mb-1 text-xs lg:text-sm">
+                        추가 메모
+                      </div>
+                      <p className="text-blue-700 text-xs lg:text-sm">{order.buyer_note}</p>
                     </div>
                   </div>
                 </div>
@@ -379,20 +385,24 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
             </div>
 
             {/* 납품 파일 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">납품 파일</h2>
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
+                납품 파일
+              </h2>
               {order.deliverables && order.deliverables.length > 0 ? (
-                <div className="space-y-3">
+                <div className="space-y-2 lg:space-y-3">
                   {order.deliverables.map((file) => (
                     <div
                       key={file.id}
-                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                      className="flex items-center justify-between p-3 lg:p-4 bg-gray-50 rounded-lg gap-2"
                     >
-                      <div className="flex items-center gap-3">
-                        <FileText className="text-blue-500 w-7 h-7" />
-                        <div>
-                          <div className="font-medium text-gray-900">{file.file_name}</div>
-                          <div className="text-sm text-gray-600">
+                      <div className="flex items-center gap-2 lg:gap-3 min-w-0 flex-1">
+                        <FileText className="text-blue-500 w-5 h-5 lg:w-7 lg:h-7 flex-shrink-0" />
+                        <div className="min-w-0">
+                          <div className="font-medium text-gray-900 text-xs lg:text-sm truncate">
+                            {file.file_name}
+                          </div>
+                          <div className="text-xs lg:text-sm text-gray-600">
                             {(file.file_size / 1024 / 1024).toFixed(2)}MB •{' '}
                             {file.created_at && typeof file.created_at === 'string'
                               ? new Date(file.created_at).toLocaleString('ko-KR')
@@ -403,34 +413,41 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                       <a
                         href={file.file_url}
                         download
-                        className="px-4 py-2 text-brand-primary hover:bg-blue-50 rounded-lg transition-colors"
+                        className="px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm text-brand-primary hover:bg-blue-50 rounded-lg transition-colors flex-shrink-0"
                       >
-                        <Download className="mr-2 inline w-4 h-4" />
-                        다운로드
+                        <Download className="mr-1 lg:mr-2 inline w-3 h-3 lg:w-4 lg:h-4" />
+                        <span className="hidden sm:inline">다운로드</span>
+                        <span className="sm:hidden">다운</span>
                       </a>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8 text-gray-500">아직 납품한 파일이 없습니다</div>
+                <div className="text-center py-6 lg:py-8 text-gray-500 text-xs lg:text-sm">
+                  아직 납품한 파일이 없습니다
+                </div>
               )}
             </div>
 
             {/* 상태 이력 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">상태 이력</h2>
-              <div className="space-y-3">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
+                상태 이력
+              </h2>
+              <div className="space-y-2 lg:space-y-3">
                 {statusHistory.map((history, index) => (
                   <div
                     key={`status-${history.status}-${index}`}
-                    className="flex items-start gap-3 pb-3 border-b border-gray-200 last:border-0"
+                    className="flex items-start gap-2 lg:gap-3 pb-2 lg:pb-3 border-b border-gray-200 last:border-0"
                   >
-                    <div className="w-8 h-8 bg-brand-primary rounded-full flex items-center justify-center flex-shrink-0">
-                      <Check className="text-white w-4 h-4" />
+                    <div className="w-6 h-6 lg:w-8 lg:h-8 bg-brand-primary rounded-full flex items-center justify-center flex-shrink-0">
+                      <Check className="text-white w-3 h-3 lg:w-4 lg:h-4" />
                     </div>
                     <div className="flex-1">
-                      <div className="font-medium text-gray-900">{history.status}</div>
-                      <div className="text-sm text-gray-600">
+                      <div className="font-medium text-gray-900 text-xs lg:text-sm">
+                        {history.status}
+                      </div>
+                      <div className="text-xs lg:text-sm text-gray-600">
                         {history.date} • {history.actor}
                       </div>
                     </div>
@@ -441,13 +458,15 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
           </div>
 
           {/* 오른쪽: 사이드바 */}
-          <div className="space-y-6">
+          <div className="space-y-4 lg:space-y-6">
             {/* 현재 상태 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">현재 상태</h3>
-              <div className="flex items-center justify-center py-4">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+              <h3 className="font-semibold text-gray-900 mb-3 lg:mb-4 text-xs lg:text-base">
+                현재 상태
+              </h3>
+              <div className="flex items-center justify-center py-3 lg:py-4">
                 <span
-                  className={`px-6 py-3 rounded-lg font-semibold text-lg ${getStatusColor(order.status)}`}
+                  className={`px-4 py-2 lg:px-6 lg:py-3 rounded-lg font-semibold text-sm lg:text-lg ${getStatusColor(order.status)}`}
                 >
                   {getStatusLabel(order.status)}
                 </span>
@@ -455,43 +474,49 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
             </div>
 
             {/* 구매자 정보 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">구매자 정보</h3>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center text-white font-semibold">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+              <h3 className="font-semibold text-gray-900 mb-3 lg:mb-4 text-xs lg:text-base">
+                구매자 정보
+              </h3>
+              <div className="flex items-center gap-2 lg:gap-3 mb-3 lg:mb-4">
+                <div className="w-10 h-10 lg:w-12 lg:h-12 bg-brand-primary rounded-full flex items-center justify-center text-white font-semibold text-sm lg:text-base">
                   {(order.buyer?.name || '구매자')[0] || 'U'}
                 </div>
                 <div>
-                  <div className="font-medium text-gray-900">{order.buyer?.name || '구매자'}</div>
-                  <div className="text-sm text-gray-600">구매자</div>
+                  <div className="font-medium text-gray-900 text-xs lg:text-sm">
+                    {order.buyer?.name || '구매자'}
+                  </div>
+                  <div className="text-xs lg:text-sm text-gray-600">구매자</div>
                 </div>
               </div>
               <Link
                 href={`/chat?order=${orderId}`}
-                className="w-full px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium text-center block"
+                className="w-full px-3 py-1.5 lg:px-4 lg:py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium text-center block text-xs lg:text-sm"
               >
-                <MessageCircle className="mr-2 inline w-4 h-4" />
+                <MessageCircle className="mr-1.5 inline w-3 h-3 lg:w-4 lg:h-4" />
                 메시지 보내기
               </Link>
             </div>
 
             {/* 결제 정보 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">결제 정보</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+              <h3 className="font-semibold text-gray-900 mb-3 lg:mb-4 text-xs lg:text-base">
+                결제 정보
+              </h3>
+              <div className="space-y-2 lg:space-y-3">
+                <div className="flex items-center justify-between text-xs lg:text-sm">
                   <span className="text-gray-600">주문 금액</span>
                   <span className="font-medium">
                     {order.total_amount?.toLocaleString() || '0'}원
                   </span>
                 </div>
-                <div className="flex items-center justify-between pt-3 border-t border-gray-200">
-                  <span className="font-semibold text-gray-900">최종 금액</span>
-                  <span className="font-semibold text-brand-primary text-lg">
+                <div className="flex items-center justify-between pt-2 lg:pt-3 border-t border-gray-200">
+                  <span className="font-semibold text-gray-900 text-xs lg:text-sm">최종 금액</span>
+                  <span className="font-semibold text-brand-primary text-sm lg:text-lg">
                     {order.total_amount?.toLocaleString() || '0'}원
                   </span>
                 </div>
-                <div className="pt-3 border-t border-gray-200 text-sm text-gray-600">
+                <div className="pt-2 lg:pt-3 border-t border-gray-200 text-xs lg:text-sm text-gray-600 space-y-1">
                   <div>주문일: {new Date(order.created_at).toLocaleString('ko-KR')}</div>
                   {order.paid_at && typeof order.paid_at === 'string' && (
                     <div>결제일: {new Date(order.paid_at).toLocaleString('ko-KR')}</div>
@@ -501,24 +526,26 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
             </div>
 
             {/* 빠른 액션 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">빠른 액션</h3>
+            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+              <h3 className="font-semibold text-gray-900 mb-3 lg:mb-4 text-xs lg:text-base">
+                빠른 액션
+              </h3>
               <div className="space-y-2">
                 {/* 결제 완료 상태일 때: 접수 버튼 표시 */}
                 {order.status === 'paid' && (
                   <button
                     onClick={handleAcceptOrder}
                     disabled={submitting}
-                    className="w-full px-4 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-4 py-2 lg:px-4 lg:py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-semibold text-sm lg:text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {submitting ? (
                       <>
-                        <Loader2 className="animate-spin mr-2 inline w-5 h-5" />
+                        <Loader2 className="animate-spin mr-1.5 inline w-4 h-4 lg:w-5 lg:h-5" />
                         처리 중...
                       </>
                     ) : (
                       <>
-                        <CheckCircle className="mr-2 inline w-5 h-5" />
+                        <CheckCircle className="mr-1.5 inline w-4 h-4 lg:w-5 lg:h-5" />
                         주문 접수하기
                       </>
                     )}
@@ -529,22 +556,22 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                 {order.status === 'in_progress' && (
                   <button
                     onClick={() => setShowDeliveryModal(true)}
-                    className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold text-lg"
+                    className="w-full px-4 py-2 lg:px-4 lg:py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold text-sm lg:text-lg"
                   >
-                    <Upload className="mr-2 inline w-5 h-5" />
+                    <Upload className="mr-1.5 inline w-4 h-4 lg:w-5 lg:h-5" />
                     납품하기
                   </button>
                 )}
 
                 <button
                   onClick={() => setShowCancelModal(true)}
-                  className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+                  className="w-full px-3 py-1.5 lg:px-4 lg:py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium text-xs lg:text-sm"
                 >
-                  <Ban className="mr-2 inline w-4 h-4" />
+                  <Ban className="mr-1.5 inline w-3 h-3 lg:w-4 lg:h-4" />
                   취소 요청
                 </button>
-                <button className="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
-                  <Headset className="mr-2 inline w-4 h-4" />
+                <button className="w-full px-3 py-1.5 lg:px-4 lg:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-xs lg:text-sm">
+                  <Headset className="mr-1.5 inline w-3 h-3 lg:w-4 lg:h-4" />
                   고객센터 문의
                 </button>
               </div>
@@ -555,22 +582,22 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
         {/* 취소 요청 모달 */}
         {showCancelModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-md w-full p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-semibold text-gray-900">주문 취소 요청</h2>
+            <div className="bg-white rounded-lg max-w-sm lg:max-w-md w-full p-4 lg:p-6">
+              <div className="flex items-center justify-between mb-4 lg:mb-6">
+                <h2 className="text-lg lg:text-2xl font-semibold text-gray-900">주문 취소 요청</h2>
                 <button
                   onClick={() => setShowCancelModal(false)}
                   className="text-gray-400 hover:text-gray-600"
                 >
-                  <X className="w-7 h-7" />
+                  <X className="w-5 h-5 lg:w-7 lg:h-7" />
                 </button>
               </div>
 
-              <div className="space-y-4">
-                <div className="bg-red-50 rounded-lg p-4">
+              <div className="space-y-3 lg:space-y-4">
+                <div className="bg-red-50 rounded-lg p-3 lg:p-4">
                   <div className="flex items-start gap-2">
-                    <Ban className="text-red-600 mt-1 w-5 h-5" />
-                    <div className="text-sm text-red-800">
+                    <Ban className="text-red-600 mt-1 w-4 h-4 lg:w-5 lg:h-5" />
+                    <div className="text-xs lg:text-sm text-red-800">
                       <p className="font-medium mb-1">취소 요청 안내</p>
                       <ul className="list-disc list-inside space-y-1">
                         <li>취소 요청 시 구매자에게 알림이 전송됩니다</li>
@@ -584,7 +611,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                 <div>
                   <label
                     htmlFor="seller-cancel-reason"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-xs lg:text-sm font-medium text-gray-700 mb-2"
                   >
                     취소 사유 *
                   </label>
@@ -594,22 +621,22 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                     value={cancelReason}
                     onChange={(e) => setCancelReason(e.target.value)}
                     placeholder="주문을 취소하려는 사유를 구체적으로 작성해주세요"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
+                    className="w-full px-3 py-2 lg:px-4 lg:py-2 text-xs lg:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   ></textarea>
                 </div>
 
-                <div className="flex gap-3 pt-4">
+                <div className="flex gap-2 lg:gap-3 pt-3 lg:pt-4">
                   <button
                     onClick={() => setShowCancelModal(false)}
                     disabled={submitting}
-                    className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+                    className="flex-1 px-4 py-2 lg:px-6 lg:py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-xs lg:text-sm disabled:opacity-50"
                   >
                     닫기
                   </button>
                   <button
                     onClick={handleCancelOrder}
                     disabled={submitting}
-                    className="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:opacity-50"
+                    className="flex-1 px-4 py-2 lg:px-6 lg:py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium text-xs lg:text-sm disabled:opacity-50"
                   >
                     {submitting ? '처리중...' : '취소 요청'}
                   </button>
@@ -622,39 +649,41 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
         {/* 납품 모달 */}
         {showDeliveryModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-2xl w-full p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-semibold text-gray-900">납품하기</h2>
+            <div className="bg-white rounded-lg max-w-sm lg:max-w-2xl w-full p-4 lg:p-6">
+              <div className="flex items-center justify-between mb-4 lg:mb-6">
+                <h2 className="text-lg lg:text-2xl font-semibold text-gray-900">납품하기</h2>
                 <button
                   onClick={() => setShowDeliveryModal(false)}
                   className="text-gray-400 hover:text-gray-600"
                 >
-                  <X className="w-7 h-7" />
+                  <X className="w-5 h-5 lg:w-7 lg:h-7" />
                 </button>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3 lg:space-y-4">
                 <div>
                   <label
                     htmlFor="seller-delivery-file-upload"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-xs lg:text-sm font-medium text-gray-700 mb-2"
                   >
                     파일 업로드
                   </label>
                   <div
                     id="seller-delivery-file-upload"
-                    className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-brand-primary transition-colors cursor-pointer"
+                    className="border-2 border-dashed border-gray-300 rounded-lg p-6 lg:p-8 text-center hover:border-brand-primary transition-colors cursor-pointer"
                   >
-                    <CloudUpload className="text-gray-400 w-10 h-10 mb-3 inline-block" />
-                    <p className="text-gray-600">클릭하여 파일 선택 또는 드래그 앤 드롭</p>
-                    <p className="text-sm text-gray-500 mt-2">최대 100MB</p>
+                    <CloudUpload className="text-gray-400 w-8 h-8 lg:w-10 lg:h-10 mb-2 lg:mb-3 inline-block" />
+                    <p className="text-gray-600 text-xs lg:text-sm">
+                      클릭하여 파일 선택 또는 드래그 앤 드롭
+                    </p>
+                    <p className="text-xs lg:text-sm text-gray-500 mt-1 lg:mt-2">최대 100MB</p>
                   </div>
                 </div>
 
                 <div>
                   <label
                     htmlFor="seller-delivery-message"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-xs lg:text-sm font-medium text-gray-700 mb-2"
                   >
                     전달 메시지
                   </label>
@@ -664,22 +693,22 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                     value={deliveryMessage}
                     onChange={(e) => setDeliveryMessage(e.target.value)}
                     placeholder="구매자에게 전달할 메시지를 입력하세요"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
+                    className="w-full px-3 py-2 lg:px-4 lg:py-2 text-xs lg:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                   ></textarea>
                 </div>
 
-                <div className="flex gap-3 pt-4">
+                <div className="flex gap-2 lg:gap-3 pt-3 lg:pt-4">
                   <button
                     onClick={() => setShowDeliveryModal(false)}
                     disabled={submitting}
-                    className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+                    className="flex-1 px-4 py-2 lg:px-6 lg:py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-xs lg:text-sm disabled:opacity-50"
                   >
                     취소
                   </button>
                   <button
                     onClick={handleDelivery}
                     disabled={submitting}
-                    className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50"
+                    className="flex-1 px-4 py-2 lg:px-6 lg:py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium text-xs lg:text-sm disabled:opacity-50"
                   >
                     {submitting ? '처리중...' : '납품 완료'}
                   </button>

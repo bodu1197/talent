@@ -227,10 +227,10 @@ export default function BuyerDashboardClient({
                 return (
                   <div
                     key={order.id}
-                    className="border border-gray-200 rounded-lg p-3 lg:p-4 hover:border-brand-primary transition-colors"
+                    className="border border-gray-200 rounded-lg hover:border-brand-primary transition-colors"
                   >
                     {/* 모바일 레이아웃 */}
-                    <div className="lg:hidden">
+                    <div className="lg:hidden p-3">
                       <div className="flex gap-3 mb-2">
                         <div className="w-14 h-14 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
                           {order.service?.thumbnail_url ? (
@@ -288,7 +288,7 @@ export default function BuyerDashboardClient({
                     </div>
 
                     {/* PC 레이아웃 */}
-                    <div className="hidden lg:block">
+                    <div className="hidden lg:block p-4">
                       <div className="flex gap-4">
                         <div className="w-20 h-20 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
                           {order.service?.thumbnail_url ? (

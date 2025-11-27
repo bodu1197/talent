@@ -45,48 +45,52 @@ export default function WithdrawHistoryClient({ history }: WithdrawHistoryClient
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-8 px-4">
-        <div className="mb-8">
-          <h1 className="text-base md:text-lg font-semibold text-gray-900">출금 내역</h1>
-          <p className="text-gray-600 mt-1 text-sm md:text-base">출금 이력을 확인하세요</p>
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
+        <div className="mb-4 lg:mb-6">
+          <h1 className="text-base lg:text-lg font-semibold text-gray-900">출금 내역</h1>
+          <p className="text-gray-600 mt-1 text-sm">출금 이력을 확인하세요</p>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200">
+        <div className="bg-white rounded-lg border border-gray-200 overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-900">
+                <th className="px-3 py-2 lg:px-6 lg:py-3 text-left text-xs lg:text-sm font-medium text-gray-900 whitespace-nowrap">
                   날짜
                 </th>
-                <th className="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-900">
+                <th className="px-3 py-2 lg:px-6 lg:py-3 text-left text-xs lg:text-sm font-medium text-gray-900 whitespace-nowrap">
                   은행
                 </th>
-                <th className="px-6 py-3 text-left text-sm md:text-base font-medium text-gray-900">
+                <th className="px-3 py-2 lg:px-6 lg:py-3 text-left text-xs lg:text-sm font-medium text-gray-900 whitespace-nowrap">
                   계좌
                 </th>
-                <th className="px-6 py-3 text-right text-sm font-medium text-gray-900">금액</th>
-                <th className="px-6 py-3 text-center text-sm font-medium text-gray-900">상태</th>
+                <th className="px-3 py-2 lg:px-6 lg:py-3 text-right text-xs lg:text-sm font-medium text-gray-900 whitespace-nowrap">
+                  금액
+                </th>
+                <th className="px-3 py-2 lg:px-6 lg:py-3 text-center text-xs lg:text-sm font-medium text-gray-900 whitespace-nowrap">
+                  상태
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {history.length > 0 ? (
                 history.map((item) => (
                   <tr key={item.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-xs md:text-sm text-gray-600">
+                    <td className="px-3 py-3 lg:px-6 lg:py-4 text-xs lg:text-sm text-gray-600 whitespace-nowrap">
                       {new Date(item.requested_at).toLocaleDateString('ko-KR')}
                     </td>
-                    <td className="px-6 py-4 text-sm md:text-base text-gray-900">
+                    <td className="px-3 py-3 lg:px-6 lg:py-4 text-xs lg:text-sm text-gray-900 whitespace-nowrap">
                       {item.bank_name}
                     </td>
-                    <td className="px-6 py-4 text-xs md:text-sm text-gray-600">
+                    <td className="px-3 py-3 lg:px-6 lg:py-4 text-xs lg:text-sm text-gray-600 whitespace-nowrap">
                       {item.account_number}
                     </td>
-                    <td className="px-6 py-4 text-sm md:text-base font-medium text-red-600 text-right">
+                    <td className="px-3 py-3 lg:px-6 lg:py-4 text-xs lg:text-sm font-medium text-red-600 text-right whitespace-nowrap">
                       -{item.amount.toLocaleString()}원
                     </td>
-                    <td className="px-6 py-4 text-center">
+                    <td className="px-3 py-3 lg:px-6 lg:py-4 text-center">
                       <span
-                        className={`px-2 py-1 rounded text-xs font-medium ${getStatusClass(item.status)}`}
+                        className={`px-2 py-1 rounded text-xs font-medium ${getStatusClass(item.status)} whitespace-nowrap`}
                       >
                         {getStatusLabel(item.status)}
                       </span>
@@ -97,7 +101,7 @@ export default function WithdrawHistoryClient({ history }: WithdrawHistoryClient
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
                     <Banknote className="w-10 h-10 mb-4 text-gray-300 mx-auto" />
-                    <p>출금 내역이 없습니다</p>
+                    <p className="text-sm">출금 내역이 없습니다</p>
                   </td>
                 </tr>
               )}

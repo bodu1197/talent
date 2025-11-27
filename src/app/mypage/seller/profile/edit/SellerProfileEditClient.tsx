@@ -123,24 +123,24 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-8 px-4">
-        <div className="mb-6 lg:mb-8 pt-12 lg:pt-0">
-          <h1 className="text-base md:text-lg font-semibold text-gray-900">판매자 정보 수정</h1>
-          <p className="text-gray-600 mt-1 text-sm md:text-base">
+      <div className="py-4 px-4 lg:py-8 lg:px-6">
+        <div className="mb-4 lg:mb-6 pt-12 lg:pt-0">
+          <h1 className="text-base lg:text-lg font-semibold text-gray-900">판매자 정보 수정</h1>
+          <p className="text-gray-600 mt-1 text-xs lg:text-sm">
             판매자 프로필 및 정산 정보를 수정하세요
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="max-w-4xl space-y-6">
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">프로필 정보</h2>
+          <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+            <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
+              프로필 정보
+            </h2>
 
             <div className="space-y-4">
               {/* 프로필 이미지 업로드 */}
               <div>
-                <span className="block text-sm md:text-base font-medium text-gray-700 mb-2">
-                  프로필 사진
-                </span>
+                <span className="block text-sm font-medium text-gray-700 mb-2">프로필 사진</span>
                 <div className="flex items-center gap-4">
                   {/* 현재 프로필 이미지 또는 기본 아바타 */}
                   {profilePreview ? (
@@ -177,7 +177,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                   <div>
                     <label
                       htmlFor="profile-image-upload"
-                      className="inline-flex items-center px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors cursor-pointer"
+                      className="inline-flex items-center px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm font-medium bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors cursor-pointer"
                     >
                       <Camera className="w-4 h-4 mr-2" />
                       사진 업로드
@@ -189,7 +189,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                       onChange={handleProfileImageChange}
                       className="hidden"
                     />
-                    <p className="mt-2 text-xs md:text-sm text-gray-500">JPG, PNG 형식, 최대 5MB</p>
+                    <p className="mt-2 text-xs lg:text-sm text-gray-500">JPG, PNG 형식, 최대 5MB</p>
                   </div>
                 </div>
               </div>
@@ -197,7 +197,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
               <div>
                 <label
                   htmlFor="seller-display-name"
-                  className="block text-sm md:text-base font-medium text-gray-700 mb-2"
+                  className="block text-sm font-medium text-gray-700 mb-2"
                 >
                   판매자명 (활동명) *
                 </label>
@@ -231,8 +231,10 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
             </div>
           </div>
 
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">연락처 정보</h2>
+          <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+            <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
+              연락처 정보
+            </h2>
 
             <div className="space-y-4">
               <div>
@@ -259,9 +261,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                       onChange={(e) => setProfile({ ...profile, show_phone: e.target.checked })}
                       className="w-4 h-4 text-brand-primary rounded"
                     />
-                    <span className="ml-2 text-sm md:text-base text-gray-700">
-                      프로필에 전화번호 공개
-                    </span>
+                    <span className="ml-2 text-sm text-gray-700">프로필에 전화번호 공개</span>
                   </label>
                 </div>
               </div>
@@ -322,7 +322,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                   <div>
                     <label
                       htmlFor="contact-start-time"
-                      className="block text-xs md:text-sm text-gray-600 mb-1"
+                      className="block text-xs lg:text-sm text-gray-600 mb-1"
                     >
                       시작 시간
                     </label>
@@ -348,7 +348,10 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                     </select>
                   </div>
                   <div>
-                    <label htmlFor="contact-end-time" className="block text-xs text-gray-600 mb-1">
+                    <label
+                      htmlFor="contact-end-time"
+                      className="block text-xs lg:text-sm text-gray-600 mb-1"
+                    >
                       종료 시간
                     </label>
                     <select
@@ -373,15 +376,17 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                     </select>
                   </div>
                 </div>
-                <p className="mt-1 text-xs md:text-sm text-gray-500">
+                <p className="mt-1 text-xs lg:text-sm text-gray-500">
                   구매자가 연락 가능한 시간대를 선택해주세요
                 </p>
               </fieldset>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">정산 정보</h2>
+          <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+            <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
+              정산 정보
+            </h2>
 
             <div className="space-y-4">
               <div>
@@ -444,7 +449,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                     onChange={(e) => setProfile({ ...profile, is_business: e.target.checked })}
                     className="w-4 h-4 text-brand-primary rounded"
                   />
-                  <span className="ml-2 text-sm md:text-base text-gray-700">사업자입니다</span>
+                  <span className="ml-2 text-sm text-gray-700">사업자입니다</span>
                 </label>
               </div>
 
@@ -485,30 +490,28 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                     }
                     className="w-4 h-4 text-brand-primary rounded"
                   />
-                  <span className="ml-2 text-sm md:text-base text-gray-700">
-                    세금계산서 발행 가능
-                  </span>
+                  <span className="ml-2 text-sm text-gray-700">세금계산서 발행 가능</span>
                 </label>
-                <p className="mt-1 ml-6 text-xs md:text-sm text-gray-500">
+                <p className="mt-1 ml-6 text-xs lg:text-sm text-gray-500">
                   사업자인 경우 체크하시면 구매자에게 세금계산서 발행 가능 여부가 표시됩니다
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex gap-3 lg:gap-4">
             <button
               type="button"
               onClick={() => router.back()}
               disabled={saving}
-              className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+              className="flex-1 px-4 py-2.5 text-sm lg:px-6 lg:py-3 lg:text-base border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
             >
               취소
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50"
+              className="flex-1 px-4 py-2.5 text-sm lg:px-6 lg:py-3 lg:text-base bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors font-medium disabled:opacity-50"
             >
               {saving ? '저장중...' : '저장하기'}
             </button>

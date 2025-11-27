@@ -68,9 +68,9 @@ export default function FavoritesPage() {
   if (!user) {
     return (
       <MypageLayoutWrapper mode="buyer">
-        <div className="py-8 px-4">
+        <div className="py-4 px-4 lg:py-8 lg:px-6">
           <div className="max-w-md mx-auto text-center">
-            <Lock className="w-16 h-16 text-gray-300 mb-4" />
+            <Lock className="w-12 h-12 lg:w-16 lg:h-16 text-gray-300 mb-4" />
             <h2 className="text-base md:text-lg font-semibold mb-4">로그인이 필요합니다</h2>
             <p className="text-gray-600 mb-6">찜한 서비스를 확인하려면 로그인해주세요.</p>
             <Link
@@ -88,15 +88,13 @@ export default function FavoritesPage() {
   if (loading) {
     return (
       <MypageLayoutWrapper mode="buyer">
-        <div className="py-8 px-4">
-          <div className="mb-6 lg:mb-8">
-            <h1 className="text-base md:text-lg font-semibold mb-2">찜한 서비스</h1>
-            <p className="text-xs md:text-sm text-gray-600">
-              관심있는 서비스를 저장하고 관리하세요
-            </p>
+        <div className="py-4 px-4 lg:py-8 lg:px-6">
+          <div className="mb-4 lg:mb-6">
+            <h1 className="text-base lg:text-lg font-semibold text-gray-900">찜한 서비스</h1>
+            <p className="text-gray-600 mt-1 text-sm">관심있는 서비스를 저장하고 관리하세요</p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 lg:gap-4">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
               <div key={`favorite-skeleton-${i}`} className="animate-pulse">
                 <div className="bg-gray-200 rounded-lg" style={{ aspectRatio: '210/160' }}></div>
@@ -139,7 +137,7 @@ export default function FavoritesPage() {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 lg:gap-4">
             {favorites.map((favorite) => {
               const { service } = favorite;
               if (!service) return null;
