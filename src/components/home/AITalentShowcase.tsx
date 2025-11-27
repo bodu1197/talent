@@ -62,14 +62,6 @@ export default function AITalentShowcase({ services = [] }: Props) {
                     <Bot className="w-10 h-10 text-gray-400" />
                   </div>
                 )}
-
-                {/* AI 배지 */}
-                <div className="absolute top-2 left-2">
-                  <div className="px-2 py-1 bg-purple-500 text-white text-xs rounded shadow-lg flex items-center gap-1">
-                    <Bot className="w-3 h-3" />
-                    AI
-                  </div>
-                </div>
               </div>
 
               {/* 서비스 정보 */}
