@@ -570,7 +570,10 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
                   <Ban className="mr-1.5 inline w-3 h-3 lg:w-4 lg:h-4" />
                   취소 요청
                 </button>
-                <button className="w-full px-3 py-1.5 lg:px-4 lg:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-xs lg:text-sm">
+                <button
+                  onClick={() => router.push('/help/contact')}
+                  className="w-full px-3 py-1.5 lg:px-4 lg:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-xs lg:text-sm"
+                >
                   <Headset className="mr-1.5 inline w-3 h-3 lg:w-4 lg:h-4" />
                   고객센터 문의
                 </button>

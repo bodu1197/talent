@@ -604,7 +604,10 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                   <Ban className="w-3 h-3 lg:w-4 lg:h-4 mr-1.5" />
                   취소 요청
                 </button>
-                <button className="w-full px-3 py-1.5 lg:px-4 lg:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-xs lg:text-sm">
+                <button
+                  onClick={() => router.push('/help/contact')}
+                  className="w-full px-3 py-1.5 lg:px-4 lg:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-xs lg:text-sm"
+                >
                   <Headphones className="w-3 h-3 lg:w-4 lg:h-4 mr-1.5" />
                   고객센터 문의
                 </button>

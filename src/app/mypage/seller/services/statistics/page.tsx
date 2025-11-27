@@ -1,6 +1,10 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import ServiceStatisticsClient from './ServiceStatisticsClient';
+import { logger } from '@/lib/logger';
+
+// 인증이 필요한 페이지이므로 동적 렌더링 강제
+export const dynamic = 'force-dynamic';
 
 interface Order {
   total_amount: number | null;
@@ -106,16 +110,31 @@ export default async function ServiceStatisticsPage({
   }
 
   // 서비스 정보 조회
-  const { data: service } = await supabase
+  logger.info('[ServiceStatistics] 조회 시작:', { serviceId, sellerId: seller.id });
+
+  const { data: service, error: serviceError } = await supabase
     .from('services')
-    .select('id, title, view_count, favorite_count, order_count, seller_id')
+    .select('id, title, views, orders_count, review_count, seller_id')
     .eq('id', serviceId)
     .eq('seller_id', seller.id)
     .single();
 
+  logger.info('[ServiceStatistics] 조회 결과:', { service, error: serviceError });
+
   if (!service) {
+    logger.warn('[ServiceStatistics] 서비스 없음 - 리다이렉트:', {
+      serviceId,
+      sellerId: seller.id,
+      error: serviceError,
+    });
     redirect('/mypage/seller/services');
   }
+
+  // 찜 수 조회 (favorites 테이블에서 계산)
+  const { count: favoriteCount } = await supabase
+    .from('favorites')
+    .select('*', { count: 'exact', head: true })
+    .eq('service_id', serviceId);
 
   // 주문 통계 (최근 30일)
   const thirtyDaysAgo = new Date();
@@ -149,9 +168,9 @@ export default async function ServiceStatisticsPage({
   const stats = {
     serviceName: service.title,
     period: '최근 30일',
-    viewCount: service.view_count || 0,
-    favoriteCount: service.favorite_count || 0,
-    orderCount: service.order_count || 0,
+    viewCount: service.views || 0,
+    favoriteCount: favoriteCount || 0,
+    orderCount: service.orders_count || 0,
     revenue,
     avgRating,
     reviewCount: reviews?.length || 0,
