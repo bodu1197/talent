@@ -358,7 +358,7 @@ export default function NewServiceClient({ sellerId }: Props) {
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-4 px-4 lg:py-8 lg:px-6">
+      <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
         {/* 상단 네비게이션 */}
         <div className="mb-4 lg:mb-6">
           <Link

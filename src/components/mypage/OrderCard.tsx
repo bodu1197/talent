@@ -36,7 +36,7 @@ export default function OrderCard({ order, mode, actions }: OrderCardProps) {
   const userLabel = mode === 'seller' ? '구매자' : '판매자';
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-3 lg:p-6 hover:border-brand-primary transition-colors">
+    <div className="bg-white rounded-lg shadow hover:shadow-md p-3 lg:p-6 transition-shadow">
       {/* 모바일 레이아웃 */}
       <div className="lg:hidden">
         {/* 상단: 썸네일 + 서비스명 + 상태 */}

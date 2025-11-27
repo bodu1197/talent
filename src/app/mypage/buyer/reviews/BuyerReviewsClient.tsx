@@ -81,7 +81,7 @@ export default function BuyerReviewsClient({
 
   return (
     <MypageLayoutWrapper mode="buyer">
-      <div className="py-4 px-4 lg:py-8 lg:px-6">
+      <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
         {/* 페이지 헤더 */}
         <div className="mb-4 lg:mb-6">
           <h1 className="text-base lg:text-lg font-semibold text-gray-900">리뷰 관리</h1>
@@ -141,10 +141,7 @@ export default function BuyerReviewsClient({
           <div className="space-y-3">
             {pendingReviews.length > 0 ? (
               pendingReviews.map((order) => (
-                <div
-                  key={order.id}
-                  className="bg-white border border-gray-200 rounded-lg p-3 lg:p-4"
-                >
+                <div key={order.id} className="bg-white rounded-lg shadow p-3 lg:p-4">
                   {/* 모바일 레이아웃 */}
                   <div className="lg:hidden">
                     <div className="flex gap-3 mb-2">
@@ -227,7 +224,7 @@ export default function BuyerReviewsClient({
                 </div>
               ))
             ) : (
-              <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 text-center">
+              <div className="bg-white rounded-lg shadow p-6 text-center">
                 <Star className="w-10 h-10 text-gray-300 mx-auto mb-3" />
                 <p className="text-gray-600 text-sm">작성 가능한 리뷰가 없습니다</p>
               </div>
@@ -240,10 +237,7 @@ export default function BuyerReviewsClient({
           <div className="space-y-3">
             {writtenReviews.length > 0 ? (
               writtenReviews.map((review) => (
-                <div
-                  key={review.id}
-                  className="bg-white border border-gray-200 rounded-lg p-3 lg:p-4"
-                >
+                <div key={review.id} className="bg-white rounded-lg shadow p-3 lg:p-4">
                   {/* 모바일 레이아웃 */}
                   <div className="lg:hidden">
                     <div className="flex gap-3 mb-2">
@@ -360,7 +354,7 @@ export default function BuyerReviewsClient({
                 </div>
               ))
             ) : (
-              <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 text-center">
+              <div className="bg-white rounded-lg shadow p-6 text-center">
                 <Star className="w-10 h-10 text-gray-300 mx-auto mb-3" />
                 <p className="text-gray-600 text-sm">작성한 리뷰가 없습니다</p>
               </div>

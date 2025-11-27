@@ -36,7 +36,7 @@ export default function SellerProfileClient({ profile }: Props) {
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-4 px-4 lg:py-8 lg:px-6">
+      <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
         {/* 페이지 헤더 */}
         <div className="mb-4 lg:mb-6 flex items-center justify-between gap-2">
           <div>

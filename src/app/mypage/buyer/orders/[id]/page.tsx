@@ -232,7 +232,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
   if (loading) {
     return (
       <MypageLayoutWrapper mode="buyer">
-        <div className="py-4 px-4 lg:py-8 lg:px-6">
+        <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
           <LoadingSpinner message="주문 정보를 불러오는 중..." />
         </div>
       </MypageLayoutWrapper>
@@ -242,7 +242,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
   if (error || !order) {
     return (
       <MypageLayoutWrapper mode="buyer">
-        <div className="py-4 px-4 lg:py-8 lg:px-6">
+        <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
           <ErrorState message={error || '주문을 찾을 수 없습니다'} retry={loadOrder} />
         </div>
       </MypageLayoutWrapper>
@@ -253,7 +253,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
 
   return (
     <MypageLayoutWrapper mode="buyer">
-      <div className="py-4 px-4 lg:py-8 lg:px-6">
+      <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
         {/* 상단 네비게이션 */}
         <div className="mb-4 lg:mb-6">
           <Link

@@ -90,7 +90,7 @@ export default function WithdrawClient({
 
   return (
     <MypageLayoutWrapper mode="seller" profileData={profileData}>
-      <div className="py-4 px-4 lg:py-8 lg:px-6">
+      <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-base lg:text-lg font-semibold mb-4 lg:mb-6">출금 신청</h1>
 

@@ -376,7 +376,7 @@ function BuyerOrdersContent() {
   if (loading) {
     return (
       <MypageLayoutWrapper mode="buyer">
-        <div className="py-4 px-4 lg:py-8 lg:px-6">
+        <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
           <LoadingSpinner message="주문 내역을 불러오는 중..." />
         </div>
       </MypageLayoutWrapper>
@@ -386,7 +386,7 @@ function BuyerOrdersContent() {
   if (error) {
     return (
       <MypageLayoutWrapper mode="buyer">
-        <div className="py-4 px-4 lg:py-8 lg:px-6">
+        <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
           <ErrorState message={error} retry={loadOrders} />
         </div>
       </MypageLayoutWrapper>
@@ -395,7 +395,7 @@ function BuyerOrdersContent() {
 
   return (
     <MypageLayoutWrapper mode="buyer">
-      <div className="py-4 px-4 lg:py-8 lg:px-6">
+      <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
         {/* 페이지 헤더 */}
         <div className="mb-4 lg:mb-6">
           <h1 className="text-base lg:text-lg font-semibold text-gray-900">주문 내역</h1>
@@ -537,7 +537,7 @@ export default function BuyerOrdersPage() {
     <Suspense
       fallback={
         <MypageLayoutWrapper mode="buyer">
-          <div className="py-4 px-4 lg:py-8 lg:px-6">
+          <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
             <LoadingSpinner message="페이지 로딩 중..." />
           </div>
         </MypageLayoutWrapper>

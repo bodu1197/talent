@@ -28,7 +28,7 @@ export default function ServiceStatisticsClient({
 }: Props) {
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="w-full max-w-[1200px] py-4 px-4 lg:py-8 lg:px-6 mx-auto">
+      <div className="w-full max-w-[1200px] pt-2 pb-4 px-4 lg:py-8 lg:px-6 mx-auto">
         {/* 상단 네비게이션 */}
         <div className="mb-4 lg:mb-6">
           <Link

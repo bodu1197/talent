@@ -178,7 +178,7 @@ export default function SellerEarningsClient({
 
   return (
     <MypageLayoutWrapper mode="seller" profileData={profileData}>
-      <div className="py-4 px-4 lg:py-8 lg:px-6">
+      <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
         <div className="mb-4 lg:mb-6">
           <h1 className="text-base lg:text-lg font-semibold text-gray-900">수익 관리</h1>
           <p className="text-gray-600 mt-1 text-sm">판매 수익을 관리하세요</p>

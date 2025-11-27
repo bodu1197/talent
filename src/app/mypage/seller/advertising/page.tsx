@@ -5,19 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import { startAdvertisingSubscription } from '@/lib/advertising';
 import type { AdvertisingDashboard } from '@/types/advertising';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
-import {
-  Gift,
-  CheckCircle,
-  Eye,
-  MousePointer,
-  TrendingUp,
-  Megaphone,
-  List,
-  Tag,
-  Rocket,
-  Plus,
-  RefreshCw,
-} from 'lucide-react';
+import { Gift, CheckCircle, Megaphone, List, Tag, Rocket, Plus, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
 import { logger } from '@/lib/logger';
@@ -253,7 +241,7 @@ export default function AdvertisingPage() {
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-4 px-4 lg:py-8 lg:px-6">
+      <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
         {/* 헤더 섹션 */}
         <div className="mb-4 lg:mb-6">
           <h1 className="text-base lg:text-lg font-semibold text-gray-900">광고 관리</h1>
@@ -300,37 +288,22 @@ export default function AdvertisingPage() {
 
             <div className="grid grid-cols-3 gap-2 lg:gap-4 mb-4 lg:mb-6">
               <div className="bg-white rounded-lg shadow p-3 lg:p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-gray-600">총 노출수</p>
-                    <p className="text-sm lg:text-lg font-semibold text-gray-900">
-                      {dashboard.stats.totalImpressions.toLocaleString()}
-                    </p>
-                  </div>
-                  <Eye className="w-5 h-5 lg:w-6 lg:h-6 text-blue-500" />
-                </div>
+                <p className="text-xs text-gray-600">총 노출수</p>
+                <p className="text-sm lg:text-lg font-semibold text-gray-900">
+                  {dashboard.stats.totalImpressions.toLocaleString()}
+                </p>
               </div>
               <div className="bg-white rounded-lg shadow p-3 lg:p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-gray-600">총 클릭수</p>
-                    <p className="text-sm lg:text-lg font-semibold text-gray-900">
-                      {dashboard.stats.totalClicks.toLocaleString()}
-                    </p>
-                  </div>
-                  <MousePointer className="w-5 h-5 lg:w-6 lg:h-6 text-green-500" />
-                </div>
+                <p className="text-xs text-gray-600">총 클릭수</p>
+                <p className="text-sm lg:text-lg font-semibold text-gray-900">
+                  {dashboard.stats.totalClicks.toLocaleString()}
+                </p>
               </div>
               <div className="bg-white rounded-lg shadow p-3 lg:p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-gray-600">클릭률</p>
-                    <p className="text-sm lg:text-lg font-semibold text-gray-900">
-                      {dashboard.stats.ctr.toFixed(2)}%
-                    </p>
-                  </div>
-                  <TrendingUp className="w-5 h-5 lg:w-6 lg:h-6 text-purple-500" />
-                </div>
+                <p className="text-xs text-gray-600">클릭률</p>
+                <p className="text-sm lg:text-lg font-semibold text-gray-900">
+                  {dashboard.stats.ctr.toFixed(2)}%
+                </p>
               </div>
             </div>
           </>
@@ -338,73 +311,65 @@ export default function AdvertisingPage() {
 
         {/* 활성 광고 섹션 */}
         {dashboard?.subscriptions && dashboard.subscriptions.length > 0 && (
-          <div className="bg-white rounded-lg shadow p-3 lg:p-4 mb-4 lg:mb-6">
-            <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                <Megaphone className="w-4 h-4 text-green-600" />
-              </div>
+          <>
+            <h2 className="text-sm lg:text-base font-semibold text-gray-900 flex items-center gap-2 mb-3">
+              <Megaphone className="w-4 h-4 text-green-600" />
               활성 광고
             </h2>
-            <div className="space-y-3">
+            <div className="space-y-2 mb-4 lg:mb-6">
               {dashboard.subscriptions.map((sub) => (
-                <div
-                  key={sub.id}
-                  className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow"
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <h3 className="text-sm font-semibold text-gray-900">{sub.serviceName}</h3>
-                      <span className="inline-flex items-center px-2 py-0.5 mt-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        광고 진행중
-                      </span>
-                    </div>
+                <div key={sub.id} className="bg-white rounded-lg shadow p-3 lg:p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-sm font-semibold text-gray-900">{sub.serviceName}</h3>
+                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      진행중
+                    </span>
                   </div>
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4 text-xs lg:text-sm">
+                  <div className="grid grid-cols-4 gap-2 text-xs">
                     <div>
-                      <div className="text-gray-500">월 결제액</div>
-                      <div className="font-semibold text-gray-900">
-                        {sub.monthlyPrice.toLocaleString()}원
+                      <div className="text-gray-500">월 결제</div>
+                      <div className="font-semibold">{sub.monthlyPrice.toLocaleString()}원</div>
+                    </div>
+                    <div>
+                      <div className="text-gray-500">다음결제</div>
+                      <div className="font-semibold">
+                        {new Date(sub.nextBillingDate).toLocaleDateString('ko-KR', {
+                          month: 'numeric',
+                          day: 'numeric',
+                        })}
                       </div>
                     </div>
                     <div>
-                      <div className="text-gray-500">다음 결제일</div>
-                      <div className="font-semibold text-gray-900">
-                        {new Date(sub.nextBillingDate).toLocaleDateString('ko-KR')}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-gray-500">노출수</div>
+                      <div className="text-gray-500">노출</div>
                       <div className="font-semibold text-blue-600">
-                        {sub.totalImpressions.toLocaleString()}회
+                        {sub.totalImpressions.toLocaleString()}
                       </div>
                     </div>
                     <div>
-                      <div className="text-gray-500">클릭수</div>
+                      <div className="text-gray-500">클릭</div>
                       <div className="font-semibold text-green-600">
-                        {sub.totalClicks.toLocaleString()}회
+                        {sub.totalClicks.toLocaleString()}
                       </div>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
+          </>
         )}
 
         {/* 서비스 광고 관리 */}
         {services.length > 0 && (
-          <div className="bg-white rounded-lg shadow p-3 lg:p-4">
-            <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4 flex items-center gap-2">
-              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                <List className="w-4 h-4 text-blue-600" />
-              </div>
+          <>
+            <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <List className="w-4 h-4 text-blue-600" />
               서비스 광고 관리
             </h2>
 
             {/* 모바일: 카드 레이아웃 */}
-            <div className="lg:hidden space-y-3">
+            <div className="lg:hidden space-y-2">
               {services.map((service) => (
-                <div key={service.id} className="border border-gray-200 rounded-lg p-3">
+                <div key={service.id} className="bg-white rounded-lg shadow p-3">
                   <div className="flex gap-3 mb-3">
                     <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 relative">
                       <Image
@@ -521,7 +486,7 @@ export default function AdvertisingPage() {
             </div>
 
             {/* PC: 테이블 레이아웃 */}
-            <div className="hidden lg:block overflow-x-auto">
+            <div className="hidden lg:block bg-white rounded-lg shadow overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b-2 border-gray-200">
@@ -647,7 +612,7 @@ export default function AdvertisingPage() {
                 </tbody>
               </table>
             </div>
-          </div>
+          </>
         )}
 
         {/* 모달 팝업 */}

@@ -232,7 +232,7 @@ export default function SellerServicesClient({
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-4 px-4 lg:py-8 lg:px-6">
+      <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
         <div className="mb-4 lg:mb-6 flex items-center justify-between">
           <div>
             <h1 className="text-base lg:text-lg font-semibold text-gray-900">서비스 관리</h1>
@@ -296,7 +296,7 @@ export default function SellerServicesClient({
             {filteredServices.map((service) => (
               <div
                 key={service.id}
-                className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-brand-primary transition-colors"
+                className="bg-white rounded-lg shadow hover:shadow-md overflow-hidden transition-shadow"
               >
                 {/* 모바일 레이아웃 */}
                 <div className="lg:hidden p-3">

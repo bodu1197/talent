@@ -83,7 +83,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="w-full max-w-[1200px] py-4 px-4 lg:py-8 lg:px-6 mx-auto">
+      <div className="w-full max-w-[1200px] pt-2 pb-4 px-4 lg:py-8 lg:px-6 mx-auto">
         <div className="max-w-4xl mx-auto">
           {/* 헤더 */}
           <div className="mb-6 lg:mb-8">

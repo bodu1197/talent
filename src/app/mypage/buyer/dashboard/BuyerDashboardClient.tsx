@@ -6,18 +6,7 @@ import { prefetchBuyerData } from '@/lib/prefetch/buyerPrefetch';
 import { logger } from '@/lib/logger';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import Link from 'next/link';
-import {
-  Bell,
-  Info,
-  ArrowRight,
-  Package,
-  Heart,
-  ImageIcon,
-  Loader2,
-  PackageOpen,
-  Star,
-  ShoppingCart,
-} from 'lucide-react';
+import { Bell, Info, ArrowRight, Package, Heart, ImageIcon } from 'lucide-react';
 
 import type { Order, Service, Seller } from '@/types/common';
 
@@ -125,7 +114,7 @@ export default function BuyerDashboardClient({
 
   return (
     <MypageLayoutWrapper mode="buyer" profileData={profileData}>
-      <div className="py-4 px-4 lg:py-8 lg:px-6">
+      <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
         {/* 페이지 헤더 */}
         <div className="mb-4 lg:mb-6">
           <h1 className="text-base lg:text-lg font-semibold text-gray-900">구매 대시보드</h1>
@@ -133,66 +122,46 @@ export default function BuyerDashboardClient({
         </div>
 
         {/* 통계 카드 */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-4 lg:mb-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4 mb-4 lg:mb-6">
           <div className="bg-white rounded-lg shadow p-3 lg:p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-gray-600">진행중 주문</p>
-                <p className="text-base lg:text-lg font-semibold text-gray-900">
-                  {stats?.inProgressOrders || 0}건
-                </p>
-              </div>
-              <Loader2 className="w-6 h-6 lg:w-7 lg:h-7 text-yellow-500 animate-spin" />
-            </div>
+            <p className="text-xs text-gray-600">진행중 주문</p>
+            <p className="text-base lg:text-lg font-semibold text-gray-900">
+              {stats?.inProgressOrders || 0}건
+            </p>
           </div>
           <div className="bg-white rounded-lg shadow p-3 lg:p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-gray-600">도착 확인 대기</p>
-                <p className="text-base lg:text-lg font-semibold text-gray-900">
-                  {stats?.deliveredOrders || 0}건
-                </p>
-              </div>
-              <PackageOpen className="w-6 h-6 lg:w-7 lg:h-7 text-blue-500" />
-            </div>
+            <p className="text-xs text-gray-600">도착 확인 대기</p>
+            <p className="text-base lg:text-lg font-semibold text-gray-900">
+              {stats?.deliveredOrders || 0}건
+            </p>
           </div>
           <div className="bg-white rounded-lg shadow p-3 lg:p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-gray-600">작성 가능 리뷰</p>
-                <p className="text-base lg:text-lg font-semibold text-gray-900">
-                  {stats?.pendingReviews || 0}건
-                </p>
-              </div>
-              <Star className="w-6 h-6 lg:w-7 lg:h-7 text-purple-500" />
-            </div>
+            <p className="text-xs text-gray-600">작성 가능 리뷰</p>
+            <p className="text-base lg:text-lg font-semibold text-gray-900">
+              {stats?.pendingReviews || 0}건
+            </p>
           </div>
           <div className="bg-white rounded-lg shadow p-3 lg:p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-gray-600">이번달 구매</p>
-                <p className="text-base lg:text-lg font-semibold text-gray-900">
-                  {stats?.monthlyPurchases || 0}건
-                </p>
-              </div>
-              <ShoppingCart className="w-6 h-6 lg:w-7 lg:h-7 text-green-500" />
-            </div>
+            <p className="text-xs text-gray-600">이번달 구매</p>
+            <p className="text-base lg:text-lg font-semibold text-gray-900">
+              {stats?.monthlyPurchases || 0}건
+            </p>
           </div>
         </div>
 
         {/* 알림 */}
         {alerts.length > 0 && (
-          <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-4 lg:mb-6">
+          <>
             <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <Bell className="w-4 h-4 lg:w-5 lg:h-5 text-red-500" />
+              <Bell className="w-4 h-4 text-red-500" />
               확인 필요
             </h2>
-            <div className="space-y-2">
+            <div className="space-y-2 mb-4 lg:mb-6">
               {alerts.map((alert) => (
                 <Link
                   key={alert.id}
                   href={alert.href}
-                  className="flex items-center justify-between p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                  className="flex items-center justify-between p-3 bg-white rounded-lg shadow hover:shadow-md transition-all"
                 >
                   <div className="flex items-center gap-2">
                     <Info className="w-4 h-4 text-blue-500" />
@@ -202,32 +171,31 @@ export default function BuyerDashboardClient({
                 </Link>
               ))}
             </div>
-          </div>
+          </>
         )}
 
         {/* 진행중인 주문 */}
-        <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-4 lg:mb-6">
-          <div className="flex items-center justify-between mb-3 lg:mb-4">
-            <h2 className="text-sm lg:text-base font-semibold text-gray-900 flex items-center gap-2">
-              <Package className="w-4 h-4 lg:w-5 lg:h-5 text-purple-500" />
-              진행중인 주문
-            </h2>
-            <Link
-              href="/mypage/buyer/orders"
-              className="text-xs text-brand-primary hover:underline flex items-center gap-1"
-            >
-              전체 보기 <ArrowRight className="w-3 h-3" />
-            </Link>
-          </div>
-
-          <div className="space-y-3">
-            {recentOrders.length > 0 ? (
-              recentOrders.map((order) => {
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm lg:text-base font-semibold text-gray-900 flex items-center gap-2">
+            <Package className="w-4 h-4 text-purple-500" />
+            진행중인 주문
+          </h2>
+          <Link
+            href="/mypage/buyer/orders"
+            className="text-xs text-brand-primary hover:underline flex items-center gap-1"
+          >
+            전체 보기 <ArrowRight className="w-3 h-3" />
+          </Link>
+        </div>
+        <div className="mb-4 lg:mb-6">
+          {recentOrders.length > 0 ? (
+            <div className="space-y-2">
+              {recentOrders.map((order) => {
                 const daysLeft = getDaysLeft(order.delivery_date);
                 return (
                   <div
                     key={order.id}
-                    className="border border-gray-200 rounded-lg hover:border-brand-primary transition-colors"
+                    className="bg-white rounded-lg shadow hover:shadow-md transition-shadow"
                   >
                     {/* 모바일 레이아웃 */}
                     <div className="lg:hidden p-3">
@@ -349,34 +317,36 @@ export default function BuyerDashboardClient({
                     </div>
                   </div>
                 );
-              })
-            ) : (
-              <div className="text-center py-8 text-sm text-gray-500">진행중인 주문이 없습니다</div>
-            )}
-          </div>
+              })}
+            </div>
+          ) : (
+            <div className="bg-white rounded-lg shadow p-6 text-center">
+              <p className="text-gray-500">진행중인 주문이 없습니다</p>
+            </div>
+          )}
         </div>
 
         {/* 최근 찜한 서비스 */}
-        <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
-          <div className="flex items-center justify-between mb-3 lg:mb-4">
-            <h2 className="text-sm lg:text-base font-semibold text-gray-900 flex items-center gap-2">
-              <Heart className="w-4 h-4 lg:w-5 lg:h-5 text-red-500 fill-current" />
-              최근 찜한 서비스
-            </h2>
-            <Link
-              href="/mypage/buyer/favorites"
-              className="text-xs text-brand-primary hover:underline"
-            >
-              전체 보기
-            </Link>
-          </div>
-          <div className="space-y-2">
-            {favorites.length > 0 ? (
-              favorites.map((item) => (
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm lg:text-base font-semibold text-gray-900 flex items-center gap-2">
+            <Heart className="w-4 h-4 text-red-500 fill-current" />
+            최근 찜한 서비스
+          </h2>
+          <Link
+            href="/mypage/buyer/favorites"
+            className="text-xs text-brand-primary hover:underline flex items-center gap-1"
+          >
+            전체 보기 <ArrowRight className="w-3 h-3" />
+          </Link>
+        </div>
+        <div>
+          {favorites.length > 0 ? (
+            <div className="space-y-2">
+              {favorites.map((item) => (
                 <Link
                   key={item.id}
                   href={`/services/${item.service?.id}`}
-                  className="flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="flex items-center justify-between p-3 bg-white rounded-lg shadow hover:shadow-md transition-all"
                 >
                   <div>
                     <div className="font-medium text-sm text-gray-900">{item.service?.title}</div>
@@ -384,11 +354,13 @@ export default function BuyerDashboardClient({
                   </div>
                   <ArrowRight className="w-4 h-4 text-gray-400" />
                 </Link>
-              ))
-            ) : (
-              <div className="text-center py-6 text-sm text-gray-500">찜한 서비스가 없습니다</div>
-            )}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white rounded-lg shadow p-6 text-center">
+              <p className="text-gray-500">찜한 서비스가 없습니다</p>
+            </div>
+          )}
         </div>
       </div>
     </MypageLayoutWrapper>

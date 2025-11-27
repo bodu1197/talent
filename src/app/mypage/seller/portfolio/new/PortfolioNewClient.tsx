@@ -271,7 +271,7 @@ export default function PortfolioNewClient({ sellerId, categories, services }: P
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="w-full max-w-[1200px] py-4 px-4 lg:py-8 lg:px-6 mx-auto">
+      <div className="w-full max-w-[1200px] pt-2 pb-4 px-4 lg:py-8 lg:px-6 mx-auto">
         <div className="max-w-3xl">
           <div className="mb-4 lg:mb-6">
             <h1 className="text-base lg:text-lg font-semibold text-gray-900">포트폴리오 등록</h1>

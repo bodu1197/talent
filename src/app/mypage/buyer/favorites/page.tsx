@@ -68,7 +68,7 @@ export default function FavoritesPage() {
   if (!user) {
     return (
       <MypageLayoutWrapper mode="buyer">
-        <div className="py-4 px-4 lg:py-8 lg:px-6">
+        <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
           <div className="max-w-md mx-auto text-center">
             <Lock className="w-12 h-12 lg:w-16 lg:h-16 text-gray-300 mb-4" />
             <h2 className="text-base md:text-lg font-semibold mb-4">로그인이 필요합니다</h2>
@@ -88,7 +88,7 @@ export default function FavoritesPage() {
   if (loading) {
     return (
       <MypageLayoutWrapper mode="buyer">
-        <div className="py-4 px-4 lg:py-8 lg:px-6">
+        <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
           <div className="mb-4 lg:mb-6">
             <h1 className="text-base lg:text-lg font-semibold text-gray-900">찜한 서비스</h1>
             <p className="text-gray-600 mt-1 text-sm">관심있는 서비스를 저장하고 관리하세요</p>
@@ -112,7 +112,7 @@ export default function FavoritesPage() {
 
   return (
     <MypageLayoutWrapper mode="buyer">
-      <div className="py-4 px-4 lg:py-8 lg:px-6">
+      <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
         <div className="mb-4 lg:mb-6">
           <div className="flex items-center gap-2 mb-1">
             <Heart className="w-5 h-5 lg:w-6 lg:h-6 text-red-500 fill-current" />
@@ -125,7 +125,7 @@ export default function FavoritesPage() {
         </div>
 
         {favorites.length === 0 ? (
-          <div className="text-center py-8 bg-white rounded-lg border border-gray-200">
+          <div className="text-center py-8 bg-white rounded-lg shadow">
             <Heart className="w-10 h-10 text-gray-300 mx-auto mb-3" />
             <h3 className="text-sm font-medium mb-1">찜한 서비스가 없습니다</h3>
             <p className="text-xs text-gray-600 mb-4">마음에 드는 서비스를 찜해보세요</p>

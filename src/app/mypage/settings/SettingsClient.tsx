@@ -25,7 +25,7 @@ export default function SettingsClient({ profile, userEmail, isSeller }: Props) 
 
   return (
     <MypageLayoutWrapper mode={isSeller ? 'seller' : 'buyer'}>
-      <div className="py-4 px-4 lg:py-8 lg:px-6">
+      <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
         <div className="mb-4 lg:mb-6 flex items-center justify-between">
           <div>
             <h1 className="text-base lg:text-lg font-semibold text-gray-900">설정</h1>

@@ -73,14 +73,14 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-4 px-4 lg:py-8 lg:px-6">
+      <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
         <div className="mb-4 lg:mb-6">
           <h1 className="text-base lg:text-lg font-semibold text-gray-900">받은 리뷰</h1>
           <p className="text-gray-600 mt-1 text-sm">고객들이 남긴 리뷰를 확인하고 답변하세요</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 lg:gap-4 mb-4 lg:mb-6">
-          <div className="lg:col-span-1 bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
+          <div className="lg:col-span-1 bg-white rounded-lg shadow p-3 lg:p-4">
             <div className="text-center">
               <div className="text-3xl lg:text-5xl font-semibold text-gray-900 mb-2">
                 {avgRating}
@@ -119,7 +119,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
           </div>
 
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-3 lg:mb-4">
+            <div className="bg-white rounded-lg shadow p-3 lg:p-4 mb-3 lg:mb-4">
               <div className="flex gap-2 overflow-x-auto">
                 {(['all', '5', '4', '3', '2', '1'] as RatingFilter[]).map((filter) => (
                   <button
@@ -140,10 +140,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
             <div className="space-y-3">
               {filteredReviews.length > 0 ? (
                 filteredReviews.map((review) => (
-                  <div
-                    key={review.id}
-                    className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4"
-                  >
+                  <div key={review.id} className="bg-white rounded-lg shadow p-3 lg:p-4">
                     <div className="flex items-start justify-between mb-3 lg:mb-4">
                       <div>
                         <div className="flex items-center gap-2 mb-2">

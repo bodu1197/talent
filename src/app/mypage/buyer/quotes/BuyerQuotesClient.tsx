@@ -27,7 +27,7 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
 
   return (
     <MypageLayoutWrapper mode="buyer">
-      <div className="py-4 px-4 lg:py-8 lg:px-6">
+      <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
         <div className="mb-4 lg:mb-6">
           <div className="flex items-center justify-between gap-2">
             <div>

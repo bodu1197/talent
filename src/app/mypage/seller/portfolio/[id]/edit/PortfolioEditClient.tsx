@@ -323,7 +323,7 @@ export default function PortfolioEditClient({
 
   return (
     <MypageLayoutWrapper mode="seller">
-      <div className="py-4 px-4 lg:py-8 lg:px-6">
+      <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
         <div className="max-w-3xl">
           <div className="mb-6 lg:mb-8">
             <Link
