@@ -103,19 +103,8 @@ export default function Header() {
           </div>
           {/* 모바일 버전 - 로그인 사용자만 표시 */}
           {user && (
-            <div className="lg:hidden flex items-center space-x-2">
+            <div className="lg:hidden flex items-center">
               <NotificationBell />
-              <Link
-                href={getMypageUrl()}
-                className="flex items-center space-x-2"
-                aria-label="마이페이지로 이동"
-              >
-                <ProfileImage
-                  src={profile?.profile_image}
-                  alt={profile?.name || '사용자 프로필'}
-                  size={32}
-                />
-              </Link>
             </div>
           )}
           {/* PC 버전: 네비게이션 메뉴 */}
