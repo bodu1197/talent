@@ -71,8 +71,16 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   motorcycle: Bike,
 };
 
-function CategoryIcon({ icon, color }: { icon?: string; color: string }) {
-  const iconClass = `${color}`;
+function CategoryIcon({
+  icon,
+  color,
+  size = 'w-6 h-6',
+}: {
+  icon?: string;
+  color: string;
+  size?: string;
+}) {
+  const iconClass = `${size} ${color}`;
   const IconComponent = (icon && ICON_MAP[icon]) || Circle;
   return <IconComponent className={iconClass} />;
 }
@@ -88,7 +96,7 @@ export default function CategoryGridClient({
 
   return (
     <>
-      <div className="hidden lg:flex flex-wrap gap-x-2 gap-y-3 items-center justify-between">
+      <div className="hidden lg:flex flex-wrap gap-x-2 gap-y-2 items-center justify-between">
         {categoriesInFirstRow.map((category, index) => (
           <Link
             key={category.id}
@@ -96,11 +104,11 @@ export default function CategoryGridClient({
             className="flex flex-col items-center group cursor-pointer"
           >
             <div
-              className={`text-4xl lg:text-5xl mb-1 h-14 w-14 lg:h-[72px] lg:w-[72px] flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[index % brightColors.length]} group-hover:text-brand-primary`}
+              className={`flex items-center justify-center transition-all duration-200 ${brightColors[index % brightColors.length]} group-hover:text-brand-primary`}
             >
-              <CategoryIcon icon={category.icon} color="" />
+              <CategoryIcon icon={category.icon} color="" size="w-12 h-12" />
             </div>
-            <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-semibold text-sm lg:text-[15px] text-center">
+            <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-semibold text-sm lg:text-[15px] text-center mt-1">
               {category.name}
             </div>
           </Link>
@@ -109,41 +117,24 @@ export default function CategoryGridClient({
         {hasMoreCategories && (
           <button
             onClick={() => setShowAllCategories(!showAllCategories)}
-            className="flex flex-col items-center justify-center h-[72px] w-[72px] bg-gray-100 text-gray-500 hover:bg-brand-primary hover:text-white transition-all duration-200 cursor-pointer rounded-lg"
+            className="flex flex-col items-center justify-center h-14 w-14 bg-gray-100 text-gray-500 hover:bg-brand-primary hover:text-white transition-all duration-200 cursor-pointer rounded-lg"
             aria-label={showAllCategories ? '카테고리 간략히 보기' : '모든 카테고리 보기'}
             aria-expanded={showAllCategories}
           >
-            <div className="grid grid-cols-2 gap-1">
-              {showAllCategories ? (
-                <Minus className="w-5 h-5" aria-hidden="true" />
-              ) : (
-                <LayoutGrid className="w-5 h-5" aria-hidden="true" />
-              )}
-              {showAllCategories ? (
-                <Minus className="w-5 h-5" aria-hidden="true" />
-              ) : (
-                <LayoutGrid className="w-5 h-5" aria-hidden="true" />
-              )}
-              {showAllCategories ? (
-                <Minus className="w-5 h-5" aria-hidden="true" />
-              ) : (
-                <LayoutGrid className="w-5 h-5" aria-hidden="true" />
-              )}
-              {showAllCategories ? (
-                <Minus className="w-5 h-5" aria-hidden="true" />
-              ) : (
-                <LayoutGrid className="w-5 h-5" aria-hidden="true" />
-              )}
-            </div>
-            <span className="text-xs font-medium mt-1">
-              {showAllCategories ? '간략히 보기' : '전체 보기'}
+            {showAllCategories ? (
+              <Minus className="w-6 h-6" aria-hidden="true" />
+            ) : (
+              <LayoutGrid className="w-6 h-6" aria-hidden="true" />
+            )}
+            <span className="text-[10px] font-medium mt-0.5">
+              {showAllCategories ? '접기' : '더보기'}
             </span>
           </button>
         )}
       </div>
 
       {showAllCategories && remainingCategories.length > 0 && (
-        <div className="hidden lg:flex flex-wrap gap-x-2 gap-y-3 items-center justify-between mt-4">
+        <div className="hidden lg:flex flex-wrap gap-x-2 gap-y-2 items-center justify-between mt-3">
           {remainingCategories.map((category, index) => (
             <Link
               key={category.id}
@@ -151,11 +142,11 @@ export default function CategoryGridClient({
               className="flex flex-col items-center group cursor-pointer"
             >
               <div
-                className={`text-4xl lg:text-5xl mb-1 h-14 w-14 lg:h-[72px] lg:w-[72px] flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[(index + initialVisibleCount) % brightColors.length]} group-hover:text-brand-primary`}
+                className={`flex items-center justify-center transition-all duration-200 ${brightColors[(index + initialVisibleCount) % brightColors.length]} group-hover:text-brand-primary`}
               >
-                <CategoryIcon icon={category.icon} color="" />
+                <CategoryIcon icon={category.icon} color="" size="w-12 h-12" />
               </div>
-              <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-semibold text-sm lg:text-[15px] text-center">
+              <div className="text-gray-700 group-hover:text-brand-primary transition-colors duration-200 font-semibold text-sm lg:text-[15px] text-center mt-1">
                 {category.name}
               </div>
             </Link>
