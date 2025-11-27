@@ -109,14 +109,14 @@ export default async function ServiceStatisticsPage({
     redirect('/mypage/seller/services');
   }
 
-  // 서비스 정보 조회
-  logger.info('[ServiceStatistics] 조회 시작:', { serviceId, sellerId: seller.id });
+  // 서비스 정보 조회 (seller_id는 user.id를 저장)
+  logger.info('[ServiceStatistics] 조회 시작:', { serviceId, userId: user.id });
 
   const { data: service, error: serviceError } = await supabase
     .from('services')
     .select('id, title, views, orders_count, review_count, seller_id')
     .eq('id', serviceId)
-    .eq('seller_id', seller.id)
+    .eq('seller_id', user.id)
     .single();
 
   logger.info('[ServiceStatistics] 조회 결과:', { service, error: serviceError });
@@ -124,7 +124,7 @@ export default async function ServiceStatisticsPage({
   if (!service) {
     logger.warn('[ServiceStatistics] 서비스 없음 - 리다이렉트:', {
       serviceId,
-      sellerId: seller.id,
+      userId: user.id,
       error: serviceError,
     });
     redirect('/mypage/seller/services');
