@@ -42,40 +42,40 @@ export default function SettingsClient({ profile, userEmail, isSeller }: Props) 
 
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
           {/* 탭 메뉴 */}
-          <div className="w-full lg:w-56 bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
-            <div className="flex lg:flex-col gap-2">
+          <div className="w-full lg:w-56 bg-white rounded-lg border border-gray-200 p-2 lg:p-4">
+            <div className="flex lg:flex-col gap-1 lg:gap-2">
               <button
                 onClick={() => setActiveTab('profile')}
-                className={`flex-1 lg:w-full px-3 py-2 rounded-lg text-left transition-colors text-sm ${
+                className={`flex-1 lg:flex-none lg:w-full flex items-center justify-center lg:justify-start gap-1.5 px-2 lg:px-3 py-2 rounded-lg transition-colors text-xs lg:text-sm whitespace-nowrap ${
                   activeTab === 'profile'
                     ? 'bg-brand-primary text-white'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
               >
-                <User className="mr-1.5 inline w-4 h-4" />
-                프로필
+                <User className="w-4 h-4 flex-shrink-0" />
+                <span>프로필</span>
               </button>
               <button
                 onClick={() => setActiveTab('account')}
-                className={`flex-1 lg:w-full px-3 py-2 rounded-lg text-left transition-colors text-sm ${
+                className={`flex-1 lg:flex-none lg:w-full flex items-center justify-center lg:justify-start gap-1.5 px-2 lg:px-3 py-2 rounded-lg transition-colors text-xs lg:text-sm whitespace-nowrap ${
                   activeTab === 'account'
                     ? 'bg-brand-primary text-white'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
               >
-                <Key className="mr-1.5 inline w-4 h-4" />
-                계정 보안
+                <Key className="w-4 h-4 flex-shrink-0" />
+                <span>계정</span>
               </button>
               <button
                 onClick={() => setActiveTab('notifications')}
-                className={`flex-1 lg:w-full px-3 py-2 rounded-lg text-left transition-colors text-sm ${
+                className={`flex-1 lg:flex-none lg:w-full flex items-center justify-center lg:justify-start gap-1.5 px-2 lg:px-3 py-2 rounded-lg transition-colors text-xs lg:text-sm whitespace-nowrap ${
                   activeTab === 'notifications'
                     ? 'bg-brand-primary text-white'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
               >
-                <Bell className="mr-1.5 inline w-4 h-4" />
-                알림
+                <Bell className="w-4 h-4 flex-shrink-0" />
+                <span>알림</span>
               </button>
             </div>
           </div>
