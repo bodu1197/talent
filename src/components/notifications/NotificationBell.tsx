@@ -163,10 +163,10 @@ export default function NotificationBell() {
   if (!user) return null;
 
   return (
-    <div className="relative">
+    <div className="relative flex items-center">
       <button
         onClick={() => setShowDropdown(!showDropdown)}
-        className="relative text-gray-900 hover:text-brand-primary transition-colors"
+        className="relative flex items-center text-gray-900 hover:text-brand-primary transition-colors"
         aria-label={unreadCount > 0 ? `알림 ${unreadCount}개 확인` : '알림 확인'}
         aria-expanded={showDropdown}
         aria-haspopup="true"

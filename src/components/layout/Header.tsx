@@ -148,7 +148,7 @@ export default function Header() {
                 {/* 찜한 서비스 */}
                 <Link
                   href="/mypage/buyer/favorites"
-                  className="text-gray-900 hover:text-red-500 transition-colors"
+                  className="flex items-center text-gray-900 hover:text-red-500 transition-colors"
                   aria-label="찜한 서비스"
                 >
                   <Heart className="w-6 h-6" />
