@@ -29,8 +29,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@fontsource/noto-sans-kr": "^5.2.8",
-    "@fortawesome/fontawesome-free": "^7.1.0",
     "@hookform/resolvers": "^5.2.2",
     "@next/bundle-analyzer": "^16.0.1",
     "@portone/browser-sdk": "^0.1.1",
