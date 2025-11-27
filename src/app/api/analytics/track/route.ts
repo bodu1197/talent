@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
 
 interface TrackPageViewBody {
@@ -46,6 +46,7 @@ function getClientIp(request: NextRequest): string | null {
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient();
+    const serviceSupabase = createServiceRoleClient();
 
     // Get optional user
     const {
@@ -73,8 +74,8 @@ export async function POST(request: NextRequest) {
       sessionId = crypto.randomUUID();
     }
 
-    // Insert page view (without geolocation for now - can add later with ip-api.com or similar)
-    const { error: insertError } = await supabase.from('page_views').insert({
+    // Insert page view using service role to bypass RLS
+    const { error: insertError } = await serviceSupabase.from('page_views').insert({
       path,
       user_id: user?.id || null,
       session_id: sessionId,

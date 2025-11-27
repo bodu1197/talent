@@ -47,6 +47,14 @@ interface RealtimeStats {
   active_sessions: number;
 }
 
+interface DeviceStats {
+  desktop: number;
+  mobile: number;
+  tablet: number;
+  bot: number;
+  total: number;
+}
+
 interface AnalyticsResponse {
   period: string;
   summary: {
@@ -65,6 +73,7 @@ export default function AdminStatisticsPage() {
   const [topPages, setTopPages] = useState<TopPage[]>([]);
   const [referrers, setReferrers] = useState<ReferrerData[]>([]);
   const [realtime, setRealtime] = useState<RealtimeStats | null>(null);
+  const [deviceStats, setDeviceStats] = useState<DeviceStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -123,12 +132,25 @@ export default function AdminStatisticsPage() {
     }
   };
 
+  const fetchDeviceStats = useCallback(async () => {
+    try {
+      const response = await fetch(`/api/admin/analytics/devices?period=${period}`);
+      if (response.ok) {
+        const data = await response.json();
+        setDeviceStats(data);
+      }
+    } catch {
+      // Silently fail if endpoint doesn't exist yet
+    }
+  }, [period]);
+
   useEffect(() => {
     fetchAnalytics();
     fetchTopPages();
     fetchReferrers();
     fetchRealtime();
-  }, [fetchAnalytics]);
+    fetchDeviceStats();
+  }, [fetchAnalytics, fetchDeviceStats]);
 
   // Auto-refresh realtime stats every 30 seconds
   useEffect(() => {
@@ -140,34 +162,21 @@ export default function AdminStatisticsPage() {
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    await Promise.all([fetchAnalytics(), fetchTopPages(), fetchReferrers(), fetchRealtime()]);
+    await Promise.all([
+      fetchAnalytics(),
+      fetchTopPages(),
+      fetchReferrers(),
+      fetchRealtime(),
+      fetchDeviceStats(),
+    ]);
     setRefreshing(false);
   };
 
-  const getDeviceStats = () => {
-    if (!analytics?.data || analytics.data.length === 0) {
-      return { desktop: 0, mobile: 0, tablet: 0, bot: 0, total: 0 };
-    }
-
-    const stats = analytics.data.reduce(
-      (acc, curr) => ({
-        desktop: acc.desktop + curr.desktop_views,
-        mobile: acc.mobile + curr.mobile_views,
-        tablet: acc.tablet + curr.tablet_views,
-        bot: acc.bot + curr.bot_views,
-      }),
-      { desktop: 0, mobile: 0, tablet: 0, bot: 0 }
-    );
-
-    return { ...stats, total: stats.desktop + stats.mobile + stats.tablet };
-  };
-
-  const deviceStats = getDeviceStats();
-
   // Calculate device percentages
   const getDevicePercentage = (count: number) => {
-    if (deviceStats.total === 0) return 0;
-    return Math.round((count / deviceStats.total) * 100);
+    const total = deviceStats?.total || 0;
+    if (total === 0) return 0;
+    return Math.round((count / total) * 100);
   };
 
   // Get max views for chart scaling
@@ -313,14 +322,14 @@ export default function AdminStatisticsPage() {
                       <div className="flex justify-between mb-1">
                         <span className="text-sm font-medium text-slate-700">데스크톱</span>
                         <span className="text-sm text-slate-600">
-                          {deviceStats.desktop.toLocaleString()} (
-                          {getDevicePercentage(deviceStats.desktop)}%)
+                          {(deviceStats?.desktop || 0).toLocaleString()} (
+                          {getDevicePercentage(deviceStats?.desktop || 0)}%)
                         </span>
                       </div>
                       <div className="w-full bg-slate-100 rounded-full h-2">
                         <div
                           className="bg-blue-500 h-2 rounded-full transition-all"
-                          style={{ width: `${getDevicePercentage(deviceStats.desktop)}%` }}
+                          style={{ width: `${getDevicePercentage(deviceStats?.desktop || 0)}%` }}
                         />
                       </div>
                     </div>
@@ -334,14 +343,14 @@ export default function AdminStatisticsPage() {
                       <div className="flex justify-between mb-1">
                         <span className="text-sm font-medium text-slate-700">모바일</span>
                         <span className="text-sm text-slate-600">
-                          {deviceStats.mobile.toLocaleString()} (
-                          {getDevicePercentage(deviceStats.mobile)}%)
+                          {(deviceStats?.mobile || 0).toLocaleString()} (
+                          {getDevicePercentage(deviceStats?.mobile || 0)}%)
                         </span>
                       </div>
                       <div className="w-full bg-slate-100 rounded-full h-2">
                         <div
                           className="bg-green-500 h-2 rounded-full transition-all"
-                          style={{ width: `${getDevicePercentage(deviceStats.mobile)}%` }}
+                          style={{ width: `${getDevicePercentage(deviceStats?.mobile || 0)}%` }}
                         />
                       </div>
                     </div>
@@ -355,14 +364,14 @@ export default function AdminStatisticsPage() {
                       <div className="flex justify-between mb-1">
                         <span className="text-sm font-medium text-slate-700">태블릿</span>
                         <span className="text-sm text-slate-600">
-                          {deviceStats.tablet.toLocaleString()} (
-                          {getDevicePercentage(deviceStats.tablet)}%)
+                          {(deviceStats?.tablet || 0).toLocaleString()} (
+                          {getDevicePercentage(deviceStats?.tablet || 0)}%)
                         </span>
                       </div>
                       <div className="w-full bg-slate-100 rounded-full h-2">
                         <div
                           className="bg-purple-500 h-2 rounded-full transition-all"
-                          style={{ width: `${getDevicePercentage(deviceStats.tablet)}%` }}
+                          style={{ width: `${getDevicePercentage(deviceStats?.tablet || 0)}%` }}
                         />
                       </div>
                     </div>
@@ -376,7 +385,7 @@ export default function AdminStatisticsPage() {
                       <div className="flex justify-between mb-1">
                         <span className="text-sm font-medium text-slate-700">봇/크롤러</span>
                         <span className="text-sm text-slate-600">
-                          {deviceStats.bot.toLocaleString()}
+                          {(deviceStats?.bot || 0).toLocaleString()}
                         </span>
                       </div>
                     </div>

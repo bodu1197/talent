@@ -3,22 +3,19 @@ import { createClient } from '@/lib/supabase/server';
 import { checkAdminAuth } from '@/lib/admin/auth';
 import { logger } from '@/lib/logger';
 
-interface AnalyticsQuery {
-  period: 'hour' | 'day' | 'month' | 'year';
-  startDate?: string;
-  endDate?: string;
-  path?: string;
+type Period = 'hour' | 'day' | 'month' | 'year';
+
+interface PageViewRow {
+  created_at: string;
+  device_type: string | null;
+  session_id: string | null;
 }
 
-interface StatsQueryConfig {
-  table: string;
-  orderColumn: string;
-  limit: number;
-  dateColumn?: string;
-}
-
-interface YearlyStatsRow {
-  year: number;
+interface AggregatedStats {
+  date?: string;
+  hour?: string;
+  month?: number;
+  year?: number;
   total_views: number;
   unique_visitors: number;
   desktop_views: number;
@@ -27,77 +24,137 @@ interface YearlyStatsRow {
   bot_views: number;
 }
 
-// Helper: Get query configuration for each period
-function getQueryConfig(period: AnalyticsQuery['period']): StatsQueryConfig {
-  const configs: Record<AnalyticsQuery['period'], StatsQueryConfig> = {
-    hour: { table: 'visitor_stats_hourly', orderColumn: 'hour', limit: 168, dateColumn: 'hour' },
-    day: { table: 'visitor_stats_daily', orderColumn: 'date', limit: 90, dateColumn: 'date' },
-    month: { table: 'visitor_stats_monthly', orderColumn: 'year', limit: 24 },
-    year: { table: 'visitor_stats_monthly', orderColumn: 'year', limit: 9999 },
-  };
-  return configs[period];
+interface InternalStats extends AggregatedStats {
+  _sessions: Set<string>;
 }
 
-// Helper: Apply date filters to query
-function applyDateFilters(
-  query: any, // eslint-disable-line @typescript-eslint/no-explicit-any
-  startDate: string | null,
-  endDate: string | null,
-  dateColumn: string
-) {
-  let filteredQuery = query;
-  if (startDate) {
-    filteredQuery = filteredQuery.gte(dateColumn, startDate);
+// Get date range based on period
+function getDateRange(period: Period): { startDate: Date; groupBy: string } {
+  const now = new Date();
+
+  switch (period) {
+    case 'hour':
+      // Last 7 days for hourly view
+      return {
+        startDate: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+        groupBy: 'hour',
+      };
+    case 'day':
+      // Last 30 days for daily view
+      return {
+        startDate: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
+        groupBy: 'day',
+      };
+    case 'month': {
+      // Last 12 months for monthly view
+      const monthlyStart = new Date(now);
+      monthlyStart.setMonth(monthlyStart.getMonth() - 12);
+      return {
+        startDate: monthlyStart,
+        groupBy: 'month',
+      };
+    }
+    case 'year': {
+      // Last 5 years for yearly view
+      const yearlyStart = new Date(now);
+      yearlyStart.setFullYear(yearlyStart.getFullYear() - 5);
+      return {
+        startDate: yearlyStart,
+        groupBy: 'year',
+      };
+    }
   }
-  if (endDate) {
-    filteredQuery = filteredQuery.lte(dateColumn, endDate);
-  }
-  return filteredQuery;
 }
 
-// Helper: Apply path filter to query
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function applyPathFilter(query: any, path: string | null) {
-  return path ? query.eq('path', path) : query;
-}
-
-// Helper: Aggregate monthly data into yearly stats
-function aggregateYearlyStats(data: YearlyStatsRow[] | null): YearlyStatsRow[] {
-  if (!data) return [];
-
-  const yearlyStats = new Map<number, YearlyStatsRow>();
+// Aggregate page views by period
+function aggregateByPeriod(data: PageViewRow[], period: Period): AggregatedStats[] {
+  const statsMap = new Map<string, InternalStats>();
 
   for (const row of data) {
-    const existing = yearlyStats.get(row.year) || {
-      year: row.year,
+    const createdAt = new Date(row.created_at);
+    let key: string;
+    let statsEntry: Partial<AggregatedStats>;
+
+    switch (period) {
+      case 'hour':
+        // Group by hour
+        key = createdAt.toISOString().substring(0, 13) + ':00:00';
+        statsEntry = { hour: key };
+        break;
+      case 'day':
+        // Group by date
+        key = createdAt.toISOString().split('T')[0];
+        statsEntry = { date: key };
+        break;
+      case 'month':
+        // Group by year-month
+        key = `${createdAt.getFullYear()}-${String(createdAt.getMonth() + 1).padStart(2, '0')}`;
+        statsEntry = { year: createdAt.getFullYear(), month: createdAt.getMonth() + 1 };
+        break;
+      case 'year':
+        // Group by year
+        key = String(createdAt.getFullYear());
+        statsEntry = { year: createdAt.getFullYear() };
+        break;
+    }
+
+    const existing: InternalStats = statsMap.get(key) || {
+      ...statsEntry,
       total_views: 0,
       unique_visitors: 0,
       desktop_views: 0,
       mobile_views: 0,
       tablet_views: 0,
       bot_views: 0,
+      _sessions: new Set<string>(),
     };
 
-    existing.total_views += row.total_views;
-    existing.unique_visitors += row.unique_visitors;
-    existing.desktop_views += row.desktop_views;
-    existing.mobile_views += row.mobile_views;
-    existing.tablet_views += row.tablet_views;
-    existing.bot_views += row.bot_views;
+    // Count views
+    existing.total_views++;
 
-    yearlyStats.set(row.year, existing);
+    // Count unique visitors by session_id
+    if (row.session_id) {
+      existing._sessions.add(row.session_id);
+      existing.unique_visitors = existing._sessions.size;
+    }
+
+    // Count by device type
+    const deviceType = row.device_type?.toLowerCase() || 'desktop';
+    switch (deviceType) {
+      case 'mobile':
+        existing.mobile_views++;
+        break;
+      case 'tablet':
+        existing.tablet_views++;
+        break;
+      case 'bot':
+        existing.bot_views++;
+        break;
+      default:
+        existing.desktop_views++;
+    }
+
+    statsMap.set(key, existing);
   }
 
-  return Array.from(yearlyStats.values());
+  // Convert to array and remove internal _sessions set
+  const result = Array.from(statsMap.values()).map((stats): AggregatedStats => {
+    const { _sessions, ...cleanStats } = stats;
+    return cleanStats;
+  });
+
+  // Sort by date/time descending
+  return result.sort((a, b) => {
+    const aKey = a.hour || a.date || `${a.year}-${String(a.month || 1).padStart(2, '0')}`;
+    const bKey = b.hour || b.date || `${b.year}-${String(b.month || 1).padStart(2, '0')}`;
+    return bKey.localeCompare(aKey);
+  });
 }
 
-// Helper: Calculate summary statistics
-function calculateSummary(stats: Array<Record<string, number | string>>) {
-  const totalViews = stats.reduce((sum, item) => sum + (Number(item.total_views) || 0), 0);
-  const totalUniqueVisitors = stats.reduce(
-    (sum, item) => sum + (Number(item.unique_visitors) || 0),
-    0
-  );
+// Calculate summary statistics
+function calculateSummary(stats: AggregatedStats[]) {
+  const totalViews = stats.reduce((sum, item) => sum + item.total_views, 0);
+  const totalUniqueVisitors = stats.reduce((sum, item) => sum + item.unique_visitors, 0);
 
   return {
     totalViews,
@@ -120,9 +177,7 @@ export async function GET(request: NextRequest) {
     const supabase = await createClient();
     const { searchParams } = new URL(request.url);
 
-    const period = (searchParams.get('period') || 'day') as AnalyticsQuery['period'];
-    const startDate = searchParams.get('startDate');
-    const endDate = searchParams.get('endDate');
+    const period = (searchParams.get('period') || 'day') as Period;
     const path = searchParams.get('path');
 
     // Validate period
@@ -133,41 +188,31 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    let stats: Array<Record<string, number | string>> = [];
-    const config = getQueryConfig(period);
+    const { startDate } = getDateRange(period);
 
-    // Build base query
+    // Query page_views directly
     let query = supabase
-      .from(config.table)
-      .select('*')
-      .order(config.orderColumn, { ascending: false })
-      .limit(config.limit);
+      .from('page_views')
+      .select('created_at, device_type, session_id')
+      .gte('created_at', startDate.toISOString())
+      .order('created_at', { ascending: false });
 
-    // Add month ordering for monthly stats
-    if (period === 'month') {
-      query = query.order('month', { ascending: false });
+    // Apply path filter if specified
+    if (path) {
+      query = query.eq('path', path);
     }
 
-    // Apply filters based on period
-    if (config.dateColumn) {
-      query = applyDateFilters(query, startDate, endDate, config.dateColumn);
-    }
-    query = applyPathFilter(query, path);
-
-    // Execute query
     const { data, error } = await query;
     if (error) throw error;
 
-    // Handle year aggregation or use data directly
-    stats = period === 'year' ? aggregateYearlyStats(data as YearlyStatsRow[]) : data || [];
+    // Aggregate data by period
+    const stats = aggregateByPeriod(data || [], period);
 
     // Calculate summary
     const summary = calculateSummary(stats);
 
     return NextResponse.json({
       period,
-      startDate,
-      endDate,
       path,
       summary,
       data: stats,
@@ -191,26 +236,31 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createClient();
     const body = await request.json();
-    const { period = 'day', limit = 10 } = body;
+    const { limit = 10 } = body;
 
-    let topPages: Array<{ path: string; views: number }> = [];
+    // Query page_views directly and count by path
+    const startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
-    if (period === 'day') {
-      const { data, error } = await supabase
-        .from('visitor_stats_daily')
-        .select('path, total_views')
-        .gte('date', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0])
-        .order('total_views', { ascending: false })
-        .limit(limit);
+    const { data, error } = await supabase
+      .from('page_views')
+      .select('path')
+      .gte('created_at', startDate.toISOString());
 
-      if (error) throw error;
+    if (error) throw error;
 
-      topPages =
-        data?.map((row: { path: string; total_views: number }) => ({
-          path: row.path,
-          views: row.total_views,
-        })) || [];
+    // Count views per path
+    const pathCounts = new Map<string, number>();
+    for (const row of data || []) {
+      if (row.path) {
+        pathCounts.set(row.path, (pathCounts.get(row.path) || 0) + 1);
+      }
     }
+
+    // Convert to sorted array
+    const topPages = Array.from(pathCounts.entries())
+      .map(([path, views]) => ({ path, views }))
+      .sort((a, b) => b.views - a.views)
+      .slice(0, limit);
 
     return NextResponse.json({ topPages });
   } catch (error) {
