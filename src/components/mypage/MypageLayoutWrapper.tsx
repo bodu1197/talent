@@ -1,10 +1,12 @@
 'use client';
 
 import { ReactNode, useState, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { logger } from '@/lib/logger';
 import Sidebar from './Sidebar';
-import MobileSidebar from './MobileSidebar';
+import MobileMyPageNav from './MobileMyPageNav';
+import MobileMyPageHeader from './MobileMyPageHeader';
 
 interface MypageLayoutWrapperProps {
   readonly mode: 'seller' | 'buyer';
@@ -83,12 +85,72 @@ export default function MypageLayoutWrapper({
     }
   }
 
+  const pathname = usePathname();
+  const router = useRouter();
+
+  // 대시보드 페이지인지 확인
+  const isDashboard =
+    pathname === '/mypage/seller/dashboard' || pathname === '/mypage/buyer/dashboard';
+
+  // 서브페이지 제목 매핑
+  const getPageTitle = () => {
+    if (pathname.includes('/orders')) return '주문관리';
+    if (pathname.includes('/favorites')) return '찜한서비스';
+    if (pathname.includes('/reviews')) return '리뷰관리';
+    if (pathname.includes('/quotes')) return '견적요청';
+    if (pathname.includes('/services')) return '서비스관리';
+    if (pathname.includes('/earnings')) return '정산관리';
+    if (pathname.includes('/statistics')) return '통계';
+    if (pathname.includes('/portfolio')) return '포트폴리오';
+    if (pathname.includes('/profile')) return '프로필';
+    if (pathname.includes('/advertising')) return '광고관리';
+    if (pathname.includes('/notifications')) return '알림';
+    if (pathname.includes('/settings')) return '설정';
+    return '마이페이지';
+  };
+
+  // 역할 변경 핸들러
+  const handleRoleChange = (role: 'buyer' | 'seller') => {
+    if (role === 'seller') {
+      router.push('/mypage/seller/dashboard');
+    } else {
+      router.push('/mypage/buyer/dashboard');
+    }
+  };
+
+  // 뒤로가기 URL
+  const getBackHref = () => {
+    if (mode === 'seller') return '/mypage/seller/dashboard';
+    return '/mypage/buyer/dashboard';
+  };
+
   return (
     <div className="bg-black/5 flex justify-center">
       <div className="flex w-full max-w-[1200px]">
-        <MobileSidebar mode={mode} isRegisteredSeller={isRegisteredSeller} />
+        {/* PC: 사이드바 */}
         <Sidebar mode={mode} profileData={profileData} isRegisteredSeller={isRegisteredSeller} />
-        <main className="flex-1 overflow-y-auto">{children}</main>
+
+        <main className="flex-1 overflow-y-auto">
+          {/* 모바일: 서브페이지 헤더 (대시보드가 아닌 경우) */}
+          {!isDashboard && (
+            <div className="lg:hidden px-4 pt-4">
+              <MobileMyPageHeader title={getPageTitle()} backHref={getBackHref()} />
+            </div>
+          )}
+
+          {/* 모바일: 대시보드에서 네비게이션 메뉴 표시 */}
+          {isDashboard && (
+            <div className="lg:hidden px-4 pt-4">
+              <MobileMyPageNav
+                currentRole={mode}
+                onRoleChange={handleRoleChange}
+                isSeller={isRegisteredSeller}
+              />
+            </div>
+          )}
+
+          {children}
+        </main>
       </div>
     </div>
   );
