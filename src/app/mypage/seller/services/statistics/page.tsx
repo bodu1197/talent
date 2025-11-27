@@ -109,14 +109,14 @@ export default async function ServiceStatisticsPage({
     redirect('/mypage/seller/services');
   }
 
-  // 서비스 정보 조회 (seller_id는 user.id를 저장)
-  logger.info('[ServiceStatistics] 조회 시작:', { serviceId, userId: user.id });
+  // 서비스 정보 조회 (seller_id는 sellers.id를 저장)
+  logger.info('[ServiceStatistics] 조회 시작:', { serviceId, sellerId: seller.id });
 
   const { data: service, error: serviceError } = await supabase
     .from('services')
     .select('id, title, views, orders_count, review_count, seller_id')
     .eq('id', serviceId)
-    .eq('seller_id', user.id)
+    .eq('seller_id', seller.id)
     .single();
 
   logger.info('[ServiceStatistics] 조회 결과:', { service, error: serviceError });
