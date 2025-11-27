@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/mypage/Sidebar';
-import MobileSidebar from '@/components/mypage/MobileSidebar';
+import MobileMyPageHeader from '@/components/mypage/MobileMyPageHeader';
 import { createClient } from '@/lib/supabase/client';
 import { logger } from '@/lib/logger';
 import toast from 'react-hot-toast';
@@ -265,12 +265,15 @@ export default function NewServiceClientV2({ sellerId, profileData }: Props) {
   return (
     <div className="min-h-screen bg-black/5 flex justify-center items-start pt-20 lg:pt-[102px] absolute inset-0 top-[102px]">
       <div className="flex w-full max-w-[1200px]">
-        <MobileSidebar mode="seller" />
         <Sidebar mode="seller" profileData={profileData} />
         <main className="flex-1 overflow-y-auto">
           <div className="py-8 px-4">
-            {/* 헤더 */}
-            <div className="mb-6">
+            {/* 모바일 헤더 */}
+            <div className="lg:hidden mb-4">
+              <MobileMyPageHeader title="서비스 등록" backHref="/mypage/seller/services" />
+            </div>
+            {/* PC 헤더 */}
+            <div className="hidden lg:block mb-6">
               <h1 className="text-base md:text-lg font-semibold text-gray-900">서비스 등록</h1>
               <p className="text-gray-600 mt-1 text-sm">새로운 서비스를 등록하세요</p>
             </div>
