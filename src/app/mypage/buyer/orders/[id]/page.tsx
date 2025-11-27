@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, use } from 'react';
+import { useRouter } from 'next/navigation';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import Link from 'next/link';
 import { useAuth } from '@/components/providers/AuthProvider';
@@ -108,6 +109,7 @@ function buildStatusHistory(order: OrderDetail): StatusHistory[] {
 export default function BuyerOrderDetailPage({ params }: PageProps) {
   const { id } = use(params);
   const { user } = useAuth();
+  const router = useRouter();
   const [order, setOrder] = useState<OrderDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

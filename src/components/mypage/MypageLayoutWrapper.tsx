@@ -130,7 +130,7 @@ export default function MypageLayoutWrapper({
   };
 
   return (
-    <div className="bg-black/[0.02] flex justify-center">
+    <div className="bg-black/[0.05] flex justify-center">
       <div className="flex w-full max-w-[1200px]">
         {/* PC: 사이드바 */}
         <Sidebar mode={mode} profileData={profileData} isRegisteredSeller={isRegisteredSeller} />
