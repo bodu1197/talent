@@ -87,7 +87,6 @@ export default async function CategoryGrid() {
   return (
     <section className="pt-2 pb-4 lg:py-8 bg-white">
       <div className="container-1200">
-
         {/* 모바일: 2줄 가로 스크롤 */}
         <div className="lg:hidden">
           <div className="flex flex-col gap-0">
@@ -139,7 +138,6 @@ export default async function CategoryGrid() {
           remainingCategories={remainingCategories}
           hasMoreCategories={hasMoreCategories}
           brightColors={brightColors}
-          initialVisibleCount={initialVisibleCount}
         />
       </div>
     </section>
