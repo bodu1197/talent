@@ -112,7 +112,12 @@ export default function MypageLayoutWrapper({
   // 역할 변경 핸들러
   const handleRoleChange = (role: 'buyer' | 'seller') => {
     if (role === 'seller') {
-      router.push('/mypage/seller/dashboard');
+      // 판매자 등록이 안 되어 있으면 등록 페이지로
+      if (!isRegisteredSeller) {
+        router.push('/mypage/seller/register');
+      } else {
+        router.push('/mypage/seller/dashboard');
+      }
     } else {
       router.push('/mypage/buyer/dashboard');
     }

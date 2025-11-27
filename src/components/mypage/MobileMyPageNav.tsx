@@ -55,33 +55,31 @@ interface Props {
   readonly isSeller: boolean;
 }
 
-export default function MobileMyPageNav({ currentRole, onRoleChange, isSeller }: Props) {
+export default function MobileMyPageNav({ currentRole, onRoleChange, isSeller: _isSeller }: Props) {
   const pathname = usePathname();
   const menuItems = currentRole === 'seller' ? sellerMenuItems : buyerMenuItems;
 
   return (
     <div className="lg:hidden">
-      {/* 판매자/구매자 토글 */}
-      {isSeller && (
-        <div className="flex bg-gray-100 rounded-lg p-1 mb-4">
-          <button
-            onClick={() => onRoleChange('seller')}
-            className={`flex-1 py-2 text-sm font-medium rounded-md transition-colors ${
-              currentRole === 'seller' ? 'bg-white text-brand-primary shadow-sm' : 'text-gray-600'
-            }`}
-          >
-            판매자
-          </button>
-          <button
-            onClick={() => onRoleChange('buyer')}
-            className={`flex-1 py-2 text-sm font-medium rounded-md transition-colors ${
-              currentRole === 'buyer' ? 'bg-white text-brand-primary shadow-sm' : 'text-gray-600'
-            }`}
-          >
-            구매자
-          </button>
-        </div>
-      )}
+      {/* 판매자/구매자 토글 - 항상 표시 */}
+      <div className="flex bg-gray-100 rounded-lg p-1 mb-4">
+        <button
+          onClick={() => onRoleChange('seller')}
+          className={`flex-1 py-2.5 text-sm font-semibold rounded-md transition-colors ${
+            currentRole === 'seller' ? 'bg-white text-brand-primary shadow-sm' : 'text-gray-500'
+          }`}
+        >
+          판매자
+        </button>
+        <button
+          onClick={() => onRoleChange('buyer')}
+          className={`flex-1 py-2.5 text-sm font-semibold rounded-md transition-colors ${
+            currentRole === 'buyer' ? 'bg-white text-brand-primary shadow-sm' : 'text-gray-500'
+          }`}
+        >
+          구매자
+        </button>
+      </div>
 
       {/* 메뉴 그리드 */}
       <div className="grid grid-cols-4 gap-3">
