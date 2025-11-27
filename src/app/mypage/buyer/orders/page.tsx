@@ -11,7 +11,7 @@ import EmptyState from '@/components/common/EmptyState';
 import ErrorState from '@/components/common/ErrorState';
 import { logger } from '@/lib/logger';
 import type { Order, Service, Seller } from '@/types/common';
-import { Eye, Download, Check, RotateCcw, Star } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 type OrderStatus =
@@ -243,16 +243,15 @@ function BuyerOrdersContent() {
         <>
           <Link
             href={`/mypage/buyer/orders/${order.id}`}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium whitespace-nowrap"
+            className="px-2 py-1 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-xs font-medium"
           >
-            <Eye className="w-4 h-4" />
-            수정 내역 확인
+            확인
           </Link>
           <Link
             href={`/chat?order=${order.id}`}
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+            className="px-2 py-1 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-xs font-medium"
           >
-            메시지
+            채팅
           </Link>
         </>
       );
@@ -261,32 +260,23 @@ function BuyerOrdersContent() {
     if (order.status === 'delivered') {
       return (
         <>
-          <Link
-            href={`/mypage/buyer/orders/${order.id}`}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium whitespace-nowrap"
-          >
-            <Download className="w-4 h-4" />
-            다운로드
-          </Link>
           <button
             onClick={() => handleConfirmOrder(order.id)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium whitespace-nowrap"
+            className="px-2 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs font-medium"
           >
-            <Check className="w-4 h-4" />
-            구매 확정
+            확정
           </button>
           <button
             onClick={() => handleRequestRevision(order.id)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors text-sm font-medium whitespace-nowrap"
+            className="px-2 py-1 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors text-xs font-medium"
           >
-            <RotateCcw className="w-4 h-4" />
-            수정 요청
+            수정
           </button>
           <Link
-            href={`/chat?order=${order.id}`}
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+            href={`/mypage/buyer/orders/${order.id}`}
+            className="px-2 py-1 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-xs font-medium"
           >
-            메시지
+            상세
           </Link>
         </>
       );
@@ -297,15 +287,15 @@ function BuyerOrdersContent() {
         <>
           <Link
             href={`/mypage/buyer/orders/${order.id}`}
-            className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium"
+            className="px-2 py-1 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-xs font-medium"
           >
-            상세보기
+            상세
           </Link>
           <Link
             href={`/chat?order=${order.id}`}
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+            className="px-2 py-1 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-xs font-medium"
           >
-            메시지
+            채팅
           </Link>
         </>
       );
@@ -316,16 +306,15 @@ function BuyerOrdersContent() {
         <>
           <Link
             href={`/mypage/buyer/orders/${order.id}`}
-            className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium"
+            className="px-2 py-1 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-xs font-medium"
           >
-            상세보기
+            상세
           </Link>
           <Link
             href={`/mypage/buyer/reviews?order=${order.id}`}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium whitespace-nowrap"
+            className="px-2 py-1 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-xs font-medium"
           >
-            <Star className="w-4 h-4" />
-            리뷰 작성
+            리뷰
           </Link>
         </>
       );
@@ -334,9 +323,9 @@ function BuyerOrdersContent() {
     return (
       <Link
         href={`/mypage/buyer/orders/${order.id}`}
-        className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-sm font-medium"
+        className="px-2 py-1 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors text-xs font-medium"
       >
-        상세보기
+        상세
       </Link>
     );
   };
