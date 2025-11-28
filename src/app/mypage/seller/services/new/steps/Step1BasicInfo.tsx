@@ -23,11 +23,15 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
   const [level2Categories, setLevel2Categories] = useState<Category[]>([]);
   const [level3Categories, setLevel3Categories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedLevel1, setSelectedLevel1] = useState('');
-  const [selectedLevel2, setSelectedLevel2] = useState('');
-  const [selectedLevel3, setSelectedLevel3] = useState('');
+  // formData에서 초기값 복원 (뒤로가기 시 유지)
+  const [selectedLevel1, setSelectedLevel1] = useState(formData.category_ids?.[0] || '');
+  const [selectedLevel2, setSelectedLevel2] = useState(formData.category_ids?.[1] || '');
+  const [selectedLevel3, setSelectedLevel3] = useState(formData.category_ids?.[2] || '');
+  const [isRestoring, setIsRestoring] = useState(
+    !!(formData.category_ids && formData.category_ids.length > 0)
+  );
 
-  // Load level 1 categories on mount and restore selections from formData
+  // Load level 1 categories on mount
   useEffect(() => {
     async function fetchLevel1Categories() {
       try {
@@ -43,10 +47,9 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
           logger.error('1차 카테고리 로딩 오류:', error);
         } else {
           setLevel1Categories(data || []);
-
-          // formData에서 카테고리 선택 상태 복원
-          if (formData.category_ids && formData.category_ids.length > 0) {
-            setSelectedLevel1(formData.category_ids[0] || '');
+          // 1차 카테고리만 선택한 경우 복원 완료
+          if (isRestoring && formData.category_ids && formData.category_ids.length === 1) {
+            setIsRestoring(false);
           }
         }
       } catch (error) {
@@ -63,9 +66,11 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
   useEffect(() => {
     if (!selectedLevel1) {
       setLevel2Categories([]);
-      setSelectedLevel2('');
-      setLevel3Categories([]);
-      setSelectedLevel3('');
+      if (!isRestoring) {
+        setSelectedLevel2('');
+        setLevel3Categories([]);
+        setSelectedLevel3('');
+      }
       return;
     }
 
@@ -83,14 +88,9 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
           logger.error('2차 카테고리 로딩 오류:', error);
         } else {
           setLevel2Categories(data || []);
-
-          // formData에서 2차 카테고리 선택 상태 복원
-          if (formData.category_ids && formData.category_ids.length > 1) {
-            const savedLevel2 = formData.category_ids[1];
-            // 로드된 카테고리에 해당 값이 있는지 확인
-            if (data?.some((cat) => cat.id === savedLevel2)) {
-              setSelectedLevel2(savedLevel2);
-            }
+          // 3차 카테고리가 없는 경우 복원 완료
+          if (isRestoring && formData.category_ids && formData.category_ids.length <= 2) {
+            setIsRestoring(false);
           }
         }
       } catch (error) {
@@ -99,13 +99,15 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
     }
 
     fetchLevel2Categories();
-  }, [selectedLevel1]);
+  }, [selectedLevel1, isRestoring]);
 
   // Load level 3 categories when level 2 is selected
   useEffect(() => {
     if (!selectedLevel2) {
       setLevel3Categories([]);
-      setSelectedLevel3('');
+      if (!isRestoring) {
+        setSelectedLevel3('');
+      }
       return;
     }
 
@@ -123,14 +125,9 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
           logger.error('3차 카테고리 로딩 오류:', error);
         } else {
           setLevel3Categories(data || []);
-
-          // formData에서 3차 카테고리 선택 상태 복원
-          if (formData.category_ids && formData.category_ids.length > 2) {
-            const savedLevel3 = formData.category_ids[2];
-            // 로드된 카테고리에 해당 값이 있는지 확인
-            if (data?.some((cat) => cat.id === savedLevel3)) {
-              setSelectedLevel3(savedLevel3);
-            }
+          // 복원 완료 후 플래그 해제
+          if (isRestoring) {
+            setIsRestoring(false);
           }
         }
       } catch (error) {
@@ -139,10 +136,13 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
     }
 
     fetchLevel3Categories();
-  }, [selectedLevel2]);
+  }, [selectedLevel2, isRestoring]);
 
   // Update final category when level 3 is selected
   useEffect(() => {
+    // 복원 중에는 formData 업데이트하지 않음
+    if (isRestoring) return;
+
     // Always update category_ids with all selected levels to preserve hierarchy
     const categories: string[] = [];
     if (selectedLevel1) categories.push(selectedLevel1);
@@ -160,7 +160,7 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
 
       return { ...prev, category_ids: categories };
     });
-  }, [selectedLevel1, selectedLevel2, selectedLevel3, setFormData]);
+  }, [selectedLevel1, selectedLevel2, selectedLevel3, setFormData, isRestoring]);
 
   return (
     <div className="space-y-6">
