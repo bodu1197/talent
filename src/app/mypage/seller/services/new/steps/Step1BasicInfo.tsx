@@ -27,7 +27,7 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
   const [selectedLevel2, setSelectedLevel2] = useState('');
   const [selectedLevel3, setSelectedLevel3] = useState('');
 
-  // Load level 1 categories on mount
+  // Load level 1 categories on mount and restore selections from formData
   useEffect(() => {
     async function fetchLevel1Categories() {
       try {
@@ -43,6 +43,11 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
           logger.error('1차 카테고리 로딩 오류:', error);
         } else {
           setLevel1Categories(data || []);
+
+          // formData에서 카테고리 선택 상태 복원
+          if (formData.category_ids && formData.category_ids.length > 0) {
+            setSelectedLevel1(formData.category_ids[0] || '');
+          }
         }
       } catch (error) {
         logger.error('1차 카테고리 로딩 실패:', error);
@@ -78,6 +83,15 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
           logger.error('2차 카테고리 로딩 오류:', error);
         } else {
           setLevel2Categories(data || []);
+
+          // formData에서 2차 카테고리 선택 상태 복원
+          if (formData.category_ids && formData.category_ids.length > 1) {
+            const savedLevel2 = formData.category_ids[1];
+            // 로드된 카테고리에 해당 값이 있는지 확인
+            if (data?.some((cat) => cat.id === savedLevel2)) {
+              setSelectedLevel2(savedLevel2);
+            }
+          }
         }
       } catch (error) {
         logger.error('2차 카테고리 로딩 실패:', error);
@@ -109,6 +123,15 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
           logger.error('3차 카테고리 로딩 오류:', error);
         } else {
           setLevel3Categories(data || []);
+
+          // formData에서 3차 카테고리 선택 상태 복원
+          if (formData.category_ids && formData.category_ids.length > 2) {
+            const savedLevel3 = formData.category_ids[2];
+            // 로드된 카테고리에 해당 값이 있는지 확인
+            if (data?.some((cat) => cat.id === savedLevel3)) {
+              setSelectedLevel3(savedLevel3);
+            }
+          }
         }
       } catch (error) {
         logger.error('3차 카테고리 로딩 실패:', error);

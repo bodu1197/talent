@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import TemplateSelector from '@/components/services/TemplateSelector';
 import toast from 'react-hot-toast';
@@ -33,6 +33,30 @@ export default function Step4Images({ formData, setFormData }: ServiceFormProps)
   const [selectedTemplate, setSelectedTemplate] = useState<GradientTemplate | null>(null);
   const [textStyle, setTextStyle] = useState<TextStyle | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // formData에서 썸네일 미리보기 복원 (뒤로 갔다가 다시 올 때)
+  useEffect(() => {
+    // 파일이 있고 미리보기가 없으면 복원
+    if (formData.thumbnail_file && !thumbnailPreview) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setThumbnailPreview(reader.result as string);
+      };
+      reader.readAsDataURL(formData.thumbnail_file);
+    }
+    // 기존 thumbnail_url이 있으면 (수정 모드) 미리보기로 사용
+    if (formData.thumbnail_url && !thumbnailPreview && !formData.thumbnail_file) {
+      setThumbnailPreview(formData.thumbnail_url);
+    }
+  }, []);
+
+  // 템플릿 모드 상태 복원
+  useEffect(() => {
+    // 템플릿으로 생성된 파일이 있으면 template 모드로 설정
+    if (formData.thumbnail_file?.name?.startsWith('thumbnail-') && uploadMode === 'file') {
+      setUploadMode('template');
+    }
+  }, []);
 
   // 파일 선택 다이얼로그 열기
   const handleFileButtonClick = () => {
@@ -190,14 +214,16 @@ export default function Step4Images({ formData, setFormData }: ServiceFormProps)
                 </button>
               </div>
             ) : (
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-gray-50">
+              <div
+                onClick={handleFileButtonClick}
+                className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-gray-50 cursor-pointer hover:border-brand-primary hover:bg-gray-100 transition-colors"
+              >
                 <ImagePlus className="text-gray-400 w-12 h-12 mb-4 mx-auto" />
                 <p className="text-gray-600 mb-4">서비스를 대표할 이미지를 업로드하세요</p>
 
                 {/* 명확한 업로드 버튼 */}
                 <button
                   type="button"
-                  onClick={handleFileButtonClick}
                   className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-primary/90 transition-colors font-medium shadow-sm"
                 >
                   <ImagePlus className="w-4 h-4 mr-2 inline" />

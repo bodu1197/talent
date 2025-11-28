@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { logger } from '@/lib/logger';
 import { X, Plus, Info, Loader2, Youtube } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -20,6 +20,16 @@ export default function Step5Requirements({
   const [tagInput, setTagInput] = useState('');
   const [youtubeVideoId, setYoutubeVideoId] = useState('');
   const [fetchingThumbnail, setFetchingThumbnail] = useState(false);
+
+  // formData에서 YouTube 비디오 ID 복원 (뒤로 갔다가 다시 올 때)
+  useEffect(() => {
+    if (formData.portfolio_data?.youtube_url && !youtubeVideoId) {
+      const videoId = extractYoutubeVideoId(formData.portfolio_data.youtube_url);
+      if (videoId) {
+        setYoutubeVideoId(videoId);
+      }
+    }
+  }, []);
 
   // 요청사항 추가
   const addRequirement = () => {
