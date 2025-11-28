@@ -61,7 +61,7 @@ export async function PATCH(request: NextRequest) {
     });
 
     if (authError) {
-      logger.warn('Auth user metadata sync failed:', authError);
+      logger.warn('Auth user metadata sync failed:', { message: authError.message });
       // 프로필 업데이트는 성공했으므로 에러를 반환하지 않음
     }
 

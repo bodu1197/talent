@@ -600,7 +600,11 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
           serviceId={id}
           sellerId={service.seller.id}
           sellerUserId={service.seller.user_id}
+          serviceTitle={service.title}
+          serviceDescription={service.description}
           servicePrice={service.price || 0}
+          deliveryDays={service.delivery_days || 7}
+          revisionCount={service.revision_count || 0}
           hasPackages={service.has_packages || false}
           packages={
             service.service_packages?.filter((p: { is_active: boolean }) => p.is_active) || []

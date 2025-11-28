@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Heart, MessageCircle, Check } from 'lucide-react';
+import { Heart, MessageCircle, Check, Loader2 } from 'lucide-react';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { createClient } from '@/lib/supabase/client';
+import toast from 'react-hot-toast';
+import { logger } from '@/lib/logger';
 import {
   PackageType,
   ServicePackage,
@@ -16,7 +18,11 @@ interface Props {
   serviceId: string;
   sellerId: string;
   sellerUserId: string;
+  serviceTitle: string;
+  serviceDescription?: string;
   servicePrice: number;
+  deliveryDays: number;
+  revisionCount: number;
   hasPackages: boolean;
   packages: ServicePackage[];
   initialIsFavorite?: boolean;
@@ -26,7 +32,11 @@ export default function MobilePackageSelector({
   serviceId,
   sellerId,
   sellerUserId,
+  serviceTitle,
+  serviceDescription,
   servicePrice,
+  deliveryDays,
+  revisionCount,
   hasPackages,
   packages,
   initialIsFavorite = false,
@@ -35,6 +45,7 @@ export default function MobilePackageSelector({
   const { user } = useAuth();
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite);
   const [isLoading, setIsLoading] = useState(false);
+  const [isPurchasing, setIsPurchasing] = useState(false);
 
   // 활성화된 패키지만 필터링하고 정렬
   const activePackages = PACKAGE_TYPE_ORDER.map((type) =>
@@ -89,32 +100,71 @@ export default function MobilePackageSelector({
     router.push(`/chat?seller=${sellerId}&service=${serviceId}`);
   };
 
-  const handlePurchase = () => {
+  // 구매 버튼 텍스트 렌더링
+  const renderPurchaseButtonContent = () => {
+    if (isPurchasing) {
+      return (
+        <>
+          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          처리 중...
+        </>
+      );
+    }
+    if (hasPackages && selectedPackage) {
+      return <span>{PACKAGE_TYPE_LABELS[selectedPackage.package_type]} 구매</span>;
+    }
+    return <span>구매하기</span>;
+  };
+
+  const handlePurchase = async () => {
     if (!user) {
-      router.push('/auth/login');
+      router.push(`/auth/login?redirect=/services/${serviceId}`);
       return;
     }
 
     if (user.id === sellerUserId) {
-      alert('본인의 서비스는 구매할 수 없습니다.');
+      toast.error('본인의 서비스는 구매할 수 없습니다.');
       return;
     }
 
-    // 패키지 모드일 때
-    if (hasPackages && selectedPackage) {
-      const params = new URLSearchParams({
-        seller_id: sellerId,
-        service_id: serviceId,
-        package_type: selectedPackage.package_type,
-        package_id: selectedPackage.id,
-        amount: selectedPackage.price.toString(),
-        delivery_days: selectedPackage.delivery_days.toString(),
-        revision_count: selectedPackage.revision_count.toString(),
+    setIsPurchasing(true);
+
+    try {
+      // 패키지 모드일 때
+      const amount = hasPackages && selectedPackage ? selectedPackage.price : servicePrice;
+      const days = hasPackages && selectedPackage ? selectedPackage.delivery_days : deliveryDays;
+      const revisions =
+        hasPackages && selectedPackage ? selectedPackage.revision_count : revisionCount;
+
+      // 바로 결제 준비 API 호출 (주문 생성)
+      const prepareResponse = await fetch('/api/payments/direct-purchase', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          seller_id: sellerId,
+          service_id: serviceId,
+          title: serviceTitle,
+          amount,
+          description: serviceDescription,
+          delivery_days: days,
+          revision_count: revisions,
+        }),
       });
-      router.push(`/payment/checkout?${params.toString()}`);
-    } else {
-      // 단일 가격 모드
-      router.push(`/payment?service=${serviceId}`);
+
+      if (!prepareResponse.ok) {
+        const error = await prepareResponse.json();
+        throw new Error(error.error || '결제 준비 실패');
+      }
+
+      const { order_id } = await prepareResponse.json();
+
+      // 결제 페이지로 이동
+      router.push(`/payment/direct/${order_id}`);
+    } catch (error) {
+      logger.error('Purchase error:', error);
+      toast.error(error instanceof Error ? error.message : '구매 진행 중 오류가 발생했습니다');
+    } finally {
+      setIsPurchasing(false);
     }
   };
 
@@ -226,13 +276,10 @@ export default function MobilePackageSelector({
           <button
             type="button"
             onClick={handlePurchase}
-            className="flex items-center justify-center flex-1 h-12 bg-brand-primary text-white font-semibold hover:bg-brand-dark transition-colors"
+            disabled={isPurchasing}
+            className="flex items-center justify-center flex-1 h-12 bg-brand-primary text-white font-semibold hover:bg-brand-dark transition-colors disabled:opacity-50"
           >
-            {hasPackages && selectedPackage ? (
-              <span>{PACKAGE_TYPE_LABELS[selectedPackage.package_type]} 구매</span>
-            ) : (
-              <span>구매하기</span>
-            )}
+            {renderPurchaseButtonContent()}
           </button>
         </div>
       </div>
