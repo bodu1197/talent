@@ -4,36 +4,9 @@ import { useState } from 'react';
 import { logger } from '@/lib/logger';
 import { X, Plus, Info, Loader2, Youtube } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { ServiceFormProps } from '@/types/service-form';
 
-interface ServiceFormData {
-  title: string;
-  category_ids: string[];
-  price: string;
-  delivery_days: string;
-  revision_count: string;
-  description: string;
-  thumbnail_url: string;
-  thumbnail_file: File | null;
-  requirements: { question: string; required: boolean }[];
-  create_portfolio: boolean;
-  portfolio_data: {
-    title: string;
-    description: string;
-    youtube_url: string;
-    project_url: string;
-    tags: string[];
-    images: File[];
-  };
-  features?: {
-    commercial_use?: boolean;
-    source_files?: boolean;
-    express_delivery?: boolean;
-  };
-}
-
-interface Props {
-  readonly formData: ServiceFormData;
-  readonly setFormData: (data: ServiceFormData) => void;
+interface Props extends ServiceFormProps {
   readonly showOnlyRequirements?: boolean;
 }
 

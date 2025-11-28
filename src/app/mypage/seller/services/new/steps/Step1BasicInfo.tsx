@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { logger } from '@/lib/logger';
 import { FolderTree } from 'lucide-react';
+import { ServiceFormData, ServiceFormProps } from '@/types/service-form';
 
 interface Category {
   id: string;
@@ -13,34 +14,7 @@ interface Category {
   parent_id: string | null;
 }
 
-interface ServiceFormData {
-  title: string;
-  category_ids: string[];
-  price: string;
-  delivery_days: string;
-  revision_count: string;
-  description: string;
-  thumbnail_url: string;
-  thumbnail_file: File | null;
-  requirements: { question: string; required: boolean }[];
-  create_portfolio: boolean;
-  portfolio_data: {
-    title: string;
-    description: string;
-    youtube_url: string;
-    project_url: string;
-    tags: string[];
-    images: File[];
-  };
-  features?: {
-    commercial_use?: boolean;
-    source_files?: boolean;
-    express_delivery?: boolean;
-  };
-}
-
-interface Props {
-  readonly formData: ServiceFormData;
+interface Props extends ServiceFormProps {
   readonly setFormData: React.Dispatch<React.SetStateAction<ServiceFormData>>;
 }
 

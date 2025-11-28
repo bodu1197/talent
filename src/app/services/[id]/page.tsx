@@ -10,7 +10,6 @@ import ShareButton from '@/components/services/ShareButton';
 import PortfolioGrid from '@/components/services/PortfolioGrid';
 import ExpertResponseBanner from '@/components/services/ExpertResponseBanner';
 import ContactSellerButton from '@/components/services/ContactSellerButton';
-import PurchaseButton from '@/components/services/PurchaseButton';
 import MobileServiceHeader from '@/components/services/MobileServiceHeader';
 import MobileServiceBottomBar from '@/components/services/MobileServiceBottomBar';
 import { logger } from '@/lib/logger';
@@ -31,6 +30,7 @@ import {
   getSellerOtherServices,
   getRecommendedServicesByCategory,
 } from '@/lib/supabase/queries/services';
+import ServicePackageSelector from '@/components/services/ServicePackageSelector';
 
 // 동적 렌더링 강제 (찜 개수 실시간 반영)
 export const dynamic = 'force-dynamic';
@@ -205,6 +205,18 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         ),
         service_categories(
           category:categories(id, name, slug, level)
+        ),
+        service_packages(
+          id,
+          name,
+          package_type,
+          price,
+          delivery_days,
+          revision_count,
+          features,
+          description,
+          is_active,
+          display_order
         )
       `
       )
@@ -822,7 +834,9 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                             <Star
                               key={star}
                               className={`w-4 h-4 ${
-                                star <= review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                                star <= review.rating
+                                  ? 'text-yellow-400 fill-current'
+                                  : 'text-gray-300'
                               }`}
                             />
                           ))}
@@ -861,43 +875,39 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
           {/* 오른쪽: 가격, 안전거래 (모바일에서 숨김 - 하단바로 이동) */}
           <div className="hidden lg:block w-full lg:w-[350px] flex-shrink-0">
             <div className="sticky top-20 space-y-6">
-              {/* 가격 정보 */}
-              <div
-                id="price"
-                className="bg-white rounded-xl shadow-sm overflow-hidden scroll-mt-20"
-              >
-                <div className="p-6">
-                  <div className="text-2xl font-semibold mb-1">
-                    {service.price?.toLocaleString() || 0}원
-                  </div>
-                  <div className="text-sm text-gray-600 mb-6">
-                    {service.delivery_days || 0}일 이내 완료 ·{' '}
-                    {service.revision_count === 999 ? '무제한' : `${service.revision_count || 0}회`}{' '}
-                    수정
-                  </div>
+              {/* 가격 정보 (패키지 또는 단일 가격) */}
+              <div id="price" className="scroll-mt-20">
+                {service.seller?.id && (
+                  <ServicePackageSelector
+                    serviceId={id}
+                    sellerId={service.seller.id}
+                    sellerUserId={service.seller.user_id}
+                    serviceTitle={service.title}
+                    serviceDescription={service.description}
+                    servicePrice={service.price || 0}
+                    deliveryDays={service.delivery_days || 7}
+                    revisionCount={service.revision_count ?? 0}
+                    hasPackages={service.has_packages || false}
+                    packages={
+                      service.service_packages?.filter(
+                        (p: { is_active: boolean }) => p.is_active
+                      ) || []
+                    }
+                    currentUserId={user?.id}
+                  />
+                )}
 
-                  {service.seller?.id && (
-                    <PurchaseButton
-                      sellerId={service.seller.id}
-                      serviceId={id}
-                      currentUserId={user?.id}
-                      sellerUserId={service.seller.user_id}
-                      serviceTitle={service.title}
-                      servicePrice={service.price || 0}
-                      deliveryDays={service.delivery_days || 7}
-                      revisionCount={service.revision_count || 0}
-                      serviceDescription={service.description}
-                    />
-                  )}
-
-                  {service.seller?.id && (!user || service.seller.user_id !== user.id) && (
+                {/* 문의하기 버튼 */}
+                {service.seller?.id && (!user || service.seller.user_id !== user.id) && (
+                  <div className="mt-4">
                     <ContactSellerButton sellerId={service.seller.id} serviceId={id} />
-                  )}
-
-                  <div className="flex flex-col gap-2 mt-3">
-                    <FavoriteButton serviceId={id} />
-                    <ShareButton serviceId={id} serviceTitle={service.title} />
                   </div>
+                )}
+
+                {/* 찜/공유 버튼 */}
+                <div className="flex flex-col gap-2 mt-3">
+                  <FavoriteButton serviceId={id} />
+                  <ShareButton serviceId={id} serviceTitle={service.title} />
                 </div>
               </div>
 

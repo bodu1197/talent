@@ -8,38 +8,13 @@ import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
 import { Upload, X, Check, CloudUpload, Sparkles } from 'lucide-react';
 import { generateThumbnailWithText, type GradientTemplate } from '@/lib/template-generator';
+import { ServiceFormProps } from '@/types/service-form';
 
 // Dynamic import for TextOverlayEditor - only loads when template mode is selected
 const TextOverlayEditor = dynamic(() => import('@/components/services/TextOverlayEditor'), {
   loading: () => <div className="py-8 text-center text-gray-500">Loading editor...</div>,
   ssr: false,
 });
-
-interface ServiceFormData {
-  title: string;
-  category_ids: string[];
-  price: string;
-  delivery_days: string;
-  revision_count: string;
-  description: string;
-  thumbnail_url: string;
-  thumbnail_file: File | null;
-  requirements: { question: string; required: boolean }[];
-  create_portfolio: boolean;
-  portfolio_data: {
-    title: string;
-    description: string;
-    youtube_url: string;
-    project_url: string;
-    tags: string[];
-    images: File[];
-  };
-  features?: {
-    commercial_use?: boolean;
-    source_files?: boolean;
-    express_delivery?: boolean;
-  };
-}
 
 interface TextStyle {
   text: string;
@@ -52,12 +27,7 @@ interface TextStyle {
   shadowBlur: number;
 }
 
-interface Props {
-  readonly formData: ServiceFormData;
-  readonly setFormData: (data: ServiceFormData) => void;
-}
-
-export default function Step4Images({ formData, setFormData }: Props) {
+export default function Step4Images({ formData, setFormData }: ServiceFormProps) {
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const [uploadMode, setUploadMode] = useState<'file' | 'template'>('file');
   const [selectedTemplate, setSelectedTemplate] = useState<GradientTemplate | null>(null);

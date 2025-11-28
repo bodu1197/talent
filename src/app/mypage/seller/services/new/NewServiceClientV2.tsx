@@ -16,6 +16,17 @@ import Step3Description from './steps/Step3Description';
 import Step4Images from './steps/Step4Images';
 import Step5Requirements from './steps/Step5Requirements';
 
+// 패키지 타입
+import {
+  PackageType,
+  PackageFormData,
+  PACKAGE_TYPE_ORDER,
+  DEFAULT_PACKAGE_FORM_DATA,
+  validateAllPackages,
+  packageFormToDbData,
+} from '@/types/package';
+import { ServiceFormData } from '@/types/service-form';
+
 interface Props {
   readonly sellerId: string;
   readonly profileData?: {
@@ -29,26 +40,37 @@ export default function NewServiceClientV2({ sellerId, profileData }: Props) {
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
 
+  // 패키지 초기값
+  const getInitialPackages = (): Record<PackageType, PackageFormData> => ({
+    standard: { ...DEFAULT_PACKAGE_FORM_DATA, is_enabled: true },
+    deluxe: { ...DEFAULT_PACKAGE_FORM_DATA },
+    premium: { ...DEFAULT_PACKAGE_FORM_DATA },
+  });
+
   // 전체 폼 데이터
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ServiceFormData>({
     // Step 1: 기본정보
     title: '',
-    category_ids: [] as string[],
+    category_ids: [],
 
     // Step 2: 가격설정
     price: '',
     delivery_days: '',
     revision_count: '0',
 
+    // Step 2: 패키지 설정
+    use_packages: false,
+    packages: getInitialPackages(),
+
     // Step 3: 서비스 설명
     description: '',
 
     // Step 4: 이미지
     thumbnail_url: '',
-    thumbnail_file: null as File | null,
+    thumbnail_file: null,
 
     // Step 5: 요청사항
-    requirements: [] as { question: string; required: boolean }[],
+    requirements: [],
 
     // 포트폴리오 (선택사항)
     create_portfolio: false,
@@ -57,8 +79,8 @@ export default function NewServiceClientV2({ sellerId, profileData }: Props) {
       description: '',
       youtube_url: '',
       project_url: '',
-      tags: [] as string[],
-      images: [] as File[],
+      tags: [],
+      images: [],
     },
   });
 
@@ -68,42 +90,58 @@ export default function NewServiceClientV2({ sellerId, profileData }: Props) {
     { number: 3, title: '포트폴리오' },
   ];
 
+  // Step 1 유효성 검사: 기본정보
+  const validateStep1 = (): boolean => {
+    logger.info('[NewService] handleNext: Checking category_ids', {
+      categoryIds: formData.category_ids,
+    });
+
+    if (!formData.category_ids || formData.category_ids.length < 3) {
+      toast.error('3차 카테고리까지 모두 선택해주세요.');
+      return false;
+    }
+    if (!formData.title?.trim()) {
+      toast.error('서비스 제목을 입력해주세요.');
+      return false;
+    }
+    if (!formData.description?.trim()) {
+      toast.error('서비스 설명을 입력해주세요.');
+      return false;
+    }
+    if (!formData.thumbnail_file) {
+      toast.error('서비스 썸네일을 업로드하거나 생성해주세요.');
+      return false;
+    }
+    return true;
+  };
+
+  // Step 2 유효성 검사: 가격설정
+  const validateStep2 = (): boolean => {
+    if (formData.use_packages) {
+      const validation = validateAllPackages(formData.packages);
+      if (!validation.isValid) {
+        const firstError = Object.values(validation.errors).flat()[0];
+        toast.error(firstError || '패키지 정보를 확인해주세요.');
+        return false;
+      }
+      return true;
+    }
+
+    // 단일 가격 모드
+    if (!formData.price || Number.parseInt(formData.price) < 5000) {
+      toast.error('서비스 가격을 5,000원 이상으로 입력해주세요.');
+      return false;
+    }
+    if (!formData.delivery_days || Number.parseInt(formData.delivery_days) < 1) {
+      toast.error('작업 기간을 1일 이상으로 입력해주세요.');
+      return false;
+    }
+    return true;
+  };
+
   const handleNext = () => {
-    // Step 1 validation: 카테고리, 제목, 설명, 썸네일 필수
-    if (currentStep === 1) {
-      logger.info('[NewService] handleNext: Checking category_ids', {
-        categoryIds: formData.category_ids,
-      });
-
-      if (!formData.category_ids || formData.category_ids.length < 3) {
-        toast.error('3차 카테고리까지 모두 선택해주세요.');
-        return;
-      }
-      if (!formData.title || formData.title.trim() === '') {
-        toast.error('서비스 제목을 입력해주세요.');
-        return;
-      }
-      if (!formData.description || formData.description.trim() === '') {
-        toast.error('서비스 설명을 입력해주세요.');
-        return;
-      }
-      if (!formData.thumbnail_file) {
-        toast.error('서비스 썸네일을 업로드하거나 생성해주세요.');
-        return;
-      }
-    }
-
-    //Step 2 validation: 가격, 작업기간 필수
-    if (currentStep === 2) {
-      if (!formData.price || Number.parseInt(formData.price) < 5000) {
-        toast.error('서비스 가격을 5,000원 이상으로 입력해주세요.');
-        return;
-      }
-      if (!formData.delivery_days || Number.parseInt(formData.delivery_days) < 1) {
-        toast.error('작업 기간을 1일 이상으로 입력해주세요.');
-        return;
-      }
-    }
+    if (currentStep === 1 && !validateStep1()) return;
+    if (currentStep === 2 && !validateStep2()) return;
 
     if (currentStep < 3) {
       setCurrentStep(currentStep + 1);
@@ -137,6 +175,24 @@ export default function NewServiceClientV2({ sellerId, profileData }: Props) {
   // 서비스 생성 헬퍼 함수
   const createService = async (thumbnailUrl: string) => {
     const supabase = createClient();
+
+    // 패키지 모드일 때 기본 가격은 첫 번째 활성화된 패키지의 가격
+    let basePrice = Number.parseInt(formData.price) || 0;
+    let baseDeliveryDays = Number.parseInt(formData.delivery_days) || 7;
+    let baseRevisionCount = Number.parseInt(formData.revision_count) || 0;
+
+    if (formData.use_packages) {
+      const enabledPackage = PACKAGE_TYPE_ORDER.map((type) => formData.packages[type]).find(
+        (pkg) => pkg.is_enabled
+      );
+
+      if (enabledPackage) {
+        basePrice = Number.parseInt(enabledPackage.price.replace(/,/g, '')) || 0;
+        baseDeliveryDays = Number.parseInt(enabledPackage.delivery_days) || 7;
+        baseRevisionCount = Number.parseInt(enabledPackage.revision_count) || 0;
+      }
+    }
+
     const { data: service, error: serviceError } = await supabase
       .from('services')
       .insert({
@@ -144,8 +200,10 @@ export default function NewServiceClientV2({ sellerId, profileData }: Props) {
         title: formData.title,
         description: formData.description,
         thumbnail_url: thumbnailUrl,
-        price: Number.parseInt(formData.price),
-        delivery_days: Number.parseInt(formData.delivery_days),
+        price: basePrice,
+        delivery_days: baseDeliveryDays,
+        revision_count: baseRevisionCount,
+        has_packages: formData.use_packages,
         status: 'pending',
       })
       .select()
@@ -153,6 +211,38 @@ export default function NewServiceClientV2({ sellerId, profileData }: Props) {
 
     if (serviceError) throw serviceError;
     return service;
+  };
+
+  // 패키지 저장 헬퍼 함수
+  const saveServicePackages = async (serviceId: string) => {
+    if (!formData.use_packages) return;
+
+    const supabase = createClient();
+    const packagesToInsert = [];
+    let displayOrder = 1;
+
+    for (const type of PACKAGE_TYPE_ORDER) {
+      const packageData = formData.packages[type];
+      if (packageData.is_enabled) {
+        packagesToInsert.push(packageFormToDbData(serviceId, type, packageData, displayOrder));
+        displayOrder++;
+      }
+    }
+
+    if (packagesToInsert.length === 0) return;
+
+    logger.info('[NewService] Saving packages', { packagesToInsert });
+
+    const { error: packageError } = await supabase
+      .from('service_packages')
+      .insert(packagesToInsert);
+
+    if (packageError) {
+      logger.error('Package insertion error:', packageError);
+      throw new Error('패키지 저장에 실패했습니다.');
+    }
+
+    logger.info('[NewService] Packages saved successfully');
   };
 
   // 카테고리 저장 헬퍼 함수
@@ -249,7 +339,10 @@ export default function NewServiceClientV2({ sellerId, profileData }: Props) {
       // 3. 카테고리 연결
       await saveServiceCategories(service.id);
 
-      // 4. 포트폴리오 생성 (선택사항)
+      // 4. 패키지 저장 (패키지 모드일 때만)
+      await saveServicePackages(service.id);
+
+      // 5. 포트폴리오 생성 (선택사항)
       await createPortfolio(service.id, thumbnailUrl);
 
       toast.success('서비스가 등록되었습니다. 승인 후 공개됩니다.');

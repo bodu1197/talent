@@ -1,37 +1,7 @@
 import { Lightbulb, Check } from 'lucide-react';
+import { ServiceFormProps } from '@/types/service-form';
 
-interface ServiceFormData {
-  title: string;
-  category_ids: string[];
-  price: string;
-  delivery_days: string;
-  revision_count: string;
-  description: string;
-  thumbnail_url: string;
-  thumbnail_file: File | null;
-  requirements: { question: string; required: boolean }[];
-  create_portfolio: boolean;
-  portfolio_data: {
-    title: string;
-    description: string;
-    youtube_url: string;
-    project_url: string;
-    tags: string[];
-    images: File[];
-  };
-  features?: {
-    commercial_use?: boolean;
-    source_files?: boolean;
-    express_delivery?: boolean;
-  };
-}
-
-interface Props {
-  readonly formData: ServiceFormData;
-  readonly setFormData: (data: ServiceFormData) => void;
-}
-
-export default function Step3Description({ formData, setFormData }: Props) {
+export default function Step3Description({ formData, setFormData }: ServiceFormProps) {
   return (
     <div className="space-y-6">
       <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">서비스 설명</h2>
