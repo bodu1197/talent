@@ -47,12 +47,5 @@ export default async function DirectPaymentPage({ params }: DirectPaymentPagePro
     .eq('user_id', order.seller_id)
     .single();
 
-  // 구매자 정보 조회 (profiles 테이블 사용)
-  const { data: buyer } = await supabase
-    .from('profiles')
-    .select('user_id, name, email, phone')
-    .eq('user_id', user.id)
-    .single();
-
-  return <DirectPaymentClient order={order} seller={seller} buyer={buyer} />;
+  return <DirectPaymentClient order={order} seller={seller} />;
 }
