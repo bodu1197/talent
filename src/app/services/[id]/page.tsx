@@ -11,7 +11,7 @@ import PortfolioGrid from '@/components/services/PortfolioGrid';
 import ExpertResponseBanner from '@/components/services/ExpertResponseBanner';
 import ContactSellerButton from '@/components/services/ContactSellerButton';
 import MobileServiceHeader from '@/components/services/MobileServiceHeader';
-import MobileServiceBottomBar from '@/components/services/MobileServiceBottomBar';
+import MobilePackageSelector from '@/components/services/MobilePackageSelector';
 import { logger } from '@/lib/logger';
 import { getCategoryPath } from '@/lib/categories';
 import {
@@ -265,6 +265,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
     categoryPath,
     otherServices,
     recommendedServices,
+    wishlistResult,
   ] = await Promise.all([
     // 포트폴리오 조회
     fetchLinkedPortfolios(supabase, id),
@@ -302,9 +303,15 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
     deepestCategory
       ? getRecommendedServicesByCategory(deepestCategory.id, service.id, 10)
       : Promise.resolve([]),
+
+    // 현재 사용자의 찜 상태 조회
+    user
+      ? supabase.from('wishlists').select('id').eq('user_id', user.id).eq('service_id', id).single()
+      : Promise.resolve({ data: null }),
   ]);
 
   const serviceReviews = reviewsResult.data;
+  const isFavorited = !!wishlistResult?.data;
 
   // 실제 리뷰 데이터로 평균 별점 계산
   const averageRating =
@@ -582,13 +589,25 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         </div>
       </div>
 
-      {/* 모바일 전용: 제목 및 가격 */}
+      {/* 모바일 전용: 제목 */}
       <div className="lg:hidden bg-white px-4 py-4">
-        <h1 className="text-lg font-semibold text-gray-900 mb-2">{service.title}</h1>
-        <div className="text-xl font-semibold text-brand-primary">
-          {service.price?.toLocaleString() || 0}원
-        </div>
+        <h1 className="text-lg font-semibold text-gray-900">{service.title}</h1>
       </div>
+
+      {/* 모바일 전용: 패키지 선택 (제목 아래에 바로 표시) */}
+      {service.seller && (
+        <MobilePackageSelector
+          serviceId={id}
+          sellerId={service.seller.id}
+          sellerUserId={service.seller.user_id}
+          servicePrice={service.price || 0}
+          hasPackages={service.has_packages || false}
+          packages={
+            service.service_packages?.filter((p: { is_active: boolean }) => p.is_active) || []
+          }
+          initialIsFavorite={isFavorited}
+        />
+      )}
 
       {/* 메인 컨텐츠 영역 */}
       <div className="container-1200 px-4 pb-8 pt-5 lg:pt-5">
@@ -974,15 +993,6 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             </div>
           </div>
         </div>
-      )}
-
-      {/* 모바일 전용: 하단 고정 버튼 (찜/문의/구매) */}
-      {service.seller && (
-        <MobileServiceBottomBar
-          serviceId={id}
-          sellerId={service.seller.id}
-          sellerUserId={service.seller.user_id}
-        />
       )}
     </div>
   );
