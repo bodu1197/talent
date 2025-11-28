@@ -109,8 +109,10 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
       {/* 안내 메시지 */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <p className="text-sm text-blue-800">
-          <strong>패키지 설정:</strong> 각 패키지를 클릭하여 상세 설정하세요. 최소 1개 이상 활성화
-          필요.
+          <strong>패키지 설정:</strong> 각 패키지를 클릭하여 가격과 포함 기능을 설정하세요.
+        </p>
+        <p className="text-xs text-blue-600 mt-1">
+          ※ 서비스 전체 설명은 다음 단계에서 별도로 작성합니다.
         </p>
       </div>
 
@@ -352,11 +354,11 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                         </div>
                       </div>
 
-                      {/* 패키지 설명 */}
+                      {/* 패키지 간단 설명 */}
                       <div>
                         <div className="flex items-center justify-between mb-2">
                           <label className="text-sm font-medium text-gray-700">
-                            패키지 설명 <span className="text-red-500">*</span>
+                            패키지 한줄 설명 <span className="text-red-500">*</span>
                           </label>
                           <span
                             className={`text-xs ${
@@ -368,7 +370,8 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                             {pkg.description?.length || 0}/{PACKAGE_DESCRIPTION_MAX_LENGTH}자
                           </span>
                         </div>
-                        <textarea
+                        <input
+                          type="text"
                           value={pkg.description}
                           onChange={(e) => {
                             const value = e.target.value;
@@ -376,15 +379,18 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                               handlePackageChange(type, 'description', value);
                             }
                           }}
-                          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent resize-none ${
+                          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent ${
                             (pkg.description?.length || 0) > PACKAGE_DESCRIPTION_MAX_LENGTH
                               ? 'border-red-300 bg-red-50'
                               : 'border-gray-300'
                           }`}
-                          rows={2}
-                          placeholder="이 패키지에서 제공하는 서비스를 간단히 설명해주세요"
+                          placeholder="예: 기본 작업물 + 1회 수정 포함"
                           maxLength={PACKAGE_DESCRIPTION_MAX_LENGTH}
                         />
+                        <p className="mt-1 text-xs text-gray-500">
+                          💡 이 패키지만의 특징을 한줄로 요약하세요. 서비스 전체 설명은 다음
+                          단계에서 작성합니다.
+                        </p>
                       </div>
 
                       {/* 포함 기능 */}
