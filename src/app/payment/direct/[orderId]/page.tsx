@@ -44,7 +44,7 @@ export default async function DirectPaymentPage({ params }: DirectPaymentPagePro
   const { data: seller } = await supabase
     .from('seller_profiles')
     .select('id, business_name, display_name, profile_image, user_id')
-    .eq('id', order.seller_id)
+    .eq('user_id', order.seller_id)
     .single();
 
   // 구매자 정보 조회 (profiles 테이블 사용)
