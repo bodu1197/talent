@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import TemplateSelector from '@/components/services/TemplateSelector';
 import toast from 'react-hot-toast';
 
 import { logger } from '@/lib/logger';
-import { Upload, X, Check, CloudUpload, Sparkles } from 'lucide-react';
+import { X, Check, ImagePlus, Sparkles } from 'lucide-react';
 import { generateThumbnailWithText, type GradientTemplate } from '@/lib/template-generator';
 import { ServiceFormProps } from '@/types/service-form';
 
@@ -32,6 +32,12 @@ export default function Step4Images({ formData, setFormData }: ServiceFormProps)
   const [uploadMode, setUploadMode] = useState<'file' | 'template'>('file');
   const [selectedTemplate, setSelectedTemplate] = useState<GradientTemplate | null>(null);
   const [textStyle, setTextStyle] = useState<TextStyle | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // 파일 선택 다이얼로그 열기
+  const handleFileButtonClick = () => {
+    fileInputRef.current?.click();
+  };
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -114,47 +120,58 @@ export default function Step4Images({ formData, setFormData }: ServiceFormProps)
       <div>
         <p className="block text-sm font-medium text-gray-700 mb-2">서비스 썸네일 *</p>
 
-        {/* 업로드 모드 선택 */}
-        <div className="flex gap-2 mb-4">
-          <button
-            type="button"
-            onClick={() => {
-              setUploadMode('file');
-              if (uploadMode === 'template') {
-                removeThumbnail();
-              }
-            }}
-            className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
-              uploadMode === 'file'
-                ? 'bg-brand-primary text-white border-brand-primary'
-                : 'bg-white text-gray-700 border-gray-300 hover:border-brand-primary'
-            }`}
-          >
-            <Upload className="w-4 h-4 mr-2 inline" />
-            파일 업로드
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setUploadMode('template');
-              if (uploadMode === 'file') {
-                removeThumbnail();
-              }
-            }}
-            className={`flex-1 px-4 py-2 rounded-lg border transition-colors ${
-              uploadMode === 'template'
-                ? 'bg-brand-primary text-white border-brand-primary'
-                : 'bg-white text-gray-700 border-gray-300 hover:border-brand-primary'
-            }`}
-          >
-            <Sparkles className="w-4 h-4 mr-2 inline" />
-            템플릿 생성
-          </button>
+        {/* 업로드 방식 선택 탭 */}
+        <div className="mb-4">
+          <p className="text-xs text-gray-500 mb-2">썸네일 생성 방식을 선택하세요</p>
+          <div className="flex border-b border-gray-200">
+            <button
+              type="button"
+              onClick={() => {
+                setUploadMode('file');
+                if (uploadMode === 'template') {
+                  removeThumbnail();
+                }
+              }}
+              className={`flex-1 py-2 text-sm font-medium border-b-2 transition-colors ${
+                uploadMode === 'file'
+                  ? 'border-brand-primary text-brand-primary'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              내 이미지 사용
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setUploadMode('template');
+                if (uploadMode === 'file') {
+                  removeThumbnail();
+                }
+              }}
+              className={`flex-1 py-2 text-sm font-medium border-b-2 transition-colors ${
+                uploadMode === 'template'
+                  ? 'border-brand-primary text-brand-primary'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              <Sparkles className="w-3 h-3 mr-1 inline" />
+              템플릿으로 생성
+            </button>
+          </div>
         </div>
 
         {/* 파일 업로드 모드 */}
         {uploadMode === 'file' && (
           <div>
+            {/* 숨겨진 파일 인풋 */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleThumbnailChange}
+              className="hidden"
+            />
+
             {thumbnailPreview ? (
               <div className="relative">
                 <img
@@ -173,18 +190,23 @@ export default function Step4Images({ formData, setFormData }: ServiceFormProps)
                 </button>
               </div>
             ) : (
-              <label className="block border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-brand-primary transition-colors cursor-pointer">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleThumbnailChange}
-                  className="hidden"
-                />
-                <CloudUpload className="text-gray-400 w-10 h-10 mb-3 inline-block" />
-                <p className="text-gray-600 font-medium">클릭하여 이미지 선택</p>
-                <p className="text-sm text-gray-500 mt-2">권장 크기: 652×488px (최대 5MB)</p>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-gray-50">
+                <ImagePlus className="text-gray-400 w-12 h-12 mb-4 mx-auto" />
+                <p className="text-gray-600 mb-4">서비스를 대표할 이미지를 업로드하세요</p>
+
+                {/* 명확한 업로드 버튼 */}
+                <button
+                  type="button"
+                  onClick={handleFileButtonClick}
+                  className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-primary/90 transition-colors font-medium shadow-sm"
+                >
+                  <ImagePlus className="w-4 h-4 mr-2 inline" />
+                  이미지 선택하기
+                </button>
+
+                <p className="text-sm text-gray-500 mt-4">권장 크기: 652×488px (최대 5MB)</p>
                 <p className="text-xs text-gray-400 mt-1">JPG, PNG, GIF 형식 지원</p>
-              </label>
+              </div>
             )}
           </div>
         )}
