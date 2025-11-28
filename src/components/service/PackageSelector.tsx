@@ -182,7 +182,7 @@ export default function PackageSelector({
             type="button"
             onClick={() => onPurchase(selectedPackage)}
             disabled={disabled}
-            className="w-full py-3 px-4 bg-brand-primary text-white font-medium rounded-lg hover:bg-[#1a4d8f] transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="w-full h-12 bg-brand-primary text-white font-medium rounded-lg hover:bg-[#1a4d8f] transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
           >
             {PACKAGE_TYPE_LABELS[selectedPackage.package_type]} 패키지 구매하기
           </button>
