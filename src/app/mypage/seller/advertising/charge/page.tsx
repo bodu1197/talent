@@ -1,31 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import * as PortOne from '@portone/browser-sdk/v2';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import { createClient } from '@/lib/supabase/client';
-import { ArrowLeft, CheckCircle, Check } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Check, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
-
-interface PaymentResponse {
-  success: boolean;
-  imp_uid: string;
-  merchant_uid: string;
-  error_msg?: string;
-}
-
-interface Window {
-  IMP?: {
-    init: (code: string) => void;
-    request_pay: (
-      params: Record<string, unknown>,
-      callback: (response: PaymentResponse) => void
-    ) => void;
-  };
-}
-
-declare let window: Window;
 
 const CREDIT_PACKAGES = [
   { amount: 100000, bonus: 0, label: '10만원' },
@@ -38,85 +20,82 @@ export default function AdvertisingChargePage() {
   const router = useRouter();
   const [selectedPackage, setSelectedPackage] = useState(300000);
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<{
+    id: string;
+    email?: string;
+    user_metadata?: { name?: string };
+  } | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    fetchUser();
+  }, []);
 
   const handlePurchase = async () => {
     const pkg = CREDIT_PACKAGES.find((p) => p.amount === selectedPackage);
     if (!pkg) return;
 
+    if (!user) {
+      toast.error('로그인이 필요합니다');
+      router.push('/auth/login');
+      return;
+    }
+
     setLoading(true);
     try {
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        toast.error('로그인이 필요합니다');
+      // 결제 ID 생성 (crypto API 사용)
+      const paymentId = `ad_credit_${Date.now()}_${crypto.randomUUID().slice(0, 8)}`;
+
+      // PortOne V2 결제창 호출
+      const response = await PortOne.requestPayment({
+        storeId: process.env.NEXT_PUBLIC_PORTONE_STORE_ID!,
+        paymentId: paymentId,
+        orderName: `광고 크레딧 ${pkg.label}`,
+        totalAmount: pkg.amount,
+        currency: 'CURRENCY_KRW',
+        channelKey: process.env.NEXT_PUBLIC_PORTONE_CHANNEL_KEY!,
+        payMethod: 'CARD',
+        customer: {
+          fullName: user.user_metadata?.name || '구매자',
+          email: user.email || undefined,
+        },
+        customData: {
+          type: 'advertising_credit',
+          bonus: pkg.bonus,
+        },
+      });
+
+      // 결제 결과 처리
+      if (response?.code != null) {
+        toast.error(`결제 실패: ${response.message}`);
+        setLoading(false);
         return;
       }
 
-      // 결제 준비 API 호출
-      const response = await fetch('/api/payments/prepare', {
+      // 결제 검증
+      const verifyResponse = await fetch('/api/payments/advertising/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          payment_id: response?.paymentId,
           amount: pkg.amount,
-          name: `광고 크레딧 ${pkg.label}`,
-          type: 'advertising_credit',
+          bonus: pkg.bonus,
         }),
       });
 
-      const data = await response.json();
-      if (data.error) {
-        toast.error(data.error);
-        return;
+      const verifyData = await verifyResponse.json();
+      if (verifyData.success) {
+        toast.success(`${(pkg.amount + pkg.bonus).toLocaleString()}원 크레딧이 충전되었습니다!`);
+        router.push('/mypage/seller/advertising');
+      } else {
+        toast.error('결제 검증 실패: ' + verifyData.error);
       }
-
-      // PortOne 결제 호출
-      const IMP = window.IMP;
-      if (!IMP) {
-        toast.error('결제 모듈을 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
-        return;
-      }
-
-      IMP.init(process.env.NEXT_PUBLIC_PORTONE_IMP_CODE!);
-      IMP.request_pay(
-        {
-          pg: 'html5_inicis',
-          pay_method: 'card',
-          merchant_uid: data.merchant_uid,
-          name: `광고 크레딧 ${pkg.label}`,
-          amount: pkg.amount,
-          buyer_email: user.email,
-          buyer_name: user.user_metadata?.name || '구매자',
-        },
-        async (rsp: PaymentResponse) => {
-          if (rsp.success) {
-            // 결제 검증
-            const verifyResponse = await fetch('/api/payments/advertising/verify', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                imp_uid: rsp.imp_uid,
-                merchant_uid: rsp.merchant_uid,
-                amount: pkg.amount,
-                bonus: pkg.bonus,
-              }),
-            });
-
-            const verifyData = await verifyResponse.json();
-            if (verifyData.success) {
-              toast.error(
-                `${(pkg.amount + pkg.bonus).toLocaleString()}원 크레딧이 충전되었습니다!`
-              );
-              router.push('/mypage/seller/advertising');
-            } else {
-              toast.error('결제 검증 실패: ' + verifyData.error);
-            }
-          } else {
-            toast.error('결제 실패: ' + rsp.error_msg);
-          }
-        }
-      );
     } catch (error) {
       logger.error('Purchase error:', error);
       toast.error('결제 처리 중 오류가 발생했습니다');
@@ -248,9 +227,16 @@ export default function AdvertisingChargePage() {
           <button
             onClick={handlePurchase}
             disabled={loading}
-            className="w-full bg-brand-primary text-white py-4 rounded-lg text-lg font-semibold hover:bg-[#1a4d8f] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+            className="w-full bg-brand-primary text-white py-4 rounded-lg text-lg font-semibold hover:bg-[#1a4d8f] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center"
           >
-            {loading ? '처리 중...' : `${selectedPackage.toLocaleString()}원 결제하기`}
+            {loading ? (
+              <>
+                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                결제 처리 중...
+              </>
+            ) : (
+              `${selectedPackage.toLocaleString()}원 결제하기`
+            )}
           </button>
 
           {/* 주의사항 */}
