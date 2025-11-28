@@ -100,7 +100,7 @@ export default function FavoriteButton({ serviceId, className = '' }: FavoriteBu
     <button
       onClick={handleToggleFavorite}
       disabled={loading}
-      className={`w-full py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${className}`}
+      className={`w-full py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${className}`}
       aria-label={isFavorited ? '찜 취소하기' : '찜하기'}
       aria-pressed={isFavorited}
     >

@@ -916,15 +916,11 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   />
                 )}
 
-                {/* 문의하기 버튼 */}
-                {service.seller?.id && (!user || service.seller.user_id !== user.id) && (
-                  <div className="mt-4">
+                {/* 문의하기/찜/공유 버튼 */}
+                <div className="flex flex-col gap-3 mt-4">
+                  {service.seller?.id && (!user || service.seller.user_id !== user.id) && (
                     <ContactSellerButton sellerId={service.seller.id} serviceId={id} />
-                  </div>
-                )}
-
-                {/* 찜/공유 버튼 */}
-                <div className="flex flex-col gap-2 mt-3">
+                  )}
                   <FavoriteButton serviceId={id} />
                   <ShareButton serviceId={id} serviceTitle={service.title} />
                 </div>

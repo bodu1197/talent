@@ -52,7 +52,7 @@ export default function ShareButton({ serviceId, serviceTitle }: ShareButtonProp
   return (
     <button
       onClick={handleShare}
-      className="w-full py-3 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors"
+      className="w-full py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors"
     >
       {copied ? (
         <>
