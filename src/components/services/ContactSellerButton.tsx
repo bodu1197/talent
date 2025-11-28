@@ -57,18 +57,18 @@ export default function ContactSellerButton({ sellerId, serviceId }: Props) {
     <button
       onClick={handleContact}
       disabled={isLoading}
-      className="w-full py-3 bg-white border border-brand-primary text-brand-primary rounded-lg font-medium hover:bg-brand-primary hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+      className="w-full h-12 bg-white border border-brand-primary text-brand-primary rounded-lg font-medium hover:bg-brand-primary hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
     >
       {isLoading ? (
-        <span>
-          <Loader2 className="w-4 h-4 mr-2 inline animate-spin" />
-          처리 중...
-        </span>
+        <>
+          <Loader2 className="w-5 h-5 animate-spin" />
+          <span>처리 중...</span>
+        </>
       ) : (
-        <span>
-          <MessageCircle className="w-4 h-4 mr-2 inline" />
-          전문가에게 문의하기
-        </span>
+        <>
+          <MessageCircle className="w-5 h-5" />
+          <span>전문가에게 문의하기</span>
+        </>
       )}
     </button>
   );

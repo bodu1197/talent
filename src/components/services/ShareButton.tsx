@@ -52,17 +52,17 @@ export default function ShareButton({ serviceId, serviceTitle }: ShareButtonProp
   return (
     <button
       onClick={handleShare}
-      className="w-full py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors"
+      className="w-full h-12 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors"
     >
       {copied ? (
         <>
-          <Check className="w-4 h-4 text-green-500" />
+          <Check className="w-5 h-5 text-green-500" />
           <span>복사됨</span>
         </>
       ) : (
         <>
-          <Share2 className="w-4 h-4" />
-          <span>공유</span>
+          <Share2 className="w-5 h-5" />
+          <span>공유하기</span>
         </>
       )}
     </button>

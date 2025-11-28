@@ -85,7 +85,7 @@ export default function ServicePackageSelector({
   return (
     <div className="bg-white rounded-xl shadow-sm overflow-hidden">
       <div className="p-6">
-        <div className="text-2xl font-semibold mb-1">{servicePrice.toLocaleString()}원</div>
+        <div className="text-xl font-semibold mb-1">{servicePrice.toLocaleString()}원</div>
         <div className="text-sm text-gray-600 mb-6">
           {deliveryDays}일 이내 완료 · {revisionCount === -1 ? '무제한' : `${revisionCount}회`} 수정
         </div>
