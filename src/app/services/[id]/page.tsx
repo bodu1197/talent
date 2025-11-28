@@ -306,7 +306,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
     // 현재 사용자의 찜 상태 조회
     user
-      ? supabase.from('wishlists').select('id').eq('user_id', user.id).eq('service_id', id).single()
+      ? supabase.from('favorites').select('id').eq('user_id', user.id).eq('service_id', id).single()
       : Promise.resolve({ data: null }),
   ]);
 
