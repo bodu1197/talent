@@ -118,6 +118,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       updated_at: string;
       delivered_at?: string;
       completed_at?: string;
+      auto_confirm_at?: string;
     }
 
     const updateData: OrderStatusUpdate = {
@@ -128,6 +129,10 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     // 특정 상태 변경 시 추가 필드 업데이트
     if (newStatus === 'delivered') {
       updateData.delivered_at = new Date().toISOString();
+      // 자동 구매확정일 설정 (3일 후)
+      const autoConfirmDate = new Date();
+      autoConfirmDate.setDate(autoConfirmDate.getDate() + 3);
+      updateData.auto_confirm_at = autoConfirmDate.toISOString();
     } else if (newStatus === 'completed') {
       updateData.completed_at = new Date().toISOString();
     }

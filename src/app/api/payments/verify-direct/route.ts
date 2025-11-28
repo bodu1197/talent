@@ -150,6 +150,28 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '주문 상태 업데이트 실패' }, { status: 500 });
     }
 
+    // 정산 대기 기록 생성 (플랫폼 에스크로)
+    // PG 수수료 약 3.3% (이니시스 기준, VAT 포함)
+    const pgFeeRate = 0.033;
+    const pgFee = Math.round(order.amount * pgFeeRate);
+    const platformFee = 0; // 돌파구는 수수료 없음
+    const netAmount = order.amount - pgFee - platformFee;
+
+    const { error: settlementError } = await supabase.from('order_settlements').insert({
+      order_id: order.id,
+      seller_id: order.seller_id,
+      order_amount: order.amount,
+      pg_fee: pgFee,
+      platform_fee: platformFee,
+      net_amount: netAmount,
+      status: 'pending', // 구매확정 대기
+    });
+
+    if (settlementError) {
+      // 정산 기록 실패해도 결제는 성공으로 처리 (로그만 남김)
+      logger.error('Settlement record error:', settlementError);
+    }
+
     // 판매자에게 결제 완료 알림 전송
     await notifyPaymentReceived(order.seller_id, order.id, order.amount);
 

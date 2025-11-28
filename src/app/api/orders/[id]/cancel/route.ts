@@ -2,9 +2,49 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { orderStatusRateLimit, checkRateLimit } from '@/lib/rate-limit';
 import { logger } from '@/lib/logger';
+import { notifyOrderCancelled } from '@/lib/notifications';
 
 // 취소 가능한 상태들
 const CANCELLABLE_STATUSES = ['pending_payment', 'paid', 'in_progress'];
+
+// PortOne 결제 취소 (환불) 처리
+async function cancelPaymentOnPortOne(
+  paymentId: string,
+  reason: string
+): Promise<{ success: boolean; error?: string }> {
+  const apiSecret = process.env.PORTONE_API_SECRET;
+  if (!apiSecret) {
+    logger.error('PORTONE_API_SECRET is not configured');
+    return { success: false, error: '서버 설정 오류' };
+  }
+
+  try {
+    const response = await fetch(
+      `https://api.portone.io/payments/${encodeURIComponent(paymentId)}/cancel`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `PortOne ${apiSecret}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          reason: reason,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      logger.error('PortOne cancel error:', errorData);
+      return { success: false, error: errorData.message || '결제 취소 실패' };
+    }
+
+    return { success: true };
+  } catch (error) {
+    logger.error('PortOne cancel request error:', error);
+    return { success: false, error: '결제 취소 요청 실패' };
+  }
+}
 
 // POST /api/orders/[id]/cancel - 주문 취소 요청
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -35,10 +75,10 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ error: '취소 사유를 입력해주세요' }, { status: 400 });
     }
 
-    // 주문 조회 및 권한 확인
+    // 주문 조회 및 결제 정보 함께 조회
     const { data: order, error: fetchError } = await supabase
       .from('orders')
-      .select('*')
+      .select('*, payments(*)')
       .eq('id', id)
       .single();
 
@@ -67,14 +107,42 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ error: '이미 취소된 주문입니다' }, { status: 400 });
     }
 
+    // 결제가 완료된 주문인 경우 PortOne 환불 처리
+    const payment = order.payments?.[0];
+    if (
+      payment &&
+      payment.payment_id &&
+      (order.status === 'paid' || order.status === 'in_progress')
+    ) {
+      const cancelResult = await cancelPaymentOnPortOne(payment.payment_id, cancel_reason.trim());
+
+      if (!cancelResult.success) {
+        return NextResponse.json(
+          { error: cancelResult.error || '결제 취소에 실패했습니다. 고객센터로 문의해주세요.' },
+          { status: 500 }
+        );
+      }
+
+      // 결제 상태 업데이트
+      await supabase
+        .from('payments')
+        .update({
+          status: 'refunded',
+          refunded_at: new Date().toISOString(),
+        })
+        .eq('id', payment.id);
+    }
+
+    const now = new Date().toISOString();
+
     // 주문 취소 처리
     const { error: updateError } = await supabase
       .from('orders')
       .update({
         status: 'cancelled',
         cancel_reason: cancel_reason.trim(),
-        cancelled_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
+        cancelled_at: now,
+        updated_at: now,
       })
       .eq('id', id);
 
@@ -83,9 +151,28 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ error: '주문 취소에 실패했습니다' }, { status: 500 });
     }
 
+    // 정산 상태도 취소로 업데이트
+    const { error: settlementError } = await supabase
+      .from('order_settlements')
+      .update({
+        status: 'cancelled',
+        cancelled_at: now,
+      })
+      .eq('order_id', id)
+      .eq('status', 'pending'); // pending 상태인 경우만 취소 가능
+
+    if (settlementError) {
+      logger.error('Settlement cancellation error:', settlementError);
+    }
+
+    // 판매자에게 취소 알림 전송
+    await notifyOrderCancelled(order.seller_id, order.id, order.title);
+
     return NextResponse.json({
       success: true,
-      message: '주문이 취소되었습니다',
+      message: payment?.payment_id
+        ? '주문이 취소되고 환불이 처리되었습니다'
+        : '주문이 취소되었습니다',
     });
   } catch (error) {
     logger.error('Order cancel API error:', error);

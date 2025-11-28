@@ -1,7 +1,30 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import SellerEarningsClient from './SellerEarningsClient';
-import { Order } from '@/types/common';
+
+interface OrderInfo {
+  id: string;
+  order_number: string | null;
+  title: string;
+  status: string;
+  auto_confirm_at: string | null;
+}
+
+interface SettlementRow {
+  id: string;
+  order_id: string;
+  order_amount: number;
+  pg_fee: number;
+  platform_fee: number;
+  net_amount: number;
+  status: string;
+  created_at: string;
+  confirmed_at: string | null;
+  paid_at: string | null;
+  cancelled_at: string | null;
+  auto_confirm_at: string | null;
+  orders: OrderInfo | OrderInfo[] | null;
+}
 
 export default async function SellerEarningsPage() {
   const supabase = await createClient();
@@ -31,22 +54,28 @@ export default async function SellerEarningsPage() {
     .eq('user_id', user.id)
     .maybeSingle();
 
-  // Calculate earnings from actual orders
-  // Note: orders.seller_id references users.id, not sellers.id
-
-  // Get completed orders (available balance)
-  const { data: completedOrders } = await supabase
-    .from('orders')
-    .select('total_amount, created_at')
+  // Get settlements from order_settlements table
+  const { data: settlements } = await supabase
+    .from('order_settlements')
+    .select(
+      `
+      id,
+      order_id,
+      order_amount,
+      pg_fee,
+      platform_fee,
+      net_amount,
+      status,
+      created_at,
+      confirmed_at,
+      paid_at,
+      cancelled_at,
+      auto_confirm_at,
+      orders!inner(id, order_number, title, status, auto_confirm_at)
+    `
+    )
     .eq('seller_id', user.id)
-    .eq('status', 'completed');
-
-  // Get delivered orders (pending balance - waiting for buyer confirmation)
-  const { data: deliveredOrders } = await supabase
-    .from('orders')
-    .select('total_amount, created_at')
-    .eq('seller_id', user.id)
-    .eq('status', 'delivered');
+    .order('created_at', { ascending: false });
 
   // Get withdrawal history
   const { data: withdrawals } = await supabase
@@ -63,76 +92,73 @@ export default async function SellerEarningsPage() {
     .eq('status', 'pending')
     .maybeSingle();
 
-  // Calculate balances
-  const totalCompleted =
-    completedOrders?.reduce((sum, order) => sum + (order.total_amount || 0), 0) || 0;
-  const totalPending =
-    deliveredOrders?.reduce((sum, order) => sum + (order.total_amount || 0), 0) || 0;
+  // Calculate balances from settlements
+  // confirmed: 구매확정됨, 출금 가능
+  // pending: 구매확정 대기 중
+  // paid: 출금 완료
+  const typedSettlements = (settlements || []) as SettlementRow[];
+
+  // Helper to get order info from settlement
+  const getOrderInfo = (s: SettlementRow): OrderInfo | null => {
+    if (!s.orders) return null;
+    if (Array.isArray(s.orders)) return s.orders[0] || null;
+    return s.orders;
+  };
+
+  const confirmedTotal = typedSettlements
+    .filter((s) => s.status === 'confirmed')
+    .reduce((sum, s) => sum + s.net_amount, 0);
+
+  const pendingTotal = typedSettlements
+    .filter((s) => s.status === 'pending')
+    .reduce((sum, s) => sum + s.net_amount, 0);
+
+  const paidTotal = typedSettlements
+    .filter((s) => s.status === 'paid')
+    .reduce((sum, s) => sum + s.net_amount, 0);
+
+  // Total withdrawn from withdrawal_requests
   const totalWithdrawn =
     withdrawals
       ?.filter((w) => w.status === 'completed')
       .reduce((sum, w) => sum + (w.amount || 0), 0) || 0;
 
-  // No commission - 100% to seller
-  const availableBalance = totalCompleted - totalWithdrawn;
-  const pendingBalance = totalPending;
-  const totalEarned = totalCompleted;
+  // Available balance = confirmed - withdrawn (not yet paid)
+  const availableBalance = confirmedTotal - totalWithdrawn;
+  const totalEarned = confirmedTotal + paidTotal;
 
   const earnings = {
     available_balance: availableBalance,
-    pending_balance: pendingBalance,
-    total_withdrawn: totalWithdrawn,
+    pending_balance: pendingTotal,
+    total_withdrawn: totalWithdrawn + paidTotal,
     total_earned: totalEarned,
     pending_withdrawal: pendingWithdrawal,
   };
 
-  // Get recent completed orders as transactions
-  const { data: transactions } = await supabase
-    .from('orders')
-    .select(
-      `
-      id,
-      order_number,
-      total_amount,
-      status,
-      created_at,
-      updated_at,
-      services!inner(id, title)
-    `
-    )
-    .eq('seller_id', user.id)
-    .in('status', ['completed', 'delivered'])
-    .order('updated_at', { ascending: false })
-    .limit(10);
-
-  // Transform the data to match expected type
-  const transformedTransactions =
-    transactions?.map(
-      ({ services, ...t }) =>
-        ({
-          ...t,
-          buyer_id: '',
-          seller_id: user.id,
-          service_id: Array.isArray(services) && services[0] ? services[0].id : '',
-          package_id: null,
-          payment_method: null,
-          payment_id: null,
-          paid_at: null,
-          started_at: null,
-          completed_at: null,
-          cancelled_at: null,
-          cancel_reason: null,
-          platform_fee: 0,
-          seller_amount: t.total_amount || 0,
-          deliverables: [],
-          service: Array.isArray(services) ? services[0] : services,
-        }) as unknown as Order
-    ) ?? [];
+  // Transform settlements for display
+  const transformedSettlements = typedSettlements.map((s) => {
+    const orderInfo = getOrderInfo(s);
+    return {
+      id: s.id,
+      order_id: s.order_id,
+      order_number: orderInfo?.order_number || s.order_id.slice(0, 8),
+      title: orderInfo?.title || '주문',
+      order_amount: s.order_amount,
+      pg_fee: s.pg_fee,
+      platform_fee: s.platform_fee,
+      net_amount: s.net_amount,
+      status: s.status,
+      created_at: s.created_at,
+      confirmed_at: s.confirmed_at,
+      paid_at: s.paid_at,
+      auto_confirm_at: orderInfo?.auto_confirm_at || s.auto_confirm_at,
+    };
+  });
 
   return (
     <SellerEarningsClient
       earnings={earnings}
-      transactions={transformedTransactions}
+      settlements={transformedSettlements}
       sellerData={seller}
       profileData={profile}
     />

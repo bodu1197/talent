@@ -304,15 +304,20 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                 <MessageSquare className="w-3 h-3 lg:w-4 lg:h-4 mr-1.5" />
                 {creatingChat ? '로딩 중...' : '메시지'}
               </button>
-              {order.status === 'delivered' && (
+              {/* 구매확정 가능 상태: in_progress, delivered, revision_requested, revision_completed */}
+              {['in_progress', 'delivered', 'revision_requested', 'revision_completed'].includes(
+                order.status
+              ) && (
                 <>
-                  <button
-                    onClick={() => setShowRevisionModal(true)}
-                    className="px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors font-medium flex items-center"
-                  >
-                    <RotateCcw className="w-3 h-3 lg:w-4 lg:h-4 mr-1.5" />
-                    수정 요청
-                  </button>
+                  {order.status === 'delivered' && (
+                    <button
+                      onClick={() => setShowRevisionModal(true)}
+                      className="px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors font-medium flex items-center"
+                    >
+                      <RotateCcw className="w-3 h-3 lg:w-4 lg:h-4 mr-1.5" />
+                      수정 요청
+                    </button>
+                  )}
                   <button
                     onClick={() => setShowConfirmModal(true)}
                     className="px-4 py-2 text-sm lg:px-6 lg:py-2 lg:text-base bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium flex items-center"

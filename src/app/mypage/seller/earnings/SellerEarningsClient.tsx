@@ -4,9 +4,24 @@ import { useState } from 'react';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import { createClient } from '@/lib/supabase/client';
 import { logger } from '@/lib/logger';
-import { Order } from '@/types/common';
-import { Banknote, X, Clock, Receipt } from 'lucide-react';
+import { Banknote, X, Clock, Receipt, Info } from 'lucide-react';
 import toast from 'react-hot-toast';
+
+interface Settlement {
+  id: string;
+  order_id: string;
+  order_number: string;
+  title: string;
+  order_amount: number;
+  pg_fee: number;
+  platform_fee: number;
+  net_amount: number;
+  status: string;
+  created_at: string;
+  confirmed_at: string | null;
+  paid_at: string | null;
+  auto_confirm_at: string | null;
+}
 
 interface SellerEarningsClientProps {
   readonly earnings: {
@@ -21,7 +36,7 @@ interface SellerEarningsClientProps {
       readonly created_at: string;
     } | null;
   };
-  readonly transactions: Order[];
+  readonly settlements: Settlement[];
   readonly sellerData: {
     readonly id: string;
     readonly bank_name: string;
@@ -36,7 +51,7 @@ interface SellerEarningsClientProps {
 
 export default function SellerEarningsClient({
   earnings,
-  transactions,
+  settlements,
   sellerData,
   profileData,
 }: SellerEarningsClientProps) {
@@ -44,10 +59,8 @@ export default function SellerEarningsClient({
   const hasPendingWithdrawal = !!earnings.pending_withdrawal;
 
   const handleWithdrawRequest = async () => {
-    // Prevent multiple clicks
     if (loading) return;
 
-    // Check if there's already a pending withdrawal
     if (hasPendingWithdrawal) {
       toast.error('이미 출금 신청이 진행 중입니다.');
       return;
@@ -77,7 +90,6 @@ export default function SellerEarningsClient({
     try {
       const supabase = createClient();
 
-      // Double-check for pending withdrawal before inserting
       const { data: existingPending } = await supabase
         .from('withdrawal_requests')
         .select('id')
@@ -106,7 +118,7 @@ export default function SellerEarningsClient({
         throw error;
       }
 
-      toast.error('출금 신청이 완료되었습니다.\n영업일 기준 1-3일 내 처리됩니다.');
+      toast.success('출금 신청이 완료되었습니다.\n영업일 기준 1-3일 내 처리됩니다.');
       globalThis.location.reload();
     } catch (error: unknown) {
       logger.error('Withdrawal request error:', error);
@@ -150,14 +162,19 @@ export default function SellerEarningsClient({
       setLoading(false);
     }
   };
+
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'delivered':
+      case 'pending':
         return '정산 대기';
-      case 'completed':
-        return '정산 완료';
+      case 'confirmed':
+        return '출금 가능';
+      case 'processing':
+        return '출금 처리중';
+      case 'paid':
+        return '출금 완료';
       case 'cancelled':
-        return '취소';
+        return '취소됨';
       default:
         return status;
     }
@@ -165,15 +182,37 @@ export default function SellerEarningsClient({
 
   const getStatusClass = (status: string) => {
     switch (status) {
-      case 'delivered':
+      case 'pending':
         return 'bg-yellow-100 text-yellow-700';
-      case 'completed':
+      case 'confirmed':
+        return 'bg-blue-100 text-blue-700';
+      case 'processing':
+        return 'bg-purple-100 text-purple-700';
+      case 'paid':
         return 'bg-green-100 text-green-700';
       case 'cancelled':
         return 'bg-red-100 text-red-700';
       default:
         return 'bg-gray-100 text-gray-700';
     }
+  };
+
+  const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return '-';
+    return new Date(dateStr).toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+  };
+
+  const getDaysUntilAutoConfirm = (autoConfirmAt: string | null) => {
+    if (!autoConfirmAt) return null;
+    const now = new Date();
+    const autoDate = new Date(autoConfirmAt);
+    const diffTime = autoDate.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays > 0 ? diffDays : 0;
   };
 
   return (
@@ -184,18 +223,33 @@ export default function SellerEarningsClient({
           <p className="text-gray-600 mt-1 text-sm">판매 수익을 관리하세요</p>
         </div>
 
+        {/* 안내 메시지 */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4 flex items-start gap-2">
+          <Info className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+          <div className="text-xs text-blue-800">
+            <p className="font-medium mb-1">플랫폼 에스크로 안내</p>
+            <ul className="list-disc list-inside space-y-0.5 text-blue-700">
+              <li>결제 완료 시 돌파구가 대금을 보관합니다</li>
+              <li>구매자 확정 또는 납품 후 3일 경과 시 정산 가능합니다</li>
+              <li>PG 수수료(약 3.3%)가 차감된 금액이 정산됩니다</li>
+              <li>돌파구는 플랫폼 수수료를 받지 않습니다</li>
+            </ul>
+          </div>
+        </div>
+
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-4 lg:mb-6">
           <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
             <div className="text-xs text-gray-600 mb-1">출금 가능 금액</div>
-            <div className="text-base lg:text-lg font-semibold text-gray-900">
+            <div className="text-base lg:text-lg font-semibold text-blue-600">
               {earnings?.available_balance?.toLocaleString() || '0'}원
             </div>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
             <div className="text-xs text-gray-600 mb-1">정산 대기중</div>
-            <div className="text-base lg:text-lg font-semibold text-gray-900">
+            <div className="text-base lg:text-lg font-semibold text-yellow-600">
               {earnings?.pending_balance?.toLocaleString() || '0'}원
             </div>
+            <div className="text-xs text-gray-500 mt-1">구매확정 대기</div>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
             <div className="text-xs text-gray-600 mb-1">출금 완료</div>
@@ -205,7 +259,7 @@ export default function SellerEarningsClient({
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
             <div className="text-xs text-gray-600 mb-1">총 수익</div>
-            <div className="text-base lg:text-lg font-semibold text-gray-900">
+            <div className="text-base lg:text-lg font-semibold text-green-600">
               {earnings?.total_earned?.toLocaleString() || '0'}원
             </div>
           </div>
@@ -251,20 +305,23 @@ export default function SellerEarningsClient({
             정산 내역
           </h2>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[500px]">
+            <table className="w-full min-w-[700px]">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-3 py-3 text-left text-sm font-medium text-gray-900 whitespace-nowrap">
                     날짜
                   </th>
                   <th className="px-3 py-3 text-left text-sm font-medium text-gray-900 whitespace-nowrap">
-                    구분
-                  </th>
-                  <th className="px-3 py-3 text-left text-sm font-medium text-gray-900 whitespace-nowrap">
-                    주문번호
+                    서비스
                   </th>
                   <th className="px-3 py-3 text-right text-sm font-medium text-gray-900 whitespace-nowrap">
-                    금액
+                    주문금액
+                  </th>
+                  <th className="px-3 py-3 text-right text-sm font-medium text-gray-900 whitespace-nowrap">
+                    PG수수료
+                  </th>
+                  <th className="px-3 py-3 text-right text-sm font-medium text-gray-900 whitespace-nowrap">
+                    정산금액
                   </th>
                   <th className="px-3 py-3 text-center text-sm font-medium text-gray-900 whitespace-nowrap">
                     상태
@@ -272,33 +329,47 @@ export default function SellerEarningsClient({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {transactions.length > 0 ? (
-                  transactions.map((tx) => (
-                    <tr key={tx.id} className="hover:bg-gray-50">
-                      <td className="px-3 py-4 text-sm text-gray-600 whitespace-nowrap">
-                        {new Date(tx.updated_at || tx.created_at).toLocaleDateString('ko-KR')}
-                      </td>
-                      <td className="px-3 py-4 text-sm text-gray-900">
-                        {tx.service?.title || '판매 수익'}
-                      </td>
-                      <td className="px-3 py-4 text-sm text-gray-600 whitespace-nowrap">
-                        #{tx.order_number || tx.id.slice(0, 8)}
-                      </td>
-                      <td className="px-3 py-4 text-sm font-medium text-right text-green-600 whitespace-nowrap">
-                        +{(tx.total_amount || 0).toLocaleString()}원
-                      </td>
-                      <td className="px-3 py-4 text-center whitespace-nowrap">
-                        <span
-                          className={`px-2 py-1 rounded text-xs font-medium ${getStatusClass(tx.status)}`}
-                        >
-                          {getStatusLabel(tx.status)}
-                        </span>
-                      </td>
-                    </tr>
-                  ))
+                {settlements.length > 0 ? (
+                  settlements.map((s) => {
+                    const daysLeft = getDaysUntilAutoConfirm(s.auto_confirm_at);
+                    return (
+                      <tr key={s.id} className="hover:bg-gray-50">
+                        <td className="px-3 py-4 text-sm text-gray-600 whitespace-nowrap">
+                          {formatDate(s.created_at)}
+                        </td>
+                        <td className="px-3 py-4 text-sm text-gray-900">
+                          <div className="truncate max-w-[150px]" title={s.title}>
+                            {s.title}
+                          </div>
+                          <div className="text-xs text-gray-500">#{s.order_number}</div>
+                        </td>
+                        <td className="px-3 py-4 text-sm text-right text-gray-900 whitespace-nowrap">
+                          {s.order_amount.toLocaleString()}원
+                        </td>
+                        <td className="px-3 py-4 text-sm text-right text-red-500 whitespace-nowrap">
+                          -{s.pg_fee.toLocaleString()}원
+                        </td>
+                        <td className="px-3 py-4 text-sm font-medium text-right text-green-600 whitespace-nowrap">
+                          {s.net_amount.toLocaleString()}원
+                        </td>
+                        <td className="px-3 py-4 text-center whitespace-nowrap">
+                          <span
+                            className={`px-2 py-1 rounded text-xs font-medium ${getStatusClass(s.status)}`}
+                          >
+                            {getStatusLabel(s.status)}
+                          </span>
+                          {s.status === 'pending' && daysLeft !== null && (
+                            <div className="text-xs text-gray-500 mt-1">
+                              {daysLeft > 0 ? `${daysLeft}일 후 자동확정` : '자동확정 예정'}
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
-                    <td colSpan={5} className="px-3 py-12 text-center text-gray-500">
+                    <td colSpan={6} className="px-3 py-12 text-center text-gray-500">
                       <Receipt className="w-10 h-10 mb-4 text-gray-300 mx-auto" />
                       <p>정산 내역이 없습니다</p>
                     </td>

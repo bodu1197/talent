@@ -1,20 +1,18 @@
 import { createClient } from '@/lib/supabase/client';
 
 export async function confirmOrder(orderId: string) {
-  const supabase = createClient();
+  // 에스크로 구매확정을 위해 API 호출 (PortOne 에스크로 정산 처리)
+  const response = await fetch(`/api/orders/${orderId}/confirm`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  });
 
-  const { data, error } = await supabase
-    .from('orders')
-    .update({
-      status: 'completed',
-      completed_at: new Date().toISOString(),
-    })
-    .eq('id', orderId)
-    .select()
-    .single();
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || '구매확정에 실패했습니다');
+  }
 
-  if (error) throw error;
-  return data;
+  return response.json();
 }
 
 export async function requestRevision(orderId: string, revisionDetails: string) {

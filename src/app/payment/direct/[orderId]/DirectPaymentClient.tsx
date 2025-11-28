@@ -150,7 +150,8 @@ export default function DirectPaymentClient({ order, seller }: Props) {
         return;
       }
 
-      // PortOne V2 결제창 호출
+      // PortOne V2 결제창 호출 (플랫폼 자체 에스크로 방식)
+      // PG 에스크로가 아닌 돌파구가 직접 대금 보관 후 구매확정 시 판매자에게 정산
       const paymentConfig: Parameters<typeof PortOne.requestPayment>[0] = {
         storeId,
         paymentId: order.merchant_uid,

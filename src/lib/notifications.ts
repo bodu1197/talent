@@ -82,12 +82,22 @@ export async function notifyWorkCompleted(buyerId: string, orderId: string, serv
 }
 
 // 구매 확정 알림 (판매자에게)
-export async function notifyOrderConfirmed(sellerId: string, orderId: string, amount: number) {
+export async function notifyOrderConfirmed(
+  sellerId: string,
+  orderId: string,
+  amount: number,
+  isAutoConfirm: boolean = false
+) {
+  const title = isAutoConfirm ? '자동 구매확정 되었습니다' : '구매가 확정되었습니다';
+  const message = isAutoConfirm
+    ? `${amount.toLocaleString()}원 정산이 예정되어 있습니다 (3일 경과 자동 확정)`
+    : `${amount.toLocaleString()}원 정산이 예정되어 있습니다`;
+
   return createNotification({
     userId: sellerId,
     type: 'order_confirmed',
-    title: '구매가 확정되었습니다',
-    message: `${amount.toLocaleString()}원 정산이 예정되어 있습니다`,
+    title,
+    message,
     linkUrl: `/mypage/seller/earnings`,
   });
 }
