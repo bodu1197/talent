@@ -48,7 +48,7 @@ export async function middleware(request: NextRequest) {
       img-src 'self' blob: data: https:;
       font-src 'self' data:;
       connect-src 'self' https://*.supabase.co wss://*.supabase.co https://vercel.live https://img.youtube.com https://www.youtube.com https://*.portone.io https://api.portone.io https://*.inicis.com https://*.iamport.co https://checkout-service.prod.iamport.co;
-      frame-src 'self' https://vercel.live https://www.youtube.com https://*.portone.io https://*.inicis.com https://pg.inicis.com https://ksmobile.inicis.com https://*.iamport.co https://checkout-service.prod.iamport.co;
+      frame-src 'self' https://vercel.live https://www.youtube.com https://*.portone.io https://*.inicis.com https://pg.inicis.com https://ksmobile.inicis.com https://*.iamport.co https://checkout-service.prod.iamport.co https://*.hyundaicard.com https://*.shinhancard.com https://*.samsungcard.com https://*.lottecard.com https://*.hanacard.com https://*.bccard.com https://*.kbcard.com https://*.wooricard.com https://*.citibank.co.kr https://*.nhcard.com;
       frame-ancestors 'none';
       object-src 'none';
       base-uri 'self';
