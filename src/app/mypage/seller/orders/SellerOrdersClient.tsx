@@ -218,7 +218,10 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
 
   const getStatusLabel = (status: string) => {
     switch (status) {
+      case 'pending_payment':
+        return '결제 대기';
       case 'paid':
+      case 'payment_completed':
         return '결제완료';
       case 'in_progress':
         return '진행중';
@@ -232,6 +235,8 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
         return '취소/환불';
       case 'refunded':
         return '환불완료';
+      case 'in_review':
+        return '검토중';
       default:
         return status;
     }

@@ -63,7 +63,10 @@ interface StatusHistory {
 // Helper functions extracted to reduce complexity
 function getStatusLabel(status: string): string {
   switch (status) {
+    case 'pending_payment':
+      return '결제 대기';
     case 'paid':
+    case 'payment_completed':
       return '결제완료';
     case 'in_progress':
       return '진행중';
@@ -75,6 +78,10 @@ function getStatusLabel(status: string): string {
       return '취소/환불';
     case 'refunded':
       return '환불완료';
+    case 'revision':
+      return '수정 요청';
+    case 'in_review':
+      return '검토중';
     default:
       return status;
   }

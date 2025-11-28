@@ -78,16 +78,42 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '이미 결제된 주문입니다' }, { status: 400 });
     }
 
-    // [Production] 실제 환경에서는 PortOne API를 통해 결제 정보를 검증해야 합니다
-    // const portOneResponse = await fetch(`https://api.portone.io/payments/${payment_id}`, {
-    //   headers: {
-    //     'Authorization': `PortOne ${process.env.PORTONE_API_SECRET}`
-    //   }
-    // })
-    // const paymentData = await portOneResponse.json()
-    // if (paymentData.amount !== order.amount) {
-    //   throw new Error('결제 금액이 일치하지 않습니다')
-    // }
+    // PortOne API를 통해 결제 정보 검증
+    const apiSecret = process.env.PORTONE_API_SECRET;
+    if (!apiSecret) {
+      logger.error('PORTONE_API_SECRET is not configured');
+      return NextResponse.json({ error: '서버 설정 오류' }, { status: 500 });
+    }
+
+    const portOneResponse = await fetch(
+      `https://api.portone.io/payments/${encodeURIComponent(payment_id)}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `PortOne ${apiSecret}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!portOneResponse.ok) {
+      logger.error('PortOne API error:', await portOneResponse.text());
+      return NextResponse.json({ error: '결제 정보 조회 실패' }, { status: 400 });
+    }
+
+    const paymentData = await portOneResponse.json();
+
+    // 결제 상태 확인
+    if (paymentData.status !== 'PAID') {
+      logger.error('Payment not paid:', paymentData.status);
+      return NextResponse.json({ error: '결제가 완료되지 않았습니다' }, { status: 400 });
+    }
+
+    // 결제 금액 확인
+    if (paymentData.amount?.total !== order.amount) {
+      logger.error('Amount mismatch:', paymentData.amount?.total, order.amount);
+      return NextResponse.json({ error: '결제 금액이 일치하지 않습니다' }, { status: 400 });
+    }
 
     // 결제 기록 생성
     const { data: payment, error: paymentError } = await supabase

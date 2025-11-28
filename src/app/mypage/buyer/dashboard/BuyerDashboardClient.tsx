@@ -91,7 +91,10 @@ export default function BuyerDashboardClient({
 
   const getStatusLabel = (status: string) => {
     switch (status) {
+      case 'pending_payment':
+        return '결제 대기';
       case 'paid':
+      case 'payment_completed':
         return '결제완료';
       case 'in_progress':
         return '진행중';
@@ -101,6 +104,12 @@ export default function BuyerDashboardClient({
         return '완료';
       case 'cancelled':
         return '취소/환불';
+      case 'refunded':
+        return '환불됨';
+      case 'revision':
+        return '수정 요청';
+      case 'in_review':
+        return '검토중';
       default:
         return status;
     }
