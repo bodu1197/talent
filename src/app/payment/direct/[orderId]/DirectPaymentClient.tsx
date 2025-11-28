@@ -12,6 +12,8 @@ import {
   CreditCard,
   Building2,
   Smartphone,
+  Globe,
+  Wallet,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
@@ -52,7 +54,8 @@ interface Buyer {
   phone: string | null;
 }
 
-type PaymentMethod = 'CARD' | 'TRANSFER' | 'VIRTUAL_ACCOUNT' | 'MOBILE';
+type PaymentMethod = 'CARD' | 'TRANSFER' | 'VIRTUAL_ACCOUNT' | 'MOBILE' | 'EASY_PAY';
+type EasyPayProvider = 'TOSSPAY' | 'NAVERPAY' | 'KAKAOPAY' | null;
 
 interface Props {
   readonly order: Order;
@@ -67,6 +70,8 @@ export default function DirectPaymentClient({ order, seller }: Props) {
   const [buyer, setBuyer] = useState<Buyer | null>(null);
   const [service, setService] = useState<Service | null>(null);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>('CARD');
+  const [easyPayProvider, setEasyPayProvider] = useState<EasyPayProvider>(null);
+  const [isInternationalCard, setIsInternationalCard] = useState(false);
 
   // 수수료 계산 (4.5%)
   const serviceFee = Math.round(order.amount * 0.045);
@@ -125,7 +130,7 @@ export default function DirectPaymentClient({ order, seller }: Props) {
 
     try {
       // PortOne V2 결제창 호출
-      const response = await PortOne.requestPayment({
+      const paymentConfig: Parameters<typeof PortOne.requestPayment>[0] = {
         storeId: process.env.NEXT_PUBLIC_PORTONE_STORE_ID!,
         paymentId: order.merchant_uid,
         orderName: order.title,
@@ -141,7 +146,14 @@ export default function DirectPaymentClient({ order, seller }: Props) {
         customData: {
           order_id: order.id,
         },
-      });
+      };
+
+      // 간편결제 provider 설정
+      if (selectedPaymentMethod === 'EASY_PAY' && easyPayProvider) {
+        paymentConfig.easyPay = { easyPayProvider };
+      }
+
+      const response = await PortOne.requestPayment(paymentConfig);
 
       // 결제 결과 처리
       if (response?.code != null) {
@@ -178,11 +190,40 @@ export default function DirectPaymentClient({ order, seller }: Props) {
   const allAgreed = agreedToTerms && agreedToPrivacy;
 
   const paymentMethods = [
+    { id: 'TRANSFER' as PaymentMethod, label: '퀵계좌이체', icon: Building2, badge: '혜택' },
     { id: 'CARD' as PaymentMethod, label: '신용카드', icon: CreditCard },
-    { id: 'TRANSFER' as PaymentMethod, label: '계좌이체', icon: Building2, badge: '혜택' },
     { id: 'VIRTUAL_ACCOUNT' as PaymentMethod, label: '무통장입금', icon: Building2 },
     { id: 'MOBILE' as PaymentMethod, label: '휴대폰', icon: Smartphone },
+    {
+      id: 'EASY_PAY' as PaymentMethod,
+      label: 'tosspay',
+      icon: Wallet,
+      provider: 'TOSSPAY' as EasyPayProvider,
+    },
+    {
+      id: 'EASY_PAY' as PaymentMethod,
+      label: 'N Pay',
+      icon: Wallet,
+      provider: 'NAVERPAY' as EasyPayProvider,
+    },
+    {
+      id: 'EASY_PAY' as PaymentMethod,
+      label: '카카오pay',
+      icon: Wallet,
+      provider: 'KAKAOPAY' as EasyPayProvider,
+    },
+    { id: 'CARD' as PaymentMethod, label: '해외신용카드', icon: Globe, isInternational: true },
   ];
+
+  const handleSelectPaymentMethod = (
+    method: PaymentMethod,
+    provider?: EasyPayProvider,
+    isIntl?: boolean
+  ) => {
+    setSelectedPaymentMethod(method);
+    setEasyPayProvider(provider || null);
+    setIsInternationalCard(isIntl || false);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -267,16 +308,33 @@ export default function DirectPaymentClient({ order, seller }: Props) {
             <section className="bg-white rounded-lg border border-gray-200 p-6">
               <h2 className="text-lg font-bold text-gray-900 mb-4">결제 방법</h2>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {paymentMethods.map((method) => {
+              <div className="grid grid-cols-4 gap-3">
+                {paymentMethods.map((method, index) => {
                   const Icon = method.icon;
-                  const isSelected = selectedPaymentMethod === method.id;
+                  let isSelected = false;
+                  if (method.provider) {
+                    isSelected =
+                      selectedPaymentMethod === method.id && easyPayProvider === method.provider;
+                  } else if (method.isInternational) {
+                    isSelected = selectedPaymentMethod === method.id && isInternationalCard;
+                  } else {
+                    isSelected =
+                      selectedPaymentMethod === method.id &&
+                      !easyPayProvider &&
+                      !isInternationalCard;
+                  }
                   return (
                     <button
-                      key={method.id}
+                      key={`${method.id}-${index}`}
                       type="button"
-                      onClick={() => setSelectedPaymentMethod(method.id)}
-                      className={`relative flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 transition-all ${
+                      onClick={() =>
+                        handleSelectPaymentMethod(
+                          method.id,
+                          method.provider,
+                          method.isInternational
+                        )
+                      }
+                      className={`relative flex flex-col items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all ${
                         isSelected
                           ? 'border-brand-primary bg-brand-primary/5'
                           : 'border-gray-200 hover:border-gray-300'
@@ -288,10 +346,10 @@ export default function DirectPaymentClient({ order, seller }: Props) {
                         </span>
                       )}
                       <Icon
-                        className={`w-6 h-6 ${isSelected ? 'text-brand-primary' : 'text-gray-500'}`}
+                        className={`w-5 h-5 ${isSelected ? 'text-brand-primary' : 'text-gray-500'}`}
                       />
                       <span
-                        className={`text-sm font-medium ${isSelected ? 'text-brand-primary' : 'text-gray-700'}`}
+                        className={`text-xs font-medium ${isSelected ? 'text-brand-primary' : 'text-gray-700'}`}
                       >
                         {method.label}
                       </span>

@@ -47,7 +47,7 @@ export async function middleware(request: NextRequest) {
       style-src-attr 'unsafe-inline';
       img-src 'self' blob: data: https:;
       font-src 'self' data:;
-      connect-src 'self' https://*.supabase.co wss://*.supabase.co https://vercel.live https://img.youtube.com https://www.youtube.com https://*.portone.io https://api.portone.io https://*.inicis.com;
+      connect-src 'self' https://*.supabase.co wss://*.supabase.co https://vercel.live https://img.youtube.com https://www.youtube.com https://*.portone.io https://api.portone.io https://*.inicis.com https://*.iamport.co https://checkout-service.prod.iamport.co;
       frame-src 'self' https://vercel.live https://www.youtube.com https://*.portone.io https://*.inicis.com https://pg.inicis.com https://ksmobile.inicis.com;
       frame-ancestors 'none';
       object-src 'none';
