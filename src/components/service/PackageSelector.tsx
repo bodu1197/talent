@@ -75,7 +75,7 @@ export default function PackageSelector({
         <div className="p-5">
           {/* 가격 */}
           <div className="mb-4">
-            <span className="text-3xl font-bold text-gray-900">
+            <span className="text-xl font-semibold text-gray-900">
               {formatPrice(selectedPackage.price)}
             </span>
             <span className="text-gray-600 ml-1">원</span>
