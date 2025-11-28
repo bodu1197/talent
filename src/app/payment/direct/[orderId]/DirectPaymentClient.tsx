@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, CreditCard, Check, Loader2, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, CreditCard, Check, Loader2, ShieldCheck, AlertCircle } from 'lucide-react';
+import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
 
@@ -46,6 +47,9 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+
+  // 구매자 정보 필수 체크
+  const isBuyerInfoComplete = buyer?.name && buyer?.email;
 
   const handlePayment = async () => {
     if (!agreedToTerms) {
@@ -204,16 +208,43 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
         </div>
 
         {/* 구매자 정보 */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-6">
+        <div
+          className={`bg-white rounded-2xl shadow-lg border p-6 mb-6 ${!isBuyerInfoComplete ? 'border-red-300' : 'border-gray-100'}`}
+        >
           <h2 className="text-lg font-bold text-gray-900 mb-4">구매자 정보</h2>
+
+          {!isBuyerInfoComplete ? (
+            <div className="bg-red-50 rounded-xl p-4 mb-4">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium text-red-800">구매자 정보가 필요합니다</p>
+                  <p className="text-xs text-red-600 mt-1">
+                    결제를 진행하려면 프로필에서 이름과 이메일을 입력해주세요.
+                  </p>
+                  <Link
+                    href="/mypage/profile"
+                    className="inline-flex items-center gap-1 mt-3 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors"
+                  >
+                    프로필 입력하기
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ) : null}
+
           <div className="space-y-3">
             <div className="flex justify-between py-2 border-b border-gray-100">
               <span className="text-gray-500">이름</span>
-              <span className="font-medium text-gray-900">{buyer?.name || '-'}</span>
+              <span className={`font-medium ${buyer?.name ? 'text-gray-900' : 'text-red-500'}`}>
+                {buyer?.name || '미입력'}
+              </span>
             </div>
             <div className="flex justify-between py-2 border-b border-gray-100">
               <span className="text-gray-500">이메일</span>
-              <span className="font-medium text-gray-900">{buyer?.email || '-'}</span>
+              <span className={`font-medium ${buyer?.email ? 'text-gray-900' : 'text-red-500'}`}>
+                {buyer?.email || '미입력'}
+              </span>
             </div>
             <div className="flex justify-between py-2">
               <span className="text-gray-500">연락처</span>
@@ -268,15 +299,17 @@ export default function DirectPaymentClient({ order, seller, buyer }: Props) {
         {/* 결제 버튼 */}
         <button
           onClick={handlePayment}
-          disabled={!agreedToTerms || isProcessing}
+          disabled={!agreedToTerms || isProcessing || !isBuyerInfoComplete}
           className="w-full py-5 bg-gradient-to-r from-brand-primary to-blue-600 text-white rounded-2xl font-bold text-xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
         >
-          {isProcessing ? (
+          {isProcessing && (
             <span className="flex items-center justify-center gap-2">
               <Loader2 className="w-5 h-5 animate-spin" />
               결제 처리 중...
             </span>
-          ) : (
+          )}
+          {!isProcessing && !isBuyerInfoComplete && <span>구매자 정보를 입력해주세요</span>}
+          {!isProcessing && isBuyerInfoComplete && (
             <span>{order.amount.toLocaleString()}원 결제하기</span>
           )}
         </button>
