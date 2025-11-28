@@ -1,10 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import * as PortOne from '@portone/browser-sdk/v2';
 import { X, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
+import { createClient } from '@/lib/supabase/client';
 
 interface Order {
   id: string;
@@ -29,6 +31,12 @@ interface Seller {
   user_id: string;
 }
 
+interface Buyer {
+  name: string | null;
+  email: string | null;
+  phone: string | null;
+}
+
 interface Props {
   readonly order: Order;
   readonly seller: Seller | null;
@@ -38,6 +46,30 @@ export default function DirectPaymentClient({ order, seller }: Props) {
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [buyer, setBuyer] = useState<Buyer | null>(null);
+
+  useEffect(() => {
+    const fetchBuyer = async () => {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('name, phone')
+          .eq('user_id', user.id)
+          .single();
+
+        setBuyer({
+          name: profile?.name || user.user_metadata?.name || null,
+          email: user.email || null,
+          phone: profile?.phone || null,
+        });
+      }
+    };
+    fetchBuyer();
+  }, []);
 
   const handleClose = () => {
     router.back();
@@ -54,15 +86,46 @@ export default function DirectPaymentClient({ order, seller }: Props) {
     setIsProcessing(true);
 
     try {
-      const verifyResponse = await fetch('/api/payments/mock-payment', {
+      // PortOne V2 결제창 호출
+      const response = await PortOne.requestPayment({
+        storeId: process.env.NEXT_PUBLIC_PORTONE_STORE_ID!,
+        paymentId: order.merchant_uid,
+        orderName: order.title,
+        totalAmount: order.amount,
+        currency: 'CURRENCY_KRW',
+        channelKey: process.env.NEXT_PUBLIC_PORTONE_CHANNEL_KEY!,
+        payMethod: 'CARD',
+        customer: {
+          fullName: buyer?.name || '구매자',
+          phoneNumber: buyer?.phone || undefined,
+          email: buyer?.email || undefined,
+        },
+        customData: {
+          order_id: order.id,
+        },
+      });
+
+      // 결제 결과 처리
+      if (response?.code != null) {
+        // 결제 실패 또는 취소
+        toast.error(`결제 실패: ${response.message}`);
+        setIsProcessing(false);
+        return;
+      }
+
+      // 결제 검증
+      const verifyResponse = await fetch('/api/payments/verify-direct', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ order_id: order.id }),
+        body: JSON.stringify({
+          payment_id: response?.paymentId,
+          order_id: order.id,
+        }),
       });
 
       if (!verifyResponse.ok) {
         const error = await verifyResponse.json();
-        throw new Error(error.error || '결제 처리 실패');
+        throw new Error(error.error || '결제 검증 실패');
       }
 
       toast.success('결제가 완료되었습니다!');
