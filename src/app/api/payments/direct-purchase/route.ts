@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { directPurchaseRateLimit, checkRateLimit } from '@/lib/rate-limit';
 import { createOrderWithIdempotency } from '@/lib/transaction';
 import { randomBytes } from 'node:crypto';
 import { logger } from '@/lib/logger';
@@ -121,11 +120,6 @@ export async function POST(request: NextRequest) {
 
     if (authError || !user) {
       return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
-    }
-
-    const rateLimitResult = await checkRateLimit(user.id, directPurchaseRateLimit);
-    if (!rateLimitResult.success) {
-      return rateLimitResult.error!;
     }
 
     const body = await request.json();
