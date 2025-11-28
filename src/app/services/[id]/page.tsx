@@ -894,7 +894,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
           {/* 오른쪽: 가격, 안전거래 (모바일에서 숨김 - 하단바로 이동) */}
           <div className="hidden lg:block w-full lg:w-[350px] flex-shrink-0">
             <div className="sticky top-20 space-y-6">
-              {/* 가격 정보 (패키지 또는 단일 가격) */}
+              {/* 가격 정보 (패키지 또는 단일 가격) + 버튼들 */}
               <div id="price" className="scroll-mt-20">
                 {service.seller?.id && (
                   <ServicePackageSelector
@@ -913,19 +913,15 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       ) || []
                     }
                     currentUserId={user?.id}
-                  />
-                )}
-
-                {/* 문의하기/찜/공유 버튼 - PackageSelector와 동일한 너비 */}
-                <div className="bg-white border border-gray-200 rounded-xl shadow-sm mt-4">
-                  <div className="p-5 flex flex-col gap-3">
-                    {service.seller?.id && (!user || service.seller.user_id !== user.id) && (
+                  >
+                    {/* 문의하기/찜/공유 버튼 - 구매버튼과 동일한 간격(gap-3) */}
+                    {(!user || service.seller.user_id !== user.id) && (
                       <ContactSellerButton sellerId={service.seller.id} serviceId={id} />
                     )}
                     <FavoriteButton serviceId={id} />
                     <ShareButton serviceId={id} serviceTitle={service.title} />
-                  </div>
-                </div>
+                  </ServicePackageSelector>
+                )}
               </div>
 
               {/* 안전거래 배지 */}

@@ -15,6 +15,7 @@ interface Props {
   serviceTitle: string;
   onPurchase: (pkg: ServicePackage) => void;
   disabled?: boolean;
+  children?: React.ReactNode;
 }
 
 export default function PackageSelector({
@@ -24,6 +25,7 @@ export default function PackageSelector({
   serviceTitle: _serviceTitle,
   onPurchase,
   disabled = false,
+  children,
 }: Props) {
   // 활성화된 패키지만 필터링하고 정렬
   const activePackages = PACKAGE_TYPE_ORDER.map((type) =>
@@ -177,19 +179,17 @@ export default function PackageSelector({
             </div>
           )}
 
-          {/* 구매 버튼 */}
-          <button
-            type="button"
-            onClick={() => onPurchase(selectedPackage)}
-            disabled={disabled}
-            className="w-full h-12 bg-brand-primary text-white font-medium rounded-lg hover:bg-[#1a4d8f] transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
-          >
-            {PACKAGE_TYPE_LABELS[selectedPackage.package_type]} 패키지 구매하기
-          </button>
-
-          {/* 예상 수익 정보 */}
-          <div className="mt-3 text-center text-xs text-gray-500">
-            결제 금액: {formatPrice(selectedPackage.price)}원
+          {/* 버튼 영역 - 모든 버튼 동일한 간격 */}
+          <div className="flex flex-col gap-3">
+            <button
+              type="button"
+              onClick={() => onPurchase(selectedPackage)}
+              disabled={disabled}
+              className="w-full h-12 bg-brand-primary text-white font-medium rounded-lg hover:bg-[#1a4d8f] transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
+            >
+              {PACKAGE_TYPE_LABELS[selectedPackage.package_type]} 패키지 구매하기
+            </button>
+            {children}
           </div>
         </div>
       )}

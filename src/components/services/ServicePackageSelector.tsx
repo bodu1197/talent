@@ -21,6 +21,8 @@ interface Props {
   packages: ServicePackage[];
   // 사용자 정보
   currentUserId?: string;
+  // 추가 버튼 (문의/찜/공유)
+  children?: React.ReactNode;
 }
 
 export default function ServicePackageSelector({
@@ -35,6 +37,7 @@ export default function ServicePackageSelector({
   hasPackages,
   packages,
   currentUserId,
+  children,
 }: Props) {
   const router = useRouter();
 
@@ -77,30 +80,36 @@ export default function ServicePackageSelector({
         serviceTitle={serviceTitle}
         onPurchase={handlePackagePurchase}
         disabled={currentUserId === sellerUserId}
-      />
+      >
+        {children}
+      </PackageSelector>
     );
   }
 
   // 단일 가격 모드일 때 (기존 UI)
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-      <div className="p-6">
+    <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+      <div className="p-5">
         <div className="text-xl font-semibold mb-1">{servicePrice.toLocaleString()}원</div>
-        <div className="text-sm text-gray-600 mb-6">
+        <div className="text-sm text-gray-600 mb-5">
           {deliveryDays}일 이내 완료 · {revisionCount === -1 ? '무제한' : `${revisionCount}회`} 수정
         </div>
 
-        <PurchaseButton
-          sellerId={sellerId}
-          serviceId={serviceId}
-          currentUserId={currentUserId}
-          sellerUserId={sellerUserId}
-          serviceTitle={serviceTitle}
-          servicePrice={servicePrice}
-          deliveryDays={deliveryDays}
-          revisionCount={revisionCount}
-          serviceDescription={serviceDescription}
-        />
+        {/* 버튼 영역 - 모든 버튼 동일한 간격 */}
+        <div className="flex flex-col gap-3">
+          <PurchaseButton
+            sellerId={sellerId}
+            serviceId={serviceId}
+            currentUserId={currentUserId}
+            sellerUserId={sellerUserId}
+            serviceTitle={serviceTitle}
+            servicePrice={servicePrice}
+            deliveryDays={deliveryDays}
+            revisionCount={revisionCount}
+            serviceDescription={serviceDescription}
+          />
+          {children}
+        </div>
       </div>
     </div>
   );
