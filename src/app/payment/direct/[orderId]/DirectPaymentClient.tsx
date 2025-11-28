@@ -74,9 +74,8 @@ export default function DirectPaymentClient({ order, seller }: Props) {
   const [isInternationalCard, setIsInternationalCard] = useState(false);
   const [phoneInput, setPhoneInput] = useState('');
 
-  // 수수료 계산 (4.5%)
-  const serviceFee = Math.round(order.amount * 0.045);
-  const totalAmount = order.amount + serviceFee;
+  // 총 결제 금액 (수수료 없음)
+  const totalAmount = order.amount;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -473,23 +472,6 @@ export default function DirectPaymentClient({ order, seller }: Props) {
                   <span className="text-gray-900 font-medium">
                     {order.amount.toLocaleString()} 원
                   </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">
-                    수수료
-                    <button className="ml-1 text-gray-400 hover:text-gray-600">
-                      <span className="inline-block w-4 h-4 text-xs border border-gray-300 rounded-full">
-                        ?
-                      </span>
-                    </button>
-                  </span>
-                  <span className="text-gray-900 font-medium">
-                    {serviceFee.toLocaleString()} 원
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">쿠폰 할인</span>
-                  <span className="text-gray-900 font-medium">0 원</span>
                 </div>
               </div>
 
