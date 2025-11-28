@@ -916,13 +916,15 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   />
                 )}
 
-                {/* 문의하기/찜/공유 버튼 */}
-                <div className="flex flex-col gap-3 mt-4">
-                  {service.seller?.id && (!user || service.seller.user_id !== user.id) && (
-                    <ContactSellerButton sellerId={service.seller.id} serviceId={id} />
-                  )}
-                  <FavoriteButton serviceId={id} />
-                  <ShareButton serviceId={id} serviceTitle={service.title} />
+                {/* 문의하기/찜/공유 버튼 - PackageSelector와 동일한 너비 */}
+                <div className="bg-white border border-gray-200 rounded-xl shadow-sm mt-4">
+                  <div className="p-5 flex flex-col gap-3">
+                    {service.seller?.id && (!user || service.seller.user_id !== user.id) && (
+                      <ContactSellerButton sellerId={service.seller.id} serviceId={id} />
+                    )}
+                    <FavoriteButton serviceId={id} />
+                    <ShareButton serviceId={id} serviceTitle={service.title} />
+                  </div>
                 </div>
               </div>
 
