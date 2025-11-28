@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import Link from 'next/link';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { confirmOrder, requestRevision, cancelOrder } from '@/lib/supabase/mutations/orders';
+import { confirmOrder, requestRevision } from '@/lib/supabase/mutations/orders';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorState from '@/components/common/ErrorState';
 import { logger } from '@/lib/logger';
@@ -194,14 +194,24 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
 
     try {
       setSubmitting(true);
-      await cancelOrder(id, cancelReason);
+      const response = await fetch(`/api/orders/${id}/cancel`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cancel_reason: cancelReason }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || '주문 취소에 실패했습니다');
+      }
+
       setShowCancelModal(false);
       setCancelReason('');
       await loadOrder(); // Reload to get updated status
       toast.success('주문이 취소되었습니다');
     } catch (err: unknown) {
       logger.error('주문 취소 실패:', err);
-      toast.error('주문 취소에 실패했습니다');
+      toast.error(err instanceof Error ? err.message : '주문 취소에 실패했습니다');
     } finally {
       setSubmitting(false);
     }
@@ -282,7 +292,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
               <button
                 onClick={handleCreateChat}
                 disabled={creatingChat}
-                className="px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+                className="px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50 flex items-center"
               >
                 <MessageSquare className="w-3 h-3 lg:w-4 lg:h-4 mr-1.5" />
                 {creatingChat ? '로딩 중...' : '메시지'}
@@ -291,14 +301,14 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                 <>
                   <button
                     onClick={() => setShowRevisionModal(true)}
-                    className="px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors font-medium"
+                    className="px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors font-medium flex items-center"
                   >
                     <RotateCcw className="w-3 h-3 lg:w-4 lg:h-4 mr-1.5" />
                     수정 요청
                   </button>
                   <button
                     onClick={() => setShowConfirmModal(true)}
-                    className="px-4 py-2 text-sm lg:px-6 lg:py-2 lg:text-base bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                    className="px-4 py-2 text-sm lg:px-6 lg:py-2 lg:text-base bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium flex items-center"
                   >
                     <Check className="w-4 h-4 lg:w-5 lg:h-5 mr-1.5" />
                     구매 확정
@@ -308,7 +318,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
               {order.status === 'completed' && (
                 <Link
                   href={`/mypage/buyer/reviews?order=${id}`}
-                  className="px-4 py-2 text-sm lg:px-6 lg:py-2 lg:text-base bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
+                  className="px-4 py-2 text-sm lg:px-6 lg:py-2 lg:text-base bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium flex items-center"
                 >
                   <Star className="w-4 h-4 lg:w-5 lg:h-5 mr-1.5" />
                   리뷰 작성
@@ -548,14 +558,14 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                 <button
                   onClick={handleCreateChat}
                   disabled={creatingChat}
-                  className="w-full px-3 py-1.5 lg:px-4 lg:py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium text-xs lg:text-sm disabled:opacity-50"
+                  className="w-full px-3 py-1.5 lg:px-4 lg:py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-light transition-colors font-medium text-xs lg:text-sm disabled:opacity-50 flex items-center justify-center"
                 >
                   <MessageSquare className="w-3 h-3 lg:w-4 lg:h-4 mr-1.5" />
                   {creatingChat ? '로딩 중...' : '메시지 보내기'}
                 </button>
                 <Link
-                  href={`/seller/${order.seller_id}`}
-                  className="w-full px-3 py-1.5 lg:px-4 lg:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-center block text-xs lg:text-sm"
+                  href={`/experts/${order.seller_id}`}
+                  className="w-full px-3 py-1.5 lg:px-4 lg:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-xs lg:text-sm flex items-center justify-center"
                 >
                   <UserIcon className="w-3 h-3 lg:w-4 lg:h-4 mr-1.5" />
                   프로필 보기
@@ -601,14 +611,14 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
               <div className="space-y-2">
                 <button
                   onClick={() => setShowCancelModal(true)}
-                  className="w-full px-3 py-1.5 lg:px-4 lg:py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium text-xs lg:text-sm"
+                  className="w-full px-3 py-1.5 lg:px-4 lg:py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium text-xs lg:text-sm flex items-center justify-center"
                 >
                   <Ban className="w-3 h-3 lg:w-4 lg:h-4 mr-1.5" />
                   취소 요청
                 </button>
                 <button
                   onClick={() => router.push('/help/contact')}
-                  className="w-full px-3 py-1.5 lg:px-4 lg:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-xs lg:text-sm"
+                  className="w-full px-3 py-1.5 lg:px-4 lg:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-xs lg:text-sm flex items-center justify-center"
                 >
                   <Headphones className="w-3 h-3 lg:w-4 lg:h-4 mr-1.5" />
                   고객센터 문의
