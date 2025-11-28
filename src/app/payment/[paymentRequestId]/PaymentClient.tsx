@@ -93,7 +93,7 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
         orderName: paymentRequest.title,
         totalAmount: paymentRequest.amount,
         currency: 'CURRENCY_KRW',
-        channelKey: 'channel-key-test', // 테스트 채널 키
+        channelKey: process.env.NEXT_PUBLIC_PORTONE_CHANNEL_KEY!, // KG이니시스 테스트
         payMethod: 'CARD',
         customer: {
           fullName: buyer?.name || '구매자',
