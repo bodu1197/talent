@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Heart, MessageCircle } from 'lucide-react';
+import { Heart, MessageCircle, Check } from 'lucide-react';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { createClient } from '@/lib/supabase/client';
 import {
@@ -46,9 +46,6 @@ export default function MobilePackageSelector({
   );
 
   const selectedPackage = activePackages.find((pkg) => pkg.package_type === selectedType);
-
-  // 선택된 패키지의 가격 (패키지 모드가 아니면 서비스 기본 가격)
-  const displayPrice = hasPackages && selectedPackage ? selectedPackage.price : servicePrice;
 
   const handleFavorite = async () => {
     if (!user) {
@@ -144,22 +141,44 @@ export default function MobilePackageSelector({
           </div>
           {/* 선택된 패키지 정보 */}
           {selectedPackage && (
-            <div className="px-4 py-3 bg-gray-50 border-t border-gray-100">
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="text-lg font-semibold text-brand-primary">
-                    {selectedPackage.price.toLocaleString()}원
-                  </span>
-                  <span className="text-xs text-gray-500 ml-2">
-                    {selectedPackage.delivery_days}일 ·{' '}
-                    {selectedPackage.revision_count === -1
-                      ? '무제한 수정'
-                      : `${selectedPackage.revision_count}회 수정`}
-                  </span>
-                </div>
+            <div className="px-4 py-4 bg-gray-50 border-t border-gray-100">
+              {/* 가격 */}
+              <div className="text-xl font-bold text-brand-primary mb-2">
+                {selectedPackage.price.toLocaleString()}원
               </div>
+
+              {/* 패키지명 */}
+              {selectedPackage.name && (
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">{selectedPackage.name}</h3>
+              )}
+
+              {/* 작업기간, 수정횟수 */}
+              <div className="flex items-center gap-3 text-xs text-gray-600 mb-3">
+                <span>작업기간: {selectedPackage.delivery_days}일</span>
+                <span>·</span>
+                <span>
+                  수정:{' '}
+                  {selectedPackage.revision_count === -1
+                    ? '무제한'
+                    : `${selectedPackage.revision_count}회`}
+                </span>
+              </div>
+
+              {/* 패키지 설명 */}
               {selectedPackage.description && (
-                <p className="text-xs text-gray-600 mt-1">{selectedPackage.description}</p>
+                <p className="text-xs text-gray-600 mb-3">{selectedPackage.description}</p>
+              )}
+
+              {/* 포함 기능 */}
+              {selectedPackage.features && selectedPackage.features.length > 0 && (
+                <div className="space-y-1.5">
+                  {selectedPackage.features.map((feature, index) => (
+                    <div key={index} className="flex items-center gap-2 text-xs text-gray-700">
+                      <Check className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />
+                      <span>{feature}</span>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           )}
@@ -210,7 +229,7 @@ export default function MobilePackageSelector({
             className="flex items-center justify-center flex-1 h-12 bg-brand-primary text-white font-semibold hover:bg-brand-dark transition-colors"
           >
             {hasPackages && selectedPackage ? (
-              <span>{displayPrice.toLocaleString()}원 구매</span>
+              <span>{PACKAGE_TYPE_LABELS[selectedPackage.package_type]} 구매</span>
             ) : (
               <span>구매하기</span>
             )}
