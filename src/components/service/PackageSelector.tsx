@@ -59,20 +59,13 @@ export default function PackageSelector({
             key={pkg.package_type}
             type="button"
             onClick={() => setSelectedType(pkg.package_type)}
-            className={`flex-1 py-4 px-2 text-center font-medium transition-colors ${
+            className={`flex-1 py-3 px-2 text-center font-medium transition-colors ${
               selectedType === pkg.package_type
                 ? 'bg-brand-primary text-white'
                 : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
             }`}
           >
             <div className="text-sm">{PACKAGE_TYPE_LABELS[pkg.package_type]}</div>
-            <div
-              className={`text-xs mt-1 ${
-                selectedType === pkg.package_type ? 'text-white/80' : 'text-gray-500'
-              }`}
-            >
-              {formatPrice(pkg.price)}원
-            </div>
           </button>
         ))}
       </div>
