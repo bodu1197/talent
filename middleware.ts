@@ -42,17 +42,17 @@ export async function middleware(request: NextRequest) {
     // 보안: XSS 취약점은 React의 자동 이스케이프로 완화
     const cspHeader = `
       default-src 'self';
-      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live;
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://cdn.portone.io https://*.portone.io;
       style-src 'self' 'unsafe-inline';
       style-src-attr 'unsafe-inline';
       img-src 'self' blob: data: https:;
       font-src 'self' data:;
-      connect-src 'self' https://*.supabase.co wss://*.supabase.co https://vercel.live https://img.youtube.com https://www.youtube.com;
-      frame-src 'self' https://vercel.live https://www.youtube.com;
+      connect-src 'self' https://*.supabase.co wss://*.supabase.co https://vercel.live https://img.youtube.com https://www.youtube.com https://*.portone.io https://api.portone.io https://*.inicis.com;
+      frame-src 'self' https://vercel.live https://www.youtube.com https://*.portone.io https://*.inicis.com https://pg.inicis.com https://ksmobile.inicis.com;
       frame-ancestors 'none';
       object-src 'none';
       base-uri 'self';
-      form-action 'self';
+      form-action 'self' https://*.inicis.com https://*.portone.io;
       upgrade-insecure-requests;
     `
       .replace(/\s{2,}/g, ' ')
