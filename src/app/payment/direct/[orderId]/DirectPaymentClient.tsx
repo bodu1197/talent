@@ -129,14 +129,28 @@ export default function DirectPaymentClient({ order, seller }: Props) {
     setIsProcessing(true);
 
     try {
+      // 환경변수 확인
+      const storeId = process.env.NEXT_PUBLIC_PORTONE_STORE_ID;
+      const channelKey = process.env.NEXT_PUBLIC_PORTONE_CHANNEL_KEY;
+
+      if (!storeId || !channelKey) {
+        logger.error('PortOne configuration missing', {
+          storeId: !!storeId,
+          channelKey: !!channelKey,
+        });
+        toast.error('결제 설정이 올바르지 않습니다. 관리자에게 문의하세요.');
+        setIsProcessing(false);
+        return;
+      }
+
       // PortOne V2 결제창 호출
       const paymentConfig: Parameters<typeof PortOne.requestPayment>[0] = {
-        storeId: process.env.NEXT_PUBLIC_PORTONE_STORE_ID!,
+        storeId,
         paymentId: order.merchant_uid,
         orderName: order.title,
         totalAmount: totalAmount,
         currency: 'CURRENCY_KRW',
-        channelKey: process.env.NEXT_PUBLIC_PORTONE_CHANNEL_KEY!,
+        channelKey,
         payMethod: selectedPaymentMethod,
         customer: {
           fullName: buyer?.name || '구매자',
@@ -148,10 +162,17 @@ export default function DirectPaymentClient({ order, seller }: Props) {
         },
       };
 
-      // 간편결제 provider 설정
+      // 간편결제 provider 설정 (해당 채널이 설정된 경우에만 동작)
       if (selectedPaymentMethod === 'EASY_PAY' && easyPayProvider) {
         paymentConfig.easyPay = { easyPayProvider };
       }
+
+      logger.debug('Payment request config', {
+        storeId,
+        channelKey,
+        payMethod: selectedPaymentMethod,
+        easyPayProvider,
+      });
 
       const response = await PortOne.requestPayment(paymentConfig);
 
