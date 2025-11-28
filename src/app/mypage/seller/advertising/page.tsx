@@ -542,7 +542,7 @@ export default function AdvertisingPage() {
                         return (
                           <button
                             onClick={() => {
-                              globalThis.location.href = '/mypage/seller/advertising/bank-transfer';
+                              globalThis.location.href = '/mypage/seller/advertising/purchase';
                             }}
                             className="w-full px-3 py-2 bg-brand-primary text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
                           >
@@ -667,8 +667,7 @@ export default function AdvertisingPage() {
                             return (
                               <button
                                 onClick={() => {
-                                  globalThis.location.href =
-                                    '/mypage/seller/advertising/bank-transfer';
+                                  globalThis.location.href = '/mypage/seller/advertising/purchase';
                                 }}
                                 className="px-4 py-2 bg-brand-primary text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
                               >
