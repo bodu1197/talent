@@ -7,6 +7,8 @@ import {
   PACKAGE_TYPE_LABELS,
   PACKAGE_TYPE_ORDER,
   DEFAULT_PACKAGE_TEMPLATES,
+  PACKAGE_TITLE_MAX_LENGTH,
+  PACKAGE_DESCRIPTION_MAX_LENGTH,
 } from '@/types/package';
 
 interface Props {
@@ -234,6 +236,44 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                         </div>
                       )}
 
+                      {/* 패키지 제목 */}
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <label className="text-sm font-medium text-gray-700">
+                            패키지 제목 <span className="text-red-500">*</span>
+                          </label>
+                          <span
+                            className={`text-xs ${
+                              (pkg.title?.length || 0) > PACKAGE_TITLE_MAX_LENGTH
+                                ? 'text-red-500 font-medium'
+                                : 'text-gray-400'
+                            }`}
+                          >
+                            {pkg.title?.length || 0}/{PACKAGE_TITLE_MAX_LENGTH}자
+                          </span>
+                        </div>
+                        <input
+                          type="text"
+                          value={pkg.title || ''}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (value.length <= PACKAGE_TITLE_MAX_LENGTH) {
+                              handlePackageChange(type, 'title', value);
+                            }
+                          }}
+                          className={`w-full px-4 py-3 text-lg border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent ${
+                            (pkg.title?.length || 0) > PACKAGE_TITLE_MAX_LENGTH
+                              ? 'border-red-300 bg-red-50'
+                              : 'border-gray-300'
+                          }`}
+                          placeholder="예: 기본 패키지, 프리미엄 서비스"
+                          maxLength={PACKAGE_TITLE_MAX_LENGTH}
+                        />
+                        <p className="mt-1 text-xs text-gray-500">
+                          구매자에게 표시되는 패키지 이름입니다
+                        </p>
+                      </div>
+
                       {/* 2열 그리드: 가격 & 작업기간 */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* 가격 */}
@@ -314,15 +354,36 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
 
                       {/* 패키지 설명 */}
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          패키지 설명 <span className="text-red-500">*</span>
-                        </label>
+                        <div className="flex items-center justify-between mb-2">
+                          <label className="text-sm font-medium text-gray-700">
+                            패키지 설명 <span className="text-red-500">*</span>
+                          </label>
+                          <span
+                            className={`text-xs ${
+                              (pkg.description?.length || 0) > PACKAGE_DESCRIPTION_MAX_LENGTH
+                                ? 'text-red-500 font-medium'
+                                : 'text-gray-400'
+                            }`}
+                          >
+                            {pkg.description?.length || 0}/{PACKAGE_DESCRIPTION_MAX_LENGTH}자
+                          </span>
+                        </div>
                         <textarea
                           value={pkg.description}
-                          onChange={(e) => handlePackageChange(type, 'description', e.target.value)}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent resize-none"
-                          rows={3}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (value.length <= PACKAGE_DESCRIPTION_MAX_LENGTH) {
+                              handlePackageChange(type, 'description', value);
+                            }
+                          }}
+                          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent resize-none ${
+                            (pkg.description?.length || 0) > PACKAGE_DESCRIPTION_MAX_LENGTH
+                              ? 'border-red-300 bg-red-50'
+                              : 'border-gray-300'
+                          }`}
+                          rows={2}
                           placeholder="이 패키지에서 제공하는 서비스를 간단히 설명해주세요"
+                          maxLength={PACKAGE_DESCRIPTION_MAX_LENGTH}
                         />
                       </div>
 
@@ -428,7 +489,10 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                       key={type}
                       className="py-2 px-3 text-center font-semibold text-brand-primary"
                     >
-                      {PACKAGE_TYPE_LABELS[type]}
+                      <div>{packages[type].title || PACKAGE_TYPE_LABELS[type]}</div>
+                      <div className="text-xs font-normal text-gray-400">
+                        {PACKAGE_TYPE_LABELS[type]}
+                      </div>
                     </th>
                   ))}
                 </tr>

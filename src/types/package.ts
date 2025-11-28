@@ -43,18 +43,24 @@ export interface ServicePackage {
   updated_at: string;
 }
 
+// 글자 수 제한
+export const PACKAGE_TITLE_MAX_LENGTH = 20;
+export const PACKAGE_DESCRIPTION_MAX_LENGTH = 60;
+
 // 패키지 폼 데이터 (서비스 등록/수정용)
 export interface PackageFormData {
+  title: string; // 패키지 제목 (최대 20자)
   price: string;
   delivery_days: string;
   revision_count: string;
   features: string[];
-  description: string;
+  description: string; // 패키지 설명 (최대 60자)
   is_enabled: boolean;
 }
 
 // 패키지 폼 초기값
 export const DEFAULT_PACKAGE_FORM_DATA: PackageFormData = {
+  title: '',
   price: '',
   delivery_days: '3',
   revision_count: '1',
@@ -66,16 +72,19 @@ export const DEFAULT_PACKAGE_FORM_DATA: PackageFormData = {
 // 기본 패키지 템플릿
 export const DEFAULT_PACKAGE_TEMPLATES: Record<PackageType, Partial<PackageFormData>> = {
   standard: {
+    title: '기본 패키지',
     description: '기본 서비스를 제공합니다.',
     features: ['기본 작업물 제공'],
     revision_count: '1',
   },
   deluxe: {
+    title: '디럭스 패키지',
     description: '소스 파일과 추가 수정을 포함합니다.',
     features: ['기본 작업물 제공', '소스 파일 제공', '추가 수정 포함'],
     revision_count: '3',
   },
   premium: {
+    title: '프리미엄 패키지',
     description: '상업적 사용권과 우선 작업을 포함합니다.',
     features: ['기본 작업물 제공', '소스 파일 제공', '무제한 수정', '상업적 사용권', '우선 작업'],
     revision_count: '-1',
@@ -103,6 +112,15 @@ export function validatePackage(data: PackageFormData, type: PackageType): strin
     return errors; // 비활성화된 패키지는 검증 스킵
   }
 
+  // 제목 검증
+  if (!data.title.trim()) {
+    errors.push(`${PACKAGE_TYPE_LABELS[type]} 제목을 입력해주세요.`);
+  } else if (data.title.length > PACKAGE_TITLE_MAX_LENGTH) {
+    errors.push(
+      `${PACKAGE_TYPE_LABELS[type]} 제목은 ${PACKAGE_TITLE_MAX_LENGTH}자 이내여야 합니다.`
+    );
+  }
+
   const price = parseInt(data.price.replace(/,/g, ''), 10);
   if (isNaN(price) || price < MIN_PACKAGE_PRICE) {
     errors.push(
@@ -115,8 +133,13 @@ export function validatePackage(data: PackageFormData, type: PackageType): strin
     errors.push(`${PACKAGE_TYPE_LABELS[type]} 작업 기간은 1~365일 사이여야 합니다.`);
   }
 
+  // 설명 검증
   if (!data.description.trim()) {
     errors.push(`${PACKAGE_TYPE_LABELS[type]} 설명을 입력해주세요.`);
+  } else if (data.description.length > PACKAGE_DESCRIPTION_MAX_LENGTH) {
+    errors.push(
+      `${PACKAGE_TYPE_LABELS[type]} 설명은 ${PACKAGE_DESCRIPTION_MAX_LENGTH}자 이내여야 합니다.`
+    );
   }
 
   if (data.features.length === 0) {
@@ -164,7 +187,7 @@ export function packageFormToDbData(
 ): Omit<ServicePackage, 'id' | 'created_at' | 'updated_at'> {
   return {
     service_id: serviceId,
-    name: PACKAGE_TYPE_LABELS[type],
+    name: data.title || PACKAGE_TYPE_LABELS[type], // 제목이 있으면 사용, 없으면 기본 라벨
     package_type: type,
     price: parseInt(data.price.replace(/,/g, ''), 10),
     delivery_days: parseInt(data.delivery_days, 10),
