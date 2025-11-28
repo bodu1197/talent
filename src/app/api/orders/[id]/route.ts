@@ -25,12 +25,28 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         `
         *,
         service:services(id, title, thumbnail_url, seller_id),
-        buyer:users!orders_buyer_id_fkey(id, name, email, profile_image),
-        seller:users!orders_seller_id_fkey(id, name, email, profile_image)
+        buyer:users!orders_buyer_id_fkey(id, name, email, profile_image)
       `
       )
       .eq('id', id)
       .single();
+
+    // 판매자 정보를 seller_profiles에서 별도 조회 (display_name, business_name 포함)
+    if (order) {
+      const { data: sellerProfile } = await supabase
+        .from('seller_profiles')
+        .select('id, user_id, display_name, business_name, profile_image')
+        .eq('user_id', order.seller_id)
+        .single();
+
+      if (sellerProfile) {
+        order.seller = {
+          id: sellerProfile.user_id,
+          name: sellerProfile.display_name || sellerProfile.business_name || '판매자',
+          profile_image: sellerProfile.profile_image,
+        };
+      }
+    }
 
     if (error) {
       logger.error('Order fetch error:', error);
@@ -43,9 +59,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     // Supabase 관계 조회가 배열로 반환되는 경우 처리
-    if (Array.isArray(order.seller) && order.seller.length > 0) {
-      order.seller = order.seller[0];
-    }
     if (Array.isArray(order.buyer) && order.buyer.length > 0) {
       order.buyer = order.buyer[0];
     }
