@@ -1,10 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
-import { startAdvertisingSubscription } from '@/lib/advertising';
+import { useRouter } from 'next/navigation';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
-import { Megaphone, CheckCircle, Rocket, X, Crown, Sparkles } from 'lucide-react';
+import { Megaphone, CheckCircle, X, Crown, Sparkles } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
 import { logger } from '@/lib/logger';
@@ -48,6 +47,7 @@ interface Service {
 }
 
 export default function AdvertisingPurchasePage() {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [services, setServices] = useState<Service[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<(typeof AD_PRODUCTS)[0] | null>(null);
@@ -114,37 +114,31 @@ export default function AdvertisingPurchasePage() {
 
     try {
       setPurchasing(true);
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        toast.error('로그인이 필요합니다');
-        return;
+
+      // prepare API 호출하여 결제 준비
+      const response = await fetch('/api/payments/advertising/prepare', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          service_id: selectedService,
+          months: selectedProduct.months,
+          monthly_price: selectedProduct.price,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || '결제 준비 실패');
       }
 
-      const totalSupplyPrice = selectedProduct.price * selectedProduct.months;
+      const data = await response.json();
 
-      const result = await startAdvertisingSubscription(
-        user.id,
-        selectedService,
-        'bank_transfer',
-        selectedProduct.months,
-        totalSupplyPrice
-      );
-
-      if (result.payment) {
-        globalThis.location.href = `/mypage/seller/advertising/payments/${result.payment.id}`;
-      } else {
-        toast.success('광고 신청이 완료되었습니다!');
-        closeModal();
-        loadServices();
-      }
+      // 결제 페이지로 이동
+      router.push(`/payment/advertising/${data.order_id}`);
     } catch (error: unknown) {
-      logger.error('광고 신청 실패:', error);
+      logger.error('광고 결제 준비 실패:', error);
       const errorMessage = error instanceof Error ? error.message : '광고 신청에 실패했습니다';
       toast.error(errorMessage);
-    } finally {
       setPurchasing(false);
     }
   }
@@ -283,8 +277,7 @@ export default function AdvertisingPurchasePage() {
 
         {/* 안내 문구 */}
         <div className="text-center text-xs lg:text-sm text-gray-500">
-          <p>• 결제는 무통장 입금으로 진행됩니다</p>
-          <p>• 입금 확인 후 1-2일 내 광고가 시작됩니다</p>
+          <p>신용카드, 계좌이체, 간편결제 등 다양한 결제수단 지원</p>
         </div>
       </div>
 
@@ -397,13 +390,10 @@ export default function AdvertisingPurchasePage() {
                 {purchasing ? (
                   <span className="flex items-center justify-center gap-2">
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    처리 중...
+                    결제 준비 중...
                   </span>
                 ) : (
-                  <>
-                    <Rocket className="w-5 h-5 inline mr-2" />
-                    광고 신청하기
-                  </>
+                  '결제하기'
                 )}
               </button>
             </div>

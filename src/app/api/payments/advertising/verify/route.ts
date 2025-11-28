@@ -38,10 +38,10 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { payment_id, amount, bonus } = body;
+    const { payment_id, advertising_payment_id, amount, bonus } = body;
 
     // 입력 검증
-    if (!payment_id || !amount) {
+    if (!payment_id) {
       return NextResponse.json({ error: '필수 정보가 누락되었습니다' }, { status: 400 });
     }
 
@@ -60,6 +60,16 @@ export async function POST(request: NextRequest) {
         { error: `결제가 완료되지 않았습니다. 상태: ${portOnePayment.status}` },
         { status: 400 }
       );
+    }
+
+    // 구독형 광고 결제 처리 (advertising_payment_id가 있는 경우)
+    if (advertising_payment_id) {
+      return handleSubscriptionPayment(supabase, user.id, advertising_payment_id, portOnePayment);
+    }
+
+    // 크레딧 충전 처리 (기존 로직)
+    if (!amount) {
+      return NextResponse.json({ error: '결제 금액이 누락되었습니다' }, { status: 400 });
     }
 
     // 결제 금액 검증
@@ -119,7 +129,6 @@ export async function POST(request: NextRequest) {
 
     if (paymentError) {
       logger.error('Payment record error:', paymentError);
-      // 크레딧은 이미 추가되었으므로 에러 반환하지 않음
     }
 
     return NextResponse.json({
@@ -130,4 +139,91 @@ export async function POST(request: NextRequest) {
     logger.error('Advertising payment verify error:', error);
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 });
   }
+}
+
+// 구독형 광고 결제 처리
+async function handleSubscriptionPayment(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string,
+  advertisingPaymentId: string,
+  portOnePayment: { amount?: { total: number }; pgTxId?: string }
+) {
+  // 광고 결제 정보 조회
+  const { data: adPayment, error: fetchError } = await supabase
+    .from('advertising_payments')
+    .select('*')
+    .eq('id', advertisingPaymentId)
+    .single();
+
+  if (fetchError || !adPayment) {
+    logger.error('Advertising payment not found:', fetchError);
+    return NextResponse.json({ error: '결제 정보를 찾을 수 없습니다' }, { status: 404 });
+  }
+
+  // 판매자 확인
+  const { data: seller } = await supabase
+    .from('sellers')
+    .select('id')
+    .eq('user_id', userId)
+    .single();
+
+  if (!seller || seller.id !== adPayment.seller_id) {
+    return NextResponse.json({ error: '권한이 없습니다' }, { status: 403 });
+  }
+
+  // 금액 확인
+  if (portOnePayment.amount?.total !== adPayment.amount) {
+    logger.error('Amount mismatch', {
+      expected: adPayment.amount,
+      received: portOnePayment.amount?.total,
+    });
+    return NextResponse.json({ error: '결제 금액 불일치' }, { status: 400 });
+  }
+
+  const now = new Date();
+  const startDate = now.toISOString();
+  const endDate = new Date(
+    now.getTime() + adPayment.months * 30 * 24 * 60 * 60 * 1000
+  ).toISOString();
+
+  // 결제 상태 업데이트
+  const { error: updateError } = await supabase
+    .from('advertising_payments')
+    .update({
+      status: 'completed',
+      paid_at: now.toISOString(),
+      pg_tx_id: portOnePayment.pgTxId,
+      updated_at: now.toISOString(),
+    })
+    .eq('id', advertisingPaymentId);
+
+  if (updateError) {
+    logger.error('Payment update error:', updateError);
+    return NextResponse.json({ error: '결제 상태 업데이트 실패' }, { status: 500 });
+  }
+
+  // 광고 구독 생성
+  const { error: subscriptionError } = await supabase.from('advertising_subscriptions').insert({
+    seller_id: adPayment.seller_id,
+    service_id: adPayment.service_id,
+    payment_id: advertisingPaymentId,
+    status: 'active',
+    start_date: startDate,
+    end_date: endDate,
+    months: adPayment.months,
+    monthly_price: adPayment.monthly_price,
+    total_amount: adPayment.amount,
+  });
+
+  if (subscriptionError) {
+    logger.error('Subscription creation error:', subscriptionError);
+  }
+
+  logger.info('Advertising subscription payment verified', {
+    advertising_payment_id: advertisingPaymentId,
+    amount: adPayment.amount,
+    months: adPayment.months,
+  });
+
+  return NextResponse.json({ success: true });
 }
