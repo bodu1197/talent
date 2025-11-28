@@ -1,19 +1,32 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { startAdvertisingSubscription } from '@/lib/advertising';
 import type { AdvertisingDashboard } from '@/types/advertising';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
-import { Gift, CheckCircle, Megaphone, List, Tag, Rocket, Plus, RefreshCw } from 'lucide-react';
+import {
+  Gift,
+  CheckCircle,
+  Megaphone,
+  List,
+  Tag,
+  Rocket,
+  Plus,
+  RefreshCw,
+  BarChart3,
+} from 'lucide-react';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
 import { logger } from '@/lib/logger';
+
+type TabType = 'stats' | 'active' | 'services';
 
 export default function AdvertisingPage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [dashboard, setDashboard] = useState<AdvertisingDashboard | null>(null);
+  const [activeTab, setActiveTab] = useState<TabType>('services');
   const [services, setServices] = useState<
     Array<{
       id: string;
@@ -41,6 +54,31 @@ export default function AdvertisingPage() {
   );
   const [purchasing, setPurchasing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 섹션 refs
+  const statsRef = useRef<HTMLDivElement>(null);
+  const activeAdsRef = useRef<HTMLDivElement>(null);
+  const servicesRef = useRef<HTMLDivElement>(null);
+
+  // 탭 변경 시 해당 섹션으로 스크롤
+  const scrollToSection = useCallback((tab: TabType) => {
+    setActiveTab(tab);
+    const refMap = {
+      stats: statsRef,
+      active: activeAdsRef,
+      services: servicesRef,
+    };
+    const targetRef = refMap[tab];
+    if (targetRef.current) {
+      const headerOffset = 120; // 탭 헤더 높이 + 여백
+      const elementPosition = targetRef.current.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - headerOffset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
+    }
+  }, []);
 
   // 할인율 계산: 1개월 20만원(공급가액) → 12개월 10만원(공급가액) (선형 할인)
   const calculateMonthlyPrice = (months: number): number => {
@@ -250,6 +288,60 @@ export default function AdvertisingPage() {
           </p>
         </div>
 
+        {/* 탭 네비게이션 - 서비스가 여러 개일 때만 표시 */}
+        {(services.length > 1 ||
+          (dashboard?.subscriptions && dashboard.subscriptions.length > 0)) && (
+          <div className="sticky top-0 z-10 bg-gray-50 -mx-4 lg:-mx-6 px-4 lg:px-6 mb-4 lg:mb-6 border-b border-gray-200">
+            <div className="flex gap-1 overflow-x-auto scrollbar-hide py-2">
+              {dashboard?.subscriptions && dashboard.subscriptions.length > 0 && (
+                <>
+                  <button
+                    onClick={() => scrollToSection('stats')}
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
+                      activeTab === 'stats'
+                        ? 'bg-brand-primary text-white shadow-sm'
+                        : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                    }`}
+                  >
+                    <BarChart3 className="w-4 h-4" />
+                    성과 통계
+                  </button>
+                  <button
+                    onClick={() => scrollToSection('active')}
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
+                      activeTab === 'active'
+                        ? 'bg-brand-primary text-white shadow-sm'
+                        : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                    }`}
+                  >
+                    <Megaphone className="w-4 h-4" />
+                    활성 광고
+                    <span className="bg-green-100 text-green-700 text-xs px-1.5 py-0.5 rounded-full">
+                      {dashboard.subscriptions.length}
+                    </span>
+                  </button>
+                </>
+              )}
+              {services.length > 0 && (
+                <button
+                  onClick={() => scrollToSection('services')}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
+                    activeTab === 'services'
+                      ? 'bg-brand-primary text-white shadow-sm'
+                      : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                  }`}
+                >
+                  <List className="w-4 h-4" />
+                  서비스 관리
+                  <span className="bg-gray-100 text-gray-600 text-xs px-1.5 py-0.5 rounded-full">
+                    {services.length}
+                  </span>
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* 무료 프로모션 알림 배너 */}
         {services.some((s) => s.adDetails?.isFreePromotion && s.adDetails?.promotionEndDate) && (
           <div className="mb-4 lg:mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-3 lg:p-4 shadow-sm">
@@ -273,9 +365,12 @@ export default function AdvertisingPage() {
 
         {/* 통계 카드 */}
         {dashboard?.subscriptions && dashboard.subscriptions.length > 0 && (
-          <>
+          <div ref={statsRef}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm lg:text-base font-semibold text-gray-900">광고 성과 통계</h2>
+              <h2 className="text-sm lg:text-base font-semibold text-gray-900 flex items-center gap-2">
+                <BarChart3 className="w-4 h-4 text-blue-600" />
+                광고 성과 통계
+              </h2>
               <button
                 onClick={() => loadDashboard(true)}
                 disabled={refreshing}
@@ -306,17 +401,17 @@ export default function AdvertisingPage() {
                 </p>
               </div>
             </div>
-          </>
+          </div>
         )}
 
         {/* 활성 광고 섹션 */}
         {dashboard?.subscriptions && dashboard.subscriptions.length > 0 && (
-          <>
+          <div ref={activeAdsRef} className="mb-4 lg:mb-6">
             <h2 className="text-sm lg:text-base font-semibold text-gray-900 flex items-center gap-2 mb-3">
               <Megaphone className="w-4 h-4 text-green-600" />
               활성 광고
             </h2>
-            <div className="space-y-2 mb-4 lg:mb-6">
+            <div className="space-y-2">
               {dashboard.subscriptions.map((sub) => (
                 <div key={sub.id} className="bg-white rounded-lg shadow p-3 lg:p-4">
                   <div className="flex items-center justify-between mb-2">
@@ -355,12 +450,12 @@ export default function AdvertisingPage() {
                 </div>
               ))}
             </div>
-          </>
+          </div>
         )}
 
         {/* 서비스 광고 관리 */}
         {services.length > 0 && (
-          <>
+          <div ref={servicesRef}>
             <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
               <List className="w-4 h-4 text-blue-600" />
               서비스 광고 관리
@@ -612,7 +707,7 @@ export default function AdvertisingPage() {
                 </tbody>
               </table>
             </div>
-          </>
+          </div>
         )}
 
         {/* 모달 팝업 */}
