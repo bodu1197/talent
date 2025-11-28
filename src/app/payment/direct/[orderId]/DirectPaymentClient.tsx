@@ -72,6 +72,7 @@ export default function DirectPaymentClient({ order, seller }: Props) {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>('CARD');
   const [easyPayProvider, setEasyPayProvider] = useState<EasyPayProvider>(null);
   const [isInternationalCard, setIsInternationalCard] = useState(false);
+  const [phoneInput, setPhoneInput] = useState('');
 
   // 수수료 계산 (4.5%)
   const serviceFee = Math.round(order.amount * 0.045);
@@ -86,16 +87,16 @@ export default function DirectPaymentClient({ order, seller }: Props) {
         data: { user },
       } = await supabase.auth.getUser();
       if (user) {
-        const { data: profile } = await supabase
-          .from('profiles')
+        const { data: userData } = await supabase
+          .from('users')
           .select('name, phone')
-          .eq('user_id', user.id)
+          .eq('id', user.id)
           .single();
 
         setBuyer({
-          name: profile?.name || user.user_metadata?.name || null,
+          name: userData?.name || user.user_metadata?.name || null,
           email: user.email || null,
-          phone: profile?.phone || null,
+          phone: userData?.phone || null,
         });
       }
 
@@ -122,6 +123,13 @@ export default function DirectPaymentClient({ order, seller }: Props) {
   const handlePayment = async () => {
     if (!agreedToTerms || !agreedToPrivacy) {
       toast.error('필수 약관에 동의해주세요');
+      return;
+    }
+
+    // 전화번호 확인 (이니시스 V2 필수)
+    const phone = buyer?.phone || phoneInput;
+    if (!phone) {
+      toast.error('결제를 위해 휴대폰 번호가 필요합니다');
       return;
     }
 
@@ -154,7 +162,7 @@ export default function DirectPaymentClient({ order, seller }: Props) {
         payMethod: selectedPaymentMethod,
         customer: {
           fullName: buyer?.name || '구매자',
-          phoneNumber: buyer?.phone || undefined,
+          phoneNumber: phone,
           email: buyer?.email || undefined,
         },
         customData: {
@@ -324,6 +332,31 @@ export default function DirectPaymentClient({ order, seller }: Props) {
                 </div>
               </div>
             </section>
+
+            {/* 구매자 정보 - 전화번호 미입력 시 */}
+            {!buyer?.phone && (
+              <section className="bg-white rounded-lg border border-gray-200 p-6">
+                <h2 className="text-lg font-bold text-gray-900 mb-4">구매자 정보</h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      휴대폰 번호 <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      value={phoneInput}
+                      onChange={(e) => setPhoneInput(e.target.value.replace(/\D/g, ''))}
+                      placeholder="01012345678"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
+                      maxLength={11}
+                    />
+                    <p className="mt-1 text-xs text-gray-500">
+                      결제 진행을 위해 휴대폰 번호가 필요합니다
+                    </p>
+                  </div>
+                </div>
+              </section>
+            )}
 
             {/* 결제 방법 */}
             <section className="bg-white rounded-lg border border-gray-200 p-6">
