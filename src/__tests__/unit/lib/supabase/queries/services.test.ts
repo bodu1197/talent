@@ -10,7 +10,18 @@ import {
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { createClient as createBrowserClient } from '@/lib/supabase/client';
 
-vi.mock('@/lib/supabase/server');
+// Mock createServiceRoleClient for advertising queries
+const mockServiceRoleClient = {
+  from: vi.fn(() => ({
+    select: vi.fn().mockReturnThis(),
+    eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+  })),
+};
+
+vi.mock('@/lib/supabase/server', () => ({
+  createClient: vi.fn(),
+  createServiceRoleClient: vi.fn(() => mockServiceRoleClient),
+}));
 vi.mock('@/lib/supabase/client');
 vi.mock('@/lib/logger');
 
@@ -149,10 +160,10 @@ describe('Supabase Queries - Services', () => {
         single: vi.fn().mockResolvedValue({ data: mockService, error: null }),
       };
 
+      // Profile query uses .in() for enrichServicesWithUserInfo
       const mockUserQuery = {
         select: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue({ data: mockUser, error: null }),
+        in: vi.fn().mockResolvedValue({ data: [mockUser], error: null }),
       };
 
       vi.mocked(createServerClient).mockResolvedValue({
@@ -192,10 +203,10 @@ describe('Supabase Queries - Services', () => {
         single: vi.fn().mockResolvedValue({ data: mockService, error: null }),
       };
 
+      // Profile query uses .in() - returns empty array to simulate no user found
       const mockUserQuery = {
         select: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue({ data: null, error: null }),
+        in: vi.fn().mockResolvedValue({ data: [], error: null }),
       };
 
       vi.mocked(createServerClient).mockResolvedValue({

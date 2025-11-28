@@ -3,7 +3,15 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getPersonalizedServicesByInterest } from '@/lib/supabase/queries/personalized-services';
 import { createClient } from '@/lib/supabase/server';
 
-vi.mock('@/lib/supabase/server');
+vi.mock('@/lib/supabase/server', () => ({
+  createClient: vi.fn(),
+  createServiceRoleClient: vi.fn(() => ({
+    from: vi.fn(() => ({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+    })),
+  })),
+}));
 vi.mock('@/lib/logger');
 
 describe('Supabase Queries - Personalized Services', () => {
@@ -43,6 +51,7 @@ describe('Supabase Queries - Personalized Services', () => {
       expect(result).toEqual([]);
       expect(mockRpc).toHaveBeenCalledWith('get_recent_category_visits', {
         p_user_id: 'user-123',
+        p_days: 30,
         p_limit: 3,
       });
     });
@@ -126,32 +135,29 @@ describe('Supabase Queries - Personalized Services', () => {
 
       const mockReviews = [{ service_id: 'service-1', rating: 5 }];
 
+      // Use a persistent counter outside the mock factory
       let categoryCallCount = 0;
 
-      const createMockQueries = () => ({
-        auth: {
-          getUser: vi.fn().mockResolvedValue({ data: { user: mockUser }, error: null }),
-        },
-        rpc: vi.fn().mockResolvedValue({ data: mockTopCategories, error: null }),
-        from: vi.fn((table: string) => {
+      const createMockQueries = () => {
+        const mockFrom = vi.fn((table: string) => {
           if (table === 'categories') {
             categoryCallCount++;
             if (categoryCallCount === 1) {
-              // First call: get category info
+              // First call: get category info by slug
               return {
                 select: vi.fn().mockReturnThis(),
                 eq: vi.fn().mockReturnThis(),
                 single: vi.fn().mockResolvedValue({ data: mockCategoryInfo, error: null }),
               };
             } else if (categoryCallCount === 2) {
-              // Second call: get parent (2nd level)
+              // Second call: get parent (2nd level) by id
               return {
                 select: vi.fn().mockReturnThis(),
                 eq: vi.fn().mockReturnThis(),
                 single: vi.fn().mockResolvedValue({ data: mockParent2nd, error: null }),
               };
             } else if (categoryCallCount === 3) {
-              // Third call: get grandparent (top level)
+              // Third call: get grandparent (top level) by id
               return {
                 select: vi.fn().mockReturnThis(),
                 eq: vi.fn().mockReturnThis(),
@@ -161,7 +167,7 @@ describe('Supabase Queries - Personalized Services', () => {
                 }),
               };
             } else if (categoryCallCount === 4) {
-              // Fourth call: get level 2 categories
+              // Fourth call: get level 2 categories by parent_id
               return {
                 select: vi.fn().mockReturnThis(),
                 eq: vi.fn().mockResolvedValue({
@@ -170,7 +176,7 @@ describe('Supabase Queries - Personalized Services', () => {
                 }),
               };
             } else if (categoryCallCount === 5) {
-              // Fifth call: get level 3 categories
+              // Fifth call: get level 3 categories by parent_ids
               return {
                 select: vi.fn().mockReturnThis(),
                 in: vi.fn().mockResolvedValue({
@@ -211,8 +217,16 @@ describe('Supabase Queries - Personalized Services', () => {
             eq: vi.fn().mockReturnThis(),
             single: vi.fn().mockResolvedValue({ data: null, error: null }),
           };
-        }),
-      });
+        });
+
+        return {
+          auth: {
+            getUser: vi.fn().mockResolvedValue({ data: { user: mockUser }, error: null }),
+          },
+          rpc: vi.fn().mockResolvedValue({ data: mockTopCategories, error: null }),
+          from: mockFrom,
+        };
+      };
 
       vi.mocked(createClient).mockResolvedValue(
         createMockQueries() as unknown as Awaited<ReturnType<typeof createClient>>

@@ -454,7 +454,8 @@ export async function getActiveServices(limit?: number) {
     }
 
     // 평균 별점 및 리뷰 수 추가 (헬퍼 함수 사용)
-    return enrichServicesWithReviewStats(supabase, data);
+    await enrichServicesWithReviewStats(supabase, data);
+    return data;
   }
 
   return data || [];
