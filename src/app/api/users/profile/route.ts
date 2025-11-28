@@ -52,6 +52,19 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
+    // auth.users 메타데이터도 동기화 (자동 생성된 닉네임 덮어쓰기)
+    const { error: authError } = await serviceClient.auth.admin.updateUserById(user.id, {
+      user_metadata: {
+        ...user.user_metadata,
+        name,
+      },
+    });
+
+    if (authError) {
+      logger.warn('Auth user metadata sync failed:', authError);
+      // 프로필 업데이트는 성공했으므로 에러를 반환하지 않음
+    }
+
     return NextResponse.json({ user: data });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
