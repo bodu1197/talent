@@ -129,7 +129,7 @@ export default function SellerServicesClient({
   async function handleDeleteService(serviceId: string, serviceTitle: string) {
     if (
       !confirm(
-        `"${serviceTitle}" 서비스를 삭제하시겠습니까?\n\n⚠️ 이 작업은 되돌릴 수 없습니다.\n- 진행 중인 주문이 있는 경우 삭제할 수 없습니다.\n- 모든 통계 데이터가 함께 삭제됩니다.`
+        `"${serviceTitle}" 서비스를 삭제하시겠습니까?\n\n⚠️ 이 작업은 되돌릴 수 없습니다.\n- 진행 중인 주문이 있는 경우 삭제할 수 없습니다.\n- 관련된 찜, 리뷰, 통계 데이터가 함께 삭제됩니다.`
       )
     )
       return;
@@ -140,21 +140,59 @@ export default function SellerServicesClient({
       // 1. 진행 중인 주문 확인 (pending_payment 포함)
       const { data: activeOrders, error: ordersError } = await supabase
         .from('orders')
-        .select('id')
+        .select('id, status')
         .eq('service_id', serviceId)
-        .in('status', ['pending_payment', 'paid', 'in_progress', 'delivered'])
-        .limit(1);
+        .in('status', ['pending_payment', 'paid', 'in_progress', 'delivered']);
 
       if (ordersError) throw ordersError;
 
       if (activeOrders && activeOrders.length > 0) {
-        toast.error(
-          '진행 중인 주문이 있어 삭제할 수 없습니다.\n모든 주문이 완료되거나 취소된 후 삭제할 수 있습니다.'
+        const statusLabels: Record<string, string> = {
+          pending_payment: '결제 대기',
+          paid: '결제 완료',
+          in_progress: '진행 중',
+          delivered: '납품 완료(검수 중)',
+        };
+        const orderSummary = activeOrders
+          .map((o) => statusLabels[o.status] || o.status)
+          .reduce(
+            (acc, status) => {
+              acc[status] = (acc[status] || 0) + 1;
+              return acc;
+            },
+            {} as Record<string, number>
+          );
+        const summaryText = Object.entries(orderSummary)
+          .map(([status, count]) => `${status}: ${count}건`)
+          .join(', ');
+
+        alert(
+          `⚠️ 진행 중인 주문이 있어 삭제할 수 없습니다.\n\n현재 진행 중인 주문:\n${summaryText}\n\n모든 주문이 완료되거나 취소된 후 삭제할 수 있습니다.`
         );
         return;
       }
 
-      // 2. 서비스 삭제 (CASCADE로 관련 데이터도 함께 삭제됨)
+      // 2. 관련 데이터 삭제 (외래 키 제약 조건 순서대로)
+      // 서비스 수정 요청의 카테고리 삭제
+      const { data: revisions } = await supabase
+        .from('service_revisions')
+        .select('id')
+        .eq('service_id', serviceId);
+
+      if (revisions && revisions.length > 0) {
+        const revisionIds = revisions.map((r) => r.id);
+        await supabase.from('service_revision_categories').delete().in('revision_id', revisionIds);
+      }
+
+      // 관련 테이블 데이터 삭제
+      await supabase.from('service_revisions').delete().eq('service_id', serviceId);
+      await supabase.from('service_categories').delete().eq('service_id', serviceId);
+      await supabase.from('service_images').delete().eq('service_id', serviceId);
+      await supabase.from('service_options').delete().eq('service_id', serviceId);
+      await supabase.from('service_faqs').delete().eq('service_id', serviceId);
+      await supabase.from('favorites').delete().eq('service_id', serviceId);
+
+      // 3. 서비스 삭제
       const { error: deleteError } = await supabase.from('services').delete().eq('id', serviceId);
 
       if (deleteError) throw deleteError;
