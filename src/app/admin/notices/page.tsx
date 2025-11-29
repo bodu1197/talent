@@ -76,6 +76,23 @@ export default function AdminNoticesPage() {
     setIsModalOpen(true);
   }
 
+  async function sendNotificationToAllUsers(noticeId: string, noticeTitle: string) {
+    const supabase = createClient();
+    const { data: notifyResult, error: notifyError } = await supabase.rpc(
+      'notify_all_users_new_notice',
+      {
+        p_notice_id: noticeId,
+        p_notice_title: noticeTitle,
+      }
+    );
+
+    if (notifyError) {
+      console.error('알림 발송 실패:', notifyError);
+      return;
+    }
+    toast.success(`${notifyResult}명에게 알림이 발송되었습니다.`);
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!title.trim() || !content.trim()) {
@@ -87,46 +104,65 @@ export default function AdminNoticesPage() {
     const supabase = createClient();
 
     if (editingNotice) {
-      // 수정
-      const { error } = await supabase
-        .from('notices')
-        .update({
-          title: title.trim(),
-          content: content.trim(),
-          category,
-          is_important: isImportant,
-          is_published: isPublished,
-        })
-        .eq('id', editingNotice.id);
-
-      if (error) {
-        toast.error('수정에 실패했습니다.');
-        console.error(error);
-      } else {
-        toast.success('공지사항이 수정되었습니다.');
-        setIsModalOpen(false);
-        fetchNotices();
-      }
+      await handleUpdateNotice(supabase);
     } else {
-      // 생성
-      const { error } = await supabase.from('notices').insert({
+      await handleCreateNotice(supabase);
+    }
+    setSaving(false);
+  }
+
+  async function handleUpdateNotice(supabase: ReturnType<typeof createClient>) {
+    if (!editingNotice) return;
+
+    const { error } = await supabase
+      .from('notices')
+      .update({
         title: title.trim(),
         content: content.trim(),
         category,
         is_important: isImportant,
         is_published: isPublished,
-      });
+      })
+      .eq('id', editingNotice.id);
 
-      if (error) {
-        toast.error('등록에 실패했습니다.');
-        console.error(error);
-      } else {
-        toast.success('공지사항이 등록되었습니다.');
-        setIsModalOpen(false);
-        fetchNotices();
-      }
+    if (error) {
+      toast.error('수정에 실패했습니다.');
+      console.error(error);
+      return;
     }
-    setSaving(false);
+    toast.success('공지사항이 수정되었습니다.');
+    setIsModalOpen(false);
+    fetchNotices();
+  }
+
+  async function handleCreateNotice(supabase: ReturnType<typeof createClient>) {
+    const { data: newNotice, error } = await supabase
+      .from('notices')
+      .insert({
+        title: title.trim(),
+        content: content.trim(),
+        category,
+        is_important: isImportant,
+        is_published: isPublished,
+      })
+      .select('id')
+      .single();
+
+    if (error) {
+      toast.error('등록에 실패했습니다.');
+      console.error(error);
+      return;
+    }
+
+    toast.success('공지사항이 등록되었습니다.');
+
+    // 공개 공지사항인 경우 전체 회원에게 알림 발송
+    if (isPublished && newNotice?.id) {
+      await sendNotificationToAllUsers(newNotice.id, title.trim());
+    }
+
+    setIsModalOpen(false);
+    fetchNotices();
   }
 
   async function handleDelete(id: string) {

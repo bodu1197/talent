@@ -27,11 +27,13 @@ import {
   ChevronRight,
   Home,
   Bell,
+  MessageSquare,
 } from 'lucide-react';
 
 const menuItems = [
   { name: '대시보드', path: '/admin/dashboard', icon: TrendingUp },
   { name: '공지사항 관리', path: '/admin/notices', icon: Bell },
+  { name: '문의 관리', path: '/admin/inquiries', icon: MessageSquare, badge: 'pendingInquiries' },
   { name: '사용자 관리', path: '/admin/users', icon: Users },
   {
     name: '서비스 관리',
@@ -77,6 +79,7 @@ export default function AdminSidebar() {
     pendingRevisions: 0,
     pendingWithdrawals: 0,
     pendingPayments: 0,
+    pendingInquiries: 0,
   });
 
   useEffect(() => {
@@ -116,11 +119,18 @@ export default function AdminSidebar() {
         .eq('payment_method', 'bank_transfer')
         .eq('status', 'pending');
 
+      // Count pending inquiries
+      const { count: inquiriesCount } = await supabase
+        .from('inquiries')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'pending');
+
       setBadgeCounts({
         pendingServices: servicesCount || 0,
         pendingRevisions: revisionsCount || 0,
         pendingWithdrawals: withdrawalsCount || 0,
         pendingPayments: paymentsCount || 0,
+        pendingInquiries: inquiriesCount || 0,
       });
     } catch (error) {
       logger.error('Failed to load pending counts:', error);
