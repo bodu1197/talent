@@ -205,7 +205,7 @@ export default function FavoritesPage() {
                           <Star className="w-3 h-3 text-yellow-400 fill-current" />
                           {(service.rating || 0).toFixed(1)}
                         </span>
-                        <span>({service.order_count || 0})</span>
+                        <span>({service.orders_count || 0})</span>
                       </div>
 
                       {/* 가격 */}

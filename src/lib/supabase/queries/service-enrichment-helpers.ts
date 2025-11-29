@@ -7,7 +7,6 @@ type Service = {
   is_advertised?: boolean;
   price_min?: number;
   price_max?: number;
-  order_count?: number;
   rating?: number;
   review_count?: number;
   seller?: {
@@ -83,7 +82,6 @@ export async function enrichServicesWithReviewStats(
   for (const service of services) {
     service.price_min = service.price || 0;
     service.price_max = service.price || undefined;
-    service.order_count = service.orders_count || 0;
 
     const stats = ratingMap.get(service.id);
     if (stats && stats.count > 0) {

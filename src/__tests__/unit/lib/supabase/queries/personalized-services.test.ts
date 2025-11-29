@@ -732,7 +732,7 @@ describe('Supabase Queries - Personalized Services', () => {
       expect(result).toBeDefined();
       expect(result[0].services[0].rating).toBe(4); // (5 + 4 + 3) / 3
       expect(result[0].services[0].review_count).toBe(3);
-      expect(result[0].services[0].order_count).toBe(10);
+      expect(result[0].services[0].orders_count).toBe(10);
     });
   });
 });

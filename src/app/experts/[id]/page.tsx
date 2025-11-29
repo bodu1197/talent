@@ -136,7 +136,6 @@ export default async function ExpertDetailPage({ params }: ExpertDetailProps) {
   const servicesWithStats =
     services?.map((service) => ({
       ...service,
-      order_count: service.orders_count || 0,
       rating: reviewStats[service.id]?.rating || 0,
       review_count: reviewStats[service.id]?.count || 0,
       seller: {

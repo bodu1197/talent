@@ -9,7 +9,7 @@ interface Service {
   price: number;
   thumbnail_url?: string;
   rating?: number;
-  order_count?: number;
+  orders_count?: number;
   seller?: {
     id: string;
     display_name?: string;

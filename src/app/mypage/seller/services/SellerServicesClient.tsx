@@ -32,7 +32,6 @@ type ServiceStatus = 'all' | 'active' | 'inactive' | 'pending';
 
 interface ServiceWithRejection extends Service {
   hasPendingRevision?: boolean;
-  order_count?: number;
   activeOrderCount?: number;
   _rejectedRevision?: {
     id: string;

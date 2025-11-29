@@ -114,7 +114,6 @@ function formatServicesWithRating(
     const rating = stats && stats.count > 0 ? stats.sum / stats.count : 0;
     return {
       ...service,
-      order_count: service.orders_count || 0,
       rating,
       review_count: stats?.count || 0,
     } as unknown as Service;

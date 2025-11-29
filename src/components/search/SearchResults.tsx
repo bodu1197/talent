@@ -23,7 +23,6 @@ interface ServiceSearchResult {
     profile_image: string | null;
     is_verified: boolean;
   } | null;
-  order_count: number;
   rating: number;
   review_count: number;
   is_promoted: boolean;

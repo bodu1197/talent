@@ -19,7 +19,6 @@ interface ServiceWithRating {
   thumbnail_url: string | null;
   orders_count: number;
   seller: SellerInfo | null;
-  order_count: number;
   rating: number;
   review_count: number;
   is_promoted: boolean;
@@ -221,7 +220,6 @@ async function formatServicesWithRating(
     return {
       ...service,
       seller: extractSeller(service.seller),
-      order_count: service.orders_count || 0,
       rating,
       review_count: stats?.count || 0,
       is_promoted: promotedServiceIds.has(service.id),

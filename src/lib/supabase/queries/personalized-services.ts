@@ -160,7 +160,6 @@ function applyRatingsToServices(
       ...service,
       rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
       review_count: stats?.count || 0,
-      order_count: service.orders_count || 0,
     } as unknown as Service;
   });
 }

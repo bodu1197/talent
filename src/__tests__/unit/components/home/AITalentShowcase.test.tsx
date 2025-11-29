@@ -4,8 +4,18 @@ import AITalentShowcase from '@/components/home/AITalentShowcase';
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    [key: string]: unknown;
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }));
 
@@ -25,7 +35,7 @@ describe('AITalentShowcase', () => {
       price: 50000,
       thumbnail_url: '/images/service1.jpg',
       rating: 4.8,
-      order_count: 100,
+      orders_count: 100,
       seller: {
         id: 'seller-1',
         display_name: '홍길동',

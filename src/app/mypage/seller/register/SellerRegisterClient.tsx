@@ -135,7 +135,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
         identityVerificationId,
         redirectUrl: `${window.location.origin}/verify-identity/callback`,
         windowType: {
-          pc: 'IFRAME',
+          pc: 'POPUP',
           mobile: 'REDIRECTION',
         },
       });

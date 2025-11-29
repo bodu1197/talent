@@ -1,29 +1,27 @@
-import { createClient as createBrowserClient } from "@/lib/supabase/client";
-import { createClient as createServerClient, createServiceRoleClient } from "@/lib/supabase/server";
-import { logger } from "@/lib/logger";
-import { cryptoShuffleArray, partitionArray } from "@/lib/utils/crypto-shuffle";
+import { createClient as createBrowserClient } from '@/lib/supabase/client';
+import { createClient as createServerClient, createServiceRoleClient } from '@/lib/supabase/server';
+import { logger } from '@/lib/logger';
+import { cryptoShuffleArray, partitionArray } from '@/lib/utils/crypto-shuffle';
 import {
   fetchAdvertisedServiceIds,
   markAdvertisedServices,
   enrichServicesWithReviewStats,
   enrichServicesWithUserInfo,
-} from "./service-enrichment-helpers";
+} from './service-enrichment-helpers';
 
 // 한 번의 쿼리로 모든 하위 카테고리 ID 가져오기 (최적화)
 async function getAllDescendantCategories(
-  supabase:
-    | ReturnType<typeof createBrowserClient>
-    | Awaited<ReturnType<typeof createServerClient>>,
+  supabase: ReturnType<typeof createBrowserClient> | Awaited<ReturnType<typeof createServerClient>>,
   parentId: string,
-  parentLevel: number,
+  parentLevel: number
 ): Promise<string[]> {
   // level에 따라 필요한 모든 카테고리를 한 번에 조회
   if (parentLevel === 1) {
     // 1차 카테고리: 2차와 3차 모두 가져오기
     const { data: level2 } = await supabase
-      .from("categories")
-      .select("id")
-      .eq("parent_id", parentId);
+      .from('categories')
+      .select('id')
+      .eq('parent_id', parentId);
 
     if (!level2 || level2.length === 0) return [];
 
@@ -31,18 +29,18 @@ async function getAllDescendantCategories(
 
     // 3차 카테고리도 한 번에 가져오기
     const { data: level3 } = await supabase
-      .from("categories")
-      .select("id")
-      .in("parent_id", level2Ids);
+      .from('categories')
+      .select('id')
+      .in('parent_id', level2Ids);
 
     const level3Ids = level3?.map((c: { id: string }) => c.id) || [];
     return [...level2Ids, ...level3Ids];
   } else if (parentLevel === 2) {
     // 2차 카테고리: 3차만 가져오기
     const { data: level3 } = await supabase
-      .from("categories")
-      .select("id")
-      .eq("parent_id", parentId);
+      .from('categories')
+      .select('id')
+      .eq('parent_id', parentId);
 
     return level3?.map((c: { id: string }) => c.id) || [];
   }
@@ -54,20 +52,20 @@ export async function getSellerServices(userId: string, status?: string) {
   const supabase = await createServerClient();
 
   let query = supabase
-    .from("services")
+    .from('services')
     .select(
       `
       *,
       service_categories(
         category:categories(id, name)
       )
-    `,
+    `
     )
-    .eq("seller_id", userId)
-    .order("created_at", { ascending: false });
+    .eq('seller_id', userId)
+    .order('created_at', { ascending: false });
 
-  if (status && status !== "all") {
-    query = query.eq("status", status);
+  if (status && status !== 'all') {
+    query = query.eq('status', status);
   }
 
   const { data, error } = await query;
@@ -80,7 +78,7 @@ export async function getServiceById(serviceId: string) {
   const supabase = await createServerClient();
 
   const { data, error } = await supabase
-    .from("services")
+    .from('services')
     .select(
       `
       *,
@@ -94,9 +92,9 @@ export async function getServiceById(serviceId: string) {
       service_categories(
         category:categories(id, name, slug)
       )
-    `,
+    `
     )
-    .eq("id", serviceId)
+    .eq('id', serviceId)
     .single();
 
   if (error) throw error;
@@ -112,10 +110,10 @@ export async function getSellerServicesCount(userId: string, status: string) {
   const supabase = await createServerClient();
 
   const { count, error } = await supabase
-    .from("services")
-    .select("*", { count: "exact", head: true })
-    .eq("seller_id", userId)
-    .eq("status", status);
+    .from('services')
+    .select('*', { count: 'exact', head: true })
+    .eq('seller_id', userId)
+    .eq('status', status);
 
   if (error) throw error;
   return count || 0;
@@ -127,15 +125,15 @@ export async function getServicesByCategory(
   categoryId: string,
   _limit: number = 100,
   useAuth: boolean = true,
-  page: number = 1,
+  page: number = 1
 ) {
   const supabase = useAuth ? await createServerClient() : createBrowserClient();
 
   // 1. Fetch category and determine hierarchy
   const { data: category } = await supabase
-    .from("categories")
-    .select("id, level")
-    .eq("id", categoryId)
+    .from('categories')
+    .select('id, level')
+    .eq('id', categoryId)
     .single();
 
   if (!category) return [];
@@ -143,32 +141,26 @@ export async function getServicesByCategory(
   // 2. Get all relevant category IDs (including descendants)
   let categoryIds = [categoryId];
   if (category.level === 1 || category.level === 2) {
-    const allDescendants = await getAllDescendantCategories(
-      supabase,
-      categoryId,
-      category.level,
-    );
+    const allDescendants = await getAllDescendantCategories(supabase, categoryId, category.level);
     categoryIds = [categoryId, ...allDescendants];
   }
 
   // 3. Fetch service IDs for categories
   const { data: serviceLinks } = await supabase
-    .from("service_categories")
-    .select("service_id")
-    .in("category_id", categoryIds);
+    .from('service_categories')
+    .select('service_id')
+    .in('category_id', categoryIds);
 
   const serviceIds = serviceLinks?.map((sl) => sl.service_id) || [];
   if (serviceIds.length === 0) return [];
 
   // 4. Fetch advertised service IDs
   const serviceRoleClient = createServiceRoleClient();
-  const advertisedServiceIds = await fetchAdvertisedServiceIds(
-    serviceRoleClient,
-  );
+  const advertisedServiceIds = await fetchAdvertisedServiceIds(serviceRoleClient);
 
   // 5. Fetch all services
   const { data: allServices, error } = await supabase
-    .from("services")
+    .from('services')
     .select(
       `
       *,
@@ -183,14 +175,14 @@ export async function getServicesByCategory(
       service_categories(
         category:categories(id, name, slug)
       )
-    `,
+    `
     )
-    .in("id", serviceIds)
-    .eq("status", "active")
-    .order("created_at", { ascending: false });
+    .in('id', serviceIds)
+    .eq('status', 'active')
+    .order('created_at', { ascending: false });
 
   if (error) {
-    logger.error("Error fetching services by category:", error);
+    logger.error('Error fetching services by category:', error);
     throw error;
   }
 
@@ -199,7 +191,7 @@ export async function getServicesByCategory(
   // 6. Mark advertised services
   markAdvertisedServices(allServices, advertisedServiceIds);
 
-  logger.info("getServicesByCategory - 광고 통계", {
+  logger.info('getServicesByCategory - 광고 통계', {
     advertisedIds: advertisedServiceIds,
     advertisedCount: allServices.filter((s) => s.is_advertised).length,
     totalCount: allServices.length,
@@ -211,9 +203,8 @@ export async function getServicesByCategory(
   });
 
   // 7. Partition and shuffle services
-  const [advertisedServices, regularServices] = partitionArray(
-    allServices,
-    (s) => advertisedServiceIds.includes(s.id),
+  const [advertisedServices, regularServices] = partitionArray(allServices, (s) =>
+    advertisedServiceIds.includes(s.id)
   );
 
   cryptoShuffleArray(advertisedServices);
@@ -238,12 +229,12 @@ export async function getServicesByCategory(
 export async function getSellerOtherServices(
   sellerId: string,
   currentServiceId: string,
-  limit: number = 5,
+  limit: number = 5
 ) {
   const supabase = await createServerClient();
 
   const { data, error } = await supabase
-    .from("services")
+    .from('services')
     .select(
       `
       *,
@@ -254,16 +245,16 @@ export async function getSellerOtherServices(
         profile_image,
         is_verified
       )
-    `,
+    `
     )
-    .eq("seller_id", sellerId)
-    .eq("status", "active")
-    .neq("id", currentServiceId)
-    .order("created_at", { ascending: false })
+    .eq('seller_id', sellerId)
+    .eq('status', 'active')
+    .neq('id', currentServiceId)
+    .order('created_at', { ascending: false })
     .limit(limit);
 
   if (error) {
-    logger.error("Error fetching seller other services:", error);
+    logger.error('Error fetching seller other services:', error);
     return [];
   }
 
@@ -271,10 +262,10 @@ export async function getSellerOtherServices(
   if (data && data.length > 0) {
     const serviceIds = data.map((s) => s.id);
     const { data: reviewStats } = await supabase
-      .from("reviews")
-      .select("service_id, rating")
-      .in("service_id", serviceIds)
-      .eq("is_visible", true);
+      .from('reviews')
+      .select('service_id, rating')
+      .in('service_id', serviceIds)
+      .eq('is_visible', true);
 
     const ratingMap = new Map<string, { sum: number; count: number }>();
     if (reviewStats) {
@@ -288,7 +279,6 @@ export async function getSellerOtherServices(
     }
 
     for (const service of data) {
-      service.order_count = service.orders_count || 0;
       const stats = ratingMap.get(service.id);
       if (stats && stats.count > 0) {
         service.rating = stats.sum / stats.count;
@@ -307,25 +297,24 @@ export async function getSellerOtherServices(
 export async function getRecommendedServicesByCategory(
   categoryId: string,
   currentServiceId: string,
-  limit: number = 5,
+  limit: number = 5
 ) {
   const supabase = await createServerClient();
 
   // 광고 서비스 ID 조회 - Service Role 클라이언트 사용하여 RLS 우회
   const serviceRoleClient = createServiceRoleClient();
   const { data: advertisingData } = await serviceRoleClient
-    .from("advertising_subscriptions")
-    .select("service_id")
-    .eq("status", "active");
+    .from('advertising_subscriptions')
+    .select('service_id')
+    .eq('status', 'active');
 
-  const advertisedServiceIds =
-    advertisingData?.map((ad) => ad.service_id) || [];
+  const advertisedServiceIds = advertisingData?.map((ad) => ad.service_id) || [];
 
   // 해당 카테고리의 서비스 ID 조회
   const { data: serviceLinks } = await supabase
-    .from("service_categories")
-    .select("service_id")
-    .eq("category_id", categoryId);
+    .from('service_categories')
+    .select('service_id')
+    .eq('category_id', categoryId);
 
   const serviceIds =
     serviceLinks?.map((sl) => sl.service_id).filter((id) => id !== currentServiceId) || [];
@@ -336,7 +325,7 @@ export async function getRecommendedServicesByCategory(
 
   // 서비스 조회
   const { data: allServices, error } = await supabase
-    .from("services")
+    .from('services')
     .select(
       `
       *,
@@ -347,14 +336,14 @@ export async function getRecommendedServicesByCategory(
         profile_image,
         is_verified
       )
-    `,
+    `
     )
-    .in("id", serviceIds)
-    .eq("status", "active")
-    .order("created_at", { ascending: false });
+    .in('id', serviceIds)
+    .eq('status', 'active')
+    .order('created_at', { ascending: false });
 
   if (error) {
-    logger.error("Error fetching recommended services:", error);
+    logger.error('Error fetching recommended services:', error);
     return [];
   }
 
@@ -363,19 +352,15 @@ export async function getRecommendedServicesByCategory(
   }
 
   // Partition and shuffle with cryptographic randomness
-  const [advertisedServices, regularServices] = partitionArray(
-    allServices,
-    (s) => advertisedServiceIds.includes(s.id),
+  const [advertisedServices, regularServices] = partitionArray(allServices, (s) =>
+    advertisedServiceIds.includes(s.id)
   );
 
   cryptoShuffleArray(advertisedServices);
   cryptoShuffleArray(regularServices);
 
   // Combine and limit
-  const combinedServices = [...advertisedServices, ...regularServices].slice(
-    0,
-    limit,
-  );
+  const combinedServices = [...advertisedServices, ...regularServices].slice(0, limit);
 
   // 평균 별점 및 리뷰 수 추가 (헬퍼 함수 사용)
   return enrichServicesWithReviewStats(supabase, combinedServices);
@@ -387,18 +372,18 @@ export async function getActiveServices(limit?: number) {
 
   // 1. AI 카테고리 ID 조회
   const { data: aiCategory } = await supabase
-    .from("categories")
-    .select("id")
-    .eq("slug", "ai-services")
+    .from('categories')
+    .select('id')
+    .eq('slug', 'ai-services')
     .maybeSingle();
 
   // 2. AI 카테고리 서비스 ID 조회
   let excludeServiceIds: string[] = [];
   if (aiCategory) {
     const { data: aiServiceLinks } = await supabase
-      .from("service_categories")
-      .select("service_id")
-      .eq("category_id", aiCategory.id);
+      .from('service_categories')
+      .select('service_id')
+      .eq('category_id', aiCategory.id);
 
     if (aiServiceLinks && aiServiceLinks.length > 0) {
       excludeServiceIds = aiServiceLinks.map((sc) => sc.service_id);
@@ -407,7 +392,7 @@ export async function getActiveServices(limit?: number) {
 
   // 3. AI 카테고리 제외한 서비스 조회
   let query = supabase
-    .from("services")
+    .from('services')
     .select(
       `
       *,
@@ -422,16 +407,16 @@ export async function getActiveServices(limit?: number) {
       service_categories(
         category:categories(id, name, slug)
       )
-    `,
+    `
     )
-    .eq("status", "active"); // 승인된 서비스만
+    .eq('status', 'active'); // 승인된 서비스만
 
   // AI 카테고리 서비스 제외
   if (excludeServiceIds.length > 0) {
-    query = query.not("id", "in", `(${excludeServiceIds.join(",")})`);
+    query = query.not('id', 'in', `(${excludeServiceIds.join(',')})`);
   }
 
-  query = query.order("created_at", { ascending: false });
+  query = query.order('created_at', { ascending: false });
 
   if (limit) {
     query = query.limit(limit);
@@ -440,7 +425,7 @@ export async function getActiveServices(limit?: number) {
   const { data, error } = await query;
 
   if (error) {
-    logger.error("Error fetching active services:", error);
+    logger.error('Error fetching active services:', error);
     throw error;
   }
 
@@ -450,7 +435,6 @@ export async function getActiveServices(limit?: number) {
     for (const service of data) {
       service.price_min = service.price || 0;
       service.price_max = service.price || undefined;
-      service.order_count = service.orders_count || 0;
     }
 
     // 평균 별점 및 리뷰 수 추가 (헬퍼 함수 사용)

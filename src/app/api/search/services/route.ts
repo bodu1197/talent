@@ -50,7 +50,6 @@ export async function GET(request: NextRequest) {
       for (const service of services) {
         service.price_min = service.price || 0;
         service.price_max = service.price || undefined;
-        service.order_count = service.orders_count || 0;
       }
     }
 

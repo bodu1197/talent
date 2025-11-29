@@ -112,7 +112,6 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
     const stats = ratingMap.get(service.id);
     return {
       ...service,
-      order_count: service.orders_count || 0,
       rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
       review_count: stats?.count || 0,
     } as unknown as Service;

@@ -161,22 +161,6 @@ export async function GET(_request: NextRequest) {
       );
     }
 
-    // orders_count를 order_count로 매핑
-    if (data && data.length > 0) {
-      interface ServiceWithOrdersCount {
-        orders_count?: number;
-        order_count?: number;
-        [key: string]: unknown;
-      }
-
-      for (const item of data) {
-        if (item.service) {
-          const service = item.service as unknown as ServiceWithOrdersCount;
-          service.order_count = service.orders_count || 0;
-        }
-      }
-    }
-
     logger.debug('Favorites fetched', { userId: user.id, count: data?.length || 0 });
     return NextResponse.json({ data }, { status: 200 });
   } catch (error) {

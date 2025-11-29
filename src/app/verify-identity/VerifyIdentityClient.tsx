@@ -41,7 +41,7 @@ export default function VerifyIdentityClient({ customerInfo, returnUrl }: Props)
         identityVerificationId,
         redirectUrl: `${window.location.origin}/verify-identity/callback`,
         windowType: {
-          pc: 'IFRAME',
+          pc: 'POPUP',
           mobile: 'REDIRECTION',
         },
         customer: {
