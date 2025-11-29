@@ -173,24 +173,24 @@ export default function SellerServicesClient({
       }
 
       // 2. 관련 데이터 삭제 (외래 키 제약 조건 순서대로)
-      // 서비스 수정 요청의 카테고리 삭제
-      const { data: revisions } = await supabase
-        .from('service_revisions')
-        .select('id')
-        .eq('service_id', serviceId);
-
-      if (revisions && revisions.length > 0) {
-        const revisionIds = revisions.map((r) => r.id);
-        await supabase.from('service_revision_categories').delete().in('revision_id', revisionIds);
-      }
-
-      // 관련 테이블 데이터 삭제
-      await supabase.from('service_revisions').delete().eq('service_id', serviceId);
+      // 실제 존재하는 테이블만 삭제 시도
       await supabase.from('service_categories').delete().eq('service_id', serviceId);
-      await supabase.from('service_images').delete().eq('service_id', serviceId);
-      await supabase.from('service_options').delete().eq('service_id', serviceId);
-      await supabase.from('service_faqs').delete().eq('service_id', serviceId);
+      await supabase.from('service_tags').delete().eq('service_id', serviceId);
+      await supabase.from('service_packages').delete().eq('service_id', serviceId);
       await supabase.from('favorites').delete().eq('service_id', serviceId);
+      await supabase.from('reviews').delete().eq('service_id', serviceId);
+      // search_logs의 converted_service_id는 NULL로 설정
+      await supabase
+        .from('search_logs')
+        .update({ converted_service_id: null })
+        .eq('converted_service_id', serviceId);
+      // reports의 reported_service_id는 NULL로 설정
+      await supabase
+        .from('reports')
+        .update({ reported_service_id: null })
+        .eq('reported_service_id', serviceId);
+      // premium_placements 삭제 (CASCADE이지만 명시적으로)
+      await supabase.from('premium_placements').delete().eq('service_id', serviceId);
 
       // 3. 서비스 삭제
       const { error: deleteError } = await supabase.from('services').delete().eq('id', serviceId);
