@@ -328,15 +328,15 @@ export default function SellerServicesClient({
                     </span>
                     <span className="flex items-center gap-0.5">
                       <Eye className="w-3 h-3" aria-hidden="true" />
-                      {service.view_count || 0}
+                      {service.views || 0}
                     </span>
                     <span className="flex items-center gap-0.5">
                       <Heart className="w-3 h-3" aria-hidden="true" />
-                      {service.favorite_count || 0}
+                      {service.wishlist_count || 0}
                     </span>
                     <span className="flex items-center gap-0.5">
                       <ShoppingCart className="w-3 h-3" aria-hidden="true" />
-                      {service.order_count || 0}
+                      {service.orders_count || 0}
                     </span>
                   </div>
 
@@ -445,15 +445,15 @@ export default function SellerServicesClient({
                         </span>
                         <span>
                           <Eye className="w-4 h-4 mr-1 inline" aria-hidden="true" />
-                          {service.view_count || 0}
+                          {service.views || 0}
                         </span>
                         <span>
                           <Heart className="w-4 h-4 mr-1 inline" aria-hidden="true" />
-                          {service.favorite_count || 0}
+                          {service.wishlist_count || 0}
                         </span>
                         <span>
                           <ShoppingCart className="w-4 h-4 mr-1 inline" aria-hidden="true" />
-                          {service.order_count || 0}
+                          {service.orders_count || 0}
                         </span>
                       </div>
 

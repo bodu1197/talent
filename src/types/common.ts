@@ -84,8 +84,9 @@ export interface Service {
   revision_count?: number;
   status: 'draft' | 'pending' | 'active' | 'inactive' | 'rejected' | 'suspended';
   rejection_reason: string | null;
-  view_count: number;
-  favorite_count: number;
+  views: number;
+  wishlist_count: number;
+  orders_count: number;
   deleted_at: string | null;
   created_at: string;
   updated_at: string;
