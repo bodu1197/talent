@@ -15,6 +15,8 @@ async function getIdentityVerification(identityVerificationId: string) {
       method: 'GET',
       headers: {
         Authorization: `PortOne ${apiSecret}`,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
     }
   );
