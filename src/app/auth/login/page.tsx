@@ -99,13 +99,6 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-[#E1E3E7]">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-          {/* 헤더 */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-semibold">
-              <span className="gradient-text">AI Talent Hub</span>
-            </h1>
-          </div>
-
           {/* SNS 간편 로그인 */}
           <div className="space-y-3 mb-6">
             <button
