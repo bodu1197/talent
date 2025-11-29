@@ -60,8 +60,14 @@ export default function AdminInquiriesPage() {
       .order('created_at', { ascending: false });
 
     if (error) {
-      toast.error('문의를 불러오는데 실패했습니다.');
-      console.error(error);
+      // 테이블이 없는 경우 404 오류 발생
+      if (error.code === 'PGRST116' || error.message?.includes('does not exist')) {
+        console.warn('inquiries 테이블이 아직 생성되지 않았습니다.');
+      } else {
+        toast.error('문의를 불러오는데 실패했습니다.');
+        console.error(error);
+      }
+      setInquiries([]);
     } else {
       setInquiries(data || []);
     }

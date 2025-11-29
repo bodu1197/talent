@@ -1,32 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { createClient as createServerClient } from '@/lib/supabase/server';
+import { checkAdminAuth } from '@/lib/admin/auth';
 import { logger } from '@/lib/logger';
-
-// 관리자 권한 확인
-async function checkAdminAuth() {
-  const supabase = await createServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return null;
-  }
-
-  // admins 테이블에서 관리자 확인
-  const { data: admin } = await supabase
-    .from('admins')
-    .select('role')
-    .eq('user_id', user.id)
-    .single();
-
-  if (!admin || admin.role !== 'super_admin') {
-    return null;
-  }
-
-  return user;
-}
 
 // 주문 관련 데이터 삭제
 async function deleteOrderRelatedData(supabase: SupabaseClient, orderIds: string[]) {
@@ -92,6 +67,7 @@ async function deleteSellerData(supabase: SupabaseClient, userId: string, seller
 // 사용자 기본 데이터 삭제
 async function deleteUserBasicData(supabase: SupabaseClient, userId: string) {
   await supabase.from('notifications').delete().eq('user_id', userId);
+  // inquiries 테이블이 존재하는 경우에만 삭제 시도 (에러 무시)
   await supabase.from('inquiries').delete().eq('user_id', userId);
   await supabase.from('reviews').delete().eq('buyer_id', userId);
   await supabase.from('chat_messages').delete().eq('sender_id', userId);
@@ -118,12 +94,17 @@ export async function DELETE(
   try {
     const { userId } = await params;
 
-    const admin = await checkAdminAuth();
-    if (!admin) {
-      return NextResponse.json({ error: '관리자 권한이 필요합니다.' }, { status: 403 });
+    // 기존 관리자 인증 함수 사용
+    const adminCheck = await checkAdminAuth();
+    if (!adminCheck.isAdmin) {
+      return NextResponse.json(
+        { error: adminCheck.error || '관리자 권한이 필요합니다.' },
+        { status: adminCheck.error === 'Unauthorized' ? 401 : 403 }
+      );
     }
 
-    if (admin.id === userId) {
+    // 자기 자신 삭제 방지
+    if (adminCheck.user?.id === userId) {
       return NextResponse.json({ error: '자기 자신은 삭제할 수 없습니다.' }, { status: 400 });
     }
 
@@ -169,7 +150,7 @@ export async function DELETE(
       );
     }
 
-    logger.warn('사용자 삭제 완료:', { userId, deletedBy: admin.id });
+    logger.warn('사용자 삭제 완료:', { userId, deletedBy: adminCheck.user?.id });
 
     return NextResponse.json({ success: true, message: '사용자가 삭제되었습니다.' });
   } catch (error) {

@@ -119,18 +119,24 @@ export default function AdminSidebar() {
         .eq('payment_method', 'bank_transfer')
         .eq('status', 'pending');
 
-      // Count pending inquiries
-      const { count: inquiriesCount } = await supabase
-        .from('inquiries')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'pending');
+      // Count pending inquiries (테이블이 없을 수 있으므로 별도 처리)
+      let inquiriesCount = 0;
+      try {
+        const { count } = await supabase
+          .from('inquiries')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'pending');
+        inquiriesCount = count || 0;
+      } catch {
+        // inquiries 테이블이 없는 경우 무시
+      }
 
       setBadgeCounts({
         pendingServices: servicesCount || 0,
         pendingRevisions: revisionsCount || 0,
         pendingWithdrawals: withdrawalsCount || 0,
         pendingPayments: paymentsCount || 0,
-        pendingInquiries: inquiriesCount || 0,
+        pendingInquiries: inquiriesCount,
       });
     } catch (error) {
       logger.error('Failed to load pending counts:', error);
