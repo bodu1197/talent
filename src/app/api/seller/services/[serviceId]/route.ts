@@ -15,7 +15,7 @@ async function deleteAdvertisingData(supabaseAdmin: SupabaseClient, serviceId: s
   }
 
   const subscriptionIds = subscriptions.map((s) => s.id);
-  logger.info('삭제할 subscription IDs:', subscriptionIds);
+  logger.info('삭제할 subscription IDs:', { subscriptionIds });
 
   // payment IDs 조회
   const { data: payments } = await supabaseAdmin
