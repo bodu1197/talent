@@ -16,7 +16,7 @@ interface Review {
 }
 
 interface ViewLog {
-  created_at: string;
+  viewed_at: string;
 }
 
 // Helper: 완료된 주문의 매출 계산
@@ -58,7 +58,7 @@ function calculateDailyViews(viewLogs: ViewLog[] | null): { date: string; views:
 
   if (viewLogs) {
     for (const log of viewLogs) {
-      const date = new Date(log.created_at);
+      const date = new Date(log.viewed_at);
       const dateStr = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
       dailyViewsMap.set(dateStr, (dailyViewsMap.get(dateStr) || 0) + 1);
     }
@@ -145,20 +145,25 @@ export default async function ServiceStatisticsPage({
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
   // 병렬 데이터 조회
-  const [{ data: orders }, { data: reviews }, { data: viewLogs }] = await Promise.all([
-    supabase
-      .from('orders')
-      .select('total_amount, created_at, status')
-      .eq('service_id', serviceId)
-      .gte('created_at', thirtyDaysAgo.toISOString()),
-    supabase.from('reviews').select('rating').eq('service_id', serviceId),
-    supabase
-      .from('service_view_logs')
-      .select('created_at')
-      .eq('service_id', serviceId)
-      .gte('created_at', sevenDaysAgo.toISOString())
-      .order('created_at', { ascending: true }),
-  ]);
+  const [{ data: orders }, { data: reviews }, { data: viewLogs }, { count: totalViewCount }] =
+    await Promise.all([
+      supabase
+        .from('orders')
+        .select('total_amount, created_at, status')
+        .eq('service_id', serviceId)
+        .gte('created_at', thirtyDaysAgo.toISOString()),
+      supabase.from('reviews').select('rating').eq('service_id', serviceId),
+      supabase
+        .from('service_views')
+        .select('viewed_at')
+        .eq('service_id', serviceId)
+        .gte('viewed_at', sevenDaysAgo.toISOString())
+        .order('viewed_at', { ascending: true }),
+      supabase
+        .from('service_views')
+        .select('*', { count: 'exact', head: true })
+        .eq('service_id', serviceId),
+    ]);
 
   // 헬퍼 함수로 통계 계산
   const revenue = calculateRevenue(orders);
@@ -168,7 +173,7 @@ export default async function ServiceStatisticsPage({
   const stats = {
     serviceName: service.title,
     period: '최근 30일',
-    viewCount: service.views || 0,
+    viewCount: totalViewCount || 0,
     favoriteCount: favoriteCount || 0,
     orderCount: service.orders_count || 0,
     revenue,
