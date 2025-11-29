@@ -16,7 +16,13 @@ interface Props {
   onPurchase: (pkg: ServicePackage) => void;
   disabled?: boolean;
   children?: React.ReactNode;
+  isBusiness?: boolean; // 사업자 여부 (VAT 계산용)
 }
+
+// VAT 포함 가격 계산 함수
+const calculateDisplayPrice = (price: number, isBusiness: boolean): number => {
+  return isBusiness ? Math.floor(price * 1.1) : price;
+};
 
 export default function PackageSelector({
   packages,
@@ -26,6 +32,7 @@ export default function PackageSelector({
   onPurchase,
   disabled = false,
   children,
+  isBusiness = false,
 }: Props) {
   // 활성화된 패키지만 필터링하고 정렬
   const activePackages = PACKAGE_TYPE_ORDER.map((type) =>
@@ -78,9 +85,14 @@ export default function PackageSelector({
           {/* 가격 */}
           <div className="mb-4">
             <span className="text-base font-semibold text-gray-900">
-              {formatPrice(selectedPackage.price)}
+              {formatPrice(calculateDisplayPrice(selectedPackage.price, isBusiness))}
             </span>
             <span className="text-gray-600 ml-1">원</span>
+            {isBusiness && (
+              <div className="text-xs text-gray-500 mt-1">
+                (공급가액 {formatPrice(selectedPackage.price)}원 + VAT 10%)
+              </div>
+            )}
           </div>
 
           {/* 기본 정보 */}

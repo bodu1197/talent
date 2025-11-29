@@ -33,9 +33,10 @@ interface Props {
     name: string;
     profile_image?: string | null;
   } | null;
+  readonly isBusiness: boolean;
 }
 
-export default function NewServiceClientV2({ sellerId, profileData }: Props) {
+export default function NewServiceClientV2({ sellerId, profileData, isBusiness }: Props) {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -427,7 +428,9 @@ export default function NewServiceClientV2({ sellerId, profileData }: Props) {
                 </div>
               </div>
             )}
-            {currentStep === 2 && <Step2Pricing formData={formData} setFormData={setFormData} />}
+            {currentStep === 2 && (
+              <Step2Pricing formData={formData} setFormData={setFormData} isBusiness={isBusiness} />
+            )}
             {currentStep === 3 && (
               <Step5Requirements formData={formData} setFormData={setFormData} />
             )}

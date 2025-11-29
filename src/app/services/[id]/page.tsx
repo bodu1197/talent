@@ -615,6 +615,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             service.service_packages?.filter((p: { is_active: boolean }) => p.is_active) || []
           }
           initialIsFavorite={isFavorited}
+          isBusiness={service.seller?.is_business ?? false}
         />
       )}
 
@@ -922,6 +923,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       ) || []
                     }
                     currentUserId={user?.id}
+                    isBusiness={service.seller?.is_business ?? false}
                   >
                     {/* 문의하기/찜/공유 버튼 - 구매버튼과 동일한 간격(gap-3) */}
                     {(!user || service.seller.user_id !== user.id) && (

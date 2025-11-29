@@ -26,7 +26,13 @@ interface Props {
   hasPackages: boolean;
   packages: ServicePackage[];
   initialIsFavorite?: boolean;
+  isBusiness?: boolean; // 사업자 여부 (VAT 계산용)
 }
+
+// VAT 포함 가격 계산 함수
+const calculateDisplayPrice = (price: number, isBusiness: boolean): number => {
+  return isBusiness ? Math.floor(price * 1.1) : price;
+};
 
 export default function MobilePackageSelector({
   serviceId,
@@ -40,6 +46,7 @@ export default function MobilePackageSelector({
   hasPackages,
   packages,
   initialIsFavorite = false,
+  isBusiness = false,
 }: Props) {
   const router = useRouter();
   const { user } = useAuth();
@@ -195,9 +202,14 @@ export default function MobilePackageSelector({
           {selectedPackage && (
             <div className="px-4 py-4 bg-gray-50 border-t border-gray-100">
               {/* 가격 */}
-              <div className="text-xl font-bold text-brand-primary mb-2">
-                {selectedPackage.price.toLocaleString()}원
+              <div className="text-xl font-bold text-brand-primary mb-1">
+                {calculateDisplayPrice(selectedPackage.price, isBusiness).toLocaleString()}원
               </div>
+              {isBusiness && (
+                <div className="text-xs text-gray-500 mb-2">
+                  (공급가액 {selectedPackage.price.toLocaleString()}원 + VAT 10%)
+                </div>
+              )}
 
               {/* 패키지명 */}
               {selectedPackage.name && (
@@ -241,8 +253,13 @@ export default function MobilePackageSelector({
       {!hasPackages && (
         <div className="lg:hidden bg-white px-4 py-3 border-b border-gray-100">
           <div className="text-lg font-semibold text-brand-primary">
-            {servicePrice.toLocaleString()}원
+            {calculateDisplayPrice(servicePrice, isBusiness).toLocaleString()}원
           </div>
+          {isBusiness && (
+            <div className="text-xs text-gray-500">
+              (공급가액 {servicePrice.toLocaleString()}원 + VAT 10%)
+            </div>
+          )}
         </div>
       )}
 

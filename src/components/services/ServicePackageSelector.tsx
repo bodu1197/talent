@@ -23,7 +23,14 @@ interface Props {
   currentUserId?: string;
   // 추가 버튼 (문의/찜/공유)
   children?: React.ReactNode;
+  // 사업자 여부 (VAT 계산용)
+  isBusiness?: boolean;
 }
+
+// VAT 포함 가격 계산 함수
+const calculateDisplayPrice = (price: number, isBusiness: boolean): number => {
+  return isBusiness ? Math.floor(price * 1.1) : price;
+};
 
 export default function ServicePackageSelector({
   serviceId,
@@ -38,6 +45,7 @@ export default function ServicePackageSelector({
   packages,
   currentUserId,
   children,
+  isBusiness = false,
 }: Props) {
   const router = useRouter();
 
@@ -80,6 +88,7 @@ export default function ServicePackageSelector({
         serviceTitle={serviceTitle}
         onPurchase={handlePackagePurchase}
         disabled={currentUserId === sellerUserId}
+        isBusiness={isBusiness}
       >
         {children}
       </PackageSelector>
@@ -90,7 +99,14 @@ export default function ServicePackageSelector({
   return (
     <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
       <div className="p-5">
-        <div className="text-xl font-semibold mb-1">{servicePrice.toLocaleString()}원</div>
+        <div className="text-xl font-semibold mb-1">
+          {calculateDisplayPrice(servicePrice, isBusiness).toLocaleString()}원
+        </div>
+        {isBusiness && (
+          <div className="text-xs text-gray-500 mb-1">
+            (공급가액 {servicePrice.toLocaleString()}원 + VAT 10%)
+          </div>
+        )}
         <div className="text-sm text-gray-600 mb-5">
           {deliveryDays}일 이내 완료 · {revisionCount === -1 ? '무제한' : `${revisionCount}회`} 수정
         </div>

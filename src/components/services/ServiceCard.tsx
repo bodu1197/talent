@@ -18,8 +18,14 @@ interface ServiceCardData {
   seller?: {
     display_name?: string;
     is_verified?: boolean;
+    is_business?: boolean; // 사업자 여부 (VAT 계산용)
   } | null;
 }
+
+// VAT 포함 가격 계산 함수
+const calculateDisplayPrice = (price: number, isBusiness: boolean): number => {
+  return isBusiness ? Math.floor(price * 1.1) : price;
+};
 
 interface ServiceCardProps {
   readonly service: ServiceCardData;
@@ -166,7 +172,11 @@ export default function ServiceCard({
         {/* 가격 */}
         <p className="text-brand-primary font-semibold text-sm">
           <span className="sr-only">가격</span>
-          {(service.price || 0).toLocaleString()}원
+          {calculateDisplayPrice(
+            service.price || 0,
+            service.seller?.is_business ?? false
+          ).toLocaleString()}
+          원
         </p>
       </div>
     </Link>

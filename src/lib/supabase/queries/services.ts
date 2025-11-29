@@ -87,7 +87,8 @@ export async function getServiceById(serviceId: string) {
         business_name,
         display_name,
         profile_image,
-        user_id
+        user_id,
+        is_business
       ),
       service_categories(
         category:categories(id, name, slug)
@@ -170,7 +171,8 @@ export async function getServicesByCategory(
         display_name,
         profile_image,
         user_id,
-        is_verified
+        is_verified,
+        is_business
       ),
       service_categories(
         category:categories(id, name, slug)
@@ -243,7 +245,8 @@ export async function getSellerOtherServices(
         business_name,
         display_name,
         profile_image,
-        is_verified
+        is_verified,
+        is_business
       )
     `
     )
@@ -334,7 +337,8 @@ export async function getRecommendedServicesByCategory(
         business_name,
         display_name,
         profile_image,
-        is_verified
+        is_verified,
+        is_business
       )
     `
     )
@@ -402,7 +406,8 @@ export async function getActiveServices(limit?: number) {
         display_name,
         profile_image,
         user_id,
-        is_verified
+        is_verified,
+        is_business
       ),
       service_categories(
         category:categories(id, name, slug)

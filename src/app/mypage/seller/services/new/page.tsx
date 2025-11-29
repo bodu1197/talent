@@ -15,7 +15,7 @@ export default async function NewServicePage() {
   // Get seller info
   const { data: seller } = await supabase
     .from('sellers')
-    .select('id')
+    .select('id, is_business')
     .eq('user_id', user.id)
     .maybeSingle();
 
@@ -30,5 +30,11 @@ export default async function NewServicePage() {
     .eq('user_id', user.id)
     .maybeSingle();
 
-  return <NewServiceClientV2 sellerId={seller.id} profileData={profile} />;
+  return (
+    <NewServiceClientV2
+      sellerId={seller.id}
+      profileData={profile}
+      isBusiness={seller.is_business ?? false}
+    />
+  );
 }
