@@ -51,6 +51,19 @@ export default async function PaymentPage({ params }: PaymentPageProps) {
     redirect('/chat');
   }
 
+  // 본인인증 확인
+  const { data: userData } = await supabase
+    .from('users')
+    .select('is_verified')
+    .eq('id', user.id)
+    .single();
+
+  if (!userData?.is_verified) {
+    // 본인인증 페이지로 리다이렉트 (returnUrl 포함)
+    const returnUrl = `/payment/${paymentRequestId}`;
+    redirect(`/verify-identity?returnUrl=${encodeURIComponent(returnUrl)}`);
+  }
+
   // 수락된 상태인지 확인
   if (paymentRequest.status !== 'accepted') {
     redirect(`/chat/${paymentRequest.room_id}`);

@@ -35,6 +35,19 @@ export default async function DirectPaymentPage({ params }: DirectPaymentPagePro
     redirect('/');
   }
 
+  // 본인인증 확인
+  const { data: userData } = await supabase
+    .from('users')
+    .select('is_verified')
+    .eq('id', user.id)
+    .single();
+
+  if (!userData?.is_verified) {
+    // 본인인증 페이지로 리다이렉트 (returnUrl 포함)
+    const returnUrl = `/payment/direct/${orderId}`;
+    redirect(`/verify-identity?returnUrl=${encodeURIComponent(returnUrl)}`);
+  }
+
   // 이미 결제된 주문인지 확인
   if (order.status !== 'pending_payment') {
     redirect(`/mypage/buyer/orders/${order.id}`);
