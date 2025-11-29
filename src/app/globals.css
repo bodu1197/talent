@@ -329,3 +329,124 @@ input[type="password"] {
   -moz-appearance: none;
   appearance: none;
 }
+
+/* ========================================
+   Form Input Styles
+   ======================================== */
+
+/* Base input style */
+.input {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: rgb(17 24 39); /* gray-900 */
+  background-color: rgb(249 250 251); /* gray-50 */
+  border: 1px solid rgb(209 213 219); /* gray-300 */
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.input::placeholder {
+  color: rgb(156 163 175); /* gray-400 */
+}
+
+.input:focus {
+  outline: none;
+  border-color: rgb(59 130 246); /* blue-500 */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  background-color: white;
+}
+
+.input:disabled {
+  background-color: rgb(243 244 246); /* gray-100 */
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Textarea style */
+textarea.input {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Select style */
+select.input {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+/* Checkbox and Radio styles */
+input[type="checkbox"],
+input[type="radio"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: rgb(37 99 235); /* blue-600 */
+  cursor: pointer;
+}
+
+/* ========================================
+   Button Styles
+   ======================================== */
+
+/* AI 브랜드 버튼 */
+.btn-ai {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #1e5799 0%, #2989d8 50%, #207cca 100%);
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-ai:hover {
+  background: linear-gradient(135deg, #164577 0%, #1e6cb0 50%, #1a64a4 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(30, 87, 153, 0.3);
+}
+
+.btn-ai:active {
+  transform: translateY(0);
+}
+
+.btn-ai:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Gradient text for branding */
+.gradient-text {
+  background: linear-gradient(135deg, #1e5799 0%, #2989d8 50%, #207cca 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Spinner animation */
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
