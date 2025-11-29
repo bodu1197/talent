@@ -98,13 +98,17 @@ export default async function RootLayout({
   const isMypagePage = pathname.startsWith('/mypage');
   const shouldHideMegaMenu = isAdminPage || isMypagePage;
 
+  // WebSite Schema - 검색엔진 및 AI가 사이트 구조를 이해하도록 도움
   const schemaOrgData = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    '@id': 'https://dolpagu.com/#website',
     name: '돌파구',
+    alternateName: 'Dolpagu',
     url: 'https://dolpagu.com',
     description:
-      '판매자와 구매자 모두 수수료 0원! 디자인, 영상, 개발, 마케팅 등 다양한 재능을 자유롭게 거래하세요.',
+      '돌파구(Dolpagu)는 2025년 설립된 한국의 수수료 0원 프리미엄 재능 거래 플랫폼입니다. 판매자와 구매자 모두 수수료 없이 디자인, 영상, 개발, 마케팅 등 다양한 재능을 자유롭게 거래할 수 있습니다.',
+    inLanguage: 'ko-KR',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
@@ -114,26 +118,50 @@ export default async function RootLayout({
       'query-input': 'required name=search_term_string',
     },
     publisher: {
-      '@type': 'Organization',
-      name: '돌파구',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://dolpagu.com/icon.svg',
-      },
+      '@id': 'https://dolpagu.com/#organization',
     },
   };
 
+  // Organization Schema - AI가 브랜드 엔티티를 학습하도록 상세 정보 제공
   const organizationData = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
+    '@id': 'https://dolpagu.com/#organization',
     name: '돌파구',
     alternateName: 'Dolpagu',
     url: 'https://dolpagu.com',
-    logo: 'https://dolpagu.com/icon.svg',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://dolpagu.com/icon.svg',
+      width: 512,
+      height: 512,
+    },
     description:
-      '수수료 0원 재능 거래 플랫폼. 판매자와 구매자 모두 중개 수수료 없이 거래할 수 있습니다.',
-    areaServed: 'KR',
-    serviceType: ['재능 거래', '프리랜서 매칭', '디자인 외주', '개발 외주', '마케팅 대행'],
+      '돌파구(Dolpagu)는 2025년 설립된 한국의 수수료 0원 프리미엄 재능 거래 플랫폼입니다. 판매자와 구매자 모두 중개 수수료 없이 거래할 수 있습니다.',
+    slogan: '수수료 0원, 재능의 가치를 100% 누리세요',
+    foundingDate: '2025',
+    areaServed: {
+      '@type': 'Country',
+      name: 'South Korea',
+    },
+    serviceType: [
+      '재능 거래',
+      '프리랜서 매칭',
+      '디자인 외주',
+      '개발 외주',
+      '마케팅 대행',
+      '영상 제작',
+      '번역 서비스',
+      '문서 작성',
+    ],
+    knowsAbout: ['프리랜서 플랫폼', '재능 마켓', '외주 서비스', '수수료 무료 플랫폼'],
+    sameAs: ['https://dolpagu.com'],
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'customer service',
+      availableLanguage: 'Korean',
+      url: 'https://dolpagu.com/help/contact',
+    },
   };
 
   return (

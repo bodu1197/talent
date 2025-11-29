@@ -1,11 +1,97 @@
-# 돌파구 - 수수료 0원 재능 거래 플랫폼
+# 돌파구 (Dolpagu) - 수수료 0원 재능 거래 플랫폼
 # https://dolpagu.com/
 
+# 모든 검색 엔진 허용
 User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /mypage/
 Disallow: /api/
+Disallow: /auth/callback
+Disallow: /payment/
 
-# Sitemap 위치
+# ========================================
+# AI 크롤러 허용 (GEO/AIO 최적화)
+# ========================================
+
+# OpenAI ChatGPT
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/
+Disallow: /mypage/
+Disallow: /api/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin/
+Disallow: /mypage/
+Disallow: /api/
+
+# Google AI (Gemini, Bard)
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /mypage/
+Disallow: /api/
+
+# Anthropic Claude
+User-agent: anthropic-ai
+Allow: /
+Disallow: /admin/
+Disallow: /mypage/
+Disallow: /api/
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /admin/
+Disallow: /mypage/
+Disallow: /api/
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin/
+Disallow: /mypage/
+Disallow: /api/
+
+# Cohere AI
+User-agent: cohere-ai
+Allow: /
+Disallow: /admin/
+Disallow: /mypage/
+Disallow: /api/
+
+# Meta AI
+User-agent: FacebookBot
+Allow: /
+Disallow: /admin/
+Disallow: /mypage/
+Disallow: /api/
+
+User-agent: meta-externalagent
+Allow: /
+Disallow: /admin/
+Disallow: /mypage/
+Disallow: /api/
+
+# Microsoft Bing AI (Copilot)
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /mypage/
+Disallow: /api/
+
+# Apple AI
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /mypage/
+Disallow: /api/
+
+# ========================================
+# Sitemap 및 LLMs.txt 위치
+# ========================================
 Sitemap: https://dolpagu.com/sitemap.xml
+
+# AI 전용 사이트 안내서
+# LLMs.txt: https://dolpagu.com/llms.txt

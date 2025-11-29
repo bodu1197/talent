@@ -3,9 +3,17 @@
   <!-- 홈페이지 -->
   <url>
     <loc>https://dolpagu.com/</loc>
-    <lastmod>2025-11-16</lastmod>
+    <lastmod>2025-11-29</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+  </url>
+
+  <!-- AI용 사이트 안내서 (GEO/AIO 최적화) -->
+  <url>
+    <loc>https://dolpagu.com/llms.txt</loc>
+    <lastmod>2025-11-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 
   <!-- 주요 페이지 -->
