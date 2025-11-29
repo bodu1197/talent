@@ -354,11 +354,12 @@ export async function getAdminUsers(filters?: {
 }): Promise<AdminUserProfile[]> {
   const supabase = createClient();
 
-  let query = supabase.from('profiles').select('*').order('created_at', { ascending: false });
+  // 먼저 sellers 테이블에서 판매자 user_id 목록 조회
+  const { data: sellers } = await supabase.from('sellers').select('user_id');
+  const sellerUserIds = new Set(sellers?.map((s) => s.user_id) || []);
 
-  if (filters?.role && filters.role !== 'all') {
-    query = query.eq('role', filters.role);
-  }
+  // 역할 필터링: seller인 경우 sellers 테이블 기준으로 필터링
+  let query = supabase.from('profiles').select('*').order('created_at', { ascending: false });
 
   if (filters?.searchQuery) {
     query = query.or(`name.ilike.%${filters.searchQuery}%`);
@@ -381,42 +382,91 @@ export async function getAdminUsers(filters?: {
   // users 테이블에서 email 조회
   const { data: users } = await supabase.from('users').select('id, email').in('id', userIds);
 
+  // admins 테이블에서 관리자 목록 조회
+  const { data: admins } = await supabase.from('admins').select('user_id');
+  const adminUserIds = new Set(admins?.map((a) => a.user_id) || []);
+
   // email 맵 생성
   const emailMap = new Map(users?.map((u) => [u.id, u.email]) || []);
 
+  // 역할 결정 함수: admins > sellers > buyer 순으로 확인
+  const determineRole = (userId: string): string => {
+    if (adminUserIds.has(userId)) return 'admin';
+    if (sellerUserIds.has(userId)) return 'seller';
+    return 'buyer';
+  };
+
   // profiles 데이터를 users 형식으로 변환
-  return (
-    profiles?.map(
-      (profile: {
-        user_id: string;
-        role?: string;
-        created_at: string;
-        name?: string;
-        profile_image?: string | null;
-      }): AdminUserProfile => ({
-        id: profile.user_id,
-        email: emailMap.get(profile.user_id) || '이메일 없음',
-        role: profile.role || 'buyer',
-        created_at: profile.created_at,
-        status: 'active',
-        name: profile.name || 'Unknown',
-        profile_image: profile.profile_image || null,
-      })
-    ) || []
+  let result = profiles.map(
+    (profile: {
+      user_id: string;
+      role?: string;
+      created_at: string;
+      name?: string;
+      profile_image?: string | null;
+    }): AdminUserProfile => ({
+      id: profile.user_id,
+      email: emailMap.get(profile.user_id) || '이메일 없음',
+      role: determineRole(profile.user_id),
+      created_at: profile.created_at,
+      status: 'active',
+      name: profile.name || 'Unknown',
+      profile_image: profile.profile_image || null,
+    })
   );
+
+  // 역할 필터 적용
+  if (filters?.role && filters.role !== 'all') {
+    result = result.filter((user) => user.role === filters.role);
+  }
+
+  return result;
 }
 
 // 사용자 역할별 카운트
 export async function getAdminUsersCount(role?: string) {
   const supabase = createClient();
 
-  let query = supabase.from('profiles').select('*', { count: 'exact', head: true });
-
-  if (role) {
-    query = query.eq('role', role);
+  // 역할별로 다르게 카운트
+  if (role === 'seller') {
+    // sellers 테이블 기준으로 카운트
+    const { count, error } = await supabase
+      .from('sellers')
+      .select('*', { count: 'exact', head: true });
+    if (error) {
+      logger.error('getAdminUsersCount seller error:', error);
+      return 0;
+    }
+    return count || 0;
   }
 
-  const { count, error } = await query;
+  if (role === 'admin') {
+    // admins 테이블 기준으로 카운트
+    const { count, error } = await supabase
+      .from('admins')
+      .select('*', { count: 'exact', head: true });
+    if (error) {
+      logger.error('getAdminUsersCount admin error:', error);
+      return 0;
+    }
+    return count || 0;
+  }
+
+  if (role === 'buyer') {
+    // 전체 프로필 - (판매자 + 관리자) = 구매자
+    const [{ count: totalCount }, { count: sellerCount }, { count: adminCount }] =
+      await Promise.all([
+        supabase.from('profiles').select('*', { count: 'exact', head: true }),
+        supabase.from('sellers').select('*', { count: 'exact', head: true }),
+        supabase.from('admins').select('*', { count: 'exact', head: true }),
+      ]);
+    return (totalCount || 0) - (sellerCount || 0) - (adminCount || 0);
+  }
+
+  // 전체 카운트
+  const { count, error } = await supabase
+    .from('profiles')
+    .select('*', { count: 'exact', head: true });
 
   if (error) {
     logger.error('getAdminUsersCount error:', error);
