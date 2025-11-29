@@ -173,12 +173,35 @@ export default function SellerServicesClient({
       }
 
       // 2. 관련 데이터 삭제 (외래 키 제약 조건 순서대로)
-      // 실제 존재하는 테이블만 삭제 시도
+
+      // 광고 관련 데이터 먼저 삭제 (advertising_subscriptions → tax_invoices 순서 중요)
+      const { data: subscriptions } = await supabase
+        .from('advertising_subscriptions')
+        .select('id')
+        .eq('service_id', serviceId);
+
+      if (subscriptions && subscriptions.length > 0) {
+        const subscriptionIds = subscriptions.map((s) => s.id);
+        // tax_invoices 먼저 삭제
+        await supabase.from('tax_invoices').delete().in('subscription_id', subscriptionIds);
+        // advertising_payments 삭제
+        await supabase.from('advertising_payments').delete().in('subscription_id', subscriptionIds);
+        // advertising_impressions 삭제
+        await supabase
+          .from('advertising_impressions')
+          .delete()
+          .in('subscription_id', subscriptionIds);
+      }
+      // advertising_subscriptions 삭제
+      await supabase.from('advertising_subscriptions').delete().eq('service_id', serviceId);
+
+      // 나머지 관련 데이터 삭제
       await supabase.from('service_categories').delete().eq('service_id', serviceId);
       await supabase.from('service_tags').delete().eq('service_id', serviceId);
       await supabase.from('service_packages').delete().eq('service_id', serviceId);
       await supabase.from('favorites').delete().eq('service_id', serviceId);
       await supabase.from('reviews').delete().eq('service_id', serviceId);
+      await supabase.from('premium_placements').delete().eq('service_id', serviceId);
       // search_logs의 converted_service_id는 NULL로 설정
       await supabase
         .from('search_logs')
@@ -189,8 +212,6 @@ export default function SellerServicesClient({
         .from('reports')
         .update({ reported_service_id: null })
         .eq('reported_service_id', serviceId);
-      // premium_placements 삭제 (CASCADE이지만 명시적으로)
-      await supabase.from('premium_placements').delete().eq('service_id', serviceId);
 
       // 3. 서비스 삭제
       const { error: deleteError } = await supabase.from('services').delete().eq('id', serviceId);
