@@ -295,10 +295,9 @@ export default function RegisterPage() {
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
           {/* 헤더 */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-semibold mb-2">
+            <h1 className="text-3xl font-semibold">
               <span className="gradient-text">AI Talent Hub</span>
             </h1>
-            <p className="text-gray-600">AI 재능 거래 플랫폼에 오신 것을 환영합니다</p>
           </div>
 
           {/* SNS 간편 회원가입 */}

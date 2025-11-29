@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
-import { logger } from "@/lib/logger";
-import { getSecureRedirectUrl, RATE_LIMIT_CONFIG } from "@/lib/auth/config";
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
+import { logger } from '@/lib/logger';
+import { getSecureRedirectUrl, RATE_LIMIT_CONFIG } from '@/lib/auth/config';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [loginAttempts, setLoginAttempts] = useState(0);
@@ -24,9 +24,7 @@ export default function LoginPage() {
     // Rate Limiting 체크
     if (lockoutUntil && Date.now() < lockoutUntil) {
       const remainingSeconds = Math.ceil((lockoutUntil - Date.now()) / 1000);
-      setError(
-        `너무 많은 로그인 시도가 있었습니다. ${remainingSeconds}초 후 다시 시도해주세요.`,
-      );
+      setError(`너무 많은 로그인 시도가 있었습니다. ${remainingSeconds}초 후 다시 시도해주세요.`);
       return;
     }
 
@@ -52,9 +50,9 @@ export default function LoginPage() {
       router.refresh();
 
       // 메인 페이지로 이동
-      router.push("/");
+      router.push('/');
     } catch (error: unknown) {
-      logger.error("로그인 실패:", error);
+      logger.error('로그인 실패:', error);
 
       const newAttempts = loginAttempts + 1;
       setLoginAttempts(newAttempts);
@@ -62,14 +60,9 @@ export default function LoginPage() {
       // Rate Limiting 적용
       if (newAttempts >= RATE_LIMIT_CONFIG.LOGIN.MAX_ATTEMPTS) {
         setLockoutUntil(Date.now() + RATE_LIMIT_CONFIG.LOGIN.LOCKOUT_DURATION);
-        setError(
-          `너무 많은 로그인 시도가 있었습니다. 5분 후 다시 시도해주세요.`,
-        );
+        setError(`너무 많은 로그인 시도가 있었습니다. 5분 후 다시 시도해주세요.`);
       } else {
-        const message =
-          error instanceof Error
-            ? error.message
-            : "로그인 중 오류가 발생했습니다.";
+        const message = error instanceof Error ? error.message : '로그인 중 오류가 발생했습니다.';
         setError(message);
       }
 
@@ -78,16 +71,13 @@ export default function LoginPage() {
   };
 
   // SNS 로그인 핸들러
-  const handleSocialLogin = async (provider: "kakao" | "google" | "apple") => {
+  const handleSocialLogin = async (provider: 'kakao' | 'google' | 'apple') => {
     try {
       setIsLoading(true);
       setError(null);
 
       // OAuth 리다이렉트 URL 검증 (CRITICAL 보안)
-      const redirectUrl = getSecureRedirectUrl(
-        globalThis.location.origin,
-        "/auth/callback",
-      );
+      const redirectUrl = getSecureRedirectUrl(globalThis.location.origin, '/auth/callback');
 
       const { error } = await supabase.auth.signInWithOAuth({
         provider: provider,
@@ -98,11 +88,8 @@ export default function LoginPage() {
 
       if (error) throw error;
     } catch (error: unknown) {
-      logger.error("SNS 로그인 실패:", error);
-      const message =
-        error instanceof Error
-          ? error.message
-          : "SNS 로그인 중 오류가 발생했습니다.";
+      logger.error('SNS 로그인 실패:', error);
+      const message = error instanceof Error ? error.message : 'SNS 로그인 중 오류가 발생했습니다.';
       setError(message);
       setIsLoading(false);
     }
@@ -114,17 +101,16 @@ export default function LoginPage() {
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
           {/* 헤더 */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-semibold mb-2">
+            <h1 className="text-3xl font-semibold">
               <span className="gradient-text">AI Talent Hub</span>
             </h1>
-            <p className="text-gray-600">AI 재능 거래의 시작</p>
           </div>
 
           {/* SNS 간편 로그인 */}
           <div className="space-y-3 mb-6">
             <button
               type="button"
-              onClick={() => handleSocialLogin("kakao")}
+              onClick={() => handleSocialLogin('kakao')}
               disabled={isLoading}
               className="w-full flex items-center justify-center gap-3 bg-[#FEE500] hover:bg-[#F5DC00] text-[#000000] font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50"
             >
@@ -136,7 +122,7 @@ export default function LoginPage() {
 
             <button
               type="button"
-              onClick={() => handleSocialLogin("google")}
+              onClick={() => handleSocialLogin('google')}
               disabled={isLoading}
               className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 px-4 rounded-lg border border-gray-300 transition-colors disabled:opacity-50"
             >
@@ -180,25 +166,16 @@ export default function LoginPage() {
               <div className="w-full border-t border-gray-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">
-                또는 이메일로 로그인
-              </span>
+              <span className="px-4 bg-white text-gray-500">또는 이메일로 로그인</span>
             </div>
           </div>
 
           {/* 로그인 폼 */}
           <form onSubmit={handleSubmit} className="space-y-6">
-            {error && (
-              <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">
-                {error}
-              </div>
-            )}
+            {error && <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">{error}</div>}
 
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                 이메일
               </label>
               <input
@@ -215,10 +192,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                 비밀번호
               </label>
               <input
@@ -259,11 +233,10 @@ export default function LoginPage() {
             >
               {isLoading ? (
                 <span className="flex items-center justify-center">
-                  <span className="spinner mr-2" />
-                  {' '}로그인 중...
+                  <span className="spinner mr-2" /> 로그인 중...
                 </span>
               ) : (
-                "로그인"
+                '로그인'
               )}
             </button>
           </form>
