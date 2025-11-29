@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
-import { createClient } from "@/lib/supabase/client";
-import { logger } from "@/lib/logger";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { logger } from '@/lib/logger';
 import {
   TrendingUp,
   Users,
@@ -26,45 +26,47 @@ import {
   ChevronLeft,
   ChevronRight,
   Home,
-} from "lucide-react";
+  Bell,
+} from 'lucide-react';
 
 const menuItems = [
-  { name: "대시보드", path: "/admin/dashboard", icon: TrendingUp },
-  { name: "사용자 관리", path: "/admin/users", icon: Users },
+  { name: '대시보드', path: '/admin/dashboard', icon: TrendingUp },
+  { name: '공지사항 관리', path: '/admin/notices', icon: Bell },
+  { name: '사용자 관리', path: '/admin/users', icon: Users },
   {
-    name: "서비스 관리",
-    path: "/admin/services",
+    name: '서비스 관리',
+    path: '/admin/services',
     icon: Briefcase,
-    badge: "pendingServices",
+    badge: 'pendingServices',
   },
   {
-    name: "수정 요청 관리",
-    path: "/admin/service-revisions",
+    name: '수정 요청 관리',
+    path: '/admin/service-revisions',
     icon: Edit,
-    badge: "pendingRevisions",
+    badge: 'pendingRevisions',
   },
-  { name: "주문 관리", path: "/admin/orders", icon: ShoppingCart },
-  { name: "정산 관리", path: "/admin/settlements", icon: Banknote },
+  { name: '주문 관리', path: '/admin/orders', icon: ShoppingCart },
+  { name: '정산 관리', path: '/admin/settlements', icon: Banknote },
   {
-    name: "출금 관리",
-    path: "/admin/withdrawals",
+    name: '출금 관리',
+    path: '/admin/withdrawals',
     icon: Wallet,
-    badge: "pendingWithdrawals",
+    badge: 'pendingWithdrawals',
   },
   {
-    name: "광고 관리",
-    path: "/admin/advertising",
+    name: '광고 관리',
+    path: '/admin/advertising',
     icon: Megaphone,
-    badge: "pendingPayments",
+    badge: 'pendingPayments',
   },
-  { name: "세금계산서", path: "/admin/tax-invoices", icon: FileText },
-  { name: "리뷰 관리", path: "/admin/reviews", icon: Star },
-  { name: "신고 관리", path: "/admin/reports", icon: Flag },
-  { name: "분쟁 관리", path: "/admin/disputes", icon: Gavel },
-  { name: "카테고리 관리", path: "/admin/categories", icon: Folder },
-  { name: "통계 분석", path: "/admin/statistics", icon: PieChart },
-  { name: "활동 로그", path: "/admin/logs", icon: History },
-  { name: "시스템 설정", path: "/admin/settings", icon: Settings },
+  { name: '세금계산서', path: '/admin/tax-invoices', icon: FileText },
+  { name: '리뷰 관리', path: '/admin/reviews', icon: Star },
+  { name: '신고 관리', path: '/admin/reports', icon: Flag },
+  { name: '분쟁 관리', path: '/admin/disputes', icon: Gavel },
+  { name: '카테고리 관리', path: '/admin/categories', icon: Folder },
+  { name: '통계 분석', path: '/admin/statistics', icon: PieChart },
+  { name: '활동 로그', path: '/admin/logs', icon: History },
+  { name: '시스템 설정', path: '/admin/settings', icon: Settings },
 ];
 
 export default function AdminSidebar() {
@@ -91,28 +93,28 @@ export default function AdminSidebar() {
 
       // Count pending services
       const { count: servicesCount } = await supabase
-        .from("services")
-        .select("*", { count: "exact", head: true })
-        .eq("status", "pending");
+        .from('services')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'pending');
 
       // Count pending revisions
       const { count: revisionsCount } = await supabase
-        .from("service_revisions")
-        .select("*", { count: "exact", head: true })
-        .eq("status", "pending");
+        .from('service_revisions')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'pending');
 
       // Count pending withdrawals
       const { count: withdrawalsCount } = await supabase
-        .from("withdrawal_requests")
-        .select("*", { count: "exact", head: true })
-        .eq("status", "pending");
+        .from('withdrawal_requests')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'pending');
 
       // Count pending advertising payments (bank_transfer)
       const { count: paymentsCount } = await supabase
-        .from("advertising_payments")
-        .select("*", { count: "exact", head: true })
-        .eq("payment_method", "bank_transfer")
-        .eq("status", "pending");
+        .from('advertising_payments')
+        .select('*', { count: 'exact', head: true })
+        .eq('payment_method', 'bank_transfer')
+        .eq('status', 'pending');
 
       setBadgeCounts({
         pendingServices: servicesCount || 0,
@@ -121,13 +123,13 @@ export default function AdminSidebar() {
         pendingPayments: paymentsCount || 0,
       });
     } catch (error) {
-      logger.error("Failed to load pending counts:", error);
+      logger.error('Failed to load pending counts:', error);
     }
   }
 
   return (
     <aside
-      className={`flex-shrink-0 h-full bg-brand-primary text-white transition-all duration-300 flex flex-col ${collapsed ? "w-20" : "w-64"}`}
+      className={`flex-shrink-0 h-full bg-brand-primary text-white transition-all duration-300 flex flex-col ${collapsed ? 'w-20' : 'w-64'}`}
     >
       {/* Logo */}
       <div className="h-16 flex items-center justify-between px-4 border-b border-white/10">
@@ -148,11 +150,8 @@ export default function AdminSidebar() {
       {/* Menu Items */}
       <nav className="flex-1 overflow-y-auto py-4 min-h-0">
         {menuItems.map((item) => {
-          const isActive =
-            pathname === item.path || pathname.startsWith(item.path + "/");
-          const badgeCount = item.badge
-            ? badgeCounts[item.badge as keyof typeof badgeCounts]
-            : 0;
+          const isActive = pathname === item.path || pathname.startsWith(item.path + '/');
+          const badgeCount = item.badge ? badgeCounts[item.badge as keyof typeof badgeCounts] : 0;
           const Icon = item.icon;
 
           return (
@@ -160,17 +159,17 @@ export default function AdminSidebar() {
               key={item.path}
               href={item.path}
               className={`relative flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors ${
-                isActive ? "bg-white/20 border-r-4 border-white" : ""
+                isActive ? 'bg-white/20 border-r-4 border-white' : ''
               }`}
               title={collapsed ? item.name : undefined}
             >
-              <Icon className={collapsed ? "text-lg" : "w-5"} />
+              <Icon className={collapsed ? 'text-lg' : 'w-5'} />
               {!collapsed && (
                 <>
                   <span className="flex-1">{item.name}</span>
                   {badgeCount > 0 && (
                     <span className="px-2 py-0.5 bg-red-500 text-white text-xs font-semibold rounded-full min-w-[20px] text-center">
-                      {badgeCount > 99 ? "99+" : badgeCount}
+                      {badgeCount > 99 ? '99+' : badgeCount}
                     </span>
                   )}
                 </>
