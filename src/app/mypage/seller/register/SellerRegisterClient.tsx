@@ -125,7 +125,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
       const randomPart = crypto.randomUUID().slice(0, 8);
       const identityVerificationId = `seller_${timestamp}_${randomPart}`;
 
-      // PortOne 본인인증 요청 (다날 휴대폰 본인인증)
+      // PortOne 본인인증 요청 (KCP 휴대폰 본인인증)
       const response = await PortOne.requestIdentityVerification({
         storeId: 'store-8855d73e-d61a-469b-a5ed-60e21cc45122',
         channelKey: 'channel-key-112bb8b1-8dcc-4045-9686-66b83f0f0026',
@@ -383,8 +383,8 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                     <div>
                       <p className="text-xs lg:text-sm font-medium text-blue-900">본인인증 안내</p>
                       <p className="text-xs lg:text-sm text-blue-700 mt-1">
-                        NICE 평가정보를 통한 휴대폰 본인인증이 필요합니다. 인증 완료 시 실명과
-                        휴대폰 번호가 자동으로 입력됩니다.
+                        휴대폰 본인인증이 필요합니다. 인증 완료 시 실명과 휴대폰 번호가 자동으로
+                        입력됩니다.
                       </p>
                     </div>
                   </div>
@@ -396,7 +396,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                     type="button"
                     onClick={handleNiceVerification}
                     disabled={isVerified}
-                    aria-label="NICE 휴대폰 본인인증"
+                    aria-label="휴대폰 본인인증"
                     className={`w-full px-4 py-2.5 text-sm lg:px-6 lg:py-3 lg:text-base rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
                       isVerified
                         ? 'bg-green-100 text-green-800 cursor-not-allowed'
@@ -408,11 +408,11 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                     ) : (
                       <ShieldCheck className="w-5 h-5" />
                     )}
-                    {isVerified ? '본인인증 완료' : 'NICE 휴대폰 본인인증'}
+                    {isVerified ? '본인인증 완료' : '휴대폰 본인인증'}
                   </button>
                   {!isVerified && (
                     <p className="text-xs lg:text-sm text-gray-500 mt-2">
-                      클릭하여 NICE 평가정보 본인인증을 진행해주세요
+                      클릭하여 휴대폰 본인인증을 진행해주세요
                     </p>
                   )}
                 </div>
