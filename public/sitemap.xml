@@ -16,6 +16,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- 인사이트 리포트 (고유 데이터/통계) -->
+  <url>
+    <loc>https://dolpagu.com/insights</loc>
+    <lastmod>2025-11-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- 주요 페이지 -->
   <url>
     <loc>https://dolpagu.com/about</loc>
