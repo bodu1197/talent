@@ -134,6 +134,10 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
         channelKey: 'channel-key-112bb8b1-8dcc-4045-9686-66b83f0f0026',
         identityVerificationId,
         redirectUrl: `${window.location.origin}/verify-identity/callback`,
+        windowType: {
+          pc: 'IFRAME',
+          mobile: 'REDIRECTION',
+        },
       });
 
       if (response?.code) {

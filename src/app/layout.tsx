@@ -1,8 +1,16 @@
 import type { Metadata, Viewport } from 'next';
 import { Suspense } from 'react';
-import { Noto_Sans_KR } from 'next/font/google';
+import localFont from 'next/font/local';
 import './globals.css';
 import { AuthProvider } from '@/components/providers/AuthProvider';
+
+// Pretendard Variable 폰트 (로컬)
+const pretendard = localFont({
+  src: '../../public/fonts/PretendardVariable.woff2',
+  display: 'swap',
+  weight: '100 900',
+  variable: '--font-pretendard',
+});
 import { ChatUnreadProvider } from '@/components/providers/ChatUnreadProvider';
 import { ErrorBoundary } from '@/components/providers/ErrorBoundary';
 import { QueryProvider } from '@/components/providers/QueryProvider';
@@ -11,18 +19,6 @@ import { headers } from 'next/headers';
 import ConditionalLayout from '@/components/layout/ConditionalLayout';
 import ConditionalMegaMenuWrapper from '@/components/layout/ConditionalMegaMenuWrapper';
 import { PageViewTracker } from '@/components/analytics/PageViewTracker';
-
-// Optimized font loading with next/font
-// 실제 사용되는 weight만 로드하여 preload 경고 방지
-const notoSansKR = Noto_Sans_KR({
-  subsets: ['latin'],
-  weight: ['400', '500', '600'],
-  display: 'optional', // CLS 방지: 폰트 로딩 시 레이아웃 변경 없음
-  preload: true,
-  fallback: ['system-ui', 'arial'],
-  adjustFontFallback: true,
-  variable: '--font-noto-sans-kr',
-});
 
 export async function generateMetadata(): Promise<Metadata> {
   const headersList = await headers();
@@ -141,7 +137,7 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang="ko" suppressHydrationWarning className={notoSansKR.variable}>
+    <html lang="ko" suppressHydrationWarning className={pretendard.variable}>
       <head>
         {/* Set window.__nonce__ for third-party libraries like goober */}
         <script

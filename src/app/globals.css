@@ -50,9 +50,9 @@
   }
 }
 
-/* Global Base Styles - Using next/font variable */
+/* Global Base Styles - Pretendard font (로컬) */
 html, body {
-  font-family: var(--font-noto-sans-kr), -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  font-family: var(--font-pretendard), 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
 }
 
 /* 모바일 수평 오버플로우 방지 */
