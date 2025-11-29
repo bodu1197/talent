@@ -31,9 +31,9 @@ export default function VerifyIdentityClient({ customerInfo, returnUrl }: Props)
       const randomPart = crypto.randomUUID().slice(0, 8);
       const identityVerificationId = `identity_${timestamp}_${randomPart}`;
 
-      // PortOne 본인인증 요청
+      // PortOne 본인인증 요청 (본인인증용 테스트 storeId: MIIiasTest)
       const response = await PortOne.requestIdentityVerification({
-        storeId: process.env.NEXT_PUBLIC_PORTONE_STORE_ID!,
+        storeId: 'MIIiasTest',
         channelKey: process.env.NEXT_PUBLIC_PORTONE_IDENTITY_CHANNEL_KEY!,
         identityVerificationId,
         customer: {
