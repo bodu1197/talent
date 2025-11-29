@@ -1,13 +1,14 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import Link from 'next/link';
 import { ArrowLeft, ShieldCheck, CheckCircle, Info, X, Camera, Check, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import * as PortOne from '@portone/browser-sdk/v2';
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -57,16 +58,6 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
     initialProfile?.profile_image || null
   );
   const [isVerified, setIsVerified] = useState(false);
-  const popupCheckIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Cleanup popup check interval on unmount
-  useEffect(() => {
-    return () => {
-      if (popupCheckIntervalRef.current) {
-        clearInterval(popupCheckIntervalRef.current);
-      }
-    };
-  }, []);
 
   const [formData, setFormData] = useState<SellerFormData>({
     realName: '',
@@ -126,63 +117,58 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
     }
   };
 
-  // NICE 본인인증 처리
-  const handleNiceVerification = () => {
-    // NICE 본인인증 팝업 열기
-    const width = 500;
-    const height = 600;
-    const left = (globalThis.screen.width - width) / 2;
-    const top = (globalThis.screen.height - height) / 2;
+  // PortOne 본인인증 처리
+  const handleNiceVerification = async () => {
+    try {
+      // 고유한 인증 ID 생성
+      const timestamp = Date.now();
+      const randomPart = crypto.randomUUID().slice(0, 8);
+      const identityVerificationId = `seller_${timestamp}_${randomPart}`;
 
-    // 실제 환경에서는 /api/nice/request 엔드포인트로 인증 요청
-    // 여기서는 시뮬레이션
-    const popup = globalThis.open(
-      '/api/nice/verify',
-      'niceVerification',
-      `width=${width},height=${height},left=${left},top=${top},scrollbars=yes`
-    );
+      // PortOne 본인인증 요청
+      const response = await PortOne.requestIdentityVerification({
+        storeId: process.env.NEXT_PUBLIC_PORTONE_STORE_ID!,
+        channelKey: process.env.NEXT_PUBLIC_PORTONE_IDENTITY_CHANNEL_KEY!,
+        identityVerificationId,
+      });
 
-    // 팝업에서 메시지 받기 (본인인증 완료 시)
-    const handleMessage = (event: MessageEvent) => {
-      // 보안을 위해 origin 체크 필요
-      if (event.origin !== globalThis.location.origin) return;
-
-      if (event.data.type === 'NICE_VERIFICATION_SUCCESS') {
-        const { name, phone } = event.data.data;
-
-        setFormData({
-          ...formData,
-          realName: name,
-          phone: phone,
-        });
-        setIsVerified(true);
-
-        toast.success('본인인증이 완료되었습니다.');
-        globalThis.removeEventListener('message', handleMessage);
-      } else if (event.data.type === 'NICE_VERIFICATION_FAILED') {
-        toast.error('본인인증에 실패했습니다. 다시 시도해주세요.');
-        globalThis.removeEventListener('message', handleMessage);
-      }
-    };
-
-    globalThis.addEventListener('message', handleMessage);
-
-    // 팝업이 닫혔는지 체크
-    // Clear existing interval if any
-    if (popupCheckIntervalRef.current) {
-      clearInterval(popupCheckIntervalRef.current);
-      popupCheckIntervalRef.current = null;
-    }
-
-    popupCheckIntervalRef.current = setInterval(() => {
-      if (popup?.closed) {
-        if (popupCheckIntervalRef.current) {
-          clearInterval(popupCheckIntervalRef.current);
-          popupCheckIntervalRef.current = null;
+      if (response?.code) {
+        // 사용자가 취소한 경우
+        if (response.code === 'FAILURE_TYPE_PG' && response.message?.includes('취소')) {
+          toast('본인인증이 취소되었습니다');
+          return;
         }
-        globalThis.removeEventListener('message', handleMessage);
+        throw new Error(response.message || '본인인증 중 오류가 발생했습니다');
       }
-    }, 500);
+
+      // 본인인증 성공 - 서버에서 검증
+      const verifyResponse = await fetch('/api/auth/verify-identity', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ identityVerificationId }),
+      });
+
+      const result = await verifyResponse.json();
+
+      if (!verifyResponse.ok) {
+        throw new Error(result.error || '본인인증 검증 실패');
+      }
+
+      // 인증 성공 - 폼 데이터 업데이트
+      setFormData({
+        ...formData,
+        realName: result.name || '',
+        phone: result.phone || '',
+      });
+      setIsVerified(true);
+
+      toast.success(`본인인증이 완료되었습니다. ${result.name}님`);
+    } catch (error) {
+      console.error('Identity verification error:', error);
+      toast.error(error instanceof Error ? error.message : '본인인증 중 오류가 발생했습니다');
+    }
   };
 
   const handleSubmit = async () => {

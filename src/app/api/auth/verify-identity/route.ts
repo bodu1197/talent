@@ -116,6 +116,7 @@ export async function POST(request: NextRequest) {
       success: true,
       verified: true,
       name: verifiedCustomer.name,
+      phone: verifiedCustomer.phoneNumber || null,
     });
   } catch (error) {
     logger.error('Identity verification error:', error);
