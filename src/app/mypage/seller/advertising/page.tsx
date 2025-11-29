@@ -281,11 +281,20 @@ export default function AdvertisingPage() {
     <MypageLayoutWrapper mode="seller">
       <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
         {/* 헤더 섹션 */}
-        <div className="mb-4 lg:mb-6">
-          <h1 className="text-base lg:text-lg font-semibold text-gray-900">광고 관리</h1>
-          <p className="text-gray-600 mt-1 text-sm">
-            더 많은 고객에게 서비스를 노출하고 매출을 증대시키세요
-          </p>
+        <div className="mb-4 lg:mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <h1 className="text-base lg:text-lg font-semibold text-gray-900">광고 관리</h1>
+            <p className="text-gray-600 mt-1 text-sm">
+              더 많은 고객에게 서비스를 노출하고 매출을 증대시키세요
+            </p>
+          </div>
+          <a
+            href="/mypage/seller/advertising/purchase"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-brand-primary text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium shadow-sm"
+          >
+            <Plus className="w-4 h-4" />
+            광고 신청하기
+          </a>
         </div>
 
         {/* 탭 네비게이션 - 서비스가 여러 개일 때만 표시 */}
@@ -481,27 +490,15 @@ export default function AdvertisingPage() {
                         {service.title}
                       </h3>
                       <div className="mt-1">
-                        {(() => {
-                          if (!service.hasActiveAd) {
-                            return (
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                                미진행
-                              </span>
-                            );
-                          }
-                          if (service.adDetails?.status === 'pending_payment') {
-                            return (
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                결제 대기중
-                              </span>
-                            );
-                          }
-                          return (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                              광고 진행중
-                            </span>
-                          );
-                        })()}
+                        {service.hasActiveAd ? (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            광고 진행중
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                            미진행
+                          </span>
+                        )}
                         {service.adDetails?.isFreePromotion &&
                           service.adDetails?.promotionEndDate && (
                             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 ml-1">
@@ -537,44 +534,24 @@ export default function AdvertisingPage() {
                   )}
 
                   <div>
-                    {(() => {
-                      if (!service.hasActiveAd) {
-                        return (
-                          <button
-                            onClick={() => {
-                              globalThis.location.href = '/mypage/seller/advertising/purchase';
-                            }}
-                            className="w-full px-3 py-2 bg-brand-primary text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
-                          >
-                            광고 신청
-                          </button>
-                        );
-                      }
-                      if (service.adDetails?.status === 'pending_payment') {
-                        return (
-                          <button
-                            onClick={() => {
-                              setSelectedService(service.id);
-                              setIsModalOpen(true);
-                            }}
-                            className="w-full px-3 py-2 bg-yellow-600 text-white text-sm rounded-lg hover:bg-yellow-700 transition-colors"
-                          >
-                            입금 확인
-                          </button>
-                        );
-                      }
-                      return (
-                        <button
-                          onClick={() => {
-                            setSelectedService(service.id);
-                            setIsModalOpen(true);
-                          }}
-                          className="w-full px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
-                        >
-                          상세보기
-                        </button>
-                      );
-                    })()}
+                    {service.hasActiveAd ? (
+                      <button
+                        onClick={() => {
+                          setSelectedService(service.id);
+                          setIsModalOpen(true);
+                        }}
+                        className="w-full px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                      >
+                        상세보기
+                      </button>
+                    ) : (
+                      <a
+                        href="/mypage/seller/advertising/purchase"
+                        className="block w-full px-3 py-2 bg-brand-primary text-white text-sm rounded-lg hover:bg-blue-700 transition-colors text-center"
+                      >
+                        광고 신청
+                      </a>
+                    )}
                   </div>
                 </div>
               ))}
@@ -618,38 +595,25 @@ export default function AdvertisingPage() {
                       </td>
                       <td className="py-3 px-4 text-center">
                         <div className="flex flex-col items-center gap-1">
-                          {(() => {
-                            if (!service.hasActiveAd) {
-                              return (
-                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                                  미진행
-                                </span>
-                              );
-                            }
-                            if (service.adDetails?.status === 'pending_payment') {
-                              return (
-                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                  <span className="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span>
-                                  결제 대기중
-                                </span>
-                              );
-                            }
-                            return (
-                              <>
-                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                  <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-                                  광고 진행중
-                                </span>
-                                {service.adDetails?.isFreePromotion &&
-                                  service.adDetails?.promotionEndDate && (
-                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-1">
-                                      <Gift className="w-3 h-3 mr-1" />
-                                      무료 프로모션
-                                    </span>
-                                  )}
-                              </>
-                            );
-                          })()}
+                          {service.hasActiveAd ? (
+                            <>
+                              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                                광고 진행중
+                              </span>
+                              {service.adDetails?.isFreePromotion &&
+                                service.adDetails?.promotionEndDate && (
+                                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-1">
+                                    <Gift className="w-3 h-3 mr-1" />
+                                    무료 프로모션
+                                  </span>
+                                )}
+                            </>
+                          ) : (
+                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                              미진행
+                            </span>
+                          )}
                         </div>
                       </td>
                       <td className="py-3 px-4 text-center font-semibold text-blue-600">
@@ -662,44 +626,24 @@ export default function AdvertisingPage() {
                         {service.adDetails ? `${service.adDetails.ctr.toFixed(2)}%` : '-'}
                       </td>
                       <td className="py-3 px-4 text-center">
-                        {(() => {
-                          if (!service.hasActiveAd) {
-                            return (
-                              <button
-                                onClick={() => {
-                                  globalThis.location.href = '/mypage/seller/advertising/purchase';
-                                }}
-                                className="px-4 py-2 bg-brand-primary text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
-                              >
-                                광고 신청
-                              </button>
-                            );
-                          }
-                          if (service.adDetails?.status === 'pending_payment') {
-                            return (
-                              <button
-                                onClick={() => {
-                                  setSelectedService(service.id);
-                                  setIsModalOpen(true);
-                                }}
-                                className="px-4 py-2 bg-yellow-600 text-white text-sm rounded-lg hover:bg-yellow-700 transition-colors"
-                              >
-                                입금 확인
-                              </button>
-                            );
-                          }
-                          return (
-                            <button
-                              onClick={() => {
-                                setSelectedService(service.id);
-                                setIsModalOpen(true);
-                              }}
-                              className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
-                            >
-                              상세보기
-                            </button>
-                          );
-                        })()}
+                        {service.hasActiveAd ? (
+                          <button
+                            onClick={() => {
+                              setSelectedService(service.id);
+                              setIsModalOpen(true);
+                            }}
+                            className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                          >
+                            상세보기
+                          </button>
+                        ) : (
+                          <a
+                            href="/mypage/seller/advertising/purchase"
+                            className="inline-block px-4 py-2 bg-brand-primary text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                          >
+                            광고 신청
+                          </a>
+                        )}
                       </td>
                     </tr>
                   ))}
