@@ -37,14 +37,16 @@ export default function MobileServiceBottomBar({
       if (isFavorite) {
         // 찜 해제
         await supabase
-          .from('favorites')
+          .from('service_favorites')
           .delete()
           .eq('user_id', user.id)
           .eq('service_id', serviceId);
         setIsFavorite(false);
       } else {
         // 찜 추가
-        await supabase.from('favorites').insert({ user_id: user.id, service_id: serviceId });
+        await supabase
+          .from('service_favorites')
+          .insert({ user_id: user.id, service_id: serviceId });
         setIsFavorite(true);
       }
     } catch (error) {

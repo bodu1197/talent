@@ -185,7 +185,7 @@ export async function getBuyerRecentFavorites(userId: string, limit: number = 5)
     const supabase = await createClient();
 
     const { data, error } = await supabase
-      .from('favorites')
+      .from('service_favorites')
       .select(
         `
         id,

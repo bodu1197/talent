@@ -70,13 +70,15 @@ export default function MobilePackageSelector({
 
       if (isFavorite) {
         await supabase
-          .from('favorites')
+          .from('service_favorites')
           .delete()
           .eq('user_id', user.id)
           .eq('service_id', serviceId);
         setIsFavorite(false);
       } else {
-        await supabase.from('favorites').insert({ user_id: user.id, service_id: serviceId });
+        await supabase
+          .from('service_favorites')
+          .insert({ user_id: user.id, service_id: serviceId });
         setIsFavorite(true);
       }
     } catch (error) {

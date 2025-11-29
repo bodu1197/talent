@@ -71,7 +71,7 @@ async function deleteRelatedData(supabaseAdmin: SupabaseClient, serviceId: strin
   await supabaseAdmin.from('service_categories').delete().eq('service_id', serviceId);
   await supabaseAdmin.from('service_tags').delete().eq('service_id', serviceId);
   await supabaseAdmin.from('service_packages').delete().eq('service_id', serviceId);
-  await supabaseAdmin.from('favorites').delete().eq('service_id', serviceId);
+  await supabaseAdmin.from('service_favorites').delete().eq('service_id', serviceId);
   await supabaseAdmin.from('reviews').delete().eq('service_id', serviceId);
   await supabaseAdmin.from('premium_placements').delete().eq('service_id', serviceId);
 

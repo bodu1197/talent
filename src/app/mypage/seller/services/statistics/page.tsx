@@ -130,9 +130,9 @@ export default async function ServiceStatisticsPage({
     redirect('/mypage/seller/services');
   }
 
-  // 찜 수 조회 (favorites 테이블에서 계산)
+  // 찜 수 조회 (service_favorites 테이블에서 계산)
   const { count: favoriteCount } = await supabase
-    .from('favorites')
+    .from('service_favorites')
     .select('*', { count: 'exact', head: true })
     .eq('service_id', serviceId);
 

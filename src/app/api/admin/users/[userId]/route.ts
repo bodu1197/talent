@@ -28,7 +28,7 @@ async function deleteServiceRelatedData(supabase: SupabaseClient, serviceIds: st
   }
 
   await supabase.from('service_revisions').delete().in('service_id', serviceIds);
-  await supabase.from('favorites').delete().in('service_id', serviceIds);
+  await supabase.from('service_favorites').delete().in('service_id', serviceIds);
 }
 
 // 판매자 관련 데이터 삭제
@@ -134,7 +134,7 @@ export async function DELETE(
     }
 
     // 나머지 데이터 삭제
-    await supabaseAdmin.from('favorites').delete().eq('user_id', userId);
+    await supabaseAdmin.from('service_favorites').delete().eq('user_id', userId);
     await supabaseAdmin.from('reports').delete().eq('reporter_id', userId);
     await supabaseAdmin.from('admins').delete().eq('user_id', userId);
     await supabaseAdmin.from('profiles').delete().eq('user_id', userId);
