@@ -132,7 +132,9 @@ async function handleVerified(
 
   if (error) {
     // 테이블이 없을 수 있음 - 무시
-    logger.warn('Failed to log identity verification (table may not exist):', error.message);
+    logger.warn('Failed to log identity verification (table may not exist):', {
+      error: error.message,
+    });
   }
 }
 
