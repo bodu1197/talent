@@ -129,94 +129,28 @@ export default function SellerServicesClient({
   async function handleDeleteService(serviceId: string, serviceTitle: string) {
     if (
       !confirm(
-        `"${serviceTitle}" 서비스를 삭제하시겠습니까?\n\n⚠️ 이 작업은 되돌릴 수 없습니다.\n- 진행 중인 주문이 있는 경우 삭제할 수 없습니다.\n- 관련된 찜, 리뷰, 통계 데이터가 함께 삭제됩니다.`
+        `"${serviceTitle}" 서비스를 삭제하시겠습니까?\n\n⚠️ 이 작업은 되돌릴 수 없습니다.\n- 진행 중인 주문이 있는 경우 삭제할 수 없습니다.\n- 관련된 찜, 리뷰, 광고, 통계 데이터가 함께 삭제됩니다.`
       )
     )
       return;
 
     try {
-      const supabase = createClient();
+      // 서버 API를 통해 삭제 (RLS 우회)
+      const response = await fetch(`/api/seller/services/${serviceId}`, {
+        method: 'DELETE',
+      });
 
-      // 1. 진행 중인 주문 확인 (pending_payment 포함)
-      const { data: activeOrders, error: ordersError } = await supabase
-        .from('orders')
-        .select('id, status')
-        .eq('service_id', serviceId)
-        .in('status', ['pending_payment', 'paid', 'in_progress', 'delivered']);
+      const result = await response.json();
 
-      if (ordersError) throw ordersError;
-
-      if (activeOrders && activeOrders.length > 0) {
-        const statusLabels: Record<string, string> = {
-          pending_payment: '결제 대기',
-          paid: '결제 완료',
-          in_progress: '진행 중',
-          delivered: '납품 완료(검수 중)',
-        };
-        const orderSummary = activeOrders
-          .map((o) => statusLabels[o.status] || o.status)
-          .reduce(
-            (acc, status) => {
-              acc[status] = (acc[status] || 0) + 1;
-              return acc;
-            },
-            {} as Record<string, number>
-          );
-        const summaryText = Object.entries(orderSummary)
-          .map(([status, count]) => `${status}: ${count}건`)
-          .join(', ');
-
-        alert(
-          `⚠️ 진행 중인 주문이 있어 삭제할 수 없습니다.\n\n현재 진행 중인 주문:\n${summaryText}\n\n모든 주문이 완료되거나 취소된 후 삭제할 수 있습니다.`
-        );
+      if (!response.ok) {
+        if (response.status === 400) {
+          // 진행 중인 주문이 있는 경우
+          alert(`⚠️ ${result.error}`);
+        } else {
+          throw new Error(result.error || '삭제에 실패했습니다.');
+        }
         return;
       }
-
-      // 2. 관련 데이터 삭제 (외래 키 제약 조건 순서대로)
-
-      // 광고 관련 데이터 먼저 삭제 (advertising_subscriptions → tax_invoices 순서 중요)
-      const { data: subscriptions } = await supabase
-        .from('advertising_subscriptions')
-        .select('id')
-        .eq('service_id', serviceId);
-
-      if (subscriptions && subscriptions.length > 0) {
-        const subscriptionIds = subscriptions.map((s) => s.id);
-        // tax_invoices 먼저 삭제
-        await supabase.from('tax_invoices').delete().in('subscription_id', subscriptionIds);
-        // advertising_payments 삭제
-        await supabase.from('advertising_payments').delete().in('subscription_id', subscriptionIds);
-        // advertising_impressions 삭제
-        await supabase
-          .from('advertising_impressions')
-          .delete()
-          .in('subscription_id', subscriptionIds);
-      }
-      // advertising_subscriptions 삭제
-      await supabase.from('advertising_subscriptions').delete().eq('service_id', serviceId);
-
-      // 나머지 관련 데이터 삭제
-      await supabase.from('service_categories').delete().eq('service_id', serviceId);
-      await supabase.from('service_tags').delete().eq('service_id', serviceId);
-      await supabase.from('service_packages').delete().eq('service_id', serviceId);
-      await supabase.from('favorites').delete().eq('service_id', serviceId);
-      await supabase.from('reviews').delete().eq('service_id', serviceId);
-      await supabase.from('premium_placements').delete().eq('service_id', serviceId);
-      // search_logs의 converted_service_id는 NULL로 설정
-      await supabase
-        .from('search_logs')
-        .update({ converted_service_id: null })
-        .eq('converted_service_id', serviceId);
-      // reports의 reported_service_id는 NULL로 설정
-      await supabase
-        .from('reports')
-        .update({ reported_service_id: null })
-        .eq('reported_service_id', serviceId);
-
-      // 3. 서비스 삭제
-      const { error: deleteError } = await supabase.from('services').delete().eq('id', serviceId);
-
-      if (deleteError) throw deleteError;
 
       // UI 업데이트
       setServices(services.filter((service: ServiceWithRejection) => service.id !== serviceId));
