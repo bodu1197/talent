@@ -31,10 +31,10 @@ export default function VerifyIdentityClient({ customerInfo, returnUrl }: Props)
       const randomPart = crypto.randomUUID().slice(0, 8);
       const identityVerificationId = `identity_${timestamp}_${randomPart}`;
 
-      // PortOne 본인인증 요청
+      // PortOne 본인인증 요청 (다날 휴대폰 본인인증)
       const response = await PortOne.requestIdentityVerification({
         storeId: 'store-8855d73e-d61a-469b-a5ed-60e21cc45122',
-        channelKey: process.env.NEXT_PUBLIC_PORTONE_IDENTITY_CHANNEL_KEY!,
+        channelKey: 'channel-key-112bb8b1-8dcc-4045-9686-66b83f0f0026',
         identityVerificationId,
         customer: {
           customerId: customerInfo.email || undefined,
