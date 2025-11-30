@@ -102,15 +102,18 @@ export default function ChatMessageArea({
   const [showPaymentRequestModal, setShowPaymentRequestModal] = useState(false);
   const [paymentRequests, setPaymentRequests] = useState<PaymentRequest[]>([]);
   const supabase = createClient();
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-  // 자동 스크롤 (새 메시지/결제 요청 시)
+  // 자동 스크롤 (채팅 컨테이너 내부만)
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
   };
 
   useEffect(() => {
-    scrollToBottom();
+    // 약간의 딜레이 후 스크롤 (렌더링 완료 대기)
+    setTimeout(scrollToBottom, 100);
   }, [messages, paymentRequests]);
 
   // 결제 요청 목록 로드
@@ -231,7 +234,7 @@ export default function ChatMessageArea({
       </div>
 
       {/* 메시지 및 결제 요청 타임라인 */}
-      <div className="flex-1 overflow-y-auto px-6 py-4 bg-gray-50">
+      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto px-6 py-4 bg-gray-50">
         {getTimeline().map((item) => {
           if (item.type === 'payment') {
             const paymentRequest = item.data as PaymentRequest;
@@ -331,8 +334,6 @@ export default function ChatMessageArea({
             </div>
           );
         })}
-        {/* 스크롤 앵커 */}
-        <div ref={messagesEndRef} />
       </div>
 
       {/* 입력 영역 */}
