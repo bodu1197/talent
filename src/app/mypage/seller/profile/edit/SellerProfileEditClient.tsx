@@ -738,56 +738,56 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                     />
                   </div>
 
-                  {/* 사업자등록번호 검증 버튼 */}
-                  {isBusinessInfoChanged && (
-                    <div>
-                      <button
-                        type="button"
-                        onClick={handleBusinessVerification}
-                        disabled={
-                          businessVerification.isVerifying ||
-                          businessVerification.isVerified ||
-                          !profile.business_number
-                        }
-                        className={`w-full px-4 py-2.5 text-sm rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${getVerificationButtonStyle(businessVerification, 'orange')}`}
-                      >
-                        <BusinessVerificationButtonContent status={businessVerification} />
-                      </button>
+                  {/* 사업자등록번호 검증 버튼 - 항상 표시 */}
+                  <div>
+                    <button
+                      type="button"
+                      onClick={handleBusinessVerification}
+                      disabled={
+                        businessVerification.isVerifying ||
+                        businessVerification.isVerified ||
+                        !profile.business_number
+                      }
+                      className={`w-full px-4 py-2.5 text-sm rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${getVerificationButtonStyle(businessVerification, 'orange')}`}
+                    >
+                      <BusinessVerificationButtonContent status={businessVerification} />
+                    </button>
 
-                      {!businessVerification.isVerified && !businessVerification.isVerifying && (
-                        <p className="text-xs text-gray-500 mt-2">
-                          사업자 정보가 변경되었습니다. 저장 전 확인이 필요합니다.
+                    {!businessVerification.isVerified && !businessVerification.isVerifying && (
+                      <p className="text-xs text-gray-500 mt-2">
+                        {isBusinessInfoChanged
+                          ? '사업자 정보가 변경되었습니다. 저장 전 확인이 필요합니다.'
+                          : '사업자등록번호를 확인하려면 버튼을 눌러주세요.'}
+                      </p>
+                    )}
+
+                    {businessVerification.isVerified && businessVerification.data && (
+                      <div className="mt-2 bg-green-50 border border-green-200 rounded-lg p-3">
+                        <p className="text-xs text-green-700 font-medium mb-1">
+                          <CheckCircle className="w-3 h-3 inline mr-1" />
+                          사업자등록번호 확인 완료
                         </p>
-                      )}
-
-                      {businessVerification.isVerified && businessVerification.data && (
-                        <div className="mt-2 bg-green-50 border border-green-200 rounded-lg p-3">
-                          <p className="text-xs text-green-700 font-medium mb-1">
-                            <CheckCircle className="w-3 h-3 inline mr-1" />
-                            사업자등록번호 확인 완료
+                        <div className="text-xs text-green-700 space-y-1">
+                          {businessVerification.data.businessName ? (
+                            <p>상호: {String(businessVerification.data.businessName)}</p>
+                          ) : null}
+                          {businessVerification.data.representativeName ? (
+                            <p>대표자: {String(businessVerification.data.representativeName)}</p>
+                          ) : null}
+                          <p>
+                            상태:{' '}
+                            {businessVerification.data.isActive
+                              ? '정상 영업 중'
+                              : String(businessVerification.data.status || '확인됨')}
                           </p>
-                          <div className="text-xs text-green-700 space-y-1">
-                            {businessVerification.data.businessName ? (
-                              <p>상호: {String(businessVerification.data.businessName)}</p>
-                            ) : null}
-                            {businessVerification.data.representativeName ? (
-                              <p>대표자: {String(businessVerification.data.representativeName)}</p>
-                            ) : null}
-                            <p>
-                              상태:{' '}
-                              {businessVerification.data.isActive
-                                ? '정상 영업 중'
-                                : String(businessVerification.data.status || '확인됨')}
-                            </p>
-                          </div>
                         </div>
-                      )}
+                      </div>
+                    )}
 
-                      {businessVerification.message && !businessVerification.isVerified && (
-                        <p className="text-xs text-red-500 mt-2">{businessVerification.message}</p>
-                      )}
-                    </div>
-                  )}
+                    {businessVerification.message && !businessVerification.isVerified && (
+                      <p className="text-xs text-red-500 mt-2">{businessVerification.message}</p>
+                    )}
+                  </div>
                 </div>
               )}
 
