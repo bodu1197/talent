@@ -482,6 +482,10 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
           roomId={roomId}
           service={service}
           onClose={() => setShowPaymentRequestModal(false)}
+          onSuccess={() => {
+            loadPaymentRequests();
+            setShowPaymentRequestModal(false);
+          }}
         />
       )}
     </div>
@@ -706,10 +710,12 @@ function PaymentRequestModal({
   roomId,
   service,
   onClose,
+  onSuccess,
 }: Readonly<{
   roomId: string;
   service: Service | null;
   onClose: () => void;
+  onSuccess: () => void;
 }>) {
   const [formData, setFormData] = useState({
     title: service?.title || '',
@@ -746,7 +752,7 @@ function PaymentRequestModal({
 
       if (response.ok) {
         toast.success('결제 요청을 전송했습니다');
-        onClose();
+        onSuccess();
       } else {
         const error = await response.json();
         toast.error(`결제 요청 실패: ${error.error || '알 수 없는 오류'}`);
