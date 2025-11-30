@@ -6,9 +6,98 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import Link from 'next/link';
-import { ArrowLeft, ShieldCheck, CheckCircle, Info, X, Camera, Check, Loader2 } from 'lucide-react';
+import {
+  ArrowLeft,
+  ShieldCheck,
+  CheckCircle,
+  Info,
+  X,
+  Camera,
+  Check,
+  Loader2,
+  Building2,
+  CreditCard,
+} from 'lucide-react';
 import toast from 'react-hot-toast';
 import * as PortOne from '@portone/browser-sdk/v2';
+
+// 검증 상태 타입
+interface VerificationStatus {
+  isVerified: boolean;
+  isVerifying: boolean;
+  message?: string;
+  data?: Record<string, unknown>;
+}
+
+// 검증 버튼 스타일 헬퍼 함수
+function getVerificationButtonStyle(
+  status: VerificationStatus,
+  baseColor: 'blue' | 'orange'
+): string {
+  if (status.isVerified) {
+    return 'bg-green-100 text-green-800 cursor-not-allowed';
+  }
+  if (status.isVerifying) {
+    return 'bg-gray-100 text-gray-500 cursor-wait';
+  }
+  const colorClasses = {
+    blue: 'bg-blue-500 text-white hover:bg-blue-600',
+    orange: 'bg-orange-500 text-white hover:bg-orange-600',
+  };
+  return `${colorClasses[baseColor]} disabled:bg-gray-300 disabled:cursor-not-allowed`;
+}
+
+// 계좌 검증 버튼 내용 컴포넌트
+function BankVerificationButtonContent({ status }: { readonly status: VerificationStatus }) {
+  if (status.isVerifying) {
+    return (
+      <>
+        <Loader2 className="w-4 h-4 animate-spin" />
+        계좌 확인 중...
+      </>
+    );
+  }
+  if (status.isVerified) {
+    return (
+      <>
+        <CheckCircle className="w-4 h-4" />
+        계좌 실명확인 완료
+      </>
+    );
+  }
+  return (
+    <>
+      <CreditCard className="w-4 h-4" />
+      계좌 실명확인
+    </>
+  );
+}
+
+// 사업자 검증 버튼 내용 컴포넌트
+function BusinessVerificationButtonContent({ status }: { readonly status: VerificationStatus }) {
+  if (status.isVerifying) {
+    return (
+      <>
+        <Loader2 className="w-4 h-4 animate-spin" />
+        사업자 확인 중...
+      </>
+    );
+  }
+  if (status.isVerified) {
+    return (
+      <>
+        <CheckCircle className="w-4 h-4" />
+        사업자 확인 완료
+      </>
+    );
+  }
+  return (
+    <>
+      <Building2 className="w-4 h-4" />
+      사업자등록번호 확인
+    </>
+  );
+}
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -58,6 +147,18 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
     initialProfile?.profile_image || null
   );
   const [isVerified, setIsVerified] = useState(false);
+
+  // 계좌 실명확인 상태
+  const [bankAccountVerification, setBankAccountVerification] = useState<VerificationStatus>({
+    isVerified: false,
+    isVerifying: false,
+  });
+
+  // 사업자등록번호 검증 상태
+  const [businessVerification, setBusinessVerification] = useState<VerificationStatus>({
+    isVerified: false,
+    isVerifying: false,
+  });
 
   const [formData, setFormData] = useState<SellerFormData>({
     realName: '',
@@ -176,6 +277,115 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
     } catch (error) {
       console.error('Identity verification error:', error);
       toast.error(error instanceof Error ? error.message : '본인인증 중 오류가 발생했습니다');
+    }
+  };
+
+  // 계좌 실명확인
+  const handleBankAccountVerification = async () => {
+    if (!formData.bankName || !formData.accountNumber || !formData.accountHolder) {
+      toast.error('은행명, 계좌번호, 예금주명을 모두 입력해주세요.');
+      return;
+    }
+
+    setBankAccountVerification({ isVerified: false, isVerifying: true });
+
+    try {
+      const response = await fetch('/api/verification/bank-account', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bankName: formData.bankName,
+          accountNumber: formData.accountNumber,
+          accountHolder: formData.accountHolder,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || '계좌 확인 실패');
+      }
+
+      if (result.verified) {
+        setBankAccountVerification({
+          isVerified: true,
+          isVerifying: false,
+          message: result.message,
+          data: { holderName: result.holderName },
+        });
+        toast.success('계좌 실명확인이 완료되었습니다.');
+      } else {
+        setBankAccountVerification({
+          isVerified: false,
+          isVerifying: false,
+          message: result.message || result.error,
+        });
+        toast.error(result.message || result.error || '계좌 확인에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('Bank account verification error:', error);
+      setBankAccountVerification({
+        isVerified: false,
+        isVerifying: false,
+        message: error instanceof Error ? error.message : '계좌 확인 중 오류가 발생했습니다',
+      });
+      toast.error(error instanceof Error ? error.message : '계좌 확인 중 오류가 발생했습니다');
+    }
+  };
+
+  // 사업자등록번호 검증
+  const handleBusinessVerification = async () => {
+    if (!formData.businessNumber) {
+      toast.error('사업자등록번호를 입력해주세요.');
+      return;
+    }
+
+    setBusinessVerification({ isVerified: false, isVerifying: true });
+
+    try {
+      const response = await fetch('/api/verification/business', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          businessNumber: formData.businessNumber,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || '사업자 확인 실패');
+      }
+
+      if (result.verified) {
+        setBusinessVerification({
+          isVerified: true,
+          isVerifying: false,
+          message: `사업자 확인 완료: ${result.businessName || ''}`,
+          data: {
+            businessName: result.businessName,
+            representativeName: result.representativeName,
+            status: result.status,
+            isActive: result.isActive,
+          },
+        });
+        toast.success(`사업자 확인 완료: ${result.businessName || ''}`);
+      } else {
+        setBusinessVerification({
+          isVerified: false,
+          isVerifying: false,
+          message: result.error,
+        });
+        toast.error(result.error || '사업자등록번호 확인에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('Business verification error:', error);
+      setBusinessVerification({
+        isVerified: false,
+        isVerifying: false,
+        message: error instanceof Error ? error.message : '사업자 확인 중 오류가 발생했습니다',
+      });
+      toast.error(error instanceof Error ? error.message : '사업자 확인 중 오류가 발생했습니다');
     }
   };
 
@@ -298,10 +508,22 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
 
   const canProceed = () => {
     switch (currentStep) {
-      case 1:
-        return (
-          isVerified && !!formData.accountNumber && !!formData.accountHolder && !!formData.bankName
-        );
+      case 1: {
+        // 기본 조건: 본인인증 완료, 계좌 정보 입력, 계좌 실명확인 완료
+        const basicCondition =
+          isVerified &&
+          !!formData.accountNumber &&
+          !!formData.accountHolder &&
+          !!formData.bankName &&
+          bankAccountVerification.isVerified;
+
+        // 사업자인 경우: 사업자등록번호 검증도 필요
+        if (formData.isBusiness) {
+          return basicCondition && !!formData.businessNumber && businessVerification.isVerified;
+        }
+
+        return basicCondition;
+      }
       case 2: {
         // 프로필 이미지: 필수가 아님 (제거 가능)
         return !!formData.displayName && formData.bio.length >= 50;
@@ -511,16 +733,56 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                       id="seller-account-number"
                       type="text"
                       value={formData.accountNumber}
-                      onChange={(e) =>
+                      onChange={(e) => {
                         setFormData({
                           ...formData,
                           accountNumber: e.target.value,
-                        })
-                      }
+                        });
+                        // 계좌번호 변경 시 검증 초기화
+                        setBankAccountVerification({ isVerified: false, isVerifying: false });
+                      }}
                       placeholder="123-456-789012"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                       required
                     />
+                  </div>
+
+                  {/* 계좌 실명확인 버튼 */}
+                  <div className="mt-4">
+                    <button
+                      type="button"
+                      onClick={handleBankAccountVerification}
+                      disabled={
+                        bankAccountVerification.isVerifying ||
+                        bankAccountVerification.isVerified ||
+                        !formData.bankName ||
+                        !formData.accountNumber ||
+                        !formData.accountHolder
+                      }
+                      className={`w-full px-4 py-2.5 text-sm rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${getVerificationButtonStyle(bankAccountVerification, 'blue')}`}
+                    >
+                      <BankVerificationButtonContent status={bankAccountVerification} />
+                    </button>
+                    {!bankAccountVerification.isVerified &&
+                      !bankAccountVerification.isVerifying && (
+                        <p className="text-xs text-gray-500 mt-2">
+                          정산 계좌의 예금주 실명을 확인합니다
+                        </p>
+                      )}
+                    {bankAccountVerification.isVerified && (
+                      <div className="mt-2 bg-green-50 border border-green-200 rounded-lg p-2">
+                        <p className="text-xs text-green-700">
+                          <CheckCircle className="w-3 h-3 inline mr-1" />
+                          예금주:{' '}
+                          {String(
+                            bankAccountVerification.data?.holderName || formData.accountHolder
+                          )}
+                        </p>
+                      </div>
+                    )}
+                    {bankAccountVerification.message && !bankAccountVerification.isVerified && (
+                      <p className="text-xs text-red-500 mt-2">{bankAccountVerification.message}</p>
+                    )}
                   </div>
                 </div>
 
@@ -541,26 +803,77 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                   </label>
 
                   {formData.isBusiness && (
-                    <div>
-                      <label
-                        htmlFor="seller-business-number"
-                        className="block text-sm font-medium text-gray-700 mb-2"
-                      >
-                        사업자 등록번호
-                      </label>
-                      <input
-                        id="seller-business-number"
-                        type="text"
-                        value={formData.businessNumber}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            businessNumber: e.target.value,
-                          })
+                    <div className="space-y-4">
+                      <div>
+                        <label
+                          htmlFor="seller-business-number"
+                          className="block text-sm font-medium text-gray-700 mb-2"
+                        >
+                          사업자 등록번호 *
+                        </label>
+                        <input
+                          id="seller-business-number"
+                          type="text"
+                          value={formData.businessNumber}
+                          onChange={(e) => {
+                            setFormData({
+                              ...formData,
+                              businessNumber: e.target.value,
+                            });
+                            // 사업자등록번호 변경 시 검증 초기화
+                            setBusinessVerification({ isVerified: false, isVerifying: false });
+                          }}
+                          placeholder="123-45-67890"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
+                        />
+                      </div>
+
+                      {/* 사업자등록번호 검증 버튼 */}
+                      <button
+                        type="button"
+                        onClick={handleBusinessVerification}
+                        disabled={
+                          businessVerification.isVerifying ||
+                          businessVerification.isVerified ||
+                          !formData.businessNumber
                         }
-                        placeholder="123-45-67890"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-                      />
+                        className={`w-full px-4 py-2.5 text-sm rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${getVerificationButtonStyle(businessVerification, 'orange')}`}
+                      >
+                        <BusinessVerificationButtonContent status={businessVerification} />
+                      </button>
+
+                      {!businessVerification.isVerified && !businessVerification.isVerifying && (
+                        <p className="text-xs text-gray-500">
+                          국세청에 등록된 사업자 정보를 확인합니다
+                        </p>
+                      )}
+
+                      {businessVerification.isVerified && businessVerification.data && (
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                          <p className="text-sm font-medium text-green-900 mb-1">
+                            <CheckCircle className="w-4 h-4 inline mr-1" />
+                            사업자 확인 완료
+                          </p>
+                          <div className="text-xs text-green-700 space-y-1">
+                            {businessVerification.data.businessName ? (
+                              <p>상호: {String(businessVerification.data.businessName)}</p>
+                            ) : null}
+                            {businessVerification.data.representativeName ? (
+                              <p>대표자: {String(businessVerification.data.representativeName)}</p>
+                            ) : null}
+                            <p>
+                              상태:{' '}
+                              {businessVerification.data.isActive
+                                ? '정상 영업 중'
+                                : String(businessVerification.data.status || '확인됨')}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      {businessVerification.message && !businessVerification.isVerified && (
+                        <p className="text-xs text-red-500">{businessVerification.message}</p>
+                      )}
                     </div>
                   )}
                 </div>
