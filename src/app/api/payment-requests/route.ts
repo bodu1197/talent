@@ -26,10 +26,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '최소 결제 금액은 1,000원입니다' }, { status: 400 });
     }
 
-    // 채팅방 정보 조회 (판매자 확인)
+    // 채팅방 정보 조회
     const { data: room, error: roomError } = await supabase
       .from('chat_rooms')
-      .select('seller_id, buyer_id')
+      .select('user1_id, user2_id, service_id')
       .eq('id', room_id)
       .single();
 
@@ -37,26 +37,33 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '채팅방을 찾을 수 없습니다' }, { status: 404 });
     }
 
-    // 판매자의 user_id 조회
+    // 현재 사용자가 이 채팅방의 참여자인지 확인
+    if (room.user1_id !== user.id && room.user2_id !== user.id) {
+      return NextResponse.json({ error: '채팅방 참여자가 아닙니다' }, { status: 403 });
+    }
+
+    // 현재 사용자가 판매자인지 확인
     const { data: seller } = await supabase
       .from('sellers')
-      .select('user_id')
-      .eq('id', room.seller_id)
-      .single();
+      .select('id')
+      .eq('user_id', user.id)
+      .maybeSingle();
 
-    // 판매자인지 확인
-    if (seller?.user_id !== user.id) {
+    if (!seller) {
       return NextResponse.json({ error: '판매자만 결제 요청을 할 수 있습니다' }, { status: 403 });
     }
+
+    // 상대방(구매자) 확인
+    const buyerId = room.user1_id === user.id ? room.user2_id : room.user1_id;
 
     // 결제 요청 생성
     const { data: paymentRequest, error: insertError } = await supabase
       .from('payment_requests')
       .insert({
         room_id,
-        seller_id: room.seller_id,
-        buyer_id: room.buyer_id,
-        service_id: service_id || null,
+        seller_id: seller.id,
+        buyer_id: buyerId,
+        service_id: service_id || room.service_id || null,
         title,
         amount,
         description: description || null,
