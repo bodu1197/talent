@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
@@ -56,8 +56,11 @@ export async function POST(request: NextRequest) {
     // 상대방(구매자) 확인
     const buyerId = room.user1_id === user.id ? room.user2_id : room.user1_id;
 
+    // Service Role 클라이언트 사용 (RLS 우회)
+    const serviceClient = createServiceRoleClient();
+
     // 결제 요청 생성
-    const { data: paymentRequest, error: insertError } = await supabase
+    const { data: paymentRequest, error: insertError } = await serviceClient
       .from('payment_requests')
       .insert({
         room_id,
@@ -107,8 +110,27 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'room_id가 필요합니다' }, { status: 400 });
     }
 
+    // Service Role 클라이언트 사용 (RLS 우회)
+    const serviceClient = createServiceRoleClient();
+
+    // 먼저 사용자가 이 채팅방의 참여자인지 확인
+    const { data: room, error: roomError } = await serviceClient
+      .from('chat_rooms')
+      .select('user1_id, user2_id')
+      .eq('id', roomId)
+      .single();
+
+    if (roomError || !room) {
+      return NextResponse.json({ error: '채팅방을 찾을 수 없습니다' }, { status: 404 });
+    }
+
+    // 참여자 확인
+    if (room.user1_id !== user.id && room.user2_id !== user.id) {
+      return NextResponse.json({ error: '채팅방 참여자가 아닙니다' }, { status: 403 });
+    }
+
     // 채팅방의 결제 요청 목록 조회
-    const { data: paymentRequests, error } = await supabase
+    const { data: paymentRequests, error } = await serviceClient
       .from('payment_requests')
       .select('*')
       .eq('room_id', roomId)
