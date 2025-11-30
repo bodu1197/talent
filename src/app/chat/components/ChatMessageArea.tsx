@@ -108,10 +108,14 @@ export default function ChatMessageArea({
     if (!selectedRoom) return;
 
     try {
+      console.log('[PaymentRequests] Loading for room:', selectedRoom.id);
       const response = await fetch(`/api/payment-requests?room_id=${selectedRoom.id}`);
       if (response.ok) {
         const data = await response.json();
+        console.log('[PaymentRequests] Loaded:', data.payment_requests?.length || 0, 'items');
         setPaymentRequests(data.payment_requests || []);
+      } else {
+        console.error('[PaymentRequests] Load failed:', response.status);
       }
     } catch (error) {
       logger.error('Failed to load payment requests:', error);
@@ -138,14 +142,23 @@ export default function ChatMessageArea({
           table: 'payment_requests',
           filter: `room_id=eq.${selectedRoom.id}`,
         },
-        () => {
+        (payload) => {
+          console.log('[PaymentRequests] Realtime event:', payload.eventType);
           loadPaymentRequests();
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log('[PaymentRequests] Subscription status:', status);
+      });
+
+    // 폴링 백업 (5초마다) - 실시간이 실패할 경우 대비
+    const pollInterval = setInterval(() => {
+      loadPaymentRequests();
+    }, 5000);
 
     return () => {
       supabase.removeChannel(channel);
+      clearInterval(pollInterval);
     };
   }, [selectedRoom?.id]);
 
