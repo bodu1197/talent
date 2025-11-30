@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   MessageCircle,
   Paperclip,
@@ -102,6 +102,16 @@ export default function ChatMessageArea({
   const [showPaymentRequestModal, setShowPaymentRequestModal] = useState(false);
   const [paymentRequests, setPaymentRequests] = useState<PaymentRequest[]>([]);
   const supabase = createClient();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // 자동 스크롤 (새 메시지/결제 요청 시)
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, paymentRequests]);
 
   // 결제 요청 목록 로드
   const loadPaymentRequests = async () => {
@@ -321,6 +331,8 @@ export default function ChatMessageArea({
             </div>
           );
         })}
+        {/* 스크롤 앵커 */}
+        <div ref={messagesEndRef} />
       </div>
 
       {/* 입력 영역 */}
