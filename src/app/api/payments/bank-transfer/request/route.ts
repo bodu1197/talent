@@ -18,10 +18,21 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { order_id } = body;
+    const { order_id, cash_receipt } = body;
 
     if (!order_id) {
       return NextResponse.json({ error: '주문 ID가 필요합니다' }, { status: 400 });
+    }
+
+    // 현금영수증 정보 검증
+    if (cash_receipt) {
+      const { type, value } = cash_receipt;
+      if (!type || !['personal', 'business'].includes(type)) {
+        return NextResponse.json({ error: '잘못된 현금영수증 유형입니다' }, { status: 400 });
+      }
+      if (!value) {
+        return NextResponse.json({ error: '현금영수증 발행 정보가 필요합니다' }, { status: 400 });
+      }
     }
 
     // 주문 조회
@@ -45,13 +56,36 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '이미 처리된 주문입니다' }, { status: 400 });
     }
 
+    // 업데이트 데이터 준비
+    const updateData: Record<string, unknown> = {
+      status: 'pending_bank_transfer',
+      payment_status: 'pending',
+    };
+
+    // 현금영수증 정보가 있으면 메타데이터에 저장
+    if (cash_receipt) {
+      // 기존 메타데이터와 병합
+      const existingMetadata = order.metadata || {};
+      updateData.metadata = {
+        ...existingMetadata,
+        cash_receipt: {
+          type: cash_receipt.type, // 'personal' 또는 'business'
+          value: cash_receipt.value, // 휴대폰번호 또는 사업자등록번호
+          requested_at: new Date().toISOString(),
+        },
+      };
+
+      logger.info('Cash receipt requested:', {
+        orderId: order_id,
+        type: cash_receipt.type,
+        valueMasked: cash_receipt.value.substring(0, 4) + '****',
+      });
+    }
+
     // 주문 상태를 pending_bank_transfer로 변경
     const { error: updateError } = await supabase
       .from('orders')
-      .update({
-        status: 'pending_bank_transfer',
-        payment_status: 'pending',
-      })
+      .update(updateData)
       .eq('id', order_id);
 
     if (updateError) {

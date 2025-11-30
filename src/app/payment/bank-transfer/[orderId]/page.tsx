@@ -19,10 +19,20 @@ export default async function BankTransferPage({
     redirect('/auth/login');
   }
 
-  // 주문 정보 조회
+  // 주문 정보 조회 (판매자 정보 포함)
   const { data: order, error: orderError } = await supabase
     .from('orders')
-    .select('*')
+    .select(
+      `
+      *,
+      seller:seller_profiles!orders_seller_id_fkey(
+        id,
+        is_business,
+        business_name,
+        display_name
+      )
+    `
+    )
     .eq('id', orderId)
     .single();
 

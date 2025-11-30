@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Landmark, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Landmark, AlertTriangle, Receipt, User, Building2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface Order {
@@ -15,7 +15,16 @@ interface Order {
   delivery_days: number;
   status: string;
   merchant_uid: string;
+  seller?: {
+    id: string;
+    is_business: boolean;
+    business_name?: string;
+    display_name?: string;
+  } | null;
 }
+
+// 현금영수증 신청 유형
+type CashReceiptType = 'none' | 'personal' | 'business';
 
 interface Props {
   readonly order: Order;
@@ -25,6 +34,14 @@ export default function BankTransferClient({ order }: Props) {
   const router = useRouter();
   const [isCopied, setIsCopied] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // 현금영수증 관련 상태
+  const [cashReceiptType, setCashReceiptType] = useState<CashReceiptType>('none');
+  const [cashReceiptValue, setCashReceiptValue] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // 판매자가 사업자인지 확인 (사업자만 현금영수증 발행 가능)
+  const canIssueCashReceipt = order.seller?.is_business === true;
 
   const bankInfo = {
     bankName: process.env.NEXT_PUBLIC_BANK_NAME || '국민은행',
@@ -54,19 +71,71 @@ export default function BankTransferClient({ order }: Props) {
     timeoutRef.current = setTimeout(() => setIsCopied(false), 2000);
   };
 
-  const handleConfirmTransfer = async () => {
-    // 주문 상태를 pending_bank_transfer로 변경
-    const response = await fetch('/api/payments/bank-transfer/request', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ order_id: order.id }),
-    });
+  // 현금영수증 유효성 검사
+  const validateCashReceipt = (): boolean => {
+    if (cashReceiptType === 'none') return true;
 
-    if (response.ok) {
-      toast.error('입금 대기 상태로 변경되었습니다.\n입금 확인 후 주문이 시작됩니다.');
-      router.push(`/mypage/buyer/orders/${order.id}`);
-    } else {
-      toast.error('오류가 발생했습니다.');
+    if (!cashReceiptValue.trim()) {
+      toast.error(
+        cashReceiptType === 'personal'
+          ? '휴대폰 번호를 입력해주세요.'
+          : '사업자등록번호를 입력해주세요.'
+      );
+      return false;
+    }
+
+    // 휴대폰 번호 검증 (숫자만, 10-11자리)
+    if (cashReceiptType === 'personal') {
+      const phoneOnly = cashReceiptValue.replace(/\D/g, '');
+      if (phoneOnly.length < 10 || phoneOnly.length > 11) {
+        toast.error('올바른 휴대폰 번호를 입력해주세요.');
+        return false;
+      }
+    }
+
+    // 사업자등록번호 검증 (숫자만, 10자리)
+    if (cashReceiptType === 'business') {
+      const bizNumOnly = cashReceiptValue.replace(/\D/g, '');
+      if (bizNumOnly.length !== 10) {
+        toast.error('올바른 사업자등록번호를 입력해주세요. (10자리)');
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const handleConfirmTransfer = async () => {
+    // 현금영수증 유효성 검사
+    if (!validateCashReceipt()) return;
+
+    setIsSubmitting(true);
+
+    try {
+      // 주문 상태를 pending_bank_transfer로 변경
+      const response = await fetch('/api/payments/bank-transfer/request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          order_id: order.id,
+          cash_receipt:
+            canIssueCashReceipt && cashReceiptType !== 'none'
+              ? {
+                  type: cashReceiptType,
+                  value: cashReceiptValue.replace(/\D/g, ''), // 숫자만 전송
+                }
+              : null,
+        }),
+      });
+
+      if (response.ok) {
+        toast.success('입금 대기 상태로 변경되었습니다.\n입금 확인 후 주문이 시작됩니다.');
+        router.push(`/mypage/buyer/orders/${order.id}`);
+      } else {
+        toast.error('오류가 발생했습니다.');
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -116,7 +185,9 @@ export default function BankTransferClient({ order }: Props) {
 
               <div>
                 <span className="text-sm text-gray-600 block mb-1">예금주</span>
-                <span className="text-xl font-semibold text-gray-900">{bankInfo.accountHolder}</span>
+                <span className="text-xl font-semibold text-gray-900">
+                  {bankInfo.accountHolder}
+                </span>
               </div>
 
               <div className="pt-4 border-t border-blue-300">
@@ -169,12 +240,101 @@ export default function BankTransferClient({ order }: Props) {
           </ul>
         </div>
 
+        {/* 현금영수증 신청 - 사업자 판매자인 경우만 표시 */}
+        {canIssueCashReceipt && (
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Receipt className="w-6 h-6 text-brand-primary" />
+              <h2 className="text-lg font-semibold text-gray-900">현금영수증 신청</h2>
+            </div>
+
+            <div className="space-y-4">
+              {/* 신청 유형 선택 */}
+              <div className="space-y-3">
+                <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                  <input
+                    type="radio"
+                    name="cashReceiptType"
+                    value="none"
+                    checked={cashReceiptType === 'none'}
+                    onChange={() => {
+                      setCashReceiptType('none');
+                      setCashReceiptValue('');
+                    }}
+                    className="w-4 h-4 text-brand-primary"
+                  />
+                  <span className="text-gray-700">신청 안함</span>
+                </label>
+
+                <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                  <input
+                    type="radio"
+                    name="cashReceiptType"
+                    value="personal"
+                    checked={cashReceiptType === 'personal'}
+                    onChange={() => setCashReceiptType('personal')}
+                    className="w-4 h-4 text-brand-primary"
+                  />
+                  <User className="w-5 h-5 text-gray-500" />
+                  <div>
+                    <span className="text-gray-700 font-medium">소득공제용 (개인)</span>
+                    <p className="text-xs text-gray-500">
+                      연말정산 소득공제를 위해 휴대폰 번호 입력
+                    </p>
+                  </div>
+                </label>
+
+                <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                  <input
+                    type="radio"
+                    name="cashReceiptType"
+                    value="business"
+                    checked={cashReceiptType === 'business'}
+                    onChange={() => setCashReceiptType('business')}
+                    className="w-4 h-4 text-brand-primary"
+                  />
+                  <Building2 className="w-5 h-5 text-gray-500" />
+                  <div>
+                    <span className="text-gray-700 font-medium">지출증빙용 (사업자)</span>
+                    <p className="text-xs text-gray-500">
+                      사업 경비 처리를 위해 사업자등록번호 입력
+                    </p>
+                  </div>
+                </label>
+              </div>
+
+              {/* 입력 필드 */}
+              {cashReceiptType !== 'none' && (
+                <div className="pt-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {cashReceiptType === 'personal' ? '휴대폰 번호' : '사업자등록번호'}
+                  </label>
+                  <input
+                    type="text"
+                    value={cashReceiptValue}
+                    onChange={(e) => setCashReceiptValue(e.target.value)}
+                    placeholder={cashReceiptType === 'personal' ? '01012345678' : '1234567890'}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
+                    maxLength={cashReceiptType === 'personal' ? 13 : 12}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    {cashReceiptType === 'personal'
+                      ? '하이픈(-) 없이 숫자만 입력해주세요'
+                      : '하이픈(-) 없이 10자리 숫자만 입력해주세요'}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* 버튼 */}
         <button
           onClick={handleConfirmTransfer}
-          className="w-full py-4 bg-brand-primary text-white rounded-lg font-semibold text-lg hover:bg-[#1a4d8f] transition-colors"
+          disabled={isSubmitting}
+          className="w-full py-4 bg-brand-primary text-white rounded-lg font-semibold text-lg hover:bg-[#1a4d8f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          입금 완료 확인 요청
+          {isSubmitting ? '처리 중...' : '입금 완료 확인 요청'}
         </button>
 
         <p className="text-center text-sm text-gray-500 mt-4">입금 완료 후 위 버튼을 눌러주세요</p>
