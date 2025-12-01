@@ -77,7 +77,9 @@ export default function WithdrawHistoryClient({ history }: WithdrawHistoryClient
                 history.map((item) => (
                   <tr key={item.id} className="hover:bg-gray-50">
                     <td className="px-3 py-3 lg:px-6 lg:py-4 text-xs lg:text-sm text-gray-600 whitespace-nowrap">
-                      {new Date(item.requested_at).toLocaleDateString('ko-KR')}
+                      {new Date(item.requested_at).toLocaleDateString('ko-KR', {
+                        timeZone: 'Asia/Seoul',
+                      })}
                     </td>
                     <td className="px-3 py-3 lg:px-6 lg:py-4 text-xs lg:text-sm text-gray-900 whitespace-nowrap">
                       {item.bank_name}

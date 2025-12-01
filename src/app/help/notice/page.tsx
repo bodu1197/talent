@@ -116,7 +116,9 @@ export default function NoticePage() {
 
                   {/* 날짜 */}
                   <div className="flex-shrink-0 text-sm text-gray-500">
-                    {new Date(notice.created_at).toLocaleDateString('ko-KR')}
+                    {new Date(notice.created_at).toLocaleDateString('ko-KR', {
+                      timeZone: 'Asia/Seoul',
+                    })}
                   </div>
 
                   {/* 화살표 */}

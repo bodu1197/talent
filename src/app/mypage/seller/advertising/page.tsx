@@ -729,7 +729,9 @@ export default function AdvertisingPage() {
                           <div className="bg-gray-50 p-3 lg:p-4 rounded-lg">
                             <div className="text-xs text-gray-600 mb-1">광고 시작일</div>
                             <div className="text-sm lg:text-base font-semibold text-gray-900">
-                              {new Date(service.adDetails.createdAt).toLocaleDateString('ko-KR')}
+                              {new Date(service.adDetails.createdAt).toLocaleDateString('ko-KR', {
+                                timeZone: 'Asia/Seoul',
+                              })}
                             </div>
                           </div>
                           <div className="bg-gray-50 p-3 lg:p-4 rounded-lg">

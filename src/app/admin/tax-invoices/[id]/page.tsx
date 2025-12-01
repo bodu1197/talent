@@ -137,7 +137,7 @@ export default function TaxInvoiceDetailPage() {
           </div>
           <div>
             <span className="font-medium">작성일자:</span>{' '}
-            {new Date(invoice.issue_date).toLocaleDateString('ko-KR')}
+            {new Date(invoice.issue_date).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' })}
           </div>
         </div>
 
@@ -272,7 +272,7 @@ export default function TaxInvoiceDetailPage() {
             </div>
             <div>
               <span className="font-medium">발행일시:</span>{' '}
-              {new Date(invoice.created_at).toLocaleString('ko-KR')}
+              {new Date(invoice.created_at).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })}
             </div>
             <div>
               <span className="font-medium">상태:</span>{' '}

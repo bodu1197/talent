@@ -2,7 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Banknote, Megaphone, Clock, CircleDollarSign, Eye, Ban, CheckCircle, X } from 'lucide-react';
+import {
+  Banknote,
+  Megaphone,
+  Clock,
+  CircleDollarSign,
+  Eye,
+  Ban,
+  CheckCircle,
+  X,
+} from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
 
@@ -189,7 +198,9 @@ export default function AdminAdvertisingPage() {
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600 mb-2">활성 광고</p>
-                <p className="text-3xl font-semibold text-slate-900">{summary.activeSubscriptions}</p>
+                <p className="text-3xl font-semibold text-slate-900">
+                  {summary.activeSubscriptions}
+                </p>
                 <p className="text-sm text-slate-500 mt-1">
                   월 ₩{summary.monthlyRevenue.toLocaleString()}
                 </p>
@@ -482,13 +493,17 @@ export default function AdminAdvertisingPage() {
                 <div>
                   <p className="text-sm font-medium text-slate-600">시작일</p>
                   <p className="text-sm text-slate-900 mt-1">
-                    {new Date(selectedSubscription.started_at).toLocaleDateString('ko-KR')}
+                    {new Date(selectedSubscription.started_at).toLocaleDateString('ko-KR', {
+                      timeZone: 'Asia/Seoul',
+                    })}
                   </p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-slate-600">다음 결제일</p>
                   <p className="text-sm text-slate-900 mt-1">
-                    {new Date(selectedSubscription.next_billing_date).toLocaleDateString('ko-KR')}
+                    {new Date(selectedSubscription.next_billing_date).toLocaleDateString('ko-KR', {
+                      timeZone: 'Asia/Seoul',
+                    })}
                   </p>
                 </div>
               </div>

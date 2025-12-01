@@ -69,7 +69,9 @@ export default function BuyerQuotesClient({ quotes }: BuyerQuotesClientProps) {
                     </div>
                     <div className="text-xs text-gray-600">
                       {quote.category?.name || '기타'} •{' '}
-                      {new Date(quote.created_at).toLocaleDateString('ko-KR')}
+                      {new Date(quote.created_at).toLocaleDateString('ko-KR', {
+                        timeZone: 'Asia/Seoul',
+                      })}
                     </div>
                   </div>
                   {(quote.response_count || 0) > 0 && (

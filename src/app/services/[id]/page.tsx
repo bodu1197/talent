@@ -853,7 +853,9 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                               {(Array.isArray(review.buyer) && review.buyer[0]?.name) || '익명'}
                             </div>
                             <div className="text-sm text-gray-500">
-                              {new Date(review.created_at).toLocaleDateString('ko-KR')}
+                              {new Date(review.created_at).toLocaleDateString('ko-KR', {
+                                timeZone: 'Asia/Seoul',
+                              })}
                             </div>
                           </div>
                         </div>
@@ -882,7 +884,9 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                             <Reply className="w-4 h-4 text-brand-primary" />
                             <span className="text-sm font-medium text-gray-900">판매자 답변</span>
                             <span className="text-xs text-gray-500">
-                              {new Date(review.seller_reply_at).toLocaleDateString('ko-KR')}
+                              {new Date(review.seller_reply_at).toLocaleDateString('ko-KR', {
+                                timeZone: 'Asia/Seoul',
+                              })}
                             </span>
                           </div>
                           <p className="text-gray-700 whitespace-pre-wrap">{review.seller_reply}</p>

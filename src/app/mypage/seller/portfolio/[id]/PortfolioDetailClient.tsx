@@ -122,7 +122,9 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
               </span>
               <span>
                 <Calendar className="inline w-4 h-4 lg:w-5 lg:h-5 mr-1" />
-                {new Date(portfolio.created_at).toLocaleDateString('ko-KR')}
+                {new Date(portfolio.created_at).toLocaleDateString('ko-KR', {
+                  timeZone: 'Asia/Seoul',
+                })}
               </span>
             </div>
           </div>

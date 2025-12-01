@@ -379,9 +379,9 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
       statusLabel: getStatusLabel(order.status),
       statusColor: getStatusColor(order.status),
       price: order.total_amount,
-      orderDate: new Date(order.created_at).toLocaleString('ko-KR'),
+      orderDate: new Date(order.created_at).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
       expectedDeliveryDate: order.delivery_date
-        ? new Date(order.delivery_date).toLocaleDateString('ko-KR')
+        ? new Date(order.delivery_date).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' })
         : '-',
       daysLeft: order.delivery_date
         ? Math.ceil((new Date(order.delivery_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24))

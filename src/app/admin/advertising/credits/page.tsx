@@ -292,7 +292,9 @@ export default function AdminCreditsPage() {
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-700">
                           {credit.expires_at
-                            ? new Date(credit.expires_at).toLocaleDateString('ko-KR')
+                            ? new Date(credit.expires_at).toLocaleDateString('ko-KR', {
+                                timeZone: 'Asia/Seoul',
+                              })
                             : '무기한'}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-center text-sm">
@@ -508,7 +510,9 @@ export default function AdminCreditsPage() {
                             {transactions.map((tx) => (
                               <tr key={tx.id} className="hover:bg-slate-50">
                                 <td className="px-4 py-3 text-sm text-slate-700">
-                                  {new Date(tx.created_at).toLocaleString('ko-KR')}
+                                  {new Date(tx.created_at).toLocaleString('ko-KR', {
+                                    timeZone: 'Asia/Seoul',
+                                  })}
                                 </td>
                                 <td className="px-4 py-3 text-sm">
                                   <span className={getTransactionTypeColor(tx.transaction_type)}>

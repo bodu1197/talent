@@ -50,7 +50,7 @@ export default function PackageSelector({
   }
 
   const formatPrice = (price: number) => {
-    return price.toLocaleString('ko-KR');
+    return price.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
   };
 
   const getRevisionText = (count: number) => {

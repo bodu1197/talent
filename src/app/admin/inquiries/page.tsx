@@ -231,7 +231,9 @@ export default function AdminInquiriesPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 text-center text-sm text-gray-600">
-                    {new Date(inquiry.created_at).toLocaleDateString('ko-KR')}
+                    {new Date(inquiry.created_at).toLocaleDateString('ko-KR', {
+                      timeZone: 'Asia/Seoul',
+                    })}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-center gap-2">
@@ -312,7 +314,9 @@ export default function AdminInquiriesPage() {
                   <div>
                     <span className="text-gray-500">접수일:</span>
                     <span className="ml-2">
-                      {new Date(selectedInquiry.created_at).toLocaleString('ko-KR')}
+                      {new Date(selectedInquiry.created_at).toLocaleString('ko-KR', {
+                        timeZone: 'Asia/Seoul',
+                      })}
                     </span>
                   </div>
                 </div>
@@ -338,7 +342,10 @@ export default function AdminInquiriesPage() {
                 />
                 {selectedInquiry.replied_at && (
                   <p className="text-xs text-gray-500 mt-1">
-                    마지막 답변: {new Date(selectedInquiry.replied_at).toLocaleString('ko-KR')}
+                    마지막 답변:{' '}
+                    {new Date(selectedInquiry.replied_at).toLocaleString('ko-KR', {
+                      timeZone: 'Asia/Seoul',
+                    })}
                   </p>
                 )}
               </div>

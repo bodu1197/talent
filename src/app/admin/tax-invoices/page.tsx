@@ -269,7 +269,9 @@ export default function AdminTaxInvoicesPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
-                        {new Date(invoice.issue_date).toLocaleDateString('ko-KR')}
+                        {new Date(invoice.issue_date).toLocaleDateString('ko-KR', {
+                          timeZone: 'Asia/Seoul',
+                        })}
                       </div>
                     </td>
                     <td className="px-6 py-4">

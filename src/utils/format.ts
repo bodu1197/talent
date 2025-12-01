@@ -2,6 +2,10 @@
  * 공통 포맷 유틸리티 함수
  */
 
+// 한국 표준시 타임존
+const KST_TIMEZONE = 'Asia/Seoul';
+const KST_LOCALE = 'ko-KR';
+
 /**
  * 숫자를 통화 형식으로 포맷
  * @example formatCurrency(10000) => "10,000원"
@@ -19,12 +23,99 @@ export function formatNumber(num: number): string {
 }
 
 /**
- * 날짜를 YYYY-MM-DD 형식으로 포맷
+ * 날짜를 YYYY-MM-DD 형식으로 포맷 (한국 표준시 기준)
  * @example formatDate(new Date()) => "2025-11-12"
  */
 export function formatDate(date: Date | string): string {
   const d = typeof date === 'string' ? new Date(date) : date;
-  return d.toISOString().split('T')[0];
+  return d
+    .toLocaleDateString(KST_LOCALE, {
+      timeZone: KST_TIMEZONE,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    })
+    .replace(/\. /g, '-')
+    .replace('.', '');
+}
+
+/**
+ * 날짜를 YYYY년 MM월 DD일 형식으로 포맷 (한국 표준시 기준)
+ * @example formatDateKorean(new Date()) => "2025년 11월 12일"
+ */
+export function formatDateKorean(date: Date | string): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return d.toLocaleDateString(KST_LOCALE, {
+    timeZone: KST_TIMEZONE,
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
+/**
+ * 날짜와 시간을 YYYY-MM-DD HH:mm 형식으로 포맷 (한국 표준시 기준)
+ * @example formatDateTime(new Date()) => "2025-11-12 14:30"
+ */
+export function formatDateTime(date: Date | string): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return d
+    .toLocaleString(KST_LOCALE, {
+      timeZone: KST_TIMEZONE,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    })
+    .replace(/\. /g, '-')
+    .replace('.', ' ');
+}
+
+/**
+ * 날짜와 시간을 YYYY년 MM월 DD일 HH:mm 형식으로 포맷 (한국 표준시 기준)
+ * @example formatDateTimeKorean(new Date()) => "2025년 11월 12일 14:30"
+ */
+export function formatDateTimeKorean(date: Date | string): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return d.toLocaleString(KST_LOCALE, {
+    timeZone: KST_TIMEZONE,
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+}
+
+/**
+ * 시간만 HH:mm 형식으로 포맷 (한국 표준시 기준)
+ * @example formatTime(new Date()) => "14:30"
+ */
+export function formatTime(date: Date | string): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return d.toLocaleTimeString(KST_LOCALE, {
+    timeZone: KST_TIMEZONE,
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+}
+
+/**
+ * 시간을 오전/오후 형식으로 포맷 (한국 표준시 기준)
+ * @example formatTimeKorean(new Date()) => "오후 2:30"
+ */
+export function formatTimeKorean(date: Date | string): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return d.toLocaleTimeString(KST_LOCALE, {
+    timeZone: KST_TIMEZONE,
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
 }
 
 /**
@@ -48,6 +139,23 @@ export function formatRelativeTime(date: Date | string): string {
   if (days < 30) return `${Math.floor(days / 7)}주 전`;
   if (days < 365) return `${Math.floor(days / 30)}개월 전`;
   return `${Math.floor(days / 365)}년 전`;
+}
+
+/**
+ * 현재 한국 표준시 Date 객체 반환
+ * @example getKSTDate() => Date (KST 기준)
+ */
+export function getKSTDate(): Date {
+  return new Date(new Date().toLocaleString('en-US', { timeZone: KST_TIMEZONE }));
+}
+
+/**
+ * 특정 날짜를 한국 표준시 기준으로 변환된 Date 객체 반환
+ * @example toKSTDate(new Date()) => Date (KST 기준)
+ */
+export function toKSTDate(date: Date | string): Date {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return new Date(d.toLocaleString('en-US', { timeZone: KST_TIMEZONE }));
 }
 
 /**

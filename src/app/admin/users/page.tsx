@@ -383,7 +383,9 @@ export default function AdminUsersPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(user.created_at).toLocaleDateString('ko-KR')}
+                      {new Date(user.created_at).toLocaleDateString('ko-KR', {
+                        timeZone: 'Asia/Seoul',
+                      })}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <button
@@ -565,7 +567,9 @@ export default function AdminUsersPage() {
                 <div>
                   <p className="block text-sm font-medium text-gray-500 mb-1">가입일</p>
                   <p className="text-sm text-gray-900">
-                    {new Date(selectedUser.created_at).toLocaleString('ko-KR')}
+                    {new Date(selectedUser.created_at).toLocaleString('ko-KR', {
+                      timeZone: 'Asia/Seoul',
+                    })}
                   </p>
                 </div>
               </div>

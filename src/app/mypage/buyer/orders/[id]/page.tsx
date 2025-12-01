@@ -96,7 +96,7 @@ function createStatusEntry(
 
   return {
     status,
-    date: new Date(timestamp).toLocaleString('ko-KR'),
+    date: new Date(timestamp).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
     actor,
   };
 }
@@ -385,7 +385,9 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                         <span className="text-gray-600">예상 완료일:</span>
                         <span className="ml-2 font-medium">
                           {order.delivery_date
-                            ? new Date(order.delivery_date).toLocaleDateString('ko-KR')
+                            ? new Date(order.delivery_date).toLocaleDateString('ko-KR', {
+                                timeZone: 'Asia/Seoul',
+                              })
                             : '-'}
                         </span>
                       </div>
@@ -462,7 +464,9 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                             {file.file_size ? (file.file_size / 1024 / 1024).toFixed(2) : '0.00'}
                             MB •
                             {file.uploaded_at
-                              ? new Date(file.uploaded_at).toLocaleString('ko-KR')
+                              ? new Date(file.uploaded_at).toLocaleString('ko-KR', {
+                                  timeZone: 'Asia/Seoul',
+                                })
                               : ''}
                           </div>
                         </div>
@@ -604,12 +608,23 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                   </span>
                 </div>
                 <div className="pt-2 lg:pt-3 border-t border-gray-200 text-xs lg:text-sm text-gray-600 space-y-1">
-                  <div>주문일: {new Date(order.created_at).toLocaleString('ko-KR')}</div>
+                  <div>
+                    주문일:{' '}
+                    {new Date(order.created_at).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })}
+                  </div>
                   {order.paid_at && (
-                    <div>결제일: {new Date(order.paid_at).toLocaleString('ko-KR')}</div>
+                    <div>
+                      결제일:{' '}
+                      {new Date(order.paid_at).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })}
+                    </div>
                   )}
                   {order.delivered_at && (
-                    <div>납품일: {new Date(order.delivered_at).toLocaleString('ko-KR')}</div>
+                    <div>
+                      납품일:{' '}
+                      {new Date(order.delivered_at).toLocaleString('ko-KR', {
+                        timeZone: 'Asia/Seoul',
+                      })}
+                    </div>
                   )}
                 </div>
               </div>

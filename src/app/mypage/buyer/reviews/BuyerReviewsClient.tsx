@@ -267,7 +267,9 @@ export default function BuyerReviewsClient({
                         </div>
                         <div className="text-xs text-gray-500 mt-0.5">
                           {review.created_at
-                            ? new Date(review.created_at).toLocaleDateString('ko-KR')
+                            ? new Date(review.created_at).toLocaleDateString('ko-KR', {
+                                timeZone: 'Asia/Seoul',
+                              })
                             : '-'}
                         </div>
                       </div>
@@ -329,7 +331,9 @@ export default function BuyerReviewsClient({
                         <div className="text-sm text-gray-600 mb-3">
                           작성일:{' '}
                           {review.created_at
-                            ? new Date(review.created_at).toLocaleDateString('ko-KR')
+                            ? new Date(review.created_at).toLocaleDateString('ko-KR', {
+                                timeZone: 'Asia/Seoul',
+                              })
                             : '-'}
                         </div>
                         <p className="text-gray-700 mb-3 lg:mb-4">{review.comment || ''}</p>

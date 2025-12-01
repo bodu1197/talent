@@ -58,7 +58,9 @@ export default function Step2Pricing({ formData, setFormData, isBusiness }: Step
   const formatPrice = (value: string) => {
     const number = value.replaceAll(/[^\d]/g, '');
     const numValue = Number.parseInt(number, 10);
-    return Number.isNaN(numValue) ? '0' : numValue.toLocaleString('ko-KR');
+    return Number.isNaN(numValue)
+      ? '0'
+      : numValue.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
   };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {

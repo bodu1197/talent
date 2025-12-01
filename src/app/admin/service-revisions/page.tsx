@@ -341,7 +341,9 @@ export default function AdminServiceRevisionsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(revision.created_at).toLocaleDateString('ko-KR')}
+                      {new Date(revision.created_at).toLocaleDateString('ko-KR', {
+                        timeZone: 'Asia/Seoul',
+                      })}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <div className="flex gap-2">

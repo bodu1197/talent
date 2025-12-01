@@ -325,7 +325,9 @@ export default function AdminNoticesPage() {
                     {notice.view_count.toLocaleString()}
                   </td>
                   <td className="px-4 py-3 text-center text-sm text-gray-600">
-                    {new Date(notice.created_at).toLocaleDateString('ko-KR')}
+                    {new Date(notice.created_at).toLocaleDateString('ko-KR', {
+                      timeZone: 'Asia/Seoul',
+                    })}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-center gap-2">

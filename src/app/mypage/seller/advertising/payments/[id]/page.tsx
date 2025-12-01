@@ -140,7 +140,9 @@ export default function PaymentDetailPage() {
 
             <div className="flex justify-between items-center border-b pb-4">
               <span className="text-gray-600">은행</span>
-              <span className="font-semibold text-gray-900">{process.env.NEXT_PUBLIC_BANK_NAME}</span>
+              <span className="font-semibold text-gray-900">
+                {process.env.NEXT_PUBLIC_BANK_NAME}
+              </span>
             </div>
 
             <div className="flex justify-between items-center border-b pb-4">
@@ -152,13 +154,16 @@ export default function PaymentDetailPage() {
 
             <div className="flex justify-between items-center border-b pb-4">
               <span className="text-gray-600">예금주</span>
-              <span className="font-semibold text-gray-900">{process.env.NEXT_PUBLIC_BANK_HOLDER}</span>
+              <span className="font-semibold text-gray-900">
+                {process.env.NEXT_PUBLIC_BANK_HOLDER}
+              </span>
             </div>
 
             <div className="flex justify-between items-center">
               <span className="text-gray-600">입금 기한</span>
               <span className="font-semibold text-red-600">
-                {deadline.toLocaleDateString('ko-KR')} {deadline.toLocaleTimeString('ko-KR')}
+                {deadline.toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' })}{' '}
+                {deadline.toLocaleTimeString('ko-KR', { timeZone: 'Asia/Seoul' })}
               </span>
             </div>
           </div>

@@ -158,7 +158,9 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
                         </div>
                         <div className="text-sm text-gray-600">
                           {review.buyer?.name || '구매자'} •{' '}
-                          {new Date(review.created_at).toLocaleDateString('ko-KR')}
+                          {new Date(review.created_at).toLocaleDateString('ko-KR', {
+                            timeZone: 'Asia/Seoul',
+                          })}
                         </div>
                       </div>
                       {!review.seller_reply && (
@@ -182,7 +184,9 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
                         <p className="text-gray-700">{review.seller_reply}</p>
                         <div className="text-xs text-gray-500 mt-2">
                           {review.seller_reply_at
-                            ? new Date(review.seller_reply_at).toLocaleDateString('ko-KR')
+                            ? new Date(review.seller_reply_at).toLocaleDateString('ko-KR', {
+                                timeZone: 'Asia/Seoul',
+                              })
                             : ''}
                         </div>
                       </div>

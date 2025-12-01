@@ -247,7 +247,9 @@ export default function AdminAdvertisingPaymentsPage() {
       const depositDate = payment.deposit_date || '-';
       const depositTime = payment.deposit_time || '-';
       const status = getStatusLabel(payment.status);
-      const createdAt = new Date(payment.created_at).toLocaleString('ko-KR');
+      const createdAt = new Date(payment.created_at).toLocaleString('ko-KR', {
+        timeZone: 'Asia/Seoul',
+      });
       const adminMemo = payment.admin_memo || '-';
 
       return [
@@ -967,14 +969,18 @@ export default function AdminAdvertisingPaymentsPage() {
                 <div className="bg-gray-50 p-4 rounded-lg space-y-2.5">
                   <div>
                     <strong className="text-sm">
-                      {new Date(detailPayment.created_at).toLocaleString('ko-KR')}
+                      {new Date(detailPayment.created_at).toLocaleString('ko-KR', {
+                        timeZone: 'Asia/Seoul',
+                      })}
                     </strong>
                     {' - 입금 요청 생성 (시스템)'}
                   </div>
                   {detailPayment.confirmed_at && (
                     <div>
                       <strong className="text-sm">
-                        {new Date(detailPayment.confirmed_at).toLocaleString('ko-KR')}
+                        {new Date(detailPayment.confirmed_at).toLocaleString('ko-KR', {
+                          timeZone: 'Asia/Seoul',
+                        })}
                       </strong>
                       {' - 입금 확인 ('}
                       {detailPayment.confirmed_by_admin?.user?.name || '관리자'}

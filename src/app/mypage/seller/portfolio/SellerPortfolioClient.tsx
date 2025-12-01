@@ -122,7 +122,11 @@ export default function SellerPortfolioClient({ portfolio: initialPortfolio }: P
                       <Eye className="inline w-3 h-3 lg:w-4 lg:h-4 mr-1" />
                       {item.view_count || 0}
                     </span>
-                    <span>{new Date(item.created_at).toLocaleDateString('ko-KR')}</span>
+                    <span>
+                      {new Date(item.created_at).toLocaleDateString('ko-KR', {
+                        timeZone: 'Asia/Seoul',
+                      })}
+                    </span>
                   </div>
                   <div className="flex gap-2 mt-3 lg:mt-4">
                     <Link

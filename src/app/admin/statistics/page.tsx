@@ -490,6 +490,7 @@ export default function AdminStatisticsPage() {
                           <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block bg-slate-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-10">
                             {day.date &&
                               new Date(day.date).toLocaleDateString('ko-KR', {
+                                timeZone: 'Asia/Seoul',
                                 month: 'short',
                                 day: 'numeric',
                               })}
@@ -552,10 +553,12 @@ export default function AdminStatisticsPage() {
                         <td className="whitespace-nowrap px-5 py-3 text-sm text-slate-900">
                           {period === 'hour' &&
                             row.hour &&
-                            new Date(row.hour).toLocaleString('ko-KR')}
+                            new Date(row.hour).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })}
                           {period === 'day' &&
                             row.date &&
-                            new Date(row.date).toLocaleDateString('ko-KR')}
+                            new Date(row.date).toLocaleDateString('ko-KR', {
+                              timeZone: 'Asia/Seoul',
+                            })}
                           {period === 'month' &&
                             row.year &&
                             row.month &&
