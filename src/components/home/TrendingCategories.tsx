@@ -20,71 +20,11 @@ interface TrendingData {
   updatedAt: string;
 }
 
-// 기본 카테고리 데이터 (API 실패 시 또는 데이터 없을 때 사용)
-const DEFAULT_CATEGORIES: CategoryData[] = [
-  {
-    id: 'ai-image-design',
-    name: 'AI 이미지/디자인',
-    slug: 'ai-image-design',
-    icon: '🎨',
-    clicks: 0,
-    ratio: 100,
-  },
-  {
-    id: 'ai-video-motion',
-    name: 'AI 영상/모션',
-    slug: 'ai-video-motion',
-    icon: '🎬',
-    clicks: 0,
-    ratio: 85,
-  },
-  {
-    id: 'ai-writing-content',
-    name: 'AI 글쓰기/콘텐츠',
-    slug: 'ai-writing-content',
-    icon: '✍️',
-    clicks: 0,
-    ratio: 70,
-  },
-  {
-    id: 'ai-programming',
-    name: 'AI 프로그래밍',
-    slug: 'ai-programming',
-    icon: '💻',
-    clicks: 0,
-    ratio: 60,
-  },
-  {
-    id: 'ai-audio-music',
-    name: 'AI 음악/사운드',
-    slug: 'ai-audio-music',
-    icon: '🎵',
-    clicks: 0,
-    ratio: 50,
-  },
-  {
-    id: 'general-design',
-    name: '일반 디자인',
-    slug: 'general-design',
-    icon: '🎨',
-    clicks: 0,
-    ratio: 40,
-  },
-  {
-    id: 'general-development',
-    name: '일반 개발',
-    slug: 'general-development',
-    icon: '💻',
-    clicks: 0,
-    ratio: 30,
-  },
-  { id: 'marketing', name: '마케팅', slug: 'marketing', icon: '📢', clicks: 0, ratio: 20 },
-];
-
 export default function TrendingCategories() {
   const [data, setData] = useState<TrendingData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAnimated, setIsAnimated] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -94,23 +34,11 @@ export default function TrendingCategories() {
           const result = await res.json();
           setData(result);
         } else {
-          // API 실패 시 기본 데이터 사용
-          setData({
-            categories: DEFAULT_CATEGORIES,
-            totalClicks: 0,
-            period: '7d',
-            updatedAt: new Date().toISOString(),
-          });
+          setHasError(true);
         }
       } catch (error) {
         console.error('Failed to fetch trending categories:', error);
-        // 에러 시 기본 데이터 사용
-        setData({
-          categories: DEFAULT_CATEGORIES,
-          totalClicks: 0,
-          period: '7d',
-          updatedAt: new Date().toISOString(),
-        });
+        setHasError(true);
       } finally {
         setIsLoading(false);
       }
@@ -148,8 +76,8 @@ export default function TrendingCategories() {
     );
   }
 
-  // 데이터가 없는 경우 (로딩 중이 아닌데 데이터가 없으면 기본값 사용)
-  if (!data) {
+  // 에러가 발생했거나 데이터가 없는 경우 표시하지 않음
+  if (hasError || !data || data.categories.length === 0) {
     return null;
   }
 
