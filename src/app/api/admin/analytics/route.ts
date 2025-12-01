@@ -5,6 +5,24 @@ import { logger } from '@/lib/logger';
 
 type Period = 'hour' | 'day' | 'month' | 'year';
 
+// 한국 표준시(KST) 변환 함수
+function toKST(date: Date): Date {
+  // UTC 시간에 9시간 추가
+  return new Date(date.getTime() + 9 * 60 * 60 * 1000);
+}
+
+// KST 기준으로 날짜 문자열 생성
+function formatKSTDate(date: Date): string {
+  const kst = toKST(date);
+  return kst.toISOString().split('T')[0];
+}
+
+// KST 기준으로 시간 문자열 생성
+function formatKSTHour(date: Date): string {
+  const kst = toKST(date);
+  return kst.toISOString().substring(0, 13) + ':00:00';
+}
+
 interface PageViewRow {
   created_at: string;
   device_type: string | null;
@@ -66,35 +84,36 @@ function getDateRange(period: Period): { startDate: Date; groupBy: string } {
   }
 }
 
-// Aggregate page views by period
+// Aggregate page views by period (KST 기준)
 function aggregateByPeriod(data: PageViewRow[], period: Period): AggregatedStats[] {
   const statsMap = new Map<string, InternalStats>();
 
   for (const row of data) {
     const createdAt = new Date(row.created_at);
+    const kstDate = toKST(createdAt); // KST로 변환
     let key: string;
     let statsEntry: Partial<AggregatedStats>;
 
     switch (period) {
       case 'hour':
-        // Group by hour
-        key = createdAt.toISOString().substring(0, 13) + ':00:00';
+        // Group by hour (KST)
+        key = formatKSTHour(createdAt);
         statsEntry = { hour: key };
         break;
       case 'day':
-        // Group by date
-        key = createdAt.toISOString().split('T')[0];
+        // Group by date (KST)
+        key = formatKSTDate(createdAt);
         statsEntry = { date: key };
         break;
       case 'month':
-        // Group by year-month
-        key = `${createdAt.getFullYear()}-${String(createdAt.getMonth() + 1).padStart(2, '0')}`;
-        statsEntry = { year: createdAt.getFullYear(), month: createdAt.getMonth() + 1 };
+        // Group by year-month (KST)
+        key = `${kstDate.getUTCFullYear()}-${String(kstDate.getUTCMonth() + 1).padStart(2, '0')}`;
+        statsEntry = { year: kstDate.getUTCFullYear(), month: kstDate.getUTCMonth() + 1 };
         break;
       case 'year':
-        // Group by year
-        key = String(createdAt.getFullYear());
-        statsEntry = { year: createdAt.getFullYear() };
+        // Group by year (KST)
+        key = String(kstDate.getUTCFullYear());
+        statsEntry = { year: kstDate.getUTCFullYear() };
         break;
     }
 
