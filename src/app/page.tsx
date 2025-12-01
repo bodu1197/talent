@@ -5,6 +5,7 @@ import HeroWithCategories from '@/components/common/HeroWithCategories';
 import AITalentShowcase from '@/components/home/AITalentShowcase';
 import RecommendedServices from '@/components/home/RecommendedServices';
 import PersonalizedServices from '@/components/home/PersonalizedServices';
+import TrendingCategories from '@/components/home/TrendingCategories';
 import SellerRegistrationGuide from '@/components/home/SellerRegistrationGuide';
 import UserReviews from '@/components/home/UserReviews';
 import { Service } from '@/types';
@@ -52,6 +53,9 @@ export default async function HomePage() {
       {/* 로그인 전 사용자 전용 섹션 */}
       {!user && (
         <>
+          {/* 실시간 인기재능 섹션 */}
+          <TrendingCategories />
+
           {/* 판매자 등록 안내 섹션 */}
           <SellerRegistrationGuide />
 
