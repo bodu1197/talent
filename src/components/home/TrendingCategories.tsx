@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { TrendingUp, Flame, ChevronRight } from 'lucide-react';
 
 interface CategoryData {
   id: string;
@@ -20,6 +19,40 @@ interface TrendingData {
   updatedAt: string;
 }
 
+// 인라인 SVG 아이콘 (lucide-react 대신 사용하여 번들 크기 절감)
+const FlameIcon = () => (
+  <svg
+    className="w-5 h-5 text-orange-500"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"
+    />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"
+    />
+  </svg>
+);
+
+const TrendingUpIcon = ({ className }: { className: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+  </svg>
+);
+
+const ChevronRightIcon = ({ className }: { className: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+  </svg>
+);
+
 export default function TrendingCategories() {
   const [data, setData] = useState<TrendingData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -36,8 +69,7 @@ export default function TrendingCategories() {
         } else {
           setHasError(true);
         }
-      } catch (error) {
-        console.error('Failed to fetch trending categories:', error);
+      } catch {
         setHasError(true);
       } finally {
         setIsLoading(false);
@@ -83,23 +115,23 @@ export default function TrendingCategories() {
 
   // 그래프 색상 배열 (그라데이션 효과)
   const barColors = [
-    'from-orange-500 to-red-500', // 1위: 주황-빨강
-    'from-amber-500 to-orange-500', // 2위: 호박-주황
-    'from-yellow-500 to-amber-500', // 3위: 노랑-호박
-    'from-lime-500 to-yellow-500', // 4위
-    'from-emerald-500 to-lime-500', // 5위
-    'from-teal-500 to-emerald-500', // 6위
-    'from-cyan-500 to-teal-500', // 7위
-    'from-blue-500 to-cyan-500', // 8위
+    'from-orange-500 to-red-500',
+    'from-amber-500 to-orange-500',
+    'from-yellow-500 to-amber-500',
+    'from-lime-500 to-yellow-500',
+    'from-emerald-500 to-lime-500',
+    'from-teal-500 to-emerald-500',
+    'from-cyan-500 to-teal-500',
+    'from-blue-500 to-cyan-500',
   ];
 
   return (
     <section className="py-4 lg:py-8 bg-gradient-to-b from-orange-50/50 to-white">
       <div className="container-1200">
-        {/* 섹션 헤더 - 다른 섹션과 동일한 스타일 */}
+        {/* 섹션 헤더 */}
         <div className="mb-4 md:mb-6">
           <div className="flex items-center gap-2 mb-1">
-            <Flame className="w-5 h-5 text-orange-500" />
+            <FlameIcon />
             <h2 className="text-mobile-lg lg:text-xl font-semibold text-gray-900">
               실시간 인기재능
             </h2>
@@ -110,7 +142,7 @@ export default function TrendingCategories() {
           <p className="text-mobile-md text-gray-600">지금 가장 많이 찾는 카테고리</p>
         </div>
 
-        {/* 막대 그래프 - 컴팩트한 디자인 */}
+        {/* 막대 그래프 */}
         <div className="grid gap-1.5 md:gap-2">
           {data.categories.map((category, index) => {
             const barColor = barColors[index % barColors.length];
@@ -155,7 +187,7 @@ export default function TrendingCategories() {
                         {category.name}
                       </span>
                       <div className="flex items-center gap-1 flex-shrink-0 ml-2">
-                        <TrendingUp
+                        <TrendingUpIcon
                           className={`w-3 h-3 ${isTop3 ? 'text-orange-500' : 'text-gray-400'}`}
                         />
                         <span
@@ -175,8 +207,8 @@ export default function TrendingCategories() {
                     </div>
                   </div>
 
-                  {/* 화살표 (호버 시) */}
-                  <ChevronRight className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-300 group-hover:text-orange-500 group-hover:translate-x-0.5 transition-all flex-shrink-0" />
+                  {/* 화살표 */}
+                  <ChevronRightIcon className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-300 group-hover:text-orange-500 group-hover:translate-x-0.5 transition-all flex-shrink-0" />
                 </div>
               </Link>
             );
@@ -190,7 +222,7 @@ export default function TrendingCategories() {
             className="inline-flex items-center gap-1.5 px-4 py-2 text-sm bg-gradient-to-r from-orange-500 to-red-500 text-white font-medium rounded-full hover:from-orange-600 hover:to-red-600 transition-all shadow-sm hover:shadow-md"
           >
             <span>전체 카테고리 보기</span>
-            <ChevronRight className="w-3.5 h-3.5" />
+            <ChevronRightIcon className="w-3.5 h-3.5" />
           </Link>
         </div>
       </div>

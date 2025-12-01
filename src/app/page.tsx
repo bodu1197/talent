@@ -5,13 +5,13 @@ import HeroWithCategories from '@/components/common/HeroWithCategories';
 import AITalentShowcase from '@/components/home/AITalentShowcase';
 import RecommendedServices from '@/components/home/RecommendedServices';
 import PersonalizedServices from '@/components/home/PersonalizedServices';
-import TrendingCategories from '@/components/home/TrendingCategories';
 import SellerRegistrationGuide from '@/components/home/SellerRegistrationGuide';
 import UserReviews from '@/components/home/UserReviews';
 import { Service } from '@/types';
 
 const RecentVisitedCategories = dynamic(() => import('@/components/home/RecentVisitedCategories'));
 const RecentViewedServices = dynamic(() => import('@/components/home/RecentViewedServices'));
+const TrendingCategories = dynamic(() => import('@/components/home/TrendingCategories'));
 
 // 캐싱 최적화: 60초마다 재생성
 export const revalidate = 60;
