@@ -103,7 +103,7 @@ export default function TrendingCategories() {
             <h2 className="text-mobile-lg lg:text-xl font-semibold text-gray-900">
               실시간 인기재능
             </h2>
-            <span className="text-[10px] md:text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded-full">
+            <span className="text-[10px] md:text-xs text-gray-700 bg-gray-200 px-1.5 py-0.5 rounded-full">
               최근 24시간
             </span>
           </div>
@@ -136,7 +136,7 @@ export default function TrendingCategories() {
                     ${
                       isTop3
                         ? 'bg-gradient-to-br from-orange-400 to-red-500 text-white'
-                        : 'bg-gray-100 text-gray-500'
+                        : 'bg-gray-200 text-gray-700'
                     }
                   `}
                   >
