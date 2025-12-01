@@ -26,11 +26,6 @@ export default function Footer() {
                     개인정보처리방침
                   </Link>
                 </li>
-                <li>
-                  <Link href="/contact" className="hover:text-brand-primary transition-colors">
-                    제휴 문의
-                  </Link>
-                </li>
               </ul>
             </div>
             <div>
