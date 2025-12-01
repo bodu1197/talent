@@ -29,9 +29,7 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
   const formatPrice = (value: string) => {
     const number = value.replaceAll(/[^\d]/g, '');
     const numValue = Number.parseInt(number, 10);
-    return Number.isNaN(numValue)
-      ? '0'
-      : numValue.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+    return Number.isNaN(numValue) ? '0' : numValue.toLocaleString('ko-KR');
   };
 
   const handlePackageChange = (
