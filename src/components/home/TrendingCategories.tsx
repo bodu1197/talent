@@ -60,14 +60,14 @@ export default function TrendingCategories() {
   // 로딩 스켈레톤
   if (isLoading) {
     return (
-      <section className="py-10 md:py-16 bg-gradient-to-b from-orange-50 to-white">
+      <section className="py-4 lg:py-8 bg-gradient-to-b from-orange-50/50 to-white">
         <div className="container-1200">
-          <div className="h-8 bg-gray-200 rounded w-48 mb-6 animate-pulse"></div>
-          <div className="grid gap-3 md:gap-4">
-            {Array.from({ length: 8 }, (_, i) => (
+          <div className="h-5 bg-gray-200 rounded w-36 mb-4 animate-pulse"></div>
+          <div className="grid gap-1.5 md:gap-2">
+            {Array.from({ length: 10 }, (_, i) => (
               <div
                 key={`skeleton-${i}`}
-                className="h-14 bg-gray-100 rounded-lg animate-pulse"
+                className="h-10 md:h-11 bg-gray-100 rounded-lg animate-pulse"
               ></div>
             ))}
           </div>
@@ -94,21 +94,24 @@ export default function TrendingCategories() {
   ];
 
   return (
-    <section className="py-10 md:py-16 bg-gradient-to-b from-orange-50/80 to-white overflow-hidden">
+    <section className="py-4 lg:py-8 bg-gradient-to-b from-orange-50/50 to-white">
       <div className="container-1200">
-        {/* 섹션 헤더 */}
-        <div className="flex items-center gap-2 mb-6 md:mb-8">
-          <div className="flex items-center gap-2">
-            <Flame className="w-6 h-6 md:w-7 md:h-7 text-orange-500 animate-pulse" />
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900">실시간 인기재능</h2>
+        {/* 섹션 헤더 - 다른 섹션과 동일한 스타일 */}
+        <div className="mb-4 md:mb-6">
+          <div className="flex items-center gap-2 mb-1">
+            <Flame className="w-5 h-5 text-orange-500" />
+            <h2 className="text-mobile-lg lg:text-xl font-semibold text-gray-900">
+              실시간 인기재능
+            </h2>
+            <span className="text-[10px] md:text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded-full">
+              최근 7일
+            </span>
           </div>
-          <span className="text-xs md:text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-            최근 7일
-          </span>
+          <p className="text-mobile-md text-gray-600">지금 가장 많이 찾는 카테고리</p>
         </div>
 
-        {/* 막대 그래프 */}
-        <div className="grid gap-2.5 md:gap-3">
+        {/* 막대 그래프 - 컴팩트한 디자인 */}
+        <div className="grid gap-1.5 md:gap-2">
           {data.categories.map((category, index) => {
             const barColor = barColors[index % barColors.length];
             const animatedWidth = isAnimated ? `${Math.max(category.ratio, 8)}%` : '0%';
@@ -118,48 +121,45 @@ export default function TrendingCategories() {
               <Link key={category.id} href={`/categories/${category.slug}`} className="group block">
                 <div
                   className={`
-                  relative flex items-center gap-3 md:gap-4 p-3 md:p-4 rounded-xl
+                  relative flex items-center gap-2 md:gap-3 p-2 md:p-2.5 rounded-lg
                   bg-white border border-gray-100
-                  hover:border-orange-200 hover:shadow-md
-                  transition-all duration-300 ease-out
-                  ${isTop3 ? 'ring-1 ring-orange-100' : ''}
+                  hover:border-orange-200 hover:shadow-sm
+                  transition-all duration-200
+                  ${isTop3 ? 'border-orange-100' : ''}
                 `}
                 >
                   {/* 순위 뱃지 */}
                   <div
                     className={`
-                    flex-shrink-0 w-7 h-7 md:w-8 md:h-8 rounded-full
-                    flex items-center justify-center font-bold text-sm md:text-base
+                    flex-shrink-0 w-5 h-5 md:w-6 md:h-6 rounded-full
+                    flex items-center justify-center font-bold text-[10px] md:text-xs
                     ${
                       isTop3
-                        ? 'bg-gradient-to-br from-orange-400 to-red-500 text-white shadow-sm'
-                        : 'bg-gray-100 text-gray-600'
+                        ? 'bg-gradient-to-br from-orange-400 to-red-500 text-white'
+                        : 'bg-gray-100 text-gray-500'
                     }
                   `}
                   >
                     {index + 1}
                   </div>
 
-                  {/* 카테고리 아이콘 */}
-                  <span className="text-xl md:text-2xl flex-shrink-0">{category.icon}</span>
-
                   {/* 카테고리명 + 막대 그래프 */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1.5 md:mb-2">
+                    <div className="flex items-center justify-between mb-1">
                       <span
                         className={`
-                        font-medium truncate text-sm md:text-base
+                        font-medium truncate text-xs md:text-sm
                         ${isTop3 ? 'text-gray-900' : 'text-gray-700'}
                       `}
                       >
                         {category.name}
                       </span>
-                      <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
+                      <div className="flex items-center gap-1 flex-shrink-0 ml-2">
                         <TrendingUp
-                          className={`w-3.5 h-3.5 ${isTop3 ? 'text-orange-500' : 'text-gray-400'}`}
+                          className={`w-3 h-3 ${isTop3 ? 'text-orange-500' : 'text-gray-400'}`}
                         />
                         <span
-                          className={`text-xs md:text-sm font-medium ${isTop3 ? 'text-orange-600' : 'text-gray-500'}`}
+                          className={`text-[10px] md:text-xs font-medium ${isTop3 ? 'text-orange-600' : 'text-gray-500'}`}
                         >
                           {category.clicks.toLocaleString('ko-KR')}
                         </span>
@@ -167,7 +167,7 @@ export default function TrendingCategories() {
                     </div>
 
                     {/* 진행 막대 */}
-                    <div className="h-2 md:h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-1.5 md:h-2 bg-gray-100 rounded-full overflow-hidden">
                       <div
                         className={`h-full bg-gradient-to-r ${barColor} rounded-full transition-all duration-1000 ease-out`}
                         style={{ width: animatedWidth }}
@@ -176,7 +176,7 @@ export default function TrendingCategories() {
                   </div>
 
                   {/* 화살표 (호버 시) */}
-                  <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-gray-300 group-hover:text-orange-500 group-hover:translate-x-1 transition-all flex-shrink-0" />
+                  <ChevronRight className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-300 group-hover:text-orange-500 group-hover:translate-x-0.5 transition-all flex-shrink-0" />
                 </div>
               </Link>
             );
@@ -184,27 +184,15 @@ export default function TrendingCategories() {
         </div>
 
         {/* 전체 보기 버튼 */}
-        <div className="mt-6 md:mt-8 text-center">
+        <div className="mt-4 md:mt-6 text-center">
           <Link
             href="/categories"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-medium rounded-full hover:from-orange-600 hover:to-red-600 transition-all shadow-md hover:shadow-lg"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm bg-gradient-to-r from-orange-500 to-red-500 text-white font-medium rounded-full hover:from-orange-600 hover:to-red-600 transition-all shadow-sm hover:shadow-md"
           >
             <span>전체 카테고리 보기</span>
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-3.5 h-3.5" />
           </Link>
         </div>
-
-        {/* 업데이트 시간 */}
-        <p className="text-center text-xs text-gray-400 mt-4">
-          {new Date(data.updatedAt).toLocaleString('ko-KR', {
-            timeZone: 'Asia/Seoul',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-          })}{' '}
-          기준
-        </p>
       </div>
     </section>
   );
