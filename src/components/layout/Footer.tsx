@@ -122,11 +122,21 @@ export default function Footer() {
             </div>
           </div>
           <div className="border-t border-gray-200 mt-8 pt-8 text-sm text-center">
-            <p className="mb-2 text-gray-600">
-              사업자등록번호: 123-45-67890 | 대표: 홍길동 | 통신판매업신고: 2025-서울강남-00000
+            <p className="mb-4 text-gray-500 text-xs">
+              돌파구는 통신판매중개자이며, 통신판매의 당사자가 아닙니다.
+              <br />
+              상품, 상품정보, 거래에 관한 의무와 책임은 판매회원에게 있습니다.
             </p>
-            <p className="mb-4 text-gray-600">
-              주소: 서울특별시 강남구 테헤란로 123 AI빌딩 5층 | 대표전화: 1234-5678
+            <p className="mb-2 text-gray-600">
+              사업자등록번호: 363-06-01936 | 대표: 배미미 | 통신판매업신고: 제 2022-경기광명-1283호
+            </p>
+            <p className="mb-2 text-gray-600">주소: 서울시 마포구 월드컵로 81 3층</p>
+            <p className="mb-2 text-gray-600">
+              고객센터: dolpagu@dolpagu.com (주말 및 공휴일 휴무 / 오전 10시 ~ 오후 7시)
+            </p>
+            <p className="mb-4 text-gray-500 text-xs">
+              (주)플랫폼몬스터에서 결제된 예약금 환불 관련한 의무 및 책임은 저희 플랫폼몬스터에
+              있습니다.
             </p>
             <p className="text-gray-500">© 2025 돌파구. All rights reserved.</p>
           </div>
