@@ -104,7 +104,7 @@ export default function TrendingCategories() {
               실시간 인기재능
             </h2>
             <span className="text-[10px] md:text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded-full">
-              최근 7일
+              최근 24시간
             </span>
           </div>
           <p className="text-mobile-md text-gray-600">지금 가장 많이 찾는 카테고리</p>

@@ -58,15 +58,15 @@ export async function GET() {
       }
     }
 
-    // 4. 최근 7일간의 카테고리 페이지 조회수 가져오기
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    // 4. 최근 24시간의 카테고리 페이지 조회수 가져오기
+    const oneDayAgo = new Date();
+    oneDayAgo.setHours(oneDayAgo.getHours() - 24);
 
     const { data: pageViews, error: viewError } = await supabase
       .from('page_views')
       .select('path')
       .like('path', '/categories/%')
-      .gte('created_at', sevenDaysAgo.toISOString());
+      .gte('created_at', oneDayAgo.toISOString());
 
     if (viewError) {
       logger.error('Failed to fetch page views:', viewError);
@@ -118,7 +118,7 @@ export async function GET() {
     return NextResponse.json({
       categories: resultWithRatio,
       totalClicks: pageViews?.length || 0,
-      period: '7d',
+      period: '24h',
       updatedAt: new Date().toISOString(),
     });
   } catch (error) {
