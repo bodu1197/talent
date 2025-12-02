@@ -285,7 +285,7 @@ export default function SecondHeroBanner() {
 
   return (
     <section ref={sectionRef} className="py-6 md:py-10 relative">
-      {/* 오토바이 애니메이션 - 스크롤 시 한 번만 실행 후 정지 */}
+      {/* 오토바이 - 모바일: 왼쪽에 고정, 데스크톱: 애니메이션 */}
       <div
         className="absolute pointer-events-none z-50"
         style={{
@@ -296,8 +296,17 @@ export default function SecondHeroBanner() {
           overflow: 'visible',
         }}
       >
+        {/* 모바일: 고정 위치 (왼쪽에 반만 걸침) */}
         <div
-          className="absolute flex items-center"
+          className="absolute flex items-center md:hidden"
+          style={{ transform: 'translateX(-80px)' }}
+        >
+          <MotorcycleIcon />
+        </div>
+
+        {/* 데스크톱: 애니메이션 */}
+        <div
+          className="absolute hidden md:flex items-center"
           style={{
             transform: scooterStarted ? undefined : 'translateX(-150px)',
             animation: scooterStarted ? 'scooter-enter 7s ease-out forwards' : 'none',
@@ -308,19 +317,19 @@ export default function SecondHeroBanner() {
           {!scooterStopped && (
             <div className="absolute -left-16 flex items-center gap-1">
               <div
-                className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-400/70"
+                className="w-10 h-10 rounded-full bg-gray-400/70"
                 style={{ animation: 'smoke-puff 0.8s ease-out infinite' }}
               />
               <div
-                className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-gray-400/60"
+                className="w-8 h-8 rounded-full bg-gray-400/60"
                 style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.15s' }}
               />
               <div
-                className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gray-400/50"
+                className="w-12 h-12 rounded-full bg-gray-400/50"
                 style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.3s' }}
               />
               <div
-                className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-gray-400/40"
+                className="w-8 h-8 rounded-full bg-gray-400/40"
                 style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.45s' }}
               />
             </div>
