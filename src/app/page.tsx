@@ -7,13 +7,15 @@ import RecommendedServices from '@/components/home/RecommendedServices';
 import PersonalizedServices from '@/components/home/PersonalizedServices';
 import SellerRegistrationGuide from '@/components/home/SellerRegistrationGuide';
 import UserReviews from '@/components/home/UserReviews';
+// 비로그인 Above-the-fold 컴포넌트 - CLS 방지를 위해 일반 import
+import TrendingCategories from '@/components/home/TrendingCategories';
+import SecondHeroBanner from '@/components/home/SecondHeroBanner';
+import ThirdHeroBanner from '@/components/home/ThirdHeroBanner';
 import { Service } from '@/types';
 
+// 로그인 사용자 전용 컴포넌트 - dynamic import 유지
 const RecentVisitedCategories = dynamic(() => import('@/components/home/RecentVisitedCategories'));
 const RecentViewedServices = dynamic(() => import('@/components/home/RecentViewedServices'));
-const TrendingCategories = dynamic(() => import('@/components/home/TrendingCategories'));
-const SecondHeroBanner = dynamic(() => import('@/components/home/SecondHeroBanner'));
-const ThirdHeroBanner = dynamic(() => import('@/components/home/ThirdHeroBanner'));
 
 // 캐싱 최적화: 60초마다 재생성
 export const revalidate = 60;
