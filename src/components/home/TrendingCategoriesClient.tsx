@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 interface CategoryData {
@@ -11,6 +11,96 @@ interface CategoryData {
   clicks: number;
   ratio: number;
 }
+
+// 코딩 배경 애니메이션 컴포넌트
+const CodeRainBackground = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // 캔버스 크기 설정
+    const resizeCanvas = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // 코드 문자들
+    const codeChars =
+      'const let var function return if else for while async await import export class interface type => {} [] () ; : = + - * / < > ! & | . , " \' ` @ # $ %'.split(
+        ' '
+      );
+    const keywords = [
+      'React',
+      'Next',
+      'TypeScript',
+      'API',
+      'async',
+      'fetch',
+      'data',
+      'user',
+      'props',
+      'state',
+      'hook',
+      'effect',
+      'render',
+      'component',
+    ];
+    const allChars = [...codeChars, ...keywords];
+
+    // 열 설정
+    const fontSize = 14;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops: number[] = Array(columns).fill(1);
+
+    // 그리기 함수
+    const draw = () => {
+      // 반투명 배경으로 잔상 효과
+      ctx.fillStyle = 'rgba(255, 247, 237, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = 'rgba(251, 146, 60, 0.15)'; // 오렌지색
+      ctx.font = `${fontSize}px monospace`;
+
+      for (let i = 0; i < drops.length; i++) {
+        // eslint-disable-next-line sonarjs/pseudo-random -- 시각적 애니메이션용 랜덤, 보안과 무관
+        const char = allChars[Math.floor(Math.random() * allChars.length)];
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+
+        ctx.fillText(char, x, y);
+
+        // 화면 아래로 떨어지면 다시 위로
+        // eslint-disable-next-line sonarjs/pseudo-random -- 시각적 애니메이션용 랜덤, 보안과 무관
+        if (y > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    };
+
+    const interval = setInterval(draw, 50);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ opacity: 0.6 }}
+    />
+  );
+};
 
 // 인라인 SVG 아이콘
 const FlameIcon = () => (
@@ -71,8 +161,11 @@ export default function TrendingCategoriesClient({ categories }: Props) {
   const maxRatio = Math.max(...categories.map((c) => c.ratio));
 
   return (
-    <section className="py-6 lg:py-10 bg-gradient-to-b from-orange-50/50 to-white">
-      <div className="container-1200">
+    <section className="py-6 lg:py-10 bg-gradient-to-b from-orange-50/50 to-white relative overflow-hidden">
+      {/* 코딩 배경 애니메이션 */}
+      <CodeRainBackground />
+
+      <div className="container-1200 relative z-10">
         {/* 섹션 헤더 */}
         <div className="text-center mb-6 md:mb-8">
           <div className="inline-flex items-center gap-2 mb-2">
