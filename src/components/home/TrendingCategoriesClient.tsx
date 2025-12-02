@@ -77,42 +77,42 @@ const CodeTypingBackground = () => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {/* 왼쪽 코드 블록들 */}
-      <div className="absolute left-2 top-4 opacity-20 hidden lg:block">
-        <pre className="text-[10px] text-gray-600 font-mono leading-tight">
+      <div className="absolute left-2 top-4 opacity-60 hidden lg:block">
+        <pre className="text-[11px] text-black font-mono leading-tight">
           {typedCodes[0]}
           <span className="animate-pulse">|</span>
         </pre>
       </div>
-      <div className="absolute left-4 bottom-8 opacity-15 hidden lg:block">
-        <pre className="text-[10px] text-gray-600 font-mono leading-tight">
+      <div className="absolute left-4 bottom-8 opacity-50 hidden lg:block">
+        <pre className="text-[11px] text-black font-mono leading-tight">
           {typedCodes[1]}
           <span className="animate-pulse">|</span>
         </pre>
       </div>
 
       {/* 오른쪽 코드 블록들 */}
-      <div className="absolute right-2 top-8 opacity-20 hidden lg:block">
-        <pre className="text-[10px] text-gray-600 font-mono leading-tight">
+      <div className="absolute right-2 top-8 opacity-60 hidden lg:block">
+        <pre className="text-[11px] text-black font-mono leading-tight">
           {typedCodes[2]}
           <span className="animate-pulse">|</span>
         </pre>
       </div>
-      <div className="absolute right-4 bottom-4 opacity-15 hidden lg:block">
-        <pre className="text-[10px] text-gray-600 font-mono leading-tight">
+      <div className="absolute right-4 bottom-4 opacity-50 hidden lg:block">
+        <pre className="text-[11px] text-black font-mono leading-tight">
           {typedCodes[3]}
           <span className="animate-pulse">|</span>
         </pre>
       </div>
 
       {/* 중앙 좌우 코드 블록 */}
-      <div className="absolute left-1/4 top-2 opacity-10 hidden md:block">
-        <pre className="text-[9px] text-gray-500 font-mono leading-tight">
+      <div className="absolute left-1/4 top-2 opacity-40 hidden md:block">
+        <pre className="text-[10px] text-black font-mono leading-tight">
           {typedCodes[4]}
           <span className="animate-pulse">|</span>
         </pre>
       </div>
-      <div className="absolute right-1/4 bottom-2 opacity-10 hidden md:block">
-        <pre className="text-[9px] text-gray-500 font-mono leading-tight">
+      <div className="absolute right-1/4 bottom-2 opacity-40 hidden md:block">
+        <pre className="text-[10px] text-black font-mono leading-tight">
           {typedCodes[5]}
           <span className="animate-pulse">|</span>
         </pre>
