@@ -90,7 +90,7 @@ export default function TrendingCategoriesClient({ categories }: Props) {
         </div>
 
         {/* 세로 막대 그래프 */}
-        <div className="flex justify-center items-end gap-1 sm:gap-2 md:gap-3 lg:gap-4 pb-4">
+        <div className="flex justify-between items-end pb-4">
           {categories.map((category, index) => {
             const barColor = barColors[index % barColors.length];
             const heightPercent = maxRatio > 0 ? (category.ratio / maxRatio) * 100 : 0;
