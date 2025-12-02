@@ -46,31 +46,48 @@ export async function GET() {
 }`,
 ];
 
-// 코딩 타이핑 애니메이션 컴포넌트
+// 코딩 타이핑 애니메이션 컴포넌트 (연속 타이핑)
 const CodeTypingBackground = () => {
-  const [typedCodes, setTypedCodes] = useState<string[]>([]);
+  const [typedCodes, setTypedCodes] = useState<string[]>(['', '', '', '', '', '']);
 
   useEffect(() => {
-    const codeBlocks = codeSnippets.map((code) => ({
-      fullCode: code,
-      currentIndex: 0,
-    }));
+    // 각 블록별로 현재 스니펫 인덱스와 타이핑 위치 추적
+    const blockStates = Array(6)
+      .fill(null)
+      .map((_, i) => ({
+        snippetIndex: i % codeSnippets.length,
+        charIndex: 0,
+        displayText: '',
+      }));
 
     const typeCode = () => {
       setTypedCodes(
-        codeBlocks.map((block) => {
-          if (block.currentIndex < block.fullCode.length) {
-            block.currentIndex += 2; // 한번에 2글자씩
+        blockStates.map((state) => {
+          const currentSnippet = codeSnippets[state.snippetIndex];
+
+          if (state.charIndex < currentSnippet.length) {
+            // 계속 타이핑
+            state.charIndex += 2;
+            state.displayText = currentSnippet.slice(0, state.charIndex);
           } else {
-            // 다 쳤으면 처음부터 다시
-            block.currentIndex = 0;
+            // 현재 스니펫 완료 → 다음 스니펫으로 이어서
+            state.snippetIndex = (state.snippetIndex + 1) % codeSnippets.length;
+            state.charIndex = 0;
+            // 이전 코드 뒤에 줄바꿈 추가하고 새 코드 시작
+            state.displayText = state.displayText + '\n\n';
           }
-          return block.fullCode.slice(0, block.currentIndex);
+
+          // 너무 길어지면 앞부분 잘라내기 (최근 500자만 유지)
+          if (state.displayText.length > 500) {
+            state.displayText = state.displayText.slice(-400);
+          }
+
+          return state.displayText;
         })
       );
     };
 
-    const interval = setInterval(typeCode, 80);
+    const interval = setInterval(typeCode, 60);
     return () => clearInterval(interval);
   }, []);
 
