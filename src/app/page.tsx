@@ -57,8 +57,10 @@ export default async function HomePage() {
       {/* 로그인 전 사용자 전용 섹션 */}
       {!user && (
         <>
-          {/* 실시간 인기재능 섹션 */}
-          <TrendingCategories />
+          {/* 실시간 인기재능 섹션 - Suspense로 스트리밍 (LCP blocking 방지) */}
+          <Suspense fallback={<TrendingSkeleton />}>
+            <TrendingCategories />
+          </Suspense>
 
           {/* 제2 히어로 배너 - 심부름 헬퍼 */}
           <SecondHeroBanner />
@@ -249,6 +251,39 @@ function PersonalizedSkeleton() {
                   ></div>
                 ))}
               </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// 트렌딩 카테고리 스켈레톤 - 실제 콘텐츠와 동일한 크기 (CLS 방지)
+function TrendingSkeleton() {
+  return (
+    <section className="py-6 lg:py-10 bg-gradient-to-b from-orange-50/50 to-white">
+      <div className="container-1200">
+        {/* 헤더 */}
+        <div className="text-center mb-6 md:mb-8">
+          <div className="h-8 bg-gray-200 rounded w-48 mb-2 animate-pulse mx-auto"></div>
+          <div className="h-5 bg-gray-200 rounded w-72 animate-pulse mx-auto"></div>
+        </div>
+        {/* 그래프 - 8개 막대 */}
+        <div className="flex justify-center items-end gap-2 sm:gap-3 md:gap-4 lg:gap-6 px-2 pb-4">
+          {Array.from({ length: 8 }, (_, i) => (
+            <div
+              key={`trending-skeleton-${i}`}
+              className="flex flex-col items-center flex-shrink-0"
+            >
+              <div className="h-4 w-8 mb-1 bg-gray-200 rounded animate-pulse"></div>
+              <div className="relative w-10 sm:w-12 md:w-14 lg:w-16 h-28 sm:h-32 md:h-40 lg:h-48 flex items-end">
+                <div
+                  className="w-full bg-gray-200 rounded-t-lg animate-pulse"
+                  style={{ height: `${90 - i * 10}%` }}
+                ></div>
+              </div>
+              <div className="mt-2 h-4 w-12 bg-gray-200 rounded animate-pulse"></div>
             </div>
           ))}
         </div>

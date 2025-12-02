@@ -49,41 +49,42 @@ function findRootCategoryId(
   }
 }
 
-// 서버에서 트렌딩 카테고리 데이터 조회
+// 서버에서 트렌딩 카테고리 데이터 조회 (쿼리 병렬화)
 async function fetchTrendingCategories() {
   try {
     const supabase = createServiceRoleClient();
-
-    // 1. 1차 카테고리 가져오기
-    const { data: primaryCategories, error: catError } = await supabase
-      .from('categories')
-      .select('id, name, slug, icon')
-      .is('parent_id', null)
-      .eq('is_active', true)
-      .order('display_order');
-
-    if (catError || !primaryCategories) {
-      return [];
-    }
-
-    // 2. 모든 카테고리 가져오기 (부모 ID 매핑용)
-    const { data: allCategories } = await supabase
-      .from('categories')
-      .select('id, slug, parent_id')
-      .eq('is_active', true);
-
-    // 3. 카테고리 매핑 생성
-    const { slugToRootId, idToParentId } = buildCategoryMappings(allCategories || []);
-
-    // 4. 최근 24시간 조회수 가져오기
     const oneDayAgo = new Date();
     oneDayAgo.setHours(oneDayAgo.getHours() - 24);
 
-    const { data: pageViews } = await supabase
-      .from('page_views')
-      .select('path')
-      .like('path', '/categories/%')
-      .gte('created_at', oneDayAgo.toISOString());
+    // 모든 쿼리를 병렬로 실행 (LCP 개선)
+    const [primaryResult, allCategoriesResult, pageViewsResult] = await Promise.all([
+      // 1. 1차 카테고리
+      supabase
+        .from('categories')
+        .select('id, name, slug, icon')
+        .is('parent_id', null)
+        .eq('is_active', true)
+        .order('display_order'),
+      // 2. 모든 카테고리 (부모 ID 매핑용)
+      supabase.from('categories').select('id, slug, parent_id').eq('is_active', true),
+      // 3. 최근 24시간 조회수
+      supabase
+        .from('page_views')
+        .select('path')
+        .like('path', '/categories/%')
+        .gte('created_at', oneDayAgo.toISOString()),
+    ]);
+
+    const primaryCategories = primaryResult.data;
+    const allCategories = allCategoriesResult.data;
+    const pageViews = pageViewsResult.data;
+
+    if (primaryResult.error || !primaryCategories) {
+      return [];
+    }
+
+    // 카테고리 매핑 생성
+    const { slugToRootId, idToParentId } = buildCategoryMappings(allCategories || []);
 
     // 5. 클릭수 초기화 및 집계
     const categoryClicks: Record<string, number> = {};
