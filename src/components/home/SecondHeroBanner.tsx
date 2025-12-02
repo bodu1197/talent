@@ -141,7 +141,7 @@ const LockIcon = () => (
 
 // 오토바이 아이콘 (스쿠터/배달 오토바이 스타일)
 const MotorcycleIcon = () => (
-  <svg className="w-12 h-12" viewBox="0 0 64 64" fill="none">
+  <svg className="w-24 h-24 md:w-32 md:h-32" viewBox="0 0 64 64" fill="none">
     {/* 바퀴 */}
     <circle cx="14" cy="44" r="8" stroke="#FFD700" strokeWidth="3" fill="#1a1a1a" />
     <circle cx="50" cy="44" r="8" stroke="#FFD700" strokeWidth="3" fill="#1a1a1a" />
@@ -285,26 +285,26 @@ export default function SecondHeroBanner() {
         <div
           className="absolute flex items-center"
           style={{
-            animation: 'motorcycle-ride 5s linear infinite',
+            animation: 'motorcycle-ride 10s linear infinite',
           }}
         >
           {/* 연기 효과 */}
-          <div className="absolute -left-10 flex items-center gap-0.5">
+          <div className="absolute -left-16 flex items-center gap-1">
             <div
-              className="w-5 h-5 rounded-full bg-gray-500/60"
-              style={{ animation: 'smoke-puff 0.6s ease-out infinite' }}
+              className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-400/70"
+              style={{ animation: 'smoke-puff 0.8s ease-out infinite' }}
             />
             <div
-              className="w-4 h-4 rounded-full bg-gray-500/50"
-              style={{ animation: 'smoke-puff 0.6s ease-out infinite 0.1s' }}
+              className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-gray-400/60"
+              style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.15s' }}
             />
             <div
-              className="w-6 h-6 rounded-full bg-gray-500/40"
-              style={{ animation: 'smoke-puff 0.6s ease-out infinite 0.2s' }}
+              className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gray-400/50"
+              style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.3s' }}
             />
             <div
-              className="w-4 h-4 rounded-full bg-gray-500/30"
-              style={{ animation: 'smoke-puff 0.6s ease-out infinite 0.3s' }}
+              className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-gray-400/40"
+              style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.45s' }}
             />
           </div>
           <MotorcycleIcon />
