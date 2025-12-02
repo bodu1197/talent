@@ -178,7 +178,7 @@ export default function SecondHeroBanner() {
           setScooterStarted(true);
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.1 } // 모바일에서도 빨리 트리거되도록 10%로 낮춤
     );
 
     if (sectionRef.current) {

@@ -457,7 +457,19 @@ input[type="radio"] {
     transform: translateX(-150px);
   }
   100% {
-    transform: translateX(calc(100vw - 450px));
+    transform: translateX(calc(100vw - 200px));
+  }
+}
+
+/* 데스크톱에서는 더 안쪽에서 멈춤 */
+@media (min-width: 768px) {
+  @keyframes scooter-enter {
+    0% {
+      transform: translateX(-150px);
+    }
+    100% {
+      transform: translateX(calc(100vw - 450px));
+    }
   }
 }
 
