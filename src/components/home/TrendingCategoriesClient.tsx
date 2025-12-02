@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 interface CategoryData {
@@ -12,93 +12,112 @@ interface CategoryData {
   ratio: number;
 }
 
-// 코딩 배경 애니메이션 컴포넌트
-const CodeRainBackground = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+// 실제 코드 스니펫들
+const codeSnippets = [
+  `const fetchData = async () => {
+  const response = await fetch('/api/talents');
+  const data = await response.json();
+  return data;
+};`,
+  `function TalentCard({ talent }) {
+  return (
+    <div className="card">
+      <h3>{talent.name}</h3>
+      <p>{talent.description}</p>
+    </div>
+  );
+}`,
+  `export interface Talent {
+  id: string;
+  name: string;
+  category: string;
+  rating: number;
+}`,
+  `useEffect(() => {
+  loadTalents();
+}, [category]);`,
+  `const [talents, setTalents] = useState([]);
+const [loading, setLoading] = useState(true);`,
+  `import { NextResponse } from 'next/server';
+
+export async function GET() {
+  const data = await db.talents.findMany();
+  return NextResponse.json(data);
+}`,
+];
+
+// 코딩 타이핑 애니메이션 컴포넌트
+const CodeTypingBackground = () => {
+  const [typedCodes, setTypedCodes] = useState<string[]>([]);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const codeBlocks = codeSnippets.map((code) => ({
+      fullCode: code,
+      currentIndex: 0,
+    }));
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    // 캔버스 크기 설정
-    const resizeCanvas = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    };
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    // 코드 문자들
-    const codeChars =
-      'const let var function return if else for while async await import export class interface type => {} [] () ; : = + - * / < > ! & | . , " \' ` @ # $ %'.split(
-        ' '
+    const typeCode = () => {
+      setTypedCodes(
+        codeBlocks.map((block) => {
+          if (block.currentIndex < block.fullCode.length) {
+            block.currentIndex += 2; // 한번에 2글자씩
+          } else {
+            // 다 쳤으면 처음부터 다시
+            block.currentIndex = 0;
+          }
+          return block.fullCode.slice(0, block.currentIndex);
+        })
       );
-    const keywords = [
-      'React',
-      'Next',
-      'TypeScript',
-      'API',
-      'async',
-      'fetch',
-      'data',
-      'user',
-      'props',
-      'state',
-      'hook',
-      'effect',
-      'render',
-      'component',
-    ];
-    const allChars = [...codeChars, ...keywords];
-
-    // 열 설정
-    const fontSize = 14;
-    const columns = Math.floor(canvas.width / fontSize);
-    const drops: number[] = Array(columns).fill(1);
-
-    // 그리기 함수
-    const draw = () => {
-      // 반투명 배경으로 잔상 효과
-      ctx.fillStyle = 'rgba(255, 247, 237, 0.05)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.8)'; // 검정색
-      ctx.font = `${fontSize}px monospace`;
-
-      for (let i = 0; i < drops.length; i++) {
-        // eslint-disable-next-line sonarjs/pseudo-random -- 시각적 애니메이션용 랜덤, 보안과 무관
-        const char = allChars[Math.floor(Math.random() * allChars.length)];
-        const x = i * fontSize;
-        const y = drops[i] * fontSize;
-
-        ctx.fillText(char, x, y);
-
-        // 화면 아래로 떨어지면 다시 위로
-        // eslint-disable-next-line sonarjs/pseudo-random -- 시각적 애니메이션용 랜덤, 보안과 무관
-        if (y > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i]++;
-      }
     };
 
-    const interval = setInterval(draw, 50);
-
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener('resize', resizeCanvas);
-    };
+    const interval = setInterval(typeCode, 80);
+    return () => clearInterval(interval);
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ opacity: 0.6 }}
-    />
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* 왼쪽 코드 블록들 */}
+      <div className="absolute left-2 top-4 opacity-20 hidden lg:block">
+        <pre className="text-[10px] text-gray-600 font-mono leading-tight">
+          {typedCodes[0]}
+          <span className="animate-pulse">|</span>
+        </pre>
+      </div>
+      <div className="absolute left-4 bottom-8 opacity-15 hidden lg:block">
+        <pre className="text-[10px] text-gray-600 font-mono leading-tight">
+          {typedCodes[1]}
+          <span className="animate-pulse">|</span>
+        </pre>
+      </div>
+
+      {/* 오른쪽 코드 블록들 */}
+      <div className="absolute right-2 top-8 opacity-20 hidden lg:block">
+        <pre className="text-[10px] text-gray-600 font-mono leading-tight">
+          {typedCodes[2]}
+          <span className="animate-pulse">|</span>
+        </pre>
+      </div>
+      <div className="absolute right-4 bottom-4 opacity-15 hidden lg:block">
+        <pre className="text-[10px] text-gray-600 font-mono leading-tight">
+          {typedCodes[3]}
+          <span className="animate-pulse">|</span>
+        </pre>
+      </div>
+
+      {/* 중앙 좌우 코드 블록 */}
+      <div className="absolute left-1/4 top-2 opacity-10 hidden md:block">
+        <pre className="text-[9px] text-gray-500 font-mono leading-tight">
+          {typedCodes[4]}
+          <span className="animate-pulse">|</span>
+        </pre>
+      </div>
+      <div className="absolute right-1/4 bottom-2 opacity-10 hidden md:block">
+        <pre className="text-[9px] text-gray-500 font-mono leading-tight">
+          {typedCodes[5]}
+          <span className="animate-pulse">|</span>
+        </pre>
+      </div>
+    </div>
   );
 };
 
@@ -162,8 +181,8 @@ export default function TrendingCategoriesClient({ categories }: Props) {
 
   return (
     <section className="py-6 lg:py-10 bg-gradient-to-b from-orange-50/50 to-white relative overflow-hidden">
-      {/* 코딩 배경 애니메이션 */}
-      <CodeRainBackground />
+      {/* 코딩 타이핑 애니메이션 */}
+      <CodeTypingBackground />
 
       <div className="container-1200 relative z-10">
         {/* 섹션 헤더 */}
