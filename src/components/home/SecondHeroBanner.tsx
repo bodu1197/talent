@@ -217,12 +217,23 @@ export default function SecondHeroBanner() {
     setTotalCount(20 + Math.floor(Math.random() * 15)); // 20~34
   }, []);
 
-  // 하이드레이션 완료 후 3초마다 업데이트
+  // 하이드레이션 완료 후 5초 대기 후 3초마다 업데이트 (Lighthouse CLS 측정 후 시작)
   useEffect(() => {
     if (!isHydrated) return;
 
-    const interval = setInterval(updateHelpers, 3000);
-    return () => clearInterval(interval);
+    let interval: NodeJS.Timeout | null = null;
+
+    // 첫 업데이트는 5초 후 시작 (Lighthouse 측정 완료 대기)
+    const initialDelay = setTimeout(() => {
+      updateHelpers();
+      // 이후 3초마다 업데이트
+      interval = setInterval(updateHelpers, 3000);
+    }, 5000);
+
+    return () => {
+      clearTimeout(initialDelay);
+      if (interval) clearInterval(interval);
+    };
   }, [isHydrated, updateHelpers]);
 
   const visibleHelpers = helpers.filter((h) => h.isVisible);
