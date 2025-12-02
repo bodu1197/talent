@@ -319,7 +319,7 @@ export default function SecondHeroBanner() {
         <div
           className="absolute flex items-center"
           style={{
-            animation: 'motorcycle-ride 10s linear infinite',
+            animation: 'motorcycle-ride 15s linear infinite',
           }}
         >
           {/* 연기 효과 */}
