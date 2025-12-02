@@ -17,57 +17,55 @@ interface Helper {
   isVisible: boolean;
 }
 
-// 랜덤 헬퍼 생성
-const createHelper = (id: number): Helper => {
-  const seeds = [
-    'Felix',
-    'Aneka',
-    'John',
-    'Sarah',
-    'Mike',
-    'Luna',
-    'Alex',
-    'Emma',
-    'Chris',
-    'Bella',
-    'David',
-    'Sophia',
-    'James',
-    'Olivia',
-    'Daniel',
-    'Mia',
-    'Lucas',
-    'Ava',
-    'Henry',
-    'Lily',
-  ];
-  const angle = Math.random() * 360;
-  const radius = 0.2 + Math.random() * 0.8; // 0.2~1.0
-  const distance = radius * 1.5; // 최대 1.5km
-
-  return {
-    id,
-    seed: seeds[id % seeds.length],
-    angle,
-    radius,
-    distance,
-    isVisible: false,
-  };
-};
-
-// 초기 헬퍼 풀 생성
+// 초기 헬퍼 풀 생성 (SSR과 동일한 결과를 위해 결정적 값 사용)
 const createInitialHelpers = (): Helper[] => {
   const helpers: Helper[] = [];
+  // 초기 위치는 결정적으로 설정 (CLS 방지)
+  const initialAngles = [
+    30, 75, 120, 165, 210, 255, 300, 345, 15, 60, 105, 150, 195, 240, 285, 330, 45, 90, 135, 180,
+  ];
+  const initialRadii = [
+    0.4, 0.6, 0.5, 0.7, 0.3, 0.8, 0.45, 0.65, 0.55, 0.75, 0.35, 0.85, 0.5, 0.6, 0.4, 0.7, 0.5, 0.6,
+    0.5, 0.6,
+  ];
+
   for (let i = 0; i < 20; i++) {
-    helpers.push(createHelper(i));
-  }
-  // 초기에 5~8명 visible
-  const initialVisible = 5 + Math.floor(Math.random() * 4);
-  for (let i = 0; i < initialVisible; i++) {
-    helpers[i].isVisible = true;
+    const seeds = [
+      'Felix',
+      'Aneka',
+      'John',
+      'Sarah',
+      'Mike',
+      'Luna',
+      'Alex',
+      'Emma',
+      'Chris',
+      'Bella',
+      'David',
+      'Sophia',
+      'James',
+      'Olivia',
+      'Daniel',
+      'Mia',
+      'Lucas',
+      'Ava',
+      'Henry',
+      'Lily',
+    ];
+    helpers.push({
+      id: i,
+      seed: seeds[i % seeds.length],
+      angle: initialAngles[i],
+      radius: initialRadii[i],
+      distance: initialRadii[i] * 1.5,
+      isVisible: i < 6, // 초기에 6명 visible (고정)
+    });
   }
   return helpers;
 };
+
+// 초기 헬퍼 (SSR용 - 고정값)
+const INITIAL_HELPERS = createInitialHelpers();
 
 // 위치 계산 (극좌표 → CSS 위치)
 const getPosition = (angle: number, radius: number) => {
@@ -141,15 +139,18 @@ const LockIcon = () => (
   </svg>
 );
 
-export default function SecondHeroBanner() {
-  const [helpers, setHelpers] = useState<Helper[]>([]);
-  const [totalCount, setTotalCount] = useState(26);
-  const [isClient, setIsClient] = useState(false);
+// 초기값 상수 (SSR과 클라이언트 일치를 위해)
+const INITIAL_TOTAL_COUNT = 26;
 
-  // 클라이언트에서만 초기화
+export default function SecondHeroBanner() {
+  // 초기값을 SSR과 동일하게 설정 (CLS 방지)
+  const [helpers, setHelpers] = useState<Helper[]>(INITIAL_HELPERS);
+  const [totalCount, setTotalCount] = useState(INITIAL_TOTAL_COUNT);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // 클라이언트 하이드레이션 완료 후 동적 업데이트 시작
   useEffect(() => {
-    setHelpers(createInitialHelpers());
-    setIsClient(true);
+    setIsHydrated(true);
   }, []);
 
   // 헬퍼 동적 업데이트
@@ -216,13 +217,13 @@ export default function SecondHeroBanner() {
     setTotalCount(20 + Math.floor(Math.random() * 15)); // 20~34
   }, []);
 
-  // 3초마다 업데이트
+  // 하이드레이션 완료 후 3초마다 업데이트
   useEffect(() => {
-    if (!isClient) return;
+    if (!isHydrated) return;
 
     const interval = setInterval(updateHelpers, 3000);
     return () => clearInterval(interval);
-  }, [isClient, updateHelpers]);
+  }, [isHydrated, updateHelpers]);
 
   const visibleHelpers = helpers.filter((h) => h.isVisible);
   const nearbyCount = visibleHelpers.length;
@@ -252,20 +253,20 @@ export default function SecondHeroBanner() {
 
                 <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-white leading-tight mb-3">
                   내 주변{' '}
-                  <span className="text-green-400 transition-all duration-500">
-                    {totalCount}명의 헬퍼 전문가
+                  <span className="text-green-400 transition-all duration-500 inline-block min-w-[3ch] tabular-nums">
+                    {totalCount}
                   </span>
-                  가
+                  명의 헬퍼 전문가가
                   <br />
                   대기하고 있어요
                 </h2>
 
                 <p className="text-gray-400 text-sm md:text-base mb-6">
                   지금 바로 호출 가능한{' '}
-                  <span className="text-green-400 font-bold transition-all duration-500 inline-block min-w-[2ch]">
-                    {nearbyCount}명
+                  <span className="text-green-400 font-bold transition-all duration-500 inline-block min-w-[2ch] tabular-nums">
+                    {nearbyCount}
                   </span>
-                  ! 평균 <span className="text-white font-bold">5분 내</span> 매칭됩니다.
+                  명! 평균 <span className="text-white font-bold">5분 내</span> 매칭됩니다.
                 </p>
 
                 <Link
@@ -297,40 +298,39 @@ export default function SecondHeroBanner() {
                   style={{ animationDuration: '3s', animationDelay: '2s' }}
                 />
 
-                {/* 동적 헬퍼들 */}
-                {isClient &&
-                  visibleHelpers.map((helper) => {
-                    const pos = getPosition(helper.angle, helper.radius);
-                    return (
+                {/* 동적 헬퍼들 - SSR과 동일한 초기값으로 CLS 방지 */}
+                {visibleHelpers.map((helper) => {
+                  const pos = getPosition(helper.angle, helper.radius);
+                  return (
+                    <div
+                      key={helper.id}
+                      className="absolute z-10 transition-all duration-1000 ease-in-out"
+                      style={{
+                        left: `${pos.x}%`,
+                        top: `${pos.y}%`,
+                        transform: 'translate(-50%, -50%)',
+                        opacity: helper.isVisible ? 1 : 0,
+                      }}
+                    >
                       <div
-                        key={helper.id}
-                        className="absolute z-10 transition-all duration-1000 ease-in-out"
-                        style={{
-                          left: `${pos.x}%`,
-                          top: `${pos.y}%`,
-                          transform: 'translate(-50%, -50%)',
-                          opacity: helper.isVisible ? 1 : 0,
-                        }}
+                        className="w-9 h-9 lg:w-10 lg:h-10 rounded-full bg-white border-2 border-green-500 flex items-center justify-center overflow-hidden shadow-lg animate-bounce"
+                        style={{ animationDuration: `${1.5 + helper.id * 0.2}s` }}
                       >
-                        <div
-                          className="w-9 h-9 lg:w-10 lg:h-10 rounded-full bg-white border-2 border-green-500 flex items-center justify-center overflow-hidden shadow-lg animate-bounce"
-                          style={{ animationDuration: `${1.5 + helper.id * 0.2}s` }}
-                        >
-                          <Image
-                            src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${helper.seed}`}
-                            alt="Helper"
-                            width={40}
-                            height={40}
-                            className="w-full h-full"
-                            unoptimized
-                          />
-                        </div>
-                        <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[9px] lg:text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap">
-                          {formatDistance(helper.distance)}
-                        </div>
+                        <Image
+                          src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${helper.seed}`}
+                          alt="Helper"
+                          width={40}
+                          height={40}
+                          className="w-full h-full"
+                          unoptimized
+                        />
                       </div>
-                    );
-                  })}
+                      <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[9px] lg:text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap">
+                        {formatDistance(helper.distance)}
+                      </div>
+                    </div>
+                  );
+                })}
 
                 {/* 남은 인원 표시 */}
                 {remainingCount > 0 && (

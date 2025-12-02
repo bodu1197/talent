@@ -96,17 +96,28 @@ export default function TrendingCategories() {
     }
   }, [isLoading, categories]);
 
-  // 로딩 스켈레톤
+  // 로딩 스켈레톤 - 실제 콘텐츠와 동일한 크기 유지 (CLS 방지)
   if (isLoading) {
     return (
       <section className="py-6 lg:py-10 bg-gradient-to-b from-orange-50/50 to-white">
         <div className="container-1200">
-          <div className="h-6 bg-gray-200 rounded w-40 mb-6 animate-pulse mx-auto"></div>
-          <div className="flex justify-center gap-3 md:gap-4">
-            {Array.from({ length: 6 }, (_, i) => (
-              <div key={`skeleton-${i}`} className="flex flex-col items-center gap-2">
-                <div className="w-12 md:w-16 h-24 md:h-32 bg-gray-100 rounded-lg animate-pulse"></div>
-                <div className="w-10 h-3 bg-gray-100 rounded animate-pulse"></div>
+          {/* 헤더 스켈레톤 - 실제 헤더와 동일한 높이 */}
+          <div className="text-center mb-6 md:mb-8">
+            <div className="h-8 bg-gray-200 rounded w-48 mb-2 animate-pulse mx-auto"></div>
+            <div className="h-5 bg-gray-200 rounded w-72 animate-pulse mx-auto"></div>
+          </div>
+          {/* 그래프 스켈레톤 - 8개 항목, 실제와 동일한 크기 */}
+          <div className="flex justify-center items-end gap-2 sm:gap-3 md:gap-4 lg:gap-6 px-2 pb-4">
+            {Array.from({ length: DISPLAY_LIMIT }, (_, i) => (
+              <div key={`skeleton-${i}`} className="flex flex-col items-center flex-shrink-0">
+                <div className="h-4 w-8 mb-1"></div>
+                <div className="relative w-10 sm:w-12 md:w-14 lg:w-16 h-28 sm:h-32 md:h-40 lg:h-48 flex items-end">
+                  <div
+                    className="w-full bg-gray-200 rounded-t-lg animate-pulse"
+                    style={{ height: `${30 + (DISPLAY_LIMIT - i) * 8}%` }}
+                  ></div>
+                </div>
+                <div className="mt-2 h-4 w-12 bg-gray-200 rounded animate-pulse"></div>
               </div>
             ))}
           </div>
@@ -115,9 +126,13 @@ export default function TrendingCategories() {
     );
   }
 
-  // 에러가 발생했거나 데이터가 없는 경우 표시하지 않음
+  // 에러가 발생했거나 데이터가 없는 경우 - 빈 섹션 유지 (CLS 방지)
   if (hasError || categories.length === 0) {
-    return null;
+    return (
+      <section className="py-6 lg:py-10 bg-gradient-to-b from-orange-50/50 to-white">
+        <div className="container-1200 min-h-[200px]"></div>
+      </section>
+    );
   }
 
   // 그래프 색상 배열
