@@ -328,46 +328,14 @@ const CodeTypingBackground = () => {
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* 왼쪽 코드 블록들 */}
-      <div className="absolute left-2 top-4 opacity-60 hidden lg:block">
-        <pre className="text-[14px] text-black font-mono leading-tight">
-          {typedCodes[0]}
-          <span className="animate-pulse">|</span>
-        </pre>
-      </div>
-      <div className="absolute left-4 bottom-8 opacity-50 hidden lg:block">
-        <pre className="text-[14px] text-black font-mono leading-tight">
-          {typedCodes[1]}
-          <span className="animate-pulse">|</span>
-        </pre>
-      </div>
-
-      {/* 오른쪽 코드 블록들 */}
-      <div className="absolute right-2 top-8 opacity-60 hidden lg:block">
-        <pre className="text-[14px] text-black font-mono leading-tight">
-          {typedCodes[2]}
-          <span className="animate-pulse">|</span>
-        </pre>
-      </div>
-      <div className="absolute right-4 bottom-4 opacity-50 hidden lg:block">
-        <pre className="text-[14px] text-black font-mono leading-tight">
-          {typedCodes[3]}
-          <span className="animate-pulse">|</span>
-        </pre>
-      </div>
-
-      {/* 중앙 좌우 코드 블록 */}
-      <div className="absolute left-1/4 top-2 opacity-40 hidden md:block">
-        <pre className="text-[13px] text-black font-mono leading-tight">
-          {typedCodes[4]}
-          <span className="animate-pulse">|</span>
-        </pre>
-      </div>
-      <div className="absolute right-1/4 bottom-2 opacity-40 hidden md:block">
-        <pre className="text-[13px] text-black font-mono leading-tight">
-          {typedCodes[5]}
-          <span className="animate-pulse">|</span>
-        </pre>
+      {/* 왼쪽에만 코드 블록 배치 - 실제 코딩처럼 */}
+      <div className="absolute left-0 top-0 bottom-0 w-64 lg:w-80 hidden lg:block overflow-hidden">
+        <div className="p-4 space-y-4">
+          <pre className="text-[12px] text-gray-700 font-mono leading-relaxed whitespace-pre-wrap">
+            {typedCodes[0]}
+            {!isComplete && <span className="animate-pulse text-orange-500">|</span>}
+          </pre>
+        </div>
       </div>
     </div>
   );
@@ -436,7 +404,7 @@ export default function TrendingCategoriesClient({ categories }: Props) {
       {/* 코딩 타이핑 애니메이션 */}
       <CodeTypingBackground />
 
-      <div className="container-1200 relative z-10">
+      <div className="container-1200 relative z-10 bg-white/95 backdrop-blur-sm rounded-2xl shadow-sm py-6 px-4">
         {/* 섹션 헤더 */}
         <div className="text-center mb-6 md:mb-8">
           <div className="inline-flex items-center gap-2 mb-2">
