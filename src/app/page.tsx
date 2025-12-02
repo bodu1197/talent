@@ -12,6 +12,7 @@ import { Service } from '@/types';
 const RecentVisitedCategories = dynamic(() => import('@/components/home/RecentVisitedCategories'));
 const RecentViewedServices = dynamic(() => import('@/components/home/RecentViewedServices'));
 const TrendingCategories = dynamic(() => import('@/components/home/TrendingCategories'));
+const SecondHeroBanner = dynamic(() => import('@/components/home/SecondHeroBanner'));
 
 // 캐싱 최적화: 60초마다 재생성
 export const revalidate = 60;
@@ -55,6 +56,9 @@ export default async function HomePage() {
         <>
           {/* 실시간 인기재능 섹션 */}
           <TrendingCategories />
+
+          {/* 제2 히어로 배너 - 돌파구 소개 */}
+          <SecondHeroBanner />
 
           {/* 판매자 등록 안내 섹션 */}
           <SellerRegistrationGuide />
