@@ -137,7 +137,7 @@ export async function DELETE(
       return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
     }
 
-    // 판매자 확인
+    // 전문가 확인
     const { data: seller } = await supabase
       .from('sellers')
       .select('id')
@@ -145,7 +145,7 @@ export async function DELETE(
       .single();
 
     if (!seller) {
-      return NextResponse.json({ error: '판매자 권한이 필요합니다.' }, { status: 403 });
+      return NextResponse.json({ error: '전문가 권한이 필요합니다.' }, { status: 403 });
     }
 
     // 서비스 소유자 확인

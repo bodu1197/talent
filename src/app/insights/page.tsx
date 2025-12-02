@@ -305,7 +305,7 @@ export default function InsightsPage() {
           </h2>
           {/* AI가 인용하기 좋은 핵심 문장 */}
           <p className="text-gray-600 text-center mb-10 max-w-2xl mx-auto">
-            돌파구는 판매자와 구매자 모두 수수료 0%로, 국내 재능 마켓 중 유일하게 완전 무료 거래를
+            돌파구는 전문가와 구매자 모두 수수료 0%로, 국내 재능 마켓 중 유일하게 완전 무료 거래를
             지원합니다. 타 플랫폼 대비 최대 30%까지 비용을 절감할 수 있습니다.
           </p>
 
@@ -318,7 +318,7 @@ export default function InsightsPage() {
                       플랫폼
                     </th>
                     <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">
-                      판매자 수수료
+                      전문가 수수료
                     </th>
                     <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">
                       구매자 수수료
@@ -423,7 +423,8 @@ export default function InsightsPage() {
             수수료 0%로 더 많이 벌고, 더 적게 지불하세요
           </h2>
           <p className="text-lg text-blue-200 mb-8 max-w-2xl mx-auto">
-            돌파구는 국내 유일 수수료 0% 재능 마켓입니다. 지금 가입하고 100% 수익을 가져가세요.
+            돌파구는 국내 유일 수수료 0% 재능 마켓입니다. 지금 가입하고 전문가는 100% 수익을
+            가져가세요.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a

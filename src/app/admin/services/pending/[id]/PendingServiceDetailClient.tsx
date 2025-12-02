@@ -1,16 +1,11 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
-import { logger } from "@/lib/logger";
-import type { ServiceDetailWithCategories } from "@/lib/supabase/queries/admin";
-import {
-  ArrowLeft,
-  AlertTriangle,
-  X,
-  Check,
-} from "lucide-react";
-import toast from "react-hot-toast";
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
+import { logger } from '@/lib/logger';
+import type { ServiceDetailWithCategories } from '@/lib/supabase/queries/admin';
+import { ArrowLeft, AlertTriangle, X, Check } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 interface Props {
   readonly service: ServiceDetailWithCategories;
@@ -20,56 +15,54 @@ export default function PendingServiceDetailClient({ service }: Props) {
   const router = useRouter();
 
   async function handleApprove() {
-    if (!confirm("이 서비스를 승인하시겠습니까?")) return;
+    if (!confirm('이 서비스를 승인하시겠습니까?')) return;
 
     try {
       const supabase = createClient();
       const { error } = await supabase
-        .from("services")
-        .update({ status: "active" })
-        .eq("id", service.id);
+        .from('services')
+        .update({ status: 'active' })
+        .eq('id', service.id);
 
       if (error) throw error;
 
-      toast.success("서비스가 승인되었습니다.");
-      router.push("/admin/services?status=pending");
+      toast.success('서비스가 승인되었습니다.');
+      router.push('/admin/services?status=pending');
     } catch (err: unknown) {
-      logger.error("승인 실패:", err);
+      logger.error('승인 실패:', err);
       toast.error(
-        "승인에 실패했습니다: " +
-          (err instanceof Error ? err.message : "알 수 없는 오류"),
+        '승인에 실패했습니다: ' + (err instanceof Error ? err.message : '알 수 없는 오류')
       );
     }
   }
 
   async function handleReject() {
-    const reason = prompt("반려 사유를 입력해주세요:");
+    const reason = prompt('반려 사유를 입력해주세요:');
     if (!reason) return;
 
     try {
       const supabase = createClient();
       const { error } = await supabase
-        .from("services")
+        .from('services')
         .update({
-          status: "suspended",
+          status: 'suspended',
           // rejection_reason 필드가 있다면 추가
         })
-        .eq("id", service.id);
+        .eq('id', service.id);
 
       if (error) throw error;
 
-      toast.error("서비스가 반려되었습니다.");
-      router.push("/admin/services?status=pending");
+      toast.error('서비스가 반려되었습니다.');
+      router.push('/admin/services?status=pending');
     } catch (err: unknown) {
-      logger.error("반려 실패:", err);
+      logger.error('반려 실패:', err);
       toast.error(
-        "반려에 실패했습니다: " +
-          (err instanceof Error ? err.message : "알 수 없는 오류"),
+        '반려에 실패했습니다: ' + (err instanceof Error ? err.message : '알 수 없는 오류')
       );
     }
   }
 
-  const isResubmission = service.status === "suspended";
+  const isResubmission = service.status === 'suspended';
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -78,12 +71,12 @@ export default function PendingServiceDetailClient({ service }: Props) {
         <div className="mb-6 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-semibold text-gray-900 mb-2">
-              {isResubmission ? "재신청 서비스 검토" : "신규 서비스 검토"}
+              {isResubmission ? '재신청 서비스 검토' : '신규 서비스 검토'}
             </h1>
             <p className="text-gray-600">
               {isResubmission
-                ? "반려 후 재신청된 서비스입니다. 수정 내용을 검토하고 승인 또는 반려하세요"
-                : "서비스 내용을 검토하고 승인 또는 반려하세요"}
+                ? '반려 후 재신청된 서비스입니다. 수정 내용을 검토하고 승인 또는 반려하세요'
+                : '서비스 내용을 검토하고 승인 또는 반려하세요'}
             </p>
           </div>
           <button
@@ -113,31 +106,27 @@ export default function PendingServiceDetailClient({ service }: Props) {
 
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <span className="text-sm text-gray-600">판매자</span>
+              <span className="text-sm text-gray-600">전문가</span>
               <p className="font-medium">
                 {service.seller?.display_name ||
                   service.seller?.business_name ||
                   service.seller?.user?.name}
               </p>
-              <p className="text-sm text-gray-500">
-                {service.seller?.user?.email}
-              </p>
+              <p className="text-sm text-gray-500">{service.seller?.user?.email}</p>
             </div>
             <div>
               <span className="text-sm text-gray-600">
-                {isResubmission ? "최초 등록일" : "등록일"}
+                {isResubmission ? '최초 등록일' : '등록일'}
               </span>
               <p className="font-medium">
-                {service.created_at
-                  ? new Date(service.created_at).toLocaleDateString("ko-KR")
-                  : ""}
+                {service.created_at ? new Date(service.created_at).toLocaleDateString('ko-KR') : ''}
               </p>
             </div>
             {isResubmission && service.updated_at && (
               <div>
                 <span className="text-sm text-gray-600">수정일</span>
                 <p className="font-medium">
-                  {new Date(service.updated_at).toLocaleDateString("ko-KR")}
+                  {new Date(service.updated_at).toLocaleDateString('ko-KR')}
                 </p>
               </div>
             )}
@@ -193,24 +182,16 @@ export default function PendingServiceDetailClient({ service }: Props) {
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
               <span className="text-sm text-gray-600 block mb-1">가격</span>
-              <p className="text-xl font-semibold">
-                {service.price?.toLocaleString()}원
-              </p>
+              <p className="text-xl font-semibold">{service.price?.toLocaleString()}원</p>
             </div>
             <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-              <span className="text-sm text-gray-600 block mb-1">
-                작업 기간
-              </span>
+              <span className="text-sm text-gray-600 block mb-1">작업 기간</span>
               <p className="text-xl font-semibold">{service.delivery_days}일</p>
             </div>
             <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-              <span className="text-sm text-gray-600 block mb-1">
-                수정 횟수
-              </span>
+              <span className="text-sm text-gray-600 block mb-1">수정 횟수</span>
               <p className="text-xl font-semibold">
-                {service.revision_count === 999
-                  ? "무제한"
-                  : `${service.revision_count}회`}
+                {service.revision_count === 999 ? '무제한' : `${service.revision_count}회`}
               </p>
             </div>
           </div>

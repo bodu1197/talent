@@ -290,7 +290,7 @@ export async function searchAll(query: string): Promise<SearchResult> {
       promotedServiceIds
     );
 
-    // 전문가 검색 (판매자 프로필)
+    // 전문가 검색 (전문가 프로필)
     const { data: experts } = await supabase
       .from('seller_profiles')
       .select(

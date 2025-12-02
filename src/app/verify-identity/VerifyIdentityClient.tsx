@@ -166,7 +166,7 @@ export default function VerifyIdentityClient({ customerInfo, returnUrl }: Props)
               <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-medium text-gray-900">신뢰 거래</p>
-                <p className="text-sm text-gray-600">판매자와 구매자 모두 신뢰할 수 있는 거래</p>
+                <p className="text-sm text-gray-600">전문가와 구매자 모두 신뢰할 수 있는 거래</p>
               </div>
             </div>
           </div>

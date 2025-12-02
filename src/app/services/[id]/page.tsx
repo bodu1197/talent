@@ -288,7 +288,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       .eq('is_visible', true)
       .order('created_at', { ascending: false }),
 
-    // 판매자 통계 조회
+    // 전문가 통계 조회
     service?.seller
       ? fetchSellerStats(supabase, service.seller)
       : Promise.resolve({ totalOrders: 0, satisfactionRate: 0, avgResponseTime: '10분 이내' }),
@@ -296,7 +296,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
     // 카테고리 경로 조회
     deepestCategory ? getCategoryPath(deepestCategory.id) : Promise.resolve([]),
 
-    // 판매자의 다른 서비스 조회
+    // 전문가의 다른 서비스 조회
     getSellerOtherServices(service.seller.id, service.id, 5),
 
     // 같은 카테고리 추천 서비스 조회
@@ -378,7 +378,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
         </div>
       </nav>
 
-      {/* PC 전용: 제목 및 판매자 프로필 영역 - 전체 가로 배경 */}
+      {/* PC 전용: 제목 및 전문가 프로필 영역 - 전체 가로 배경 */}
       <div
         className="hidden lg:block w-full"
         style={{
@@ -387,7 +387,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
       >
         <div className="container-1200 px-4 py-8">
           <div className="flex flex-col lg:flex-row gap-5">
-            {/* 왼쪽: 제목, 통계, 판매자 카드 */}
+            {/* 왼쪽: 제목, 통계, 전문가 카드 */}
             <div className="flex-1">
               <h1 className="text-2xl font-semibold mb-6">{service.title}</h1>
 
@@ -407,7 +407,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                 </div>
               </div>
 
-              {/* 판매자 정보 카드 */}
+              {/* 전문가 정보 카드 */}
               <div className="bg-white rounded-lg p-3 h-[70px] flex items-center">
                 <div className="flex items-center gap-3 w-full">
                   {/* 프로필 이미지 */}
@@ -415,7 +415,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                     {service.seller?.profile_image ? (
                       <Image
                         src={service.seller.profile_image}
-                        alt={service.seller?.display_name || '판매자'}
+                        alt={service.seller?.display_name || '전문가'}
                         fill
                         className="object-cover"
                         sizes="54px"
@@ -430,7 +430,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
                   {/* 정보 영역 */}
                   <div className="flex-1 flex flex-col justify-center gap-1 min-w-0">
-                    {/* 판매자 활동명 */}
+                    {/* 전문가 활동명 */}
                     <h3 className="font-semibold text-sm leading-tight truncate">
                       {service.seller?.display_name || service.seller?.business_name}
                     </h3>
@@ -545,7 +545,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
               {service.seller?.profile_image ? (
                 <Image
                   src={service.seller.profile_image}
-                  alt={service.seller?.display_name || '판매자'}
+                  alt={service.seller?.display_name || '전문가'}
                   fill
                   className="object-cover"
                   sizes="48px"
@@ -666,7 +666,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                         {service.seller?.profile_image ? (
                           <Image
                             src={service.seller.profile_image}
-                            alt={service.seller?.display_name || '판매자'}
+                            alt={service.seller?.display_name || '전문가'}
                             fill
                             className="object-cover"
                             sizes="64px"
@@ -877,12 +877,12 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       {/* 리뷰 내용 */}
                       <p className="text-gray-700 mb-4 whitespace-pre-wrap">{review.comment}</p>
 
-                      {/* 판매자 답변 */}
+                      {/* 전문가 답변 */}
                       {review.seller_reply && (
                         <div className="bg-gray-50 rounded-lg p-4 ml-8">
                           <div className="flex items-center gap-2 mb-2">
                             <Reply className="w-4 h-4 text-brand-primary" />
-                            <span className="text-sm font-medium text-gray-900">판매자 답변</span>
+                            <span className="text-sm font-medium text-gray-900">전문가 답변</span>
                             <span className="text-xs text-gray-500">
                               {new Date(review.seller_reply_at).toLocaleDateString('ko-KR', {
                                 timeZone: 'Asia/Seoul',

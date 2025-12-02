@@ -165,7 +165,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       logger.error('Settlement cancellation error:', settlementError);
     }
 
-    // 판매자에게 취소 알림 전송
+    // 전문가에게 취소 알림 전송
     await notifyOrderCancelled(order.seller_id, order.id, order.title);
 
     return NextResponse.json({

@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     const sellerId = searchParams.get('sellerId');
 
     if (sellerId) {
-      // 특정 판매자의 크레딧 상세 정보
+      // 특정 전문가의 크레딧 상세 정보
       const { data: credit, error: creditError } = await supabase
         .from('advertising_credits')
         .select(

@@ -4,8 +4,18 @@ import Sidebar from '@/components/mypage/Sidebar';
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    [key: string]: unknown;
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }));
 
@@ -26,10 +36,10 @@ describe('Sidebar', () => {
     mockPathname = '/mypage/seller/dashboard';
   });
 
-  describe('판매자 모드', () => {
+  describe('전문가 모드', () => {
     const profileData = { name: '홍길동', profile_image: 'https://example.com/profile.jpg' };
 
-    it('판매자 사이드바를 렌더링한다', () => {
+    it('전문가 사이드바를 렌더링한다', () => {
       render(<Sidebar mode="seller" profileData={profileData} />);
 
       expect(screen.getByText('판매 대시보드')).toBeInTheDocument();
@@ -62,16 +72,16 @@ describe('Sidebar', () => {
       expect(screen.getByText('진행중')).toBeInTheDocument();
     });
 
-    it('isRegisteredSeller가 true일 때 판매자 등록 메뉴가 숨겨진다', () => {
+    it('isRegisteredSeller가 true일 때 전문가 등록 메뉴가 숨겨진다', () => {
       render(<Sidebar mode="seller" profileData={profileData} isRegisteredSeller={true} />);
 
-      expect(screen.queryByText('판매자 등록')).not.toBeInTheDocument();
+      expect(screen.queryByText('전문가 등록')).not.toBeInTheDocument();
     });
 
-    it('isRegisteredSeller가 false일 때 판매자 등록 메뉴가 표시된다', () => {
+    it('isRegisteredSeller가 false일 때 전문가 등록 메뉴가 표시된다', () => {
       render(<Sidebar mode="seller" profileData={profileData} isRegisteredSeller={false} />);
 
-      expect(screen.getByText('판매자 등록')).toBeInTheDocument();
+      expect(screen.getByText('전문가 등록')).toBeInTheDocument();
     });
 
     it('올바른 링크 경로를 가진다', () => {
@@ -106,11 +116,11 @@ describe('Sidebar', () => {
       expect(screen.getByText('프로필 설정')).toBeInTheDocument();
     });
 
-    it('판매자 페이지 전환 버튼을 표시한다', () => {
+    it('전문가 페이지 전환 버튼을 표시한다', () => {
       mockPathname = '/mypage/buyer/dashboard';
       render(<Sidebar mode="buyer" profileData={profileData} />);
 
-      expect(screen.getByText('판매자 페이지로')).toBeInTheDocument();
+      expect(screen.getByText('전문가 페이지로')).toBeInTheDocument();
     });
 
     it('주문 내역 하위 메뉴가 확장된다', () => {

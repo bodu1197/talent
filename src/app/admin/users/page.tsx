@@ -178,7 +178,7 @@ export default function AdminUsersPage() {
       case 'buyer':
         return '구매자';
       case 'seller':
-        return '판매자';
+        return '전문가';
       case 'admin':
         return '관리자';
       default:
@@ -216,7 +216,7 @@ export default function AdminUsersPage() {
     { value: 'buyer' as RoleFilter, label: '구매자', count: roleCounts.buyer },
     {
       value: 'seller' as RoleFilter,
-      label: '판매자',
+      label: '전문가',
       count: roleCounts.seller,
     },
     { value: 'admin' as RoleFilter, label: '관리자', count: roleCounts.admin },

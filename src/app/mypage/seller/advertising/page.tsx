@@ -226,7 +226,7 @@ export default function AdvertisingPage() {
         .maybeSingle();
 
       if (!seller) {
-        toast.error('판매자 정보를 찾을 수 없습니다');
+        toast.error('전문가 정보를 찾을 수 없습니다');
         return;
       }
 

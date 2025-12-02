@@ -49,7 +49,7 @@ async function payWithCreditInternal(
     .update({
       amount: totalAvailable - amount,
       used_amount: credit.used_amount + amount,
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     })
     .eq('id', credit.id);
 
@@ -67,7 +67,7 @@ async function payWithCreditInternal(
     balance_after: totalAvailable - amount,
     description: '월간 광고료 결제',
     reference_type: 'subscription',
-    reference_id: subscriptionId
+    reference_id: subscriptionId,
   });
 
   return { success: true, remaining: 0 };
@@ -118,7 +118,7 @@ export async function processMonthlyBilling() {
           .from('advertising_subscriptions')
           .update({
             last_billed_at: new Date().toISOString(),
-            next_billing_date: nextBilling.toISOString().split('T')[0]
+            next_billing_date: nextBilling.toISOString().split('T')[0],
           })
           .eq('id', sub.id);
 
@@ -129,7 +129,7 @@ export async function processMonthlyBilling() {
           amount: sub.monthly_price,
           payment_method: 'credit',
           status: 'completed',
-          paid_at: new Date().toISOString()
+          paid_at: new Date().toISOString(),
         });
       } else {
         logger.warn('[Cron] 크레딧 부족', { subscriptionId: sub.id, remaining });
@@ -140,13 +140,13 @@ export async function processMonthlyBilling() {
           .update({ status: 'pending_payment' })
           .eq('id', sub.id);
 
-        // 판매자에게 알림
+        // 전문가에게 알림
         await supabase.from('notifications').insert({
           user_id: sub.seller_id,
           type: 'payment_failed',
           title: '광고 결제 실패',
           content: `크레딧 잔액이 부족하여 광고가 일시 중지되었습니다. ${remaining.toLocaleString()}원이 추가로 필요합니다.`,
-          link_url: '/mypage/seller/advertising'
+          link_url: '/mypage/seller/advertising',
         });
       }
     } catch (error) {
@@ -169,12 +169,14 @@ export async function cancelExpiredBankTransfers() {
   // 기한 초과된 미입금 결제 조회
   const { data: expiredPayments, error } = await supabase
     .from('advertising_payments')
-    .select(`
+    .select(
+      `
       *,
       subscription:advertising_subscriptions!inner(
         bank_transfer_deadline
       )
-    `)
+    `
+    )
     .eq('payment_method', 'bank_transfer')
     .eq('status', 'pending')
     .lt('subscription.bank_transfer_deadline', now);
@@ -201,17 +203,17 @@ export async function cancelExpiredBankTransfers() {
         .from('advertising_subscriptions')
         .update({
           status: 'expired',
-          expires_at: now
+          expires_at: now,
         })
         .eq('id', payment.subscription_id);
 
-      // 판매자에게 알림
+      // 전문가에게 알림
       await supabase.from('notifications').insert({
         user_id: payment.seller_id,
         type: 'payment_expired',
         title: '광고 결제 기한 만료',
         content: '입금 기한이 지나 광고가 중지되었습니다. 다시 신청해주세요.',
-        link_url: '/mypage/seller/advertising'
+        link_url: '/mypage/seller/advertising',
       });
     } catch (error) {
       logger.error('[Cron] 결제 취소 실패', error, { paymentId: payment.id });
@@ -255,7 +257,7 @@ export async function expireCredits() {
         .from('advertising_credits')
         .update({
           amount: 0,
-          used_amount: credit.used_amount + expiredAmount
+          used_amount: credit.used_amount + expiredAmount,
         })
         .eq('id', credit.id);
 
@@ -267,16 +269,16 @@ export async function expireCredits() {
         amount: -expiredAmount,
         balance_after: 0,
         description: '프로모션 크레딧 만료',
-        reference_type: 'promotion'
+        reference_type: 'promotion',
       });
 
-      // 판매자에게 알림
+      // 전문가에게 알림
       await supabase.from('notifications').insert({
         user_id: credit.seller_id,
         type: 'credit_expired',
         title: '광고 크레딧 만료',
         content: `프로모션 크레딧 ${expiredAmount.toLocaleString()}원이 만료되었습니다.`,
-        link_url: '/mypage/seller/advertising'
+        link_url: '/mypage/seller/advertising',
       });
     } catch (error) {
       logger.error('[Cron] 크레딧 만료 처리 실패', error, { creditId: credit.id });

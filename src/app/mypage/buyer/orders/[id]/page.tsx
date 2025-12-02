@@ -439,7 +439,7 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                     <UserCircle className="w-4 h-4 lg:w-5 lg:h-5 text-green-600 mt-1" />
                     <div>
                       <div className="font-medium text-green-900 mb-1 text-xs lg:text-sm">
-                        판매자 메시지
+                        전문가 메시지
                       </div>
                       <p className="text-green-700 text-xs lg:text-sm">{order.seller_message}</p>
                     </div>
@@ -554,10 +554,10 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
               )}
             </div>
 
-            {/* 판매자 정보 */}
+            {/* 전문가 정보 */}
             <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
               <h3 className="font-semibold text-gray-900 mb-3 lg:mb-4 text-xs lg:text-base">
-                판매자 정보
+                전문가 정보
               </h3>
               <div className="flex items-center gap-2 lg:gap-3 mb-3 lg:mb-4">
                 <div className="w-10 h-10 lg:w-12 lg:h-12 bg-brand-primary rounded-full flex items-center justify-center text-white font-semibold text-sm lg:text-base">
@@ -565,9 +565,9 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
                 </div>
                 <div>
                   <div className="font-medium text-gray-900 text-xs lg:text-sm">
-                    {order.seller?.name || '판매자'}
+                    {order.seller?.name || '전문가'}
                   </div>
-                  <div className="text-xs lg:text-sm text-gray-600">판매자</div>
+                  <div className="text-xs lg:text-sm text-gray-600">전문가</div>
                 </div>
               </div>
               <div className="space-y-2">

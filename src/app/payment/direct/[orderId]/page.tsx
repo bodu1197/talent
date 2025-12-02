@@ -53,7 +53,7 @@ export default async function DirectPaymentPage({ params }: DirectPaymentPagePro
     redirect(`/mypage/buyer/orders/${order.id}`);
   }
 
-  // 판매자 정보 조회 (seller_profiles 뷰 사용)
+  // 전문가 정보 조회 (seller_profiles 뷰 사용)
   const { data: seller } = await supabase
     .from('seller_profiles')
     .select('id, business_name, display_name, profile_image, user_id')

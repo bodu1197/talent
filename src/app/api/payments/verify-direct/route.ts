@@ -172,7 +172,7 @@ export async function POST(request: NextRequest) {
       logger.error('Settlement record error:', settlementError);
     }
 
-    // 판매자에게 결제 완료 알림 전송
+    // 전문가에게 결제 완료 알림 전송
     await notifyPaymentReceived(order.seller_id, order.id, order.amount);
 
     return NextResponse.json({

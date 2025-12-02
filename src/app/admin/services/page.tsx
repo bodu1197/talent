@@ -1,31 +1,25 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import {
   getAdminServices,
   getAdminServicesCount,
   type ServiceWithSeller,
-} from "@/lib/supabase/queries/admin";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
-import ErrorState from "@/components/common/ErrorState";
-import EmptyState from "@/components/common/EmptyState";
-import { logger } from "@/lib/logger";
-import {
-  RefreshCw,
-  ExternalLink,
-  Eye,
-  Check,
-  X,
-} from "lucide-react";
+} from '@/lib/supabase/queries/admin';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
+import ErrorState from '@/components/common/ErrorState';
+import EmptyState from '@/components/common/EmptyState';
+import { logger } from '@/lib/logger';
+import { RefreshCw, ExternalLink, Eye, Check, X } from 'lucide-react';
 
-type ServiceStatus = "all" | "pending" | "approved" | "rejected";
+type ServiceStatus = 'all' | 'pending' | 'approved' | 'rejected';
 
 export default function AdminServicesPage() {
   const [services, setServices] = useState<ServiceWithSeller[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [statusFilter, setStatusFilter] = useState<ServiceStatus>("pending");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<ServiceStatus>('pending');
+  const [searchQuery, setSearchQuery] = useState('');
   const [statusCounts, setStatusCounts] = useState({
     all: 0,
     pending: 0,
@@ -47,26 +41,22 @@ export default function AdminServicesPage() {
       // approved: active 상태 (승인됨)
       // rejected: suspended 상태 (반려됨)
       let queryStatus: string | undefined;
-      if (statusFilter === "pending") {
-        queryStatus = "pending";
-      } else if (statusFilter === "approved") {
-        queryStatus = "active";
-      } else if (statusFilter === "rejected") {
-        queryStatus = "suspended";
+      if (statusFilter === 'pending') {
+        queryStatus = 'pending';
+      } else if (statusFilter === 'approved') {
+        queryStatus = 'active';
+      } else if (statusFilter === 'rejected') {
+        queryStatus = 'suspended';
       }
 
       const data = await getAdminServices({
-        status: statusFilter === "all" ? undefined : queryStatus,
+        status: statusFilter === 'all' ? undefined : queryStatus,
         searchQuery,
       });
       setServices(data);
     } catch (err: unknown) {
-      logger.error("서비스 조회 실패:", err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "서비스 목록을 불러오는데 실패했습니다",
-      );
+      logger.error('서비스 조회 실패:', err);
+      setError(err instanceof Error ? err.message : '서비스 목록을 불러오는데 실패했습니다');
     } finally {
       setLoading(false);
     }
@@ -74,13 +64,12 @@ export default function AdminServicesPage() {
 
   async function loadStatusCounts() {
     try {
-      const [allCount, pendingCount, approvedCount, rejectedCount] =
-        await Promise.all([
-          getAdminServicesCount(),
-          getAdminServicesCount("pending"),
-          getAdminServicesCount("active"),
-          getAdminServicesCount("suspended"),
-        ]);
+      const [allCount, pendingCount, approvedCount, rejectedCount] = await Promise.all([
+        getAdminServicesCount(),
+        getAdminServicesCount('pending'),
+        getAdminServicesCount('active'),
+        getAdminServicesCount('suspended'),
+      ]);
 
       setStatusCounts({
         all: allCount,
@@ -89,7 +78,7 @@ export default function AdminServicesPage() {
         rejected: rejectedCount,
       });
     } catch (err) {
-      logger.error("상태별 카운트 조회 실패:", err);
+      logger.error('상태별 카운트 조회 실패:', err);
     }
   }
 
@@ -108,12 +97,12 @@ export default function AdminServicesPage() {
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "pending":
-        return "검토중";
-      case "active":
-        return "승인됨";
-      case "suspended":
-        return "반려됨";
+      case 'pending':
+        return '검토중';
+      case 'active':
+        return '승인됨';
+      case 'suspended':
+        return '반려됨';
       default:
         return status;
     }
@@ -121,32 +110,32 @@ export default function AdminServicesPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "pending":
-        return "bg-yellow-100 text-yellow-700";
-      case "active":
-        return "bg-green-100 text-green-700";
-      case "suspended":
-        return "bg-red-100 text-red-700";
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-700';
+      case 'active':
+        return 'bg-green-100 text-green-700';
+      case 'suspended':
+        return 'bg-red-100 text-red-700';
       default:
-        return "bg-gray-100 text-gray-700";
+        return 'bg-gray-100 text-gray-700';
     }
   };
 
   const tabs = [
-    { value: "all" as ServiceStatus, label: "전체", count: statusCounts.all },
+    { value: 'all' as ServiceStatus, label: '전체', count: statusCounts.all },
     {
-      value: "pending" as ServiceStatus,
-      label: "검토중",
+      value: 'pending' as ServiceStatus,
+      label: '검토중',
       count: statusCounts.pending,
     },
     {
-      value: "approved" as ServiceStatus,
-      label: "승인됨",
+      value: 'approved' as ServiceStatus,
+      label: '승인됨',
       count: statusCounts.approved,
     },
     {
-      value: "rejected" as ServiceStatus,
-      label: "반려됨",
+      value: 'rejected' as ServiceStatus,
+      label: '반려됨',
       count: statusCounts.rejected,
     },
   ];
@@ -179,8 +168,8 @@ export default function AdminServicesPage() {
               aria-label={`${tab.label} (${tab.count}개)`}
               className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
                 statusFilter === tab.value
-                  ? "border-brand-primary text-brand-primary"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
+                  ? 'border-brand-primary text-brand-primary'
+                  : 'border-transparent text-gray-600 hover:text-gray-900'
               }`}
             >
               {tab.label}
@@ -188,8 +177,8 @@ export default function AdminServicesPage() {
                 <span
                   className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
                     statusFilter === tab.value
-                      ? "bg-brand-primary text-white"
-                      : "bg-gray-200 text-gray-600"
+                      ? 'bg-brand-primary text-white'
+                      : 'bg-gray-200 text-gray-600'
                   }`}
                 >
                   {tab.count}
@@ -204,18 +193,20 @@ export default function AdminServicesPage() {
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <div className="flex gap-4">
           <div className="flex-1">
-            <label htmlFor="admin-services-search" className="sr-only">서비스 검색</label>
+            <label htmlFor="admin-services-search" className="sr-only">
+              서비스 검색
+            </label>
             <input
               id="admin-services-search"
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="서비스명 또는 판매자명으로 검색"
+              placeholder="서비스명 또는 전문가명으로 검색"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
             />
           </div>
           <button
-            onClick={() => setSearchQuery("")}
+            onClick={() => setSearchQuery('')}
             className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
             aria-label="검색 초기화"
           >
@@ -227,11 +218,8 @@ export default function AdminServicesPage() {
 
       {/* 결과 카운트 */}
       <div className="text-sm text-gray-600">
-        총{' '}
-        <span className="font-semibold text-gray-900">
-          {filteredServices.length}
-        </span>
-        {' '}개의 서비스
+        총 <span className="font-semibold text-gray-900">{filteredServices.length}</span> 개의
+        서비스
       </div>
 
       {/* 서비스 목록 */}
@@ -245,7 +233,7 @@ export default function AdminServicesPage() {
                     서비스
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    판매자
+                    전문가
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     가격
@@ -297,9 +285,7 @@ export default function AdminServicesPage() {
                           service.seller?.business_name ||
                           service.seller?.user?.name}
                       </div>
-                      <div className="text-xs text-gray-500">
-                        {service.seller?.user?.email}
-                      </div>
+                      <div className="text-xs text-gray-500">{service.seller?.user?.email}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
@@ -308,17 +294,15 @@ export default function AdminServicesPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(service.status || "")}`}
+                        className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(service.status || '')}`}
                       >
-                        {getStatusLabel(service.status || "")}
+                        {getStatusLabel(service.status || '')}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {service.created_at
-                        ? new Date(service.created_at).toLocaleDateString(
-                            "ko-KR",
-                          )
-                        : ""}
+                        ? new Date(service.created_at).toLocaleDateString('ko-KR')
+                        : ''}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <div className="flex gap-2">
@@ -330,7 +314,7 @@ export default function AdminServicesPage() {
                           <Eye className="w-3 h-3 inline mr-1" />
                           상세보기
                         </a>
-                        {service.status === "pending" && (
+                        {service.status === 'pending' && (
                           <>
                             <a
                               href={`/admin/services/pending/${service.id}?action=approve`}

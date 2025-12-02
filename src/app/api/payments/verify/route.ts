@@ -139,7 +139,7 @@ export async function POST(request: NextRequest) {
         .eq('id', payment_request_id);
     }
 
-    // 판매자에게 결제 완료 알림 전송 (실패해도 결제는 성공으로 처리)
+    // 전문가에게 결제 완료 알림 전송 (실패해도 결제는 성공으로 처리)
     try {
       await notifyPaymentReceived(typedOrder.seller_id, typedOrder.id, typedOrder.total_amount);
     } catch (notificationError) {

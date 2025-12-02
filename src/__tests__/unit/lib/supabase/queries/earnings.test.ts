@@ -10,7 +10,7 @@ describe('getSellerEarnings', () => {
     vi.clearAllMocks();
   });
 
-  it('판매자의 수익 정보를 반환한다', async () => {
+  it('전문가의 수익 정보를 반환한다', async () => {
     const mockData = {
       id: 'earnings-1',
       seller_id: 'seller-123',
@@ -35,7 +35,7 @@ describe('getSellerEarnings', () => {
     expect(result.available_balance).toBe(50000);
   });
 
-  it('판매자가 없으면 null을 반환한다', async () => {
+  it('전문가가 없으면 null을 반환한다', async () => {
     vi.mocked(createClient).mockResolvedValue({
       from: vi.fn(() => ({
         select: vi.fn(() => ({

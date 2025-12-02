@@ -180,7 +180,7 @@ export default function SellerReviewsClient({ reviews: initialReviews }: Props) 
 
                     {review.seller_reply && (
                       <div className="mt-3 lg:mt-4 pl-3 lg:pl-4 border-l-4 border-brand-primary bg-blue-50 p-3 lg:p-4 rounded">
-                        <div className="text-sm font-medium text-gray-900 mb-2">판매자 답변</div>
+                        <div className="text-sm font-medium text-gray-900 mb-2">전문가 답변</div>
                         <p className="text-gray-700">{review.seller_reply}</p>
                         <div className="text-xs text-gray-500 mt-2">
                           {review.seller_reply_at

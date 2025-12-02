@@ -31,14 +31,14 @@ export default function BuyerGuidePage() {
                 <li>서비스 상세 페이지에서 내용을 확인합니다</li>
                 <li>옵션을 선택하고 구매하기 버튼을 클릭합니다</li>
                 <li>결제를 완료합니다</li>
-                <li>판매자와 메시지로 소통하며 작업을 진행합니다</li>
+                <li>전문가와 메시지로 소통하며 작업을 진행합니다</li>
               </ol>
             </section>
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">주문 후 진행 절차</h2>
               <ul className="list-disc list-inside space-y-2 text-gray-700">
-                <li>결제 완료 후 판매자가 작업을 시작합니다</li>
+                <li>결제 완료 후 전문가가 작업을 시작합니다</li>
                 <li>작업 진행 상황은 마이페이지 &gt; 주문 내역에서 확인할 수 있습니다</li>
                 <li>작업 완료 시 검수 후 최종 확인합니다</li>
                 <li>만족하시면 리뷰를 작성해주세요</li>
@@ -53,16 +53,16 @@ export default function BuyerGuidePage() {
                     Q. 결제 후 취소가 가능한가요?
                   </h3>
                   <p className="text-gray-700">
-                    작업 시작 전에는 전액 환불이 가능합니다. 작업 진행 중인 경우 판매자와 협의가
+                    작업 시작 전에는 전액 환불이 가능합니다. 작업 진행 중인 경우 전문가와 협의가
                     필요합니다.
                   </p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">
-                    Q. 판매자와 어떻게 소통하나요?
+                    Q. 전문가와 어떻게 소통하나요?
                   </h3>
                   <p className="text-gray-700">
-                    마이페이지의 메시지 기능을 통해 판매자와 직접 소통할 수 있습니다.
+                    마이페이지의 메시지 기능을 통해 전문가와 직접 소통할 수 있습니다.
                   </p>
                 </div>
               </div>

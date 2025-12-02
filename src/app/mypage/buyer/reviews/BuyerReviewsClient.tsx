@@ -201,7 +201,7 @@ export default function BuyerReviewsClient({
                         {order.title || order.service?.title}
                       </h3>
                       <div className="text-sm text-gray-600 mb-2">
-                        판매자: {order.seller?.name} • 주문번호 #
+                        전문가: {order.seller?.name} • 주문번호 #
                         {order.order_number || order.id?.slice(0, 8) || 'N/A'}
                       </div>
                       <div className="flex items-center justify-between">
@@ -281,7 +281,7 @@ export default function BuyerReviewsClient({
                       <div className="bg-gray-50 rounded-lg p-2 mb-2">
                         <div className="flex items-center gap-1 mb-1">
                           <Reply className="w-3 h-3 text-brand-primary" />
-                          <span className="text-xs font-medium text-gray-900">판매자 답변</span>
+                          <span className="text-xs font-medium text-gray-900">전문가 답변</span>
                         </div>
                         <p className="text-xs text-gray-700 line-clamp-2">{review.seller_reply}</p>
                       </div>
@@ -315,7 +315,7 @@ export default function BuyerReviewsClient({
                               {review.service?.title}
                             </h3>
                             <div className="text-sm text-gray-600">
-                              판매자: {review.seller?.name} • 주문번호 #
+                              전문가: {review.seller?.name} • 주문번호 #
                               {review.order?.order_number || review.order_id?.slice(0, 8)}
                             </div>
                           </div>
@@ -341,7 +341,7 @@ export default function BuyerReviewsClient({
                           <div className="bg-gray-50 rounded-lg p-3 lg:p-4 mb-3 lg:mb-4">
                             <div className="flex items-center gap-2 mb-2">
                               <Reply className="w-4 h-4 text-brand-primary" />
-                              <span className="text-sm font-medium text-gray-900">판매자 답변</span>
+                              <span className="text-sm font-medium text-gray-900">전문가 답변</span>
                             </div>
                             <p className="text-gray-700">{review.seller_reply}</p>
                           </div>
@@ -428,7 +428,7 @@ export default function BuyerReviewsClient({
                     <div className="text-sm text-blue-700">
                       <p className="font-medium mb-1">리뷰 작성 안내</p>
                       <ul className="list-disc list-inside space-y-1">
-                        <li>서비스 품질, 판매자 응대, 납품 속도 등을 평가해주세요</li>
+                        <li>서비스 품질, 전문가 응대, 납품 속도 등을 평가해주세요</li>
                         <li>구체적이고 솔직한 후기가 다른 구매자에게 도움이 됩니다</li>
                         <li>비속어나 욕설은 사용하지 말아주세요</li>
                       </ul>

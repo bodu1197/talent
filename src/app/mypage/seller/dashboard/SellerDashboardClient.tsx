@@ -69,9 +69,9 @@ function getStatusText(status: string): string {
 export default function SellerDashboardClient({ stats, recentOrders, profileData }: Props) {
   const queryClient = useQueryClient();
 
-  // 백그라운드에서 모든 판매자 페이지 데이터 프리페치
+  // 백그라운드에서 모든 전문가 페이지 데이터 프리페치
   useEffect(() => {
-    // 판매자 등록이 완료된 경우에만 프리페치
+    // 전문가 등록이 완료된 경우에만 프리페치
     if (stats) {
       const timer = setTimeout(() => {
         prefetchSellerData(queryClient).catch((err) => logger.error('Operation error:', err));
@@ -81,20 +81,20 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
     }
   }, [queryClient, stats]);
 
-  // 판매자 미등록 상태 - 등록 유도 UI 표시
+  // 전문가 미등록 상태 - 등록 유도 UI 표시
   if (!stats) {
     return (
       <MypageLayoutWrapper mode="seller" profileData={profileData}>
         <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
           <div className="max-w-3xl mx-auto">
-            {/* 판매자 등록 안내 카드 */}
+            {/* 전문가 등록 안내 카드 */}
             <div className="bg-white rounded-lg shadow p-3 lg:p-4 text-center">
               <div className="mb-4 lg:mb-6">
                 <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-full mb-4">
                   <Store className="w-10 h-10 text-brand-primary" />
                 </div>
                 <h1 className="text-2xl font-semibold text-gray-900 mb-2">
-                  판매자로 등록하고 서비스를 판매하세요
+                  전문가로 등록하고 서비스를 판매하세요
                 </h1>
                 <p className="text-gray-600">
                   전문가로 등록하여 여러분의 재능을 공유하고 수익을 창출할 수 있습니다
@@ -132,7 +132,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
                 className="inline-flex items-center px-8 py-4 bg-brand-primary text-white rounded-lg hover:bg-[#1a4d8f] transition-colors text-lg font-semibold shadow-md hover:shadow-lg"
               >
                 <Rocket className="inline mr-3 w-5 h-5" />
-                판매자 등록하기
+                전문가 등록하기
               </Link>
 
               {/* 추가 정보 */}
@@ -148,7 +148,7 @@ export default function SellerDashboardClient({ stats, recentOrders, profileData
     );
   }
 
-  // 판매자 등록 완료 - 정상 대시보드 표시
+  // 전문가 등록 완료 - 정상 대시보드 표시
   return (
     <MypageLayoutWrapper mode="seller" profileData={profileData}>
       <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">

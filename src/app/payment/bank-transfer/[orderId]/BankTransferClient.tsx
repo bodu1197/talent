@@ -40,7 +40,7 @@ export default function BankTransferClient({ order }: Props) {
   const [cashReceiptValue, setCashReceiptValue] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 판매자가 사업자인지 확인 (사업자만 현금영수증 발행 가능)
+  // 전문가가 사업자인지 확인 (사업자만 현금영수증 발행 가능)
   const canIssueCashReceipt = order.seller?.is_business === true;
 
   const bankInfo = {
@@ -240,7 +240,7 @@ export default function BankTransferClient({ order }: Props) {
           </ul>
         </div>
 
-        {/* 현금영수증 신청 - 사업자 판매자인 경우만 표시 */}
+        {/* 현금영수증 신청 - 사업자 전문가인 경우만 표시 */}
         {canIssueCashReceipt && (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
             <div className="flex items-center gap-2 mb-4">

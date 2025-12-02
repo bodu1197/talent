@@ -31,7 +31,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       .eq('id', id)
       .single();
 
-    // 판매자 정보를 seller_profiles에서 별도 조회 (display_name, business_name 포함)
+    // 전문가 정보를 seller_profiles에서 별도 조회 (display_name, business_name 포함)
     if (order) {
       const { data: sellerProfile } = await supabase
         .from('seller_profiles')
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       if (sellerProfile) {
         order.seller = {
           id: sellerProfile.user_id,
-          name: sellerProfile.display_name || sellerProfile.business_name || '판매자',
+          name: sellerProfile.display_name || sellerProfile.business_name || '전문가',
           profile_image: sellerProfile.profile_image,
         };
       }
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: '주문을 찾을 수 없습니다' }, { status: 404 });
     }
 
-    // 권한 확인 (구매자 또는 판매자만 조회 가능)
+    // 권한 확인 (구매자 또는 전문가만 조회 가능)
     if (order.buyer_id !== user.id && order.seller_id !== user.id) {
       return NextResponse.json({ error: '권한이 없습니다' }, { status: 403 });
     }

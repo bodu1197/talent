@@ -242,7 +242,7 @@ export default function BuyerDashboardClient({
                       </div>
                       <div className="flex items-center justify-between pt-2 border-t border-gray-100">
                         <div className="flex items-center gap-2 text-xs text-gray-600">
-                          <span>{order.seller?.name || '판매자'}</span>
+                          <span>{order.seller?.name || '전문가'}</span>
                           <span className="font-semibold text-gray-900">
                             {order.total_amount?.toLocaleString() || '0'}원
                           </span>
@@ -288,7 +288,7 @@ export default function BuyerDashboardClient({
                             </span>
                           </div>
                           <div className="text-sm text-gray-600 mb-2">
-                            판매자: {order.seller?.name || '판매자'}
+                            전문가: {order.seller?.name || '전문가'}
                           </div>
                           <div className="flex items-center gap-3 mb-3">
                             <span

@@ -4,8 +4,18 @@ import SellerRegistrationGuide from '@/components/home/SellerRegistrationGuide';
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    [key: string]: unknown;
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }));
 
@@ -13,7 +23,7 @@ describe('SellerRegistrationGuide', () => {
   it('섹션을 렌더링한다', () => {
     render(<SellerRegistrationGuide />);
 
-    expect(screen.getByText('돌파구 판매자가 되어보세요')).toBeInTheDocument();
+    expect(screen.getByText('돌파구 전문가가 되어보세요')).toBeInTheDocument();
   });
 
   it('설명 텍스트를 표시한다', () => {
@@ -42,10 +52,10 @@ describe('SellerRegistrationGuide', () => {
     expect(safeTradeTexts.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('판매자로 시작하기 버튼을 렌더링한다', () => {
+  it('전문가로 시작하기 버튼을 렌더링한다', () => {
     render(<SellerRegistrationGuide />);
 
-    const link = screen.getByRole('link', { name: /판매자로 시작하기/ });
+    const link = screen.getByRole('link', { name: /전문가로 시작하기/ });
     expect(link).toHaveAttribute('href', '/auth/register');
   });
 
@@ -62,7 +72,7 @@ describe('SellerRegistrationGuide', () => {
     const feeDescTexts = screen.getAllByText('판매 수수료 없이 100% 수익을 가져가세요');
     expect(feeDescTexts.length).toBeGreaterThanOrEqual(1);
 
-    const opportunityDescTexts = screen.getAllByText('신규 판매자도 동등한 노출 기회를 드립니다');
+    const opportunityDescTexts = screen.getAllByText('신규 전문가도 동등한 노출 기회를 드립니다');
     expect(opportunityDescTexts.length).toBeGreaterThanOrEqual(1);
   });
 

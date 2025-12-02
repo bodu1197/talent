@@ -23,7 +23,7 @@ export default function BuyerRefundPage() {
                   <h3 className="font-semibold text-green-900 mb-2">✓ 전액 환불 가능한 경우</h3>
                   <ul className="list-disc list-inside space-y-1 text-green-800">
                     <li>작업 시작 전 취소 요청</li>
-                    <li>판매자가 작업을 시작하지 않은 경우</li>
+                    <li>전문가가 작업을 시작하지 않은 경우</li>
                     <li>서비스 설명과 실제 제공 내용이 다른 경우</li>
                   </ul>
                 </div>
@@ -32,7 +32,7 @@ export default function BuyerRefundPage() {
                   <h3 className="font-semibold text-yellow-900 mb-2">⚠ 부분 환불 가능한 경우</h3>
                   <ul className="list-disc list-inside space-y-1 text-yellow-800">
                     <li>작업 진행 중 취소 요청 (진행률에 따라 협의)</li>
-                    <li>판매자와 구매자 간 합의가 이루어진 경우</li>
+                    <li>전문가와 구매자 간 합의가 이루어진 경우</li>
                   </ul>
                 </div>
 

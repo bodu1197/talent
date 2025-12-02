@@ -23,7 +23,7 @@ export default function Loading() {
               <div className="h-8 bg-gray-200 rounded w-3/4 mb-6" />
               {/* 별점 */}
               <div className="h-6 bg-gray-200 rounded w-48 mb-6" />
-              {/* 판매자 카드 */}
+              {/* 전문가 카드 */}
               <div className="bg-white rounded-lg h-[70px] p-3">
                 <div className="flex items-center gap-3">
                   <div className="w-[54px] h-[54px] bg-gray-200 rounded-full" />

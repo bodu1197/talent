@@ -38,8 +38,8 @@ export default function CancelModal({
               <div className="text-sm text-red-800">
                 <p className="font-medium mb-1">취소 요청 안내</p>
                 <ul className="list-disc list-inside space-y-1">
-                  <li>취소 요청 시 판매자에게 알림이 전송됩니다</li>
-                  <li>판매자 동의 후 취소가 확정됩니다</li>
+                  <li>취소 요청 시 전문가에게 알림이 전송됩니다</li>
+                  <li>전문가 동의 후 취소가 확정됩니다</li>
                   <li>결제가 완료된 경우 환불 절차가 진행됩니다</li>
                 </ul>
               </div>

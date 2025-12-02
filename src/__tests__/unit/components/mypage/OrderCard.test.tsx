@@ -5,7 +5,6 @@ import OrderCard from '@/components/mypage/OrderCard';
 // Mock next/image
 vi.mock('next/image', () => ({
   default: ({ src, alt, ...props }: { src: string; alt: string; [key: string]: unknown }) => (
-    // eslint-disable-next-line @next/next/no-img-element
     <img src={src} alt={alt} {...props} />
   ),
 }));
@@ -52,10 +51,10 @@ describe('OrderCard', () => {
     expect(screen.getAllByText('50,000원')[0]).toBeInTheDocument();
   });
 
-  it('buyer 모드에서는 판매자 이름을 표시한다', () => {
+  it('buyer 모드에서는 전문가 이름을 표시한다', () => {
     render(<OrderCard order={mockOrder} mode="buyer" />);
 
-    expect(screen.getByText(/판매자: 김디자인/)).toBeInTheDocument();
+    expect(screen.getByText(/전문가: 김디자인/)).toBeInTheDocument();
   });
 
   it('seller 모드에서는 구매자 이름을 표시한다', () => {

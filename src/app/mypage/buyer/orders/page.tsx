@@ -446,7 +446,7 @@ function BuyerOrdersContent() {
                 htmlFor="order-search"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                판매자명 / 주문번호 검색
+                전문가명 / 주문번호 검색
               </label>
               <input
                 id="order-search"

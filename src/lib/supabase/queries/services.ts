@@ -227,7 +227,7 @@ export async function getServicesByCategory(
   return data;
 }
 
-// 판매자의 다른 서비스 조회 (현재 서비스 제외)
+// 전문가의 다른 서비스 조회 (현재 서비스 제외)
 export async function getSellerOtherServices(
   sellerId: string,
   currentServiceId: string,

@@ -180,7 +180,7 @@ export default function AdminServiceRevisionsPage() {
       {/* Page Header */}
       <div>
         <h1 className="text-3xl font-semibold text-gray-900">서비스 수정 요청 관리</h1>
-        <p className="text-gray-600 mt-1">판매자의 서비스 수정 요청을 검토하세요</p>
+        <p className="text-gray-600 mt-1">전문가의 서비스 수정 요청을 검토하세요</p>
       </div>
 
       {/* 탭 네비게이션 */}
@@ -221,7 +221,7 @@ export default function AdminServiceRevisionsPage() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="서비스명 또는 판매자명으로 검색"
+              placeholder="서비스명 또는 전문가명으로 검색"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
             />
           </div>
@@ -255,7 +255,7 @@ export default function AdminServiceRevisionsPage() {
                     수정 내용
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    판매자
+                    전문가
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     가격

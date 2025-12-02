@@ -58,7 +58,7 @@ export default function AITalentShowcase({ services = [] }: Props) {
 
               {/* 서비스 정보 */}
               <div className="mt-2">
-                {/* 판매자 */}
+                {/* 전문가 */}
                 <div className="flex items-center gap-1 mb-1">
                   <div className="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center text-white text-[8px] font-semibold">
                     {service.seller?.display_name?.[0] || 'S'}

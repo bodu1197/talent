@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import Link from "next/link";
+import Link from 'next/link';
 import {
   Banknote,
   TrendingUp,
@@ -16,7 +16,7 @@ import {
   Megaphone,
   Clock,
   Lightbulb,
-} from "lucide-react";
+} from 'lucide-react';
 
 export default function ExpertRegisterPage() {
   return (
@@ -54,7 +54,7 @@ export default function ExpertRegisterPage() {
             <h2 className="text-3xl font-semibold text-gray-900 mb-4">
               다른 플랫폼에서 이런 고민 하셨나요?
             </h2>
-            <p className="text-gray-600">수수료 때문에 판매자들이 겪는 현실</p>
+            <p className="text-gray-600">수수료 때문에 전문가들이 겪는 현실</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
@@ -111,21 +111,15 @@ export default function ExpertRegisterPage() {
             <div className="grid md:grid-cols-3 gap-4 mt-6">
               <div className="bg-white/10 backdrop-blur p-4 rounded-lg">
                 <div className="font-semibold mb-2">낮은 가격 제시</div>
-                <div className="text-sm text-gray-200">
-                  수수료 없으니 가격 경쟁력 확보
-                </div>
+                <div className="text-sm text-gray-200">수수료 없으니 가격 경쟁력 확보</div>
               </div>
               <div className="bg-white/10 backdrop-blur p-4 rounded-lg">
                 <div className="font-semibold mb-2">주문 증가</div>
-                <div className="text-sm text-gray-200">
-                  합리적 가격에 고객이 몰려요
-                </div>
+                <div className="text-sm text-gray-200">합리적 가격에 고객이 몰려요</div>
               </div>
               <div className="bg-white/10 backdrop-blur p-4 rounded-lg">
                 <div className="font-semibold mb-2">수익 극대화</div>
-                <div className="text-sm text-gray-200">
-                  벌어들인 돈 100% 내 것
-                </div>
+                <div className="text-sm text-gray-200">벌어들인 돈 100% 내 것</div>
               </div>
             </div>
           </div>
@@ -136,9 +130,7 @@ export default function ExpertRegisterPage() {
       <div className="py-16 bg-white">
         <div className="container-1200">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-semibold text-gray-900 mb-4">
-              비교해보세요
-            </h2>
+            <h2 className="text-3xl font-semibold text-gray-900 mb-4">비교해보세요</h2>
             <p className="text-gray-600">같은 서비스, 다른 결과</p>
           </div>
 
@@ -193,9 +185,7 @@ export default function ExpertRegisterPage() {
             <h2 className="text-3xl font-semibold text-gray-900 mb-4">
               왜 우리 플랫폼을 선택해야 할까요?
             </h2>
-            <p className="text-gray-600">
-              판매자의 성공이 곧 우리의 성공입니다
-            </p>
+            <p className="text-gray-600">전문가의 성공이 곧 우리의 성공입니다</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -203,9 +193,7 @@ export default function ExpertRegisterPage() {
               <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white">
                 <CircleDollarSign className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                수수료 0원
-              </h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">수수료 0원</h3>
               <p className="text-gray-600 text-sm leading-relaxed mb-3">
                 수수료 걱정 없이 합리적인 가격으로 서비스를 판매하세요.
               </p>
@@ -218,75 +206,55 @@ export default function ExpertRegisterPage() {
               <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white">
                 <Zap className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                빠른 정산
-              </h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">빠른 정산</h3>
               <p className="text-gray-600 text-sm leading-relaxed mb-3">
                 작업 완료 후 즉시 출금 가능. 복잡한 절차 없이 당일 정산.
               </p>
-              <div className="text-brand-primary font-semibold text-sm">
-                ✓ 당일 출금 가능
-              </div>
+              <div className="text-brand-primary font-semibold text-sm">✓ 당일 출금 가능</div>
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white">
                 <Megaphone className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                적극적 마케팅
-              </h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">적극적 마케팅</h3>
               <p className="text-gray-600 text-sm leading-relaxed mb-3">
                 SEO 최적화와 광고로 당신의 서비스를 활발히 홍보합니다.
               </p>
-              <div className="text-brand-primary font-semibold text-sm">
-                ✓ 무료 홍보 지원
-              </div>
+              <div className="text-brand-primary font-semibold text-sm">✓ 무료 홍보 지원</div>
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white">
                 <TrendingUp className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                성장 지원
-              </h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">성장 지원</h3>
               <p className="text-gray-600 text-sm leading-relaxed mb-3">
                 판매 데이터 분석, 가격 전략 컨설팅까지 전문가의 성공을 돕습니다.
               </p>
-              <div className="text-brand-primary font-semibold text-sm">
-                ✓ 전담 매니저 배정
-              </div>
+              <div className="text-brand-primary font-semibold text-sm">✓ 전담 매니저 배정</div>
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white">
                 <Clock className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                3분 만에 시작
-              </h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">3분 만에 시작</h3>
               <p className="text-gray-600 text-sm leading-relaxed mb-3">
                 복잡한 서류나 심사 없이 간단한 정보만으로 바로 시작.
               </p>
-              <div className="text-brand-primary font-semibold text-sm">
-                ✓ 즉시 승인
-              </div>
+              <div className="text-brand-primary font-semibold text-sm">✓ 즉시 승인</div>
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <div className="w-12 h-12 bg-brand-primary rounded-lg flex items-center justify-center mb-4 text-white">
                 <CheckCircle className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                안전한 거래
-              </h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">안전한 거래</h3>
               <p className="text-gray-600 text-sm leading-relaxed mb-3">
                 에스크로 시스템으로 안전한 거래 보장. 분쟁 시 전문팀 중재.
               </p>
-              <div className="text-brand-primary font-semibold text-sm">
-                ✓ 100% 거래 보호
-              </div>
+              <div className="text-brand-primary font-semibold text-sm">✓ 100% 거래 보호</div>
             </div>
           </div>
         </div>
@@ -296,12 +264,8 @@ export default function ExpertRegisterPage() {
       <div className="py-16 bg-white">
         <div className="container-1200">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-semibold text-gray-900 mb-4">
-              전문가들의 성공 스토리
-            </h2>
-            <p className="text-gray-600">
-              수수료 스트레스에서 해방된 전문가들의 이야기
-            </p>
+            <h2 className="text-3xl font-semibold text-gray-900 mb-4">전문가들의 성공 스토리</h2>
+            <p className="text-gray-600">수수료 스트레스에서 해방된 전문가들의 이야기</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -316,9 +280,8 @@ export default function ExpertRegisterPage() {
                 </div>
               </div>
               <p className="text-gray-600 text-sm mb-3">
-                "수수료 때문에 가격을 10만원이나 더 받아야 했어요. 여기 옮기고
-                나서 가격을 3만원 낮췄는데도 제 수익은 더 높아졌어요! 주문은
-                3배로 늘었고요."
+                "수수료 때문에 가격을 10만원이나 더 받아야 했어요. 여기 옮기고 나서 가격을 3만원
+                낮췄는데도 제 수익은 더 높아졌어요! 주문은 3배로 늘었고요."
               </p>
               <div className="bg-brand-primary/10 p-3 rounded text-sm text-brand-primary flex items-center gap-2">
                 <Lightbulb className="w-4 h-4" /> 저렴한 가격으로 더 많이 벌어요
@@ -336,9 +299,8 @@ export default function ExpertRegisterPage() {
                 </div>
               </div>
               <p className="text-gray-600 text-sm mb-3">
-                "매달 수수료 빠져나가는거 보면서 스트레스 받았어요. 여기는
-                수수료 걱정 없이 일할 수 있어서 정신 건강에 너무 좋아요.
-                일하는게 즐거워졌습니다!"
+                "매달 수수료 빠져나가는거 보면서 스트레스 받았어요. 여기는 수수료 걱정 없이 일할 수
+                있어서 정신 건강에 너무 좋아요. 일하는게 즐거워졌습니다!"
               </p>
               <div className="bg-brand-primary/10 p-3 rounded text-sm text-brand-primary flex items-center gap-2">
                 <Lightbulb className="w-4 h-4" /> 스트레스 없이 일에 집중해요
@@ -356,9 +318,8 @@ export default function ExpertRegisterPage() {
                 </div>
               </div>
               <p className="text-gray-600 text-sm mb-3">
-                "다른 플랫폼에서는 수수료 포함해서 가격 책정하니까 경쟁자들보다
-                항상 비싸 보였어요. 여기서는 수수료가 없으니 가격 경쟁력이
-                생겼고, 주문이 밀려들어요!"
+                "다른 플랫폼에서는 수수료 포함해서 가격 책정하니까 경쟁자들보다 항상 비싸 보였어요.
+                여기서는 수수료가 없으니 가격 경쟁력이 생겼고, 주문이 밀려들어요!"
               </p>
               <div className="bg-brand-primary/10 p-3 rounded text-sm text-brand-primary flex items-center gap-2">
                 <Lightbulb className="w-4 h-4" /> 가격 경쟁력으로 시장 장악
@@ -378,9 +339,7 @@ export default function ExpertRegisterPage() {
             </div>
             <div>
               <div className="text-4xl font-semibold mb-2">95%</div>
-              <div className="text-gray-300 text-sm">
-                "주문이 늘었다" 응답률
-              </div>
+              <div className="text-gray-300 text-sm">"주문이 늘었다" 응답률</div>
             </div>
             <div>
               <div className="text-4xl font-semibold mb-2">2.8배</div>
@@ -398,9 +357,7 @@ export default function ExpertRegisterPage() {
       <div className="py-16 bg-gray-50">
         <div className="container-1200">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-semibold text-gray-900 mb-4">
-              시작하기 정말 간단합니다
-            </h2>
+            <h2 className="text-3xl font-semibold text-gray-900 mb-4">시작하기 정말 간단합니다</h2>
             <p className="text-gray-600">3단계로 오늘부터 수익 창출 시작</p>
           </div>
 
@@ -409,9 +366,7 @@ export default function ExpertRegisterPage() {
               <div className="bg-brand-primary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-semibold mx-auto mb-4">
                 1
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                무료 회원가입
-              </h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">무료 회원가입</h3>
               <p className="text-gray-600 text-sm">
                 이메일과 기본 정보만 입력하면 끝!
                 <br />
@@ -423,9 +378,7 @@ export default function ExpertRegisterPage() {
               <div className="bg-brand-primary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-semibold mx-auto mb-4">
                 2
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                서비스 등록
-              </h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">서비스 등록</h3>
               <p className="text-gray-600 text-sm">
                 당신의 재능과 가격을 설정하고
                 <br />
@@ -437,9 +390,7 @@ export default function ExpertRegisterPage() {
               <div className="bg-brand-primary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-semibold mx-auto mb-4">
                 3
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                수익 창출 시작
-              </h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">수익 창출 시작</h3>
               <p className="text-gray-600 text-sm">
                 주문이 들어오면 작업하고
                 <br />
@@ -468,8 +419,7 @@ export default function ExpertRegisterPage() {
               3분만에 전문가 등록하기 →
             </Link>
             <div className="mt-6 text-gray-700 text-sm">
-              ✓ 신용카드 불필요 &nbsp;&nbsp; ✓ 언제든지 해지 가능 &nbsp;&nbsp; ✓
-              평생 무료
+              ✓ 신용카드 불필요 &nbsp;&nbsp; ✓ 언제든지 해지 가능 &nbsp;&nbsp; ✓ 평생 무료
             </div>
           </div>
         </div>
@@ -478,18 +428,15 @@ export default function ExpertRegisterPage() {
       {/* FAQ */}
       <div className="py-16 bg-white">
         <div className="container-1200">
-          <h2 className="text-3xl font-semibold text-gray-900 mb-8 text-center">
-            자주 묻는 질문
-          </h2>
+          <h2 className="text-3xl font-semibold text-gray-900 mb-8 text-center">자주 묻는 질문</h2>
           <div className="space-y-4 max-w-4xl mx-auto">
             <div className="bg-gray-50 p-6 rounded-lg">
               <h3 className="font-semibold text-gray-900 mb-2">
                 수수료 0원이면 가격을 낮춰도 되나요?
               </h3>
               <p className="text-gray-600 text-sm">
-                네! 그게 핵심입니다. 수수료가 없으니 가격을 낮춰도 당신의
-                실수익은 오히려 높아집니다. 낮은 가격 → 주문 증가 → 총 수익
-                증가의 선순환이 만들어져요.
+                네! 그게 핵심입니다. 수수료가 없으니 가격을 낮춰도 당신의 실수익은 오히려
+                높아집니다. 낮은 가격 → 주문 증가 → 총 수익 증가의 선순환이 만들어져요.
               </p>
             </div>
 
@@ -498,9 +445,8 @@ export default function ExpertRegisterPage() {
                 다른 플랫폼에서 느꼈던 스트레스가 없나요?
               </h3>
               <p className="text-gray-600 text-sm">
-                전혀 없습니다. "수수료 때문에 가격 올려야 하나?", "주문이 안
-                들어오면 어쩌지?" 같은 고민이 사라집니다. 순수하게 내 일에만
-                집중할 수 있어요.
+                전혀 없습니다. "수수료 때문에 가격 올려야 하나?", "주문이 안 들어오면 어쩌지?" 같은
+                고민이 사라집니다. 순수하게 내 일에만 집중할 수 있어요.
               </p>
             </div>
 
@@ -509,20 +455,16 @@ export default function ExpertRegisterPage() {
                 타 플랫폼에서 옮겨오는 사람들이 많나요?
               </h3>
               <p className="text-gray-600 text-sm">
-                현재 전문가의 73%가 다른 플랫폼에서 옮겨온 분들입니다.
-                공통적으로 "수수료 스트레스가 사라졌다", "주문이 2~3배 늘었다"고
-                말씀하세요.
+                현재 전문가의 73%가 다른 플랫폼에서 옮겨온 분들입니다. 공통적으로 "수수료 스트레스가
+                사라졌다", "주문이 2~3배 늘었다"고 말씀하세요.
               </p>
             </div>
 
             <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="font-semibold text-gray-900 mb-2">
-                가격 경쟁력이 정말 생기나요?
-              </h3>
+              <h3 className="font-semibold text-gray-900 mb-2">가격 경쟁력이 정말 생기나요?</h3>
               <p className="text-gray-600 text-sm">
-                당연합니다. 같은 서비스를 타 플랫폼보다 20% 저렴하게 제공해도
-                당신의 수익은 똑같거나 더 높아요. 고객 입장에서는 당연히 우리
-                플랫폼을 선택하죠.
+                당연합니다. 같은 서비스를 타 플랫폼보다 20% 저렴하게 제공해도 당신의 수익은 똑같거나
+                더 높아요. 고객 입장에서는 당연히 우리 플랫폼을 선택하죠.
               </p>
             </div>
           </div>

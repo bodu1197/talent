@@ -10,7 +10,7 @@ const CATEGORIES = [
   { value: 'account', label: '회원/계정' },
   { value: 'payment', label: '결제/환불' },
   { value: 'service', label: '서비스 이용' },
-  { value: 'seller', label: '판매자' },
+  { value: 'seller', label: '전문가' },
   { value: 'technical', label: '기술적 문제' },
   { value: 'other', label: '기타' },
 ];

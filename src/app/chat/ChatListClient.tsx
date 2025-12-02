@@ -16,7 +16,7 @@ interface ChatRoom {
   service_id: string | null;
   last_message_at: string;
   created_at: string;
-  seller_id: string | null; // 현재 사용자가 판매자인 경우
+  seller_id: string | null; // 현재 사용자가 전문가인 경우
   is_favorite?: boolean;
   has_active_order?: boolean;
   otherUser?: {

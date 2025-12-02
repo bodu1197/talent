@@ -47,7 +47,7 @@ async function processAutoConfirm(
     logger.error(`Settlement update error for order ${order.id}:`, settlementError);
   }
 
-  // 판매자에게 자동 구매확정 알림
+  // 전문가에게 자동 구매확정 알림
   await notifyOrderConfirmed(order.seller_id, order.id, order.amount, true);
 
   return { orderId: order.id, success: true };

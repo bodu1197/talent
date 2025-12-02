@@ -33,7 +33,7 @@ const statusColorClasses = {
 
 export default function OrderCard({ order, mode, actions }: OrderCardProps) {
   const userName = mode === 'seller' ? order.buyerName : order.sellerName;
-  const userLabel = mode === 'seller' ? '구매자' : '판매자';
+  const userLabel = mode === 'seller' ? '구매자' : '전문가';
 
   return (
     <div className="bg-white rounded-lg shadow hover:shadow-md p-3 lg:p-6 transition-shadow">

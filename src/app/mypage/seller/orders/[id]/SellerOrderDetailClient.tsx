@@ -259,8 +259,8 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
     const entries = [
       buildStatusEntry('주문 접수', order.created_at, '시스템'),
       buildStatusEntry('결제 완료', order.paid_at, '구매자'),
-      buildStatusEntry('작업 시작', order.started_at, '판매자'),
-      buildStatusEntry('납품 완료', order.delivered_at, '판매자'),
+      buildStatusEntry('작업 시작', order.started_at, '전문가'),
+      buildStatusEntry('납품 완료', order.delivered_at, '전문가'),
       buildStatusEntry('구매 확정', order.completed_at, '구매자'),
     ];
 

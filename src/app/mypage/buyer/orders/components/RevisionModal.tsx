@@ -39,7 +39,7 @@ export default function RevisionModal({
               <Info className="w-5 h-5 lg:w-6 lg:h-6" />
               <span className="font-medium">남은 수정 횟수: {remainingRevisions}회</span>
             </div>
-            <p className="text-sm text-blue-700">수정 요청 시 판매자에게 알림이 전송됩니다.</p>
+            <p className="text-sm text-blue-700">수정 요청 시 전문가에게 알림이 전송됩니다.</p>
           </div>
 
           <div>

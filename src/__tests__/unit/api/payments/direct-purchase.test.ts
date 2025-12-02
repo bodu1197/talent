@@ -361,7 +361,7 @@ describe('POST /api/payments/direct-purchase', () => {
       const data = await response.json();
 
       expect(response.status).toBe(404);
-      expect(data.error).toBe('판매자를 찾을 수 없습니다');
+      expect(data.error).toBe('전문가를 찾을 수 없습니다');
     });
 
     it('should return 403 when trying to buy own service', async () => {

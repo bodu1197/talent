@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '필수 정보가 누락되었습니다' }, { status: 400 });
     }
 
-    // 판매자 확인
+    // 전문가 확인
     const { data: seller } = await supabase
       .from('sellers')
       .select('id')
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
       .maybeSingle();
 
     if (!seller) {
-      return NextResponse.json({ error: '판매자 정보를 찾을 수 없습니다' }, { status: 400 });
+      return NextResponse.json({ error: '전문가 정보를 찾을 수 없습니다' }, { status: 400 });
     }
 
     // 서비스 확인 및 소유권 검증

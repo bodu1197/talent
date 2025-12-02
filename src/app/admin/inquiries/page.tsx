@@ -30,7 +30,7 @@ const CATEGORY_MAP: Record<string, string> = {
   account: '회원/계정',
   payment: '결제/환불',
   service: '서비스 이용',
-  seller: '판매자',
+  seller: '전문가',
   technical: '기술적 문제',
   other: '기타',
 };

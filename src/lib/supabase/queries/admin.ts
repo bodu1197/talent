@@ -228,7 +228,7 @@ export async function getAdminRecentOrders(limit: number = 10): Promise<OrderWit
       s.user_id,
       {
         id: s.user_id,
-        name: s.display_name || s.business_name || '판매자',
+        name: s.display_name || s.business_name || '전문가',
         email: sellerEmailMap.get(s.user_id) || '이메일 없음',
         display_name: s.display_name,
         business_name: s.business_name,
@@ -354,7 +354,7 @@ export async function getAdminUsers(filters?: {
 }): Promise<AdminUserProfile[]> {
   const supabase = createClient();
 
-  // 먼저 sellers 테이블에서 판매자 user_id 목록 조회
+  // 먼저 sellers 테이블에서 전문가 user_id 목록 조회
   const { data: sellers } = await supabase.from('sellers').select('user_id');
   const sellerUserIds = new Set(sellers?.map((s) => s.user_id) || []);
 
@@ -549,7 +549,7 @@ export async function getAdminOrders(filters?: {
       s.user_id,
       {
         id: s.user_id,
-        name: s.display_name || s.business_name || '판매자',
+        name: s.display_name || s.business_name || '전문가',
         email: sellerEmailMap.get(s.user_id) || '이메일 없음',
         display_name: s.display_name,
         business_name: s.business_name,

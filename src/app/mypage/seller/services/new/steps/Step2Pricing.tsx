@@ -190,12 +190,12 @@ export default function Step2Pricing({ formData, setFormData, isBusiness }: Step
               {isBusiness ? (
                 <>
                   <Building2 className="w-5 h-5 text-blue-600" />
-                  <span className="font-semibold text-blue-900">사업자 판매자</span>
+                  <span className="font-semibold text-blue-900">사업자 전문가</span>
                 </>
               ) : (
                 <>
                   <User className="w-5 h-5 text-green-600" />
-                  <span className="font-semibold text-green-900">프리랜서 판매자</span>
+                  <span className="font-semibold text-green-900">프리랜서 전문가</span>
                 </>
               )}
             </div>

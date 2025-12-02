@@ -4,8 +4,18 @@ import MobileMyPageNav from '@/components/mypage/MobileMyPageNav';
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    [key: string]: unknown;
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }));
 
@@ -26,11 +36,7 @@ describe('MobileMyPageNav', () => {
   describe('구매자 모드', () => {
     it('구매자 메뉴를 렌더링한다', () => {
       render(
-        <MobileMyPageNav
-          currentRole="buyer"
-          onRoleChange={mockOnRoleChange}
-          isSeller={false}
-        />
+        <MobileMyPageNav currentRole="buyer" onRoleChange={mockOnRoleChange} isSeller={false} />
       );
 
       expect(screen.getByText('주문 내역')).toBeInTheDocument();
@@ -41,11 +47,7 @@ describe('MobileMyPageNav', () => {
 
     it('구매자 버튼이 활성화 상태다', () => {
       render(
-        <MobileMyPageNav
-          currentRole="buyer"
-          onRoleChange={mockOnRoleChange}
-          isSeller={false}
-        />
+        <MobileMyPageNav currentRole="buyer" onRoleChange={mockOnRoleChange} isSeller={false} />
       );
 
       const buyerButton = screen.getByRole('button', { name: '구매자' });
@@ -55,11 +57,7 @@ describe('MobileMyPageNav', () => {
     it('현재 경로와 일치하는 메뉴가 활성화된다', () => {
       mockPathname = '/mypage/buyer/orders';
       render(
-        <MobileMyPageNav
-          currentRole="buyer"
-          onRoleChange={mockOnRoleChange}
-          isSeller={false}
-        />
+        <MobileMyPageNav currentRole="buyer" onRoleChange={mockOnRoleChange} isSeller={false} />
       );
 
       const orderLink = screen.getByRole('link', { name: /주문 내역/ });
@@ -67,15 +65,11 @@ describe('MobileMyPageNav', () => {
     });
   });
 
-  describe('판매자 모드', () => {
-    it('판매자 메뉴를 렌더링한다', () => {
+  describe('전문가 모드', () => {
+    it('전문가 메뉴를 렌더링한다', () => {
       mockPathname = '/mypage/seller/services';
       render(
-        <MobileMyPageNav
-          currentRole="seller"
-          onRoleChange={mockOnRoleChange}
-          isSeller={true}
-        />
+        <MobileMyPageNav currentRole="seller" onRoleChange={mockOnRoleChange} isSeller={true} />
       );
 
       expect(screen.getByText('서비스 관리')).toBeInTheDocument();
@@ -84,32 +78,24 @@ describe('MobileMyPageNav', () => {
       expect(screen.getByText('포트폴리오')).toBeInTheDocument();
     });
 
-    it('판매자 버튼이 활성화 상태다', () => {
+    it('전문가 버튼이 활성화 상태다', () => {
       mockPathname = '/mypage/seller/services';
       render(
-        <MobileMyPageNav
-          currentRole="seller"
-          onRoleChange={mockOnRoleChange}
-          isSeller={true}
-        />
+        <MobileMyPageNav currentRole="seller" onRoleChange={mockOnRoleChange} isSeller={true} />
       );
 
-      const sellerButton = screen.getByRole('button', { name: '판매자' });
+      const sellerButton = screen.getByRole('button', { name: '전문가' });
       expect(sellerButton).toHaveClass('bg-white', 'text-brand-primary');
     });
   });
 
   describe('역할 전환', () => {
-    it('판매자 버튼 클릭 시 onRoleChange가 호출된다', () => {
+    it('전문가 버튼 클릭 시 onRoleChange가 호출된다', () => {
       render(
-        <MobileMyPageNav
-          currentRole="buyer"
-          onRoleChange={mockOnRoleChange}
-          isSeller={false}
-        />
+        <MobileMyPageNav currentRole="buyer" onRoleChange={mockOnRoleChange} isSeller={false} />
       );
 
-      fireEvent.click(screen.getByRole('button', { name: '판매자' }));
+      fireEvent.click(screen.getByRole('button', { name: '전문가' }));
 
       expect(mockOnRoleChange).toHaveBeenCalledWith('seller');
     });
@@ -117,11 +103,7 @@ describe('MobileMyPageNav', () => {
     it('구매자 버튼 클릭 시 onRoleChange가 호출된다', () => {
       mockPathname = '/mypage/seller/services';
       render(
-        <MobileMyPageNav
-          currentRole="seller"
-          onRoleChange={mockOnRoleChange}
-          isSeller={true}
-        />
+        <MobileMyPageNav currentRole="seller" onRoleChange={mockOnRoleChange} isSeller={true} />
       );
 
       fireEvent.click(screen.getByRole('button', { name: '구매자' }));
@@ -133,11 +115,7 @@ describe('MobileMyPageNav', () => {
   describe('스타일', () => {
     it('모바일에서만 보이도록 lg:hidden 클래스가 적용된다', () => {
       const { container } = render(
-        <MobileMyPageNav
-          currentRole="buyer"
-          onRoleChange={mockOnRoleChange}
-          isSeller={false}
-        />
+        <MobileMyPageNav currentRole="buyer" onRoleChange={mockOnRoleChange} isSeller={false} />
       );
 
       const wrapper = container.firstChild as HTMLElement;
@@ -146,11 +124,7 @@ describe('MobileMyPageNav', () => {
 
     it('그리드 레이아웃이 적용된다', () => {
       const { container } = render(
-        <MobileMyPageNav
-          currentRole="buyer"
-          onRoleChange={mockOnRoleChange}
-          isSeller={false}
-        />
+        <MobileMyPageNav currentRole="buyer" onRoleChange={mockOnRoleChange} isSeller={false} />
       );
 
       const grid = container.querySelector('.grid');
@@ -161,15 +135,17 @@ describe('MobileMyPageNav', () => {
   describe('링크', () => {
     it('올바른 href를 가진다', () => {
       render(
-        <MobileMyPageNav
-          currentRole="buyer"
-          onRoleChange={mockOnRoleChange}
-          isSeller={false}
-        />
+        <MobileMyPageNav currentRole="buyer" onRoleChange={mockOnRoleChange} isSeller={false} />
       );
 
-      expect(screen.getByRole('link', { name: /주문 내역/ })).toHaveAttribute('href', '/mypage/buyer/orders');
-      expect(screen.getByRole('link', { name: /찜한 서비스/ })).toHaveAttribute('href', '/mypage/buyer/favorites');
+      expect(screen.getByRole('link', { name: /주문 내역/ })).toHaveAttribute(
+        'href',
+        '/mypage/buyer/orders'
+      );
+      expect(screen.getByRole('link', { name: /찜한 서비스/ })).toHaveAttribute(
+        'href',
+        '/mypage/buyer/favorites'
+      );
     });
   });
 });

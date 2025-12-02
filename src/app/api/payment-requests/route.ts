@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '채팅방 참여자가 아닙니다' }, { status: 403 });
     }
 
-    // 현재 사용자가 판매자인지 확인
+    // 현재 사용자가 전문가인지 확인
     const { data: seller } = await supabase
       .from('sellers')
       .select('id')
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
       .maybeSingle();
 
     if (!seller) {
-      return NextResponse.json({ error: '판매자만 결제 요청을 할 수 있습니다' }, { status: 403 });
+      return NextResponse.json({ error: '전문가만 결제 요청을 할 수 있습니다' }, { status: 403 });
     }
 
     // 상대방(구매자) 확인

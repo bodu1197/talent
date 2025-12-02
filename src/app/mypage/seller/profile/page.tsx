@@ -13,7 +13,7 @@ export default async function SellerProfilePage() {
     redirect('/auth/login');
   }
 
-  // sellers 테이블에서 판매자 정보 조회
+  // sellers 테이블에서 전문가 정보 조회
   const { data: seller, error: sellerError } = await supabase
     .from('sellers')
     .select('*')

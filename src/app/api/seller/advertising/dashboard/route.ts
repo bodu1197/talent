@@ -41,7 +41,7 @@ export async function GET(_request: NextRequest) {
       .eq('seller_id', seller.id)
       .in('status', ['active', 'pending_payment']);
 
-    // 판매자의 모든 서비스 조회
+    // 전문가의 모든 서비스 조회
     const { data: myServices } = await serviceSupabase
       .from('services')
       .select('id, title, thumbnail_url')

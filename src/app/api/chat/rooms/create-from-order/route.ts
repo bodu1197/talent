@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '주문을 찾을 수 없습니다' }, { status: 404 });
     }
 
-    // 권한 확인 (구매자 또는 판매자만 채팅방 생성 가능)
+    // 권한 확인 (구매자 또는 전문가만 채팅방 생성 가능)
     if (order.buyer_id !== user.id && order.seller_id !== user.id) {
       return NextResponse.json({ error: '권한이 없습니다' }, { status: 403 });
     }

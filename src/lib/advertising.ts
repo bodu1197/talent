@@ -77,7 +77,7 @@ export async function grantLaunchPromotion(sellerId: string) {
 
   // 입력 검증
   if (!validateUUID(sellerId)) {
-    throw new Error('유효하지 않은 판매자 ID입니다');
+    throw new Error('유효하지 않은 전문가 ID입니다');
   }
 
   const supabase = getAdminClient();
@@ -91,7 +91,7 @@ export async function grantLaunchPromotion(sellerId: string) {
     .single();
 
   if (existing) {
-    throw new Error('이미 런칭 프로모션을 받은 판매자입니다');
+    throw new Error('이미 런칭 프로모션을 받은 전문가입니다');
   }
 
   const expiresAt = new Date();
@@ -127,12 +127,12 @@ export async function grantLaunchPromotion(sellerId: string) {
 }
 
 /**
- * 판매자의 총 크레딧 조회
+ * 전문가의 총 크레딧 조회
  */
 export async function getTotalCredits(sellerId: string): Promise<number> {
   // 입력 검증
   if (!validateUUID(sellerId)) {
-    throw new Error('유효하지 않은 판매자 ID입니다');
+    throw new Error('유효하지 않은 전문가 ID입니다');
   }
 
   const supabase = getAdminClient();
@@ -156,7 +156,7 @@ export async function payWithCredit(
   amount: number
 ): Promise<{ success: boolean; remaining: number }> {
   // 입력 검증
-  if (!validateUUID(sellerId)) throw new Error('유효하지 않은 판매자 ID');
+  if (!validateUUID(sellerId)) throw new Error('유효하지 않은 전문가 ID');
   if (!validateUUID(subscriptionId)) throw new Error('유효하지 않은 구독 ID');
   if (!validateAmount(amount)) throw new Error('유효하지 않은 금액');
 
@@ -248,7 +248,7 @@ export async function startAdvertisingSubscription(
     .single();
 
   if (!seller) {
-    throw new Error('판매자 정보를 찾을 수 없습니다');
+    throw new Error('전문가 정보를 찾을 수 없습니다');
   }
 
   // 서비스 소유권 확인 (services.seller_id는 sellers.id를 참조)
@@ -368,7 +368,7 @@ export async function cancelSubscription(subscriptionId: string) {
 
 /**
  * 무통장 입금 요청
- * @param sellerId - 판매자 ID (sellers.id)
+ * @param sellerId - 전문가 ID (sellers.id)
  */
 export async function requestBankTransferPayment(
   subscriptionId: string,
@@ -380,7 +380,7 @@ export async function requestBankTransferPayment(
 ) {
   // 입력 검증
   if (!validateUUID(subscriptionId)) throw new Error('유효하지 않은 구독 ID');
-  if (!validateUUID(sellerId)) throw new Error('유효하지 않은 판매자 ID');
+  if (!validateUUID(sellerId)) throw new Error('유효하지 않은 전문가 ID');
   if (!validateAmount(totalAmount)) throw new Error('유효하지 않은 금액');
 
   const supabase = getAdminClient();
@@ -395,7 +395,7 @@ export async function requestBankTransferPayment(
     .eq('id', sellerId)
     .single();
 
-  if (!seller) throw new Error('판매자 정보를 찾을 수 없습니다');
+  if (!seller) throw new Error('전문가 정보를 찾을 수 없습니다');
 
   // 결제 내역 생성 (sellers.id 사용)
   const { data: payment } = await supabase
@@ -421,7 +421,7 @@ export async function requestBankTransferPayment(
     })
     .eq('id', subscriptionId);
 
-  // 판매자에게 입금 안내 알림 (users.id 사용)
+  // 전문가에게 입금 안내 알림 (users.id 사용)
   await supabase.from('notifications').insert({
     user_id: seller.user_id, // users.id 사용
     type: 'payment_bank_transfer',
@@ -503,14 +503,14 @@ export async function confirmBankTransferPayment(
   // 세금계산서 자동 발행
   await issueTaxInvoice(payment.id, adminId);
 
-  // 판매자의 user_id 조회
+  // 전문가의 user_id 조회
   const { data: sellerForNotification } = await supabase
     .from('sellers')
     .select('user_id')
     .eq('id', payment.seller_id)
     .single();
 
-  // 판매자에게 확인 완료 알림
+  // 전문가에게 확인 완료 알림
   if (sellerForNotification) {
     await supabase.from('notifications').insert({
       user_id: sellerForNotification.user_id,
@@ -556,7 +556,7 @@ export async function issueTaxInvoice(paymentId: string, _issuedBy: string) {
 
   if (!companyInfo) throw new Error('회사 정보가 설정되지 않았습니다');
 
-  // 공급받는자 정보 조회 (판매자) - payment.seller_id는 sellers.id
+  // 공급받는자 정보 조회 (전문가) - payment.seller_id는 sellers.id
   const { data: buyerInfo } = await supabase
     .from('sellers')
     .select(
@@ -566,7 +566,7 @@ export async function issueTaxInvoice(paymentId: string, _issuedBy: string) {
     .single();
 
   if (!buyerInfo?.business_number) {
-    throw new Error('판매자 사업자 정보가 등록되지 않았습니다');
+    throw new Error('전문가 사업자 정보가 등록되지 않았습니다');
   }
 
   // 승인번호 생성 (YYYYMMDD-시퀀스)

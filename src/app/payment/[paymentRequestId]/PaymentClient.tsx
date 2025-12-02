@@ -145,7 +145,7 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
     }
   };
 
-  const sellerName = seller?.display_name || seller?.business_name || '판매자';
+  const sellerName = seller?.display_name || seller?.business_name || '전문가';
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
@@ -182,7 +182,7 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
             )}
 
             <div className="flex justify-between">
-              <span className="text-gray-600">판매자</span>
+              <span className="text-gray-600">전문가</span>
               <span className="font-medium text-gray-900">{sellerName}</span>
             </div>
 
@@ -242,7 +242,7 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
             </div>
             <div className="flex items-start gap-2 text-sm text-gray-600">
               <Check className="w-4 h-4 text-green-600 mt-1 flex-shrink-0" />
-              <span>결제 후 환불은 판매자와 협의가 필요합니다</span>
+              <span>결제 후 환불은 전문가와 협의가 필요합니다</span>
             </div>
           </div>
 
@@ -279,7 +279,7 @@ export default function PaymentClient({ paymentRequest, seller, buyer }: Props) 
         <div className="mt-6 bg-blue-50 rounded-lg p-4 border border-blue-200">
           <p className="text-sm text-blue-900">
             <Info className="w-4 h-4 mr-2 inline" />
-            결제 후 작업이 시작되며, 판매자와의 소통은 채팅을 통해 진행됩니다.
+            결제 후 작업이 시작되며, 전문가와의 소통은 채팅을 통해 진행됩니다.
           </p>
         </div>
       </div>

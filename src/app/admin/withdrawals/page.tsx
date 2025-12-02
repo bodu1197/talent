@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { createClient } from "@/lib/supabase/client";
-import { logger } from "@/lib/logger";
-import { Inbox } from "lucide-react";
-import toast from "react-hot-toast";
+import { useState, useEffect } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { logger } from '@/lib/logger';
+import { Inbox } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 interface Withdrawal {
   id: string;
@@ -27,9 +27,7 @@ export default function AdminWithdrawalsPage() {
   const [withdrawals, setWithdrawals] = useState<Withdrawal[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
-  const [filter, setFilter] = useState<
-    "all" | "pending" | "completed" | "rejected"
-  >("all");
+  const [filter, setFilter] = useState<'all' | 'pending' | 'completed' | 'rejected'>('all');
 
   useEffect(() => {
     loadWithdrawals();
@@ -40,7 +38,7 @@ export default function AdminWithdrawalsPage() {
       const supabase = createClient();
 
       const { data, error } = await supabase
-        .from("withdrawal_requests")
+        .from('withdrawal_requests')
         .select(
           `
           id,
@@ -57,9 +55,9 @@ export default function AdminWithdrawalsPage() {
             display_name,
             user_id
           )
-        `,
+        `
         )
-        .order("created_at", { ascending: false });
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
 
@@ -71,42 +69,42 @@ export default function AdminWithdrawalsPage() {
 
       setWithdrawals(transformedData);
     } catch (error) {
-      logger.error("Failed to load withdrawals:", error);
-      toast.error("출금 내역을 불러오는데 실패했습니다.");
+      logger.error('Failed to load withdrawals:', error);
+      toast.error('출금 내역을 불러오는데 실패했습니다.');
     } finally {
       setLoading(false);
     }
   }
 
   async function handleApprove(withdrawalId: string) {
-    if (!confirm("출금을 승인하시겠습니까?")) return;
+    if (!confirm('출금을 승인하시겠습니까?')) return;
 
     setActionLoading(withdrawalId);
     try {
       const supabase = createClient();
 
       const { error } = await supabase
-        .from("withdrawal_requests")
+        .from('withdrawal_requests')
         .update({
-          status: "completed",
+          status: 'completed',
           completed_at: new Date().toISOString(),
         })
-        .eq("id", withdrawalId);
+        .eq('id', withdrawalId);
 
       if (error) throw error;
 
-      toast.success("출금이 승인되었습니다.");
+      toast.success('출금이 승인되었습니다.');
       loadWithdrawals();
     } catch (error) {
-      logger.error("Approval error:", error);
-      toast.error("출금 승인에 실패했습니다.");
+      logger.error('Approval error:', error);
+      toast.error('출금 승인에 실패했습니다.');
     } finally {
       setActionLoading(null);
     }
   }
 
   async function handleReject(withdrawalId: string) {
-    const reason = prompt("거절 사유를 입력하세요:");
+    const reason = prompt('거절 사유를 입력하세요:');
     if (!reason) return;
 
     setActionLoading(withdrawalId);
@@ -114,21 +112,21 @@ export default function AdminWithdrawalsPage() {
       const supabase = createClient();
 
       const { error } = await supabase
-        .from("withdrawal_requests")
+        .from('withdrawal_requests')
         .update({
-          status: "rejected",
+          status: 'rejected',
           rejected_reason: reason,
           completed_at: new Date().toISOString(),
         })
-        .eq("id", withdrawalId);
+        .eq('id', withdrawalId);
 
       if (error) throw error;
 
-      toast.error("출금이 거절되었습니다.");
+      toast.error('출금이 거절되었습니다.');
       loadWithdrawals();
     } catch (error) {
-      logger.error("Rejection error:", error);
-      toast.error("출금 거절에 실패했습니다.");
+      logger.error('Rejection error:', error);
+      toast.error('출금 거절에 실패했습니다.');
     } finally {
       setActionLoading(null);
     }
@@ -136,12 +134,12 @@ export default function AdminWithdrawalsPage() {
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "pending":
-        return "대기 중";
-      case "completed":
-        return "완료";
-      case "rejected":
-        return "거절";
+      case 'pending':
+        return '대기 중';
+      case 'completed':
+        return '완료';
+      case 'rejected':
+        return '거절';
       default:
         return status;
     }
@@ -149,25 +147,25 @@ export default function AdminWithdrawalsPage() {
 
   const getStatusClass = (status: string) => {
     switch (status) {
-      case "pending":
-        return "bg-yellow-100 text-yellow-700";
-      case "completed":
-        return "bg-green-100 text-green-700";
-      case "rejected":
-        return "bg-red-100 text-red-700";
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-700';
+      case 'completed':
+        return 'bg-green-100 text-green-700';
+      case 'rejected':
+        return 'bg-red-100 text-red-700';
       default:
-        return "bg-gray-100 text-gray-700";
+        return 'bg-gray-100 text-gray-700';
     }
   };
 
   const filteredWithdrawals = withdrawals.filter((w) => {
-    if (filter === "all") return true;
+    if (filter === 'all') return true;
     return w.status === filter;
   });
 
-  const pendingCount = withdrawals.filter((w) => w.status === "pending").length;
+  const pendingCount = withdrawals.filter((w) => w.status === 'pending').length;
   const totalPendingAmount = withdrawals
-    .filter((w) => w.status === "pending")
+    .filter((w) => w.status === 'pending')
     .reduce((sum, w) => sum + w.amount, 0);
 
   if (loading) {
@@ -182,15 +180,13 @@ export default function AdminWithdrawalsPage() {
     <div>
       <div className="mb-8">
         <h1 className="text-2xl font-semibold text-gray-900">출금 관리</h1>
-        <p className="text-gray-600 mt-1">판매자 출금 요청을 관리하세요</p>
+        <p className="text-gray-600 mt-1">전문가 출금 요청을 관리하세요</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="text-sm text-gray-600 mb-2">대기 중인 출금 요청</div>
-          <div className="text-2xl font-semibold text-yellow-600">
-            {pendingCount}건
-          </div>
+          <div className="text-2xl font-semibold text-yellow-600">{pendingCount}건</div>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="text-sm text-gray-600 mb-2">대기 중인 출금 금액</div>
@@ -200,49 +196,47 @@ export default function AdminWithdrawalsPage() {
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="text-sm text-gray-600 mb-2">전체 요청</div>
-          <div className="text-2xl font-semibold text-gray-900">
-            {withdrawals.length}건
-          </div>
+          <div className="text-2xl font-semibold text-gray-900">{withdrawals.length}건</div>
         </div>
       </div>
 
       <div className="mb-6 flex gap-2">
         <button
-          onClick={() => setFilter("all")}
+          onClick={() => setFilter('all')}
           className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-            filter === "all"
-              ? "bg-brand-primary text-white"
-              : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+            filter === 'all'
+              ? 'bg-brand-primary text-white'
+              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
           }`}
         >
           전체
         </button>
         <button
-          onClick={() => setFilter("pending")}
+          onClick={() => setFilter('pending')}
           className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-            filter === "pending"
-              ? "bg-brand-primary text-white"
-              : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+            filter === 'pending'
+              ? 'bg-brand-primary text-white'
+              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
           }`}
         >
           대기 중
         </button>
         <button
-          onClick={() => setFilter("completed")}
+          onClick={() => setFilter('completed')}
           className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-            filter === "completed"
-              ? "bg-brand-primary text-white"
-              : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+            filter === 'completed'
+              ? 'bg-brand-primary text-white'
+              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
           }`}
         >
           완료
         </button>
         <button
-          onClick={() => setFilter("rejected")}
+          onClick={() => setFilter('rejected')}
           className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-            filter === "rejected"
-              ? "bg-brand-primary text-white"
-              : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+            filter === 'rejected'
+              ? 'bg-brand-primary text-white'
+              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
           }`}
         >
           거절
@@ -257,24 +251,12 @@ export default function AdminWithdrawalsPage() {
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-900">
-                  날짜
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-900">
-                  판매자
-                </th>
-                <th className="px-6 py-3 text-right text-sm font-medium text-gray-900">
-                  금액
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-900">
-                  계좌 정보
-                </th>
-                <th className="px-6 py-3 text-center text-sm font-medium text-gray-900">
-                  상태
-                </th>
-                <th className="px-6 py-3 text-center text-sm font-medium text-gray-900">
-                  작업
-                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-900">날짜</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-900">전문가</th>
+                <th className="px-6 py-3 text-right text-sm font-medium text-gray-900">금액</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-900">계좌 정보</th>
+                <th className="px-6 py-3 text-center text-sm font-medium text-gray-900">상태</th>
+                <th className="px-6 py-3 text-center text-sm font-medium text-gray-900">작업</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -283,23 +265,19 @@ export default function AdminWithdrawalsPage() {
                   <tr key={withdrawal.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 text-sm text-gray-600">
                       {new Date(
-                        withdrawal.requested_at || withdrawal.created_at,
-                      ).toLocaleDateString("ko-KR")}
+                        withdrawal.requested_at || withdrawal.created_at
+                      ).toLocaleDateString('ko-KR')}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">
-                      {withdrawal.seller?.display_name || "알 수 없음"}
+                      {withdrawal.seller?.display_name || '알 수 없음'}
                     </td>
                     <td className="px-6 py-4 text-sm font-medium text-right text-gray-900">
                       {withdrawal.amount.toLocaleString()}원
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">
                       <div>{withdrawal.bank_name}</div>
-                      <div className="text-xs text-gray-500">
-                        {withdrawal.account_number}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {withdrawal.account_holder}
-                      </div>
+                      <div className="text-xs text-gray-500">{withdrawal.account_number}</div>
+                      <div className="text-xs text-gray-500">{withdrawal.account_holder}</div>
                     </td>
                     <td className="px-6 py-4 text-center">
                       <span
@@ -309,7 +287,7 @@ export default function AdminWithdrawalsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-center">
-                      {withdrawal.status === "pending" && (
+                      {withdrawal.status === 'pending' && (
                         <div className="flex gap-2 justify-center">
                           <button
                             onClick={() => handleApprove(withdrawal.id)}
@@ -332,10 +310,7 @@ export default function AdminWithdrawalsPage() {
                 ))
               ) : (
                 <tr>
-                  <td
-                    colSpan={6}
-                    className="px-6 py-12 text-center text-gray-500"
-                  >
+                  <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
                     <Inbox className="w-10 h-10 mb-4 text-gray-300 mx-auto" />
                     <p>출금 요청이 없습니다</p>
                   </td>

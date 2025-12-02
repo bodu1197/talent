@@ -147,7 +147,7 @@ export default function AdminAdvertisingPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-semibold text-slate-900 mb-2">광고 관리</h1>
-          <p className="text-slate-600">판매자들의 광고 구독을 관리합니다</p>
+          <p className="text-slate-600">전문가들의 광고 구독을 관리합니다</p>
         </div>
         <div className="flex gap-2">
           <Link
@@ -290,7 +290,7 @@ export default function AdminAdvertisingPage() {
                   <thead className="border-b border-slate-200 bg-slate-50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">
-                        판매자
+                        전문가
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">
                         서비스
@@ -420,7 +420,7 @@ export default function AdminAdvertisingPage() {
             <div className="px-6 py-4 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm font-medium text-slate-600">판매자</p>
+                  <p className="text-sm font-medium text-slate-600">전문가</p>
                   <p className="text-sm text-slate-900 mt-1">
                     {selectedSubscription.seller?.user?.name || 'Unknown'}
                   </p>

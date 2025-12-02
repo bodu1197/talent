@@ -160,7 +160,7 @@ async function handleSubscriptionPayment(
     return NextResponse.json({ error: '결제 정보를 찾을 수 없습니다' }, { status: 404 });
   }
 
-  // 판매자 확인
+  // 전문가 확인
   const { data: seller } = await supabase
     .from('sellers')
     .select('id')

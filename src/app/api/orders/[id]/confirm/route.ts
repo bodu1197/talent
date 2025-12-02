@@ -99,7 +99,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       logger.error('Settlement update error:', settlementError);
     }
 
-    // 판매자에게 구매확정 알림 전송
+    // 전문가에게 구매확정 알림 전송
     await notifyOrderConfirmed(order.seller_id, order.id, order.amount);
 
     return NextResponse.json({

@@ -19,12 +19,7 @@ describe('MobileServiceHeader', () => {
   });
 
   it('헤더를 렌더링한다', () => {
-    render(
-      <MobileServiceHeader
-        serviceId="service-1"
-        serviceTitle="테스트 서비스"
-      />
-    );
+    render(<MobileServiceHeader serviceId="service-1" serviceTitle="테스트 서비스" />);
 
     expect(screen.getByRole('button', { name: '뒤로가기' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '전화하기' })).toBeInTheDocument();
@@ -32,12 +27,7 @@ describe('MobileServiceHeader', () => {
   });
 
   it('뒤로가기 버튼 클릭 시 router.back()이 호출된다', () => {
-    render(
-      <MobileServiceHeader
-        serviceId="service-1"
-        serviceTitle="테스트 서비스"
-      />
-    );
+    render(<MobileServiceHeader serviceId="service-1" serviceTitle="테스트 서비스" />);
 
     fireEvent.click(screen.getByRole('button', { name: '뒤로가기' }));
 
@@ -61,16 +51,11 @@ describe('MobileServiceHeader', () => {
   it('전화번호가 없으면 알림을 표시한다', () => {
     const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
 
-    render(
-      <MobileServiceHeader
-        serviceId="service-1"
-        serviceTitle="테스트 서비스"
-      />
-    );
+    render(<MobileServiceHeader serviceId="service-1" serviceTitle="테스트 서비스" />);
 
     fireEvent.click(screen.getByRole('button', { name: '전화하기' }));
 
-    expect(alertMock).toHaveBeenCalledWith('판매자 연락처가 등록되지 않았습니다.');
+    expect(alertMock).toHaveBeenCalledWith('전문가 연락처가 등록되지 않았습니다.');
     alertMock.mockRestore();
   });
 
@@ -82,12 +67,7 @@ describe('MobileServiceHeader', () => {
       writable: true,
     });
 
-    render(
-      <MobileServiceHeader
-        serviceId="service-1"
-        serviceTitle="테스트 서비스"
-      />
-    );
+    render(<MobileServiceHeader serviceId="service-1" serviceTitle="테스트 서비스" />);
 
     fireEvent.click(screen.getByRole('button', { name: '공유하기' }));
 
@@ -113,12 +93,7 @@ describe('MobileServiceHeader', () => {
 
     const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
 
-    render(
-      <MobileServiceHeader
-        serviceId="service-1"
-        serviceTitle="테스트 서비스"
-      />
-    );
+    render(<MobileServiceHeader serviceId="service-1" serviceTitle="테스트 서비스" />);
 
     fireEvent.click(screen.getByRole('button', { name: '공유하기' }));
 
@@ -131,12 +106,7 @@ describe('MobileServiceHeader', () => {
   });
 
   it('버튼들에 올바른 스타일이 적용된다', () => {
-    render(
-      <MobileServiceHeader
-        serviceId="service-1"
-        serviceTitle="테스트 서비스"
-      />
-    );
+    render(<MobileServiceHeader serviceId="service-1" serviceTitle="테스트 서비스" />);
 
     const backButton = screen.getByRole('button', { name: '뒤로가기' });
     expect(backButton).toHaveClass('bg-black/40', 'rounded-full');

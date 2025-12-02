@@ -626,7 +626,7 @@ function PaymentRequestCard({
           </div>
         )}
 
-        {/* 판매자 안내 */}
+        {/* 전문가 안내 */}
         {isSeller && isPending && (
           <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
             <p className="text-xs text-blue-700">

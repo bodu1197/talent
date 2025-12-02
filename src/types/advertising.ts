@@ -87,7 +87,7 @@ export interface CreditTransaction {
   created_at: string;
 }
 
-// 판매자 대시보드용 타입
+// 전문가 대시보드용 타입
 export interface AdvertisingDashboard {
   credits: {
     total: number;

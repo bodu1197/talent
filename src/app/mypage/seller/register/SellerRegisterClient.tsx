@@ -111,7 +111,7 @@ interface SellerFormData {
   businessNumber: string;
   isBusiness: boolean;
 
-  // 2단계: 판매자 프로필
+  // 2단계: 전문가 프로필
   displayName: string;
   profileImage: File | null;
   bio: string;
@@ -445,7 +445,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
         return;
       }
 
-      // 3. sellers 테이블에 판매자 정보 등록 (display_name, profile_image 제거됨)
+      // 3. sellers 테이블에 전문가 정보 등록 (display_name, profile_image 제거됨)
       const insertData = {
         user_id: userId,
         real_name: formData.realName,
@@ -475,19 +475,19 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
 
       if (sellerError) {
         toast.error(
-          `판매자 등록에 실패했습니다.\n\n에러: ${sellerError.message}\n코드: ${sellerError.code}\n\n관리자에게 문의해주세요.`
+          `전문가 등록에 실패했습니다.\n\n에러: ${sellerError.message}\n코드: ${sellerError.code}\n\n관리자에게 문의해주세요.`
         );
         setLoading(false);
         return;
       }
 
-      toast.success('판매자로 등록되었습니다! 서비스를 등록하세요.');
+      toast.success('전문가로 등록되었습니다! 서비스를 등록하세요.');
 
       router.push('/mypage/seller/dashboard');
       router.refresh();
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다';
-      toast.error(`판매자 등록 중 오류가 발생했습니다.\n\n${message}`);
+      toast.error(`전문가 등록 중 오류가 발생했습니다.\n\n${message}`);
       setLoading(false);
     } finally {
       setLoading(false);
@@ -553,9 +553,9 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
 
         {/* 페이지 헤더 */}
         <div className="mb-4 lg:mb-6">
-          <h1 className="text-base lg:text-lg font-semibold text-gray-900">판매자 등록</h1>
+          <h1 className="text-base lg:text-lg font-semibold text-gray-900">전문가 등록</h1>
           <p className="text-gray-600 mt-1 text-xs lg:text-sm">
-            재능을 판매하기 위해 판매자 정보를 입력해주세요
+            재능을 판매하기 위해 전문가 정보를 입력해주세요
           </p>
         </div>
 
@@ -881,11 +881,11 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
             </div>
           )}
 
-          {/* 2단계: 판매자 프로필 */}
+          {/* 2단계: 전문가 프로필 */}
           {currentStep === 2 && (
             <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-4 lg:mb-6">
               <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
-                2단계: 판매자 프로필
+                2단계: 전문가 프로필
               </h2>
               <div className="space-y-4">
                 <div>
@@ -965,7 +965,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                     htmlFor="seller-display-name"
                     className="block text-sm font-medium text-gray-700 mb-2"
                   >
-                    판매자명 (활동명) *
+                    전문가명 (활동명) *
                   </label>
                   <input
                     id="seller-display-name"
@@ -1175,15 +1175,15 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                         })
                       }
                       className="w-5 h-5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary mt-0.5 flex-shrink-0"
-                      aria-label="판매자 이용약관 동의"
+                      aria-label="전문가 이용약관 동의"
                       required
                     />
                     <div className="flex-1">
                       <span className="text-sm font-medium text-gray-900">
-                        판매자 이용약관 동의 (필수)
+                        전문가 이용약관 동의 (필수)
                       </span>
                       <p className="text-xs lg:text-sm text-gray-600 mt-1">
-                        판매자로서 준수해야 할 규정과 책임사항에 동의합니다.
+                        전문가로서 준수해야 할 규정과 책임사항에 동의합니다.
                       </p>
                     </div>
                   </label>
@@ -1284,7 +1284,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                 ) : (
                   <>
                     <Check className="w-4 h-4 mr-2 inline" />
-                    판매자 등록 완료
+                    전문가 등록 완료
                   </>
                 )}
               </button>

@@ -432,7 +432,7 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
       {/* 메시지 입력 */}
       <div className="bg-white border-t shadow-lg">
         <div className="container mx-auto px-4 py-4 max-w-4xl">
-          {/* 판매자인 경우 결제 요청 버튼 표시 */}
+          {/* 전문가인 경우 결제 요청 버튼 표시 */}
           {isSeller && (
             <div className="mb-3 flex justify-end">
               <button
@@ -683,7 +683,7 @@ function PaymentRequestCard({
           </div>
         )}
 
-        {/* 판매자 안내 */}
+        {/* 전문가 안내 */}
         {isSeller && isPending && (
           <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
             <p className="text-xs text-blue-700">

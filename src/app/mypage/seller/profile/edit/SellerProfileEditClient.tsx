@@ -336,9 +336,9 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
     <MypageLayoutWrapper mode="seller">
       <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
         <div className="mb-4 lg:mb-6 pt-12 lg:pt-0">
-          <h1 className="text-base lg:text-lg font-semibold text-gray-900">판매자 정보 수정</h1>
+          <h1 className="text-base lg:text-lg font-semibold text-gray-900">전문가 정보 수정</h1>
           <p className="text-gray-600 mt-1 text-xs lg:text-sm">
-            판매자 프로필 및 정산 정보를 수정하세요
+            전문가 프로필 및 정산 정보를 수정하세요
           </p>
         </div>
 
@@ -410,7 +410,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                   htmlFor="seller-display-name"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  판매자명 (활동명) *
+                  전문가명 (활동명) *
                 </label>
                 <input
                   id="seller-display-name"

@@ -37,7 +37,7 @@ export async function createNotification({
   return data;
 }
 
-// 새 주문 알림 (판매자에게)
+// 새 주문 알림 (전문가에게)
 export async function notifyNewOrder(sellerId: string, orderId: string, serviceName: string) {
   return createNotification({
     userId: sellerId,
@@ -48,7 +48,7 @@ export async function notifyNewOrder(sellerId: string, orderId: string, serviceN
   });
 }
 
-// 결제 완료 알림 (판매자에게)
+// 결제 완료 알림 (전문가에게)
 export async function notifyPaymentReceived(sellerId: string, orderId: string, amount: number) {
   return createNotification({
     userId: sellerId,
@@ -81,7 +81,7 @@ export async function notifyWorkCompleted(buyerId: string, orderId: string, serv
   });
 }
 
-// 구매 확정 알림 (판매자에게)
+// 구매 확정 알림 (전문가에게)
 export async function notifyOrderConfirmed(
   sellerId: string,
   orderId: string,
@@ -102,7 +102,7 @@ export async function notifyOrderConfirmed(
   });
 }
 
-// 리뷰 작성 알림 (판매자에게)
+// 리뷰 작성 알림 (전문가에게)
 export async function notifyNewReview(sellerId: string, orderId: string, rating: number) {
   return createNotification({
     userId: sellerId,

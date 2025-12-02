@@ -156,7 +156,7 @@ export default function AdminCreditsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-semibold text-slate-900 mb-2">크레딧 관리</h1>
-          <p className="text-slate-600">판매자 광고 크레딧을 관리합니다</p>
+          <p className="text-slate-600">전문가 광고 크레딧을 관리합니다</p>
         </div>
         <button
           onClick={() => setShowGrantDialog(true)}
@@ -245,7 +245,7 @@ export default function AdminCreditsPage() {
                   <thead className="border-b border-slate-200 bg-slate-50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">
-                        판매자
+                        전문가
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">
                         프로모션 타입
@@ -322,7 +322,7 @@ export default function AdminCreditsPage() {
                   <div className="px-6 py-4 border-b border-slate-200">
                     <h2 className="text-xl font-semibold text-slate-900">크레딧 지급</h2>
                     <p className="text-sm text-slate-600 mt-1">
-                      판매자에게 광고 크레딧을 지급합니다.
+                      전문가에게 광고 크레딧을 지급합니다.
                     </p>
                   </div>
 
@@ -332,7 +332,7 @@ export default function AdminCreditsPage() {
                         htmlFor="seller-id"
                         className="block text-sm font-medium text-slate-700 mb-1"
                       >
-                        판매자 ID *
+                        전문가 ID *
                       </label>
                       <input
                         id="seller-id"

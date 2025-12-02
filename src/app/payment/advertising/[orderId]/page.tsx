@@ -39,7 +39,7 @@ export default async function AdvertisingPaymentPage({ params }: Props) {
     notFound();
   }
 
-  // 판매자 본인 확인
+  // 전문가 본인 확인
   const { data: seller } = await supabase
     .from('sellers')
     .select('id')
@@ -55,7 +55,7 @@ export default async function AdvertisingPaymentPage({ params }: Props) {
     redirect('/mypage/seller/advertising');
   }
 
-  // 구매자(판매자) 정보
+  // 구매자(전문가) 정보
   const { data: userData } = await supabase
     .from('users')
     .select('name, phone')

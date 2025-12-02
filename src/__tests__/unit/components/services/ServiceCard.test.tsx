@@ -5,15 +5,24 @@ import ServiceCard from '@/components/services/ServiceCard';
 // Mock next/image
 vi.mock('next/image', () => ({
   default: ({ src, alt, ...props }: { src: string; alt: string; [key: string]: unknown }) => (
-    // eslint-disable-next-line @next/next/no-img-element
     <img src={src} alt={alt} {...props} />
   ),
 }));
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    [key: string]: unknown;
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }));
 
@@ -47,7 +56,7 @@ describe('ServiceCard', () => {
     expect(screen.getByText('전문 로고 디자인')).toBeInTheDocument();
   });
 
-  it('판매자 이름을 렌더링한다', () => {
+  it('전문가 이름을 렌더링한다', () => {
     render(<ServiceCard service={mockService} />);
 
     expect(screen.getByText('디자인스튜디오')).toBeInTheDocument();
@@ -65,20 +74,20 @@ describe('ServiceCard', () => {
     expect(screen.getByText('4.5')).toBeInTheDocument();
   });
 
-  it('인증된 판매자는 인증 아이콘을 표시한다', () => {
+  it('인증된 전문가는 인증 아이콘을 표시한다', () => {
     render(<ServiceCard service={mockService} />);
 
-    expect(screen.getByLabelText('인증된 판매자')).toBeInTheDocument();
+    expect(screen.getByLabelText('인증된 전문가')).toBeInTheDocument();
   });
 
-  it('인증되지 않은 판매자는 인증 아이콘을 표시하지 않는다', () => {
+  it('인증되지 않은 전문가는 인증 아이콘을 표시하지 않는다', () => {
     const unverifiedService = {
       ...mockService,
       seller: { display_name: '테스트', is_verified: false },
     };
     render(<ServiceCard service={unverifiedService} />);
 
-    expect(screen.queryByLabelText('인증된 판매자')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('인증된 전문가')).not.toBeInTheDocument();
   });
 
   it('프리미엄 서비스는 PREMIUM 배지를 표시한다', () => {
@@ -162,19 +171,16 @@ describe('ServiceCard', () => {
     fireEvent.click(link);
 
     // 클릭 추적은 광고 서비스에서만 발생
-    expect(mockFetch).not.toHaveBeenCalledWith(
-      '/api/advertising/track/click',
-      expect.anything()
-    );
+    expect(mockFetch).not.toHaveBeenCalledWith('/api/advertising/track/click', expect.anything());
   });
 
-  it('판매자 이름의 첫 글자를 아바타에 표시한다', () => {
+  it('전문가 이름의 첫 글자를 아바타에 표시한다', () => {
     render(<ServiceCard service={mockService} />);
 
     expect(screen.getByText('디')).toBeInTheDocument();
   });
 
-  it('판매자가 없으면 기본값 S를 표시한다', () => {
+  it('전문가가 없으면 기본값 S를 표시한다', () => {
     const noSellerService = { ...mockService, seller: null };
     render(<ServiceCard service={noSellerService} />);
 

@@ -29,7 +29,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       return NextResponse.json({ error: '주문을 찾을 수 없습니다' }, { status: 404 });
     }
 
-    // 판매자만 수정 완료 가능
+    // 전문가만 수정 완료 가능
     if (order.seller_id !== user.id) {
       return NextResponse.json({ error: '권한이 없습니다' }, { status: 403 });
     }

@@ -55,12 +55,12 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: '돌파구 - 수수료 0원 재능 거래 플랫폼 | 판매자·구매자 모두 무료',
     description:
-      '판매자와 구매자 모두 수수료 0원! 디자인, 영상, 개발, 마케팅 등 다양한 재능을 자유롭게 거래하세요. 돌파구에서 새로운 기회를 찾아보세요.',
+      '전문가와 구매자 모두 수수료 0원! 디자인, 영상, 개발, 마케팅 등 다양한 재능을 자유롭게 거래하세요. 돌파구에서 새로운 기회를 찾아보세요.',
     keywords:
       '돌파구, 재능거래, 수수료0원, 무료플랫폼, 프리랜서, 재능마켓, 디자인외주, 영상제작, 개발외주, 마케팅',
     openGraph: {
       title: '돌파구 - 수수료 0원 재능 거래 플랫폼',
-      description: '판매자·구매자 모두 수수료 0원! 부담 없이 시작하는 재능 거래',
+      description: '전문가·구매자 모두 수수료 0원! 부담 없이 시작하는 재능 거래',
       type: 'website',
       locale: 'ko_KR',
       siteName: '돌파구',
@@ -68,7 +68,7 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: {
       card: 'summary_large_image',
       title: '돌파구 - 수수료 0원 재능 거래 플랫폼',
-      description: '판매자·구매자 모두 수수료 0원! 부담 없이 시작하는 재능 거래',
+      description: '전문가·구매자 모두 수수료 0원! 부담 없이 시작하는 재능 거래',
     },
     robots: {
       index: true,
@@ -107,7 +107,7 @@ export default async function RootLayout({
     alternateName: 'Dolpagu',
     url: 'https://dolpagu.com',
     description:
-      '돌파구(Dolpagu)는 2025년 설립된 한국의 수수료 0원 프리미엄 재능 거래 플랫폼입니다. 판매자와 구매자 모두 수수료 없이 디자인, 영상, 개발, 마케팅 등 다양한 재능을 자유롭게 거래할 수 있습니다.',
+      '돌파구(Dolpagu)는 2025년 설립된 한국의 수수료 0원 프리미엄 재능 거래 플랫폼입니다. 전문가와 구매자 모두 수수료 없이 디자인, 영상, 개발, 마케팅 등 다양한 재능을 자유롭게 거래할 수 있습니다.',
     inLanguage: 'ko-KR',
     potentialAction: {
       '@type': 'SearchAction',
@@ -137,7 +137,7 @@ export default async function RootLayout({
       height: 512,
     },
     description:
-      '돌파구(Dolpagu)는 2025년 설립된 한국의 수수료 0원 프리미엄 재능 거래 플랫폼입니다. 판매자와 구매자 모두 중개 수수료 없이 거래할 수 있습니다.',
+      '돌파구(Dolpagu)는 2025년 설립된 한국의 수수료 0원 프리미엄 재능 거래 플랫폼입니다. 전문가와 구매자 모두 중개 수수료 없이 거래할 수 있습니다.',
     slogan: '수수료 0원, 재능의 가치를 100% 누리세요',
     foundingDate: '2025',
     areaServed: {

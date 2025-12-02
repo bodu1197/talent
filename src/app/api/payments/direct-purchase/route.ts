@@ -138,7 +138,7 @@ export async function POST(request: NextRequest) {
       package_id,
     } = body;
 
-    // 판매자 정보 확인
+    // 전문가 정보 확인
     const { data: seller, error: sellerError } = await supabase
       .from('sellers')
       .select('id, user_id')
@@ -146,7 +146,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (sellerError || !seller) {
-      return NextResponse.json({ error: '판매자를 찾을 수 없습니다' }, { status: 404 });
+      return NextResponse.json({ error: '전문가를 찾을 수 없습니다' }, { status: 404 });
     }
 
     if (seller.user_id === user.id) {

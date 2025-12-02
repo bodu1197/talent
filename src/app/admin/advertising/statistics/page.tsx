@@ -388,7 +388,7 @@ function TopServicesTable({ services }: Readonly<{ services: TopService[] }>) {
                 서비스명
               </th>
               <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">
-                판매자
+                전문가
               </th>
               <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-700">
                 노출수

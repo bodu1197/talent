@@ -42,7 +42,7 @@ export default function ConfirmModal({
             </div>
           </div>
           <p className="text-gray-700">
-            구매 확정 시 판매자에게 대금이 정산되며, 이후에는 수정 요청이 불가능합니다.
+            구매 확정 시 전문가에게 대금이 정산되며, 이후에는 수정 요청이 불가능합니다.
           </p>
         </div>
 

@@ -75,7 +75,7 @@ describe('AITalentShowcase', () => {
     expect(screen.getByText('AI 글쓰기 서비스')).toBeInTheDocument();
   });
 
-  it('판매자 이름을 표시한다', () => {
+  it('전문가 이름을 표시한다', () => {
     render(<AITalentShowcase services={mockServices} />);
 
     expect(screen.getByText('홍길동')).toBeInTheDocument();
@@ -104,7 +104,7 @@ describe('AITalentShowcase', () => {
     expect(links[1]).toHaveAttribute('href', '/services/service-2');
   });
 
-  it('검증된 판매자에게 체크 아이콘이 표시된다', () => {
+  it('검증된 전문가에게 체크 아이콘이 표시된다', () => {
     const { container } = render(<AITalentShowcase services={mockServices} />);
 
     // lucide-react CheckCircle icon (verified seller)

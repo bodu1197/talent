@@ -95,7 +95,7 @@ function getOtherUserInfo(
   if (sellerInfo) {
     return {
       id: otherUserId,
-      name: sellerInfo.display_name || sellerInfo.business_name || '판매자',
+      name: sellerInfo.display_name || sellerInfo.business_name || '전문가',
       profile_image: sellerInfo.profile_image,
       seller_id: sellerInfo.id,
     };
@@ -161,7 +161,7 @@ export async function GET(_request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // 현재 사용자가 판매자인지 확인
+    // 현재 사용자가 전문가인지 확인
     const { data: seller } = await supabase
       .from('sellers')
       .select('id')

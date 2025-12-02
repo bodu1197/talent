@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { withAuth } from '@/lib/api/auth-middleware';
 import { ApiError, handleApiError } from '@/lib/api/error-handler';
 
-// GET /api/orders/seller - 판매자 주문 목록 조회
+// GET /api/orders/seller - 전문가 주문 목록 조회
 export const GET = withAuth(async (request: NextRequest, user) => {
   try {
     const supabase = await createClient();
