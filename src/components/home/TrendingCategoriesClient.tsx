@@ -12,84 +12,319 @@ interface CategoryData {
   ratio: number;
 }
 
-// 실제 코드 스니펫들
-const codeSnippets = [
-  `const fetchData = async () => {
-  const response = await fetch('/api/talents');
-  const data = await response.json();
+// 긴 코드 스니펫들 (각 블록별로 다른 코드)
+const longCodeSnippets = [
+  `// 재능 데이터 fetching
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
+
+export async function fetchTalents(category) {
+  const { data, error } = await supabase
+    .from('talents')
+    .select('*')
+    .eq('category', category)
+    .order('rating', { ascending: false });
+
+  if (error) throw error;
   return data;
-};`,
-  `function TalentCard({ talent }) {
+}
+
+export async function createTalent(talentData) {
+  const { data, error } = await supabase
+    .from('talents')
+    .insert(talentData)
+    .select()
+    .single();
+
+  return { data, error };
+}`,
+
+  `// TalentCard 컴포넌트
+'use client';
+
+import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+
+interface TalentCardProps {
+  talent: {
+    id: string;
+    name: string;
+    avatar: string;
+    category: string;
+    rating: number;
+    reviews: number;
+    price: number;
+  };
+}
+
+export function TalentCard({ talent }: TalentCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
-    <div className="card">
-      <h3>{talent.name}</h3>
-      <p>{talent.description}</p>
-    </div>
+    <Link href={\`/talents/\${talent.id}\`}>
+      <div
+        className="card hover:shadow-lg"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <Image
+          src={talent.avatar}
+          alt={talent.name}
+          width={100}
+          height={100}
+        />
+        <h3>{talent.name}</h3>
+        <p>{talent.category}</p>
+        <div className="rating">
+          ⭐ {talent.rating} ({talent.reviews})
+        </div>
+        <p className="price">₩{talent.price.toLocaleString()}</p>
+      </div>
+    </Link>
   );
 }`,
-  `export interface Talent {
-  id: string;
-  name: string;
-  category: string;
-  rating: number;
-}`,
-  `useEffect(() => {
-  loadTalents();
-}, [category]);`,
-  `const [talents, setTalents] = useState([]);
-const [loading, setLoading] = useState(true);`,
-  `import { NextResponse } from 'next/server';
 
-export async function GET() {
-  const data = await db.talents.findMany();
-  return NextResponse.json(data);
+  `// TypeScript 인터페이스 정의
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  avatar?: string;
+  role: 'user' | 'expert' | 'admin';
+  createdAt: Date;
+}
+
+export interface Talent {
+  id: string;
+  userId: string;
+  title: string;
+  description: string;
+  category: string;
+  subcategory: string;
+  price: number;
+  deliveryTime: number;
+  rating: number;
+  reviewCount: number;
+  images: string[];
+  tags: string[];
+  isActive: boolean;
+}
+
+export interface Order {
+  id: string;
+  talentId: string;
+  buyerId: string;
+  sellerId: string;
+  status: OrderStatus;
+  amount: number;
+  requirements: string;
+  createdAt: Date;
+  completedAt?: Date;
+}
+
+type OrderStatus =
+  | 'pending'
+  | 'accepted'
+  | 'in_progress'
+  | 'delivered'
+  | 'completed'
+  | 'cancelled';`,
+
+  `// React Hook - useTalents
+import { useState, useEffect, useCallback } from 'react';
+
+interface UseTalentsOptions {
+  category?: string;
+  limit?: number;
+  sortBy?: 'rating' | 'price' | 'reviews';
+}
+
+export function useTalents(options: UseTalentsOptions = {}) {
+  const [talents, setTalents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchTalents = useCallback(async () => {
+    try {
+      setLoading(true);
+      const params = new URLSearchParams();
+
+      if (options.category) {
+        params.set('category', options.category);
+      }
+      if (options.limit) {
+        params.set('limit', options.limit.toString());
+      }
+      if (options.sortBy) {
+        params.set('sortBy', options.sortBy);
+      }
+
+      const response = await fetch(\`/api/talents?\${params}\`);
+      const data = await response.json();
+
+      setTalents(data);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [options.category, options.limit, options.sortBy]);
+
+  useEffect(() => {
+    fetchTalents();
+  }, [fetchTalents]);
+
+  return { talents, loading, error, refetch: fetchTalents };
+}`,
+
+  `// API Route Handler
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { getServerSession } from 'next-auth';
+
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const category = searchParams.get('category');
+  const limit = parseInt(searchParams.get('limit') || '10');
+
+  const talents = await prisma.talent.findMany({
+    where: category ? { category } : undefined,
+    take: limit,
+    orderBy: { rating: 'desc' },
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
+        },
+      },
+    },
+  });
+
+  return NextResponse.json(talents);
+}
+
+export async function POST(request: NextRequest) {
+  const session = await getServerSession();
+
+  if (!session) {
+    return NextResponse.json(
+      { error: 'Unauthorized' },
+      { status: 401 }
+    );
+  }
+
+  const body = await request.json();
+
+  const talent = await prisma.talent.create({
+    data: {
+      ...body,
+      userId: session.user.id,
+    },
+  });
+
+  return NextResponse.json(talent, { status: 201 });
+}`,
+
+  `// 결제 처리 로직
+import { PaymentService } from '@/services/payment';
+import { NotificationService } from '@/services/notification';
+
+interface PaymentRequest {
+  orderId: string;
+  amount: number;
+  method: 'card' | 'bank' | 'kakao';
+  buyerId: string;
+  sellerId: string;
+}
+
+export async function processPayment(request: PaymentRequest) {
+  const payment = new PaymentService();
+  const notification = new NotificationService();
+
+  try {
+    // 1. 결제 요청
+    const result = await payment.requestPayment({
+      orderId: request.orderId,
+      amount: request.amount,
+      method: request.method,
+    });
+
+    if (!result.success) {
+      throw new Error(result.message);
+    }
+
+    // 2. 주문 상태 업데이트
+    await prisma.order.update({
+      where: { id: request.orderId },
+      data: {
+        status: 'paid',
+        paidAt: new Date(),
+        paymentId: result.paymentId,
+      },
+    });
+
+    // 3. 알림 발송
+    await Promise.all([
+      notification.sendToBuyer(request.buyerId, {
+        type: 'payment_success',
+        orderId: request.orderId,
+      }),
+      notification.sendToSeller(request.sellerId, {
+        type: 'new_order',
+        orderId: request.orderId,
+      }),
+    ]);
+
+    return { success: true, paymentId: result.paymentId };
+  } catch (error) {
+    console.error('Payment failed:', error);
+    return { success: false, error: error.message };
+  }
 }`,
 ];
 
-// 코딩 타이핑 애니메이션 컴포넌트 (연속 타이핑)
+// 코딩 타이핑 애니메이션 컴포넌트 (한 번 완성 후 멈춤)
 const CodeTypingBackground = () => {
   const [typedCodes, setTypedCodes] = useState<string[]>(['', '', '', '', '', '']);
+  const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
-    // 각 블록별로 현재 스니펫 인덱스와 타이핑 위치 추적
-    const blockStates = Array(6)
-      .fill(null)
-      .map((_, i) => ({
-        snippetIndex: i % codeSnippets.length,
-        charIndex: 0,
-        displayText: '',
-      }));
+    if (isComplete) return;
+
+    const charIndexes = [0, 0, 0, 0, 0, 0];
+    let allComplete = false;
 
     const typeCode = () => {
-      setTypedCodes(
-        blockStates.map((state) => {
-          const currentSnippet = codeSnippets[state.snippetIndex];
+      if (allComplete) return;
 
-          if (state.charIndex < currentSnippet.length) {
-            // 계속 타이핑
-            state.charIndex += 2;
-            state.displayText = currentSnippet.slice(0, state.charIndex);
-          } else {
-            // 현재 스니펫 완료 → 다음 스니펫으로 이어서
-            state.snippetIndex = (state.snippetIndex + 1) % codeSnippets.length;
-            state.charIndex = 0;
-            // 이전 코드 뒤에 줄바꿈 추가하고 새 코드 시작
-            state.displayText = state.displayText + '\n\n';
-          }
+      const newTypedCodes = longCodeSnippets.map((snippet, i) => {
+        if (charIndexes[i] < snippet.length) {
+          charIndexes[i] += 3; // 한번에 3글자씩
+          return snippet.slice(0, charIndexes[i]);
+        }
+        return snippet;
+      });
 
-          // 너무 길어지면 앞부분 잘라내기 (최근 500자만 유지)
-          if (state.displayText.length > 500) {
-            state.displayText = state.displayText.slice(-400);
-          }
+      setTypedCodes(newTypedCodes);
 
-          return state.displayText;
-        })
-      );
+      // 모든 코드가 완성되었는지 확인
+      allComplete = charIndexes.every((idx, i) => idx >= longCodeSnippets[i].length);
+      if (allComplete) {
+        setIsComplete(true);
+      }
     };
 
-    const interval = setInterval(typeCode, 60);
+    const interval = setInterval(typeCode, 40);
     return () => clearInterval(interval);
-  }, []);
+  }, [isComplete]);
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
