@@ -457,7 +457,7 @@ input[type="radio"] {
     transform: translateX(-150px);
   }
   100% {
-    transform: translateX(calc(100vw - 150px));
+    transform: translateX(calc(100vw - 400px));
   }
 }
 
