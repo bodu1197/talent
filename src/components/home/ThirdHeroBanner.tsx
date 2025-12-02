@@ -39,6 +39,18 @@ const ArrowRightIcon = () => (
   </svg>
 );
 
+// 위치 핀 아이콘
+const MapPinIcon = ({ className = 'w-4 h-4' }: { className?: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
+    />
+  </svg>
+);
+
 // 주문제작 아이콘
 const WrenchIcon = () => (
   <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -161,7 +173,7 @@ export default function ThirdHeroBanner() {
             가까운 곳에서 직접 만나는 전문가 서비스
           </p>
           <span className="inline-flex items-center gap-1 text-xs text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
-            <span>📍</span>
+            <MapPinIcon className="w-3.5 h-3.5 text-orange-500" />
             <span>내 위치 기준</span>
           </span>
         </div>
@@ -192,7 +204,7 @@ export default function ThirdHeroBanner() {
                       </div>
                       {/* 주변 전문가 수 배지 */}
                       <div className="flex items-center gap-1 bg-white/25 backdrop-blur-sm px-2.5 py-1 rounded-full">
-                        <span className="text-white text-xs">📍</span>
+                        <MapPinIcon className="w-3 h-3 text-white" />
                         <span className="text-white text-xs font-medium">
                           주변 {category.nearbyCount}명
                         </span>
