@@ -1,133 +1,143 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-
-interface CategoryData {
-  id: string;
-  name: string;
-  slug: string;
-  icon: string;
-  clicks: number;
-  ratio: number;
-}
-
-interface TrendingData {
-  categories: CategoryData[];
-  totalCount: number;
-  hasMore: boolean;
-  totalClicks: number;
-  period: string;
-  updatedAt: string;
-}
+import { createServiceRoleClient } from '@/lib/supabase/server';
+import TrendingCategoriesClient from './TrendingCategoriesClient';
 
 // 오프라인 카테고리 slug 목록 (제외할 카테고리)
 const OFFLINE_CATEGORY_SLUGS = ['errands', 'life-service', 'event', 'beauty-fashion'];
-
-// 인라인 SVG 아이콘
-const FlameIcon = () => (
-  <svg
-    className="w-5 h-5 text-orange-500"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={2}
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"
-    />
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"
-    />
-  </svg>
-);
-
-const TrendingUpIcon = ({ className }: { className: string }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-  </svg>
-);
-
 const DISPLAY_LIMIT = 8;
 
-export default function TrendingCategories() {
-  const [categories, setCategories] = useState<CategoryData[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isAnimated, setIsAnimated] = useState(false);
-  const [hasError, setHasError] = useState(false);
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  icon: string | null;
+}
 
-  // 데이터 로드
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await fetch(`/api/analytics/trending-categories?limit=20`);
-        if (res.ok) {
-          const result: TrendingData = await res.json();
-          // 오프라인 카테고리 제외
-          const onlineCategories = result.categories.filter(
-            (cat) => !OFFLINE_CATEGORY_SLUGS.includes(cat.slug)
-          );
-          // 상위 N개만 표시
-          setCategories(onlineCategories.slice(0, DISPLAY_LIMIT));
-        } else {
-          setHasError(true);
-        }
-      } catch {
-        setHasError(true);
-      } finally {
-        setIsLoading(false);
+interface CategoryMapping {
+  id: string;
+  slug: string;
+  parent_id: string | null;
+}
+
+// 카테고리 매핑 생성 함수
+function buildCategoryMappings(allCategories: CategoryMapping[]) {
+  const slugToRootId = new Map<string, string>();
+  const idToParentId = new Map<string, string | null>();
+
+  for (const cat of allCategories) {
+    idToParentId.set(cat.id, cat.parent_id);
+    slugToRootId.set(cat.slug, cat.id);
+  }
+
+  return { slugToRootId, idToParentId };
+}
+
+// 루트 카테고리 ID 찾기 함수
+function findRootCategoryId(
+  slug: string,
+  slugToRootId: Map<string, string>,
+  idToParentId: Map<string, string | null>
+): string | null {
+  let currentId = slugToRootId.get(slug);
+  if (!currentId) return null;
+
+  while (true) {
+    const parentId = idToParentId.get(currentId);
+    if (!parentId) {
+      return currentId;
+    }
+    currentId = parentId;
+  }
+}
+
+// 서버에서 트렌딩 카테고리 데이터 조회
+async function fetchTrendingCategories() {
+  try {
+    const supabase = createServiceRoleClient();
+
+    // 1. 1차 카테고리 가져오기
+    const { data: primaryCategories, error: catError } = await supabase
+      .from('categories')
+      .select('id, name, slug, icon')
+      .is('parent_id', null)
+      .eq('is_active', true)
+      .order('display_order');
+
+    if (catError || !primaryCategories) {
+      return [];
+    }
+
+    // 2. 모든 카테고리 가져오기 (부모 ID 매핑용)
+    const { data: allCategories } = await supabase
+      .from('categories')
+      .select('id, slug, parent_id')
+      .eq('is_active', true);
+
+    // 3. 카테고리 매핑 생성
+    const { slugToRootId, idToParentId } = buildCategoryMappings(allCategories || []);
+
+    // 4. 최근 24시간 조회수 가져오기
+    const oneDayAgo = new Date();
+    oneDayAgo.setHours(oneDayAgo.getHours() - 24);
+
+    const { data: pageViews } = await supabase
+      .from('page_views')
+      .select('path')
+      .like('path', '/categories/%')
+      .gte('created_at', oneDayAgo.toISOString());
+
+    // 5. 클릭수 초기화 및 집계
+    const categoryClicks: Record<string, number> = {};
+    for (const cat of primaryCategories) {
+      categoryClicks[cat.id] = 0;
+    }
+
+    for (const view of pageViews || []) {
+      const pathParts = view.path.split('/');
+      const categorySlug = pathParts[2];
+      if (!categorySlug) continue;
+
+      const rootCategoryId = findRootCategoryId(categorySlug, slugToRootId, idToParentId);
+      if (rootCategoryId && categoryClicks[rootCategoryId] !== undefined) {
+        categoryClicks[rootCategoryId]++;
       }
     }
 
-    fetchData();
-  }, []);
+    // 6. 결과 정리
+    const result = primaryCategories.map((cat: Category) => ({
+      id: cat.id,
+      name: cat.name,
+      slug: cat.slug,
+      icon: cat.icon || '📂',
+      clicks: categoryClicks[cat.id] || 0,
+    }));
 
-  // 애니메이션 트리거
-  useEffect(() => {
-    if (!isLoading && categories.length > 0) {
-      const timer = setTimeout(() => {
-        setIsAnimated(true);
-      }, 100);
-      return () => clearTimeout(timer);
-    }
-  }, [isLoading, categories]);
+    // 클릭수 기준 정렬
+    result.sort((a, b) => b.clicks - a.clicks);
 
-  // 로딩 스켈레톤 - 실제 콘텐츠와 동일한 크기 유지 (CLS 방지)
-  if (isLoading) {
-    return (
-      <section className="py-6 lg:py-10 bg-gradient-to-b from-orange-50/50 to-white">
-        <div className="container-1200">
-          {/* 헤더 스켈레톤 - 실제 헤더와 동일한 높이 */}
-          <div className="text-center mb-6 md:mb-8">
-            <div className="h-8 bg-gray-200 rounded w-48 mb-2 animate-pulse mx-auto"></div>
-            <div className="h-5 bg-gray-200 rounded w-72 animate-pulse mx-auto"></div>
-          </div>
-          {/* 그래프 스켈레톤 - 8개 항목, 실제와 동일한 크기 */}
-          <div className="flex justify-center items-end gap-2 sm:gap-3 md:gap-4 lg:gap-6 px-2 pb-4">
-            {Array.from({ length: DISPLAY_LIMIT }, (_, i) => (
-              <div key={`skeleton-${i}`} className="flex flex-col items-center flex-shrink-0">
-                <div className="h-4 w-8 mb-1"></div>
-                <div className="relative w-10 sm:w-12 md:w-14 lg:w-16 h-28 sm:h-32 md:h-40 lg:h-48 flex items-end">
-                  <div
-                    className="w-full bg-gray-200 rounded-t-lg animate-pulse"
-                    style={{ height: `${30 + (DISPLAY_LIMIT - i) * 8}%` }}
-                  ></div>
-                </div>
-                <div className="mt-2 h-4 w-12 bg-gray-200 rounded animate-pulse"></div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
+    // 최대 클릭수 계산
+    const maxClicks = Math.max(...result.map((r) => r.clicks), 1);
+
+    // 비율 추가
+    const resultWithRatio = result.map((item) => ({
+      ...item,
+      ratio: Math.round((item.clicks / maxClicks) * 100),
+    }));
+
+    // 오프라인 카테고리 제외 및 상위 N개 반환
+    return resultWithRatio
+      .filter((cat) => !OFFLINE_CATEGORY_SLUGS.includes(cat.slug))
+      .slice(0, DISPLAY_LIMIT);
+  } catch {
+    return [];
   }
+}
 
-  // 에러가 발생했거나 데이터가 없는 경우 - 빈 섹션 유지 (CLS 방지)
-  if (hasError || categories.length === 0) {
+// 서버 컴포넌트 - 데이터를 SSR 시점에 로드
+export default async function TrendingCategories() {
+  const categories = await fetchTrendingCategories();
+
+  // 데이터가 없으면 빈 섹션 (CLS 방지를 위해 높이 유지)
+  if (categories.length === 0) {
     return (
       <section className="py-6 lg:py-10 bg-gradient-to-b from-orange-50/50 to-white">
         <div className="container-1200 min-h-[200px]"></div>
@@ -135,139 +145,5 @@ export default function TrendingCategories() {
     );
   }
 
-  // 그래프 색상 배열
-  const barColors = [
-    'from-orange-500 to-red-500',
-    'from-amber-500 to-orange-500',
-    'from-yellow-500 to-amber-500',
-    'from-lime-500 to-yellow-500',
-    'from-emerald-500 to-lime-500',
-    'from-teal-500 to-emerald-500',
-    'from-cyan-500 to-teal-500',
-    'from-blue-500 to-cyan-500',
-  ];
-
-  // 최대 ratio 값 (높이 계산용)
-  const maxRatio = Math.max(...categories.map((c) => c.ratio));
-
-  return (
-    <section className="py-6 lg:py-10 bg-gradient-to-b from-orange-50/50 to-white">
-      <div className="container-1200">
-        {/* 섹션 헤더 */}
-        <div className="text-center mb-6 md:mb-8">
-          <div className="inline-flex items-center gap-2 mb-2">
-            <FlameIcon />
-            <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900">
-              실시간 인기재능
-            </h2>
-          </div>
-          <p className="text-gray-500 text-sm md:text-base">
-            지금 가장 많이 찾는 온라인 전문가 카테고리
-            <span className="ml-2 text-xs text-gray-600 bg-gray-200 px-2 py-0.5 rounded-full">
-              최근 24시간
-            </span>
-          </p>
-        </div>
-
-        {/* 세로 막대 그래프 */}
-        <div className="flex justify-center items-end gap-2 sm:gap-3 md:gap-4 lg:gap-6 px-2 overflow-x-auto pb-4">
-          {categories.map((category, index) => {
-            const barColor = barColors[index % barColors.length];
-            const heightPercent = maxRatio > 0 ? (category.ratio / maxRatio) * 100 : 0;
-            const animatedHeight = isAnimated ? `${Math.max(heightPercent, 15)}%` : '0%';
-            const isTop3 = index < 3;
-
-            return (
-              <Link
-                key={category.id}
-                href={`/categories/${category.slug}`}
-                className="group flex flex-col items-center flex-shrink-0"
-              >
-                {/* 클릭 수 */}
-                <div
-                  className={`
-                    text-[10px] md:text-xs font-medium mb-1 transition-all duration-500
-                    ${isAnimated ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}
-                    ${isTop3 ? 'text-orange-600' : 'text-gray-500'}
-                  `}
-                  style={{ transitionDelay: `${index * 100 + 500}ms` }}
-                >
-                  {category.clicks.toLocaleString('ko-KR')}
-                </div>
-
-                {/* 막대 */}
-                <div className="relative w-10 sm:w-12 md:w-14 lg:w-16 h-28 sm:h-32 md:h-40 lg:h-48 flex items-end">
-                  <div
-                    className={`
-                      w-full bg-gradient-to-t ${barColor} rounded-t-lg
-                      transition-all duration-1000 ease-out
-                      group-hover:shadow-lg group-hover:scale-105
-                      ${isTop3 ? 'shadow-md' : ''}
-                    `}
-                    style={{
-                      height: animatedHeight,
-                      transitionDelay: `${index * 100}ms`,
-                    }}
-                  >
-                    {/* 순위 뱃지 */}
-                    <div
-                      className={`
-                        absolute -top-3 left-1/2 -translate-x-1/2
-                        w-5 h-5 md:w-6 md:h-6 rounded-full
-                        flex items-center justify-center
-                        text-[10px] md:text-xs font-bold
-                        transition-all duration-500
-                        ${isAnimated ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}
-                        ${
-                          isTop3
-                            ? 'bg-gradient-to-br from-orange-400 to-red-500 text-white shadow-md'
-                            : 'bg-gray-200 text-gray-600'
-                        }
-                      `}
-                      style={{ transitionDelay: `${index * 100 + 800}ms` }}
-                    >
-                      {index + 1}
-                    </div>
-
-                    {/* 트렌딩 아이콘 (TOP 3만) */}
-                    {isTop3 && (
-                      <div
-                        className={`
-                          absolute top-2 left-1/2 -translate-x-1/2
-                          transition-all duration-500
-                          ${isAnimated ? 'opacity-100' : 'opacity-0'}
-                        `}
-                        style={{ transitionDelay: `${index * 100 + 1000}ms` }}
-                      >
-                        <TrendingUpIcon className="w-4 h-4 text-white/80" />
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* 카테고리명 */}
-                <div
-                  className={`
-                    mt-2 text-center transition-all duration-500
-                    ${isAnimated ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}
-                  `}
-                  style={{ transitionDelay: `${index * 100 + 300}ms` }}
-                >
-                  <span
-                    className={`
-                      text-[10px] sm:text-xs md:text-sm font-medium
-                      group-hover:text-orange-600 transition-colors
-                      ${isTop3 ? 'text-gray-900' : 'text-gray-600'}
-                    `}
-                  >
-                    {category.name}
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
+  return <TrendingCategoriesClient categories={categories} />;
 }
