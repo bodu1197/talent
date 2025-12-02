@@ -39,6 +39,39 @@ const ArrowRightIcon = () => (
   </svg>
 );
 
+// 주문제작 아이콘
+const WrenchIcon = () => (
+  <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"
+    />
+  </svg>
+);
+
+// 상담/코칭 아이콘
+const ChatBubbleIcon = () => (
+  <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"
+    />
+  </svg>
+);
+
+// 취미/핸드메이드 아이콘
+const PuzzleIcon = () => (
+  <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.643 48.39 48.39 0 01-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 01-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 00-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 01-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 00.657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 01-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 005.427-.63 48.05 48.05 0 00.582-4.717.532.532 0 00-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.96.401v0a.656.656 0 00.658-.663 48.422 48.422 0 00-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 01-.61-.58v0z"
+    />
+  </svg>
+);
+
 // 카테고리 데이터
 const categories = [
   {
@@ -74,6 +107,39 @@ const categories = [
     textColor: 'text-pink-600',
     href: '/search?category=beauty',
   },
+  {
+    id: 'custom-order',
+    title: '주문제작',
+    subtitle: '맞춤 제작 · 커스텀 상품 · 핸드메이드',
+    description: '세상에 하나뿐인 나만의 것',
+    icon: WrenchIcon,
+    gradient: 'from-amber-500 to-orange-600',
+    bgLight: 'bg-amber-50',
+    textColor: 'text-amber-600',
+    href: '/categories/custom-order',
+  },
+  {
+    id: 'counseling-coaching',
+    title: '상담 · 코칭',
+    subtitle: '심리상담 · 커리어 · 라이프 코칭',
+    description: '전문가와 1:1 맞춤 상담',
+    icon: ChatBubbleIcon,
+    gradient: 'from-sky-500 to-blue-600',
+    bgLight: 'bg-sky-50',
+    textColor: 'text-sky-600',
+    href: '/categories/counseling-coaching',
+  },
+  {
+    id: 'hobby-handmade',
+    title: '취미 · 핸드메이드',
+    subtitle: '공예 · DIY · 클래스 · 원데이',
+    description: '새로운 취미를 발견하세요',
+    icon: PuzzleIcon,
+    gradient: 'from-fuchsia-500 to-pink-600',
+    bgLight: 'bg-fuchsia-50',
+    textColor: 'text-fuchsia-600',
+    href: '/categories/hobby-handmade',
+  },
 ];
 
 export default function ThirdHeroBanner() {
@@ -91,7 +157,7 @@ export default function ThirdHeroBanner() {
         </div>
 
         {/* 카드 컨테이너 - 모바일: 가로 스크롤, 데스크톱: 그리드 */}
-        <div className="flex md:grid md:grid-cols-3 gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
+        <div className="flex md:grid md:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
           {categories.map((category) => {
             const IconComponent = category.icon;
             return (

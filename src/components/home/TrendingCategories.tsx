@@ -1,9 +1,17 @@
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import TrendingCategoriesClient from './TrendingCategoriesClient';
 
-// 오프라인 카테고리 slug 목록 (제외할 카테고리)
-const OFFLINE_CATEGORY_SLUGS = ['errands', 'life-service', 'event', 'beauty-fashion'];
-const DISPLAY_LIMIT = 14;
+// 제외할 카테고리 slug 목록 (오프라인 + 프리미엄 전문가 섹션에 표시되는 카테고리)
+const EXCLUDED_CATEGORY_SLUGS = [
+  'errands',
+  'life-service',
+  'event',
+  'beauty-fashion',
+  'custom-order',
+  'counseling-coaching',
+  'hobby-handmade',
+];
+const DISPLAY_LIMIT = 11;
 
 interface Category {
   id: string;
@@ -126,7 +134,7 @@ async function fetchTrendingCategories() {
 
     // 오프라인 카테고리 제외하고 14개만 반환
     return resultWithRatio
-      .filter((cat) => !OFFLINE_CATEGORY_SLUGS.includes(cat.slug))
+      .filter((cat) => !EXCLUDED_CATEGORY_SLUGS.includes(cat.slug))
       .slice(0, DISPLAY_LIMIT);
   } catch {
     return [];
