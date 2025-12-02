@@ -141,7 +141,7 @@ const sellerNavItems: NavItem[] = [
     icon: 'fa-bullhorn',
   },
   {
-    label: '판매자 정보',
+    label: '전문가 정보',
     href: '/mypage/seller/profile',
     icon: 'fa-id-card',
   },
@@ -151,7 +151,7 @@ const sellerNavItems: NavItem[] = [
     icon: 'fa-chart-bar',
   },
   {
-    label: '판매자 등록',
+    label: '전문가 등록',
     href: '/mypage/seller/register',
     icon: 'fa-user-plus',
   },
@@ -248,7 +248,7 @@ const buyerNavItems: NavItem[] = [
 export default function Sidebar({ mode, profileData, isRegisteredSeller }: SidebarProps) {
   const pathname = usePathname();
 
-  // 판매자 모드에서 등록 완료 시 "판매자 등록" 메뉴 숨김
+  // 전문가 모드에서 등록 완료 시 "전문가 등록" 메뉴 숨김
   const navItems = (mode === 'seller' ? sellerNavItems : buyerNavItems).filter(
     (item) => !(mode === 'seller' && isRegisteredSeller && item.href === '/mypage/seller/register')
   );
@@ -321,8 +321,12 @@ export default function Sidebar({ mode, profileData, isRegisteredSeller }: Sideb
             href={mode === 'seller' ? '/mypage/buyer/dashboard' : '/mypage/seller/dashboard'}
             className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-sm font-medium click-pop btn-ripple"
           >
-            {mode === 'seller' ? <ShoppingCart className="w-4 h-4" /> : <ShoppingBag className="w-4 h-4" />}
-            <span>{mode === 'seller' ? '구매자 페이지로' : '판매자 페이지로'}</span>
+            {mode === 'seller' ? (
+              <ShoppingCart className="w-4 h-4" />
+            ) : (
+              <ShoppingBag className="w-4 h-4" />
+            )}
+            <span>{mode === 'seller' ? '구매자 페이지로' : '전문가 페이지로'}</span>
             <ChevronRight className="w-3 h-3" />
           </Link>
         </div>

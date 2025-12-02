@@ -61,7 +61,7 @@ export default function MobileMyPageNav({ currentRole, onRoleChange, isSeller: _
 
   return (
     <div className="lg:hidden px-4 pt-4">
-      {/* 판매자/구매자 토글 - 항상 표시 */}
+      {/* 전문가/구매자 토글 - 항상 표시 */}
       <div className="flex bg-gray-100 rounded-lg p-1 mb-4">
         <button
           onClick={() => onRoleChange('seller')}
@@ -69,7 +69,7 @@ export default function MobileMyPageNav({ currentRole, onRoleChange, isSeller: _
             currentRole === 'seller' ? 'bg-white text-brand-primary shadow-sm' : 'text-gray-500'
           }`}
         >
-          판매자
+          전문가
         </button>
         <button
           onClick={() => onRoleChange('buyer')}

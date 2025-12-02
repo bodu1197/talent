@@ -4,7 +4,7 @@ import { Building2, Users, Zap, Shield, TrendingUp, Heart } from 'lucide-react';
 export const metadata: Metadata = {
   title: '회사 소개 - 돌파구 | 수수료 0원 재능 거래 플랫폼',
   description:
-    '돌파구(Dolpagu)는 2025년 설립된 한국의 수수료 0원 프리미엄 재능 거래 플랫폼입니다. 판매자와 구매자 모두 수수료 없이 자유롭게 재능을 거래하세요.',
+    '돌파구(Dolpagu)는 2025년 설립된 한국의 수수료 0원 프리미엄 재능 거래 플랫폼입니다. 전문가와 구매자 모두 수수료 없이 자유롭게 재능을 거래하세요.',
   keywords: '돌파구, Dolpagu, 회사 소개, 재능 거래 플랫폼, 수수료 0원, 프리랜서 마켓, 재능 마켓',
   openGraph: {
     title: '회사 소개 - 돌파구 | 수수료 0원 재능 거래 플랫폼',
@@ -25,7 +25,7 @@ export default function AboutPage() {
     url: 'https://dolpagu.com',
     logo: 'https://dolpagu.com/icon.svg',
     description:
-      '돌파구(Dolpagu)는 2025년 설립된 한국의 수수료 0원 프리미엄 재능 거래 플랫폼입니다. 판매자와 구매자 모두 수수료 없이 자유롭게 재능을 거래할 수 있습니다.',
+      '돌파구(Dolpagu)는 2025년 설립된 한국의 수수료 0원 프리미엄 재능 거래 플랫폼입니다. 전문가와 구매자 모두 수수료 없이 자유롭게 재능을 거래할 수 있습니다.',
     foundingDate: '2025',
     areaServed: {
       '@type': 'Country',
@@ -52,7 +52,7 @@ export default function AboutPage() {
     {
       icon: Zap,
       title: '수수료 0%',
-      description: '판매자도, 구매자도 수수료 없이 100% 투명한 거래',
+      description: '전문가도, 구매자도 수수료 없이 100% 투명한 거래',
     },
     {
       icon: Shield,
@@ -72,7 +72,7 @@ export default function AboutPage() {
   ];
 
   const stats = [
-    { label: '수수료', value: '0%', description: '판매자/구매자 모두' },
+    { label: '수수료', value: '0%', description: '전문가/구매자 모두' },
     { label: '최소 정산', value: '1만원', description: '타 플랫폼 대비 5배 낮음' },
     { label: '정산 기간', value: '1-3일', description: '영업일 기준' },
     { label: '카테고리', value: '8+', description: '다양한 재능 분야' },
@@ -96,7 +96,7 @@ export default function AboutPage() {
           {/* AI Snippet - 40~60단어 핵심 정의 */}
           <p className="text-xl md:text-2xl leading-relaxed max-w-3xl mb-8 text-blue-100">
             돌파구(Dolpagu)는 2025년 설립된 한국의 수수료 0원 프리미엄 재능 거래 플랫폼입니다.
-            판매자와 구매자 모두 수수료 없이 디자인, 개발, 마케팅 등 다양한 재능을 자유롭게 거래할
+            전문가와 구매자 모두 수수료 없이 디자인, 개발, 마케팅 등 다양한 재능을 자유롭게 거래할
             수 있습니다.
           </p>
 
@@ -118,7 +118,7 @@ export default function AboutPage() {
                 <h2 className="text-2xl font-bold">우리의 미션</h2>
               </div>
               <p className="text-gray-700 text-lg leading-relaxed">
-                기존 재능 마켓의 높은 수수료(10~20%)는 판매자의 수익을 줄이고 구매자의 부담을
+                기존 재능 마켓의 높은 수수료(10~20%)는 전문가의 수익을 줄이고 구매자의 부담을
                 늘립니다. 돌파구는 이 문제를 해결하기 위해 탄생했습니다.
                 <strong className="text-brand-primary"> 모든 거래에서 수수료 0%</strong>를 실현하여,
                 재능 있는 사람들이 정당한 대가를 받을 수 있는 환경을 만들고 있습니다.
@@ -192,7 +192,7 @@ export default function AboutPage() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 <tr>
-                  <td className="py-4 px-6 font-medium">판매자 수수료</td>
+                  <td className="py-4 px-6 font-medium">전문가 수수료</td>
                   <td className="py-4 px-6 text-center bg-brand-primary/5 text-brand-primary font-bold">
                     0%
                   </td>

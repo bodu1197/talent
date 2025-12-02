@@ -50,7 +50,7 @@ const slides: Slide[] = [
     glowColor: '#db2777',
     icon: 'fa-sack-dollar',
     cardTitle: '수수료 0%',
-    cardSubtitle: '판매자가 100% 가져갑니다',
+    cardSubtitle: '전문가가 100% 가져갑니다',
     cardDescription:
       '당신이 번 돈, 한 푼도 떼지 않습니다. 다른 플랫폼의 15~20% 수수료는 이제 그만. 돌파구에서는 100% 당신의 것입니다.',
     splatterPattern: [
@@ -70,12 +70,12 @@ const slides: Slide[] = [
   {
     id: 2,
     title: '첫날부터 공정하게,\n모두에게 같은 기회를',
-    subtitle: '신규 판매자와 베테랑, 시작이 평등한 곳입니다.',
+    subtitle: '신규 전문가와 베테랑, 시작이 평등한 곳입니다.',
     gradient: 'bg-indigo-600',
     glowColor: '#4f46e5',
     icon: 'fa-balance-scale',
     cardTitle: '판매 기회 균등',
-    cardSubtitle: '모든 판매자에게 공평한 기회',
+    cardSubtitle: '모든 전문가에게 공평한 기회',
     cardDescription:
       '신규든 베테랑이든, 모두에게 같은 기회. 알고리즘도, 편애도 없습니다. 오직 실력으로 승부하세요.',
     splatterPattern: [

@@ -72,7 +72,7 @@ export default function Footer() {
                 </li>
                 <li>
                   <Link href="/help" className="hover:text-brand-primary transition-colors">
-                    판매자 가이드
+                    전문가 가이드
                   </Link>
                 </li>
                 <li>

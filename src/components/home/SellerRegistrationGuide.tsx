@@ -8,7 +8,7 @@ export default function SellerRegistrationGuide() {
           {/* 제목 */}
           <div className="text-center mb-6 md:mb-12">
             <h2 className="text-xl md:text-3xl lg:text-4xl font-semibold text-gray-900 mb-2 md:mb-4">
-              돌파구 판매자가 되어보세요
+              돌파구 전문가가 되어보세요
             </h2>
             <p className="text-sm md:text-lg text-gray-600">
               당신의 재능을 공유하고 수익을 창출하세요
@@ -55,8 +55,8 @@ export default function SellerRegistrationGuide() {
                   />
                 </svg>
               </div>
-              <h3 className="text-base font-semibold text-gray-900 mb-1">판매기회균등</h3>
-              <p className="text-xs text-gray-600">신규 판매자도 동등한 노출 기회를 드립니다</p>
+              <h3 className="text-base font-semibold text-gray-900 mb-1">기회균등</h3>
+              <p className="text-xs text-gray-600">신규 전문가도 동등한 노출 기회를 드립니다</p>
             </div>
 
             {/* 모바일 카드 - 수익 창출 */}
@@ -169,8 +169,8 @@ export default function SellerRegistrationGuide() {
                   />
                 </svg>
               </div>
-              <h3 className="text-base font-semibold text-gray-900 mb-1">판매기회균등</h3>
-              <p className="text-sm text-gray-600">신규 판매자도 동등한 노출 기회를 드립니다</p>
+              <h3 className="text-base font-semibold text-gray-900 mb-1">기회균등</h3>
+              <p className="text-sm text-gray-600">신규 전문가도 동등한 노출 기회를 드립니다</p>
             </div>
 
             {/* PC 카드 - 수익 창출 */}
@@ -249,7 +249,7 @@ export default function SellerRegistrationGuide() {
               href="/auth/register"
               className="inline-flex items-center px-6 py-3 md:px-8 md:py-4 bg-blue-600 hover:bg-blue-700 text-white text-sm md:text-base font-semibold rounded-lg transition-colors shadow-lg hover:shadow-xl"
             >
-              판매자로 시작하기
+              전문가로 시작하기
               <svg
                 className="w-4 h-4 md:w-5 md:h-5 ml-2"
                 fill="none"

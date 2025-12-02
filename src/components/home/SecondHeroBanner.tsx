@@ -148,7 +148,7 @@ export default function SecondHeroBanner() {
             <div>
               <h3 className="font-bold text-sm md:text-lg text-white mb-1">수수료 0%</h3>
               <p className="text-blue-200 text-xs md:text-sm">
-                판매자 수수료 없이 100% 수익을 가져가세요.
+                수수료 없이 100% 수익을 가져가세요.
               </p>
             </div>
           </div>

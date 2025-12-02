@@ -141,7 +141,7 @@ export default function ServiceCard({
 
       {/* 서비스 정보 */}
       <div className="mt-2">
-        {/* 판매자 */}
+        {/* 전문가 */}
         <div className="flex items-center gap-1 mb-1">
           <div
             className="w-4 h-4 rounded-full bg-brand-primary flex items-center justify-center text-white text-[8px] font-semibold"
@@ -151,7 +151,7 @@ export default function ServiceCard({
           </div>
           <span className="text-xs text-gray-600 truncate">{service.seller?.display_name}</span>
           {service.seller?.is_verified && (
-            <CheckCircle className="w-3 h-3 text-blue-500" aria-label="인증된 판매자" />
+            <CheckCircle className="w-3 h-3 text-blue-500" aria-label="인증된 전문가" />
           )}
         </div>
 

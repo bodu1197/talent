@@ -600,7 +600,7 @@ export default function RegisterPage() {
             </div>
 
             {/* 회원 유형 선택 제거 - 기본값: 구매자 */}
-            {/* 마이페이지에서 판매자로 전환 가능 */}
+            {/* 마이페이지에서 전문가로 전환 가능 */}
 
             {/* 약관 동의 */}
             <div className="space-y-2 pt-2">

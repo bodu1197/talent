@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from 'next/link';
 import {
   Search,
   CircleHelp,
@@ -7,7 +7,7 @@ import {
   Phone,
   ShoppingBag,
   Store,
-} from "lucide-react";
+} from 'lucide-react';
 
 export default function HelpPage() {
   return (
@@ -98,10 +98,7 @@ export default function HelpPage() {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/buyer/payment"
-                  className="hover:text-brand-primary"
-                >
+                <Link href="/buyer/payment" className="hover:text-brand-primary">
                   • 결제 안내
                 </Link>
               </li>
@@ -116,27 +113,21 @@ export default function HelpPage() {
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h3 className="font-semibold mb-4 flex items-center gap-2">
               <Store className="w-5 h-5 text-brand-primary" />
-              판매자 가이드
+              전문가 가이드
             </h3>
             <ul className="space-y-2 text-sm text-gray-600">
               <li>
                 <Link href="/seller/guide" className="hover:text-brand-primary">
-                  • 판매자 가이드
+                  • 전문가 가이드
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/seller/commission"
-                  className="hover:text-brand-primary"
-                >
+                <Link href="/seller/commission" className="hover:text-brand-primary">
                   • 수수료 안내
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/seller/settlement"
-                  className="hover:text-brand-primary"
-                >
+                <Link href="/seller/settlement" className="hover:text-brand-primary">
                   • 정산 안내
                 </Link>
               </li>

@@ -24,7 +24,7 @@ export default function MobileServiceHeader({
     if (sellerPhone) {
       window.location.href = `tel:${sellerPhone}`;
     } else {
-      alert('판매자 연락처가 등록되지 않았습니다.');
+      alert('전문가 연락처가 등록되지 않았습니다.');
     }
   };
 
