@@ -13,6 +13,7 @@ const RecentVisitedCategories = dynamic(() => import('@/components/home/RecentVi
 const RecentViewedServices = dynamic(() => import('@/components/home/RecentViewedServices'));
 const TrendingCategories = dynamic(() => import('@/components/home/TrendingCategories'));
 const SecondHeroBanner = dynamic(() => import('@/components/home/SecondHeroBanner'));
+const ThirdHeroBanner = dynamic(() => import('@/components/home/ThirdHeroBanner'));
 
 // 캐싱 최적화: 60초마다 재생성
 export const revalidate = 60;
@@ -57,10 +58,13 @@ export default async function HomePage() {
           {/* 실시간 인기재능 섹션 */}
           <TrendingCategories />
 
-          {/* 제2 히어로 배너 - 돌파구 소개 */}
+          {/* 제2 히어로 배너 - 심부름 헬퍼 */}
           <SecondHeroBanner />
 
-          {/* 판매자 등록 안내 섹션 */}
+          {/* 제3 히어로 배너 - 현장 전문가 서비스 (생활/이벤트/뷰티) */}
+          <ThirdHeroBanner />
+
+          {/* 전문가 등록 안내 섹션 */}
           <SellerRegistrationGuide />
 
           {/* 사용자 리뷰 섹션 */}
