@@ -72,73 +72,79 @@ const PuzzleIcon = () => (
   </svg>
 );
 
-// 카테고리 데이터
+// 카테고리 데이터 (nearbyCount: 주변 전문가 수)
 const categories = [
   {
     id: 'living',
     title: '생활 서비스',
     subtitle: '청소 · 수리 · 이사 · 정리수납',
-    description: '전문가가 직접 방문합니다',
+    description: '내 주변 전문가가 직접 방문해요',
     icon: HomeIcon,
     gradient: 'from-emerald-500 to-teal-600',
     bgLight: 'bg-emerald-50',
     textColor: 'text-emerald-600',
     href: '/search?category=living',
+    nearbyCount: 18,
   },
   {
     id: 'event',
     title: '이벤트',
     subtitle: 'MC · 사회자 · 공연 · 행사',
-    description: '특별한 순간을 빛내드립니다',
+    description: '가까운 곳에서 특별한 순간을',
     icon: MicIcon,
     gradient: 'from-violet-500 to-purple-600',
     bgLight: 'bg-violet-50',
     textColor: 'text-violet-600',
     href: '/search?category=event',
+    nearbyCount: 12,
   },
   {
     id: 'beauty',
     title: '뷰티 · 패션',
     subtitle: '메이크업 · 헤어 · 네일 · 스타일링',
-    description: '당신만을 위한 변신',
+    description: '동네에서 만나는 뷰티 전문가',
     icon: SparklesIcon,
     gradient: 'from-pink-500 to-rose-600',
     bgLight: 'bg-pink-50',
     textColor: 'text-pink-600',
     href: '/search?category=beauty',
+    nearbyCount: 24,
   },
   {
     id: 'custom-order',
     title: '주문제작',
     subtitle: '맞춤 제작 · 커스텀 상품 · 핸드메이드',
-    description: '세상에 하나뿐인 나만의 것',
+    description: '근처 공방에서 나만의 것을',
     icon: WrenchIcon,
     gradient: 'from-amber-500 to-orange-600',
     bgLight: 'bg-amber-50',
     textColor: 'text-amber-600',
     href: '/categories/custom-order',
+    nearbyCount: 9,
   },
   {
     id: 'counseling-coaching',
     title: '상담 · 코칭',
     subtitle: '심리상담 · 커리어 · 라이프 코칭',
-    description: '전문가와 1:1 맞춤 상담',
+    description: '가까운 전문가와 1:1 상담',
     icon: ChatBubbleIcon,
     gradient: 'from-sky-500 to-blue-600',
     bgLight: 'bg-sky-50',
     textColor: 'text-sky-600',
     href: '/categories/counseling-coaching',
+    nearbyCount: 15,
   },
   {
     id: 'hobby-handmade',
     title: '취미 · 핸드메이드',
     subtitle: '공예 · DIY · 클래스 · 원데이',
-    description: '새로운 취미를 발견하세요',
+    description: '동네 원데이클래스 발견하기',
     icon: PuzzleIcon,
     gradient: 'from-fuchsia-500 to-pink-600',
     bgLight: 'bg-fuchsia-50',
     textColor: 'text-fuchsia-600',
     href: '/categories/hobby-handmade',
+    nearbyCount: 21,
   },
 ];
 
@@ -149,11 +155,15 @@ export default function ThirdHeroBanner() {
         {/* 헤더 */}
         <div className="text-center mb-6 md:mb-8">
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 mb-2">
-            직접 만나는 <span className="text-blue-600">프리미엄 전문가</span>
+            <span className="text-orange-500">내 주변</span>의 프리미엄 전문가
           </h2>
-          <p className="text-gray-500 text-sm md:text-base">
-            현장에서 프리미엄 서비스를 경험하세요
+          <p className="text-gray-500 text-sm md:text-base mb-2">
+            가까운 곳에서 직접 만나는 전문가 서비스
           </p>
+          <span className="inline-flex items-center gap-1 text-xs text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
+            <span>📍</span>
+            <span>내 위치 기준</span>
+          </span>
         </div>
 
         {/* 카드 컨테이너 - 모바일: 가로 스크롤, 데스크톱: 그리드 */}
@@ -175,9 +185,18 @@ export default function ThirdHeroBanner() {
 
                   {/* 콘텐츠 */}
                   <div className="relative z-10 h-full flex flex-col">
-                    {/* 아이콘 */}
-                    <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300">
-                      <IconComponent />
+                    {/* 상단: 아이콘 + 주변 전문가 배지 */}
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
+                        <IconComponent />
+                      </div>
+                      {/* 주변 전문가 수 배지 */}
+                      <div className="flex items-center gap-1 bg-white/25 backdrop-blur-sm px-2.5 py-1 rounded-full">
+                        <span className="text-white text-xs">📍</span>
+                        <span className="text-white text-xs font-medium">
+                          주변 {category.nearbyCount}명
+                        </span>
+                      </div>
                     </div>
 
                     {/* 텍스트 */}
@@ -189,7 +208,7 @@ export default function ThirdHeroBanner() {
 
                     {/* CTA */}
                     <div className="flex items-center gap-2 text-white font-medium text-sm mt-4 group-hover:gap-3 transition-all duration-300">
-                      <span>바로가기</span>
+                      <span>주변 전문가 보기</span>
                       <ArrowRightIcon />
                     </div>
                   </div>
