@@ -3,6 +3,7 @@ import TrendingCategoriesClient from './TrendingCategoriesClient';
 
 // 오프라인 카테고리 slug 목록 (제외할 카테고리)
 const OFFLINE_CATEGORY_SLUGS = ['errands', 'life-service', 'event', 'beauty-fashion'];
+const DISPLAY_LIMIT = 14;
 
 interface Category {
   id: string;
@@ -123,8 +124,10 @@ async function fetchTrendingCategories() {
       ratio: Math.round((item.clicks / maxClicks) * 100),
     }));
 
-    // 오프라인 카테고리 제외하고 전체 반환
-    return resultWithRatio.filter((cat) => !OFFLINE_CATEGORY_SLUGS.includes(cat.slug));
+    // 오프라인 카테고리 제외하고 14개만 반환
+    return resultWithRatio
+      .filter((cat) => !OFFLINE_CATEGORY_SLUGS.includes(cat.slug))
+      .slice(0, DISPLAY_LIMIT);
   } catch {
     return [];
   }

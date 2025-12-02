@@ -422,7 +422,7 @@ export default function TrendingCategoriesClient({ categories }: Props) {
         </div>
 
         {/* 세로 막대 그래프 */}
-        <div className="flex justify-center items-end gap-2 sm:gap-3 md:gap-4 lg:gap-6 px-2 overflow-x-auto pb-4">
+        <div className="flex justify-center items-end gap-1 sm:gap-2 md:gap-3 lg:gap-4 px-2 pb-4">
           {categories.map((category, index) => {
             const barColor = barColors[index % barColors.length];
             const heightPercent = maxRatio > 0 ? (category.ratio / maxRatio) * 100 : 0;
@@ -448,7 +448,7 @@ export default function TrendingCategoriesClient({ categories }: Props) {
                 </div>
 
                 {/* 막대 */}
-                <div className="relative w-10 sm:w-12 md:w-14 lg:w-16 h-28 sm:h-32 md:h-40 lg:h-48 flex items-end">
+                <div className="relative w-8 sm:w-10 md:w-12 lg:w-14 h-24 sm:h-28 md:h-36 lg:h-44 flex items-end">
                   <div
                     className={`
                       w-full bg-gradient-to-t ${barColor} rounded-t-lg
