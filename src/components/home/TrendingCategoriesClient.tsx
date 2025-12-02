@@ -97,17 +97,17 @@ export default function TrendingCategoriesClient({ categories }: Props) {
             const animatedHeight = isAnimated ? `${Math.max(heightPercent, 15)}%` : '0%';
             const isTop3 = index < 3;
 
-            // 모바일에서는 6위까지만 표시
-            const isMobileHidden = index >= 6;
+            // 모바일에서는 5위까지만 표시
+            const isMobileHidden = index >= 5;
 
             return (
               <Link
                 key={category.id}
                 href={`/categories/${category.slug}`}
-                className={`group flex flex-col items-center w-14 sm:w-14 md:w-16 lg:w-20 ${isMobileHidden ? 'hidden md:flex' : ''}`}
+                className={`group flex flex-col items-center w-16 sm:w-16 md:w-16 lg:w-20 ${isMobileHidden ? 'hidden md:flex' : ''}`}
               >
                 {/* 막대 */}
-                <div className="relative w-11 sm:w-11 md:w-12 lg:w-14 h-28 sm:h-32 md:h-36 lg:h-44 flex items-end">
+                <div className="relative w-12 sm:w-12 md:w-12 lg:w-14 h-28 sm:h-32 md:h-36 lg:h-44 flex items-end">
                   <div
                     className={`
                       w-full bg-gradient-to-t ${barColor} rounded-t-lg
