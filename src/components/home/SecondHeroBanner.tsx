@@ -351,17 +351,18 @@ export default function SecondHeroBanner() {
                   대기하고 있어요
                 </h2>
 
-                <p className="text-gray-400 text-sm md:text-base mb-6">
-                  지금 바로 호출 가능한{' '}
+                <p className="text-gray-400 text-sm md:text-base mb-6 whitespace-nowrap">
+                  <span className="hidden sm:inline">지금 바로 호출 가능한</span>
+                  <span className="sm:hidden">호출 가능</span>{' '}
                   <span className="text-green-400 font-bold transition-all duration-500 inline-block min-w-[2ch] tabular-nums">
                     {nearbyCount}
                   </span>
-                  명! 평균 <span className="text-white font-bold">5분 내</span> 매칭됩니다.
+                  명 · <span className="text-white font-bold">5분 내</span> 매칭
                 </p>
 
                 <Link
                   href="/search?category=errands"
-                  className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-6 py-3.5 rounded-xl font-bold text-base shadow-lg shadow-blue-900/50 transition transform active:scale-95"
+                  className="inline-flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-lg md:rounded-xl font-bold text-sm md:text-base shadow-lg shadow-blue-900/50 transition transform active:scale-95"
                 >
                   <ZapIcon />
                   지금 호출하기
