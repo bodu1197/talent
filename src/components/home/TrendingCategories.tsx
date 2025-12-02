@@ -163,7 +163,7 @@ export default function TrendingCategories() {
           </div>
           <p className="text-gray-500 text-sm md:text-base">
             지금 가장 많이 찾는 온라인 전문가 카테고리
-            <span className="ml-2 text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+            <span className="ml-2 text-xs text-gray-600 bg-gray-200 px-2 py-0.5 rounded-full">
               최근 24시간
             </span>
           </p>
