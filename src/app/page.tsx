@@ -14,6 +14,7 @@ const RecentViewedServices = dynamic(() => import('@/components/home/RecentViewe
 const TrendingCategories = dynamic(() => import('@/components/home/TrendingCategories'));
 const SecondHeroBanner = dynamic(() => import('@/components/home/SecondHeroBanner'));
 const ThirdHeroBanner = dynamic(() => import('@/components/home/ThirdHeroBanner'));
+const FourthHeroBanner = dynamic(() => import('@/components/home/FourthHeroBanner'));
 
 // 캐싱 최적화: 60초마다 재생성
 export const revalidate = 60;
@@ -36,25 +37,28 @@ export default async function HomePage() {
       {/* 히어로 섹션 + 카테고리 (즉시 표시) */}
       <HeroWithCategories />
 
-      {/* 로그인 사용자 전용 섹션 (클라이언트 사이드) */}
+      {/* 로그인 사용자 전용 섹션 */}
       {user && (
         <>
           <RecentVisitedCategories />
           <RecentViewedServices />
+
+          {/* AI 재능 쇼케이스 (로그인 시에만 표시) */}
+          <AIServicesSection aiCategoryIds={aiCategoryIds} />
+
+          {/* 추천 서비스 섹션 (로그인 시에만 표시) */}
+          <Suspense fallback={<RecommendedSkeleton />}>
+            <RecommendedServices aiCategoryIds={aiCategoryIds} />
+          </Suspense>
         </>
       )}
-
-      {/* AI 재능 쇼케이스 (LCP 최적화: Suspense 제거 - 초기 HTML에 이미지 포함) */}
-      <AIServicesSection aiCategoryIds={aiCategoryIds} />
-
-      {/* 추천 서비스 섹션 (Suspense로 감싸기) */}
-      <Suspense fallback={<RecommendedSkeleton />}>
-        <RecommendedServices aiCategoryIds={aiCategoryIds} />
-      </Suspense>
 
       {/* 로그인 전 사용자 전용 섹션 */}
       {!user && (
         <>
+          {/* 제4 히어로 배너 - 돌파구의 약속 (핵심 섹션) */}
+          <FourthHeroBanner />
+
           {/* 실시간 인기재능 섹션 */}
           <TrendingCategories />
 
