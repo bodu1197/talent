@@ -139,6 +139,35 @@ const LockIcon = () => (
   </svg>
 );
 
+// 오토바이 아이콘 (스쿠터/배달 오토바이 스타일)
+const MotorcycleIcon = () => (
+  <svg className="w-12 h-12" viewBox="0 0 64 64" fill="none">
+    {/* 바퀴 */}
+    <circle cx="14" cy="44" r="8" stroke="#FFD700" strokeWidth="3" fill="#1a1a1a" />
+    <circle cx="50" cy="44" r="8" stroke="#FFD700" strokeWidth="3" fill="#1a1a1a" />
+    <circle cx="14" cy="44" r="3" fill="#FFD700" />
+    <circle cx="50" cy="44" r="3" fill="#FFD700" />
+    {/* 바디 */}
+    <path
+      d="M18 44 L24 32 L44 32 L52 44"
+      stroke="#3B82F6"
+      strokeWidth="4"
+      strokeLinecap="round"
+      fill="none"
+    />
+    <path d="M26 32 L28 24 L40 24 L42 32" fill="#3B82F6" stroke="#3B82F6" strokeWidth="2" />
+    {/* 핸들 */}
+    <path d="M40 24 L46 18" stroke="#666" strokeWidth="3" strokeLinecap="round" />
+    <circle cx="47" cy="17" r="2" fill="#FFD700" />
+    {/* 시트 */}
+    <ellipse cx="32" cy="28" rx="8" ry="3" fill="#1a1a1a" />
+    {/* 라이더 (간단한 실루엣) */}
+    <circle cx="32" cy="16" r="5" fill="#FFD700" />
+    <path d="M32 21 L32 28" stroke="#FFD700" strokeWidth="3" strokeLinecap="round" />
+    <path d="M28 26 L32 24 L36 26" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" />
+  </svg>
+);
+
 // 초기값 상수 (SSR과 클라이언트 일치를 위해)
 const INITIAL_TOTAL_COUNT = 26;
 
@@ -241,7 +270,47 @@ export default function SecondHeroBanner() {
   const remainingCount = Math.max(0, totalCount - nearbyCount);
 
   return (
-    <section className="py-6 md:py-10">
+    <section className="py-6 md:py-10 relative">
+      {/* 오토바이 애니메이션 - 브라우저 전체를 가로지르며 달림 */}
+      <div
+        className="absolute pointer-events-none z-50"
+        style={{
+          top: '50%',
+          left: 0,
+          right: 0,
+          transform: 'translateY(-50%)',
+          overflow: 'visible',
+        }}
+      >
+        <div
+          className="absolute flex items-center"
+          style={{
+            animation: 'motorcycle-ride 5s linear infinite',
+          }}
+        >
+          {/* 연기 효과 */}
+          <div className="absolute -left-10 flex items-center gap-0.5">
+            <div
+              className="w-5 h-5 rounded-full bg-gray-500/60"
+              style={{ animation: 'smoke-puff 0.6s ease-out infinite' }}
+            />
+            <div
+              className="w-4 h-4 rounded-full bg-gray-500/50"
+              style={{ animation: 'smoke-puff 0.6s ease-out infinite 0.1s' }}
+            />
+            <div
+              className="w-6 h-6 rounded-full bg-gray-500/40"
+              style={{ animation: 'smoke-puff 0.6s ease-out infinite 0.2s' }}
+            />
+            <div
+              className="w-4 h-4 rounded-full bg-gray-500/30"
+              style={{ animation: 'smoke-puff 0.6s ease-out infinite 0.3s' }}
+            />
+          </div>
+          <MotorcycleIcon />
+        </div>
+      </div>
+
       <div className="container-1200">
         <div className="relative overflow-hidden rounded-2xl md:rounded-3xl bg-gray-900 border border-gray-800 shadow-2xl">
           {/* 배경 도트 패턴 */}
