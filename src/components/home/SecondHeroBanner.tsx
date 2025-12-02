@@ -142,11 +142,11 @@ const LockIcon = () => (
 // 배달 스쿠터 GIF 이미지 (로컬)
 const MotorcycleIcon = () => (
   <Image
-    src="/delivery-scooter.gif"
+    src="/delivery-scooter2.gif"
     alt="배달 스쿠터"
-    width={160}
-    height={116}
-    className="w-32 h-auto md:w-40"
+    width={200}
+    height={200}
+    className="w-36 h-auto md:w-44"
     unoptimized
   />
 );
