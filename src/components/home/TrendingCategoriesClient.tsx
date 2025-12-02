@@ -72,7 +72,7 @@ export default function TrendingCategoriesClient({ categories }: Props) {
 
   return (
     <section className="py-6 lg:py-10 bg-gradient-to-b from-orange-50/50 to-white">
-      <div className="container-1200 py-6 px-4">
+      <div className="container-1200 py-6 px-0">
         {/* 섹션 헤더 */}
         <div className="text-center mb-6 md:mb-8">
           <div className="inline-flex items-center gap-2 mb-2">
@@ -103,18 +103,6 @@ export default function TrendingCategoriesClient({ categories }: Props) {
                 href={`/categories/${category.slug}`}
                 className="group flex flex-col items-center flex-shrink-0"
               >
-                {/* 클릭 수 */}
-                <div
-                  className={`
-                    text-[10px] md:text-xs font-medium mb-1 transition-all duration-500
-                    ${isAnimated ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}
-                    ${isTop3 ? 'text-orange-600' : 'text-gray-500'}
-                  `}
-                  style={{ transitionDelay: `${index * 100 + 500}ms` }}
-                >
-                  {category.clicks.toLocaleString('ko-KR')}
-                </div>
-
                 {/* 막대 */}
                 <div className="relative w-8 sm:w-10 md:w-12 lg:w-14 h-24 sm:h-28 md:h-36 lg:h-44 flex items-end">
                   <div
