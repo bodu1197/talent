@@ -65,7 +65,7 @@ const CodeRainBackground = () => {
       ctx.fillStyle = 'rgba(255, 247, 237, 0.05)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = 'rgba(251, 146, 60, 0.35)'; // 오렌지색 (더 진하게)
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.8)'; // 검정색
       ctx.font = `${fontSize}px monospace`;
 
       for (let i = 0; i < drops.length; i++) {
