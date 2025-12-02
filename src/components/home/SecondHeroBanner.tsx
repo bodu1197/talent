@@ -3,7 +3,7 @@
 /* eslint-disable sonarjs/pseudo-random */
 // Math.random()은 시각적 애니메이션용으로만 사용되며 보안과 무관함
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -160,10 +160,33 @@ export default function SecondHeroBanner() {
   const [totalCount, setTotalCount] = useState(INITIAL_TOTAL_COUNT);
   const [isHydrated, setIsHydrated] = useState(false);
 
+  // 스쿠터 애니메이션 상태
+  const [scooterStarted, setScooterStarted] = useState(false);
+  const [scooterStopped, setScooterStopped] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
   // 클라이언트 하이드레이션 완료 후 동적 업데이트 시작
   useEffect(() => {
     setIsHydrated(true);
   }, []);
+
+  // 스크롤 감지하여 스쿠터 애니메이션 시작
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !scooterStarted) {
+          setScooterStarted(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [scooterStarted]);
 
   // 헬퍼 동적 업데이트
   const updateHelpers = useCallback(() => {
@@ -253,8 +276,8 @@ export default function SecondHeroBanner() {
   const remainingCount = Math.max(0, totalCount - nearbyCount);
 
   return (
-    <section className="py-6 md:py-10 relative">
-      {/* 오토바이 애니메이션 - 브라우저 전체를 가로지르며 달림 */}
+    <section ref={sectionRef} className="py-6 md:py-10 relative">
+      {/* 오토바이 애니메이션 - 스크롤 시 한 번만 실행 후 정지 */}
       <div
         className="absolute pointer-events-none z-50"
         style={{
@@ -268,28 +291,32 @@ export default function SecondHeroBanner() {
         <div
           className="absolute flex items-center"
           style={{
-            animation: 'motorcycle-ride 15s linear infinite',
+            transform: scooterStarted ? undefined : 'translateX(-150px)',
+            animation: scooterStarted ? 'scooter-enter 4s ease-out forwards' : 'none',
           }}
+          onAnimationEnd={() => setScooterStopped(true)}
         >
-          {/* 연기 효과 */}
-          <div className="absolute -left-16 flex items-center gap-1">
-            <div
-              className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-400/70"
-              style={{ animation: 'smoke-puff 0.8s ease-out infinite' }}
-            />
-            <div
-              className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-gray-400/60"
-              style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.15s' }}
-            />
-            <div
-              className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gray-400/50"
-              style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.3s' }}
-            />
-            <div
-              className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-gray-400/40"
-              style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.45s' }}
-            />
-          </div>
+          {/* 연기 효과 - 스쿠터가 정지하면 멈춤 */}
+          {!scooterStopped && (
+            <div className="absolute -left-16 flex items-center gap-1">
+              <div
+                className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-400/70"
+                style={{ animation: 'smoke-puff 0.8s ease-out infinite' }}
+              />
+              <div
+                className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-gray-400/60"
+                style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.15s' }}
+              />
+              <div
+                className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gray-400/50"
+                style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.3s' }}
+              />
+              <div
+                className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-gray-400/40"
+                style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.45s' }}
+              />
+            </div>
+          )}
           <MotorcycleIcon />
         </div>
       </div>

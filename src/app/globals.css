@@ -451,13 +451,13 @@ input[type="radio"] {
   }
 }
 
-/* 오토바이 주행 애니메이션 */
-@keyframes motorcycle-ride {
+/* 오토바이 주행 애니메이션 - 스크롤 시 한 번만 실행 후 정지 */
+@keyframes scooter-enter {
   0% {
-    transform: translateX(-120px);
+    transform: translateX(-150px);
   }
   100% {
-    transform: translateX(calc(100vw + 120px));
+    transform: translateX(calc(100vw - 150px));
   }
 }
 
