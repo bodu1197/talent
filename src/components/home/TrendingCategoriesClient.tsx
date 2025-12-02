@@ -169,9 +169,10 @@ export default function TrendingCategoriesClient({ categories }: Props) {
                     className={`
                       text-[10px] sm:text-xs md:text-sm font-medium leading-tight
                       group-hover:text-orange-600 transition-colors
-                      block break-keep
+                      block truncate
                       ${isTop3 ? 'text-gray-900' : 'text-gray-600'}
                     `}
+                    title={category.name}
                   >
                     {category.name}
                   </span>
