@@ -22,7 +22,7 @@ interface TrendingData {
 }
 
 // 오프라인 카테고리 slug 목록 (제외할 카테고리)
-const OFFLINE_CATEGORY_SLUGS = ['errands', 'living', 'event', 'beauty'];
+const OFFLINE_CATEGORY_SLUGS = ['errands', 'life-service', 'event', 'beauty-fashion'];
 
 // 인라인 SVG 아이콘
 const FlameIcon = () => (
