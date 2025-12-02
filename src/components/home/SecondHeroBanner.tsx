@@ -82,17 +82,17 @@ export default function SecondHeroBanner() {
                   <span>서울시 강남구 역삼동 기준</span>
                 </div>
 
-                {/* 메인 타이틀 */}
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight mb-3">
-                  내 주변 <span className="text-green-400">3명의 헬퍼</span>가
+                {/* 메인 타이틀 - HeroSection과 동일한 폰트 사이즈 */}
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-white leading-tight mb-3">
+                  내 주변 <span className="text-green-400">26명의 헬퍼 전문가</span>가
                   <br />
                   대기하고 있어요
                 </h2>
 
                 {/* 서브텍스트 */}
                 <p className="text-gray-400 text-sm md:text-base mb-6">
-                  지금 요청하면 평균 <span className="text-white font-bold">5분 내</span>{' '}
-                  매칭됩니다.
+                  지금 바로 호출 가능한 <span className="text-green-400 font-bold">3명</span>! 평균{' '}
+                  <span className="text-white font-bold">5분 내</span> 매칭됩니다.
                 </p>
 
                 {/* CTA 버튼 */}
@@ -125,9 +125,16 @@ export default function SecondHeroBanner() {
                   style={{ animationDuration: '3s', animationDelay: '2s' }}
                 />
 
-                {/* 헬퍼 1 - 좌상단 */}
+                {/* 배경 희미한 점들 - 더 많은 헬퍼 전문가가 있다는 느낌 */}
+                <div className="absolute top-2 right-1/4 w-2 h-2 bg-green-500/30 rounded-full" />
+                <div className="absolute bottom-4 left-4 w-2 h-2 bg-green-500/25 rounded-full" />
+                <div className="absolute top-1/4 left-2 w-1.5 h-1.5 bg-green-500/20 rounded-full" />
+                <div className="absolute bottom-1/4 right-2 w-1.5 h-1.5 bg-green-500/20 rounded-full" />
+                <div className="absolute top-4 left-1/3 w-1.5 h-1.5 bg-green-500/15 rounded-full" />
+
+                {/* 헬퍼 1 - 중심 근처 (가장 가까움: 150m) */}
                 <div
-                  className="absolute top-8 left-8 animate-bounce"
+                  className="absolute top-1/3 left-1/3 animate-bounce z-10"
                   style={{ animationDuration: '2s' }}
                 >
                   <div className="w-10 h-10 rounded-full bg-white border-2 border-green-500 flex items-center justify-center overflow-hidden shadow-lg">
@@ -141,13 +148,13 @@ export default function SecondHeroBanner() {
                     />
                   </div>
                   <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap">
-                    300m
+                    150m
                   </div>
                 </div>
 
-                {/* 헬퍼 2 - 우하단 */}
+                {/* 헬퍼 2 - 중간 영역 (500m) */}
                 <div
-                  className="absolute bottom-6 right-8 animate-bounce"
+                  className="absolute bottom-10 right-6 animate-bounce z-10"
                   style={{ animationDuration: '2.5s' }}
                 >
                   <div className="w-10 h-10 rounded-full bg-white border-2 border-green-500 flex items-center justify-center overflow-hidden shadow-lg">
@@ -161,13 +168,13 @@ export default function SecondHeroBanner() {
                     />
                   </div>
                   <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap">
-                    0.8km
+                    500m
                   </div>
                 </div>
 
-                {/* 헬퍼 3 - 우측 중앙 */}
+                {/* 헬퍼 3 - 외곽 (가장 멂: 1.2km) */}
                 <div
-                  className="absolute top-1/2 -translate-y-1/2 right-0 animate-bounce"
+                  className="absolute top-4 right-4 animate-bounce z-10"
                   style={{ animationDuration: '1.8s' }}
                 >
                   <div className="w-10 h-10 rounded-full bg-white border-2 border-green-500 flex items-center justify-center overflow-hidden shadow-lg">
@@ -183,6 +190,11 @@ export default function SecondHeroBanner() {
                   <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap">
                     1.2km
                   </div>
+                </div>
+
+                {/* +23명 대기중 표시 */}
+                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-green-600/90 text-white text-[10px] px-2 py-1 rounded-full whitespace-nowrap font-medium">
+                  +23명 대기중
                 </div>
               </div>
             </div>
