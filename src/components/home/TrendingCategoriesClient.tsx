@@ -72,7 +72,7 @@ export default function TrendingCategoriesClient({ categories }: Props) {
 
   return (
     <section className="py-6 lg:py-10 bg-gradient-to-b from-orange-50/50 to-white">
-      <div className="container-1200 py-6 px-0">
+      <div className="container-1200 py-6">
         {/* 섹션 헤더 */}
         <div className="text-center mb-6 md:mb-8">
           <div className="inline-flex items-center gap-2 mb-2">

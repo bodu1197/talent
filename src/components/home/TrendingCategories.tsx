@@ -3,7 +3,7 @@ import TrendingCategoriesClient from './TrendingCategoriesClient';
 
 // 오프라인 카테고리 slug 목록 (제외할 카테고리)
 const OFFLINE_CATEGORY_SLUGS = ['errands', 'life-service', 'event', 'beauty-fashion'];
-const DISPLAY_LIMIT = 16;
+const DISPLAY_LIMIT = 14;
 
 interface Category {
   id: string;
