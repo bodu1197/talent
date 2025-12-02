@@ -72,9 +72,9 @@ export default function TrendingCategoriesClient({ categories }: Props) {
 
   return (
     <section className="py-6 lg:py-10 bg-gradient-to-b from-orange-50/50 to-white">
-      <div className="container-1200 py-6">
+      <div className="container-1200">
         {/* 섹션 헤더 */}
-        <div className="text-center mb-6 md:mb-8">
+        <div className="text-center mb-6 md:mb-8 px-4">
           <div className="inline-flex items-center gap-2 mb-2">
             <FlameIcon />
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900">
@@ -90,7 +90,7 @@ export default function TrendingCategoriesClient({ categories }: Props) {
         </div>
 
         {/* 세로 막대 그래프 */}
-        <div className="flex justify-center items-end gap-1 sm:gap-2 md:gap-3 lg:gap-4 px-2 pb-4">
+        <div className="flex justify-center items-end gap-1 sm:gap-2 md:gap-3 lg:gap-4 pb-4">
           {categories.map((category, index) => {
             const barColor = barColors[index % barColors.length];
             const heightPercent = maxRatio > 0 ? (category.ratio / maxRatio) * 100 : 0;
