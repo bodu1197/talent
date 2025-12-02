@@ -170,22 +170,30 @@ export default function SecondHeroBanner() {
     setIsHydrated(true);
   }, []);
 
-  // 스크롤 감지하여 스쿠터 애니메이션 시작
+  // 스크롤 감지하여 스쿠터 애니메이션 시작 (페이지 로드 후 약간의 지연)
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !scooterStarted) {
-          setScooterStarted(true);
-        }
-      },
-      { threshold: 0.1 } // 모바일에서도 빨리 트리거되도록 10%로 낮춤
-    );
+    let observer: IntersectionObserver | null = null;
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+    // 페이지 로드 직후에는 트리거하지 않도록 1초 대기
+    const delay = setTimeout(() => {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting && !scooterStarted) {
+            setScooterStarted(true);
+          }
+        },
+        { threshold: 0.2 }
+      );
 
-    return () => observer.disconnect();
+      if (sectionRef.current) {
+        observer.observe(sectionRef.current);
+      }
+    }, 1000);
+
+    return () => {
+      clearTimeout(delay);
+      if (observer) observer.disconnect();
+    };
   }, [scooterStarted]);
 
   // 헬퍼 동적 업데이트
