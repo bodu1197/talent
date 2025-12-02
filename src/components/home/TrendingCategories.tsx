@@ -21,6 +21,9 @@ interface TrendingData {
   updatedAt: string;
 }
 
+// 오프라인 카테고리 slug 목록 (제외할 카테고리)
+const OFFLINE_CATEGORY_SLUGS = ['errands', 'living', 'event', 'beauty'];
+
 // 인라인 SVG 아이콘
 const FlameIcon = () => (
   <svg
@@ -49,80 +52,27 @@ const TrendingUpIcon = ({ className }: { className: string }) => (
   </svg>
 );
 
-const ChevronRightIcon = ({ className }: { className: string }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-  </svg>
-);
-
-const ChevronDownIcon = ({ className }: { className: string }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-  </svg>
-);
-
-const ChevronUpIcon = ({ className }: { className: string }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-  </svg>
-);
-
-const INITIAL_LIMIT = 5;
-
-// 버튼 내용 컴포넌트 (중첩 삼항 연산자 회피)
-function ExpandButtonContent({
-  isExpanding,
-  isExpanded,
-  remainingCount,
-}: {
-  isExpanding: boolean;
-  isExpanded: boolean;
-  remainingCount: number;
-}) {
-  if (isExpanding) {
-    return (
-      <>
-        <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-        <span>로딩 중...</span>
-      </>
-    );
-  }
-
-  if (isExpanded) {
-    return (
-      <>
-        <span>접기</span>
-        <ChevronUpIcon className="w-3.5 h-3.5" />
-      </>
-    );
-  }
-
-  return (
-    <>
-      <span>+{remainingCount}개 더보기</span>
-      <ChevronDownIcon className="w-3.5 h-3.5" />
-    </>
-  );
-}
+const DISPLAY_LIMIT = 8;
 
 export default function TrendingCategories() {
   const [categories, setCategories] = useState<CategoryData[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [isExpanding, setIsExpanding] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
   const [isAnimated, setIsAnimated] = useState(false);
   const [hasError, setHasError] = useState(false);
 
-  // 초기 데이터 로드 (5개만)
+  // 데이터 로드
   useEffect(() => {
-    async function fetchInitialData() {
+    async function fetchData() {
       try {
-        const res = await fetch(`/api/analytics/trending-categories?limit=${INITIAL_LIMIT}`);
+        const res = await fetch(`/api/analytics/trending-categories?limit=20`);
         if (res.ok) {
           const result: TrendingData = await res.json();
-          setCategories(result.categories);
-          setTotalCount(result.totalCount);
+          // 오프라인 카테고리 제외
+          const onlineCategories = result.categories.filter(
+            (cat) => !OFFLINE_CATEGORY_SLUGS.includes(cat.slug)
+          );
+          // 상위 N개만 표시
+          setCategories(onlineCategories.slice(0, DISPLAY_LIMIT));
         } else {
           setHasError(true);
         }
@@ -133,7 +83,7 @@ export default function TrendingCategories() {
       }
     }
 
-    fetchInitialData();
+    fetchData();
   }, []);
 
   // 애니메이션 트리거
@@ -146,44 +96,18 @@ export default function TrendingCategories() {
     }
   }, [isLoading, categories]);
 
-  // 나머지 데이터 로드
-  const handleExpand = async () => {
-    if (isExpanded) {
-      // 접기
-      setIsExpanded(false);
-      setCategories((prev) => prev.slice(0, INITIAL_LIMIT));
-      return;
-    }
-
-    setIsExpanding(true);
-    try {
-      const res = await fetch(
-        `/api/analytics/trending-categories?limit=${totalCount - INITIAL_LIMIT}&offset=${INITIAL_LIMIT}`
-      );
-      if (res.ok) {
-        const result: TrendingData = await res.json();
-        setCategories((prev) => [...prev, ...result.categories]);
-        setIsExpanded(true);
-      }
-    } catch {
-      // 에러 무시
-    } finally {
-      setIsExpanding(false);
-    }
-  };
-
   // 로딩 스켈레톤
   if (isLoading) {
     return (
-      <section className="py-4 lg:py-8 bg-gradient-to-b from-orange-50/50 to-white">
+      <section className="py-6 lg:py-10 bg-gradient-to-b from-orange-50/50 to-white">
         <div className="container-1200">
-          <div className="h-5 bg-gray-200 rounded w-36 mb-4 animate-pulse"></div>
-          <div className="grid gap-1.5 md:gap-2">
-            {Array.from({ length: INITIAL_LIMIT }, (_, i) => (
-              <div
-                key={`skeleton-${i}`}
-                className="h-10 md:h-11 bg-gray-100 rounded-lg animate-pulse"
-              ></div>
+          <div className="h-6 bg-gray-200 rounded w-40 mb-6 animate-pulse mx-auto"></div>
+          <div className="flex justify-center gap-3 md:gap-4">
+            {Array.from({ length: 6 }, (_, i) => (
+              <div key={`skeleton-${i}`} className="flex flex-col items-center gap-2">
+                <div className="w-12 md:w-16 h-24 md:h-32 bg-gray-100 rounded-lg animate-pulse"></div>
+                <div className="w-10 h-3 bg-gray-100 rounded animate-pulse"></div>
+              </div>
             ))}
           </div>
         </div>
@@ -208,142 +132,127 @@ export default function TrendingCategories() {
     'from-blue-500 to-cyan-500',
   ];
 
-  const remainingCount = totalCount - INITIAL_LIMIT;
+  // 최대 ratio 값 (높이 계산용)
+  const maxRatio = Math.max(...categories.map((c) => c.ratio));
 
   return (
-    <section className="py-4 lg:py-8 bg-gradient-to-b from-orange-50/50 to-white">
+    <section className="py-6 lg:py-10 bg-gradient-to-b from-orange-50/50 to-white">
       <div className="container-1200">
         {/* 섹션 헤더 */}
-        <div className="mb-4 md:mb-6">
-          <div className="flex items-center gap-2 mb-1">
+        <div className="text-center mb-6 md:mb-8">
+          <div className="inline-flex items-center gap-2 mb-2">
             <FlameIcon />
-            <h2 className="text-mobile-lg lg:text-xl font-semibold text-gray-900">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900">
               실시간 인기재능
             </h2>
-            <span className="text-[10px] md:text-xs text-gray-700 bg-gray-200 px-1.5 py-0.5 rounded-full">
+          </div>
+          <p className="text-gray-500 text-sm md:text-base">
+            지금 가장 많이 찾는 온라인 전문가 카테고리
+            <span className="ml-2 text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
               최근 24시간
             </span>
-          </div>
-          <p className="text-mobile-md text-gray-600">지금 가장 많이 찾는 카테고리</p>
+          </p>
         </div>
 
-        {/* 막대 그래프 */}
-        <div className="grid gap-1.5 md:gap-2">
+        {/* 세로 막대 그래프 */}
+        <div className="flex justify-center items-end gap-2 sm:gap-3 md:gap-4 lg:gap-6 px-2 overflow-x-auto pb-4">
           {categories.map((category, index) => {
             const barColor = barColors[index % barColors.length];
-            const animatedWidth = isAnimated ? `${Math.max(category.ratio, 8)}%` : '0%';
+            const heightPercent = maxRatio > 0 ? (category.ratio / maxRatio) * 100 : 0;
+            const animatedHeight = isAnimated ? `${Math.max(heightPercent, 15)}%` : '0%';
             const isTop3 = index < 3;
-            const isNewItem = index >= INITIAL_LIMIT;
 
             return (
               <Link
                 key={category.id}
                 href={`/categories/${category.slug}`}
-                className={`group block transition-all duration-300 ${isNewItem ? 'animate-fade-in-slide' : ''}`}
-                style={{
-                  animationDelay: isNewItem ? `${(index - INITIAL_LIMIT) * 50}ms` : undefined,
-                }}
+                className="group flex flex-col items-center flex-shrink-0"
               >
+                {/* 클릭 수 */}
                 <div
                   className={`
-                  relative flex items-center gap-2 md:gap-3 p-2 md:p-2.5 rounded-lg
-                  bg-white border border-gray-100
-                  hover:border-orange-200 hover:shadow-sm
-                  transition-all duration-200
-                  ${isTop3 ? 'border-orange-100' : ''}
-                `}
+                    text-[10px] md:text-xs font-medium mb-1 transition-all duration-500
+                    ${isAnimated ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}
+                    ${isTop3 ? 'text-orange-600' : 'text-gray-500'}
+                  `}
+                  style={{ transitionDelay: `${index * 100 + 500}ms` }}
                 >
-                  {/* 순위 뱃지 */}
+                  {category.clicks.toLocaleString('ko-KR')}
+                </div>
+
+                {/* 막대 */}
+                <div className="relative w-10 sm:w-12 md:w-14 lg:w-16 h-28 sm:h-32 md:h-40 lg:h-48 flex items-end">
                   <div
                     className={`
-                    flex-shrink-0 w-5 h-5 md:w-6 md:h-6 rounded-full
-                    flex items-center justify-center font-bold text-[10px] md:text-xs
-                    ${
-                      isTop3
-                        ? 'bg-gradient-to-br from-orange-400 to-red-500 text-white'
-                        : 'bg-gray-200 text-gray-700'
-                    }
-                  `}
+                      w-full bg-gradient-to-t ${barColor} rounded-t-lg
+                      transition-all duration-1000 ease-out
+                      group-hover:shadow-lg group-hover:scale-105
+                      ${isTop3 ? 'shadow-md' : ''}
+                    `}
+                    style={{
+                      height: animatedHeight,
+                      transitionDelay: `${index * 100}ms`,
+                    }}
                   >
-                    {index + 1}
-                  </div>
-
-                  {/* 카테고리명 + 막대 그래프 */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <span
-                        className={`
-                        font-medium truncate text-xs md:text-sm
-                        ${isTop3 ? 'text-gray-900' : 'text-gray-700'}
+                    {/* 순위 뱃지 */}
+                    <div
+                      className={`
+                        absolute -top-3 left-1/2 -translate-x-1/2
+                        w-5 h-5 md:w-6 md:h-6 rounded-full
+                        flex items-center justify-center
+                        text-[10px] md:text-xs font-bold
+                        transition-all duration-500
+                        ${isAnimated ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}
+                        ${
+                          isTop3
+                            ? 'bg-gradient-to-br from-orange-400 to-red-500 text-white shadow-md'
+                            : 'bg-gray-200 text-gray-600'
+                        }
                       `}
-                      >
-                        {category.name}
-                      </span>
-                      <div className="flex items-center gap-1 flex-shrink-0 ml-2">
-                        <TrendingUpIcon
-                          className={`w-3 h-3 ${isTop3 ? 'text-orange-500' : 'text-gray-400'}`}
-                        />
-                        <span
-                          className={`text-[10px] md:text-xs font-medium ${isTop3 ? 'text-orange-600' : 'text-gray-500'}`}
-                        >
-                          {category.clicks.toLocaleString('ko-KR')}
-                        </span>
-                      </div>
+                      style={{ transitionDelay: `${index * 100 + 800}ms` }}
+                    >
+                      {index + 1}
                     </div>
 
-                    {/* 진행 막대 */}
-                    <div className="h-1.5 md:h-2 bg-gray-100 rounded-full overflow-hidden">
+                    {/* 트렌딩 아이콘 (TOP 3만) */}
+                    {isTop3 && (
                       <div
-                        className={`h-full bg-gradient-to-r ${barColor} rounded-full transition-all duration-1000 ease-out`}
-                        style={{
-                          width: animatedWidth,
-                          transitionDelay: isNewItem ? `${(index - INITIAL_LIMIT) * 50}ms` : '0ms',
-                        }}
-                      />
-                    </div>
+                        className={`
+                          absolute top-2 left-1/2 -translate-x-1/2
+                          transition-all duration-500
+                          ${isAnimated ? 'opacity-100' : 'opacity-0'}
+                        `}
+                        style={{ transitionDelay: `${index * 100 + 1000}ms` }}
+                      >
+                        <TrendingUpIcon className="w-4 h-4 text-white/80" />
+                      </div>
+                    )}
                   </div>
+                </div>
 
-                  {/* 화살표 */}
-                  <ChevronRightIcon className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-300 group-hover:text-orange-500 group-hover:translate-x-0.5 transition-all flex-shrink-0" />
+                {/* 카테고리명 */}
+                <div
+                  className={`
+                    mt-2 text-center transition-all duration-500
+                    ${isAnimated ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}
+                  `}
+                  style={{ transitionDelay: `${index * 100 + 300}ms` }}
+                >
+                  <span
+                    className={`
+                      text-[10px] sm:text-xs md:text-sm font-medium
+                      group-hover:text-orange-600 transition-colors
+                      ${isTop3 ? 'text-gray-900' : 'text-gray-600'}
+                    `}
+                  >
+                    {category.name}
+                  </span>
                 </div>
               </Link>
             );
           })}
         </div>
-
-        {/* 펼치기/접기 버튼 */}
-        {remainingCount > 0 && (
-          <div className="mt-4 md:mt-6 text-center">
-            <button
-              onClick={handleExpand}
-              disabled={isExpanding}
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-sm bg-gradient-to-r from-orange-500 to-red-500 text-white font-medium rounded-full hover:from-orange-600 hover:to-red-600 transition-all shadow-sm hover:shadow-md disabled:opacity-50"
-            >
-              <ExpandButtonContent
-                isExpanding={isExpanding}
-                isExpanded={isExpanded}
-                remainingCount={remainingCount}
-              />
-            </button>
-          </div>
-        )}
       </div>
-
-      <style jsx>{`
-        @keyframes fade-in-slide {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-in-slide {
-          animation: fade-in-slide 0.3s ease-out forwards;
-        }
-      `}</style>
     </section>
   );
 }

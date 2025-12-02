@@ -55,8 +55,6 @@ export default async function HomePage() {
       {/* 로그인 전 사용자 전용 섹션 */}
       {!user && (
         <>
-          {/* 제4 히어로 배너 - 온라인 전문가 (기획 중) */}
-
           {/* 실시간 인기재능 섹션 */}
           <TrendingCategories />
 
