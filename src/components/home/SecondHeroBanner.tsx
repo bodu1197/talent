@@ -137,6 +137,7 @@ export default function SecondHeroBanner() {
                       width={40}
                       height={40}
                       className="w-full h-full"
+                      unoptimized
                     />
                   </div>
                   <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap">
@@ -156,6 +157,7 @@ export default function SecondHeroBanner() {
                       width={40}
                       height={40}
                       className="w-full h-full"
+                      unoptimized
                     />
                   </div>
                   <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap">
@@ -175,6 +177,7 @@ export default function SecondHeroBanner() {
                       width={40}
                       height={40}
                       className="w-full h-full"
+                      unoptimized
                     />
                   </div>
                   <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap">
