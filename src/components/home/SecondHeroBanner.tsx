@@ -1,7 +1,91 @@
 'use client';
 
+/* eslint-disable sonarjs/pseudo-random */
+// Math.random()은 시각적 애니메이션용으로만 사용되며 보안과 무관함
+
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+
+// 헬퍼 타입
+interface Helper {
+  id: number;
+  seed: string;
+  angle: number; // 0-360도
+  radius: number; // 0-1 (0=중심, 1=외곽)
+  distance: number; // km
+  isVisible: boolean;
+}
+
+// 랜덤 헬퍼 생성
+const createHelper = (id: number): Helper => {
+  const seeds = [
+    'Felix',
+    'Aneka',
+    'John',
+    'Sarah',
+    'Mike',
+    'Luna',
+    'Alex',
+    'Emma',
+    'Chris',
+    'Bella',
+    'David',
+    'Sophia',
+    'James',
+    'Olivia',
+    'Daniel',
+    'Mia',
+    'Lucas',
+    'Ava',
+    'Henry',
+    'Lily',
+  ];
+  const angle = Math.random() * 360;
+  const radius = 0.2 + Math.random() * 0.8; // 0.2~1.0
+  const distance = radius * 1.5; // 최대 1.5km
+
+  return {
+    id,
+    seed: seeds[id % seeds.length],
+    angle,
+    radius,
+    distance,
+    isVisible: false,
+  };
+};
+
+// 초기 헬퍼 풀 생성
+const createInitialHelpers = (): Helper[] => {
+  const helpers: Helper[] = [];
+  for (let i = 0; i < 20; i++) {
+    helpers.push(createHelper(i));
+  }
+  // 초기에 5~8명 visible
+  const initialVisible = 5 + Math.floor(Math.random() * 4);
+  for (let i = 0; i < initialVisible; i++) {
+    helpers[i].isVisible = true;
+  }
+  return helpers;
+};
+
+// 위치 계산 (극좌표 → CSS 위치)
+const getPosition = (angle: number, radius: number) => {
+  const centerOffset = 50; // %
+  const maxOffset = 45; // 최대 45% 이동
+  const rad = (angle * Math.PI) / 180;
+  const x = centerOffset + Math.cos(rad) * radius * maxOffset;
+  const y = centerOffset + Math.sin(rad) * radius * maxOffset;
+  return { x, y };
+};
+
+// 거리 포맷
+const formatDistance = (km: number): string => {
+  if (km < 1) {
+    return `${Math.round(km * 1000)}m`;
+  }
+  return `${km.toFixed(1)}km`;
+};
 
 // 인라인 SVG 아이콘들
 const MapPinIcon = () => (
@@ -58,10 +142,95 @@ const LockIcon = () => (
 );
 
 export default function SecondHeroBanner() {
+  const [helpers, setHelpers] = useState<Helper[]>([]);
+  const [totalCount, setTotalCount] = useState(26);
+  const [isClient, setIsClient] = useState(false);
+
+  // 클라이언트에서만 초기화
+  useEffect(() => {
+    setHelpers(createInitialHelpers());
+    setIsClient(true);
+  }, []);
+
+  // 헬퍼 동적 업데이트
+  const updateHelpers = useCallback(() => {
+    setHelpers((prev) => {
+      const newHelpers = [...prev];
+      const visibleHelpers = newHelpers.filter((h) => h.isVisible);
+      const hiddenHelpers = newHelpers.filter((h) => !h.isVisible);
+
+      // 1~3명 퇴장 (최소 3명은 유지)
+      const toHide = Math.min(
+        Math.floor(Math.random() * 3) + 1,
+        Math.max(0, visibleHelpers.length - 3)
+      );
+
+      // 0~4명 등장 (최대 18명까지)
+      const maxCanShow = 18 - (visibleHelpers.length - toHide);
+      const toShow = Math.min(Math.floor(Math.random() * 5), hiddenHelpers.length, maxCanShow);
+
+      // 퇴장 처리
+      const shuffledVisible = [...visibleHelpers].sort(() => Math.random() - 0.5);
+      for (let i = 0; i < toHide; i++) {
+        const helper = shuffledVisible[i];
+        const idx = newHelpers.findIndex((h) => h.id === helper.id);
+        if (idx !== -1) {
+          newHelpers[idx] = { ...newHelpers[idx], isVisible: false };
+        }
+      }
+
+      // 등장 처리 (새 위치로)
+      const shuffledHidden = [...hiddenHelpers].sort(() => Math.random() - 0.5);
+      for (let i = 0; i < toShow; i++) {
+        const helper = shuffledHidden[i];
+        const idx = newHelpers.findIndex((h) => h.id === helper.id);
+        if (idx !== -1) {
+          const newAngle = Math.random() * 360;
+          const newRadius = 0.2 + Math.random() * 0.8;
+          newHelpers[idx] = {
+            ...newHelpers[idx],
+            isVisible: true,
+            angle: newAngle,
+            radius: newRadius,
+            distance: newRadius * 1.5,
+          };
+        }
+      }
+
+      // 기존 visible 헬퍼들 위치 약간 변경 (움직이는 효과)
+      newHelpers.forEach((h, idx) => {
+        if (h.isVisible) {
+          newHelpers[idx] = {
+            ...h,
+            angle: h.angle + (Math.random() - 0.5) * 20,
+            radius: Math.max(0.15, Math.min(1, h.radius + (Math.random() - 0.5) * 0.1)),
+            distance: Math.max(0.1, Math.min(1.5, h.radius * 1.5)),
+          };
+        }
+      });
+
+      return newHelpers;
+    });
+
+    // 전체 카운트도 변경
+    setTotalCount(20 + Math.floor(Math.random() * 15)); // 20~34
+  }, []);
+
+  // 3초마다 업데이트
+  useEffect(() => {
+    if (!isClient) return;
+
+    const interval = setInterval(updateHelpers, 3000);
+    return () => clearInterval(interval);
+  }, [isClient, updateHelpers]);
+
+  const visibleHelpers = helpers.filter((h) => h.isVisible);
+  const nearbyCount = visibleHelpers.length;
+  const remainingCount = Math.max(0, totalCount - nearbyCount);
+
   return (
     <section className="py-6 md:py-10">
       <div className="container-1200">
-        {/* 메인 배너 영역 - 어두운 테마 */}
         <div className="relative overflow-hidden rounded-2xl md:rounded-3xl bg-gray-900 border border-gray-800 shadow-2xl">
           {/* 배경 도트 패턴 */}
           <div
@@ -76,26 +245,29 @@ export default function SecondHeroBanner() {
             <div className="flex flex-col md:flex-row items-center justify-between gap-8">
               {/* 좌측: 텍스트 콘텐츠 */}
               <div className="text-center md:text-left max-w-md">
-                {/* 위치 뱃지 */}
                 <div className="inline-flex items-center gap-2 bg-gray-800/80 backdrop-blur border border-gray-700 rounded-full px-4 py-1.5 text-sm text-blue-300 mb-4">
                   <MapPinIcon />
                   <span>서울시 강남구 역삼동 기준</span>
                 </div>
 
-                {/* 메인 타이틀 - HeroSection과 동일한 폰트 사이즈 */}
                 <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-white leading-tight mb-3">
-                  내 주변 <span className="text-green-400">26명의 헬퍼 전문가</span>가
+                  내 주변{' '}
+                  <span className="text-green-400 transition-all duration-500">
+                    {totalCount}명의 헬퍼 전문가
+                  </span>
+                  가
                   <br />
                   대기하고 있어요
                 </h2>
 
-                {/* 서브텍스트 */}
                 <p className="text-gray-400 text-sm md:text-base mb-6">
-                  지금 바로 호출 가능한 <span className="text-green-400 font-bold">3명</span>! 평균{' '}
-                  <span className="text-white font-bold">5분 내</span> 매칭됩니다.
+                  지금 바로 호출 가능한{' '}
+                  <span className="text-green-400 font-bold transition-all duration-500 inline-block min-w-[2ch]">
+                    {nearbyCount}명
+                  </span>
+                  ! 평균 <span className="text-white font-bold">5분 내</span> 매칭됩니다.
                 </p>
 
-                {/* CTA 버튼 */}
                 <Link
                   href="/search?category=errands"
                   className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-6 py-3.5 rounded-xl font-bold text-base shadow-lg shadow-blue-900/50 transition transform active:scale-95"
@@ -105,7 +277,7 @@ export default function SecondHeroBanner() {
                 </Link>
               </div>
 
-              {/* 우측: 레이더 시각화 (md 이상에서만) */}
+              {/* 우측: 레이더 시각화 */}
               <div className="hidden md:flex relative w-56 h-56 lg:w-64 lg:h-64 items-center justify-center flex-shrink-0">
                 {/* 중앙 사용자 위치 */}
                 <div className="absolute w-4 h-4 bg-blue-500 rounded-full z-20 shadow-[0_0_20px_rgba(59,130,246,0.8)] animate-pulse" />
@@ -125,77 +297,47 @@ export default function SecondHeroBanner() {
                   style={{ animationDuration: '3s', animationDelay: '2s' }}
                 />
 
-                {/* 배경 희미한 점들 - 더 많은 헬퍼 전문가가 있다는 느낌 */}
-                <div className="absolute top-2 right-1/4 w-2 h-2 bg-green-500/30 rounded-full" />
-                <div className="absolute bottom-4 left-4 w-2 h-2 bg-green-500/25 rounded-full" />
-                <div className="absolute top-1/4 left-2 w-1.5 h-1.5 bg-green-500/20 rounded-full" />
-                <div className="absolute bottom-1/4 right-2 w-1.5 h-1.5 bg-green-500/20 rounded-full" />
-                <div className="absolute top-4 left-1/3 w-1.5 h-1.5 bg-green-500/15 rounded-full" />
+                {/* 동적 헬퍼들 */}
+                {isClient &&
+                  visibleHelpers.map((helper) => {
+                    const pos = getPosition(helper.angle, helper.radius);
+                    return (
+                      <div
+                        key={helper.id}
+                        className="absolute z-10 transition-all duration-1000 ease-in-out"
+                        style={{
+                          left: `${pos.x}%`,
+                          top: `${pos.y}%`,
+                          transform: 'translate(-50%, -50%)',
+                          opacity: helper.isVisible ? 1 : 0,
+                        }}
+                      >
+                        <div
+                          className="w-9 h-9 lg:w-10 lg:h-10 rounded-full bg-white border-2 border-green-500 flex items-center justify-center overflow-hidden shadow-lg animate-bounce"
+                          style={{ animationDuration: `${1.5 + helper.id * 0.2}s` }}
+                        >
+                          <Image
+                            src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${helper.seed}`}
+                            alt="Helper"
+                            width={40}
+                            height={40}
+                            className="w-full h-full"
+                            unoptimized
+                          />
+                        </div>
+                        <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[9px] lg:text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap">
+                          {formatDistance(helper.distance)}
+                        </div>
+                      </div>
+                    );
+                  })}
 
-                {/* 헬퍼 1 - 중심 근처 (가장 가까움: 150m) */}
-                <div
-                  className="absolute top-1/3 left-1/3 animate-bounce z-10"
-                  style={{ animationDuration: '2s' }}
-                >
-                  <div className="w-10 h-10 rounded-full bg-white border-2 border-green-500 flex items-center justify-center overflow-hidden shadow-lg">
-                    <Image
-                      src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
-                      alt="Helper"
-                      width={40}
-                      height={40}
-                      className="w-full h-full"
-                      unoptimized
-                    />
+                {/* 남은 인원 표시 */}
+                {remainingCount > 0 && (
+                  <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-green-600/90 text-white text-[10px] px-2 py-1 rounded-full whitespace-nowrap font-medium transition-all duration-500">
+                    +{remainingCount}명 대기중
                   </div>
-                  <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap">
-                    150m
-                  </div>
-                </div>
-
-                {/* 헬퍼 2 - 중간 영역 (500m) */}
-                <div
-                  className="absolute bottom-10 right-6 animate-bounce z-10"
-                  style={{ animationDuration: '2.5s' }}
-                >
-                  <div className="w-10 h-10 rounded-full bg-white border-2 border-green-500 flex items-center justify-center overflow-hidden shadow-lg">
-                    <Image
-                      src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka"
-                      alt="Helper"
-                      width={40}
-                      height={40}
-                      className="w-full h-full"
-                      unoptimized
-                    />
-                  </div>
-                  <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap">
-                    500m
-                  </div>
-                </div>
-
-                {/* 헬퍼 3 - 외곽 (가장 멂: 1.2km) */}
-                <div
-                  className="absolute top-4 right-4 animate-bounce z-10"
-                  style={{ animationDuration: '1.8s' }}
-                >
-                  <div className="w-10 h-10 rounded-full bg-white border-2 border-green-500 flex items-center justify-center overflow-hidden shadow-lg">
-                    <Image
-                      src="https://api.dicebear.com/7.x/avataaars/svg?seed=John"
-                      alt="Helper"
-                      width={40}
-                      height={40}
-                      className="w-full h-full"
-                      unoptimized
-                    />
-                  </div>
-                  <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap">
-                    1.2km
-                  </div>
-                </div>
-
-                {/* +23명 대기중 표시 */}
-                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-green-600/90 text-white text-[10px] px-2 py-1 rounded-full whitespace-nowrap font-medium">
-                  +23명 대기중
-                </div>
+                )}
               </div>
             </div>
           </div>
