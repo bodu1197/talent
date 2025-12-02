@@ -97,14 +97,14 @@ export default function TrendingCategoriesClient({ categories }: Props) {
             const animatedHeight = isAnimated ? `${Math.max(heightPercent, 15)}%` : '0%';
             const isTop3 = index < 3;
 
-            // 모바일에서는 5위까지만 표시
-            const isMobileHidden = index >= 5;
+            // 모바일에서는 7위까지만 표시
+            const isMobileHidden = index >= 7;
 
             return (
               <Link
                 key={category.id}
                 href={`/categories/${category.slug}`}
-                className={`group flex flex-col items-center flex-shrink-0 ${isMobileHidden ? 'hidden md:flex' : ''}`}
+                className={`group flex flex-col items-center w-10 sm:w-12 md:w-16 lg:w-20 ${isMobileHidden ? 'hidden md:flex' : ''}`}
               >
                 {/* 막대 */}
                 <div className="relative w-8 sm:w-10 md:w-12 lg:w-14 h-24 sm:h-28 md:h-36 lg:h-44 flex items-end">
@@ -159,15 +159,16 @@ export default function TrendingCategoriesClient({ categories }: Props) {
                 {/* 카테고리명 */}
                 <div
                   className={`
-                    mt-2 text-center transition-all duration-500
+                    mt-2 w-full text-center transition-all duration-500
                     ${isAnimated ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}
                   `}
                   style={{ transitionDelay: `${index * 100 + 300}ms` }}
                 >
                   <span
                     className={`
-                      text-[10px] sm:text-xs md:text-sm font-medium
+                      text-[10px] sm:text-xs md:text-sm font-medium leading-tight
                       group-hover:text-orange-600 transition-colors
+                      block break-keep
                       ${isTop3 ? 'text-gray-900' : 'text-gray-600'}
                     `}
                   >
