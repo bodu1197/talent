@@ -1,15 +1,83 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
 
 // 캐시 시간 (초)
 export const revalidate = 60; // 1분마다 갱신
 
-export async function GET() {
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  icon: string | null;
+}
+
+interface CategoryMapping {
+  id: string;
+  slug: string;
+  parent_id: string | null;
+}
+
+// 카테고리 매핑 생성 함수
+function buildCategoryMappings(allCategories: CategoryMapping[]) {
+  const slugToRootId = new Map<string, string>();
+  const idToParentId = new Map<string, string | null>();
+
+  for (const cat of allCategories) {
+    idToParentId.set(cat.id, cat.parent_id);
+    slugToRootId.set(cat.slug, cat.id);
+  }
+
+  return { slugToRootId, idToParentId };
+}
+
+// 루트 카테고리 ID 찾기 함수
+function findRootCategoryId(
+  slug: string,
+  slugToRootId: Map<string, string>,
+  idToParentId: Map<string, string | null>
+): string | null {
+  let currentId = slugToRootId.get(slug);
+  if (!currentId) return null;
+
+  while (true) {
+    const parentId = idToParentId.get(currentId);
+    if (!parentId) {
+      return currentId;
+    }
+    currentId = parentId;
+  }
+}
+
+// 클릭수 집계 함수
+function aggregateClicks(
+  pageViews: { path: string }[],
+  slugToRootId: Map<string, string>,
+  idToParentId: Map<string, string | null>,
+  categoryClicks: Record<string, number>
+) {
+  for (const view of pageViews) {
+    const pathParts = view.path.split('/');
+    const categorySlug = pathParts[2];
+
+    if (!categorySlug) continue;
+
+    const rootCategoryId = findRootCategoryId(categorySlug, slugToRootId, idToParentId);
+    if (rootCategoryId && categoryClicks[rootCategoryId] !== undefined) {
+      categoryClicks[rootCategoryId]++;
+    }
+  }
+}
+
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
+    const limit = searchParams.get('limit') ? parseInt(searchParams.get('limit')!, 10) : undefined;
+    const offset = searchParams.get('offset') ? parseInt(searchParams.get('offset')!, 10) : 0;
+
     const supabase = createServiceRoleClient();
 
-    // 1. 데이터베이스에서 1차 카테고리 가져오기 (parent_id가 null인 것)
+    // 1. 1차 카테고리 가져오기
     const { data: primaryCategories, error: catError } = await supabase
       .from('categories')
       .select('id, name, slug, icon')
@@ -22,7 +90,7 @@ export async function GET() {
       return NextResponse.json({ error: 'Failed to fetch categories' }, { status: 500 });
     }
 
-    // 2. 모든 카테고리 가져오기 (2차, 3차 포함) - 부모 ID 매핑용
+    // 2. 모든 카테고리 가져오기 (부모 ID 매핑용)
     const { data: allCategories, error: allCatError } = await supabase
       .from('categories')
       .select('id, slug, parent_id')
@@ -32,33 +100,10 @@ export async function GET() {
       logger.error('Failed to fetch all categories:', allCatError);
     }
 
-    // 3. 카테고리 slug -> 1차 카테고리 ID 매핑 생성
-    const slugToRootId = new Map<string, string>();
-    const idToParentId = new Map<string, string | null>();
+    // 3. 카테고리 매핑 생성
+    const { slugToRootId, idToParentId } = buildCategoryMappings(allCategories || []);
 
-    // 모든 카테고리의 부모 관계 저장
-    for (const cat of allCategories || []) {
-      idToParentId.set(cat.id, cat.parent_id);
-      slugToRootId.set(cat.slug, cat.id);
-    }
-
-    // 각 slug가 어느 1차 카테고리에 속하는지 찾기
-    function findRootCategoryId(slug: string): string | null {
-      let currentId = slugToRootId.get(slug);
-      if (!currentId) return null;
-
-      // 부모를 따라가면서 루트(1차) 카테고리 찾기
-      while (true) {
-        const parentId = idToParentId.get(currentId);
-        if (!parentId) {
-          // 부모가 없으면 이게 1차 카테고리
-          return currentId;
-        }
-        currentId = parentId;
-      }
-    }
-
-    // 4. 최근 24시간의 카테고리 페이지 조회수 가져오기
+    // 4. 최근 24시간 조회수 가져오기
     const oneDayAgo = new Date();
     oneDayAgo.setHours(oneDayAgo.getHours() - 24);
 
@@ -72,30 +117,16 @@ export async function GET() {
       logger.error('Failed to fetch page views:', viewError);
     }
 
-    // 5. 1차 카테고리별 클릭수 집계
+    // 5. 클릭수 초기화 및 집계
     const categoryClicks: Record<string, number> = {};
-
-    // 초기화
     for (const cat of primaryCategories) {
       categoryClicks[cat.id] = 0;
     }
 
-    // 경로에서 카테고리 slug 추출하고 집계
-    for (const view of pageViews || []) {
-      const pathParts = view.path.split('/');
-      const categorySlug = pathParts[2]; // /categories/{slug}
+    aggregateClicks(pageViews || [], slugToRootId, idToParentId, categoryClicks);
 
-      if (!categorySlug) continue;
-
-      // 해당 slug가 어떤 1차 카테고리에 속하는지 확인
-      const rootCategoryId = findRootCategoryId(categorySlug);
-      if (rootCategoryId && categoryClicks[rootCategoryId] !== undefined) {
-        categoryClicks[rootCategoryId]++;
-      }
-    }
-
-    // 6. 결과 정리 (클릭수 포함)
-    const result = primaryCategories.map((cat) => ({
+    // 6. 결과 정리
+    const result = primaryCategories.map((cat: Category) => ({
       id: cat.id,
       name: cat.name,
       slug: cat.slug,
@@ -103,10 +134,10 @@ export async function GET() {
       clicks: categoryClicks[cat.id] || 0,
     }));
 
-    // 클릭수 기준 내림차순 정렬
+    // 클릭수 기준 정렬
     result.sort((a, b) => b.clicks - a.clicks);
 
-    // 최대 클릭수 계산 (그래프 비율 계산용)
+    // 최대 클릭수 계산
     const maxClicks = Math.max(...result.map((r) => r.clicks), 1);
 
     // 비율 추가
@@ -115,8 +146,16 @@ export async function GET() {
       ratio: Math.round((item.clicks / maxClicks) * 100),
     }));
 
+    // limit과 offset 적용
+    const totalCount = resultWithRatio.length;
+    const slicedResult = limit
+      ? resultWithRatio.slice(offset, offset + limit)
+      : resultWithRatio.slice(offset);
+
     return NextResponse.json({
-      categories: resultWithRatio,
+      categories: slicedResult,
+      totalCount,
+      hasMore: limit ? offset + limit < totalCount : false,
       totalClicks: pageViews?.length || 0,
       period: '24h',
       updatedAt: new Date().toISOString(),

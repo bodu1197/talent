@@ -14,12 +14,14 @@ interface CategoryData {
 
 interface TrendingData {
   categories: CategoryData[];
+  totalCount: number;
+  hasMore: boolean;
   totalClicks: number;
   period: string;
   updatedAt: string;
 }
 
-// 인라인 SVG 아이콘 (lucide-react 대신 사용하여 번들 크기 절감)
+// 인라인 SVG 아이콘
 const FlameIcon = () => (
   <svg
     className="w-5 h-5 text-orange-500"
@@ -53,19 +55,74 @@ const ChevronRightIcon = ({ className }: { className: string }) => (
   </svg>
 );
 
+const ChevronDownIcon = ({ className }: { className: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+  </svg>
+);
+
+const ChevronUpIcon = ({ className }: { className: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+  </svg>
+);
+
+const INITIAL_LIMIT = 5;
+
+// 버튼 내용 컴포넌트 (중첩 삼항 연산자 회피)
+function ExpandButtonContent({
+  isExpanding,
+  isExpanded,
+  remainingCount,
+}: {
+  isExpanding: boolean;
+  isExpanded: boolean;
+  remainingCount: number;
+}) {
+  if (isExpanding) {
+    return (
+      <>
+        <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+        <span>로딩 중...</span>
+      </>
+    );
+  }
+
+  if (isExpanded) {
+    return (
+      <>
+        <span>접기</span>
+        <ChevronUpIcon className="w-3.5 h-3.5" />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <span>+{remainingCount}개 더보기</span>
+      <ChevronDownIcon className="w-3.5 h-3.5" />
+    </>
+  );
+}
+
 export default function TrendingCategories() {
-  const [data, setData] = useState<TrendingData | null>(null);
+  const [categories, setCategories] = useState<CategoryData[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [isExpanding, setIsExpanding] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [isAnimated, setIsAnimated] = useState(false);
   const [hasError, setHasError] = useState(false);
 
+  // 초기 데이터 로드 (5개만)
   useEffect(() => {
-    async function fetchData() {
+    async function fetchInitialData() {
       try {
-        const res = await fetch('/api/analytics/trending-categories');
+        const res = await fetch(`/api/analytics/trending-categories?limit=${INITIAL_LIMIT}`);
         if (res.ok) {
-          const result = await res.json();
-          setData(result);
+          const result: TrendingData = await res.json();
+          setCategories(result.categories);
+          setTotalCount(result.totalCount);
         } else {
           setHasError(true);
         }
@@ -76,18 +133,44 @@ export default function TrendingCategories() {
       }
     }
 
-    fetchData();
+    fetchInitialData();
   }, []);
 
   // 애니메이션 트리거
   useEffect(() => {
-    if (!isLoading && data) {
+    if (!isLoading && categories.length > 0) {
       const timer = setTimeout(() => {
         setIsAnimated(true);
       }, 100);
       return () => clearTimeout(timer);
     }
-  }, [isLoading, data]);
+  }, [isLoading, categories]);
+
+  // 나머지 데이터 로드
+  const handleExpand = async () => {
+    if (isExpanded) {
+      // 접기
+      setIsExpanded(false);
+      setCategories((prev) => prev.slice(0, INITIAL_LIMIT));
+      return;
+    }
+
+    setIsExpanding(true);
+    try {
+      const res = await fetch(
+        `/api/analytics/trending-categories?limit=${totalCount - INITIAL_LIMIT}&offset=${INITIAL_LIMIT}`
+      );
+      if (res.ok) {
+        const result: TrendingData = await res.json();
+        setCategories((prev) => [...prev, ...result.categories]);
+        setIsExpanded(true);
+      }
+    } catch {
+      // 에러 무시
+    } finally {
+      setIsExpanding(false);
+    }
+  };
 
   // 로딩 스켈레톤
   if (isLoading) {
@@ -96,7 +179,7 @@ export default function TrendingCategories() {
         <div className="container-1200">
           <div className="h-5 bg-gray-200 rounded w-36 mb-4 animate-pulse"></div>
           <div className="grid gap-1.5 md:gap-2">
-            {Array.from({ length: 10 }, (_, i) => (
+            {Array.from({ length: INITIAL_LIMIT }, (_, i) => (
               <div
                 key={`skeleton-${i}`}
                 className="h-10 md:h-11 bg-gray-100 rounded-lg animate-pulse"
@@ -109,11 +192,11 @@ export default function TrendingCategories() {
   }
 
   // 에러가 발생했거나 데이터가 없는 경우 표시하지 않음
-  if (hasError || !data || data.categories.length === 0) {
+  if (hasError || categories.length === 0) {
     return null;
   }
 
-  // 그래프 색상 배열 (그라데이션 효과)
+  // 그래프 색상 배열
   const barColors = [
     'from-orange-500 to-red-500',
     'from-amber-500 to-orange-500',
@@ -124,6 +207,8 @@ export default function TrendingCategories() {
     'from-cyan-500 to-teal-500',
     'from-blue-500 to-cyan-500',
   ];
+
+  const remainingCount = totalCount - INITIAL_LIMIT;
 
   return (
     <section className="py-4 lg:py-8 bg-gradient-to-b from-orange-50/50 to-white">
@@ -144,13 +229,21 @@ export default function TrendingCategories() {
 
         {/* 막대 그래프 */}
         <div className="grid gap-1.5 md:gap-2">
-          {data.categories.map((category, index) => {
+          {categories.map((category, index) => {
             const barColor = barColors[index % barColors.length];
             const animatedWidth = isAnimated ? `${Math.max(category.ratio, 8)}%` : '0%';
             const isTop3 = index < 3;
+            const isNewItem = index >= INITIAL_LIMIT;
 
             return (
-              <Link key={category.id} href={`/categories/${category.slug}`} className="group block">
+              <Link
+                key={category.id}
+                href={`/categories/${category.slug}`}
+                className={`group block transition-all duration-300 ${isNewItem ? 'animate-fade-in-slide' : ''}`}
+                style={{
+                  animationDelay: isNewItem ? `${(index - INITIAL_LIMIT) * 50}ms` : undefined,
+                }}
+              >
                 <div
                   className={`
                   relative flex items-center gap-2 md:gap-3 p-2 md:p-2.5 rounded-lg
@@ -202,7 +295,10 @@ export default function TrendingCategories() {
                     <div className="h-1.5 md:h-2 bg-gray-100 rounded-full overflow-hidden">
                       <div
                         className={`h-full bg-gradient-to-r ${barColor} rounded-full transition-all duration-1000 ease-out`}
-                        style={{ width: animatedWidth }}
+                        style={{
+                          width: animatedWidth,
+                          transitionDelay: isNewItem ? `${(index - INITIAL_LIMIT) * 50}ms` : '0ms',
+                        }}
                       />
                     </div>
                   </div>
@@ -215,17 +311,39 @@ export default function TrendingCategories() {
           })}
         </div>
 
-        {/* 전체 보기 버튼 */}
-        <div className="mt-4 md:mt-6 text-center">
-          <Link
-            href="/categories"
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm bg-gradient-to-r from-orange-500 to-red-500 text-white font-medium rounded-full hover:from-orange-600 hover:to-red-600 transition-all shadow-sm hover:shadow-md"
-          >
-            <span>전체 카테고리 보기</span>
-            <ChevronRightIcon className="w-3.5 h-3.5" />
-          </Link>
-        </div>
+        {/* 펼치기/접기 버튼 */}
+        {remainingCount > 0 && (
+          <div className="mt-4 md:mt-6 text-center">
+            <button
+              onClick={handleExpand}
+              disabled={isExpanding}
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-sm bg-gradient-to-r from-orange-500 to-red-500 text-white font-medium rounded-full hover:from-orange-600 hover:to-red-600 transition-all shadow-sm hover:shadow-md disabled:opacity-50"
+            >
+              <ExpandButtonContent
+                isExpanding={isExpanding}
+                isExpanded={isExpanded}
+                remainingCount={remainingCount}
+              />
+            </button>
+          </div>
+        )}
       </div>
+
+      <style jsx>{`
+        @keyframes fade-in-slide {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fade-in-slide {
+          animation: fade-in-slide 0.3s ease-out forwards;
+        }
+      `}</style>
     </section>
   );
 }
