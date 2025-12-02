@@ -139,67 +139,16 @@ const LockIcon = () => (
   </svg>
 );
 
-// 배달 스쿠터 아이콘 (사실적인 스타일)
+// 배달 스쿠터 GIF 이미지 (로컬)
 const MotorcycleIcon = () => (
-  <svg className="w-28 h-28 md:w-36 md:h-36" viewBox="0 0 120 80" fill="none">
-    {/* 뒷바퀴 */}
-    <circle cx="25" cy="60" r="14" fill="#1f2937" stroke="#374151" strokeWidth="3" />
-    <circle cx="25" cy="60" r="8" fill="#374151" />
-    <circle cx="25" cy="60" r="3" fill="#6b7280" />
-    {/* 앞바퀴 */}
-    <circle cx="95" cy="60" r="14" fill="#1f2937" stroke="#374151" strokeWidth="3" />
-    <circle cx="95" cy="60" r="8" fill="#374151" />
-    <circle cx="95" cy="60" r="3" fill="#6b7280" />
-
-    {/* 스쿠터 바디 */}
-    <path d="M30 58 Q40 40, 55 42 L75 42 Q85 42, 90 55 L90 58" fill="#3b82f6" />
-    <path d="M35 58 L35 50 Q35 44, 45 44 L70 44 Q78 44, 80 50 L85 58" fill="#2563eb" />
-
-    {/* 발판 */}
-    <rect x="40" y="54" width="30" height="4" rx="2" fill="#1e40af" />
-
-    {/* 시트 */}
-    <ellipse cx="50" cy="40" rx="12" ry="5" fill="#1f2937" />
-    <ellipse cx="50" cy="39" rx="10" ry="4" fill="#374151" />
-
-    {/* 핸들바 */}
-    <path d="M80 42 L88 28" stroke="#4b5563" strokeWidth="3" strokeLinecap="round" />
-    <path d="M85 30 L78 26" stroke="#4b5563" strokeWidth="3" strokeLinecap="round" />
-    <path d="M85 30 L92 26" stroke="#4b5563" strokeWidth="3" strokeLinecap="round" />
-
-    {/* 백미러 */}
-    <ellipse cx="76" cy="24" rx="3" ry="2" fill="#1f2937" stroke="#374151" strokeWidth="1" />
-    <ellipse cx="94" cy="24" rx="3" ry="2" fill="#1f2937" stroke="#374151" strokeWidth="1" />
-
-    {/* 헤드라이트 */}
-    <ellipse cx="95" cy="45" rx="4" ry="3" fill="#fbbf24" />
-    <ellipse cx="95" cy="45" rx="2" ry="1.5" fill="#fef3c7" />
-
-    {/* 배달 박스 */}
-    <rect x="28" y="20" width="22" height="18" rx="2" fill="#ef4444" />
-    <rect x="30" y="22" width="18" height="14" rx="1" fill="#dc2626" />
-    <text x="39" y="32" fontSize="8" fill="white" fontWeight="bold" textAnchor="middle">
-      배달
-    </text>
-
-    {/* 라이더 */}
-    {/* 몸통 */}
-    <path d="M55 38 Q55 28, 60 25 L65 25 Q70 28, 70 38" fill="#1e3a5f" />
-    {/* 헬멧 */}
-    <ellipse cx="62" cy="18" rx="9" ry="8" fill="#1f2937" />
-    <path d="M53 18 Q53 12, 62 10 Q71 12, 71 18" fill="#3b82f6" />
-    <rect x="54" y="16" width="16" height="5" rx="1" fill="#1e3a5f" opacity="0.7" />
-    {/* 바이저 */}
-    <path d="M55 18 Q62 20, 69 18" stroke="#60a5fa" strokeWidth="2" fill="none" />
-
-    {/* 팔 */}
-    <path d="M58 30 Q65 32, 78 28" stroke="#1e3a5f" strokeWidth="4" strokeLinecap="round" />
-    <path d="M66 30 Q73 32, 85 28" stroke="#1e3a5f" strokeWidth="4" strokeLinecap="round" />
-
-    {/* 장갑 */}
-    <circle cx="78" cy="27" r="3" fill="#1f2937" />
-    <circle cx="86" cy="27" r="3" fill="#1f2937" />
-  </svg>
+  <Image
+    src="/delivery-scooter.gif"
+    alt="배달 스쿠터"
+    width={160}
+    height={116}
+    className="w-32 h-auto md:w-40"
+    unoptimized
+  />
 );
 
 // 초기값 상수 (SSR과 클라이언트 일치를 위해)
