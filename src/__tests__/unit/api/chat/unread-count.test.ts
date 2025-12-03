@@ -38,6 +38,7 @@ describe('Chat Unread Count API', () => {
 
   describe('GET /api/chat/unread-count', () => {
     it('should return 401 if user is not authenticated', async () => {
+      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: null },
       });
@@ -52,6 +53,7 @@ describe('Chat Unread Count API', () => {
     });
 
     it('should return 0 when user has no rooms', async () => {
+      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
       });
@@ -68,11 +70,14 @@ describe('Chat Unread Count API', () => {
     });
 
     it('should count rooms with unread messages', async () => {
+      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
       });
 
+      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.or.mockResolvedValue({
+        // @ts-expect-error - Mock structure type mismatch
         data: [{ id: 'room-1' }, { id: 'room-2' }],
       });
 
@@ -91,6 +96,7 @@ describe('Chat Unread Count API', () => {
     });
 
     it('should handle database error', async () => {
+      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
       });

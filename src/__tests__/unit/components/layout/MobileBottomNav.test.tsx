@@ -10,7 +10,9 @@ vi.mock('next/navigation', () => ({
 
 // Mock useAuth
 const mockUser = { id: 'user-123', email: 'test@example.com' };
-const mockUseAuth = vi.fn(() => ({ user: mockUser }));
+const mockUseAuth = vi.fn<[], { user: { id: string; email: string } | null }>(() => ({
+  user: mockUser,
+}));
 vi.mock('@/components/providers/AuthProvider', () => ({
   useAuth: () => mockUseAuth(),
 }));
@@ -118,9 +120,8 @@ describe('MobileBottomNav', () => {
 
   it('채팅 페이지에서 메시지 링크가 활성화된다', () => {
     mockPathname.mockReturnValue('/chat/room-123');
-    const labelText = mockUnreadCount().unreadCount > 0
-      ? `메시지 ${mockUnreadCount().unreadCount}개`
-      : '메시지';
+    const labelText =
+      mockUnreadCount().unreadCount > 0 ? `메시지 ${mockUnreadCount().unreadCount}개` : '메시지';
     render(<MobileBottomNav />);
 
     const chatLink = screen.getByLabelText(labelText);

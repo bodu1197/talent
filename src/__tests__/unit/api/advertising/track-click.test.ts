@@ -89,14 +89,8 @@ describe('Advertising Click Track API', () => {
             limit: vi.fn().mockReturnThis(),
             maybeSingle: vi.fn().mockResolvedValue({ data: mockImpression }),
           };
-        } else if (callCount === 3) {
-          // Update impression
-          return {
-            update: vi.fn().mockReturnThis(),
-            eq: vi.fn().mockResolvedValue({ error: null }),
-          };
         } else {
-          // Update subscription
+          // Update impression (callCount 3) or subscription (callCount 4) - both have same structure
           return {
             update: vi.fn().mockReturnThis(),
             eq: vi.fn().mockResolvedValue({ error: null }),

@@ -41,7 +41,9 @@ describe('useYoutubeThumbnail', () => {
     it('should extract video ID from standard YouTube URL', () => {
       const { result } = renderHook(() => useYoutubeThumbnail());
 
-      expect(result.current.extractVideoId('https://www.youtube.com/watch?v=dQw4w9WgXcQ')).toBe('dQw4w9WgXcQ');
+      expect(result.current.extractVideoId('https://www.youtube.com/watch?v=dQw4w9WgXcQ')).toBe(
+        'dQw4w9WgXcQ'
+      );
     });
 
     it('should extract video ID from short YouTube URL', () => {
@@ -53,7 +55,9 @@ describe('useYoutubeThumbnail', () => {
     it('should extract video ID from embed URL', () => {
       const { result } = renderHook(() => useYoutubeThumbnail());
 
-      expect(result.current.extractVideoId('https://www.youtube.com/embed/dQw4w9WgXcQ')).toBe('dQw4w9WgXcQ');
+      expect(result.current.extractVideoId('https://www.youtube.com/embed/dQw4w9WgXcQ')).toBe(
+        'dQw4w9WgXcQ'
+      );
     });
 
     it('should return null for invalid URL', () => {
@@ -67,7 +71,7 @@ describe('useYoutubeThumbnail', () => {
     it('should return null for empty URL', async () => {
       const { result } = renderHook(() => useYoutubeThumbnail());
 
-      let fetchResult: any;
+      let fetchResult: { thumbnailUrl: string; videoId: string; blob: Blob } | null = null;
       await act(async () => {
         fetchResult = await result.current.fetchThumbnail('');
       });
@@ -78,7 +82,7 @@ describe('useYoutubeThumbnail', () => {
     it('should return null for invalid YouTube URL', async () => {
       const { result } = renderHook(() => useYoutubeThumbnail());
 
-      let fetchResult: any;
+      let fetchResult: { thumbnailUrl: string; videoId: string; blob: Blob } | null = null;
       await act(async () => {
         fetchResult = await result.current.fetchThumbnail('https://example.com');
       });
@@ -88,27 +92,29 @@ describe('useYoutubeThumbnail', () => {
 
     it('should fetch thumbnail for valid YouTube URL', async () => {
       const mockBlob = new Blob(['test'], { type: 'image/jpeg' });
-      (global.fetch as any).mockResolvedValueOnce({
+      (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
         ok: true,
         blob: () => Promise.resolve(mockBlob),
       });
 
       const { result } = renderHook(() => useYoutubeThumbnail());
 
-      let fetchResult: any;
+      let fetchResult: { thumbnailUrl: string; videoId: string; blob: Blob } | null = null;
       await act(async () => {
-        fetchResult = await result.current.fetchThumbnail('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+        fetchResult = await result.current.fetchThumbnail(
+          'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        );
       });
 
       expect(fetchResult).not.toBeNull();
-      expect(fetchResult.videoId).toBe('dQw4w9WgXcQ');
+      expect(result.current.videoId).toBe('dQw4w9WgXcQ');
     });
   });
 
   describe('resetVideoId', () => {
     it('should reset videoId to empty string', async () => {
       const mockBlob = new Blob(['test'], { type: 'image/jpeg' });
-      (global.fetch as any).mockResolvedValueOnce({
+      (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
         ok: true,
         blob: () => Promise.resolve(mockBlob),
       });

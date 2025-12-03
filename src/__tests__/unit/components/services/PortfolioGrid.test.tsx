@@ -5,7 +5,6 @@ import PortfolioGrid from '@/components/services/PortfolioGrid';
 // Mock next/image
 vi.mock('next/image', () => ({
   default: ({ src, alt, ...props }: { src: string; alt: string; [key: string]: unknown }) => (
-    // eslint-disable-next-line @next/next/no-img-element
     <img src={src} alt={alt} {...props} />
   ),
 }));
@@ -13,7 +12,13 @@ vi.mock('next/image', () => ({
 // Mock dynamic import of PortfolioModal
 vi.mock('next/dynamic', () => ({
   default: () => {
-    const DynamicComponent = ({ portfolio, onClose }: { portfolio: { title: string }; onClose: () => void }) => (
+    const DynamicComponent = ({
+      portfolio,
+      onClose,
+    }: {
+      portfolio: { title: string };
+      onClose: () => void;
+    }) => (
       <div data-testid="portfolio-modal">
         <span>{portfolio.title}</span>
         <button onClick={onClose}>Close</button>

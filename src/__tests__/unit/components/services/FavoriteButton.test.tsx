@@ -1,10 +1,13 @@
+/* eslint-disable sonarjs/no-nested-functions -- Test file requires nested functions for async/await testing patterns */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import FavoriteButton from '@/components/services/FavoriteButton';
 
 // Mock useAuth
 const mockUser = { id: 'user-123', email: 'test@example.com' };
-const mockUseAuth = vi.fn(() => ({ user: mockUser }));
+const mockUseAuth = vi.fn<[], { user: { id: string; email: string } | null }>(() => ({
+  user: mockUser,
+}));
 vi.mock('@/components/providers/AuthProvider', () => ({
   useAuth: () => mockUseAuth(),
 }));
@@ -193,15 +196,19 @@ describe('FavoriteButton', () => {
   });
 
   it('로딩 중에는 버튼이 비활성화된다', async () => {
-    // 느린 응답 시뮬레이션
+    const delayMs = 100;
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
         json: async () => ({ data: [] }),
       })
-      .mockImplementationOnce(
-        () => new Promise((resolve) => setTimeout(() => resolve({ ok: true }), 100))
-      );
+      .mockImplementationOnce(() => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve({ ok: true });
+          }, delayMs);
+        });
+      });
 
     render(<FavoriteButton serviceId="service-1" />);
 

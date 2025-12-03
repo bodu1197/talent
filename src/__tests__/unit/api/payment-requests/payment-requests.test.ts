@@ -34,6 +34,7 @@ describe('Payment Requests API', () => {
 
   describe('POST /api/payment-requests', () => {
     it('should return 401 if not authenticated', async () => {
+      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: null },
         error: null,
@@ -49,6 +50,7 @@ describe('Payment Requests API', () => {
     });
 
     it('should return 400 if required fields are missing', async () => {
+      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
         error: null,
@@ -64,6 +66,7 @@ describe('Payment Requests API', () => {
     });
 
     it('should return 400 if amount is less than 1000', async () => {
+      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
         error: null,
@@ -83,6 +86,7 @@ describe('Payment Requests API', () => {
 
   describe('GET /api/payment-requests', () => {
     it('should return 401 if not authenticated', async () => {
+      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: null },
         error: null,
@@ -95,6 +99,7 @@ describe('Payment Requests API', () => {
     });
 
     it('should return 400 if room_id is missing', async () => {
+      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
         error: null,
@@ -107,15 +112,16 @@ describe('Payment Requests API', () => {
     });
 
     it('should return payment requests list', async () => {
+      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
         error: null,
       });
 
+      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.order.mockResolvedValue({
-        data: [
-          { id: 'pr-1', amount: 10000, status: 'pending' },
-        ],
+        // @ts-expect-error - Mock structure type mismatch
+        data: [{ id: 'pr-1', amount: 10000, status: 'pending' }],
         error: null,
       });
 

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NextRequest } from 'next/server';
 import { GET, POST, PATCH, DELETE } from '@/app/api/admin/categories/route';
+import type { User } from '@supabase/supabase-js';
 
 // Mock Supabase
 const mockSupabase = {
@@ -33,7 +34,7 @@ describe('Admin Categories API', () => {
 
   describe('GET /api/admin/categories', () => {
     it('should return 401 if not admin', async () => {
-      mockCheckAdminAuth.mockResolvedValue({ isAdmin: false, error: 'Unauthorized' });
+      mockCheckAdminAuth.mockResolvedValue({ isAdmin: false, user: null, error: 'Unauthorized' });
 
       const request = new NextRequest('http://localhost:3000/api/admin/categories');
 
@@ -45,7 +46,7 @@ describe('Admin Categories API', () => {
     });
 
     it('should return 403 if not admin (forbidden)', async () => {
-      mockCheckAdminAuth.mockResolvedValue({ isAdmin: false, error: 'Forbidden' });
+      mockCheckAdminAuth.mockResolvedValue({ isAdmin: false, user: null, error: 'Forbidden' });
 
       const request = new NextRequest('http://localhost:3000/api/admin/categories');
 
@@ -57,7 +58,12 @@ describe('Admin Categories API', () => {
     });
 
     it('should return categories list', async () => {
-      mockCheckAdminAuth.mockResolvedValue({ isAdmin: true, userId: 'admin-1' });
+      mockCheckAdminAuth.mockResolvedValue({
+        isAdmin: true,
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
+      });
 
       const mockCategories = [
         { id: 'cat-1', name: 'Category 1', slug: 'category-1', is_active: true },
@@ -82,7 +88,12 @@ describe('Admin Categories API', () => {
     });
 
     it('should include inactive categories when requested', async () => {
-      mockCheckAdminAuth.mockResolvedValue({ isAdmin: true, userId: 'admin-1' });
+      mockCheckAdminAuth.mockResolvedValue({
+        isAdmin: true,
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
+      });
 
       const mockCategories = [{ id: 'cat-1', name: 'Category 1', is_active: false }];
 
@@ -107,7 +118,12 @@ describe('Admin Categories API', () => {
 
   describe('POST /api/admin/categories', () => {
     it('should return 400 if name is missing', async () => {
-      mockCheckAdminAuth.mockResolvedValue({ isAdmin: true, userId: 'admin-1' });
+      mockCheckAdminAuth.mockResolvedValue({
+        isAdmin: true,
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
+      });
 
       const request = new NextRequest('http://localhost:3000/api/admin/categories', {
         method: 'POST',
@@ -122,7 +138,12 @@ describe('Admin Categories API', () => {
     });
 
     it('should return 409 if slug already exists', async () => {
-      mockCheckAdminAuth.mockResolvedValue({ isAdmin: true, userId: 'admin-1' });
+      mockCheckAdminAuth.mockResolvedValue({
+        isAdmin: true,
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
+      });
 
       const selectChain = {
         select: vi.fn().mockReturnThis(),
@@ -145,7 +166,12 @@ describe('Admin Categories API', () => {
     });
 
     it('should create category successfully', async () => {
-      mockCheckAdminAuth.mockResolvedValue({ isAdmin: true, userId: 'admin-1' });
+      mockCheckAdminAuth.mockResolvedValue({
+        isAdmin: true,
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
+      });
 
       const mockCategory = { id: 'new-cat', name: 'New Category', slug: 'new-category' };
 
@@ -184,7 +210,12 @@ describe('Admin Categories API', () => {
 
   describe('PATCH /api/admin/categories', () => {
     it('should return 400 if id is missing', async () => {
-      mockCheckAdminAuth.mockResolvedValue({ isAdmin: true, userId: 'admin-1' });
+      mockCheckAdminAuth.mockResolvedValue({
+        isAdmin: true,
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
+      });
 
       const request = new NextRequest('http://localhost:3000/api/admin/categories', {
         method: 'PATCH',
@@ -199,7 +230,12 @@ describe('Admin Categories API', () => {
     });
 
     it('should return 409 if new slug already exists', async () => {
-      mockCheckAdminAuth.mockResolvedValue({ isAdmin: true, userId: 'admin-1' });
+      mockCheckAdminAuth.mockResolvedValue({
+        isAdmin: true,
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
+      });
 
       const selectChain = {
         select: vi.fn().mockReturnThis(),
@@ -223,7 +259,12 @@ describe('Admin Categories API', () => {
     });
 
     it('should update category successfully', async () => {
-      mockCheckAdminAuth.mockResolvedValue({ isAdmin: true, userId: 'admin-1' });
+      mockCheckAdminAuth.mockResolvedValue({
+        isAdmin: true,
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
+      });
 
       const mockCategory = { id: 'cat-1', name: 'Updated Name', slug: 'cat-1' };
 
@@ -264,7 +305,12 @@ describe('Admin Categories API', () => {
 
   describe('DELETE /api/admin/categories', () => {
     it('should return 400 if id is missing', async () => {
-      mockCheckAdminAuth.mockResolvedValue({ isAdmin: true, userId: 'admin-1' });
+      mockCheckAdminAuth.mockResolvedValue({
+        isAdmin: true,
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
+      });
 
       const request = new NextRequest('http://localhost:3000/api/admin/categories');
 
@@ -276,7 +322,12 @@ describe('Admin Categories API', () => {
     });
 
     it('should return 400 if category has subcategories', async () => {
-      mockCheckAdminAuth.mockResolvedValue({ isAdmin: true, userId: 'admin-1' });
+      mockCheckAdminAuth.mockResolvedValue({
+        isAdmin: true,
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
+      });
 
       const selectChain = {
         select: vi.fn().mockReturnThis(),
@@ -296,7 +347,12 @@ describe('Admin Categories API', () => {
     });
 
     it('should return 400 if category has associated services', async () => {
-      mockCheckAdminAuth.mockResolvedValue({ isAdmin: true, userId: 'admin-1' });
+      mockCheckAdminAuth.mockResolvedValue({
+        isAdmin: true,
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
+      });
 
       let callCount = 0;
       mockSupabase.from.mockImplementation(() => {
@@ -328,20 +384,18 @@ describe('Admin Categories API', () => {
     });
 
     it('should delete category successfully', async () => {
-      mockCheckAdminAuth.mockResolvedValue({ isAdmin: true, userId: 'admin-1' });
+      mockCheckAdminAuth.mockResolvedValue({
+        isAdmin: true,
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
+      });
 
       let callCount = 0;
       mockSupabase.from.mockImplementation(() => {
         callCount++;
-        if (callCount === 1) {
-          // Check subcategories
-          return {
-            select: vi.fn().mockReturnThis(),
-            eq: vi.fn().mockReturnThis(),
-            limit: vi.fn().mockResolvedValue({ data: [] }),
-          };
-        } else if (callCount === 2) {
-          // Check services
+        if (callCount === 1 || callCount === 2) {
+          // Check subcategories and services - both return empty arrays
           return {
             select: vi.fn().mockReturnThis(),
             eq: vi.fn().mockReturnThis(),

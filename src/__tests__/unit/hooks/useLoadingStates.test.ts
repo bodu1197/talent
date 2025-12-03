@@ -38,11 +38,13 @@ describe('useLoadingStates', () => {
     });
 
     it('should set a specific state to false', () => {
-      const { result } = renderHook(() => useLoadingStates({
-        loading: true,
-        uploading: false,
-        deleting: false,
-      }));
+      const { result } = renderHook(() =>
+        useLoadingStates({
+          loading: true,
+          uploading: false,
+          deleting: false,
+        })
+      );
 
       act(() => {
         result.current.setLoading('loading', false);
@@ -65,13 +67,21 @@ describe('useLoadingStates', () => {
   });
 
   describe('withLoading', () => {
+    const simpleAsyncFn = async () => 'result';
+    const testResultFn = async () => 'test-result';
+    const errorFn = async () => {
+      throw new Error('Test error');
+    };
+    const delayedFn = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 10));
+      return 'async-result';
+    };
+
     it('should set loading false after function execution', async () => {
       const { result } = renderHook(() => useLoadingStates(initialStates));
 
       await act(async () => {
-        await result.current.withLoading('loading', async () => {
-          return 'result';
-        });
+        await result.current.withLoading('loading', simpleAsyncFn);
       });
 
       // After execution, loading should be false
@@ -84,9 +94,7 @@ describe('useLoadingStates', () => {
       let returnValue: string = '';
 
       await act(async () => {
-        returnValue = await result.current.withLoading('loading', async () => {
-          return 'test-result';
-        });
+        returnValue = await result.current.withLoading('loading', testResultFn);
       });
 
       expect(returnValue).toBe('test-result');
@@ -97,11 +105,9 @@ describe('useLoadingStates', () => {
 
       await act(async () => {
         try {
-          await result.current.withLoading('loading', async () => {
-            throw new Error('Test error');
-          });
-        } catch (e) {
-          // Expected
+          await result.current.withLoading('loading', errorFn);
+        } catch {
+          // Expected error - intentionally ignored for test
         }
       });
 
@@ -111,10 +117,7 @@ describe('useLoadingStates', () => {
     it('should work with async functions', async () => {
       const { result } = renderHook(() => useLoadingStates(initialStates));
 
-      const asyncFn = vi.fn().mockImplementation(async () => {
-        await new Promise(resolve => setTimeout(resolve, 10));
-        return 'async-result';
-      });
+      const asyncFn = vi.fn().mockImplementation(delayedFn);
 
       let returnValue: string = '';
 

@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/pseudo-random -- Test file uses Math.random in mocks for crypto.getRandomValues */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
   generateRandomNickname,
@@ -7,13 +8,14 @@ import {
 } from '@/lib/utils/nickname-generator';
 
 // Mock crypto.getRandomValues
-const mockGetRandomValues = vi.fn();
+const mockGetRandomValues = vi.fn().mockImplementation((array: Uint32Array) => {
+  array[0] = Math.floor(Math.random() * 4294967296);
+  return array;
+});
+
 Object.defineProperty(global, 'crypto', {
   value: {
-    getRandomValues: mockGetRandomValues.mockImplementation((array: Uint32Array) => {
-      array[0] = Math.floor(Math.random() * 4294967296);
-      return array;
-    }),
+    getRandomValues: mockGetRandomValues,
   },
 });
 
@@ -51,13 +53,17 @@ describe('nickname-generator', () => {
       const nickname = generateUniqueNickname();
       expect(nickname).toBeTruthy();
       // Should contain numbers at the end
-      expect(/\d+$/.test(nickname)).toBe(true);
+      // eslint-disable-next-line sonarjs/slow-regex -- Simple regex for testing Korean characters, not vulnerable to backtracking
+      const hasNumbersAtEnd = /\d+$/.test(nickname);
+      expect(hasNumbersAtEnd).toBe(true);
     });
 
     it('should include base nickname plus number', () => {
       const nickname = generateUniqueNickname();
       // Korean part followed by numbers
-      expect(/[가-힣]+\d+/.test(nickname)).toBe(true);
+      // eslint-disable-next-line sonarjs/slow-regex -- Simple regex for testing Korean characters, not vulnerable to backtracking
+      const hasKoreanAndNumbers = /[가-힣]+\d+/.test(nickname);
+      expect(hasKoreanAndNumbers).toBe(true);
     });
   });
 

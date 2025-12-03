@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NextRequest } from 'next/server';
 import { GET } from '@/app/api/admin/analytics/devices/route';
+import type { User } from '@supabase/supabase-js';
 
 // Mock admin auth
 vi.mock('@/lib/admin/auth', () => ({
@@ -8,10 +9,17 @@ vi.mock('@/lib/admin/auth', () => ({
 }));
 
 // Mock Supabase
-const mockSupabase = {
-  from: vi.fn(() => mockSupabase),
-  select: vi.fn(() => mockSupabase),
-  gte: vi.fn(() => mockSupabase),
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mockSupabase: any = {
+  from: vi.fn(function (this: typeof mockSupabase) {
+    return this;
+  }),
+  select: vi.fn(function (this: typeof mockSupabase) {
+    return this;
+  }),
+  gte: vi.fn(function (this: typeof mockSupabase) {
+    return this;
+  }),
 };
 
 vi.mock('@/lib/supabase/server', () => ({
@@ -37,6 +45,7 @@ describe('Admin Device Analytics API', () => {
     it('should return 401 if not authenticated', async () => {
       vi.mocked(checkAdminAuth).mockResolvedValue({
         isAdmin: false,
+        user: null,
         error: 'Unauthorized',
       });
 
@@ -51,7 +60,9 @@ describe('Admin Device Analytics API', () => {
     it('should return device stats', async () => {
       vi.mocked(checkAdminAuth).mockResolvedValue({
         isAdmin: true,
-        userId: 'admin-1',
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
       });
 
       const mockDeviceData = [
@@ -82,7 +93,9 @@ describe('Admin Device Analytics API', () => {
     it('should handle different periods', async () => {
       vi.mocked(checkAdminAuth).mockResolvedValue({
         isAdmin: true,
-        userId: 'admin-1',
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
       });
 
       mockSupabase.gte.mockResolvedValue({
@@ -93,7 +106,9 @@ describe('Admin Device Analytics API', () => {
       const periods = ['hour', 'day', 'month', 'year'];
 
       for (const period of periods) {
-        const request = new NextRequest(`http://localhost:3000/api/admin/analytics/devices?period=${period}`);
+        const request = new NextRequest(
+          `http://localhost:3000/api/admin/analytics/devices?period=${period}`
+        );
         const response = await GET(request);
         const data = await response.json();
 
@@ -105,7 +120,9 @@ describe('Admin Device Analytics API', () => {
     it('should handle null device types as desktop', async () => {
       vi.mocked(checkAdminAuth).mockResolvedValue({
         isAdmin: true,
-        userId: 'admin-1',
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
       });
 
       const mockDeviceData = [
@@ -131,7 +148,9 @@ describe('Admin Device Analytics API', () => {
     it('should handle database errors', async () => {
       vi.mocked(checkAdminAuth).mockResolvedValue({
         isAdmin: true,
-        userId: 'admin-1',
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
       });
 
       mockSupabase.gte.mockResolvedValue({

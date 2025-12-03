@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NextRequest } from 'next/server';
 import { GET, POST } from '@/app/api/admin/analytics/route';
+import type { User } from '@supabase/supabase-js';
 
 // Mock admin auth
 vi.mock('@/lib/admin/auth', () => ({
@@ -8,12 +9,23 @@ vi.mock('@/lib/admin/auth', () => ({
 }));
 
 // Mock Supabase
-const mockSupabase = {
-  from: vi.fn(() => mockSupabase),
-  select: vi.fn(() => mockSupabase),
-  gte: vi.fn(() => mockSupabase),
-  eq: vi.fn(() => mockSupabase),
-  order: vi.fn(() => mockSupabase),
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mockSupabase: any = {
+  from: vi.fn(function (this: typeof mockSupabase) {
+    return this;
+  }),
+  select: vi.fn(function (this: typeof mockSupabase) {
+    return this;
+  }),
+  gte: vi.fn(function (this: typeof mockSupabase) {
+    return this;
+  }),
+  eq: vi.fn(function (this: typeof mockSupabase) {
+    return this;
+  }),
+  order: vi.fn(function (this: typeof mockSupabase) {
+    return this;
+  }),
 };
 
 vi.mock('@/lib/supabase/server', () => ({
@@ -39,6 +51,7 @@ describe('Admin Analytics API', () => {
     it('should return 401 if not authenticated', async () => {
       vi.mocked(checkAdminAuth).mockResolvedValue({
         isAdmin: false,
+        user: null,
         error: 'Unauthorized',
       });
 
@@ -53,7 +66,7 @@ describe('Admin Analytics API', () => {
     it('should return 403 if not admin', async () => {
       vi.mocked(checkAdminAuth).mockResolvedValue({
         isAdmin: false,
-        user: { id: 'user-1' },
+        user: { id: 'user-1' } as unknown as User,
         error: 'Not an admin',
       });
 
@@ -68,7 +81,9 @@ describe('Admin Analytics API', () => {
     it('should return analytics data for day period', async () => {
       vi.mocked(checkAdminAuth).mockResolvedValue({
         isAdmin: true,
-        userId: 'admin-1',
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
       });
 
       const mockPageViews = [
@@ -94,7 +109,9 @@ describe('Admin Analytics API', () => {
     it('should return analytics data for hour period', async () => {
       vi.mocked(checkAdminAuth).mockResolvedValue({
         isAdmin: true,
-        userId: 'admin-1',
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
       });
 
       mockSupabase.order.mockResolvedValue({
@@ -113,7 +130,9 @@ describe('Admin Analytics API', () => {
     it('should return analytics data for month period', async () => {
       vi.mocked(checkAdminAuth).mockResolvedValue({
         isAdmin: true,
-        userId: 'admin-1',
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
       });
 
       mockSupabase.order.mockResolvedValue({
@@ -132,7 +151,9 @@ describe('Admin Analytics API', () => {
     it('should return analytics data for year period', async () => {
       vi.mocked(checkAdminAuth).mockResolvedValue({
         isAdmin: true,
-        userId: 'admin-1',
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
       });
 
       mockSupabase.order.mockResolvedValue({
@@ -151,7 +172,9 @@ describe('Admin Analytics API', () => {
     it('should return 400 for invalid period', async () => {
       vi.mocked(checkAdminAuth).mockResolvedValue({
         isAdmin: true,
-        userId: 'admin-1',
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
       });
 
       const request = new NextRequest('http://localhost:3000/api/admin/analytics?period=invalid');
@@ -165,7 +188,7 @@ describe('Admin Analytics API', () => {
     it('should handle path filter parameter', async () => {
       vi.mocked(checkAdminAuth).mockResolvedValue({
         isAdmin: true,
-        user: { id: 'admin-1' },
+        user: { id: 'admin-1' } as unknown as User,
         admin: { user_id: 'admin-1', role: 'admin' },
         error: null,
       });
@@ -185,7 +208,9 @@ describe('Admin Analytics API', () => {
     it('should handle database errors', async () => {
       vi.mocked(checkAdminAuth).mockResolvedValue({
         isAdmin: true,
-        userId: 'admin-1',
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
       });
 
       mockSupabase.order.mockResolvedValue({
@@ -206,7 +231,9 @@ describe('Admin Analytics API', () => {
     it('should return top pages', async () => {
       vi.mocked(checkAdminAuth).mockResolvedValue({
         isAdmin: true,
-        userId: 'admin-1',
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
       });
 
       const mockPageViews = [
@@ -239,7 +266,9 @@ describe('Admin Analytics API', () => {
     it('should respect limit parameter', async () => {
       vi.mocked(checkAdminAuth).mockResolvedValue({
         isAdmin: true,
-        userId: 'admin-1',
+        user: { id: 'admin-1' } as unknown as User,
+        admin: {},
+        error: null,
       });
 
       const mockPageViews = Array.from({ length: 20 }, (_, i) => ({ path: `/page-${i}` }));

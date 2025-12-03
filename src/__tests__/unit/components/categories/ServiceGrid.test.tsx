@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import ServiceGrid from '@/components/categories/ServiceGrid';
+import type { Service } from '@/types';
 
 // Mock next/navigation
 const mockSearchParams = new URLSearchParams();
@@ -16,41 +17,71 @@ vi.mock('@/components/services/ServiceCard', () => ({
 }));
 
 describe('ServiceGrid', () => {
-  const mockServices = [
+  const mockServices: Service[] = [
     {
       id: 'service-1',
+      seller_id: 'seller-1',
+      category_id: 'cat-1',
       title: '로고 디자인',
       description: '고품질 로고',
       price: 50000,
-      thumbnail_url: null,
-      seller: null,
+      delivery_days: 3,
+      revision_count: 2,
+      is_express_available: false,
+      status: 'active' as const,
+      views: 100,
       orders_count: 10,
       rating: 4.5,
       review_count: 8,
+      is_featured: false,
+      created_at: '2024-01-01T00:00:00Z',
+      updated_at: '2024-01-01T00:00:00Z',
+      thumbnail_url: null,
+      seller: null,
       is_promoted: false,
     },
     {
       id: 'service-2',
+      seller_id: 'seller-2',
+      category_id: 'cat-1',
       title: '웹 개발',
       description: '웹사이트 개발',
       price: 150000,
-      thumbnail_url: null,
-      seller: null,
+      delivery_days: 7,
+      revision_count: 3,
+      is_express_available: false,
+      status: 'active' as const,
+      views: 200,
       orders_count: 5,
       rating: 4.8,
       review_count: 12,
+      is_featured: false,
+      created_at: '2024-01-01T00:00:00Z',
+      updated_at: '2024-01-01T00:00:00Z',
+      thumbnail_url: null,
+      seller: null,
       is_promoted: false,
     },
     {
       id: 'service-3',
+      seller_id: 'seller-3',
+      category_id: 'cat-1',
       title: '앱 개발',
       description: '앱 개발',
       price: 300000,
-      thumbnail_url: null,
-      seller: null,
+      delivery_days: 14,
+      revision_count: 5,
+      is_express_available: false,
+      status: 'active' as const,
+      views: 150,
       orders_count: 3,
       rating: 4.2,
       review_count: 5,
+      is_featured: false,
+      created_at: '2024-01-01T00:00:00Z',
+      updated_at: '2024-01-01T00:00:00Z',
+      thumbnail_url: null,
+      seller: null,
       is_promoted: false,
     },
   ];

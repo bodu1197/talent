@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-hardcoded-passwords -- Test file uses hardcoded passwords to validate password rules */
 import { describe, it, expect } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { usePasswordValidation } from '@/hooks/usePasswordValidation';
@@ -89,7 +90,28 @@ describe('usePasswordValidation', () => {
     });
 
     it('should pass with various special characters', () => {
-      const specialChars = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', ',', '.', '?', '"', ':', '{', '}', '|', '<', '>'];
+      const specialChars = [
+        '!',
+        '@',
+        '#',
+        '$',
+        '%',
+        '^',
+        '&',
+        '*',
+        '(',
+        ')',
+        ',',
+        '.',
+        '?',
+        '"',
+        ':',
+        '{',
+        '}',
+        '|',
+        '<',
+        '>',
+      ];
 
       for (const char of specialChars) {
         const { result } = renderHook(() => usePasswordValidation(`Abcd1234${char}`));
@@ -126,10 +148,9 @@ describe('usePasswordValidation', () => {
 
   describe('reactivity', () => {
     it('should update when password changes', () => {
-      const { result, rerender } = renderHook(
-        ({ password }) => usePasswordValidation(password),
-        { initialProps: { password: 'short' } }
-      );
+      const { result, rerender } = renderHook(({ password }) => usePasswordValidation(password), {
+        initialProps: { password: 'short' },
+      });
 
       expect(result.current.isPasswordValid).toBe(false);
 

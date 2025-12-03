@@ -97,7 +97,13 @@ describe('Categories', () => {
 
   describe('getCategoryBySlug', () => {
     it('should return category with children', async () => {
-      const mockCategory = { id: 'cat-1', name: 'Design', slug: 'design', parent_id: null, level: 1 };
+      const mockCategory = {
+        id: 'cat-1',
+        name: 'Design',
+        slug: 'design',
+        parent_id: null,
+        level: 1,
+      };
       const mockChildren = [
         { id: 'cat-2', name: 'Logo', slug: 'logo', parent_id: 'cat-1', level: 2 },
       ];
@@ -159,19 +165,37 @@ describe('Categories', () => {
     });
 
     it('should fallback to manual lookup on RPC error', async () => {
-      const mockCategory1 = { id: 'cat-1', name: 'Design', slug: 'design', parent_id: null, level: 1 };
-      const mockCategory2 = { id: 'cat-2', name: 'Logo', slug: 'logo', parent_id: 'cat-1', level: 2 };
+      const mockCategory1 = {
+        id: 'cat-1',
+        name: 'Design',
+        slug: 'design',
+        parent_id: null,
+        level: 1,
+      };
+      const mockCategory2 = {
+        id: 'cat-2',
+        name: 'Logo',
+        slug: 'logo',
+        parent_id: 'cat-1',
+        level: 2,
+      };
 
       mockSupabase.rpc.mockResolvedValue({ data: null, error: { code: '42883' } });
 
       let callCount = 0;
       mockSupabase.from.mockImplementation(() => {
         callCount++;
+        let mockData = null;
+        if (callCount === 1) {
+          mockData = mockCategory2;
+        } else if (callCount === 2) {
+          mockData = mockCategory1;
+        }
         return {
           select: vi.fn().mockReturnThis(),
           eq: vi.fn().mockReturnThis(),
           single: vi.fn().mockResolvedValue({
-            data: callCount === 1 ? mockCategory2 : (callCount === 2 ? mockCategory1 : null),
+            data: mockData,
             error: null,
           }),
         };

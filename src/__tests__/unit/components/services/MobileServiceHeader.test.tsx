@@ -15,7 +15,10 @@ describe('MobileServiceHeader', () => {
     vi.clearAllMocks();
     // Reset window.location.href
     delete (window as { location?: unknown }).location;
-    window.location = { href: '', origin: 'https://example.com' } as Location;
+    Object.defineProperty(window, 'location', {
+      writable: true,
+      value: { href: '', origin: 'https://example.com' },
+    });
   });
 
   it('헤더를 렌더링한다', () => {

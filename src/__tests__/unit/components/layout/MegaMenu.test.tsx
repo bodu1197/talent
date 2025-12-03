@@ -4,8 +4,18 @@ import MegaMenu from '@/components/layout/MegaMenu';
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    [key: string]: unknown;
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }));
 
@@ -18,13 +28,15 @@ describe('MegaMenu', () => {
       icon: 'robot',
       is_ai: true,
       service_count: 100,
+      level: 1,
       children: [
         {
           id: 'ai-images',
           name: 'AI 이미지',
           slug: 'ai-images',
+          level: 2,
           children: [
-            { id: 'ai-photo', name: 'AI 사진 편집', slug: 'ai-photo' },
+            { id: 'ai-photo', name: 'AI 사진 편집', slug: 'ai-photo', level: 3, children: [] },
           ],
         },
       ],
@@ -35,11 +47,13 @@ describe('MegaMenu', () => {
       slug: 'it-programming',
       icon: 'code',
       service_count: 80,
+      level: 1,
       children: [
         {
           id: 'web-dev',
           name: '웹 개발',
           slug: 'web-dev',
+          level: 2,
           children: [],
         },
       ],
@@ -50,6 +64,7 @@ describe('MegaMenu', () => {
       slug: 'design',
       icon: 'palette',
       service_count: 50,
+      level: 1,
       children: [],
     },
   ];
@@ -79,7 +94,10 @@ describe('MegaMenu', () => {
   it('AI Hub 버튼이 표시된다', () => {
     render(<MegaMenu categories={mockCategories} />);
 
-    expect(screen.getByRole('link', { name: 'AI Hub 페이지로 이동' })).toHaveAttribute('href', '/ai');
+    expect(screen.getByRole('link', { name: 'AI Hub 페이지로 이동' })).toHaveAttribute(
+      'href',
+      '/ai'
+    );
   });
 
   it('전체 카테고리 버튼 클릭 시 드롭다운이 열린다', () => {

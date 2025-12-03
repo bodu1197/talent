@@ -139,7 +139,9 @@ describe('Service Favorites API', () => {
         error: { message: 'Not authenticated' },
       });
 
-      const request = new NextRequest('http://localhost:3000/api/user/service-favorites?serviceId=service-1');
+      const request = new NextRequest(
+        'http://localhost:3000/api/user/service-favorites?serviceId=service-1'
+      );
 
       const response = await DELETE(request);
       const data = await response.json();
@@ -172,14 +174,12 @@ describe('Service Favorites API', () => {
       // delete().eq('user_id').eq('service_id') - two .eq() calls
       const deleteChain = {
         delete: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockImplementation(function () {
+        eq: vi.fn().mockImplementation(function (this: typeof deleteChain) {
           return this;
         }),
       };
       // Make final .eq() return resolved value
-      deleteChain.eq
-        .mockReturnValueOnce(deleteChain)
-        .mockResolvedValueOnce({ error: null });
+      deleteChain.eq.mockReturnValueOnce(deleteChain).mockResolvedValueOnce({ error: null });
 
       const selectChain = {
         select: vi.fn().mockReturnThis(),
@@ -200,7 +200,9 @@ describe('Service Favorites API', () => {
         return updateChain;
       });
 
-      const request = new NextRequest('http://localhost:3000/api/user/service-favorites?serviceId=service-1');
+      const request = new NextRequest(
+        'http://localhost:3000/api/user/service-favorites?serviceId=service-1'
+      );
 
       const response = await DELETE(request);
       const data = await response.json();

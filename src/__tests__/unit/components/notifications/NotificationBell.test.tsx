@@ -4,14 +4,26 @@ import NotificationBell from '@/components/notifications/NotificationBell';
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    [key: string]: unknown;
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }));
 
 // Mock useAuth
 const mockUser = { id: 'user-123', email: 'test@example.com' };
-const mockUseAuth = vi.fn(() => ({ user: mockUser }));
+const mockUseAuth = vi.fn<[], { user: { id: string; email: string } | null }>(() => ({
+  user: mockUser,
+}));
 vi.mock('@/components/providers/AuthProvider', () => ({
   useAuth: () => mockUseAuth(),
 }));

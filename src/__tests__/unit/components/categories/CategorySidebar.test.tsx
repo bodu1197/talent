@@ -4,8 +4,20 @@ import CategorySidebar from '@/components/categories/CategorySidebar';
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, onClick, ...props }: { children: React.ReactNode; href: string; onClick?: (e: React.MouseEvent) => void; [key: string]: unknown }) => (
-    <a href={href} onClick={onClick} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    onClick,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    onClick?: (e: React.MouseEvent) => void;
+    [key: string]: unknown;
+  }) => (
+    <a href={href} onClick={onClick} {...props}>
+      {children}
+    </a>
   ),
 }));
 
@@ -16,9 +28,8 @@ describe('CategorySidebar', () => {
       name: 'AI 서비스',
       slug: 'ai-services',
       icon: 'robot',
-      parent_id: null,
+      parent_id: undefined,
       level: 1,
-      path: 'ai-services',
       children: [
         {
           id: 'cat-1-1',
@@ -26,7 +37,6 @@ describe('CategorySidebar', () => {
           slug: 'ai-images',
           parent_id: 'cat-1',
           level: 2,
-          path: 'ai-services/ai-images',
           children: [
             {
               id: 'cat-1-1-1',
@@ -34,7 +44,6 @@ describe('CategorySidebar', () => {
               slug: 'ai-photo-editing',
               parent_id: 'cat-1-1',
               level: 3,
-              path: 'ai-services/ai-images/ai-photo-editing',
               children: [],
             },
           ],
@@ -46,15 +55,14 @@ describe('CategorySidebar', () => {
       name: '디자인',
       slug: 'design',
       icon: 'palette',
-      parent_id: null,
+      parent_id: undefined,
       level: 1,
-      path: 'design',
       children: [],
     },
   ];
 
   const mockCategoryPath = [
-    { id: 'cat-1', name: 'AI 서비스', slug: 'ai-services', parent_id: null, level: 1, path: 'ai-services' },
+    { id: 'cat-1', name: 'AI 서비스', slug: 'ai-services', parent_id: undefined, level: 1 },
   ];
 
   it('카테고리 목록을 렌더링한다', () => {
@@ -141,11 +149,7 @@ describe('CategorySidebar', () => {
 
   it('1차 카테고리 클릭 시 토글된다', () => {
     render(
-      <CategorySidebar
-        categories={mockCategories}
-        currentCategoryId="cat-2"
-        categoryPath={[]}
-      />
+      <CategorySidebar categories={mockCategories} currentCategoryId="cat-2" categoryPath={[]} />
     );
 
     // 처음에는 AI 이미지가 보이지 않음 (경로에 없으므로)
@@ -160,11 +164,7 @@ describe('CategorySidebar', () => {
 
   it('빈 카테고리 배열을 처리한다', () => {
     const { container } = render(
-      <CategorySidebar
-        categories={[]}
-        currentCategoryId=""
-        categoryPath={[]}
-      />
+      <CategorySidebar categories={[]} currentCategoryId="" categoryPath={[]} />
     );
 
     const links = container.querySelectorAll('a');
