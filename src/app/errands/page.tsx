@@ -193,7 +193,6 @@ const getCategoryColor = (category: string) => {
 export default function ErrandsPage() {
   const [helpers, setHelpers] = useState<Helper[]>(createInitialHelpers());
   const [totalCount, setTotalCount] = useState(24);
-  const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [isHydrated, setIsHydrated] = useState(false);
 
   // 하이드레이션 완료
@@ -238,11 +237,6 @@ export default function ErrandsPage() {
   }, [isHydrated, updateHelpers]);
 
   const visibleHelpers = helpers.filter((h) => h.isVisible);
-
-  const filteredErrands =
-    selectedCategory === 'ALL'
-      ? SAMPLE_ERRANDS
-      : SAMPLE_ERRANDS.filter((e) => e.category === selectedCategory);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -432,29 +426,12 @@ export default function ErrandsPage() {
         <section>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl md:text-2xl font-bold text-gray-800">주변 심부름 요청</h2>
-            <span className="text-sm text-gray-500">{filteredErrands.length}건</span>
-          </div>
-
-          {/* 카테고리 필터 */}
-          <div className="flex gap-2 overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.value}
-                onClick={() => setSelectedCategory(cat.value)}
-                className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium transition ${
-                  selectedCategory === cat.value
-                    ? 'bg-gray-900 text-white'
-                    : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
+            <span className="text-sm text-gray-500">{SAMPLE_ERRANDS.length}건</span>
           </div>
 
           {/* 요청 목록 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            {filteredErrands.map((errand) => (
+            {SAMPLE_ERRANDS.map((errand) => (
               <div
                 key={errand.id}
                 className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition cursor-pointer group overflow-hidden"
@@ -529,7 +506,7 @@ export default function ErrandsPage() {
             ))}
           </div>
 
-          {filteredErrands.length === 0 && (
+          {SAMPLE_ERRANDS.length === 0 && (
             <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300">
               <Package size={48} className="mx-auto text-gray-300 mb-4" />
               <p className="text-gray-500">해당 카테고리의 요청이 없습니다.</p>
