@@ -4,7 +4,14 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { logger } from '@/lib/logger';
 import { FolderTree } from 'lucide-react';
-import { ServiceFormData, ServiceFormProps } from '@/types/service-form';
+import {
+  ServiceFormData,
+  ServiceFormProps,
+  ServiceType,
+  DeliveryMethod,
+} from '@/types/service-form';
+import LocationInputSection from '@/components/service/LocationInputSection';
+import type { LocationData } from '@/components/service/LocationInputSection';
 
 interface Category {
   id: string;
@@ -12,6 +19,7 @@ interface Category {
   slug: string;
   level: number;
   parent_id: string | null;
+  service_type?: ServiceType;
 }
 
 interface Props extends ServiceFormProps {
@@ -31,6 +39,19 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
     !!(formData.category_ids && formData.category_ids.length > 0)
   );
 
+  // 위치 기반 기능용 상태
+  const [selectedServiceType, setSelectedServiceType] = useState<ServiceType | null>(
+    formData.service_type || null
+  );
+  const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>(
+    formData.delivery_method || 'online'
+  );
+
+  // 위치 입력이 필요한지 확인
+  const needsLocation =
+    selectedServiceType === 'offline' ||
+    (selectedServiceType === 'both' && deliveryMethod !== 'online');
+
   // Load level 1 categories on mount
   useEffect(() => {
     async function fetchLevel1Categories() {
@@ -38,7 +59,7 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
         const supabase = createClient();
         const { data, error } = await supabase
           .from('categories')
-          .select('id, name, slug, level, parent_id')
+          .select('id, name, slug, level, parent_id, service_type')
           .eq('is_active', true)
           .eq('level', 1)
           .order('display_order', { ascending: true });
@@ -138,6 +159,35 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
     fetchLevel3Categories();
   }, [selectedLevel2, isRestoring]);
 
+  // Update service_type when level 1 category changes
+  useEffect(() => {
+    if (isRestoring) return;
+
+    if (selectedLevel1) {
+      const selectedCategory = level1Categories.find((c) => c.id === selectedLevel1);
+      const serviceType = (selectedCategory?.service_type as ServiceType) || 'online';
+      setSelectedServiceType(serviceType);
+
+      // 카테고리 변경 시 위치 관련 상태 초기화
+      if (serviceType === 'online') {
+        setDeliveryMethod('online');
+      }
+    } else {
+      setSelectedServiceType(null);
+      setDeliveryMethod('online');
+    }
+  }, [selectedLevel1, level1Categories, isRestoring]);
+
+  // Update formData when delivery_method changes
+  useEffect(() => {
+    if (isRestoring) return;
+
+    setFormData((prev: ServiceFormData) => ({
+      ...prev,
+      delivery_method: deliveryMethod,
+    }));
+  }, [deliveryMethod, setFormData, isRestoring]);
+
   // Update final category when level 3 is selected
   useEffect(() => {
     // 복원 중에는 formData 업데이트하지 않음
@@ -156,11 +206,30 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
         prevIds.length === categories.length &&
         prevIds.every((val: string, index: number) => val === categories[index]);
 
-      if (isSame) return prev;
+      if (isSame && prev.service_type === selectedServiceType) return prev;
 
-      return { ...prev, category_ids: categories };
+      return {
+        ...prev,
+        category_ids: categories,
+        service_type: selectedServiceType || undefined,
+      };
     });
-  }, [selectedLevel1, selectedLevel2, selectedLevel3, setFormData, isRestoring]);
+  }, [
+    selectedLevel1,
+    selectedLevel2,
+    selectedLevel3,
+    selectedServiceType,
+    setFormData,
+    isRestoring,
+  ]);
+
+  // 위치 변경 핸들러
+  const handleLocationChange = (location: LocationData | null) => {
+    setFormData((prev: ServiceFormData) => ({
+      ...prev,
+      location: location,
+    }));
+  };
 
   return (
     <div className="space-y-6">
@@ -254,6 +323,87 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
           )}
         </div>
       </fieldset>
+
+      {/* 서비스 제공 방식 선택 (both 카테고리일 때만 표시) */}
+      {selectedServiceType === 'both' && (
+        <fieldset className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <legend className="text-sm font-medium text-blue-700 mb-3">서비스 제공 방식 *</legend>
+          <p className="text-sm text-gray-600 mb-3">
+            이 카테고리는 온라인과 오프라인 모두 가능합니다. 제공 방식을 선택해주세요.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="delivery_method"
+                value="online"
+                checked={deliveryMethod === 'online'}
+                onChange={() => setDeliveryMethod('online')}
+                className="w-4 h-4 text-blue-600"
+              />
+              <span className="text-sm">온라인 제공</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="delivery_method"
+                value="offline"
+                checked={deliveryMethod === 'offline'}
+                onChange={() => setDeliveryMethod('offline')}
+                className="w-4 h-4 text-blue-600"
+              />
+              <span className="text-sm">오프라인 방문</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="delivery_method"
+                value="both"
+                checked={deliveryMethod === 'both'}
+                onChange={() => setDeliveryMethod('both')}
+                className="w-4 h-4 text-blue-600"
+              />
+              <span className="text-sm">둘 다 가능</span>
+            </label>
+          </div>
+        </fieldset>
+      )}
+
+      {/* 위치 입력 섹션 (오프라인 또는 both 카테고리일 때 표시) */}
+      {needsLocation && (
+        <div className="p-4 bg-orange-50 rounded-lg border border-orange-200">
+          <LocationInputSection
+            value={formData.location}
+            onChange={handleLocationChange}
+            required={selectedServiceType === 'offline'}
+            label="서비스 제공 위치"
+            placeholder="주소를 검색하거나 현재 위치를 사용하세요"
+            helpText="오프라인 서비스는 위치 정보가 필요합니다. 고객에게 거리가 표시됩니다."
+          />
+        </div>
+      )}
+
+      {/* 오프라인 서비스 안내 */}
+      {selectedServiceType === 'offline' && (
+        <div className="flex items-start gap-3 p-3 bg-amber-50 rounded-lg text-sm text-amber-800">
+          <svg
+            className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <span>
+            <strong>오프라인 서비스</strong>입니다. 고객이 내 위치 근처에서 검색하면 노출됩니다.
+          </span>
+        </div>
+      )}
 
       {/* 서비스 제목 */}
       <div>

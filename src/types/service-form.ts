@@ -4,11 +4,30 @@
 
 import { PackageType, PackageFormData } from './package';
 
+// 위치 정보 인터페이스
+export interface LocationData {
+  address: string;
+  latitude: number;
+  longitude: number;
+  region: string;
+}
+
+// 서비스 타입 (카테고리별)
+export type ServiceType = 'online' | 'offline' | 'both';
+
+// 서비스 제공 방식 (서비스별 - both 카테고리용)
+export type DeliveryMethod = 'online' | 'offline' | 'both';
+
 // 서비스 폼 데이터 인터페이스
 export interface ServiceFormData {
   // Step 1: 기본정보
   title: string;
   category_ids: string[];
+
+  // Step 1: 위치 정보 (오프라인/both 카테고리용)
+  service_type?: ServiceType; // 선택된 카테고리의 서비스 타입
+  delivery_method?: DeliveryMethod; // 서비스 제공 방식 (both 카테고리일 때 선택)
+  location?: LocationData | null; // 위치 정보 (오프라인/both일 때)
 
   // Step 2: 가격설정
   price: string;
