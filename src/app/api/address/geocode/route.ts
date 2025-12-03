@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const KAKAO_REST_API_KEY = 'c5653a1a2efdb970ab761af0c20f3615';
+const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY || '';
 
 // POST: 주소 → 좌표 변환 (Kakao REST API 사용)
 export async function POST(request: NextRequest) {
