@@ -5,7 +5,7 @@
  */
 
 // 환경 변수에서 API 키 로드
-const KAKAO_REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY || '';
+const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY || '';
 
 // ==================== 타입 정의 ====================
 

@@ -150,7 +150,7 @@ export async function POST(request: NextRequest) {
 async function getKakaoCoordinates(
   address: string
 ): Promise<{ latitude: number; longitude: number } | null> {
-  const KAKAO_REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
+  const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY;
 
   if (!KAKAO_REST_API_KEY || !address) {
     return null;
