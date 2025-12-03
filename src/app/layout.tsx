@@ -14,6 +14,7 @@ const pretendard = localFont({
 import { ChatUnreadProvider } from '@/components/providers/ChatUnreadProvider';
 import { ErrorBoundary } from '@/components/providers/ErrorBoundary';
 import { QueryProvider } from '@/components/providers/QueryProvider';
+import RollbarProvider from '@/components/providers/RollbarProvider';
 import ToastProvider from '@/components/providers/ToastProvider';
 import { headers } from 'next/headers';
 import ConditionalLayout from '@/components/layout/ConditionalLayout';
@@ -195,23 +196,25 @@ export default async function RootLayout({
       </head>
       <body className="min-h-screen bg-gray-50 overflow-x-hidden">
         <ErrorBoundary>
-          {!isAdminPage && !isMypagePage && (
-            <Suspense fallback={null}>
-              <PageViewTracker />
-            </Suspense>
-          )}
-          <QueryProvider>
-            <AuthProvider>
-              <ChatUnreadProvider>
-                <ConditionalLayout
-                  megaMenu={shouldHideMegaMenu ? null : <ConditionalMegaMenuWrapper />}
-                >
-                  {children}
-                </ConditionalLayout>
-              </ChatUnreadProvider>
-            </AuthProvider>
-          </QueryProvider>
-          <ToastProvider />
+          <RollbarProvider>
+            {!isAdminPage && !isMypagePage && (
+              <Suspense fallback={null}>
+                <PageViewTracker />
+              </Suspense>
+            )}
+            <QueryProvider>
+              <AuthProvider>
+                <ChatUnreadProvider>
+                  <ConditionalLayout
+                    megaMenu={shouldHideMegaMenu ? null : <ConditionalMegaMenuWrapper />}
+                  >
+                    {children}
+                  </ConditionalLayout>
+                </ChatUnreadProvider>
+              </AuthProvider>
+            </QueryProvider>
+            <ToastProvider />
+          </RollbarProvider>
         </ErrorBoundary>
       </body>
     </html>
