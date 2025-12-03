@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
 
-// GET: 주변 전문가 조회 (위치 기반)
+// GET: 주변 서비스 조회 (서비스 위치 기반)
+// 판매자가 아닌 실제 서비스 제공 위치를 기준으로 검색
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient();
@@ -35,8 +36,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // RPC 함수로 주변 전문가 조회
-    const { data, error } = await supabase.rpc('get_nearby_experts', {
+    // RPC 함수로 주변 서비스 조회 (서비스 위치 기반)
+    const { data, error } = await supabase.rpc('get_nearby_services', {
       user_lat: lat,
       user_lon: lng,
       category_slug_filter: category,
@@ -45,10 +46,10 @@ export async function GET(request: NextRequest) {
     });
 
     if (error) {
-      logger.error('Get nearby experts error:', error);
+      logger.error('Get nearby services error:', error);
       return NextResponse.json(
         {
-          error: 'Failed to get nearby experts',
+          error: 'Failed to get nearby services',
           details: error.message,
         },
         { status: 500 }
@@ -66,7 +67,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    logger.error('Nearby experts GET error:', error);
+    logger.error('Nearby services GET error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
