@@ -96,14 +96,14 @@ export default function RecommendedServicesClient({
           {/* 탭 컨테이너 - PC: 한 줄 표시 / 모바일: 스크롤 */}
           <div
             ref={tabContainerRef}
-            className="flex gap-1.5 lg:gap-2 overflow-x-auto lg:overflow-x-visible lg:flex-wrap scrollbar-hide px-1 py-1"
+            className="flex gap-1 lg:gap-1.5 overflow-x-auto scrollbar-hide px-1 py-1 lg:justify-center"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {categories.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-3 lg:px-4 py-1.5 lg:py-2 text-sm font-medium rounded-full whitespace-nowrap transition-all flex-shrink-0 ${
+                className={`px-2.5 lg:px-3 py-1.5 text-xs lg:text-sm font-medium rounded-full whitespace-nowrap transition-all flex-shrink-0 ${
                   activeTab === tab.id
                     ? 'bg-orange-500 text-white shadow-sm'
                     : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
