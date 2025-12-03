@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY || '';
 
@@ -14,7 +15,7 @@ export async function POST(request: NextRequest) {
 
     // Kakao 주소 검색 API 호출
     const url = `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(address)}`;
-    console.log('[Geocode] Kakao API URL:', url);
+    logger.debug('[Geocode] Kakao API URL:', url);
 
     const response = await fetch(url, {
       headers: {
@@ -31,7 +32,7 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await response.json();
-    console.log('[Geocode] Kakao response:', JSON.stringify(data));
+    logger.debug('[Geocode] Kakao response:', JSON.stringify(data));
 
     if (!data.documents || data.documents.length === 0) {
       // 주소 검색 실패 시 키워드 검색으로 재시도
