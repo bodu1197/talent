@@ -9,7 +9,9 @@ export function getServerRollbar(): Rollbar | null {
   }
 
   const serverToken =
-    process.env.ROLLBAR_SERVER_TOKEN || process.env.choi_ROLLBAR_TALENT_SERVER_TOKEN_1764791738;
+    process.env.ROLLBAR_SERVER_TOKEN ||
+    process.env.choi_ROLLBAR_TALENT_SERVER_TOKEN_1764791738 ||
+    process.env.ROLLBAR_TALENT_SERVER_TOKEN_1764791738;
   if (!rollbarInstance && serverToken) {
     rollbarInstance = new Rollbar({
       accessToken: serverToken,

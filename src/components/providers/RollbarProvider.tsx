@@ -35,7 +35,7 @@ export default function RollbarProvider({ children }: RollbarProviderProps) {
   // Rollbar 토큰이 없으면 Provider 없이 렌더링
   const hasToken =
     process.env.NEXT_PUBLIC_ROLLBAR_CLIENT_TOKEN ||
-    process.env.NEXT_PUBLIC_choi_ROLLBAR_TALENT_CLIENT_TOKEN_1764791738;
+    process.env.NEXT_PUBLIC_ROLLBAR_TALENT_CLIENT_TOKEN_1764791738;
   if (!hasToken) {
     return <>{children}</>;
   }

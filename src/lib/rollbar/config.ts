@@ -2,7 +2,7 @@
 const rollbarConfig = {
   accessToken:
     process.env.NEXT_PUBLIC_ROLLBAR_CLIENT_TOKEN ||
-    process.env.NEXT_PUBLIC_choi_ROLLBAR_TALENT_CLIENT_TOKEN_1764791738,
+    process.env.NEXT_PUBLIC_ROLLBAR_TALENT_CLIENT_TOKEN_1764791738,
   environment: process.env.NODE_ENV || 'development',
   captureUncaught: true,
   captureUnhandledRejections: true,
