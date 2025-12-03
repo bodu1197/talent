@@ -52,14 +52,7 @@ export default async function PersonalizedServices() {
             <div key={category.category_id}>
               {/* 카테고리 헤더 */}
               <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <h3 className="text-xl font-semibold text-gray-900">{category.category_name}</h3>
-                  {category.visit_count > 1 && (
-                    <span className="px-2 py-1 bg-brand-primary text-white text-xs rounded-full">
-                      {category.visit_count}회 방문
-                    </span>
-                  )}
-                </div>
+                <h3 className="text-xl font-semibold text-gray-900">{category.category_name}</h3>
                 <Link
                   href={`/categories/${category.category_slug}`}
                   className="text-sm text-brand-primary hover:underline flex items-center gap-1"

@@ -317,27 +317,38 @@ async function fetchCategoryVisitsFallback(
     return [];
   }
 
-  // 카테고리별 방문 횟수 집계
+  // 카테고리별 최신 방문 시간 추적 (마지막 접속 순으로 정렬하기 위함)
   const categoryMap = new Map<
     string,
-    { category_id: string; category_name: string; category_slug: string; visitCount: number }
+    {
+      category_id: string;
+      category_name: string;
+      category_slug: string;
+      visitCount: number;
+      maxVisitedAt: string;
+    }
   >();
 
   for (const visit of data) {
     const existing = categoryMap.get(visit.category_id);
     if (existing) {
       existing.visitCount += 1;
+      // 더 최근 방문 시간으로 업데이트
+      if (visit.visited_at > existing.maxVisitedAt) {
+        existing.maxVisitedAt = visit.visited_at;
+      }
     } else {
       categoryMap.set(visit.category_id, {
         category_id: visit.category_id,
         category_name: visit.category_name,
         category_slug: visit.category_slug,
         visitCount: 1,
+        maxVisitedAt: visit.visited_at,
       });
     }
   }
 
-  // 방문 횟수 순으로 정렬 후 상위 limit개 반환
+  // 마지막 접속 순으로 정렬 후 상위 limit개 반환
   return Array.from(categoryMap.values())
     .map((cat) => ({
       category_id: cat.category_id,
@@ -345,13 +356,17 @@ async function fetchCategoryVisitsFallback(
       category_slug: cat.category_slug,
       visit_count: cat.visitCount,
     }))
-    .sort((a, b) => b.visit_count - a.visit_count)
+    .sort((a, b) => {
+      const aTime = categoryMap.get(a.category_id)?.maxVisitedAt || '';
+      const bTime = categoryMap.get(b.category_id)?.maxVisitedAt || '';
+      return bTime.localeCompare(aTime); // 최신 방문 순 (내림차순)
+    })
     .slice(0, limit);
 }
 
 /**
  * 회원의 관심 카테고리 기반 개인화 서비스 추천
- * 최근 방문한 모든 카테고리의 서비스를 불러옴 (방문 횟수 순)
+ * 최근 방문한 모든 카테고리의 서비스를 불러옴 (마지막 접속 순)
  */
 export async function getPersonalizedServicesByInterest(): Promise<PersonalizedCategory[]> {
   const supabase = await createServerClient();
@@ -366,7 +381,7 @@ export async function getPersonalizedServicesByInterest(): Promise<PersonalizedC
   }
 
   try {
-    // 최근 방문한 카테고리 조회 (방문 횟수 우선, 최근 방문 순)
+    // 최근 방문한 카테고리 조회 (마지막 접속 순)
     const { data: topCategories, error: categoryError } = await supabase.rpc(
       'get_recent_category_visits',
       { p_user_id: user.id, p_days: 30, p_limit: 3 }
