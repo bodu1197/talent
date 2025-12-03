@@ -1,300 +1,542 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import LocationHeroBanner from '@/components/errands/LocationHeroBanner';
-import { getCurrentPosition, reverseGeocode } from '@/lib/location/address-api';
 import Link from 'next/link';
 import Image from 'next/image';
+import {
+  MapPin,
+  Zap,
+  Shield,
+  Navigation,
+  Star,
+  Package,
+  Clock,
+  ArrowRight,
+  Moon,
+  CloudRain,
+} from 'lucide-react';
 
-// 아이콘 컴포넌트
-const MapPinIcon = ({ className }: { className?: string }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-    />
-  </svg>
-);
-
-const StarIcon = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 20 20" fill="currentColor">
-    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-  </svg>
-);
-
-const LoadingSpinner = ({ className }: { className?: string }) => (
-  <svg className={`animate-spin ${className}`} fill="none" viewBox="0 0 24 24">
-    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-    <path
-      className="opacity-75"
-      fill="currentColor"
-      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-    />
-  </svg>
-);
-
-interface NearbyExpert {
-  seller_id: string;
-  seller_name: string;
-  seller_profile_image: string | null;
-  seller_average_rating: number;
-  seller_total_reviews: number;
-  service_id: string;
-  service_title: string;
-  service_price: number;
-  category_name: string;
-  distance_km: number;
-  seller_region: string;
+// 타입 정의
+interface Helper {
+  id: number;
+  name: string;
+  avatar: string;
+  angle: number;
+  radius: number;
+  distance: number;
+  isVisible: boolean;
 }
 
-interface LocationState {
-  latitude: number;
-  longitude: number;
-  region: string;
-  address: string;
+interface ActiveHelper {
+  id: string;
+  name: string;
+  avatar: string;
+  distance: number;
+  rating: number;
+  reviews: number;
+  specialties: string[];
 }
+
+interface ErrandRequest {
+  id: string;
+  title: string;
+  category: string;
+  categoryLabel: string;
+  price: number;
+  startLocation: string;
+  endLocation: string;
+  status: 'OPEN' | 'IN_PROGRESS' | 'COMPLETED';
+  weather?: 'RAIN' | 'SNOW' | 'CLEAR';
+  timeOfDay?: 'DAY' | 'NIGHT' | 'LATE_NIGHT';
+  isHeavy?: boolean;
+  createdAt: number;
+}
+
+// 카테고리 정의
+const CATEGORIES = [
+  { value: 'ALL', label: '전체' },
+  { value: 'DELIVERY', label: '배달', color: 'bg-blue-100 text-blue-700' },
+  { value: 'SHOPPING', label: '구매대행', color: 'bg-green-100 text-green-700' },
+  { value: 'MOVING', label: '운반', color: 'bg-orange-100 text-orange-700' },
+  { value: 'QUEUEING', label: '줄서기', color: 'bg-purple-100 text-purple-700' },
+  { value: 'CLEANING', label: '청소', color: 'bg-teal-100 text-teal-700' },
+  { value: 'OTHER', label: '기타', color: 'bg-gray-100 text-gray-700' },
+];
+
+// 초기 헬퍼 데이터 (레이더용)
+const createInitialHelpers = (): Helper[] => {
+  const names = ['김민수', '이지은', '박철민', '최영희', '정대현', '한소연'];
+  const seeds = ['Felix', 'Aneka', 'John', 'Sarah', 'Mike', 'Luna'];
+  const angles = [30, 120, 210, 300, 75, 255];
+  const radii = [0.4, 0.6, 0.5, 0.7, 0.45, 0.65];
+
+  return names.map((name, i) => ({
+    id: i,
+    name,
+    avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${seeds[i]}`,
+    angle: angles[i],
+    radius: radii[i],
+    distance: radii[i] * 1.5,
+    isVisible: i < 3,
+  }));
+};
+
+// 활동 중인 헬퍼 데이터
+const ACTIVE_HELPERS: ActiveHelper[] = [
+  {
+    id: 'h1',
+    name: '김민수',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
+    distance: 0.3,
+    rating: 4.9,
+    reviews: 128,
+    specialties: ['배달', '장보기'],
+  },
+  {
+    id: 'h2',
+    name: '이지은',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka',
+    distance: 0.8,
+    rating: 5.0,
+    reviews: 42,
+    specialties: ['청소', '돌봄'],
+  },
+  {
+    id: 'h3',
+    name: '박철민',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John',
+    distance: 1.2,
+    rating: 4.8,
+    reviews: 315,
+    specialties: ['운반', '기타'],
+  },
+  {
+    id: 'h4',
+    name: '최영희',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah',
+    distance: 0.5,
+    rating: 4.7,
+    reviews: 89,
+    specialties: ['배달', '줄서기'],
+  },
+];
+
+// 샘플 심부름 요청
+const SAMPLE_ERRANDS: ErrandRequest[] = [
+  {
+    id: '1',
+    title: '비오는데 강남역 쉑쉑버거 배달해주실 분',
+    category: 'DELIVERY',
+    categoryLabel: '배달',
+    price: 18000,
+    startLocation: '강남역 1번 출구',
+    endLocation: '역삼동 푸르지오',
+    status: 'IN_PROGRESS',
+    weather: 'RAIN',
+    timeOfDay: 'DAY',
+    createdAt: Date.now(),
+  },
+  {
+    id: '2',
+    title: '마트 장보기 대행 (10개 품목)',
+    category: 'SHOPPING',
+    categoryLabel: '구매대행',
+    price: 25000,
+    startLocation: '이마트 역삼점',
+    endLocation: '테헤란로 아파트',
+    status: 'OPEN',
+    timeOfDay: 'DAY',
+    createdAt: Date.now() - 3600000,
+  },
+  {
+    id: '3',
+    title: '성수동 팝업스토어 줄서기 (2시간)',
+    category: 'QUEUEING',
+    categoryLabel: '줄서기',
+    price: 30000,
+    startLocation: '성수동 디올',
+    endLocation: '성수동 디올',
+    status: 'OPEN',
+    timeOfDay: 'DAY',
+    createdAt: Date.now() - 7200000,
+  },
+  {
+    id: '4',
+    title: '원룸 입주 청소 부탁드려요',
+    category: 'CLEANING',
+    categoryLabel: '청소',
+    price: 50000,
+    startLocation: '신림동 원룸',
+    endLocation: '신림동 원룸',
+    status: 'OPEN',
+    isHeavy: true,
+    createdAt: Date.now() - 100000,
+  },
+];
+
+// 위치 계산 함수
+const getPosition = (angle: number, radius: number) => {
+  const centerOffset = 50;
+  const maxOffset = 42;
+  const rad = (angle * Math.PI) / 180;
+  const x = centerOffset + Math.cos(rad) * radius * maxOffset;
+  const y = centerOffset + Math.sin(rad) * radius * maxOffset;
+  return { x, y };
+};
+
+// 카테고리 색상
+const getCategoryColor = (category: string) => {
+  const cat = CATEGORIES.find((c) => c.value === category);
+  return cat?.color || 'bg-gray-100 text-gray-700';
+};
 
 export default function ErrandsPage() {
-  const [location, setLocation] = useState<LocationState | null>(null);
-  const [isLoadingLocation, setIsLoadingLocation] = useState(true);
-  const [nearbyExperts, setNearbyExperts] = useState<NearbyExpert[]>([]);
-  const [isLoadingExperts, setIsLoadingExperts] = useState(false);
+  const [helpers, setHelpers] = useState<Helper[]>(createInitialHelpers());
+  const [totalCount, setTotalCount] = useState(24);
+  const [selectedCategory, setSelectedCategory] = useState('ALL');
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  // 주변 전문가 가져오기
-  const fetchNearbyExperts = useCallback(async (lat: number, lng: number) => {
-    setIsLoadingExperts(true);
-    try {
-      const response = await fetch(`/api/experts/nearby?lat=${lat}&lng=${lng}&radius=10&limit=12`);
-      if (response.ok) {
-        const data = await response.json();
-        setNearbyExperts(data.experts || []);
-      }
-    } catch (error) {
-      console.error('주변 전문가 로딩 실패:', error);
-    } finally {
-      setIsLoadingExperts(false);
-    }
+  // 하이드레이션 완료
+  useEffect(() => {
+    setIsHydrated(true);
   }, []);
 
-  // 현재 위치 가져오기
-  const handleGetLocation = useCallback(async () => {
-    setIsLoadingLocation(true);
+  /* eslint-disable sonarjs/pseudo-random */
+  // 헬퍼 동적 업데이트 (UI 애니메이션용 랜덤 - 보안과 무관)
+  const updateHelpers = useCallback(() => {
+    setHelpers((prev) => {
+      const newHelpers = [...prev];
+      newHelpers.forEach((h, idx) => {
+        if (h.isVisible) {
+          newHelpers[idx] = {
+            ...h,
+            angle: h.angle + (Math.random() - 0.5) * 15,
+            radius: Math.max(0.2, Math.min(0.9, h.radius + (Math.random() - 0.5) * 0.1)),
+          };
+        }
+      });
 
-    try {
-      const coords = await getCurrentPosition();
-      const result = await reverseGeocode(coords.latitude, coords.longitude);
-
-      if (result) {
-        const newLocation = {
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-          region: result.region || '알 수 없음',
-          address: result.roadAddress || result.address || '',
+      // 랜덤하게 visible 토글
+      const randomIdx = Math.floor(Math.random() * newHelpers.length);
+      if (Math.random() > 0.7) {
+        newHelpers[randomIdx] = {
+          ...newHelpers[randomIdx],
+          isVisible: !newHelpers[randomIdx].isVisible,
         };
-        setLocation(newLocation);
-        await fetchNearbyExperts(coords.latitude, coords.longitude);
       }
-    } catch (err) {
-      console.error('위치 가져오기 실패:', err);
-    } finally {
-      setIsLoadingLocation(false);
-    }
-  }, [fetchNearbyExperts]);
 
-  // 컴포넌트 마운트 시 자동으로 위치 요청
+      return newHelpers;
+    });
+    setTotalCount(20 + Math.floor(Math.random() * 10));
+  }, []);
+  /* eslint-enable sonarjs/pseudo-random */
+
   useEffect(() => {
-    handleGetLocation();
-  }, [handleGetLocation]);
+    if (!isHydrated) return;
+    const interval = setInterval(updateHelpers, 3000);
+    return () => clearInterval(interval);
+  }, [isHydrated, updateHelpers]);
+
+  const visibleHelpers = helpers.filter((h) => h.isVisible);
+
+  const filteredErrands =
+    selectedCategory === 'ALL'
+      ? SAMPLE_ERRANDS
+      : SAMPLE_ERRANDS.filter((e) => e.category === selectedCategory);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* 히어로 배너 (실제 위치 데이터) */}
-      <LocationHeroBanner />
+      <div className="container-1200 py-6">
+        {/* 히어로 섹션 */}
+        <section className="relative overflow-hidden rounded-2xl md:rounded-3xl bg-gray-900 border border-gray-800 shadow-2xl mb-8">
+          {/* 배경 도트 패턴 */}
+          <div
+            className="absolute inset-0 opacity-20"
+            style={{
+              backgroundImage: 'radial-gradient(#4B5563 1px, transparent 1px)',
+              backgroundSize: '24px 24px',
+            }}
+          />
 
-      {/* 주변 전문가 리스트 */}
-      <section className="py-8 md:py-12">
-        <div className="container-1200">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900">가까운 전문가</h2>
-              {location && (
-                <p className="text-sm text-gray-500 mt-1 flex items-center gap-1">
-                  <MapPinIcon className="w-4 h-4 text-orange-500" />
-                  {location.region} 기준 10km 이내
-                </p>
-              )}
-            </div>
-            {location && (
-              <Link
-                href={`/search?lat=${location.latitude}&lng=${location.longitude}&radius=10`}
-                className="text-sm text-orange-600 hover:text-orange-700 font-medium"
-              >
-                전체 보기
-              </Link>
-            )}
-          </div>
+          <div className="relative z-10 p-6 md:p-10">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+              {/* 좌측: 레이더 시각화 */}
+              <div className="relative w-56 h-56 md:w-64 md:h-64 flex items-center justify-center flex-shrink-0 order-2 md:order-1">
+                {/* 중앙 사용자 위치 */}
+                <div className="absolute w-4 h-4 bg-blue-500 rounded-full z-20 shadow-[0_0_20px_rgba(59,130,246,0.8)] animate-pulse" />
+                <div className="absolute bg-blue-500/20 w-16 h-16 rounded-full blur-md" />
 
-          {(isLoadingLocation || isLoadingExperts) && (
-            <div className="flex items-center justify-center py-16">
-              <div className="text-center">
-                <LoadingSpinner className="w-8 h-8 text-orange-500 mx-auto mb-3" />
-                <p className="text-gray-500">
-                  {isLoadingLocation ? '위치 확인 중...' : '주변 전문가 찾는 중...'}
+                {/* Ripple 효과 */}
+                <div
+                  className="absolute inset-0 rounded-full border border-blue-500/30 animate-ping"
+                  style={{ animationDuration: '3s' }}
+                />
+                <div
+                  className="absolute inset-6 rounded-full border border-blue-500/20 animate-ping"
+                  style={{ animationDuration: '3s', animationDelay: '1s' }}
+                />
+                <div
+                  className="absolute inset-12 rounded-full border border-blue-500/10 animate-ping"
+                  style={{ animationDuration: '3s', animationDelay: '2s' }}
+                />
+
+                {/* 헬퍼들 */}
+                {visibleHelpers.map((helper) => {
+                  const pos = getPosition(helper.angle, helper.radius);
+                  return (
+                    <div
+                      key={helper.id}
+                      className="absolute z-10 transition-all duration-1000 ease-in-out"
+                      style={{
+                        left: `${pos.x}%`,
+                        top: `${pos.y}%`,
+                        transform: 'translate(-50%, -50%)',
+                      }}
+                    >
+                      <div
+                        className="w-9 h-9 rounded-full bg-white border-2 border-green-500 flex items-center justify-center overflow-hidden shadow-lg animate-bounce"
+                        style={{ animationDuration: `${1.5 + helper.id * 0.2}s` }}
+                      >
+                        <Image
+                          src={helper.avatar}
+                          alt={helper.name}
+                          width={36}
+                          height={36}
+                          className="w-full h-full"
+                          unoptimized
+                        />
+                      </div>
+                      <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[9px] px-1.5 py-0.5 rounded whitespace-nowrap">
+                        {(helper.radius * 1.5).toFixed(1)}km
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* 우측: 텍스트 콘텐츠 */}
+              <div className="text-center md:text-left max-w-md order-1 md:order-2">
+                <div className="inline-flex items-center gap-2 bg-gray-800/80 backdrop-blur border border-gray-700 rounded-full px-4 py-1.5 text-sm text-blue-300 mb-4">
+                  <MapPin size={14} className="animate-pulse" />
+                  <span>내 위치 기준</span>
+                </div>
+
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight mb-3">
+                  내 주변{' '}
+                  <span className="text-green-400 transition-all duration-500 inline-block min-w-[2ch] tabular-nums">
+                    {totalCount}
+                  </span>
+                  명의 헬퍼가
+                  <br />
+                  대기하고 있어요
+                </h1>
+
+                <p className="text-gray-400 text-sm md:text-base mb-6">
+                  지금 요청하면 평균 <span className="text-white font-bold">5분 내</span>{' '}
+                  매칭됩니다.
                 </p>
+
+                <Link
+                  href="/errands/new"
+                  className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 md:px-8 md:py-4 rounded-xl font-bold text-base md:text-lg shadow-lg shadow-blue-900/50 transition transform active:scale-95"
+                >
+                  <Zap size={20} fill="currentColor" />
+                  지금 호출하기
+                </Link>
               </div>
             </div>
-          )}
+          </div>
 
-          {!isLoadingLocation && !isLoadingExperts && nearbyExperts.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {nearbyExperts.map((expert) => (
-                <Link
-                  key={expert.service_id}
-                  href={`/services/${expert.service_id}`}
-                  className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300"
-                >
-                  {/* 전문가 정보 */}
-                  <div className="p-4">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
-                        {expert.seller_profile_image ? (
-                          <Image
-                            src={expert.seller_profile_image}
-                            alt={expert.seller_name}
-                            fill
-                            className="object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-400 text-lg font-medium">
-                            {expert.seller_name.charAt(0)}
-                          </div>
-                        )}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <h3 className="font-medium text-gray-900 truncate">{expert.seller_name}</h3>
-                        <div className="flex items-center gap-2 text-sm text-gray-500">
-                          <span className="flex items-center gap-0.5">
-                            <StarIcon className="w-3.5 h-3.5 text-yellow-400" />
-                            {expert.seller_average_rating.toFixed(1)}
-                          </span>
-                          <span>({expert.seller_total_reviews})</span>
-                        </div>
-                      </div>
-                    </div>
+          {/* 하단 특징 바 */}
+          <div className="relative z-10 bg-gray-900/90 border-t border-gray-800 px-6 py-4">
+            <div className="flex flex-wrap justify-center md:justify-around gap-4 md:gap-6 text-xs md:text-sm text-gray-400">
+              <div className="flex items-center gap-2">
+                <Shield size={14} className="text-green-500" />
+                <span>신원검증 완료</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Navigation size={14} className="text-blue-500" />
+                <span>실시간 위치 추적</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock size={14} className="text-purple-500" />
+                <span>평균 5분 내 매칭</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
-                    {/* 서비스 정보 */}
-                    <h4 className="text-sm text-gray-700 mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors">
-                      {expert.service_title}
-                    </h4>
+        {/* 활동 중인 헬퍼 */}
+        <section className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-bold text-lg text-gray-800">지금 활동 중인 헬퍼</h2>
+            <button className="text-xs text-blue-600 font-medium">전체보기</button>
+          </div>
 
-                    {/* 카테고리 & 거리 */}
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded">
-                        {expert.category_name}
-                      </span>
-                      <span className="flex items-center gap-1 text-orange-600">
-                        <MapPinIcon className="w-3.5 h-3.5" />
-                        {expert.distance_km.toFixed(1)}km
-                      </span>
-                    </div>
+          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4">
+            {ACTIVE_HELPERS.map((helper) => (
+              <div
+                key={helper.id}
+                className="min-w-[260px] bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex items-center gap-4"
+              >
+                <div className="relative">
+                  <div className="w-14 h-14 rounded-full bg-gray-100 overflow-hidden">
+                    <Image
+                      src={helper.avatar}
+                      alt={helper.name}
+                      width={56}
+                      height={56}
+                      className="w-full h-full object-cover"
+                      unoptimized
+                    />
+                  </div>
+                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
+                </div>
 
-                    {/* 가격 */}
-                    <div className="mt-3 pt-3 border-t border-gray-100">
-                      <span className="text-lg font-bold text-gray-900">
-                        {expert.service_price.toLocaleString()}원
-                      </span>
+                <div className="flex-1">
+                  <div className="flex justify-between items-start">
+                    <h4 className="font-bold text-gray-900">{helper.name}</h4>
+                    <div className="flex items-center gap-0.5 text-yellow-500 text-xs font-bold">
+                      <Star size={10} fill="currentColor" />
+                      <span>{helper.rating}</span>
                     </div>
                   </div>
-                </Link>
-              ))}
-            </div>
-          )}
 
-          {!isLoadingLocation && !isLoadingExperts && nearbyExperts.length === 0 && (
-            <div className="text-center py-16 bg-white rounded-xl border border-gray-200">
-              <MapPinIcon className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">주변에 전문가가 없습니다</h3>
-              <p className="text-gray-500 mb-4">
-                {location
-                  ? '검색 범위를 넓혀서 다시 찾아보세요'
-                  : '위치를 허용하면 가까운 전문가를 찾을 수 있어요'}
-              </p>
-              <Link
-                href="/search"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
-              >
-                전체 서비스 둘러보기
-              </Link>
-            </div>
-          )}
-        </div>
-      </section>
+                  <div className="flex items-center gap-1 text-xs text-gray-500 mt-1 mb-2">
+                    <MapPin size={10} />
+                    <span>{helper.distance}km 이내</span>
+                    <span className="text-gray-300">|</span>
+                    <span>리뷰 {helper.reviews}</span>
+                  </div>
 
-      {/* 오프라인 서비스 안내 */}
-      <section className="py-8 md:py-12 bg-gradient-to-br from-orange-50 to-amber-50">
-        <div className="container-1200">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">심부름 서비스란?</h2>
-            <p className="text-gray-600 mb-6">
-              내 주변의 전문가가 직접 방문하여 서비스를 제공합니다.
-              <br />
-              청소, 수리, 이사, 뷰티, 이벤트 등 다양한 분야의 전문가를 만나보세요.
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-              <div className="bg-white rounded-xl p-6 shadow-sm">
-                <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MapPinIcon className="w-6 h-6 text-orange-500" />
+                  <div className="flex gap-1">
+                    {helper.specialties.slice(0, 2).map((specialty, i) => (
+                      <span
+                        key={i}
+                        className="px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px]"
+                      >
+                        {specialty}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">위치 기반 검색</h3>
-                <p className="text-sm text-gray-500">
-                  내 위치에서 가까운 전문가를 자동으로 찾아드려요
-                </p>
               </div>
-              <div className="bg-white rounded-xl p-6 shadow-sm">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg
-                    className="w-6 h-6 text-blue-500"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-2">검증된 전문가</h3>
-                <p className="text-sm text-gray-500">리뷰와 평점으로 검증된 전문가만 만나보세요</p>
-              </div>
-              <div className="bg-white rounded-xl p-6 shadow-sm">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg
-                    className="w-6 h-6 text-green-500"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-2">안전한 결제</h3>
-                <p className="text-sm text-gray-500">서비스 완료 후 안전하게 결제할 수 있어요</p>
-              </div>
-            </div>
+            ))}
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* 구분선 */}
+        <div className="h-2 bg-gray-100 -mx-4 md:hidden mb-6" />
+
+        {/* 주변 요청 목록 */}
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800">주변 심부름 요청</h2>
+            <span className="text-sm text-gray-500">{filteredErrands.length}건</span>
+          </div>
+
+          {/* 카테고리 필터 */}
+          <div className="flex gap-2 overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat.value}
+                onClick={() => setSelectedCategory(cat.value)}
+                className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium transition ${
+                  selectedCategory === cat.value
+                    ? 'bg-gray-900 text-white'
+                    : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
+          {/* 요청 목록 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            {filteredErrands.map((errand) => (
+              <div
+                key={errand.id}
+                className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition cursor-pointer group overflow-hidden"
+              >
+                {/* 헤더: 가격 & 카테고리 */}
+                <div className="p-5 pb-2">
+                  <div className="flex justify-between items-start mb-2">
+                    <span
+                      className={`px-2.5 py-1 rounded-md text-xs font-bold ${getCategoryColor(errand.category)}`}
+                    >
+                      {errand.categoryLabel}
+                    </span>
+                    <span className="text-lg font-bold text-gray-900">
+                      {errand.price.toLocaleString()}원
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition truncate">
+                    {errand.title}
+                  </h3>
+                </div>
+
+                {/* 경로 시각화 */}
+                <div className="px-5 py-3 bg-gray-50 border-t border-b border-gray-100">
+                  <div className="flex items-center gap-2 text-sm">
+                    <div className="flex items-center gap-1 text-gray-600 max-w-[40%] truncate">
+                      <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
+                      <span className="truncate">{errand.startLocation}</span>
+                    </div>
+                    <ArrowRight size={14} className="text-gray-400 shrink-0" />
+                    <div className="flex items-center gap-1 text-gray-600 max-w-[40%] truncate">
+                      <span className="w-2 h-2 rounded-full bg-red-500 shrink-0" />
+                      <span className="truncate">{errand.endLocation}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 푸터: 태그 & 상태 */}
+                <div className="p-4 pt-3 flex items-center justify-between">
+                  <div className="flex gap-1">
+                    {errand.weather === 'RAIN' && (
+                      <span className="px-2 py-1 bg-blue-50 text-blue-600 rounded text-xs flex items-center gap-1">
+                        <CloudRain size={12} /> 우천
+                      </span>
+                    )}
+                    {errand.timeOfDay === 'LATE_NIGHT' && (
+                      <span className="px-2 py-1 bg-purple-50 text-purple-600 rounded text-xs flex items-center gap-1">
+                        <Moon size={12} /> 심야
+                      </span>
+                    )}
+                    {errand.isHeavy && (
+                      <span className="px-2 py-1 bg-orange-50 text-orange-600 rounded text-xs flex items-center gap-1">
+                        <Package size={12} /> 무거움
+                      </span>
+                    )}
+                  </div>
+
+                  {errand.status === 'IN_PROGRESS' ? (
+                    <Link
+                      href={`/errands/track/${errand.id}`}
+                      className="flex items-center gap-1 text-white text-xs font-bold bg-green-500 px-3 py-1.5 rounded-full hover:bg-green-600 transition shadow-sm"
+                    >
+                      <Navigation size={12} />
+                      <span>위치 추적</span>
+                    </Link>
+                  ) : (
+                    <span className="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">
+                      대기중
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {filteredErrands.length === 0 && (
+            <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300">
+              <Package size={48} className="mx-auto text-gray-300 mb-4" />
+              <p className="text-gray-500">해당 카테고리의 요청이 없습니다.</p>
+            </div>
+          )}
+        </section>
+      </div>
     </div>
   );
 }
