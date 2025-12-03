@@ -1,15 +1,13 @@
 // 심부름 관련 타입 정의
 
+// 심부름 = 어디 다녀오는 것 (배달, 구매대행, 운반, 줄서기, 서류 등)
 export type ErrandCategory =
-  | 'DELIVERY'
-  | 'SHOPPING'
-  | 'CLEANING'
-  | 'QUEUEING'
-  | 'PET_CARE'
-  | 'BUG_CATCHING'
-  | 'MOVING'
-  | 'DOCUMENT'
-  | 'OTHER';
+  | 'DELIVERY' // 배달/픽업
+  | 'SHOPPING' // 구매대행
+  | 'MOVING' // 운반/이사
+  | 'QUEUEING' // 줄서기/대기
+  | 'DOCUMENT' // 서류 대행
+  | 'OTHER'; // 기타
 
 export type ErrandStatus = 'OPEN' | 'MATCHED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
 
@@ -129,12 +127,9 @@ export interface UpdateErrandStatusRequest {
 // Category Labels (Korean)
 export const ERRAND_CATEGORY_LABELS: Record<ErrandCategory, string> = {
   DELIVERY: '배달/픽업',
-  SHOPPING: '대리 구매',
-  CLEANING: '청소/정리',
-  QUEUEING: '줄서기/대기',
-  PET_CARE: '반려동물 케어',
-  BUG_CATCHING: '벌레 잡기',
-  MOVING: '이사/운반',
+  SHOPPING: '구매대행',
+  MOVING: '운반/이사',
+  QUEUEING: '줄서기',
   DOCUMENT: '서류 대행',
   OTHER: '기타',
 };
@@ -279,12 +274,9 @@ export const HELPER_GRADE_LABELS: Record<HelperGrade, string> = {
 // Category Icons (for UI)
 export const ERRAND_CATEGORY_ICONS: Record<ErrandCategory, string> = {
   DELIVERY: 'Package',
-  SHOPPING: 'ShoppingBag',
-  CLEANING: 'Sparkles',
-  QUEUEING: 'Users',
-  PET_CARE: 'Heart',
-  BUG_CATCHING: 'Bug',
+  SHOPPING: 'ShoppingCart',
   MOVING: 'Truck',
+  QUEUEING: 'Users',
   DOCUMENT: 'FileText',
   OTHER: 'MoreHorizontal',
 };
