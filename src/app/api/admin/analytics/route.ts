@@ -27,6 +27,7 @@ interface PageViewRow {
   created_at: string;
   device_type: string | null;
   session_id: string | null;
+  user_id: string | null;
 }
 
 interface AggregatedStats {
@@ -131,9 +132,10 @@ function aggregateByPeriod(data: PageViewRow[], period: Period): AggregatedStats
     // Count views
     existing.total_views++;
 
-    // Count unique visitors by session_id
-    if (row.session_id) {
-      existing._sessions.add(row.session_id);
+    // Count unique visitors (user_id 우선, 없으면 session_id 사용)
+    const uniqueId = row.user_id || row.session_id;
+    if (uniqueId) {
+      existing._sessions.add(uniqueId);
       existing.unique_visitors = existing._sessions.size;
     }
 
@@ -212,7 +214,7 @@ export async function GET(request: NextRequest) {
     // Query page_views directly
     let query = supabase
       .from('page_views')
-      .select('created_at, device_type, session_id')
+      .select('created_at, device_type, session_id, user_id')
       .gte('created_at', startDate.toISOString())
       .order('created_at', { ascending: false });
 
