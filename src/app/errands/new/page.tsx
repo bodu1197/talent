@@ -159,7 +159,7 @@ export default function NewErrandPage() {
     <div className="min-h-screen bg-gray-50">
       {/* 헤더 */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-lg mx-auto px-4 h-14 flex items-center">
+        <div className="container-1200 h-14 flex items-center">
           <Link href="/errands" className="mr-4">
             <ChevronLeft className="w-6 h-6 text-gray-600" />
           </Link>
@@ -167,124 +167,128 @@ export default function NewErrandPage() {
         </div>
       </header>
 
-      <main className="max-w-lg mx-auto px-4 py-6">
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* 카테고리 선택 */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              어떤 심부름이 필요하세요?
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat.value}
-                  type="button"
-                  onClick={() => handleCategorySelect(cat.value)}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
-                    formData.category === cat.value
-                      ? 'bg-blue-600 text-white shadow-md'
-                      : 'bg-white text-gray-700 border border-gray-200 hover:border-blue-300'
-                  }`}
-                >
-                  {cat.icon}
-                  {cat.label}
-                </button>
-              ))}
+      <main className="container-1200 py-6">
+        <div className="max-w-2xl mx-auto">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* 카테고리 선택 */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                어떤 심부름이 필요하세요?
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {CATEGORIES.map((cat) => (
+                  <button
+                    key={cat.value}
+                    type="button"
+                    onClick={() => handleCategorySelect(cat.value)}
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
+                      formData.category === cat.value
+                        ? 'bg-blue-600 text-white shadow-md'
+                        : 'bg-white text-gray-700 border border-gray-200 hover:border-blue-300'
+                    }`}
+                  >
+                    {cat.icon}
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* 출발지 */}
-          <div className="bg-white rounded-xl border border-gray-200 p-4">
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-              <div className="w-2 h-2 rounded-full bg-blue-500" />
-              출발지
-            </label>
-            <div className="flex gap-2">
+            {/* 출발지 */}
+            <div className="bg-white rounded-xl border border-gray-200 p-4">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                <div className="w-2 h-2 rounded-full bg-blue-500" />
+                출발지
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  name="pickup_address"
+                  value={formData.pickup_address || ''}
+                  onChange={handleChange}
+                  placeholder="출발지 주소 입력"
+                  className="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={handleCurrentLocation}
+                  className="px-3 py-3 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
+                  title="현재 위치"
+                >
+                  <Navigation className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* 도착지 */}
+            <div className="bg-white rounded-xl border border-gray-200 p-4">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                <div className="w-2 h-2 rounded-full bg-red-500" />
+                도착지
+              </label>
               <input
                 type="text"
-                name="pickup_address"
-                value={formData.pickup_address || ''}
+                name="delivery_address"
+                value={formData.delivery_address || ''}
                 onChange={handleChange}
-                placeholder="출발지 주소 입력"
-                className="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                placeholder="도착지 주소 입력"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
-              <button
-                type="button"
-                onClick={handleCurrentLocation}
-                className="px-3 py-3 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
-                title="현재 위치"
-              >
-                <Navigation className="w-5 h-5" />
-              </button>
             </div>
-          </div>
 
-          {/* 도착지 */}
-          <div className="bg-white rounded-xl border border-gray-200 p-4">
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-              <div className="w-2 h-2 rounded-full bg-red-500" />
-              도착지
-            </label>
-            <input
-              type="text"
-              name="delivery_address"
-              value={formData.delivery_address || ''}
-              onChange={handleChange}
-              placeholder="도착지 주소 입력"
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-            />
-          </div>
-
-          {/* 요청 내용 */}
-          <div className="bg-white rounded-xl border border-gray-200 p-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              요청 내용 <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              name="title"
-              value={formData.title || ''}
-              onChange={handleChange}
-              placeholder="예: 편의점에서 물건 가져다주세요"
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm mb-3"
-            />
-            <textarea
-              name="description"
-              value={formData.description || ''}
-              onChange={handleChange}
-              rows={3}
-              placeholder="상세 설명 (선택)"
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none"
-            />
-          </div>
-
-          {/* 예상 금액 */}
-          <div className="bg-blue-50 rounded-xl p-4">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600">예상 금액</span>
-              <span className="text-lg font-bold text-blue-600">
-                {ERRAND_PRICING.BASE_PRICE.toLocaleString()}원~
-              </span>
+            {/* 요청 내용 */}
+            <div className="bg-white rounded-xl border border-gray-200 p-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                요청 내용 <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title || ''}
+                onChange={handleChange}
+                placeholder="예: 편의점에서 물건 가져다주세요"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm mb-3"
+              />
+              <textarea
+                name="description"
+                value={formData.description || ''}
+                onChange={handleChange}
+                rows={3}
+                placeholder="상세 설명 (선택)"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none"
+              />
             </div>
-            <p className="text-xs text-gray-500 mt-1">거리에 따라 추가 요금이 발생할 수 있습니다</p>
-          </div>
 
-          {/* 제출 버튼 */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-bold text-base flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-600/30"
-          >
-            {loading ? (
-              '요청 중...'
-            ) : (
-              <>
-                <Bike className="w-5 h-5" />
-                심부름 요청하기
-              </>
-            )}
-          </button>
-        </form>
+            {/* 예상 금액 */}
+            <div className="bg-blue-50 rounded-xl p-4">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">예상 금액</span>
+                <span className="text-lg font-bold text-blue-600">
+                  {ERRAND_PRICING.BASE_PRICE.toLocaleString()}원~
+                </span>
+              </div>
+              <p className="text-xs text-gray-500 mt-1">
+                거리에 따라 추가 요금이 발생할 수 있습니다
+              </p>
+            </div>
+
+            {/* 제출 버튼 */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-bold text-base flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-600/30"
+            >
+              {loading ? (
+                '요청 중...'
+              ) : (
+                <>
+                  <Bike className="w-5 h-5" />
+                  심부름 요청하기
+                </>
+              )}
+            </button>
+          </form>
+        </div>
       </main>
     </div>
   );
