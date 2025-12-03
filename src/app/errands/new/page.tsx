@@ -199,7 +199,7 @@ export default function NewErrandPage() {
   }
 
   if (!user) {
-    router.push('/login?redirect=/errands/new');
+    router.push('/auth/login?redirect=/errands/new');
     return null;
   }
 
