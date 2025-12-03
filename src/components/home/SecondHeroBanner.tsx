@@ -378,7 +378,7 @@ export default function SecondHeroBanner() {
                 </p>
 
                 <Link
-                  href="/search?category=errands"
+                  href="/errands"
                   className="inline-flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-lg md:rounded-xl font-bold text-sm md:text-base shadow-lg shadow-blue-900/50 transition transform active:scale-95"
                 >
                   <ZapIcon />
