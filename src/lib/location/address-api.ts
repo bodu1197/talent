@@ -1,11 +1,8 @@
 /**
  * 주소 검색 및 좌표 변환 유틸리티
  * - 도로명주소 API (juso.go.kr): 주소 검색 + 좌표 변환
- * - 카카오 API: 역지오코딩 (좌표 → 주소)
+ * - 카카오 API: 역지오코딩 (좌표 → 주소) - 서버 API 경유
  */
-
-// 환경 변수에서 API 키 로드
-const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY || '';
 
 // ==================== 타입 정의 ====================
 
@@ -69,50 +66,34 @@ export async function searchAddress(
   }
 }
 
-// ==================== 카카오 역지오코딩 API ====================
+// ==================== 카카오 역지오코딩 API (서버 API 경유) ====================
 
 /**
  * 좌표로 주소 조회 (역지오코딩)
- * - 카카오 REST API 사용
+ * - 서버 API 경유 (카카오 REST API 키는 서버에서만 사용)
  * - GPS 좌표 → 주소 변환
  */
 export async function reverseGeocode(
   latitude: number,
   longitude: number
 ): Promise<ReverseGeocodeResult | null> {
-  if (!KAKAO_REST_API_KEY) {
-    console.error('카카오 API 키가 설정되지 않았습니다');
-    return null;
-  }
-
   try {
-    const response = await fetch(
-      `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${longitude}&y=${latitude}`,
-      {
-        headers: {
-          Authorization: `KakaoAK ${KAKAO_REST_API_KEY}`,
-        },
-      }
-    );
+    const response = await fetch('/api/address/reverse-geocode', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ latitude, longitude }),
+    });
 
     if (!response.ok) {
-      throw new Error('Reverse geocoding failed');
+      return null;
     }
 
     const data = await response.json();
 
-    if (!data.documents || data.documents.length === 0) {
-      return null;
-    }
-
-    const doc = data.documents[0];
-    const address = doc.address;
-    const roadAddress = doc.road_address;
-
     return {
-      address: address?.address_name || '',
-      roadAddress: roadAddress?.address_name || null,
-      region: address?.region_2depth_name || '', // 구/군
+      address: data.address || '',
+      roadAddress: data.roadAddress || null,
+      region: data.region || '',
       latitude,
       longitude,
     };

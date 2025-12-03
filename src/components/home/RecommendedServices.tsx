@@ -93,7 +93,7 @@ function processCategoryServices<T extends { id: string }>(
 export default async function RecommendedServices({ aiCategoryIds }: RecommendedServicesProps) {
   const supabase = await createClient();
 
-  // 1. 1단계 카테고리 조회 (AI 카테고리 및 제외 카테고리 제외)
+  // 1. 1단계 카테고리 조회 (AI 카테고리 및 제외 카테고리 제외 - 탭용)
   const { data: categoriesData } = await supabase
     .from('categories')
     .select('id, name, slug')
@@ -101,7 +101,7 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
     .eq('is_active', true)
     .order('display_order');
 
-  // AI 카테고리 및 제외 카테고리 필터링
+  // 탭에 표시할 카테고리 (AI 카테고리 및 제외 카테고리 제외)
   const categories: CategoryTab[] = (categoriesData || [])
     .filter((cat) => !aiCategoryIds.includes(cat.id) && !EXCLUDED_CATEGORY_SLUGS.includes(cat.slug))
     .map((cat) => ({ id: cat.id, name: cat.name, slug: cat.slug }));
@@ -115,8 +115,50 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
 
   const advertisedServiceIds = new Set(advertisingData?.map((ad) => ad.service_id) || []);
 
-  // 3. 카테고리별 서비스 조회 (병렬 처리로 성능 향상)
+  // 3. 모든 활성 서비스 조회 (전체 탭용)
+  const { data: allServicesData } = await supabase
+    .from('services')
+    .select(
+      `id, title, description, price, thumbnail_url, orders_count, delivery_method,
+       seller:seller_profiles(id, business_name, display_name, profile_image, is_verified)`
+    )
+    .eq('status', 'active')
+    .order('created_at', { ascending: false })
+    .limit(100);
+
+  if (!allServicesData || allServicesData.length === 0) {
+    return (
+      <RecommendedServicesClient categories={categories} servicesByCategory={{}} allServices={[]} />
+    );
+  }
+
+  const allServiceIds = allServicesData.map((s) => s.id);
+
+  // 4. 모든 리뷰 통계 한 번에 조회
+  const { data: reviewStats } = await supabase
+    .from('reviews')
+    .select('service_id, rating')
+    .in('service_id', allServiceIds)
+    .eq('is_visible', true);
+
+  const ratingMap = buildRatingMap(reviewStats as { service_id: string; rating: number }[] | null);
+
+  // 5. 전체 탭용 서비스 (광고 우선 + 랜덤)
+  const allServices = processCategoryServices(allServicesData, advertisedServiceIds, ratingMap);
+
+  // 6. 카테고리별 서비스 조회 (탭에 표시되는 카테고리만)
   const allCategoryIds = categories.map((c) => c.id);
+
+  if (allCategoryIds.length === 0) {
+    return (
+      <RecommendedServicesClient
+        categories={categories}
+        servicesByCategory={{}}
+        allServices={allServices}
+      />
+    );
+  }
+
   const { data: allSubCategories } = await supabase
     .from('categories')
     .select('id, parent_id')
@@ -137,35 +179,6 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
     .select('service_id, category_id')
     .in('category_id', allRelatedCatIds);
 
-  const allServiceIds = [...new Set(allServiceLinks?.map((s) => s.service_id) || [])];
-
-  if (allServiceIds.length === 0) {
-    return <RecommendedServicesClient categories={categories} servicesByCategory={{}} />;
-  }
-
-  // 모든 서비스 한 번에 조회
-  const { data: allServicesData } = await supabase
-    .from('services')
-    .select(
-      `id, title, description, price, thumbnail_url, orders_count, delivery_method,
-       seller:seller_profiles(id, business_name, display_name, profile_image, is_verified)`
-    )
-    .in('id', allServiceIds)
-    .eq('status', 'active')
-    .order('created_at', { ascending: false });
-
-  if (!allServicesData || allServicesData.length === 0) {
-    return <RecommendedServicesClient categories={categories} servicesByCategory={{}} />;
-  }
-
-  // 모든 리뷰 통계 한 번에 조회
-  const { data: reviewStats } = await supabase
-    .from('reviews')
-    .select('service_id, rating')
-    .in('service_id', allServiceIds)
-    .eq('is_visible', true);
-
-  const ratingMap = buildRatingMap(reviewStats as { service_id: string; rating: number }[] | null);
   const serviceToCategories = buildServiceToCategoriesMap(allServiceLinks);
 
   // 각 카테고리별로 서비스 분류
@@ -188,6 +201,10 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
   }
 
   return (
-    <RecommendedServicesClient categories={categories} servicesByCategory={servicesByCategory} />
+    <RecommendedServicesClient
+      categories={categories}
+      servicesByCategory={servicesByCategory}
+      allServices={allServices}
+    />
   );
 }

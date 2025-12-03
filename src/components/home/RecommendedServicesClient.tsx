@@ -14,11 +14,13 @@ interface CategoryTab {
 interface RecommendedServicesClientProps {
   readonly categories: CategoryTab[];
   readonly servicesByCategory: Record<string, Service[]>;
+  readonly allServices: Service[];
 }
 
 export default function RecommendedServicesClient({
   categories,
   servicesByCategory,
+  allServices,
 }: RecommendedServicesClientProps) {
   const [activeTab, setActiveTab] = useState<string>('all');
   const tabContainerRef = useRef<HTMLDivElement>(null);
@@ -58,10 +60,7 @@ export default function RecommendedServicesClient({
   };
 
   // 현재 탭에 맞는 서비스 가져오기
-  const currentServices =
-    activeTab === 'all'
-      ? Object.values(servicesByCategory).flat()
-      : servicesByCategory[activeTab] || [];
+  const currentServices = activeTab === 'all' ? allServices : servicesByCategory[activeTab] || [];
 
   // 전체 탭 + 카테고리 탭
   const tabs: CategoryTab[] = [{ id: 'all', name: '전체', slug: 'all' }, ...categories];
