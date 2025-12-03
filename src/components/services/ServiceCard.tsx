@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Package, Star, CheckCircle } from 'lucide-react';
+import { Package, Star, CheckCircle, MapPin } from 'lucide-react';
 
 // ServiceCard가 실제로 사용하는 최소 필드만 정의
 interface ServiceCardData {
@@ -15,6 +15,8 @@ interface ServiceCardData {
   is_featured?: boolean;
   is_advertised?: boolean;
   is_promoted?: boolean; // 검색 결과에서 사용
+  location_region?: string | null; // 서비스 제공 지역
+  _distance?: number; // 사용자 위치와의 거리 (km)
   seller?: {
     display_name?: string;
     is_verified?: boolean;
@@ -160,13 +162,32 @@ export default function ServiceCard({
           {service.title}
         </h3>
 
-        {/* 평점 및 주문 수 */}
+        {/* 평점 및 거리 */}
         <div className="flex items-center gap-2 text-xs text-gray-600 mb-1">
           <span className="flex items-center gap-1">
             <Star className="w-3 h-3 text-yellow-400 fill-current" aria-hidden="true" />
             <span className="sr-only">평점</span>
             {(service.rating || 0).toFixed(1)}
           </span>
+          {/* 거리 표시 (위치 정보가 있을 때만) */}
+          {service._distance !== undefined && service._distance < 99999 && (
+            <span className="flex items-center gap-1 text-gray-500">
+              <MapPin className="w-3 h-3" aria-hidden="true" />
+              <span className="sr-only">거리</span>
+              {service._distance < 1
+                ? `${Math.round(service._distance * 1000)}m`
+                : `${service._distance.toFixed(1)}km`}
+            </span>
+          )}
+          {/* 지역 표시 (거리 정보 없고 지역 정보만 있을 때) */}
+          {(service._distance === undefined || service._distance >= 99999) &&
+            service.location_region && (
+              <span className="flex items-center gap-1 text-gray-500">
+                <MapPin className="w-3 h-3" aria-hidden="true" />
+                <span className="sr-only">지역</span>
+                {service.location_region}
+              </span>
+            )}
         </div>
 
         {/* 가격 */}

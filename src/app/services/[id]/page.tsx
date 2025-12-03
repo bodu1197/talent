@@ -24,6 +24,7 @@ import {
   Image as ImageIcon,
   MessageCircle,
   UserCircle,
+  MapPin,
 } from 'lucide-react';
 import ServiceCard from '@/components/services/ServiceCard';
 import {
@@ -405,6 +406,13 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   <Heart className="w-4 h-4 text-red-400 fill-current" />
                   <span className="font-semibold">{service.wishlist_count || 0}</span>
                 </div>
+                {/* 서비스 제공 지역 */}
+                {service.location_region && (
+                  <div className="flex items-center gap-1.5 text-gray-600">
+                    <MapPin className="w-4 h-4" />
+                    <span>{service.location_region}</span>
+                  </div>
+                )}
               </div>
 
               {/* 전문가 정보 카드 */}
@@ -578,7 +586,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
       {/* 모바일 전용: 평점 별표 */}
       <div className="lg:hidden bg-white px-4 py-3 border-b border-gray-100">
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 flex-wrap">
           {[1, 2, 3, 4, 5].map((star) => (
             <Star
               key={star}
@@ -591,6 +599,13 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             <Heart className="w-4 h-4 text-red-400 fill-current" />
             <span>{service.wishlist_count || 0}</span>
           </div>
+          {/* 서비스 제공 지역 */}
+          {service.location_region && (
+            <div className="ml-4 flex items-center gap-1 text-gray-500">
+              <MapPin className="w-4 h-4" />
+              <span>{service.location_region}</span>
+            </div>
+          )}
         </div>
       </div>
 
