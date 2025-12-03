@@ -308,7 +308,7 @@ export default function NewServiceClient({ sellerId }: Props) {
         .replaceAll(/-+/g, '-')
         .substring(0, 100);
 
-      // 5. Insert service
+      // 5. Insert service (위치 정보 포함)
       const { data: service, error: serviceError } = await supabase
         .from('services')
         .insert({
@@ -325,6 +325,11 @@ export default function NewServiceClient({ sellerId }: Props) {
           thumbnail_url: publicUrl,
           search_keywords: formData.searchKeywords || null,
           status: 'pending',
+          // 서비스별 위치 정보 저장
+          location_address: formData.location?.address || null,
+          location_latitude: formData.location?.latitude || null,
+          location_longitude: formData.location?.longitude || null,
+          location_region: formData.location?.region || null,
         })
         .select()
         .single();
@@ -346,7 +351,7 @@ export default function NewServiceClient({ sellerId }: Props) {
         logger.error('Category insert error:', categoryError);
       }
 
-      toast.error('서비스가 성공적으로 등록되었습니다!\n관리자 승인 후 판매가 시작됩니다.');
+      toast.success('서비스가 성공적으로 등록되었습니다!\n관리자 승인 후 판매가 시작됩니다.');
       globalThis.location.href = '/mypage/seller/services';
     } catch (error) {
       logger.error('Service registration error:', error);

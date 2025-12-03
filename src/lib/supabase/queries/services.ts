@@ -167,21 +167,8 @@ export async function getServicesByCategory(
   const serviceRoleClient = createServiceRoleClient();
   const advertisedServiceIds = await fetchAdvertisedServiceIds(serviceRoleClient);
 
-  // 5. Fetch all services (include location fields if location sorting is needed)
-  const sellerFields = location
-    ? `
-        id,
-        business_name,
-        display_name,
-        profile_image,
-        user_id,
-        is_verified,
-        is_business,
-        location_latitude,
-        location_longitude,
-        location_region
-      `
-    : `
+  // 5. Fetch all services (services 테이블에서 위치 정보 가져옴 - select '*'로 자동 포함)
+  const sellerFields = `
         id,
         business_name,
         display_name,
@@ -251,14 +238,14 @@ export async function getServicesByCategory(
       return R * c;
     };
 
-    // Add distance to each service
+    // Add distance to each service (서비스 자체의 위치 정보 사용)
     const addDistance = (services: typeof allServices) => {
       return services.map((service) => {
-        const sellerLat = service.seller?.location_latitude;
-        const sellerLng = service.seller?.location_longitude;
+        const serviceLat = service.location_latitude;
+        const serviceLng = service.location_longitude;
         const distance =
-          sellerLat && sellerLng
-            ? calculateDistance(location.lat, location.lng, sellerLat, sellerLng)
+          serviceLat && serviceLng
+            ? calculateDistance(location.lat, location.lng, serviceLat, serviceLng)
             : 99999; // Services without location go to the end
         return { ...service, _distance: distance };
       });
@@ -282,7 +269,7 @@ export async function getServicesByCategory(
       sampleDistances: combinedServices.slice(0, 3).map((s) => ({
         title: s.title,
         distance: s._distance?.toFixed(2),
-        region: s.seller?.location_region,
+        region: s.location_region,
       })),
     });
   } else {
