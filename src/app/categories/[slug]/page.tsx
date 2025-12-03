@@ -127,12 +127,10 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                   {isOfflineCategoryPage && <LocationSortToggle />}
                 </div>
 
-                {/* 필터 + 정렬 (아래 줄) */}
-                <div className="flex items-center gap-2 flex-wrap">
+                {/* 필터 + 정렬 (한 줄에 모두 표시) */}
+                <div className="flex items-center justify-between gap-1.5 sm:gap-2">
                   <CategoryFilter categoryId={category.id} isAI={category.is_ai || false} />
-                  <div className="ml-auto">
-                    <CategorySort currentSort="popular" currentPrice="" />
-                  </div>
+                  <CategorySort currentSort="popular" currentPrice="" />
                 </div>
               </div>
 
