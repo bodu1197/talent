@@ -23,6 +23,11 @@ import {
   User,
   ChevronDown,
   ChevronRight,
+  Bike,
+  MapPin,
+  Clock,
+  Wallet,
+  FileCheck,
 } from 'lucide-react';
 
 // Icon mapping helper
@@ -43,7 +48,14 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   'fa-file-invoice': FileText,
   'fa-heart': Heart,
   'fa-user': User,
+  'fa-bike': Bike,
+  'fa-map-pin': MapPin,
+  'fa-clock': Clock,
+  'fa-wallet': Wallet,
+  'fa-file-check': FileCheck,
 };
+
+type UserRole = 'seller' | 'buyer' | 'helper';
 
 interface NavItem {
   label: string;
@@ -54,12 +66,13 @@ interface NavItem {
 }
 
 interface SidebarProps {
-  readonly mode: 'seller' | 'buyer';
+  readonly mode: UserRole;
   readonly profileData?: {
     readonly name: string;
     readonly profile_image?: string | null;
   } | null;
   readonly isRegisteredSeller?: boolean;
+  readonly isRegisteredHelper?: boolean;
 }
 
 const sellerNavItems: NavItem[] = [
@@ -211,6 +224,36 @@ const buyerNavItems: NavItem[] = [
     ],
   },
   {
+    label: '심부름 내역',
+    href: '/mypage/buyer/errands',
+    icon: 'fa-bike',
+    children: [
+      { label: '전체', href: '/mypage/buyer/errands', icon: '' },
+      {
+        label: '요청중',
+        href: '/mypage/buyer/errands?status=OPEN',
+        icon: '',
+        badge: 0,
+      },
+      {
+        label: '진행중',
+        href: '/mypage/buyer/errands?status=IN_PROGRESS',
+        icon: '',
+        badge: 0,
+      },
+      {
+        label: '완료',
+        href: '/mypage/buyer/errands?status=COMPLETED',
+        icon: '',
+      },
+      {
+        label: '취소',
+        href: '/mypage/buyer/errands?status=CANCELLED',
+        icon: '',
+      },
+    ],
+  },
+  {
     label: '견적 요청 내역',
     href: '/mypage/buyer/quotes',
     icon: 'fa-file-invoice',
@@ -245,13 +288,116 @@ const buyerNavItems: NavItem[] = [
   },
 ];
 
-export default function Sidebar({ mode, profileData, isRegisteredSeller }: SidebarProps) {
+const helperNavItems: NavItem[] = [
+  {
+    label: '심부름꾼 대시보드',
+    href: '/mypage/helper/dashboard',
+    icon: 'fa-chart-pie',
+  },
+  {
+    label: '심부름 찾기',
+    href: '/mypage/helper/available',
+    icon: 'fa-map-pin',
+    children: [
+      { label: '주변 심부름', href: '/mypage/helper/available', icon: '' },
+      { label: '지원한 심부름', href: '/mypage/helper/applied', icon: '' },
+    ],
+  },
+  {
+    label: '내 심부름',
+    href: '/mypage/helper/errands',
+    icon: 'fa-bike',
+    children: [
+      { label: '전체', href: '/mypage/helper/errands', icon: '' },
+      {
+        label: '진행중',
+        href: '/mypage/helper/errands?status=IN_PROGRESS',
+        icon: '',
+        badge: 0,
+      },
+      {
+        label: '완료',
+        href: '/mypage/helper/errands?status=COMPLETED',
+        icon: '',
+      },
+    ],
+  },
+  {
+    label: '수익 관리',
+    href: '/mypage/helper/earnings',
+    icon: 'fa-wallet',
+    children: [
+      { label: '정산 내역', href: '/mypage/helper/earnings', icon: '' },
+      { label: '출금 요청', href: '/mypage/helper/earnings/withdraw', icon: '' },
+    ],
+  },
+  {
+    label: '리뷰 관리',
+    href: '/mypage/helper/reviews',
+    icon: 'fa-star',
+  },
+  {
+    label: '구독 관리',
+    href: '/mypage/helper/subscription',
+    icon: 'fa-file-check',
+  },
+  {
+    label: '심부름꾼 정보',
+    href: '/mypage/helper/profile',
+    icon: 'fa-id-card',
+  },
+  {
+    label: '심부름꾼 등록',
+    href: '/mypage/helper/register',
+    icon: 'fa-user-plus',
+  },
+  {
+    label: '기본정보',
+    href: '/mypage/settings',
+    icon: 'fa-user-circle',
+  },
+];
+
+// 모드별 프로필 링크 결정
+const getProfileHref = (mode: UserRole) => {
+  if (mode === 'seller') return '/mypage/seller/profile';
+  if (mode === 'helper') return '/mypage/helper/profile';
+  return '/mypage/settings';
+};
+
+// 모드별 프로필 텍스트 결정
+const getProfileText = (mode: UserRole) => {
+  if (mode === 'seller') return '전문가 프로필';
+  if (mode === 'helper') return '심부름꾼 프로필';
+  return '프로필 설정';
+};
+
+export default function Sidebar({
+  mode,
+  profileData,
+  isRegisteredSeller,
+  isRegisteredHelper,
+}: SidebarProps) {
   const pathname = usePathname();
 
+  // 모드별 네비게이션 아이템 가져오기
+  const getNavItems = () => {
+    if (mode === 'seller') return sellerNavItems;
+    if (mode === 'helper') return helperNavItems;
+    return buyerNavItems;
+  };
+
   // 전문가 모드에서 등록 완료 시 "전문가 등록" 메뉴 숨김
-  const navItems = (mode === 'seller' ? sellerNavItems : buyerNavItems).filter(
-    (item) => !(mode === 'seller' && isRegisteredSeller && item.href === '/mypage/seller/register')
-  );
+  // 심부름꾼 모드에서 등록 완료 시 "심부름꾼 등록" 메뉴 숨김
+  const navItems = getNavItems().filter((item) => {
+    if (mode === 'seller' && isRegisteredSeller && item.href === '/mypage/seller/register') {
+      return false;
+    }
+    if (mode === 'helper' && isRegisteredHelper && item.href === '/mypage/helper/register') {
+      return false;
+    }
+    return true;
+  });
 
   // Initialize with currently active parent items expanded
   const getInitialExpandedItems = () => {
@@ -297,7 +443,7 @@ export default function Sidebar({ mode, profileData, isRegisteredSeller }: Sideb
         {/* 프로필 정보 카드 */}
         <div className="mb-4">
           <Link
-            href={mode === 'seller' ? '/mypage/seller/profile' : '/mypage/settings'}
+            href={getProfileHref(mode)}
             className="flex items-center gap-3 w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 card-interactive"
           >
             <ProfileImage
@@ -307,28 +453,44 @@ export default function Sidebar({ mode, profileData, isRegisteredSeller }: Sideb
             />
             <div className="flex-1">
               <p className="text-sm font-medium text-gray-900">{profileData?.name || '회원'}</p>
-              <p className="text-xs text-gray-500">
-                {mode === 'seller' ? '전문가 프로필' : '프로필 설정'}
-              </p>
+              <p className="text-xs text-gray-500">{getProfileText(mode)}</p>
             </div>
             <ChevronRight className="w-4 h-4 text-gray-400" />
           </Link>
         </div>
 
-        {/* 모드 전환 버튼 */}
-        <div className="mb-6">
-          <Link
-            href={mode === 'seller' ? '/mypage/buyer/dashboard' : '/mypage/seller/dashboard'}
-            className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-sm font-medium click-pop btn-ripple"
-          >
-            {mode === 'seller' ? (
+        {/* 모드 전환 버튼들 */}
+        <div className="mb-6 space-y-2">
+          {mode !== 'buyer' && (
+            <Link
+              href="/mypage/buyer/dashboard"
+              className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-sm font-medium click-pop btn-ripple"
+            >
               <ShoppingCart className="w-4 h-4" />
-            ) : (
+              <span>구매자 페이지로</span>
+              <ChevronRight className="w-3 h-3" />
+            </Link>
+          )}
+          {mode !== 'seller' && (
+            <Link
+              href="/mypage/seller/dashboard"
+              className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-sm font-medium click-pop btn-ripple"
+            >
               <ShoppingBag className="w-4 h-4" />
-            )}
-            <span>{mode === 'seller' ? '구매자 페이지로' : '전문가 페이지로'}</span>
-            <ChevronRight className="w-3 h-3" />
-          </Link>
+              <span>전문가 페이지로</span>
+              <ChevronRight className="w-3 h-3" />
+            </Link>
+          )}
+          {mode !== 'helper' && (
+            <Link
+              href="/mypage/helper/dashboard"
+              className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-orange-100 hover:bg-orange-200 rounded-lg transition-colors text-sm font-medium click-pop btn-ripple text-orange-700"
+            >
+              <Bike className="w-4 h-4" />
+              <span>심부름꾼 페이지로</span>
+              <ChevronRight className="w-3 h-3" />
+            </Link>
+          )}
         </div>
 
         {/* 네비게이션 메뉴 */}

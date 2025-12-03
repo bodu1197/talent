@@ -1,0 +1,213 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
+import { logServerError } from '@/lib/rollbar/server';
+import { SupabaseClient } from '@supabase/supabase-js';
+
+interface RouteParams {
+  params: Promise<{ id: string; appId: string }>;
+}
+
+// 지원 수락 처리
+async function handleAcceptApplication(
+  supabase: SupabaseClient,
+  errandId: string,
+  appId: string,
+  helperUserId: string
+): Promise<NextResponse> {
+  // 1. 지원 상태를 accepted로 변경
+  const { error: appError } = await supabase
+    .from('errand_applications')
+    .update({
+      status: 'accepted',
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', appId);
+
+  if (appError) {
+    throw appError;
+  }
+
+  // 2. 다른 지원들은 rejected로 변경
+  await supabase
+    .from('errand_applications')
+    .update({
+      status: 'rejected',
+      updated_at: new Date().toISOString(),
+    })
+    .eq('errand_id', errandId)
+    .neq('id', appId)
+    .eq('status', 'pending');
+
+  // 3. 심부름 상태를 MATCHED로 변경하고 헬퍼 배정
+  const { error: errandError } = await supabase
+    .from('errands')
+    .update({
+      status: 'MATCHED',
+      helper_id: helperUserId,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', errandId);
+
+  if (errandError) {
+    throw errandError;
+  }
+
+  return NextResponse.json({
+    success: true,
+    message: '헬퍼가 선정되었습니다',
+  });
+}
+
+// 지원 거절 처리
+async function handleRejectApplication(
+  supabase: SupabaseClient,
+  appId: string
+): Promise<NextResponse> {
+  const { error } = await supabase
+    .from('errand_applications')
+    .update({
+      status: 'rejected',
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', appId);
+
+  if (error) {
+    throw error;
+  }
+
+  return NextResponse.json({
+    success: true,
+    message: '지원이 거절되었습니다',
+  });
+}
+
+// 지원 수락/거절 (요청자)
+export async function PATCH(request: NextRequest, { params }: RouteParams) {
+  try {
+    const { id, appId } = await params;
+    const supabase = await createClient();
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json({ error: '로그인이 필요합니다' }, { status: 401 });
+    }
+
+    // 심부름 조회 및 권한 확인
+    const { data: errand } = await supabase.from('errands').select('*').eq('id', id).single();
+
+    if (!errand) {
+      return NextResponse.json({ error: '심부름을 찾을 수 없습니다' }, { status: 404 });
+    }
+
+    if (errand.requester_id !== user.id) {
+      return NextResponse.json({ error: '수락 권한이 없습니다' }, { status: 403 });
+    }
+
+    if (errand.status !== 'OPEN') {
+      return NextResponse.json({ error: '이미 진행중인 심부름입니다' }, { status: 400 });
+    }
+
+    // 지원 조회
+    const { data: application } = await supabase
+      .from('errand_applications')
+      .select('*, helper:helper_profiles(user_id)')
+      .eq('id', appId)
+      .eq('errand_id', id)
+      .single();
+
+    if (!application) {
+      return NextResponse.json({ error: '지원을 찾을 수 없습니다' }, { status: 404 });
+    }
+
+    if (application.status !== 'pending') {
+      return NextResponse.json({ error: '이미 처리된 지원입니다' }, { status: 400 });
+    }
+
+    const body = await request.json();
+    const action = body.action as 'accept' | 'reject';
+
+    if (!action || !['accept', 'reject'].includes(action)) {
+      return NextResponse.json({ error: '유효하지 않은 액션입니다' }, { status: 400 });
+    }
+
+    if (action === 'accept') {
+      return handleAcceptApplication(supabase, id, appId, application.helper?.user_id);
+    }
+
+    return handleRejectApplication(supabase, appId);
+  } catch (error) {
+    logServerError(error instanceof Error ? error : new Error(String(error)), {
+      context: 'errand_application_action_error',
+    });
+    return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 });
+  }
+}
+
+// 지원 철회 (헬퍼)
+export async function DELETE(request: NextRequest, { params }: RouteParams) {
+  try {
+    const { id, appId } = await params;
+    const supabase = await createClient();
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json({ error: '로그인이 필요합니다' }, { status: 401 });
+    }
+
+    // 헬퍼 프로필 확인
+    const { data: helperProfile } = await supabase
+      .from('helper_profiles')
+      .select('id')
+      .eq('user_id', user.id)
+      .single();
+
+    if (!helperProfile) {
+      return NextResponse.json({ error: '권한이 없습니다' }, { status: 403 });
+    }
+
+    // 지원 조회 및 권한 확인
+    const { data: application } = await supabase
+      .from('errand_applications')
+      .select('*')
+      .eq('id', appId)
+      .eq('errand_id', id)
+      .eq('helper_id', helperProfile.id)
+      .single();
+
+    if (!application) {
+      return NextResponse.json({ error: '지원을 찾을 수 없습니다' }, { status: 404 });
+    }
+
+    if (application.status !== 'pending') {
+      return NextResponse.json({ error: '이미 처리된 지원은 철회할 수 없습니다' }, { status: 400 });
+    }
+
+    const { error } = await supabase
+      .from('errand_applications')
+      .update({
+        status: 'withdrawn',
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', appId);
+
+    if (error) {
+      throw error;
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: '지원이 철회되었습니다',
+    });
+  } catch (error) {
+    logServerError(error instanceof Error ? error : new Error(String(error)), {
+      context: 'errand_application_withdraw_error',
+    });
+    return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 });
+  }
+}

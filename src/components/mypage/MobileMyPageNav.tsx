@@ -15,7 +15,12 @@ import {
   Settings,
   Bell,
   Megaphone,
+  Bike,
+  MapPin,
+  CreditCard,
 } from 'lucide-react';
+
+type UserRole = 'buyer' | 'seller' | 'helper';
 
 interface MenuItem {
   label: string;
@@ -25,6 +30,7 @@ interface MenuItem {
 
 const buyerMenuItems: MenuItem[] = [
   { label: '주문 내역', href: '/mypage/buyer/orders', icon: <ShoppingBag className="w-6 h-6" /> },
+  { label: '심부름 내역', href: '/mypage/buyer/errands', icon: <Bike className="w-6 h-6" /> },
   { label: '찜한 서비스', href: '/mypage/buyer/favorites', icon: <Heart className="w-6 h-6" /> },
   { label: '리뷰 관리', href: '/mypage/buyer/reviews', icon: <Star className="w-6 h-6" /> },
   { label: '견적 요청', href: '/mypage/buyer/quotes', icon: <FileText className="w-6 h-6" /> },
@@ -49,19 +55,41 @@ const sellerMenuItems: MenuItem[] = [
   { label: '설정', href: '/mypage/settings', icon: <Settings className="w-6 h-6" /> },
 ];
 
+const helperMenuItems: MenuItem[] = [
+  { label: '심부름 찾기', href: '/mypage/helper/available', icon: <MapPin className="w-6 h-6" /> },
+  { label: '내 심부름', href: '/mypage/helper/errands', icon: <Bike className="w-6 h-6" /> },
+  { label: '수익 관리', href: '/mypage/helper/earnings', icon: <Wallet className="w-6 h-6" /> },
+  {
+    label: '구독 관리',
+    href: '/mypage/helper/subscription',
+    icon: <CreditCard className="w-6 h-6" />,
+  },
+  { label: '리뷰 관리', href: '/mypage/helper/reviews', icon: <Star className="w-6 h-6" /> },
+  { label: '프로필', href: '/mypage/helper/profile', icon: <User className="w-6 h-6" /> },
+  { label: '알림', href: '/mypage/notifications', icon: <Bell className="w-6 h-6" /> },
+  { label: '설정', href: '/mypage/settings', icon: <Settings className="w-6 h-6" /> },
+];
+
 interface Props {
-  readonly currentRole: 'buyer' | 'seller';
-  readonly onRoleChange: (role: 'buyer' | 'seller') => void;
+  readonly currentRole: UserRole;
+  readonly onRoleChange: (role: UserRole) => void;
   readonly isSeller: boolean;
 }
 
+// 역할별 메뉴 아이템 매핑
+const getMenuItems = (role: UserRole) => {
+  if (role === 'seller') return sellerMenuItems;
+  if (role === 'helper') return helperMenuItems;
+  return buyerMenuItems;
+};
+
 export default function MobileMyPageNav({ currentRole, onRoleChange, isSeller: _isSeller }: Props) {
   const pathname = usePathname();
-  const menuItems = currentRole === 'seller' ? sellerMenuItems : buyerMenuItems;
+  const menuItems = getMenuItems(currentRole);
 
   return (
     <div className="lg:hidden px-4 pt-4">
-      {/* 전문가/구매자 토글 - 항상 표시 */}
+      {/* 전문가/구매자/심부름꾼 토글 */}
       <div className="flex bg-gray-100 rounded-lg p-1 mb-4">
         <button
           onClick={() => onRoleChange('seller')}
@@ -78,6 +106,14 @@ export default function MobileMyPageNav({ currentRole, onRoleChange, isSeller: _
           }`}
         >
           구매자
+        </button>
+        <button
+          onClick={() => onRoleChange('helper')}
+          className={`flex-1 py-2.5 text-sm font-semibold rounded-md transition-colors ${
+            currentRole === 'helper' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-500'
+          }`}
+        >
+          심부름꾼
         </button>
       </div>
 
