@@ -60,7 +60,7 @@ export async function middleware(request: NextRequest) {
 
     response.headers.set('Content-Security-Policy', cspHeader);
     response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-    response.headers.set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+    response.headers.set('Permissions-Policy', 'geolocation=(self), microphone=(), camera=()');
 
     // HTTPS 전용 (프로덕션에서만)
     if (process.env.NODE_ENV === 'production') {
