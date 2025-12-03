@@ -107,66 +107,60 @@ const PuzzleIcon = () => (
   </svg>
 );
 
-// 카테고리 설정 (아이콘, 스타일)
+// 카테고리 설정 (아이콘, 스타일) - slug는 실제 카테고리 slug와 일치해야 함
 const categoryConfig = [
   {
-    id: 'living',
+    slug: 'life-service',
     title: '생활 서비스',
     subtitle: '청소 · 수리 · 이사 · 정리수납',
     description: '내 주변 전문가가 직접 방문해요',
     icon: HomeIcon,
     gradient: 'from-emerald-500 to-teal-600',
-    href: '/search?category=living',
   },
   {
-    id: 'event',
+    slug: 'event',
     title: '이벤트',
     subtitle: 'MC · 사회자 · 공연 · 행사',
     description: '가까운 곳에서 특별한 순간을',
     icon: MicIcon,
     gradient: 'from-violet-500 to-purple-600',
-    href: '/search?category=event',
   },
   {
-    id: 'beauty',
+    slug: 'beauty-fashion',
     title: '뷰티 · 패션',
     subtitle: '메이크업 · 헤어 · 네일 · 스타일링',
     description: '동네에서 만나는 뷰티 전문가',
     icon: SparklesIcon,
     gradient: 'from-pink-500 to-rose-600',
-    href: '/search?category=beauty',
   },
   {
-    id: 'custom-order',
+    slug: 'custom-order',
     title: '주문제작',
     subtitle: '맞춤 제작 · 커스텀 상품 · 핸드메이드',
     description: '근처 공방에서 나만의 것을',
     icon: WrenchIcon,
     gradient: 'from-amber-500 to-orange-600',
-    href: '/categories/custom-order',
   },
   {
-    id: 'counseling-coaching',
+    slug: 'counseling-coaching',
     title: '상담 · 코칭',
     subtitle: '심리상담 · 커리어 · 라이프 코칭',
     description: '가까운 전문가와 1:1 상담',
     icon: ChatBubbleIcon,
     gradient: 'from-sky-500 to-blue-600',
-    href: '/categories/counseling-coaching',
   },
   {
-    id: 'hobby-handmade',
+    slug: 'hobby-handmade',
     title: '취미 · 핸드메이드',
     subtitle: '공예 · DIY · 클래스 · 원데이',
     description: '동네 원데이클래스 발견하기',
     icon: PuzzleIcon,
     gradient: 'from-fuchsia-500 to-pink-600',
-    href: '/categories/hobby-handmade',
   },
 ];
 
-interface CategoryCount {
-  category_slug: string;
+interface CategoryServiceCount {
+  slug: string;
   count: number;
 }
 
@@ -179,22 +173,21 @@ interface LocationState {
 export default function ThirdHeroBanner() {
   const [location, setLocation] = useState<LocationState | null>(null);
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
-  const [categoryCounts, setCategoryCounts] = useState<CategoryCount[]>([]);
+  const [serviceCounts, setServiceCounts] = useState<CategoryServiceCount[]>([]);
   const [isLoadingCounts, setIsLoadingCounts] = useState(false);
 
-  // 위치 기반 카테고리 수 가져오기
-  const fetchCategoryCounts = useCallback(async (lat: number, lng: number) => {
+  // 카테고리별 서비스 수 가져오기 (전체 등록 서비스)
+  const fetchServiceCounts = useCallback(async () => {
     setIsLoadingCounts(true);
     try {
-      const response = await fetch(
-        `/api/experts/nearby/categories?lat=${lat}&lng=${lng}&radius=10`
-      );
+      const slugs = categoryConfig.map((c) => c.slug);
+      const response = await fetch(`/api/categories/service-counts?slugs=${slugs.join(',')}`);
       if (response.ok) {
         const data = await response.json();
-        setCategoryCounts(data.categories || []);
+        setServiceCounts(data.counts || []);
       }
     } catch (error) {
-      console.error('카테고리 수 로딩 실패:', error);
+      console.error('서비스 수 로딩 실패:', error);
     } finally {
       setIsLoadingCounts(false);
     }
@@ -215,23 +208,23 @@ export default function ThirdHeroBanner() {
           region: result.region || '알 수 없음',
         };
         setLocation(newLocation);
-        await fetchCategoryCounts(coords.latitude, coords.longitude);
       }
     } catch (error) {
       console.error('위치 가져오기 실패:', error);
     } finally {
       setIsLoadingLocation(false);
     }
-  }, [fetchCategoryCounts]);
+  }, []);
 
-  // 컴포넌트 마운트 시 자동으로 위치 요청
+  // 컴포넌트 마운트 시 위치 요청 및 서비스 수 가져오기
   useEffect(() => {
     handleGetLocation();
-  }, [handleGetLocation]);
+    fetchServiceCounts();
+  }, [handleGetLocation, fetchServiceCounts]);
 
-  // 카테고리 슬러그로 전문가 수 가져오기
-  const getNearbyCount = (slug: string): number => {
-    const found = categoryCounts.find((c) => c.category_slug === slug);
+  // 카테고리 슬러그로 서비스 수 가져오기
+  const getServiceCount = (slug: string): number => {
+    const found = serviceCounts.find((c) => c.slug === slug);
     return found?.count || 0;
   };
 
@@ -308,17 +301,17 @@ export default function ThirdHeroBanner() {
         <div className="flex md:grid md:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
           {categoryConfig.map((category) => {
             const IconComponent = category.icon;
-            const nearbyCount = getNearbyCount(category.id);
-            const hasExperts = nearbyCount > 0;
+            const serviceCount = getServiceCount(category.slug);
+            const hasServices = serviceCount > 0;
+            // 실제 카테고리 페이지 링크 생성
+            const categoryHref = location
+              ? `/categories/${category.slug}?lat=${location.latitude}&lng=${location.longitude}`
+              : `/categories/${category.slug}`;
 
             return (
               <Link
-                key={category.id}
-                href={
-                  location
-                    ? `${category.href}?lat=${location.latitude}&lng=${location.longitude}`
-                    : category.href
-                }
+                key={category.slug}
+                href={categoryHref}
                 className="group flex-shrink-0 w-[85%] sm:w-[70%] md:w-auto snap-center"
               >
                 <div
@@ -330,14 +323,14 @@ export default function ThirdHeroBanner() {
 
                   {/* 콘텐츠 */}
                   <div className="relative z-10 h-full flex flex-col">
-                    {/* 상단: 아이콘 + 주변 전문가 배지 */}
+                    {/* 상단: 아이콘 + 서비스 수 배지 */}
                     <div className="flex items-start justify-between mb-4">
                       <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
                         <IconComponent />
                       </div>
-                      {/* 주변 전문가 수 배지 */}
+                      {/* 내주변 서비스 수 배지 */}
                       <div
-                        className={`flex items-center gap-1 backdrop-blur-sm px-2.5 py-1 rounded-full ${getBadgeBackground(isLoadingCounts, hasExperts)}`}
+                        className={`flex items-center gap-1 backdrop-blur-sm px-2.5 py-1 rounded-full ${getBadgeBackground(isLoadingCounts, hasServices)}`}
                       >
                         {isLoadingCounts ? (
                           <LoadingSpinner className="w-3 h-3 text-white" />
@@ -345,7 +338,7 @@ export default function ThirdHeroBanner() {
                           <>
                             <MapPinIcon className="w-3 h-3 text-white" />
                             <span className="text-white text-xs font-medium">
-                              {hasExperts ? `주변 ${nearbyCount}명` : '주변 0명'}
+                              {hasServices ? `서비스 ${serviceCount}개` : '내주변 서비스'}
                             </span>
                           </>
                         )}
@@ -361,7 +354,7 @@ export default function ThirdHeroBanner() {
 
                     {/* CTA */}
                     <div className="flex items-center gap-2 text-white font-medium text-sm mt-4 group-hover:gap-3 transition-all duration-300">
-                      <span>{hasExperts ? '주변 전문가 보기' : '전문가 찾기'}</span>
+                      <span>{hasServices ? '서비스 보기' : '전문가 찾기'}</span>
                       <ArrowRightIcon />
                     </div>
                   </div>
