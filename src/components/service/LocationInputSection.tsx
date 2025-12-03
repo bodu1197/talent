@@ -1,13 +1,35 @@
 'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
-import {
-  searchAddress,
-  reverseGeocode,
-  getCurrentPosition,
-  extractRegion,
-} from '@/lib/location/address-api';
-import type { AddressResult } from '@/lib/location/address-api';
+import { useState, useEffect } from 'react';
+import { reverseGeocode, getCurrentPosition, extractRegion } from '@/lib/location/address-api';
+
+// Daum Postcode 타입 선언
+declare global {
+  interface Window {
+    daum: {
+      Postcode: new (options: {
+        oncomplete: (data: DaumPostcodeResult) => void;
+        onclose?: () => void;
+        width?: string | number;
+        height?: string | number;
+      }) => {
+        embed: (element: HTMLElement) => void;
+        open: () => void;
+      };
+    };
+  }
+}
+
+interface DaumPostcodeResult {
+  address: string; // 기본 주소
+  roadAddress: string; // 도로명 주소
+  jibunAddress: string; // 지번 주소
+  zonecode: string; // 우편번호
+  sido: string; // 시도
+  sigungu: string; // 시군구
+  bname: string; // 법정동명
+  buildingName: string; // 건물명
+}
 
 // 아이콘 컴포넌트
 const MapPinIcon = ({ className }: { className?: string }) => (
@@ -81,86 +103,85 @@ export default function LocationInputSection({
   required = false,
   disabled = false,
   label = '서비스 제공 위치',
-  placeholder = '주소를 검색하거나 현재 위치를 사용하세요',
+  placeholder = '주소를 검색하세요',
   helpText = '오프라인 서비스의 경우 고객님께 위치가 표시됩니다',
   error,
 }: LocationInputSectionProps) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<AddressResult[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
   const [isGettingLocation, setIsGettingLocation] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
-  const inputRef = useRef<HTMLInputElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const debounceRef = useRef<NodeJS.Timeout | null>(null);
-
-  // 외부 클릭 시 드롭다운 닫기
+  // Daum Postcode 스크립트 로드
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node) &&
-        inputRef.current &&
-        !inputRef.current.contains(event.target as Node)
-      ) {
-        setShowDropdown(false);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  // 디바운스 주소 검색
-  const handleSearch = useCallback(async (query: string) => {
-    if (query.length < 2) {
-      setSearchResults([]);
-      setShowDropdown(false);
+    if (typeof window !== 'undefined' && window.daum) {
+      setIsScriptLoaded(true);
       return;
     }
 
-    setIsSearching(true);
-    try {
-      const result = await searchAddress(query, 1, 5);
-      setSearchResults(result.results);
-      setShowDropdown(result.results.length > 0);
-    } catch {
-      setSearchResults([]);
-    } finally {
-      setIsSearching(false);
-    }
+    const script = document.createElement('script');
+    script.src = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+    script.async = true;
+    script.onload = () => setIsScriptLoaded(true);
+    document.head.appendChild(script);
+
+    return () => {
+      // cleanup은 하지 않음 (한번 로드된 스크립트는 유지)
+    };
   }, []);
 
-  // 검색어 변경 핸들러 (디바운스 적용)
-  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-    setLocationError(null);
+  // 카카오 API로 좌표 조회
+  const getCoordinates = async (address: string): Promise<{ lat: number; lng: number } | null> => {
+    const KAKAO_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
+    if (!KAKAO_API_KEY) return null;
 
-    // 이전 타이머 취소
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
+    try {
+      const response = await fetch(
+        `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(address)}`,
+        {
+          headers: { Authorization: `KakaoAK ${KAKAO_API_KEY}` },
+        }
+      );
+      const data = await response.json();
+      if (data.documents && data.documents.length > 0) {
+        return {
+          lat: parseFloat(data.documents[0].y),
+          lng: parseFloat(data.documents[0].x),
+        };
+      }
+    } catch (err) {
+      console.error('좌표 조회 실패:', err);
     }
-
-    // 300ms 디바운스
-    debounceRef.current = setTimeout(() => {
-      handleSearch(query);
-    }, 300);
+    return null;
   };
 
-  // 주소 선택 핸들러
-  const handleSelectAddress = (address: AddressResult) => {
-    onChange({
-      address: address.roadAddress || address.address,
-      latitude: address.latitude,
-      longitude: address.longitude,
-      region: address.region || extractRegion(address.address),
-    });
-    setSearchQuery('');
-    setSearchResults([]);
-    setShowDropdown(false);
+  // Daum 우편번호 검색 열기
+  const handleOpenPostcode = () => {
+    if (!isScriptLoaded || disabled) return;
+
+    setLocationError(null);
+    setIsSearching(true);
+
+    new window.daum.Postcode({
+      oncomplete: async (data: DaumPostcodeResult) => {
+        const address = data.roadAddress || data.jibunAddress || data.address;
+        const region = data.sigungu || extractRegion(address);
+
+        // 카카오 API로 좌표 조회
+        const coords = await getCoordinates(address);
+
+        onChange({
+          address,
+          latitude: coords?.lat || 0,
+          longitude: coords?.lng || 0,
+          region,
+        });
+        setIsSearching(false);
+      },
+      onclose: () => {
+        setIsSearching(false);
+      },
+    }).open();
   };
 
   // 현재 위치 가져오기
@@ -198,7 +219,6 @@ export default function LocationInputSection({
   // 위치 삭제
   const handleClearLocation = () => {
     onChange(null);
-    setSearchQuery('');
     setLocationError(null);
   };
 
@@ -235,56 +255,26 @@ export default function LocationInputSection({
         <>
           {/* 입력 영역 */}
           <div className="flex gap-2">
-            {/* 주소 검색 입력 */}
-            <div className="relative flex-1">
-              <div className="relative">
-                <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={searchQuery}
-                  onChange={handleQueryChange}
-                  onFocus={() => searchResults.length > 0 && setShowDropdown(true)}
-                  placeholder={placeholder}
-                  disabled={disabled}
-                  className={`
-                    w-full pl-10 pr-4 py-3 border rounded-lg
-                    focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                    disabled:bg-gray-100 disabled:cursor-not-allowed
-                    ${error ? 'border-red-500' : 'border-gray-300'}
-                  `}
-                />
-                {isSearching && (
-                  <LoadingSpinner className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500" />
-                )}
-              </div>
-
-              {/* 검색 결과 드롭다운 */}
-              {showDropdown && searchResults.length > 0 && (
-                <div
-                  ref={dropdownRef}
-                  className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-y-auto"
-                >
-                  {searchResults.map((result, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      onClick={() => handleSelectAddress(result)}
-                      className="w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors"
-                    >
-                      <p className="text-sm font-medium text-gray-900 truncate">
-                        {result.roadAddress}
-                      </p>
-                      {result.jibunAddress && result.jibunAddress !== result.roadAddress && (
-                        <p className="text-xs text-gray-500 mt-0.5 truncate">
-                          {result.jibunAddress}
-                        </p>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+            {/* 주소 검색 버튼 */}
+            <button
+              type="button"
+              onClick={handleOpenPostcode}
+              disabled={disabled || !isScriptLoaded || isSearching}
+              className={`
+                flex-1 flex items-center gap-2 px-4 py-3 border rounded-lg text-left
+                transition-all duration-200
+                ${
+                  disabled || !isScriptLoaded
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200'
+                    : 'bg-white text-gray-700 border-gray-300 hover:border-blue-500 hover:bg-blue-50'
+                }
+                ${error ? 'border-red-500' : ''}
+              `}
+            >
+              <SearchIcon className="w-5 h-5 text-gray-400" />
+              <span className="text-sm">{placeholder}</span>
+              {isSearching && <LoadingSpinner className="w-5 h-5 text-blue-500 ml-auto" />}
+            </button>
 
             {/* 현재 위치 버튼 */}
             <button
