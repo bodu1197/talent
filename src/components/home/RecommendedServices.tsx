@@ -50,37 +50,23 @@ function buildRatingMap(
   return ratingMap;
 }
 
-// 서비스 ID → 카테고리 ID 매핑 생성
-function buildServiceToCategoriesMap(
-  serviceLinks: { service_id: string; category_id: string }[] | null
-): Map<string, Set<string>> {
-  const map = new Map<string, Set<string>>();
-  if (!serviceLinks) return map;
-
-  for (const link of serviceLinks) {
-    if (!map.has(link.service_id)) {
-      map.set(link.service_id, new Set());
-    }
-    map.get(link.service_id)!.add(link.category_id);
-  }
-  return map;
-}
-
-// 카테고리별 서비스 분류 및 셔플
-function processCategoryServices<T extends { id: string }>(
-  categoryServices: T[],
-  advertisedServiceIds: Set<string>,
-  ratingMap: Map<string, { sum: number; count: number }>
+// 서비스 포맷 변환 (리뷰 통계 포함)
+function formatServicesWithRating(
+  services: Array<{ id: string; [key: string]: unknown }>,
+  ratingMap: Map<string, { sum: number; count: number }>,
+  advertisedServiceIds: Set<string>
 ): Service[] {
-  const advertisedServices = categoryServices.filter((s) => advertisedServiceIds.has(s.id));
-  const regularServices = categoryServices.filter((s) => !advertisedServiceIds.has(s.id));
+  // 광고 서비스와 일반 서비스 분리
+  const advertisedServices = services.filter((s) => advertisedServiceIds.has(s.id));
+  const regularServices = services.filter((s) => !advertisedServiceIds.has(s.id));
 
   shuffleArray(advertisedServices);
   shuffleArray(regularServices);
 
-  const shuffled = [...advertisedServices, ...regularServices].slice(0, 15);
+  // 광고 서비스 우선 + 일반 서비스 (상위 15개)
+  const combinedServices = [...advertisedServices, ...regularServices].slice(0, 15);
 
-  return shuffled.map((service) => {
+  return combinedServices.map((service) => {
     const stats = ratingMap.get(service.id);
     return {
       ...service,
@@ -118,93 +104,116 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
 
   const advertisedServiceIds = new Set(advertisingData?.map((ad) => ad.service_id) || []);
 
-  // 3. 하위 카테고리 조회
+  // 3. 하위 카테고리 조회 (2단계 + 3단계 모두)
   const allCategoryIds = filteredCategories.map((c) => c.id);
-  const { data: allSubCategories } = await supabase
+
+  // 2단계 카테고리 (1단계의 자식)
+  const { data: level2Categories } = await supabase
     .from('categories')
     .select('id, parent_id')
     .in('parent_id', allCategoryIds);
 
-  // 카테고리별 ID 매핑 (자신 + 하위)
+  const level2Ids = level2Categories?.map((c) => c.id) || [];
+
+  // 3단계 카테고리 (2단계의 자식)
+  let level3Categories: { id: string; parent_id: string }[] = [];
+  if (level2Ids.length > 0) {
+    const { data: level3Data } = await supabase
+      .from('categories')
+      .select('id, parent_id')
+      .in('parent_id', level2Ids);
+    level3Categories = level3Data || [];
+  }
+
+  // 카테고리별 ID 매핑 (자신 + 2단계 + 3단계)
   const categoryIdMap = new Map<string, string[]>();
   for (const cat of filteredCategories) {
-    const subCatIds =
-      allSubCategories?.filter((sub) => sub.parent_id === cat.id).map((sub) => sub.id) || [];
-    categoryIdMap.set(cat.id, [cat.id, ...subCatIds]);
+    const level2Cats = level2Categories?.filter((sub) => sub.parent_id === cat.id) || [];
+    const level2CatIds = level2Cats.map((c) => c.id);
+    const level3CatIds = level3Categories
+      .filter((sub) => level2CatIds.includes(sub.parent_id))
+      .map((c) => c.id);
+    categoryIdMap.set(cat.id, [cat.id, ...level2CatIds, ...level3CatIds]);
   }
 
-  const allRelatedCatIds = [...categoryIdMap.values()].flat();
-
-  // 4. 서비스-카테고리 연결 조회
-  const { data: allServiceLinks } = await supabase
-    .from('service_categories')
-    .select('service_id, category_id')
-    .in('category_id', allRelatedCatIds);
-
-  const allServiceIds = [...new Set(allServiceLinks?.map((s) => s.service_id) || [])];
-
-  if (allServiceIds.length === 0) {
-    // 서비스가 없어도 카테고리 탭은 표시
-    const categories: CategoryTab[] = filteredCategories.map((cat) => ({
-      id: cat.id,
-      name: cat.name,
-      slug: cat.slug,
-    }));
-    return <RecommendedServicesClient categories={categories} servicesByCategory={{}} />;
-  }
-
-  // 5. 서비스 조회
-  const { data: allServicesData } = await supabase
-    .from('services')
-    .select(
-      `id, title, description, price, thumbnail_url, orders_count, delivery_method,
-       seller:seller_profiles(id, business_name, display_name, profile_image, is_verified)`
-    )
-    .in('id', allServiceIds)
-    .eq('status', 'active')
-    .order('created_at', { ascending: false });
-
-  if (!allServicesData || allServicesData.length === 0) {
-    const categories: CategoryTab[] = filteredCategories.map((cat) => ({
-      id: cat.id,
-      name: cat.name,
-      slug: cat.slug,
-    }));
-    return <RecommendedServicesClient categories={categories} servicesByCategory={{}} />;
-  }
-
-  // 6. 리뷰 통계 조회
-  const { data: reviewStats } = await supabase
-    .from('reviews')
-    .select('service_id, rating')
-    .in(
-      'service_id',
-      allServicesData.map((s) => s.id)
-    )
-    .eq('is_visible', true);
-
-  const ratingMap = buildRatingMap(reviewStats as { service_id: string; rating: number }[] | null);
-  const serviceToCategories = buildServiceToCategoriesMap(allServiceLinks);
-
-  // 7. 각 카테고리별로 서비스 분류
+  // 4. 각 카테고리별로 서비스 조회 (JOIN 쿼리 사용 - AIServicesSection과 동일한 패턴)
   const servicesByCategory: Record<string, Service[]> = {};
   const categories: CategoryTab[] = [];
+  const allServiceIds: string[] = [];
 
   for (const category of filteredCategories) {
-    const catIds = new Set(categoryIdMap.get(category.id) || []);
-    const categoryServices = allServicesData.filter((service) => {
-      const serviceCats = serviceToCategories.get(service.id);
-      return serviceCats ? [...serviceCats].some((catId) => catIds.has(catId)) : false;
-    });
+    const catIds = categoryIdMap.get(category.id) || [];
 
-    // 카테고리는 항상 추가 (서비스 유무와 관계없이)
+    if (catIds.length === 0) {
+      categories.push({ id: category.id, name: category.name, slug: category.slug });
+      continue;
+    }
+
+    // JOIN 쿼리로 서비스 조회 (service_categories!inner 사용)
+    const { data: categoryServices } = await supabase
+      .from('services')
+      .select(
+        `
+        id,
+        title,
+        description,
+        price,
+        thumbnail_url,
+        orders_count,
+        delivery_method,
+        seller:seller_profiles(
+          id,
+          business_name,
+          display_name,
+          profile_image,
+          is_verified
+        ),
+        service_categories!inner(category_id)
+      `
+      )
+      .in('service_categories.category_id', catIds)
+      .eq('status', 'active')
+      .order('created_at', { ascending: false })
+      .limit(50);
+
     categories.push({ id: category.id, name: category.name, slug: category.slug });
 
-    if (categoryServices.length > 0) {
-      servicesByCategory[category.id] = processCategoryServices(
-        categoryServices,
-        advertisedServiceIds,
-        ratingMap
+    if (categoryServices && categoryServices.length > 0) {
+      // 중복 제거 (같은 서비스가 여러 카테고리에 연결된 경우)
+      const uniqueServices = Array.from(new Map(categoryServices.map((s) => [s.id, s])).values());
+
+      // 서비스 ID 수집 (리뷰 통계 조회용)
+      uniqueServices.forEach((s) => {
+        if (!allServiceIds.includes(s.id)) {
+          allServiceIds.push(s.id);
+        }
+      });
+
+      // 임시 저장 (리뷰 통계 적용 후 최종 포맷팅)
+      servicesByCategory[category.id] = uniqueServices as unknown as Service[];
+    }
+  }
+
+  // 5. 리뷰 통계 조회 (모든 서비스에 대해 한 번에)
+  let ratingMap = new Map<string, { sum: number; count: number }>();
+  if (allServiceIds.length > 0) {
+    const { data: reviewStats } = await supabase
+      .from('reviews')
+      .select('service_id, rating')
+      .in('service_id', allServiceIds)
+      .eq('is_visible', true);
+
+    ratingMap = buildRatingMap(reviewStats as { service_id: string; rating: number }[] | null);
+  }
+
+  // 6. 각 카테고리별 서비스에 리뷰 통계 적용 및 셔플
+  for (const categoryId of Object.keys(servicesByCategory)) {
+    const services = servicesByCategory[categoryId];
+    if (services && services.length > 0) {
+      servicesByCategory[categoryId] = formatServicesWithRating(
+        services as unknown as Array<{ id: string; [key: string]: unknown }>,
+        ratingMap,
+        advertisedServiceIds
       );
     }
   }
