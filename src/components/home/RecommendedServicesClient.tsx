@@ -1,72 +1,132 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import ServiceCard from '@/components/services/ServiceCard';
 import { Service } from '@/types';
 
-type TabType = 'all' | 'offline' | 'online';
-
-interface RecommendedServicesClientProps {
-  readonly services: Service[];
+interface CategoryTab {
+  id: string;
+  name: string;
+  slug: string;
 }
 
-export default function RecommendedServicesClient({ services }: RecommendedServicesClientProps) {
-  const [activeTab, setActiveTab] = useState<TabType>('all');
+interface RecommendedServicesClientProps {
+  readonly categories: CategoryTab[];
+  readonly servicesByCategory: Record<string, Service[]>;
+}
 
-  // 탭에 따라 서비스 필터링
-  const filteredServices = services.filter((service) => {
-    if (activeTab === 'all') return true;
-    const deliveryMethod = (service as Service & { delivery_method?: string }).delivery_method;
-    if (activeTab === 'offline') {
-      return deliveryMethod === 'offline' || deliveryMethod === 'both';
-    }
-    if (activeTab === 'online') {
-      return deliveryMethod === 'online' || deliveryMethod === 'both';
-    }
-    return true;
-  });
+export default function RecommendedServicesClient({
+  categories,
+  servicesByCategory,
+}: RecommendedServicesClientProps) {
+  const [activeTab, setActiveTab] = useState<string>('all');
+  const tabContainerRef = useRef<HTMLDivElement>(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(false);
 
-  const tabs: { key: TabType; label: string }[] = [
-    { key: 'all', label: '전체' },
-    { key: 'offline', label: '오프라인' },
-    { key: 'online', label: '온라인' },
-  ];
+  // 스크롤 상태 체크
+  useEffect(() => {
+    const checkScroll = () => {
+      const container = tabContainerRef.current;
+      if (container) {
+        setShowLeftArrow(container.scrollLeft > 0);
+        setShowRightArrow(container.scrollLeft < container.scrollWidth - container.clientWidth - 5);
+      }
+    };
+
+    checkScroll();
+    const container = tabContainerRef.current;
+    container?.addEventListener('scroll', checkScroll);
+    window.addEventListener('resize', checkScroll);
+
+    return () => {
+      container?.removeEventListener('scroll', checkScroll);
+      window.removeEventListener('resize', checkScroll);
+    };
+  }, []);
+
+  const scrollTabs = (direction: 'left' | 'right') => {
+    const container = tabContainerRef.current;
+    if (container) {
+      const scrollAmount = 200;
+      container.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  // 현재 탭에 맞는 서비스 가져오기
+  const currentServices =
+    activeTab === 'all'
+      ? Object.values(servicesByCategory).flat()
+      : servicesByCategory[activeTab] || [];
+
+  // 전체 탭 + 카테고리 탭
+  const tabs: CategoryTab[] = [{ id: 'all', name: '전체', slug: 'all' }, ...categories];
 
   return (
     <section className="py-4 lg:py-8 bg-gray-50">
       <div className="container-1200">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-          <div>
-            <h2 className="text-mobile-lg lg:text-xl font-semibold mb-2">추천 서비스</h2>
-            <p className="text-mobile-md text-gray-600">믿을 수 있는 검증된 전문가들의 서비스</p>
-          </div>
+        <div className="mb-6">
+          <h2 className="text-mobile-lg lg:text-xl font-semibold mb-2">추천 서비스</h2>
+          <p className="text-mobile-md text-gray-600">믿을 수 있는 검증된 전문가들의 서비스</p>
+        </div>
 
-          {/* 탭 UI */}
-          <div className="flex gap-2 bg-gray-100 p-1 rounded-lg">
+        {/* 탭 UI - 스크롤 가능 */}
+        <div className="relative mb-6">
+          {/* 왼쪽 화살표 */}
+          {showLeftArrow && (
+            <button
+              onClick={() => scrollTabs('left')}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white shadow-md rounded-full flex items-center justify-center hover:bg-gray-50"
+            >
+              <ChevronLeft className="w-5 h-5 text-gray-600" />
+            </button>
+          )}
+
+          {/* 탭 컨테이너 */}
+          <div
+            ref={tabContainerRef}
+            className="flex gap-2 overflow-x-auto scrollbar-hide px-1 py-1"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
             {tabs.map((tab) => (
               <button
-                key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
-                  activeTab === tab.key
-                    ? 'bg-white text-orange-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-4 py-2 text-sm font-medium rounded-full whitespace-nowrap transition-all flex-shrink-0 ${
+                  activeTab === tab.id
+                    ? 'bg-orange-500 text-white shadow-sm'
+                    : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
                 }`}
               >
-                {tab.label}
+                {tab.name}
               </button>
             ))}
           </div>
+
+          {/* 오른쪽 화살표 */}
+          {showRightArrow && (
+            <button
+              onClick={() => scrollTabs('right')}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white shadow-md rounded-full flex items-center justify-center hover:bg-gray-50"
+            >
+              <ChevronRight className="w-5 h-5 text-gray-600" />
+            </button>
+          )}
         </div>
 
-        {filteredServices.length > 0 ? (
+        {/* 서비스 그리드 */}
+        {currentServices.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {filteredServices.map((service) => (
+            {currentServices.slice(0, 15).map((service) => (
               <ServiceCard key={service.id} service={service} />
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 text-gray-500">해당 유형의 서비스가 없습니다.</div>
+          <div className="text-center py-12 text-gray-500">해당 카테고리의 서비스가 없습니다.</div>
         )}
       </div>
     </section>
