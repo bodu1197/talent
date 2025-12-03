@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const KAKAO_REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
+// 서버 전용 환경변수 우선, 없으면 NEXT_PUBLIC 버전 사용
+const KAKAO_REST_API_KEY =
+  process.env.KAKAO_REST_API_KEY || process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
 
 // POST: 주소 → 좌표 변환
 export async function POST(request: NextRequest) {
@@ -13,6 +15,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!KAKAO_REST_API_KEY) {
+      console.error('[Geocode] API key not configured');
       return NextResponse.json({ error: 'API key not configured' }, { status: 500 });
     }
 
@@ -26,7 +29,12 @@ export async function POST(request: NextRequest) {
     );
 
     if (!response.ok) {
-      return NextResponse.json({ error: 'Kakao API error' }, { status: response.status });
+      const errorText = await response.text();
+      console.error('[Geocode] Kakao API error:', response.status, errorText);
+      return NextResponse.json(
+        { error: 'Kakao API error', status: response.status },
+        { status: response.status }
+      );
     }
 
     const data = await response.json();
