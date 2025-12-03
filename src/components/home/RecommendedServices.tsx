@@ -12,10 +12,88 @@ interface CategoryTab {
   slug: string;
 }
 
+// 탭에서 제외할 카테고리 slug (내 주변의 프리미엄 전문가 + 심부름)
+const EXCLUDED_CATEGORY_SLUGS = [
+  'life-service', // 생활 서비스
+  'event', // 이벤트
+  'beauty-fashion', // 뷰티 · 패션
+  'custom-order', // 주문제작
+  'counseling-coaching', // 상담 · 코칭
+  'hobby-handmade', // 취미 · 핸드메이드
+  'errands', // 심부름
+];
+
+// 배열 랜덤 셔플 (Fisher-Yates)
+function shuffleArray<T>(array: T[]): void {
+  for (let i = array.length - 1; i > 0; i--) {
+    const arr = new Uint32Array(1);
+    crypto.getRandomValues(arr);
+    const j = Math.floor((arr[0] / 0xffffffff) * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+// 리뷰 통계 맵 생성
+function buildRatingMap(
+  reviewStats: { service_id: string; rating: number }[] | null
+): Map<string, { sum: number; count: number }> {
+  const ratingMap = new Map<string, { sum: number; count: number }>();
+  if (!reviewStats) return ratingMap;
+
+  for (const review of reviewStats) {
+    const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
+    ratingMap.set(review.service_id, {
+      sum: current.sum + review.rating,
+      count: current.count + 1,
+    });
+  }
+  return ratingMap;
+}
+
+// 서비스 ID → 카테고리 ID 매핑 생성
+function buildServiceToCategoriesMap(
+  serviceLinks: { service_id: string; category_id: string }[] | null
+): Map<string, Set<string>> {
+  const map = new Map<string, Set<string>>();
+  if (!serviceLinks) return map;
+
+  for (const link of serviceLinks) {
+    if (!map.has(link.service_id)) {
+      map.set(link.service_id, new Set());
+    }
+    map.get(link.service_id)!.add(link.category_id);
+  }
+  return map;
+}
+
+// 카테고리별 서비스 분류 및 셔플
+function processCategoryServices<T extends { id: string }>(
+  categoryServices: T[],
+  advertisedServiceIds: Set<string>,
+  ratingMap: Map<string, { sum: number; count: number }>
+): Service[] {
+  const advertisedServices = categoryServices.filter((s) => advertisedServiceIds.has(s.id));
+  const regularServices = categoryServices.filter((s) => !advertisedServiceIds.has(s.id));
+
+  shuffleArray(advertisedServices);
+  shuffleArray(regularServices);
+
+  const shuffled = [...advertisedServices, ...regularServices].slice(0, 15);
+
+  return shuffled.map((service) => {
+    const stats = ratingMap.get(service.id);
+    return {
+      ...service,
+      rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
+      review_count: stats?.count || 0,
+    } as unknown as Service;
+  });
+}
+
 export default async function RecommendedServices({ aiCategoryIds }: RecommendedServicesProps) {
   const supabase = await createClient();
 
-  // 1. 1단계 카테고리 조회 (AI 카테고리 제외)
+  // 1. 1단계 카테고리 조회 (AI 카테고리 및 제외 카테고리 제외)
   const { data: categoriesData } = await supabase
     .from('categories')
     .select('id, name, slug')
@@ -23,14 +101,10 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
     .eq('is_active', true)
     .order('display_order');
 
-  // AI 카테고리 제외한 카테고리 목록
+  // AI 카테고리 및 제외 카테고리 필터링
   const categories: CategoryTab[] = (categoriesData || [])
-    .filter((cat) => !aiCategoryIds.includes(cat.id))
-    .map((cat) => ({
-      id: cat.id,
-      name: cat.name,
-      slug: cat.slug,
-    }));
+    .filter((cat) => !aiCategoryIds.includes(cat.id) && !EXCLUDED_CATEGORY_SLUGS.includes(cat.slug))
+    .map((cat) => ({ id: cat.id, name: cat.name, slug: cat.slug }));
 
   // 2. 광고 서비스 ID 조회 - Service Role 클라이언트 사용
   const serviceRoleClient = createServiceRoleClient();
@@ -41,112 +115,76 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
 
   const advertisedServiceIds = new Set(advertisingData?.map((ad) => ad.service_id) || []);
 
-  // 3. 카테고리별 서비스 조회
+  // 3. 카테고리별 서비스 조회 (병렬 처리로 성능 향상)
+  const allCategoryIds = categories.map((c) => c.id);
+  const { data: allSubCategories } = await supabase
+    .from('categories')
+    .select('id, parent_id')
+    .in('parent_id', allCategoryIds);
+
+  // 카테고리별 ID 매핑 (자신 + 하위)
+  const categoryIdMap = new Map<string, string[]>();
+  for (const cat of categories) {
+    const subCatIds =
+      allSubCategories?.filter((sub) => sub.parent_id === cat.id).map((sub) => sub.id) || [];
+    categoryIdMap.set(cat.id, [cat.id, ...subCatIds]);
+  }
+
+  const allRelatedCatIds = [...categoryIdMap.values()].flat();
+
+  const { data: allServiceLinks } = await supabase
+    .from('service_categories')
+    .select('service_id, category_id')
+    .in('category_id', allRelatedCatIds);
+
+  const allServiceIds = [...new Set(allServiceLinks?.map((s) => s.service_id) || [])];
+
+  if (allServiceIds.length === 0) {
+    return <RecommendedServicesClient categories={categories} servicesByCategory={{}} />;
+  }
+
+  // 모든 서비스 한 번에 조회
+  const { data: allServicesData } = await supabase
+    .from('services')
+    .select(
+      `id, title, description, price, thumbnail_url, orders_count, delivery_method,
+       seller:seller_profiles(id, business_name, display_name, profile_image, is_verified)`
+    )
+    .in('id', allServiceIds)
+    .eq('status', 'active')
+    .order('created_at', { ascending: false });
+
+  if (!allServicesData || allServicesData.length === 0) {
+    return <RecommendedServicesClient categories={categories} servicesByCategory={{}} />;
+  }
+
+  // 모든 리뷰 통계 한 번에 조회
+  const { data: reviewStats } = await supabase
+    .from('reviews')
+    .select('service_id, rating')
+    .in('service_id', allServiceIds)
+    .eq('is_visible', true);
+
+  const ratingMap = buildRatingMap(reviewStats as { service_id: string; rating: number }[] | null);
+  const serviceToCategories = buildServiceToCategoriesMap(allServiceLinks);
+
+  // 각 카테고리별로 서비스 분류
   const servicesByCategory: Record<string, Service[]> = {};
 
-  // 각 카테고리에 대해 서비스 조회
   for (const category of categories) {
-    // 해당 카테고리와 하위 카테고리의 서비스 조회
-    const { data: categoryIds } = await supabase
-      .from('categories')
-      .select('id')
-      .or(`id.eq.${category.id},parent_id.eq.${category.id}`);
-
-    const catIds = categoryIds?.map((c) => c.id) || [category.id];
-
-    // 해당 카테고리 서비스 조회
-    const { data: serviceLinks } = await supabase
-      .from('service_categories')
-      .select('service_id')
-      .in('category_id', catIds);
-
-    const serviceIds = [...new Set(serviceLinks?.map((s) => s.service_id) || [])];
-
-    if (serviceIds.length === 0) continue;
-
-    // 서비스 상세 조회
-    const { data: servicesData } = await supabase
-      .from('services')
-      .select(
-        `
-        id,
-        title,
-        description,
-        price,
-        thumbnail_url,
-        orders_count,
-        delivery_method,
-        seller:seller_profiles(
-          id,
-          business_name,
-          display_name,
-          profile_image,
-          is_verified
-        )
-      `
-      )
-      .in('id', serviceIds)
-      .eq('status', 'active')
-      .order('created_at', { ascending: false })
-      .limit(20);
-
-    if (!servicesData || servicesData.length === 0) continue;
-
-    // 광고 서비스와 일반 서비스 분리
-    const advertisedServices = servicesData.filter((s) => advertisedServiceIds.has(s.id));
-    const regularServices = servicesData.filter((s) => !advertisedServiceIds.has(s.id));
-
-    // 광고 서비스 랜덤 셔플
-    for (let i = advertisedServices.length - 1; i > 0; i--) {
-      const arr = new Uint32Array(1);
-      crypto.getRandomValues(arr);
-      const j = Math.floor((arr[0] / 0xffffffff) * (i + 1));
-      [advertisedServices[i], advertisedServices[j]] = [
-        advertisedServices[j],
-        advertisedServices[i],
-      ];
-    }
-
-    // 일반 서비스 랜덤 셔플
-    for (let i = regularServices.length - 1; i > 0; i--) {
-      const arr = new Uint32Array(1);
-      crypto.getRandomValues(arr);
-      const j = Math.floor((arr[0] / 0xffffffff) * (i + 1));
-      [regularServices[i], regularServices[j]] = [regularServices[j], regularServices[i]];
-    }
-
-    // 광고 우선 + 랜덤 (15개)
-    const shuffled = [...advertisedServices, ...regularServices].slice(0, 15);
-
-    // 리뷰 통계 조회
-    const svcIds = shuffled.map((s) => s.id);
-    const { data: reviewStats } = await supabase
-      .from('reviews')
-      .select('service_id, rating')
-      .in('service_id', svcIds)
-      .eq('is_visible', true);
-
-    // 평균 별점 계산
-    const ratingMap = new Map<string, { sum: number; count: number }>();
-    if (reviewStats) {
-      for (const review of reviewStats as { service_id: string; rating: number }[]) {
-        const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
-        ratingMap.set(review.service_id, {
-          sum: current.sum + review.rating,
-          count: current.count + 1,
-        });
-      }
-    }
-
-    // 서비스 포맷팅
-    servicesByCategory[category.id] = shuffled.map((service) => {
-      const stats = ratingMap.get(service.id);
-      return {
-        ...service,
-        rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
-        review_count: stats?.count || 0,
-      } as unknown as Service;
+    const catIds = new Set(categoryIdMap.get(category.id) || []);
+    const categoryServices = allServicesData.filter((service) => {
+      const serviceCats = serviceToCategories.get(service.id);
+      return serviceCats ? [...serviceCats].some((catId) => catIds.has(catId)) : false;
     });
+
+    if (categoryServices.length > 0) {
+      servicesByCategory[category.id] = processCategoryServices(
+        categoryServices,
+        advertisedServiceIds,
+        ratingMap
+      );
+    }
   }
 
   return (
