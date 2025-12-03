@@ -1,4 +1,4 @@
-import ServiceCard from '@/components/services/ServiceCard';
+import RecommendedServicesClient from './RecommendedServicesClient';
 import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 import { Service } from '@/types';
 
@@ -32,7 +32,7 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
 
   const advertisedServiceIds = advertisingData?.map((ad) => ad.service_id) || [];
 
-  // 추천 서비스 조회 (AI 카테고리 제외) - 최적화: 50개만
+  // 추천 서비스 조회 (AI 카테고리 제외) - delivery_method 포함
   let recommendedQuery = supabase
     .from('services')
     .select(
@@ -43,6 +43,7 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
       price,
       thumbnail_url,
       orders_count,
+      delivery_method,
       seller:seller_profiles(
         id,
         business_name,
@@ -54,7 +55,7 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
     )
     .eq('status', 'active')
     .order('created_at', { ascending: false })
-    .limit(50); // 최적화: 1000 -> 50
+    .limit(50);
 
   // AI 서비스 제외
   if (aiServiceIds.length > 0) {
@@ -85,10 +86,10 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
     [regularServices[i], regularServices[j]] = [regularServices[j], regularServices[i]];
   }
 
-  // 광고 서비스(랜덤) + 일반 서비스(랜덤) (총 15개)
-  const shuffled = [...advertisedServices, ...regularServices].slice(0, 15);
+  // 광고 서비스(랜덤) + 일반 서비스(랜덤) (총 30개 - 탭 필터링 후에도 충분히 보이도록)
+  const shuffled = [...advertisedServices, ...regularServices].slice(0, 30);
 
-  // 리뷰 통계 조회 (15개만)
+  // 리뷰 통계 조회
   const serviceIds = shuffled.map((s) => s.id);
   const { data: reviewStats } = await supabase
     .from('reviews')
@@ -117,22 +118,5 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
     } as unknown as Service;
   });
 
-  return (
-    <section className="py-4 lg:py-8 bg-gray-50">
-      <div className="container-1200">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h2 className="text-mobile-lg lg:text-xl font-semibold mb-2">추천 서비스</h2>
-            <p className="text-mobile-md text-gray-600">믿을 수 있는 검증된 전문가들의 서비스</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {recommendedServices.map((service) => (
-            <ServiceCard key={service.id} service={service} />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+  return <RecommendedServicesClient services={recommendedServices} />;
 }
