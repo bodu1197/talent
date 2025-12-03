@@ -9,6 +9,9 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { logger } from '@/lib/logger';
 import TemplateSelector from '@/components/services/TemplateSelector';
 import toast from 'react-hot-toast';
+import LocationInputSection from '@/components/service/LocationInputSection';
+import type { LocationData } from '@/components/service/LocationInputSection';
+import type { ServiceType, DeliveryMethod } from '@/types/service-form';
 
 import { Sparkles } from 'lucide-react';
 import { type GradientTemplate, generateThumbnailWithText } from '@/lib/template-generator';
@@ -37,6 +40,7 @@ interface Category {
   slug: string;
   level: number;
   parent_id: string | null;
+  service_type?: ServiceType;
 }
 
 interface ServiceData {
@@ -51,6 +55,12 @@ interface ServiceData {
   tax_invoice_available?: boolean;
   search_keywords?: string;
   status?: string;
+  // 위치 관련 필드
+  location_address?: string | null;
+  location_latitude?: number | null;
+  location_longitude?: number | null;
+  location_region?: string | null;
+  delivery_method?: DeliveryMethod | null;
 }
 
 interface TextStyleConfig {
@@ -195,7 +205,11 @@ async function updateServiceDirectly(
   serviceId: string,
   serviceStatus: string,
   formData: ServiceFormData,
-  thumbnailUrl: string | null
+  thumbnailUrl: string | null,
+  locationData?: {
+    location: LocationData | null;
+    deliveryMethod: DeliveryMethod;
+  }
 ): Promise<string> {
   const updateData: Record<string, unknown> = {
     title: formData.title,
@@ -207,6 +221,23 @@ async function updateServiceDirectly(
     thumbnail_url: thumbnailUrl,
     updated_at: new Date().toISOString(),
   };
+
+  // 위치 정보 추가
+  if (locationData) {
+    updateData.delivery_method = locationData.deliveryMethod;
+    if (locationData.location) {
+      updateData.location_address = locationData.location.address;
+      updateData.location_latitude = locationData.location.latitude;
+      updateData.location_longitude = locationData.location.longitude;
+      updateData.location_region = locationData.location.region;
+    } else {
+      // 위치 정보 삭제
+      updateData.location_address = null;
+      updateData.location_latitude = null;
+      updateData.location_longitude = null;
+      updateData.location_region = null;
+    }
+  }
 
   if (serviceStatus === 'suspended') {
     updateData.status = 'pending';
@@ -293,6 +324,27 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
   const [uploadMode, setUploadMode] = useState<'file' | 'template'>('file');
   const [selectedTemplate, setSelectedTemplate] = useState<GradientTemplate | null>(null);
   const [textStyle, setTextStyle] = useState<TextStyleConfig | null>(null);
+
+  // 위치 관련 상태
+  const [selectedServiceType, setSelectedServiceType] = useState<ServiceType | null>(null);
+  const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>(
+    service.delivery_method || 'online'
+  );
+  const [location, setLocation] = useState<LocationData | null>(
+    service.location_address
+      ? {
+          address: service.location_address,
+          latitude: service.location_latitude || 0,
+          longitude: service.location_longitude || 0,
+          region: service.location_region || '',
+        }
+      : null
+  );
+
+  // 위치 입력이 필요한지 확인
+  const needsLocation =
+    selectedServiceType === 'offline' ||
+    (selectedServiceType === 'both' && deliveryMethod !== 'online');
 
   const [formData, setFormData] = useState({
     title: service.title || '',
@@ -390,7 +442,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
         const supabase = createClient();
         const { data, error } = await supabase
           .from('categories')
-          .select('id, name, slug, level, parent_id')
+          .select('id, name, slug, level, parent_id, service_type')
           .eq('is_active', true)
           .eq('level', 1)
           .order('display_order', { ascending: true });
@@ -492,6 +544,28 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
     });
   }, [selectedLevel1, selectedLevel2, selectedLevel3]);
 
+  // Update service_type when level 1 category changes
+  useEffect(() => {
+    if (selectedLevel1) {
+      const selectedCategory = level1Categories.find((c) => c.id === selectedLevel1);
+      const serviceType = (selectedCategory?.service_type as ServiceType) || 'online';
+      setSelectedServiceType(serviceType);
+
+      // 카테고리 변경 시 온라인 카테고리면 위치 관련 상태 초기화
+      if (serviceType === 'online') {
+        setDeliveryMethod('online');
+      }
+    } else {
+      setSelectedServiceType(null);
+      setDeliveryMethod('online');
+    }
+  }, [selectedLevel1, level1Categories]);
+
+  // 위치 변경 핸들러
+  const handleLocationChange = (newLocation: LocationData | null) => {
+    setLocation(newLocation);
+  };
+
   // Helper: Process active service updates
   async function processActiveServiceUpdate(
     supabase: SupabaseClient,
@@ -522,7 +596,11 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
       service.id,
       service.status!,
       formData,
-      thumbnail_url
+      thumbnail_url,
+      {
+        location,
+        deliveryMethod,
+      }
     );
 
     if (formData.category_ids.length > 0) {
@@ -896,6 +974,78 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
                   )}
                 </div>
               </div>
+
+              {/* 서비스 제공 방식 선택 (both 카테고리일 때만 표시) */}
+              {selectedServiceType === 'both' && (
+                <fieldset className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <legend className="text-sm font-medium text-blue-700 mb-3">
+                    서비스 제공 방식 *
+                  </legend>
+                  <p className="text-sm text-gray-600 mb-3">
+                    이 카테고리는 온라인과 오프라인 모두 가능합니다. 제공 방식을 선택해주세요.
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="delivery_method"
+                        value="online"
+                        checked={deliveryMethod === 'online'}
+                        onChange={() => setDeliveryMethod('online')}
+                        className="w-4 h-4 text-blue-600"
+                      />
+                      <span className="text-sm">온라인 제공</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="delivery_method"
+                        value="offline"
+                        checked={deliveryMethod === 'offline'}
+                        onChange={() => setDeliveryMethod('offline')}
+                        className="w-4 h-4 text-blue-600"
+                      />
+                      <span className="text-sm">오프라인 방문</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="delivery_method"
+                        value="both"
+                        checked={deliveryMethod === 'both'}
+                        onChange={() => setDeliveryMethod('both')}
+                        className="w-4 h-4 text-blue-600"
+                      />
+                      <span className="text-sm">둘 다 가능</span>
+                    </label>
+                  </div>
+                </fieldset>
+              )}
+
+              {/* 위치 입력 섹션 (오프라인 또는 both 카테고리일 때 표시) */}
+              {needsLocation && (
+                <div className="p-4 bg-orange-50 rounded-lg border border-orange-200">
+                  <LocationInputSection
+                    value={location}
+                    onChange={handleLocationChange}
+                    required={selectedServiceType === 'offline'}
+                    label="서비스 제공 위치"
+                    placeholder="주소를 검색하거나 현재 위치를 사용하세요"
+                    helpText="오프라인 서비스는 위치 정보가 필요합니다. 고객에게 거리가 표시됩니다."
+                  />
+                </div>
+              )}
+
+              {/* 오프라인 서비스 안내 */}
+              {selectedServiceType === 'offline' && (
+                <div className="flex items-start gap-3 p-3 bg-amber-50 rounded-lg text-sm text-amber-800">
+                  <Info className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                  <span>
+                    <strong>오프라인 서비스</strong>입니다. 고객이 내 위치 근처에서 검색하면
+                    노출됩니다.
+                  </span>
+                </div>
+              )}
 
               <div>
                 <label
