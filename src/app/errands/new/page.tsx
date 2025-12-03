@@ -7,28 +7,14 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { logger } from '@/lib/logger';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import {
-  ChevronLeft,
-  Package,
-  ShoppingCart,
-  Truck,
-  Users,
-  FileText,
-  MoreHorizontal,
-  Navigation,
-  Bike,
-} from 'lucide-react';
+import { ChevronLeft, Package, ShoppingCart, Navigation, Bike } from 'lucide-react';
 import type { ErrandCategory, CreateErrandRequest } from '@/types/errand';
 import { ERRAND_PRICING } from '@/types/errand';
 
-// 심부름 카테고리 (어디 다녀오는 것만)
+// 심부름 카테고리
 const CATEGORIES: { value: ErrandCategory; label: string; icon: React.ReactNode }[] = [
   { value: 'DELIVERY', label: '배달', icon: <Package className="w-5 h-5" /> },
   { value: 'SHOPPING', label: '구매대행', icon: <ShoppingCart className="w-5 h-5" /> },
-  { value: 'MOVING', label: '운반', icon: <Truck className="w-5 h-5" /> },
-  { value: 'QUEUEING', label: '줄서기', icon: <Users className="w-5 h-5" /> },
-  { value: 'DOCUMENT', label: '서류', icon: <FileText className="w-5 h-5" /> },
-  { value: 'OTHER', label: '기타', icon: <MoreHorizontal className="w-5 h-5" /> },
 ];
 
 export default function NewErrandPage() {

@@ -1,13 +1,9 @@
 // 심부름 관련 타입 정의
 
-// 심부름 = 어디 다녀오는 것 (배달, 구매대행, 운반, 줄서기, 서류 등)
+// 심부름 = 어디 다녀오는 것
 export type ErrandCategory =
-  | 'DELIVERY' // 배달/픽업
-  | 'SHOPPING' // 구매대행
-  | 'MOVING' // 운반/이사
-  | 'QUEUEING' // 줄서기/대기
-  | 'DOCUMENT' // 서류 대행
-  | 'OTHER'; // 기타
+  | 'DELIVERY' // 배달 (운반, 줄서기, 서류 등 모두 포함)
+  | 'SHOPPING'; // 구매대행
 
 export type ErrandStatus = 'OPEN' | 'MATCHED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
 
@@ -126,12 +122,8 @@ export interface UpdateErrandStatusRequest {
 
 // Category Labels (Korean)
 export const ERRAND_CATEGORY_LABELS: Record<ErrandCategory, string> = {
-  DELIVERY: '배달/픽업',
+  DELIVERY: '배달',
   SHOPPING: '구매대행',
-  MOVING: '운반/이사',
-  QUEUEING: '줄서기',
-  DOCUMENT: '서류 대행',
-  OTHER: '기타',
 };
 
 export const ERRAND_STATUS_LABELS: Record<ErrandStatus, string> = {
@@ -275,8 +267,4 @@ export const HELPER_GRADE_LABELS: Record<HelperGrade, string> = {
 export const ERRAND_CATEGORY_ICONS: Record<ErrandCategory, string> = {
   DELIVERY: 'Package',
   SHOPPING: 'ShoppingCart',
-  MOVING: 'Truck',
-  QUEUEING: 'Users',
-  DOCUMENT: 'FileText',
-  OTHER: 'MoreHorizontal',
 };

@@ -41,15 +41,11 @@ interface ErrandRequest {
   createdAt: number;
 }
 
-// 카테고리 정의 (심부름 = 어디 다녀오는 것)
+// 카테고리 정의
 const CATEGORIES = [
   { value: 'ALL', label: '전체' },
   { value: 'DELIVERY', label: '배달', color: 'bg-blue-100 text-blue-700' },
   { value: 'SHOPPING', label: '구매대행', color: 'bg-green-100 text-green-700' },
-  { value: 'MOVING', label: '운반', color: 'bg-orange-100 text-orange-700' },
-  { value: 'QUEUEING', label: '줄서기', color: 'bg-purple-100 text-purple-700' },
-  { value: 'DOCUMENT', label: '서류', color: 'bg-teal-100 text-teal-700' },
-  { value: 'OTHER', label: '기타', color: 'bg-gray-100 text-gray-700' },
 ];
 
 // 초기 헬퍼 데이터 (레이더용)
@@ -99,25 +95,26 @@ const SAMPLE_ERRANDS: ErrandRequest[] = [
   },
   {
     id: '3',
-    title: '성수동 팝업스토어 줄서기 (2시간)',
-    category: 'QUEUEING',
-    categoryLabel: '줄서기',
-    price: 30000,
-    startLocation: '성수동 디올',
-    endLocation: '성수동 디올',
+    title: '홍대 카페 음료 픽업해주실 분',
+    category: 'DELIVERY',
+    categoryLabel: '배달',
+    price: 12000,
+    startLocation: '홍대입구역 스타벅스',
+    endLocation: '망원동 오피스텔',
     status: 'OPEN',
     timeOfDay: 'DAY',
     createdAt: Date.now() - 7200000,
   },
   {
     id: '4',
-    title: '주민센터 서류 발급 대행 부탁드려요',
-    category: 'DOCUMENT',
-    categoryLabel: '서류',
-    price: 15000,
-    startLocation: '신림동 주민센터',
-    endLocation: '신림동 아파트',
+    title: '코스트코 대량 장보기 부탁드려요',
+    category: 'SHOPPING',
+    categoryLabel: '구매대행',
+    price: 35000,
+    startLocation: '코스트코 양재점',
+    endLocation: '서초동 아파트',
     status: 'OPEN',
+    isHeavy: true,
     createdAt: Date.now() - 100000,
   },
 ];
