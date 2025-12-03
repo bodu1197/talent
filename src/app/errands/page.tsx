@@ -8,7 +8,6 @@ import {
   Zap,
   Shield,
   Navigation,
-  Star,
   Package,
   Clock,
   ArrowRight,
@@ -25,16 +24,6 @@ interface Helper {
   radius: number;
   distance: number;
   isVisible: boolean;
-}
-
-interface ActiveHelper {
-  id: string;
-  name: string;
-  avatar: string;
-  distance: number;
-  rating: number;
-  reviews: number;
-  specialties: string[];
 }
 
 interface ErrandRequest {
@@ -80,46 +69,6 @@ const createInitialHelpers = (): Helper[] => {
     isVisible: i < 3,
   }));
 };
-
-// 활동 중인 헬퍼 데이터
-const ACTIVE_HELPERS: ActiveHelper[] = [
-  {
-    id: 'h1',
-    name: '김민수',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
-    distance: 0.3,
-    rating: 4.9,
-    reviews: 128,
-    specialties: ['배달', '장보기'],
-  },
-  {
-    id: 'h2',
-    name: '이지은',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka',
-    distance: 0.8,
-    rating: 5.0,
-    reviews: 42,
-    specialties: ['청소', '돌봄'],
-  },
-  {
-    id: 'h3',
-    name: '박철민',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John',
-    distance: 1.2,
-    rating: 4.8,
-    reviews: 315,
-    specialties: ['운반', '기타'],
-  },
-  {
-    id: 'h4',
-    name: '최영희',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah',
-    distance: 0.5,
-    rating: 4.7,
-    reviews: 89,
-    specialties: ['배달', '줄서기'],
-  },
-];
 
 // 샘플 심부름 요청
 const SAMPLE_ERRANDS: ErrandRequest[] = [
@@ -359,68 +308,6 @@ export default function ErrandsPage() {
             </div>
           </div>
         </section>
-
-        {/* 활동 중인 헬퍼 */}
-        <section className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-bold text-lg text-gray-800">지금 활동 중인 헬퍼</h2>
-            <button className="text-xs text-blue-600 font-medium">전체보기</button>
-          </div>
-
-          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4">
-            {ACTIVE_HELPERS.map((helper) => (
-              <div
-                key={helper.id}
-                className="min-w-[260px] bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex items-center gap-4"
-              >
-                <div className="relative">
-                  <div className="w-14 h-14 rounded-full bg-gray-100 overflow-hidden">
-                    <Image
-                      src={helper.avatar}
-                      alt={helper.name}
-                      width={56}
-                      height={56}
-                      className="w-full h-full object-cover"
-                      unoptimized
-                    />
-                  </div>
-                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
-                </div>
-
-                <div className="flex-1">
-                  <div className="flex justify-between items-start">
-                    <h4 className="font-bold text-gray-900">{helper.name}</h4>
-                    <div className="flex items-center gap-0.5 text-yellow-500 text-xs font-bold">
-                      <Star size={10} fill="currentColor" />
-                      <span>{helper.rating}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-1 text-xs text-gray-500 mt-1 mb-2">
-                    <MapPin size={10} />
-                    <span>{helper.distance}km 이내</span>
-                    <span className="text-gray-300">|</span>
-                    <span>리뷰 {helper.reviews}</span>
-                  </div>
-
-                  <div className="flex gap-1">
-                    {helper.specialties.slice(0, 2).map((specialty, i) => (
-                      <span
-                        key={i}
-                        className="px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px]"
-                      >
-                        {specialty}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* 구분선 */}
-        <div className="h-2 bg-gray-100 -mx-4 md:hidden mb-6" />
 
         {/* 주변 요청 목록 */}
         <section>
