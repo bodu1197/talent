@@ -22,6 +22,7 @@ export default function ServiceGrid({
   const searchParams = useSearchParams();
   const sort = searchParams.get('sort') || 'popular';
   const price = searchParams.get('price');
+  const tax = searchParams.get('tax');
 
   const [services, setServices] = useState<Service[]>(initialServices);
 
@@ -43,6 +44,21 @@ export default function ServiceGrid({
             return servicePrice >= 300000 && servicePrice < 500000;
           case 'over-500000':
             return servicePrice >= 500000;
+          default:
+            return true;
+        }
+      });
+    }
+
+    // 세금계산서 필터 적용 (seller.is_business 기준)
+    if (tax) {
+      filtered = filtered.filter((service) => {
+        const isBusiness = service.seller?.is_business ?? false;
+        switch (tax) {
+          case 'issued':
+            return isBusiness === true; // 사업자 = 세금계산서 발행 가능
+          case 'not-issued':
+            return isBusiness === false; // 비사업자 = 세금계산서 미발행
           default:
             return true;
         }
@@ -71,7 +87,7 @@ export default function ServiceGrid({
     }
 
     setServices(sorted);
-  }, [sort, price, initialServices]);
+  }, [sort, price, tax, initialServices]);
 
   if (services.length === 0) {
     return (

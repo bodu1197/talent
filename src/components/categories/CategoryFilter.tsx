@@ -15,13 +15,14 @@ export default function CategoryFilter({
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentPrice = searchParams.get('price') || '';
+  const currentTaxInvoice = searchParams.get('tax') || '';
 
-  const handlePriceChange = (priceRange: string) => {
+  const handleFilterChange = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams);
-    if (priceRange) {
-      params.set('price', priceRange);
+    if (value) {
+      params.set(key, value);
     } else {
-      params.delete('price');
+      params.delete(key);
     }
     router.push(`?${params.toString()}`);
   };
@@ -31,17 +32,17 @@ export default function CategoryFilter({
   };
 
   // 현재 필터가 적용되어 있는지 확인
-  const hasActiveFilters = currentPrice || searchParams.get('sort');
+  const hasActiveFilters = currentPrice || currentTaxInvoice || searchParams.get('sort');
 
   return (
-    <div className="flex items-center gap-2 flex-shrink-0">
+    <div className="flex items-center gap-3 flex-shrink-0 flex-wrap">
       {/* 가격 드롭다운 */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5">
         <span className="font-medium text-sm text-gray-600">가격:</span>
         <select
           name="price"
           value={currentPrice}
-          onChange={(e) => handlePriceChange(e.target.value)}
+          onChange={(e) => handleFilterChange('price', e.target.value)}
           className="px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm bg-white"
           aria-label="가격 범위 선택"
         >
@@ -51,6 +52,22 @@ export default function CategoryFilter({
           <option value="100000-300000">10~30만원</option>
           <option value="300000-500000">30~50만원</option>
           <option value="over-500000">50만원~</option>
+        </select>
+      </div>
+
+      {/* 세금계산서 드롭다운 */}
+      <div className="flex items-center gap-1.5">
+        <span className="font-medium text-sm text-gray-600">세금계산서:</span>
+        <select
+          name="tax"
+          value={currentTaxInvoice}
+          onChange={(e) => handleFilterChange('tax', e.target.value)}
+          className="px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm bg-white"
+          aria-label="세금계산서 발행 여부"
+        >
+          <option value="">전체</option>
+          <option value="issued">발행 가능</option>
+          <option value="not-issued">미발행</option>
         </select>
       </div>
 
