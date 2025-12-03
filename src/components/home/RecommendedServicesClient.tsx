@@ -83,27 +83,27 @@ export default function RecommendedServicesClient({
 
         {/* 탭 UI - 스크롤 가능 */}
         <div className="relative mb-6">
-          {/* 왼쪽 화살표 */}
+          {/* 왼쪽 화살표 - 모바일만 */}
           {showLeftArrow && (
             <button
               onClick={() => scrollTabs('left')}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white shadow-md rounded-full flex items-center justify-center hover:bg-gray-50"
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white shadow-md rounded-full flex items-center justify-center hover:bg-gray-50 lg:hidden"
             >
               <ChevronLeft className="w-5 h-5 text-gray-600" />
             </button>
           )}
 
-          {/* 탭 컨테이너 */}
+          {/* 탭 컨테이너 - PC: 한 줄 표시 / 모바일: 스크롤 */}
           <div
             ref={tabContainerRef}
-            className="flex gap-2 overflow-x-auto scrollbar-hide px-1 py-1"
+            className="flex gap-1.5 lg:gap-2 overflow-x-auto lg:overflow-x-visible lg:flex-wrap scrollbar-hide px-1 py-1"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {categories.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 text-sm font-medium rounded-full whitespace-nowrap transition-all flex-shrink-0 ${
+                className={`px-3 lg:px-4 py-1.5 lg:py-2 text-sm font-medium rounded-full whitespace-nowrap transition-all flex-shrink-0 ${
                   activeTab === tab.id
                     ? 'bg-orange-500 text-white shadow-sm'
                     : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
@@ -114,11 +114,11 @@ export default function RecommendedServicesClient({
             ))}
           </div>
 
-          {/* 오른쪽 화살표 */}
+          {/* 오른쪽 화살표 - 모바일만 */}
           {showRightArrow && (
             <button
               onClick={() => scrollTabs('right')}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white shadow-md rounded-full flex items-center justify-center hover:bg-gray-50"
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white shadow-md rounded-full flex items-center justify-center hover:bg-gray-50 lg:hidden"
             >
               <ChevronRight className="w-5 h-5 text-gray-600" />
             </button>
