@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ counts: [] });
     }
 
-    // 2. 각 카테고리별 서비스 수 조회 (하위 카테고리 포함)
+    // 2. 각 카테고리별 활성 서비스 수 조회 (하위 카테고리 포함)
     const counts = await Promise.all(
       categories.map(async (category) => {
         // 해당 카테고리와 하위 카테고리 ID 조회
@@ -46,12 +46,12 @@ export async function GET(request: NextRequest) {
 
         const categoryIds = subCategories?.map((c) => c.id) || [category.id];
 
-        // service_categories 테이블에서 해당 카테고리들의 활성 서비스 수 조회
+        // services 테이블에서 활성 서비스만 카운트 (service_categories와 조인)
         const { count, error: countError } = await supabase
-          .from('service_categories')
-          .select('service_id', { count: 'exact', head: true })
-          .in('category_id', categoryIds)
-          .not('service_id', 'is', null);
+          .from('services')
+          .select('id, service_categories!inner(category_id)', { count: 'exact', head: true })
+          .eq('status', 'active')
+          .in('service_categories.category_id', categoryIds);
 
         if (countError) {
           console.error(`서비스 수 조회 오류 (${category.slug}):`, countError);
