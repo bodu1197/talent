@@ -316,7 +316,7 @@ export default function ThirdHeroBanner() {
                 key={category.id}
                 href={
                   location
-                    ? `${category.href}&lat=${location.latitude}&lng=${location.longitude}`
+                    ? `${category.href}?lat=${location.latitude}&lng=${location.longitude}`
                     : category.href
                 }
                 className="group flex-shrink-0 w-[85%] sm:w-[70%] md:w-auto snap-center"

@@ -120,13 +120,21 @@ export async function getSellerServicesCount(userId: string, status: string) {
   return count || 0;
 }
 
+// 위치 기반 거리순 정렬 옵션
+export interface LocationSortOptions {
+  lat: number;
+  lng: number;
+}
+
 // 카테고리별 승인된 서비스 조회 (서버 컴포넌트용)
 // useAuth=true이면 인증된 클라이언트 사용 (기본값), false면 anon 클라이언트 사용 (캐싱 가능)
+// location: 제공시 거리순으로 정렬 (가까운 서비스 우선)
 export async function getServicesByCategory(
   categoryId: string,
   _limit: number = 100,
   useAuth: boolean = true,
-  page: number = 1
+  page: number = 1,
+  location?: LocationSortOptions
 ) {
   const supabase = useAuth ? await createServerClient() : createBrowserClient();
 
@@ -159,13 +167,21 @@ export async function getServicesByCategory(
   const serviceRoleClient = createServiceRoleClient();
   const advertisedServiceIds = await fetchAdvertisedServiceIds(serviceRoleClient);
 
-  // 5. Fetch all services
-  const { data: allServices, error } = await supabase
-    .from('services')
-    .select(
+  // 5. Fetch all services (include location fields if location sorting is needed)
+  const sellerFields = location
+    ? `
+        id,
+        business_name,
+        display_name,
+        profile_image,
+        user_id,
+        is_verified,
+        is_business,
+        location_latitude,
+        location_longitude,
+        location_region
       `
-      *,
-      seller:seller_profiles!inner(
+    : `
         id,
         business_name,
         display_name,
@@ -173,7 +189,14 @@ export async function getServicesByCategory(
         user_id,
         is_verified,
         is_business
-      ),
+      `;
+
+  const { data: allServices, error } = await supabase
+    .from('services')
+    .select(
+      `
+      *,
+      seller:seller_profiles!inner(${sellerFields}),
       service_categories(
         category:categories(id, name, slug)
       )
@@ -204,16 +227,72 @@ export async function getServicesByCategory(
     },
   });
 
-  // 7. Partition and shuffle services
+  // 7. Partition services into advertised and regular
   const [advertisedServices, regularServices] = partitionArray(allServices, (s) =>
     advertisedServiceIds.includes(s.id)
   );
 
-  cryptoShuffleArray(advertisedServices);
-  cryptoShuffleArray(regularServices);
+  // 8. Sort or shuffle based on location
+  let combinedServices: typeof allServices;
 
-  // 8. Combine and paginate
-  const combinedServices = [...advertisedServices, ...regularServices];
+  if (location) {
+    // Distance-based sorting: Calculate distance for each service
+    const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+      const R = 6371; // Earth's radius in km
+      const dLat = ((lat2 - lat1) * Math.PI) / 180;
+      const dLon = ((lon2 - lon1) * Math.PI) / 180;
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos((lat1 * Math.PI) / 180) *
+          Math.cos((lat2 * Math.PI) / 180) *
+          Math.sin(dLon / 2) *
+          Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    };
+
+    // Add distance to each service
+    const addDistance = (services: typeof allServices) => {
+      return services.map((service) => {
+        const sellerLat = service.seller?.location_latitude;
+        const sellerLng = service.seller?.location_longitude;
+        const distance =
+          sellerLat && sellerLng
+            ? calculateDistance(location.lat, location.lng, sellerLat, sellerLng)
+            : 99999; // Services without location go to the end
+        return { ...service, _distance: distance };
+      });
+    };
+
+    // Sort by distance
+    const sortByDistance = (
+      a: (typeof allServices)[0] & { _distance: number },
+      b: (typeof allServices)[0] & { _distance: number }
+    ) => a._distance - b._distance;
+
+    const advertisedWithDistance = addDistance(advertisedServices).sort(sortByDistance);
+    const regularWithDistance = addDistance(regularServices).sort(sortByDistance);
+
+    // Advertised first, then regular, both sorted by distance
+    combinedServices = [...advertisedWithDistance, ...regularWithDistance];
+
+    logger.info('getServicesByCategory - 거리순 정렬 적용', {
+      userLocation: location,
+      totalCount: combinedServices.length,
+      sampleDistances: combinedServices.slice(0, 3).map((s) => ({
+        title: s.title,
+        distance: s._distance?.toFixed(2),
+        region: s.seller?.location_region,
+      })),
+    });
+  } else {
+    // Default: Shuffle for random display
+    cryptoShuffleArray(advertisedServices);
+    cryptoShuffleArray(regularServices);
+    combinedServices = [...advertisedServices, ...regularServices];
+  }
+
+  // 9. Paginate
   const perPage = 28;
   const startIndex = (page - 1) * perPage;
   const data = combinedServices.slice(startIndex, startIndex + perPage);

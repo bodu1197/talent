@@ -11,6 +11,7 @@ import CategoryFilter from '@/components/categories/CategoryFilter';
 import CategorySort from '@/components/categories/CategorySort';
 import CategorySidebar from '@/components/categories/CategorySidebar';
 import CategoryVisitTracker from '@/components/categories/CategoryVisitTracker';
+import LocationSortToggle from '@/components/categories/LocationSortToggle';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { logger } from '@/lib/logger';
@@ -24,13 +25,24 @@ interface CategoryPageProps {
   }>;
   readonly searchParams: Promise<{
     page?: string;
+    lat?: string; // 사용자 위치 위도 (거리순 정렬용)
+    lng?: string; // 사용자 위치 경도 (거리순 정렬용)
   }>;
 }
 
 export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
   const { slug } = await params;
-  const { page: pageParam } = await searchParams;
+  const { page: pageParam, lat: latParam, lng: lngParam } = await searchParams;
   const currentPage = Number.parseInt(pageParam || '1', 10);
+
+  // 위치 정보 파싱 (거리순 정렬용)
+  const userLocation =
+    latParam && lngParam
+      ? {
+          lat: parseFloat(latParam),
+          lng: parseFloat(lngParam),
+        }
+      : undefined;
 
   // 카테고리 찾기 (인증 불필요, 캐싱 가능)
   const category = await getCategory(slug, false);
@@ -49,8 +61,14 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   const [categoryPath, allCategories, services] = await Promise.all([
     getCategoryPath(category.id, false),
     getCachedCategoriesTree(false),
-    getServicesByCategory(category.id, 1000, false, currentPage), // 모든 서비스 조회, 페이지네이션 적용
+    getServicesByCategory(category.id, 1000, false, currentPage, userLocation), // 위치 제공 시 거리순 정렬
   ]);
+
+  // 페이지네이션 URL 생성 헬퍼 함수
+  const buildPageUrl = (pageNum: number): string => {
+    const locationParams = userLocation ? `&lat=${userLocation.lat}&lng=${userLocation.lng}` : '';
+    return `/categories/${slug}?page=${pageNum}${locationParams}`;
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -100,7 +118,10 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                   </nav>
 
                   {/* 정렬 */}
-                  <CategorySort currentSort="popular" currentPrice="" />
+                  <div className="flex items-center gap-2">
+                    <LocationSortToggle />
+                    <CategorySort currentSort="popular" currentPrice="" />
+                  </div>
                 </div>
 
                 {/* 필터 영역 */}
@@ -121,7 +142,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                 <div className="flex justify-center gap-2">
                   {currentPage > 1 && (
                     <Link
-                      href={`/categories/${slug}?page=${currentPage - 1}`}
+                      href={buildPageUrl(currentPage - 1)}
                       className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
                     >
                       <ChevronLeft className="w-4 h-4" />
@@ -131,7 +152,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                     {currentPage}
                   </span>
                   <Link
-                    href={`/categories/${slug}?page=${currentPage + 1}`}
+                    href={buildPageUrl(currentPage + 1)}
                     className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
                   >
                     <ChevronRight className="w-4 h-4" />
