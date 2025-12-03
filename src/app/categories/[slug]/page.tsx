@@ -97,38 +97,40 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
 
             {/* 오른쪽 필터 및 서비스 그리드 */}
             <main className="flex-1">
-              {/* Breadcrumb + 필터/정렬 (한 줄) */}
-              <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
-                {/* Breadcrumb */}
-                <nav className="flex items-center gap-2 text-sm flex-wrap mb-3">
-                  <Link href="/" className="text-gray-500 hover:text-gray-700">
-                    홈
-                  </Link>
-                  {categoryPath.map((cat, index) => (
-                    <div key={cat.id} className="flex items-center gap-2">
-                      <span className="text-gray-400">/</span>
-                      {index === categoryPath.length - 1 ? (
-                        <span className="text-gray-900 font-medium">{cat.name}</span>
-                      ) : (
-                        <Link
-                          href={`/categories/${cat.slug}`}
-                          className="text-gray-500 hover:text-gray-700"
-                        >
-                          {cat.name}
-                        </Link>
-                      )}
-                    </div>
-                  ))}
-                </nav>
+              {/* Breadcrumb + 필터/정렬 */}
+              <div className="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 mb-4 sm:mb-6">
+                {/* 빵조각 + 거리순 버튼 (같은 줄) */}
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  {/* Breadcrumb */}
+                  <nav className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm flex-wrap min-w-0">
+                    <Link href="/" className="text-gray-500 hover:text-gray-700 whitespace-nowrap">
+                      홈
+                    </Link>
+                    {categoryPath.map((cat, index) => (
+                      <div key={cat.id} className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                        <span className="text-gray-400">/</span>
+                        {index === categoryPath.length - 1 ? (
+                          <span className="text-gray-900 font-medium truncate">{cat.name}</span>
+                        ) : (
+                          <Link
+                            href={`/categories/${cat.slug}`}
+                            className="text-gray-500 hover:text-gray-700 truncate"
+                          >
+                            {cat.name}
+                          </Link>
+                        )}
+                      </div>
+                    ))}
+                  </nav>
 
-                {/* 필터 + 정렬 (한 줄) */}
-                <div className="flex items-center justify-between gap-3 flex-wrap">
-                  {/* 왼쪽: 가격 필터 */}
+                  {/* 거리순 버튼 (오프라인 카테고리에서만) */}
+                  {isOfflineCategoryPage && <LocationSortToggle />}
+                </div>
+
+                {/* 필터 + 정렬 (아래 줄) */}
+                <div className="flex items-center gap-2 flex-wrap">
                   <CategoryFilter categoryId={category.id} isAI={category.is_ai || false} />
-
-                  {/* 오른쪽: 위치 정렬 + 정렬 */}
-                  <div className="flex items-center gap-2">
-                    {isOfflineCategoryPage && <LocationSortToggle />}
+                  <div className="ml-auto">
                     <CategorySort currentSort="popular" currentPrice="" />
                   </div>
                 </div>

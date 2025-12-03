@@ -66,6 +66,7 @@ export interface SellerProfile {
   total_sales: number;
   response_time: number;
   is_verified: boolean;
+  is_business?: boolean; // 사업자 여부 (세금계산서 발행 가능)
   bank_account?: BankAccount;
   created_at: string;
   updated_at: string;
