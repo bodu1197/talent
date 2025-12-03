@@ -67,6 +67,12 @@ export default function NewServiceClient({ sellerId }: Props) {
     revisionCount: '0',
     taxInvoiceAvailable: false,
     searchKeywords: '',
+    location: null as {
+      address: string;
+      latitude: number;
+      longitude: number;
+      region: string;
+    } | null,
   });
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
