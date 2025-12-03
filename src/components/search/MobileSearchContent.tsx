@@ -30,6 +30,7 @@ import {
   Circle,
   Plus,
 } from 'lucide-react';
+import { OFFLINE_CATEGORY_SLUGS } from '@/lib/constants/categories';
 
 interface CategoryItem {
   id: string;
@@ -96,10 +97,12 @@ const bgColors = [
   'bg-yellow-50',
   'bg-purple-50',
   'bg-pink-50',
+  'bg-orange-50',
+  'bg-teal-50',
 ];
 
-// 생활서비스 카테고리 slugs
-const LIFE_SERVICE_SLUGS = ['errands', 'beauty-fashion', 'life-service'];
+// 내 주변 전문가 카테고리 slugs (오프라인/대면 서비스)
+// OFFLINE_CATEGORY_SLUGS를 사용하여 일관성 유지
 
 export default function MobileSearchContent({ categories }: MobileSearchContentProps) {
   const router = useRouter();
@@ -108,8 +111,10 @@ export default function MobileSearchContent({ categories }: MobileSearchContentP
     router.push(`/search?q=${encodeURIComponent(keyword)}`);
   };
 
-  // 생활서비스 카테고리 필터링 (하위 카테고리 포함)
-  const lifeServiceCategories = categories.filter((cat) => LIFE_SERVICE_SLUGS.includes(cat.slug));
+  // 내 주변 전문가 카테고리 필터링 (오프라인/대면 서비스)
+  const nearbyCategories = categories.filter((cat) =>
+    OFFLINE_CATEGORY_SLUGS.includes(cat.slug as (typeof OFFLINE_CATEGORY_SLUGS)[number])
+  );
 
   return (
     <div className="lg:hidden bg-white min-h-screen pb-20">
@@ -146,7 +151,7 @@ export default function MobileSearchContent({ categories }: MobileSearchContentP
       <div className="px-3 pb-6">
         <h3 className="font-semibold text-gray-900 mb-3">내주변 전문가</h3>
         <div className="space-y-3">
-          {lifeServiceCategories.map((category, index) => (
+          {nearbyCategories.map((category, index) => (
             <div
               key={category.id}
               className={`rounded-xl p-4 ${bgColors[index % bgColors.length]}`}
