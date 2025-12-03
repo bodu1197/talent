@@ -171,23 +171,40 @@ async function createServiceRevision(
   serviceId: string,
   sellerId: string,
   formData: ServiceFormData,
-  thumbnailUrl: string | null
+  thumbnailUrl: string | null,
+  locationData?: {
+    location: LocationData | null;
+    deliveryMethod: DeliveryMethod;
+  }
 ): Promise<ServiceRevision> {
+  const insertData: Record<string, unknown> = {
+    service_id: serviceId,
+    seller_id: sellerId,
+    title: formData.title,
+    description: formData.description,
+    price: Number.parseInt(formData.price) || 0,
+    delivery_days: Number.parseInt(formData.deliveryDays) || 7,
+    revision_count:
+      formData.revisionCount === 'unlimited' ? 999 : Number.parseInt(formData.revisionCount) || 0,
+    thumbnail_url: thumbnailUrl,
+    status: 'pending',
+    revision_note: '서비스 정보 수정',
+  };
+
+  // 위치 정보 추가
+  if (locationData) {
+    insertData.delivery_method = locationData.deliveryMethod;
+    if (locationData.location) {
+      insertData.location_address = locationData.location.address;
+      insertData.location_latitude = locationData.location.latitude;
+      insertData.location_longitude = locationData.location.longitude;
+      insertData.location_region = locationData.location.region;
+    }
+  }
+
   const { data: revision, error: revisionError } = await supabase
     .from('service_revisions')
-    .insert({
-      service_id: serviceId,
-      seller_id: sellerId,
-      title: formData.title,
-      description: formData.description,
-      price: Number.parseInt(formData.price) || 0,
-      delivery_days: Number.parseInt(formData.deliveryDays) || 7,
-      revision_count:
-        formData.revisionCount === 'unlimited' ? 999 : Number.parseInt(formData.revisionCount) || 0,
-      thumbnail_url: thumbnailUrl,
-      status: 'pending',
-      revision_note: '서비스 정보 수정',
-    })
+    .insert(insertData)
     .select()
     .single();
 
@@ -576,7 +593,11 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
       service.id,
       sellerId,
       formData,
-      thumbnail_url
+      thumbnail_url,
+      {
+        location,
+        deliveryMethod,
+      }
     );
 
     if (formData.category_ids.length > 0) {
