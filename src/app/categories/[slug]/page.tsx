@@ -97,41 +97,41 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
 
             {/* 오른쪽 필터 및 서비스 그리드 */}
             <main className="flex-1">
-              {/* Breadcrumb + 정렬 */}
+              {/* Breadcrumb + 필터/정렬 (한 줄) */}
               <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
-                <div className="flex items-center justify-between gap-4 mb-4">
-                  {/* Breadcrumb */}
-                  <nav className="flex items-center gap-2 text-sm flex-wrap">
-                    <Link href="/" className="text-gray-500 hover:text-gray-700">
-                      홈
-                    </Link>
-                    {categoryPath.map((cat, index) => (
-                      <div key={cat.id} className="flex items-center gap-2">
-                        <span className="text-gray-400">/</span>
-                        {index === categoryPath.length - 1 ? (
-                          <span className="text-gray-900 font-medium">{cat.name}</span>
-                        ) : (
-                          <Link
-                            href={`/categories/${cat.slug}`}
-                            className="text-gray-500 hover:text-gray-700"
-                          >
-                            {cat.name}
-                          </Link>
-                        )}
-                      </div>
-                    ))}
-                  </nav>
+                {/* Breadcrumb */}
+                <nav className="flex items-center gap-2 text-sm flex-wrap mb-3">
+                  <Link href="/" className="text-gray-500 hover:text-gray-700">
+                    홈
+                  </Link>
+                  {categoryPath.map((cat, index) => (
+                    <div key={cat.id} className="flex items-center gap-2">
+                      <span className="text-gray-400">/</span>
+                      {index === categoryPath.length - 1 ? (
+                        <span className="text-gray-900 font-medium">{cat.name}</span>
+                      ) : (
+                        <Link
+                          href={`/categories/${cat.slug}`}
+                          className="text-gray-500 hover:text-gray-700"
+                        >
+                          {cat.name}
+                        </Link>
+                      )}
+                    </div>
+                  ))}
+                </nav>
 
-                  {/* 정렬 */}
+                {/* 필터 + 정렬 (한 줄) */}
+                <div className="flex items-center justify-between gap-3 flex-wrap">
+                  {/* 왼쪽: 가격 필터 */}
+                  <CategoryFilter categoryId={category.id} isAI={category.is_ai || false} />
+
+                  {/* 오른쪽: 위치 정렬 + 정렬 */}
                   <div className="flex items-center gap-2">
-                    {/* 오프라인 카테고리에서만 위치 기반 정렬 표시 */}
                     {isOfflineCategoryPage && <LocationSortToggle />}
                     <CategorySort currentSort="popular" currentPrice="" />
                   </div>
                 </div>
-
-                {/* 필터 영역 */}
-                <CategoryFilter categoryId={category.id} isAI={category.is_ai || false} />
               </div>
 
               {/* 서비스 그리드 */}
