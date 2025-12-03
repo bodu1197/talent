@@ -130,23 +130,25 @@ export default function LocationInputSection({
     };
   }, []);
 
-  // 카카오 API로 좌표 조회
+  // 서버 API를 통해 좌표 조회 (Kakao API 403 에러 방지)
   const getCoordinates = async (address: string): Promise<{ lat: number; lng: number } | null> => {
-    const KAKAO_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
-    if (!KAKAO_API_KEY) return null;
-
     try {
-      const response = await fetch(
-        `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(address)}`,
-        {
-          headers: { Authorization: `KakaoAK ${KAKAO_API_KEY}` },
-        }
-      );
+      const response = await fetch('/api/address/geocode', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ address }),
+      });
+
+      if (!response.ok) {
+        console.error('좌표 조회 API 오류:', response.status);
+        return null;
+      }
+
       const data = await response.json();
-      if (data.documents && data.documents.length > 0) {
+      if (data.latitude && data.longitude) {
         return {
-          lat: parseFloat(data.documents[0].y),
-          lng: parseFloat(data.documents[0].x),
+          lat: data.latitude,
+          lng: data.longitude,
         };
       }
     } catch (err) {
