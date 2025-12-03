@@ -194,19 +194,31 @@ export default function NewServiceClientV2({ sellerId, profileData, isBusiness }
       }
     }
 
+    // 서비스 데이터 구성
+    const serviceData: Record<string, unknown> = {
+      seller_id: sellerId,
+      title: formData.title,
+      description: formData.description,
+      thumbnail_url: thumbnailUrl,
+      price: basePrice,
+      delivery_days: baseDeliveryDays,
+      revision_count: baseRevisionCount,
+      has_packages: formData.use_packages,
+      status: 'pending',
+    };
+
+    // 위치 정보가 있는 경우 추가
+    if (formData.location) {
+      serviceData.location_address = formData.location.address;
+      serviceData.location_latitude = formData.location.latitude;
+      serviceData.location_longitude = formData.location.longitude;
+      serviceData.location_region = formData.location.region;
+      serviceData.delivery_method = formData.delivery_method || 'offline';
+    }
+
     const { data: service, error: serviceError } = await supabase
       .from('services')
-      .insert({
-        seller_id: sellerId,
-        title: formData.title,
-        description: formData.description,
-        thumbnail_url: thumbnailUrl,
-        price: basePrice,
-        delivery_days: baseDeliveryDays,
-        revision_count: baseRevisionCount,
-        has_packages: formData.use_packages,
-        status: 'pending',
-      })
+      .insert(serviceData)
       .select()
       .single();
 
