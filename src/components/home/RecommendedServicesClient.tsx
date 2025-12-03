@@ -14,18 +14,24 @@ interface CategoryTab {
 interface RecommendedServicesClientProps {
   readonly categories: CategoryTab[];
   readonly servicesByCategory: Record<string, Service[]>;
-  readonly allServices: Service[];
 }
 
 export default function RecommendedServicesClient({
   categories,
   servicesByCategory,
-  allServices,
 }: RecommendedServicesClientProps) {
-  const [activeTab, setActiveTab] = useState<string>('all');
+  // 첫 번째 카테고리를 기본 탭으로 설정
+  const [activeTab, setActiveTab] = useState<string>(categories[0]?.id || '');
   const tabContainerRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);
+
+  // 카테고리가 변경되면 첫 번째 탭으로 설정
+  useEffect(() => {
+    if (categories.length > 0 && !categories.some((c) => c.id === activeTab)) {
+      setActiveTab(categories[0].id);
+    }
+  }, [categories, activeTab]);
 
   // 스크롤 상태 체크
   useEffect(() => {
@@ -60,10 +66,12 @@ export default function RecommendedServicesClient({
   };
 
   // 현재 탭에 맞는 서비스 가져오기
-  const currentServices = activeTab === 'all' ? allServices : servicesByCategory[activeTab] || [];
+  const currentServices = servicesByCategory[activeTab] || [];
 
-  // 전체 탭 + 카테고리 탭
-  const tabs: CategoryTab[] = [{ id: 'all', name: '전체', slug: 'all' }, ...categories];
+  // 카테고리가 없으면 섹션 숨김
+  if (categories.length === 0) {
+    return null;
+  }
 
   return (
     <section className="py-4 lg:py-8 bg-gray-50">
@@ -91,7 +99,7 @@ export default function RecommendedServicesClient({
             className="flex gap-2 overflow-x-auto scrollbar-hide px-1 py-1"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {tabs.map((tab) => (
+            {categories.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}

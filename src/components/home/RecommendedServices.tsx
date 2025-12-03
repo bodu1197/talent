@@ -12,7 +12,7 @@ interface CategoryTab {
   slug: string;
 }
 
-// 탭에서 제외할 카테고리 slug (내 주변의 프리미엄 전문가 + 심부름)
+// 탭에서 제외할 카테고리 slug (내 주변의 프리미엄 전문가 6개 + 심부름)
 const EXCLUDED_CATEGORY_SLUGS = [
   'life-service', // 생활 서비스
   'event', // 이벤트
@@ -93,7 +93,7 @@ function processCategoryServices<T extends { id: string }>(
 export default async function RecommendedServices({ aiCategoryIds }: RecommendedServicesProps) {
   const supabase = await createClient();
 
-  // 1. 1단계 카테고리 조회 (AI 카테고리 및 제외 카테고리 제외 - 탭용)
+  // 1. 1단계 카테고리 조회 (AI + 심부름 + 내주변전문가 6개 제외)
   const { data: categoriesData } = await supabase
     .from('categories')
     .select('id, name, slug')
@@ -101,12 +101,15 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
     .eq('is_active', true)
     .order('display_order');
 
-  // 탭에 표시할 카테고리 (AI 카테고리 및 제외 카테고리 제외)
-  const categories: CategoryTab[] = (categoriesData || [])
-    .filter((cat) => !aiCategoryIds.includes(cat.id) && !EXCLUDED_CATEGORY_SLUGS.includes(cat.slug))
-    .map((cat) => ({ id: cat.id, name: cat.name, slug: cat.slug }));
+  const filteredCategories = (categoriesData || []).filter(
+    (cat) => !aiCategoryIds.includes(cat.id) && !EXCLUDED_CATEGORY_SLUGS.includes(cat.slug)
+  );
 
-  // 2. 광고 서비스 ID 조회 - Service Role 클라이언트 사용
+  if (filteredCategories.length === 0) {
+    return <RecommendedServicesClient categories={[]} servicesByCategory={{}} />;
+  }
+
+  // 2. 광고 서비스 ID 조회
   const serviceRoleClient = createServiceRoleClient();
   const { data: advertisingData } = await serviceRoleClient
     .from('advertising_subscriptions')
@@ -115,50 +118,8 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
 
   const advertisedServiceIds = new Set(advertisingData?.map((ad) => ad.service_id) || []);
 
-  // 3. 모든 활성 서비스 조회 (전체 탭용)
-  const { data: allServicesData } = await supabase
-    .from('services')
-    .select(
-      `id, title, description, price, thumbnail_url, orders_count, delivery_method,
-       seller:seller_profiles(id, business_name, display_name, profile_image, is_verified)`
-    )
-    .eq('status', 'active')
-    .order('created_at', { ascending: false })
-    .limit(100);
-
-  if (!allServicesData || allServicesData.length === 0) {
-    return (
-      <RecommendedServicesClient categories={categories} servicesByCategory={{}} allServices={[]} />
-    );
-  }
-
-  const allServiceIds = allServicesData.map((s) => s.id);
-
-  // 4. 모든 리뷰 통계 한 번에 조회
-  const { data: reviewStats } = await supabase
-    .from('reviews')
-    .select('service_id, rating')
-    .in('service_id', allServiceIds)
-    .eq('is_visible', true);
-
-  const ratingMap = buildRatingMap(reviewStats as { service_id: string; rating: number }[] | null);
-
-  // 5. 전체 탭용 서비스 (광고 우선 + 랜덤)
-  const allServices = processCategoryServices(allServicesData, advertisedServiceIds, ratingMap);
-
-  // 6. 카테고리별 서비스 조회 (탭에 표시되는 카테고리만)
-  const allCategoryIds = categories.map((c) => c.id);
-
-  if (allCategoryIds.length === 0) {
-    return (
-      <RecommendedServicesClient
-        categories={categories}
-        servicesByCategory={{}}
-        allServices={allServices}
-      />
-    );
-  }
-
+  // 3. 하위 카테고리 조회
+  const allCategoryIds = filteredCategories.map((c) => c.id);
   const { data: allSubCategories } = await supabase
     .from('categories')
     .select('id, parent_id')
@@ -166,7 +127,7 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
 
   // 카테고리별 ID 매핑 (자신 + 하위)
   const categoryIdMap = new Map<string, string[]>();
-  for (const cat of categories) {
+  for (const cat of filteredCategories) {
     const subCatIds =
       allSubCategories?.filter((sub) => sub.parent_id === cat.id).map((sub) => sub.id) || [];
     categoryIdMap.set(cat.id, [cat.id, ...subCatIds]);
@@ -174,22 +135,70 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
 
   const allRelatedCatIds = [...categoryIdMap.values()].flat();
 
+  // 4. 서비스-카테고리 연결 조회
   const { data: allServiceLinks } = await supabase
     .from('service_categories')
     .select('service_id, category_id')
     .in('category_id', allRelatedCatIds);
 
+  const allServiceIds = [...new Set(allServiceLinks?.map((s) => s.service_id) || [])];
+
+  if (allServiceIds.length === 0) {
+    // 서비스가 없어도 카테고리 탭은 표시
+    const categories: CategoryTab[] = filteredCategories.map((cat) => ({
+      id: cat.id,
+      name: cat.name,
+      slug: cat.slug,
+    }));
+    return <RecommendedServicesClient categories={categories} servicesByCategory={{}} />;
+  }
+
+  // 5. 서비스 조회
+  const { data: allServicesData } = await supabase
+    .from('services')
+    .select(
+      `id, title, description, price, thumbnail_url, orders_count, delivery_method,
+       seller:seller_profiles(id, business_name, display_name, profile_image, is_verified)`
+    )
+    .in('id', allServiceIds)
+    .eq('status', 'active')
+    .order('created_at', { ascending: false });
+
+  if (!allServicesData || allServicesData.length === 0) {
+    const categories: CategoryTab[] = filteredCategories.map((cat) => ({
+      id: cat.id,
+      name: cat.name,
+      slug: cat.slug,
+    }));
+    return <RecommendedServicesClient categories={categories} servicesByCategory={{}} />;
+  }
+
+  // 6. 리뷰 통계 조회
+  const { data: reviewStats } = await supabase
+    .from('reviews')
+    .select('service_id, rating')
+    .in(
+      'service_id',
+      allServicesData.map((s) => s.id)
+    )
+    .eq('is_visible', true);
+
+  const ratingMap = buildRatingMap(reviewStats as { service_id: string; rating: number }[] | null);
   const serviceToCategories = buildServiceToCategoriesMap(allServiceLinks);
 
-  // 각 카테고리별로 서비스 분류
+  // 7. 각 카테고리별로 서비스 분류
   const servicesByCategory: Record<string, Service[]> = {};
+  const categories: CategoryTab[] = [];
 
-  for (const category of categories) {
+  for (const category of filteredCategories) {
     const catIds = new Set(categoryIdMap.get(category.id) || []);
     const categoryServices = allServicesData.filter((service) => {
       const serviceCats = serviceToCategories.get(service.id);
       return serviceCats ? [...serviceCats].some((catId) => catIds.has(catId)) : false;
     });
+
+    // 카테고리는 항상 추가 (서비스 유무와 관계없이)
+    categories.push({ id: category.id, name: category.name, slug: category.slug });
 
     if (categoryServices.length > 0) {
       servicesByCategory[category.id] = processCategoryServices(
@@ -201,10 +210,6 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
   }
 
   return (
-    <RecommendedServicesClient
-      categories={categories}
-      servicesByCategory={servicesByCategory}
-      allServices={allServices}
-    />
+    <RecommendedServicesClient categories={categories} servicesByCategory={servicesByCategory} />
   );
 }
