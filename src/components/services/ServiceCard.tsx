@@ -35,6 +35,7 @@ interface ServiceCardProps {
   readonly categoryId?: string; // 현재 카테고리 ID
   readonly page?: number; // 현재 페이지
   readonly priority?: boolean; // LCP 최적화를 위한 이미지 우선 로딩
+  readonly showLocation?: boolean; // 오프라인 카테고리에서만 위치 정보 표시
 }
 
 export default function ServiceCard({
@@ -43,6 +44,7 @@ export default function ServiceCard({
   categoryId,
   page,
   priority = false,
+  showLocation = false,
 }: ServiceCardProps) {
   const impressionTracked = useRef(false);
 
@@ -169,25 +171,30 @@ export default function ServiceCard({
             <span className="sr-only">평점</span>
             {(service.rating || 0).toFixed(1)}
           </span>
-          {/* 거리 표시 (위치 정보가 있을 때만) */}
-          {service._distance !== undefined && service._distance < 99999 && (
-            <span className="flex items-center gap-1 text-gray-500">
-              <MapPin className="w-3 h-3" aria-hidden="true" />
-              <span className="sr-only">거리</span>
-              {service._distance < 1
-                ? `${Math.round(service._distance * 1000)}m`
-                : `${service._distance.toFixed(1)}km`}
-            </span>
+          {/* 위치 정보 표시 (오프라인 카테고리에서만) */}
+          {showLocation && (
+            <>
+              {/* 거리 표시 (위치 정보가 있을 때만) */}
+              {service._distance !== undefined && service._distance < 99999 && (
+                <span className="flex items-center gap-1 text-gray-500">
+                  <MapPin className="w-3 h-3" aria-hidden="true" />
+                  <span className="sr-only">거리</span>
+                  {service._distance < 1
+                    ? `${Math.round(service._distance * 1000)}m`
+                    : `${service._distance.toFixed(1)}km`}
+                </span>
+              )}
+              {/* 지역 표시 (거리 정보 없고 지역 정보만 있을 때) */}
+              {(service._distance === undefined || service._distance >= 99999) &&
+                service.location_region && (
+                  <span className="flex items-center gap-1 text-gray-500">
+                    <MapPin className="w-3 h-3" aria-hidden="true" />
+                    <span className="sr-only">지역</span>
+                    {service.location_region}
+                  </span>
+                )}
+            </>
           )}
-          {/* 지역 표시 (거리 정보 없고 지역 정보만 있을 때) */}
-          {(service._distance === undefined || service._distance >= 99999) &&
-            service.location_region && (
-              <span className="flex items-center gap-1 text-gray-500">
-                <MapPin className="w-3 h-3" aria-hidden="true" />
-                <span className="sr-only">지역</span>
-                {service.location_region}
-              </span>
-            )}
         </div>
 
         {/* 가격 */}

@@ -15,6 +15,7 @@ import LocationSortToggle from '@/components/categories/LocationSortToggle';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { logger } from '@/lib/logger';
+import { isOfflineCategory } from '@/lib/constants/categories';
 
 // ISR 캐싱: 광고 우선순위 테스트를 위해 일시적으로 비활성화
 export const revalidate = 0;
@@ -70,6 +71,10 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
     return `/categories/${slug}?page=${pageNum}${locationParams}`;
   };
 
+  // 오프라인 카테고리 여부 확인 (1차 카테고리 기준)
+  const rootCategorySlug = categoryPath.length > 0 ? categoryPath[0].slug : slug;
+  const isOfflineCategoryPage = isOfflineCategory(rootCategorySlug);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 카테고리 방문 추적 (모든 카테고리) */}
@@ -119,7 +124,8 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
 
                   {/* 정렬 */}
                   <div className="flex items-center gap-2">
-                    <LocationSortToggle />
+                    {/* 오프라인 카테고리에서만 위치 기반 정렬 표시 */}
+                    {isOfflineCategoryPage && <LocationSortToggle />}
                     <CategorySort currentSort="popular" currentPrice="" />
                   </div>
                 </div>
@@ -134,6 +140,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                   initialServices={services}
                   categoryId={category.id}
                   page={currentPage}
+                  showLocation={isOfflineCategoryPage}
                 />
               </div>
 

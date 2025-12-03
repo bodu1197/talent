@@ -9,9 +9,10 @@ import { logger } from '@/lib/logger';
 import TemplateSelector from '@/components/services/TemplateSelector';
 import toast from 'react-hot-toast';
 
-import { Sparkles } from 'lucide-react';
+import { Sparkles, MapPin } from 'lucide-react';
 import { type GradientTemplate, generateThumbnailWithText } from '@/lib/template-generator';
 import { ArrowLeft, Upload, Palette, X, Check, CloudUpload, Loader2 } from 'lucide-react';
+import { isOfflineCategory } from '@/lib/constants/categories';
 
 // Dynamic import for TextOverlayEditor - only loads when template mode is selected
 const TextOverlayEditor = dynamic(() => import('@/components/services/TextOverlayEditor'), {
@@ -250,6 +251,19 @@ export default function NewServiceClient({ sellerId }: Props) {
       setFormData((prev) => ({ ...prev, category: '' }));
     }
   }, [selectedLevel3, selectedLevel2, selectedLevel1]);
+
+  // 오프라인 카테고리 여부 확인 (1차 카테고리 기준)
+  const selectedLevel1Category = level1Categories.find((c) => c.id === selectedLevel1);
+  const showLocationInput = selectedLevel1Category
+    ? isOfflineCategory(selectedLevel1Category.slug)
+    : false;
+
+  // 오프라인 카테고리 아닐 때 위치 정보 초기화
+  useEffect(() => {
+    if (!showLocationInput && formData.location) {
+      setFormData((prev) => ({ ...prev, location: null }));
+    }
+  }, [showLocationInput, formData.location]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -830,6 +844,120 @@ export default function NewServiceClient({ sellerId }: Props) {
               </div>
             </div>
           </div>
+
+          {/* 서비스 제공 지역 (오프라인 카테고리에서만 표시) */}
+          {showLocationInput && (
+            <div className="bg-white rounded-lg border border-gray-200 p-4 lg:p-6 mb-4 lg:mb-6">
+              <h2 className="text-base lg:text-lg font-semibold text-gray-900 mb-4 lg:mb-6 flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-brand-primary" />
+                서비스 제공 지역
+              </h2>
+              <p className="text-sm text-gray-600 mb-4">
+                오프라인/대면 서비스의 경우, 서비스 제공 가능 지역을 입력해주세요. 구매자가 &quot;내
+                주변&quot; 검색 시 노출됩니다.
+              </p>
+
+              <div className="space-y-4">
+                {formData.location ? (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="font-medium text-green-800">위치가 설정되었습니다</p>
+                        <p className="text-sm text-green-700 mt-1">{formData.location.address}</p>
+                        <p className="text-xs text-green-600 mt-1">
+                          지역: {formData.location.region}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, location: null })}
+                        className="text-sm text-red-600 hover:text-red-700"
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if ('geolocation' in navigator) {
+                          toast.loading('위치를 가져오는 중...', { id: 'location' });
+                          // eslint-disable-next-line sonarjs/no-intrusive-permissions -- 오프라인 서비스 위치 등록에 필요
+                          navigator.geolocation.getCurrentPosition(
+                            async (position) => {
+                              const { latitude, longitude } = position.coords;
+                              // Reverse geocoding using a simple approximation for Korean addresses
+                              try {
+                                const response = await fetch(
+                                  `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&accept-language=ko`
+                                );
+                                const data = await response.json();
+                                const address = data.display_name || '위치 정보';
+                                // Extract region (시/군/구)
+                                const region =
+                                  data.address?.city ||
+                                  data.address?.county ||
+                                  data.address?.town ||
+                                  data.address?.district ||
+                                  data.address?.state ||
+                                  '알 수 없음';
+
+                                setFormData({
+                                  ...formData,
+                                  location: {
+                                    address,
+                                    latitude,
+                                    longitude,
+                                    region,
+                                  },
+                                });
+                                toast.success('위치가 설정되었습니다!', { id: 'location' });
+                              } catch {
+                                // Fallback without reverse geocoding
+                                setFormData({
+                                  ...formData,
+                                  location: {
+                                    address: `위도: ${latitude.toFixed(6)}, 경도: ${longitude.toFixed(6)}`,
+                                    latitude,
+                                    longitude,
+                                    region: '직접 입력 필요',
+                                  },
+                                });
+                                toast.success('좌표가 저장되었습니다. 지역을 직접 입력해주세요.', {
+                                  id: 'location',
+                                });
+                              }
+                            },
+                            (error) => {
+                              logger.error('Geolocation error:', error);
+                              toast.error(
+                                '위치를 가져올 수 없습니다. 브라우저 설정을 확인해주세요.',
+                                {
+                                  id: 'location',
+                                }
+                              );
+                            },
+                            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                          );
+                        } else {
+                          toast.error('이 브라우저는 위치 서비스를 지원하지 않습니다.');
+                        }
+                      }}
+                      className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-brand-primary hover:text-brand-primary transition-colors flex items-center justify-center gap-2"
+                    >
+                      <MapPin className="w-5 h-5" />
+                      현재 위치 가져오기
+                    </button>
+                    <p className="text-xs text-gray-500 text-center">
+                      브라우저에서 위치 권한을 허용해야 합니다
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* 제출 버튼 */}
           <div className="flex gap-2 lg:gap-3">

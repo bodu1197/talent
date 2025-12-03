@@ -10,9 +10,15 @@ interface ServiceGridProps {
   readonly initialServices: Service[];
   readonly categoryId?: string;
   readonly page?: number;
+  readonly showLocation?: boolean; // 오프라인 카테고리에서만 위치 정보 표시
 }
 
-export default function ServiceGrid({ initialServices, categoryId, page }: ServiceGridProps) {
+export default function ServiceGrid({
+  initialServices,
+  categoryId,
+  page,
+  showLocation = false,
+}: ServiceGridProps) {
   const searchParams = useSearchParams();
   const sort = searchParams.get('sort') || 'popular';
   const price = searchParams.get('price');
@@ -85,6 +91,7 @@ export default function ServiceGrid({ initialServices, categoryId, page }: Servi
           categoryId={categoryId}
           position={index + 1}
           page={page || 1}
+          showLocation={showLocation}
         />
       ))}
     </>

@@ -32,6 +32,7 @@ import {
   getRecommendedServicesByCategory,
 } from '@/lib/supabase/queries/services';
 import ServicePackageSelector from '@/components/services/ServicePackageSelector';
+import { isOfflineCategory } from '@/lib/constants/categories';
 
 // 동적 렌더링 강제 (찜 개수 실시간 반영)
 export const dynamic = 'force-dynamic';
@@ -328,6 +329,10 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
 
   const categoryName = deepestCategory?.name || '관련';
 
+  // 오프라인 카테고리 여부 확인 (1차 카테고리 기준)
+  const rootCategorySlug = categoryPath.length > 0 ? categoryPath[0].slug : '';
+  const showLocationInfo = isOfflineCategory(rootCategorySlug);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 조회수 추적 */}
@@ -406,8 +411,8 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                   <Heart className="w-4 h-4 text-red-400 fill-current" />
                   <span className="font-semibold">{service.wishlist_count || 0}</span>
                 </div>
-                {/* 서비스 제공 지역 */}
-                {service.location_region && (
+                {/* 서비스 제공 지역 (오프라인 카테고리에서만 표시) */}
+                {showLocationInfo && service.location_region && (
                   <div className="flex items-center gap-1.5 text-gray-600">
                     <MapPin className="w-4 h-4" />
                     <span>{service.location_region}</span>
@@ -599,8 +604,8 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             <Heart className="w-4 h-4 text-red-400 fill-current" />
             <span>{service.wishlist_count || 0}</span>
           </div>
-          {/* 서비스 제공 지역 */}
-          {service.location_region && (
+          {/* 서비스 제공 지역 (오프라인 카테고리에서만 표시) */}
+          {showLocationInfo && service.location_region && (
             <div className="ml-4 flex items-center gap-1 text-gray-500">
               <MapPin className="w-4 h-4" />
               <span>{service.location_region}</span>
