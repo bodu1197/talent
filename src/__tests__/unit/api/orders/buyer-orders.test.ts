@@ -10,7 +10,8 @@ vi.mock('@/lib/api/auth-middleware', () => ({
 }));
 
 // Mock Supabase
-const mockSupabase = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mockSupabase: Record<string, any> = {
   from: vi.fn(() => mockSupabase),
   select: vi.fn(() => mockSupabase),
   eq: vi.fn(() => mockSupabase),

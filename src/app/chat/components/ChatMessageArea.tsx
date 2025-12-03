@@ -121,11 +121,11 @@ export default function ChatMessageArea({
     if (!selectedRoom) return;
 
     try {
-      logger.debug('[PaymentRequests] Loading for room:', selectedRoom.id);
+      logger.debug('[PaymentRequests] Loading for room', { roomId: selectedRoom.id });
       const response = await fetch(`/api/payment-requests?room_id=${selectedRoom.id}`);
       if (response.ok) {
         const data = await response.json();
-        logger.debug('[PaymentRequests] Loaded:', data.payment_requests?.length || 0, 'items');
+        logger.debug('[PaymentRequests] Loaded', { count: data.payment_requests?.length || 0 });
         setPaymentRequests(data.payment_requests || []);
       } else {
         logger.error('[PaymentRequests] Load failed:', response.status);
@@ -156,12 +156,12 @@ export default function ChatMessageArea({
           filter: `room_id=eq.${selectedRoom.id}`,
         },
         (payload) => {
-          logger.debug('[PaymentRequests] Realtime event:', payload.eventType);
+          logger.debug('[PaymentRequests] Realtime event', { eventType: payload.eventType });
           loadPaymentRequests();
         }
       )
       .subscribe((status) => {
-        logger.debug('[PaymentRequests] Subscription status:', status);
+        logger.debug('[PaymentRequests] Subscription status', { status });
       });
 
     // 폴링 백업 (5초마다) - 실시간이 실패할 경우 대비

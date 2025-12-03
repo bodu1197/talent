@@ -3,7 +3,8 @@ import { NextRequest } from 'next/server';
 import { POST } from '@/app/api/chat/favorites/route';
 
 // Mock Supabase
-const mockSupabase = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mockSupabase: Record<string, any> = {
   auth: {
     getUser: vi.fn(),
   },

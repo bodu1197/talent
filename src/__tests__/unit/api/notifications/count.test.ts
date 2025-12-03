@@ -3,7 +3,8 @@ import { NextRequest } from 'next/server';
 import { GET } from '@/app/api/notifications/count/route';
 
 // Mock Supabase with proper chaining
-const mockSupabase = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mockSupabase: Record<string, any> = {
   auth: {
     getUser: vi.fn(),
   },

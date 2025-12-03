@@ -38,7 +38,6 @@ describe('ServiceGrid', () => {
       updated_at: '2024-01-01T00:00:00Z',
       thumbnail_url: undefined,
       seller: undefined,
-      is_promoted: false,
     },
     {
       id: 'service-2',
@@ -60,7 +59,6 @@ describe('ServiceGrid', () => {
       updated_at: '2024-01-01T00:00:00Z',
       thumbnail_url: undefined,
       seller: undefined,
-      is_promoted: false,
     },
     {
       id: 'service-3',
@@ -82,7 +80,6 @@ describe('ServiceGrid', () => {
       updated_at: '2024-01-01T00:00:00Z',
       thumbnail_url: undefined,
       seller: undefined,
-      is_promoted: false,
     },
   ];
 

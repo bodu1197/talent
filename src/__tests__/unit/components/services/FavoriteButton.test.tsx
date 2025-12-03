@@ -5,8 +5,8 @@ import FavoriteButton from '@/components/services/FavoriteButton';
 
 // Mock useAuth
 const mockUser = { id: 'user-123', email: 'test@example.com' };
-const mockUseAuth = vi.fn<[], { user: { id: string; email: string } | null }>(() => ({
-  user: mockUser,
+const mockUseAuth = vi.fn(() => ({
+  user: mockUser as { id: string; email: string } | null,
 }));
 vi.mock('@/components/providers/AuthProvider', () => ({
   useAuth: () => mockUseAuth(),
