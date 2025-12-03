@@ -11,15 +11,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Nominatim API 호출 (OpenStreetMap)
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1&countrycodes=kr`,
-      {
-        headers: {
-          'User-Agent': 'Dolpagu/1.0 (https://dolpagu.com)',
-          'Accept-Language': 'ko',
-        },
-      }
-    );
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`;
+    console.log('[Geocode] Nominatim URL:', url);
+
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Dolpagu/1.0 (https://dolpagu.com)',
+        'Accept-Language': 'ko',
+      },
+    });
 
     if (!response.ok) {
       console.error('[Geocode] Nominatim API error:', response.status);
@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await response.json();
+    console.log('[Geocode] Nominatim response:', JSON.stringify(data));
 
     if (!data || data.length === 0) {
       return NextResponse.json({ latitude: 0, longitude: 0 });
