@@ -12,6 +12,7 @@ import CategorySort from '@/components/categories/CategorySort';
 import CategorySidebar from '@/components/categories/CategorySidebar';
 import CategoryVisitTracker from '@/components/categories/CategoryVisitTracker';
 import LocationSortToggle from '@/components/categories/LocationSortToggle';
+import CategoryTreeSelect from '@/components/categories/CategoryTreeSelect';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { logger } from '@/lib/logger';
@@ -75,6 +76,11 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   const rootCategorySlug = categoryPath.length > 0 ? categoryPath[0].slug : slug;
   const isOfflineCategoryPage = isOfflineCategory(rootCategorySlug);
 
+  // 1차 카테고리와 하위 카테고리 트리 추출 (CategoryTreeSelect용)
+  const rootCategory = allCategories.find((c) => c.slug === rootCategorySlug);
+  const rootCategoryName = rootCategory?.name || category.name;
+  const subCategories = rootCategory?.children || [];
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 카테고리 방문 추적 (모든 카테고리) */}
@@ -127,10 +133,21 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                   {isOfflineCategoryPage && <LocationSortToggle />}
                 </div>
 
-                {/* 필터 + 정렬 (한 줄에 모두 표시) */}
-                <div className="flex items-center justify-between gap-1.5 sm:gap-2">
+                {/* 카테고리 선택 + 필터 + 정렬 */}
+                <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                  {/* 카테고리 트리 선택 (하위 카테고리가 있는 경우만) */}
+                  {subCategories.length > 0 && (
+                    <CategoryTreeSelect
+                      categories={subCategories}
+                      currentCategoryId={category.id}
+                      rootCategoryName={rootCategoryName}
+                      rootCategorySlug={rootCategorySlug}
+                    />
+                  )}
                   <CategoryFilter categoryId={category.id} isAI={category.is_ai || false} />
-                  <CategorySort currentSort="popular" currentPrice="" />
+                  <div className="ml-auto">
+                    <CategorySort currentSort="popular" currentPrice="" />
+                  </div>
                 </div>
               </div>
 
