@@ -65,7 +65,6 @@ describe('Buyer Orders API', () => {
         },
       ];
 
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.order.mockResolvedValue({
         data: mockOrders,
         error: null,
@@ -81,9 +80,7 @@ describe('Buyer Orders API', () => {
 
     it('should handle status filter parameter', async () => {
       // Just verify that the API accepts the status parameter without error when mock is properly set
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.order.mockResolvedValue({
-        // @ts-expect-error - Mock structure type mismatch
         data: [],
         error: null,
       });
@@ -96,9 +93,7 @@ describe('Buyer Orders API', () => {
     });
 
     it('should return all statuses when status=all', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.order.mockResolvedValue({
-        // @ts-expect-error - Mock structure type mismatch
         data: [],
         error: null,
       });
@@ -112,7 +107,6 @@ describe('Buyer Orders API', () => {
     });
 
     it('should handle database errors', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.order.mockResolvedValue({
         data: null,
         error: { message: 'Database error' },
@@ -127,9 +121,7 @@ describe('Buyer Orders API', () => {
     });
 
     it('should include service and seller relations', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.order.mockResolvedValue({
-        // @ts-expect-error - Mock structure type mismatch
         data: [],
         error: null,
       });

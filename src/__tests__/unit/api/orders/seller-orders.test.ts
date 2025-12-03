@@ -63,7 +63,6 @@ describe('Seller Orders API', () => {
       });
 
       mockSupabase.in.mockResolvedValueOnce({
-        // @ts-expect-error - Mock structure type mismatch
         data: [{ order_id: 'order-1', total_revisions: 0, pending_revisions: 0 }],
         error: null,
       });
@@ -77,9 +76,7 @@ describe('Seller Orders API', () => {
     });
 
     it('should return empty array when no orders exist', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.order.mockResolvedValue({
-        // @ts-expect-error - Mock structure type mismatch
         data: [],
         error: null,
       });
@@ -93,7 +90,6 @@ describe('Seller Orders API', () => {
     });
 
     it('should handle database errors', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.order.mockResolvedValue({
         data: null,
         error: { message: 'Database error' },

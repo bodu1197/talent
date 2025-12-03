@@ -39,7 +39,6 @@ describe('Chat Favorites API', () => {
 
   describe('POST /api/chat/favorites', () => {
     it('should return 401 if user is not authenticated', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: null },
       });
@@ -57,7 +56,6 @@ describe('Chat Favorites API', () => {
     });
 
     it('should return 400 if room_id is missing', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
       });
@@ -75,7 +73,6 @@ describe('Chat Favorites API', () => {
     });
 
     it('should add favorite when not exists', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
       });
@@ -96,12 +93,10 @@ describe('Chat Favorites API', () => {
     });
 
     it('should remove favorite when exists', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
       });
 
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.maybeSingle.mockResolvedValue({
         data: { id: 'favorite-1' },
       });
@@ -125,13 +120,11 @@ describe('Chat Favorites API', () => {
     });
 
     it('should handle insert error', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
       });
 
       mockSupabase.maybeSingle.mockResolvedValue({ data: null });
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.insert.mockResolvedValue({
         error: { message: 'Insert failed' },
       });

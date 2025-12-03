@@ -40,7 +40,6 @@ describe('Chat Rooms API', () => {
 
   describe('GET /api/chat/rooms', () => {
     it('should return 401 if not authenticated', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: null },
         error: null,
@@ -55,23 +54,19 @@ describe('Chat Rooms API', () => {
     });
 
     it('should return empty rooms array when no rooms exist', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
         error: null,
       });
 
       // Mock seller check
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.maybeSingle.mockResolvedValue({
         data: null,
         error: null,
       });
 
       // Mock rooms query returning empty
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.order.mockResolvedValue({
-        // @ts-expect-error - Mock structure type mismatch
         data: [],
         error: null,
       });
@@ -87,7 +82,6 @@ describe('Chat Rooms API', () => {
 
   describe('POST /api/chat/rooms', () => {
     it('should return 401 if not authenticated', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: null },
         error: null,
@@ -105,7 +99,6 @@ describe('Chat Rooms API', () => {
     });
 
     it('should return 400 if no seller_id or other_user_id provided', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
         error: null,

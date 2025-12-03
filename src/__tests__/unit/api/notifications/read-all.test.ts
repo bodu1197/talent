@@ -34,7 +34,6 @@ describe('Notifications Read All API', () => {
 
   describe('PATCH /api/notifications/read-all', () => {
     it('should return 401 if user is not authenticated', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: null },
         error: { message: 'Not authenticated' },
@@ -52,7 +51,6 @@ describe('Notifications Read All API', () => {
     });
 
     it('should mark all notifications as read', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
         error: null,
@@ -74,7 +72,6 @@ describe('Notifications Read All API', () => {
     });
 
     it('should handle database error', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
         error: null,

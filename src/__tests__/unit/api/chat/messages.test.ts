@@ -37,7 +37,6 @@ describe('Chat Messages API', () => {
 
   describe('GET /api/chat/messages', () => {
     it('should return 401 if user is not authenticated', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: null },
         error: null,
@@ -52,7 +51,6 @@ describe('Chat Messages API', () => {
     });
 
     it('should return 400 if room_id is missing', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
         error: null,
@@ -87,19 +85,16 @@ describe('Chat Messages API', () => {
         },
       ];
 
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: mockUser },
         error: null,
       });
 
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.order.mockResolvedValue({
         data: mockMessages,
         error: null,
       });
 
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.maybeSingle.mockResolvedValue({
         data: { display_name: 'Test User', profile_image: null },
         error: null,
@@ -114,13 +109,11 @@ describe('Chat Messages API', () => {
     });
 
     it('should handle database errors gracefully', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
         error: null,
       });
 
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.order.mockResolvedValue({
         data: null,
         error: { message: 'Database error' },
@@ -137,7 +130,6 @@ describe('Chat Messages API', () => {
 
   describe('POST /api/chat/messages', () => {
     it('should return 401 if user is not authenticated', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: null },
         error: null,
@@ -155,7 +147,6 @@ describe('Chat Messages API', () => {
     });
 
     it('should return 400 if room_id is missing', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
         error: null,
@@ -173,7 +164,6 @@ describe('Chat Messages API', () => {
     });
 
     it('should return 400 if message and file are both missing', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
         error: null,
@@ -201,19 +191,16 @@ describe('Chat Messages API', () => {
         created_at: new Date().toISOString(),
       };
 
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: mockUser },
         error: null,
       });
 
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.single.mockResolvedValue({
         data: mockNewMessage,
         error: null,
       });
 
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.maybeSingle.mockResolvedValue({
         data: { display_name: 'Test User', profile_image: null },
         error: null,
@@ -245,19 +232,16 @@ describe('Chat Messages API', () => {
         created_at: new Date().toISOString(),
       };
 
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: mockUser },
         error: null,
       });
 
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.single.mockResolvedValue({
         data: mockNewMessage,
         error: null,
       });
 
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.maybeSingle.mockResolvedValue({
         data: null,
         error: null,

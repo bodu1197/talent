@@ -33,7 +33,6 @@ describe('Notifications Count API', () => {
 
   describe('GET /api/notifications/count', () => {
     it('should return 401 if user is not authenticated', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: null },
         error: { message: 'Not authenticated' },
@@ -48,7 +47,6 @@ describe('Notifications Count API', () => {
     });
 
     it('should handle count query', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
         error: null,
@@ -67,7 +65,6 @@ describe('Notifications Count API', () => {
     });
 
     it('should handle database errors', async () => {
-      // @ts-expect-error - Mock structure type mismatch
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
         error: null,

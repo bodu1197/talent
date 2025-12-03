@@ -36,8 +36,8 @@ describe('ServiceGrid', () => {
       is_featured: false,
       created_at: '2024-01-01T00:00:00Z',
       updated_at: '2024-01-01T00:00:00Z',
-      thumbnail_url: null,
-      seller: null,
+      thumbnail_url: undefined,
+      seller: undefined,
       is_promoted: false,
     },
     {
@@ -58,8 +58,8 @@ describe('ServiceGrid', () => {
       is_featured: false,
       created_at: '2024-01-01T00:00:00Z',
       updated_at: '2024-01-01T00:00:00Z',
-      thumbnail_url: null,
-      seller: null,
+      thumbnail_url: undefined,
+      seller: undefined,
       is_promoted: false,
     },
     {
@@ -80,8 +80,8 @@ describe('ServiceGrid', () => {
       is_featured: false,
       created_at: '2024-01-01T00:00:00Z',
       updated_at: '2024-01-01T00:00:00Z',
-      thumbnail_url: null,
-      seller: null,
+      thumbnail_url: undefined,
+      seller: undefined,
       is_promoted: false,
     },
   ];
