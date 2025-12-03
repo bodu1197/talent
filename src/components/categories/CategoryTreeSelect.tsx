@@ -25,31 +25,47 @@ export default function CategoryTreeSelect({
   rootCategorySlug,
 }: CategoryTreeSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // 현재 선택된 카테고리 이름 찾기
-  const findCurrentCategoryName = (): string => {
-    // 루트 카테고리인 경우
-    if (categories.length === 0) return rootCategoryName;
-
-    // 2차 카테고리에서 찾기
-    for (const cat of categories) {
-      if (cat.id === currentCategoryId) return cat.name;
-      // 3차 카테고리에서 찾기
-      if (cat.children) {
-        for (const child of cat.children) {
-          if (child.id === currentCategoryId) return child.name;
-        }
-      }
-    }
-    return `${rootCategoryName} 전체`;
-  };
-
-  const currentName = findCurrentCategoryName();
+  // 현재 1차 카테고리가 선택된 상태인지 확인
   const isRootSelected = !categories.some(
     (cat) => cat.id === currentCategoryId || cat.children?.some((c) => c.id === currentCategoryId)
   );
+
+  // 모든 카테고리 펼치기
+  const expandAll = () => {
+    const allIds = new Set<string>();
+    categories.forEach((cat) => {
+      if (cat.children && cat.children.length > 0) {
+        allIds.add(cat.id);
+      }
+    });
+    setExpandedCategories(allIds);
+  };
+
+  // 드롭다운 열 때 모든 하위 카테고리 펼치기
+  const handleOpen = () => {
+    if (!isOpen) {
+      expandAll();
+    }
+    setIsOpen(!isOpen);
+  };
+
+  // 개별 카테고리 토글
+  const toggleCategory = (categoryId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setExpandedCategories((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(categoryId)) {
+        newSet.delete(categoryId);
+      } else {
+        newSet.add(categoryId);
+      }
+      return newSet;
+    });
+  };
 
   // 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
@@ -63,21 +79,6 @@ export default function CategoryTreeSelect({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // 2차 카테고리 펼침/접힘 토글
-  const toggleExpand = (categoryId: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setExpandedIds((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(categoryId)) {
-        newSet.delete(categoryId);
-      } else {
-        newSet.add(categoryId);
-      }
-      return newSet;
-    });
-  };
-
   // 카테고리가 없으면 렌더링하지 않음
   if (categories.length === 0) {
     return null;
@@ -88,13 +89,11 @@ export default function CategoryTreeSelect({
       {/* 드롭다운 버튼 */}
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleOpen}
         className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:border-gray-400 transition-colors w-full sm:w-auto"
       >
         <Folder className="w-4 h-4 text-gray-500" />
-        <span className="text-sm font-medium text-gray-700 truncate max-w-[200px]">
-          {currentName}
-        </span>
+        <span className="text-sm font-medium text-gray-700">전체 카테고리</span>
         <ChevronDown
           className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
         />
@@ -102,7 +101,7 @@ export default function CategoryTreeSelect({
 
       {/* 드롭다운 메뉴 */}
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
+        <div className="absolute top-full left-0 mt-1 w-72 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
           {/* 전체 보기 옵션 */}
           <Link
             href={`/categories/${rootCategorySlug}`}
@@ -122,52 +121,43 @@ export default function CategoryTreeSelect({
           {/* 2차/3차 카테고리 트리 */}
           {categories.map((category) => {
             const hasChildren = category.children && category.children.length > 0;
-            const isExpanded = expandedIds.has(category.id);
             const isSelected = category.id === currentCategoryId;
-            const hasSelectedChild = category.children?.some((c) => c.id === currentCategoryId);
+            const isExpanded = expandedCategories.has(category.id);
 
             return (
               <div key={category.id}>
                 {/* 2차 카테고리 */}
-                <div
-                  className={`flex items-center gap-1 px-3 py-2 text-sm hover:bg-gray-50 transition-colors ${
-                    isSelected
-                      ? 'bg-brand-primary/10 text-brand-primary font-medium'
-                      : 'text-gray-700'
-                  }`}
-                >
-                  {hasChildren ? (
+                <div className="flex items-center">
+                  {hasChildren && (
                     <button
                       type="button"
-                      onClick={(e) => toggleExpand(category.id, e)}
-                      className="p-0.5 hover:bg-gray-200 rounded"
+                      onClick={(e) => toggleCategory(category.id, e)}
+                      className="p-2 hover:bg-gray-100 rounded"
                     >
-                      {isExpanded ? (
-                        <ChevronDown className="w-4 h-4 text-gray-400" />
-                      ) : (
-                        <ChevronRight className="w-4 h-4 text-gray-400" />
-                      )}
+                      <ChevronRight
+                        className={`w-4 h-4 text-gray-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`}
+                      />
                     </button>
-                  ) : (
-                    <span className="w-5" />
                   )}
-
                   <Link
                     href={`/categories/${category.slug}`}
                     onClick={() => setIsOpen(false)}
-                    className="flex-1 flex items-center gap-2"
+                    className={`flex-1 flex items-center gap-2 px-2 py-2 text-sm hover:bg-gray-50 transition-colors ${
+                      isSelected
+                        ? 'bg-brand-primary/10 text-brand-primary font-medium'
+                        : 'text-gray-700'
+                    } ${!hasChildren ? 'ml-8' : ''}`}
                   >
                     {isSelected && <Check className="w-4 h-4" />}
-                    <span>{category.name}</span>
-                    {hasChildren && (
-                      <span className="text-xs text-gray-400">({category.children?.length})</span>
-                    )}
+                    <span className={!isSelected && !hasChildren ? 'ml-6' : ''}>
+                      {category.name}
+                    </span>
                   </Link>
                 </div>
 
-                {/* 3차 카테고리 (펼쳐진 경우) */}
-                {hasChildren && (isExpanded || hasSelectedChild) && (
-                  <div className="bg-gray-50">
+                {/* 3차 카테고리 (펼쳐진 경우에만 표시) */}
+                {hasChildren && isExpanded && (
+                  <div className="bg-gray-50 ml-6 border-l-2 border-gray-200">
                     {category.children?.map((child) => {
                       const isChildSelected = child.id === currentCategoryId;
                       return (
@@ -175,7 +165,7 @@ export default function CategoryTreeSelect({
                           key={child.id}
                           href={`/categories/${child.slug}`}
                           onClick={() => setIsOpen(false)}
-                          className={`flex items-center gap-2 pl-10 pr-3 py-2 text-sm hover:bg-gray-100 transition-colors ${
+                          className={`flex items-center gap-2 pl-4 pr-3 py-2 text-sm hover:bg-gray-100 transition-colors ${
                             isChildSelected
                               ? 'bg-brand-primary/10 text-brand-primary font-medium'
                               : 'text-gray-600'
