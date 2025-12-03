@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { MapPin, Navigation, X, Loader2 } from 'lucide-react';
+import { MapPin, Send, X, Loader2 } from 'lucide-react';
 
 interface LocationSortToggleProps {
   className?: string;
@@ -15,6 +15,13 @@ export default function LocationSortToggle({ className = '' }: LocationSortToggl
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isAnimated, setIsAnimated] = useState(false);
+
+  // 마운트 시 애니메이션 시작
+  useEffect(() => {
+    const timer = setTimeout(() => setIsAnimated(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Check if location sorting is currently active
   const currentLat = searchParams.get('lat');
@@ -96,7 +103,7 @@ export default function LocationSortToggle({ className = '' }: LocationSortToggl
       {hasLocation ? (
         <button
           onClick={disableLocationSort}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-full hover:bg-blue-100 transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-gradient-to-r from-orange-500 to-pink-500 rounded-full hover:from-orange-600 hover:to-pink-600 transition-all shadow-md hover:shadow-lg"
           title="거리순 정렬 해제"
         >
           <MapPin className="w-4 h-4" />
@@ -107,15 +114,30 @@ export default function LocationSortToggle({ className = '' }: LocationSortToggl
         <button
           onClick={enableLocationSort}
           disabled={isLoading}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-600 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 hover:text-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="group relative flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-orange-600 bg-gradient-to-r from-orange-50 to-pink-50 border-2 border-orange-300 rounded-full hover:from-orange-100 hover:to-pink-100 hover:border-orange-400 transition-all shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
           title="내 위치 기반으로 가까운 서비스 먼저 보기"
         >
-          {isLoading ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            <Navigation className="w-4 h-4" />
+          {/* 종이비행기 날아오는 애니메이션 */}
+          <span
+            className={`inline-flex transition-all duration-700 ease-out ${
+              isAnimated
+                ? 'translate-x-0 translate-y-0 rotate-0 opacity-100'
+                : '-translate-x-8 -translate-y-4 -rotate-45 opacity-0'
+            }`}
+          >
+            {isLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin text-orange-500" />
+            ) : (
+              <Send className="w-4 h-4 text-orange-500 group-hover:text-orange-600 transition-colors" />
+            )}
+          </span>
+          <span className="text-orange-600 group-hover:text-orange-700">
+            {isLoading ? '위치 확인 중...' : '거리순'}
+          </span>
+          {/* 반짝임 효과 */}
+          {!isLoading && (
+            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
           )}
-          <span>{isLoading ? '위치 확인 중...' : '거리순'}</span>
         </button>
       )}
 
