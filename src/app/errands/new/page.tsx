@@ -139,9 +139,10 @@ export default function NewErrandPage() {
   const [shoppingItems, setShoppingItems] = useState<ShoppingItem[]>([{ name: '', quantity: 1 }]);
   const [shoppingLocation, setShoppingLocation] = useState<{
     address: string;
+    detail?: string;
     lat?: number;
     lng?: number;
-  }>({ address: '' });
+  }>({ address: '', detail: '' });
   const [hasHeavyItem, setHasHeavyItem] = useState(false);
   const [shoppingPrice, setShoppingPrice] = useState<ShoppingPriceBreakdown | null>(null);
 
@@ -504,12 +505,14 @@ export default function NewErrandPage() {
       toast.error('카테고리를 선택해주세요');
       return;
     }
-    if (!pickup.address.trim()) {
+    // 배달 카테고리일 때만 출발지 검증
+    if (formData.category === 'DELIVERY' && !pickup.address.trim()) {
       toast.error('출발지를 입력해주세요');
       return;
     }
     if (!delivery.address.trim()) {
-      toast.error('도착지를 입력해주세요');
+      const errorMsg = formData.category === 'SHOPPING' ? '배달 받을 주소를 입력해주세요' : '도착지를 입력해주세요';
+      toast.error(errorMsg);
       return;
     }
     if (!formData.title?.trim()) {
@@ -566,14 +569,20 @@ export default function NewErrandPage() {
       };
 
       // 구매대행 카테고리 데이터
+      // SPECIFIC: 지정된 구매처 주소 사용
+      // 그 외: 구매처는 범위 내 헬퍼가 결정 (배달지 주소를 출발지로 사용)
+      const shoppingPickupAddress = shoppingRange === 'SPECIFIC' ? shoppingLocation.address : delivery.address;
+      const shoppingPickupLat = shoppingRange === 'SPECIFIC' ? shoppingLocation.lat : delivery.lat;
+      const shoppingPickupLng = shoppingRange === 'SPECIFIC' ? shoppingLocation.lng : delivery.lng;
+
       const shoppingData: CreateErrandRequest = {
         ...formData,
         title: formData.title || '',
         category: 'SHOPPING',
-        pickup_address: shoppingRange === 'SPECIFIC' ? shoppingLocation.address : pickup.address,
-        pickup_detail: pickup.detail || undefined,
-        pickup_lat: shoppingRange === 'SPECIFIC' ? shoppingLocation.lat : pickup.lat,
-        pickup_lng: shoppingRange === 'SPECIFIC' ? shoppingLocation.lng : pickup.lng,
+        pickup_address: shoppingPickupAddress,
+        pickup_detail: shoppingRange === 'SPECIFIC' ? shoppingLocation.detail : undefined,
+        pickup_lat: shoppingPickupLat,
+        pickup_lng: shoppingPickupLng,
         delivery_address: delivery.address,
         delivery_detail: delivery.detail || undefined,
         delivery_lat: delivery.lat,
@@ -663,51 +672,53 @@ export default function NewErrandPage() {
               </div>
             </div>
 
-            {/* 출발지 */}
-            <div className="bg-white rounded-xl border border-gray-200 p-4">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                <div className="w-2 h-2 rounded-full bg-blue-500" />
-                출발지
-              </label>
-              <div className="flex gap-2 mb-2">
-                <button
-                  type="button"
-                  onClick={handlePickupSearch}
-                  disabled={!isScriptLoaded}
-                  className={`flex-1 flex items-center gap-2 px-4 py-3 border rounded-lg text-left transition-all ${
-                    pickup.address
-                      ? 'bg-blue-50 border-blue-200 text-gray-900'
-                      : 'bg-white border-gray-200 text-gray-500 hover:border-blue-300'
-                  }`}
-                >
-                  <Search className="w-4 h-4 text-gray-400" />
-                  <span className="text-sm truncate">{pickup.address || '주소 검색'}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCurrentLocation}
-                  className="px-3 py-3 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
-                  title="현재 위치"
-                >
-                  <Navigation className="w-5 h-5" />
-                </button>
+            {/* 출발지 (배달 카테고리만) */}
+            {formData.category === 'DELIVERY' && (
+              <div className="bg-white rounded-xl border border-gray-200 p-4">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-blue-500" />
+                  출발지
+                </label>
+                <div className="flex gap-2 mb-2">
+                  <button
+                    type="button"
+                    onClick={handlePickupSearch}
+                    disabled={!isScriptLoaded}
+                    className={`flex-1 flex items-center gap-2 px-4 py-3 border rounded-lg text-left transition-all ${
+                      pickup.address
+                        ? 'bg-blue-50 border-blue-200 text-gray-900'
+                        : 'bg-white border-gray-200 text-gray-500 hover:border-blue-300'
+                    }`}
+                  >
+                    <Search className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm truncate">{pickup.address || '주소 검색'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCurrentLocation}
+                    className="px-3 py-3 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
+                    title="현재 위치"
+                  >
+                    <Navigation className="w-5 h-5" />
+                  </button>
+                </div>
+                {pickup.address && (
+                  <input
+                    type="text"
+                    value={pickup.detail}
+                    onChange={(e) => setPickup((prev) => ({ ...prev, detail: e.target.value }))}
+                    placeholder="상세주소 (동/호수, 층, 건물명 등)"
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                )}
               </div>
-              {pickup.address && (
-                <input
-                  type="text"
-                  value={pickup.detail}
-                  onChange={(e) => setPickup((prev) => ({ ...prev, detail: e.target.value }))}
-                  placeholder="상세주소 (동/호수, 층, 건물명 등)"
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              )}
-            </div>
+            )}
 
-            {/* 도착지 */}
+            {/* 도착지 / 배달 받을 주소 */}
             <div className="bg-white rounded-xl border border-gray-200 p-4">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                <div className="w-2 h-2 rounded-full bg-red-500" />
-                도착지
+                <div className={`w-2 h-2 rounded-full ${formData.category === 'SHOPPING' ? 'bg-green-500' : 'bg-red-500'}`} />
+                {formData.category === 'SHOPPING' ? '배달 받을 주소' : '도착지'}
               </label>
               <button
                 type="button"
@@ -903,7 +914,7 @@ export default function NewErrandPage() {
                       type="button"
                       onClick={handleShoppingLocationSearch}
                       disabled={!isScriptLoaded}
-                      className={`w-full flex items-center gap-2 px-4 py-3 border rounded-lg text-left transition-all ${
+                      className={`w-full flex items-center gap-2 px-4 py-3 border rounded-lg text-left transition-all mb-2 ${
                         shoppingLocation.address
                           ? 'bg-green-50 border-green-200 text-gray-900'
                           : 'bg-white border-gray-200 text-gray-500 hover:border-green-300'
@@ -914,6 +925,15 @@ export default function NewErrandPage() {
                         {shoppingLocation.address || '구매할 장소 검색'}
                       </span>
                     </button>
+                    {shoppingLocation.address && (
+                      <input
+                        type="text"
+                        value={shoppingLocation.detail || ''}
+                        onChange={(e) => setShoppingLocation((prev) => ({ ...prev, detail: e.target.value }))}
+                        placeholder="상세주소 (층, 매장명 등)"
+                        className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      />
+                    )}
                   </div>
                 )}
 
