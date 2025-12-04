@@ -195,7 +195,7 @@ export default function ErrandDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container-800 px-4">
+      <div className="max-w-3xl mx-auto px-4">
         {/* 뒤로가기 */}
         <Link
           href="/errands"
@@ -362,40 +362,49 @@ export default function ErrandDetailPage() {
           <div className="p-6 border-b border-gray-100">
             <h2 className="text-sm font-medium text-gray-500 mb-4">요금 상세</h2>
             <div className="space-y-2 text-sm">
+              {/* 기본 요금 (할증 포함된 금액) */}
               <div className="flex justify-between">
-                <span className="text-gray-600">기본 요금</span>
-                <span className="text-gray-900">{errand.base_price?.toLocaleString()}원</span>
+                <span className="text-gray-600">심부름 요금</span>
+                <span className="text-gray-900">
+                  {(
+                    (errand.total_price || 0) -
+                    (errand.tip || 0) -
+                    (errand.stop_fee || 0) -
+                    (errand.range_fee || 0) -
+                    (errand.item_fee || 0)
+                  ).toLocaleString()}
+                  원
+                </span>
               </div>
-              {errand.distance_price > 0 && (
-                <div className="flex justify-between">
-                  <span className="text-gray-600">거리 요금</span>
-                  <span className="text-gray-900">{errand.distance_price?.toLocaleString()}원</span>
-                </div>
-              )}
+              {/* 정차 요금 (다중 배달) */}
               {errand.stop_fee > 0 && (
                 <div className="flex justify-between">
                   <span className="text-gray-600">정차 요금 ({errand.total_stops}곳)</span>
                   <span className="text-gray-900">{errand.stop_fee?.toLocaleString()}원</span>
                 </div>
               )}
+              {/* 범위 요금 (구매대행) */}
               {errand.range_fee > 0 && (
                 <div className="flex justify-between">
                   <span className="text-gray-600">범위 요금</span>
                   <span className="text-gray-900">{errand.range_fee?.toLocaleString()}원</span>
                 </div>
               )}
+              {/* 품목 요금 (구매대행) */}
               {errand.item_fee > 0 && (
                 <div className="flex justify-between">
                   <span className="text-gray-600">품목 요금</span>
                   <span className="text-gray-900">{errand.item_fee?.toLocaleString()}원</span>
                 </div>
               )}
+              {/* 팁 */}
               {errand.tip > 0 && (
                 <div className="flex justify-between">
                   <span className="text-gray-600">팁</span>
                   <span className="text-blue-600">+{errand.tip?.toLocaleString()}원</span>
                 </div>
               )}
+              {/* 총 요금 */}
               <div className="border-t border-gray-200 pt-2 mt-2 flex justify-between font-bold">
                 <span className="text-gray-900">총 요금</span>
                 <span className="text-blue-600">{errand.total_price?.toLocaleString()}원</span>
