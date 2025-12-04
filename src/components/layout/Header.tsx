@@ -218,6 +218,9 @@ export default function Header() {
             ) : (
               // 비로그인 또는 로딩 상태
               (() => {
+                // /errands 페이지에서는 "라이더 등록"으로 표시
+                const isErrandsPage = pathname?.startsWith('/errands');
+
                 if (loading) {
                   return (
                     <div className="flex items-center space-x-4">
@@ -230,11 +233,11 @@ export default function Header() {
                 return (
                   <>
                     <Link
-                      href="/expert/register"
+                      href={isErrandsPage ? '/helper/register' : '/expert/register'}
                       className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm"
-                      aria-label="전문가로 등록하기"
+                      aria-label={isErrandsPage ? '라이더로 등록하기' : '전문가로 등록하기'}
                     >
-                      전문가등록
+                      {isErrandsPage ? '라이더 등록' : '전문가등록'}
                     </Link>
                     <Link
                       href="/auth/login"
