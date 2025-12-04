@@ -17,9 +17,11 @@ export interface Errand {
   description: string | null;
   category: ErrandCategory;
   pickup_address: string;
+  pickup_detail: string | null; // 상세주소 (동/호수, 층, 건물명 등)
   pickup_lat: number | null;
   pickup_lng: number | null;
   delivery_address: string;
+  delivery_detail: string | null; // 상세주소 (동/호수, 층, 건물명 등)
   delivery_lat: number | null;
   delivery_lng: number | null;
   estimated_distance: number | null;
@@ -105,9 +107,11 @@ export interface CreateErrandRequest {
   description?: string;
   category: ErrandCategory;
   pickup_address: string;
+  pickup_detail?: string; // 상세주소 (동/호수, 층, 건물명 등)
   pickup_lat?: number;
   pickup_lng?: number;
   delivery_address: string;
+  delivery_detail?: string; // 상세주소 (동/호수, 층, 건물명 등)
   delivery_lat?: number;
   delivery_lng?: number;
   tip?: number;

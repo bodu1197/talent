@@ -82,14 +82,16 @@ export default function NewErrandPage() {
   // 위치 데이터
   const [pickup, setPickup] = useState<{
     address: string;
+    detail: string; // 상세주소 (동/호수, 층, 건물명 등)
     lat?: number;
     lng?: number;
-  }>({ address: '' });
+  }>({ address: '', detail: '' });
   const [delivery, setDelivery] = useState<{
     address: string;
+    detail: string; // 상세주소 (동/호수, 층, 건물명 등)
     lat?: number;
     lng?: number;
-  }>({ address: '' });
+  }>({ address: '', detail: '' });
 
   // 폼 데이터
   const [formData, setFormData] = useState<Partial<CreateErrandRequest> & { tip: number }>({
@@ -238,11 +240,12 @@ export default function NewErrandPage() {
       oncomplete: async (data: DaumPostcodeResult) => {
         const address = data.roadAddress || data.jibunAddress || data.address;
         const coords = await getCoordinates(address);
-        setPickup({
+        setPickup((prev) => ({
+          ...prev,
           address,
           lat: coords?.lat,
           lng: coords?.lng,
-        });
+        }));
       },
     }).open();
   };
@@ -255,11 +258,12 @@ export default function NewErrandPage() {
       oncomplete: async (data: DaumPostcodeResult) => {
         const address = data.roadAddress || data.jibunAddress || data.address;
         const coords = await getCoordinates(address);
-        setDelivery({
+        setDelivery((prev) => ({
+          ...prev,
           address,
           lat: coords?.lat,
           lng: coords?.lng,
-        });
+        }));
       },
     }).open();
   };
@@ -292,11 +296,12 @@ export default function NewErrandPage() {
 
       if (response.ok) {
         const { address } = await response.json();
-        setPickup({
+        setPickup((prev) => ({
+          ...prev,
           address,
           lat: latitude,
           lng: longitude,
-        });
+        }));
         toast.success('현재 위치를 가져왔습니다');
       }
     } catch {
@@ -341,9 +346,11 @@ export default function NewErrandPage() {
         title: formData.title || '',
         category: formData.category || 'DELIVERY',
         pickup_address: pickup.address,
+        pickup_detail: pickup.detail || undefined,
         pickup_lat: pickup.lat,
         pickup_lng: pickup.lng,
         delivery_address: delivery.address,
+        delivery_detail: delivery.detail || undefined,
         delivery_lat: delivery.lat,
         delivery_lng: delivery.lng,
         estimated_price: priceBreakdown?.totalPrice,
@@ -433,7 +440,7 @@ export default function NewErrandPage() {
                 <div className="w-2 h-2 rounded-full bg-blue-500" />
                 출발지
               </label>
-              <div className="flex gap-2">
+              <div className="flex gap-2 mb-2">
                 <button
                   type="button"
                   onClick={handlePickupSearch}
@@ -456,6 +463,15 @@ export default function NewErrandPage() {
                   <Navigation className="w-5 h-5" />
                 </button>
               </div>
+              {pickup.address && (
+                <input
+                  type="text"
+                  value={pickup.detail}
+                  onChange={(e) => setPickup((prev) => ({ ...prev, detail: e.target.value }))}
+                  placeholder="상세주소 (동/호수, 층, 건물명 등)"
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              )}
             </div>
 
             {/* 도착지 */}
@@ -468,7 +484,7 @@ export default function NewErrandPage() {
                 type="button"
                 onClick={handleDeliverySearch}
                 disabled={!isScriptLoaded}
-                className={`w-full flex items-center gap-2 px-4 py-3 border rounded-lg text-left transition-all ${
+                className={`w-full flex items-center gap-2 px-4 py-3 border rounded-lg text-left transition-all mb-2 ${
                   delivery.address
                     ? 'bg-red-50 border-red-200 text-gray-900'
                     : 'bg-white border-gray-200 text-gray-500 hover:border-red-300'
@@ -477,6 +493,15 @@ export default function NewErrandPage() {
                 <Search className="w-4 h-4 text-gray-400" />
                 <span className="text-sm truncate">{delivery.address || '주소 검색'}</span>
               </button>
+              {delivery.address && (
+                <input
+                  type="text"
+                  value={delivery.detail}
+                  onChange={(e) => setDelivery((prev) => ({ ...prev, detail: e.target.value }))}
+                  placeholder="상세주소 (동/호수, 층, 건물명 등)"
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                />
+              )}
             </div>
 
             {/* 거리 표시 */}
