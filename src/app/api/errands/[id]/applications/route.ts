@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 import { logServerError } from '@/lib/rollbar/server';
 
 interface RouteParams {
@@ -147,8 +147,9 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     const body = await request.json();
 
-    // 지원 생성
-    const { data: application, error } = await supabase
+    // 지원 생성 - Service Role로 RLS 우회 (권한 체크는 위에서 완료됨)
+    const serviceClient = createServiceRoleClient();
+    const { data: application, error } = await serviceClient
       .from('errand_applications')
       .insert({
         errand_id: id,
