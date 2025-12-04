@@ -176,8 +176,16 @@ export async function GET(request: NextRequest) {
 
     // 모드별 필터링
     if (mode === 'my' && user) {
-      // 내가 요청한 심부름
-      query = query.eq('requester_id', user.id);
+      // 내가 요청한 심부름 - profiles.id로 조회해야 함
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('user_id', user.id)
+        .single();
+
+      if (profile) {
+        query = query.eq('requester_id', profile.id);
+      }
     } else if (mode === 'available') {
       // 헬퍼가 지원 가능한 심부름 (OPEN 상태만)
       query = query.eq('status', 'OPEN');
@@ -228,6 +236,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '로그인이 필요합니다' }, { status: 401 });
     }
 
+    // profiles 테이블에서 사용자의 profile id 조회 (FK 참조용)
+    const { data: existingProfile, error: profileError } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('user_id', user.id)
+      .single();
+
+    // 프로필 가져오기 또는 자동 생성
+    const profile = await getOrCreateProfile(supabase, user, existingProfile, profileError);
+    if (!profile) {
+      return NextResponse.json(
+        { error: '프로필 정보를 처리할 수 없습니다. 다시 시도해주세요.' },
+        { status: 500 }
+      );
+    }
+
     const body: CreateErrandRequest = await request.json();
 
     // 필수 필드 검증
@@ -244,8 +268,8 @@ export async function POST(request: NextRequest) {
     const timeOfDay: TimeCondition = body.time_condition || getCurrentTimeCondition();
     const weight: WeightClass = body.weight_class || 'LIGHT';
 
-    // 기본 데이터 생성
-    const baseData = buildBaseInsertData(user.id, body);
+    // 기본 데이터 생성 (profiles.id 사용 - FK 참조)
+    const baseData = buildBaseInsertData(profile.id, body);
 
     // 카테고리별 가격 데이터 생성
     const priceData =
@@ -263,8 +287,30 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      logServerError(error, { context: 'errand_create', user_id: user.id });
-      return NextResponse.json({ error: '심부름 등록에 실패했습니다' }, { status: 500 });
+      logServerError(error, { context: 'errand_create', user_id: user.id, insertData });
+      // 개발 환경에서는 상세 에러 반환
+      const errorMessage =
+        process.env.NODE_ENV === 'development'
+          ? `심부름 등록 실패: ${error.message} (code: ${error.code}, details: ${error.details})`
+          : '심부름 등록에 실패했습니다';
+      console.error('[Errand Create Error]', {
+        error,
+        insertData,
+        profile_id: profile.id,
+        user_id: user.id,
+      });
+      return NextResponse.json(
+        {
+          error: errorMessage,
+          // 프로덕션에서도 디버깅용 힌트 제공
+          debug: {
+            code: error.code,
+            hint: error.hint,
+            message: error.message,
+          },
+        },
+        { status: 500 }
+      );
     }
 
     // 다중 배달인 경우 정차지 저장
@@ -318,4 +364,54 @@ async function saveErrandStops(
   if (stopsError) {
     logServerError(stopsError, { context: 'errand_stops_create', errand_id: errandId });
   }
+}
+
+// 프로필 조회 또는 자동 생성 헬퍼
+interface ProfileResult {
+  id: string;
+}
+
+async function getOrCreateProfile(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  user: { id: string; email?: string; user_metadata?: { name?: string } },
+  existingProfile: ProfileResult | null,
+  profileError: { code?: string; message?: string } | null
+): Promise<ProfileResult | null> {
+  // 프로필이 이미 있으면 반환
+  if (existingProfile && !profileError) {
+    return existingProfile;
+  }
+
+  // PGRST116은 "no rows returned" 에러 - 프로필이 없음
+  if (profileError?.code === 'PGRST116' || !existingProfile) {
+    const { data: newProfile, error: createError } = await supabase
+      .from('profiles')
+      .insert({
+        user_id: user.id,
+        name: user.user_metadata?.name || user.email?.split('@')[0] || '사용자',
+        email: user.email,
+      })
+      .select('id')
+      .single();
+
+    if (createError || !newProfile) {
+      logServerError(createError || new Error('Failed to create profile'), {
+        context: 'errand_create_profile_auto_create',
+        user_id: user.id,
+      });
+      return null;
+    }
+    return newProfile;
+  }
+
+  // 다른 에러인 경우
+  if (profileError) {
+    logServerError(new Error(profileError.message || 'Profile lookup failed'), {
+      context: 'errand_create_profile_lookup',
+      user_id: user.id,
+    });
+    return null;
+  }
+
+  return null;
 }
