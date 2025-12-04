@@ -21,19 +21,29 @@ import {
   Weight,
   MapPin,
   Search,
+  Plus,
+  Trash2,
+  User,
+  Phone,
 } from 'lucide-react';
-import type { ErrandCategory, CreateErrandRequest } from '@/types/errand';
+import type { ErrandCategory, CreateErrandRequest, ErrandStop, ShoppingItem, ShoppingRange } from '@/types/errand';
 import {
   calculateErrandPrice,
   calculateDistance,
   getCurrentTimeCondition,
+  calculateMultiStopPrice,
+  calculateShoppingPrice,
   WeatherCondition,
   TimeCondition,
   WeightClass,
   WEATHER_LABELS,
   TIME_LABELS,
   WEIGHT_LABELS,
+  SHOPPING_RANGE_LABELS,
   PriceBreakdown,
+  MultiStopPriceBreakdown,
+  ShoppingPriceBreakdown,
+  PRICING_CONSTANTS,
 } from '@/lib/errand-pricing';
 
 // Daum Postcode 결과 타입
@@ -57,6 +67,14 @@ const WEIGHT_OPTIONS: { value: WeightClass; label: string }[] = [
   { value: 'LIGHT', label: WEIGHT_LABELS.LIGHT },
   { value: 'MEDIUM', label: WEIGHT_LABELS.MEDIUM },
   { value: 'HEAVY', label: WEIGHT_LABELS.HEAVY },
+];
+
+// 구매대행 범위 옵션
+const SHOPPING_RANGE_OPTIONS: { value: ShoppingRange; label: string; price: number }[] = [
+  { value: 'LOCAL', label: '🏠 동네 (1km 이내)', price: 0 },
+  { value: 'DISTRICT', label: '🏪 우리동네 (3km 이내)', price: 3000 },
+  { value: 'CITY', label: '🏙️ 넓은 범위 (10km 이내)', price: 8000 },
+  { value: 'SPECIFIC', label: '📍 특정 장소 지정', price: 0 },
 ];
 
 // 날씨 아이콘 컴포넌트
@@ -110,6 +128,22 @@ export default function NewErrandPage() {
   const [distanceLoading, setDistanceLoading] = useState(false);
   const [estimatedDuration, setEstimatedDuration] = useState<number>(0); // 예상 소요 시간 (분)
   const [priceBreakdown, setPriceBreakdown] = useState<PriceBreakdown | null>(null);
+
+  // 다중 배달 상태
+  const [isMultiStop, setIsMultiStop] = useState(false);
+  const [stops, setStops] = useState<ErrandStop[]>([]);
+  const [multiStopPrice, setMultiStopPrice] = useState<MultiStopPriceBreakdown | null>(null);
+
+  // 구매대행 상태
+  const [shoppingRange, setShoppingRange] = useState<ShoppingRange>('LOCAL');
+  const [shoppingItems, setShoppingItems] = useState<ShoppingItem[]>([{ name: '', quantity: 1 }]);
+  const [shoppingLocation, setShoppingLocation] = useState<{
+    address: string;
+    lat?: number;
+    lng?: number;
+  }>({ address: '' });
+  const [hasHeavyItem, setHasHeavyItem] = useState(false);
+  const [shoppingPrice, setShoppingPrice] = useState<ShoppingPriceBreakdown | null>(null);
 
   // Daum Postcode 스크립트 로드
   useEffect(() => {
@@ -200,16 +234,74 @@ export default function NewErrandPage() {
     }
   }, [pickup.lat, pickup.lng, delivery.lat, delivery.lng, fetchRoadDistance, fetchWeather]);
 
-  // 가격 계산
+  // 가격 계산 (카테고리별 분기)
   useEffect(() => {
-    const breakdown = calculateErrandPrice({
-      distance,
-      weather,
-      timeOfDay: timeCondition,
-      weight,
-    });
-    setPriceBreakdown(breakdown);
-  }, [distance, weather, timeCondition, weight]);
+    if (formData.category === 'DELIVERY') {
+      // 배달 카테고리
+      if (isMultiStop && stops.length > 0) {
+        // 다중 배달
+        const breakdown = calculateMultiStopPrice({
+          distance,
+          weather,
+          timeOfDay: timeCondition,
+          weight,
+          totalStops: stops.length + 1, // 첫 번째 도착지 + 추가 정차지
+        });
+        setMultiStopPrice(breakdown);
+        setPriceBreakdown(breakdown);
+        setShoppingPrice(null);
+      } else {
+        // 단일 배달
+        const breakdown = calculateErrandPrice({
+          distance,
+          weather,
+          timeOfDay: timeCondition,
+          weight,
+        });
+        setPriceBreakdown(breakdown);
+        setMultiStopPrice(null);
+        setShoppingPrice(null);
+      }
+    } else if (formData.category === 'SHOPPING') {
+      // 구매대행 카테고리
+      let shoppingDistance = 0;
+      if (shoppingRange === 'SPECIFIC' && shoppingLocation.lat && shoppingLocation.lng && delivery.lat && delivery.lng) {
+        shoppingDistance = calculateDistance(
+          shoppingLocation.lat,
+          shoppingLocation.lng,
+          delivery.lat,
+          delivery.lng
+        );
+      }
+
+      const validItems = shoppingItems.filter((item) => item.name.trim() !== '');
+      const breakdown = calculateShoppingPrice({
+        range: shoppingRange,
+        itemCount: validItems.length,
+        distance: shoppingDistance,
+        weather,
+        timeOfDay: timeCondition,
+        hasHeavyItem,
+      });
+      setShoppingPrice(breakdown);
+      setPriceBreakdown(null);
+      setMultiStopPrice(null);
+    }
+  }, [
+    formData.category,
+    distance,
+    weather,
+    timeCondition,
+    weight,
+    isMultiStop,
+    stops.length,
+    shoppingRange,
+    shoppingItems,
+    shoppingLocation,
+    delivery.lat,
+    delivery.lng,
+    hasHeavyItem,
+  ]);
 
   // 좌표 조회
   const getCoordinates = async (address: string): Promise<{ lat: number; lng: number } | null> => {
@@ -316,6 +408,93 @@ export default function NewErrandPage() {
 
   const handleCategorySelect = (category: ErrandCategory) => {
     setFormData((prev) => ({ ...prev, category }));
+    // 카테고리 변경 시 관련 상태 초기화
+    if (category === 'DELIVERY') {
+      setShoppingRange('LOCAL');
+      setShoppingItems([{ name: '', quantity: 1 }]);
+      setHasHeavyItem(false);
+    } else {
+      setIsMultiStop(false);
+      setStops([]);
+    }
+  };
+
+  // 다중 배달 정차지 추가
+  const addStop = () => {
+    setStops((prev) => [
+      ...prev,
+      {
+        stop_order: prev.length + 2, // 첫 번째 도착지 다음부터
+        address: '',
+        address_detail: '',
+        recipient_name: '',
+        recipient_phone: '',
+      },
+    ]);
+  };
+
+  // 다중 배달 정차지 삭제
+  const removeStop = (index: number) => {
+    setStops((prev) =>
+      prev.filter((_, i) => i !== index).map((stop, i) => ({ ...stop, stop_order: i + 2 }))
+    );
+  };
+
+  // 다중 배달 정차지 업데이트
+  const updateStop = (index: number, field: keyof ErrandStop, value: string) => {
+    setStops((prev) => prev.map((stop, i) => (i === index ? { ...stop, [field]: value } : stop)));
+  };
+
+  // 정차지 주소 검색
+  const handleStopAddressSearch = (index: number) => {
+    if (!isScriptLoaded || !window.daum) return;
+
+    new (window.daum as typeof window.daum).Postcode({
+      oncomplete: async (data: DaumPostcodeResult) => {
+        const address = data.roadAddress || data.jibunAddress || data.address;
+        const coords = await getCoordinates(address);
+        setStops((prev) =>
+          prev.map((stop, i) =>
+            i === index ? { ...stop, address, lat: coords?.lat, lng: coords?.lng } : stop
+          )
+        );
+      },
+    }).open();
+  };
+
+  // 구매대행 품목 추가
+  const addShoppingItem = () => {
+    setShoppingItems((prev) => [...prev, { name: '', quantity: 1 }]);
+  };
+
+  // 구매대행 품목 삭제
+  const removeShoppingItem = (index: number) => {
+    if (shoppingItems.length <= 1) return;
+    setShoppingItems((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // 구매대행 품목 업데이트
+  const updateShoppingItem = (index: number, field: keyof ShoppingItem, value: string | number) => {
+    setShoppingItems((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
+    );
+  };
+
+  // 구매대행 특정 장소 주소 검색
+  const handleShoppingLocationSearch = () => {
+    if (!isScriptLoaded || !window.daum) return;
+
+    new (window.daum as typeof window.daum).Postcode({
+      oncomplete: async (data: DaumPostcodeResult) => {
+        const address = data.roadAddress || data.jibunAddress || data.address;
+        const coords = await getCoordinates(address);
+        setShoppingLocation({
+          address,
+          lat: coords?.lat,
+          lng: coords?.lng,
+        });
+      },
+    }).open();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -338,10 +517,33 @@ export default function NewErrandPage() {
       return;
     }
 
+    // 구매대행 카테고리 검증
+    if (formData.category === 'SHOPPING') {
+      const validItems = shoppingItems.filter((item) => item.name.trim() !== '');
+      if (validItems.length === 0) {
+        toast.error('최소 1개 이상의 품목을 입력해주세요');
+        return;
+      }
+      if (shoppingRange === 'SPECIFIC' && !shoppingLocation.address) {
+        toast.error('구매 장소를 지정해주세요');
+        return;
+      }
+    }
+
+    // 다중 배달 검증
+    if (formData.category === 'DELIVERY' && isMultiStop) {
+      const validStops = stops.filter((stop) => stop.address.trim() !== '');
+      if (validStops.length === 0) {
+        toast.error('최소 1개 이상의 추가 정차지를 입력해주세요');
+        return;
+      }
+    }
+
     try {
       setLoading(true);
 
-      const submitData: CreateErrandRequest = {
+      // 배달 카테고리 데이터
+      const deliveryData: CreateErrandRequest = {
         ...formData,
         title: formData.title || '',
         category: formData.category || 'DELIVERY',
@@ -358,7 +560,34 @@ export default function NewErrandPage() {
         weather_condition: weather,
         time_condition: timeCondition,
         weight_class: weight,
+        // 다중 배달
+        is_multi_stop: isMultiStop,
+        stops: isMultiStop ? stops.filter((stop) => stop.address.trim() !== '') : undefined,
       };
+
+      // 구매대행 카테고리 데이터
+      const shoppingData: CreateErrandRequest = {
+        ...formData,
+        title: formData.title || '',
+        category: 'SHOPPING',
+        pickup_address: shoppingRange === 'SPECIFIC' ? shoppingLocation.address : pickup.address,
+        pickup_detail: pickup.detail || undefined,
+        pickup_lat: shoppingRange === 'SPECIFIC' ? shoppingLocation.lat : pickup.lat,
+        pickup_lng: shoppingRange === 'SPECIFIC' ? shoppingLocation.lng : pickup.lng,
+        delivery_address: delivery.address,
+        delivery_detail: delivery.detail || undefined,
+        delivery_lat: delivery.lat,
+        delivery_lng: delivery.lng,
+        estimated_price: shoppingPrice?.totalPrice,
+        weather_condition: weather,
+        time_condition: timeCondition,
+        // 구매대행 전용
+        shopping_range: shoppingRange,
+        shopping_items: shoppingItems.filter((item) => item.name.trim() !== ''),
+      };
+
+      const submitData: CreateErrandRequest =
+        formData.category === 'SHOPPING' ? shoppingData : deliveryData;
 
       const response = await fetch('/api/errands', {
         method: 'POST',
@@ -504,8 +733,272 @@ export default function NewErrandPage() {
               )}
             </div>
 
-            {/* 거리 표시 */}
-            {(distance > 0 || distanceLoading) && (
+            {/* 다중 배달 옵션 (배달 카테고리만) */}
+            {formData.category === 'DELIVERY' && (
+              <div className="bg-white rounded-xl border border-gray-200 p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                    <Package className="w-4 h-4" />
+                    다중 배달
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsMultiStop(!isMultiStop);
+                      if (!isMultiStop) {
+                        // 다중 배달 활성화 시 첫 번째 추가 정차지 생성
+                        setStops([
+                          {
+                            stop_order: 2,
+                            address: '',
+                            address_detail: '',
+                            recipient_name: '',
+                            recipient_phone: '',
+                          },
+                        ]);
+                      } else {
+                        setStops([]);
+                      }
+                    }}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                      isMultiStop ? 'bg-blue-600' : 'bg-gray-300'
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        isMultiStop ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500 mb-3">
+                  여러 곳에 배달해야 할 때 사용하세요 (정차당 +{PRICING_CONSTANTS.STOP_FEE.toLocaleString()}원)
+                </p>
+
+                {/* 추가 정차지 목록 */}
+                {isMultiStop && (
+                  <div className="space-y-4">
+                    {stops.map((stop, index) => (
+                      <div
+                        key={index}
+                        className="bg-gray-50 rounded-lg p-3 border border-gray-200"
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs font-medium text-gray-600">
+                            추가 정차지 #{index + 1}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => removeStop(index)}
+                            className="text-red-500 hover:text-red-700 p-1"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                        {/* 주소 */}
+                        <button
+                          type="button"
+                          onClick={() => handleStopAddressSearch(index)}
+                          disabled={!isScriptLoaded}
+                          className={`w-full flex items-center gap-2 px-3 py-2.5 border rounded-lg text-left text-sm mb-2 ${
+                            stop.address
+                              ? 'bg-white border-gray-300 text-gray-900'
+                              : 'bg-white border-gray-200 text-gray-500 hover:border-blue-300'
+                          }`}
+                        >
+                          <Search className="w-4 h-4 text-gray-400" />
+                          <span className="truncate">{stop.address || '주소 검색'}</span>
+                        </button>
+                        {/* 상세주소 */}
+                        {stop.address && (
+                          <input
+                            type="text"
+                            value={stop.address_detail || ''}
+                            onChange={(e) => updateStop(index, 'address_detail', e.target.value)}
+                            placeholder="상세주소"
+                            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm mb-2"
+                          />
+                        )}
+                        {/* 수령인 정보 */}
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="relative">
+                            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                            <input
+                              type="text"
+                              value={stop.recipient_name || ''}
+                              onChange={(e) => updateStop(index, 'recipient_name', e.target.value)}
+                              placeholder="수령인"
+                              className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm"
+                            />
+                          </div>
+                          <div className="relative">
+                            <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                            <input
+                              type="text"
+                              value={stop.recipient_phone || ''}
+                              onChange={(e) => updateStop(index, 'recipient_phone', e.target.value)}
+                              placeholder="연락처"
+                              className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* 정차지 추가 버튼 */}
+                    <button
+                      type="button"
+                      onClick={addStop}
+                      className="w-full flex items-center justify-center gap-2 py-2.5 border-2 border-dashed border-gray-300 rounded-lg text-sm text-gray-600 hover:border-blue-400 hover:text-blue-600 transition-colors"
+                    >
+                      <Plus className="w-4 h-4" />
+                      정차지 추가
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* 구매대행 범위 선택 (구매대행 카테고리만) */}
+            {formData.category === 'SHOPPING' && (
+              <>
+                {/* 범위 선택 */}
+                <div className="bg-white rounded-xl border border-gray-200 p-4">
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
+                    <MapPin className="w-4 h-4" />
+                    구매 범위
+                  </label>
+                  <p className="text-xs text-gray-500 mb-3">
+                    라이더가 물건을 구매할 범위를 선택해주세요
+                  </p>
+                  <div className="space-y-2">
+                    {SHOPPING_RANGE_OPTIONS.map((opt) => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => setShoppingRange(opt.value)}
+                        className={`w-full flex items-center justify-between px-4 py-3 border rounded-lg text-sm transition-all ${
+                          shoppingRange === opt.value
+                            ? 'bg-green-50 border-green-400 text-gray-900'
+                            : 'bg-white border-gray-200 text-gray-700 hover:border-green-300'
+                        }`}
+                      >
+                        <span>{opt.label}</span>
+                        {opt.price > 0 && (
+                          <span className="text-green-600 font-medium">+{opt.price.toLocaleString()}원</span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 특정 장소 지정 시 주소 입력 */}
+                {shoppingRange === 'SPECIFIC' && (
+                  <div className="bg-white rounded-xl border border-gray-200 p-4">
+                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                      <MapPin className="w-4 h-4 text-green-600" />
+                      구매 장소
+                    </label>
+                    <button
+                      type="button"
+                      onClick={handleShoppingLocationSearch}
+                      disabled={!isScriptLoaded}
+                      className={`w-full flex items-center gap-2 px-4 py-3 border rounded-lg text-left transition-all ${
+                        shoppingLocation.address
+                          ? 'bg-green-50 border-green-200 text-gray-900'
+                          : 'bg-white border-gray-200 text-gray-500 hover:border-green-300'
+                      }`}
+                    >
+                      <Search className="w-4 h-4 text-gray-400" />
+                      <span className="text-sm truncate">
+                        {shoppingLocation.address || '구매할 장소 검색'}
+                      </span>
+                    </button>
+                  </div>
+                )}
+
+                {/* 구매 품목 리스트 */}
+                <div className="bg-white rounded-xl border border-gray-200 p-4">
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                    <ShoppingCart className="w-4 h-4" />
+                    구매 품목
+                  </label>
+                  <p className="text-xs text-gray-500 mb-3">
+                    {PRICING_CONSTANTS.SHOPPING_FREE_ITEMS}개까지 무료, 이후 품목당 +{PRICING_CONSTANTS.SHOPPING_ITEM_PRICE.toLocaleString()}원
+                  </p>
+                  <div className="space-y-2">
+                    {shoppingItems.map((item, index) => (
+                      <div key={index} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={item.name}
+                          onChange={(e) => updateShoppingItem(index, 'name', e.target.value)}
+                          placeholder={`품목 ${index + 1} (예: 우유 1개)`}
+                          className="flex-1 px-3 py-2.5 border border-gray-200 rounded-lg text-sm"
+                        />
+                        <input
+                          type="number"
+                          value={item.quantity}
+                          onChange={(e) =>
+                            updateShoppingItem(index, 'quantity', parseInt(e.target.value) || 1)
+                          }
+                          min={1}
+                          className="w-16 px-2 py-2.5 border border-gray-200 rounded-lg text-sm text-center"
+                        />
+                        {shoppingItems.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removeShoppingItem(index)}
+                            className="text-red-500 hover:text-red-700 px-2"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addShoppingItem}
+                    className="w-full flex items-center justify-center gap-2 py-2.5 mt-3 border-2 border-dashed border-gray-300 rounded-lg text-sm text-gray-600 hover:border-green-400 hover:text-green-600 transition-colors"
+                  >
+                    <Plus className="w-4 h-4" />
+                    품목 추가
+                  </button>
+                </div>
+
+                {/* 무거운 물품 여부 */}
+                <div className="bg-white rounded-xl border border-gray-200 p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                        <Weight className="w-4 h-4" />
+                        무거운 물품 포함
+                      </label>
+                      <p className="text-xs text-gray-500 mt-1">
+                        쌀, 음료 박스 등 (+{PRICING_CONSTANTS.WEIGHT_HEAVY_SURCHARGE.toLocaleString()}원)
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setHasHeavyItem(!hasHeavyItem)}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                        hasHeavyItem ? 'bg-orange-500' : 'bg-gray-300'
+                      }`}
+                    >
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                          hasHeavyItem ? 'translate-x-6' : 'translate-x-1'
+                        }`}
+                      />
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* 거리 표시 (배달 카테고리만) */}
+            {formData.category === 'DELIVERY' && (distance > 0 || distanceLoading) && (
               <div className="flex items-center gap-4 px-4 py-2.5 bg-gray-100 rounded-lg">
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-gray-500" />
@@ -528,29 +1021,31 @@ export default function NewErrandPage() {
               </div>
             )}
 
-            {/* 무게 선택 */}
-            <div className="bg-white rounded-xl border border-gray-200 p-4">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
-                <Weight className="w-4 h-4" />
-                물품 무게
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {WEIGHT_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    onClick={() => setWeight(opt.value)}
-                    className={`px-4 py-2 rounded-lg text-sm transition-all ${
-                      weight === opt.value
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
+            {/* 무게 선택 (배달 카테고리만) */}
+            {formData.category === 'DELIVERY' && (
+              <div className="bg-white rounded-xl border border-gray-200 p-4">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
+                  <Weight className="w-4 h-4" />
+                  물품 무게
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {WEIGHT_OPTIONS.map((opt) => (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => setWeight(opt.value)}
+                      className={`px-4 py-2 rounded-lg text-sm transition-all ${
+                        weight === opt.value
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* 요청 내용 */}
             <div className="bg-white rounded-xl border border-gray-200 p-4">
@@ -611,8 +1106,8 @@ export default function NewErrandPage() {
                 </div>
               </div>
 
-              {/* 요금 breakdown */}
-              {priceBreakdown && (
+              {/* 요금 breakdown - 배달 */}
+              {formData.category === 'DELIVERY' && priceBreakdown && (
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between text-gray-600">
                     <span>기본 요금</span>
@@ -628,6 +1123,13 @@ export default function NewErrandPage() {
                     <div className="flex justify-between text-gray-600">
                       <span>무게 할증</span>
                       <span>+{priceBreakdown.weightSurcharge.toLocaleString()}원</span>
+                    </div>
+                  )}
+                  {/* 다중 배달 정차 요금 */}
+                  {multiStopPrice && multiStopPrice.stopFee > 0 && (
+                    <div className="flex justify-between text-blue-600">
+                      <span>정차 요금 ({stops.length}곳)</span>
+                      <span>+{multiStopPrice.stopFee.toLocaleString()}원</span>
                     </div>
                   )}
                   {priceBreakdown.weatherSurcharge > 0 && (
@@ -652,22 +1154,91 @@ export default function NewErrandPage() {
                   </div>
                 </div>
               )}
+
+              {/* 요금 breakdown - 구매대행 */}
+              {formData.category === 'SHOPPING' && shoppingPrice && (
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between text-gray-600">
+                    <span>구매대행 기본료</span>
+                    <span>{shoppingPrice.basePrice.toLocaleString()}원</span>
+                  </div>
+                  {shoppingPrice.rangeFee > 0 && (
+                    <div className="flex justify-between text-gray-600">
+                      <span>범위 요금 ({SHOPPING_RANGE_LABELS[shoppingRange].split(' ')[0]})</span>
+                      <span>+{shoppingPrice.rangeFee.toLocaleString()}원</span>
+                    </div>
+                  )}
+                  {shoppingPrice.distancePrice > 0 && (
+                    <div className="flex justify-between text-gray-600">
+                      <span>거리 요금</span>
+                      <span>+{shoppingPrice.distancePrice.toLocaleString()}원</span>
+                    </div>
+                  )}
+                  {shoppingPrice.itemFee > 0 && (
+                    <div className="flex justify-between text-gray-600">
+                      <span>품목 추가 요금</span>
+                      <span>+{shoppingPrice.itemFee.toLocaleString()}원</span>
+                    </div>
+                  )}
+                  {shoppingPrice.weightSurcharge > 0 && (
+                    <div className="flex justify-between text-gray-600">
+                      <span>무거운 물품 할증</span>
+                      <span>+{shoppingPrice.weightSurcharge.toLocaleString()}원</span>
+                    </div>
+                  )}
+                  {shoppingPrice.weatherSurcharge > 0 && (
+                    <div className="flex justify-between text-orange-600">
+                      <span>날씨 할증 ({WEATHER_LABELS[weather]})</span>
+                      <span>+{shoppingPrice.weatherSurcharge.toLocaleString()}원</span>
+                    </div>
+                  )}
+                  {shoppingPrice.timeSurcharge > 0 && (
+                    <div className="flex justify-between text-orange-600">
+                      <span>시간대 할증 ({TIME_LABELS[timeCondition]})</span>
+                      <span>+{shoppingPrice.timeSurcharge.toLocaleString()}원</span>
+                    </div>
+                  )}
+                  <div className="border-t border-green-200 pt-2 mt-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-gray-900">예상 총액</span>
+                      <span className="text-2xl font-bold text-green-600">
+                        {shoppingPrice.totalPrice.toLocaleString()}원
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* 제출 버튼 */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-bold text-base flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-600/30"
+              className={`w-full py-4 text-white rounded-xl transition-colors font-bold text-base flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+                formData.category === 'SHOPPING'
+                  ? 'bg-green-600 hover:bg-green-700 shadow-lg shadow-green-600/30'
+                  : 'bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/30'
+              }`}
             >
               {loading ? (
                 '요청 중...'
               ) : (
                 <>
-                  <Bike className="w-5 h-5" />
-                  {priceBreakdown
-                    ? `${priceBreakdown.totalPrice.toLocaleString()}원 심부름 요청`
-                    : '심부름 요청하기'}
+                  {formData.category === 'SHOPPING' ? (
+                    <ShoppingCart className="w-5 h-5" />
+                  ) : (
+                    <Bike className="w-5 h-5" />
+                  )}
+                  {formData.category === 'SHOPPING' && (
+                    shoppingPrice
+                      ? `${shoppingPrice.totalPrice.toLocaleString()}원 구매대행 요청`
+                      : '구매대행 요청하기'
+                  )}
+                  {formData.category === 'DELIVERY' && (
+                    priceBreakdown
+                      ? `${priceBreakdown.totalPrice.toLocaleString()}원 배달 요청`
+                      : '배달 요청하기'
+                  )}
                 </>
               )}
             </button>

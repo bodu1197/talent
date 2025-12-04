@@ -9,6 +9,31 @@ export type ErrandStatus = 'OPEN' | 'MATCHED' | 'IN_PROGRESS' | 'COMPLETED' | 'C
 
 export type ApplicationStatus = 'pending' | 'accepted' | 'rejected' | 'withdrawn';
 
+// 구매대행 범위
+export type ShoppingRange = 'LOCAL' | 'DISTRICT' | 'CITY' | 'SPECIFIC';
+
+// 구매대행 품목
+export interface ShoppingItem {
+  name: string;
+  quantity: number;
+  note?: string;
+}
+
+// 다중 배달 정차지
+export interface ErrandStop {
+  id?: string;
+  errand_id?: string;
+  stop_order: number;
+  address: string;
+  address_detail?: string;
+  lat?: number;
+  lng?: number;
+  recipient_name?: string;
+  recipient_phone?: string;
+  is_completed?: boolean;
+  completed_at?: string;
+}
+
 export interface Errand {
   id: string;
   requester_id: string;
@@ -37,6 +62,15 @@ export interface Errand {
   cancel_reason: string | null;
   created_at: string;
   updated_at: string;
+  // 다중 배달
+  is_multi_stop: boolean;
+  total_stops: number;
+  stop_fee: number;
+  // 구매대행
+  shopping_range: ShoppingRange | null;
+  shopping_items: ShoppingItem[] | null;
+  range_fee: number;
+  item_fee: number;
   // Relations
   requester?: {
     id: string;
@@ -106,14 +140,22 @@ export interface CreateErrandRequest {
   title: string;
   description?: string;
   category: ErrandCategory;
+  // 배달용 (단순/다중)
   pickup_address: string;
-  pickup_detail?: string; // 상세주소 (동/호수, 층, 건물명 등)
+  pickup_detail?: string;
   pickup_lat?: number;
   pickup_lng?: number;
   delivery_address: string;
-  delivery_detail?: string; // 상세주소 (동/호수, 층, 건물명 등)
+  delivery_detail?: string;
   delivery_lat?: number;
   delivery_lng?: number;
+  // 다중 배달
+  is_multi_stop?: boolean;
+  stops?: ErrandStop[];
+  // 구매대행
+  shopping_range?: ShoppingRange;
+  shopping_items?: ShoppingItem[];
+  // 공통
   tip?: number;
   scheduled_at?: string;
   // 스마트 요금 계산 필드
@@ -163,6 +205,23 @@ export const ERRAND_PRICING = {
   TIME_RUSH_HOUR_SURCHARGE: 2000, // 출퇴근 (7-9시, 18-20시)
   WEIGHT_MEDIUM_SURCHARGE: 2000, // 보통 무게
   WEIGHT_HEAVY_SURCHARGE: 10000, // 무거운 물품
+  // 다중 배달
+  STOP_FEE: 1500, // 정차당 추가 요금
+  // 구매대행
+  SHOPPING_BASE_PRICE: 5000, // 구매대행 기본료
+  SHOPPING_RANGE_LOCAL: 0, // 동네 (1km)
+  SHOPPING_RANGE_DISTRICT: 3000, // 우리동네 (3km)
+  SHOPPING_RANGE_CITY: 8000, // 넓은 범위 (10km)
+  SHOPPING_ITEM_PRICE: 500, // 품목당 (3개 초과 시)
+  SHOPPING_FREE_ITEMS: 2, // 무료 품목 수
+};
+
+// 구매대행 범위 라벨
+export const SHOPPING_RANGE_LABELS: Record<ShoppingRange, string> = {
+  LOCAL: '🏠 동네 (1km 이내)',
+  DISTRICT: '🏪 우리동네 (3km 이내)',
+  CITY: '🏙️ 넓은 범위 (10km 이내)',
+  SPECIFIC: '📍 특정 장소 지정',
 };
 
 // Helper Types

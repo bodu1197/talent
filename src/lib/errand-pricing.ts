@@ -20,10 +20,15 @@ export interface PriceBreakdown {
   totalPrice: number;
 }
 
+// 구매대행 범위 타입
+export type ShoppingRange = 'LOCAL' | 'DISTRICT' | 'CITY' | 'SPECIFIC';
+
 // 가격 상수
 export const PRICING_CONSTANTS = {
+  // 배달 기본
   BASE_PRICE: 3000, // 기본 요금
   PRICE_PER_KM: 1200, // km당 요금
+  // 할증
   WEATHER_RAIN_MULTIPLIER: 1.2, // 비 20% 할증
   WEATHER_SNOW_MULTIPLIER: 1.4, // 눈 40% 할증
   WEATHER_EXTREME_MULTIPLIER: 1.5, // 극한날씨 50% 할증
@@ -31,6 +36,15 @@ export const PRICING_CONSTANTS = {
   TIME_RUSH_HOUR_SURCHARGE: 2000, // 출퇴근 할증 (7-9시, 18-20시)
   WEIGHT_MEDIUM_SURCHARGE: 2000, // 보통 무게 할증
   WEIGHT_HEAVY_SURCHARGE: 10000, // 무거운 물품 할증
+  // 다중 배달
+  STOP_FEE: 1500, // 정차당 추가 요금
+  // 구매대행
+  SHOPPING_BASE_PRICE: 5000, // 구매대행 기본료
+  SHOPPING_RANGE_LOCAL: 0, // 동네 (1km)
+  SHOPPING_RANGE_DISTRICT: 3000, // 우리동네 (3km)
+  SHOPPING_RANGE_CITY: 8000, // 넓은 범위 (10km)
+  SHOPPING_ITEM_PRICE: 500, // 품목당 추가 (무료 품목 초과 시)
+  SHOPPING_FREE_ITEMS: 2, // 무료 품목 수
 };
 
 // 가격 계산 함수
@@ -147,4 +161,136 @@ export const calculateDistance = (
       Math.sin(dLng / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
+};
+
+// ============================================
+// 다중 배달 요금 계산
+// ============================================
+export interface MultiStopPriceFactors extends PriceFactors {
+  totalStops: number; // 총 정차 수 (첫 번째 포함)
+}
+
+export interface MultiStopPriceBreakdown extends PriceBreakdown {
+  stopFee: number; // 정차 요금
+}
+
+export const calculateMultiStopPrice = (
+  factors: MultiStopPriceFactors
+): MultiStopPriceBreakdown => {
+  // 기본 배달 요금 계산
+  const baseBreakdown = calculateErrandPrice(factors);
+
+  // 정차 요금 (첫 번째 제외)
+  const additionalStops = Math.max(0, factors.totalStops - 1);
+  const stopFee = additionalStops * PRICING_CONSTANTS.STOP_FEE;
+
+  // 총 요금
+  const subtotal = baseBreakdown.totalPrice + stopFee;
+  const totalPrice = Math.round(subtotal / 100) * 100;
+
+  return {
+    ...baseBreakdown,
+    stopFee,
+    totalPrice,
+  };
+};
+
+// ============================================
+// 구매대행 요금 계산
+// ============================================
+export interface ShoppingPriceFactors {
+  range: ShoppingRange;
+  itemCount: number;
+  distance?: number; // SPECIFIC인 경우에만
+  weather: WeatherCondition;
+  timeOfDay: TimeCondition;
+  hasHeavyItem: boolean;
+}
+
+export interface ShoppingPriceBreakdown {
+  basePrice: number;
+  rangeFee: number;
+  itemFee: number;
+  distancePrice: number;
+  weatherSurcharge: number;
+  timeSurcharge: number;
+  weightSurcharge: number;
+  totalPrice: number;
+}
+
+export const calculateShoppingPrice = (
+  factors: ShoppingPriceFactors
+): ShoppingPriceBreakdown => {
+  const { range, itemCount, distance = 0, weather, timeOfDay, hasHeavyItem } = factors;
+
+  // 1. 기본료
+  const basePrice = PRICING_CONSTANTS.SHOPPING_BASE_PRICE;
+
+  // 2. 범위 요금
+  let rangeFee = 0;
+  let distancePrice = 0;
+
+  if (range === 'LOCAL') {
+    rangeFee = PRICING_CONSTANTS.SHOPPING_RANGE_LOCAL;
+  } else if (range === 'DISTRICT') {
+    rangeFee = PRICING_CONSTANTS.SHOPPING_RANGE_DISTRICT;
+  } else if (range === 'CITY') {
+    rangeFee = PRICING_CONSTANTS.SHOPPING_RANGE_CITY;
+  } else if (range === 'SPECIFIC' && distance > 0) {
+    // 특정 장소: 거리 기반 요금
+    distancePrice = Math.round(distance * PRICING_CONSTANTS.PRICE_PER_KM);
+  }
+
+  // 3. 품목 요금 (무료 품목 초과 시)
+  const chargeableItems = Math.max(0, itemCount - PRICING_CONSTANTS.SHOPPING_FREE_ITEMS);
+  const itemFee = chargeableItems * PRICING_CONSTANTS.SHOPPING_ITEM_PRICE;
+
+  // 4. 무게 할증
+  const weightSurcharge = hasHeavyItem ? PRICING_CONSTANTS.WEIGHT_HEAVY_SURCHARGE : 0;
+
+  // 5. 시간대 할증
+  let timeSurcharge = 0;
+  if (timeOfDay === 'LATE_NIGHT') {
+    timeSurcharge = PRICING_CONSTANTS.TIME_LATE_NIGHT_SURCHARGE;
+  } else if (timeOfDay === 'RUSH_HOUR') {
+    timeSurcharge = PRICING_CONSTANTS.TIME_RUSH_HOUR_SURCHARGE;
+  }
+
+  // 6. 날씨 할증
+  let weatherMultiplier = 1;
+  if (weather === 'RAIN') {
+    weatherMultiplier = PRICING_CONSTANTS.WEATHER_RAIN_MULTIPLIER;
+  } else if (weather === 'SNOW') {
+    weatherMultiplier = PRICING_CONSTANTS.WEATHER_SNOW_MULTIPLIER;
+  } else if (weather === 'EXTREME') {
+    weatherMultiplier = PRICING_CONSTANTS.WEATHER_EXTREME_MULTIPLIER;
+  }
+
+  const weatherSurcharge = Math.round(
+    (basePrice + rangeFee + distancePrice) * (weatherMultiplier - 1)
+  );
+
+  // 7. 총 요금
+  const subtotal =
+    basePrice + rangeFee + distancePrice + itemFee + weightSurcharge + timeSurcharge + weatherSurcharge;
+  const totalPrice = Math.round(subtotal / 100) * 100;
+
+  return {
+    basePrice,
+    rangeFee,
+    itemFee,
+    distancePrice,
+    weatherSurcharge,
+    timeSurcharge,
+    weightSurcharge,
+    totalPrice,
+  };
+};
+
+// 구매대행 범위 라벨
+export const SHOPPING_RANGE_LABELS: Record<ShoppingRange, string> = {
+  LOCAL: '🏠 동네 (1km 이내)',
+  DISTRICT: '🏪 우리동네 (3km 이내)',
+  CITY: '🏙️ 넓은 범위 (10km 이내)',
+  SPECIFIC: '📍 특정 장소 지정',
 };
