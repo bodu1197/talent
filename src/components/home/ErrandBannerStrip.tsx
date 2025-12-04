@@ -49,11 +49,11 @@ export default function ErrandBannerStrip() {
 
   return (
     <section ref={sectionRef} className="relative">
-      {/* 오토바이 - 모바일: 왼쪽에 고정, 데스크톱: 애니메이션 (SecondHeroBanner와 동일) */}
+      {/* 오토바이 - 모바일: 왼쪽에 고정, 데스크톱: 애니메이션 (300px 상단으로 이동) */}
       <div
         className="absolute pointer-events-none z-50"
         style={{
-          top: '50%',
+          top: 'calc(50% - 300px)',
           left: 0,
           right: 0,
           transform: 'translateY(-50%)',
