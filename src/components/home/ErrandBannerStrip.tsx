@@ -4,15 +4,28 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
+// 배달 오토바이 이미지 (SecondHeroBanner와 동일 크기)
+const MotorcycleIcon = () => (
+  <Image
+    src="/delivery-bike.png"
+    alt="배달 오토바이"
+    width={300}
+    height={200}
+    className="w-44 h-auto md:w-56"
+    unoptimized
+  />
+);
+
 export default function ErrandBannerStrip() {
   const [scooterStarted, setScooterStarted] = useState(false);
   const [scooterStopped, setScooterStopped] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
-  // 스크롤 감지하여 스쿠터 애니메이션 시작
+  // 스크롤 감지하여 스쿠터 애니메이션 시작 (SecondHeroBanner와 동일)
   useEffect(() => {
     let observer: IntersectionObserver | null = null;
 
+    // 페이지 로드 직후에는 트리거하지 않도록 1초 대기
     const delay = setTimeout(() => {
       observer = new IntersectionObserver(
         ([entry]) => {
@@ -20,13 +33,13 @@ export default function ErrandBannerStrip() {
             setScooterStarted(true);
           }
         },
-        { threshold: 0.3 }
+        { threshold: 0.2 }
       );
 
       if (sectionRef.current) {
         observer.observe(sectionRef.current);
       }
-    }, 500);
+    }, 1000);
 
     return () => {
       clearTimeout(delay);
@@ -35,100 +48,88 @@ export default function ErrandBannerStrip() {
   }, [scooterStarted]);
 
   return (
-    <section
-      ref={sectionRef}
-      className="w-full bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 relative overflow-hidden"
-    >
-      {/* 도로 패턴 배경 */}
-      <div className="absolute inset-0 opacity-10">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(255,255,255,0.3) 50px, rgba(255,255,255,0.3) 100px)`,
-          }}
-        />
-        {/* 도로 중앙선 */}
-        <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-yellow-400/30" />
-      </div>
-
-      {/* 오토바이 애니메이션 - 왼쪽에서 오른쪽으로 */}
+    <section ref={sectionRef} className="relative">
+      {/* 오토바이 - 모바일: 왼쪽에 고정, 데스크톱: 애니메이션 (SecondHeroBanner와 동일) */}
       <div
-        className="absolute top-1/2 -translate-y-1/2 z-20 pointer-events-none flex items-center"
+        className="absolute pointer-events-none z-50"
         style={{
-          left: scooterStarted ? undefined : '-200px',
-          animation:
-            scooterStarted && !scooterStopped ? 'scooter-strip-enter 5s ease-out forwards' : 'none',
+          top: '50%',
+          left: 0,
+          right: 0,
+          transform: 'translateY(-50%)',
+          overflow: 'visible',
         }}
-        onAnimationEnd={() => setScooterStopped(true)}
       >
-        {/* 연기 효과 */}
-        {scooterStarted && !scooterStopped && (
-          <div className="absolute -left-12 flex items-center gap-0.5">
-            <div
-              className="w-6 h-6 rounded-full bg-gray-300/60"
-              style={{ animation: 'smoke-puff 0.6s ease-out infinite' }}
-            />
-            <div
-              className="w-5 h-5 rounded-full bg-gray-300/50"
-              style={{ animation: 'smoke-puff 0.6s ease-out infinite 0.1s' }}
-            />
-            <div
-              className="w-7 h-7 rounded-full bg-gray-300/40"
-              style={{ animation: 'smoke-puff 0.6s ease-out infinite 0.2s' }}
-            />
-          </div>
-        )}
-        <Image
-          src="/delivery-bike.png"
-          alt="배달 오토바이"
-          width={160}
-          height={100}
-          className="w-24 md:w-32 h-auto"
-          unoptimized
-        />
-      </div>
+        {/* 모바일: 고정 위치 (왼쪽에 반만 걸침) */}
+        <div
+          className="absolute flex items-center md:hidden"
+          style={{ transform: 'translateX(-80px)' }}
+        >
+          <MotorcycleIcon />
+        </div>
 
-      {/* CTA 버튼 - 우측 고정 */}
-      <div className="container-1200 relative z-10">
-        <div className="flex items-center justify-end py-3 md:py-4">
-          <Link
-            href="/errands/new"
-            className="inline-flex items-center gap-1.5 bg-white hover:bg-yellow-50 text-blue-700 font-bold px-4 py-2 md:px-5 md:py-2.5 rounded-full text-sm md:text-base shadow-lg hover:shadow-xl transition-all transform hover:scale-105 active:scale-95"
-          >
-            <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-            </svg>
-            <span className="hidden sm:inline">심부름 요청하기</span>
-            <span className="sm:hidden">요청</span>
-          </Link>
+        {/* 데스크톱: 애니메이션 */}
+        <div
+          className="absolute hidden md:flex items-center"
+          style={{
+            transform: scooterStarted ? undefined : 'translateX(-150px)',
+            animation: scooterStarted ? 'scooter-enter 7s ease-out forwards' : 'none',
+          }}
+          onAnimationEnd={() => setScooterStopped(true)}
+        >
+          {/* 연기 효과 - 스쿠터가 정지하면 멈춤 (SecondHeroBanner와 동일) */}
+          {!scooterStopped && (
+            <div className="absolute -left-16 flex items-center gap-1">
+              <div
+                className="w-10 h-10 rounded-full bg-gray-400/70"
+                style={{ animation: 'smoke-puff 0.8s ease-out infinite' }}
+              />
+              <div
+                className="w-8 h-8 rounded-full bg-gray-400/60"
+                style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.15s' }}
+              />
+              <div
+                className="w-12 h-12 rounded-full bg-gray-400/50"
+                style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.3s' }}
+              />
+              <div
+                className="w-8 h-8 rounded-full bg-gray-400/40"
+                style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.45s' }}
+              />
+            </div>
+          )}
+          <MotorcycleIcon />
         </div>
       </div>
 
-      {/* 애니메이션 스타일 */}
-      <style jsx>{`
-        @keyframes scooter-strip-enter {
-          0% {
-            transform: translateX(-200px) translateY(-50%);
-          }
-          70% {
-            transform: translateX(calc(100vw * 0.15)) translateY(-50%);
-          }
-          100% {
-            transform: translateX(calc(100vw * 0.12)) translateY(-50%);
-          }
-        }
+      {/* 배경: SecondHeroBanner의 bg-gray-900와 동일 */}
+      <div className="bg-gray-900 border-y border-gray-800">
+        {/* 배경 도트 패턴 (SecondHeroBanner와 동일) */}
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage: 'radial-gradient(#4B5563 1px, transparent 1px)',
+            backgroundSize: '24px 24px',
+          }}
+        />
 
-        @keyframes smoke-puff {
-          0% {
-            opacity: 0.6;
-            transform: scale(0.5) translateX(0);
-          }
-          100% {
-            opacity: 0;
-            transform: scale(1.5) translateX(-20px);
-          }
-        }
-      `}</style>
+        <div className="container-1200 relative z-10">
+          {/* 높이: 오토바이 높이에 맞춤 (w-56 = 224px, 비율 약 2:1.3이므로 높이 ~145px + 패딩) */}
+          <div className="flex items-center justify-end py-8 md:py-10 min-h-[120px] md:min-h-[160px]">
+            {/* CTA 버튼 - 우측 */}
+            <Link
+              href="/errands/new"
+              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-5 py-3 md:px-6 md:py-3.5 rounded-xl font-bold text-sm md:text-base shadow-lg shadow-blue-900/50 transition transform active:scale-95"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+              </svg>
+              <span className="hidden sm:inline">지금 심부름 요청하기</span>
+              <span className="sm:hidden">심부름 요청</span>
+            </Link>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
