@@ -165,8 +165,19 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         context: 'errand_apply',
         errand_id: id,
         helper_id: helperProfile.id,
+        error_details: error,
       });
-      return NextResponse.json({ error: '지원에 실패했습니다' }, { status: 500 });
+      console.error('[Errand Apply Error]', { error, errand_id: id, helper_id: helperProfile.id });
+      return NextResponse.json(
+        {
+          error: '지원에 실패했습니다',
+          debug:
+            process.env.NODE_ENV === 'development'
+              ? { code: error.code, message: error.message, hint: error.hint }
+              : undefined,
+        },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({ application }, { status: 201 });

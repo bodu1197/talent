@@ -18,6 +18,7 @@ export default function ErrandApplyPage() {
   // 지원 폼 상태
   const [message, setMessage] = useState('');
   const [proposedPrice, setProposedPrice] = useState<number | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const id = params?.id as string;
 
@@ -70,6 +71,7 @@ export default function ErrandApplyPage() {
     }
 
     setSubmitting(true);
+    setSubmitError(null);
     try {
       const res = await fetch(`/api/errands/${id}/applications`, {
         method: 'POST',
@@ -80,17 +82,21 @@ export default function ErrandApplyPage() {
         }),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        const data = await res.json();
-        alert(data.error || '지원에 실패했습니다');
+        const errorMsg = data.error || '지원에 실패했습니다';
+        setSubmitError(errorMsg);
+        console.error('지원 실패:', data);
         return;
       }
 
       // 성공 시 상세 페이지로 이동
       alert('지원이 완료되었습니다!');
       router.push(`/errands/${id}`);
-    } catch {
-      alert('네트워크 오류가 발생했습니다');
+    } catch (err) {
+      console.error('네트워크 오류:', err);
+      setSubmitError('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
     } finally {
       setSubmitting(false);
     }
@@ -179,6 +185,14 @@ export default function ErrandApplyPage() {
           <h2 className="text-lg font-bold text-gray-900 mb-6">심부름 지원하기</h2>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* 에러 메시지 */}
+            {submitError && (
+              <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700">
+                <p className="font-medium">지원 실패</p>
+                <p className="text-sm mt-1">{submitError}</p>
+              </div>
+            )}
+
             {/* 메시지 */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
