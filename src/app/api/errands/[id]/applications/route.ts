@@ -133,12 +133,12 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // 이미 지원했는지 확인
+    // 이미 지원했는지 확인 (helper_id는 profiles.id)
     const { data: existingApplication } = await supabase
       .from('errand_applications')
       .select('id')
       .eq('errand_id', id)
-      .eq('helper_id', helperProfile.id)
+      .eq('helper_id', userProfile!.id)
       .single();
 
     if (existingApplication) {
@@ -148,12 +148,13 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const body = await request.json();
 
     // 지원 생성 - Service Role로 RLS 우회 (권한 체크는 위에서 완료됨)
+    // helper_id는 profiles.id를 참조 (FK 제약) - userProfile.id를 사용해야 함
     const serviceClient = createServiceRoleClient();
     const { data: application, error } = await serviceClient
       .from('errand_applications')
       .insert({
         errand_id: id,
-        helper_id: helperProfile.id,
+        helper_id: userProfile!.id, // profiles.id (FK: errand_applications.helper_id -> profiles.id)
         message: body.message?.trim() || null,
         proposed_price: body.proposed_price || null,
         status: 'pending',
