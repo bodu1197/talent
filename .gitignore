@@ -57,3 +57,11 @@ array_index_issues_list.txt
 # Windows reserved filenames and temp files
 nul
 temp_issues.json
+.env*.local
+
+# Temporary analysis/test folders
+errand-banner-analysis/
+errand-banner-temp/
+ddoring-temp/
+*-temp/
+*-analysis/

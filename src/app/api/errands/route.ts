@@ -9,7 +9,125 @@ import {
   calculateDistance,
   getCurrentTimeCondition,
 } from '@/lib/errand-pricing';
-import type { WeatherCondition, TimeCondition, WeightClass } from '@/lib/errand-pricing';
+import type {
+  WeatherCondition,
+  TimeCondition,
+  WeightClass,
+  ShoppingRange,
+} from '@/lib/errand-pricing';
+
+// 요청 본문 검증
+function validateErrandRequest(body: CreateErrandRequest): string | null {
+  if (!body.title?.trim()) return '제목을 입력해주세요';
+  if (!body.pickup_address?.trim()) return '출발지 주소를 입력해주세요';
+  if (!body.delivery_address?.trim()) return '도착지 주소를 입력해주세요';
+  if (!body.category) return '카테고리를 선택해주세요';
+  return null;
+}
+
+// 최종 가격 계산 (클라이언트/서버 가격 검증)
+function calculateFinalPrice(clientPrice: number, serverPrice: number, tip: number): number {
+  const priceDiff = Math.abs(clientPrice - serverPrice);
+  const totalPrice = priceDiff <= serverPrice * 0.1 ? clientPrice : serverPrice;
+  return totalPrice + tip;
+}
+
+// 기본 데이터 생성
+function buildBaseInsertData(userId: string, body: CreateErrandRequest): Record<string, unknown> {
+  return {
+    requester_id: userId,
+    title: body.title.trim(),
+    description: body.description?.trim() || null,
+    category: body.category,
+    pickup_address: body.pickup_address.trim(),
+    pickup_detail: body.pickup_detail?.trim() || null,
+    pickup_lat: body.pickup_lat || null,
+    pickup_lng: body.pickup_lng || null,
+    delivery_address: body.delivery_address.trim(),
+    delivery_detail: body.delivery_detail?.trim() || null,
+    delivery_lat: body.delivery_lat || null,
+    delivery_lng: body.delivery_lng || null,
+    tip: body.tip || 0,
+    status: 'OPEN',
+    scheduled_at: body.scheduled_at || null,
+  };
+}
+
+// 배달 가격 데이터 생성
+function buildDeliveryPriceData(
+  body: CreateErrandRequest,
+  estimatedDistance: number,
+  weather: WeatherCondition,
+  timeOfDay: TimeCondition,
+  weight: WeightClass
+): Record<string, unknown> {
+  const isMultiStop = body.is_multi_stop || false;
+  const totalStops = isMultiStop && body.stops ? body.stops.length + 1 : 1;
+  const distance = body.distance_km || estimatedDistance;
+  const clientPrice = body.estimated_price || 0;
+  const tip = body.tip || 0;
+
+  if (isMultiStop && totalStops > 1) {
+    const breakdown = calculateMultiStopPrice({ distance, weather, timeOfDay, weight, totalStops });
+    return {
+      estimated_distance: estimatedDistance || null,
+      base_price: breakdown.basePrice,
+      distance_price: breakdown.distancePrice,
+      total_price: calculateFinalPrice(clientPrice, breakdown.totalPrice, tip),
+      is_multi_stop: true,
+      total_stops: totalStops,
+      stop_fee: breakdown.stopFee,
+    };
+  }
+
+  const breakdown = calculateErrandPrice({ distance, weather, timeOfDay, weight });
+  return {
+    estimated_distance: estimatedDistance || null,
+    base_price: breakdown.basePrice,
+    distance_price: breakdown.distancePrice,
+    total_price: calculateFinalPrice(clientPrice, breakdown.totalPrice, tip),
+    is_multi_stop: false,
+    total_stops: 1,
+    stop_fee: 0,
+  };
+}
+
+// 구매대행 가격 데이터 생성
+function buildShoppingPriceData(
+  body: CreateErrandRequest,
+  estimatedDistance: number,
+  weather: WeatherCondition,
+  timeOfDay: TimeCondition
+): Record<string, unknown> {
+  const range: ShoppingRange = body.shopping_range || 'LOCAL';
+  const items = body.shopping_items || [];
+  const hasHeavyItem = items.some(
+    (item) =>
+      item.note?.toLowerCase().includes('무거') || item.note?.toLowerCase().includes('heavy')
+  );
+
+  const breakdown = calculateShoppingPrice({
+    range,
+    itemCount: items.length,
+    distance: estimatedDistance,
+    weather,
+    timeOfDay,
+    hasHeavyItem,
+  });
+
+  const clientPrice = body.estimated_price || 0;
+  const tip = body.tip || 0;
+
+  return {
+    base_price: breakdown.basePrice,
+    distance_price: breakdown.distancePrice,
+    total_price: calculateFinalPrice(clientPrice, breakdown.totalPrice, tip),
+    shopping_range: range,
+    shopping_items: items,
+    range_fee: breakdown.rangeFee,
+    item_fee: breakdown.itemFee,
+  };
+}
 
 // 심부름 목록 조회
 export async function GET(request: NextRequest) {
@@ -100,147 +218,29 @@ export async function POST(request: NextRequest) {
     const body: CreateErrandRequest = await request.json();
 
     // 필수 필드 검증
-    if (!body.title?.trim()) {
-      return NextResponse.json({ error: '제목을 입력해주세요' }, { status: 400 });
-    }
-    if (!body.pickup_address?.trim()) {
-      return NextResponse.json({ error: '출발지 주소를 입력해주세요' }, { status: 400 });
-    }
-    if (!body.delivery_address?.trim()) {
-      return NextResponse.json({ error: '도착지 주소를 입력해주세요' }, { status: 400 });
-    }
-    if (!body.category) {
-      return NextResponse.json({ error: '카테고리를 선택해주세요' }, { status: 400 });
+    const validationError = validateErrandRequest(body);
+    if (validationError) {
+      return NextResponse.json({ error: validationError }, { status: 400 });
     }
 
     // 거리 계산
-    let estimatedDistance = 0;
+    const estimatedDistance = calculateEstimatedDistance(body);
 
-    if (body.pickup_lat && body.pickup_lng && body.delivery_lat && body.delivery_lng) {
-      estimatedDistance = calculateDistance(
-        body.pickup_lat,
-        body.pickup_lng,
-        body.delivery_lat,
-        body.delivery_lng
-      );
-    }
-
-    // 클라이언트에서 전달된 요금 정보 사용 (검증 포함)
+    // 요금 계산 조건
     const weather: WeatherCondition = body.weather_condition || 'CLEAR';
     const timeOfDay: TimeCondition = body.time_condition || getCurrentTimeCondition();
     const weight: WeightClass = body.weight_class || 'LIGHT';
 
-    // 카테고리별 요금 계산 분기
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let insertData: Record<string, any> = {
-      requester_id: user.id,
-      title: body.title.trim(),
-      description: body.description?.trim() || null,
-      category: body.category,
-      pickup_address: body.pickup_address.trim(),
-      pickup_detail: body.pickup_detail?.trim() || null,
-      pickup_lat: body.pickup_lat || null,
-      pickup_lng: body.pickup_lng || null,
-      delivery_address: body.delivery_address.trim(),
-      delivery_detail: body.delivery_detail?.trim() || null,
-      delivery_lat: body.delivery_lat || null,
-      delivery_lng: body.delivery_lng || null,
-      tip: body.tip || 0,
-      status: 'OPEN',
-      scheduled_at: body.scheduled_at || null,
-    };
+    // 기본 데이터 생성
+    const baseData = buildBaseInsertData(user.id, body);
 
-    if (body.category === 'DELIVERY') {
-      // 배달 카테고리
-      const isMultiStop = body.is_multi_stop || false;
-      const totalStops = isMultiStop && body.stops ? body.stops.length + 1 : 1;
+    // 카테고리별 가격 데이터 생성
+    const priceData =
+      body.category === 'SHOPPING'
+        ? buildShoppingPriceData(body, estimatedDistance, weather, timeOfDay)
+        : buildDeliveryPriceData(body, estimatedDistance, weather, timeOfDay, weight);
 
-      if (isMultiStop && totalStops > 1) {
-        // 다중 배달
-        const multiStopBreakdown = calculateMultiStopPrice({
-          distance: body.distance_km || estimatedDistance,
-          weather,
-          timeOfDay,
-          weight,
-          totalStops,
-        });
-
-        const clientPrice = body.estimated_price || 0;
-        const serverPrice = multiStopBreakdown.totalPrice;
-        const priceDiff = Math.abs(clientPrice - serverPrice);
-        const totalPrice = priceDiff <= serverPrice * 0.1 ? clientPrice : serverPrice;
-        const finalPrice = totalPrice + (body.tip || 0);
-
-        insertData = {
-          ...insertData,
-          estimated_distance: estimatedDistance || null,
-          base_price: multiStopBreakdown.basePrice,
-          distance_price: multiStopBreakdown.distancePrice,
-          total_price: finalPrice,
-          is_multi_stop: true,
-          total_stops: totalStops,
-          stop_fee: multiStopBreakdown.stopFee,
-        };
-      } else {
-        // 단일 배달
-        const priceBreakdown = calculateErrandPrice({
-          distance: body.distance_km || estimatedDistance,
-          weather,
-          timeOfDay,
-          weight,
-        });
-
-        const clientPrice = body.estimated_price || 0;
-        const serverPrice = priceBreakdown.totalPrice;
-        const priceDiff = Math.abs(clientPrice - serverPrice);
-        const totalPrice = priceDiff <= serverPrice * 0.1 ? clientPrice : serverPrice;
-        const finalPrice = totalPrice + (body.tip || 0);
-
-        insertData = {
-          ...insertData,
-          estimated_distance: estimatedDistance || null,
-          base_price: priceBreakdown.basePrice,
-          distance_price: priceBreakdown.distancePrice,
-          total_price: finalPrice,
-          is_multi_stop: false,
-          total_stops: 1,
-          stop_fee: 0,
-        };
-      }
-    } else if (body.category === 'SHOPPING') {
-      // 구매대행 카테고리
-      const shoppingRange = body.shopping_range || 'LOCAL';
-      const shoppingItems = body.shopping_items || [];
-      const hasHeavyItem = shoppingItems.some(
-        (item) => item.note?.toLowerCase().includes('무거') || item.note?.toLowerCase().includes('heavy')
-      );
-
-      const shoppingBreakdown = calculateShoppingPrice({
-        range: shoppingRange,
-        itemCount: shoppingItems.length,
-        distance: estimatedDistance,
-        weather,
-        timeOfDay,
-        hasHeavyItem,
-      });
-
-      const clientPrice = body.estimated_price || 0;
-      const serverPrice = shoppingBreakdown.totalPrice;
-      const priceDiff = Math.abs(clientPrice - serverPrice);
-      const totalPrice = priceDiff <= serverPrice * 0.1 ? clientPrice : serverPrice;
-      const finalPrice = totalPrice + (body.tip || 0);
-
-      insertData = {
-        ...insertData,
-        base_price: shoppingBreakdown.basePrice,
-        distance_price: shoppingBreakdown.distancePrice,
-        total_price: finalPrice,
-        shopping_range: shoppingRange,
-        shopping_items: shoppingItems,
-        range_fee: shoppingBreakdown.rangeFee,
-        item_fee: shoppingBreakdown.itemFee,
-      };
-    }
+    const insertData = { ...baseData, ...priceData };
 
     // 심부름 생성
     const { data: errand, error } = await supabase
@@ -255,25 +255,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 다중 배달인 경우 정차지 저장
-    if (body.category === 'DELIVERY' && body.is_multi_stop && body.stops && body.stops.length > 0) {
-      const stopsToInsert = body.stops.map((stop, index) => ({
-        errand_id: errand.id,
-        stop_order: index + 2, // 첫 번째 도착지 다음부터
-        address: stop.address,
-        address_detail: stop.address_detail || null,
-        lat: stop.lat || null,
-        lng: stop.lng || null,
-        recipient_name: stop.recipient_name || null,
-        recipient_phone: stop.recipient_phone || null,
-      }));
-
-      const { error: stopsError } = await supabase.from('errand_stops').insert(stopsToInsert);
-
-      if (stopsError) {
-        logServerError(stopsError, { context: 'errand_stops_create', errand_id: errand.id });
-        // 정차지 저장 실패해도 심부름은 생성됨 (경고만 로깅)
-      }
-    }
+    await saveErrandStops(supabase, body, errand.id);
 
     return NextResponse.json({ errand }, { status: 201 });
   } catch (error) {
@@ -281,5 +263,46 @@ export async function POST(request: NextRequest) {
       context: 'errand_create_error',
     });
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 });
+  }
+}
+
+// 거리 계산 헬퍼
+function calculateEstimatedDistance(body: CreateErrandRequest): number {
+  if (body.pickup_lat && body.pickup_lng && body.delivery_lat && body.delivery_lng) {
+    return calculateDistance(
+      body.pickup_lat,
+      body.pickup_lng,
+      body.delivery_lat,
+      body.delivery_lng
+    );
+  }
+  return 0;
+}
+
+// 정차지 저장 헬퍼
+async function saveErrandStops(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  body: CreateErrandRequest,
+  errandId: string
+): Promise<void> {
+  if (body.category !== 'DELIVERY' || !body.is_multi_stop || !body.stops?.length) {
+    return;
+  }
+
+  const stopsToInsert = body.stops.map((stop, index) => ({
+    errand_id: errandId,
+    stop_order: index + 2,
+    address: stop.address,
+    address_detail: stop.address_detail || null,
+    lat: stop.lat || null,
+    lng: stop.lng || null,
+    recipient_name: stop.recipient_name || null,
+    recipient_phone: stop.recipient_phone || null,
+  }));
+
+  const { error: stopsError } = await supabase.from('errand_stops').insert(stopsToInsert);
+
+  if (stopsError) {
+    logServerError(stopsError, { context: 'errand_stops_create', errand_id: errandId });
   }
 }

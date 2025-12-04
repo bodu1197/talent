@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -26,25 +26,23 @@ import {
   User,
   Phone,
 } from 'lucide-react';
-import type { ErrandCategory, CreateErrandRequest, ErrandStop, ShoppingItem, ShoppingRange } from '@/types/errand';
+import type {
+  ErrandCategory,
+  CreateErrandRequest,
+  ErrandStop,
+  ShoppingItem,
+  ShoppingRange,
+} from '@/types/errand';
 import {
-  calculateErrandPrice,
-  calculateDistance,
-  getCurrentTimeCondition,
-  calculateMultiStopPrice,
-  calculateShoppingPrice,
-  WeatherCondition,
-  TimeCondition,
   WeightClass,
+  WeatherCondition,
   WEATHER_LABELS,
   TIME_LABELS,
   WEIGHT_LABELS,
   SHOPPING_RANGE_LABELS,
-  PriceBreakdown,
-  MultiStopPriceBreakdown,
-  ShoppingPriceBreakdown,
   PRICING_CONSTANTS,
 } from '@/lib/errand-pricing';
+import { useErrandPricing } from '@/hooks/useErrandPricing';
 
 // Daum Postcode 결과 타입
 interface DaumPostcodeResult {
@@ -91,6 +89,8 @@ const WeatherIcon = ({ weather }: { weather: WeatherCondition }) => {
   }
 };
 
+// UI 폼 컴포넌트로 다양한 조건부 렌더링이 필요하여 복잡도가 높음
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export default function NewErrandPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
@@ -121,18 +121,10 @@ export default function NewErrandPage() {
 
   // 가격 계산 요소
   const [weight, setWeight] = useState<WeightClass>('LIGHT');
-  const [weather, setWeather] = useState<WeatherCondition>('CLEAR');
-  const [weatherLoading, setWeatherLoading] = useState(false);
-  const [timeCondition, setTimeCondition] = useState<TimeCondition>('DAY');
-  const [distance, setDistance] = useState<number>(0);
-  const [distanceLoading, setDistanceLoading] = useState(false);
-  const [estimatedDuration, setEstimatedDuration] = useState<number>(0); // 예상 소요 시간 (분)
-  const [priceBreakdown, setPriceBreakdown] = useState<PriceBreakdown | null>(null);
 
   // 다중 배달 상태
   const [isMultiStop, setIsMultiStop] = useState(false);
   const [stops, setStops] = useState<ErrandStop[]>([]);
-  const [multiStopPrice, setMultiStopPrice] = useState<MultiStopPriceBreakdown | null>(null);
 
   // 구매대행 상태
   const [shoppingRange, setShoppingRange] = useState<ShoppingRange>('LOCAL');
@@ -144,7 +136,30 @@ export default function NewErrandPage() {
     lng?: number;
   }>({ address: '', detail: '' });
   const [hasHeavyItem, setHasHeavyItem] = useState(false);
-  const [shoppingPrice, setShoppingPrice] = useState<ShoppingPriceBreakdown | null>(null);
+
+  // 가격 계산 훅 사용
+  const {
+    weather,
+    weatherLoading,
+    timeCondition,
+    distance,
+    distanceLoading,
+    estimatedDuration,
+    priceBreakdown,
+    multiStopPrice,
+    shoppingPrice,
+  } = useErrandPricing({
+    category: formData.category || 'DELIVERY',
+    pickup: { lat: pickup.lat, lng: pickup.lng },
+    delivery: { lat: delivery.lat, lng: delivery.lng },
+    weight,
+    isMultiStop,
+    stops,
+    shoppingRange,
+    shoppingItems,
+    shoppingLocation: { lat: shoppingLocation.lat, lng: shoppingLocation.lng },
+    hasHeavyItem,
+  });
 
   // Daum Postcode 스크립트 로드
   useEffect(() => {
@@ -159,150 +174,6 @@ export default function NewErrandPage() {
     script.onload = () => setIsScriptLoaded(true);
     document.head.appendChild(script);
   }, []);
-
-  // 시간대 체크
-  useEffect(() => {
-    setTimeCondition(getCurrentTimeCondition());
-  }, []);
-
-  // 날씨 조회
-  const fetchWeather = useCallback(async (lat: number, lng: number) => {
-    setWeatherLoading(true);
-    try {
-      const response = await fetch(`/api/weather?lat=${lat}&lng=${lng}`);
-      if (response.ok) {
-        const data = await response.json();
-        setWeather(data.weather as WeatherCondition);
-      }
-    } catch (err) {
-      logger.error('날씨 조회 실패:', err);
-    } finally {
-      setWeatherLoading(false);
-    }
-  }, []);
-
-  // 도로 거리 계산 (카카오 모빌리티 API)
-  const fetchRoadDistance = useCallback(async () => {
-    if (!pickup.lat || !pickup.lng || !delivery.lat || !delivery.lng) {
-      setDistance(0);
-      setEstimatedDuration(0);
-      return;
-    }
-
-    setDistanceLoading(true);
-    try {
-      const response = await fetch('/api/address/directions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          originLat: pickup.lat,
-          originLng: pickup.lng,
-          destLat: delivery.lat,
-          destLng: delivery.lng,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setDistance(data.distanceKm);
-        setEstimatedDuration(data.durationMin);
-      } else {
-        // API 오류 시 직선 거리 × 1.4 보정계수 적용
-        const straightDist = calculateDistance(pickup.lat, pickup.lng, delivery.lat, delivery.lng);
-        setDistance(Math.round(straightDist * 1.4 * 10) / 10);
-        setEstimatedDuration(Math.round(((straightDist * 1.4) / 30) * 60));
-      }
-    } catch (err) {
-      logger.error('도로 거리 계산 실패:', err);
-      // 오류 시 직선 거리 × 1.4 보정계수 적용
-      const straightDist = calculateDistance(pickup.lat, pickup.lng, delivery.lat, delivery.lng);
-      setDistance(Math.round(straightDist * 1.4 * 10) / 10);
-      setEstimatedDuration(Math.round(((straightDist * 1.4) / 30) * 60));
-    } finally {
-      setDistanceLoading(false);
-    }
-  }, [pickup.lat, pickup.lng, delivery.lat, delivery.lng]);
-
-  // 거리 계산 및 날씨 조회
-  useEffect(() => {
-    if (pickup.lat && pickup.lng && delivery.lat && delivery.lng) {
-      fetchRoadDistance();
-      // 출발지 기준 날씨 조회
-      fetchWeather(pickup.lat, pickup.lng);
-    } else {
-      setDistance(0);
-      setEstimatedDuration(0);
-    }
-  }, [pickup.lat, pickup.lng, delivery.lat, delivery.lng, fetchRoadDistance, fetchWeather]);
-
-  // 가격 계산 (카테고리별 분기)
-  useEffect(() => {
-    if (formData.category === 'DELIVERY') {
-      // 배달 카테고리
-      if (isMultiStop && stops.length > 0) {
-        // 다중 배달
-        const breakdown = calculateMultiStopPrice({
-          distance,
-          weather,
-          timeOfDay: timeCondition,
-          weight,
-          totalStops: stops.length + 1, // 첫 번째 도착지 + 추가 정차지
-        });
-        setMultiStopPrice(breakdown);
-        setPriceBreakdown(breakdown);
-        setShoppingPrice(null);
-      } else {
-        // 단일 배달
-        const breakdown = calculateErrandPrice({
-          distance,
-          weather,
-          timeOfDay: timeCondition,
-          weight,
-        });
-        setPriceBreakdown(breakdown);
-        setMultiStopPrice(null);
-        setShoppingPrice(null);
-      }
-    } else if (formData.category === 'SHOPPING') {
-      // 구매대행 카테고리
-      let shoppingDistance = 0;
-      if (shoppingRange === 'SPECIFIC' && shoppingLocation.lat && shoppingLocation.lng && delivery.lat && delivery.lng) {
-        shoppingDistance = calculateDistance(
-          shoppingLocation.lat,
-          shoppingLocation.lng,
-          delivery.lat,
-          delivery.lng
-        );
-      }
-
-      const validItems = shoppingItems.filter((item) => item.name.trim() !== '');
-      const breakdown = calculateShoppingPrice({
-        range: shoppingRange,
-        itemCount: validItems.length,
-        distance: shoppingDistance,
-        weather,
-        timeOfDay: timeCondition,
-        hasHeavyItem,
-      });
-      setShoppingPrice(breakdown);
-      setPriceBreakdown(null);
-      setMultiStopPrice(null);
-    }
-  }, [
-    formData.category,
-    distance,
-    weather,
-    timeCondition,
-    weight,
-    isMultiStop,
-    stops.length,
-    shoppingRange,
-    shoppingItems,
-    shoppingLocation,
-    delivery.lat,
-    delivery.lng,
-    hasHeavyItem,
-  ]);
 
   // 좌표 조회
   const getCoordinates = async (address: string): Promise<{ lat: number; lng: number } | null> => {
@@ -407,16 +278,45 @@ export default function NewErrandPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // 쇼핑 상태 초기화
+  const resetShoppingState = () => {
+    setShoppingRange('LOCAL');
+    setShoppingItems([{ name: '', quantity: 1 }]);
+    setHasHeavyItem(false);
+  };
+
+  // 배달 상태 초기화
+  const resetDeliveryState = () => {
+    setIsMultiStop(false);
+    setStops([]);
+  };
+
+  // 다중 배달 토글
+  const toggleMultiStop = () => {
+    const newIsMultiStop = !isMultiStop;
+    setIsMultiStop(newIsMultiStop);
+    if (newIsMultiStop) {
+      setStops([
+        {
+          stop_order: 2,
+          address: '',
+          address_detail: '',
+          recipient_name: '',
+          recipient_phone: '',
+        },
+      ]);
+    } else {
+      setStops([]);
+    }
+  };
+
   const handleCategorySelect = (category: ErrandCategory) => {
     setFormData((prev) => ({ ...prev, category }));
     // 카테고리 변경 시 관련 상태 초기화
     if (category === 'DELIVERY') {
-      setShoppingRange('LOCAL');
-      setShoppingItems([{ name: '', quantity: 1 }]);
-      setHasHeavyItem(false);
+      resetShoppingState();
     } else {
-      setIsMultiStop(false);
-      setStops([]);
+      resetDeliveryState();
     }
   };
 
@@ -446,6 +346,19 @@ export default function NewErrandPage() {
     setStops((prev) => prev.map((stop, i) => (i === index ? { ...stop, [field]: value } : stop)));
   };
 
+  // 정차지 주소 업데이트 헬퍼
+  const updateStopAddress = (
+    index: number,
+    address: string,
+    coords: { lat: number; lng: number } | null
+  ) => {
+    setStops((prev) =>
+      prev.map((stop, i) =>
+        i === index ? { ...stop, address, lat: coords?.lat, lng: coords?.lng } : stop
+      )
+    );
+  };
+
   // 정차지 주소 검색
   const handleStopAddressSearch = (index: number) => {
     if (!isScriptLoaded || !window.daum) return;
@@ -454,11 +367,7 @@ export default function NewErrandPage() {
       oncomplete: async (data: DaumPostcodeResult) => {
         const address = data.roadAddress || data.jibunAddress || data.address;
         const coords = await getCoordinates(address);
-        setStops((prev) =>
-          prev.map((stop, i) =>
-            i === index ? { ...stop, address, lat: coords?.lat, lng: coords?.lng } : stop
-          )
-        );
+        updateStopAddress(index, address, coords);
       },
     }).open();
   };
@@ -498,105 +407,107 @@ export default function NewErrandPage() {
     }).open();
   };
 
+  // 기본 필드 검증
+  const validateBaseFields = (): string | null => {
+    if (!formData.category) return '카테고리를 선택해주세요';
+    if (!formData.title?.trim()) return '요청 내용을 입력해주세요';
+    if (!delivery.address.trim()) {
+      return formData.category === 'SHOPPING'
+        ? '배달 받을 주소를 입력해주세요'
+        : '도착지를 입력해주세요';
+    }
+    return null;
+  };
+
+  // 구매대행 검증
+  const validateShopping = (): string | null => {
+    const validItems = shoppingItems.filter((item) => item.name.trim() !== '');
+    if (validItems.length === 0) return '최소 1개 이상의 품목을 입력해주세요';
+    if (shoppingRange === 'SPECIFIC' && !shoppingLocation.address)
+      return '구매 장소를 지정해주세요';
+    return null;
+  };
+
+  // 배달 검증
+  const validateDelivery = (): string | null => {
+    if (!pickup.address.trim()) return '출발지를 입력해주세요';
+    if (isMultiStop) {
+      const validStops = stops.filter((stop) => stop.address.trim() !== '');
+      if (validStops.length === 0) return '최소 1개 이상의 추가 정차지를 입력해주세요';
+    }
+    return null;
+  };
+
+  // 통합 검증 함수
+  const validateForm = (): string | null => {
+    const baseError = validateBaseFields();
+    if (baseError) return baseError;
+
+    if (formData.category === 'SHOPPING') return validateShopping();
+    if (formData.category === 'DELIVERY') return validateDelivery();
+
+    return null;
+  };
+
+  // 배달 데이터 생성
+  const buildDeliveryData = (): CreateErrandRequest => ({
+    ...formData,
+    title: formData.title || '',
+    category: formData.category || 'DELIVERY',
+    pickup_address: pickup.address,
+    pickup_detail: pickup.detail || undefined,
+    pickup_lat: pickup.lat,
+    pickup_lng: pickup.lng,
+    delivery_address: delivery.address,
+    delivery_detail: delivery.detail || undefined,
+    delivery_lat: delivery.lat,
+    delivery_lng: delivery.lng,
+    estimated_price: priceBreakdown?.totalPrice,
+    distance_km: distance,
+    weather_condition: weather,
+    time_condition: timeCondition,
+    weight_class: weight,
+    is_multi_stop: isMultiStop,
+    stops: isMultiStop ? stops.filter((stop) => stop.address.trim() !== '') : undefined,
+  });
+
+  // 구매대행 데이터 생성
+  const buildShoppingData = (): CreateErrandRequest => {
+    const isSpecific = shoppingRange === 'SPECIFIC';
+    return {
+      ...formData,
+      title: formData.title || '',
+      category: 'SHOPPING',
+      pickup_address: isSpecific ? shoppingLocation.address : delivery.address,
+      pickup_detail: isSpecific ? shoppingLocation.detail : undefined,
+      pickup_lat: isSpecific ? shoppingLocation.lat : delivery.lat,
+      pickup_lng: isSpecific ? shoppingLocation.lng : delivery.lng,
+      delivery_address: delivery.address,
+      delivery_detail: delivery.detail || undefined,
+      delivery_lat: delivery.lat,
+      delivery_lng: delivery.lng,
+      estimated_price: shoppingPrice?.totalPrice,
+      weather_condition: weather,
+      time_condition: timeCondition,
+      shopping_range: shoppingRange,
+      shopping_items: shoppingItems.filter((item) => item.name.trim() !== ''),
+    };
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.category) {
-      toast.error('카테고리를 선택해주세요');
+    const validationError = validateForm();
+    if (validationError) {
+      toast.error(validationError);
       return;
-    }
-    // 배달 카테고리일 때만 출발지 검증
-    if (formData.category === 'DELIVERY' && !pickup.address.trim()) {
-      toast.error('출발지를 입력해주세요');
-      return;
-    }
-    if (!delivery.address.trim()) {
-      const errorMsg = formData.category === 'SHOPPING' ? '배달 받을 주소를 입력해주세요' : '도착지를 입력해주세요';
-      toast.error(errorMsg);
-      return;
-    }
-    if (!formData.title?.trim()) {
-      toast.error('요청 내용을 입력해주세요');
-      return;
-    }
-
-    // 구매대행 카테고리 검증
-    if (formData.category === 'SHOPPING') {
-      const validItems = shoppingItems.filter((item) => item.name.trim() !== '');
-      if (validItems.length === 0) {
-        toast.error('최소 1개 이상의 품목을 입력해주세요');
-        return;
-      }
-      if (shoppingRange === 'SPECIFIC' && !shoppingLocation.address) {
-        toast.error('구매 장소를 지정해주세요');
-        return;
-      }
-    }
-
-    // 다중 배달 검증
-    if (formData.category === 'DELIVERY' && isMultiStop) {
-      const validStops = stops.filter((stop) => stop.address.trim() !== '');
-      if (validStops.length === 0) {
-        toast.error('최소 1개 이상의 추가 정차지를 입력해주세요');
-        return;
-      }
     }
 
     try {
       setLoading(true);
 
-      // 배달 카테고리 데이터
-      const deliveryData: CreateErrandRequest = {
-        ...formData,
-        title: formData.title || '',
-        category: formData.category || 'DELIVERY',
-        pickup_address: pickup.address,
-        pickup_detail: pickup.detail || undefined,
-        pickup_lat: pickup.lat,
-        pickup_lng: pickup.lng,
-        delivery_address: delivery.address,
-        delivery_detail: delivery.detail || undefined,
-        delivery_lat: delivery.lat,
-        delivery_lng: delivery.lng,
-        estimated_price: priceBreakdown?.totalPrice,
-        distance_km: distance,
-        weather_condition: weather,
-        time_condition: timeCondition,
-        weight_class: weight,
-        // 다중 배달
-        is_multi_stop: isMultiStop,
-        stops: isMultiStop ? stops.filter((stop) => stop.address.trim() !== '') : undefined,
-      };
-
-      // 구매대행 카테고리 데이터
-      // SPECIFIC: 지정된 구매처 주소 사용
-      // 그 외: 구매처는 범위 내 헬퍼가 결정 (배달지 주소를 출발지로 사용)
-      const shoppingPickupAddress = shoppingRange === 'SPECIFIC' ? shoppingLocation.address : delivery.address;
-      const shoppingPickupLat = shoppingRange === 'SPECIFIC' ? shoppingLocation.lat : delivery.lat;
-      const shoppingPickupLng = shoppingRange === 'SPECIFIC' ? shoppingLocation.lng : delivery.lng;
-
-      const shoppingData: CreateErrandRequest = {
-        ...formData,
-        title: formData.title || '',
-        category: 'SHOPPING',
-        pickup_address: shoppingPickupAddress,
-        pickup_detail: shoppingRange === 'SPECIFIC' ? shoppingLocation.detail : undefined,
-        pickup_lat: shoppingPickupLat,
-        pickup_lng: shoppingPickupLng,
-        delivery_address: delivery.address,
-        delivery_detail: delivery.detail || undefined,
-        delivery_lat: delivery.lat,
-        delivery_lng: delivery.lng,
-        estimated_price: shoppingPrice?.totalPrice,
-        weather_condition: weather,
-        time_condition: timeCondition,
-        // 구매대행 전용
-        shopping_range: shoppingRange,
-        shopping_items: shoppingItems.filter((item) => item.name.trim() !== ''),
-      };
-
-      const submitData: CreateErrandRequest =
-        formData.category === 'SHOPPING' ? shoppingData : deliveryData;
+      const submitData =
+        formData.category === 'SHOPPING' ? buildShoppingData() : buildDeliveryData();
 
       const response = await fetch('/api/errands', {
         method: 'POST',
@@ -717,7 +628,9 @@ export default function NewErrandPage() {
             {/* 도착지 / 배달 받을 주소 */}
             <div className="bg-white rounded-xl border border-gray-200 p-4">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                <div className={`w-2 h-2 rounded-full ${formData.category === 'SHOPPING' ? 'bg-green-500' : 'bg-red-500'}`} />
+                <div
+                  className={`w-2 h-2 rounded-full ${formData.category === 'SHOPPING' ? 'bg-green-500' : 'bg-red-500'}`}
+                />
                 {formData.category === 'SHOPPING' ? '배달 받을 주소' : '도착지'}
               </label>
               <button
@@ -754,23 +667,7 @@ export default function NewErrandPage() {
                   </label>
                   <button
                     type="button"
-                    onClick={() => {
-                      setIsMultiStop(!isMultiStop);
-                      if (!isMultiStop) {
-                        // 다중 배달 활성화 시 첫 번째 추가 정차지 생성
-                        setStops([
-                          {
-                            stop_order: 2,
-                            address: '',
-                            address_detail: '',
-                            recipient_name: '',
-                            recipient_phone: '',
-                          },
-                        ]);
-                      } else {
-                        setStops([]);
-                      }
-                    }}
+                    onClick={toggleMultiStop}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                       isMultiStop ? 'bg-blue-600' : 'bg-gray-300'
                     }`}
@@ -783,17 +680,15 @@ export default function NewErrandPage() {
                   </button>
                 </div>
                 <p className="text-xs text-gray-500 mb-3">
-                  여러 곳에 배달해야 할 때 사용하세요 (정차당 +{PRICING_CONSTANTS.STOP_FEE.toLocaleString()}원)
+                  여러 곳에 배달해야 할 때 사용하세요 (정차당 +
+                  {PRICING_CONSTANTS.STOP_FEE.toLocaleString()}원)
                 </p>
 
                 {/* 추가 정차지 목록 */}
                 {isMultiStop && (
                   <div className="space-y-4">
                     {stops.map((stop, index) => (
-                      <div
-                        key={index}
-                        className="bg-gray-50 rounded-lg p-3 border border-gray-200"
-                      >
+                      <div key={index} className="bg-gray-50 rounded-lg p-3 border border-gray-200">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-xs font-medium text-gray-600">
                             추가 정차지 #{index + 1}
@@ -896,7 +791,9 @@ export default function NewErrandPage() {
                       >
                         <span>{opt.label}</span>
                         {opt.price > 0 && (
-                          <span className="text-green-600 font-medium">+{opt.price.toLocaleString()}원</span>
+                          <span className="text-green-600 font-medium">
+                            +{opt.price.toLocaleString()}원
+                          </span>
                         )}
                       </button>
                     ))}
@@ -929,7 +826,9 @@ export default function NewErrandPage() {
                       <input
                         type="text"
                         value={shoppingLocation.detail || ''}
-                        onChange={(e) => setShoppingLocation((prev) => ({ ...prev, detail: e.target.value }))}
+                        onChange={(e) =>
+                          setShoppingLocation((prev) => ({ ...prev, detail: e.target.value }))
+                        }
                         placeholder="상세주소 (층, 매장명 등)"
                         className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       />
@@ -944,7 +843,8 @@ export default function NewErrandPage() {
                     구매 품목
                   </label>
                   <p className="text-xs text-gray-500 mb-3">
-                    {PRICING_CONSTANTS.SHOPPING_FREE_ITEMS}개까지 무료, 이후 품목당 +{PRICING_CONSTANTS.SHOPPING_ITEM_PRICE.toLocaleString()}원
+                    {PRICING_CONSTANTS.SHOPPING_FREE_ITEMS}개까지 무료, 이후 품목당 +
+                    {PRICING_CONSTANTS.SHOPPING_ITEM_PRICE.toLocaleString()}원
                   </p>
                   <div className="space-y-2">
                     {shoppingItems.map((item, index) => (
@@ -996,7 +896,8 @@ export default function NewErrandPage() {
                         무거운 물품 포함
                       </label>
                       <p className="text-xs text-gray-500 mt-1">
-                        쌀, 음료 박스 등 (+{PRICING_CONSTANTS.WEIGHT_HEAVY_SURCHARGE.toLocaleString()}원)
+                        쌀, 음료 박스 등 (+
+                        {PRICING_CONSTANTS.WEIGHT_HEAVY_SURCHARGE.toLocaleString()}원)
                       </p>
                     </div>
                     <button
@@ -1249,16 +1150,14 @@ export default function NewErrandPage() {
                   ) : (
                     <Bike className="w-5 h-5" />
                   )}
-                  {formData.category === 'SHOPPING' && (
-                    shoppingPrice
+                  {formData.category === 'SHOPPING' &&
+                    (shoppingPrice
                       ? `${shoppingPrice.totalPrice.toLocaleString()}원 구매대행 요청`
-                      : '구매대행 요청하기'
-                  )}
-                  {formData.category === 'DELIVERY' && (
-                    priceBreakdown
+                      : '구매대행 요청하기')}
+                  {formData.category === 'DELIVERY' &&
+                    (priceBreakdown
                       ? `${priceBreakdown.totalPrice.toLocaleString()}원 배달 요청`
-                      : '배달 요청하기'
-                  )}
+                      : '배달 요청하기')}
                 </>
               )}
             </button>

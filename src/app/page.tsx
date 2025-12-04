@@ -11,6 +11,7 @@ import UserReviews from '@/components/home/UserReviews';
 import TrendingCategories from '@/components/home/TrendingCategories';
 import SecondHeroBanner from '@/components/home/SecondHeroBanner';
 import ThirdHeroBanner from '@/components/home/ThirdHeroBanner';
+import ErrandBannerStrip from '@/components/home/ErrandBannerStrip';
 import { Service } from '@/types';
 
 // 로그인 사용자 전용 컴포넌트 - dynamic import 유지
@@ -51,6 +52,9 @@ export default async function HomePage() {
           <Suspense fallback={<RecommendedSkeleton />}>
             <RecommendedServices aiCategoryIds={aiCategoryIds} />
           </Suspense>
+
+          {/* 심부름 배너 띠 (프리미엄 전문가 섹션 위) */}
+          <ErrandBannerStrip />
 
           {/* 내 주변의 프리미엄 전문가 (로그인 시에도 표시) */}
           <ThirdHeroBanner />
