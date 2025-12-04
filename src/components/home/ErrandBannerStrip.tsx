@@ -53,7 +53,7 @@ export default function ErrandBannerStrip() {
       <div
         className="absolute pointer-events-none z-50"
         style={{
-          top: 'calc(50% - 300px)',
+          top: 'calc(50% - 150px)',
           left: 0,
           right: 0,
           transform: 'translateY(-50%)',
