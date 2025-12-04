@@ -38,10 +38,8 @@ interface HelperProfile {
   user: {
     id: string;
     name: string;
-    avatar_url: string | null;
-    phone: string | null;
-    email: string | null;
-  };
+    profile_image: string | null;
+  } | null;
 }
 
 export default function HelperDashboardPage() {
@@ -201,7 +199,9 @@ export default function HelperDashboardPage() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-lg font-bold text-gray-900">{helperProfile.user.name}</h2>
+                  <h2 className="text-lg font-bold text-gray-900">
+                    {helperProfile.user?.name || '심부름꾼'}
+                  </h2>
                   <span
                     className={`px-2 py-0.5 rounded-full text-xs font-medium ${getGradeColor(
                       helperProfile.grade

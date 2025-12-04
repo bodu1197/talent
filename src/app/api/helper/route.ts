@@ -16,7 +16,7 @@ export async function GET() {
     }
 
     // helper_profiles와 profiles 모두 user_id가 auth.users.id를 참조
-    // 별도로 profiles 정보 조회
+    // helper_profiles 조회
     const { data: helperProfile, error } = await supabase
       .from('helper_profiles')
       .select('*')
@@ -30,6 +30,13 @@ export async function GET() {
       }
       throw error;
     }
+
+    // profiles 테이블에서 사용자 정보 별도 조회 (올바른 컬럼명 사용)
+    const { data: userProfile } = await supabase
+      .from('profiles')
+      .select('id, name, profile_image')
+      .eq('user_id', user.id)
+      .single();
 
     // 통계 정보 조회
     const [settlementsResult, withdrawalsResult] = await Promise.all([
@@ -50,8 +57,20 @@ export async function GET() {
     const totalWithdrawn =
       withdrawalsResult.data?.reduce((sum, w) => sum + Number(w.amount), 0) || 0;
 
+    // helperProfile에 user 정보 추가
+    const helperProfileWithUser = {
+      ...helperProfile,
+      user: userProfile
+        ? {
+            id: userProfile.id,
+            name: userProfile.name,
+            profile_image: userProfile.profile_image,
+          }
+        : null,
+    };
+
     return NextResponse.json({
-      helperProfile,
+      helperProfile: helperProfileWithUser,
       stats: {
         availableBalance,
         totalWithdrawn,
