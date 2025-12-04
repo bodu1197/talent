@@ -23,7 +23,9 @@
     "test:all": "npm run test:run && npm run test:e2e",
     "sonar": "sonar-scanner",
     "sonar:local": "sonar-scanner -Dsonar.host.url=http://localhost:9000",
-    "sonar:cloud": "sonar-scanner -Dsonar.host.url=https://sonarcloud.io"
+    "sonar:cloud": "sonar-scanner -Dsonar.host.url=https://sonarcloud.io",
+    "quality-gate": "node scripts/quality-gate.js",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",

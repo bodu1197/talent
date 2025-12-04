@@ -143,6 +143,11 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     const { id } = await params;
     const supabase = await createClient();
 
+    // 현재 사용자 확인
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
     const { data: errand, error } = await supabase
       .from('errands')
       .select(
@@ -165,6 +170,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     // 지원자 목록 조회 (OPEN 상태일 때만)
     let applications = null;
+    let hasApplied = false;
+
     if (errand.status === 'OPEN') {
       const { data: apps } = await supabase
         .from('errand_applications')
@@ -185,9 +192,29 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         .order('created_at', { ascending: false });
 
       applications = apps;
+
+      // 현재 사용자가 이미 지원했는지 확인
+      if (user) {
+        const { data: helperProfile } = await supabase
+          .from('helper_profiles')
+          .select('id')
+          .eq('user_id', user.id)
+          .single();
+
+        if (helperProfile) {
+          const { data: myApplication } = await supabase
+            .from('errand_applications')
+            .select('id')
+            .eq('errand_id', id)
+            .eq('helper_id', helperProfile.id)
+            .single();
+
+          hasApplied = !!myApplication;
+        }
+      }
     }
 
-    return NextResponse.json({ errand, applications });
+    return NextResponse.json({ errand, applications, hasApplied });
   } catch (error) {
     logServerError(error instanceof Error ? error : new Error(String(error)), {
       context: 'errand_detail_error',

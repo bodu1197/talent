@@ -1,0 +1,12 @@
+#!/bin/sh
+# Pre-push hook: 코드 품질 검사
+# Push 전에 ESLint, TypeScript, SonarQube 검사 실행
+# 실패 시 push 차단
+
+echo "🔍 Push 전 코드 품질 검사 시작..."
+
+# 품질 검사 스크립트 실행
+node scripts/quality-gate.js
+
+# 스크립트 종료 코드에 따라 push 허용/차단
+exit $?
