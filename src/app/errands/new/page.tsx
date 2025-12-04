@@ -105,6 +105,8 @@ export default function NewErrandPage() {
   const [weatherLoading, setWeatherLoading] = useState(false);
   const [timeCondition, setTimeCondition] = useState<TimeCondition>('DAY');
   const [distance, setDistance] = useState<number>(0);
+  const [distanceLoading, setDistanceLoading] = useState(false);
+  const [estimatedDuration, setEstimatedDuration] = useState<number>(0); // 예상 소요 시간 (분)
   const [priceBreakdown, setPriceBreakdown] = useState<PriceBreakdown | null>(null);
 
   // Daum Postcode 스크립트 로드
@@ -142,18 +144,59 @@ export default function NewErrandPage() {
     }
   }, []);
 
-  // 거리 계산 및 가격 업데이트
+  // 도로 거리 계산 (카카오 모빌리티 API)
+  const fetchRoadDistance = useCallback(async () => {
+    if (!pickup.lat || !pickup.lng || !delivery.lat || !delivery.lng) {
+      setDistance(0);
+      setEstimatedDuration(0);
+      return;
+    }
+
+    setDistanceLoading(true);
+    try {
+      const response = await fetch('/api/address/directions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          originLat: pickup.lat,
+          originLng: pickup.lng,
+          destLat: delivery.lat,
+          destLng: delivery.lng,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setDistance(data.distanceKm);
+        setEstimatedDuration(data.durationMin);
+      } else {
+        // API 오류 시 직선 거리 × 1.4 보정계수 적용
+        const straightDist = calculateDistance(pickup.lat, pickup.lng, delivery.lat, delivery.lng);
+        setDistance(Math.round(straightDist * 1.4 * 10) / 10);
+        setEstimatedDuration(Math.round(((straightDist * 1.4) / 30) * 60));
+      }
+    } catch (err) {
+      logger.error('도로 거리 계산 실패:', err);
+      // 오류 시 직선 거리 × 1.4 보정계수 적용
+      const straightDist = calculateDistance(pickup.lat, pickup.lng, delivery.lat, delivery.lng);
+      setDistance(Math.round(straightDist * 1.4 * 10) / 10);
+      setEstimatedDuration(Math.round(((straightDist * 1.4) / 30) * 60));
+    } finally {
+      setDistanceLoading(false);
+    }
+  }, [pickup.lat, pickup.lng, delivery.lat, delivery.lng]);
+
+  // 거리 계산 및 날씨 조회
   useEffect(() => {
     if (pickup.lat && pickup.lng && delivery.lat && delivery.lng) {
-      const dist = calculateDistance(pickup.lat, pickup.lng, delivery.lat, delivery.lng);
-      setDistance(dist);
-
+      fetchRoadDistance();
       // 출발지 기준 날씨 조회
       fetchWeather(pickup.lat, pickup.lng);
     } else {
       setDistance(0);
+      setEstimatedDuration(0);
     }
-  }, [pickup.lat, pickup.lng, delivery.lat, delivery.lng, fetchWeather]);
+  }, [pickup.lat, pickup.lng, delivery.lat, delivery.lng, fetchRoadDistance, fetchWeather]);
 
   // 가격 계산
   useEffect(() => {
@@ -437,12 +480,26 @@ export default function NewErrandPage() {
             </div>
 
             {/* 거리 표시 */}
-            {distance > 0 && (
-              <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg">
-                <MapPin className="w-4 h-4 text-gray-500" />
-                <span className="text-sm text-gray-600">
-                  예상 거리: <strong>{distance.toFixed(1)}km</strong>
-                </span>
+            {(distance > 0 || distanceLoading) && (
+              <div className="flex items-center gap-4 px-4 py-2.5 bg-gray-100 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-gray-500" />
+                  {distanceLoading ? (
+                    <span className="text-sm text-gray-500">거리 계산 중...</span>
+                  ) : (
+                    <span className="text-sm text-gray-600">
+                      도로 거리: <strong className="text-blue-600">{distance.toFixed(1)}km</strong>
+                    </span>
+                  )}
+                </div>
+                {!distanceLoading && estimatedDuration > 0 && (
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-gray-500" />
+                    <span className="text-sm text-gray-600">
+                      예상: <strong className="text-blue-600">{estimatedDuration}분</strong>
+                    </span>
+                  </div>
+                )}
               </div>
             )}
 

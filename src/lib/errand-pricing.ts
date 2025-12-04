@@ -87,9 +87,12 @@ export const calculateErrandPrice = (factors: PriceFactors): PriceBreakdown => {
   };
 };
 
-// 현재 시간대 판별
+// 현재 시간대 판별 (한국 시간 KST 기준)
 export const getCurrentTimeCondition = (): TimeCondition => {
-  const hour = new Date().getHours();
+  // 한국 시간으로 변환 (UTC+9)
+  const now = new Date();
+  const koreaTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+  const hour = koreaTime.getHours();
 
   // 심야: 22시~6시
   if (hour >= 22 || hour < 6) {
