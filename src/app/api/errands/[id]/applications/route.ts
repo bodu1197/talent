@@ -20,14 +20,21 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: '로그인이 필요합니다' }, { status: 401 });
     }
 
-    // 심부름 요청자인지 확인
+    // 현재 사용자의 profile.id 조회
+    const { data: userProfile } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('user_id', user.id)
+      .single();
+
+    // 심부름 요청자인지 확인 (requester_id는 profiles.id)
     const { data: errand } = await supabase
       .from('errands')
       .select('requester_id')
       .eq('id', id)
       .single();
 
-    if (!errand || errand.requester_id !== user.id) {
+    if (!errand || !userProfile || errand.requester_id !== userProfile.id) {
       return NextResponse.json({ error: '조회 권한이 없습니다' }, { status: 403 });
     }
 
@@ -43,7 +50,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
           total_completed,
           total_reviews,
           bio,
-          user:profiles(id, name, avatar_url)
+          user:profiles(id, name, profile_image)
         )
       `
       )
@@ -100,6 +107,13 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       );
     }
 
+    // 현재 사용자의 profile.id 조회
+    const { data: userProfile } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('user_id', user.id)
+      .single();
+
     // 심부름 상태 확인
     const { data: errand } = await supabase.from('errands').select('*').eq('id', id).single();
 
@@ -111,7 +125,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: '이미 마감된 심부름입니다' }, { status: 400 });
     }
 
-    if (errand.requester_id === user.id) {
+    // requester_id는 profiles.id이므로 userProfile.id와 비교
+    if (userProfile && errand.requester_id === userProfile.id) {
       return NextResponse.json(
         { error: '본인이 등록한 심부름에는 지원할 수 없습니다' },
         { status: 400 }

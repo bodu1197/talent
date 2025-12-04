@@ -69,8 +69,10 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
           code: userError.code,
         });
         // 에러 발생 시 기본 프로필 설정 (SNS 아바타 포함)
+        // Note: profiles.id를 알 수 없으므로 빈 문자열로 설정
+        // 이 경우 FK 참조가 필요한 기능(심부름 등)은 사용 불가
         setProfile({
-          id: userId,
+          id: '', // profiles.id를 알 수 없음
           email: '',
           name: 'User',
           profile_image: snsAvatarUrl,
@@ -81,7 +83,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
           is_buyer: true,
           is_seller: false,
         });
-        logger.warn('[AuthProvider] Set fallback profile due to error');
+        logger.warn('[AuthProvider] Set fallback profile due to error (profile.id unavailable)');
         return;
       }
 
@@ -101,16 +103,15 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
         .maybeSingle();
       const isSeller = !!sellerData;
 
-      // profiles 테이블의 user_id를 제외하고 userId를 id로 사용
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Destructuring to exclude user_id and id from profileFields
-      const { user_id, id, ...profileFields } = userData as Record<string, unknown>;
+      // profiles 테이블에서 가져온 id를 그대로 사용 (FK 참조에 필요)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Destructuring to exclude user_id from profileFields
+      const { user_id, ...profileFields } = userData as Record<string, unknown>;
 
       // profile_image가 없으면 SNS 아바타 사용
       const profileImage = (profileFields.profile_image as string) || snsAvatarUrl;
 
       const profileData = {
         ...profileFields,
-        id: userId, // user의 id를 profile id로 사용
         profile_image: profileImage,
         is_buyer: isBuyer,
         is_seller: isSeller,
@@ -126,8 +127,9 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
       logger.error('[AuthProvider] Profile fetch error:', error);
 
       // 에러 시 fallback 프로필 설정
+      // Note: profiles.id를 알 수 없으므로 빈 문자열로 설정
       setProfile({
-        id: userId,
+        id: '', // profiles.id를 알 수 없음
         email: '',
         name: 'User',
         email_verified: false,
