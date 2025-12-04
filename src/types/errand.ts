@@ -94,6 +94,11 @@ export interface ErrandMessage {
   };
 }
 
+// 스마트 요금 관련 타입
+export type WeatherCondition = 'CLEAR' | 'RAIN' | 'SNOW' | 'EXTREME';
+export type TimeCondition = 'DAY' | 'LATE_NIGHT' | 'RUSH_HOUR';
+export type WeightClass = 'LIGHT' | 'MEDIUM' | 'HEAVY';
+
 // API Request/Response Types
 export interface CreateErrandRequest {
   title: string;
@@ -107,6 +112,12 @@ export interface CreateErrandRequest {
   delivery_lng?: number;
   tip?: number;
   scheduled_at?: string;
+  // 스마트 요금 계산 필드
+  estimated_price?: number;
+  distance_km?: number;
+  weather_condition?: WeatherCondition;
+  time_condition?: TimeCondition;
+  weight_class?: WeightClass;
 }
 
 export interface ApplyErrandRequest {
@@ -134,12 +145,20 @@ export const ERRAND_STATUS_LABELS: Record<ErrandStatus, string> = {
   CANCELLED: '취소됨',
 };
 
-// Pricing Constants
+// Pricing Constants (스마트 요금과 일치)
 export const ERRAND_PRICING = {
-  BASE_PRICE: 5000, // 기본 요금
-  PRICE_PER_KM: 1000, // km당 추가 요금
-  MIN_PRICE: 5000, // 최소 요금
+  BASE_PRICE: 3000, // 기본 요금
+  PRICE_PER_KM: 1200, // km당 추가 요금
+  MIN_PRICE: 3000, // 최소 요금
   SUBSCRIPTION_FEE: 30000, // 월 구독료
+  // 할증
+  WEATHER_RAIN_MULTIPLIER: 1.2, // 비 20%
+  WEATHER_SNOW_MULTIPLIER: 1.4, // 눈 40%
+  WEATHER_EXTREME_MULTIPLIER: 1.5, // 극한 50%
+  TIME_LATE_NIGHT_SURCHARGE: 5000, // 심야 (22시~6시)
+  TIME_RUSH_HOUR_SURCHARGE: 2000, // 출퇴근 (7-9시, 18-20시)
+  WEIGHT_MEDIUM_SURCHARGE: 2000, // 보통 무게
+  WEIGHT_HEAVY_SURCHARGE: 10000, // 무거운 물품
 };
 
 // Helper Types
