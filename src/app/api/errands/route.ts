@@ -2,7 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { logServerError } from '@/lib/rollbar/server';
 import type { ErrandCategory, ErrandStatus, CreateErrandRequest } from '@/types/errand';
-import { ERRAND_PRICING } from '@/types/errand';
+import {
+  calculateErrandPrice,
+  calculateDistance,
+  getCurrentTimeCondition,
+} from '@/lib/errand-pricing';
+import type { WeatherCondition, TimeCondition, WeightClass } from '@/lib/errand-pricing';
 
 // 심부름 목록 조회
 export async function GET(request: NextRequest) {
@@ -106,29 +111,39 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '카테고리를 선택해주세요' }, { status: 400 });
     }
 
-    // 거리 기반 가격 계산
-    let distancePrice = 0;
-    let estimatedDistance = null;
+    // 거리 계산
+    let estimatedDistance = 0;
 
     if (body.pickup_lat && body.pickup_lng && body.delivery_lat && body.delivery_lng) {
-      // 간단한 거리 계산 (Haversine formula)
-      const R = 6371; // 지구 반경 (km)
-      const dLat = ((body.delivery_lat - body.pickup_lat) * Math.PI) / 180;
-      const dLng = ((body.delivery_lng - body.pickup_lng) * Math.PI) / 180;
-      const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos((body.pickup_lat * Math.PI) / 180) *
-          Math.cos((body.delivery_lat * Math.PI) / 180) *
-          Math.sin(dLng / 2) *
-          Math.sin(dLng / 2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      estimatedDistance = Math.round(R * c * 100) / 100; // km, 소수점 2자리
-
-      // 거리 요금 계산
-      distancePrice = Math.round(estimatedDistance * ERRAND_PRICING.PRICE_PER_KM);
+      estimatedDistance = calculateDistance(
+        body.pickup_lat,
+        body.pickup_lng,
+        body.delivery_lat,
+        body.delivery_lng
+      );
     }
 
-    const totalPrice = ERRAND_PRICING.BASE_PRICE + distancePrice + (body.tip || 0);
+    // 클라이언트에서 전달된 요금 정보 사용 (검증 포함)
+    const weather: WeatherCondition = body.weather_condition || 'CLEAR';
+    const timeOfDay: TimeCondition = body.time_condition || getCurrentTimeCondition();
+    const weight: WeightClass = body.weight_class || 'LIGHT';
+
+    // 서버에서도 가격 계산하여 검증
+    const priceBreakdown = calculateErrandPrice({
+      distance: body.distance_km || estimatedDistance,
+      weather,
+      timeOfDay,
+      weight,
+    });
+
+    // 클라이언트 가격과 서버 가격 비교 (10% 이내 차이 허용)
+    const clientPrice = body.estimated_price || 0;
+    const serverPrice = priceBreakdown.totalPrice;
+    const priceDiff = Math.abs(clientPrice - serverPrice);
+    const totalPrice = priceDiff <= serverPrice * 0.1 ? clientPrice : serverPrice;
+
+    // 팁 추가
+    const finalPrice = totalPrice + (body.tip || 0);
 
     // 심부름 생성
     const { data: errand, error } = await supabase
@@ -144,11 +159,11 @@ export async function POST(request: NextRequest) {
         delivery_address: body.delivery_address.trim(),
         delivery_lat: body.delivery_lat || null,
         delivery_lng: body.delivery_lng || null,
-        estimated_distance: estimatedDistance,
-        base_price: ERRAND_PRICING.BASE_PRICE,
-        distance_price: distancePrice,
+        estimated_distance: estimatedDistance || null,
+        base_price: priceBreakdown.basePrice,
+        distance_price: priceBreakdown.distancePrice,
         tip: body.tip || 0,
-        total_price: totalPrice,
+        total_price: finalPrice,
         status: 'OPEN',
         scheduled_at: body.scheduled_at || null,
       })
