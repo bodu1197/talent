@@ -316,6 +316,14 @@ export async function POST(request: NextRequest) {
     // 다중 배달인 경우 정차지 저장
     await saveErrandStops(supabase, body, errand.id);
 
+    // 활성 헬퍼들에게 알림 발송 (비동기로 처리, 실패해도 심부름 등록은 성공)
+    sendNewErrandNotifications(supabase, errand).catch((err) => {
+      logServerError(err instanceof Error ? err : new Error(String(err)), {
+        context: 'errand_notification_error',
+        errand_id: errand.id,
+      });
+    });
+
     return NextResponse.json({ errand }, { status: 201 });
   } catch (error) {
     logServerError(error instanceof Error ? error : new Error(String(error)), {
@@ -415,4 +423,46 @@ async function getOrCreateProfile(
   }
 
   return null;
+}
+
+// 새 심부름 알림 발송 (활성 헬퍼들에게)
+interface ErrandForNotification {
+  id: string;
+  title: string;
+  category: ErrandCategory;
+  total_price: number;
+  pickup_address: string;
+}
+
+async function sendNewErrandNotifications(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  errand: ErrandForNotification
+): Promise<void> {
+  // 활성 헬퍼들 조회 (구독 상태가 active 또는 trial인 헬퍼)
+  const { data: activeHelpers, error: helpersError } = await supabase
+    .from('helper_profiles')
+    .select('user_id')
+    .eq('is_active', true)
+    .in('subscription_status', ['active', 'trial'])
+    .limit(100);
+
+  if (helpersError || !activeHelpers?.length) return;
+
+  const categoryLabel = errand.category === 'DELIVERY' ? '배달' : '구매대행';
+  const notifications = activeHelpers.map((helper) => ({
+    user_id: helper.user_id,
+    type: 'new_errand',
+    title: '새로운 심부름이 등록되었습니다!',
+    message: `[${categoryLabel}] ${errand.title} - ${errand.total_price?.toLocaleString()}원`,
+    link: `/errands/${errand.id}`,
+    is_read: false,
+    data: {
+      errand_id: errand.id,
+      category: errand.category,
+      pickup_address: errand.pickup_address,
+    },
+  }));
+
+  const { error: notifyError } = await supabase.from('notifications').insert(notifications);
+  if (notifyError) throw notifyError;
 }
