@@ -95,6 +95,13 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: '로그인이 필요합니다' }, { status: 401 });
     }
 
+    // 현재 사용자의 profile.id 조회
+    const { data: userProfile } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('user_id', user.id)
+      .single();
+
     // 심부름 조회 및 권한 확인
     const { data: errand } = await supabase.from('errands').select('*').eq('id', id).single();
 
@@ -102,7 +109,8 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: '심부름을 찾을 수 없습니다' }, { status: 404 });
     }
 
-    if (errand.requester_id !== user.id) {
+    // requester_id는 profiles.id이므로 userProfile.id와 비교
+    if (!userProfile || errand.requester_id !== userProfile.id) {
       return NextResponse.json({ error: '수락 권한이 없습니다' }, { status: 403 });
     }
 
@@ -110,7 +118,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: '이미 진행중인 심부름입니다' }, { status: 400 });
     }
 
-    // 지원 조회
+    // 지원 조회 (helper_profiles.user_id를 가져옴)
     const { data: application } = await supabase
       .from('errand_applications')
       .select('*, helper:helper_profiles(user_id)')
@@ -134,7 +142,23 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     if (action === 'accept') {
-      return handleAcceptApplication(supabase, id, appId, application.helper?.user_id);
+      // helper_profiles.user_id로 profiles.id 조회
+      const helperUserId = application.helper?.user_id;
+      if (!helperUserId) {
+        return NextResponse.json({ error: '헬퍼 정보를 찾을 수 없습니다' }, { status: 400 });
+      }
+
+      const { data: helperProfile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('user_id', helperUserId)
+        .single();
+
+      if (!helperProfile) {
+        return NextResponse.json({ error: '헬퍼 프로필을 찾을 수 없습니다' }, { status: 400 });
+      }
+
+      return handleAcceptApplication(supabase, id, appId, helperProfile.id);
     }
 
     return handleRejectApplication(supabase, appId);
