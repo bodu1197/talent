@@ -81,6 +81,7 @@ export default function HelperDashboardPage() {
 
   const getGradeLabel = (grade: string) => {
     const gradeMap: Record<string, string> = {
+      NEWBIE: '뉴비',
       BRONZE: '브론즈',
       SILVER: '실버',
       GOLD: '골드',
@@ -92,6 +93,7 @@ export default function HelperDashboardPage() {
 
   const getGradeColor = (grade: string) => {
     const colorMap: Record<string, string> = {
+      NEWBIE: 'text-green-600 bg-green-100',
       BRONZE: 'text-amber-700 bg-amber-100',
       SILVER: 'text-gray-600 bg-gray-200',
       GOLD: 'text-yellow-600 bg-yellow-100',
