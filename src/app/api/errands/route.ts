@@ -77,6 +77,9 @@ function buildDeliveryPriceData(
       is_multi_stop: true,
       total_stops: totalStops,
       stop_fee: breakdown.stopFee,
+      // 구매대행 필드 (배달에서는 0)
+      range_fee: 0,
+      item_fee: 0,
     };
   }
 
@@ -89,6 +92,9 @@ function buildDeliveryPriceData(
     is_multi_stop: false,
     total_stops: 1,
     stop_fee: 0,
+    // 구매대행 필드 (배달에서는 0)
+    range_fee: 0,
+    item_fee: 0,
   };
 }
 
@@ -119,9 +125,16 @@ function buildShoppingPriceData(
   const tip = body.tip || 0;
 
   return {
+    // 배달 필드 (구매대행에서도 필요)
+    estimated_distance: estimatedDistance || null,
+    is_multi_stop: false,
+    total_stops: 1,
+    stop_fee: 0,
+    // 공통 가격 필드
     base_price: breakdown.basePrice,
     distance_price: breakdown.distancePrice,
     total_price: calculateFinalPrice(clientPrice, breakdown.totalPrice, tip),
+    // 구매대행 전용 필드
     shopping_range: range,
     shopping_items: items,
     range_fee: breakdown.rangeFee,
