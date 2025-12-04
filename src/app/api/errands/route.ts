@@ -384,12 +384,13 @@ async function getOrCreateProfile(
 
   // PGRST116은 "no rows returned" 에러 - 프로필이 없음
   if (profileError?.code === 'PGRST116' || !existingProfile) {
+    // profiles 테이블 스키마: id, user_id, name, profile_image, bio, role, created_at, updated_at
+    // email 컬럼은 profiles 테이블에 존재하지 않음 (auth.users에만 있음)
     const { data: newProfile, error: createError } = await supabase
       .from('profiles')
       .insert({
         user_id: user.id,
         name: user.user_metadata?.name || user.email?.split('@')[0] || '사용자',
-        email: user.email,
       })
       .select('id')
       .single();
