@@ -148,8 +148,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       .select(
         `
         *,
-        requester:profiles!errands_requester_id_fkey(id, name, avatar_url, phone),
-        helper:profiles!errands_helper_id_fkey(id, name, avatar_url, phone)
+        requester:profiles!errands_requester_id_fkey(id, name, profile_image),
+        helper:profiles!errands_helper_id_fkey(id, name, profile_image)
       `
       )
       .eq('id', id)
@@ -176,7 +176,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
             grade,
             average_rating,
             total_completed,
-            user:profiles(id, name, avatar_url)
+            user:profiles(id, name, profile_image)
           )
         `
         )

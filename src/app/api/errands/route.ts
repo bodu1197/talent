@@ -166,8 +166,8 @@ export async function GET(request: NextRequest) {
       .select(
         `
         *,
-        requester:profiles!errands_requester_id_fkey(id, name, avatar_url),
-        helper:profiles!errands_helper_id_fkey(id, name, avatar_url)
+        requester:profiles!errands_requester_id_fkey(id, name, profile_image),
+        helper:profiles!errands_helper_id_fkey(id, name, profile_image)
       `,
         { count: 'exact' }
       )
