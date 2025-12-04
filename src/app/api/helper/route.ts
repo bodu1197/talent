@@ -15,14 +15,11 @@ export async function GET() {
       return NextResponse.json({ error: '로그인이 필요합니다' }, { status: 401 });
     }
 
+    // helper_profiles와 profiles 모두 user_id가 auth.users.id를 참조
+    // 별도로 profiles 정보 조회
     const { data: helperProfile, error } = await supabase
       .from('helper_profiles')
-      .select(
-        `
-        *,
-        user:profiles(id, name, avatar_url, phone, email)
-      `
-      )
+      .select('*')
       .eq('user_id', user.id)
       .single();
 
