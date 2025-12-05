@@ -151,7 +151,7 @@ export default function Header() {
                           role="menuitem"
                         >
                           <Bike className="inline w-4 h-4 mr-2" aria-hidden="true" />
-                          심부름꾼
+                          라이더
                         </Link>
                       </>
                     ) : (

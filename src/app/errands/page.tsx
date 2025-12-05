@@ -265,7 +265,7 @@ export default function ErrandsPage() {
                   <span className="text-green-400 transition-all duration-500 inline-block min-w-[2ch] tabular-nums">
                     {totalCount}
                   </span>
-                  명의 헬퍼가
+                  명의 라이더가
                   <br />
                   대기하고 있어요
                 </h1>

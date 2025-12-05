@@ -247,7 +247,7 @@ export default function ErrandMypageLayout({ children, mode }: ErrandMypageLayou
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  심부름꾼
+                  라이더
                 </Link>
               </div>
             </div>
@@ -342,7 +342,7 @@ export default function ErrandMypageLayout({ children, mode }: ErrandMypageLayou
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  심부름꾼
+                  라이더
                 </Link>
               </div>
             </div>

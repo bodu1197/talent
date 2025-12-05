@@ -128,7 +128,7 @@ export default function ErrandRequesterDashboard() {
             </div>
             <div>
               <p className="font-bold">새 심부름 요청하기</p>
-              <p className="text-sm text-blue-100">배달, 구매대행, 줄서기 등</p>
+              <p className="text-sm text-blue-100">배달, 구매대행 등</p>
             </div>
           </div>
           <ChevronRight className="w-6 h-6" />

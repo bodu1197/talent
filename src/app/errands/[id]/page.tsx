@@ -460,7 +460,7 @@ export default function ErrandDetailPage() {
           {/* 헬퍼 정보 */}
           {errand.helper && (
             <div className="p-6 border-b border-gray-100">
-              <h2 className="text-sm font-medium text-gray-500 mb-4">헬퍼</h2>
+              <h2 className="text-sm font-medium text-gray-500 mb-4">라이더</h2>
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
                   {errand.helper?.avatar_url || errand.helper?.profile_image ? (
@@ -656,31 +656,45 @@ export default function ErrandDetailPage() {
               )}
 
               {/* 헬퍼 지원하기 버튼 - 헬퍼 프로필이 없는 경우 */}
-              {!isRequester && !isHelper && errand.status === 'OPEN' && user && !hasHelperProfile && (
-                <Link
-                  href="/mypage/helper/register"
-                  className="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition font-medium"
-                >
-                  심부름꾼 등록 후 지원하기
-                </Link>
-              )}
+              {!isRequester &&
+                !isHelper &&
+                errand.status === 'OPEN' &&
+                user &&
+                !hasHelperProfile && (
+                  <Link
+                    href="/mypage/helper/register"
+                    className="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition font-medium"
+                  >
+                    라이더 등록 후 지원하기
+                  </Link>
+                )}
 
               {/* 헬퍼 지원하기 버튼 - 헬퍼 프로필이 있고 이미 지원한 경우 */}
-              {!isRequester && !isHelper && errand.status === 'OPEN' && user && hasHelperProfile && hasApplied && (
-                <span className="px-4 py-2 bg-gray-100 text-gray-500 rounded-lg">
-                  이미 지원함
-                </span>
-              )}
+              {!isRequester &&
+                !isHelper &&
+                errand.status === 'OPEN' &&
+                user &&
+                hasHelperProfile &&
+                hasApplied && (
+                  <span className="px-4 py-2 bg-gray-100 text-gray-500 rounded-lg">
+                    이미 지원함
+                  </span>
+                )}
 
               {/* 헬퍼 지원하기 버튼 - 헬퍼 프로필이 있고 아직 지원하지 않은 경우 */}
-              {!isRequester && !isHelper && errand.status === 'OPEN' && user && hasHelperProfile && !hasApplied && (
-                <Link
-                  href={`/errands/${id}/apply`}
-                  className="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition font-medium"
-                >
-                  심부름 지원하기
-                </Link>
-              )}
+              {!isRequester &&
+                !isHelper &&
+                errand.status === 'OPEN' &&
+                user &&
+                hasHelperProfile &&
+                !hasApplied && (
+                  <Link
+                    href={`/errands/${id}/apply`}
+                    className="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition font-medium"
+                  >
+                    심부름 지원하기
+                  </Link>
+                )}
 
               {/* 비로그인 사용자 */}
               {!user && errand.status === 'OPEN' && (

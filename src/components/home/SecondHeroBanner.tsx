@@ -363,7 +363,7 @@ export default function SecondHeroBanner() {
                   <span className="text-green-400 transition-all duration-500 inline-block min-w-[3ch] tabular-nums">
                     {totalCount}
                   </span>
-                  명의 헬퍼 전문가가
+                  명의 라이더가
                   <br />
                   대기하고 있어요
                 </h2>

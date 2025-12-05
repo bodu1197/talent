@@ -260,7 +260,7 @@ const buyerNavItems: NavItem[] = [
 
 const helperNavItems: NavItem[] = [
   {
-    label: '심부름꾼 대시보드',
+    label: '라이더 대시보드',
     href: '/mypage/helper/dashboard',
     icon: 'fa-chart-pie',
   },
@@ -312,12 +312,12 @@ const helperNavItems: NavItem[] = [
     icon: 'fa-file-check',
   },
   {
-    label: '심부름꾼 정보',
+    label: '라이더 정보',
     href: '/mypage/helper/profile',
     icon: 'fa-id-card',
   },
   {
-    label: '심부름꾼 등록',
+    label: '라이더 등록',
     href: '/mypage/helper/register',
     icon: 'fa-user-plus',
   },
@@ -338,7 +338,7 @@ const getProfileHref = (mode: UserRole) => {
 // 모드별 프로필 텍스트 결정
 const getProfileText = (mode: UserRole) => {
   if (mode === 'seller') return '전문가 프로필';
-  if (mode === 'helper') return '심부름꾼 프로필';
+  if (mode === 'helper') return '라이더 프로필';
   return '프로필 설정';
 };
 
@@ -358,7 +358,7 @@ export default function Sidebar({
   };
 
   // 전문가 모드에서 등록 완료 시 "전문가 등록" 메뉴 숨김
-  // 심부름꾼 모드에서 등록 완료 시 "심부름꾼 등록" 메뉴 숨김
+  // 라이더 모드에서 등록 완료 시 "라이더 등록" 메뉴 숨김
   const navItems = getNavItems().filter((item) => {
     if (mode === 'seller' && isRegisteredSeller && item.href === '/mypage/seller/register') {
       return false;

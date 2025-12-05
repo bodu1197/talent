@@ -113,7 +113,7 @@ export default function MobileMyPageNav({ currentRole, onRoleChange, isSeller: _
             currentRole === 'helper' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-500'
           }`}
         >
-          심부름꾼
+          라이더
         </button>
       </div>
 
