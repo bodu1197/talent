@@ -186,7 +186,7 @@ export default function ErrandDetailPage() {
         return;
       }
 
-      router.push('/errands');
+      router.push('/errands/mypage');
     } catch {
       alert('네트워크 오류가 발생했습니다');
     } finally {
@@ -588,6 +588,25 @@ export default function ErrandDetailPage() {
                 >
                   심부름 취소
                 </button>
+              )}
+
+              {/* 취소된 심부름 - 삭제/재요청 */}
+              {isRequester && errand.status === 'CANCELLED' && (
+                <>
+                  <button
+                    onClick={handleDelete}
+                    disabled={actionLoading}
+                    className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition disabled:opacity-50"
+                  >
+                    삭제
+                  </button>
+                  <Link
+                    href="/errands/new"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                  >
+                    재요청
+                  </Link>
+                </>
               )}
 
               {/* 헬퍼 액션 */}

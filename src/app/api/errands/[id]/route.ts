@@ -349,10 +349,10 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: '삭제 권한이 없습니다' }, { status: 403 });
     }
 
-    // OPEN 상태에서만 삭제 가능
-    if (currentErrand.status !== 'OPEN') {
+    // OPEN 또는 CANCELLED 상태에서만 삭제 가능
+    if (!['OPEN', 'CANCELLED'].includes(currentErrand.status)) {
       return NextResponse.json(
-        { error: '진행중인 심부름은 삭제할 수 없습니다. 취소를 이용해주세요.' },
+        { error: '진행중인 심부름은 삭제할 수 없습니다. 취소를 먼저 진행해주세요.' },
         { status: 400 }
       );
     }
