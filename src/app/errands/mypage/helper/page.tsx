@@ -134,7 +134,7 @@ export default function ErrandHelperDashboard() {
               <br />첫 달은 무료로 체험할 수 있습니다.
             </p>
             <Link
-              href="/mypage/helper/register"
+              href="/errands/register"
               className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium"
             >
               라이더 등록하기

@@ -265,7 +265,7 @@ export default function Header() {
                 return (
                   <>
                     <Link
-                      href={isErrandsPage ? '/mypage/helper/register' : '/expert/register'}
+                      href={isErrandsPage ? '/errands/register' : '/expert/register'}
                       className="px-3 py-1.5 text-gray-700 hover:text-gray-900 font-medium text-sm"
                       aria-label={isErrandsPage ? '라이더로 등록하기' : '전문가로 등록하기'}
                     >
