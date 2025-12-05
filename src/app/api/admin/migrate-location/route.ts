@@ -1,5 +1,12 @@
 import { NextResponse } from 'next/server';
-import { createServiceRoleClient } from '@/lib/supabase/admin';
+import { createClient } from '@supabase/supabase-js';
+
+// Service Role 클라이언트 생성
+function createServiceRoleClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+  return createClient(supabaseUrl, supabaseServiceKey);
+}
 
 // POST /api/admin/migrate-location
 // 라이더 위치 추적용 DB 마이그레이션 실행
