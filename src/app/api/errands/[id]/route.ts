@@ -237,6 +237,17 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: '로그인이 필요합니다' }, { status: 401 });
     }
 
+    // 사용자 프로필 조회 (profiles.id 필요)
+    const { data: userProfile } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('user_id', user.id)
+      .single();
+
+    if (!userProfile) {
+      return NextResponse.json({ error: '프로필을 찾을 수 없습니다' }, { status: 404 });
+    }
+
     const body = await request.json();
 
     // 현재 심부름 조회
@@ -246,8 +257,8 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: '심부름을 찾을 수 없습니다' }, { status: 404 });
     }
 
-    // 권한 확인
-    const { isRequester, isHelper } = checkUserPermission(currentErrand, user.id);
+    // 권한 확인 (profiles.id로 비교)
+    const { isRequester, isHelper } = checkUserPermission(currentErrand, userProfile.id);
     if (!isRequester && !isHelper) {
       return NextResponse.json({ error: '수정 권한이 없습니다' }, { status: 403 });
     }
@@ -315,6 +326,17 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: '로그인이 필요합니다' }, { status: 401 });
     }
 
+    // 사용자 프로필 조회 (profiles.id 필요)
+    const { data: userProfile } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('user_id', user.id)
+      .single();
+
+    if (!userProfile) {
+      return NextResponse.json({ error: '프로필을 찾을 수 없습니다' }, { status: 404 });
+    }
+
     // 현재 심부름 조회
     const { errand: currentErrand, error: fetchError } = await fetchErrand(supabase, id);
     if (fetchError) return fetchError;
@@ -322,8 +344,8 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: '심부름을 찾을 수 없습니다' }, { status: 404 });
     }
 
-    // 권한 확인 (요청자만 삭제 가능)
-    if (currentErrand.requester_id !== user.id) {
+    // 권한 확인 (요청자만 삭제 가능) - profiles.id로 비교
+    if (currentErrand.requester_id !== userProfile.id) {
       return NextResponse.json({ error: '삭제 권한이 없습니다' }, { status: 403 });
     }
 
