@@ -1,9 +1,50 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 import { logServerError } from '@/lib/rollbar/server';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
+}
+
+// 요청자에게 알림 전송 헬퍼 함수
+async function sendApplicationNotification(
+  supabase: SupabaseClient,
+  serviceClient: ReturnType<typeof createServiceRoleClient>,
+  errandId: string,
+  errandTitle: string,
+  requesterId: string,
+  helperProfileId: string
+): Promise<void> {
+  // 요청자의 user_id 조회 (profiles.id -> profiles.user_id)
+  const { data: requesterProfile } = await supabase
+    .from('profiles')
+    .select('user_id')
+    .eq('id', requesterId)
+    .single();
+
+  // 라이더 이름 조회
+  const { data: helperInfo } = await supabase
+    .from('profiles')
+    .select('name')
+    .eq('id', helperProfileId)
+    .single();
+
+  if (requesterProfile?.user_id) {
+    await serviceClient.from('notifications').insert({
+      user_id: requesterProfile.user_id,
+      type: 'errand_application',
+      title: '새로운 라이더 지원',
+      message: `"${errandTitle}" 심부름에 ${helperInfo?.name || '라이더'}님이 지원했습니다.`,
+      link: `/errands/${errandId}`,
+      is_read: false,
+    });
+  }
+}
+
+// 구독 상태 확인 헬퍼 함수
+function isValidSubscription(status: string | null): boolean {
+  return status === 'active' || status === 'trial';
 }
 
 // 심부름 지원 목록 조회
@@ -97,10 +138,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     // 구독 상태 확인
-    if (
-      helperProfile.subscription_status !== 'active' &&
-      helperProfile.subscription_status !== 'trial'
-    ) {
+    if (!isValidSubscription(helperProfile.subscription_status)) {
       return NextResponse.json(
         { error: '구독이 만료되었습니다. 구독을 갱신해주세요.' },
         { status: 400 }
@@ -180,6 +218,21 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         },
         { status: 500 }
       );
+    }
+
+    // 요청자에게 알림 전송
+    try {
+      await sendApplicationNotification(
+        supabase,
+        serviceClient,
+        id,
+        errand.title,
+        errand.requester_id,
+        userProfile!.id
+      );
+    } catch (notifError) {
+      // 알림 실패해도 지원 자체는 성공으로 처리
+      console.error('[Notification Error]', notifError);
     }
 
     return NextResponse.json({ application }, { status: 201 });
