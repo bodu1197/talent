@@ -17,6 +17,8 @@ import {
   ChevronDown,
   Search,
   Heart,
+  Bike,
+  MapPin,
 } from 'lucide-react';
 
 export default function Header() {
@@ -117,13 +119,15 @@ export default function Header() {
             {user ? (
               // 로그인 상태
               <>
-                {/* 주문 관리 드롭다운 */}
+                {/* 주문/심부름 관리 드롭다운 */}
                 <div className="relative group">
                   <button
                     className="px-3 py-2 text-gray-700 hover:text-brand-primary transition-colors"
-                    aria-label="주문 관리"
+                    aria-label={pathname?.startsWith('/errands') ? '심부름 관리' : '주문 관리'}
                   >
-                    <span className="text-sm font-medium">주문 관리</span>
+                    <span className="text-sm font-medium">
+                      {pathname?.startsWith('/errands') ? '심부름 관리' : '주문 관리'}
+                    </span>
                   </button>
 
                   {/* 드롭다운 메뉴 */}
@@ -131,22 +135,45 @@ export default function Header() {
                     className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all"
                     role="menu"
                   >
-                    <Link
-                      href="/mypage/buyer/orders"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg"
-                      role="menuitem"
-                    >
-                      <ShoppingCart className="inline w-4 h-4 mr-2" aria-hidden="true" />
-                      구매 관리
-                    </Link>
-                    <Link
-                      href="/mypage/seller/orders"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-b-lg"
-                      role="menuitem"
-                    >
-                      <Package className="inline w-4 h-4 mr-2" aria-hidden="true" />
-                      판매 관리
-                    </Link>
+                    {pathname?.startsWith('/errands') ? (
+                      <>
+                        <Link
+                          href="/errands/mypage"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg"
+                          role="menuitem"
+                        >
+                          <MapPin className="inline w-4 h-4 mr-2" aria-hidden="true" />
+                          요청자
+                        </Link>
+                        <Link
+                          href="/errands/mypage/helper"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-b-lg"
+                          role="menuitem"
+                        >
+                          <Bike className="inline w-4 h-4 mr-2" aria-hidden="true" />
+                          심부름꾼
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        <Link
+                          href="/mypage/buyer/orders"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg"
+                          role="menuitem"
+                        >
+                          <ShoppingCart className="inline w-4 h-4 mr-2" aria-hidden="true" />
+                          구매 관리
+                        </Link>
+                        <Link
+                          href="/mypage/seller/orders"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-b-lg"
+                          role="menuitem"
+                        >
+                          <Package className="inline w-4 h-4 mr-2" aria-hidden="true" />
+                          판매 관리
+                        </Link>
+                      </>
+                    )}
                   </div>
                 </div>
 
