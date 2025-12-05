@@ -93,7 +93,7 @@ export default function ErrandApplyPage() {
       }
 
       // 성공 시 상세 페이지로 이동
-      alert('지원이 완료되었습니다!');
+      alert('심부름이 배정되었습니다! 바로 심부름을 시작할 수 있습니다.');
       router.push(`/errands/${id}`);
     } catch (err) {
       console.error('네트워크 오류:', err);
@@ -149,8 +149,8 @@ export default function ErrandApplyPage() {
     <ErrandMypageLayout mode="helper">
       <div className="p-4 lg:p-0">
         <div className="mb-6">
-          <h1 className="text-xl font-bold text-gray-900">심부름 지원</h1>
-          <p className="text-gray-600 mt-1">심부름에 지원하고 수익을 올려보세요</p>
+          <h1 className="text-xl font-bold text-gray-900">심부름 수락</h1>
+          <p className="text-gray-600 mt-1">심부름을 수락하고 수익을 올려보세요</p>
         </div>
 
         <div className="max-w-2xl">
@@ -177,9 +177,9 @@ export default function ErrandApplyPage() {
             </div>
           </div>
 
-          {/* 지원 폼 */}
+          {/* 수락 폼 */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-6">심부름 지원하기</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-6">심부름 수락하기</h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* 에러 메시지 */}
@@ -236,12 +236,12 @@ export default function ErrandApplyPage() {
               </div>
 
               {/* 안내 */}
-              <div className="bg-blue-50 rounded-xl p-4">
-                <h3 className="text-sm font-medium text-blue-800 mb-2">지원 안내</h3>
-                <ul className="text-sm text-blue-700 space-y-1">
-                  <li>• 요청자가 지원을 수락하면 심부름이 시작됩니다</li>
+              <div className="bg-green-50 rounded-xl p-4">
+                <h3 className="text-sm font-medium text-green-800 mb-2">수락 안내</h3>
+                <ul className="text-sm text-green-700 space-y-1">
+                  <li>• 수락하면 바로 심부름이 배정됩니다</li>
                   <li>• 심부름 완료 후 요금이 정산됩니다</li>
-                  <li>• 지원 후에도 취소가 가능합니다</li>
+                  <li>• 수락 후 취소 시 패널티가 있을 수 있습니다</li>
                 </ul>
               </div>
 
@@ -249,15 +249,15 @@ export default function ErrandApplyPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-4 bg-green-600 text-white rounded-xl font-bold text-lg hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {submitting ? (
                   <span className="flex items-center justify-center gap-2">
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    지원 중...
+                    수락 중...
                   </span>
                 ) : (
-                  '지원하기'
+                  '수락하기'
                 )}
               </button>
             </form>

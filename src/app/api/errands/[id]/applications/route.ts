@@ -7,8 +7,8 @@ interface RouteParams {
   params: Promise<{ id: string }>;
 }
 
-// 요청자에게 알림 전송 헬퍼 함수
-async function sendApplicationNotification(
+// 요청자에게 매칭 완료 알림 전송 헬퍼 함수
+async function sendMatchedNotification(
   supabase: SupabaseClient,
   serviceClient: ReturnType<typeof createServiceRoleClient>,
   errandId: string,
@@ -16,7 +16,7 @@ async function sendApplicationNotification(
   requesterId: string,
   helperProfileId: string
 ): Promise<void> {
-  console.log('[Application Notification] Starting...', { errandId, requesterId, helperProfileId });
+  console.log('[Match Notification] Starting...', { errandId, requesterId, helperProfileId });
 
   // 요청자의 user_id 조회 (profiles.id -> profiles.user_id)
   const { data: requesterProfile, error: requesterError } = await supabase
@@ -26,7 +26,7 @@ async function sendApplicationNotification(
     .single();
 
   if (requesterError) {
-    console.error('[Application Notification] Failed to get requester profile:', requesterError);
+    console.error('[Match Notification] Failed to get requester profile:', requesterError);
     return;
   }
 
@@ -38,28 +38,28 @@ async function sendApplicationNotification(
     .single();
 
   if (helperError) {
-    console.log('[Application Notification] Helper info not found:', helperError);
+    console.log('[Match Notification] Helper info not found:', helperError);
   }
 
   if (requesterProfile?.user_id) {
-    console.log('[Application Notification] Sending notification to user:', requesterProfile.user_id);
+    console.log('[Match Notification] Sending notification to user:', requesterProfile.user_id);
 
     const { error: notifyError } = await serviceClient.from('notifications').insert({
       user_id: requesterProfile.user_id,
-      type: 'errand_application',
-      title: '새로운 라이더 지원',
-      message: `"${errandTitle}" 심부름에 ${helperInfo?.name || '라이더'}님이 지원했습니다.`,
+      type: 'errand_matched',
+      title: '라이더가 배정되었습니다',
+      message: `"${errandTitle}" 심부름에 ${helperInfo?.name || '라이더'}님이 배정되었습니다.`,
       link: `/errands/${errandId}`,
       is_read: false,
     });
 
     if (notifyError) {
-      console.error('[Application Notification] Failed to insert notification:', notifyError);
+      console.error('[Match Notification] Failed to insert notification:', notifyError);
     } else {
-      console.log('[Application Notification] Successfully sent notification');
+      console.log('[Match Notification] Successfully sent notification');
     }
   } else {
-    console.log('[Application Notification] No requester user_id found, skipping notification');
+    console.log('[Match Notification] No requester user_id found, skipping notification');
   }
 }
 
@@ -206,9 +206,10 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     const body = await request.json();
 
-    // 지원 생성 - Service Role로 RLS 우회 (권한 체크는 위에서 완료됨)
-    // helper_id는 profiles.id를 참조 (FK 제약) - userProfile.id를 사용해야 함
+    // Service Role로 RLS 우회 (권한 체크는 위에서 완료됨)
     const serviceClient = createServiceRoleClient();
+
+    // 1. 지원 기록 생성 (바로 accepted 상태로)
     const { data: application, error } = await serviceClient
       .from('errand_applications')
       .insert({
@@ -216,7 +217,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         helper_id: userProfile!.id, // profiles.id (FK: errand_applications.helper_id -> profiles.id)
         message: body.message?.trim() || null,
         proposed_price: body.proposed_price || null,
-        status: 'pending',
+        status: 'accepted', // 바로 수락됨 상태
       })
       .select()
       .single();
@@ -241,9 +242,31 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // 요청자에게 알림 전송
+    // 2. 심부름 상태를 MATCHED로 변경하고 helper_id 설정
+    const { error: updateError } = await serviceClient
+      .from('errands')
+      .update({
+        status: 'MATCHED',
+        helper_id: userProfile!.id, // 라이더의 profiles.id
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id);
+
+    if (updateError) {
+      logServerError(updateError, {
+        context: 'errand_match',
+        errand_id: id,
+        helper_id: userProfile!.id,
+      });
+      console.error('[Errand Match Error]', updateError);
+      // 지원 기록 롤백
+      await serviceClient.from('errand_applications').delete().eq('id', application.id);
+      return NextResponse.json({ error: '매칭에 실패했습니다' }, { status: 500 });
+    }
+
+    // 3. 요청자에게 매칭 완료 알림 전송
     try {
-      await sendApplicationNotification(
+      await sendMatchedNotification(
         supabase,
         serviceClient,
         id,
@@ -252,11 +275,15 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         userProfile!.id
       );
     } catch (notifError) {
-      // 알림 실패해도 지원 자체는 성공으로 처리
+      // 알림 실패해도 매칭 자체는 성공으로 처리
       console.error('[Notification Error]', notifError);
     }
 
-    return NextResponse.json({ application }, { status: 201 });
+    return NextResponse.json({
+      application,
+      matched: true,
+      message: '심부름이 배정되었습니다!'
+    }, { status: 201 });
   } catch (error) {
     logServerError(error instanceof Error ? error : new Error(String(error)), {
       context: 'errand_apply_error',
