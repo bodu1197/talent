@@ -542,7 +542,7 @@ async function getOrCreateProfile(
   return null;
 }
 
-// 새 심부름 알림 발송 (활성 헬퍼들에게)
+// 새 심부름 알림 발송 (구독 라이더 전체에게)
 interface ErrandForNotification {
   id: string;
   title: string;
@@ -555,11 +555,11 @@ async function sendNewErrandNotifications(
   supabase: Awaited<ReturnType<typeof createClient>>,
   errand: ErrandForNotification
 ): Promise<void> {
-  // 활성 헬퍼들 조회 (구독 상태가 active 또는 trial인 헬퍼)
-  const { data: activeHelpers, error: helpersError } = await supabase
+  // 구독 상태가 active 또는 trial인 라이더 전체에게 알림 (is_active 무관)
+  // is_active는 위치 추적/활동 상태 표시용으로만 사용
+  const { data: subscribedHelpers, error: helpersError } = await supabase
     .from('helper_profiles')
     .select('user_id')
-    .eq('is_active', true)
     .in('subscription_status', ['active', 'trial'])
     .limit(100);
 
@@ -571,12 +571,12 @@ async function sendNewErrandNotifications(
     return;
   }
 
-  if (!activeHelpers?.length) {
+  if (!subscribedHelpers?.length) {
     return;
   }
 
   const categoryLabel = errand.category === 'DELIVERY' ? '배달' : '구매대행';
-  const notifications = activeHelpers.map((helper) => ({
+  const notifications = subscribedHelpers.map((helper) => ({
     user_id: helper.user_id,
     type: 'new_errand',
     title: '새로운 심부름이 등록되었습니다!',
