@@ -4,17 +4,38 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import {
-  ArrowLeft,
-  Send,
-  Loader2,
-  MessageCircle,
-  User,
-  Clock,
-  AlertCircle,
-} from 'lucide-react';
+import { ArrowLeft, Send, Loader2, MessageCircle, User, Clock, AlertCircle } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import ErrandMypageLayout from '@/components/errands/ErrandMypageLayout';
+
+// 실시간 메시지 처리 함수
+async function handleRealtimeMessage(
+  payload: { new: Message },
+  currentUserId: string | null,
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>
+) {
+  const newMsg = payload.new;
+
+  // 내가 보낸 메시지면 이미 추가되어 있으므로 무시
+  if (newMsg.sender_id === currentUserId) return;
+
+  // 발신자 정보 조회
+  const supabase = createClient();
+  const { data: sender } = await supabase
+    .from('profiles')
+    .select('id, name, profile_image')
+    .eq('id', newMsg.sender_id)
+    .single();
+
+  if (sender) {
+    const messageWithSender = { ...newMsg, sender };
+    setMessages((prev) => {
+      // 중복 방지
+      if (prev.some((m) => m.id === messageWithSender.id)) return prev;
+      return [...prev, messageWithSender];
+    });
+  }
+}
 
 interface Message {
   id: string;
@@ -155,28 +176,8 @@ export default function ErrandChatPage() {
           table: 'errand_chat_messages',
           filter: `errand_id=eq.${errandId}`,
         },
-        async (payload) => {
-          // 새 메시지가 도착하면 sender 정보와 함께 다시 조회
-          const newMsg = payload.new as Message;
-
-          // 내가 보낸 메시지면 이미 추가되어 있으므로 무시
-          if (newMsg.sender_id === currentUserId) return;
-
-          // 발신자 정보 조회
-          const { data: sender } = await supabase
-            .from('profiles')
-            .select('id, name, profile_image')
-            .eq('id', newMsg.sender_id)
-            .single();
-
-          if (sender) {
-            const messageWithSender = { ...newMsg, sender };
-            setMessages((prev) => {
-              // 중복 방지
-              if (prev.some((m) => m.id === messageWithSender.id)) return prev;
-              return [...prev, messageWithSender];
-            });
-          }
+        (payload) => {
+          handleRealtimeMessage(payload as { new: Message }, currentUserId, setMessages);
         }
       )
       .subscribe();
@@ -211,19 +212,29 @@ export default function ErrandChatPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'OPEN':
-        return <span className="px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full">대기중</span>;
+        return (
+          <span className="px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full">대기중</span>
+        );
       case 'MATCHED':
         return (
-          <span className="px-2 py-0.5 text-xs bg-green-100 text-green-700 rounded-full">매칭완료</span>
+          <span className="px-2 py-0.5 text-xs bg-green-100 text-green-700 rounded-full">
+            매칭완료
+          </span>
         );
       case 'IN_PROGRESS':
         return (
-          <span className="px-2 py-0.5 text-xs bg-yellow-100 text-yellow-700 rounded-full">진행중</span>
+          <span className="px-2 py-0.5 text-xs bg-yellow-100 text-yellow-700 rounded-full">
+            진행중
+          </span>
         );
       case 'COMPLETED':
-        return <span className="px-2 py-0.5 text-xs bg-gray-100 text-gray-700 rounded-full">완료</span>;
+        return (
+          <span className="px-2 py-0.5 text-xs bg-gray-100 text-gray-700 rounded-full">완료</span>
+        );
       case 'CANCELLED':
-        return <span className="px-2 py-0.5 text-xs bg-red-100 text-red-700 rounded-full">취소됨</span>;
+        return (
+          <span className="px-2 py-0.5 text-xs bg-red-100 text-red-700 rounded-full">취소됨</span>
+        );
       default:
         return null;
     }
@@ -334,7 +345,9 @@ export default function ErrandChatPage() {
 
                     {/* 메시지 버블 */}
                     <div className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
-                      {!isMe && <span className="text-xs text-gray-500 mb-1">{msg.sender.name}</span>}
+                      {!isMe && (
+                        <span className="text-xs text-gray-500 mb-1">{msg.sender.name}</span>
+                      )}
                       <div
                         className={`px-4 py-2.5 rounded-2xl ${
                           isMe
@@ -347,7 +360,9 @@ export default function ErrandChatPage() {
                       <div className="flex items-center gap-1 mt-1">
                         <Clock className="w-3 h-3 text-gray-400" />
                         <span className="text-xs text-gray-400">{formatTime(msg.created_at)}</span>
-                        {isMe && msg.is_read && <span className="text-xs text-blue-400 ml-1">읽음</span>}
+                        {isMe && msg.is_read && (
+                          <span className="text-xs text-blue-400 ml-1">읽음</span>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -373,7 +388,10 @@ export default function ErrandChatPage() {
             </p>
           </div>
         ) : (
-          <form onSubmit={sendMessage} className="flex items-center gap-2 px-4 py-3 border-t bg-white">
+          <form
+            onSubmit={sendMessage}
+            className="flex items-center gap-2 px-4 py-3 border-t bg-white"
+          >
             <input
               ref={inputRef}
               type="text"
