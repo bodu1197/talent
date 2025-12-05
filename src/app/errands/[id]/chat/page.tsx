@@ -177,7 +177,7 @@ export default function ErrandChatPage() {
           filter: `errand_id=eq.${errandId}`,
         },
         (payload) => {
-          handleRealtimeMessage(payload as { new: Message }, currentUserId, setMessages);
+          handleRealtimeMessage(payload as unknown as { new: Message }, currentUserId, setMessages);
         }
       )
       .subscribe();
