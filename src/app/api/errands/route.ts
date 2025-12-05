@@ -143,12 +143,7 @@ function buildShoppingPriceData(
 }
 
 // Haversine formula로 두 지점 간 거리 계산 (km)
-function haversineDistance(
-  lat1: number,
-  lng1: number,
-  lat2: number,
-  lng2: number
-): number {
+function haversineDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
   const R = 6371;
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
   const dLng = ((lng2 - lng1) * Math.PI) / 180;
@@ -162,25 +157,92 @@ function haversineDistance(
   return R * c;
 }
 
+// 심부름 목록 파라미터 파싱
+interface ErrandListParams {
+  status: ErrandStatus | null;
+  category: ErrandCategory | null;
+  limit: number;
+  offset: number;
+  mode: string | null;
+  helperLat: number;
+  helperLng: number;
+  sortBy: string;
+  maxDistance: number;
+}
+
+function parseErrandListParams(searchParams: URLSearchParams): ErrandListParams {
+  const statusParam = searchParams.get('status');
+  return {
+    status: statusParam && statusParam !== 'all' ? (statusParam as ErrandStatus) : null,
+    category: searchParams.get('category') as ErrandCategory | null,
+    limit: parseInt(searchParams.get('limit') || '20', 10),
+    offset: parseInt(searchParams.get('offset') || '0', 10),
+    mode: searchParams.get('mode'),
+    helperLat: parseFloat(searchParams.get('lat') || '0'),
+    helperLng: parseFloat(searchParams.get('lng') || '0'),
+    sortBy: searchParams.get('sort') || 'recent',
+    maxDistance: parseFloat(searchParams.get('maxDistance') || '0'),
+  };
+}
+
+// 심부름에 거리 정보 추가
+function addDistanceToErrands(
+  errands: Record<string, unknown>[],
+  helperLat: number,
+  helperLng: number
+): Record<string, unknown>[] {
+  return errands.map((errand) => {
+    const pickupLat = errand.pickup_lat as number | null;
+    const pickupLng = errand.pickup_lng as number | null;
+    let distance: number | null = null;
+
+    if (pickupLat && pickupLng) {
+      distance = haversineDistance(helperLat, helperLng, pickupLat, pickupLng);
+    }
+
+    return {
+      ...errand,
+      distance_km: distance ? Math.round(distance * 10) / 10 : null,
+    };
+  });
+}
+
+// 거리 기반 필터링 및 정렬
+function filterAndSortByDistance(
+  errands: Record<string, unknown>[],
+  maxDistance: number,
+  sortBy: string
+): Record<string, unknown>[] {
+  let result = errands;
+
+  // 최대 거리 필터링
+  if (maxDistance > 0) {
+    result = result.filter(
+      (errand) => errand.distance_km === null || (errand.distance_km as number) <= maxDistance
+    );
+  }
+
+  // 정렬
+  if (sortBy === 'distance') {
+    result.sort((a, b) => {
+      if (a.distance_km === null) return 1;
+      if (b.distance_km === null) return -1;
+      return (a.distance_km as number) - (b.distance_km as number);
+    });
+  } else if (sortBy === 'price') {
+    result.sort((a, b) => ((b.total_price as number) || 0) - ((a.total_price as number) || 0));
+  }
+
+  return result;
+}
+
 // 심부름 목록 조회
+// eslint-disable-next-line sonarjs/cognitive-complexity -- 목록 조회 필터링/정렬 로직으로 인한 예외 처리
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient();
     const { searchParams } = new URL(request.url);
-
-    // 필터 파라미터
-    const statusParam = searchParams.get('status');
-    const status = statusParam && statusParam !== 'all' ? (statusParam as ErrandStatus) : null;
-    const category = searchParams.get('category') as ErrandCategory | null;
-    const limit = parseInt(searchParams.get('limit') || '20', 10);
-    const offset = parseInt(searchParams.get('offset') || '0', 10);
-    const mode = searchParams.get('mode'); // 'my' for requester's errands, 'available' for helpers
-
-    // 위치 기반 파라미터 (라이더용)
-    const helperLat = parseFloat(searchParams.get('lat') || '0');
-    const helperLng = parseFloat(searchParams.get('lng') || '0');
-    const sortBy = searchParams.get('sort') || 'recent'; // 'recent' | 'distance' | 'price'
-    const maxDistance = parseFloat(searchParams.get('maxDistance') || '0'); // km, 0이면 제한 없음
+    const params = parseErrandListParams(searchParams);
 
     // 현재 사용자 확인
     const {
@@ -198,11 +260,10 @@ export async function GET(request: NextRequest) {
         { count: 'exact' }
       )
       .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1);
+      .range(params.offset, params.offset + params.limit - 1);
 
     // 모드별 필터링
-    if (mode === 'my' && user) {
-      // 내가 요청한 심부름 - profiles.id로 조회해야 함
+    if (params.mode === 'my' && user) {
       const { data: profile } = await supabase
         .from('profiles')
         .select('id')
@@ -212,19 +273,18 @@ export async function GET(request: NextRequest) {
       if (profile) {
         query = query.eq('requester_id', profile.id);
       }
-    } else if (mode === 'available') {
-      // 헬퍼가 지원 가능한 심부름 (OPEN 상태만)
+    } else if (params.mode === 'available') {
       query = query.eq('status', 'OPEN');
     }
 
     // 상태 필터
-    if (status) {
-      query = query.eq('status', status);
+    if (params.status) {
+      query = query.eq('status', params.status);
     }
 
     // 카테고리 필터
-    if (category) {
-      query = query.eq('category', category);
+    if (params.category) {
+      query = query.eq('category', params.category);
     }
 
     const { data: errands, error, count } = await query;
@@ -234,14 +294,13 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: '심부름 목록을 불러올 수 없습니다' }, { status: 500 });
     }
 
-    // 라이더 위치가 제공된 경우 거리 계산 및 정렬
-    let processedErrands = errands || [];
+    let processedErrands = (errands || []) as Record<string, unknown>[];
 
     // mode=my인 경우 각 심부름의 지원자 수 조회 (OPEN 상태만)
-    if (mode === 'my' && processedErrands.length > 0) {
+    if (params.mode === 'my' && processedErrands.length > 0) {
       const openErrandIds = processedErrands
         .filter((e) => e.status === 'OPEN')
-        .map((e) => e.id);
+        .map((e) => e.id as string);
 
       if (openErrandIds.length > 0) {
         const { data: applicationCounts } = await supabase
@@ -250,67 +309,33 @@ export async function GET(request: NextRequest) {
           .in('errand_id', openErrandIds)
           .eq('status', 'pending');
 
-        // 각 심부름별 지원자 수 계산
         const countMap: Record<string, number> = {};
         applicationCounts?.forEach((app) => {
           countMap[app.errand_id] = (countMap[app.errand_id] || 0) + 1;
         });
 
-        // processedErrands에 application_count 추가
         processedErrands = processedErrands.map((errand) => ({
           ...errand,
-          application_count: errand.status === 'OPEN' ? (countMap[errand.id] || 0) : 0,
+          application_count: errand.status === 'OPEN' ? countMap[errand.id as string] || 0 : 0,
         }));
       }
     }
 
-    if (helperLat && helperLng && mode === 'available') {
-      // 각 심부름에 거리 정보 추가
-      processedErrands = processedErrands.map((errand) => {
-        let distance: number | null = null;
-
-        // pickup 위치와 라이더 위치 간 거리 계산
-        if (errand.pickup_lat && errand.pickup_lng) {
-          distance = haversineDistance(
-            helperLat,
-            helperLng,
-            errand.pickup_lat,
-            errand.pickup_lng
-          );
-        }
-
-        return {
-          ...errand,
-          distance_km: distance ? Math.round(distance * 10) / 10 : null, // 소수점 1자리
-        };
-      });
-
-      // 최대 거리 필터링
-      if (maxDistance > 0) {
-        processedErrands = processedErrands.filter(
-          (errand) => errand.distance_km === null || errand.distance_km <= maxDistance
-        );
-      }
-
-      // 정렬
-      if (sortBy === 'distance') {
-        processedErrands.sort((a, b) => {
-          // 거리 정보가 없는 경우 맨 뒤로
-          if (a.distance_km === null) return 1;
-          if (b.distance_km === null) return -1;
-          return a.distance_km - b.distance_km;
-        });
-      } else if (sortBy === 'price') {
-        processedErrands.sort((a, b) => (b.total_price || 0) - (a.total_price || 0));
-      }
-      // 'recent'는 이미 created_at 기준으로 정렬됨
+    // 라이더 위치가 제공된 경우 거리 계산 및 정렬
+    if (params.helperLat && params.helperLng && params.mode === 'available') {
+      processedErrands = addDistanceToErrands(processedErrands, params.helperLat, params.helperLng);
+      processedErrands = filterAndSortByDistance(
+        processedErrands,
+        params.maxDistance,
+        params.sortBy
+      );
     }
 
     return NextResponse.json({
       errands: processedErrands,
       total: count,
-      limit,
-      offset,
+      limit: params.limit,
+      offset: params.offset,
     });
   } catch (error) {
     logServerError(error instanceof Error ? error : new Error(String(error)), {
@@ -391,12 +416,6 @@ export async function POST(request: NextRequest) {
         process.env.NODE_ENV === 'development'
           ? `심부름 등록 실패: ${error.message} (code: ${error.code}, details: ${error.details})`
           : '심부름 등록에 실패했습니다';
-      console.error('[Errand Create Error]', {
-        error,
-        insertData,
-        profile_id: profile.id,
-        user_id: user.id,
-      });
       return NextResponse.json(
         {
           error: errorMessage,
@@ -544,12 +563,17 @@ async function sendNewErrandNotifications(
     .in('subscription_status', ['active', 'trial'])
     .limit(100);
 
-  if (helpersError || !activeHelpers?.length) {
-    console.log('[New Errand Notification] No active helpers found or error:', helpersError);
+  if (helpersError) {
+    logServerError(helpersError, {
+      context: 'errand_notification_helpers_lookup',
+      errand_id: errand.id,
+    });
     return;
   }
 
-  console.log(`[New Errand Notification] Sending to ${activeHelpers.length} helpers`);
+  if (!activeHelpers?.length) {
+    return;
+  }
 
   const categoryLabel = errand.category === 'DELIVERY' ? '배달' : '구매대행';
   const notifications = activeHelpers.map((helper) => ({
@@ -566,9 +590,7 @@ async function sendNewErrandNotifications(
   const { error: notifyError } = await serviceClient.from('notifications').insert(notifications);
 
   if (notifyError) {
-    console.error('[New Errand Notification Error]', notifyError);
+    logServerError(notifyError, { context: 'errand_notification_insert', errand_id: errand.id });
     throw notifyError;
   }
-
-  console.log(`[New Errand Notification] Successfully sent ${notifications.length} notifications`);
 }
