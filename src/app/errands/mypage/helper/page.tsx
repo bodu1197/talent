@@ -16,6 +16,7 @@ import {
   CreditCard,
   CheckCircle,
 } from 'lucide-react';
+import HelperLocationTracker from '@/components/errands/HelperLocationTracker';
 
 interface HelperProfile {
   id: string;
@@ -212,6 +213,12 @@ export default function ErrandHelperDashboard() {
             </div>
           </div>
         </div>
+
+        {/* 위치 추적 / 활동 상태 */}
+        <HelperLocationTracker
+          isActiveHelper={!isSubscriptionExpired && helperProfile.is_active}
+          className="mb-4"
+        />
 
         {/* 수익 요약 */}
         <div className="grid grid-cols-3 gap-3 mb-6">

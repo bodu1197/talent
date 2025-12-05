@@ -142,6 +142,26 @@ function buildShoppingPriceData(
   };
 }
 
+// Haversine formula로 두 지점 간 거리 계산 (km)
+function haversineDistance(
+  lat1: number,
+  lng1: number,
+  lat2: number,
+  lng2: number
+): number {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLng = ((lng2 - lng1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) *
+      Math.sin(dLng / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
 // 심부름 목록 조회
 export async function GET(request: NextRequest) {
   try {
@@ -155,6 +175,12 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20', 10);
     const offset = parseInt(searchParams.get('offset') || '0', 10);
     const mode = searchParams.get('mode'); // 'my' for requester's errands, 'available' for helpers
+
+    // 위치 기반 파라미터 (라이더용)
+    const helperLat = parseFloat(searchParams.get('lat') || '0');
+    const helperLng = parseFloat(searchParams.get('lng') || '0');
+    const sortBy = searchParams.get('sort') || 'recent'; // 'recent' | 'distance' | 'price'
+    const maxDistance = parseFloat(searchParams.get('maxDistance') || '0'); // km, 0이면 제한 없음
 
     // 현재 사용자 확인
     const {
@@ -208,8 +234,53 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: '심부름 목록을 불러올 수 없습니다' }, { status: 500 });
     }
 
+    // 라이더 위치가 제공된 경우 거리 계산 및 정렬
+    let processedErrands = errands || [];
+
+    if (helperLat && helperLng && mode === 'available') {
+      // 각 심부름에 거리 정보 추가
+      processedErrands = processedErrands.map((errand) => {
+        let distance: number | null = null;
+
+        // pickup 위치와 라이더 위치 간 거리 계산
+        if (errand.pickup_lat && errand.pickup_lng) {
+          distance = haversineDistance(
+            helperLat,
+            helperLng,
+            errand.pickup_lat,
+            errand.pickup_lng
+          );
+        }
+
+        return {
+          ...errand,
+          distance_km: distance ? Math.round(distance * 10) / 10 : null, // 소수점 1자리
+        };
+      });
+
+      // 최대 거리 필터링
+      if (maxDistance > 0) {
+        processedErrands = processedErrands.filter(
+          (errand) => errand.distance_km === null || errand.distance_km <= maxDistance
+        );
+      }
+
+      // 정렬
+      if (sortBy === 'distance') {
+        processedErrands.sort((a, b) => {
+          // 거리 정보가 없는 경우 맨 뒤로
+          if (a.distance_km === null) return 1;
+          if (b.distance_km === null) return -1;
+          return a.distance_km - b.distance_km;
+        });
+      } else if (sortBy === 'price') {
+        processedErrands.sort((a, b) => (b.total_price || 0) - (a.total_price || 0));
+      }
+      // 'recent'는 이미 created_at 기준으로 정렬됨
+    }
+
     return NextResponse.json({
-      errands,
+      errands: processedErrands,
       total: count,
       limit,
       offset,

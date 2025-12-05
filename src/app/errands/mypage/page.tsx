@@ -14,6 +14,7 @@ import {
   MapPin,
   Bike,
 } from 'lucide-react';
+import NearbyHelpersIndicator from '@/components/errands/NearbyHelpersIndicator';
 
 interface ErrandSummary {
   total: number;
@@ -116,6 +117,9 @@ export default function ErrandRequesterDashboard() {
           <h1 className="text-xl font-bold text-gray-900">심부름 요청자 대시보드</h1>
           <p className="text-gray-600 mt-1">심부름 요청 현황을 확인하세요</p>
         </div>
+
+        {/* 주변 라이더 현황 */}
+        <NearbyHelpersIndicator className="mb-4" />
 
         {/* 빠른 요청 버튼 */}
         <Link
