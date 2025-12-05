@@ -4,11 +4,10 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import ErrandMypageLayout from '@/components/errands/ErrandMypageLayout';
 import { logger } from '@/lib/logger';
 import toast from 'react-hot-toast';
-import Link from 'next/link';
 import {
-  ChevronLeft,
   Package,
   ShoppingCart,
   Navigation,
@@ -545,19 +544,13 @@ export default function NewErrandPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* 헤더 */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="container-1200 h-14 flex items-center">
-          <Link href="/errands" className="mr-4">
-            <ChevronLeft className="w-6 h-6 text-gray-600" />
-          </Link>
-          <h1 className="text-lg font-bold text-gray-900">심부름 요청</h1>
+    <ErrandMypageLayout mode="requester">
+      <div className="p-4 lg:p-0">
+        <div className="mb-6">
+          <h1 className="text-xl font-bold text-gray-900">심부름 요청</h1>
+          <p className="text-gray-600 mt-1">배달 또는 구매대행 심부름을 요청하세요</p>
         </div>
-      </header>
-
-      <main className="container-1200 py-6">
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-2xl">
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* 카테고리 선택 */}
             <div>
@@ -1163,7 +1156,7 @@ export default function NewErrandPage() {
             </button>
           </form>
         </div>
-      </main>
-    </div>
+      </div>
+    </ErrandMypageLayout>
   );
 }
