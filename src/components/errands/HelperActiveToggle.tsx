@@ -84,7 +84,7 @@ export default function HelperActiveToggle({ className = '' }: HelperActiveToggl
 
       // 활성화 시 위치 업데이트 시도
       if (newActiveState) {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- navigator.geolocation may not exist in some environments
+        // eslint-disable-next-line sonarjs/no-intrusive-permissions -- Geolocation is required for rider location tracking
         navigator.geolocation?.getCurrentPosition(
           async (position) => {
             await fetch('/api/helper/location', {
@@ -200,11 +200,7 @@ export default function HelperActiveToggle({ className = '' }: HelperActiveToggl
               : 'bg-green-500 text-white hover:bg-green-400'
           } disabled:opacity-50`}
         >
-          {toggling ? (
-            <Loader2 className="w-5 h-5 animate-spin" />
-          ) : (
-            <Power className="w-5 h-5" />
-          )}
+          {toggling ? <Loader2 className="w-5 h-5 animate-spin" /> : <Power className="w-5 h-5" />}
         </button>
       </div>
     </div>

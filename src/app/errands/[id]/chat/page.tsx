@@ -8,6 +8,19 @@ import { ArrowLeft, Send, Loader2, MessageCircle, User, Clock, AlertCircle } fro
 import { createClient } from '@/lib/supabase/client';
 import ErrandMypageLayout from '@/components/errands/ErrandMypageLayout';
 
+// 알림음 재생 함수
+function playNotificationSound() {
+  try {
+    const audio = new Audio('/sounds/notification.mp3');
+    audio.volume = 0.5;
+    audio.play().catch(() => {
+      // 자동 재생 정책으로 인해 실패할 수 있음 (사용자 상호작용 필요)
+    });
+  } catch {
+    // 오디오 재생 실패 무시
+  }
+}
+
 // 실시간 메시지 처리 함수
 async function handleRealtimeMessage(
   payload: { new: Message },
@@ -18,6 +31,9 @@ async function handleRealtimeMessage(
 
   // 내가 보낸 메시지면 이미 추가되어 있으므로 무시
   if (newMsg.sender_id === currentUserId) return;
+
+  // 알림음 재생
+  playNotificationSound();
 
   // 발신자 정보 조회
   const supabase = createClient();
