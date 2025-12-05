@@ -16,22 +16,35 @@ async function sendApplicationNotification(
   requesterId: string,
   helperProfileId: string
 ): Promise<void> {
+  console.log('[Application Notification] Starting...', { errandId, requesterId, helperProfileId });
+
   // 요청자의 user_id 조회 (profiles.id -> profiles.user_id)
-  const { data: requesterProfile } = await supabase
+  const { data: requesterProfile, error: requesterError } = await supabase
     .from('profiles')
     .select('user_id')
     .eq('id', requesterId)
     .single();
 
+  if (requesterError) {
+    console.error('[Application Notification] Failed to get requester profile:', requesterError);
+    return;
+  }
+
   // 라이더 이름 조회
-  const { data: helperInfo } = await supabase
+  const { data: helperInfo, error: helperError } = await supabase
     .from('profiles')
     .select('name')
     .eq('id', helperProfileId)
     .single();
 
+  if (helperError) {
+    console.log('[Application Notification] Helper info not found:', helperError);
+  }
+
   if (requesterProfile?.user_id) {
-    await serviceClient.from('notifications').insert({
+    console.log('[Application Notification] Sending notification to user:', requesterProfile.user_id);
+
+    const { error: notifyError } = await serviceClient.from('notifications').insert({
       user_id: requesterProfile.user_id,
       type: 'errand_application',
       title: '새로운 라이더 지원',
@@ -39,6 +52,14 @@ async function sendApplicationNotification(
       link: `/errands/${errandId}`,
       is_read: false,
     });
+
+    if (notifyError) {
+      console.error('[Application Notification] Failed to insert notification:', notifyError);
+    } else {
+      console.log('[Application Notification] Successfully sent notification');
+    }
+  } else {
+    console.log('[Application Notification] No requester user_id found, skipping notification');
   }
 }
 

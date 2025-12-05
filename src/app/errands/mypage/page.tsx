@@ -13,6 +13,7 @@ import {
   ChevronRight,
   MapPin,
   Bike,
+  Users,
 } from 'lucide-react';
 import NearbyHelpersIndicator from '@/components/errands/NearbyHelpersIndicator';
 
@@ -32,6 +33,7 @@ interface RecentErrand {
   pickup_address: string;
   delivery_address: string;
   created_at: string;
+  application_count?: number;
 }
 
 export default function ErrandRequesterDashboard() {
@@ -218,6 +220,12 @@ export default function ErrandRequesterDashboard() {
                         <span className="text-xs text-gray-500">
                           {getCategoryLabel(errand.category)}
                         </span>
+                        {errand.status === 'OPEN' && (errand.application_count ?? 0) > 0 && (
+                          <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
+                            <Users className="w-3 h-3" />
+                            {errand.application_count}명 지원
+                          </span>
+                        )}
                       </div>
                       <h3 className="font-medium text-gray-900 truncate">{errand.title}</h3>
                       <div className="flex items-center gap-1 text-xs text-gray-500 mt-1">

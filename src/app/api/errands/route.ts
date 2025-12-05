@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 import { logServerError } from '@/lib/rollbar/server';
 import type { ErrandCategory, ErrandStatus, CreateErrandRequest } from '@/types/errand';
 import {
@@ -236,6 +236,33 @@ export async function GET(request: NextRequest) {
 
     // 라이더 위치가 제공된 경우 거리 계산 및 정렬
     let processedErrands = errands || [];
+
+    // mode=my인 경우 각 심부름의 지원자 수 조회 (OPEN 상태만)
+    if (mode === 'my' && processedErrands.length > 0) {
+      const openErrandIds = processedErrands
+        .filter((e) => e.status === 'OPEN')
+        .map((e) => e.id);
+
+      if (openErrandIds.length > 0) {
+        const { data: applicationCounts } = await supabase
+          .from('errand_applications')
+          .select('errand_id')
+          .in('errand_id', openErrandIds)
+          .eq('status', 'pending');
+
+        // 각 심부름별 지원자 수 계산
+        const countMap: Record<string, number> = {};
+        applicationCounts?.forEach((app) => {
+          countMap[app.errand_id] = (countMap[app.errand_id] || 0) + 1;
+        });
+
+        // processedErrands에 application_count 추가
+        processedErrands = processedErrands.map((errand) => ({
+          ...errand,
+          application_count: errand.status === 'OPEN' ? (countMap[errand.id] || 0) : 0,
+        }));
+      }
+    }
 
     if (helperLat && helperLng && mode === 'available') {
       // 각 심부름에 거리 정보 추가
@@ -517,7 +544,12 @@ async function sendNewErrandNotifications(
     .in('subscription_status', ['active', 'trial'])
     .limit(100);
 
-  if (helpersError || !activeHelpers?.length) return;
+  if (helpersError || !activeHelpers?.length) {
+    console.log('[New Errand Notification] No active helpers found or error:', helpersError);
+    return;
+  }
+
+  console.log(`[New Errand Notification] Sending to ${activeHelpers.length} helpers`);
 
   const categoryLabel = errand.category === 'DELIVERY' ? '배달' : '구매대행';
   const notifications = activeHelpers.map((helper) => ({
@@ -527,13 +559,16 @@ async function sendNewErrandNotifications(
     message: `[${categoryLabel}] ${errand.title} - ${errand.total_price?.toLocaleString()}원`,
     link: `/errands/${errand.id}`,
     is_read: false,
-    data: {
-      errand_id: errand.id,
-      category: errand.category,
-      pickup_address: errand.pickup_address,
-    },
   }));
 
-  const { error: notifyError } = await supabase.from('notifications').insert(notifications);
-  if (notifyError) throw notifyError;
+  // Service Role Client 사용하여 RLS 우회
+  const serviceClient = createServiceRoleClient();
+  const { error: notifyError } = await serviceClient.from('notifications').insert(notifications);
+
+  if (notifyError) {
+    console.error('[New Errand Notification Error]', notifyError);
+    throw notifyError;
+  }
+
+  console.log(`[New Errand Notification] Successfully sent ${notifications.length} notifications`);
 }
