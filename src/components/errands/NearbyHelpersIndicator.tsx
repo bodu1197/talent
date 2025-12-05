@@ -28,25 +28,28 @@ export default function NearbyHelpersIndicator({
   const [error, setError] = useState<string | null>(null);
   const [permissionDenied, setPermissionDenied] = useState(false);
 
-  const fetchNearbyHelpers = useCallback(async (lat: number, lng: number) => {
-    try {
-      const response = await fetch(
-        `/api/errands/nearby-helpers?lat=${lat}&lng=${lng}&radius=${radiusKm}`
-      );
+  const fetchNearbyHelpers = useCallback(
+    async (lat: number, lng: number) => {
+      try {
+        const response = await fetch(
+          `/api/errands/nearby-helpers?lat=${lat}&lng=${lng}&radius=${radiusKm}`
+        );
 
-      if (!response.ok) {
-        throw new Error('라이더 정보를 불러올 수 없습니다');
+        if (!response.ok) {
+          throw new Error('라이더 정보를 불러올 수 없습니다');
+        }
+
+        const result = await response.json();
+        setData(result);
+        setError(null);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : '오류가 발생했습니다');
+      } finally {
+        setLoading(false);
       }
-
-      const result = await response.json();
-      setData(result);
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : '오류가 발생했습니다');
-    } finally {
-      setLoading(false);
-    }
-  }, [radiusKm]);
+    },
+    [radiusKm]
+  );
 
   const getLocation = useCallback(() => {
     if (!navigator.geolocation) {
@@ -56,6 +59,7 @@ export default function NearbyHelpersIndicator({
     }
 
     setLoading(true);
+    // eslint-disable-next-line sonarjs/no-intrusive-permissions -- 주변 라이더 표시에 위치 권한 필요
     navigator.geolocation.getCurrentPosition(
       (position) => {
         fetchNearbyHelpers(position.coords.latitude, position.coords.longitude);
@@ -104,9 +108,7 @@ export default function NearbyHelpersIndicator({
         } ${className}`}
       >
         <Bike className="w-4 h-4" />
-        <span>
-          주변 {data.count}명 활동 중
-        </span>
+        <span>주변 {data.count}명 활동 중</span>
       </div>
     );
   }

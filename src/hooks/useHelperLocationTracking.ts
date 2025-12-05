@@ -61,7 +61,9 @@ export function useHelperLocationTracking(
   const [isTracking, setIsTracking] = useState(false);
   const [isOnline, setIsOnline] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
-  const [permissionStatus, setPermissionStatus] = useState<'granted' | 'denied' | 'prompt' | 'unknown'>('unknown');
+  const [permissionStatus, setPermissionStatus] = useState<
+    'granted' | 'denied' | 'prompt' | 'unknown'
+  >('unknown');
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const watchIdRef = useRef<number | null>(null);
@@ -74,6 +76,7 @@ export function useHelperLocationTracking(
     }
 
     try {
+      // eslint-disable-next-line sonarjs/no-intrusive-permissions -- 위치 권한 상태 확인용
       const result = await navigator.permissions.query({ name: 'geolocation' });
       setPermissionStatus(result.state as 'granted' | 'denied' | 'prompt');
 
@@ -93,12 +96,15 @@ export function useHelperLocationTracking(
         return;
       }
 
+      // eslint-disable-next-line sonarjs/no-intrusive-permissions -- 라이더 위치 추적에 필수적인 기능
       navigator.geolocation.getCurrentPosition(
         resolve,
         (err) => {
           switch (err.code) {
             case err.PERMISSION_DENIED:
-              reject(new Error('위치 권한이 거부되었습니다. 브라우저 설정에서 위치 권한을 허용해주세요.'));
+              reject(
+                new Error('위치 권한이 거부되었습니다. 브라우저 설정에서 위치 권한을 허용해주세요.')
+              );
               break;
             case err.POSITION_UNAVAILABLE:
               reject(new Error('위치 정보를 사용할 수 없습니다. GPS를 켜주세요.'));
@@ -211,6 +217,7 @@ export function useHelperLocationTracking(
       // watchPosition으로 이동 시 위치 업데이트 (배터리 절약을 위해 선택적)
       // 사용자 이동이 감지되면 즉시 업데이트
       if (navigator.geolocation) {
+        // eslint-disable-next-line sonarjs/no-intrusive-permissions -- 라이더 이동 추적에 필수적인 기능
         watchIdRef.current = navigator.geolocation.watchPosition(
           async (pos) => {
             // 50m 이상 이동 시 즉시 업데이트
@@ -222,7 +229,8 @@ export function useHelperLocationTracking(
                 pos.coords.longitude
               );
 
-              if (distance > 0.05) { // 50m
+              if (distance > 0.05) {
+                // 50m
                 const movedLocation: LocationState = {
                   lat: pos.coords.latitude,
                   lng: pos.coords.longitude,
@@ -249,7 +257,16 @@ export function useHelperLocationTracking(
       setError(message);
       onError?.(message);
     }
-  }, [isActive, getCurrentPosition, sendLocationToServer, updateInterval, updateLocation, location, onLocationUpdate, onError]);
+  }, [
+    isActive,
+    getCurrentPosition,
+    sendLocationToServer,
+    updateInterval,
+    updateLocation,
+    location,
+    onLocationUpdate,
+    onError,
+  ]);
 
   // 추적 중지 (활동 종료)
   const stopTracking = useCallback(async () => {
@@ -335,12 +352,7 @@ export function useHelperLocationTracking(
 }
 
 // Haversine formula로 두 지점 간 거리 계산 (km)
-function calculateDistance(
-  lat1: number,
-  lng1: number,
-  lat2: number,
-  lng2: number
-): number {
+function calculateDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
   const R = 6371;
   const dLat = toRad(lat2 - lat1);
   const dLng = toRad(lng2 - lng1);

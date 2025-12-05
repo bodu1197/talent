@@ -137,6 +137,32 @@ export default function HelperSettingsPage() {
     { value: 'walk', label: '도보', icon: Bike },
   ];
 
+  // 저장 버튼 내용 렌더링 (nested ternary 해결)
+  const renderSaveButtonContent = (isSaving: boolean, isSuccess: boolean) => {
+    if (isSaving) {
+      return (
+        <>
+          <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
+          저장 중...
+        </>
+      );
+    }
+    if (isSuccess) {
+      return (
+        <>
+          <Check className="w-5 h-5" />
+          저장 완료
+        </>
+      );
+    }
+    return (
+      <>
+        <Save className="w-5 h-5" />
+        변경사항 저장
+      </>
+    );
+  };
+
   return (
     <ErrandMypageLayout mode="helper">
       <div className="p-4 lg:p-0">
@@ -161,11 +187,7 @@ export default function HelperSettingsPage() {
                 {/* 프로필 이미지 */}
                 <div className="flex items-center gap-4">
                   <div className="relative">
-                    <ProfileImage
-                      src={profile?.profile_image}
-                      alt={settings.name}
-                      size={64}
-                    />
+                    <ProfileImage src={profile?.profile_image} alt={settings.name} size={64} />
                     <button className="absolute bottom-0 right-0 w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white">
                       <Camera className="w-3 h-3" />
                     </button>
@@ -178,9 +200,7 @@ export default function HelperSettingsPage() {
 
                 {/* 이름 */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    이름
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">이름</label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
@@ -195,9 +215,7 @@ export default function HelperSettingsPage() {
 
                 {/* 연락처 */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    연락처
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">연락처</label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
@@ -223,9 +241,7 @@ export default function HelperSettingsPage() {
               <div className="p-4 space-y-4">
                 {/* 이동 수단 */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    이동 수단
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">이동 수단</label>
                   <div className="grid grid-cols-4 gap-2">
                     {vehicleOptions.map((option) => (
                       <button
@@ -246,9 +262,7 @@ export default function HelperSettingsPage() {
 
                 {/* 활동 지역 */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    활동 지역
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">활동 지역</label>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
@@ -280,9 +294,7 @@ export default function HelperSettingsPage() {
                           })
                         }
                         className={`w-10 h-10 rounded-full font-medium text-sm transition-colors ${
-                          active
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-gray-100 text-gray-500'
+                          active ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-500'
                         }`}
                       >
                         {dayLabels[day]}
@@ -304,9 +316,7 @@ export default function HelperSettingsPage() {
               <div className="p-4 space-y-4">
                 {/* 은행 선택 */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    은행
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">은행</label>
                   <select
                     value={settings.bankAccount.bank}
                     onChange={(e) =>
@@ -328,9 +338,7 @@ export default function HelperSettingsPage() {
 
                 {/* 계좌번호 */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    계좌번호
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">계좌번호</label>
                   <input
                     type="text"
                     value={settings.bankAccount.accountNumber}
@@ -347,9 +355,7 @@ export default function HelperSettingsPage() {
 
                 {/* 예금주 */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    예금주
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">예금주</label>
                   <input
                     type="text"
                     value={settings.bankAccount.accountHolder}
@@ -493,27 +499,10 @@ export default function HelperSettingsPage() {
               onClick={handleSave}
               disabled={saving}
               className={`w-full py-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors ${
-                saveSuccess
-                  ? 'bg-green-600 text-white'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
+                saveSuccess ? 'bg-green-600 text-white' : 'bg-blue-600 text-white hover:bg-blue-700'
               }`}
             >
-              {saving ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
-                  저장 중...
-                </>
-              ) : saveSuccess ? (
-                <>
-                  <Check className="w-5 h-5" />
-                  저장 완료
-                </>
-              ) : (
-                <>
-                  <Save className="w-5 h-5" />
-                  변경사항 저장
-                </>
-              )}
+              {renderSaveButtonContent(saving, saveSuccess)}
             </button>
           </div>
         )}

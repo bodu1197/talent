@@ -66,6 +66,7 @@ export default function HelperAvailableErrandsPage() {
 
     try {
       const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        // eslint-disable-next-line sonarjs/no-intrusive-permissions -- 위치 기반 심부름 매칭에 필수적인 기능
         navigator.geolocation.getCurrentPosition(resolve, reject, {
           enableHighAccuracy: false,
           timeout: 10000,

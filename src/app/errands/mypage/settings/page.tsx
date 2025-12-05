@@ -4,17 +4,7 @@ import { useState, useEffect } from 'react';
 import ErrandMypageLayout from '@/components/errands/ErrandMypageLayout';
 import { useAuth } from '@/components/providers/AuthProvider';
 import ProfileImage from '@/components/common/ProfileImage';
-import {
-  User,
-  Phone,
-  MapPin,
-  Bell,
-  Shield,
-  ChevronRight,
-  Save,
-  Camera,
-  Check,
-} from 'lucide-react';
+import { User, Phone, MapPin, Bell, Shield, ChevronRight, Save, Camera, Check } from 'lucide-react';
 
 interface UserSettings {
   name: string;
@@ -90,6 +80,32 @@ export default function RequesterSettingsPage() {
     }));
   };
 
+  // 저장 버튼 내용 렌더링 (nested ternary 해결)
+  const renderSaveButtonContent = (isSaving: boolean, isSuccess: boolean) => {
+    if (isSaving) {
+      return (
+        <>
+          <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
+          저장 중...
+        </>
+      );
+    }
+    if (isSuccess) {
+      return (
+        <>
+          <Check className="w-5 h-5" />
+          저장 완료
+        </>
+      );
+    }
+    return (
+      <>
+        <Save className="w-5 h-5" />
+        변경사항 저장
+      </>
+    );
+  };
+
   return (
     <ErrandMypageLayout mode="requester">
       <div className="p-4 lg:p-0">
@@ -114,11 +130,7 @@ export default function RequesterSettingsPage() {
                 {/* 프로필 이미지 */}
                 <div className="flex items-center gap-4">
                   <div className="relative">
-                    <ProfileImage
-                      src={profile?.profile_image}
-                      alt={settings.name}
-                      size={64}
-                    />
+                    <ProfileImage src={profile?.profile_image} alt={settings.name} size={64} />
                     <button className="absolute bottom-0 right-0 w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white">
                       <Camera className="w-3 h-3" />
                     </button>
@@ -131,9 +143,7 @@ export default function RequesterSettingsPage() {
 
                 {/* 이름 */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    이름
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">이름</label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
@@ -148,9 +158,7 @@ export default function RequesterSettingsPage() {
 
                 {/* 연락처 */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    연락처
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">연락처</label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
@@ -277,27 +285,10 @@ export default function RequesterSettingsPage() {
               onClick={handleSave}
               disabled={saving}
               className={`w-full py-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors ${
-                saveSuccess
-                  ? 'bg-green-600 text-white'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
+                saveSuccess ? 'bg-green-600 text-white' : 'bg-blue-600 text-white hover:bg-blue-700'
               }`}
             >
-              {saving ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
-                  저장 중...
-                </>
-              ) : saveSuccess ? (
-                <>
-                  <Check className="w-5 h-5" />
-                  저장 완료
-                </>
-              ) : (
-                <>
-                  <Save className="w-5 h-5" />
-                  변경사항 저장
-                </>
-              )}
+              {renderSaveButtonContent(saving, saveSuccess)}
             </button>
           </div>
         )}
