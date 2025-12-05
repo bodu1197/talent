@@ -95,7 +95,7 @@ export default async function CategoryGrid() {
               {topLevelCategories.slice(0, 11).map((category, index) => (
                 <Link
                   key={category.id}
-                  href={`/categories/${category.slug}`}
+                  href={category.slug === 'errands' ? '/errands' : `/categories/${category.slug}`}
                   className="flex flex-col items-center group cursor-pointer flex-shrink-0 w-[76px]"
                 >
                   <div
@@ -115,7 +115,7 @@ export default async function CategoryGrid() {
               {topLevelCategories.slice(11).map((category, index) => (
                 <Link
                   key={category.id}
-                  href={`/categories/${category.slug}`}
+                  href={category.slug === 'errands' ? '/errands' : `/categories/${category.slug}`}
                   className="flex flex-col items-center group cursor-pointer flex-shrink-0 w-[76px]"
                 >
                   <div

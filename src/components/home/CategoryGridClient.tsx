@@ -94,7 +94,7 @@ export default function CategoryGridClient({
       {allCategories.map((category, index) => (
         <Link
           key={category.id}
-          href={`/categories/${category.slug}`}
+          href={category.slug === 'errands' ? '/errands' : `/categories/${category.slug}`}
           className="flex flex-col items-center group cursor-pointer w-[72px]"
         >
           <div
