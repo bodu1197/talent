@@ -481,16 +481,6 @@ export default function Sidebar({
               <ChevronRight className="w-3 h-3" />
             </Link>
           )}
-          {mode !== 'helper' && (
-            <Link
-              href="/mypage/helper/dashboard"
-              className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-orange-100 hover:bg-orange-200 rounded-lg transition-colors text-sm font-medium click-pop btn-ripple text-orange-700"
-            >
-              <Bike className="w-4 h-4" />
-              <span>심부름꾼 페이지로</span>
-              <ChevronRight className="w-3 h-3" />
-            </Link>
-          )}
         </div>
 
         {/* 네비게이션 메뉴 */}
