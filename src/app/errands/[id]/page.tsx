@@ -581,13 +581,24 @@ export default function ErrandDetailPage() {
                 </>
               )}
               {isRequester && (errand.status === 'MATCHED' || errand.status === 'IN_PROGRESS') && (
-                <button
-                  onClick={handleCancel}
-                  disabled={actionLoading}
-                  className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition disabled:opacity-50"
-                >
-                  심부름 취소
-                </button>
+                <>
+                  <Link
+                    href={`/errands/${id}/chat`}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    라이더와 대화
+                  </Link>
+                  <button
+                    onClick={handleCancel}
+                    disabled={actionLoading}
+                    className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition disabled:opacity-50"
+                  >
+                    심부름 취소
+                  </button>
+                </>
               )}
 
               {/* 취소된 심부름 - 삭제/재요청 */}
@@ -611,52 +622,74 @@ export default function ErrandDetailPage() {
 
               {/* 헬퍼 액션 */}
               {isHelper && errand.status === 'MATCHED' && (
-                <button
-                  onClick={async () => {
-                    setActionLoading(true);
-                    try {
-                      const res = await fetch(`/api/errands/${id}`, {
-                        method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ status: 'IN_PROGRESS' }),
-                      });
-                      if (res.ok) {
-                        const data = await res.json();
-                        setErrand((prev) => (prev ? { ...prev, ...data.errand } : null));
+                <>
+                  <Link
+                    href={`/errands/${id}/chat`}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    요청자와 대화
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      setActionLoading(true);
+                      try {
+                        const res = await fetch(`/api/errands/${id}`, {
+                          method: 'PATCH',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ status: 'IN_PROGRESS' }),
+                        });
+                        if (res.ok) {
+                          const data = await res.json();
+                          setErrand((prev) => (prev ? { ...prev, ...data.errand } : null));
+                        }
+                      } finally {
+                        setActionLoading(false);
                       }
-                    } finally {
-                      setActionLoading(false);
-                    }
-                  }}
-                  disabled={actionLoading}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
-                >
-                  심부름 시작
-                </button>
+                    }}
+                    disabled={actionLoading}
+                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition disabled:opacity-50"
+                  >
+                    심부름 시작
+                  </button>
+                </>
               )}
               {isHelper && errand.status === 'IN_PROGRESS' && (
-                <button
-                  onClick={async () => {
-                    setActionLoading(true);
-                    try {
-                      const res = await fetch(`/api/errands/${id}`, {
-                        method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ status: 'COMPLETED' }),
-                      });
-                      if (res.ok) {
-                        const data = await res.json();
-                        setErrand((prev) => (prev ? { ...prev, ...data.errand } : null));
+                <>
+                  <Link
+                    href={`/errands/${id}/chat`}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    요청자와 대화
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      setActionLoading(true);
+                      try {
+                        const res = await fetch(`/api/errands/${id}`, {
+                          method: 'PATCH',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ status: 'COMPLETED' }),
+                        });
+                        if (res.ok) {
+                          const data = await res.json();
+                          setErrand((prev) => (prev ? { ...prev, ...data.errand } : null));
+                        }
+                      } finally {
+                        setActionLoading(false);
                       }
-                    } finally {
-                      setActionLoading(false);
-                    }
-                  }}
-                  disabled={actionLoading}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition disabled:opacity-50"
-                >
-                  완료 처리
-                </button>
+                    }}
+                    disabled={actionLoading}
+                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition disabled:opacity-50"
+                  >
+                    완료 처리
+                  </button>
+                </>
               )}
 
               {/* 헬퍼 지원하기 버튼 - 헬퍼 프로필이 없는 경우 */}

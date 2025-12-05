@@ -92,9 +92,8 @@ export default function ErrandApplyPage() {
         return;
       }
 
-      // 성공 시 상세 페이지로 이동
-      alert('심부름이 배정되었습니다! 바로 심부름을 시작할 수 있습니다.');
-      router.push(`/errands/${id}`);
+      // 성공 시 채팅 페이지로 바로 이동
+      router.push(`/errands/${id}/chat`);
     } catch (err) {
       console.error('네트워크 오류:', err);
       setSubmitError('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
