@@ -224,36 +224,6 @@ const buyerNavItems: NavItem[] = [
     ],
   },
   {
-    label: '심부름 내역',
-    href: '/mypage/buyer/errands',
-    icon: 'fa-bike',
-    children: [
-      { label: '전체', href: '/mypage/buyer/errands', icon: '' },
-      {
-        label: '요청중',
-        href: '/mypage/buyer/errands?status=OPEN',
-        icon: '',
-        badge: 0,
-      },
-      {
-        label: '진행중',
-        href: '/mypage/buyer/errands?status=IN_PROGRESS',
-        icon: '',
-        badge: 0,
-      },
-      {
-        label: '완료',
-        href: '/mypage/buyer/errands?status=COMPLETED',
-        icon: '',
-      },
-      {
-        label: '취소',
-        href: '/mypage/buyer/errands?status=CANCELLED',
-        icon: '',
-      },
-    ],
-  },
-  {
     label: '견적 요청 내역',
     href: '/mypage/buyer/quotes',
     icon: 'fa-file-invoice',
