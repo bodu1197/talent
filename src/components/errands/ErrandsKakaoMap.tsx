@@ -484,7 +484,8 @@ export default function ErrandsKakaoMap({
         src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_KEY}&autoload=false`}
         onLoad={handleScriptLoad}
         onError={handleScriptError}
-        strategy="afterInteractive"
+        strategy="beforeInteractive"
+        crossOrigin="anonymous"
       />
 
       <div className={`relative rounded-2xl overflow-hidden shadow-lg ${className}`}>
