@@ -232,7 +232,7 @@ export default function PrivacyPage() {
                     <br />
                     주소: 서울시 마포구 월드컵로 81 3층
                     <br />
-                    고객센터: dolpagu@dolpagu.com
+                    고객센터: 070-8019-6077 | dolpagu@dolpagu.com
                   </p>
                 </div>
               </div>

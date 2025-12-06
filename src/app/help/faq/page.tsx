@@ -70,7 +70,8 @@ const faqs = [
       },
       {
         question: '서비스 이용 중 문제가 생기면 어디로 문의하나요?',
-        answer: '고객센터의 1:1 문의를 이용하시거나 이메일(dolpagu@dolpagu.com)로 문의해주세요.',
+        answer:
+          '고객센터 전화(070-8019-6077) 또는 1:1 문의를 이용하시거나 이메일(dolpagu@dolpagu.com)로 문의해주세요.',
       },
     ],
   },

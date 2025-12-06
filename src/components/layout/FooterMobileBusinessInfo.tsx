@@ -33,7 +33,8 @@ export default function FooterMobileBusinessInfo() {
           <p>사업자등록번호: 363-06-01936</p>
           <p>통신판매업신고번호: 제 2022-경기광명-1283호</p>
           <p>주소: 서울시 마포구 월드컵로 81 3층</p>
-          <p>고객센터: dolpagu@dolpagu.com</p>
+          <p>고객센터: 070-8019-6077</p>
+          <p>이메일: dolpagu@dolpagu.com</p>
           <p>운영시간: 주말 및 공휴일 휴무 / 오전 10시 ~ 오후 7시</p>
           <p className="mt-3 text-gray-500 text-[11px]">
             (주)플랫폼몬스터에서 결제된 예약금 환불 관련한 의무 및 책임은 저희 플랫폼몬스터에

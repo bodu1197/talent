@@ -125,7 +125,7 @@ export default function HelpPage() {
                 </div>
                 <div className="text-left">
                   <p className="text-sm font-semibold">전화 상담</p>
-                  <p className="text-xs text-gray-500">dolpagu@dolpagu.com (평일 10:00 - 19:00)</p>
+                  <p className="text-xs text-gray-500">070-8019-6077 (평일 10:00 - 19:00)</p>
                 </div>
               </div>
             </div>

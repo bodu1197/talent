@@ -130,7 +130,8 @@ export default function Footer() {
             </p>
             <p className="mb-2 text-gray-600">주소: 서울시 마포구 월드컵로 81 3층</p>
             <p className="mb-2 text-gray-600">
-              고객센터: dolpagu@dolpagu.com (주말 및 공휴일 휴무 / 오전 10시 ~ 오후 7시)
+              고객센터: 070-8019-6077 | dolpagu@dolpagu.com (주말 및 공휴일 휴무 / 오전 10시 ~ 오후
+              7시)
             </p>
             <p className="mb-4 text-gray-500 text-xs">
               (주)플랫폼몬스터에서 결제된 예약금 환불 관련한 의무 및 책임은 저희 플랫폼몬스터에
