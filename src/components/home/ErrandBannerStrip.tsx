@@ -117,7 +117,7 @@ export default function ErrandBannerStrip() {
       <div
         className="absolute pointer-events-none z-50"
         style={{
-          top: '50%',
+          top: 'calc(50% - 150px)',
           left: 0,
           right: 0,
           transform: 'translateY(-50%)',
@@ -126,7 +126,7 @@ export default function ErrandBannerStrip() {
         {/* 모바일: 고정 위치 */}
         <div
           className="absolute flex items-center md:hidden"
-          style={{ transform: 'translateX(-80px) translateY(-20px)' }}
+          style={{ transform: 'translateX(-80px)' }}
         >
           <MotorcycleIcon />
         </div>
@@ -135,7 +135,7 @@ export default function ErrandBannerStrip() {
         <div
           className="absolute hidden md:flex items-center"
           style={{
-            transform: `translateX(${bikePosition}px) translateY(-20px)`,
+            transform: `translateX(${bikePosition}px)`,
           }}
         >
           {/* 연기 효과 */}
