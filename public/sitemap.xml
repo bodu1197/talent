@@ -76,7 +76,14 @@
     <priority>0.7</priority>
   </url>
 
-  <!-- 전문가 등록 -->
+  <!-- 전문가 안내 -->
+  <url>
+    <loc>https://dolpagu.com/seller/guide</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <url>
     <loc>https://dolpagu.com/expert/register</loc>
     <lastmod>2025-11-16</lastmod>

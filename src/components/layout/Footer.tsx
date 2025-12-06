@@ -71,7 +71,7 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/help" className="hover:text-brand-primary transition-colors">
+                  <Link href="/seller/guide" className="hover:text-brand-primary transition-colors">
                     전문가 가이드
                   </Link>
                 </li>
