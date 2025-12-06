@@ -93,7 +93,7 @@ export default function ErrandBannerStrip() {
           top: '50%',
           left: 0,
           right: 0,
-          marginTop: '-190px',
+          marginTop: '-160px',
           overflow: 'visible',
         }}
       >
