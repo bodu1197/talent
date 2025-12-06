@@ -8,6 +8,7 @@ import { useAuth } from '@/components/providers/AuthProvider';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { logger } from '@/lib/logger';
 import toast from 'react-hot-toast';
+import * as PortOne from '@portone/browser-sdk/v2';
 import {
   Bike,
   CreditCard,
@@ -46,6 +47,35 @@ const BANK_LIST = [
   '토스뱅크',
 ];
 
+// 성별 변환 헬퍼 함수
+function convertGenderFromApi(gender: string | null): string {
+  if (gender === 'MALE') return 'male';
+  if (gender === 'FEMALE') return 'female';
+  return '';
+}
+
+// PortOne 본인인증 결과 처리
+async function verifyIdentityWithServer(identityVerificationId: string) {
+  const response = await fetch('/api/auth/verify-identity', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ identityVerificationId }),
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.error || '본인인증 검증 실패');
+  }
+
+  return {
+    name: result.name || '',
+    phone: result.phone || '',
+    birthDate: result.birthDate || '',
+    gender: convertGenderFromApi(result.gender),
+  };
+}
+
 // 4단계로 변경: 본인인증 → 서류제출 → 계좌정보 → 약관동의
 const STEPS = [
   { number: 1, title: '본인인증', icon: Fingerprint },
@@ -60,6 +90,7 @@ interface FileUpload {
   uploading: boolean;
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity -- 다단계 등록 폼 페이지로 복잡도가 높음
 export default function ErrandRiderRegisterPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
@@ -152,25 +183,56 @@ export default function ErrandRiderRegisterPage() {
     }));
   };
 
-  // 본인인증 완료 후 호출 - 실제로는 PASS API 응답에서 데이터를 받아옴
-  const handleIdentityVerification = () => {
-    // 실제 구현에서는 PASS 본인인증 API를 호출하고,
-    // 응답에서 이름, 생년월일, 성별, 휴대폰번호를 받아옴
-    // 여기서는 시뮬레이션
-    const verifiedData = {
-      name: '홍길동', // 실제로는 API 응답에서 받음
-      birth_date: '1990-01-01',
-      gender: 'male',
-      phone_number: '010-1234-5678',
-    };
+  // 본인인증 상태
+  const [isVerifying, setIsVerifying] = useState(false);
 
-    setFormData((prev) => ({
-      ...prev,
-      ...verifiedData,
-      phone_verified: true,
-    }));
+  // PortOne 본인인증 처리
+  const handleIdentityVerification = async () => {
+    setIsVerifying(true);
 
-    toast.success('본인인증이 완료되었습니다');
+    try {
+      // 고유한 인증 ID 생성
+      const identityVerificationId = `helper_${Date.now()}_${crypto.randomUUID().slice(0, 8)}`;
+      localStorage.setItem('verifyReturnUrl', '/errands/register');
+
+      // PortOne 본인인증 요청 (KCP 휴대폰 본인인증)
+      const response = await PortOne.requestIdentityVerification({
+        storeId: 'store-8855d73e-d61a-469b-a5ed-60e21cc45122',
+        channelKey: 'channel-key-112bb8b1-8dcc-4045-9686-66b83f0f0026',
+        identityVerificationId,
+        redirectUrl: `${window.location.origin}/verify-identity/callback`,
+        windowType: { pc: 'POPUP', mobile: 'REDIRECTION' },
+      });
+
+      // 사용자 취소 처리
+      if (response?.code === 'FAILURE_TYPE_PG' && response.message?.includes('취소')) {
+        toast('본인인증이 취소되었습니다');
+        return;
+      }
+
+      if (response?.code) {
+        throw new Error(response.message || '본인인증 중 오류가 발생했습니다');
+      }
+
+      // 서버에서 본인인증 결과 검증
+      const verifiedData = await verifyIdentityWithServer(identityVerificationId);
+
+      setFormData((prev) => ({
+        ...prev,
+        name: verifiedData.name,
+        phone_number: verifiedData.phone,
+        birth_date: verifiedData.birthDate,
+        gender: verifiedData.gender,
+        phone_verified: true,
+      }));
+
+      toast.success(`본인인증이 완료되었습니다. ${verifiedData.name}님`);
+    } catch (error) {
+      logger.error('Identity verification error:', error);
+      toast.error(error instanceof Error ? error.message : '본인인증 중 오류가 발생했습니다');
+    } finally {
+      setIsVerifying(false);
+    }
   };
 
   const validateStep1 = (): boolean => {
@@ -448,14 +510,24 @@ export default function ErrandRiderRegisterPage() {
 
                 <button
                   onClick={handleIdentityVerification}
-                  className="w-full py-3.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium flex items-center justify-center gap-2"
+                  disabled={isVerifying}
+                  className="w-full py-3.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Fingerprint className="w-5 h-5" />
-                  본인인증 진행하기
+                  {isVerifying ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      인증 진행 중...
+                    </>
+                  ) : (
+                    <>
+                      <Fingerprint className="w-5 h-5" />
+                      본인인증 진행하기
+                    </>
+                  )}
                 </button>
 
                 <p className="text-xs text-gray-500 text-center mt-3">
-                  PASS 앱 또는 SMS 인증으로 진행됩니다
+                  KCP 휴대폰 본인인증으로 진행됩니다
                 </p>
               </>
             ) : (
