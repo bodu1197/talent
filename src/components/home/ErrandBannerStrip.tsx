@@ -18,7 +18,6 @@ const MotorcycleIcon = () => (
 
 // 광고 카피
 const COPY_TEXT = '귀찮은 일 모두 돌파구에 맡겨 주세요';
-const BIKE_WIDTH = 256; // 오토바이 너비 (w-64 = 256px)
 
 export default function ErrandBannerStrip() {
   const [scooterStarted, setScooterStarted] = useState(false);
@@ -134,13 +133,12 @@ export default function ErrandBannerStrip() {
         </div>
       </div>
 
-      {/* 글자를 가리는 마스크 - 오토바이 꼬리(뒷바퀴) 위치부터 화면 끝까지 (데스크톱만) */}
-      {/* 뒷바퀴 여백 10px만 주고, 그 오른쪽은 모두 가림 */}
+      {/* 글자를 가리는 마스크 - 오토바이 전체를 감싸고, 뒷바퀴가 왼쪽 끝 근처 (데스크톱만) */}
       <div
-        className="absolute inset-y-0 bg-gray-900 z-30 pointer-events-none hidden md:block"
+        className="absolute inset-y-0 bg-gray-900 z-40 pointer-events-none hidden md:block"
         style={{
-          left: scooterStarted ? `${bikePosition + BIKE_WIDTH - 10}px` : '0px',
-          right: 0,
+          left: scooterStarted ? `${bikePosition - 20}px` : '-300vw',
+          width: '300vw',
         }}
       />
 
