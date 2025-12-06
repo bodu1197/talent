@@ -228,15 +228,26 @@ export default function ErrandsKakaoMap({
     // SDK 스크립트 동적 로드
     const script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&autoload=false`;
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&autoload=false`;
     script.async = true;
+    // CORS 문제 해결을 위해 crossorigin 제거 (카카오 SDK는 CORS 헤더 미제공)
+    // script.crossOrigin = 'anonymous';  // 이 줄을 추가하면 오히려 문제가 됨
 
     script.onload = () => {
-      initializeKakaoMaps();
+      if (window.kakao) {
+        initializeKakaoMaps();
+      } else {
+        console.error('[KakaoMap] kakao object not found after load');
+        setSdkError('카카오맵 초기화에 실패했습니다.');
+      }
     };
 
-    script.onerror = () => {
-      setSdkError('카카오맵 SDK 로드에 실패했습니다. 네트워크를 확인해주세요.');
+    script.onerror = (e) => {
+      console.error('[KakaoMap] SDK load error:', e);
+      console.error(
+        '[KakaoMap] This may be caused by domain not registered in Kakao Developer Console'
+      );
+      setSdkError('카카오맵 SDK 로드에 실패했습니다. 도메인 설정을 확인해주세요.');
     };
 
     document.head.appendChild(script);
