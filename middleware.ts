@@ -42,12 +42,12 @@ export async function middleware(request: NextRequest) {
     // 보안: XSS 취약점은 React의 자동 이스케이프로 완화
     const cspHeader = `
       default-src 'self';
-      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://cdn.portone.io https://*.portone.io https://t1.daumcdn.net https://postcode.map.daum.net https://dapi.kakao.com;
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://cdn.portone.io https://*.portone.io https://t1.daumcdn.net https://postcode.map.daum.net https://dapi.kakao.com https://*.kakao.com https://*.daumcdn.net;
       style-src 'self' 'unsafe-inline';
       style-src-attr 'unsafe-inline';
       img-src 'self' blob: data: https:;
       font-src 'self' data:;
-      connect-src 'self' https://*.supabase.co wss://*.supabase.co https://vercel.live https://img.youtube.com https://www.youtube.com https://*.portone.io https://api.portone.io https://*.inicis.com https://*.iamport.co https://checkout-service.prod.iamport.co https://dapi.kakao.com;
+      connect-src 'self' https://*.supabase.co wss://*.supabase.co https://vercel.live https://img.youtube.com https://www.youtube.com https://*.portone.io https://api.portone.io https://*.inicis.com https://*.iamport.co https://checkout-service.prod.iamport.co https://dapi.kakao.com https://*.kakao.com https://*.daumcdn.net;
       frame-src 'self' https://vercel.live https://www.youtube.com https://*.portone.io https://*.inicis.com https://pg.inicis.com https://ksmobile.inicis.com https://*.iamport.co https://checkout-service.prod.iamport.co https://*.hyundaicard.com https://*.shinhancard.com https://*.samsungcard.com https://*.lottecard.com https://*.hanacard.com https://*.bccard.com https://*.kbcard.com https://*.wooricard.com https://*.citibank.co.kr https://*.nhcard.com https://postcode.map.daum.net https://t1.daumcdn.net;
       frame-ancestors 'none';
       object-src 'none';
