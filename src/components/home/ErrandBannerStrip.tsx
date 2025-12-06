@@ -16,19 +16,16 @@ const MotorcycleIcon = () => (
   />
 );
 
-// 광고 카피 문구들
-const COPY_TEXTS = [
-  '귀찮은 일은 저희가',
-  '번개처럼 빠르게',
-  '뭐든 다 해드려요',
-  '지금 바로 요청하세요!',
-];
+// 광고 카피 - 한 글자씩 떨어짐
+const COPY_TEXT = '귀찮은 일 모두 돌파구에 맡겨 주세요';
 
 export default function ErrandBannerStrip() {
   const [scooterStarted, setScooterStarted] = useState(false);
   const [scooterStopped, setScooterStopped] = useState(false);
-  const [visibleTexts, setVisibleTexts] = useState<number[]>([]);
+  const [visibleChars, setVisibleChars] = useState<number[]>([]);
+  const [bikePosition, setBikePosition] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+  const animationRef = useRef<number | null>(null);
 
   // 스크롤 감지하여 스쿠터 애니메이션 시작
   useEffect(() => {
@@ -55,24 +52,57 @@ export default function ErrandBannerStrip() {
     };
   }, [scooterStarted]);
 
-  // 오토바이 시작 후 텍스트 순차적으로 떨어뜨리기
+  // 오토바이 위치 추적 및 글자 떨어뜨리기
   useEffect(() => {
     if (!scooterStarted) return;
 
-    const timers: NodeJS.Timeout[] = [];
-    const addVisibleText = (index: number) => {
-      setVisibleTexts((prev) => [...prev, index]);
+    const chars = COPY_TEXT.split('');
+    const totalDuration = 7000; // 7초 애니메이션
+    const startTime = Date.now();
+    let lastCharIndex = -1;
+
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / totalDuration, 1);
+
+      // 오토바이 위치 계산 (ease-out)
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      const maxPosition = typeof window !== 'undefined' ? window.innerWidth - 450 : 800;
+      const currentPosition = -150 + easeOut * (maxPosition + 150);
+      setBikePosition(currentPosition);
+
+      // 글자 떨어뜨리기 - 오토바이가 지나간 위치에 따라
+      const charInterval = (maxPosition + 150) / chars.length;
+      const currentCharIndex = Math.floor((currentPosition + 150) / charInterval);
+
+      if (currentCharIndex > lastCharIndex && currentCharIndex < chars.length) {
+        for (let i = lastCharIndex + 1; i <= currentCharIndex; i++) {
+          if (!visibleChars.includes(i)) {
+            setVisibleChars((prev) => [...prev, i]);
+          }
+        }
+        lastCharIndex = currentCharIndex;
+      }
+
+      if (progress < 1) {
+        animationRef.current = requestAnimationFrame(animate);
+      } else {
+        setScooterStopped(true);
+        // 마지막에 모든 글자 표시
+        setVisibleChars(chars.map((_, i) => i));
+      }
     };
 
-    for (let i = 0; i < COPY_TEXTS.length; i++) {
-      const timer = setTimeout(addVisibleText, 800 + i * 1200, i);
-      timers.push(timer);
-    }
+    animationRef.current = requestAnimationFrame(animate);
 
     return () => {
-      timers.forEach((timer) => clearTimeout(timer));
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
     };
   }, [scooterStarted]);
+
+  const chars = COPY_TEXT.split('');
 
   return (
     <section ref={sectionRef} className="relative overflow-hidden">
@@ -80,7 +110,7 @@ export default function ErrandBannerStrip() {
       <div
         className="absolute pointer-events-none z-50"
         style={{
-          top: 'calc(50% - 150px)',
+          top: 'calc(50% - 100px)',
           left: 0,
           right: 0,
           transform: 'translateY(-50%)',
@@ -99,13 +129,11 @@ export default function ErrandBannerStrip() {
         <div
           className="absolute hidden md:flex items-center"
           style={{
-            transform: scooterStarted ? undefined : 'translateX(-150px)',
-            animation: scooterStarted ? 'scooter-enter 7s ease-out forwards' : 'none',
+            transform: `translateX(${bikePosition}px)`,
           }}
-          onAnimationEnd={() => setScooterStopped(true)}
         >
           {/* 연기 효과 */}
-          {!scooterStopped && (
+          {!scooterStopped && scooterStarted && (
             <div className="absolute -left-16 flex items-center gap-1">
               <div
                 className="w-10 h-10 rounded-full bg-gray-400/70"
@@ -118,10 +146,6 @@ export default function ErrandBannerStrip() {
               <div
                 className="w-12 h-12 rounded-full bg-gray-400/50"
                 style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.3s' }}
-              />
-              <div
-                className="w-8 h-8 rounded-full bg-gray-400/40"
-                style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.45s' }}
               />
             </div>
           )}
@@ -142,27 +166,24 @@ export default function ErrandBannerStrip() {
 
         <div className="container-1200 relative z-10">
           <div className="flex items-center justify-between py-8 md:py-10 min-h-[180px] md:min-h-[200px]">
-            {/* 떨어지는 텍스트 영역 - 중앙 */}
-            <div className="flex-1 flex flex-col items-center justify-center gap-2 md:gap-3 pl-24 md:pl-64">
-              {COPY_TEXTS.map((text, index) => (
-                <div
-                  key={text}
-                  className={`text-white font-bold text-base md:text-xl lg:text-2xl whitespace-nowrap ${
-                    visibleTexts.includes(index) ? 'opacity-100' : 'opacity-0'
-                  }`}
+            {/* 떨어지는 글자들 - 가로로 배치 */}
+            <div className="flex-1 flex items-center justify-center gap-0.5 md:gap-1 pl-4 md:pl-20 flex-wrap">
+              {chars.map((char, index) => (
+                <span
+                  key={index}
+                  className={`text-white font-bold text-xl md:text-3xl lg:text-4xl ${
+                    visibleChars.includes(index) ? 'opacity-100' : 'opacity-0'
+                  } ${char === ' ' ? 'w-2 md:w-4' : ''}`}
                   style={{
-                    animation: visibleTexts.includes(index)
-                      ? 'text-bounce-drop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards'
+                    animation: visibleChars.includes(index)
+                      ? 'text-bounce-drop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards'
                       : 'none',
                     textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+                    color: char === '돌' || char === '파' || char === '구' ? '#fb923c' : 'white',
                   }}
                 >
-                  {index === COPY_TEXTS.length - 1 ? (
-                    <span className="text-orange-400">{text}</span>
-                  ) : (
-                    text
-                  )}
-                </div>
+                  {char === ' ' ? '\u00A0' : char}
+                </span>
               ))}
             </div>
 
