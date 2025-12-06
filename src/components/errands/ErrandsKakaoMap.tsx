@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import Script from 'next/script';
 import { Loader2, Navigation, MapPin, RefreshCw, Star, AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
 
@@ -109,9 +108,6 @@ export default function ErrandsKakaoMap({
   const [selectedHelper, setSelectedHelper] = useState<HelperLocation | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [sdkError, setSdkError] = useState<string | null>(null);
-  const [scriptLoaded, setScriptLoaded] = useState(false);
-
-  const KAKAO_MAP_KEY = process.env.NEXT_PUBLIC_KAKAO_MAP_KEY;
 
   // 사용자 위치 가져오기 (타임아웃 3초로 단축)
   useEffect(() => {
@@ -186,12 +182,12 @@ export default function ErrandsKakaoMap({
     }
   }, [userLocation, fetchHelpers]);
 
-  // 카카오 SDK 폴링으로 로드 확인
+  // 카카오 SDK 폴링으로 로드 확인 (layout.tsx에서 beforeInteractive로 로드됨)
   useEffect(() => {
     if (isLoaded) return;
 
     let attempts = 0;
-    const maxAttempts = 30; // 15초 (500ms * 30)
+    const maxAttempts = 40; // 20초 (500ms * 40)
 
     sdkCheckIntervalRef.current = setInterval(() => {
       attempts++;
@@ -217,23 +213,7 @@ export default function ErrandsKakaoMap({
         clearInterval(sdkCheckIntervalRef.current);
       }
     };
-  }, [isLoaded, scriptLoaded]);
-
-  // 카카오 지도 SDK 로드 완료 핸들러
-  const handleScriptLoad = useCallback(() => {
-    setScriptLoaded(true);
-
-    if (window.kakao && window.kakao.maps) {
-      window.kakao.maps.load(() => {
-        setIsLoaded(true);
-      });
-    }
-  }, []);
-
-  // Script 로드 에러 핸들러
-  const handleScriptError = useCallback(() => {
-    setSdkError('카카오맵 스크립트 로드에 실패했습니다.');
-  }, []);
+  }, [isLoaded]);
 
   // 지도 초기화
   useEffect(() => {
@@ -452,16 +432,6 @@ export default function ErrandsKakaoMap({
     }
   };
 
-  // API 키 없음
-  if (!KAKAO_MAP_KEY) {
-    return (
-      <div className={`bg-gray-100 rounded-2xl p-8 text-center ${className}`}>
-        <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-        <p className="text-gray-600">카카오 지도 API 키가 설정되지 않았습니다.</p>
-      </div>
-    );
-  }
-
   // SDK 로드 에러
   if (sdkError) {
     return (
@@ -479,130 +449,118 @@ export default function ErrandsKakaoMap({
   }
 
   return (
-    <>
-      <Script
-        src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_KEY}&autoload=false`}
-        onLoad={handleScriptLoad}
-        onError={handleScriptError}
-        strategy="beforeInteractive"
-        crossOrigin="anonymous"
-      />
+    <div className={`relative rounded-2xl overflow-hidden shadow-lg ${className}`}>
+      {/* 지도 컨테이너 */}
+      <div ref={mapContainerRef} className="w-full h-[400px] md:h-[500px] bg-gray-200" />
 
-      <div className={`relative rounded-2xl overflow-hidden shadow-lg ${className}`}>
-        {/* 지도 컨테이너 */}
-        <div ref={mapContainerRef} className="w-full h-[400px] md:h-[500px] bg-gray-200" />
+      {/* 로딩 오버레이 */}
+      {(loading || !isMapReady) && !sdkError && (
+        <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-10">
+          <div className="text-center">
+            <Loader2 className="w-10 h-10 animate-spin text-blue-500 mx-auto mb-3" />
+            <p className="text-gray-600 font-medium">
+              {(() => {
+                if (!userLocation) return '위치를 확인하는 중...';
+                if (!isLoaded) return '카카오맵 로드 중...';
+                return '주변 라이더를 찾는 중...';
+              })()}
+            </p>
+            <p className="text-gray-400 text-sm mt-2">{!isLoaded && '잠시만 기다려주세요...'}</p>
+          </div>
+        </div>
+      )}
 
-        {/* 로딩 오버레이 */}
-        {(loading || !isMapReady) && !sdkError && (
-          <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-10">
-            <div className="text-center">
-              <Loader2 className="w-10 h-10 animate-spin text-blue-500 mx-auto mb-3" />
-              <p className="text-gray-600 font-medium">
-                {(() => {
-                  if (!userLocation) return '위치를 확인하는 중...';
-                  if (!isLoaded) return '카카오맵 로드 중...';
-                  return '주변 라이더를 찾는 중...';
-                })()}
-              </p>
-              <p className="text-gray-400 text-sm mt-2">
-                {!isLoaded && scriptLoaded && '잠시만 기다려주세요...'}
-              </p>
+      {/* 위치 오류 메시지 */}
+      {locationError && isMapReady && (
+        <div className="absolute top-4 left-4 right-4 bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-2 text-sm text-yellow-700 z-20">
+          {locationError}
+        </div>
+      )}
+
+      {/* 컨트롤 버튼들 */}
+      {isMapReady && (
+        <div className="absolute top-4 right-4 flex flex-col gap-2 z-20">
+          <button
+            onClick={moveToMyLocation}
+            className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-50 transition"
+            title="내 위치로"
+          >
+            <Navigation className="w-5 h-5 text-blue-500" />
+          </button>
+          <button
+            onClick={handleRefresh}
+            disabled={loading}
+            className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-50 transition disabled:opacity-50"
+            title="새로고침"
+          >
+            <RefreshCw className={`w-5 h-5 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
+      )}
+
+      {/* 라이더 수 표시 */}
+      {isMapReady && (
+        <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur rounded-xl px-4 py-2 shadow-md z-20">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+            <span className="font-bold text-gray-800">
+              주변 <span className="text-green-600">{helpers.length}</span>명의 라이더
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* 선택된 라이더 정보 카드 */}
+      {selectedHelper && (
+        <div className="absolute bottom-4 right-4 left-4 md:left-auto md:w-80 bg-white rounded-xl shadow-xl p-4 z-30 animate-in slide-in-from-bottom-4">
+          <button
+            onClick={() => setSelectedHelper(null)}
+            className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+          >
+            ✕
+          </button>
+
+          <div className="flex items-center gap-3">
+            {/* 프로필 이미지 */}
+            <div className="w-14 h-14 rounded-full overflow-hidden bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white text-xl font-bold shrink-0">
+              {selectedHelper.profileImage ? (
+                <Image
+                  src={selectedHelper.profileImage}
+                  alt={selectedHelper.name}
+                  width={56}
+                  height={56}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                selectedHelper.name.charAt(0)
+              )}
             </div>
-          </div>
-        )}
 
-        {/* 위치 오류 메시지 */}
-        {locationError && isMapReady && (
-          <div className="absolute top-4 left-4 right-4 bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-2 text-sm text-yellow-700 z-20">
-            {locationError}
-          </div>
-        )}
-
-        {/* 컨트롤 버튼들 */}
-        {isMapReady && (
-          <div className="absolute top-4 right-4 flex flex-col gap-2 z-20">
-            <button
-              onClick={moveToMyLocation}
-              className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-50 transition"
-              title="내 위치로"
-            >
-              <Navigation className="w-5 h-5 text-blue-500" />
-            </button>
-            <button
-              onClick={handleRefresh}
-              disabled={loading}
-              className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-50 transition disabled:opacity-50"
-              title="새로고침"
-            >
-              <RefreshCw className={`w-5 h-5 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
-            </button>
-          </div>
-        )}
-
-        {/* 라이더 수 표시 */}
-        {isMapReady && (
-          <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur rounded-xl px-4 py-2 shadow-md z-20">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-              <span className="font-bold text-gray-800">
-                주변 <span className="text-green-600">{helpers.length}</span>명의 라이더
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* 선택된 라이더 정보 카드 */}
-        {selectedHelper && (
-          <div className="absolute bottom-4 right-4 left-4 md:left-auto md:w-80 bg-white rounded-xl shadow-xl p-4 z-30 animate-in slide-in-from-bottom-4">
-            <button
-              onClick={() => setSelectedHelper(null)}
-              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
-            >
-              ✕
-            </button>
-
-            <div className="flex items-center gap-3">
-              {/* 프로필 이미지 */}
-              <div className="w-14 h-14 rounded-full overflow-hidden bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white text-xl font-bold shrink-0">
-                {selectedHelper.profileImage ? (
-                  <Image
-                    src={selectedHelper.profileImage}
-                    alt={selectedHelper.name}
-                    width={56}
-                    height={56}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  selectedHelper.name.charAt(0)
-                )}
+            {/* 정보 */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="font-bold text-gray-900 truncate">{selectedHelper.name}</h3>
+                <span
+                  className={`text-xs px-2 py-0.5 rounded-full border ${getGradeBadgeColor(selectedHelper.grade)}`}
+                >
+                  {getGradeLabel(selectedHelper.grade)}
+                </span>
               </div>
 
-              {/* 정보 */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-bold text-gray-900 truncate">{selectedHelper.name}</h3>
-                  <span
-                    className={`text-xs px-2 py-0.5 rounded-full border ${getGradeBadgeColor(selectedHelper.grade)}`}
-                  >
-                    {getGradeLabel(selectedHelper.grade)}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-3 text-sm text-gray-600">
-                  <span className="flex items-center gap-1">
-                    <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                    {selectedHelper.rating?.toFixed(1) || '신규'}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <MapPin className="w-4 h-4 text-gray-400" />
-                    {selectedHelper.distance.toFixed(1)}km
-                  </span>
-                </div>
+              <div className="flex items-center gap-3 text-sm text-gray-600">
+                <span className="flex items-center gap-1">
+                  <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                  {selectedHelper.rating?.toFixed(1) || '신규'}
+                </span>
+                <span className="flex items-center gap-1">
+                  <MapPin className="w-4 h-4 text-gray-400" />
+                  {selectedHelper.distance.toFixed(1)}km
+                </span>
               </div>
             </div>
           </div>
-        )}
-      </div>
-    </>
+        </div>
+      )}
+    </div>
   );
 }
