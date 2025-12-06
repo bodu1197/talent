@@ -72,14 +72,18 @@ export default function ErrandBannerStrip() {
       const currentPosition = -150 + easeOut * (maxPosition + 150);
       setBikePosition(currentPosition);
 
-      // 오토바이 꼬리 위치 기준으로 reveal 영역 계산
-      const bikeTailPosition = currentPosition + BIKE_WIDTH;
+      // 오토바이 꼬리의 실제 화면 위치 (절대 좌표)
+      const bikeTailScreenPosition = currentPosition + BIKE_WIDTH;
 
       // 텍스트 컨테이너 기준으로 reveal 너비 계산
       if (textRef.current) {
         const textRect = textRef.current.getBoundingClientRect();
-        const revealFromLeft = bikeTailPosition - textRect.left + window.scrollX;
-        setRevealWidth(Math.max(0, revealFromLeft));
+        const textStartPosition = textRect.left;
+
+        // 오토바이 꼬리가 텍스트 시작점에 도달했을 때부터 reveal 시작
+        // 꼬리 위치 - 텍스트 시작 위치 = reveal 해야 할 너비
+        const revealAmount = bikeTailScreenPosition - textStartPosition;
+        setRevealWidth(Math.max(0, revealAmount));
       }
 
       if (progress < 1) {
