@@ -8,6 +8,7 @@ import {
   Phone,
   ShoppingBag,
   Store,
+  ArrowRight,
 } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -31,131 +32,156 @@ export const metadata: Metadata = {
 };
 
 export default function HelpPage() {
+  const mainMenus = [
+    {
+      icon: CircleHelp,
+      title: '자주 묻는 질문',
+      description: 'FAQ를 확인해보세요',
+      href: '/help/faq',
+    },
+    {
+      icon: Megaphone,
+      title: '공지사항',
+      description: '최신 소식을 확인하세요',
+      href: '/help/notice',
+    },
+    {
+      icon: MessageSquare,
+      title: '1:1 문의',
+      description: '직접 문의하기',
+      href: '/help/contact',
+    },
+  ];
+
+  const buyerGuides = [
+    { title: '서비스 구매 방법', href: '/buyer/how-to-order' },
+    { title: '결제 안내', href: '/buyer/payment' },
+    { title: '환불 정책', href: '/buyer/refund' },
+  ];
+
+  const sellerGuides = [
+    { title: '전문가 가이드', href: '/seller/guide' },
+    { title: '수수료 안내', href: '/seller/commission' },
+    { title: '정산 안내', href: '/mypage/seller/earnings' },
+  ];
+
   return (
-    <div className="container-1200 py-16">
-      <div className="text-center mb-12">
-        <h1 className="text-3xl font-semibold mb-4">고객센터</h1>
-        <p className="text-gray-600">무엇을 도와드릴까요?</p>
-      </div>
-
-      {/* 검색 */}
-      <div className="max-w-2xl mx-auto mb-12">
-        <div className="relative">
-          <input
-            id="help-search"
-            name="help-search"
-            type="text"
-            placeholder="궁금하신 내용을 검색해보세요"
-            className="w-full px-6 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
-            autoComplete="off"
-          />
-          <button
-            aria-label="검색"
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-primary"
-          >
-            <Search className="w-5 h-5" />
-          </button>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-brand-primary to-brand-dark text-white py-10 md:py-12">
+        <div className="container-1200 px-4 text-center">
+          <h1 className="text-2xl md:text-3xl font-bold mb-3">고객센터</h1>
+          <p className="text-base md:text-lg text-blue-100">무엇을 도와드릴까요?</p>
         </div>
-      </div>
+      </section>
 
-      {/* 주요 메뉴 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-        <Link
-          href="/help/faq"
-          className="bg-white rounded-lg border border-gray-200 p-8 text-center hover:border-brand-primary hover:shadow-lg transition-all group"
-        >
-          <div className="w-16 h-16 bg-brand-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-opacity-20 transition-colors">
-            <CircleHelp className="w-8 h-8 text-brand-primary" />
-          </div>
-          <h3 className="font-semibold text-lg mb-2">자주 묻는 질문</h3>
-          <p className="text-sm text-gray-600">FAQ를 확인해보세요</p>
-        </Link>
-
-        <Link
-          href="/help/notice"
-          className="bg-white rounded-lg border border-gray-200 p-8 text-center hover:border-brand-primary hover:shadow-lg transition-all group"
-        >
-          <div className="w-16 h-16 bg-brand-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-opacity-20 transition-colors">
-            <Megaphone className="w-8 h-8 text-brand-primary" />
-          </div>
-          <h3 className="font-semibold text-lg mb-2">공지사항</h3>
-          <p className="text-sm text-gray-600">최신 소식을 확인하세요</p>
-        </Link>
-
-        <Link
-          href="/help/contact"
-          className="bg-white rounded-lg border border-gray-200 p-8 text-center hover:border-brand-primary hover:shadow-lg transition-all group"
-        >
-          <div className="w-16 h-16 bg-brand-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-opacity-20 transition-colors">
-            <MessageSquare className="w-8 h-8 text-brand-primary" />
-          </div>
-          <h3 className="font-semibold text-lg mb-2">1:1 문의</h3>
-          <p className="text-sm text-gray-600">직접 문의하기</p>
-        </Link>
-
-        <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
-          <div className="w-16 h-16 bg-brand-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Phone className="w-8 h-8 text-brand-primary" />
-          </div>
-          <h3 className="font-semibold text-lg mb-2">전화 상담</h3>
-          <p className="text-sm text-gray-600 mb-2">1234-5678</p>
-          <p className="text-xs text-gray-500">평일 09:00 - 18:00</p>
-        </div>
-      </div>
-
-      {/* 카테고리별 도움말 */}
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl font-semibold mb-6">카테고리별 도움말</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="font-semibold mb-4 flex items-center gap-2">
-              <ShoppingBag className="w-5 h-5 text-brand-primary" />
-              구매자 가이드
-            </h3>
-            <ul className="space-y-2 text-sm text-gray-600">
-              <li>
-                <Link href="/buyer/guide" className="hover:text-brand-primary">
-                  • 서비스 구매 방법
-                </Link>
-              </li>
-              <li>
-                <Link href="/buyer/payment" className="hover:text-brand-primary">
-                  • 결제 안내
-                </Link>
-              </li>
-              <li>
-                <Link href="/buyer/refund" className="hover:text-brand-primary">
-                  • 환불 정책
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="font-semibold mb-4 flex items-center gap-2">
-              <Store className="w-5 h-5 text-brand-primary" />
-              전문가 가이드
-            </h3>
-            <ul className="space-y-2 text-sm text-gray-600">
-              <li>
-                <Link href="/seller/guide" className="hover:text-brand-primary">
-                  • 전문가 가이드
-                </Link>
-              </li>
-              <li>
-                <Link href="/seller/commission" className="hover:text-brand-primary">
-                  • 수수료 안내
-                </Link>
-              </li>
-              <li>
-                <Link href="/seller/settlement" className="hover:text-brand-primary">
-                  • 정산 안내
-                </Link>
-              </li>
-            </ul>
+      {/* Search */}
+      <section className="py-8 bg-white border-b">
+        <div className="container-1200 px-4">
+          <div className="max-w-lg mx-auto relative">
+            <input
+              id="help-search"
+              name="help-search"
+              type="text"
+              placeholder="궁금하신 내용을 검색해보세요"
+              className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary text-sm"
+              autoComplete="off"
+            />
+            <button
+              aria-label="검색"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-primary"
+            >
+              <Search className="w-5 h-5" />
+            </button>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Main Menus */}
+      <section className="py-10 md:py-12">
+        <div className="container-1200 px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+            {mainMenus.map((menu) => (
+              <Link
+                key={menu.title}
+                href={menu.href}
+                className="bg-white rounded-lg border border-gray-200 p-5 text-center hover:border-brand-primary hover:shadow-md transition-all group"
+              >
+                <div className="w-12 h-12 bg-brand-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-brand-primary/20 transition-colors">
+                  <menu.icon className="w-6 h-6 text-brand-primary" />
+                </div>
+                <h3 className="text-sm font-semibold mb-1">{menu.title}</h3>
+                <p className="text-xs text-gray-500">{menu.description}</p>
+              </Link>
+            ))}
+          </div>
+
+          {/* Phone */}
+          <div className="max-w-3xl mx-auto mt-4">
+            <div className="bg-white rounded-lg border border-gray-200 p-5 text-center">
+              <div className="flex items-center justify-center gap-3">
+                <div className="w-10 h-10 bg-brand-primary/10 rounded-full flex items-center justify-center">
+                  <Phone className="w-5 h-5 text-brand-primary" />
+                </div>
+                <div className="text-left">
+                  <p className="text-sm font-semibold">전화 상담</p>
+                  <p className="text-xs text-gray-500">dolpagu@dolpagu.com (평일 10:00 - 19:00)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Category Guides */}
+      <section className="py-10 md:py-12 bg-white">
+        <div className="container-1200 px-4">
+          <h2 className="text-lg md:text-xl font-bold text-center mb-6">카테고리별 도움말</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+            {/* Buyer Guide */}
+            <div className="bg-gray-50 rounded-lg p-4">
+              <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                <ShoppingBag className="w-4 h-4 text-brand-primary" />
+                구매자 가이드
+              </h3>
+              <ul className="space-y-2">
+                {buyerGuides.map((guide) => (
+                  <li key={guide.href}>
+                    <Link
+                      href={guide.href}
+                      className="flex items-center justify-between text-xs text-gray-600 hover:text-brand-primary transition-colors py-1"
+                    >
+                      <span>{guide.title}</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Seller Guide */}
+            <div className="bg-gray-50 rounded-lg p-4">
+              <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                <Store className="w-4 h-4 text-brand-primary" />
+                전문가 가이드
+              </h3>
+              <ul className="space-y-2">
+                {sellerGuides.map((guide) => (
+                  <li key={guide.href}>
+                    <Link
+                      href={guide.href}
+                      className="flex items-center justify-between text-xs text-gray-600 hover:text-brand-primary transition-colors py-1"
+                    >
+                      <span>{guide.title}</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

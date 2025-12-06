@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import Link from 'next/link';
+import { ChevronDown, ArrowRight, HelpCircle } from 'lucide-react';
 
 const faqs = [
   {
@@ -50,7 +51,7 @@ const faqs = [
       {
         question: '수수료는 얼마인가요?',
         answer:
-          '돌파구는 전문가와 구매자 모두 수수료가 0원입니다! 다른 플랫폼과 달리 중개 수수료가 전혀 없어서 전문가는 판매가의 100%를 수익으로 가져갈 수 있고, 구매자는 표시된 가격 그대로 결제하시면 됩니다.',
+          '돌파구는 전문가와 구매자 모두 수수료가 0원입니다! 판매가의 100%를 수익으로 가져갈 수 있습니다.',
       },
       {
         question: '정산은 언제 받을 수 있나요?',
@@ -69,8 +70,7 @@ const faqs = [
       },
       {
         question: '서비스 이용 중 문제가 생기면 어디로 문의하나요?',
-        answer:
-          '고객센터의 1:1 문의를 이용하시거나 이메일(support@example.com)로 문의해주세요. 평일 09:00-18:00에는 전화 상담(1234-5678)도 가능합니다.',
+        answer: '고객센터의 1:1 문의를 이용하시거나 이메일(dolpagu@dolpagu.com)로 문의해주세요.',
       },
     ],
   },
@@ -84,7 +84,6 @@ export default function FAQPage() {
     setOpenItems((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
-  // Schema.org FAQPage 구조화 데이터
   const faqSchema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -101,65 +100,84 @@ export default function FAQPage() {
   };
 
   return (
-    <div className="container-1200 py-16">
-      {/* Schema.org 구조화 데이터 */}
+    <div className="min-h-screen bg-gray-50">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <h1 className="text-3xl font-semibold mb-8">자주 묻는 질문</h1>
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-brand-primary to-brand-dark text-white py-10 md:py-12">
+        <div className="container-1200 px-4">
+          <h1 className="text-2xl md:text-3xl font-bold mb-3">자주 묻는 질문</h1>
+          <p className="text-base md:text-lg text-blue-100">궁금한 점을 빠르게 확인하세요.</p>
+        </div>
+      </section>
 
-      <div className="max-w-4xl">
-        {faqs.map((category, categoryIndex) => (
-          <div key={category.category || `category-${categoryIndex}`} className="mb-12">
-            <h2 className="text-2xl font-semibold mb-6 text-brand-primary">{category.category}</h2>
-            <div className="space-y-4">
-              {category.items.map((item, itemIndex) => {
-                const key = `${categoryIndex}-${itemIndex}`;
-                const isOpen = openItems[key];
+      {/* FAQ List */}
+      <section className="py-10 md:py-12">
+        <div className="container-1200 px-4">
+          <div className="max-w-3xl mx-auto">
+            {faqs.map((category, categoryIndex) => (
+              <div key={category.category} className="mb-8">
+                <h2 className="text-sm md:text-base font-semibold mb-4 text-brand-primary">
+                  {category.category}
+                </h2>
+                <div className="space-y-2">
+                  {category.items.map((item, itemIndex) => {
+                    const key = `${categoryIndex}-${itemIndex}`;
+                    const isOpen = openItems[key];
 
-                return (
-                  <div
-                    key={key}
-                    className="bg-white rounded-lg border border-gray-200 overflow-hidden"
-                  >
-                    <button
-                      onClick={() => toggleItem(categoryIndex, itemIndex)}
-                      className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
-                    >
-                      <div className="flex items-start gap-3 text-left">
-                        <span className="text-brand-primary font-semibold">Q.</span>
-                        <span className="font-semibold">{item.question}</span>
+                    return (
+                      <div
+                        key={key}
+                        className="bg-white rounded-lg border border-gray-200 overflow-hidden"
+                      >
+                        <button
+                          onClick={() => toggleItem(categoryIndex, itemIndex)}
+                          className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                        >
+                          <div className="flex items-start gap-2 text-left">
+                            <span className="text-brand-primary font-semibold text-sm">Q.</span>
+                            <span className="text-sm font-medium">{item.question}</span>
+                          </div>
+                          <ChevronDown
+                            className={`w-4 h-4 flex-shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                          />
+                        </button>
+                        {isOpen && (
+                          <div className="px-4 py-3 bg-gray-50 border-t border-gray-200">
+                            <div className="flex items-start gap-2">
+                              <span className="text-gray-500 font-semibold text-sm">A.</span>
+                              <p className="text-xs text-gray-700 leading-relaxed">{item.answer}</p>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      <ChevronDown
-                        className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-                      />
-                    </button>
-                    {isOpen && (
-                      <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                        <div className="flex items-start gap-3">
-                          <span className="text-gray-500 font-semibold">A.</span>
-                          <p className="text-gray-700">{item.answer}</p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      </section>
 
-      {/* 추가 문의 */}
-      <div className="mt-12 bg-brand-primary bg-opacity-5 rounded-lg p-8 text-center max-w-4xl">
-        <h3 className="text-xl font-semibold mb-4">원하는 답변을 찾지 못하셨나요?</h3>
-        <p className="text-gray-600 mb-6">1:1 문의를 통해 직접 질문해주세요.</p>
-        <button className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-opacity-90 transition-colors">
-          1:1 문의하기
-        </button>
-      </div>
+      {/* Help */}
+      <section className="py-10 md:py-12 bg-white">
+        <div className="container-1200 px-4 text-center">
+          <HelpCircle className="w-10 h-10 text-brand-primary mx-auto mb-4" />
+          <h2 className="text-lg font-bold mb-2">원하는 답변을 찾지 못하셨나요?</h2>
+          <p className="text-sm text-gray-600 mb-4">1:1 문의를 통해 직접 질문해주세요.</p>
+          <Link
+            href="/help/contact"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-primary text-white text-sm font-medium rounded-lg hover:bg-brand-dark transition-colors"
+          >
+            1:1 문의하기
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }
