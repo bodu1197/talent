@@ -24,10 +24,7 @@ export default function ErrandBannerStrip() {
   const [scooterStarted, setScooterStarted] = useState(false);
   const [scooterStopped, setScooterStopped] = useState(false);
   const [bikePosition, setBikePosition] = useState(-150);
-  const [revealWidth, setRevealWidth] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
 
   // 스크롤 감지하여 스쿠터 애니메이션 시작
@@ -55,7 +52,7 @@ export default function ErrandBannerStrip() {
     };
   }, [scooterStarted]);
 
-  // 오토바이 위치 추적 및 reveal 영역 계산
+  // 오토바이 위치 추적
   useEffect(() => {
     if (!scooterStarted || typeof window === 'undefined') return;
 
@@ -72,25 +69,10 @@ export default function ErrandBannerStrip() {
       const currentPosition = -150 + easeOut * (maxPosition + 150);
       setBikePosition(currentPosition);
 
-      // 오토바이 꼬리의 실제 화면 위치 (절대 좌표)
-      const bikeTailScreenPosition = currentPosition + BIKE_WIDTH;
-
-      // 텍스트 컨테이너 기준으로 reveal 너비 계산
-      if (textRef.current) {
-        const textRect = textRef.current.getBoundingClientRect();
-        const textStartPosition = textRect.left;
-
-        // 오토바이 꼬리가 텍스트 시작점에 도달했을 때부터 reveal 시작
-        // 꼬리 위치 - 텍스트 시작 위치 = reveal 해야 할 너비
-        const revealAmount = bikeTailScreenPosition - textStartPosition;
-        setRevealWidth(Math.max(0, revealAmount));
-      }
-
       if (progress < 1) {
         animationRef.current = requestAnimationFrame(animate);
       } else {
         setScooterStopped(true);
-        setRevealWidth(9999); // 완전히 보이게
       }
     };
 
@@ -103,9 +85,12 @@ export default function ErrandBannerStrip() {
     };
   }, [scooterStarted]);
 
+  // 마스크 left 위치 = 오토바이 꼬리 위치
+  const maskLeftPosition = bikePosition + BIKE_WIDTH;
+
   return (
     <section ref={sectionRef} className="relative" style={{ overflow: 'visible' }}>
-      {/* 오토바이 - 가장 위 레이어 (상단 overflow 허용) */}
+      {/* 오토바이 - 가장 위 레이어 */}
       <div
         className="absolute pointer-events-none z-50"
         style={{
@@ -152,6 +137,15 @@ export default function ErrandBannerStrip() {
         </div>
       </div>
 
+      {/* 글자를 가리는 마스크 - 오토바이 꼬리부터 화면 끝까지 (데스크톱만) */}
+      <div
+        className="absolute inset-y-0 bg-gray-900 z-30 pointer-events-none hidden md:block"
+        style={{
+          left: scooterStarted ? `${maskLeftPosition}px` : '0px',
+          right: 0,
+        }}
+      />
+
       {/* 배경 */}
       <div className="bg-gray-900 border-y border-gray-800">
         {/* 도트 패턴 */}
@@ -163,19 +157,11 @@ export default function ErrandBannerStrip() {
           }}
         />
 
-        <div className="container-1200 relative z-10" ref={containerRef}>
+        <div className="container-1200 relative z-10">
           <div className="flex items-center justify-between py-8 md:py-10 min-h-[180px] md:min-h-[200px]">
-            {/* 글자들 - 오토바이가 지나간 영역만 보이도록 clip */}
+            {/* 글자들 - 항상 보이는 상태, 마스크에 의해 가려짐 */}
             <div className="flex-1 flex items-center justify-center h-20 md:h-24">
-              <div
-                ref={textRef}
-                className="flex items-center"
-                style={{
-                  clipPath: scooterStarted
-                    ? `inset(0 calc(100% - ${revealWidth}px) 0 0)`
-                    : 'inset(0 100% 0 0)',
-                }}
-              >
+              <div className="flex items-center">
                 {COPY_TEXT.split('').map((char, index) => {
                   const isSpace = char === ' ';
                   const isHighlight = char === '돌' || char === '파' || char === '구';
@@ -203,7 +189,7 @@ export default function ErrandBannerStrip() {
             {/* CTA 버튼 - 우측 */}
             <Link
               href="/errands"
-              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-5 py-3 md:px-6 md:py-3.5 rounded-xl font-bold text-sm md:text-base shadow-lg shadow-blue-900/50 transition transform active:scale-95 flex-shrink-0 z-20"
+              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-5 py-3 md:px-6 md:py-3.5 rounded-xl font-bold text-sm md:text-base shadow-lg shadow-blue-900/50 transition transform active:scale-95 flex-shrink-0 z-40"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
