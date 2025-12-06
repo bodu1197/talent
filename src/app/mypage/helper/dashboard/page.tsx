@@ -155,7 +155,7 @@ export default function HelperDashboardPage() {
               <br />첫 달은 무료로 체험할 수 있습니다.
             </p>
             <Link
-              href="/mypage/helper/register"
+              href="/errands/register"
               className="inline-flex items-center gap-2 px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium"
             >
               심부름꾼 등록하기

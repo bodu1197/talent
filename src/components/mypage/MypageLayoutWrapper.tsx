@@ -160,7 +160,7 @@ export default function MypageLayoutWrapper({
     } else if (role === 'helper') {
       // 심부름꾼 등록이 안 되어 있으면 등록 페이지로
       if (!isRegisteredHelper) {
-        router.push('/mypage/helper/register');
+        router.push('/errands/register');
       } else {
         router.push('/mypage/helper/dashboard');
       }

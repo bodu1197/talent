@@ -318,7 +318,7 @@ const helperNavItems: NavItem[] = [
   },
   {
     label: '라이더 등록',
-    href: '/mypage/helper/register',
+    href: '/errands/register',
     icon: 'fa-user-plus',
   },
   {
@@ -363,7 +363,7 @@ export default function Sidebar({
     if (mode === 'seller' && isRegisteredSeller && item.href === '/mypage/seller/register') {
       return false;
     }
-    if (mode === 'helper' && isRegisteredHelper && item.href === '/mypage/helper/register') {
+    if (mode === 'helper' && isRegisteredHelper && item.href === '/errands/register') {
       return false;
     }
     return true;

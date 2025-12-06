@@ -194,7 +194,7 @@ export default function HelperGuidePage() {
             안전한 대면 서비스를 위해 엄격한 등록 절차를 운영합니다.
           </p>
           <Link
-            href="/mypage/helper/register"
+            href="/errands/register"
             className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-orange-600 text-sm font-semibold rounded-lg hover:bg-gray-100 transition-colors"
           >
             등록 신청하기
@@ -416,7 +416,7 @@ export default function HelperGuidePage() {
           <p className="text-sm text-orange-100 mb-6">안전한 플랫폼에서 수익을 올려보세요</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
-              href="/mypage/helper/register"
+              href="/errands/register"
               className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-white text-orange-600 text-sm font-semibold rounded-lg hover:bg-gray-100 transition-colors"
             >
               등록 신청하기
