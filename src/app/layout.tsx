@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Suspense } from 'react';
 import localFont from 'next/font/local';
-import Script from 'next/script';
 import './globals.css';
 import { AuthProvider } from '@/components/providers/AuthProvider';
 
@@ -194,10 +193,18 @@ export default async function RootLayout({
             />
           </>
         )}
-        {/* 카카오맵 SDK - 전역 로드 */}
-        <Script
-          src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&autoload=false`}
-          strategy="beforeInteractive"
+        {/* 카카오맵 SDK - 전역 로드 (dangerouslySetInnerHTML로 직접 삽입) */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var script = document.createElement('script');
+                script.src = 'https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&autoload=false';
+                script.async = true;
+                document.head.appendChild(script);
+              })();
+            `,
+          }}
         />
       </head>
       <body className="min-h-screen bg-gray-50 overflow-x-hidden">
