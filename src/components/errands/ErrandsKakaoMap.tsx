@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import Script from 'next/script';
-import { Loader2, Navigation, MapPin, RefreshCw, Star } from 'lucide-react';
+import { Loader2, Navigation, MapPin, RefreshCw, Star, AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
 
 // 카카오 지도 타입 선언
@@ -99,6 +99,7 @@ export default function ErrandsKakaoMap({
   const overlaysRef = useRef<KakaoCustomOverlay[]>([]);
   const circleRef = useRef<KakaoCircle | null>(null);
   const userMarkerRef = useRef<KakaoMarker | null>(null);
+  const sdkCheckIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [isMapReady, setIsMapReady] = useState(false);
@@ -107,38 +108,51 @@ export default function ErrandsKakaoMap({
   const [loading, setLoading] = useState(true);
   const [selectedHelper, setSelectedHelper] = useState<HelperLocation | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [sdkError, setSdkError] = useState<string | null>(null);
+  const [scriptLoaded, setScriptLoaded] = useState(false);
 
   const KAKAO_MAP_KEY = process.env.NEXT_PUBLIC_KAKAO_MAP_KEY;
 
-  // 사용자 위치 가져오기
+  // 사용자 위치 가져오기 (타임아웃 3초로 단축)
   useEffect(() => {
+    // 위치 권한 상관없이 바로 서울 좌표 설정 (빠른 로딩을 위해)
+    const fallbackTimer = setTimeout(() => {
+      if (!userLocation) {
+        setUserLocation({ lat: 37.5665, lng: 126.978 });
+      }
+    }, 3000);
+
     if (!navigator.geolocation) {
       setLocationError('위치 서비스를 지원하지 않는 브라우저입니다.');
-      setUserLocation({ lat: 37.5665, lng: 126.978 }); // 서울 시청 기본값
+      setUserLocation({ lat: 37.5665, lng: 126.978 });
+      clearTimeout(fallbackTimer);
       return;
     }
 
     /* eslint-disable sonarjs/no-intrusive-permissions */
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        clearTimeout(fallbackTimer);
         setUserLocation({
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         });
         setLocationError(null);
       },
-      (error) => {
-        console.error('Geolocation error:', error);
+      () => {
+        clearTimeout(fallbackTimer);
         setLocationError('위치 권한이 거부되었습니다. 서울 중심으로 표시합니다.');
         setUserLocation({ lat: 37.5665, lng: 126.978 });
       },
       {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 60000,
+        enableHighAccuracy: false,
+        timeout: 3000,
+        maximumAge: 300000, // 5분 캐시
       }
     );
     /* eslint-enable sonarjs/no-intrusive-permissions */
+
+    return () => clearTimeout(fallbackTimer);
   }, []);
 
   // 라이더 목록 가져오기
@@ -159,8 +173,8 @@ export default function ErrandsKakaoMap({
         setHelpers(data.helpers || []);
         onHelperCountChange?.(data.count || 0);
       }
-    } catch (error) {
-      console.error('Failed to fetch helpers:', error);
+    } catch {
+      // 에러 시 빈 목록 유지
     } finally {
       setLoading(false);
     }
@@ -172,8 +186,43 @@ export default function ErrandsKakaoMap({
     }
   }, [userLocation, fetchHelpers]);
 
+  // 카카오 SDK 폴링으로 로드 확인
+  useEffect(() => {
+    if (isLoaded) return;
+
+    let attempts = 0;
+    const maxAttempts = 30; // 15초 (500ms * 30)
+
+    sdkCheckIntervalRef.current = setInterval(() => {
+      attempts++;
+
+      if (window.kakao && window.kakao.maps) {
+        clearInterval(sdkCheckIntervalRef.current!);
+
+        try {
+          window.kakao.maps.load(() => {
+            setIsLoaded(true);
+          });
+        } catch {
+          setSdkError('카카오맵 초기화 중 오류가 발생했습니다.');
+        }
+      } else if (attempts >= maxAttempts) {
+        clearInterval(sdkCheckIntervalRef.current!);
+        setSdkError('카카오맵 로드에 실패했습니다. 네트워크를 확인해주세요.');
+      }
+    }, 500);
+
+    return () => {
+      if (sdkCheckIntervalRef.current) {
+        clearInterval(sdkCheckIntervalRef.current);
+      }
+    };
+  }, [isLoaded, scriptLoaded]);
+
   // 카카오 지도 SDK 로드 완료 핸들러
   const handleScriptLoad = useCallback(() => {
+    setScriptLoaded(true);
+
     if (window.kakao && window.kakao.maps) {
       window.kakao.maps.load(() => {
         setIsLoaded(true);
@@ -181,66 +230,76 @@ export default function ErrandsKakaoMap({
     }
   }, []);
 
+  // Script 로드 에러 핸들러
+  const handleScriptError = useCallback(() => {
+    setSdkError('카카오맵 스크립트 로드에 실패했습니다.');
+  }, []);
+
   // 지도 초기화
   useEffect(() => {
-    if (!isLoaded || !mapContainerRef.current || !userLocation) return;
+    if (!isLoaded || !mapContainerRef.current || !userLocation) {
+      return;
+    }
 
-    const { kakao } = window;
-    const container = mapContainerRef.current;
-    const options = {
-      center: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-      level: 5, // 약 1km 반경
-    };
+    try {
+      const { kakao } = window;
+      const container = mapContainerRef.current;
+      const options = {
+        center: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+        level: 5,
+      };
 
-    const map = new kakao.maps.Map(container, options);
-    mapRef.current = map;
+      const map = new kakao.maps.Map(container, options);
+      mapRef.current = map;
 
-    // 사용자 위치 마커 (파란색 점)
-    const userMarkerContent = document.createElement('div');
-    userMarkerContent.innerHTML = `
-      <div style="
-        width: 20px;
-        height: 20px;
-        background: #3B82F6;
-        border: 3px solid white;
-        border-radius: 50%;
-        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.5);
-        animation: pulse 2s infinite;
-      "></div>
-      <style>
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.2); opacity: 0.8; }
-        }
-      </style>
-    `;
+      // 사용자 위치 마커 (파란색 점)
+      const userMarkerContent = document.createElement('div');
+      userMarkerContent.innerHTML = `
+        <div style="
+          width: 20px;
+          height: 20px;
+          background: #3B82F6;
+          border: 3px solid white;
+          border-radius: 50%;
+          box-shadow: 0 2px 8px rgba(59, 130, 246, 0.5);
+          animation: pulse 2s infinite;
+        "></div>
+        <style>
+          @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+          }
+        </style>
+      `;
 
-    const userOverlay = new kakao.maps.CustomOverlay({
-      position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-      content: userMarkerContent,
-      yAnchor: 0.5,
-      xAnchor: 0.5,
-    });
-    userOverlay.setMap(map);
+      const userOverlay = new kakao.maps.CustomOverlay({
+        position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+        content: userMarkerContent,
+        yAnchor: 0.5,
+        xAnchor: 0.5,
+      });
+      userOverlay.setMap(map);
 
-    // 반경 표시 (5km)
-    const circle = new kakao.maps.Circle({
-      center: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-      radius: 5000,
-      strokeWeight: 2,
-      strokeColor: '#3B82F6',
-      strokeOpacity: 0.3,
-      strokeStyle: 'dashed',
-      fillColor: '#3B82F6',
-      fillOpacity: 0.05,
-    });
-    circle.setMap(map);
-    circleRef.current = circle;
+      // 반경 표시 (5km)
+      const circle = new kakao.maps.Circle({
+        center: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+        radius: 5000,
+        strokeWeight: 2,
+        strokeColor: '#3B82F6',
+        strokeOpacity: 0.3,
+        strokeStyle: 'dashed',
+        fillColor: '#3B82F6',
+        fillOpacity: 0.05,
+      });
+      circle.setMap(map);
+      circleRef.current = circle;
 
-    setIsMapReady(true);
+      setIsMapReady(true);
+    } catch {
+      setSdkError('지도 초기화 중 오류가 발생했습니다.');
+    }
 
     return () => {
-      // 정리
       markersRef.current.forEach((marker) => marker.setMap(null));
       overlaysRef.current.forEach((overlay) => overlay.setMap(null));
       if (circleRef.current) circleRef.current.setMap(null);
@@ -361,6 +420,11 @@ export default function ErrandsKakaoMap({
     fetchHelpers();
   }, [fetchHelpers]);
 
+  // 페이지 새로고침
+  const handlePageReload = useCallback(() => {
+    window.location.reload();
+  }, []);
+
   // 등급 배지 색상
   const getGradeBadgeColor = (grade: string) => {
     switch (grade) {
@@ -388,6 +452,7 @@ export default function ErrandsKakaoMap({
     }
   };
 
+  // API 키 없음
   if (!KAKAO_MAP_KEY) {
     return (
       <div className={`bg-gray-100 rounded-2xl p-8 text-center ${className}`}>
@@ -397,11 +462,28 @@ export default function ErrandsKakaoMap({
     );
   }
 
+  // SDK 로드 에러
+  if (sdkError) {
+    return (
+      <div className={`bg-red-50 rounded-2xl p-8 text-center ${className}`}>
+        <AlertTriangle className="w-12 h-12 text-red-400 mx-auto mb-4" />
+        <p className="text-red-600 font-medium mb-4">{sdkError}</p>
+        <button
+          onClick={handlePageReload}
+          className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+        >
+          페이지 새로고침
+        </button>
+      </div>
+    );
+  }
+
   return (
     <>
       <Script
         src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_KEY}&autoload=false`}
         onLoad={handleScriptLoad}
+        onError={handleScriptError}
         strategy="afterInteractive"
       />
 
@@ -410,52 +492,63 @@ export default function ErrandsKakaoMap({
         <div ref={mapContainerRef} className="w-full h-[400px] md:h-[500px] bg-gray-200" />
 
         {/* 로딩 오버레이 */}
-        {(loading || !isMapReady) && (
+        {(loading || !isMapReady) && !sdkError && (
           <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-10">
             <div className="text-center">
               <Loader2 className="w-10 h-10 animate-spin text-blue-500 mx-auto mb-3" />
               <p className="text-gray-600 font-medium">
-                {!userLocation ? '위치를 확인하는 중...' : '주변 라이더를 찾는 중...'}
+                {(() => {
+                  if (!userLocation) return '위치를 확인하는 중...';
+                  if (!isLoaded) return '카카오맵 로드 중...';
+                  return '주변 라이더를 찾는 중...';
+                })()}
+              </p>
+              <p className="text-gray-400 text-sm mt-2">
+                {!isLoaded && scriptLoaded && '잠시만 기다려주세요...'}
               </p>
             </div>
           </div>
         )}
 
         {/* 위치 오류 메시지 */}
-        {locationError && (
+        {locationError && isMapReady && (
           <div className="absolute top-4 left-4 right-4 bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-2 text-sm text-yellow-700 z-20">
             {locationError}
           </div>
         )}
 
         {/* 컨트롤 버튼들 */}
-        <div className="absolute top-4 right-4 flex flex-col gap-2 z-20">
-          <button
-            onClick={moveToMyLocation}
-            className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-50 transition"
-            title="내 위치로"
-          >
-            <Navigation className="w-5 h-5 text-blue-500" />
-          </button>
-          <button
-            onClick={handleRefresh}
-            disabled={loading}
-            className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-50 transition disabled:opacity-50"
-            title="새로고침"
-          >
-            <RefreshCw className={`w-5 h-5 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
-          </button>
-        </div>
+        {isMapReady && (
+          <div className="absolute top-4 right-4 flex flex-col gap-2 z-20">
+            <button
+              onClick={moveToMyLocation}
+              className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-50 transition"
+              title="내 위치로"
+            >
+              <Navigation className="w-5 h-5 text-blue-500" />
+            </button>
+            <button
+              onClick={handleRefresh}
+              disabled={loading}
+              className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-50 transition disabled:opacity-50"
+              title="새로고침"
+            >
+              <RefreshCw className={`w-5 h-5 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
+        )}
 
         {/* 라이더 수 표시 */}
-        <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur rounded-xl px-4 py-2 shadow-md z-20">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-            <span className="font-bold text-gray-800">
-              주변 <span className="text-green-600">{helpers.length}</span>명의 라이더
-            </span>
+        {isMapReady && (
+          <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur rounded-xl px-4 py-2 shadow-md z-20">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+              <span className="font-bold text-gray-800">
+                주변 <span className="text-green-600">{helpers.length}</span>명의 라이더
+              </span>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* 선택된 라이더 정보 카드 */}
         {selectedHelper && (
