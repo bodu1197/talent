@@ -10,7 +10,6 @@ import { logger } from '@/lib/logger';
 import toast from 'react-hot-toast';
 import * as PortOne from '@portone/browser-sdk/v2';
 import {
-  Bike,
   CreditCard,
   CheckCircle,
   Shield,
@@ -29,7 +28,6 @@ import {
   Ban,
   Fingerprint,
   ArrowLeft,
-  Star,
   Gift,
   MapPin,
 } from 'lucide-react';
@@ -380,19 +378,14 @@ export default function ErrandRiderRegisterPage() {
     <div className="min-h-screen bg-gray-50">
       {/* 헤더 */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-lg mx-auto px-4 h-14 flex items-center justify-between">
+        <div className="max-w-lg mx-auto px-4 h-14 flex items-center">
           <button
             onClick={() => router.back()}
             className="p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-gray-700" />
           </button>
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-brand-primary rounded-lg flex items-center justify-center">
-              <Star className="w-4 h-4 text-white fill-current" />
-            </div>
-            <span className="font-semibold text-gray-900">돌파구</span>
-          </Link>
+          <h1 className="flex-1 text-center font-semibold text-gray-900">라이더 등록</h1>
           <div className="w-9" />
         </div>
       </header>
@@ -400,10 +393,6 @@ export default function ErrandRiderRegisterPage() {
       <main className="max-w-lg mx-auto px-4 py-6">
         {/* 타이틀 */}
         <div className="text-center mb-6">
-          <div className="w-16 h-16 mx-auto bg-orange-100 rounded-full flex items-center justify-center mb-3">
-            <Bike className="w-8 h-8 text-orange-500" />
-          </div>
-          <h1 className="text-xl font-bold text-gray-900 mb-1">라이더 등록</h1>
           <p className="text-sm text-gray-600">안전한 서비스를 위해 신원 확인이 필요합니다</p>
         </div>
 
