@@ -28,7 +28,6 @@ import {
   Ban,
   Fingerprint,
   ArrowLeft,
-  Gift,
   MapPin,
 } from 'lucide-react';
 
@@ -396,59 +395,6 @@ export default function ErrandRiderRegisterPage() {
           <p className="text-sm text-gray-600">안전한 서비스를 위해 신원 확인이 필요합니다</p>
         </div>
 
-        {/* 생활물류서비스산업발전법 안내 배너 */}
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-          <div className="flex items-start gap-3">
-            <Shield className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="text-sm font-semibold text-red-800 mb-1">
-                생활물류서비스산업발전법 (제19조의 2, 3)
-              </p>
-              <p className="text-xs text-red-700 mb-2">
-                2025년 1월 17일부터 시행된 법률에 따라 <strong>범죄경력회보서 제출</strong>이
-                의무화되었습니다.
-              </p>
-              <ul className="text-xs text-red-700 space-y-1">
-                <li>• 소화물 배송 대행 종사자 범죄경력 조회 의무</li>
-                <li>• 살인·성범죄 20년, 절도 상습 18년, 마약류 2~10년 취업 제한</li>
-                <li>• 미확인 시 사업자에게 최대 500만원 과태료 부과</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        {/* 혜택 안내 (첫 화면에서만 표시) */}
-        {step === 1 && !formData.phone_verified && (
-          <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-lg border border-orange-200 p-4 mb-6">
-            <h2 className="font-bold text-orange-700 mb-3 flex items-center gap-2 text-sm">
-              <Gift className="w-4 h-4" />첫 달 무료 체험!
-            </h2>
-            <div className="space-y-2">
-              <div className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium text-gray-900">30일 무료 체험</p>
-                  <p className="text-xs text-gray-600">가입 후 30일간 무료로 이용해보세요</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
-                <Shield className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium text-gray-900">플랫폼 수수료 0%</p>
-                  <p className="text-xs text-gray-600">수익금 전액을 가져가세요!</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
-                <Clock className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium text-gray-900">자유로운 활동</p>
-                  <p className="text-xs text-gray-600">원할 때 원하는 심부름만 선택하세요</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* 스텝 인디케이터 */}
         <div className="flex items-center justify-between mb-6 px-2">
           {STEPS.map((s, index) => (
@@ -615,6 +561,27 @@ export default function ErrandRiderRegisterPage() {
               <FileText className="w-4 h-4 text-gray-600" />
               서류 제출
             </h3>
+
+            {/* 생활물류서비스산업발전법 안내 배너 */}
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-5">
+              <div className="flex items-start gap-3">
+                <Shield className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-red-800 mb-1">
+                    생활물류서비스산업발전법 (제19조의 2, 3)
+                  </p>
+                  <p className="text-xs text-red-700 mb-2">
+                    2025년 1월 17일부터 시행된 법률에 따라 <strong>범죄경력회보서 제출</strong>이
+                    의무화되었습니다.
+                  </p>
+                  <ul className="text-xs text-red-700 space-y-1">
+                    <li>• 소화물 배송 대행 종사자 범죄경력 조회 의무</li>
+                    <li>• 살인·성범죄 20년, 절도 상습 18년, 마약류 2~10년 취업 제한</li>
+                    <li>• 미확인 시 사업자에게 최대 500만원 과태료 부과</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
 
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-5">
               <div className="flex items-start gap-2">
