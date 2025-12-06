@@ -136,10 +136,12 @@ export default function ErrandBannerStrip() {
       {/* 글자를 가리는 마스크 - 오토바이 전체를 감싸고, 뒷바퀴가 왼쪽 끝 근처 (데스크톱만) */}
       {/* 시작 전: 전체 화면을 덮음 / 시작 후: 오토바이와 함께 이동 */}
       <div
-        className="absolute inset-y-0 bg-gray-900 z-40 pointer-events-none hidden md:block"
+        className="absolute inset-y-0 z-40 pointer-events-none hidden md:block"
         style={{
-          left: scooterStarted ? `${bikePosition - 20}px` : '0px',
+          left: scooterStarted ? `${bikePosition - 70}px` : '-50px',
           width: '300vw',
+          background:
+            'linear-gradient(to right, transparent 0px, rgba(17,24,39,0.3) 15px, rgba(17,24,39,0.7) 30px, rgb(17,24,39) 50px)',
         }}
       />
 
