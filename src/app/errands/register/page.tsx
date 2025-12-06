@@ -407,16 +407,23 @@ export default function ErrandRiderRegisterPage() {
           <p className="text-sm text-gray-600">안전한 서비스를 위해 신원 확인이 필요합니다</p>
         </div>
 
-        {/* 안전 안내 배너 */}
+        {/* 생활물류서비스산업발전법 안내 배너 */}
         <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
           <div className="flex items-start gap-3">
             <Shield className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-semibold text-red-800 mb-1">대면 서비스 안전 수칙</p>
-              <p className="text-xs text-red-700">
-                고객 안전을 위해 <strong>범죄경력 조회</strong>와 <strong>성범죄경력 조회</strong>를
-                필수로 진행합니다. 이는 배달의민족, 쿠팡이츠 등 주요 플랫폼의 기준을 따릅니다.
+              <p className="text-sm font-semibold text-red-800 mb-1">
+                생활물류서비스산업발전법 (제19조의 2, 3)
               </p>
+              <p className="text-xs text-red-700 mb-2">
+                2025년 1월 17일부터 시행된 법률에 따라 <strong>범죄경력회보서 제출</strong>이
+                의무화되었습니다.
+              </p>
+              <ul className="text-xs text-red-700 space-y-1">
+                <li>• 소화물 배송 대행 종사자 범죄경력 조회 의무</li>
+                <li>• 살인·성범죄 20년, 절도 상습 18년, 마약류 2~10년 취업 제한</li>
+                <li>• 미확인 시 사업자에게 최대 500만원 과태료 부과</li>
+              </ul>
             </div>
           </div>
         </div>
