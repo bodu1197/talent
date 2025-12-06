@@ -465,18 +465,96 @@ export default function ErrandsKakaoMap({
     }
   };
 
-  // SDK 로드 에러
+  // SDK 로드 에러 - 지도 없이 라이더 목록만 표시
   if (sdkError) {
     return (
-      <div className={`bg-red-50 rounded-2xl p-8 text-center ${className}`}>
-        <AlertTriangle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-        <p className="text-red-600 font-medium mb-4">{sdkError}</p>
-        <button
-          onClick={handlePageReload}
-          className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-        >
-          페이지 새로고침
-        </button>
+      <div className={`bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl p-6 ${className}`}>
+        {/* 헤더 */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+              <MapPin className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="font-bold text-gray-800">주변 라이더</h3>
+              <p className="text-sm text-gray-500">
+                {helpers.length > 0 ? `${helpers.length}명 대기 중` : '로딩 중...'}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={handleRefresh}
+            disabled={loading}
+            className="p-2 bg-white rounded-full shadow hover:bg-gray-50 transition"
+          >
+            <RefreshCw className={`w-5 h-5 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
+
+        {/* 라이더 목록 */}
+        {helpers.length > 0 && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {helpers.slice(0, 8).map((helper) => (
+              <div
+                key={helper.id}
+                className="bg-white rounded-xl p-3 shadow-sm hover:shadow-md transition cursor-pointer"
+                onClick={() => setSelectedHelper(helper)}
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-bold shrink-0">
+                    {helper.profileImage ? (
+                      <Image
+                        src={helper.profileImage}
+                        alt={helper.name}
+                        width={40}
+                        height={40}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      helper.name.charAt(0)
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-medium text-gray-800 truncate text-sm">{helper.name}</p>
+                    <p className="text-xs text-gray-500">{helper.distance.toFixed(1)}km</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 text-xs">
+                  <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
+                  <span className="text-gray-600">{helper.rating?.toFixed(1) || '신규'}</span>
+                  <span
+                    className={`ml-auto px-1.5 py-0.5 rounded text-[10px] ${getGradeBadgeColor(helper.grade)}`}
+                  >
+                    {getGradeLabel(helper.grade)}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {helpers.length === 0 && loading && (
+          <div className="flex items-center justify-center py-8">
+            <Loader2 className="w-6 h-6 animate-spin text-blue-500" />
+          </div>
+        )}
+
+        {helpers.length === 0 && !loading && (
+          <div className="text-center py-8 text-gray-500">
+            <p>주변에 활동 중인 라이더가 없습니다</p>
+          </div>
+        )}
+
+        {/* 지도 로드 실패 안내 (작게) */}
+        <div className="mt-4 pt-3 border-t border-gray-200 flex items-center justify-between">
+          <p className="text-xs text-gray-400 flex items-center gap-1">
+            <AlertTriangle className="w-3 h-3" />
+            지도를 불러올 수 없습니다
+          </p>
+          <button onClick={handlePageReload} className="text-xs text-blue-500 hover:text-blue-600">
+            다시 시도
+          </button>
+        </div>
       </div>
     );
   }
