@@ -18,8 +18,8 @@ export default function ConditionalLayout({ children, megaMenu }: ConditionalLay
   // 관리자 및 마이페이지에서 헤더/푸터 숨기기
   const hideLayout = pathname?.startsWith('/admin') || pathname?.startsWith('/mypage');
 
-  // 메인 페이지 확인 (모바일에서 헤더/검색 표시) - 랜딩 페이지도 포함
-  const isMainPage = pathname === '/' || pathname === '/landing';
+  // 메인 페이지 확인 (모바일에서 헤더/검색 표시)
+  const isMainPage = pathname === '/';
 
   // 검색 페이지 확인 (모바일에서 자체 UI 사용)
   const isSearchPage = pathname === '/search';

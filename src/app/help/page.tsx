@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
   Search,
@@ -8,6 +9,26 @@ import {
   ShoppingBag,
   Store,
 } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: '고객센터 | 돌파구',
+  description: '돌파구 고객센터입니다. FAQ, 공지사항, 1:1 문의 등을 통해 도움을 받으세요.',
+  keywords: ['고객센터', '도움말', 'FAQ', '문의', '돌파구'],
+  openGraph: {
+    title: '고객센터 | 돌파구',
+    description: '돌파구 고객센터입니다. FAQ, 공지사항, 1:1 문의 등을 통해 도움을 받으세요.',
+    type: 'website',
+    url: 'https://dolpagu.com/help',
+    siteName: '돌파구',
+  },
+  alternates: {
+    canonical: 'https://dolpagu.com/help',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 export default function HelpPage() {
   return (

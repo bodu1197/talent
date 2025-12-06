@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -6,6 +7,77 @@ import ServiceCard from '@/components/services/ServiceCard';
 import { Star, CheckCircle, Briefcase, User, Mail } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
+
+// 동적 메타데이터 생성
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const supabase = await createClient();
+
+  const { data: seller } = await supabase
+    .from('seller_profiles')
+    .select('id, display_name, business_name, bio, profile_image')
+    .eq('id', id)
+    .single();
+
+  if (!seller) {
+    return {
+      title: '전문가를 찾을 수 없습니다 | 돌파구',
+      description: '요청하신 전문가를 찾을 수 없습니다.',
+    };
+  }
+
+  const expertName = seller.display_name || seller.business_name || '전문가';
+  const description =
+    seller.bio?.slice(0, 155) || `${expertName}님의 프로필과 서비스를 확인하세요.`;
+
+  return {
+    title: `${expertName} | 돌파구 전문가`,
+    description,
+    openGraph: {
+      title: `${expertName} | 돌파구 전문가`,
+      description,
+      type: 'profile',
+      url: `https://dolpagu.com/experts/${id}`,
+      siteName: '돌파구',
+      images: seller.profile_image
+        ? [
+            {
+              url: seller.profile_image,
+              width: 400,
+              height: 400,
+              alt: expertName,
+            },
+          ]
+        : [
+            {
+              url: 'https://dolpagu.com/og-default.png',
+              width: 1200,
+              height: 630,
+              alt: '돌파구',
+            },
+          ],
+    },
+    twitter: {
+      card: 'summary',
+      title: `${expertName} | 돌파구 전문가`,
+      description,
+      images: seller.profile_image
+        ? [seller.profile_image]
+        : ['https://dolpagu.com/og-default.png'],
+    },
+    alternates: {
+      canonical: `https://dolpagu.com/experts/${id}`,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
 
 interface ExpertDetailProps {
   readonly params: Promise<{
