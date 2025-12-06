@@ -42,7 +42,7 @@ export async function middleware(request: NextRequest) {
     // 보안: XSS 취약점은 React의 자동 이스케이프로 완화
     const cspHeader = `
       default-src 'self';
-      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://cdn.portone.io https://*.portone.io https://t1.daumcdn.net https://postcode.map.daum.net;
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://cdn.portone.io https://*.portone.io https://t1.daumcdn.net https://postcode.map.daum.net https://dapi.kakao.com;
       style-src 'self' 'unsafe-inline';
       style-src-attr 'unsafe-inline';
       img-src 'self' blob: data: https:;
