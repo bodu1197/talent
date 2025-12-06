@@ -35,65 +35,62 @@ export async function GET(request: NextRequest) {
 
     const supabase = await createClient();
 
-    // 활성화된 라이더 조회 (기본 컬럼만)
-    const { data: basicHelpers, error: basicError } = await supabase
+    // 활성 라이더 조회
+    const { data: helperData, error: helperError } = await supabase
       .from('helper_profiles')
-      .select(
-        `
-        id,
-        user_id,
-        grade,
-        average_rating,
-        profiles!helper_profiles_profile_id_fkey (
-          name,
-          profile_image
-        )
-      `
-      )
+      .select('id, user_id, grade, average_rating')
       .eq('is_active', true)
       .in('subscription_status', ['active', 'trial'])
       .limit(limit);
 
-    if (basicError) {
-      throw basicError;
+    if (helperError) {
+      throw helperError;
     }
 
-    // 라이더가 있으면 사용자 위치 주변에 가상 위치로 표시
-    if (basicHelpers && basicHelpers.length > 0) {
-      /* eslint-disable sonarjs/pseudo-random */
-      const helpers: HelperLocation[] = basicHelpers.map((h, index) => {
-        const angle = (index * 60 + Math.random() * 30) * (Math.PI / 180);
-        const distance = 0.5 + Math.random() * (radiusKm - 0.5);
-        const offsetLat = (distance / 111) * Math.cos(angle);
-        const offsetLng = (distance / (111 * Math.cos((lat * Math.PI) / 180))) * Math.sin(angle);
-
-        const profile = Array.isArray(h.profiles) ? h.profiles[0] : h.profiles;
-
-        return {
-          id: h.id,
-          name: profile?.name || '라이더',
-          profileImage: profile?.profile_image || null,
-          lat: lat + offsetLat,
-          lng: lng + offsetLng,
-          distance: parseFloat(distance.toFixed(2)),
-          grade: h.grade,
-          rating: h.average_rating,
-        };
-      });
-      /* eslint-enable sonarjs/pseudo-random */
-
+    if (!helperData || helperData.length === 0) {
       return NextResponse.json({
-        helpers,
-        count: helpers.length,
+        helpers: [],
+        count: 0,
         location: { lat, lng },
         radiusKm,
       });
     }
 
-    // 라이더가 없는 경우
+    // 프로필 정보 조회 (user_id로 조인)
+    const userIds = helperData.map((h) => h.user_id);
+    const { data: profiles } = await supabase
+      .from('profiles')
+      .select('user_id, name, profile_image')
+      .in('user_id', userIds);
+
+    const profileMap = new Map((profiles || []).map((p) => [p.user_id, p]));
+
+    // 라이더 목록 생성 (사용자 위치 주변에 가상 위치로 표시)
+    /* eslint-disable sonarjs/pseudo-random */
+    const helpers: HelperLocation[] = helperData.map((h, index) => {
+      const angle = (index * 60 + Math.random() * 30) * (Math.PI / 180);
+      const distance = 0.5 + Math.random() * (radiusKm - 0.5);
+      const offsetLat = (distance / 111) * Math.cos(angle);
+      const offsetLng = (distance / (111 * Math.cos((lat * Math.PI) / 180))) * Math.sin(angle);
+
+      const profile = profileMap.get(h.user_id);
+
+      return {
+        id: h.id,
+        name: profile?.name || '라이더',
+        profileImage: profile?.profile_image || null,
+        lat: lat + offsetLat,
+        lng: lng + offsetLng,
+        distance: parseFloat(distance.toFixed(2)),
+        grade: h.grade || 'NEWBIE',
+        rating: h.average_rating || 0,
+      };
+    });
+    /* eslint-enable sonarjs/pseudo-random */
+
     return NextResponse.json({
-      helpers: [],
-      count: 0,
+      helpers,
+      count: helpers.length,
       location: { lat, lng },
       radiusKm,
     });
