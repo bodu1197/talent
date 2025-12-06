@@ -34,11 +34,27 @@ export default function AboutPage() {
     serviceType: [
       '재능 거래',
       '프리랜서 매칭',
-      '디자인 외주',
-      '개발 외주',
-      '마케팅 대행',
-      '영상 제작',
-      '번역 서비스',
+      'IT/프로그래밍',
+      '디자인',
+      '영상/사진',
+      '마케팅',
+      '번역/통역',
+      '문서/글쓰기',
+      '비즈니스',
+      'AI 서비스',
+      '음악/오디오',
+      '상담/코칭',
+      '취업/입시',
+      '직무역량',
+      '세무/법무/노무',
+      '운세/타로',
+      '뷰티/패션',
+      '취미/핸드메이드',
+      '주문제작',
+      '전자책/템플릿',
+      '이벤트',
+      '생활 서비스',
+      '심부름',
     ],
     sameAs: ['https://dolpagu.com'],
     contactPoint: {
@@ -75,7 +91,7 @@ export default function AboutPage() {
     { label: '수수료', value: '0%', description: '전문가/구매자 모두' },
     { label: '최소 정산', value: '1만원', description: '타 플랫폼 대비 5배 낮음' },
     { label: '정산 기간', value: '1-3일', description: '영업일 기준' },
-    { label: '카테고리', value: '8+', description: '다양한 재능 분야' },
+    { label: '카테고리', value: '21', description: '다양한 재능 분야' },
   ];
 
   return (
@@ -237,23 +253,37 @@ export default function AboutPage() {
             돌파구에서 다양한 분야의 전문가를 만나보세요
           </p>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
             {[
-              '디자인',
-              '개발/IT',
-              '영상/사진',
-              '마케팅',
-              '번역/통역',
-              '문서/글쓰기',
-              '비즈니스',
-              '레슨/상담',
+              { name: 'IT/프로그래밍', slug: 'it-programming' },
+              { name: '디자인', slug: 'design' },
+              { name: '영상/사진', slug: 'video-photo' },
+              { name: '마케팅', slug: 'marketing' },
+              { name: '번역/통역', slug: 'translation' },
+              { name: '문서/글쓰기', slug: 'writing' },
+              { name: '비즈니스', slug: 'business' },
+              { name: 'AI 서비스', slug: 'ai-services' },
+              { name: '음악/오디오', slug: 'music-audio' },
+              { name: '상담/코칭', slug: 'counseling-coaching' },
+              { name: '취업/입시', slug: 'career-admission' },
+              { name: '직무역량', slug: 'job-skills' },
+              { name: '세무/법무/노무', slug: 'tax-legal-labor' },
+              { name: '운세/타로', slug: 'fortune-tarot' },
+              { name: '뷰티/패션', slug: 'beauty-fashion' },
+              { name: '취미/핸드메이드', slug: 'hobby-handmade' },
+              { name: '주문제작', slug: 'custom-order' },
+              { name: '전자책/템플릿', slug: 'ebook-template' },
+              { name: '이벤트', slug: 'event' },
+              { name: '생활 서비스', slug: 'life-service' },
+              { name: '심부름', slug: 'errands' },
             ].map((category) => (
-              <div
-                key={category}
-                className="bg-white p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow"
+              <a
+                key={category.slug}
+                href={`/categories/${category.slug}`}
+                className="bg-white p-4 rounded-lg text-center shadow-sm hover:shadow-md hover:border-brand-primary border border-transparent transition-all"
               >
-                <p className="font-medium text-gray-800">{category}</p>
-              </div>
+                <p className="font-medium text-gray-800 text-sm">{category.name}</p>
+              </a>
             ))}
           </div>
         </div>
