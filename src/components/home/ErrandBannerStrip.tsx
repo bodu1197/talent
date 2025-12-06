@@ -155,7 +155,10 @@ export default function ErrandBannerStrip() {
         />
 
         <div className="container-1200 relative z-10">
-          <div className="flex items-center justify-between py-8 md:py-10 min-h-[180px] md:min-h-[200px]">
+          <div
+            className="flex items-center justify-between py-8 md:py-10 min-h-[180px] md:min-h-[200px]"
+            style={{ marginLeft: '-150px' }}
+          >
             {/* 글자들 - 항상 보이는 상태, 마스크에 의해 가려짐 */}
             <div className="flex-1 flex items-center justify-center h-20 md:h-24">
               <div className="flex items-center">
