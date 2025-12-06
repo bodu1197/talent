@@ -111,13 +111,8 @@ export default function HelperActiveToggle({ className = '' }: HelperActiveToggl
     return null;
   }
 
-  // 비로그인 사용자
+  // 비로그인 사용자에게만 라이더 등록 안내 표시
   if (!user) {
-    return null;
-  }
-
-  // 라이더가 아닌 경우
-  if (!isHelper) {
     return (
       <div className={`bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-4 ${className}`}>
         <div className="flex items-center justify-between">
@@ -131,7 +126,7 @@ export default function HelperActiveToggle({ className = '' }: HelperActiveToggl
             </div>
           </div>
           <Link
-            href="/errands/register"
+            href="/errands"
             className="px-4 py-2 bg-white text-green-600 rounded-lg font-bold text-sm hover:bg-green-50 transition"
           >
             등록하기
@@ -139,6 +134,11 @@ export default function HelperActiveToggle({ className = '' }: HelperActiveToggl
         </div>
       </div>
     );
+  }
+
+  // 로그인한 사용자이지만 라이더가 아닌 경우 - 아무것도 표시하지 않음
+  if (!isHelper) {
+    return null;
   }
 
   // 구독 만료된 경우
