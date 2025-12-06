@@ -193,19 +193,6 @@ export default async function RootLayout({
             />
           </>
         )}
-        {/* 카카오맵 SDK - 프록시 API를 통해 로드 (ORB 우회) */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                var script = document.createElement('script');
-                script.src = '/api/kakao-sdk';
-                script.async = true;
-                document.head.appendChild(script);
-              })();
-            `,
-          }}
-        />
       </head>
       <body className="min-h-screen bg-gray-50 overflow-x-hidden">
         <ErrorBoundary>

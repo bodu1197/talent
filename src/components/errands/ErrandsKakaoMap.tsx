@@ -182,38 +182,71 @@ export default function ErrandsKakaoMap({
     }
   }, [userLocation, fetchHelpers]);
 
-  // 카카오 SDK 폴링으로 로드 확인 (layout.tsx에서 beforeInteractive로 로드됨)
+  // 카카오맵 SDK 초기화 헬퍼
+  const initializeKakaoMaps = useCallback(() => {
+    if (!window.kakao?.maps) return;
+    window.kakao.maps.load(() => {
+      setIsLoaded(true);
+    });
+  }, []);
+
+  // 카카오 SDK 동적 로드 (컴포넌트 내에서 직접 로드)
   useEffect(() => {
     if (isLoaded) return;
 
-    let attempts = 0;
-    const maxAttempts = 40; // 20초 (500ms * 40)
+    // 이미 SDK가 로드되어 있으면 바로 사용
+    if (window.kakao?.maps) {
+      initializeKakaoMaps();
+      return;
+    }
 
-    sdkCheckIntervalRef.current = setInterval(() => {
-      attempts++;
+    // 폴링 함수 (이미 로드 중인 스크립트를 기다림)
+    const startPolling = () => {
+      let attempts = 0;
+      const maxAttempts = 40; // 20초
 
-      if (window.kakao && window.kakao.maps) {
-        clearInterval(sdkCheckIntervalRef.current!);
+      sdkCheckIntervalRef.current = setInterval(() => {
+        attempts++;
 
-        try {
-          window.kakao.maps.load(() => {
-            setIsLoaded(true);
-          });
-        } catch {
-          setSdkError('카카오맵 초기화 중 오류가 발생했습니다.');
+        if (window.kakao?.maps) {
+          clearInterval(sdkCheckIntervalRef.current!);
+          initializeKakaoMaps();
+        } else if (attempts >= maxAttempts) {
+          clearInterval(sdkCheckIntervalRef.current!);
+          setSdkError('카카오맵 로드 시간이 초과되었습니다.');
         }
-      } else if (attempts >= maxAttempts) {
-        clearInterval(sdkCheckIntervalRef.current!);
-        setSdkError('카카오맵 로드에 실패했습니다. 네트워크를 확인해주세요.');
-      }
-    }, 500);
+      }, 500);
+    };
+
+    // 이미 스크립트가 추가되어 있는지 확인
+    const existingScript = document.querySelector('script[src*="dapi.kakao.com"]');
+    if (existingScript) {
+      startPolling();
+      return;
+    }
+
+    // SDK 스크립트 동적 로드
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&autoload=false`;
+    script.async = true;
+
+    script.onload = () => {
+      initializeKakaoMaps();
+    };
+
+    script.onerror = () => {
+      setSdkError('카카오맵 SDK 로드에 실패했습니다. 네트워크를 확인해주세요.');
+    };
+
+    document.head.appendChild(script);
 
     return () => {
       if (sdkCheckIntervalRef.current) {
         clearInterval(sdkCheckIntervalRef.current);
       }
     };
-  }, [isLoaded]);
+  }, [isLoaded, initializeKakaoMaps]);
 
   // 지도 초기화
   useEffect(() => {
