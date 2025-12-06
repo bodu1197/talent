@@ -16,7 +16,7 @@ const MotorcycleIcon = () => (
   />
 );
 
-// 광고 카피 - 한 글자씩 떨어짐
+// 광고 카피 - 글자 단위로 떨어짐 (공백 제외)
 const COPY_TEXT = '귀찮은 일 모두 돌파구에 맡겨 주세요';
 const BIKE_WIDTH = 224; // 오토바이 너비 (w-56 = 224px)
 
@@ -29,7 +29,13 @@ export default function ErrandBannerStrip() {
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
 
-  const chars = COPY_TEXT.split('');
+  // 공백을 제외한 글자 배열과 공백 위치 정보
+  const charsWithSpace = COPY_TEXT.split('').map((char, i) => ({
+    char,
+    index: i,
+    isSpace: char === ' ',
+  }));
+  const chars = charsWithSpace.filter((c) => !c.isSpace);
 
   // 스크롤 감지하여 스쿠터 애니메이션 시작
   useEffect(() => {
@@ -172,33 +178,40 @@ export default function ErrandBannerStrip() {
 
         <div className="container-1200 relative z-10" ref={containerRef}>
           <div className="flex items-center justify-between py-8 md:py-10 min-h-[180px] md:min-h-[200px]">
-            {/* 떨어지는 글자들 - 절대 위치로 배치 */}
-            <div className="flex-1 relative h-20 md:h-24">
-              {chars.map((char, index) => {
-                const isDropped = droppedChars.has(index);
-                // 글자 위치 계산
-                const leftPercent = 5 + (index / chars.length) * 75; // 5% ~ 80%
+            {/* 떨어지는 글자들 - flexbox로 자연스러운 간격 */}
+            <div className="flex-1 flex items-center justify-center h-20 md:h-24">
+              <div className="flex items-center">
+                {COPY_TEXT.split('').map((char, originalIndex) => {
+                  // 공백이 아닌 글자의 인덱스 찾기
+                  const charIndex = chars.findIndex((c) => c.index === originalIndex);
+                  const isSpace = char === ' ';
+                  const isDropped = !isSpace && charIndex !== -1 && droppedChars.has(charIndex);
+                  const isHighlight = char === '돌' || char === '파' || char === '구';
 
-                return (
-                  <span
-                    key={index}
-                    className="absolute font-bold text-xl md:text-3xl lg:text-4xl"
-                    style={{
-                      left: `${leftPercent}%`,
-                      top: '50%',
-                      opacity: isDropped ? 1 : 0,
-                      transform: isDropped ? 'translateY(-50%)' : 'translateY(-150px)',
-                      animation: isDropped
-                        ? 'text-bounce-drop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards'
-                        : 'none',
-                      textShadow: '0 2px 10px rgba(0,0,0,0.5)',
-                      color: char === '돌' || char === '파' || char === '구' ? '#fb923c' : 'white',
-                    }}
-                  >
-                    {char === ' ' ? '\u00A0' : char}
-                  </span>
-                );
-              })}
+                  if (isSpace) {
+                    // 띄어쓰기는 자연스러운 간격으로
+                    return <span key={originalIndex} className="w-2 md:w-3 lg:w-4" />;
+                  }
+
+                  return (
+                    <span
+                      key={originalIndex}
+                      className="font-bold text-xl md:text-3xl lg:text-4xl"
+                      style={{
+                        opacity: isDropped ? 1 : 0,
+                        transform: isDropped ? 'translateY(0)' : 'translateY(-80px)',
+                        animation: isDropped
+                          ? 'text-bounce-drop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards'
+                          : 'none',
+                        textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+                        color: isHighlight ? '#fb923c' : 'white',
+                      }}
+                    >
+                      {char}
+                    </span>
+                  );
+                })}
+              </div>
             </div>
 
             {/* CTA 버튼 - 우측 */}
