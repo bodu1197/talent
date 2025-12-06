@@ -193,13 +193,13 @@ export default async function RootLayout({
             />
           </>
         )}
-        {/* 카카오맵 SDK - 전역 로드 (dangerouslySetInnerHTML로 직접 삽입) */}
+        {/* 카카오맵 SDK - 프록시 API를 통해 로드 (ORB 우회) */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 var script = document.createElement('script');
-                script.src = 'https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&autoload=false';
+                script.src = '/api/kakao-sdk';
                 script.async = true;
                 document.head.appendChild(script);
               })();
