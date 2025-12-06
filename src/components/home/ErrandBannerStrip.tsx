@@ -11,14 +11,14 @@ const MotorcycleIcon = () => (
     alt="배달 오토바이"
     width={300}
     height={200}
-    className="w-44 h-auto md:w-56"
+    className="w-52 h-auto md:w-64"
     unoptimized
   />
 );
 
 // 광고 카피 - 글자 단위로 떨어짐 (공백 제외)
 const COPY_TEXT = '귀찮은 일 모두 돌파구에 맡겨 주세요';
-const BIKE_WIDTH = 224; // 오토바이 너비 (w-56 = 224px)
+const BIKE_WIDTH = 256; // 오토바이 너비 (w-64 = 256px)
 
 export default function ErrandBannerStrip() {
   const [scooterStarted, setScooterStarted] = useState(false);
@@ -118,15 +118,16 @@ export default function ErrandBannerStrip() {
   }, [scooterStarted, chars.length]);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden">
-      {/* 오토바이 - 가장 위 레이어 */}
+    <section ref={sectionRef} className="relative" style={{ overflow: 'visible' }}>
+      {/* 오토바이 - 가장 위 레이어 (상단 overflow 허용) */}
       <div
         className="absolute pointer-events-none z-50"
         style={{
-          top: 'calc(50% - 150px)',
+          top: '50%',
           left: 0,
           right: 0,
-          transform: 'translateY(-50%)',
+          marginTop: '-120px',
+          overflow: 'visible',
         }}
       >
         {/* 모바일: 고정 위치 */}
@@ -199,12 +200,13 @@ export default function ErrandBannerStrip() {
                       className="font-bold text-xl md:text-3xl lg:text-4xl"
                       style={{
                         opacity: isDropped ? 1 : 0,
-                        transform: isDropped ? 'translateY(0)' : 'translateY(-80px)',
+                        transform: isDropped ? 'none' : 'translateY(-80px)',
                         animation: isDropped
                           ? 'text-bounce-drop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards'
                           : 'none',
                         textShadow: '0 2px 10px rgba(0,0,0,0.5)',
                         color: isHighlight ? '#fb923c' : 'white',
+                        visibility: isDropped ? 'visible' : 'hidden',
                       }}
                     >
                       {char}
