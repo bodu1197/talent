@@ -76,7 +76,10 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/help" className="hover:text-brand-primary transition-colors">
+                  <Link
+                    href="/seller/commission"
+                    className="hover:text-brand-primary transition-colors"
+                  >
                     수수료 안내
                   </Link>
                 </li>
