@@ -85,9 +85,6 @@ export default function ErrandBannerStrip() {
     };
   }, [scooterStarted]);
 
-  // 마스크 left 위치 = 오토바이 꼬리 위치
-  const maskLeftPosition = bikePosition + BIKE_WIDTH;
-
   return (
     <section ref={sectionRef} className="relative" style={{ overflow: 'visible' }}>
       {/* 오토바이 - 가장 위 레이어 */}
@@ -137,11 +134,12 @@ export default function ErrandBannerStrip() {
         </div>
       </div>
 
-      {/* 글자를 가리는 마스크 - 오토바이 꼬리부터 화면 끝까지 (데스크톱만) */}
+      {/* 글자를 가리는 마스크 - 오토바이 꼬리(뒷바퀴) 위치부터 화면 끝까지 (데스크톱만) */}
+      {/* 뒷바퀴 여백 10px만 주고, 그 오른쪽은 모두 가림 */}
       <div
         className="absolute inset-y-0 bg-gray-900 z-30 pointer-events-none hidden md:block"
         style={{
-          left: scooterStarted ? `${maskLeftPosition}px` : '0px',
+          left: scooterStarted ? `${bikePosition + BIKE_WIDTH - 10}px` : '0px',
           right: 0,
         }}
       />
