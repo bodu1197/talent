@@ -16,7 +16,7 @@ const MotorcycleIcon = () => (
   />
 );
 
-// 광고 카피 - 글자 단위로 떨어짐 (공백 제외)
+// 광고 카피
 const COPY_TEXT = '귀찮은 일 모두 돌파구에 맡겨 주세요';
 const BIKE_WIDTH = 256; // 오토바이 너비 (w-64 = 256px)
 
@@ -24,18 +24,11 @@ export default function ErrandBannerStrip() {
   const [scooterStarted, setScooterStarted] = useState(false);
   const [scooterStopped, setScooterStopped] = useState(false);
   const [bikePosition, setBikePosition] = useState(-150);
-  const [droppedChars, setDroppedChars] = useState<Set<number>>(new Set());
+  const [revealWidth, setRevealWidth] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
-
-  // 공백을 제외한 글자 배열과 공백 위치 정보
-  const charsWithSpace = COPY_TEXT.split('').map((char, i) => ({
-    char,
-    index: i,
-    isSpace: char === ' ',
-  }));
-  const chars = charsWithSpace.filter((c) => !c.isSpace);
 
   // 스크롤 감지하여 스쿠터 애니메이션 시작
   useEffect(() => {
@@ -62,19 +55,13 @@ export default function ErrandBannerStrip() {
     };
   }, [scooterStarted]);
 
-  // 오토바이 위치 추적 및 글자 떨어뜨리기
+  // 오토바이 위치 추적 및 reveal 영역 계산
   useEffect(() => {
     if (!scooterStarted || typeof window === 'undefined') return;
 
     const totalDuration = 7000;
     const startTime = Date.now();
     const maxPosition = window.innerWidth - 450;
-
-    // 글자들이 배치될 영역 (컨테이너 기준)
-    const containerWidth = containerRef.current?.offsetWidth || 800;
-    const textAreaStart = 100; // 왼쪽 여백
-    const textAreaWidth = containerWidth - 200; // 글자 영역 너비
-    const charSpacing = textAreaWidth / chars.length;
 
     const animate = () => {
       const elapsed = Date.now() - startTime;
@@ -85,26 +72,21 @@ export default function ErrandBannerStrip() {
       const currentPosition = -150 + easeOut * (maxPosition + 150);
       setBikePosition(currentPosition);
 
-      // 오토바이 뒷부분 위치 (오토바이가 완전히 지나간 위치)
+      // 오토바이 꼬리 위치 기준으로 reveal 영역 계산
       const bikeTailPosition = currentPosition + BIKE_WIDTH;
 
-      // 각 글자가 오토바이가 지나간 후에 떨어지도록
-      const newDroppedChars = new Set(droppedChars);
-      for (let i = 0; i < chars.length; i++) {
-        const charXPosition = textAreaStart + i * charSpacing;
-        // 오토바이 꼬리가 글자 위치를 지나쳤을 때 떨어뜨림
-        if (bikeTailPosition > charXPosition && !newDroppedChars.has(i)) {
-          newDroppedChars.add(i);
-        }
+      // 텍스트 컨테이너 기준으로 reveal 너비 계산
+      if (textRef.current) {
+        const textRect = textRef.current.getBoundingClientRect();
+        const revealFromLeft = bikeTailPosition - textRect.left + window.scrollX;
+        setRevealWidth(Math.max(0, revealFromLeft));
       }
-      setDroppedChars(newDroppedChars);
 
       if (progress < 1) {
         animationRef.current = requestAnimationFrame(animate);
       } else {
         setScooterStopped(true);
-        // 마지막에 모든 글자 표시
-        setDroppedChars(new Set(chars.map((_, i) => i)));
+        setRevealWidth(9999); // 완전히 보이게
       }
     };
 
@@ -115,7 +97,7 @@ export default function ErrandBannerStrip() {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [scooterStarted, chars.length]);
+  }, [scooterStarted]);
 
   return (
     <section ref={sectionRef} className="relative" style={{ overflow: 'visible' }}>
@@ -179,34 +161,32 @@ export default function ErrandBannerStrip() {
 
         <div className="container-1200 relative z-10" ref={containerRef}>
           <div className="flex items-center justify-between py-8 md:py-10 min-h-[180px] md:min-h-[200px]">
-            {/* 떨어지는 글자들 - flexbox로 자연스러운 간격 */}
+            {/* 글자들 - 오토바이가 지나간 영역만 보이도록 clip */}
             <div className="flex-1 flex items-center justify-center h-20 md:h-24">
-              <div className="flex items-center">
-                {COPY_TEXT.split('').map((char, originalIndex) => {
-                  // 공백이 아닌 글자의 인덱스 찾기
-                  const charIndex = chars.findIndex((c) => c.index === originalIndex);
+              <div
+                ref={textRef}
+                className="flex items-center"
+                style={{
+                  clipPath: scooterStarted
+                    ? `inset(0 calc(100% - ${revealWidth}px) 0 0)`
+                    : 'inset(0 100% 0 0)',
+                }}
+              >
+                {COPY_TEXT.split('').map((char, index) => {
                   const isSpace = char === ' ';
-                  const isDropped = !isSpace && charIndex !== -1 && droppedChars.has(charIndex);
                   const isHighlight = char === '돌' || char === '파' || char === '구';
 
                   if (isSpace) {
-                    // 띄어쓰기는 자연스러운 간격으로
-                    return <span key={originalIndex} className="w-2 md:w-3 lg:w-4" />;
+                    return <span key={index} className="w-2 md:w-3 lg:w-4" />;
                   }
 
                   return (
                     <span
-                      key={originalIndex}
+                      key={index}
                       className="font-bold text-xl md:text-3xl lg:text-4xl"
                       style={{
-                        opacity: isDropped ? 1 : 0,
-                        transform: isDropped ? 'none' : 'translateY(-80px)',
-                        animation: isDropped
-                          ? 'text-bounce-drop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards'
-                          : 'none',
                         textShadow: '0 2px 10px rgba(0,0,0,0.5)',
                         color: isHighlight ? '#fb923c' : 'white',
-                        visibility: isDropped ? 'visible' : 'hidden',
                       }}
                     >
                       {char}
