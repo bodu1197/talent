@@ -30,6 +30,7 @@ import {
   ArrowLeft,
   Star,
   Gift,
+  MapPin,
 } from 'lucide-react';
 
 const BANK_LIST = [
@@ -45,12 +46,12 @@ const BANK_LIST = [
   '토스뱅크',
 ];
 
+// 4단계로 변경: 본인인증 → 서류제출 → 계좌정보 → 약관동의
 const STEPS = [
-  { number: 1, title: '기본정보', icon: User },
-  { number: 2, title: '본인인증', icon: Phone },
-  { number: 3, title: '서류제출', icon: FileText },
-  { number: 4, title: '계좌정보', icon: CreditCard },
-  { number: 5, title: '약관동의', icon: CheckCircle },
+  { number: 1, title: '본인인증', icon: Fingerprint },
+  { number: 2, title: '서류제출', icon: FileText },
+  { number: 3, title: '계좌정보', icon: CreditCard },
+  { number: 4, title: '약관동의', icon: CheckCircle },
 ];
 
 interface FileUpload {
@@ -60,7 +61,7 @@ interface FileUpload {
 }
 
 export default function ErrandRiderRegisterPage() {
-  const { user, profile, loading: authLoading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
@@ -72,29 +73,29 @@ export default function ErrandRiderRegisterPage() {
 
   // 폼 데이터
   const [formData, setFormData] = useState({
-    // Step 1: 기본 정보
-    name: profile?.name || '',
+    // Step 1: 본인인증 후 자동 입력
+    name: '',
     birth_date: '',
     gender: '',
+    phone_number: '',
+    phone_verified: false,
+
+    // 주소는 별도 입력
     address: '',
     detail_address: '',
 
-    // Step 2: 본인인증
-    phone_verified: false,
-    phone_number: '',
-
-    // Step 3: 서류 제출
+    // Step 2: 서류 제출
     id_card: { file: null, preview: null, uploading: false } as FileUpload,
     selfie: { file: null, preview: null, uploading: false } as FileUpload,
     criminal_record: { file: null, preview: null, uploading: false } as FileUpload,
 
-    // Step 4: 계좌 정보
+    // Step 3: 계좌 정보
     bank_name: '',
     bank_account: '',
     account_holder: '',
     bio: '',
 
-    // Step 5: 약관 동의
+    // Step 4: 약관 동의
     agree_terms: false,
     agree_privacy: false,
     agree_criminal_check: false,
@@ -151,15 +152,34 @@ export default function ErrandRiderRegisterPage() {
     }));
   };
 
-  const simulatePhoneVerification = () => {
-    // 실제로는 본인인증 API 연동 필요
+  // 본인인증 완료 후 호출 - 실제로는 PASS API 응답에서 데이터를 받아옴
+  const handleIdentityVerification = () => {
+    // 실제 구현에서는 PASS 본인인증 API를 호출하고,
+    // 응답에서 이름, 생년월일, 성별, 휴대폰번호를 받아옴
+    // 여기서는 시뮬레이션
+    const verifiedData = {
+      name: '홍길동', // 실제로는 API 응답에서 받음
+      birth_date: '1990-01-01',
+      gender: 'male',
+      phone_number: '010-1234-5678',
+    };
+
+    setFormData((prev) => ({
+      ...prev,
+      ...verifiedData,
+      phone_verified: true,
+    }));
+
     toast.success('본인인증이 완료되었습니다');
-    setFormData((prev) => ({ ...prev, phone_verified: true }));
   };
 
   const validateStep1 = (): boolean => {
-    if (!formData.name || !formData.birth_date || !formData.gender || !formData.address) {
-      toast.error('필수 정보를 모두 입력해주세요');
+    if (!formData.phone_verified) {
+      toast.error('본인인증을 완료해주세요');
+      return false;
+    }
+    if (!formData.address) {
+      toast.error('주소를 입력해주세요');
       return false;
     }
     const birthYear = parseInt(formData.birth_date.split('-')[0]);
@@ -172,14 +192,6 @@ export default function ErrandRiderRegisterPage() {
   };
 
   const validateStep2 = (): boolean => {
-    if (!formData.phone_verified) {
-      toast.error('본인인증을 완료해주세요');
-      return false;
-    }
-    return true;
-  };
-
-  const validateStep3 = (): boolean => {
     if (!formData.id_card.file) {
       toast.error('신분증을 업로드해주세요');
       return false;
@@ -195,7 +207,7 @@ export default function ErrandRiderRegisterPage() {
     return true;
   };
 
-  const validateStep4 = (): boolean => {
+  const validateStep3 = (): boolean => {
     if (!formData.bank_name || !formData.bank_account || !formData.account_holder) {
       toast.error('계좌 정보를 모두 입력해주세요');
       return false;
@@ -203,7 +215,7 @@ export default function ErrandRiderRegisterPage() {
     return true;
   };
 
-  const validateStep5 = (): boolean => {
+  const validateStep4 = (): boolean => {
     const allAgreed =
       formData.agree_terms && formData.agree_privacy && formData.agree_criminal_check;
     if (!allAgreed) {
@@ -223,8 +235,6 @@ export default function ErrandRiderRegisterPage() {
         return validateStep3();
       case 4:
         return validateStep4();
-      case 5:
-        return validateStep5();
       default:
         return true;
     }
@@ -232,7 +242,7 @@ export default function ErrandRiderRegisterPage() {
 
   const nextStep = () => {
     if (validateStep(step)) {
-      setStep((prev) => Math.min(prev + 1, 5));
+      setStep((prev) => Math.min(prev + 1, 4));
     }
   };
 
@@ -241,7 +251,7 @@ export default function ErrandRiderRegisterPage() {
   };
 
   const handleSubmit = async () => {
-    if (!validateStep(5)) return;
+    if (!validateStep(4)) return;
 
     try {
       setLoading(true);
@@ -350,7 +360,7 @@ export default function ErrandRiderRegisterPage() {
         </div>
 
         {/* 혜택 안내 (첫 화면에서만 표시) */}
-        {step === 1 && (
+        {step === 1 && !formData.phone_verified && (
           <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-lg border border-orange-200 p-4 mb-6">
             <h2 className="font-bold text-orange-700 mb-3 flex items-center gap-2 text-sm">
               <Gift className="w-4 h-4" />첫 달 무료 체험!
@@ -403,7 +413,7 @@ export default function ErrandRiderRegisterPage() {
               </div>
               {index < STEPS.length - 1 && (
                 <div
-                  className={`w-4 sm:w-8 h-0.5 mx-0.5 ${
+                  className={`w-6 sm:w-10 h-0.5 mx-1 ${
                     step > s.number ? 'bg-orange-500' : 'bg-gray-200'
                   }`}
                 />
@@ -412,198 +422,126 @@ export default function ErrandRiderRegisterPage() {
           ))}
         </div>
 
-        {/* Step 1: 기본 정보 */}
+        {/* Step 1: 본인인증 (이름, 생년월일, 성별, 휴대폰 자동 입력) */}
         {step === 1 && (
           <div className="bg-white rounded-lg border border-gray-200 p-5">
             <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2 text-sm">
-              <User className="w-4 h-4 text-gray-600" />
-              기본 정보
-            </h3>
-
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                  이름 <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="실명을 입력하세요"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="birth_date"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  생년월일 <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id="birth_date"
-                  type="date"
-                  name="birth_date"
-                  value={formData.birth_date}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
-                />
-                <p className="mt-1 text-xs text-gray-500">만 19세 이상만 등록 가능합니다</p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  성별 <span className="text-red-500">*</span>
-                </label>
-                <div className="flex gap-4">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="gender"
-                      value="male"
-                      checked={formData.gender === 'male'}
-                      onChange={handleChange}
-                      className="w-4 h-4 text-orange-500 focus:ring-orange-500"
-                    />
-                    <span className="text-sm">남성</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="gender"
-                      value="female"
-                      checked={formData.gender === 'female'}
-                      onChange={handleChange}
-                      className="w-4 h-4 text-orange-500 focus:ring-orange-500"
-                    />
-                    <span className="text-sm">여성</span>
-                  </label>
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
-                  주소 <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id="address"
-                  type="text"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  placeholder="기본 주소"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm mb-2"
-                />
-                <input
-                  id="detail_address"
-                  type="text"
-                  name="detail_address"
-                  value={formData.detail_address}
-                  onChange={handleChange}
-                  placeholder="상세 주소 (선택)"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
-                />
-              </div>
-            </div>
-
-            <button
-              onClick={nextStep}
-              className="w-full mt-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium flex items-center justify-center gap-2"
-            >
-              다음
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-        )}
-
-        {/* Step 2: 본인인증 */}
-        {step === 2 && (
-          <div className="bg-white rounded-lg border border-gray-200 p-5">
-            <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2 text-sm">
-              <Phone className="w-4 h-4 text-gray-600" />
+              <Fingerprint className="w-4 h-4 text-gray-600" />
               본인인증
             </h3>
 
-            <div className="bg-gray-50 rounded-lg p-4 mb-5">
-              <div className="flex items-start gap-3">
-                <Fingerprint className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium text-gray-900 mb-1">
-                    본인 명의 휴대폰으로 인증이 필요합니다
-                  </p>
-                  <p className="text-xs text-gray-600">
-                    신원 확인을 위해 본인 명의의 휴대폰 번호로 인증을 진행합니다.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {formData.phone_verified ? (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-5">
-                <div className="flex items-center gap-3">
-                  <CheckCircle className="w-6 h-6 text-green-600" />
-                  <div>
-                    <p className="font-medium text-green-800">본인인증 완료</p>
-                    <p className="text-sm text-green-700">
-                      {formData.phone_number || '010-****-****'}
-                    </p>
+            {!formData.phone_verified ? (
+              <>
+                <div className="bg-gray-50 rounded-lg p-4 mb-5">
+                  <div className="flex items-start gap-3">
+                    <Phone className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-900 mb-1">
+                        본인 명의 휴대폰으로 인증이 필요합니다
+                      </p>
+                      <p className="text-xs text-gray-600">
+                        인증 완료 시 이름, 생년월일, 성별, 휴대폰 번호가 자동으로 입력됩니다.
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div>
-                  <label
-                    htmlFor="phone_number"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    휴대폰 번호
-                  </label>
-                  <input
-                    id="phone_number"
-                    type="tel"
-                    name="phone_number"
-                    value={formData.phone_number}
-                    onChange={handleChange}
-                    placeholder="010-0000-0000"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
-                  />
                 </div>
 
                 <button
-                  onClick={simulatePhoneVerification}
-                  className="w-full py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
+                  onClick={handleIdentityVerification}
+                  className="w-full py-3.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium flex items-center justify-center gap-2"
                 >
+                  <Fingerprint className="w-5 h-5" />
                   본인인증 진행하기
                 </button>
-              </div>
-            )}
 
-            <div className="flex gap-3 mt-5">
-              <button
-                onClick={prevStep}
-                className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center justify-center gap-2"
-              >
-                <ChevronLeft className="w-4 h-4" />
-                이전
-              </button>
-              <button
-                onClick={nextStep}
-                disabled={!formData.phone_verified}
-                className="flex-1 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                다음
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
+                <p className="text-xs text-gray-500 text-center mt-3">
+                  PASS 앱 또는 SMS 인증으로 진행됩니다
+                </p>
+              </>
+            ) : (
+              <>
+                {/* 본인인증 완료 - 정보 표시 */}
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-5">
+                  <div className="flex items-center gap-3 mb-3">
+                    <CheckCircle className="w-6 h-6 text-green-600" />
+                    <div>
+                      <p className="font-medium text-green-800">본인인증 완료</p>
+                      <p className="text-xs text-green-700">
+                        인증된 정보가 자동으로 입력되었습니다
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 mt-4">
+                    <div className="bg-white rounded-lg p-3 border border-green-100">
+                      <p className="text-xs text-gray-500 mb-1">이름</p>
+                      <p className="text-sm font-medium text-gray-900">{formData.name}</p>
+                    </div>
+                    <div className="bg-white rounded-lg p-3 border border-green-100">
+                      <p className="text-xs text-gray-500 mb-1">생년월일</p>
+                      <p className="text-sm font-medium text-gray-900">{formData.birth_date}</p>
+                    </div>
+                    <div className="bg-white rounded-lg p-3 border border-green-100">
+                      <p className="text-xs text-gray-500 mb-1">성별</p>
+                      <p className="text-sm font-medium text-gray-900">
+                        {formData.gender === 'male' ? '남성' : '여성'}
+                      </p>
+                    </div>
+                    <div className="bg-white rounded-lg p-3 border border-green-100">
+                      <p className="text-xs text-gray-500 mb-1">휴대폰</p>
+                      <p className="text-sm font-medium text-gray-900">{formData.phone_number}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 주소 입력 */}
+                <div className="space-y-3">
+                  <div>
+                    <label
+                      htmlFor="address"
+                      className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1"
+                    >
+                      <MapPin className="w-4 h-4" />
+                      활동 지역 주소 <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="address"
+                      type="text"
+                      name="address"
+                      value={formData.address}
+                      onChange={handleChange}
+                      placeholder="기본 주소 입력"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                    />
+                  </div>
+                  <input
+                    id="detail_address"
+                    type="text"
+                    name="detail_address"
+                    value={formData.detail_address}
+                    onChange={handleChange}
+                    placeholder="상세 주소 (선택)"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                  />
+                  <p className="text-xs text-gray-500">
+                    주로 활동할 지역의 주소를 입력해주세요. 해당 지역의 심부름이 우선 노출됩니다.
+                  </p>
+                </div>
+
+                <button
+                  onClick={nextStep}
+                  className="w-full mt-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium flex items-center justify-center gap-2"
+                >
+                  다음
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </>
+            )}
           </div>
         )}
 
-        {/* Step 3: 서류 제출 */}
-        {step === 3 && (
+        {/* Step 2: 서류 제출 */}
+        {step === 2 && (
           <div className="bg-white rounded-lg border border-gray-200 p-5">
             <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2 text-sm">
               <FileText className="w-4 h-4 text-gray-600" />
@@ -848,8 +786,8 @@ export default function ErrandRiderRegisterPage() {
           </div>
         )}
 
-        {/* Step 4: 계좌 정보 */}
-        {step === 4 && (
+        {/* Step 3: 계좌 정보 */}
+        {step === 3 && (
           <div className="bg-white rounded-lg border border-gray-200 p-5">
             <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2 text-sm">
               <CreditCard className="w-4 h-4 text-gray-600" />
@@ -914,6 +852,9 @@ export default function ErrandRiderRegisterPage() {
                   placeholder="예금주명 (본인 명의)"
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  본인인증된 이름({formData.name})과 동일해야 합니다
+                </p>
               </div>
 
               <div>
@@ -951,8 +892,8 @@ export default function ErrandRiderRegisterPage() {
           </div>
         )}
 
-        {/* Step 5: 약관 동의 */}
-        {step === 5 && (
+        {/* Step 4: 약관 동의 */}
+        {step === 4 && (
           <div className="bg-white rounded-lg border border-gray-200 p-5">
             <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2 text-sm">
               <CheckCircle className="w-4 h-4 text-gray-600" />
