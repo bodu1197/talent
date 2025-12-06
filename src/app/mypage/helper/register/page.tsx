@@ -1,13 +1,34 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import { useAuth } from '@/components/providers/AuthProvider';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { logger } from '@/lib/logger';
 import toast from 'react-hot-toast';
-import { Bike, CreditCard, CheckCircle, Gift, Shield, Clock, ChevronRight } from 'lucide-react';
+import {
+  Bike,
+  CreditCard,
+  CheckCircle,
+  Shield,
+  Clock,
+  ChevronRight,
+  ChevronLeft,
+  User,
+  FileText,
+  Camera,
+  Upload,
+  AlertTriangle,
+  Phone,
+  ExternalLink,
+  X,
+  Info,
+  Ban,
+  Fingerprint,
+} from 'lucide-react';
 
 const BANK_LIST = [
   '국민은행',
@@ -22,19 +43,60 @@ const BANK_LIST = [
   '토스뱅크',
 ];
 
+const STEPS = [
+  { number: 1, title: '기본정보', icon: User },
+  { number: 2, title: '본인인증', icon: Phone },
+  { number: 3, title: '서류제출', icon: FileText },
+  { number: 4, title: '계좌정보', icon: CreditCard },
+  { number: 5, title: '약관동의', icon: CheckCircle },
+];
+
+interface FileUpload {
+  file: File | null;
+  preview: string | null;
+  uploading: boolean;
+}
+
 export default function HelperRegisterPage() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, profile, loading: authLoading } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
 
+  // 파일 입력 refs
+  const idCardRef = useRef<HTMLInputElement>(null);
+  const criminalRecordRef = useRef<HTMLInputElement>(null);
+  const sexOffenderRef = useRef<HTMLInputElement>(null);
+
+  // 폼 데이터
   const [formData, setFormData] = useState({
+    // Step 1: 기본 정보
+    name: profile?.name || '',
+    birth_date: '',
+    gender: '',
+    address: '',
+    detail_address: '',
+
+    // Step 2: 본인인증
+    phone_verified: false,
+    phone_number: '',
+
+    // Step 3: 서류 제출
+    id_card: { file: null, preview: null, uploading: false } as FileUpload,
+    criminal_record: { file: null, preview: null, uploading: false } as FileUpload,
+    sex_offender_record: { file: null, preview: null, uploading: false } as FileUpload,
+
+    // Step 4: 계좌 정보
     bank_name: '',
     bank_account: '',
     account_holder: '',
     bio: '',
+
+    // Step 5: 약관 동의
     agree_terms: false,
     agree_privacy: false,
+    agree_criminal_check: false,
+    agree_sex_offender_check: false,
   });
 
   const handleChange = (
@@ -51,28 +113,167 @@ export default function HelperRegisterPage() {
     }
   };
 
-  const handleSubmit = async () => {
-    if (!formData.bank_name || !formData.bank_account || !formData.account_holder) {
-      toast.error('계좌 정보를 모두 입력해주세요');
+  const handleFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    fieldName: 'id_card' | 'criminal_record' | 'sex_offender_record'
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // 파일 크기 체크 (10MB 제한)
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error('파일 크기는 10MB 이하만 가능합니다');
       return;
     }
 
-    if (!formData.agree_terms || !formData.agree_privacy) {
-      toast.error('약관에 동의해주세요');
+    // 이미지 또는 PDF만 허용
+    if (!file.type.startsWith('image/') && file.type !== 'application/pdf') {
+      toast.error('이미지 또는 PDF 파일만 업로드 가능합니다');
       return;
     }
+
+    const preview = file.type.startsWith('image/') ? URL.createObjectURL(file) : null;
+
+    setFormData((prev) => ({
+      ...prev,
+      [fieldName]: { file, preview, uploading: false },
+    }));
+  };
+
+  const removeFile = (fieldName: 'id_card' | 'criminal_record' | 'sex_offender_record') => {
+    if (formData[fieldName].preview) {
+      URL.revokeObjectURL(formData[fieldName].preview!);
+    }
+    setFormData((prev) => ({
+      ...prev,
+      [fieldName]: { file: null, preview: null, uploading: false },
+    }));
+  };
+
+  const simulatePhoneVerification = () => {
+    // 실제로는 본인인증 API 연동 필요
+    toast.success('본인인증이 완료되었습니다');
+    setFormData((prev) => ({ ...prev, phone_verified: true }));
+  };
+
+  const validateStep1 = (): boolean => {
+    if (!formData.name || !formData.birth_date || !formData.gender || !formData.address) {
+      toast.error('필수 정보를 모두 입력해주세요');
+      return false;
+    }
+    const birthYear = parseInt(formData.birth_date.split('-')[0]);
+    const currentYear = new Date().getFullYear();
+    if (currentYear - birthYear < 19) {
+      toast.error('만 19세 이상만 등록 가능합니다');
+      return false;
+    }
+    return true;
+  };
+
+  const validateStep2 = (): boolean => {
+    if (!formData.phone_verified) {
+      toast.error('본인인증을 완료해주세요');
+      return false;
+    }
+    return true;
+  };
+
+  const validateStep3 = (): boolean => {
+    if (!formData.id_card.file) {
+      toast.error('신분증을 업로드해주세요');
+      return false;
+    }
+    if (!formData.criminal_record.file) {
+      toast.error('범죄경력회보서를 업로드해주세요');
+      return false;
+    }
+    if (!formData.sex_offender_record.file) {
+      toast.error('성범죄경력조회서를 업로드해주세요');
+      return false;
+    }
+    return true;
+  };
+
+  const validateStep4 = (): boolean => {
+    if (!formData.bank_name || !formData.bank_account || !formData.account_holder) {
+      toast.error('계좌 정보를 모두 입력해주세요');
+      return false;
+    }
+    return true;
+  };
+
+  const validateStep5 = (): boolean => {
+    const allAgreed =
+      formData.agree_terms &&
+      formData.agree_privacy &&
+      formData.agree_criminal_check &&
+      formData.agree_sex_offender_check;
+    if (!allAgreed) {
+      toast.error('모든 약관에 동의해주세요');
+      return false;
+    }
+    return true;
+  };
+
+  const validateStep = (currentStep: number): boolean => {
+    switch (currentStep) {
+      case 1:
+        return validateStep1();
+      case 2:
+        return validateStep2();
+      case 3:
+        return validateStep3();
+      case 4:
+        return validateStep4();
+      case 5:
+        return validateStep5();
+      default:
+        return true;
+    }
+  };
+
+  const nextStep = () => {
+    if (validateStep(step)) {
+      setStep((prev) => Math.min(prev + 1, 5));
+    }
+  };
+
+  const prevStep = () => {
+    setStep((prev) => Math.max(prev - 1, 1));
+  };
+
+  const handleSubmit = async () => {
+    if (!validateStep(5)) return;
 
     try {
       setLoading(true);
+
+      // FormData로 파일 업로드 포함
+      const submitData = new FormData();
+      submitData.append('name', formData.name);
+      submitData.append('birth_date', formData.birth_date);
+      submitData.append('gender', formData.gender);
+      submitData.append('address', formData.address);
+      submitData.append('detail_address', formData.detail_address);
+      submitData.append('phone_number', formData.phone_number);
+      submitData.append('bank_name', formData.bank_name);
+      submitData.append('bank_account', formData.bank_account);
+      submitData.append('account_holder', formData.account_holder);
+      submitData.append('bio', formData.bio || '');
+
+      if (formData.id_card.file) {
+        submitData.append('id_card', formData.id_card.file);
+      }
+      if (formData.criminal_record.file) {
+        submitData.append('criminal_record', formData.criminal_record.file);
+      }
+      if (formData.sex_offender_record.file) {
+        submitData.append('sex_offender_record', formData.sex_offender_record.file);
+      }
+
       const response = await fetch('/api/helper', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          bank_name: formData.bank_name,
-          bank_account: formData.bank_account,
-          account_holder: formData.account_holder,
-          bio: formData.bio || null,
-        }),
+        body: submitData,
       });
 
       if (!response.ok) {
@@ -80,7 +281,7 @@ export default function HelperRegisterPage() {
         throw new Error(error.error || '등록에 실패했습니다');
       }
 
-      toast.success('심부름꾼 등록이 완료되었습니다!');
+      toast.success('심부름꾼 등록 신청이 완료되었습니다! 심사 후 승인 결과를 안내드립니다.');
       router.push('/mypage/helper/dashboard');
     } catch (err) {
       logger.error('심부름꾼 등록 실패:', err);
@@ -109,86 +310,494 @@ export default function HelperRegisterPage() {
     <MypageLayoutWrapper mode="helper">
       <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6 max-w-2xl mx-auto">
         {/* 헤더 */}
-        <div className="text-center mb-8">
-          <div className="w-20 h-20 mx-auto bg-orange-100 rounded-full flex items-center justify-center mb-4">
-            <Bike className="w-10 h-10 text-orange-500" />
+        <div className="text-center mb-6">
+          <div className="w-16 h-16 mx-auto bg-orange-100 rounded-full flex items-center justify-center mb-3">
+            <Bike className="w-8 h-8 text-orange-500" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">심부름꾼 등록</h1>
-          <p className="text-gray-600">심부름을 수행하고 수익을 올려보세요</p>
+          <h1 className="text-xl font-bold text-gray-900 mb-1">심부름꾼 등록</h1>
+          <p className="text-sm text-gray-600">안전한 서비스를 위해 신원 확인이 필요합니다</p>
         </div>
 
-        {/* 혜택 안내 */}
-        <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-lg border border-orange-200 p-6 mb-6">
-          <h2 className="font-bold text-orange-700 mb-4 flex items-center gap-2">
-            <Gift className="w-5 h-5" />첫 달 무료 체험!
-          </h2>
-          <div className="space-y-3">
-            <div className="flex items-start gap-3">
-              <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="font-medium text-gray-900">30일 무료 체험</p>
-                <p className="text-sm text-gray-600">
-                  가입 후 30일간 무료로 심부름 서비스를 이용해보세요
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <Shield className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="font-medium text-gray-900">플랫폼 수수료 0%</p>
-                <p className="text-sm text-gray-600">
-                  수익금 전액을 그대로 가져가세요. 수수료 없습니다!
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <Clock className="w-5 h-5 text-purple-500 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="font-medium text-gray-900">자유로운 활동</p>
-                <p className="text-sm text-gray-600">원할 때 원하는 심부름만 선택해서 수행하세요</p>
-              </div>
+        {/* 안전 안내 배너 */}
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+          <div className="flex items-start gap-3">
+            <Shield className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-semibold text-red-800 mb-1">대면 서비스 안전 수칙</p>
+              <p className="text-xs text-red-700">
+                고객 안전을 위해 <strong>범죄경력 조회</strong>와 <strong>성범죄경력 조회</strong>를
+                필수로 진행합니다. 이는 배달의민족, 쿠팡이츠 등 주요 플랫폼의 기준을 따릅니다.
+              </p>
             </div>
           </div>
         </div>
 
         {/* 스텝 인디케이터 */}
-        <div className="flex items-center justify-center gap-4 mb-8">
-          <div
-            className={`flex items-center gap-2 ${step >= 1 ? 'text-orange-500' : 'text-gray-400'}`}
-          >
-            <span
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                step >= 1 ? 'bg-orange-500 text-white' : 'bg-gray-200'
-              }`}
-            >
-              1
-            </span>
-            <span className="font-medium hidden sm:inline">계좌 정보</span>
-          </div>
-          <ChevronRight className="w-4 h-4 text-gray-400" />
-          <div
-            className={`flex items-center gap-2 ${step >= 2 ? 'text-orange-500' : 'text-gray-400'}`}
-          >
-            <span
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                step >= 2 ? 'bg-orange-500 text-white' : 'bg-gray-200'
-              }`}
-            >
-              2
-            </span>
-            <span className="font-medium hidden sm:inline">약관 동의</span>
-          </div>
+        <div className="flex items-center justify-between mb-8 px-2">
+          {STEPS.map((s, index) => (
+            <div key={s.number} className="flex items-center">
+              <div className="flex flex-col items-center">
+                <div
+                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
+                    step >= s.number ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-500'
+                  }`}
+                >
+                  {step > s.number ? <CheckCircle className="w-5 h-5" /> : s.number}
+                </div>
+                <span
+                  className={`text-[10px] mt-1 font-medium ${
+                    step >= s.number ? 'text-orange-600' : 'text-gray-400'
+                  }`}
+                >
+                  {s.title}
+                </span>
+              </div>
+              {index < STEPS.length - 1 && (
+                <div
+                  className={`w-6 sm:w-10 h-0.5 mx-1 ${
+                    step > s.number ? 'bg-orange-500' : 'bg-gray-200'
+                  }`}
+                />
+              )}
+            </div>
+          ))}
         </div>
 
-        {/* 스텝 1: 계좌 정보 */}
+        {/* Step 1: 기본 정보 */}
         {step === 1 && (
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <User className="w-5 h-5 text-gray-600" />
+              기본 정보
+            </h3>
+
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                  이름 <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="실명을 입력하세요"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="birth_date"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  생년월일 <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="birth_date"
+                  type="date"
+                  name="birth_date"
+                  value={formData.birth_date}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                />
+                <p className="mt-1 text-xs text-gray-500">만 19세 이상만 등록 가능합니다</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  성별 <span className="text-red-500">*</span>
+                </label>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="male"
+                      checked={formData.gender === 'male'}
+                      onChange={handleChange}
+                      className="w-4 h-4 text-orange-500 focus:ring-orange-500"
+                    />
+                    <span className="text-sm">남성</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="female"
+                      checked={formData.gender === 'female'}
+                      onChange={handleChange}
+                      className="w-4 h-4 text-orange-500 focus:ring-orange-500"
+                    />
+                    <span className="text-sm">여성</span>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
+                  주소 <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="address"
+                  type="text"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  placeholder="기본 주소"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm mb-2"
+                />
+                <input
+                  id="detail_address"
+                  type="text"
+                  name="detail_address"
+                  value={formData.detail_address}
+                  onChange={handleChange}
+                  placeholder="상세 주소 (선택)"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                />
+              </div>
+            </div>
+
+            <button
+              onClick={nextStep}
+              className="w-full mt-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium flex items-center justify-center gap-2"
+            >
+              다음
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
+        {/* Step 2: 본인인증 */}
+        {step === 2 && (
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <Phone className="w-5 h-5 text-gray-600" />
+              본인인증
+            </h3>
+
+            <div className="bg-gray-50 rounded-lg p-4 mb-6">
+              <div className="flex items-start gap-3">
+                <Fingerprint className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium text-gray-900 mb-1">
+                    본인 명의 휴대폰으로 인증이 필요합니다
+                  </p>
+                  <p className="text-xs text-gray-600">
+                    신원 확인을 위해 본인 명의의 휴대폰 번호로 인증을 진행합니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {formData.phone_verified ? (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-6 h-6 text-green-600" />
+                  <div>
+                    <p className="font-medium text-green-800">본인인증 완료</p>
+                    <p className="text-sm text-green-700">
+                      {formData.phone_number || '010-****-****'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div>
+                  <label
+                    htmlFor="phone_number"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    휴대폰 번호
+                  </label>
+                  <input
+                    id="phone_number"
+                    type="tel"
+                    name="phone_number"
+                    value={formData.phone_number}
+                    onChange={handleChange}
+                    placeholder="010-0000-0000"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                  />
+                </div>
+
+                <button
+                  onClick={simulatePhoneVerification}
+                  className="w-full py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
+                >
+                  본인인증 진행하기
+                </button>
+              </div>
+            )}
+
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={prevStep}
+                className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center justify-center gap-2"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                이전
+              </button>
+              <button
+                onClick={nextStep}
+                disabled={!formData.phone_verified}
+                className="flex-1 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                다음
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: 서류 제출 */}
+        {step === 3 && (
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <FileText className="w-5 h-5 text-gray-600" />
+              서류 제출
+            </h3>
+
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+              <div className="flex items-start gap-2">
+                <AlertTriangle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium text-yellow-800 mb-1">서류 발급 안내</p>
+                  <ul className="text-xs text-yellow-700 space-y-1">
+                    <li>
+                      • 범죄경력회보서, 성범죄경력조회서는{' '}
+                      <a
+                        href="https://www.gov.kr"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline font-medium inline-flex items-center gap-0.5"
+                      >
+                        정부24
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                      에서 무료 발급 가능합니다
+                    </li>
+                    <li>• 발급일로부터 3개월 이내의 서류만 유효합니다</li>
+                    <li>• 이미지(JPG, PNG) 또는 PDF 파일로 업로드해주세요</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-5">
+              {/* 신분증 */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  신분증 사본 <span className="text-red-500">*</span>
+                </label>
+                <p className="text-xs text-gray-500 mb-2">주민등록증, 운전면허증, 여권 중 1개</p>
+                {formData.id_card.file ? (
+                  <div className="relative border border-gray-200 rounded-lg p-3 bg-gray-50">
+                    <div className="flex items-center gap-3">
+                      {formData.id_card.preview ? (
+                        <Image
+                          src={formData.id_card.preview}
+                          alt="신분증"
+                          width={60}
+                          height={40}
+                          className="rounded object-cover"
+                        />
+                      ) : (
+                        <div className="w-[60px] h-[40px] bg-gray-200 rounded flex items-center justify-center">
+                          <FileText className="w-5 h-5 text-gray-500" />
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">
+                          {formData.id_card.file.name}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {(formData.id_card.file.size / 1024 / 1024).toFixed(2)} MB
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => removeFile('id_card')}
+                        className="p-1 hover:bg-gray-200 rounded"
+                      >
+                        <X className="w-4 h-4 text-gray-500" />
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => idCardRef.current?.click()}
+                    className="w-full border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-orange-500 hover:bg-orange-50 transition-colors"
+                  >
+                    <div className="flex flex-col items-center">
+                      <Camera className="w-8 h-8 text-gray-400 mb-2" />
+                      <p className="text-sm text-gray-600">클릭하여 업로드</p>
+                      <p className="text-xs text-gray-400 mt-1">JPG, PNG, PDF (최대 10MB)</p>
+                    </div>
+                  </button>
+                )}
+                <input
+                  ref={idCardRef}
+                  type="file"
+                  accept="image/*,.pdf"
+                  onChange={(e) => handleFileChange(e, 'id_card')}
+                  className="hidden"
+                />
+              </div>
+
+              {/* 범죄경력회보서 */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  범죄경력회보서 <span className="text-red-500">*</span>
+                </label>
+                <p className="text-xs text-gray-500 mb-2">
+                  정부24에서 발급 (본인용, 발급일 3개월 이내)
+                </p>
+                {formData.criminal_record.file ? (
+                  <div className="relative border border-gray-200 rounded-lg p-3 bg-gray-50">
+                    <div className="flex items-center gap-3">
+                      {formData.criminal_record.preview ? (
+                        <Image
+                          src={formData.criminal_record.preview}
+                          alt="범죄경력회보서"
+                          width={60}
+                          height={40}
+                          className="rounded object-cover"
+                        />
+                      ) : (
+                        <div className="w-[60px] h-[40px] bg-gray-200 rounded flex items-center justify-center">
+                          <FileText className="w-5 h-5 text-gray-500" />
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">
+                          {formData.criminal_record.file.name}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {(formData.criminal_record.file.size / 1024 / 1024).toFixed(2)} MB
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => removeFile('criminal_record')}
+                        className="p-1 hover:bg-gray-200 rounded"
+                      >
+                        <X className="w-4 h-4 text-gray-500" />
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => criminalRecordRef.current?.click()}
+                    className="w-full border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-orange-500 hover:bg-orange-50 transition-colors"
+                  >
+                    <div className="flex flex-col items-center">
+                      <Upload className="w-8 h-8 text-gray-400 mb-2" />
+                      <p className="text-sm text-gray-600">클릭하여 업로드</p>
+                      <p className="text-xs text-gray-400 mt-1">JPG, PNG, PDF (최대 10MB)</p>
+                    </div>
+                  </button>
+                )}
+                <input
+                  ref={criminalRecordRef}
+                  type="file"
+                  accept="image/*,.pdf"
+                  onChange={(e) => handleFileChange(e, 'criminal_record')}
+                  className="hidden"
+                />
+              </div>
+
+              {/* 성범죄경력조회서 */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  성범죄경력조회서 <span className="text-red-500">*</span>
+                </label>
+                <p className="text-xs text-gray-500 mb-2">
+                  정부24에서 발급 (본인용, 발급일 3개월 이내)
+                </p>
+                {formData.sex_offender_record.file ? (
+                  <div className="relative border border-gray-200 rounded-lg p-3 bg-gray-50">
+                    <div className="flex items-center gap-3">
+                      {formData.sex_offender_record.preview ? (
+                        <Image
+                          src={formData.sex_offender_record.preview}
+                          alt="성범죄경력조회서"
+                          width={60}
+                          height={40}
+                          className="rounded object-cover"
+                        />
+                      ) : (
+                        <div className="w-[60px] h-[40px] bg-gray-200 rounded flex items-center justify-center">
+                          <FileText className="w-5 h-5 text-gray-500" />
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">
+                          {formData.sex_offender_record.file.name}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {(formData.sex_offender_record.file.size / 1024 / 1024).toFixed(2)} MB
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => removeFile('sex_offender_record')}
+                        className="p-1 hover:bg-gray-200 rounded"
+                      >
+                        <X className="w-4 h-4 text-gray-500" />
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => sexOffenderRef.current?.click()}
+                    className="w-full border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-orange-500 hover:bg-orange-50 transition-colors"
+                  >
+                    <div className="flex flex-col items-center">
+                      <Upload className="w-8 h-8 text-gray-400 mb-2" />
+                      <p className="text-sm text-gray-600">클릭하여 업로드</p>
+                      <p className="text-xs text-gray-400 mt-1">JPG, PNG, PDF (최대 10MB)</p>
+                    </div>
+                  </button>
+                )}
+                <input
+                  ref={sexOffenderRef}
+                  type="file"
+                  accept="image/*,.pdf"
+                  onChange={(e) => handleFileChange(e, 'sex_offender_record')}
+                  className="hidden"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={prevStep}
+                className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center justify-center gap-2"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                이전
+              </button>
+              <button
+                onClick={nextStep}
+                className="flex-1 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium flex items-center justify-center gap-2"
+              >
+                다음
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: 계좌 정보 */}
+        {step === 4 && (
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
               <CreditCard className="w-5 h-5 text-gray-600" />
               정산 계좌 정보
             </h3>
             <p className="text-sm text-gray-600 mb-6">
-              심부름 대금을 받을 계좌를 입력해주세요. 나중에 변경할 수 있습니다.
+              심부름 대금을 받을 계좌를 입력해주세요. 본인 명의 계좌만 등록 가능합니다.
             </p>
 
             <div className="space-y-4">
@@ -201,7 +810,7 @@ export default function HelperRegisterPage() {
                   name="bank_name"
                   value={formData.bank_name}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                 >
                   <option value="">은행 선택</option>
                   {BANK_LIST.map((bank) => (
@@ -226,7 +835,7 @@ export default function HelperRegisterPage() {
                   value={formData.bank_account}
                   onChange={handleChange}
                   placeholder="-없이 숫자만 입력"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                 />
               </div>
 
@@ -243,8 +852,8 @@ export default function HelperRegisterPage() {
                   name="account_holder"
                   value={formData.account_holder}
                   onChange={handleChange}
-                  placeholder="예금주명"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  placeholder="예금주명 (본인 명의)"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                 />
               </div>
 
@@ -259,32 +868,53 @@ export default function HelperRegisterPage() {
                   onChange={handleChange}
                   rows={3}
                   placeholder="심부름꾼으로서의 자기소개를 작성해주세요"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none text-sm"
                 />
               </div>
             </div>
 
-            <button
-              onClick={() => {
-                if (!formData.bank_name || !formData.bank_account || !formData.account_holder) {
-                  toast.error('필수 항목을 모두 입력해주세요');
-                  return;
-                }
-                setStep(2);
-              }}
-              className="w-full mt-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium"
-            >
-              다음
-            </button>
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={prevStep}
+                className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center justify-center gap-2"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                이전
+              </button>
+              <button
+                onClick={nextStep}
+                className="flex-1 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium flex items-center justify-center gap-2"
+              >
+                다음
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         )}
 
-        {/* 스텝 2: 약관 동의 */}
-        {step === 2 && (
+        {/* Step 5: 약관 동의 */}
+        {step === 5 && (
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="font-bold text-gray-900 mb-4">약관 동의</h3>
+            <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <CheckCircle className="w-5 h-5 text-gray-600" />
+              약관 동의 및 제출
+            </h3>
 
-            <div className="space-y-4">
+            {/* 등록 불가 사유 안내 */}
+            <div className="bg-gray-900 text-white rounded-lg p-4 mb-6">
+              <div className="flex items-center gap-2 mb-3">
+                <Ban className="w-5 h-5 text-red-400" />
+                <span className="font-semibold text-sm">등록 불가 사유 안내</span>
+              </div>
+              <ul className="text-xs text-gray-300 space-y-1">
+                <li>• 폭력, 절도, 사기 등 범죄 경력이 있는 경우</li>
+                <li>• 성범죄 경력이 있는 경우</li>
+                <li>• 마약류 관련 범죄 경력이 있는 경우</li>
+                <li>• 허위 서류 제출 또는 신분증 위조의 경우</li>
+              </ul>
+            </div>
+
+            <div className="space-y-3">
               <label className="flex items-start gap-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
                 <input
                   type="checkbox"
@@ -294,10 +924,10 @@ export default function HelperRegisterPage() {
                   className="w-5 h-5 mt-0.5 text-orange-500 rounded focus:ring-orange-500"
                 />
                 <div>
-                  <p className="font-medium text-gray-900">
+                  <p className="font-medium text-gray-900 text-sm">
                     심부름꾼 이용약관 동의 <span className="text-red-500">*</span>
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-xs text-gray-600">
                     심부름 서비스 이용에 관한 약관에 동의합니다.
                   </p>
                 </div>
@@ -312,40 +942,91 @@ export default function HelperRegisterPage() {
                   className="w-5 h-5 mt-0.5 text-orange-500 rounded focus:ring-orange-500"
                 />
                 <div>
-                  <p className="font-medium text-gray-900">
+                  <p className="font-medium text-gray-900 text-sm">
                     개인정보 수집 및 이용 동의 <span className="text-red-500">*</span>
                   </p>
-                  <p className="text-sm text-gray-600">
-                    정산 처리를 위한 계좌정보 수집에 동의합니다.
+                  <p className="text-xs text-gray-600">
+                    신원 확인 및 정산 처리를 위한 개인정보 수집에 동의합니다.
+                  </p>
+                </div>
+              </label>
+
+              <label className="flex items-start gap-3 p-4 border border-orange-200 bg-orange-50 rounded-lg cursor-pointer hover:bg-orange-100">
+                <input
+                  type="checkbox"
+                  name="agree_criminal_check"
+                  checked={formData.agree_criminal_check}
+                  onChange={handleChange}
+                  className="w-5 h-5 mt-0.5 text-orange-500 rounded focus:ring-orange-500"
+                />
+                <div>
+                  <p className="font-medium text-gray-900 text-sm">
+                    범죄경력 조회 동의 <span className="text-red-500">*</span>
+                  </p>
+                  <p className="text-xs text-gray-600">
+                    제출된 범죄경력회보서의 진위 확인에 동의합니다.
+                  </p>
+                </div>
+              </label>
+
+              <label className="flex items-start gap-3 p-4 border border-orange-200 bg-orange-50 rounded-lg cursor-pointer hover:bg-orange-100">
+                <input
+                  type="checkbox"
+                  name="agree_sex_offender_check"
+                  checked={formData.agree_sex_offender_check}
+                  onChange={handleChange}
+                  className="w-5 h-5 mt-0.5 text-orange-500 rounded focus:ring-orange-500"
+                />
+                <div>
+                  <p className="font-medium text-gray-900 text-sm">
+                    성범죄경력 조회 동의 <span className="text-red-500">*</span>
+                  </p>
+                  <p className="text-xs text-gray-600">
+                    제출된 성범죄경력조회서의 진위 확인에 동의합니다.
                   </p>
                 </div>
               </label>
             </div>
 
-            <div className="mt-6 p-4 bg-orange-50 rounded-lg">
-              <p className="text-sm text-orange-700">
-                <strong>월 이용료:</strong> 30,000원 (부가세 별도)
-                <br />
-                <strong>결제일:</strong> 무료 체험 종료 후 매월 자동 결제
-                <br />
-                <strong>플랫폼 수수료:</strong> 0원 (없음)
-              </p>
+            {/* 혜택 안내 */}
+            <div className="mt-6 p-4 bg-gradient-to-br from-orange-50 to-yellow-50 rounded-lg border border-orange-200">
+              <div className="flex items-center gap-2 mb-2">
+                <Clock className="w-5 h-5 text-orange-600" />
+                <span className="font-semibold text-sm text-orange-800">승인 후 혜택</span>
+              </div>
+              <ul className="text-xs text-orange-700 space-y-1">
+                <li>• 30일 무료 체험 (이후 월 30,000원)</li>
+                <li>• 플랫폼 수수료 0%</li>
+                <li>• 심사 기간: 영업일 기준 1-3일</li>
+              </ul>
             </div>
 
             <div className="flex gap-3 mt-6">
               <button
-                onClick={() => setStep(1)}
-                className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                onClick={prevStep}
+                className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center justify-center gap-2"
               >
+                <ChevronLeft className="w-4 h-4" />
                 이전
               </button>
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="flex-1 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium disabled:opacity-50"
+                className="flex-1 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? '등록 중...' : '등록 완료'}
+                {loading ? '제출 중...' : '등록 신청'}
               </button>
+            </div>
+
+            {/* 가이드 링크 */}
+            <div className="mt-4 text-center">
+              <Link
+                href="/helper/guide"
+                className="text-xs text-gray-500 hover:text-orange-500 inline-flex items-center gap-1"
+              >
+                <Info className="w-3 h-3" />
+                등록 가이드 자세히 보기
+              </Link>
             </div>
           </div>
         )}
