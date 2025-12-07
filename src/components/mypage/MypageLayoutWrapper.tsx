@@ -7,6 +7,7 @@ import { logger } from '@/lib/logger';
 import Sidebar from './Sidebar';
 import MobileMyPageNav from './MobileMyPageNav';
 import MobileMyPageHeader from './MobileMyPageHeader';
+import ServiceTabs from './ServiceTabs';
 
 interface MypageLayoutWrapperProps {
   readonly mode: 'seller' | 'buyer' | 'helper';
@@ -177,38 +178,48 @@ export default function MypageLayoutWrapper({
   };
 
   return (
-    <div className="bg-black/[0.05] flex justify-center">
-      <div className="flex w-full max-w-[1200px]">
-        {/* PC: 사이드바 */}
-        <Sidebar
-          mode={mode}
-          profileData={profileData}
+    <>
+      {/* 서비스 전환 탭 - 모바일에서만 표시 */}
+      <div className="lg:hidden">
+        <ServiceTabs
           isRegisteredSeller={isRegisteredSeller}
           isRegisteredHelper={isRegisteredHelper}
         />
-
-        <main className="flex-1 overflow-y-auto">
-          {/* 모바일: 서브페이지 헤더 (대시보드가 아닌 경우) */}
-          {!isDashboard && (
-            <div className="lg:hidden">
-              <MobileMyPageHeader title={getPageTitle()} backHref={getBackHref()} />
-            </div>
-          )}
-
-          {/* 모바일: 대시보드에서 네비게이션 메뉴 표시 */}
-          {isDashboard && (
-            <div className="lg:hidden">
-              <MobileMyPageNav
-                currentRole={mode}
-                onRoleChange={handleRoleChange}
-                isSeller={isRegisteredSeller}
-              />
-            </div>
-          )}
-
-          {children}
-        </main>
       </div>
-    </div>
+
+      <div className="bg-black/[0.05] flex justify-center">
+        <div className="flex w-full max-w-[1200px]">
+          {/* PC: 사이드바 */}
+          <Sidebar
+            mode={mode}
+            profileData={profileData}
+            isRegisteredSeller={isRegisteredSeller}
+            isRegisteredHelper={isRegisteredHelper}
+          />
+
+          <main className="flex-1 overflow-y-auto">
+            {/* 모바일: 서브페이지 헤더 (대시보드가 아닌 경우) */}
+            {!isDashboard && (
+              <div className="lg:hidden">
+                <MobileMyPageHeader title={getPageTitle()} backHref={getBackHref()} />
+              </div>
+            )}
+
+            {/* 모바일: 대시보드에서 네비게이션 메뉴 표시 */}
+            {isDashboard && (
+              <div className="lg:hidden">
+                <MobileMyPageNav
+                  currentRole={mode}
+                  onRoleChange={handleRoleChange}
+                  isSeller={isRegisteredSeller}
+                />
+              </div>
+            )}
+
+            {children}
+          </main>
+        </div>
+      </div>
+    </>
   );
 }

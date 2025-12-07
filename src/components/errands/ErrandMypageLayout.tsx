@@ -21,6 +21,7 @@ import {
   X,
   type LucideIcon,
 } from 'lucide-react';
+import ServiceTabs from '@/components/mypage/ServiceTabs';
 
 interface ErrandMypageLayoutProps {
   readonly children: ReactNode;
@@ -93,6 +94,8 @@ export default function ErrandMypageLayout({ children, mode }: ErrandMypageLayou
     subscription_status: string;
     subscription_expires_at: string | null;
   } | null>(null);
+  const [isRegisteredSeller, setIsRegisteredSeller] = useState(false);
+  const [isRegisteredHelper, setIsRegisteredHelper] = useState(false);
 
   const menuItems = mode === 'helper' ? helperMenuItems : requesterMenuItems;
 
@@ -102,12 +105,34 @@ export default function ErrandMypageLayout({ children, mode }: ErrandMypageLayou
     }
   }, [user, loading, router, pathname]);
 
-  // 헬퍼 프로필 로드
+  // 헬퍼 프로필 로드 및 등록 여부 확인
   useEffect(() => {
-    if (mode === 'helper' && user) {
-      loadHelperProfile();
+    if (user) {
+      checkRegistrations();
+      if (mode === 'helper') {
+        loadHelperProfile();
+      }
     }
   }, [mode, user]);
+
+  async function checkRegistrations() {
+    try {
+      const [sellerRes, helperRes] = await Promise.all([
+        fetch('/api/seller/check'),
+        fetch('/api/helper/check'),
+      ]);
+      if (sellerRes.ok) {
+        const data = await sellerRes.json();
+        setIsRegisteredSeller(data.isRegistered);
+      }
+      if (helperRes.ok) {
+        const data = await helperRes.json();
+        setIsRegisteredHelper(data.isRegistered);
+      }
+    } catch (error) {
+      console.error('등록 여부 확인 실패:', error);
+    }
+  }
 
   async function loadHelperProfile() {
     try {
@@ -163,8 +188,16 @@ export default function ErrandMypageLayout({ children, mode }: ErrandMypageLayou
 
   return (
     <div className="min-h-screen bg-gray-100">
+      {/* 서비스 전환 탭 - 모바일에서만 표시 */}
+      <div className="lg:hidden">
+        <ServiceTabs
+          isRegisteredSeller={isRegisteredSeller}
+          isRegisteredHelper={isRegisteredHelper}
+        />
+      </div>
+
       {/* 모바일 헤더 */}
-      <header className="lg:hidden bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40">
+      <header className="lg:hidden bg-white border-b border-gray-200 sticky top-[48px] z-30">
         <div className="flex items-center justify-between h-14 px-4">
           <button
             onClick={() => setMobileMenuOpen(true)}
@@ -377,7 +410,7 @@ export default function ErrandMypageLayout({ children, mode }: ErrandMypageLayou
         </aside>
 
         {/* 메인 컨텐츠 */}
-        <main className="flex-1 pt-14 lg:pt-0 pb-20 lg:pb-8">
+        <main className="flex-1 pt-0 lg:pt-0 pb-20 lg:pb-8">
           <div className="lg:p-6">{children}</div>
         </main>
       </div>
