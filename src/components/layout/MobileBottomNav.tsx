@@ -86,7 +86,7 @@ export default function MobileBottomNav() {
       isActiveCheck: (p) => p.startsWith('/chat'),
     },
     {
-      path: '/mypage/buyer/dashboard',
+      path: '/mypage',
       label: user ? '마이페이지' : '로그인',
       icon: <User className="w-5 h-5" aria-hidden="true" />,
       requiresAuth: true,

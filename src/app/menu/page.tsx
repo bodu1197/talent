@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useAuth } from "@/components/providers/AuthProvider";
+import Link from 'next/link';
+import { useAuth } from '@/components/providers/AuthProvider';
 import {
   User,
   LayoutGrid,
@@ -16,46 +16,44 @@ import {
   FileText,
   ShieldCheck,
   ChevronRight,
-} from "lucide-react";
+} from 'lucide-react';
 
 export default function MenuPage() {
   const { user, signOut } = useAuth();
 
   const menuSections = [
     {
-      title: "서비스",
+      title: '서비스',
       items: [
-        { name: "전체 카테고리", href: "/categories", icon: LayoutGrid },
-        { name: "AI 서비스", href: "/categories/ai-services", icon: Bot },
+        { name: '전체 카테고리', href: '/categories', icon: LayoutGrid },
+        { name: 'AI 서비스', href: '/categories/ai-services', icon: Bot },
         {
-          name: "IT/프로그래밍",
-          href: "/categories/it-programming",
+          name: 'IT/프로그래밍',
+          href: '/categories/it-programming',
           icon: Code,
         },
-        { name: "디자인", href: "/categories/design", icon: Palette },
-        { name: "마케팅", href: "/categories/marketing", icon: Megaphone },
+        { name: '디자인', href: '/categories/design', icon: Palette },
+        { name: '마케팅', href: '/categories/marketing', icon: Megaphone },
       ],
     },
     {
-      title: "전문가",
+      title: '전문가',
+      items: [{ name: '전문가 등록', href: '/expert/register', icon: UserPlus }],
+    },
+    {
+      title: '고객센터',
       items: [
-        { name: "전문가 등록", href: "/expert/register", icon: UserPlus },
+        { name: '공지사항', href: '/help/notice', icon: Megaphone },
+        { name: '자주 묻는 질문', href: '/help/faq', icon: CircleHelp },
+        { name: '문의하기', href: '/help/contact', icon: Mail },
       ],
     },
     {
-      title: "고객센터",
+      title: '정보',
       items: [
-        { name: "공지사항", href: "/help/notice", icon: Megaphone },
-        { name: "자주 묻는 질문", href: "/help/faq", icon: CircleHelp },
-        { name: "문의하기", href: "/help/contact", icon: Mail },
-      ],
-    },
-    {
-      title: "정보",
-      items: [
-        { name: "서비스 소개", href: "/about", icon: Info },
-        { name: "이용약관", href: "/terms", icon: FileText },
-        { name: "개인정보처리방침", href: "/privacy", icon: ShieldCheck },
+        { name: '서비스 소개', href: '/about', icon: Info },
+        { name: '이용약관', href: '/terms', icon: FileText },
+        { name: '개인정보처리방침', href: '/privacy', icon: ShieldCheck },
       ],
     },
   ];
@@ -73,10 +71,7 @@ export default function MenuPage() {
                 </div>
                 <div>
                   <p className="font-semibold text-lg">{user.email}</p>
-                  <Link
-                    href="/mypage/buyer/dashboard"
-                    className="text-sm text-brand-primary hover:underline"
-                  >
+                  <Link href="/mypage" className="text-sm text-brand-primary hover:underline">
                     마이페이지로 이동
                   </Link>
                 </div>
@@ -92,9 +87,7 @@ export default function MenuPage() {
         ) : (
           <div className="bg-white rounded-xl p-6 mb-6 shadow-sm">
             <div className="text-center">
-              <p className="text-gray-600 mb-4">
-                로그인하고 더 많은 서비스를 이용하세요
-              </p>
+              <p className="text-gray-600 mb-4">로그인하고 더 많은 서비스를 이용하세요</p>
               <div className="flex gap-3 justify-center">
                 <Link
                   href="/auth/login"
@@ -116,10 +109,7 @@ export default function MenuPage() {
         {/* 메뉴 섹션들 */}
         <div className="space-y-6">
           {menuSections.map((section) => (
-            <div
-              key={section.title}
-              className="bg-white rounded-xl shadow-sm overflow-hidden"
-            >
+            <div key={section.title} className="bg-white rounded-xl shadow-sm overflow-hidden">
               <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
                 <h2 className="font-semibold text-gray-900">{section.title}</h2>
               </div>

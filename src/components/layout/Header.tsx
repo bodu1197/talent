@@ -37,24 +37,14 @@ export default function Header() {
     }
   };
 
-  // 사용자 역할에 따른 마이페이지 URL
+  // 통합 마이페이지 허브 URL
   const getMypageUrl = () => {
     if (!user) {
       return '/auth/login';
     }
 
-    // /errands 페이지에서는 심부름 전용 마이페이지로
-    if (pathname?.startsWith('/errands')) {
-      return '/errands/mypage';
-    }
-
-    // seller 활동이 있으면 seller dashboard로
-    if (profile?.is_seller) {
-      return '/mypage/seller/dashboard';
-    }
-
-    // 아니면 buyer dashboard로 (기본값)
-    return '/mypage/buyer/dashboard';
+    // 통합 마이페이지 허브로 이동 (LocalStorage 기반 자동 리다이렉트)
+    return '/mypage';
   };
 
   return (
