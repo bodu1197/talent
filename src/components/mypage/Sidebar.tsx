@@ -543,6 +543,22 @@ export default function Sidebar({
             </div>
           ))}
         </nav>
+
+        {/* 심부름 마이페이지로 이동 (buyer/seller 모드일 때만) */}
+        {(mode === 'buyer' || mode === 'seller') && (
+          <div className="mt-4 pt-4 border-t border-gray-200">
+            <Link
+              href="/errands/mypage"
+              className="flex items-center justify-between px-4 py-3 bg-orange-50 hover:bg-orange-100 rounded-xl text-orange-600 transition-colors"
+            >
+              <div className="flex items-center gap-2">
+                <Bike className="w-4 h-4" />
+                <span className="text-sm font-medium">심부름 마이페이지</span>
+              </div>
+              <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
+        )}
       </div>
     </aside>
   );
