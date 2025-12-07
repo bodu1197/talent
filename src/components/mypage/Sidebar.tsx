@@ -408,53 +408,49 @@ export default function Sidebar({
   };
 
   return (
-    <aside className="hidden lg:flex w-64 flex-shrink-0 bg-white border-r border-gray-200 overflow-y-auto flex-col">
-      <div className="p-4 flex-1">
-        {/* 프로필 정보 카드 */}
-        <div className="mb-4">
-          <Link
-            href={getProfileHref(mode)}
-            className="flex items-center gap-3 w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 card-interactive"
-          >
+    <aside className="hidden lg:block lg:w-64 lg:flex-shrink-0 lg:sticky lg:top-20 lg:h-[calc(100vh-5rem)] lg:overflow-y-auto">
+      <div className="p-4">
+        {/* 프로필 섹션 - 카드 스타일 */}
+        <div className="bg-white rounded-xl p-4 mb-4 shadow-sm">
+          <Link href={getProfileHref(mode)} className="flex items-center gap-3 mb-3">
             <ProfileImage
               src={profileData?.profile_image}
               alt={profileData?.name || '회원'}
               size={48}
             />
             <div className="flex-1">
-              <p className="text-sm font-medium text-gray-900">{profileData?.name || '회원'}</p>
+              <p className="font-semibold text-gray-900">{profileData?.name || '회원'}</p>
               <p className="text-xs text-gray-500">{getProfileText(mode)}</p>
             </div>
-            <ChevronRight className="w-4 h-4 text-gray-400" />
           </Link>
-        </div>
 
-        {/* 모드 전환 버튼들 */}
-        <div className="mb-6 space-y-2">
-          {mode !== 'buyer' && (
+          {/* 모드 전환 버튼들 */}
+          <div className="flex gap-2">
             <Link
               href="/mypage/buyer/dashboard"
-              className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-sm font-medium click-pop btn-ripple"
+              className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium text-center transition-colors ${
+                mode === 'buyer'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
             >
-              <ShoppingCart className="w-4 h-4" />
-              <span>구매자 페이지로</span>
-              <ChevronRight className="w-3 h-3" />
+              구매자
             </Link>
-          )}
-          {mode !== 'seller' && (
             <Link
               href="/mypage/seller/dashboard"
-              className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-sm font-medium click-pop btn-ripple"
+              className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium text-center transition-colors ${
+                mode === 'seller'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
             >
-              <ShoppingBag className="w-4 h-4" />
-              <span>전문가 페이지로</span>
-              <ChevronRight className="w-3 h-3" />
+              전문가
             </Link>
-          )}
+          </div>
         </div>
 
-        {/* 네비게이션 메뉴 */}
-        <nav>
+        {/* 네비게이션 메뉴 - 카드 스타일 */}
+        <nav className="bg-white rounded-xl p-2 shadow-sm mb-4">
           {navItems.map((item) => (
             <div key={item.href} className="mb-1">
               {/* 메인 아이템 */}
@@ -543,23 +539,18 @@ export default function Sidebar({
             </div>
           ))}
         </nav>
-      </div>
 
-      {/* 심부름 마이페이지로 이동 (buyer/seller 모드일 때만) - 사이드바 하단 고정 */}
-      {(mode === 'buyer' || mode === 'seller') && (
-        <div className="p-4 bg-gray-100 border-t border-gray-200">
+        {/* 심부름 마이페이지로 이동 (buyer/seller 모드일 때만) */}
+        {(mode === 'buyer' || mode === 'seller') && (
           <Link
             href="/errands/mypage"
-            className="flex items-center justify-between px-4 py-3 bg-white hover:bg-gray-50 rounded-xl text-gray-700 shadow-sm transition-colors"
+            className="flex items-center justify-between px-4 py-3 bg-white hover:bg-gray-50 rounded-xl text-gray-600 shadow-sm transition-colors"
           >
-            <div className="flex items-center gap-2">
-              <Bike className="w-4 h-4 text-orange-500" />
-              <span className="text-sm font-medium">심부름 마이페이지</span>
-            </div>
+            <span className="text-sm">심부름 마이페이지</span>
             <ChevronRight className="w-4 h-4" />
           </Link>
-        </div>
-      )}
+        )}
+      </div>
     </aside>
   );
 }
