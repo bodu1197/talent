@@ -38,13 +38,13 @@ export default function MypageHubPage() {
       return;
     }
 
-    // 마지막 방문 서비스 확인
+    // 마지막 방문 서비스 확인 - 바로 해당 마이페이지로 이동
     const lastService = localStorage.getItem(LAST_SERVICE_KEY);
     if (lastService === 'market') {
-      router.replace('/mypage/market');
+      router.replace('/mypage/buyer/dashboard');
       return;
     } else if (lastService === 'errands') {
-      router.replace('/mypage/errands');
+      router.replace('/errands/mypage');
       return;
     }
 
@@ -93,7 +93,12 @@ export default function MypageHubPage() {
 
   function handleServiceSelect(service: 'market' | 'errands') {
     localStorage.setItem(LAST_SERVICE_KEY, service);
-    router.push(`/mypage/${service}`);
+    // 바로 해당 서비스의 마이페이지로 이동
+    if (service === 'market') {
+      router.push('/mypage/buyer/dashboard');
+    } else {
+      router.push('/errands/mypage');
+    }
   }
 
   function getActivityIcon(type: string) {
