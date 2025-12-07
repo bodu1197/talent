@@ -547,13 +547,13 @@ export default function Sidebar({
 
       {/* 심부름 마이페이지로 이동 (buyer/seller 모드일 때만) - 사이드바 하단 고정 */}
       {(mode === 'buyer' || mode === 'seller') && (
-        <div className="p-4 border-t border-gray-200">
+        <div className="p-4 bg-gray-100 border-t border-gray-200">
           <Link
             href="/errands/mypage"
-            className="flex items-center justify-between px-4 py-3 bg-orange-50 hover:bg-orange-100 rounded-xl text-orange-600 transition-colors"
+            className="flex items-center justify-between px-4 py-3 bg-white hover:bg-gray-50 rounded-xl text-gray-700 shadow-sm transition-colors"
           >
             <div className="flex items-center gap-2">
-              <Bike className="w-4 h-4" />
+              <Bike className="w-4 h-4 text-orange-500" />
               <span className="text-sm font-medium">심부름 마이페이지</span>
             </div>
             <ChevronRight className="w-4 h-4" />
