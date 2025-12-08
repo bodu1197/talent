@@ -303,10 +303,10 @@ export default function FoodPartnerMenuPage() {
   const uncategorizedMenus = menus.filter((m) => !m.category_id);
 
   return (
-    <div className="min-h-screen bg-gray-100 pb-24">
+    <div className="min-h-screen bg-gray-100 pb-24 md:pb-6">
       {/* 헤더 */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="flex items-center justify-between px-4 h-14">
+        <div className="container-1200 flex items-center justify-between px-4 h-14">
           <h1 className="font-bold text-lg">메뉴 관리</h1>
           <button
             onClick={() => openMenuModal()}
@@ -318,123 +318,163 @@ export default function FoodPartnerMenuPage() {
         </div>
       </header>
 
-      {/* 카테고리 관리 */}
-      <section className="bg-white mt-2 px-4 py-4">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="font-semibold">메뉴 카테고리</h2>
-          <button
-            onClick={() => {
-              setEditingCategory(null);
-              setCategoryName('');
-              setShowCategoryModal(true);
-            }}
-            className="text-sm text-brand-primary font-medium"
-          >
-            + 추가
-          </button>
-        </div>
+      {/* 메인 콘텐츠 */}
+      <div className="container-1200 md:flex md:gap-6 md:py-6">
+        {/* PC 사이드바 네비게이션 */}
+        <aside className="hidden md:block md:w-64 md:flex-shrink-0">
+          <nav className="bg-white rounded-2xl p-4 sticky top-20 space-y-2">
+            <Link
+              href="/food/partner"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50"
+            >
+              <ClipboardList className="w-5 h-5" />
+              주문관리
+            </Link>
+            <Link
+              href="/food/partner/menu"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-orange-50 text-brand-primary font-medium"
+            >
+              <UtensilsCrossed className="w-5 h-5" />
+              메뉴관리
+            </Link>
+            <Link
+              href="/food/partner/stats"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50"
+            >
+              <BarChart3 className="w-5 h-5" />
+              매출현황
+            </Link>
+            <Link
+              href="/food/partner/store"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50"
+            >
+              <Settings className="w-5 h-5" />
+              가게관리
+            </Link>
+          </nav>
+        </aside>
 
-        {categories.length === 0 ? (
-          <p className="text-sm text-gray-500 py-4 text-center">카테고리를 추가해보세요</p>
-        ) : (
-          <div className="flex gap-2 overflow-x-auto pb-2">
-            {categories.map((cat) => (
-              <div
-                key={cat.id}
-                className="flex-shrink-0 flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg"
+        {/* 메인 영역 */}
+        <div className="md:flex-1">
+          {/* 카테고리 관리 */}
+          <section className="bg-white mt-2 md:mt-0 md:rounded-2xl px-4 py-4">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-semibold">메뉴 카테고리</h2>
+              <button
+                onClick={() => {
+                  setEditingCategory(null);
+                  setCategoryName('');
+                  setShowCategoryModal(true);
+                }}
+                className="text-sm text-brand-primary font-medium"
               >
-                <span className="text-sm">{cat.name}</span>
-                <button
-                  onClick={() => {
-                    setEditingCategory(cat);
-                    setCategoryName(cat.name);
-                    setShowCategoryModal(true);
-                  }}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <Edit2 className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  onClick={() => deleteCategory(cat.id)}
-                  className="text-gray-400 hover:text-red-500"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
-
-      {/* 메뉴 목록 */}
-      <section className="mt-2">
-        {/* 카테고리별 메뉴 */}
-        {menusByCategory.map(({ category, menus: catMenus }) => (
-          <div key={category.id} className="bg-white mb-2">
-            <div className="px-4 py-3 border-b border-gray-100">
-              <h3 className="font-semibold">{category.name}</h3>
+                + 추가
+              </button>
             </div>
-            {catMenus.length === 0 ? (
-              <div className="px-4 py-6 text-center text-sm text-gray-400">메뉴가 없습니다</div>
+
+            {categories.length === 0 ? (
+              <p className="text-sm text-gray-500 py-4 text-center">카테고리를 추가해보세요</p>
             ) : (
-              <div className="divide-y divide-gray-100">
-                {catMenus.map((menu) => (
-                  <MenuRow
-                    key={menu.id}
-                    menu={menu}
-                    onEdit={() => openMenuModal(menu)}
-                    onDelete={() => deleteMenu(menu.id)}
-                    onToggleSoldOut={() => toggleSoldOut(menu)}
-                  />
+              <div className="flex gap-2 overflow-x-auto md:flex-wrap pb-2">
+                {categories.map((cat) => (
+                  <div
+                    key={cat.id}
+                    className="flex-shrink-0 flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg"
+                  >
+                    <span className="text-sm">{cat.name}</span>
+                    <button
+                      onClick={() => {
+                        setEditingCategory(cat);
+                        setCategoryName(cat.name);
+                        setShowCategoryModal(true);
+                      }}
+                      className="text-gray-400 hover:text-gray-600"
+                    >
+                      <Edit2 className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => deleteCategory(cat.id)}
+                      className="text-gray-400 hover:text-red-500"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 ))}
               </div>
             )}
-          </div>
-        ))}
+          </section>
 
-        {/* 미분류 메뉴 */}
-        {uncategorizedMenus.length > 0 && (
-          <div className="bg-white mb-2">
-            <div className="px-4 py-3 border-b border-gray-100">
-              <h3 className="font-semibold text-gray-500">미분류</h3>
-            </div>
-            <div className="divide-y divide-gray-100">
-              {uncategorizedMenus.map((menu) => (
-                <MenuRow
-                  key={menu.id}
-                  menu={menu}
-                  onEdit={() => openMenuModal(menu)}
-                  onDelete={() => deleteMenu(menu.id)}
-                  onToggleSoldOut={() => toggleSoldOut(menu)}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+          {/* 메뉴 목록 */}
+          <section className="mt-2 md:mt-4">
+            {/* 카테고리별 메뉴 */}
+            {menusByCategory.map(({ category, menus: catMenus }) => (
+              <div key={category.id} className="bg-white mb-2 md:rounded-2xl md:overflow-hidden">
+                <div className="px-4 py-3 border-b border-gray-100">
+                  <h3 className="font-semibold">{category.name}</h3>
+                </div>
+                {catMenus.length === 0 ? (
+                  <div className="px-4 py-6 text-center text-sm text-gray-400">메뉴가 없습니다</div>
+                ) : (
+                  <div className="divide-y divide-gray-100">
+                    {catMenus.map((menu) => (
+                      <MenuRow
+                        key={menu.id}
+                        menu={menu}
+                        onEdit={() => openMenuModal(menu)}
+                        onDelete={() => deleteMenu(menu.id)}
+                        onToggleSoldOut={() => toggleSoldOut(menu)}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
 
-        {/* 메뉴 없음 */}
-        {menus.length === 0 && (
-          <div className="bg-white px-4 py-12 text-center">
-            <UtensilsCrossed className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500 mb-4">등록된 메뉴가 없습니다</p>
-            <button
-              onClick={() => openMenuModal()}
-              className="px-4 py-2 bg-brand-primary text-white rounded-lg text-sm font-medium"
-            >
-              첫 메뉴 등록하기
-            </button>
-          </div>
-        )}
-      </section>
+            {/* 미분류 메뉴 */}
+            {uncategorizedMenus.length > 0 && (
+              <div className="bg-white mb-2 md:rounded-2xl md:overflow-hidden">
+                <div className="px-4 py-3 border-b border-gray-100">
+                  <h3 className="font-semibold text-gray-500">미분류</h3>
+                </div>
+                <div className="divide-y divide-gray-100">
+                  {uncategorizedMenus.map((menu) => (
+                    <MenuRow
+                      key={menu.id}
+                      menu={menu}
+                      onEdit={() => openMenuModal(menu)}
+                      onDelete={() => deleteMenu(menu.id)}
+                      onToggleSoldOut={() => toggleSoldOut(menu)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 메뉴 없음 */}
+            {menus.length === 0 && (
+              <div className="bg-white px-4 py-12 text-center md:rounded-2xl">
+                <UtensilsCrossed className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                <p className="text-gray-500 mb-4">등록된 메뉴가 없습니다</p>
+                <button
+                  onClick={() => openMenuModal()}
+                  className="px-4 py-2 bg-brand-primary text-white rounded-lg text-sm font-medium"
+                >
+                  첫 메뉴 등록하기
+                </button>
+              </div>
+            )}
+          </section>
+        </div>
+      </div>
 
       {/* 카테고리 모달 */}
       {showCategoryModal && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center">
+        <div className="fixed inset-0 z-50 flex items-end md:items-center md:justify-center">
           <div
             className="absolute inset-0 bg-black/50"
             onClick={() => setShowCategoryModal(false)}
           />
-          <div className="relative bg-white w-full rounded-t-3xl p-6 safe-area-bottom">
+          <div className="relative bg-white w-full md:w-[400px] md:max-w-[90vw] rounded-t-3xl md:rounded-2xl p-6 safe-area-bottom">
             <h3 className="font-bold text-lg mb-4">
               {editingCategory ? '카테고리 수정' : '카테고리 추가'}
             </h3>
@@ -466,189 +506,194 @@ export default function FoodPartnerMenuPage() {
 
       {/* 메뉴 모달 */}
       {showMenuModal && (
-        <div className="fixed inset-0 z-50 bg-white overflow-y-auto">
-          {/* 헤더 */}
-          <header className="sticky top-0 bg-white border-b border-gray-200 z-10">
-            <div className="flex items-center justify-between px-4 h-14">
-              <button onClick={closeMenuModal}>
-                <X className="w-6 h-6" />
-              </button>
-              <h2 className="font-bold">{editingMenu ? '메뉴 수정' : '메뉴 추가'}</h2>
-              <button onClick={saveMenu} className="text-brand-primary font-semibold">
-                저장
-              </button>
-            </div>
-          </header>
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50 hidden md:block" onClick={closeMenuModal} />
+          <div className="relative bg-white w-full h-full md:w-[600px] md:h-auto md:max-h-[90vh] md:rounded-2xl overflow-y-auto">
+            {/* 헤더 */}
+            <header className="sticky top-0 bg-white border-b border-gray-200 z-10">
+              <div className="flex items-center justify-between px-4 h-14">
+                <button onClick={closeMenuModal}>
+                  <X className="w-6 h-6" />
+                </button>
+                <h2 className="font-bold">{editingMenu ? '메뉴 수정' : '메뉴 추가'}</h2>
+                <button onClick={saveMenu} className="text-brand-primary font-semibold">
+                  저장
+                </button>
+              </div>
+            </header>
 
-          <div className="p-4 space-y-6 pb-20">
-            {/* 이미지 */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">메뉴 사진</label>
-              <label className="flex items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                />
-                {menuForm.imageUrl ? (
-                  <div className="relative w-full h-full">
-                    <Image
-                      src={menuForm.imageUrl}
-                      alt="메뉴 사진"
-                      fill
-                      className="object-cover rounded-xl"
-                    />
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setMenuForm((prev) => ({ ...prev, imageUrl: '' }));
-                      }}
-                      className="absolute top-2 right-2 w-6 h-6 bg-black/50 rounded-full flex items-center justify-center"
-                    >
-                      <X className="w-4 h-4 text-white" />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="text-center">
-                    <ImageIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-sm text-gray-500">사진 추가</p>
-                  </div>
-                )}
-              </label>
-            </div>
+            <div className="p-4 space-y-6 pb-20 md:pb-6">
+              {/* 이미지 */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">메뉴 사진</label>
+                <label className="flex items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+                  {menuForm.imageUrl ? (
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={menuForm.imageUrl}
+                        alt="메뉴 사진"
+                        fill
+                        className="object-cover rounded-xl"
+                      />
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setMenuForm((prev) => ({ ...prev, imageUrl: '' }));
+                        }}
+                        className="absolute top-2 right-2 w-6 h-6 bg-black/50 rounded-full flex items-center justify-center"
+                      >
+                        <X className="w-4 h-4 text-white" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="text-center">
+                      <ImageIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                      <p className="text-sm text-gray-500">사진 추가</p>
+                    </div>
+                  )}
+                </label>
+              </div>
 
-            {/* 메뉴명 */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                메뉴명 <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                value={menuForm.name}
-                onChange={(e) => setMenuForm((prev) => ({ ...prev, name: e.target.value }))}
-                placeholder="메뉴명을 입력하세요"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl"
-              />
-            </div>
-
-            {/* 설명 */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">메뉴 설명</label>
-              <textarea
-                value={menuForm.description}
-                onChange={(e) => setMenuForm((prev) => ({ ...prev, description: e.target.value }))}
-                placeholder="메뉴를 설명해주세요"
-                rows={2}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl resize-none"
-              />
-            </div>
-
-            {/* 가격 */}
-            <div className="grid grid-cols-2 gap-4">
+              {/* 메뉴명 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  가격 <span className="text-red-500">*</span>
+                  메뉴명 <span className="text-red-500">*</span>
                 </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    value={menuForm.price || ''}
-                    onChange={(e) =>
-                      setMenuForm((prev) => ({
-                        ...prev,
-                        price: parseInt(e.target.value) || 0,
-                      }))
-                    }
-                    placeholder="0"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl pr-10"
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
-                    원
-                  </span>
-                </div>
+                <input
+                  type="text"
+                  value={menuForm.name}
+                  onChange={(e) => setMenuForm((prev) => ({ ...prev, name: e.target.value }))}
+                  placeholder="메뉴명을 입력하세요"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                />
               </div>
+
+              {/* 설명 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">할인가</label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    value={menuForm.salePrice || ''}
-                    onChange={(e) =>
-                      setMenuForm((prev) => ({
-                        ...prev,
-                        salePrice: e.target.value ? parseInt(e.target.value) : null,
-                      }))
-                    }
-                    placeholder="선택"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl pr-10"
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
-                    원
-                  </span>
+                <label className="block text-sm font-medium text-gray-700 mb-2">메뉴 설명</label>
+                <textarea
+                  value={menuForm.description}
+                  onChange={(e) =>
+                    setMenuForm((prev) => ({ ...prev, description: e.target.value }))
+                  }
+                  placeholder="메뉴를 설명해주세요"
+                  rows={2}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl resize-none"
+                />
+              </div>
+
+              {/* 가격 */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    가격 <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      value={menuForm.price || ''}
+                      onChange={(e) =>
+                        setMenuForm((prev) => ({
+                          ...prev,
+                          price: parseInt(e.target.value) || 0,
+                        }))
+                      }
+                      placeholder="0"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl pr-10"
+                    />
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
+                      원
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">할인가</label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      value={menuForm.salePrice || ''}
+                      onChange={(e) =>
+                        setMenuForm((prev) => ({
+                          ...prev,
+                          salePrice: e.target.value ? parseInt(e.target.value) : null,
+                        }))
+                      }
+                      placeholder="선택"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl pr-10"
+                    />
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
+                      원
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* 카테고리 */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">카테고리</label>
-              <select
-                value={menuForm.categoryId}
-                onChange={(e) => setMenuForm((prev) => ({ ...prev, categoryId: e.target.value }))}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl"
-              >
-                <option value="">미분류</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+              {/* 카테고리 */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">카테고리</label>
+                <select
+                  value={menuForm.categoryId}
+                  onChange={(e) => setMenuForm((prev) => ({ ...prev, categoryId: e.target.value }))}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                >
+                  <option value="">미분류</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            {/* 옵션 */}
-            <div className="space-y-3">
-              <label className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  checked={menuForm.isPopular}
-                  onChange={(e) =>
-                    setMenuForm((prev) => ({ ...prev, isPopular: e.target.checked }))
-                  }
-                  className="w-5 h-5 rounded"
-                />
-                <span>인기 메뉴로 표시</span>
-              </label>
-              <label className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  checked={menuForm.isNew}
-                  onChange={(e) => setMenuForm((prev) => ({ ...prev, isNew: e.target.checked }))}
-                  className="w-5 h-5 rounded"
-                />
-                <span>신메뉴로 표시</span>
-              </label>
-              <label className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  checked={menuForm.isSoldOut}
-                  onChange={(e) =>
-                    setMenuForm((prev) => ({ ...prev, isSoldOut: e.target.checked }))
-                  }
-                  className="w-5 h-5 rounded"
-                />
-                <span>품절 처리</span>
-              </label>
+              {/* 옵션 */}
+              <div className="space-y-3">
+                <label className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={menuForm.isPopular}
+                    onChange={(e) =>
+                      setMenuForm((prev) => ({ ...prev, isPopular: e.target.checked }))
+                    }
+                    className="w-5 h-5 rounded"
+                  />
+                  <span>인기 메뉴로 표시</span>
+                </label>
+                <label className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={menuForm.isNew}
+                    onChange={(e) => setMenuForm((prev) => ({ ...prev, isNew: e.target.checked }))}
+                    className="w-5 h-5 rounded"
+                  />
+                  <span>신메뉴로 표시</span>
+                </label>
+                <label className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={menuForm.isSoldOut}
+                    onChange={(e) =>
+                      setMenuForm((prev) => ({ ...prev, isSoldOut: e.target.checked }))
+                    }
+                    className="w-5 h-5 rounded"
+                  />
+                  <span>품절 처리</span>
+                </label>
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* 하단 네비게이션 */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 safe-area-bottom">
-        <div className="grid grid-cols-4 h-16">
+      {/* 하단 네비게이션 (모바일 전용) */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 safe-area-bottom md:hidden">
+        <div className="container-1200 grid grid-cols-4 h-16">
           <Link
             href="/food/partner"
             className="flex flex-col items-center justify-center text-gray-500"

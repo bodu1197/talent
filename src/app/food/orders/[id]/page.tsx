@@ -197,7 +197,7 @@ export default function OrderDetailPage() {
     <div className="min-h-screen bg-gray-50 pb-8">
       {/* 헤더 */}
       <header className="sticky top-0 z-50 bg-white border-b">
-        <div className="max-w-lg mx-auto px-4 h-14 flex items-center">
+        <div className="container-1200 px-4 h-14 flex items-center">
           <button onClick={() => router.back()} className="p-2 -ml-2">
             <ArrowLeft className="w-6 h-6" />
           </button>
@@ -206,285 +206,293 @@ export default function OrderDetailPage() {
         </div>
       </header>
 
-      <div className="max-w-lg mx-auto">
-        {/* 주문 상태 */}
-        <div className="bg-white p-6">
-          {/* 상태 아이콘 & 텍스트 */}
-          <div className="text-center mb-6">
-            <div
-              className={`w-20 h-20 mx-auto rounded-full flex items-center justify-center text-4xl mb-4 ${(() => {
-                if (isCompleted) return 'bg-green-100';
-                if (isCancelled) return 'bg-red-100';
-                return 'bg-orange-100';
-              })()}`}
-            >
-              {(() => {
-                if (isCompleted) return '✅';
-                if (isCancelled) return '❌';
-                return '🛵';
-              })()}
+      <div className="container-1200">
+        <div className="md:flex md:gap-6 md:py-6">
+          {/* 왼쪽: 주문 상태 및 정보 */}
+          <div className="md:flex-1">
+            {/* 주문 상태 */}
+            <div className="bg-white p-6 md:rounded-xl">
+              {/* 상태 아이콘 & 텍스트 */}
+              <div className="text-center mb-6">
+                <div
+                  className={`w-20 h-20 mx-auto rounded-full flex items-center justify-center text-4xl mb-4 ${(() => {
+                    if (isCompleted) return 'bg-green-100';
+                    if (isCancelled) return 'bg-red-100';
+                    return 'bg-orange-100';
+                  })()}`}
+                >
+                  {(() => {
+                    if (isCompleted) return '✅';
+                    if (isCancelled) return '❌';
+                    return '🛵';
+                  })()}
+                </div>
+                <h2 className={`text-xl font-bold ${isCancelled ? 'text-red-600' : ''}`}>
+                  {FOOD_ORDER_STATUS[order.status].label}
+                </h2>
+                {!isCompleted && !isCancelled && getRemainingTime() && (
+                  <p className="text-gray-500 mt-1">{getRemainingTime()} 후 도착 예정</p>
+                )}
+              </div>
+
+              {/* 진행 단계 */}
+              {!isCancelled && (
+                <div className="relative">
+                  {/* 진행 바 배경 */}
+                  <div className="absolute top-4 left-0 right-0 h-1 bg-gray-200 rounded"></div>
+                  {/* 진행 바 */}
+                  <div
+                    className="absolute top-4 left-0 h-1 bg-orange-500 rounded transition-all duration-500"
+                    style={{ width: `${(currentStepIndex / (ORDER_STEPS.length - 1)) * 100}%` }}
+                  ></div>
+
+                  {/* 단계 표시 */}
+                  <div className="relative flex justify-between">
+                    {ORDER_STEPS.map((step, index) => {
+                      const isPassed = index <= currentStepIndex;
+                      const isCurrent = index === currentStepIndex;
+
+                      return (
+                        <div key={step.status} className="flex flex-col items-center">
+                          <div
+                            className={`w-8 h-8 rounded-full flex items-center justify-center text-sm z-10 ${
+                              isPassed ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-400'
+                            } ${isCurrent ? 'ring-4 ring-orange-100' : ''}`}
+                          >
+                            {typeof step.icon === 'string' ? (
+                              step.icon
+                            ) : (
+                              <span className="scale-75">{step.icon}</span>
+                            )}
+                          </div>
+                          <span
+                            className={`text-xs mt-2 text-center ${
+                              isPassed ? 'text-orange-600 font-medium' : 'text-gray-400'
+                            }`}
+                          >
+                            {step.label}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
-            <h2 className={`text-xl font-bold ${isCancelled ? 'text-red-600' : ''}`}>
-              {FOOD_ORDER_STATUS[order.status].label}
-            </h2>
-            {!isCompleted && !isCancelled && getRemainingTime() && (
-              <p className="text-gray-500 mt-1">{getRemainingTime()} 후 도착 예정</p>
-            )}
-          </div>
 
-          {/* 진행 단계 */}
-          {!isCancelled && (
-            <div className="relative">
-              {/* 진행 바 배경 */}
-              <div className="absolute top-4 left-0 right-0 h-1 bg-gray-200 rounded"></div>
-              {/* 진행 바 */}
-              <div
-                className="absolute top-4 left-0 h-1 bg-orange-500 rounded transition-all duration-500"
-                style={{ width: `${(currentStepIndex / (ORDER_STEPS.length - 1)) * 100}%` }}
-              ></div>
-
-              {/* 단계 표시 */}
-              <div className="relative flex justify-between">
-                {ORDER_STEPS.map((step, index) => {
-                  const isPassed = index <= currentStepIndex;
-                  const isCurrent = index === currentStepIndex;
-
-                  return (
-                    <div key={step.status} className="flex flex-col items-center">
-                      <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center text-sm z-10 ${
-                          isPassed ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-400'
-                        } ${isCurrent ? 'ring-4 ring-orange-100' : ''}`}
-                      >
-                        {typeof step.icon === 'string' ? (
-                          step.icon
-                        ) : (
-                          <span className="scale-75">{step.icon}</span>
-                        )}
-                      </div>
-                      <span
-                        className={`text-xs mt-2 text-center ${
-                          isPassed ? 'text-orange-600 font-medium' : 'text-gray-400'
-                        }`}
-                      >
-                        {step.label}
-                      </span>
+            {/* 라이더 정보 (배달중일 때만) */}
+            {order.rider && ['picked_up', 'delivering'].includes(order.status) && (
+              <div className="bg-white mt-2 p-4 md:rounded-xl">
+                <h3 className="font-bold mb-3">배달 라이더</h3>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+                      🛵
                     </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* 라이더 정보 (배달중일 때만) */}
-        {order.rider && ['picked_up', 'delivering'].includes(order.status) && (
-          <div className="bg-white mt-2 p-4">
-            <h3 className="font-bold mb-3">배달 라이더</h3>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
-                  🛵
-                </div>
-                <div>
-                  <p className="font-medium">{order.rider.name} 라이더</p>
-                  <p className="text-sm text-gray-500">{order.rider.phone}</p>
+                    <div>
+                      <p className="font-medium">{order.rider.name} 라이더</p>
+                      <p className="text-sm text-gray-500">{order.rider.phone}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => callPhone(order.rider!.phone)}
+                    className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-500"
+                  >
+                    <Phone className="w-5 h-5" />
+                  </button>
                 </div>
               </div>
-              <button
-                onClick={() => callPhone(order.rider!.phone)}
-                className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-500"
-              >
-                <Phone className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        )}
+            )}
 
-        {/* 배달 주소 */}
-        <div className="bg-white mt-2 p-4">
-          <h3 className="font-bold flex items-center gap-2 mb-3">
-            <MapPin className="w-5 h-5 text-orange-500" />
-            배달 주소
-          </h3>
-          <p className="text-gray-700">{order.delivery_address}</p>
-          {order.delivery_detail_address && (
-            <p className="text-gray-500">{order.delivery_detail_address}</p>
-          )}
-          <p className="text-gray-500 mt-1">{order.delivery_phone}</p>
-
-          {/* 요청사항 */}
-          {(order.request_to_store || order.request_to_rider) && (
-            <div className="mt-4 pt-4 border-t space-y-2">
-              {order.request_to_store && (
-                <div className="flex gap-2 text-sm">
-                  <span className="text-gray-500">가게:</span>
-                  <span>{order.request_to_store}</span>
-                </div>
+            {/* 배달 주소 */}
+            <div className="bg-white mt-2 p-4 md:rounded-xl">
+              <h3 className="font-bold flex items-center gap-2 mb-3">
+                <MapPin className="w-5 h-5 text-orange-500" />
+                배달 주소
+              </h3>
+              <p className="text-gray-700">{order.delivery_address}</p>
+              {order.delivery_detail_address && (
+                <p className="text-gray-500">{order.delivery_detail_address}</p>
               )}
-              {order.request_to_rider && (
-                <div className="flex gap-2 text-sm">
-                  <span className="text-gray-500">배달:</span>
-                  <span>{order.request_to_rider}</span>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+              <p className="text-gray-500 mt-1">{order.delivery_phone}</p>
 
-        {/* 가게 정보 */}
-        <div className="bg-white mt-2 p-4">
-          <h3 className="font-bold mb-3">주문 가게</h3>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                🍗
-              </div>
-              <div>
-                <p className="font-medium">{order.store?.name}</p>
-                <p className="text-sm text-gray-500">{order.store?.address}</p>
-              </div>
-            </div>
-            <button
-              onClick={() => callPhone(order.store!.phone)}
-              className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-500"
-            >
-              <Phone className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-
-        {/* 주문 내역 */}
-        <div className="bg-white mt-2 p-4">
-          <h3 className="font-bold mb-3">주문 내역</h3>
-          <div className="space-y-3">
-            {order.items.map((item, index) => (
-              <div key={index} className="flex justify-between">
-                <div>
-                  <span className="font-medium">{item.menu_name}</span>
-                  {item.options && item.options.length > 0 && (
-                    <p className="text-sm text-gray-500">
-                      {item.options.map((opt: { name: string }) => opt.name).join(', ')}
-                    </p>
+              {/* 요청사항 */}
+              {(order.request_to_store || order.request_to_rider) && (
+                <div className="mt-4 pt-4 border-t space-y-2">
+                  {order.request_to_store && (
+                    <div className="flex gap-2 text-sm">
+                      <span className="text-gray-500">가게:</span>
+                      <span>{order.request_to_store}</span>
+                    </div>
                   )}
-                  <span className="text-sm text-gray-500"> x {item.quantity}</span>
+                  {order.request_to_rider && (
+                    <div className="flex gap-2 text-sm">
+                      <span className="text-gray-500">배달:</span>
+                      <span>{order.request_to_rider}</span>
+                    </div>
+                  )}
                 </div>
-                <span>{item.total_price.toLocaleString()}원</span>
+              )}
+            </div>
+
+            {/* 가게 정보 */}
+            <div className="bg-white mt-2 p-4 md:rounded-xl">
+              <h3 className="font-bold mb-3">주문 가게</h3>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                    🍗
+                  </div>
+                  <div>
+                    <p className="font-medium">{order.store?.name}</p>
+                    <p className="text-sm text-gray-500">{order.store?.address}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => callPhone(order.store!.phone)}
+                  className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-500"
+                >
+                  <Phone className="w-5 h-5" />
+                </button>
               </div>
-            ))}
+            </div>
           </div>
 
-          <div className="border-t mt-4 pt-4 space-y-2">
-            <div className="flex justify-between text-gray-600">
-              <span>주문금액</span>
-              <span>{order.subtotal.toLocaleString()}원</span>
+          {/* 오른쪽: 주문 내역 및 결제 정보 (PC에서 사이드바) */}
+          <div className="md:w-96 md:flex-shrink-0">
+            {/* 주문 내역 */}
+            <div className="bg-white mt-2 md:mt-0 p-4 md:rounded-xl">
+              <h3 className="font-bold mb-3">주문 내역</h3>
+              <div className="space-y-3">
+                {order.items.map((item, index) => (
+                  <div key={index} className="flex justify-between">
+                    <div>
+                      <span className="font-medium">{item.menu_name}</span>
+                      {item.options && item.options.length > 0 && (
+                        <p className="text-sm text-gray-500">
+                          {item.options.map((opt: { name: string }) => opt.name).join(', ')}
+                        </p>
+                      )}
+                      <span className="text-sm text-gray-500"> x {item.quantity}</span>
+                    </div>
+                    <span>{item.total_price.toLocaleString()}원</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="border-t mt-4 pt-4 space-y-2">
+                <div className="flex justify-between text-gray-600">
+                  <span>주문금액</span>
+                  <span>{order.subtotal.toLocaleString()}원</span>
+                </div>
+                <div className="flex justify-between text-gray-600">
+                  <span>배달비</span>
+                  <span>{order.delivery_fee.toLocaleString()}원</span>
+                </div>
+                <div className="flex justify-between font-bold text-lg pt-2 border-t">
+                  <span>총 결제금액</span>
+                  <span className="text-orange-500">{order.total_amount.toLocaleString()}원</span>
+                </div>
+              </div>
             </div>
-            <div className="flex justify-between text-gray-600">
-              <span>배달비</span>
-              <span>{order.delivery_fee.toLocaleString()}원</span>
+
+            {/* 결제 정보 */}
+            <div className="bg-white mt-2 p-4 md:rounded-xl">
+              <h3 className="font-bold mb-3">결제 정보</h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-500">결제 수단</span>
+                  <span>
+                    {{ card: '카드 결제', cash: '현금 결제', transfer: '계좌이체' }[
+                      order.payment_method
+                    ] || order.payment_method}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">주문 번호</span>
+                  <span>{order.order_number}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">주문 시간</span>
+                  <span>{formatTime(order.created_at)}</span>
+                </div>
+              </div>
             </div>
-            <div className="flex justify-between font-bold text-lg pt-2 border-t">
-              <span>총 결제금액</span>
-              <span className="text-orange-500">{order.total_amount.toLocaleString()}원</span>
+
+            {/* 주문 타임라인 */}
+            <div className="bg-white mt-2 p-4 md:rounded-xl">
+              <h3 className="font-bold mb-3">주문 진행</h3>
+              <div className="space-y-3">
+                {order.created_at && (
+                  <div className="flex items-center gap-3 text-sm">
+                    <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                    <span className="text-gray-500 w-16">{formatTime(order.created_at)}</span>
+                    <span>주문 접수</span>
+                  </div>
+                )}
+                {order.accepted_at && (
+                  <div className="flex items-center gap-3 text-sm">
+                    <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                    <span className="text-gray-500 w-16">{formatTime(order.accepted_at)}</span>
+                    <span>주문 확인</span>
+                  </div>
+                )}
+                {order.preparing_at && (
+                  <div className="flex items-center gap-3 text-sm">
+                    <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                    <span className="text-gray-500 w-16">{formatTime(order.preparing_at)}</span>
+                    <span>조리 시작</span>
+                  </div>
+                )}
+                {order.ready_at && (
+                  <div className="flex items-center gap-3 text-sm">
+                    <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                    <span className="text-gray-500 w-16">{formatTime(order.ready_at)}</span>
+                    <span>조리 완료</span>
+                  </div>
+                )}
+                {order.picked_up_at && (
+                  <div className="flex items-center gap-3 text-sm">
+                    <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                    <span className="text-gray-500 w-16">{formatTime(order.picked_up_at)}</span>
+                    <span>라이더 픽업</span>
+                  </div>
+                )}
+                {order.delivered_at && (
+                  <div className="flex items-center gap-3 text-sm">
+                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                    <span className="text-gray-500 w-16">{formatTime(order.delivered_at)}</span>
+                    <span>배달 완료</span>
+                  </div>
+                )}
+              </div>
             </div>
+
+            {/* 하단 버튼 */}
+            {isCompleted && (
+              <div className="p-4 md:px-0 space-y-2">
+                <button
+                  onClick={() => router.push(`/food/store/${order.store_id}`)}
+                  className="w-full py-4 border border-orange-500 text-orange-500 rounded-xl font-bold"
+                >
+                  재주문하기
+                </button>
+                <button className="w-full py-4 bg-orange-500 text-white rounded-xl font-bold">
+                  리뷰 작성하기
+                </button>
+              </div>
+            )}
+
+            {/* 주문 취소 버튼 (접수 전에만) */}
+            {order.status === 'pending' && (
+              <div className="p-4 md:px-0">
+                <button className="w-full py-4 border border-gray-300 text-gray-500 rounded-xl">
+                  주문 취소
+                </button>
+              </div>
+            )}
           </div>
         </div>
-
-        {/* 결제 정보 */}
-        <div className="bg-white mt-2 p-4">
-          <h3 className="font-bold mb-3">결제 정보</h3>
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="text-gray-500">결제 수단</span>
-              <span>
-                {{ card: '카드 결제', cash: '현금 결제', transfer: '계좌이체' }[
-                  order.payment_method
-                ] || order.payment_method}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-500">주문 번호</span>
-              <span>{order.order_number}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-500">주문 시간</span>
-              <span>{formatTime(order.created_at)}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* 주문 타임라인 */}
-        <div className="bg-white mt-2 p-4">
-          <h3 className="font-bold mb-3">주문 진행</h3>
-          <div className="space-y-3">
-            {order.created_at && (
-              <div className="flex items-center gap-3 text-sm">
-                <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-                <span className="text-gray-500 w-16">{formatTime(order.created_at)}</span>
-                <span>주문 접수</span>
-              </div>
-            )}
-            {order.accepted_at && (
-              <div className="flex items-center gap-3 text-sm">
-                <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-                <span className="text-gray-500 w-16">{formatTime(order.accepted_at)}</span>
-                <span>주문 확인</span>
-              </div>
-            )}
-            {order.preparing_at && (
-              <div className="flex items-center gap-3 text-sm">
-                <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-                <span className="text-gray-500 w-16">{formatTime(order.preparing_at)}</span>
-                <span>조리 시작</span>
-              </div>
-            )}
-            {order.ready_at && (
-              <div className="flex items-center gap-3 text-sm">
-                <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-                <span className="text-gray-500 w-16">{formatTime(order.ready_at)}</span>
-                <span>조리 완료</span>
-              </div>
-            )}
-            {order.picked_up_at && (
-              <div className="flex items-center gap-3 text-sm">
-                <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-                <span className="text-gray-500 w-16">{formatTime(order.picked_up_at)}</span>
-                <span>라이더 픽업</span>
-              </div>
-            )}
-            {order.delivered_at && (
-              <div className="flex items-center gap-3 text-sm">
-                <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                <span className="text-gray-500 w-16">{formatTime(order.delivered_at)}</span>
-                <span>배달 완료</span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* 하단 버튼 */}
-        {isCompleted && (
-          <div className="p-4 space-y-2">
-            <button
-              onClick={() => router.push(`/food/store/${order.store_id}`)}
-              className="w-full py-4 border border-orange-500 text-orange-500 rounded-xl font-bold"
-            >
-              재주문하기
-            </button>
-            <button className="w-full py-4 bg-orange-500 text-white rounded-xl font-bold">
-              리뷰 작성하기
-            </button>
-          </div>
-        )}
-
-        {/* 주문 취소 버튼 (접수 전에만) */}
-        {order.status === 'pending' && (
-          <div className="p-4">
-            <button className="w-full py-4 border border-gray-300 text-gray-500 rounded-xl">
-              주문 취소
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );

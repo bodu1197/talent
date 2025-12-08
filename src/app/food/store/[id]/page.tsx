@@ -236,244 +236,249 @@ export default function FoodStorePage({ params }: { params: Promise<{ id: string
 
   return (
     <div className="min-h-screen bg-gray-50 pb-32">
-      {/* 헤더 이미지 */}
-      <div className="relative h-56 bg-gray-200">
-        {store.banner_url ? (
-          <Image src={store.banner_url} alt={store.name} fill className="object-cover" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-100 to-orange-200">
-            <span className="text-7xl">{FOOD_CATEGORY_ICONS[store.category]}</span>
-          </div>
-        )}
+      <div className="container-1200">
+        {/* 헤더 이미지 */}
+        <div className="relative h-56 md:h-72 lg:h-80 bg-gray-200 md:rounded-b-2xl md:overflow-hidden">
+          {store.banner_url ? (
+            <Image src={store.banner_url} alt={store.name} fill className="object-cover" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-100 to-orange-200">
+              <span className="text-7xl">{FOOD_CATEGORY_ICONS[store.category]}</span>
+            </div>
+          )}
 
-        {/* 상단 버튼들 */}
-        <div className="absolute top-0 left-0 right-0 p-4 flex items-center justify-between">
-          <button
-            onClick={() => router.back()}
-            className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center shadow-sm"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <div className="flex gap-2">
+          {/* 상단 버튼들 */}
+          <div className="absolute top-0 left-0 right-0 p-4 flex items-center justify-between">
             <button
-              onClick={() => setIsFavorite(!isFavorite)}
+              onClick={() => router.back()}
               className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center shadow-sm"
             >
-              <Heart
-                className={`w-5 h-5 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'}`}
-              />
+              <ArrowLeft className="w-5 h-5" />
             </button>
-            <button className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center shadow-sm">
-              <Share2 className="w-5 h-5 text-gray-600" />
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setIsFavorite(!isFavorite)}
+                className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center shadow-sm"
+              >
+                <Heart
+                  className={`w-5 h-5 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'}`}
+                />
+              </button>
+              <button className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center shadow-sm">
+                <Share2 className="w-5 h-5 text-gray-600" />
+              </button>
+            </div>
           </div>
-        </div>
 
-        {/* 영업 상태 */}
-        {!store.is_open && (
-          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-            <span className="bg-white text-gray-900 px-6 py-3 rounded-full text-lg font-semibold">
-              현재 준비 중입니다
-            </span>
-          </div>
-        )}
-      </div>
-
-      {/* 음식점 정보 */}
-      <div className="bg-white px-4 py-5 border-b border-gray-100">
-        <div className="flex items-start gap-3">
-          {store.logo_url && (
-            <Image
-              src={store.logo_url}
-              alt={store.name}
-              width={56}
-              height={56}
-              className="rounded-xl"
-            />
-          )}
-          <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold text-gray-900">{store.name}</h1>
-              <span className="text-xs px-2 py-0.5 bg-orange-100 text-orange-600 rounded">
-                {FOOD_CATEGORY_LABELS[store.category]}
+          {/* 영업 상태 */}
+          {!store.is_open && (
+            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+              <span className="bg-white text-gray-900 px-6 py-3 rounded-full text-lg font-semibold">
+                현재 준비 중입니다
               </span>
             </div>
-            <div className="flex items-center gap-2 mt-1 text-sm">
-              <div className="flex items-center text-yellow-500">
-                <Star className="w-4 h-4 fill-current" />
-                <span className="ml-0.5 font-semibold text-gray-900">
-                  {store.rating.toFixed(1)}
+          )}
+        </div>
+
+        {/* 음식점 정보 */}
+        <div className="bg-white px-4 py-5 border-b border-gray-100">
+          <div className="flex items-start gap-3">
+            {store.logo_url && (
+              <Image
+                src={store.logo_url}
+                alt={store.name}
+                width={56}
+                height={56}
+                className="rounded-xl"
+              />
+            )}
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl font-bold text-gray-900">{store.name}</h1>
+                <span className="text-xs px-2 py-0.5 bg-orange-100 text-orange-600 rounded">
+                  {FOOD_CATEGORY_LABELS[store.category]}
                 </span>
               </div>
-              <span className="text-gray-300">·</span>
-              <span className="text-gray-500">리뷰 {store.review_count}</span>
+              <div className="flex items-center gap-2 mt-1 text-sm">
+                <div className="flex items-center text-yellow-500">
+                  <Star className="w-4 h-4 fill-current" />
+                  <span className="ml-0.5 font-semibold text-gray-900">
+                    {store.rating.toFixed(1)}
+                  </span>
+                </div>
+                <span className="text-gray-300">·</span>
+                <span className="text-gray-500">리뷰 {store.review_count}</span>
+              </div>
             </div>
           </div>
+
+          {/* 배달 정보 */}
+          <div className="mt-4 flex items-center gap-4 text-sm text-gray-600">
+            <div className="flex items-center gap-1">
+              <Clock className="w-4 h-4" />
+              <span>
+                {store.estimated_prep_time}~{store.estimated_prep_time + 10}분
+              </span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span>최소주문</span>
+              <span className="font-medium">{store.min_order_amount.toLocaleString()}원</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span>배달비</span>
+              <span className="font-medium">{store.delivery_fee.toLocaleString()}원</span>
+            </div>
+          </div>
+
+          {store.description && <p className="mt-3 text-sm text-gray-500">{store.description}</p>}
         </div>
 
-        {/* 배달 정보 */}
-        <div className="mt-4 flex items-center gap-4 text-sm text-gray-600">
-          <div className="flex items-center gap-1">
-            <Clock className="w-4 h-4" />
-            <span>
-              {store.estimated_prep_time}~{store.estimated_prep_time + 10}분
-            </span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span>최소주문</span>
-            <span className="font-medium">{store.min_order_amount.toLocaleString()}원</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span>배달비</span>
-            <span className="font-medium">{store.delivery_fee.toLocaleString()}원</span>
+        {/* 탭 메뉴 */}
+        <div className="bg-white sticky top-0 z-40 border-b border-gray-200">
+          <div className="flex">
+            {(['menu', 'info', 'review'] as const).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`flex-1 py-4 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === tab
+                    ? 'text-brand-primary border-brand-primary'
+                    : 'text-gray-500 border-transparent'
+                }`}
+              >
+                {{ menu: '메뉴', info: '정보', review: '리뷰' }[tab]}
+              </button>
+            ))}
           </div>
         </div>
 
-        {store.description && <p className="mt-3 text-sm text-gray-500">{store.description}</p>}
-      </div>
-
-      {/* 탭 메뉴 */}
-      <div className="bg-white sticky top-0 z-40 border-b border-gray-200">
-        <div className="flex">
-          {(['menu', 'info', 'review'] as const).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`flex-1 py-4 text-sm font-medium border-b-2 transition-colors ${
-                activeTab === tab
-                  ? 'text-brand-primary border-brand-primary'
-                  : 'text-gray-500 border-transparent'
-              }`}
-            >
-              {{ menu: '메뉴', info: '정보', review: '리뷰' }[tab]}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* 메뉴 탭 */}
-      {activeTab === 'menu' && (
-        <div>
-          {/* 메뉴 카테고리 */}
-          {menuCategories.length > 0 && (
-            <div className="bg-white px-4 py-3 border-b border-gray-100 overflow-x-auto">
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setSelectedCategory(null)}
-                  className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    selectedCategory === null
-                      ? 'bg-gray-900 text-white'
-                      : 'bg-gray-100 text-gray-600'
-                  }`}
-                >
-                  전체
-                </button>
-                {menuCategories.map((cat) => (
+        {/* 메뉴 탭 */}
+        {activeTab === 'menu' && (
+          <div>
+            {/* 메뉴 카테고리 */}
+            {menuCategories.length > 0 && (
+              <div className="bg-white px-4 py-3 border-b border-gray-100 overflow-x-auto">
+                <div className="flex gap-2">
                   <button
-                    key={cat.id}
-                    onClick={() => setSelectedCategory(cat.id)}
+                    onClick={() => setSelectedCategory(null)}
                     className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                      selectedCategory === cat.id
+                      selectedCategory === null
                         ? 'bg-gray-900 text-white'
                         : 'bg-gray-100 text-gray-600'
                     }`}
                   >
-                    {cat.name}
+                    전체
                   </button>
-                ))}
+                  {menuCategories.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setSelectedCategory(cat.id)}
+                      className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                        selectedCategory === cat.id
+                          ? 'bg-gray-900 text-white'
+                          : 'bg-gray-100 text-gray-600'
+                      }`}
+                    >
+                      {cat.name}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* 인기 메뉴 */}
-          {!selectedCategory && popularMenus.length > 0 && (
+            {/* 인기 메뉴 */}
+            {!selectedCategory && popularMenus.length > 0 && (
+              <div className="bg-white mt-2 px-4 py-4">
+                <h2 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                  <span className="text-lg">🔥</span>
+                  인기 메뉴
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {popularMenus.map((menu) => (
+                    <MenuCard key={menu.id} menu={menu} onClick={() => openMenuSheet(menu)} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 전체 메뉴 */}
             <div className="bg-white mt-2 px-4 py-4">
-              <h2 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                <span className="text-lg">🔥</span>
-                인기 메뉴
-              </h2>
-              <div className="space-y-3">
-                {popularMenus.map((menu) => (
+              {!selectedCategory && popularMenus.length > 0 && (
+                <h2 className="font-bold text-gray-900 mb-3">전체 메뉴</h2>
+              )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {filteredMenus.map((menu) => (
                   <MenuCard key={menu.id} menu={menu} onClick={() => openMenuSheet(menu)} />
                 ))}
               </div>
             </div>
-          )}
+          </div>
+        )}
 
-          {/* 전체 메뉴 */}
-          <div className="bg-white mt-2 px-4 py-4">
-            {!selectedCategory && popularMenus.length > 0 && (
-              <h2 className="font-bold text-gray-900 mb-3">전체 메뉴</h2>
-            )}
-            <div className="space-y-3">
-              {filteredMenus.map((menu) => (
-                <MenuCard key={menu.id} menu={menu} onClick={() => openMenuSheet(menu)} />
-              ))}
+        {/* 정보 탭 */}
+        {activeTab === 'info' && (
+          <div className="bg-white mt-2 px-4 py-4 space-y-4">
+            <div>
+              <h3 className="text-sm font-semibold text-gray-900 mb-2">영업시간</h3>
+              <p className="text-sm text-gray-600">
+                매일{' '}
+                {(store.business_hours as Record<string, { open: string; close: string } | null>)
+                  .mon?.open || '09:00'}{' '}
+                -{' '}
+                {(store.business_hours as Record<string, { open: string; close: string } | null>)
+                  .mon?.close || '21:00'}
+              </p>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-gray-900 mb-2">주소</h3>
+              <p className="text-sm text-gray-600">{store.address}</p>
+              {store.detail_address && (
+                <p className="text-sm text-gray-500">{store.detail_address}</p>
+              )}
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-gray-900 mb-2">전화번호</h3>
+              <a href={`tel:${store.phone}`} className="text-sm text-brand-primary">
+                {store.phone}
+              </a>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* 정보 탭 */}
-      {activeTab === 'info' && (
-        <div className="bg-white mt-2 px-4 py-4 space-y-4">
-          <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-2">영업시간</h3>
-            <p className="text-sm text-gray-600">
-              매일{' '}
-              {(store.business_hours as Record<string, { open: string; close: string } | null>).mon
-                ?.open || '09:00'}{' '}
-              -{' '}
-              {(store.business_hours as Record<string, { open: string; close: string } | null>).mon
-                ?.close || '21:00'}
-            </p>
+        {/* 리뷰 탭 */}
+        {activeTab === 'review' && (
+          <div className="bg-white mt-2 px-4 py-8 text-center">
+            <p className="text-gray-500">아직 리뷰가 없습니다</p>
           </div>
-          <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-2">주소</h3>
-            <p className="text-sm text-gray-600">{store.address}</p>
-            {store.detail_address && (
-              <p className="text-sm text-gray-500">{store.detail_address}</p>
-            )}
-          </div>
-          <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-2">전화번호</h3>
-            <a href={`tel:${store.phone}`} className="text-sm text-brand-primary">
-              {store.phone}
-            </a>
-          </div>
-        </div>
-      )}
+        )}
 
-      {/* 리뷰 탭 */}
-      {activeTab === 'review' && (
-        <div className="bg-white mt-2 px-4 py-8 text-center">
-          <p className="text-gray-500">아직 리뷰가 없습니다</p>
-        </div>
-      )}
-
-      {/* 장바구니 바 */}
-      {cart.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 safe-area-bottom">
-          <Link
-            href={`/food/cart?store=${storeId}`}
-            className="flex items-center justify-between bg-brand-primary text-white rounded-xl px-5 py-4"
-          >
-            <div className="flex items-center gap-3">
-              <div className="bg-white/20 rounded-full px-2.5 py-1 text-sm font-semibold">
-                {cartCount}
-              </div>
-              <span className="font-medium">장바구니 보기</span>
+        {/* 장바구니 바 */}
+        {cart.length > 0 && (
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 safe-area-bottom">
+            <div className="container-1200">
+              <Link
+                href={`/food/cart?store=${storeId}`}
+                className="flex items-center justify-between bg-brand-primary text-white rounded-xl px-5 py-4 max-w-xl md:mx-auto"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="bg-white/20 rounded-full px-2.5 py-1 text-sm font-semibold">
+                    {cartCount}
+                  </div>
+                  <span className="font-medium">장바구니 보기</span>
+                </div>
+                <span className="font-bold">{cartTotal.toLocaleString()}원</span>
+              </Link>
             </div>
-            <span className="font-bold">{cartTotal.toLocaleString()}원</span>
-          </Link>
-        </div>
-      )}
+          </div>
+        )}
+      </div>
+      {/* container-1200 닫기 */}
 
       {/* 메뉴 옵션 바텀시트 */}
       {selectedMenu && (
-        <div className="fixed inset-0 z-50">
+        <div className="fixed inset-0 z-50 flex items-end md:items-center md:justify-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setSelectedMenu(null)} />
-          <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl max-h-[85vh] overflow-y-auto safe-area-bottom">
+          <div className="relative w-full md:w-[500px] md:max-w-[90vw] bg-white rounded-t-3xl md:rounded-2xl max-h-[85vh] overflow-y-auto safe-area-bottom">
             {/* 헤더 */}
             <div className="sticky top-0 bg-white px-4 py-4 border-b border-gray-100 flex items-center justify-between">
               <h2 className="font-bold text-lg">{selectedMenu.name}</h2>

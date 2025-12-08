@@ -224,7 +224,7 @@ export default function OrdersPage() {
 
       {/* 헤더 */}
       <header className="sticky top-0 z-50 bg-white border-b">
-        <div className="max-w-lg mx-auto px-4 h-14 flex items-center">
+        <div className="container-1200 px-4 h-14 flex items-center">
           <button onClick={() => router.push('/food')} className="p-2 -ml-2">
             <ArrowLeft className="w-6 h-6" />
           </button>
@@ -233,7 +233,7 @@ export default function OrdersPage() {
         </div>
 
         {/* 탭 */}
-        <div className="max-w-lg mx-auto flex border-b">
+        <div className="container-1200 flex border-b">
           <button
             onClick={() => setActiveTab('ongoing')}
             className={`flex-1 py-3 text-center font-medium relative ${
@@ -264,7 +264,7 @@ export default function OrdersPage() {
         </div>
       </header>
 
-      <div className="max-w-lg mx-auto">
+      <div className="container-1200 pb-24">
         {displayOrders.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 px-4">
             <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
@@ -294,7 +294,7 @@ export default function OrdersPage() {
             </Link>
           </div>
         ) : (
-          <div className="p-4 space-y-4">
+          <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {displayOrders.map((order) => (
               <Link
                 key={order.id}
@@ -377,9 +377,9 @@ export default function OrdersPage() {
         )}
       </div>
 
-      {/* 하단 네비게이션 */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t safe-area-bottom">
-        <div className="max-w-lg mx-auto flex">
+      {/* 하단 네비게이션 (모바일 전용) */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t safe-area-bottom md:hidden">
+        <div className="container-1200 flex">
           <Link href="/food" className="flex-1 py-3 flex flex-col items-center gap-1 text-gray-400">
             <Home className="w-6 h-6" />
             <span className="text-xs">홈</span>

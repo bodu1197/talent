@@ -245,7 +245,7 @@ export default function CheckoutPage() {
 
       {/* 헤더 */}
       <header className="sticky top-0 z-50 bg-white border-b">
-        <div className="max-w-lg mx-auto px-4 h-14 flex items-center">
+        <div className="container-1200 px-4 h-14 flex items-center">
           <button onClick={() => router.back()} className="p-2 -ml-2">
             <ArrowLeft className="w-6 h-6" />
           </button>
@@ -254,195 +254,230 @@ export default function CheckoutPage() {
         </div>
       </header>
 
-      <div className="max-w-lg mx-auto">
-        {/* 배달 주소 */}
-        <div className="bg-white mt-2 p-4">
-          <h3 className="font-bold flex items-center gap-2 mb-4">
-            <MapPin className="w-5 h-5 text-orange-500" />
-            배달 주소
-          </h3>
+      <div className="container-1200">
+        <div className="md:flex md:gap-6 md:py-6">
+          {/* 왼쪽: 배달/결제 정보 */}
+          <div className="md:flex-1">
+            {/* 배달 주소 */}
+            <div className="bg-white mt-2 md:mt-0 p-4 md:rounded-xl">
+              <h3 className="font-bold flex items-center gap-2 mb-4">
+                <MapPin className="w-5 h-5 text-orange-500" />
+                배달 주소
+              </h3>
 
-          <button
-            onClick={handleAddressSearch}
-            className="w-full p-4 border rounded-xl text-left flex items-center justify-between mb-3"
-          >
-            <span className={deliveryAddress ? 'text-gray-900' : 'text-gray-400'}>
-              {deliveryAddress || '주소를 검색해주세요'}
-            </span>
-            <ChevronRight className="w-5 h-5 text-gray-400" />
-          </button>
+              <button
+                onClick={handleAddressSearch}
+                className="w-full p-4 border rounded-xl text-left flex items-center justify-between mb-3"
+              >
+                <span className={deliveryAddress ? 'text-gray-900' : 'text-gray-400'}>
+                  {deliveryAddress || '주소를 검색해주세요'}
+                </span>
+                <ChevronRight className="w-5 h-5 text-gray-400" />
+              </button>
 
-          <input
-            type="text"
-            placeholder="상세주소 (동/호수)"
-            value={detailAddress}
-            onChange={(e) => setDetailAddress(e.target.value)}
-            className="w-full p-4 border rounded-xl"
-          />
-        </div>
-
-        {/* 연락처 */}
-        <div className="bg-white mt-2 p-4">
-          <h3 className="font-bold flex items-center gap-2 mb-4">
-            <Phone className="w-5 h-5 text-orange-500" />
-            연락처
-          </h3>
-
-          <input
-            type="tel"
-            placeholder="010-0000-0000"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="w-full p-4 border rounded-xl"
-          />
-        </div>
-
-        {/* 요청사항 */}
-        <div className="bg-white mt-2 p-4">
-          <h3 className="font-bold flex items-center gap-2 mb-4">
-            <MessageSquare className="w-5 h-5 text-orange-500" />
-            요청사항
-          </h3>
-
-          <div className="space-y-3">
-            <div>
-              <label className="text-sm text-gray-500 block mb-2">가게 요청사항</label>
               <input
                 type="text"
-                placeholder="예: 젓가락 많이 주세요"
-                value={requestMessage}
-                onChange={(e) => setRequestMessage(e.target.value)}
+                placeholder="상세주소 (동/호수)"
+                value={detailAddress}
+                onChange={(e) => setDetailAddress(e.target.value)}
                 className="w-full p-4 border rounded-xl"
               />
             </div>
-            <div>
-              <label className="text-sm text-gray-500 block mb-2">배달 요청사항</label>
+
+            {/* 연락처 */}
+            <div className="bg-white mt-2 p-4 md:rounded-xl">
+              <h3 className="font-bold flex items-center gap-2 mb-4">
+                <Phone className="w-5 h-5 text-orange-500" />
+                연락처
+              </h3>
+
               <input
-                type="text"
-                placeholder="예: 문 앞에 놓아주세요"
-                value={riderMessage}
-                onChange={(e) => setRiderMessage(e.target.value)}
+                type="tel"
+                placeholder="010-0000-0000"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 className="w-full p-4 border rounded-xl"
               />
             </div>
-          </div>
-        </div>
 
-        {/* 결제 수단 */}
-        <div className="bg-white mt-2 p-4">
-          <h3 className="font-bold flex items-center gap-2 mb-4">
-            <CreditCard className="w-5 h-5 text-orange-500" />
-            결제 수단
-          </h3>
+            {/* 요청사항 */}
+            <div className="bg-white mt-2 p-4 md:rounded-xl">
+              <h3 className="font-bold flex items-center gap-2 mb-4">
+                <MessageSquare className="w-5 h-5 text-orange-500" />
+                요청사항
+              </h3>
 
-          <div className="space-y-2">
-            {/* 카드 결제 */}
-            <button
-              onClick={() => setPaymentMethod('card')}
-              className={`w-full p-4 border rounded-xl flex items-center justify-between ${
-                paymentMethod === 'card' ? 'border-orange-500 bg-orange-50' : ''
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <CreditCard className="w-6 h-6 text-gray-600" />
-                <span>카드 결제</span>
-              </div>
-              {paymentMethod === 'card' && <CheckCircle className="w-6 h-6 text-orange-500" />}
-            </button>
-
-            {/* 만나서 결제 */}
-            <button
-              onClick={() => setPaymentMethod('cash')}
-              className={`w-full p-4 border rounded-xl flex items-center justify-between ${
-                paymentMethod === 'cash' ? 'border-orange-500 bg-orange-50' : ''
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <Banknote className="w-6 h-6 text-gray-600" />
-                <span>만나서 현금결제</span>
-              </div>
-              {paymentMethod === 'cash' && <CheckCircle className="w-6 h-6 text-orange-500" />}
-            </button>
-
-            {/* 계좌이체 */}
-            <button
-              onClick={() => setPaymentMethod('transfer')}
-              className={`w-full p-4 border rounded-xl flex items-center justify-between ${
-                paymentMethod === 'transfer' ? 'border-orange-500 bg-orange-50' : ''
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <svg
-                  className="w-6 h-6 text-gray-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                  />
-                </svg>
-                <span>계좌이체</span>
-              </div>
-              {paymentMethod === 'transfer' && <CheckCircle className="w-6 h-6 text-orange-500" />}
-            </button>
-          </div>
-        </div>
-
-        {/* 주문 내역 */}
-        <div className="bg-white mt-2 p-4">
-          <h3 className="font-bold mb-4">주문 내역</h3>
-
-          <div className="space-y-3">
-            {cartItems.map((item, index) => (
-              <div key={index} className="flex justify-between">
+              <div className="space-y-3">
                 <div>
-                  <span className="font-medium">{item.menu.name}</span>
-                  {item.selectedOptions && item.selectedOptions.length > 0 && (
-                    <p className="text-sm text-gray-500">
-                      {item.selectedOptions.map((opt) => opt.name).join(', ')}
-                    </p>
-                  )}
-                  <span className="text-sm text-gray-500"> x {item.quantity}</span>
+                  <label className="text-sm text-gray-500 block mb-2">가게 요청사항</label>
+                  <input
+                    type="text"
+                    placeholder="예: 젓가락 많이 주세요"
+                    value={requestMessage}
+                    onChange={(e) => setRequestMessage(e.target.value)}
+                    className="w-full p-4 border rounded-xl"
+                  />
                 </div>
-                <span>{calculateItemPrice(item).toLocaleString()}원</span>
+                <div>
+                  <label className="text-sm text-gray-500 block mb-2">배달 요청사항</label>
+                  <input
+                    type="text"
+                    placeholder="예: 문 앞에 놓아주세요"
+                    value={riderMessage}
+                    onChange={(e) => setRiderMessage(e.target.value)}
+                    className="w-full p-4 border rounded-xl"
+                  />
+                </div>
               </div>
-            ))}
+            </div>
+
+            {/* 결제 수단 */}
+            <div className="bg-white mt-2 p-4 md:rounded-xl">
+              <h3 className="font-bold flex items-center gap-2 mb-4">
+                <CreditCard className="w-5 h-5 text-orange-500" />
+                결제 수단
+              </h3>
+
+              <div className="space-y-2">
+                {/* 카드 결제 */}
+                <button
+                  onClick={() => setPaymentMethod('card')}
+                  className={`w-full p-4 border rounded-xl flex items-center justify-between ${
+                    paymentMethod === 'card' ? 'border-orange-500 bg-orange-50' : ''
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <CreditCard className="w-6 h-6 text-gray-600" />
+                    <span>카드 결제</span>
+                  </div>
+                  {paymentMethod === 'card' && <CheckCircle className="w-6 h-6 text-orange-500" />}
+                </button>
+
+                {/* 만나서 결제 */}
+                <button
+                  onClick={() => setPaymentMethod('cash')}
+                  className={`w-full p-4 border rounded-xl flex items-center justify-between ${
+                    paymentMethod === 'cash' ? 'border-orange-500 bg-orange-50' : ''
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Banknote className="w-6 h-6 text-gray-600" />
+                    <span>만나서 현금결제</span>
+                  </div>
+                  {paymentMethod === 'cash' && <CheckCircle className="w-6 h-6 text-orange-500" />}
+                </button>
+
+                {/* 계좌이체 */}
+                <button
+                  onClick={() => setPaymentMethod('transfer')}
+                  className={`w-full p-4 border rounded-xl flex items-center justify-between ${
+                    paymentMethod === 'transfer' ? 'border-orange-500 bg-orange-50' : ''
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <svg
+                      className="w-6 h-6 text-gray-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1.5}
+                        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                      />
+                    </svg>
+                    <span>계좌이체</span>
+                  </div>
+                  {paymentMethod === 'transfer' && (
+                    <CheckCircle className="w-6 h-6 text-orange-500" />
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
 
-        {/* 결제 금액 */}
-        <div className="bg-white mt-2 p-4">
-          <h3 className="font-bold mb-4">결제 금액</h3>
+          {/* 오른쪽: 주문 내역 및 결제 금액 (PC에서 사이드바) */}
+          <div className="md:w-96 md:flex-shrink-0">
+            {/* 주문 내역 */}
+            <div className="bg-white mt-2 md:mt-0 p-4 md:rounded-xl">
+              <h3 className="font-bold mb-4">주문 내역</h3>
 
-          <div className="space-y-3">
-            <div className="flex justify-between text-gray-600">
-              <span>주문금액</span>
-              <span>{subtotal.toLocaleString()}원</span>
+              <div className="space-y-3">
+                {cartItems.map((item, index) => (
+                  <div key={index} className="flex justify-between">
+                    <div>
+                      <span className="font-medium">{item.menu.name}</span>
+                      {item.selectedOptions && item.selectedOptions.length > 0 && (
+                        <p className="text-sm text-gray-500">
+                          {item.selectedOptions.map((opt) => opt.name).join(', ')}
+                        </p>
+                      )}
+                      <span className="text-sm text-gray-500"> x {item.quantity}</span>
+                    </div>
+                    <span>{calculateItemPrice(item).toLocaleString()}원</span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="flex justify-between text-gray-600">
-              <span>배달비</span>
-              <span>{deliveryFee.toLocaleString()}원</span>
+
+            {/* 결제 금액 */}
+            <div className="bg-white mt-2 p-4 md:rounded-xl md:sticky md:top-20">
+              <h3 className="font-bold mb-4">결제 금액</h3>
+
+              <div className="space-y-3">
+                <div className="flex justify-between text-gray-600">
+                  <span>주문금액</span>
+                  <span>{subtotal.toLocaleString()}원</span>
+                </div>
+                <div className="flex justify-between text-gray-600">
+                  <span>배달비</span>
+                  <span>{deliveryFee.toLocaleString()}원</span>
+                </div>
+                <div className="border-t pt-3 flex justify-between font-bold text-lg">
+                  <span>총 결제금액</span>
+                  <span className="text-orange-500">{totalAmount.toLocaleString()}원</span>
+                </div>
+              </div>
+
+              {/* PC용 결제 버튼 */}
+              <div className="hidden md:block mt-6">
+                <p className="text-sm text-gray-500 mb-4">
+                  주문 내용을 확인하였으며, 정보 제공 등에 동의합니다.
+                </p>
+                <button
+                  onClick={handleSubmitOrder}
+                  disabled={submitting || !deliveryAddress || !phone}
+                  className={`w-full py-4 rounded-xl font-bold text-lg ${
+                    submitting || !deliveryAddress || !phone
+                      ? 'bg-gray-200 text-gray-400'
+                      : 'bg-orange-500 text-white'
+                  }`}
+                >
+                  {submitting ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      주문 처리중...
+                    </span>
+                  ) : (
+                    `${totalAmount.toLocaleString()}원 결제하기`
+                  )}
+                </button>
+              </div>
             </div>
-            <div className="border-t pt-3 flex justify-between font-bold text-lg">
-              <span>총 결제금액</span>
-              <span className="text-orange-500">{totalAmount.toLocaleString()}원</span>
+
+            {/* 동의 안내 (모바일) */}
+            <div className="p-4 text-sm text-gray-500 md:hidden">
+              <p>주문 내용을 확인하였으며, 정보 제공 등에 동의합니다.</p>
             </div>
           </div>
-        </div>
-
-        {/* 동의 안내 */}
-        <div className="p-4 text-sm text-gray-500">
-          <p>주문 내용을 확인하였으며, 정보 제공 등에 동의합니다.</p>
         </div>
       </div>
 
-      {/* 하단 결제 버튼 */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 safe-area-bottom">
-        <div className="max-w-lg mx-auto">
+      {/* 하단 결제 버튼 (모바일 전용) */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 safe-area-bottom md:hidden">
+        <div className="container-1200">
           <button
             onClick={handleSubmitOrder}
             disabled={submitting || !deliveryAddress || !phone}

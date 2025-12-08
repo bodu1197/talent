@@ -245,10 +245,10 @@ export default function FoodPartnerDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 pb-24">
+    <div className="min-h-screen bg-gray-100 pb-24 md:pb-6">
       {/* 헤더 - 영업 상태 */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="flex items-center justify-between px-4 h-16">
+        <div className="container-1200 flex items-center justify-between px-4 h-16">
           <div className="flex items-center gap-3">
             <div
               className={`w-3 h-3 rounded-full ${store?.is_open ? 'bg-green-500' : 'bg-gray-400'}`}
@@ -267,118 +267,160 @@ export default function FoodPartnerDashboard() {
         </div>
       </header>
 
-      {/* 오늘 매출 */}
-      <section className="bg-white mx-4 mt-4 rounded-2xl p-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm text-gray-500">오늘 매출</p>
-            <p className="text-2xl font-bold text-gray-900">
-              {todayStats.revenue.toLocaleString()}원
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="text-sm text-gray-500">주문</p>
-            <p className="text-2xl font-bold text-brand-primary">{todayStats.count}건</p>
-          </div>
-        </div>
-      </section>
+      {/* 메인 콘텐츠 */}
+      <div className="container-1200 md:flex md:gap-6 md:py-6">
+        {/* PC 사이드바 네비게이션 */}
+        <aside className="hidden md:block md:w-64 md:flex-shrink-0">
+          <nav className="bg-white rounded-2xl p-4 sticky top-20 space-y-2">
+            <Link
+              href="/food/partner"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-orange-50 text-brand-primary font-medium"
+            >
+              <ClipboardList className="w-5 h-5" />
+              주문관리
+            </Link>
+            <Link
+              href="/food/partner/menu"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50"
+            >
+              <UtensilsCrossed className="w-5 h-5" />
+              메뉴관리
+            </Link>
+            <Link
+              href="/food/partner/stats"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50"
+            >
+              <BarChart3 className="w-5 h-5" />
+              매출현황
+            </Link>
+            <Link
+              href="/food/partner/store"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50"
+            >
+              <Settings className="w-5 h-5" />
+              가게관리
+            </Link>
+          </nav>
+        </aside>
 
-      {/* 주문 탭 */}
-      <section className="mt-4">
-        <div className="bg-white px-4 py-3 flex gap-2 overflow-x-auto">
-          <button
-            onClick={() => setActiveTab('new')}
-            className={`flex-shrink-0 px-4 py-2 rounded-full font-medium transition-colors relative ${
-              activeTab === 'new' ? 'bg-red-500 text-white' : 'bg-gray-100 text-gray-600'
-            }`}
-          >
-            신규 주문
-            {newOrders.length > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-600 text-white text-xs rounded-full flex items-center justify-center">
-                {newOrders.length}
-              </span>
-            )}
-          </button>
-          <button
-            onClick={() => setActiveTab('preparing')}
-            className={`flex-shrink-0 px-4 py-2 rounded-full font-medium transition-colors ${
-              activeTab === 'preparing' ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600'
-            }`}
-          >
-            조리중 ({cookingOrders.length})
-          </button>
-          <button
-            onClick={() => setActiveTab('ready')}
-            className={`flex-shrink-0 px-4 py-2 rounded-full font-medium transition-colors ${
-              activeTab === 'ready' ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-600'
-            }`}
-          >
-            픽업대기 ({readyOrders.length})
-          </button>
-        </div>
+        {/* 메인 영역 */}
+        <div className="md:flex-1">
+          {/* 오늘 매출 */}
+          <section className="bg-white mx-4 md:mx-0 mt-4 md:mt-0 rounded-2xl p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500">오늘 매출</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {todayStats.revenue.toLocaleString()}원
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-sm text-gray-500">주문</p>
+                <p className="text-2xl font-bold text-brand-primary">{todayStats.count}건</p>
+              </div>
+            </div>
+          </section>
 
-        {/* 주문 목록 */}
-        <div className="px-4 py-4 space-y-4">
-          {/* 신규 주문 */}
-          {activeTab === 'new' && (
-            <>
-              {newOrders.length === 0 ? (
-                <div className="bg-white rounded-2xl p-8 text-center">
-                  <Bell className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">새로운 주문이 없습니다</p>
-                </div>
-              ) : (
-                newOrders.map((order) => (
-                  <OrderCard
-                    key={order.id}
-                    order={order}
-                    onAccept={() => updateOrderStatus(order.id, 'accepted')}
-                    onReject={() => updateOrderStatus(order.id, 'cancelled')}
-                  />
-                ))
+          {/* 주문 탭 */}
+          <section className="mt-4">
+            <div className="bg-white md:rounded-2xl px-4 py-3 flex gap-2 overflow-x-auto">
+              <button
+                onClick={() => setActiveTab('new')}
+                className={`flex-shrink-0 px-4 py-2 rounded-full font-medium transition-colors relative ${
+                  activeTab === 'new' ? 'bg-red-500 text-white' : 'bg-gray-100 text-gray-600'
+                }`}
+              >
+                신규 주문
+                {newOrders.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-600 text-white text-xs rounded-full flex items-center justify-center">
+                    {newOrders.length}
+                  </span>
+                )}
+              </button>
+              <button
+                onClick={() => setActiveTab('preparing')}
+                className={`flex-shrink-0 px-4 py-2 rounded-full font-medium transition-colors ${
+                  activeTab === 'preparing'
+                    ? 'bg-orange-500 text-white'
+                    : 'bg-gray-100 text-gray-600'
+                }`}
+              >
+                조리중 ({cookingOrders.length})
+              </button>
+              <button
+                onClick={() => setActiveTab('ready')}
+                className={`flex-shrink-0 px-4 py-2 rounded-full font-medium transition-colors ${
+                  activeTab === 'ready' ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-600'
+                }`}
+              >
+                픽업대기 ({readyOrders.length})
+              </button>
+            </div>
+
+            {/* 주문 목록 */}
+            <div className="px-4 md:px-0 py-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {/* 신규 주문 */}
+              {activeTab === 'new' && (
+                <>
+                  {newOrders.length === 0 ? (
+                    <div className="bg-white rounded-2xl p-8 text-center lg:col-span-2">
+                      <Bell className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                      <p className="text-gray-500">새로운 주문이 없습니다</p>
+                    </div>
+                  ) : (
+                    newOrders.map((order) => (
+                      <OrderCard
+                        key={order.id}
+                        order={order}
+                        onAccept={() => updateOrderStatus(order.id, 'accepted')}
+                        onReject={() => updateOrderStatus(order.id, 'cancelled')}
+                      />
+                    ))
+                  )}
+                </>
               )}
-            </>
-          )}
 
-          {/* 조리중 */}
-          {activeTab === 'preparing' && (
-            <>
-              {cookingOrders.length === 0 ? (
-                <div className="bg-white rounded-2xl p-8 text-center">
-                  <ChefHat className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">조리중인 주문이 없습니다</p>
-                </div>
-              ) : (
-                cookingOrders.map((order) => (
-                  <OrderCard
-                    key={order.id}
-                    order={order}
-                    onComplete={() => updateOrderStatus(order.id, 'ready')}
-                  />
-                ))
+              {/* 조리중 */}
+              {activeTab === 'preparing' && (
+                <>
+                  {cookingOrders.length === 0 ? (
+                    <div className="bg-white rounded-2xl p-8 text-center lg:col-span-2">
+                      <ChefHat className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                      <p className="text-gray-500">조리중인 주문이 없습니다</p>
+                    </div>
+                  ) : (
+                    cookingOrders.map((order) => (
+                      <OrderCard
+                        key={order.id}
+                        order={order}
+                        onComplete={() => updateOrderStatus(order.id, 'ready')}
+                      />
+                    ))
+                  )}
+                </>
               )}
-            </>
-          )}
 
-          {/* 픽업대기 */}
-          {activeTab === 'ready' && (
-            <>
-              {readyOrders.length === 0 ? (
-                <div className="bg-white rounded-2xl p-8 text-center">
-                  <Bike className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">픽업 대기중인 주문이 없습니다</p>
-                </div>
-              ) : (
-                readyOrders.map((order) => <OrderCard key={order.id} order={order} isReady />)
+              {/* 픽업대기 */}
+              {activeTab === 'ready' && (
+                <>
+                  {readyOrders.length === 0 ? (
+                    <div className="bg-white rounded-2xl p-8 text-center lg:col-span-2">
+                      <Bike className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                      <p className="text-gray-500">픽업 대기중인 주문이 없습니다</p>
+                    </div>
+                  ) : (
+                    readyOrders.map((order) => <OrderCard key={order.id} order={order} isReady />)
+                  )}
+                </>
               )}
-            </>
-          )}
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
 
-      {/* 하단 네비게이션 */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 safe-area-bottom">
-        <div className="grid grid-cols-4 h-16">
+      {/* 하단 네비게이션 (모바일 전용) */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 safe-area-bottom md:hidden">
+        <div className="container-1200 grid grid-cols-4 h-16">
           <Link
             href="/food/partner"
             className="flex flex-col items-center justify-center text-brand-primary"
