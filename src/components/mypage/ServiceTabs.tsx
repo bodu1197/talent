@@ -98,13 +98,13 @@ export default function ServiceTabs({
                 key={tab.id}
                 href={tab.href}
                 onClick={() => handleServiceClick(tab.service)}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-3 text-sm font-medium border-b-2 transition-colors ${colorClass}`}
+                className={`flex-1 flex items-center justify-center gap-1 py-3 text-xs sm:text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${colorClass}`}
               >
-                <Icon className="w-4 h-4" />
+                <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
                 <span>{tab.label}</span>
                 {tab.badge && (
                   <span
-                    className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                    className={`text-[9px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded-full flex-shrink-0 ${
                       tab.color === 'blue'
                         ? 'bg-blue-100 text-blue-600'
                         : 'bg-orange-100 text-orange-600'
