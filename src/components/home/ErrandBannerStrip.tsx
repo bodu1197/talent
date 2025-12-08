@@ -4,14 +4,26 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-// 배달 오토바이 이미지
+// 배달 오토바이 이미지 (데스크톱용)
 const MotorcycleIcon = () => (
   <Image
     src="/delivery-bike.png"
     alt="배달 오토바이"
     width={300}
     height={200}
-    className="w-52 h-auto md:w-64"
+    className="w-64 h-auto"
+    unoptimized
+  />
+);
+
+// 모바일용 작은 오토바이
+const MobileMotorcycleIcon = () => (
+  <Image
+    src="/delivery-bike.png"
+    alt="배달 오토바이"
+    width={100}
+    height={67}
+    className="w-16 h-auto"
     unoptimized
   />
 );
@@ -87,8 +99,21 @@ export default function ErrandBannerStrip() {
   return (
     <section ref={sectionRef} className="relative" style={{ overflow: 'visible' }}>
       {/* 오토바이 - 가장 위 레이어 */}
+      {/* 모바일: 고정된 작은 오토바이 */}
       <div
-        className="absolute pointer-events-none z-50"
+        className="absolute pointer-events-none z-50 md:hidden"
+        style={{
+          top: '50%',
+          left: '8px',
+          transform: 'translateY(-70%)',
+        }}
+      >
+        <MobileMotorcycleIcon />
+      </div>
+
+      {/* 데스크톱: 애니메이션 오토바이 */}
+      <div
+        className="absolute pointer-events-none z-50 hidden md:block"
         style={{
           top: '50%',
           left: 0,
@@ -97,17 +122,8 @@ export default function ErrandBannerStrip() {
           overflow: 'visible',
         }}
       >
-        {/* 모바일: 고정 위치 */}
         <div
-          className="absolute flex items-center md:hidden"
-          style={{ transform: 'translateX(-80px)' }}
-        >
-          <MotorcycleIcon />
-        </div>
-
-        {/* 데스크톱: 애니메이션 */}
-        <div
-          className="absolute hidden md:flex items-center"
+          className="absolute flex items-center"
           style={{
             transform: `translateX(${bikePosition}px)`,
           }}
@@ -157,25 +173,59 @@ export default function ErrandBannerStrip() {
         />
 
         <div className="container-1200 relative z-10">
-          <div
-            className="flex items-center py-8 md:py-10 min-h-[180px] md:min-h-[200px]"
-            style={{ gap: '200px' }}
-          >
+          {/* 모바일: 세로 레이아웃 */}
+          <div className="flex flex-col items-center justify-center py-6 min-h-[140px] md:hidden pl-16">
+            {/* 글자 - 세로로 표시 */}
+            <div className="flex flex-col items-center mb-3">
+              {COPY_TEXT.split(' ').map((word, wordIndex) => (
+                <span key={wordIndex} className="font-bold text-base leading-tight">
+                  {word.split('').map((char, charIndex) => {
+                    const isHighlight = char === '돌' || char === '파' || char === '구';
+                    return (
+                      <span
+                        key={charIndex}
+                        style={{
+                          textShadow: '0 2px 8px rgba(0,0,0,0.5)',
+                          color: isHighlight ? '#fb923c' : 'white',
+                        }}
+                      >
+                        {char}
+                      </span>
+                    );
+                  })}
+                </span>
+              ))}
+            </div>
+
+            {/* CTA 버튼 - 모바일 최적화 */}
+            <Link
+              href="/errands"
+              className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-bold text-xs shadow-lg shadow-blue-900/50 transition transform active:scale-95 z-50"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+              </svg>
+              <span>심부름 요청</span>
+            </Link>
+          </div>
+
+          {/* 데스크톱: 가로 레이아웃 */}
+          <div className="hidden md:flex items-center py-10 min-h-[200px]" style={{ gap: '200px' }}>
             {/* 글자들 - 항상 보이는 상태, 마스크에 의해 가려짐 */}
-            <div className="flex items-center justify-center h-20 md:h-24">
+            <div className="flex items-center justify-center h-24">
               <div className="flex items-center">
                 {COPY_TEXT.split('').map((char, index) => {
                   const isSpace = char === ' ';
                   const isHighlight = char === '돌' || char === '파' || char === '구';
 
                   if (isSpace) {
-                    return <span key={index} className="w-2 md:w-3 lg:w-4" />;
+                    return <span key={index} className="w-3 lg:w-4" />;
                   }
 
                   return (
                     <span
                       key={index}
-                      className="font-bold text-xl md:text-3xl lg:text-4xl"
+                      className="font-bold text-3xl lg:text-4xl"
                       style={{
                         textShadow: '0 2px 10px rgba(0,0,0,0.5)',
                         color: isHighlight ? '#fb923c' : 'white',
@@ -191,13 +241,12 @@ export default function ErrandBannerStrip() {
             {/* CTA 버튼 - 글자 뒤쪽에 배치 */}
             <Link
               href="/errands"
-              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-5 py-3 md:px-6 md:py-3.5 rounded-xl font-bold text-sm md:text-base shadow-lg shadow-blue-900/50 transition transform active:scale-95 flex-shrink-0 z-50"
+              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-6 py-3.5 rounded-xl font-bold text-base shadow-lg shadow-blue-900/50 transition transform active:scale-95 flex-shrink-0 z-50"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
               </svg>
-              <span className="hidden sm:inline">지금 심부름 요청하기</span>
-              <span className="sm:hidden">심부름 요청</span>
+              <span>지금 심부름 요청하기</span>
             </Link>
           </div>
         </div>
