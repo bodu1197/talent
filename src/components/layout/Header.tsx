@@ -2,13 +2,13 @@
 
 import ProfileImage from '@/components/common/ProfileImage';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
 import ChatNotificationBadge from '@/components/chat/ChatNotificationBadge';
 import NotificationBell from '@/components/notifications/NotificationBell';
 import { useState } from 'react';
 import {
-  Star,
   ShoppingCart,
   Package,
   UserCircle,
@@ -54,13 +54,17 @@ export default function Header() {
           {/* 로고 */}
           <Link
             href="/"
-            className="flex items-center space-x-2 flex-shrink-0"
+            className="flex items-center flex-shrink-0"
             aria-label="돌파구 홈으로 이동"
           >
-            <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
-              <Star className="w-4 h-4 text-white fill-current" aria-hidden="true" />
-            </div>
-            <span className="text-xl font-semibold">돌파구</span>
+            <Image
+              src="/logo.png"
+              alt="돌파구"
+              width={120}
+              height={40}
+              className="h-8 w-auto"
+              priority
+            />
           </Link>
           {/* 검색창 - PC에서만 표시 (메인 페이지 제외) */}
           <div className={`flex-1 max-w-md ${isHomePage ? 'hidden' : 'hidden lg:block'}`}>
