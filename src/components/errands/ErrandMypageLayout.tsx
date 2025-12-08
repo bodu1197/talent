@@ -210,7 +210,7 @@ export default function ErrandMypageLayout({ children, mode }: ErrandMypageLayou
             <Bike className="w-6 h-6 text-blue-600" />
             <span className="font-bold text-gray-900">심부름</span>
           </Link>
-          <Link href="/errands/mypage/notifications" className="p-2 -mr-2 text-gray-600">
+          <Link href="/mypage/notifications" className="p-2 -mr-2 text-gray-600">
             <Bell className="w-6 h-6" />
           </Link>
         </div>
