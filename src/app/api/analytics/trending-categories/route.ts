@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
 
-// 캐시 시간 (초)
-export const revalidate = 60; // 1분마다 갱신
+// 동적 라우트로 설정 (request.url 사용)
+export const dynamic = 'force-dynamic';
 
 interface Category {
   id: string;
