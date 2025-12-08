@@ -26,6 +26,22 @@ export default function Footer() {
                     개인정보처리방침
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    href="/terms/location"
+                    className="hover:text-brand-primary transition-colors"
+                  >
+                    위치기반서비스 이용약관
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/terms/partner"
+                    className="hover:text-brand-primary transition-colors"
+                  >
+                    파트너 업무위수탁 약관
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
@@ -235,10 +251,10 @@ export default function Footer() {
 
         {/* 4. 약관 링크 */}
         <div className="px-5 pt-4 pb-[44px]">
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex items-center justify-center gap-2 flex-wrap">
             <Link
               href="/terms"
-              className="text-mobile-sm text-gray-700 hover:text-brand-primary transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 rounded"
+              className="text-mobile-sm text-gray-700 hover:text-brand-primary transition-colors"
               aria-label="이용약관"
             >
               이용약관
@@ -246,10 +262,26 @@ export default function Footer() {
             <span className="text-gray-300">|</span>
             <Link
               href="/privacy"
-              className="text-mobile-sm text-gray-700 hover:text-brand-primary transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 rounded font-semibold"
+              className="text-mobile-sm text-gray-700 hover:text-brand-primary transition-colors font-semibold"
               aria-label="개인정보처리방침"
             >
               개인정보처리방침
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link
+              href="/terms/location"
+              className="text-mobile-sm text-gray-700 hover:text-brand-primary transition-colors"
+              aria-label="위치기반서비스"
+            >
+              위치기반서비스
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link
+              href="/terms/partner"
+              className="text-mobile-sm text-gray-700 hover:text-brand-primary transition-colors"
+              aria-label="파트너약관"
+            >
+              파트너약관
             </Link>
           </div>
 
