@@ -16,18 +16,6 @@ const MotorcycleIcon = () => (
   />
 );
 
-// 모바일용 작은 오토바이
-const MobileMotorcycleIcon = () => (
-  <Image
-    src="/delivery-bike.png"
-    alt="배달 오토바이"
-    width={100}
-    height={67}
-    className="w-16 h-auto"
-    unoptimized
-  />
-);
-
 // 광고 카피
 const COPY_TEXT = '귀찮은 일 모두 돌파구에 맡겨 주세요';
 
@@ -99,16 +87,23 @@ export default function ErrandBannerStrip() {
   return (
     <section ref={sectionRef} className="relative" style={{ overflow: 'visible' }}>
       {/* 오토바이 - 가장 위 레이어 */}
-      {/* 모바일: 고정된 작은 오토바이 */}
+      {/* 모바일: 상단에 큰 오토바이 (배경 절반 차지) */}
       <div
-        className="absolute pointer-events-none z-50 md:hidden"
+        className="absolute pointer-events-none z-30 md:hidden"
         style={{
-          top: '50%',
-          left: '8px',
-          transform: 'translateY(-70%)',
+          top: '-20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
         }}
       >
-        <MobileMotorcycleIcon />
+        <Image
+          src="/delivery-bike.png"
+          alt="배달 오토바이"
+          width={200}
+          height={133}
+          className="w-40 h-auto opacity-40"
+          unoptimized
+        />
       </div>
 
       {/* 데스크톱: 애니메이션 오토바이 */}
@@ -173,24 +168,24 @@ export default function ErrandBannerStrip() {
         />
 
         <div className="container-1200 relative z-10">
-          {/* 모바일: 가로 레이아웃 */}
-          <div className="flex items-center justify-between py-4 min-h-[100px] md:hidden pl-20 pr-2">
-            {/* 글자 - 가로 한줄 */}
-            <div className="flex items-center flex-wrap">
+          {/* 모바일: 세로 레이아웃 (오토바이 배경 위에 텍스트) */}
+          <div className="flex flex-col items-center justify-center py-8 min-h-[120px] md:hidden relative z-40">
+            {/* 글자 - 가로 한줄, 가독성 있는 큰 폰트 */}
+            <div className="flex items-center justify-center flex-wrap mb-4">
               {COPY_TEXT.split('').map((char, index) => {
                 const isSpace = char === ' ';
                 const isHighlight = char === '돌' || char === '파' || char === '구';
 
                 if (isSpace) {
-                  return <span key={index} className="w-1" />;
+                  return <span key={index} className="w-1.5" />;
                 }
 
                 return (
                   <span
                     key={index}
-                    className="font-bold text-[11px]"
+                    className="font-bold text-base"
                     style={{
-                      textShadow: '0 1px 4px rgba(0,0,0,0.5)',
+                      textShadow: '0 2px 8px rgba(0,0,0,0.8)',
                       color: isHighlight ? '#fb923c' : 'white',
                     }}
                   >
@@ -200,15 +195,15 @@ export default function ErrandBannerStrip() {
               })}
             </div>
 
-            {/* CTA 버튼 - 모바일 최적화 */}
+            {/* CTA 버튼 */}
             <Link
               href="/errands"
-              className="inline-flex items-center gap-1 bg-blue-600 hover:bg-blue-500 text-white px-2.5 py-1.5 rounded-lg font-bold text-[10px] shadow-lg shadow-blue-900/50 transition transform active:scale-95 z-50 flex-shrink-0 ml-2"
+              className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-bold text-sm shadow-lg shadow-blue-900/50 transition transform active:scale-95 z-50"
             >
-              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
               </svg>
-              <span>요청</span>
+              <span>심부름 요청</span>
             </Link>
           </div>
 
