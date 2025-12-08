@@ -59,6 +59,13 @@ export async function generateMetadata(): Promise<Metadata> {
       '전문가와 구매자 모두 수수료 0원! 디자인, 영상, 개발, 마케팅 등 다양한 재능을 자유롭게 거래하세요. 돌파구에서 새로운 기회를 찾아보세요.',
     keywords:
       '돌파구, 재능거래, 수수료0원, 무료플랫폼, 프리랜서, 재능마켓, 디자인외주, 영상제작, 개발외주, 마케팅',
+    icons: {
+      icon: [
+        { url: '/icon.png', type: 'image/png' },
+        { url: '/favicon.png', type: 'image/png' },
+      ],
+      apple: '/apple-icon.png',
+    },
     openGraph: {
       title: '돌파구 - 수수료 0원 재능 거래 플랫폼',
       description: '전문가·구매자 모두 수수료 0원! 부담 없이 시작하는 재능 거래',
