@@ -126,10 +126,10 @@ export default function HelperActiveToggle({ className = '' }: HelperActiveToggl
             </div>
           </div>
           <Link
-            href="/errands"
+            href="/errands/register/guide"
             className="px-4 py-2 bg-white text-green-600 rounded-lg font-bold text-sm hover:bg-green-50 transition"
           >
-            등록하기
+            등록안내
           </Link>
         </div>
       </div>
