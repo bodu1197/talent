@@ -64,7 +64,7 @@ export default function ServiceTabs({
     {
       id: 'errands-helper' as ServiceType,
       label: '라이더',
-      href: isRegisteredHelper ? '/mypage/helper/dashboard' : '/mypage/helper/register',
+      href: isRegisteredHelper ? '/mypage/helper/dashboard' : '/errands/register',
       icon: Bike,
       service: 'errands' as const,
       color: 'orange',
