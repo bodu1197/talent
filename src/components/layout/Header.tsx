@@ -54,16 +54,23 @@ export default function Header() {
           {/* 로고 */}
           <Link
             href="/"
-            className="flex items-center gap-2 flex-shrink-0"
+            className="flex items-center gap-1.5 lg:gap-2 flex-shrink-0"
             aria-label="돌파구 홈으로 이동"
           >
-            <Image src="/icon.png" alt="" width={32} height={32} className="h-8 w-8" priority />
+            <Image
+              src="/icon.png"
+              alt=""
+              width={32}
+              height={32}
+              className="h-7 w-7 lg:h-8 lg:w-8"
+              priority
+            />
             <Image
               src="/logo.png"
               alt="돌파구"
               width={120}
               height={40}
-              className="h-8 w-auto"
+              className="h-7 lg:h-8 w-auto"
               priority
             />
           </Link>
