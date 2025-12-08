@@ -3,10 +3,21 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Store, FileText, CheckCircle2, Upload } from 'lucide-react';
+import { ArrowLeft, Store, FileText, CheckCircle2, Upload, Search, MapPin } from 'lucide-react';
 import { FoodStoreCategory, FOOD_CATEGORY_LABELS, FOOD_CATEGORY_ICONS } from '@/types/food';
 import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
+
+// Daum Postcode 결과 타입
+interface DaumPostcodeResult {
+  address: string;
+  roadAddress: string;
+  jibunAddress: string;
+  zonecode: string;
+  sido: string;
+  sigungu: string;
+  bname: string;
+}
 
 // 카테고리 목록
 const CATEGORIES: FoodStoreCategory[] = [
@@ -32,6 +43,7 @@ export default function FoodPartnerRegisterPage() {
   // 인증 상태
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
+  const [isPostcodeLoaded, setIsPostcodeLoaded] = useState(false);
 
   // 인증 체크
   useEffect(() => {
@@ -47,6 +59,21 @@ export default function FoodPartnerRegisterPage() {
     };
     checkAuth();
   }, [supabase, router]);
+
+  // Daum Postcode 스크립트 로드
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (typeof window !== 'undefined' && (window as any).daum) {
+      setIsPostcodeLoaded(true);
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+    script.async = true;
+    script.onload = () => setIsPostcodeLoaded(true);
+    document.head.appendChild(script);
+  }, []);
 
   // 폼 상태
   const [step, setStep] = useState(1);
@@ -87,57 +114,40 @@ export default function FoodPartnerRegisterPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 주소 검색 (카카오 주소 API)
+  // 주소 검색 (다음 주소 API + 서버 좌표 변환)
   const handleAddressSearch = () => {
-    if (
-      typeof window !== 'undefined' &&
-      (
-        window as unknown as {
-          daum?: {
-            Postcode: new (config: {
-              oncomplete: (data: { address: string; roadAddress: string }) => void;
-            }) => { open: () => void };
-          };
-        }
-      ).daum
-    ) {
-      new (
-        window as unknown as {
-          daum: {
-            Postcode: new (config: {
-              oncomplete: (data: { address: string; roadAddress: string }) => void;
-            }) => { open: () => void };
-          };
-        }
-      ).daum.Postcode({
-        oncomplete: async (data: { address: string; roadAddress: string }) => {
-          const address = data.roadAddress || data.address;
-          setFormData((prev) => ({ ...prev, address }));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const daum = (window as any).daum;
+    if (!isPostcodeLoaded || !daum) return;
 
-          // 좌표 변환
-          try {
-            const response = await fetch(
-              `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(address)}`,
-              {
-                headers: {
-                  Authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}`,
-                },
-              }
-            );
+    new daum.Postcode({
+      oncomplete: async (data: DaumPostcodeResult) => {
+        const address = data.roadAddress || data.jibunAddress || data.address;
+        setFormData((prev) => ({ ...prev, address }));
+
+        // 서버 API를 통해 좌표 변환 (CORS 문제 없음)
+        try {
+          const response = await fetch('/api/address/geocode', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ address }),
+          });
+
+          if (response.ok) {
             const result = await response.json();
-            if (result.documents?.[0]) {
+            if (result.latitude && result.longitude) {
               setFormData((prev) => ({
                 ...prev,
-                latitude: parseFloat(result.documents[0].y),
-                longitude: parseFloat(result.documents[0].x),
+                latitude: result.latitude,
+                longitude: result.longitude,
               }));
             }
-          } catch (error) {
-            console.error('좌표 변환 실패:', error);
           }
-        },
-      }).open();
-    }
+        } catch (error) {
+          console.error('좌표 변환 실패:', error);
+        }
+      },
+    }).open();
   };
 
   // 파일 업로드
@@ -324,30 +334,44 @@ export default function FoodPartnerRegisterPage() {
                   가게 주소 <span className="text-red-500">*</span>
                 </label>
                 <div className="flex gap-2 mb-2">
-                  <input
-                    type="text"
-                    name="address"
-                    value={formData.address}
-                    readOnly
-                    placeholder="주소를 검색해주세요"
-                    className="flex-1 px-4 py-3 border border-gray-300 rounded-xl bg-gray-50"
-                  />
                   <button
                     type="button"
                     onClick={handleAddressSearch}
-                    className="px-4 py-3 bg-gray-900 text-white rounded-xl font-medium"
+                    disabled={!isPostcodeLoaded}
+                    className={`flex-1 flex items-center gap-2 px-4 py-3 border rounded-xl text-left transition-colors ${
+                      formData.address
+                        ? 'border-brand-primary bg-brand-primary/5'
+                        : 'border-gray-300 hover:border-brand-primary hover:bg-gray-50'
+                    } ${!isPostcodeLoaded ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
-                    검색
+                    {formData.address ? (
+                      <>
+                        <MapPin className="w-5 h-5 text-brand-primary flex-shrink-0" />
+                        <span className="text-gray-900 truncate">{formData.address}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Search className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                        <span className="text-gray-500">주소를 검색하세요</span>
+                      </>
+                    )}
                   </button>
                 </div>
-                <input
-                  type="text"
-                  name="addressDetail"
-                  value={formData.addressDetail}
-                  onChange={handleChange}
-                  placeholder="상세 주소 (예: 2층)"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-                />
+                {formData.address && (
+                  <input
+                    type="text"
+                    name="addressDetail"
+                    value={formData.addressDetail}
+                    onChange={handleChange}
+                    placeholder="상세 주소 (예: 2층)"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
+                  />
+                )}
+                {formData.latitude && formData.longitude && (
+                  <p className="mt-1 text-xs text-gray-500">
+                    좌표: {formData.latitude.toFixed(6)}, {formData.longitude.toFixed(6)}
+                  </p>
+                )}
               </div>
 
               {/* 가게 소개 */}
@@ -647,9 +671,6 @@ export default function FoodPartnerRegisterPage() {
           )}
         </div>
       </div>
-
-      {/* 카카오 주소 API 스크립트 */}
-      <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" async />
     </div>
   );
 }
