@@ -12,8 +12,6 @@ import {
   AlertTriangle,
   Bike,
   MapPin,
-  Star,
-  Gift,
 } from 'lucide-react';
 
 export const metadata = {
@@ -86,14 +84,9 @@ function getColorClass(color: string): string {
 
 const BENEFITS = [
   {
-    icon: Gift,
-    title: '30일 무료 체험',
-    description: '승인 후 30일간 무료로 이용하세요',
-  },
-  {
     icon: Wallet,
-    title: '플랫폼 수수료 0%',
-    description: '번 돈 100% 본인 수익',
+    title: '건당 100원',
+    description: '심부름 금액 상관없이 고정 수수료',
   },
   {
     icon: Clock,
@@ -130,7 +123,7 @@ export default function RiderRegisterGuidePage() {
           </p>
 
           {/* 혜택 카드 */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-3 gap-3">
             {BENEFITS.map((benefit) => (
               <div key={benefit.title} className="bg-white/10 backdrop-blur rounded-xl p-3 md:p-4">
                 <benefit.icon className="w-5 h-5 mb-2 text-orange-200" />
@@ -239,38 +232,41 @@ export default function RiderRegisterGuidePage() {
         <p className="text-gray-600 text-sm text-center mb-8">투명하고 합리적인 요금 정책</p>
 
         <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-2xl border border-orange-200 p-6 md:p-8">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <p className="text-sm text-orange-600 font-medium mb-1">월 이용료</p>
+          <div className="flex items-center justify-center mb-6">
+            <div className="text-center">
+              <p className="text-sm text-orange-600 font-medium mb-1">플랫폼 이용료</p>
               <p className="text-3xl md:text-4xl font-bold text-gray-900">
-                30,000<span className="text-lg font-normal text-gray-500">원</span>
+                건당 100<span className="text-lg font-normal text-gray-500">원</span>
               </p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-green-600 font-medium mb-1">플랫폼 수수료</p>
-              <p className="text-3xl md:text-4xl font-bold text-green-600">0%</p>
+              <p className="text-xs text-gray-500 mt-1">심부름 금액과 상관없이 고정</p>
             </div>
           </div>
 
           <div className="border-t border-orange-200 pt-4">
-            <div className="flex items-center gap-2 mb-3">
-              <Star className="w-5 h-5 text-yellow-500" />
-              <span className="font-semibold text-gray-900">신규 가입 혜택</span>
-            </div>
             <ul className="space-y-2 text-sm text-gray-700">
               <li className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4 text-green-500" />
-                승인 후 <strong>30일 무료</strong> 체험
+                심부름 대금에서 <strong>100원만 공제</strong>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4 text-green-500" />
-                심부름 대금 <strong>100% 본인 수익</strong>
+                나머지는 <strong>100% 본인 수익</strong>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4 text-green-500" />
                 언제든 <strong>해지 가능</strong>
               </li>
             </ul>
+          </div>
+
+          <div className="border-t border-orange-200 mt-4 pt-4">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5" />
+              <p className="text-xs text-gray-600">
+                <strong className="text-gray-800">출금 시 안내:</strong> 정산금 출금 시 이니시스
+                카드 결제 수수료(PG 수수료)가 별도로 공제됩니다.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -299,8 +295,8 @@ export default function RiderRegisterGuidePage() {
             <div className="bg-white rounded-xl p-5">
               <h3 className="font-semibold text-gray-900 mb-2">정산은 어떻게 되나요?</h3>
               <p className="text-sm text-gray-600">
-                심부름 완료 후 고객의 결제가 확인되면 등록된 계좌로 정산됩니다. 플랫폼 수수료는
-                0%로, 번 돈 전액이 본인 수익입니다.
+                심부름 완료 후 고객의 결제가 확인되면 등록된 계좌로 정산됩니다. 심부름 대금에서
+                플랫폼 이용료 100원과 출금 시 PG 수수료(이니시스 카드 결제 수수료)가 공제됩니다.
               </p>
             </div>
             <div className="bg-white rounded-xl p-5">

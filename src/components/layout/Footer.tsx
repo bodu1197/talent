@@ -7,7 +7,7 @@ export default function Footer() {
       {/* 데스크톱: 기존 그리드 레이아웃 */}
       <div className="hidden md:block">
         <div className="container-1200 py-12">
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-5 gap-8">
             <div>
               <p className="text-gray-900 font-semibold mb-4">회사 소개</p>
               <ul className="space-y-2 text-sm">
@@ -94,6 +94,40 @@ export default function Footer() {
               </ul>
             </div>
             <div>
+              <p className="text-gray-900 font-semibold mb-4">라이더 안내</p>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <Link
+                    href="/errands/register/guide"
+                    className="hover:text-brand-primary transition-colors"
+                  >
+                    라이더 등록 안내
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/errands" className="hover:text-brand-primary transition-colors">
+                    심부름 메인
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/errands/mypage/helper"
+                    className="hover:text-brand-primary transition-colors"
+                  >
+                    라이더 대시보드
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/errands/register"
+                    className="hover:text-brand-primary transition-colors"
+                  >
+                    라이더 등록
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
               <p className="text-gray-900 font-semibold mb-4">고객센터</p>
               <ul className="space-y-2 text-sm">
                 <li>
@@ -167,6 +201,13 @@ export default function Footer() {
               aria-label="FAQ"
             >
               FAQ
+            </Link>
+            <Link
+              href="/errands/register/guide"
+              className="text-mobile-md font-medium text-gray-800 hover:text-brand-primary transition-colors"
+              aria-label="라이더"
+            >
+              라이더
             </Link>
             <Link
               href="/help"
