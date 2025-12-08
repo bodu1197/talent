@@ -41,6 +41,25 @@ const getIconComponent = (iconName: string) => {
 };
 
 const slides: Slide[] = [
+  // Slide 0: 그레이/다크 - 철학과 가치 (캐치프레이즈)
+  {
+    id: 0,
+    title: '플랫폼은 다리여야 합니다\n통행료를 걷는 관문이 아니라',
+    subtitle: '— 돌파구, 은퇴 개발자의 마지막 코드',
+    gradient: 'bg-gray-800',
+    glowColor: '#374151',
+    icon: 'fa-shield-alt',
+    cardTitle: '우리의 철학',
+    cardSubtitle: '다리가 되겠습니다',
+    cardDescription:
+      '플랫폼은 연결해주는 다리여야 합니다. 통행료를 걷는 관문이 되어서는 안 됩니다. 돌파구는 이 철학을 코드로 실현합니다.',
+    splatterPattern: [
+      { size: 400, top: '-30%', right: '-20%', opacity: 0.3, blur: '3xl' },
+      { size: 300, bottom: '-25%', left: '-15%', opacity: 0.25, blur: '3xl' },
+      { size: 120, top: '15%', left: '5%', opacity: 0.4, blur: '2xl' },
+      { size: 80, top: '45%', right: '30%', opacity: 0.5, blur: 'xl' },
+    ],
+  },
   // Slide 1: 핑크/로즈 - 따뜻하고 풍요로운 느낌 (수수료 0%)
   {
     id: 1,

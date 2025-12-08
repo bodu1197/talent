@@ -26,6 +26,7 @@ export default function AboutPage() {
     logo: 'https://dolpagu.com/icon.svg',
     description:
       '돌파구(Dolpagu)는 2025년 설립된 한국의 수수료 0원 프리미엄 재능 거래 플랫폼입니다. 전문가와 구매자 모두 수수료 없이 자유롭게 재능을 거래할 수 있습니다.',
+    slogan: '플랫폼은 다리여야 합니다. 통행료를 걷는 관문이 아니라.',
     foundingDate: '2025',
     areaServed: {
       '@type': 'Country',
@@ -105,6 +106,18 @@ export default function AboutPage() {
       {/* Hero Section - AI Snippet 최적화 */}
       <section className="bg-gradient-to-br from-brand-primary to-brand-dark text-white py-20">
         <div className="container-1200">
+          {/* 캐치프라이즈 - 철학 */}
+          <blockquote className="border-l-4 border-white/30 pl-6 mb-8">
+            <p className="text-2xl md:text-3xl font-light italic leading-relaxed mb-3">
+              &quot;플랫폼은 다리여야 합니다.
+              <br />
+              통행료를 걷는 관문이 아니라.&quot;
+            </p>
+            <cite className="text-blue-200 text-sm not-italic">
+              — 돌파구, 은퇴 개발자의 마지막 코드
+            </cite>
+          </blockquote>
+
           {/* AI가 인용하기 좋은 정의형 문단 */}
           <p className="text-lg text-blue-200 mb-4">About Dolpagu</p>
           <h1 className="text-4xl md:text-5xl font-bold mb-6">돌파구 (Dolpagu)</h1>
@@ -148,6 +161,9 @@ export default function AboutPage() {
               <p className="text-gray-700 text-lg leading-relaxed">
                 돌파구는 &quot;누구나 자신의 재능으로 가치를 창출할 수 있는 세상&quot;을 꿈꿉니다.
                 플랫폼이 아닌 사람이 중심이 되는 거래 환경, 그것이 우리가 만들어가는 미래입니다.
+              </p>
+              <p className="text-gray-600 text-base mt-4 italic border-l-2 border-brand-primary pl-4">
+                &quot;플랫폼은 다리여야 합니다. 통행료를 걷는 관문이 아니라.&quot;
               </p>
             </div>
           </div>

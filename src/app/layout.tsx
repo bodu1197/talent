@@ -146,7 +146,7 @@ export default async function RootLayout({
     },
     description:
       '돌파구(Dolpagu)는 2025년 설립된 한국의 수수료 0원 프리미엄 재능 거래 플랫폼입니다. 전문가와 구매자 모두 중개 수수료 없이 거래할 수 있습니다.',
-    slogan: '수수료 0원, 재능의 가치를 100% 누리세요',
+    slogan: '플랫폼은 다리여야 합니다. 통행료를 걷는 관문이 아니라.',
     foundingDate: '2025',
     areaServed: {
       '@type': 'Country',
