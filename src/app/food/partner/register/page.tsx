@@ -158,14 +158,27 @@ export default function FoodPartnerRegisterPage() {
     const file = e.target.files?.[0];
     if (!file || !user) return;
 
+    // 사업자등록증은 비공개 버킷, 나머지는 공개 버킷
+    const bucket = field === 'businessDocumentUrl' ? 'business-documents' : 'food-stores';
     const fileExt = file.name.split('.').pop();
     const fileName = `${user.id}/${field}_${Date.now()}.${fileExt}`;
 
-    const { error } = await supabase.storage.from('food-stores').upload(fileName, file);
+    const { error } = await supabase.storage.from(bucket).upload(fileName, file, {
+      contentType: file.type,
+      upsert: true,
+    });
 
-    if (!error) {
-      const { data: urlData } = supabase.storage.from('food-stores').getPublicUrl(fileName);
+    if (error) {
+      console.error('파일 업로드 실패:', error);
+      alert('파일 업로드에 실패했습니다. 다시 시도해주세요.');
+      return;
+    }
 
+    // 사업자등록증은 파일명만 저장 (비공개), 나머지는 공개 URL
+    if (field === 'businessDocumentUrl') {
+      setFormData((prev) => ({ ...prev, [field]: fileName }));
+    } else {
+      const { data: urlData } = supabase.storage.from(bucket).getPublicUrl(fileName);
       setFormData((prev) => ({ ...prev, [field]: urlData.publicUrl }));
     }
   };
@@ -188,7 +201,7 @@ export default function FoodPartnerRegisterPage() {
         category: formData.category,
         phone: formData.phone,
         address: formData.address,
-        address_detail: formData.addressDetail,
+        detail_address: formData.addressDetail,
         latitude: formData.latitude,
         longitude: formData.longitude,
         min_order_amount: formData.minOrderAmount,
@@ -197,7 +210,7 @@ export default function FoodPartnerRegisterPage() {
         business_number: formData.businessNumber,
         business_name: formData.businessName,
         business_document_url: formData.businessDocumentUrl,
-        logo_url: formData.logoUrl,
+        thumbnail_url: formData.logoUrl,
         banner_url: formData.bannerUrl,
         is_open: false,
         is_verified: false,
