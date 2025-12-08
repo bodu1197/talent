@@ -87,13 +87,13 @@ export default function ErrandBannerStrip() {
   return (
     <section ref={sectionRef} className="relative" style={{ overflow: 'visible' }}>
       {/* 오토바이 - 가장 위 레이어 */}
-      {/* 모바일: 상단에 큰 오토바이 (배경 절반 차지) */}
+      {/* 모바일: 왼쪽에 오토바이 (절반만 보임) */}
       <div
-        className="absolute pointer-events-none z-30 md:hidden"
+        className="absolute pointer-events-none z-30 md:hidden overflow-hidden"
         style={{
-          top: '-20px',
-          left: '50%',
-          transform: 'translateX(-50%)',
+          top: '50%',
+          left: '-60px',
+          transform: 'translateY(-50%)',
         }}
       >
         <Image
@@ -101,7 +101,7 @@ export default function ErrandBannerStrip() {
           alt="배달 오토바이"
           width={200}
           height={133}
-          className="w-40 h-auto opacity-40"
+          className="w-32 h-auto opacity-70"
           unoptimized
         />
       </div>
