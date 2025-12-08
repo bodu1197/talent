@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { MapPin, Search, ChevronRight, Star, Clock, Heart, Store, Loader2 } from 'lucide-react';
+import { MapPin, Search, ChevronRight, Star, Clock, Heart, Store } from 'lucide-react';
 import {
   FoodStoreCategory,
   FOOD_CATEGORY_LABELS,
@@ -14,7 +14,7 @@ import {
   FOOD_STORE_SORT_LABELS,
 } from '@/types/food';
 import { createClient } from '@/lib/supabase/client';
-import { getCurrentPosition, reverseGeocode } from '@/lib/location/address-api';
+import { getCurrentPosition } from '@/lib/location/address-api';
 
 // 카테고리 목록
 const CATEGORIES: { id: FoodStoreCategory; label: string; icon: string }[] = [
@@ -35,8 +35,6 @@ export default function FoodMainPage() {
   const supabase = createClient();
 
   // 상태
-  const [address, setAddress] = useState('');
-  const [locationLoading, setLocationLoading] = useState(true);
   const [userLocation, setUserLocation] = useState<{
     lat: number;
     lng: number;
@@ -47,28 +45,14 @@ export default function FoodMainPage() {
   const [sortOption, setSortOption] = useState<FoodStoreSortOption>('distance');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // 위치 가져오기 - 플랫폼의 공통 위치 API 사용
+  // 위치 가져오기 - 거리 계산용
   useEffect(() => {
     const fetchLocation = async () => {
       try {
-        // 브라우저 위치 가져오기
         const coords = await getCurrentPosition();
         setUserLocation({ lat: coords.latitude, lng: coords.longitude });
-
-        // 서버 API를 통해 역지오코딩 (CORS 문제 없음)
-        const result = await reverseGeocode(coords.latitude, coords.longitude);
-        if (result) {
-          // 간단한 주소 표시 (구/동)
-          setAddress(result.region || result.address.split(' ').slice(1, 3).join(' '));
-        } else {
-          setAddress('현재 위치');
-        }
       } catch (error) {
         console.error('위치 가져오기 실패:', error);
-        // 위치 권한이 거부되어도 식당 목록은 표시 (거리순 정렬만 비활성화)
-        setAddress('');
-      } finally {
-        setLocationLoading(false);
       }
     };
 
@@ -177,39 +161,11 @@ export default function FoodMainPage() {
     }
   };
 
-  // 주소 표시 렌더링
-  const renderAddressDisplay = () => {
-    if (locationLoading) {
-      return (
-        <>
-          <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
-          <span className="text-gray-500">위치 확인 중...</span>
-        </>
-      );
-    }
-    if (address) {
-      return <span className="font-semibold text-gray-900 truncate">{address}</span>;
-    }
-    return <span className="text-gray-500">위치를 설정하세요</span>;
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
-      {/* 헤더 - 주소 & 검색 */}
+      {/* 헤더 - 검색 */}
       <header className="bg-white sticky top-0 z-50 border-b border-gray-100">
         <div className="container-1200">
-          {/* 배달 주소 */}
-          <div className="px-4 py-3 border-b border-gray-100">
-            <button
-              onClick={() => router.push('/food/address')}
-              className="flex items-center gap-2 text-left w-full max-w-md"
-            >
-              <MapPin className="w-5 h-5 text-brand-primary flex-shrink-0" />
-              {renderAddressDisplay()}
-              <ChevronRight className="w-4 h-4 text-gray-400 ml-auto flex-shrink-0" />
-            </button>
-          </div>
-
           {/* 검색 바 */}
           <form onSubmit={handleSearch} className="px-4 py-3">
             <div className="relative max-w-2xl">

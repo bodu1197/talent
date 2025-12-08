@@ -357,16 +357,14 @@ export default function FoodPartnerRegisterPage() {
                     )}
                   </button>
                 </div>
-                {formData.address && (
-                  <input
-                    type="text"
-                    name="addressDetail"
-                    value={formData.addressDetail}
-                    onChange={handleChange}
-                    placeholder="상세 주소 (예: 2층)"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-                  />
-                )}
+                <input
+                  type="text"
+                  name="addressDetail"
+                  value={formData.addressDetail}
+                  onChange={handleChange}
+                  placeholder="상세 주소 (예: 2층, 101호)"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
+                />
                 {formData.latitude && formData.longitude && (
                   <p className="mt-1 text-xs text-gray-500">
                     좌표: {formData.latitude.toFixed(6)}, {formData.longitude.toFixed(6)}
