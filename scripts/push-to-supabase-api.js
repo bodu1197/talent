@@ -1,6 +1,6 @@
 // Supabase REST API를 통해 마이그레이션 적용
 
-const path = require('path');
+// path module removed - not used
 const https = require('https');
 
 const _SUPABASE_URL = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
@@ -42,9 +42,6 @@ function executeSQL(_sql) {
 
 async function applyMigration() {
   console.log('🚀 Supabase REST API를 통해 마이그레이션 적용 시작...\n');
-
-
-// const _sql = fs.readFileSync(migrationFile, 'utf8'); // Removed unused variable
 
   // SQL을 실행 가능한 단위로 분리
   const statements = sql

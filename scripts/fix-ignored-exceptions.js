@@ -8,14 +8,13 @@ const fs = require('fs');
 const path = require('path');
 
 function fixIgnoredExceptions(content, filename) {
-  let modified = content;
   let changes = 0;
 
   // Pattern: catch (error) { console.log(...) } where error is not used
   // Replace console.log with console.error and include the error
   const catchPattern = /} catch \(error\) \{([^}]+)\}/g;
 
-  modified = content.replace(catchPattern, (match, body) => {
+  const modified = content.replace(catchPattern, (match, body) => {
     // Check if error is already used in the body
     if (body.includes('error')) {
       return match; // Already uses error, no change needed

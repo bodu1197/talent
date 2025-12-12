@@ -258,8 +258,6 @@ async function main() {
 
   await disableRLS();
 
-// const _totalFailed = 0; // Removed unused variable
-
   for (const tableName of TABLE_ORDER) {
     await importTableFromJSON(tableName);
   }

@@ -19,7 +19,7 @@ try {
 
       if (value) {
         // Remove quotes if present
-        const cleanValue = value.replace(/^["']|["']$/g, '');
+        const cleanValue = value.replace(/(^["'])|(["']$)/g, '');
 
         // Check for newlines or other whitespace
         if (cleanValue.includes('\n') || cleanValue.includes('\r')) {

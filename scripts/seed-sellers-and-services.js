@@ -87,7 +87,7 @@ async function createAuthUser(email, password, name) {
 }
 
 // 3. Seller 생성
-async function createSeller(userId, categoryId, categoryName, categorySlug) {
+async function createSeller(userId, categoryId, categoryName, _categorySlug) {
   const businessName = `${categoryName} 스튜디오`;
   const description = `${categoryName} 분야의 전문가입니다. 고객 만족을 최우선으로 생각하며, 최고의 품질을 제공합니다.`;
   const profileImage = `https://ui-avatars.com/api/?name=${encodeURIComponent(categoryName)}&background=0f3460&color=fff&size=200`;

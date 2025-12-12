@@ -11,6 +11,7 @@ const NEW_ACCESS_TOKEN = 'sbp_f40b15f794e727f0aa9161de38c497174fcac2ee';
 
 function executeQuery(query) {
   return new Promise((resolve, reject) => {
+    const data = JSON.stringify({ query });
 
     const options = {
       hostname: 'api.supabase.com',

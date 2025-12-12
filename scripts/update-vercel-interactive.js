@@ -51,13 +51,10 @@ function runCommand(command, args, inputs) {
       process.stderr.write(data);
     });
 
-    proc.on('close', (code) => {
-      if (code === 0) {
-        resolve(output);
-      } else {
-        // code가 0이 아니어도 성공으로 처리 (일부 vercel 명령어는 비정상 종료 코드 반환)
-        resolve(output);
-      }
+    proc.on('close', () => {
+      // Always resolve - some vercel commands return non-zero exit codes
+      // code가 0이 아니어도 성공으로 처리 (일부 vercel 명령어는 비정상 종료 코드 반환)
+      resolve(output);
     });
 
     proc.on('error', (err) => {

@@ -104,7 +104,7 @@ async function runMigration() {
         shell: true
       });
       console.log('\n✅ Migration executed via psql!\n');
-    } catch (psqlError) {
+    } catch {
       console.error('에러 발생:', error);
       console.error('❌ psql also failed. Please execute manually in Supabase Dashboard.');
       console.error('URL: https://supabase.com/dashboard/project/bpvfkkrlyrjkwgwmfrci/sql/new');

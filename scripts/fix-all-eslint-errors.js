@@ -13,7 +13,6 @@ const fs = require('fs');
 const path = require('path');
 
 function fixCatchBlocks(content, filename) {
-  let modified = content;
   let changes = 0;
 
   // 패턴 1: } catch (e) { ... }
@@ -22,7 +21,7 @@ function fixCatchBlocks(content, filename) {
 
   const catchPattern = /} catch \(([e_]|err)\) \{([^}]*?)(\n\s*resolve|\n\s*reject|\n\s*})/g;
 
-  modified = content.replace(catchPattern, (match, varName, body, ending) => {
+  const modified = content.replace(catchPattern, (match, varName, body, ending) => {
     // 이미 console.error가 있으면 변수명만 변경
     if (body.includes('console.error')) {
       changes++;

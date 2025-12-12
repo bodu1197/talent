@@ -46,7 +46,7 @@ unusedVarsErrors.forEach(fileData => {
 
   console.log(`\n📝 ${fileName} (${fileData.errors.length}개 에러)`);
 
-  let content = fs.readFileSync(filePath, 'utf8');
+  const content = fs.readFileSync(filePath, 'utf8');
   const lines = content.split('\n');
   let modified = false;
 

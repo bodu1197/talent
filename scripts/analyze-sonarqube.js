@@ -87,7 +87,7 @@ async function fetchSecurityHotspots() {
   console.log('🔐 보안 핫스팟 조회 중...\n');
 
   try {
-    const endpoint = `/api/hotspots/search?projectKey=${PROJECT_KEY}&ps=500`;
+    // Endpoint for hotspots API (currently not used - direct result access)
 
 
     console.log(`✅ ${result.hotspots?.length || 0}개 보안 핫스팟 발견\n`);
@@ -102,24 +102,14 @@ async function fetchSecurityHotspots() {
 async function fetchMetrics() {
   console.log('📈 코드 품질 메트릭 조회 중...\n');
 
-  const metrics = [
-    'bugs',
-    'vulnerabilities',
-    'code_smells',
-    'coverage',
-    'duplicated_lines_density',
-    'security_hotspots',
-    'ncloc',
-    'complexity',
-    'cognitive_complexity',
-    'sqale_index',
-    'reliability_rating',
-    'security_rating',
-    'sqale_rating',
-  ];
+  // Metrics list removed - currently not used in API call
+  // Available metrics: bugs, vulnerabilities, code_smells, coverage,
+  // duplicated_lines_density, security_hotspots, ncloc, complexity,
+  // cognitive_complexity, sqale_index, reliability_rating,
+  // security_rating, sqale_rating
 
   try {
-    const endpoint = `/api/measures/component?component=${PROJECT_KEY}&metricKeys=${metrics.join(',')}`;
+    // Endpoint for measures API (currently not used - direct result access)
 
 
     console.log('✅ 메트릭 조회 완료\n');
