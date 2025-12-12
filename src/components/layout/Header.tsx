@@ -5,8 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
-import ChatNotificationBadge from '@/components/chat/ChatNotificationBadge';
-import NotificationBell from '@/components/notifications/NotificationBell';
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import {
   ShoppingCart,
@@ -19,7 +18,28 @@ import {
   Heart,
   Bike,
   MapPin,
+  Bell,
+  MessageCircle,
 } from 'lucide-react';
+
+// NotificationBell과 ChatNotificationBadge를 lazy load하여 Supabase 번들을 초기 로드에서 제외
+const NotificationBell = dynamic(() => import('@/components/notifications/NotificationBell'), {
+  ssr: false,
+  loading: () => (
+    <div className="relative flex items-center">
+      <Bell className="w-6 h-6 text-gray-400 animate-pulse" aria-hidden="true" />
+    </div>
+  ),
+});
+
+const ChatNotificationBadge = dynamic(() => import('@/components/chat/ChatNotificationBadge'), {
+  ssr: false,
+  loading: () => (
+    <div className="relative flex items-center text-gray-400">
+      <MessageCircle className="w-6 h-6 animate-pulse" />
+    </div>
+  ),
+});
 
 export default function Header() {
   const { user, profile, loading, signOut } = useAuth();
