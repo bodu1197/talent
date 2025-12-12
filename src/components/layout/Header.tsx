@@ -68,8 +68,8 @@ export default function Header() {
             <Image
               src="/logo.png"
               alt="돌파구"
-              width={120}
-              height={40}
+              width={607}
+              height={178}
               className="h-7 lg:h-8 w-auto"
               priority
             />

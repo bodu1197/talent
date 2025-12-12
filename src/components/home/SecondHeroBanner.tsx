@@ -144,8 +144,8 @@ const MotorcycleIcon = () => (
   <Image
     src="/delivery-bike.png"
     alt="배달 오토바이"
-    width={300}
-    height={200}
+    width={360}
+    height={360}
     className="w-44 h-auto md:w-56"
     unoptimized
   />
