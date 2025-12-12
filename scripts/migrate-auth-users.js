@@ -15,7 +15,6 @@ const NEW_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 
 function executeQuery(projectId, token, query) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query });
 
     const options = {
       hostname: 'api.supabase.com',
@@ -52,7 +51,6 @@ function executeQuery(projectId, token, query) {
 
 function createUser(projectRef, serviceKey, userData) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify(userData);
 
     const options = {
       hostname: `${projectRef}.supabase.co`,
@@ -132,7 +130,7 @@ async function migrateUsers() {
       process.stdout.write(`\r[${i + 1}/${users.length}] ${user.email.substring(0, 30).padEnd(30)} `);
 
       // Prepare user data for Admin API
-      const userData = {
+      const _userData = {
         id: user.id,
         email: user.email,
         email_confirm: user.email_confirmed_at ? true : false,

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const { spawn } = require('child_process');
-const readline = require('readline');
+const _readline = require('readline');
 
 const ENV_VARS = [
   {

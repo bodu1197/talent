@@ -14,7 +14,7 @@ const NEW_ACCESS_TOKEN = 'sbp_f40b15f794e727f0aa9161de38c497174fcac2ee';
 
 function executeQuery(projectId, token, query) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query });
+    const data = JSON.stringify({ query });
 
     const options = {
       hostname: 'api.supabase.com',
@@ -56,7 +56,7 @@ function executeQuery(projectId, token, query) {
 
 async function getColumnTypes(tableName) {
   try {
-    const _result = await executeQuery(NEW_PROJECT_ID, NEW_ACCESS_TOKEN, `
+    await executeQuery(NEW_PROJECT_ID, NEW_ACCESS_TOKEN, `
       SELECT column_name, udt_name, data_type
       FROM information_schema.columns
       WHERE table_name = '${tableName}'
@@ -85,7 +85,7 @@ async function importByLevel(level) {
       ? 'SELECT * FROM categories WHERE parent_id IS NULL ORDER BY name'
       : `SELECT * FROM categories WHERE level = ${level} ORDER BY name`;
 
-    const _data = await executeQuery(OLD_PROJECT_ID, OLD_ACCESS_TOKEN, query);
+    await executeQuery(OLD_PROJECT_ID, OLD_ACCESS_TOKEN, query);
 
     if (!data || data.length === 0) {
       console.log(`   ⚪ No data\n`);
@@ -180,7 +180,7 @@ async function main() {
 
   // Import in order: NULL → 1 → 2 → 3
   for (const level of [null, 1, 2, 3]) {
-    const _result = await importByLevel(level);
+    await importByLevel(level);
     totalSuccess += result.success;
     totalFailed += result.failed;
   }
@@ -192,7 +192,7 @@ async function main() {
 
   // Verify final count
   try {
-    const _result = await executeQuery(NEW_PROJECT_ID, NEW_ACCESS_TOKEN,
+    await executeQuery(NEW_PROJECT_ID, NEW_ACCESS_TOKEN,
       'SELECT COUNT(*) as count FROM categories'
     );
     console.log(`📊 Final count in new DB: ${result[0].count} categories\n`);

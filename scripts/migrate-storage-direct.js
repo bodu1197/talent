@@ -17,7 +17,6 @@ const NEW_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 
 function executeQuery(projectId, token, query) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query });
 
     const options = {
       hostname: 'api.supabase.com',
@@ -195,7 +194,7 @@ async function main() {
   let totalSuccess = 0, totalFailed = 0, totalSkipped = 0;
 
   for (const { bucket_id } of counts) {
-    const _result = await migrateBucket(bucket_id);
+    await migrateBucket(bucket_id);
     totalSuccess += result.success;
     totalFailed += result.failed;
     totalSkipped += result.skipped;

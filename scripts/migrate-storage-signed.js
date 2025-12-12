@@ -17,7 +17,6 @@ const NEW_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 
 function executeQuery(projectId, token, query) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query });
 
     const options = {
       hostname: 'api.supabase.com',
@@ -54,7 +53,6 @@ function executeQuery(projectId, token, query) {
 
 function createSignedUrl(projectRef, apiKey, bucket, filePath) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ expiresIn: 3600 });
 
     const options = {
       hostname: `${projectRef}.supabase.co`,
@@ -73,7 +71,7 @@ function createSignedUrl(projectRef, apiKey, bucket, filePath) {
       res.on('end', () => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           try {
-            const _result = JSON.parse(body);
+            const result = JSON.parse(body);
             resolve(result.signedURL);
           } catch (error) {
             console.error('에러 발생:', error);
@@ -231,7 +229,7 @@ async function main() {
   const buckets = counts.map(c => c.bucket_id);
 
   for (const bucket of buckets) {
-    const _result = await migrateBucket(bucket);
+    await migrateBucket(bucket);
     totalSuccess += result.success;
     totalFailed += result.failed;
     totalSkipped += result.skipped;

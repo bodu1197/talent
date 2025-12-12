@@ -55,7 +55,7 @@ function makeVercelRequest(method, path, token, body = null) {
 
 async function getExistingEnvs(token) {
   try {
-    const _result = await makeVercelRequest(
+    await makeVercelRequest(
       'GET',
       `/v9/projects/${PROJECT_ID}/env?teamId=${TEAM_ID}`,
       token

@@ -70,6 +70,7 @@ async function checkDatabase() {
         const countResult = await pool.query(`SELECT COUNT(*) as count FROM ${tableName}`);
         console.log(`✅ ${tableName.padEnd(20)} : ${countResult.rows[0].count}개 레코드`);
       } catch (error) {
+        console.error('에러 발생:', error);
         console.log(`⚠️  ${tableName.padEnd(20)} : 테이블 없음 또는 접근 불가`);
       }
     }

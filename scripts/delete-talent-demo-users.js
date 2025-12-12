@@ -11,7 +11,7 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 async function deleteAuthUser(userId) {
-  const _response = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${userId}`, {
+  await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${userId}`, {
     method: 'DELETE',
     headers: {
       'Authorization': `Bearer ${SERVICE_ROLE_KEY}`,
@@ -20,7 +20,7 @@ async function deleteAuthUser(userId) {
   });
 
   if (!response.ok && response.status !== 404) {
-    const _data = await response.json();
+    await response.json();
     throw new Error(data.msg || 'Failed to delete user');
   }
 }

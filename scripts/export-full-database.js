@@ -23,7 +23,7 @@ if (!fs.existsSync(OUTPUT_DIR)) {
 
 function executeQuery(query) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query });
+    const data = JSON.stringify({ query });
 
     const options = {
       hostname: 'api.supabase.com',
@@ -92,7 +92,7 @@ async function exportAllTables() {
       }
 
       // 데이터 export
-      const _data = await executeQuery(`SELECT * FROM "${table_name}"`);
+      await executeQuery(`SELECT * FROM "${table_name}"`);
 
       const outputPath = path.join(OUTPUT_DIR, `${table_name}.json`);
       fs.writeFileSync(outputPath, JSON.stringify(data, null, 2));

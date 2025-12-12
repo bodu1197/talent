@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 require('dotenv').config({ path: '.env.local' });
 const { createClient } = require('@supabase/supabase-js');
 
@@ -61,9 +62,9 @@ async function main() {
     let aiServicesCreated = 0;
 
     for (let i = 1; i <= 20; i++) {
-      const price = Math.floor(Math.random() * 49 + 1) * 10000;
-      const deliveryDays = Math.floor(Math.random() * 30) + 1;
-      const revisionCount = Math.floor(Math.random() * 6);
+      const price = Math.floor(crypto.randomInt(49) + 1) * 10000;
+      const deliveryDays = Math.floor(crypto.randomInt(30)) + 1;
+      const revisionCount = Math.floor(crypto.randomInt(6));
 
       // 서비스 생성
       const { data: service, error: serviceError } = await supabase
@@ -107,9 +108,9 @@ async function main() {
     let rhymixServicesCreated = 0;
 
     for (let i = 1; i <= 20; i++) {
-      const price = Math.floor(Math.random() * 49 + 1) * 10000;
-      const deliveryDays = Math.floor(Math.random() * 30) + 1;
-      const revisionCount = Math.floor(Math.random() * 6);
+      const price = Math.floor(crypto.randomInt(49) + 1) * 10000;
+      const deliveryDays = Math.floor(crypto.randomInt(30)) + 1;
+      const revisionCount = Math.floor(crypto.randomInt(6));
 
       // 서비스 생성
       const { data: service, error: serviceError } = await supabase

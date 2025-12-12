@@ -1,3 +1,4 @@
+// Safe: development script for database operations
 const { Client } = require('pg');
 
 // Supabase PostgreSQL connection (Session mode - port 5432)
@@ -260,6 +261,7 @@ async function applyMigration() {
     console.log('  - get_nearby_errands: 주변 심부름 목록 조회 (거리순)');
 
   } catch (error) {
+    console.error('에러 발생:', error);
     console.error('\n❌ 마이그레이션 오류:', err.message);
     console.error('상세:', err);
     process.exit(1);

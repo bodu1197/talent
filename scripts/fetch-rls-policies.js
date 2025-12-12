@@ -43,7 +43,7 @@ async function fetchRLSPolicies() {
       console.log(`\n📄 ${tableName}`)
       console.log('-'.repeat(70))
 
-      const _result = await client.query(`
+      await client.query(`
         SELECT
           schemaname,
           tablename,

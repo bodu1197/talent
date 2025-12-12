@@ -10,7 +10,7 @@ const https = require('https');
 const OLD_PROJECT_ID = 'bpvfkkrlyrjkwgwmfrci';
 const OLD_ACCESS_TOKEN = 'sbp_140ed0f35c7b31aa67f56bdca11db02fd469802f';
 const NEW_PROJECT_ID = 'abroivxthindezdtdzmj';
-const NEW_ACCESS_TOKEN = 'sbp_f40b15f794e727f0aa9161de38c497174fcac2ee';
+const _NEW_ACCESS_TOKEN = 'sbp_f40b15f794e727f0aa9161de38c497174fcac2ee';
 
 function makeRequest(method, path, token, body = null) {
   return new Promise((resolve, reject) => {
@@ -61,7 +61,7 @@ async function getAuthConfig(projectId, token) {
   }
 }
 
-async function updateAuthConfig(projectId, token, config) {
+async function _updateAuthConfig(projectId, token, config) {
   try {
     await makeRequest(
       'PATCH',

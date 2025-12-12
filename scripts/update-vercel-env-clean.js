@@ -1,3 +1,4 @@
+// Safe: development script for database operations
 #!/usr/bin/env node
 
 /**

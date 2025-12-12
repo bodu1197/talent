@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 // TypeScript 타입에서 PostgreSQL 타입으로 매핑
-const typeMapping = {
+const _typeMapping = {
   'string': 'TEXT',
   'string | null': 'TEXT',
   'number': 'INTEGER',
@@ -287,7 +287,7 @@ function generateCreateTableSQL(tableName, tableSchema) {
   sql += `CREATE TABLE IF NOT EXISTS public.${tableName} (\n`;
 
   const columnDefs = [];
-  let primaryKeys = [];
+  const primaryKeys = [];
 
   for (const [colName, colDef] of Object.entries(columns)) {
     let colSQL = `  ${colName} ${colDef.type}`;

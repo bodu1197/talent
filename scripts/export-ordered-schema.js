@@ -29,7 +29,7 @@ if (!fs.existsSync(OUTPUT_DIR)) {
 
 function executeQuery(query) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query });
+    const data = JSON.stringify({ query });
 
     const options = {
       hostname: 'api.supabase.com',
@@ -315,7 +315,7 @@ const SCHEMA_DIR = path.join(__dirname, '..', 'schema-parts');
 
 function executeQuery(query) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query });
+    const data = JSON.stringify({ query });
 
     const options = {
       hostname: 'api.supabase.com',

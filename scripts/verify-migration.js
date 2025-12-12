@@ -14,7 +14,6 @@ const NEW_ACCESS_TOKEN = 'sbp_f40b15f794e727f0aa9161de38c497174fcac2ee';
 
 function executeQuery(projectId, token, query) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query });
 
     const options = {
       hostname: 'api.supabase.com',
@@ -146,7 +145,7 @@ async function main() {
 
   const results = [];
   for (const tableName of IMPORTANT_TABLES) {
-    const _result = await verifyTable(tableName);
+    await verifyTable(tableName);
     results.push(result);
   }
 

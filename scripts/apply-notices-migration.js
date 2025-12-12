@@ -151,7 +151,6 @@ ON CONFLICT DO NOTHING;
 
 async function runQuery(query) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query });
 
     const options = {
       hostname: 'api.supabase.com',
@@ -170,7 +169,6 @@ async function runQuery(query) {
       res.on('data', (chunk) => (body += chunk));
       res.on('end', () => {
         try {
-          const _result = JSON.parse(body);
           resolve(result);
         } catch {
           resolve({ raw: body });

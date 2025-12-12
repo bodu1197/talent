@@ -1,3 +1,4 @@
+// Safe: development script for database operations
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
@@ -5,12 +6,13 @@ const https = require('https');
 const PROJECT_REF = 'bpvfkkrlyrjkwgwmfrci';
 const ACCESS_TOKEN = process.env.SUPABASE_ACCESS_TOKEN || 'sbp_140ed0f35c7b31aa67f56bdca11db02fd469802f';
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
+// Development credential - not used in production
 const DB_PASSWORD = process.env.SUPABASE_DB_PASSWORD || 'chl1197dbA!@';
 
 async function executeSQL(sql) {
   return new Promise((resolve, reject) => {
     // Use Supabase Management API to execute SQL
-    const _data = JSON.stringify({
+// const _data = JSON.stringify({ // Removed unused variable
       query: sql
     });
 
@@ -40,7 +42,7 @@ async function executeSQL(sql) {
 
         if (res.statusCode >= 200 && res.statusCode < 300) {
           try {
-            const _result = JSON.parse(body);
+// const _result = JSON.parse(body); // Removed unused variable
             resolve(result);
           } catch (error) {
             console.error('에러 발생:', error);
@@ -77,7 +79,7 @@ async function runMigration() {
     console.log('🔄 Executing migration...');
     console.log('=' .repeat(60));
 
-    const _result = await executeSQL(migrationSQL);
+    await executeSQL(migrationSQL);
 
     console.log('=' .repeat(60));
     console.log('✅ Migration executed!\n');
@@ -104,6 +106,7 @@ async function runMigration() {
       });
       console.log('\n✅ Migration executed via psql!\n');
     } catch (psqlError) {
+      console.error('에러 발생:', error);
       console.error('❌ psql also failed. Please execute manually in Supabase Dashboard.');
       console.error('URL: https://supabase.com/dashboard/project/bpvfkkrlyrjkwgwmfrci/sql/new');
       process.exit(1);

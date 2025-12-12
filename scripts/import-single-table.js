@@ -8,8 +8,8 @@
  */
 
 const https = require('https');
-const fs = require('fs');
-const path = require('path');
+const _fs = require('fs');
+const _path = require('path');
 
 const OLD_PROJECT_ID = 'bpvfkkrlyrjkwgwmfrci';
 const OLD_ACCESS_TOKEN = 'sbp_140ed0f35c7b31aa67f56bdca11db02fd469802f';
@@ -18,7 +18,7 @@ const NEW_ACCESS_TOKEN = 'sbp_f40b15f794e727f0aa9161de38c497174fcac2ee';
 
 function executeQuery(projectId, token, query) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query });
+    const data = JSON.stringify({ query });
 
     const options = {
       hostname: 'api.supabase.com',
@@ -62,7 +62,7 @@ async function downloadTable(tableName) {
   console.log(`📥 Downloading ${tableName} from original DB...`);
 
   try {
-    const _data = await executeQuery(OLD_PROJECT_ID, OLD_ACCESS_TOKEN,
+    await executeQuery(OLD_PROJECT_ID, OLD_ACCESS_TOKEN,
       `SELECT * FROM "${tableName}"`
     );
 
@@ -76,7 +76,7 @@ async function downloadTable(tableName) {
 
 async function getColumnTypes(tableName) {
   try {
-    const _result = await executeQuery(NEW_PROJECT_ID, NEW_ACCESS_TOKEN, `
+    await executeQuery(NEW_PROJECT_ID, NEW_ACCESS_TOKEN, `
       SELECT column_name, udt_name, data_type
       FROM information_schema.columns
       WHERE table_name = '${tableName}'
@@ -213,7 +213,7 @@ async function main() {
   console.log(`Target: ${NEW_PROJECT_ID}\n`);
 
   // Download from original
-  const _data = await downloadTable(tableName);
+  await downloadTable(tableName);
 
   if (!data) {
     console.log('❌ Failed to download data');
@@ -221,7 +221,7 @@ async function main() {
   }
 
   // Upload to new
-  const _result = await uploadTable(tableName, data);
+  await uploadTable(tableName, data);
 
   console.log('═══════════════════════════════════════');
   console.log(`✅ Success: ${result.success}`);

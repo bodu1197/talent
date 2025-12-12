@@ -17,7 +17,7 @@ const REAL_USERS = [
 ];
 
 async function deleteAuthUser(userId) {
-  const _response = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${userId}`, {
+  await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${userId}`, {
     method: 'DELETE',
     headers: {
       'Authorization': `Bearer ${SERVICE_ROLE_KEY}`,
@@ -26,7 +26,7 @@ async function deleteAuthUser(userId) {
   });
 
   if (!response.ok && response.status !== 404) {
-    const _data = await response.json();
+    await response.json();
     throw new Error(data.msg || 'Failed to delete user');
   }
 }

@@ -17,7 +17,7 @@ const DATA_DIR = path.join(__dirname, '..', 'database-export');
 
 function executeQuery(query) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query });
+    const data = JSON.stringify({ query });
 
     const options = {
       hostname: 'api.supabase.com',
@@ -222,7 +222,7 @@ async function importTable(tableName) {
   }
 
   try {
-    const _data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
     if (!data || data.length === 0) {
       console.log(`   ⚠️  Empty data, skipping\n`);

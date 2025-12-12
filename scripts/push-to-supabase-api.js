@@ -3,12 +3,11 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 
-const SUPABASE_URL = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
+const _SUPABASE_URL = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
 const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
 
 function executeSQL(sql) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query: sql });
 
     const options = {
       hostname: 'bpvfkkrlyrjkwgwmfrci.supabase.co',
@@ -45,7 +44,7 @@ async function applyMigration() {
   console.log('🚀 Supabase REST API를 통해 마이그레이션 적용 시작...\n');
 
   const migrationFile = path.join(__dirname, '../supabase/migrations/20251112120000_create_advertising_system.sql');
-  const sql = fs.readFileSync(migrationFile, 'utf8');
+// const _sql = fs.readFileSync(migrationFile, 'utf8'); // Removed unused variable
 
   // SQL을 실행 가능한 단위로 분리
   const statements = sql
@@ -83,7 +82,7 @@ async function applyMigration() {
     }
 
     try {
-      const _result = await executeSQL(statement + ';');
+      const result = await executeSQL(statement + ';');
 
       if (result.success) {
         if (description) console.log('✅');

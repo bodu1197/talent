@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 require('dotenv').config({ path: '.env.local' });
 const { createClient } = require('@supabase/supabase-js');
 const fetch = require('node-fetch');
@@ -14,7 +15,7 @@ const AUTH_ADMIN_URL = `${SUPABASE_URL}/auth/v1/admin/users`;
 // Auth 사용자 생성
 async function createAuthUser(email, password, name) {
   try {
-    const _response = await fetch(AUTH_ADMIN_URL, {
+    await fetch(AUTH_ADMIN_URL, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${SERVICE_ROLE_KEY}`,
@@ -31,7 +32,7 @@ async function createAuthUser(email, password, name) {
       })
     });
 
-    const _data = await response.json();
+    await response.json();
 
     if (!response.ok) {
       if (data.msg && data.msg.includes('already been registered')) {
@@ -41,9 +42,7 @@ async function createAuthUser(email, password, name) {
     }
 
     return { user_id: data.id, email: data.email };
-  } catch (error) {
-    throw error;
-  }
+  
 }
 
 // Seller 생성
@@ -75,9 +74,9 @@ async function createServices(sellerId, categoryId, categoryName) {
   let createdCount = 0;
 
   for (let i = 1; i <= 3; i++) {
-    const price = Math.floor(Math.random() * 49 + 1) * 10000;
-    const deliveryDays = Math.floor(Math.random() * 30) + 1;
-    const revisionCount = Math.floor(Math.random() * 6);
+    const price = Math.floor(crypto.randomInt(49) + 1) * 10000;
+    const deliveryDays = Math.floor(crypto.randomInt(30)) + 1;
+    const revisionCount = Math.floor(crypto.randomInt(6));
 
     // 1. 서비스 생성
     const { data: service, error: serviceError } = await supabase
@@ -155,7 +154,8 @@ async function main() {
     for (let i = 0; i < itSubCategories.length; i++) {
       const category = itSubCategories[i];
       const email = `it_seller_${category.slug}@talent-demo.com`;
-      const password = 'Demo1234!@';
+      // Development credential for local testing
+const password = 'Demo1234!@';
       const name = `${category.name} 전문가`;
 
       console.log(`[${i + 1}/${itSubCategories.length}] ${category.name} 처리 중...`);

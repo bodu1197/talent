@@ -13,12 +13,12 @@ const path = require('path');
 
 const NEW_PROJECT_ID = 'abroivxthindezdtdzmj';
 const NEW_ACCESS_TOKEN = 'sbp_f40b15f794e727f0aa9161de38c497174fcac2ee';
-const CSV_DIR = path.join(__dirname, '..', 'csv-export');
+const _CSV_DIR = path.join(__dirname, '..', 'csv-export');
 const JSON_DIR = path.join(__dirname, '..', 'database-export');
 
 function executeQuery(query) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query });
+    const data = JSON.stringify({ query });
 
     const options = {
       hostname: 'api.supabase.com',
@@ -69,7 +69,7 @@ async function importTableFromJSON(tableName) {
   try {
     console.log(`📦 Importing ${tableName}...`);
 
-    const _data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+    const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
 
     if (!data || data.length === 0) {
       console.log(`   ⚠️  No data, skipping\n`);
@@ -123,6 +123,7 @@ async function importTableFromJSON(tableName) {
         }
 
       } catch (error) {
+        console.error('에러 발생:', error);
         errorCount++;
         // Continue with next row
       }
@@ -257,8 +258,7 @@ async function main() {
 
   await disableRLS();
 
-  let totalSuccess = 0;
-  let totalFailed = 0;
+// const _totalFailed = 0; // Removed unused variable
 
   for (const tableName of TABLE_ORDER) {
     await importTableFromJSON(tableName);

@@ -2,8 +2,8 @@ const { createClient } = require('@supabase/supabase-js')
 const fs = require('fs')
 const path = require('path')
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://bpvfkkrlyrjkwgwmfrci.supabase.co'
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8'
+const _supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://bpvfkkrlyrjkwgwmfrci.supabase.co'
+const _supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8'
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   auth: {
@@ -57,6 +57,7 @@ async function runMigration() {
     console.log('\n🎉 마이그레이션 완료!')
 
   } catch (error) {
+    console.error('에러 발생:', error);
     console.error('❌ 마이그레이션 실패:', err.message)
     process.exit(1)
   }

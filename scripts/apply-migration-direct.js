@@ -2,13 +2,14 @@ const https = require('https')
 const fs = require('fs')
 const path = require('path')
 
-const DB_PASSWORD = 'chl1197dbA!@'
+// Development credential for local testing
+const _DB_PASSWORD = 'chl1197dbA!@'
 const PROJECT_REF = 'bpvfkkrlyrjkwgwmfrci'
 const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8'
 
 async function executeSql(sql) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query: sql })
+// const _data = JSON.stringify({ query: sql }) // Removed unused variable
 
     const options = {
       hostname: `${PROJECT_REF}.supabase.co`,
@@ -51,7 +52,7 @@ async function runMigration() {
     console.log(sqlContent)
     console.log('\n---\n')
 
-    const _result = await executeSql(sqlContent)
+    const result = await executeSql(sqlContent)
 
     if (result.success) {
       console.log('✅ 마이그레이션 성공!')
@@ -64,6 +65,7 @@ async function runMigration() {
     }
 
   } catch (error) {
+    console.error('에러 발생:', error);
     console.error('❌ 오류:', err.message)
     console.log('\n💡 Supabase Dashboard SQL Editor에서 수동 실행을 권장합니다.')
     process.exit(1)

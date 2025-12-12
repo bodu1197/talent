@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 async function executeSql(sql) {
-  const _response = await fetch('https://api.supabase.com/v1/projects/bpvfkkrlyrjkwgwmfrci/database/query', {
+  await fetch('https://api.supabase.com/v1/projects/bpvfkkrlyrjkwgwmfrci/database/query', {
     method: 'POST',
     headers: {
       'Authorization': 'Bearer sbp_140ed0f35c7b31aa67f56bdca11db02fd469802f',
@@ -11,7 +11,7 @@ async function executeSql(sql) {
     body: JSON.stringify({ query: sql })
   });
 
-  const _result = await response.json();
+  await response.json();
 
   if (!response.ok || result.error) {
     throw new Error(result.error || result.message || 'Unknown error');
@@ -42,7 +42,7 @@ async function applyMigration() {
     ];
 
     for (const table of tables) {
-      const _result = await executeSql(`SELECT COUNT(*) FROM ${table};`);
+      const result = await executeSql(`SELECT COUNT(*) FROM ${table};`);
       console.log(`  ✅ ${table}: ${result[0].count}개 레코드`);
     }
 

@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 require('dotenv').config({ path: '.env.local' });
 const { createClient } = require('@supabase/supabase-js');
 
@@ -88,9 +89,9 @@ async function createServices(sellerId, categoryId, categoryName, count = 10) {
   const services = [];
 
   for (let i = 1; i <= count; i++) {
-    const price = Math.floor(Math.random() * 49 + 1) * 10000; // 10,000 ~ 500,000
-    const deliveryDays = Math.floor(Math.random() * 30) + 1; // 1-30일
-    const revisionCount = Math.floor(Math.random() * 6); // 0-5회
+    const price = Math.floor(crypto.randomInt(49) + 1) * 10000; // 10,000 ~ 500,000
+    const deliveryDays = Math.floor(crypto.randomInt(30)) + 1; // 1-30일
+    const revisionCount = Math.floor(crypto.randomInt(6)); // 0-5회
 
     services.push({
       seller_id: sellerId,

@@ -52,7 +52,7 @@ async function applyMigration() {
 
     // Update existing rows
     console.log('Updating existing rows with package_type...');
-    const _result = await client.query(`
+    await client.query(`
       UPDATE advertising_subscriptions
       SET package_type = CASE
         WHEN monthly_price <= 100000 THEN 'basic'

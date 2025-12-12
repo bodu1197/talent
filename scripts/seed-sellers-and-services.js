@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 require('dotenv').config({ path: '.env.local' });
 const { createClient } = require('@supabase/supabase-js');
 const fetch = require('node-fetch');
@@ -51,7 +52,7 @@ async function loadLeafCategories() {
 // 2. Auth 사용자 생성
 async function createAuthUser(email, password, name) {
   try {
-    const _response = await fetch(AUTH_ADMIN_URL, {
+    await fetch(AUTH_ADMIN_URL, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${SERVICE_ROLE_KEY}`,
@@ -68,7 +69,7 @@ async function createAuthUser(email, password, name) {
       })
     });
 
-    const _data = await response.json();
+    await response.json();
 
     if (!response.ok) {
       // 이미 존재하는 사용자인 경우
@@ -79,9 +80,7 @@ async function createAuthUser(email, password, name) {
     }
 
     return { user_id: data.id, email: data.email };
-  } catch (error) {
-    throw error;
-  }
+  
 }
 
 // 3. Seller 생성
@@ -112,9 +111,9 @@ async function createServices(sellerId, categoryId, categoryName, count = 10) {
   const services = [];
 
   for (let i = 1; i <= count; i++) {
-    const price = Math.floor(Math.random() * 49 + 1) * 10000; // 10,000 ~ 500,000
-    const deliveryDays = Math.floor(Math.random() * 30) + 1; // 1-30일
-    const revisionCount = Math.floor(Math.random() * 6); // 0-5회
+    const price = Math.floor(crypto.randomInt(49) + 1) * 10000; // 10,000 ~ 500,000
+    const deliveryDays = Math.floor(crypto.randomInt(30)) + 1; // 1-30일
+    const revisionCount = Math.floor(crypto.randomInt(6)); // 0-5회
 
     services.push({
       seller_id: sellerId,
@@ -142,7 +141,8 @@ async function createServices(sellerId, categoryId, categoryName, count = 10) {
 // 5. 단일 카테고리 처리
 async function processCategory(category, index, total) {
   const email = `seller_${category.slug}@talent-demo.com`;
-  const password = 'Demo1234!@';
+  // Development credential for local testing
+const password = 'Demo1234!@';
   const name = `${category.name} 전문가`;
 
   console.log(`[${index + 1}/${total}] ${category.name} 처리 중...`);

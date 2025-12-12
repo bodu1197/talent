@@ -1,7 +1,7 @@
 const fs = require('fs');
 const https = require('https');
 
-const SUPABASE_URL = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
+const _SUPABASE_URL = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
 const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
 
 // Read the migration SQL
@@ -19,9 +19,9 @@ const statements = migrationSQL
 
 console.log(`📝 Found ${statements.length} SQL statements to execute\n`);
 
-async function executeSQL(sql) {
+async function _executeSQL(sql) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query: sql });
+    const data = JSON.stringify({ query: sql });
 
     const options = {
       hostname: 'bpvfkkrlyrjkwgwmfrci.supabase.co',

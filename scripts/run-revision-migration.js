@@ -33,6 +33,7 @@ async function runMigration() {
     console.log('   - order_revision_stats 뷰 생성됨\n')
 
   } catch (error) {
+    console.error('에러 발생:', error);
     console.error('❌ 마이그레이션 실패:', err.message)
     console.error('상세:', err)
     process.exit(1)

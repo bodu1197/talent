@@ -2,7 +2,7 @@ const fs = require('fs');
 const https = require('https');
 const path = require('path');
 
-const SUPABASE_URL = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
+const _SUPABASE_URL = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 async function executeSql(sql) {

@@ -106,7 +106,7 @@ async function applyMigration() {
   const url = `https://api.supabase.com/v1/projects/${projectRef}/database/query`;
 
   try {
-    const _response = await fetch(url, {
+    await fetch(url, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${apiKey}`,
@@ -115,7 +115,7 @@ async function applyMigration() {
       body: JSON.stringify({ query: sql }),
     });
 
-    const _result = await response.json();
+    await response.json();
 
     if (response.ok) {
       console.log('✅ 마이그레이션 성공!');

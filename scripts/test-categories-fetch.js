@@ -5,12 +5,10 @@
  */
 
 require('dotenv').config({ path: '.env.local' });
-// const { createClient } = require('@supabase/supabase-js'); // unused
 
 async function testCategoriesFetch() {
   console.log('\n🔍 Testing Categories Fetch...\n');
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseKey) {

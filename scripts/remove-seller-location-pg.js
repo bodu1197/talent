@@ -38,7 +38,7 @@ async function applyMigration() {
     await client.connect();
     console.log('DB 연결 성공');
 
-    const _result = await client.query(sql);
+    await client.query(sql);
     console.log('✅ 판매자 위치 필드 삭제 완료!');
 
     // 확인

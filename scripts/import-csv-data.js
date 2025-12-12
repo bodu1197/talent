@@ -14,7 +14,7 @@ const CSV_DIR = path.join(__dirname, '..', 'csv-export');
 
 function executeQuery(query) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query });
+    const data = JSON.stringify({ query });
 
     const options = {
       hostname: 'api.supabase.com',
@@ -144,7 +144,9 @@ async function main() {
   console.log('🔓 Disabling RLS...\n');
   try {
     await executeQuery('ALTER TABLE users DISABLE ROW LEVEL SECURITY');
-  } catch (_error) {}
+  } catch (_error) {
+    // Intentionally empty}
+    console.error('에러 발생:', error);
 
   for (const tableName of TABLE_ORDER) {
     await importTableFromCSV(tableName);
@@ -153,6 +155,7 @@ async function main() {
   // Enable RLS
   console.log('\n🔒 Re-enabling RLS...\n');
   try {
+    // Intentionally empty
     await executeQuery('ALTER TABLE users ENABLE ROW LEVEL SECURITY');
   } catch (_error) {}
 

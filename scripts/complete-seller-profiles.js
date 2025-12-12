@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 require('dotenv').config({ path: '.env.local' });
 const { createClient } = require('@supabase/supabase-js');
 
@@ -17,14 +18,14 @@ const stats = {
 // 랜덤 전화번호 생성
 function generatePhone() {
   const prefix = '010';
-  const middle = Math.floor(Math.random() * 9000 + 1000); // 1000-9999
-  const last = Math.floor(Math.random() * 9000 + 1000); // 1000-9999
+  const middle = Math.floor(crypto.randomInt(9000) + 1000); // 1000-9999
+  const last = Math.floor(crypto.randomInt(9000) + 1000); // 1000-9999
   return `${prefix}-${middle}-${last}`;
 }
 
 // 랜덤 경력 생성 (1-15년)
 function generateExperience() {
-  return Math.floor(Math.random() * 15) + 1;
+  return Math.floor(crypto.randomInt(15)) + 1;
 }
 
 // 카카오톡 ID 생성
@@ -33,7 +34,7 @@ function generateKakaoId(businessName) {
     .replace(/\s+/g, '')
     .replace(/스튜디오/g, '')
     .toLowerCase();
-  return `kakao_${slug}_${Math.floor(Math.random() * 999 + 1)}`;
+  return `kakao_${slug}_${Math.floor(crypto.randomInt(999) + 1)}`;
 }
 
 // 웹사이트 생성
@@ -56,7 +57,7 @@ function generateCertificates(businessName) {
 }
 
 // 영업 시간 생성
-function generateBusinessHours() {
+function _generateBusinessHours() {
   return {
     weekdays: '09:00-18:00',
     saturday: '10:00-15:00',

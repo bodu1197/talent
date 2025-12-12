@@ -19,7 +19,7 @@ if (!fs.existsSync(OUTPUT_DIR)) {
 
 function executeQuery(query) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query });
+    const data = JSON.stringify({ query });
 
     const options = {
       hostname: 'api.supabase.com',
@@ -93,7 +93,7 @@ async function exportTableAsCSV(tableName) {
     }
 
     // Get data
-    const _data = await executeQuery(`SELECT * FROM "${tableName}"`);
+    await executeQuery(`SELECT * FROM "${tableName}"`);
 
     if (!data || data.length === 0) {
       console.log(`   ⚠️  No data, skipping\n`);
@@ -163,7 +163,7 @@ const CSV_DIR = path.join(__dirname, '..', 'csv-export');
 
 function executeQuery(query) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query });
+    const data = JSON.stringify({ query });
 
     const options = {
       hostname: 'api.supabase.com',

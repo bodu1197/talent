@@ -26,7 +26,6 @@ if (!VERCEL_TOKEN) {
 
 function makeRequest(method, path, body) {
   return new Promise((resolve, reject) => {
-    const _data = body ? JSON.stringify(body) : null;
 
     const options = {
       hostname: 'api.vercel.com',

@@ -48,7 +48,7 @@ async function fetchRLSPolicies() {
       }
 
       // 2. RLS 정책 가져오기
-      const _result = await client.query(
+      await client.query(
         `
         SELECT
           policyname,

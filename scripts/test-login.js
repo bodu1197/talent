@@ -4,13 +4,11 @@
  * Test login functionality
  */
 
-// const { createClient } = require('@supabase/supabase-js'); // unused
 require('dotenv').config({ path: '.env.local' });
 
 async function testLogin() {
   console.log('\n🔐 Testing Login Functionality...\n');
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseKey) {

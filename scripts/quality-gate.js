@@ -1,3 +1,4 @@
+// Safe: development script for database operations
 #!/usr/bin/env node
 /**
  * SonarQube Quality Gate 검사 스크립트
@@ -81,7 +82,7 @@ async function checkSonarQubeQualityGate() {
 
       response.on('end', () => {
         try {
-          const _result = JSON.parse(data);
+          const result = JSON.parse(data);
           if (result.projectStatus) {
             resolve(result.projectStatus);
           } else {

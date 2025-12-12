@@ -8,8 +8,8 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config({ path: '.env.local' });
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const _supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const _supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseServiceKey) {
   console.error('Missing Supabase env vars');
@@ -23,7 +23,7 @@ if (!projectRef) {
   process.exit(1);
 }
 
-async function executeStatementViaRest(sql) {
+async function _executeStatementViaRest(sql) {
   return new Promise((resolve, reject) => {
     const postData = JSON.stringify({ query: sql });
 

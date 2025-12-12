@@ -50,6 +50,7 @@ function fetchIssues(page = 1, allIssues = []) {
             });
           }
         } catch (error) {
+          console.error('에러 발생:', error);
           console.error('Parse error:', e.message);
           reject(e);
         }

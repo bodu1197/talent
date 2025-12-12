@@ -38,7 +38,7 @@ async function verifyRLSOptimization() {
     let issuesFound = 0
 
     for (const tableName of tables) {
-      const _result = await client.query(`
+      await client.query(`
         SELECT
           schemaname,
           tablename,
@@ -73,7 +73,7 @@ async function verifyRLSOptimization() {
         const withCheck = policy.with_check || ''
 
         // auth.uid()가 (select auth.uid())로 감싸지지 않고 직접 사용되는지 확인
-        const directAuthUidPattern = /(?<!\(select\s+)auth\.uid\(\)/gi
+        const directAuthUidPattern = /(?<!\(select\s+)auth\.uid\(\)/i
 
         if (directAuthUidPattern.test(qual) || directAuthUidPattern.test(withCheck)) {
           hasDirectAuthUid = true

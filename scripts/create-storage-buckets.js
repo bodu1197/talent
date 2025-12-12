@@ -11,7 +11,6 @@ const NEW_ACCESS_TOKEN = 'sbp_f40b15f794e727f0aa9161de38c497174fcac2ee';
 
 function executeQuery(query) {
   return new Promise((resolve, reject) => {
-    const _data = JSON.stringify({ query });
 
     const options = {
       hostname: 'api.supabase.com',
@@ -104,7 +103,7 @@ async function createBucket(bucket) {
       ? `ARRAY[${bucket.allowed_mime_types.map(m => `'${m}'`).join(', ')}]::text[]`
       : 'NULL';
 
-    const query = `
+// const _query = ` // Removed unused variable
       INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
       VALUES (
         '${bucket.id}',

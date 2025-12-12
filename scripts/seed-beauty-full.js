@@ -103,7 +103,6 @@ async function main() {
   const existingCount = existingSellers?.length || 0;
   console.log(`👤 기존 판매자 수: ${existingCount}`);
 
-  const needToCreate = 25 - existingCount;
 
   // 2. 기존 사용자 중 판매자 등록 안된 경우 처리
   console.log('\n🔧 기존 뷰티 테스트 사용자에서 판매자 등록...');

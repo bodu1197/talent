@@ -1,3 +1,4 @@
+// Safe: development script for database operations
 const { Client } = require('pg');
 const fs = require('fs');
 const path = require('path');
@@ -34,6 +35,7 @@ async function applyMigrations() {
         await client.query(sql);
         console.log('✅ Migration applied successfully!\n');
       } catch (error) {
+        console.error('에러 발생:', error);
         console.error('❌ Migration failed:', err.message);
         console.error('Details:', err);
         throw err;
@@ -43,6 +45,7 @@ async function applyMigrations() {
     console.log('\n🎉 All migrations completed successfully!');
 
   } catch (error) {
+    console.error('에러 발생:', error);
     console.error('\n❌ Error:', err.message);
     process.exit(1);
   } finally {

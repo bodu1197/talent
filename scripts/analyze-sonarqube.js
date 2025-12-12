@@ -66,7 +66,7 @@ async function fetchAllIssues() {
 
   while (hasMore) {
     const endpoint = `/api/issues/search?componentKeys=${PROJECT_KEY}&ps=${pageSize}&p=${page}`;
-    const _result = await apiCall(endpoint);
+    const result = await apiCall(endpoint);
 
     allIssues.push(...result.issues);
 
