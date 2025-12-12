@@ -45,13 +45,14 @@ async function applyMigration() {
         CHECK (package_type IN ('basic', 'standard', 'premium'));
       `);
       console.log('✓ Added package_type constraint\n');
-    } catch (err) {
+    } catch (error) {
+      console.error('에러 발생:', error);
       console.log('Note: Constraint may already exist, continuing...\n');
     }
 
     // Update existing rows
     console.log('Updating existing rows with package_type...');
-    const result = await client.query(`
+    const _result = await client.query(`
       UPDATE advertising_subscriptions
       SET package_type = CASE
         WHEN monthly_price <= 100000 THEN 'basic'

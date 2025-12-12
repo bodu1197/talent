@@ -43,7 +43,8 @@ function apiCall(endpoint) {
         res.on('end', () => {
           try {
             resolve(JSON.parse(data));
-          } catch (e) {
+          } catch (error) {
+            console.error('에러 발생:', error);
             reject(new Error(`Failed to parse JSON: ${e.message}`));
           }
         });
@@ -65,7 +66,7 @@ async function fetchAllIssues() {
 
   while (hasMore) {
     const endpoint = `/api/issues/search?componentKeys=${PROJECT_KEY}&ps=${pageSize}&p=${page}`;
-    const result = await apiCall(endpoint);
+    const _result = await apiCall(endpoint);
 
     allIssues.push(...result.issues);
 
@@ -87,7 +88,7 @@ async function fetchSecurityHotspots() {
 
   try {
     const endpoint = `/api/hotspots/search?projectKey=${PROJECT_KEY}&ps=500`;
-    const result = await apiCall(endpoint);
+    const _result = await apiCall(endpoint);
 
     console.log(`✅ ${result.hotspots?.length || 0}개 보안 핫스팟 발견\n`);
     return result.hotspots || [];
@@ -119,7 +120,7 @@ async function fetchMetrics() {
 
   try {
     const endpoint = `/api/measures/component?component=${PROJECT_KEY}&metricKeys=${metrics.join(',')}`;
-    const result = await apiCall(endpoint);
+    const _result = await apiCall(endpoint);
 
     console.log('✅ 메트릭 조회 완료\n');
     return result.component.measures;

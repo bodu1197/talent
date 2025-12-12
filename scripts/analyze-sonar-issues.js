@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const jsonPath = path.join(__dirname, '..', 'sonar_issues.json');
-const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+const _data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
 
 console.log('='.repeat(80));
 console.log('SonarQube 재스캔 결과 분석');

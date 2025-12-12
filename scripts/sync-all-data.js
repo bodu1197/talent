@@ -92,7 +92,7 @@ async function syncAllData() {
 
     // active로 변경
     if (activeIds.length > 0) {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('advertising_subscriptions')
         .update({
           status: 'active',
@@ -110,7 +110,7 @@ async function syncAllData() {
 
     // cancelled로 변경
     if (cancelledIds.length > 0) {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('advertising_subscriptions')
         .update({
           status: 'cancelled',
@@ -129,7 +129,7 @@ async function syncAllData() {
 
     // pending_payment로 변경
     if (pendingIds.length > 0) {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('advertising_subscriptions')
         .update({
           status: 'pending_payment',

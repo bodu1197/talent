@@ -33,7 +33,7 @@ async function applyMigrations() {
       try {
         await client.query(sql);
         console.log('✅ Migration applied successfully!\n');
-      } catch (err) {
+      } catch (error) {
         console.error('❌ Migration failed:', err.message);
         console.error('Details:', err);
         throw err;
@@ -42,7 +42,7 @@ async function applyMigrations() {
 
     console.log('\n🎉 All migrations completed successfully!');
 
-  } catch (err) {
+  } catch (error) {
     console.error('\n❌ Error:', err.message);
     process.exit(1);
   } finally {
@@ -54,7 +54,8 @@ async function applyMigrations() {
 try {
   require.resolve('pg');
   applyMigrations();
-} catch (e) {
+} catch (error) {
+  console.error('에러 발생:', error);
   console.log('📦 Installing pg package...\n');
   const { execSync } = require('child_process');
   execSync('npm install pg', { stdio: 'inherit' });

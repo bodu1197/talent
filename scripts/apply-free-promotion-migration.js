@@ -48,7 +48,7 @@ ON advertising_subscriptions(is_free_promotion)`
       const stmt = statements[i]
       console.log(`${i + 1}. Executing statement...`)
 
-      const { data, error } = await supabase.rpc('exec_sql', { sql_string: stmt })
+      const { error } = await supabase.rpc('exec_sql', { sql_string: stmt })
 
       if (error) {
         console.log(`   ℹ️  exec_sql not available, trying raw query...`)

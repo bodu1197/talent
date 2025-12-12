@@ -30,7 +30,8 @@ async function applyMigration() {
         ADD COLUMN IF NOT EXISTS is_online BOOLEAN DEFAULT false;
       `);
       console.log('✅ 위치 컬럼 추가 완료\n');
-    } catch (err) {
+    } catch (error) {
+      console.error('에러 발생:', error);
       if (err.message.includes('already exists')) {
         console.log('  - 컬럼이 이미 존재합니다\n');
       } else {
@@ -48,7 +49,8 @@ async function applyMigration() {
         WHERE is_online = true AND is_active = true;
       `);
       console.log('  - idx_helper_profiles_location 생성 완료');
-    } catch (err) {
+    } catch (error) {
+      console.error('에러 발생:', error);
       console.log('  - idx_helper_profiles_location:', err.message);
     }
 
@@ -59,7 +61,8 @@ async function applyMigration() {
         WHERE is_online = true AND is_active = true;
       `);
       console.log('  - idx_helper_profiles_online_active 생성 완료\n');
-    } catch (err) {
+    } catch (error) {
+      console.error('에러 발생:', error);
       console.log('  - idx_helper_profiles_online_active:', err.message, '\n');
     }
 
@@ -256,7 +259,7 @@ async function applyMigration() {
     console.log('  - get_nearby_helpers: 주변 라이더 목록 조회 (거리순)');
     console.log('  - get_nearby_errands: 주변 심부름 목록 조회 (거리순)');
 
-  } catch (err) {
+  } catch (error) {
     console.error('\n❌ 마이그레이션 오류:', err.message);
     console.error('상세:', err);
     process.exit(1);
@@ -269,7 +272,8 @@ async function applyMigration() {
 try {
   require.resolve('pg');
   applyMigration();
-} catch (e) {
+} catch (error) {
+  console.error('에러 발생:', error);
   console.log('📦 Installing pg package...\n');
   const { execSync } = require('child_process');
   execSync('npm install pg', { stdio: 'inherit' });

@@ -31,7 +31,7 @@ async function verifyFunctionSearchPath() {
     console.log('📊 함수 보안 설정 확인')
     console.log('-'.repeat(70))
 
-    const result = await client.query(`
+    const _result = await client.query(`
       SELECT
         p.proname as function_name,
         p.prosecdef as is_security_definer,

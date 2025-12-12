@@ -81,7 +81,7 @@ async function checkSonarQubeQualityGate() {
 
       response.on('end', () => {
         try {
-          const result = JSON.parse(data);
+          const _result = JSON.parse(data);
           if (result.projectStatus) {
             resolve(result.projectStatus);
           } else {

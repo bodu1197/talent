@@ -8,7 +8,7 @@ const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhY
 
 function executeSQL(sql) {
   return new Promise((resolve, reject) => {
-    const data = JSON.stringify({ query: sql });
+    const _data = JSON.stringify({ query: sql });
 
     const options = {
       hostname: 'bpvfkkrlyrjkwgwmfrci.supabase.co',
@@ -83,7 +83,7 @@ async function applyMigration() {
     }
 
     try {
-      const result = await executeSQL(statement + ';');
+      const _result = await executeSQL(statement + ';');
 
       if (result.success) {
         if (description) console.log('✅');

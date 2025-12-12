@@ -93,7 +93,7 @@ async function insertTestStores() {
   console.log('테스트 식당 데이터 입력 시작...');
 
   for (const store of testStores) {
-    const { data, error } = await supabase.from('food_stores').insert(store).select();
+    const { error } = await supabase.from('food_stores').insert(store).select();
 
     if (error) {
       console.error(`❌ ${store.name} 입력 실패:`, error.message);

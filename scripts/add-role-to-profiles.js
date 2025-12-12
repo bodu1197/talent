@@ -27,7 +27,7 @@ async function addRoleToProfiles() {
     AND p.role = 'buyer';
   `;
 
-  const { data, error } = await supabase.rpc('exec_sql', { sql_query: sql });
+  const { error } = await supabase.rpc('exec_sql', { sql_query: sql });
 
   if (error) {
     console.error('Error adding role column:', error);

@@ -41,7 +41,7 @@ async function fetchFunctionDefinitions() {
       console.log('-'.repeat(70))
 
       // 함수 정의 가져오기
-      const result = await client.query(`
+      const _result = await client.query(`
         SELECT
           p.proname as function_name,
           pg_get_functiondef(p.oid) as definition,

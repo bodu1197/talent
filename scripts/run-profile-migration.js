@@ -11,7 +11,8 @@ async function runMigration() {
   // Check if pg is installed
   try {
     require.resolve('pg');
-  } catch (e) {
+  } catch (error) {
+    console.error('에러 발생:', error);
     console.log('📦 Installing pg package...\n');
     const { execSync } = require('child_process');
     execSync('npm install pg', { stdio: 'inherit' });

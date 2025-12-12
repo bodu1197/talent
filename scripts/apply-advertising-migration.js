@@ -75,7 +75,7 @@ async function applyMigration() {
   ];
 
   for (const table of tables) {
-    const { count, error } = await supabase
+    const { error } = await supabase
       .from(table)
       .select('*', { count: 'exact', head: true });
 

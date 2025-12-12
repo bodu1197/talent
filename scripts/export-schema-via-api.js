@@ -41,7 +41,7 @@ async function exportSchema() {
       console.log(`Fetching structure for table: ${tableName}`);
 
       // Get a sample row to understand the structure
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from(tableName)
         .select('*')
         .limit(1);

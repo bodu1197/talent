@@ -10,7 +10,7 @@ const DB_PASSWORD = process.env.SUPABASE_DB_PASSWORD || 'chl1197dbA!@';
 async function executeSQL(sql) {
   return new Promise((resolve, reject) => {
     // Use Supabase Management API to execute SQL
-    const data = JSON.stringify({
+    const _data = JSON.stringify({
       query: sql
     });
 
@@ -40,9 +40,10 @@ async function executeSQL(sql) {
 
         if (res.statusCode >= 200 && res.statusCode < 300) {
           try {
-            const result = JSON.parse(body);
+            const _result = JSON.parse(body);
             resolve(result);
-          } catch (e) {
+          } catch (error) {
+            console.error('에러 발생:', error);
             resolve({ success: true, body });
           }
         } else {
@@ -76,7 +77,7 @@ async function runMigration() {
     console.log('🔄 Executing migration...');
     console.log('=' .repeat(60));
 
-    const result = await executeSQL(migrationSQL);
+    const _result = await executeSQL(migrationSQL);
 
     console.log('=' .repeat(60));
     console.log('✅ Migration executed!\n');

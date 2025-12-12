@@ -33,13 +33,13 @@ async function runSQL() {
     console.log('연결 성공!');
 
     console.log('SQL 실행 중...');
-    const result = await client.query(sql);
+    const _result = await client.query(sql);
     console.log('✅ SQL 실행 완료!');
 
     if (result.command) {
       console.log('실행된 명령:', result.command);
     }
-  } catch (err) {
+  } catch (error) {
     console.error('❌ SQL 실행 실패:', err.message);
     process.exit(1);
   } finally {

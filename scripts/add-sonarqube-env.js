@@ -17,7 +17,7 @@ try {
   envContent = fs.readFileSync(envPath, 'utf8');
   console.log('✅ .env.local 파일을 찾았습니다.');
 } catch (error) {
-  console.log('⚠️  .env.local 파일이 없습니다. 새로 생성합니다.');
+  console.log('⚠️  .env.local 파일이 없습니다. 새로 생성합니다.', error);
 }
 
 // SonarQube 설정이 이미 있는지 확인

@@ -105,7 +105,7 @@ async function createServices(sellerId, categoryId, categoryName, count = 10) {
     });
   }
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('services')
     .insert(services)
     .select();

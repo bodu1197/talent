@@ -16,7 +16,7 @@ async function applyMigration() {
     console.log('마이그레이션 실행 중...')
 
     // SQL 실행
-    const { data, error } = await supabase.rpc('exec_sql', { sql_query: sql })
+    const { error } = await supabase.rpc('exec_sql', { sql_query: sql })
 
     if (error) {
       console.error('마이그레이션 실패:', error)
@@ -25,7 +25,7 @@ async function applyMigration() {
 
     console.log('✅ 마이그레이션 성공!')
     console.log('결과:', data)
-  } catch (err) {
+  } catch (error) {
     console.error('오류:', err)
     process.exit(1)
   }

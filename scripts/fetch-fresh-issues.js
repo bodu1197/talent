@@ -57,7 +57,7 @@ function fetchIssues(page = 1, allIssues = []) {
               issues: newIssues,
             });
           }
-        } catch (e) {
+        } catch (error) {
           console.error('Parse error:', e.message);
           console.error('Response preview:', data.substring(0, 200));
           reject(e);

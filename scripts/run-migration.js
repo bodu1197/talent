@@ -31,7 +31,7 @@ async function runMigration() {
       console.log(`\n[${i + 1}/${statements.length}] 실행 중...`)
       console.log(statement.substring(0, 100) + '...')
 
-      const { data, error } = await supabase.rpc('exec_sql', {
+      const { error } = await supabase.rpc('exec_sql', {
         query: statement
       }).catch(async () => {
         // exec_sql이 없으면 직접 쿼리
@@ -56,7 +56,7 @@ async function runMigration() {
 
     console.log('\n🎉 마이그레이션 완료!')
 
-  } catch (err) {
+  } catch (error) {
     console.error('❌ 마이그레이션 실패:', err.message)
     process.exit(1)
   }

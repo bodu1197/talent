@@ -49,7 +49,7 @@ function fetchIssues(page = 1, allIssues = []) {
               issues: newIssues,
             });
           }
-        } catch (e) {
+        } catch (error) {
           console.error('Parse error:', e.message);
           reject(e);
         }

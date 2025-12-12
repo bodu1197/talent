@@ -7,7 +7,7 @@ const supabase = createClient(
 );
 
 async function checkPageViews() {
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('page_views')
     .select('*')
     .order('created_at', { ascending: false })

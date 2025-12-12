@@ -8,7 +8,7 @@ const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhY
 
 async function executeSql(sql) {
   return new Promise((resolve, reject) => {
-    const data = JSON.stringify({ query: sql })
+    const _data = JSON.stringify({ query: sql })
 
     const options = {
       hostname: `${PROJECT_REF}.supabase.co`,
@@ -51,7 +51,7 @@ async function runMigration() {
     console.log(sqlContent)
     console.log('\n---\n')
 
-    const result = await executeSql(sqlContent)
+    const _result = await executeSql(sqlContent)
 
     if (result.success) {
       console.log('✅ 마이그레이션 성공!')
@@ -63,7 +63,7 @@ async function runMigration() {
       console.log(`https://supabase.com/dashboard/project/${PROJECT_REF}/sql/new`)
     }
 
-  } catch (err) {
+  } catch (error) {
     console.error('❌ 오류:', err.message)
     console.log('\n💡 Supabase Dashboard SQL Editor에서 수동 실행을 권장합니다.')
     process.exit(1)

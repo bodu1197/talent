@@ -22,7 +22,7 @@ async function applyMigration(filePath, description) {
 
   try {
     // Execute SQL directly using Supabase SQL editor API
-    const response = await fetch(`${supabaseUrl}/rest/v1/rpc/exec`, {
+    const _response = await fetch(`${supabaseUrl}/rest/v1/rpc/exec`, {
       method: 'POST',
       headers: {
         'apikey': supabaseServiceKey,
@@ -33,7 +33,7 @@ async function applyMigration(filePath, description) {
     });
 
     // Alternative: Use psql-style execution
-    const { data, error } = await supabase.rpc('exec_sql', { sql });
+    const { error } = await supabase.rpc('exec_sql', { sql });
 
     if (error) {
       console.error('❌ Migration failed:', error.message);

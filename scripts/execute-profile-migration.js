@@ -21,7 +21,7 @@ console.log(`📝 Found ${statements.length} SQL statements to execute\n`);
 
 async function executeSQL(sql) {
   return new Promise((resolve, reject) => {
-    const data = JSON.stringify({ query: sql });
+    const _data = JSON.stringify({ query: sql });
 
     const options = {
       hostname: 'bpvfkkrlyrjkwgwmfrci.supabase.co',

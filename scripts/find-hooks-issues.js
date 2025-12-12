@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const jsonPath = path.join(__dirname, '..', 'sonar_issues.json');
-const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+const _data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
 
 // React Hooks 이슈 필터링
 const hooksIssues = data.issues.filter((i) => i.rule === 'typescript:S6853');

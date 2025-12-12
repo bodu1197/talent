@@ -38,7 +38,7 @@ async function verifyRLSOptimization() {
     let issuesFound = 0
 
     for (const tableName of tables) {
-      const result = await client.query(`
+      const _result = await client.query(`
         SELECT
           schemaname,
           tablename,

@@ -51,7 +51,7 @@ async function loadLeafCategories() {
 // 2. Auth 사용자 생성
 async function createAuthUser(email, password, name) {
   try {
-    const response = await fetch(AUTH_ADMIN_URL, {
+    const _response = await fetch(AUTH_ADMIN_URL, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${SERVICE_ROLE_KEY}`,
@@ -68,7 +68,7 @@ async function createAuthUser(email, password, name) {
       })
     });
 
-    const data = await response.json();
+    const _data = await response.json();
 
     if (!response.ok) {
       // 이미 존재하는 사용자인 경우
@@ -90,7 +90,7 @@ async function createSeller(userId, categoryId, categoryName, categorySlug) {
   const description = `${categoryName} 분야의 전문가입니다. 고객 만족을 최우선으로 생각하며, 최고의 품질을 제공합니다.`;
   const profileImage = `https://ui-avatars.com/api/?name=${encodeURIComponent(categoryName)}&background=0f3460&color=fff&size=200`;
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('sellers')
     .insert({
       user_id: userId,
@@ -129,7 +129,7 @@ async function createServices(sellerId, categoryId, categoryName, count = 10) {
     });
   }
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('services')
     .insert(services)
     .select();

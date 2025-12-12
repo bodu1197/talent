@@ -16,7 +16,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 (async () => {
   console.log('Checking advertising subscriptions...\n');
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('advertising_subscriptions')
     .select('id, seller_id, service_id, status, total_impressions, total_clicks, created_at')
     .in('status', ['active', 'pending_payment']);

@@ -1,0 +1,74 @@
+#!/usr/bin/env node
+
+/**
+ * Update Vercel environment variables with clean API keys (no newlines)
+ */
+
+const { execSync } = require('child_process');
+
+// Clean keys without any whitespace or newlines
+const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1Mzg5MjcsImV4cCI6MjA4MTExNDkyN30.gn5LpB2VFeE778IT-nIZlOUk7XHjR0pYHstDSVukgcY';
+const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NTUzODkyNywiZXhwIjoyMDgxMTE0OTI3fQ.6dk7o_z9Bp5MoG06obd4dk6fl_nRFiTJjLysfd-7Xo8';
+
+console.log('\n🔧 Updating Vercel Environment Variables (Clean)...\n');
+console.log('This will remove any newlines or whitespace from API keys\n');
+
+const environments = ['production', 'preview', 'development'];
+
+try {
+  // Update ANON KEY
+  console.log('📝 Updating NEXT_PUBLIC_SUPABASE_ANON_KEY...');
+  for (const env of environments) {
+    console.log(`   - ${env}...`);
+
+    // Remove old key
+    try {
+      execSync(`vercel env rm NEXT_PUBLIC_SUPABASE_ANON_KEY ${env} --yes`, {
+        stdio: 'pipe'
+      });
+    } catch (error) {
+      console.error('에러 발생:', error);
+      // Ignore if doesn't exist
+    }
+
+    // Add new clean key
+    execSync(`echo ${ANON_KEY} | vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY ${env}`, {
+      stdio: 'pipe'
+    });
+  }
+  console.log('   ✅ ANON KEY updated\n');
+
+  // Update SERVICE ROLE KEY
+  console.log('📝 Updating SUPABASE_SERVICE_ROLE_KEY...');
+  for (const env of environments) {
+    console.log(`   - ${env}...`);
+
+    // Remove old key
+    try {
+      execSync(`vercel env rm SUPABASE_SERVICE_ROLE_KEY ${env} --yes`, {
+        stdio: 'pipe'
+      });
+    } catch (error) {
+      console.error('에러 발생:', error);
+      // Ignore if doesn't exist
+    }
+
+    // Add new clean key
+    execSync(`echo ${SERVICE_KEY} | vercel env add SUPABASE_SERVICE_ROLE_KEY ${env}`, {
+      stdio: 'pipe'
+    });
+  }
+  console.log('   ✅ SERVICE ROLE KEY updated\n');
+
+  console.log('✅ All environment variables updated successfully!\n');
+  console.log('🚀 Triggering redeployment...\n');
+
+  // Trigger redeployment
+  execSync('vercel --prod', { stdio: 'inherit' });
+
+  console.log('\n✅ Deployment complete!\n');
+
+} catch (error) {
+  console.error('\n❌ Error:', error.message);
+  process.exit(1);
+}

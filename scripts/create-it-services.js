@@ -14,7 +14,7 @@ const AUTH_ADMIN_URL = `${SUPABASE_URL}/auth/v1/admin/users`;
 // Auth 사용자 생성
 async function createAuthUser(email, password, name) {
   try {
-    const response = await fetch(AUTH_ADMIN_URL, {
+    const _response = await fetch(AUTH_ADMIN_URL, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${SERVICE_ROLE_KEY}`,
@@ -31,7 +31,7 @@ async function createAuthUser(email, password, name) {
       })
     });
 
-    const data = await response.json();
+    const _data = await response.json();
 
     if (!response.ok) {
       if (data.msg && data.msg.includes('already been registered')) {
@@ -51,7 +51,7 @@ async function createSeller(userId, categoryName) {
   const businessName = `${categoryName} 전문가`;
   const bio = `${categoryName} 분야의 전문가입니다. 고품질 서비스를 제공합니다.`;
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('sellers')
     .insert({
       user_id: userId,

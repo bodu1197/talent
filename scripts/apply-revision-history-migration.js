@@ -30,7 +30,7 @@ async function applyMigration() {
     console.log(`✅ SQL 파일 저장됨: ${tempSqlPath}`)
     console.log('   이 파일을 Supabase Dashboard에 복사-붙여넣기 하세요.\n')
 
-  } catch (err) {
+  } catch (error) {
     console.error('❌ 오류:', err)
     process.exit(1)
   }

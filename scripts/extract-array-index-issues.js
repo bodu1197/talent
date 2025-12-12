@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const jsonPath = path.join(__dirname, '..', 'array_index_issues_full.json');
-const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+const _data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
 
 console.log('='.repeat(80));
 console.log('Array Index Issues - Full Analysis');
