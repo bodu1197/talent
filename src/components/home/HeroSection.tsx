@@ -180,7 +180,6 @@ export default function HeroSection() {
   const router = useRouter();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [hasRendered, setHasRendered] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = (e: React.FormEvent) => {
@@ -208,11 +207,6 @@ export default function HeroSection() {
   }, [currentSlide, performSlideTransition]);
 
   useEffect(() => {
-    // Mark as rendered after initial paint to enable transitions
-    setHasRendered(true);
-  }, []);
-
-  useEffect(() => {
     const timer = setInterval(advanceSlide, 8000);
     return () => clearInterval(timer);
   }, [advanceSlide]);
@@ -227,12 +221,12 @@ export default function HeroSection() {
           <div className="flex-1 w-full">
             <div className="mb-6 lg:mb-8 pt-5">
               <h1
-                className={`text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 mb-3 lg:mb-4 lg:min-h-[120px] leading-[1.6] whitespace-pre-line ${hasRendered ? 'transition-opacity duration-500' : ''} ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+                className={`text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 mb-3 lg:mb-4 lg:min-h-[120px] leading-[1.6] whitespace-pre-line transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
               >
                 {slide.title}
               </h1>
               <p
-                className={`text-sm sm:text-base text-gray-600 lg:min-h-[48px] leading-[1.5] ${hasRendered ? 'transition-opacity duration-500' : ''} ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+                className={`text-sm sm:text-base text-gray-600 lg:min-h-[48px] leading-[1.5] transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
               >
                 {slide.subtitle}
               </p>
@@ -334,7 +328,7 @@ export default function HeroSection() {
               return (
                 <div
                   key={`splatter-${slide.id}-${index}`}
-                  className={`absolute rounded-full ${hasRendered ? 'transition-all duration-500' : ''}`}
+                  className="absolute rounded-full transition-all duration-500"
                   style={{
                     width: `${drop.size}px`,
                     height: `${drop.size}px`,
@@ -346,19 +340,16 @@ export default function HeroSection() {
                     backgroundColor: slide.glowColor,
                     filter: drop.blur === 'none' ? 'none' : `blur(${blurValues[drop.blur]})`,
                     transform: drop.transform,
-                    willChange: hasRendered ? 'transform, opacity' : 'auto',
                   }}
                 />
               );
             })}
 
             {/* 메인 카드 - 배경 없이 내용만 표시 */}
-            <div
-              className={`relative p-5 sm:p-6 h-[250px] sm:h-[298px] flex flex-col ${hasRendered ? 'transition-all duration-500' : ''}`}
-            >
+            <div className="relative p-5 sm:p-6 h-[250px] sm:h-[298px] flex flex-col transition-all duration-500">
               {/* 아이콘 */}
               <div
-                className={`mb-4 ${hasRendered ? 'transition-opacity duration-500' : ''} ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+                className={`mb-4 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
               >
                 <div
                   className="w-14 h-14 rounded-full flex items-center justify-center text-white"
@@ -373,19 +364,19 @@ export default function HeroSection() {
 
               {/* 내용 */}
               <h2
-                className={`text-2xl font-semibold mb-2 text-gray-900 ${hasRendered ? 'transition-opacity duration-500' : ''} ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+                className={`text-2xl font-semibold mb-2 text-gray-900 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
                 style={{ textShadow: '0 2px 4px rgba(255, 255, 255, 0.5)' }}
               >
                 {slide.cardTitle}
               </h2>
               <p
-                className={`text-lg mb-3 text-gray-800 ${hasRendered ? 'transition-opacity duration-500' : ''} ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+                className={`text-lg mb-3 text-gray-800 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
                 style={{ textShadow: '0 1px 2px rgba(255, 255, 255, 0.5)' }}
               >
                 {slide.cardSubtitle}
               </p>
               <p
-                className={`text-sm text-gray-700 leading-relaxed line-clamp-3 mb-6 ${hasRendered ? 'transition-opacity duration-500' : ''} ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+                className={`text-sm text-gray-700 leading-relaxed line-clamp-3 mb-6 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
                 style={{ textShadow: '0 1px 2px rgba(255, 255, 255, 0.5)' }}
               >
                 {slide.cardDescription}
