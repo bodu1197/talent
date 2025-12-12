@@ -199,7 +199,7 @@ export default function ThirdHeroBanner() {
         {/* 헤더 */}
         <div className="text-center mb-6 md:mb-8">
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 mb-2">
-            <span className="text-orange-500">내 주변</span>의 프리미엄 전문가
+            <span className="text-orange-600">내 주변</span>의 프리미엄 전문가
           </h2>
           <p className="text-gray-500 text-sm md:text-base">
             가까운 곳에서 직접 만나는 전문가 서비스
