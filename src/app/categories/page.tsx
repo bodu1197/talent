@@ -1,6 +1,14 @@
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { getAllCategoriesTree } from '@/lib/categories';
-import MobileCategoryBrowser from '@/components/categories/MobileCategoryBrowser';
+
+// 모바일 카테고리 브라우저는 동적 로드 (초기 번들 크기 감소)
+const MobileCategoryBrowser = dynamic(
+  () => import('@/components/categories/MobileCategoryBrowser'),
+  {
+    loading: () => <div className="lg:hidden min-h-screen bg-gray-50 animate-pulse" />,
+  }
+);
 
 export const metadata = {
   title: '전체 카테고리 - 돌파구 | 수수료 0원 재능 거래',

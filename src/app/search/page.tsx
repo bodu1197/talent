@@ -1,10 +1,15 @@
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { searchAll } from '@/lib/supabase/queries/search';
 import SearchResults from '@/components/search/SearchResults';
-import MobileSearchContent from '@/components/search/MobileSearchContent';
 import { getTopLevelCategories } from '@/lib/categories';
 import { Search } from 'lucide-react';
+
+// 모바일 검색 컨텐츠는 동적 로드
+const MobileSearchContent = dynamic(() => import('@/components/search/MobileSearchContent'), {
+  loading: () => <div className="lg:hidden min-h-screen bg-gray-50 animate-pulse" />,
+});
 
 export const metadata: Metadata = {
   title: '검색 | 돌파구',

@@ -64,8 +64,14 @@ const nextConfig = {
     },
     // CSS 최적화 - 불필요한 preload 경고 방지
     optimizeCss: true,
-    // lucide-react 트리쉐이킹 최적화
-    optimizePackageImports: ['lucide-react'],
+    // 트리쉐이킹 최적화 - 자동 import 최적화
+    optimizePackageImports: [
+      'lucide-react',
+      '@supabase/supabase-js',
+      'date-fns',
+      'lodash',
+      'recharts',
+    ],
   },
   // 프로덕션에서 Source Map 비활성화 (CSP eval 차단)
   productionBrowserSourceMaps: false,

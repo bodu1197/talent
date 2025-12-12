@@ -2,19 +2,23 @@ import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { createClient } from '@/lib/supabase/server';
 import HeroWithCategories from '@/components/common/HeroWithCategories';
-import AITalentShowcase from '@/components/home/AITalentShowcase';
-import RecommendedServices from '@/components/home/RecommendedServices';
-import PersonalizedServices from '@/components/home/PersonalizedServices';
-import SellerRegistrationGuide from '@/components/home/SellerRegistrationGuide';
-import UserReviews from '@/components/home/UserReviews';
-// 비로그인 Above-the-fold 컴포넌트 - CLS 방지를 위해 일반 import
-import TrendingCategories from '@/components/home/TrendingCategories';
-import SecondHeroBanner from '@/components/home/SecondHeroBanner';
-import ThirdHeroBanner from '@/components/home/ThirdHeroBanner';
-import ErrandBannerStrip from '@/components/home/ErrandBannerStrip';
 import { Service } from '@/types';
 
-// 로그인 사용자 전용 컴포넌트 - dynamic import 유지
+// Above-the-fold: 즉시 로드 (LCP에 영향)
+// HeroWithCategories는 LCP에 영향을 주므로 즉시 로드
+
+// Below-the-fold: 동적 로드로 초기 번들 크기 감소
+const AITalentShowcase = dynamic(() => import('@/components/home/AITalentShowcase'));
+const RecommendedServices = dynamic(() => import('@/components/home/RecommendedServices'));
+const PersonalizedServices = dynamic(() => import('@/components/home/PersonalizedServices'));
+const SellerRegistrationGuide = dynamic(() => import('@/components/home/SellerRegistrationGuide'));
+const UserReviews = dynamic(() => import('@/components/home/UserReviews'));
+const TrendingCategories = dynamic(() => import('@/components/home/TrendingCategories'));
+const SecondHeroBanner = dynamic(() => import('@/components/home/SecondHeroBanner'));
+const ThirdHeroBanner = dynamic(() => import('@/components/home/ThirdHeroBanner'));
+const ErrandBannerStrip = dynamic(() => import('@/components/home/ErrandBannerStrip'));
+
+// 로그인 사용자 전용 컴포넌트
 const RecentVisitedCategories = dynamic(() => import('@/components/home/RecentVisitedCategories'));
 const RecentViewedServices = dynamic(() => import('@/components/home/RecentViewedServices'));
 
