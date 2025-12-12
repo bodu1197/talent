@@ -207,8 +207,12 @@ export default function HeroSection() {
   }, [currentSlide, performSlideTransition]);
 
   useEffect(() => {
-    const timer = setInterval(advanceSlide, 8000);
-    return () => clearInterval(timer);
+    const timerId = setTimeout(() => {
+      const intervalId = setInterval(advanceSlide, 8000);
+      return () => clearInterval(intervalId);
+    }, 2000); // Wait 2 seconds before starting the carousel
+
+    return () => clearTimeout(timerId);
   }, [advanceSlide]);
 
   const slide = slides[currentSlide];
