@@ -111,15 +111,33 @@ export interface GeoLocationResult {
   accuracy: number;
 }
 
+export interface GeolocationOptions {
+  enableHighAccuracy?: boolean; // GPS 사용 여부 (기본: true)
+  timeout?: number; // 타임아웃 (밀리초, 기본: 30000)
+  maximumAge?: number; // 캐시 유효시간 (밀리초, 기본: 300000)
+}
+
 /**
  * 브라우저 Geolocation API로 현재 위치 가져오기
+ * 오프라인 재능 거래 "내 주변" 기능에 최적화
+ *
+ * @param options - 위치 가져오기 옵션
+ *   - enableHighAccuracy: GPS 사용 여부 (기본: true, 정확한 위치)
+ *   - timeout: 타임아웃 (기본: 30초)
+ *   - maximumAge: 캐시 유효시간 (기본: 5분)
  */
-export function getCurrentPosition(): Promise<GeoLocationResult> {
+export function getCurrentPosition(options?: GeolocationOptions): Promise<GeoLocationResult> {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
       reject(new Error('Geolocation is not supported by this browser'));
       return;
     }
+
+    const defaultOptions: PositionOptions = {
+      enableHighAccuracy: options?.enableHighAccuracy ?? true, // 기본: GPS 사용 (정확함)
+      timeout: options?.timeout ?? 30000, // 기본: 30초
+      maximumAge: options?.maximumAge ?? 300000, // 기본: 5분 캐시
+    };
 
     // eslint-disable-next-line sonarjs/no-intrusive-permissions -- 위치 기반 서비스에 필수
     navigator.geolocation.getCurrentPosition(
@@ -145,11 +163,7 @@ export function getCurrentPosition(): Promise<GeoLocationResult> {
         }
         reject(new Error(message));
       },
-      {
-        enableHighAccuracy: false, // WiFi/IP 기반 위치 사용 (더 빠름)
-        timeout: 30000, // 30초로 증가
-        maximumAge: 300000, // 5분 캐시
-      }
+      defaultOptions
     );
   });
 }
