@@ -43,15 +43,8 @@ import {
 } from '@/lib/errand-pricing';
 import { useErrandPricing } from '@/hooks/useErrandPricing';
 
-// Daum Postcode 결과 타입
-interface DaumPostcodeResult {
-  address: string;
-  roadAddress: string;
-  jibunAddress: string;
-  zonecode: string;
-  sido: string;
-  sigungu: string;
-}
+// Daum Postcode 타입 import
+import type { DaumPostcodeData } from '@/types/daum-postcode';
 
 // 심부름 카테고리
 const CATEGORIES: { value: ErrandCategory; label: string; icon: React.ReactNode }[] = [
@@ -162,15 +155,32 @@ export default function NewErrandPage() {
 
   // Daum Postcode 스크립트 로드
   useEffect(() => {
-    if (typeof window !== 'undefined' && (window as Window & { daum?: unknown }).daum) {
+    // 이미 로드되어 있는지 확인
+    if (typeof window !== 'undefined' && window.daum?.Postcode) {
       setIsScriptLoaded(true);
       return;
     }
 
+    // 스크립트가 이미 추가되어 있는지 확인
+    const existingScript = document.querySelector('script[src*="postcode.v2.js"]');
+    if (existingScript) {
+      // 스크립트는 있지만 아직 로드 안 된 경우
+      existingScript.addEventListener('load', () => setIsScriptLoaded(true));
+      return;
+    }
+
+    // 새로 스크립트 추가
     const script = document.createElement('script');
-    script.src = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+    script.src = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
     script.async = true;
-    script.onload = () => setIsScriptLoaded(true);
+    script.onload = () => {
+      setIsScriptLoaded(true);
+      logger.info('Daum Postcode script loaded');
+    };
+    script.onerror = () => {
+      logger.error('Failed to load Daum Postcode script');
+      toast.error('주소 검색 기능을 불러올 수 없습니다');
+    };
     document.head.appendChild(script);
   }, []);
 
@@ -197,38 +207,66 @@ export default function NewErrandPage() {
 
   // 주소 검색 (출발지)
   const handlePickupSearch = () => {
-    if (!isScriptLoaded || !window.daum) return;
+    if (!isScriptLoaded) {
+      toast.error('주소 검색 기능을 로드하는 중입니다. 잠시 후 다시 시도해주세요.');
+      return;
+    }
 
-    new (window.daum as typeof window.daum).Postcode({
-      oncomplete: async (data: DaumPostcodeResult) => {
-        const address = data.roadAddress || data.jibunAddress || data.address;
-        const coords = await getCoordinates(address);
-        setPickup((prev) => ({
-          ...prev,
-          address,
-          lat: coords?.lat,
-          lng: coords?.lng,
-        }));
-      },
-    }).open();
+    if (!window.daum?.Postcode) {
+      toast.error('주소 검색 기능을 사용할 수 없습니다.');
+      logger.error('Daum Postcode not available');
+      return;
+    }
+
+    try {
+      new window.daum.Postcode({
+        oncomplete: async (data: DaumPostcodeData) => {
+          const address = data.roadAddress || data.jibunAddress || data.address;
+          const coords = await getCoordinates(address);
+          setPickup((prev) => ({
+            ...prev,
+            address,
+            lat: coords?.lat,
+            lng: coords?.lng,
+          }));
+        },
+      }).open();
+    } catch (error) {
+      logger.error('Failed to open address search:', error);
+      toast.error('주소 검색 창을 열 수 없습니다.');
+    }
   };
 
   // 주소 검색 (도착지)
   const handleDeliverySearch = () => {
-    if (!isScriptLoaded || !window.daum) return;
+    if (!isScriptLoaded) {
+      toast.error('주소 검색 기능을 로드하는 중입니다. 잠시 후 다시 시도해주세요.');
+      return;
+    }
 
-    new (window.daum as typeof window.daum).Postcode({
-      oncomplete: async (data: DaumPostcodeResult) => {
-        const address = data.roadAddress || data.jibunAddress || data.address;
-        const coords = await getCoordinates(address);
-        setDelivery((prev) => ({
-          ...prev,
-          address,
-          lat: coords?.lat,
-          lng: coords?.lng,
-        }));
-      },
-    }).open();
+    if (!window.daum?.Postcode) {
+      toast.error('주소 검색 기능을 사용할 수 없습니다.');
+      logger.error('Daum Postcode not available');
+      return;
+    }
+
+    try {
+      new window.daum.Postcode({
+        oncomplete: async (data: DaumPostcodeData) => {
+          const address = data.roadAddress || data.jibunAddress || data.address;
+          const coords = await getCoordinates(address);
+          setDelivery((prev) => ({
+            ...prev,
+            address,
+            lat: coords?.lat,
+            lng: coords?.lng,
+          }));
+        },
+      }).open();
+    } catch (error) {
+      logger.error('Failed to open address search:', error);
+      toast.error('주소 검색 창을 열 수 없습니다.');
+    }
   };
 
   // 현재 위치 가져오기
@@ -360,15 +398,29 @@ export default function NewErrandPage() {
 
   // 정차지 주소 검색
   const handleStopAddressSearch = (index: number) => {
-    if (!isScriptLoaded || !window.daum) return;
+    if (!isScriptLoaded) {
+      toast.error('주소 검색 기능을 로드하는 중입니다. 잠시 후 다시 시도해주세요.');
+      return;
+    }
 
-    new (window.daum as typeof window.daum).Postcode({
-      oncomplete: async (data: DaumPostcodeResult) => {
-        const address = data.roadAddress || data.jibunAddress || data.address;
-        const coords = await getCoordinates(address);
-        updateStopAddress(index, address, coords);
-      },
-    }).open();
+    if (!window.daum?.Postcode) {
+      toast.error('주소 검색 기능을 사용할 수 없습니다.');
+      logger.error('Daum Postcode not available');
+      return;
+    }
+
+    try {
+      new window.daum.Postcode({
+        oncomplete: async (data: DaumPostcodeData) => {
+          const address = data.roadAddress || data.jibunAddress || data.address;
+          const coords = await getCoordinates(address);
+          updateStopAddress(index, address, coords);
+        },
+      }).open();
+    } catch (error) {
+      logger.error('Failed to open address search:', error);
+      toast.error('주소 검색 창을 열 수 없습니다.');
+    }
   };
 
   // 구매대행 품목 추가
@@ -391,19 +443,33 @@ export default function NewErrandPage() {
 
   // 구매대행 특정 장소 주소 검색
   const handleShoppingLocationSearch = () => {
-    if (!isScriptLoaded || !window.daum) return;
+    if (!isScriptLoaded) {
+      toast.error('주소 검색 기능을 로드하는 중입니다. 잠시 후 다시 시도해주세요.');
+      return;
+    }
 
-    new (window.daum as typeof window.daum).Postcode({
-      oncomplete: async (data: DaumPostcodeResult) => {
-        const address = data.roadAddress || data.jibunAddress || data.address;
-        const coords = await getCoordinates(address);
-        setShoppingLocation({
-          address,
-          lat: coords?.lat,
-          lng: coords?.lng,
-        });
-      },
-    }).open();
+    if (!window.daum?.Postcode) {
+      toast.error('주소 검색 기능을 사용할 수 없습니다.');
+      logger.error('Daum Postcode not available');
+      return;
+    }
+
+    try {
+      new window.daum.Postcode({
+        oncomplete: async (data: DaumPostcodeData) => {
+          const address = data.roadAddress || data.jibunAddress || data.address;
+          const coords = await getCoordinates(address);
+          setShoppingLocation({
+            address,
+            lat: coords?.lat,
+            lng: coords?.lng,
+          });
+        },
+      }).open();
+    } catch (error) {
+      logger.error('Failed to open address search:', error);
+      toast.error('주소 검색 창을 열 수 없습니다.');
+    }
   };
 
   // 기본 필드 검증

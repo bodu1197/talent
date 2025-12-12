@@ -2,34 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { reverseGeocode, getCurrentPosition, extractRegion } from '@/lib/location/address-api';
-
-// Daum Postcode 타입 선언
-declare global {
-  interface Window {
-    daum: {
-      Postcode: new (options: {
-        oncomplete: (data: DaumPostcodeResult) => void;
-        onclose?: () => void;
-        width?: string | number;
-        height?: string | number;
-      }) => {
-        embed: (element: HTMLElement) => void;
-        open: () => void;
-      };
-    };
-  }
-}
-
-interface DaumPostcodeResult {
-  address: string; // 기본 주소
-  roadAddress: string; // 도로명 주소
-  jibunAddress: string; // 지번 주소
-  zonecode: string; // 우편번호
-  sido: string; // 시도
-  sigungu: string; // 시군구
-  bname: string; // 법정동명
-  buildingName: string; // 건물명
-}
+import type { DaumPostcodeData } from '@/types/daum-postcode';
 
 // 아이콘 컴포넌트
 const MapPinIcon = ({ className }: { className?: string }) => (
@@ -161,11 +134,17 @@ export default function LocationInputSection({
   const handleOpenPostcode = () => {
     if (!isScriptLoaded || disabled) return;
 
+    if (!window.daum?.Postcode) {
+      setLocationError('주소 검색 기능을 사용할 수 없습니다');
+      return;
+    }
+
     setLocationError(null);
     setIsSearching(true);
 
     new window.daum.Postcode({
-      oncomplete: async (data: DaumPostcodeResult) => {
+      oncomplete: async (data: DaumPostcodeData) => {
+        // 신주소(도로명주소) 우선, 없으면 구주소(지번주소) 사용
         const address = data.roadAddress || data.jibunAddress || data.address;
         const region = data.sigungu || extractRegion(address);
 
