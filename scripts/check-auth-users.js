@@ -5,7 +5,7 @@ const https = require('https');
 const NEW_PROJECT_ID = 'abroivxthindezdtdzmj';
 const NEW_ACCESS_TOKEN = 'sbp_f40b15f794e727f0aa9161de38c497174fcac2ee';
 
-function executeQuery(projectId, token, query) {
+function executeQuery(projectId, token, _query) {
   return new Promise((resolve, reject) => {
 
     const options = {

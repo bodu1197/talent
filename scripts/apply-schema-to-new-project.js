@@ -12,7 +12,7 @@ const NEW_PROJECT_ID = process.argv[2] || 'abroivxthindezdtdzmj';
 const NEW_ACCESS_TOKEN = process.argv[3] || 'sb_secret_yjCABwj3zJbfvFsJ4baU4A_4b3YUPvT';
 const SCHEMA_FILE = path.join(__dirname, '..', 'complete-schema.sql');
 
-function executeQuery(query) {
+function executeQuery(_query) {
   return new Promise((resolve, reject) => {
 
     const options = {

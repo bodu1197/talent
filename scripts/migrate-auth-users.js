@@ -13,7 +13,7 @@ const OLD_ACCESS_TOKEN = 'sbp_140ed0f35c7b31aa67f56bdca11db02fd469802f';
 const NEW_PROJECT_REF = 'abroivxthindezdtdzmj';
 const NEW_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NTUzODkyNywiZXhwIjoyMDgxMTE0OTI3fQ.6dk7o_z9Bp5MoG06obd4dk6fl_nRFiTJjLysfd-7Xo8';
 
-function executeQuery(projectId, token, query) {
+function executeQuery(projectId, token, _query) {
   return new Promise((resolve, reject) => {
 
     const options = {
@@ -49,7 +49,7 @@ function executeQuery(projectId, token, query) {
   });
 }
 
-function createUser(projectRef, serviceKey, userData) {
+function createUser(projectRef, serviceKey, _userData) {
   return new Promise((resolve, reject) => {
 
     const options = {

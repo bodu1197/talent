@@ -23,7 +23,7 @@ function fixUnusedVariables(content, filename) {
   ];
 
   for (const pattern of unusedConstPatterns) {
-    const before = modified;
+    const _before = modified;
     modified = modified.replace(pattern, (match) => {
       // Extract the await expression and preserve it without assignment
       const awaitMatch = match.match(/await ([^;]+);/);
@@ -64,7 +64,7 @@ function fixUnusedVariables(content, filename) {
   ];
 
   for (const pattern of unusedTopLevel) {
-    const before = modified;
+    const _before = modified;
     modified = modified.replace(pattern, (match) => {
       changes++;
       return `// ${match} // unused`;
@@ -73,13 +73,13 @@ function fixUnusedVariables(content, filename) {
 
   // Pattern 5: function parameters that are never used
   // function executeStatementViaRest(...) -> function _executeStatementViaRest(...)
-  modified = modified.replace(/function executeStatementViaRest\(/g, (match) => {
+  modified = modified.replace(/function executeStatementViaRest\(/g, (_match) => {
     changes++;
     return 'function _executeStatementViaRest(';
   });
 
   // Pattern 6: const testData = ... (simple assignment, never used)
-  modified = modified.replace(/\bconst testData = /g, (match) => {
+  modified = modified.replace(/\bconst testData = /g, (_match) => {
     changes++;
     return 'const _testData = ';
   });

@@ -15,7 +15,7 @@ const NEW_PROJECT_ID = process.argv[2] || 'abroivxthindezdtdzmj';
 const NEW_ACCESS_TOKEN = process.argv[3] || 'sbp_f40b15f794e727f0aa9161de38c497174fcac2ee';
 const SCHEMA_DIR = path.join(__dirname, '..', 'schema-parts');
 
-function executeQuery(query) {
+function executeQuery(_query) {
   return new Promise((resolve, reject) => {
 
     const options = {

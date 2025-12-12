@@ -149,7 +149,7 @@ INSERT INTO notices (title, content, category, is_important, is_published) VALUE
 ON CONFLICT DO NOTHING;
 `;
 
-async function runQuery(query) {
+async function runQuery(_query) {
   return new Promise((resolve, reject) => {
 
     const options = {

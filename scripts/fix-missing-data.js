@@ -126,7 +126,7 @@ async function importWithRetry(tableName, maxRetries = 3) {
           successCount++;
           success = true;
 
-        } catch (error) {
+        } catch {
           if (attempt === maxRetries - 1) {
             failCount++;
           }
@@ -206,7 +206,7 @@ async function main() {
       const result = await executeQuery(`SELECT COUNT(*) as count FROM "${tableName}"`);
       const count = result[0].count;
       console.log(`   ${tableName}: ${count} rows`);
-    } catch (e) {
+    } catch {
       console.log(`   ${tableName}: Error`);
     }
   }

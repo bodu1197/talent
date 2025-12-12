@@ -61,7 +61,7 @@ async function getAllAuthUsers() {
 }
 
 // 3. Seller 생성
-async function createSeller(userId, categoryId, categoryName, categorySlug) {
+async function createSeller(userId, categoryId, categoryName, _categorySlug) {
   const businessName = `${categoryName} 스튜디오`;
   const bio = `${categoryName} 분야의 전문가입니다. 고객 만족을 최우선으로 생각하며, 최고의 품질을 제공합니다.`;
 

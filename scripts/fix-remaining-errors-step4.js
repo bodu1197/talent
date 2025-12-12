@@ -88,7 +88,7 @@ function fixRemainingErrors(content, filename) {
   });
 
   // 10. Useless catch blocks that just rethrow
-  modified = modified.replace(/} catch \(error\) \{\s*\n\s*throw error;\s*\n\s*\}/g, (match) => {
+  modified = modified.replace(/} catch \(error\) \{\s*\n\s*throw error;\s*\n\s*\}/g, (_match) => {
     changes++;
     return ''; // Remove the try/catch entirely - ESLint should handle this
   });

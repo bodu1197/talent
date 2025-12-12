@@ -1,0 +1,43 @@
+===========================================
+Vercel 환경변수 수동 업데이트 명령어
+===========================================
+
+아래 명령어를 순서대로 실행하세요:
+
+1️⃣ NEXT_PUBLIC_SUPABASE_URL 삭제:
+vercel env rm NEXT_PUBLIC_SUPABASE_URL
+
+2️⃣ NEXT_PUBLIC_SUPABASE_URL 추가:
+vercel env add NEXT_PUBLIC_SUPABASE_URL
+(값 입력: https://abroivxthindezdtdzmj.supabase.co)
+(환경 선택: a - All environments)
+
+---
+
+3️⃣ NEXT_PUBLIC_SUPABASE_ANON_KEY 삭제:
+vercel env rm NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+4️⃣ NEXT_PUBLIC_SUPABASE_ANON_KEY 추가:
+vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY
+(값 입력: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5ODk3NjcsImV4cCI6MjA0OTU2NTc2N30.P-pJc-qGUYdw8z_jNmG-p8kE1TlhCpNzmYR4EBBZUBs)
+(환경 선택: a - All environments)
+
+---
+
+5️⃣ SUPABASE_SERVICE_ROLE_KEY 삭제:
+vercel env rm SUPABASE_SERVICE_ROLE_KEY
+
+6️⃣ SUPABASE_SERVICE_ROLE_KEY 추가:
+vercel env add SUPABASE_SERVICE_ROLE_KEY
+(값 입력: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzk4OTc2NywiZXhwIjoyMDQ5NTY1NzY3fQ.sb_secret_yjCABwj3zJbfvFsJ4baU4A_4b3YUPvT)
+(환경 선택: a - All environments)
+
+---
+
+7️⃣ 확인:
+vercel env ls
+
+===========================================
+또는 Vercel 대시보드에서 직접 변경:
+https://vercel.com/soriplays-projects/talent/settings/environment-variables
+===========================================

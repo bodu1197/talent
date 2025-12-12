@@ -24,7 +24,7 @@ if (!VERCEL_TOKEN) {
   process.exit(1);
 }
 
-function makeRequest(method, path, body) {
+function makeRequest(method, path, _body) {
   return new Promise((resolve, reject) => {
 
     const options = {
