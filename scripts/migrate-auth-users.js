@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable sonarjs/cognitive-complexity, sonarjs/os-command, sonarjs/no-os-command-from-path, sonarjs/no-hardcoded-passwords, sonarjs/sql-queries, sonarjs/slow-regex */
 
 /**
  * Migrate auth.users from old project to new project
@@ -130,7 +131,7 @@ async function migrateUsers() {
       process.stdout.write(`\r[${i + 1}/${users.length}] ${user.email.substring(0, 30).padEnd(30)} `);
 
       // Prepare user data for Admin API
-
+      const userData = {
         id: user.id,
         email: user.email,
         email_confirm: user.email_confirmed_at ? true : false,

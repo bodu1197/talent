@@ -1,0 +1,164 @@
+[
+  {
+    "id": "4f6a55ae-bc2b-4531-adba-f13c56f228ab",
+    "revision_id": "0d107293-dd0b-4a75-ba85-da3ee2b652cb",
+    "category_id": "560825ff-712f-4396-82e1-357c4aa16b06",
+    "created_at": "2025-11-19 08:25:43.510403+00"
+  },
+  {
+    "id": "8de76350-e25c-4b1d-a0a7-fdee6fad0b61",
+    "revision_id": "2df6978a-ee31-436f-bd77-e5021fd1440b",
+    "category_id": "560825ff-712f-4396-82e1-357c4aa16b06",
+    "created_at": "2025-11-19 08:30:23.313684+00"
+  },
+  {
+    "id": "fd3d81d7-6850-4f7b-9595-1da8409f6be4",
+    "revision_id": "98c916b4-3b0c-475b-90b7-cd099873e74d",
+    "category_id": "560825ff-712f-4396-82e1-357c4aa16b06",
+    "created_at": "2025-11-19 08:36:29.484262+00"
+  },
+  {
+    "id": "edc18b48-d8d0-44b0-b962-6d3c4e5e3189",
+    "revision_id": "a7e1185f-4be6-425e-8871-9dc88d4ceb00",
+    "category_id": "560825ff-712f-4396-82e1-357c4aa16b06",
+    "created_at": "2025-11-19 08:44:50.24352+00"
+  },
+  {
+    "id": "969ce0e9-c83d-4826-ad88-5331dd148a83",
+    "revision_id": "8c209115-c1da-4585-9dc8-4a8c0d7598e5",
+    "category_id": "bdf52812-1b1c-4dee-b9db-845936cf0a11",
+    "created_at": "2025-11-02 05:27:36.781807+00"
+  },
+  {
+    "id": "5bf357b9-7ccb-41e1-8a8c-900c12f9f152",
+    "revision_id": "e6530488-78f2-4a44-8f61-5752c002fa3e",
+    "category_id": "bdf52812-1b1c-4dee-b9db-845936cf0a11",
+    "created_at": "2025-11-03 06:13:31.159656+00"
+  },
+  {
+    "id": "48404856-93c0-4839-ac71-0ea90ff652fe",
+    "revision_id": "70f33998-f7ed-42df-b0c1-2ceae7b4767d",
+    "category_id": "bdf52812-1b1c-4dee-b9db-845936cf0a11",
+    "created_at": "2025-11-03 06:23:19.130953+00"
+  },
+  {
+    "id": "4db78789-269b-4891-a9a8-c133eed35e1f",
+    "revision_id": "2d9369f3-db73-4010-8a5a-0183cdd7c6fb",
+    "category_id": "bdf52812-1b1c-4dee-b9db-845936cf0a11",
+    "created_at": "2025-11-03 06:30:13.767164+00"
+  },
+  {
+    "id": "ecf5ff14-6c69-4577-ae31-0aee7e3b6609",
+    "revision_id": "721114d1-f580-47df-9050-646b56fd770e",
+    "category_id": "bdf52812-1b1c-4dee-b9db-845936cf0a11",
+    "created_at": "2025-11-03 06:33:01.428679+00"
+  },
+  {
+    "id": "3a7e4da6-d69b-4909-b22c-f668a6e1ea3a",
+    "revision_id": "2dd1c666-dbfa-406a-b1e3-e1be8e1e8e8b",
+    "category_id": "dcb2e25b-369f-4b8c-a0b6-9c198184bdce",
+    "created_at": "2025-12-03 07:08:21.025013+00"
+  },
+  {
+    "id": "e67d527f-9257-4991-a0de-f3bdf20f0d67",
+    "revision_id": "2dd1c666-dbfa-406a-b1e3-e1be8e1e8e8b",
+    "category_id": "4817b24c-10a7-4774-98d8-7100222f62e1",
+    "created_at": "2025-12-03 07:08:21.025013+00"
+  },
+  {
+    "id": "0f81adf3-c3c2-4308-a90a-5f40b1f00f75",
+    "revision_id": "2dd1c666-dbfa-406a-b1e3-e1be8e1e8e8b",
+    "category_id": "843ca7b7-38bc-4ac9-9865-40afbb260794",
+    "created_at": "2025-12-03 07:08:21.025013+00"
+  },
+  {
+    "id": "d173024d-ab3a-422b-b83c-9e9626eb3d94",
+    "revision_id": "f33c1893-0fcb-4167-9149-47dc5994eb7b",
+    "category_id": "dcb2e25b-369f-4b8c-a0b6-9c198184bdce",
+    "created_at": "2025-12-03 07:12:44.332886+00"
+  },
+  {
+    "id": "16b02364-d4bf-41e4-b4e8-a6e6dd132196",
+    "revision_id": "f33c1893-0fcb-4167-9149-47dc5994eb7b",
+    "category_id": "4817b24c-10a7-4774-98d8-7100222f62e1",
+    "created_at": "2025-12-03 07:12:44.332886+00"
+  },
+  {
+    "id": "8e0e5fd0-604d-426d-9216-df8ef88151ff",
+    "revision_id": "f33c1893-0fcb-4167-9149-47dc5994eb7b",
+    "category_id": "843ca7b7-38bc-4ac9-9865-40afbb260794",
+    "created_at": "2025-12-03 07:12:44.332886+00"
+  },
+  {
+    "id": "c81c6053-c042-4446-b3bc-3f96991b6d65",
+    "revision_id": "2d92b11d-f232-4a28-82a3-9be15af44245",
+    "category_id": "dcb2e25b-369f-4b8c-a0b6-9c198184bdce",
+    "created_at": "2025-12-03 07:29:13.133055+00"
+  },
+  {
+    "id": "97b4625d-f273-4b26-b232-1e7af966e9c5",
+    "revision_id": "2d92b11d-f232-4a28-82a3-9be15af44245",
+    "category_id": "4817b24c-10a7-4774-98d8-7100222f62e1",
+    "created_at": "2025-12-03 07:29:13.133055+00"
+  },
+  {
+    "id": "01c33bd6-d2df-4858-b227-b2470097596d",
+    "revision_id": "2d92b11d-f232-4a28-82a3-9be15af44245",
+    "category_id": "843ca7b7-38bc-4ac9-9865-40afbb260794",
+    "created_at": "2025-12-03 07:29:13.133055+00"
+  },
+  {
+    "id": "50061401-3ff1-43df-8d45-7509671151e8",
+    "revision_id": "fe921b15-238a-4b4a-9fa2-30a85db36340",
+    "category_id": "dcb2e25b-369f-4b8c-a0b6-9c198184bdce",
+    "created_at": "2025-12-03 07:33:43.242665+00"
+  },
+  {
+    "id": "31acf232-d368-463b-a35c-ddfacce77bf7",
+    "revision_id": "fe921b15-238a-4b4a-9fa2-30a85db36340",
+    "category_id": "4817b24c-10a7-4774-98d8-7100222f62e1",
+    "created_at": "2025-12-03 07:33:43.242665+00"
+  },
+  {
+    "id": "ec27d42c-a8ed-4f60-b7fa-bd53e844c972",
+    "revision_id": "fe921b15-238a-4b4a-9fa2-30a85db36340",
+    "category_id": "843ca7b7-38bc-4ac9-9865-40afbb260794",
+    "created_at": "2025-12-03 07:33:43.242665+00"
+  },
+  {
+    "id": "3bd1f2e4-0302-4398-9311-0934c4e5d3f9",
+    "revision_id": "fd967cb3-39e0-48cb-826e-d5d615f534a5",
+    "category_id": "dcb2e25b-369f-4b8c-a0b6-9c198184bdce",
+    "created_at": "2025-12-03 07:37:35.92111+00"
+  },
+  {
+    "id": "46b491c8-03c4-404a-8f48-69f7647d7781",
+    "revision_id": "fd967cb3-39e0-48cb-826e-d5d615f534a5",
+    "category_id": "4817b24c-10a7-4774-98d8-7100222f62e1",
+    "created_at": "2025-12-03 07:37:35.92111+00"
+  },
+  {
+    "id": "86288cf6-03c0-4a4f-9062-7bdf0d744207",
+    "revision_id": "fd967cb3-39e0-48cb-826e-d5d615f534a5",
+    "category_id": "843ca7b7-38bc-4ac9-9865-40afbb260794",
+    "created_at": "2025-12-03 07:37:35.92111+00"
+  },
+  {
+    "id": "1cd94bbb-5d2c-439f-85de-fca61519e440",
+    "revision_id": "0dc3100f-047f-4011-b596-ceee61ed6a1d",
+    "category_id": "dcb2e25b-369f-4b8c-a0b6-9c198184bdce",
+    "created_at": "2025-12-03 09:07:55.688925+00"
+  },
+  {
+    "id": "495cf940-48fa-452e-8ea2-dba8d2d72aef",
+    "revision_id": "0dc3100f-047f-4011-b596-ceee61ed6a1d",
+    "category_id": "4817b24c-10a7-4774-98d8-7100222f62e1",
+    "created_at": "2025-12-03 09:07:55.688925+00"
+  },
+  {
+    "id": "0f49e4d3-3c7d-4324-8eff-9beb924634e6",
+    "revision_id": "0dc3100f-047f-4011-b596-ceee61ed6a1d",
+    "category_id": "843ca7b7-38bc-4ac9-9865-40afbb260794",
+    "created_at": "2025-12-03 09:07:55.688925+00"
+  }
+]

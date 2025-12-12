@@ -1,0 +1,27 @@
+[
+  {
+    "id": "a33d475c-fece-40b0-b98a-04c89683eff0",
+    "subscription_id": "3d1168b2-c13d-463b-af2f-44b8c145617f",
+    "seller_id": "60d6e3d2-37b1-4ca7-8604-0aa1a7a5b98d",
+    "amount": 220000,
+    "payment_method": "bank_transfer",
+    "status": "completed",
+    "depositor_name": null,
+    "bank_name": null,
+    "deposit_date": null,
+    "deposit_time": null,
+    "receipt_image": null,
+    "pg_transaction_id": null,
+    "card_company": null,
+    "card_number_masked": null,
+    "paid_at": null,
+    "confirmed_at": "2025-11-14 22:59:01.749+00",
+    "confirmed_by": "a2674414-a5c4-451e-abbf-879c14506b05",
+    "admin_memo": null,
+    "created_at": "2025-11-14 21:12:32.752193+00",
+    "updated_at": "2025-11-14 22:59:01.845686+00",
+    "supply_amount": 200000,
+    "tax_amount": 20000,
+    "tax_invoice_id": null
+  }
+]

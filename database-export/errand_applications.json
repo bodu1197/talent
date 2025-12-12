@@ -1,0 +1,32 @@
+[
+  {
+    "id": "452c5a52-7938-4265-9d73-e90b738129ed",
+    "errand_id": "90e461d4-696f-4163-9cac-091543dbc22c",
+    "helper_id": "8f32a8da-8599-4629-9abf-185adc3ecb02",
+    "message": null,
+    "proposed_price": null,
+    "status": "pending",
+    "created_at": "2025-12-05 08:26:49.441113+00",
+    "updated_at": "2025-12-05 08:26:49.441113+00"
+  },
+  {
+    "id": "d200fb2d-aac3-4930-94bf-2da7b59afe0e",
+    "errand_id": "a06572f1-1f2c-455d-874b-990d5948fc0c",
+    "helper_id": "8f32a8da-8599-4629-9abf-185adc3ecb02",
+    "message": null,
+    "proposed_price": null,
+    "status": "accepted",
+    "created_at": "2025-12-05 10:20:36.637229+00",
+    "updated_at": "2025-12-05 10:20:36.637229+00"
+  },
+  {
+    "id": "f2b50e55-dc93-4193-bbc7-e8ec6283c3cf",
+    "errand_id": "75ccfdb5-3768-48ed-8c90-4bad25af9bd1",
+    "helper_id": "8f32a8da-8599-4629-9abf-185adc3ecb02",
+    "message": null,
+    "proposed_price": null,
+    "status": "accepted",
+    "created_at": "2025-12-05 10:29:22.637414+00",
+    "updated_at": "2025-12-05 10:29:22.637414+00"
+  }
+]

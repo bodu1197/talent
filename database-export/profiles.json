@@ -1,0 +1,302 @@
+[
+  {
+    "id": "cab6d73f-1bd1-4fb1-b5e6-d0bd842d1aac",
+    "user_id": "b69245ab-9beb-4723-bd19-8cc1cd065fd5",
+    "name": "안미래 메이크업",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:27.690344+00",
+    "updated_at": "2025-12-03 02:01:27.690344+00",
+    "role": "buyer"
+  },
+  {
+    "id": "acadc6bd-1dfc-46dd-a1fc-2cc687797faf",
+    "user_id": "0fefd860-b14f-403d-83d9-ce36a88ed37c",
+    "name": "유서연 살롱",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:27.125778+00",
+    "updated_at": "2025-12-03 02:01:27.125778+00",
+    "role": "buyer"
+  },
+  {
+    "id": "b97b9c1d-b3ed-4040-99bb-3c725abe2dbc",
+    "user_id": "cb45fbd8-c643-4898-bc62-547a72e130a6",
+    "name": "홍지원 스튜디오",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:26.585363+00",
+    "updated_at": "2025-12-03 02:01:26.585363+00",
+    "role": "buyer"
+  },
+  {
+    "id": "66c79538-be99-48e8-a7eb-7a03f0238803",
+    "user_id": "e4c6958a-7cdc-422b-8316-a9f86172f29b",
+    "name": "전유나 뷰티샵",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:26.070461+00",
+    "updated_at": "2025-12-03 02:01:26.070461+00",
+    "role": "buyer"
+  },
+  {
+    "id": "e24708d2-7c29-43c0-9a9c-e8891c222f3e",
+    "user_id": "ccf26cba-d1d5-4aae-b5d9-0fe85449f086",
+    "name": "이것저것 문제연구소",
+    "profile_image": "https://bpvfkkrlyrjkwgwmfrci.supabase.co/storage/v1/object/public/profiles/profiles/ccf26cba-d1d5-4aae-b5d9-0fe85449f086_1763511498376.jpg",
+    "bio": "노련한 프로다 ",
+    "created_at": "2025-11-13 23:00:25.429638+00",
+    "updated_at": "2025-11-30 00:48:29.431+00",
+    "role": "seller"
+  },
+  {
+    "id": "015c5770-65bc-42e6-8d20-4e5b80c215a8",
+    "user_id": "d17c8881-5f60-4316-ac0b-2905cb1ae762",
+    "name": "장소희 스타일리스트",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:25.536794+00",
+    "updated_at": "2025-12-03 02:01:25.536794+00",
+    "role": "buyer"
+  },
+  {
+    "id": "c9effb94-74ef-4f1e-886f-3495d37efe86",
+    "user_id": "f1ea6d0b-c373-427a-b8ed-9f2e4c0e87f1",
+    "name": "산뜻한강",
+    "profile_image": "https://bpvfkkrlyrjkwgwmfrci.supabase.co/storage/v1/object/public/profiles/profiles/f1ea6d0b-c373-427a-b8ed-9f2e4c0e87f1_1763490288175.png",
+    "bio": null,
+    "created_at": "2025-11-18 18:19:46.991319+00",
+    "updated_at": "2025-11-18 18:24:48.454+00",
+    "role": "buyer"
+  },
+  {
+    "id": "e9f8c10b-09f7-47e7-bb5f-5bc464390c1a",
+    "user_id": "47d56e63-920b-4634-bd73-a0522b20b095",
+    "name": "남채린 디자이너",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:25.01347+00",
+    "updated_at": "2025-12-03 02:01:25.01347+00",
+    "role": "buyer"
+  },
+  {
+    "id": "62b4060a-e1f8-4ef2-82b6-17a6a52712e3",
+    "user_id": "510c9930-bc8c-46eb-82ae-da5c396710cb",
+    "name": "보라파도",
+    "profile_image": "https://bpvfkkrlyrjkwgwmfrci.supabase.co/storage/v1/object/public/profiles/profiles/510c9930-bc8c-46eb-82ae-da5c396710cb_1763490289241.png",
+    "bio": null,
+    "created_at": "2025-11-17 08:43:31.606806+00",
+    "updated_at": "2025-11-18 18:24:49.488+00",
+    "role": "buyer"
+  },
+  {
+    "id": "73d9a12d-a578-466e-b4fb-9ea94689883f",
+    "user_id": "51e683b7-9e41-45c1-acc1-baf3437c07b5",
+    "name": "백서윤 아티스트",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:24.492002+00",
+    "updated_at": "2025-12-03 02:01:24.492002+00",
+    "role": "buyer"
+  },
+  {
+    "id": "9a31c07b-54bc-45fe-b5ba-89866a868af2",
+    "user_id": "5922c985-c778-41d0-a27c-c98bfe18683b",
+    "name": "류하은 대표",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:23.980217+00",
+    "updated_at": "2025-12-03 02:01:23.980217+00",
+    "role": "buyer"
+  },
+  {
+    "id": "2c392087-1a9c-4032-9a41-42b08e9d3fdb",
+    "user_id": "8200da25-dece-4dab-8b41-c57b5cd3f78e",
+    "name": "송유진 실장",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:23.443388+00",
+    "updated_at": "2025-12-03 02:01:23.443388+00",
+    "role": "buyer"
+  },
+  {
+    "id": "45ba9494-39a7-4e55-aed3-0634f576b581",
+    "user_id": "62b91a94-1172-4813-be41-bba0b16a2cd4",
+    "name": "문지현 원장",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:22.919734+00",
+    "updated_at": "2025-12-03 02:01:22.919734+00",
+    "role": "buyer"
+  },
+  {
+    "id": "c127683a-0701-4e7f-9274-78d1835baa88",
+    "user_id": "f54b8cd8-1ca3-4b56-ab75-7512ee5f0de0",
+    "name": "황나은 컨설팅",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:22.401398+00",
+    "updated_at": "2025-12-03 02:01:22.401398+00",
+    "role": "buyer"
+  },
+  {
+    "id": "365b719b-e78a-4f38-9683-0a88b43b4cf0",
+    "user_id": "e46a53fd-2cfc-44c2-906a-da45694810ed",
+    "name": "권수아 뷰티",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:21.85743+00",
+    "updated_at": "2025-12-03 02:01:21.85743+00",
+    "role": "buyer"
+  },
+  {
+    "id": "5e882b87-03fd-4831-a46f-03c94847d703",
+    "user_id": "1cde3786-ec3b-4980-81b5-10b5c4fa45b2",
+    "name": "서민지 스타일링",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:21.292202+00",
+    "updated_at": "2025-12-03 02:01:21.292202+00",
+    "role": "buyer"
+  },
+  {
+    "id": "effc8ea7-dc59-4138-8b44-ae10b66bd897",
+    "user_id": "b2ce6228-2972-4eb9-a868-e759647d4d8d",
+    "name": "오다은 헤어샵",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:20.76292+00",
+    "updated_at": "2025-12-03 02:01:20.76292+00",
+    "role": "buyer"
+  },
+  {
+    "id": "f6cf3786-f2b5-4442-98c3-039a9a381fd3",
+    "user_id": "68cd6f97-f327-41b3-a9aa-93bde066355a",
+    "name": "신예진 네일아트",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:20.249594+00",
+    "updated_at": "2025-12-03 02:01:20.249594+00",
+    "role": "buyer"
+  },
+  {
+    "id": "836d8a82-a89d-4d76-ab7c-5600e0302d0c",
+    "user_id": "113412fd-aab4-4e6e-82f3-78d000497286",
+    "name": "한소율 메이크업",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:19.710655+00",
+    "updated_at": "2025-12-03 02:01:19.710655+00",
+    "role": "buyer"
+  },
+  {
+    "id": "fd616b02-be88-4765-81a8-aed770e9e54a",
+    "user_id": "cfb45aa4-8a9e-499f-a71d-b94b6decd103",
+    "name": "임채원 살롱",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:19.180701+00",
+    "updated_at": "2025-12-03 02:01:19.180701+00",
+    "role": "buyer"
+  },
+  {
+    "id": "11d1dabc-93ec-4ebb-839d-34c04a8bddf6",
+    "user_id": "9dca98dc-68c3-439e-85f9-08c10886e1d1",
+    "name": "윤지아 스튜디오",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:18.639874+00",
+    "updated_at": "2025-12-03 02:01:18.639874+00",
+    "role": "buyer"
+  },
+  {
+    "id": "41136dfa-493b-40c6-b852-9fb76af06d8b",
+    "user_id": "9eef92d6-6571-45ff-a673-3f53fc5b5e70",
+    "name": "조민서 뷰티샵",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:18.106729+00",
+    "updated_at": "2025-12-03 02:01:18.106729+00",
+    "role": "buyer"
+  },
+  {
+    "id": "048e3ef9-d43a-467e-b48c-1314c4ffdaa9",
+    "user_id": "eb00d2cf-77ed-48c7-9e11-1a4a079ed29e",
+    "name": "강예은 스타일리스트",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:17.552686+00",
+    "updated_at": "2025-12-03 02:01:17.552686+00",
+    "role": "buyer"
+  },
+  {
+    "id": "5253d161-68ed-46fd-a493-28a6a54be4c4",
+    "user_id": "d8936072-43c0-4a3e-a4eb-a78492928b32",
+    "name": "정하윤 디자이너",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:17.013232+00",
+    "updated_at": "2025-12-03 02:01:17.013232+00",
+    "role": "buyer"
+  },
+  {
+    "id": "50d8501c-ec4d-4f0f-b0ea-f98c22bdeda6",
+    "user_id": "aa213c80-16ed-4800-a527-3bf521a7c73f",
+    "name": "최수민 아티스트",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 02:01:16.31626+00",
+    "updated_at": "2025-12-03 02:01:16.31626+00",
+    "role": "buyer"
+  },
+  {
+    "id": "fa0547f8-0c76-4624-b25b-7c74b01cb6b6",
+    "user_id": "f4caeba4-2dfe-41a5-8c68-7e37e9461e6f",
+    "name": "한결",
+    "profile_image": null,
+    "bio": null,
+    "created_at": "2025-12-03 08:29:00.492872+00",
+    "updated_at": "2025-12-03 08:29:00.492872+00",
+    "role": "buyer"
+  },
+  {
+    "id": "7e87d721-71c1-43be-8ede-aa9b039695a1",
+    "user_id": "7f73b01b-4075-4f68-b150-dd9e7b8b2b99",
+    "name": "용감한하늘",
+    "profile_image": "https://api.dicebear.com/7.x/avataaars/png?seed=%EC%9A%A9%EA%B0%90%ED%95%9C%ED%95%98%EB%8A%98&backgroundColor=b6e3f4,c0aede,d1d4f9&size=200",
+    "bio": null,
+    "created_at": "2025-12-05 20:52:31.385518+00",
+    "updated_at": "2025-12-05 20:52:31.385518+00",
+    "role": "buyer"
+  },
+  {
+    "id": "aeee0247-2ac8-44ab-95bd-bd0226377399",
+    "user_id": "6e118407-7d00-4748-8c61-6be75711fa7f",
+    "name": "검은레몬",
+    "profile_image": "https://bpvfkkrlyrjkwgwmfrci.supabase.co/storage/v1/object/public/profiles/profiles/6e118407-7d00-4748-8c61-6be75711fa7f_1763490290032.png",
+    "bio": null,
+    "created_at": "2025-11-18 17:30:22.132625+00",
+    "updated_at": "2025-11-18 18:24:50.293+00",
+    "role": "buyer"
+  },
+  {
+    "id": "67623942-37e6-42d7-acaa-d682e4ffbdcf",
+    "user_id": "759941a3-bb1c-4395-9630-8a5e1e915a8b",
+    "name": "시원한달",
+    "profile_image": "https://api.dicebear.com/7.x/avataaars/png?seed=%EC%8B%9C%EC%9B%90%ED%95%9C%EB%8B%AC&backgroundColor=b6e3f4,c0aede,d1d4f9&size=200",
+    "bio": "ai 전문가입니다. 최고의 서비스로 모시겠습니다. ai로 고민하시는 모든분의 고민을 말끔하게 해결드립니다.",
+    "created_at": "2025-11-19 07:49:55.278498+00",
+    "updated_at": "2025-11-19 08:07:20.522+00",
+    "role": "buyer"
+  },
+  {
+    "id": "8f32a8da-8599-4629-9abf-185adc3ecb02",
+    "user_id": "9b42216d-56bd-4825-99e2-fff60147f35e",
+    "name": "파파야",
+    "profile_image": "https://bpvfkkrlyrjkwgwmfrci.supabase.co/storage/v1/object/public/profiles/profiles/9b42216d-56bd-4825-99e2-fff60147f35e_1764113977899.jpg",
+    "bio": null,
+    "created_at": "2025-11-23 00:17:13.914113+00",
+    "updated_at": "2025-11-28 19:48:28.701015+00",
+    "role": "buyer"
+  }
+]

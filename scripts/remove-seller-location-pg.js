@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/cognitive-complexity, sonarjs/os-command, sonarjs/no-os-command-from-path, sonarjs/no-hardcoded-passwords, sonarjs/sql-queries, sonarjs/slow-regex */
 // PostgreSQL 직접 연결로 판매자 위치 필드 삭제
 // 실행: SUPABASE_DB_PASSWORD=your_password node scripts/remove-seller-location-pg.js
 

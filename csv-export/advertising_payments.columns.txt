@@ -1,0 +1,1 @@
+id,subscription_id,seller_id,amount,payment_method,status,depositor_name,bank_name,deposit_date,deposit_time,receipt_image,pg_transaction_id,card_company,card_number_masked,paid_at,confirmed_at,confirmed_by,admin_memo,created_at,updated_at,supply_amount,tax_amount,tax_invoice_id

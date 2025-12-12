@@ -1,0 +1,1 @@
+id,path,user_id,session_id,ip_address,user_agent,referrer,country,device_type,created_at

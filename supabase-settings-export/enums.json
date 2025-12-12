@@ -1,0 +1,26 @@
+[
+  {
+    "enum_name": "errand_category",
+    "enum_values": "{DELIVERY,SHOPPING,CLEANING,QUEUEING,PET_CARE,BUG_CATCHING,OTHER}"
+  },
+  {
+    "enum_name": "errand_status",
+    "enum_values": "{OPEN,MATCHED,IN_PROGRESS,COMPLETED,CANCELLED}"
+  },
+  {
+    "enum_name": "food_order_status",
+    "enum_values": "{pending,accepted,cooking,ready,picked_up,delivering,delivered,cancelled}"
+  },
+  {
+    "enum_name": "food_store_category",
+    "enum_values": "{korean,chinese,japanese,western,chicken,pizza,burger,snack,cafe,asian,lunchbox,nightfood,etc}"
+  },
+  {
+    "enum_name": "helper_grade",
+    "enum_values": "{NEWBIE,REGULAR,PRO,MASTER}"
+  },
+  {
+    "enum_name": "subscription_status",
+    "enum_values": "{active,expired,cancelled,trial}"
+  }
+]

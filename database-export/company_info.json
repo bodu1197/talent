@@ -1,0 +1,16 @@
+[
+  {
+    "id": "6615b17e-3a6a-4183-877d-c84bf44d6104",
+    "business_number": "123-45-67890",
+    "company_name": "���ı�",
+    "ceo_name": "��ǥ��",
+    "address": "����Ư����",
+    "business_type": "���񽺾�",
+    "business_item": "��������",
+    "phone": "02-1234-5678",
+    "email": "info@talent.com",
+    "is_active": true,
+    "created_at": "2025-11-14 12:23:53.858174+00",
+    "updated_at": "2025-11-14 12:23:53.858174+00"
+  }
+]

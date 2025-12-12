@@ -1,0 +1,1 @@
+id,seller_id,amount,bank_name,account_number,account_holder,status,processed_by,processed_at,rejection_reason,requested_at,created_at,updated_at,completed_at,rejected_reason

@@ -1,0 +1,182 @@
+[
+  {
+    "id": "ec9a65fb-991d-4ee2-93f9-4efec8750a54",
+    "user_id": "759941a3-bb1c-4395-9630-8a5e1e915a8b",
+    "type": "order_new",
+    "title": "새로운 주문이 도착했습니다",
+    "message": "11111111님이 \"AI 기반 전문 로고 & 제품 이미지 디자인 작업\"를 주문했습니다.",
+    "link": "/mypage/seller/orders/82ba856f-466b-4319-b35a-0a5eb0ae0a83",
+    "is_read": false,
+    "created_at": "2025-11-28 18:18:32.798427+00",
+    "order_id": "82ba856f-466b-4319-b35a-0a5eb0ae0a83",
+    "sender_id": "ccf26cba-d1d5-4aae-b5d9-0fe85449f086",
+    "metadata": {
+      "amount": 50000
+    }
+  },
+  {
+    "id": "8105a0fe-944a-417b-8924-314263ff882f",
+    "user_id": "759941a3-bb1c-4395-9630-8a5e1e915a8b",
+    "type": "order_new",
+    "title": "새로운 주문이 도착했습니다",
+    "message": "11111111님이 \"AI 기반 전문 로고 디자인 & 광고소재 제작\"를 주문했습니다.",
+    "link": "/mypage/seller/orders/e5c82e1a-d950-4392-9881-d620d34b6903",
+    "is_read": false,
+    "created_at": "2025-11-28 20:16:28.162014+00",
+    "order_id": "e5c82e1a-d950-4392-9881-d620d34b6903",
+    "sender_id": "ccf26cba-d1d5-4aae-b5d9-0fe85449f086",
+    "metadata": {
+      "amount": 100000
+    }
+  },
+  {
+    "id": "91ff973e-b7e5-43b8-8783-a64685e96119",
+    "user_id": "759941a3-bb1c-4395-9630-8a5e1e915a8b",
+    "type": "order_new",
+    "title": "새로운 주문이 도착했습니다",
+    "message": "11111111님이 \"AI 기반 전문 로고 디자인 & 광고소재 제작\"를 주문했습니다.",
+    "link": "/mypage/seller/orders/2e3dedc9-08ee-4ada-a5f5-b22d81a5c319",
+    "is_read": false,
+    "created_at": "2025-11-28 20:16:37.433704+00",
+    "order_id": "2e3dedc9-08ee-4ada-a5f5-b22d81a5c319",
+    "sender_id": "ccf26cba-d1d5-4aae-b5d9-0fe85449f086",
+    "metadata": {
+      "amount": 100000
+    }
+  },
+  {
+    "id": "ba175e9c-5505-4fbf-9a27-eef00cc73c53",
+    "user_id": "759941a3-bb1c-4395-9630-8a5e1e915a8b",
+    "type": "order_new",
+    "title": "새로운 주문이 도착했습니다",
+    "message": "11111111님이 \"AI 기반 전문 로고 디자인 & 광고소재 제작\"를 주문했습니다.",
+    "link": "/mypage/seller/orders/ba519dfe-edc4-4818-87a6-69e85f87e073",
+    "is_read": false,
+    "created_at": "2025-11-28 20:17:25.207638+00",
+    "order_id": "ba519dfe-edc4-4818-87a6-69e85f87e073",
+    "sender_id": "ccf26cba-d1d5-4aae-b5d9-0fe85449f086",
+    "metadata": {
+      "amount": 100000
+    }
+  },
+  {
+    "id": "4a8017fd-c96f-41dc-9f2e-c7f47b2b27bd",
+    "user_id": "759941a3-bb1c-4395-9630-8a5e1e915a8b",
+    "type": "order_new",
+    "title": "새로운 주문이 도착했습니다",
+    "message": "11111111님이 \"AI 기반 전문 로고 디자인 & 광고소재 제작\"를 주문했습니다.",
+    "link": "/mypage/seller/orders/e1d41c6c-d8b5-4ad9-9adb-ce2de67454cc",
+    "is_read": false,
+    "created_at": "2025-11-28 20:38:34.273308+00",
+    "order_id": "e1d41c6c-d8b5-4ad9-9adb-ce2de67454cc",
+    "sender_id": "ccf26cba-d1d5-4aae-b5d9-0fe85449f086",
+    "metadata": {
+      "amount": 100000
+    }
+  },
+  {
+    "id": "91b49230-ab24-492d-82ac-c565fe672ce6",
+    "user_id": "759941a3-bb1c-4395-9630-8a5e1e915a8b",
+    "type": "order_new",
+    "title": "새로운 주문이 도착했습니다",
+    "message": "11111111님이 \"AI 기반 전문 로고 디자인 & 광고소재 제작\"를 주문했습니다.",
+    "link": "/mypage/seller/orders/5ea697d3-29a4-4a34-ae9a-1abdbcf2b758",
+    "is_read": false,
+    "created_at": "2025-11-28 21:19:15.326273+00",
+    "order_id": "5ea697d3-29a4-4a34-ae9a-1abdbcf2b758",
+    "sender_id": "ccf26cba-d1d5-4aae-b5d9-0fe85449f086",
+    "metadata": {
+      "amount": 100000
+    }
+  },
+  {
+    "id": "d2084375-5690-4e86-958e-bd6a1894de57",
+    "user_id": "759941a3-bb1c-4395-9630-8a5e1e915a8b",
+    "type": "order_new",
+    "title": "새로운 주문이 도착했습니다",
+    "message": "11111111님이 \"AI 기반 전문 로고 디자인 & 광고소재 제작\"를 주문했습니다.",
+    "link": "/mypage/seller/orders/74274c85-b14a-4f28-8eb1-aeb3521804a7",
+    "is_read": false,
+    "created_at": "2025-11-28 21:29:17.852311+00",
+    "order_id": "74274c85-b14a-4f28-8eb1-aeb3521804a7",
+    "sender_id": "ccf26cba-d1d5-4aae-b5d9-0fe85449f086",
+    "metadata": {
+      "amount": 100000
+    }
+  },
+  {
+    "id": "24bf9a1a-8686-4de2-b9ab-177ee02e7c6f",
+    "user_id": "759941a3-bb1c-4395-9630-8a5e1e915a8b",
+    "type": "order_new",
+    "title": "새로운 주문이 도착했습니다",
+    "message": "11111111님이 \"AI 기반 전문 로고 & 제품 이미지 디자인 작업\"를 주문했습니다.",
+    "link": "/mypage/seller/orders/fd5efc36-7821-4441-8ce3-0173fbc442bf",
+    "is_read": false,
+    "created_at": "2025-11-28 23:02:33.151253+00",
+    "order_id": "fd5efc36-7821-4441-8ce3-0173fbc442bf",
+    "sender_id": "ccf26cba-d1d5-4aae-b5d9-0fe85449f086",
+    "metadata": {
+      "amount": 50000
+    }
+  },
+  {
+    "id": "33e32e32-9243-431f-984b-a769e87452d7",
+    "user_id": "ccf26cba-d1d5-4aae-b5d9-0fe85449f086",
+    "type": "order_new",
+    "title": "새로운 주문이 도착했습니다",
+    "message": "노란레몬님이 \"빠른 답변, 정직한 조언, 확실한 결과물을 약속드립니다\"를 주문했습니다.",
+    "link": "/mypage/seller/orders/ca8d0cf4-544a-4edd-82c0-879f4b1b6c05",
+    "is_read": true,
+    "created_at": "2025-11-29 23:13:33.827319+00",
+    "order_id": "ca8d0cf4-544a-4edd-82c0-879f4b1b6c05",
+    "sender_id": "9b42216d-56bd-4825-99e2-fff60147f35e",
+    "metadata": {
+      "amount": 380000
+    }
+  },
+  {
+    "id": "74c53338-0128-457d-8844-8e630fe5159a",
+    "user_id": "ccf26cba-d1d5-4aae-b5d9-0fe85449f086",
+    "type": "order_new",
+    "title": "새로운 주문이 도착했습니다",
+    "message": "노란레몬님이 \"빠른 답변, 정직한 조언, 확실한 결과물을 약속드립니다\"를 주문했습니다.",
+    "link": "/mypage/seller/orders/de6bb19b-9ffa-4aa4-a28f-c69bffa0701e",
+    "is_read": true,
+    "created_at": "2025-11-29 23:14:21.666657+00",
+    "order_id": "de6bb19b-9ffa-4aa4-a28f-c69bffa0701e",
+    "sender_id": "9b42216d-56bd-4825-99e2-fff60147f35e",
+    "metadata": {
+      "amount": 380000
+    }
+  },
+  {
+    "id": "f4cff5cf-f5dc-4840-9ad6-8c687564a10e",
+    "user_id": "ccf26cba-d1d5-4aae-b5d9-0fe85449f086",
+    "type": "order_new",
+    "title": "새로운 주문이 도착했습니다",
+    "message": "노란레몬님이 \"빠른 답변, 정직한 조언, 확실한 결과물을 약속드립니다\"를 주문했습니다.",
+    "link": "/mypage/seller/orders/d548483c-4bc1-499c-b60c-f87ae44c4014",
+    "is_read": true,
+    "created_at": "2025-11-29 23:19:40.110695+00",
+    "order_id": "d548483c-4bc1-499c-b60c-f87ae44c4014",
+    "sender_id": "9b42216d-56bd-4825-99e2-fff60147f35e",
+    "metadata": {
+      "amount": 380000
+    }
+  },
+  {
+    "id": "b609670a-ac27-45a7-86e5-9c4d728b6b02",
+    "user_id": "759941a3-bb1c-4395-9630-8a5e1e915a8b",
+    "type": "order_new",
+    "title": "새로운 주문이 도착했습니다",
+    "message": "11111111님이 \"AI 기반 전문 로고 디자인 & 광고소재 제작\"를 주문했습니다.",
+    "link": "/mypage/seller/orders/b6b8b012-4aea-4bc6-a8ca-7d876339a681",
+    "is_read": false,
+    "created_at": "2025-11-30 02:13:56.991835+00",
+    "order_id": "b6b8b012-4aea-4bc6-a8ca-7d876339a681",
+    "sender_id": "ccf26cba-d1d5-4aae-b5d9-0fe85449f086",
+    "metadata": {
+      "amount": 100000
+    }
+  }
+]

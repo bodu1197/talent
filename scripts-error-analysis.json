@@ -1,0 +1,350 @@
+{
+  "totalErrors": 119,
+  "categories": {
+    "security": [
+      {
+        "ruleId": "sonarjs/no-os-command-from-path",
+        "count": 13
+      },
+      {
+        "ruleId": "sonarjs/os-command",
+        "count": 11
+      },
+      {
+        "ruleId": "sonarjs/no-hardcoded-passwords",
+        "count": 6
+      },
+      {
+        "ruleId": "sonarjs/sql-queries",
+        "count": 2
+      }
+    ],
+    "complexity": [
+      {
+        "ruleId": "sonarjs/cognitive-complexity",
+        "count": 22
+      },
+      {
+        "ruleId": "sonarjs/no-nested-template-literals",
+        "count": 4
+      },
+      {
+        "ruleId": "sonarjs/no-nested-conditional",
+        "count": 3
+      }
+    ],
+    "style": [
+      {
+        "ruleId": "sonarjs/slow-regex",
+        "count": 36
+      },
+      {
+        "ruleId": "sonarjs/concise-regex",
+        "count": 2
+      }
+    ],
+    "bestPractice": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "count": 6
+      },
+      {
+        "ruleId": "sonarjs/no-dead-store",
+        "count": 4
+      },
+      {
+        "ruleId": "sonarjs/no-unused-vars",
+        "count": 2
+      },
+      {
+        "ruleId": "prefer-const",
+        "count": 2
+      },
+      {
+        "ruleId": "sonarjs/no-commented-code",
+        "count": 2
+      },
+      {
+        "ruleId": "sonarjs/no-ignored-exceptions",
+        "count": 1
+      },
+      {
+        "ruleId": "sonarjs/no-all-duplicated-branches",
+        "count": 1
+      }
+    ],
+    "other": [
+      {
+        "ruleId": "sonarjs/anchor-precedence",
+        "count": 1
+      },
+      {
+        "ruleId": "unknown",
+        "count": 1
+      }
+    ]
+  },
+  "ruleStats": {
+    "sonarjs/cognitive-complexity": 22,
+    "sonarjs/no-os-command-from-path": 13,
+    "sonarjs/no-unused-vars": 2,
+    "sonarjs/no-dead-store": 4,
+    "@typescript-eslint/no-unused-vars": 6,
+    "sonarjs/no-hardcoded-passwords": 6,
+    "sonarjs/sql-queries": 2,
+    "sonarjs/anchor-precedence": 1,
+    "sonarjs/slow-regex": 36,
+    "sonarjs/no-nested-template-literals": 4,
+    "sonarjs/os-command": 11,
+    "sonarjs/no-ignored-exceptions": 1,
+    "sonarjs/concise-regex": 2,
+    "prefer-const": 2,
+    "sonarjs/no-commented-code": 2,
+    "unknown": 1,
+    "sonarjs/no-nested-conditional": 3,
+    "sonarjs/no-all-duplicated-branches": 1
+  },
+  "ruleExamples": {
+    "sonarjs/cognitive-complexity": [
+      {
+        "file": "advanced-security-advisor.js",
+        "line": 13,
+        "message": "Refactor this function to reduce its Cognitive Complexity from 22 to the 15 allowed."
+      },
+      {
+        "file": "apply-advertising-migration.js",
+        "line": 10,
+        "message": "Refactor this function to reduce its Cognitive Complexity from 19 to the 15 allowed."
+      },
+      {
+        "file": "check-errand-tables.js",
+        "line": 19,
+        "message": "Refactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed."
+      }
+    ],
+    "sonarjs/no-os-command-from-path": [
+      {
+        "file": "analyze-eslint-errors.js",
+        "line": 6,
+        "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories."
+      },
+      {
+        "file": "analyze-remaining-errors.js",
+        "line": 10,
+        "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories."
+      },
+      {
+        "file": "apply-helper-location-migration.js",
+        "line": 281,
+        "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories."
+      }
+    ],
+    "sonarjs/no-unused-vars": [
+      {
+        "file": "analyze-sonarqube.js",
+        "line": 90,
+        "message": "Remove the declaration of the unused 'endpoint' variable."
+      },
+      {
+        "file": "analyze-sonarqube.js",
+        "line": 122,
+        "message": "Remove the declaration of the unused 'endpoint' variable."
+      }
+    ],
+    "sonarjs/no-dead-store": [
+      {
+        "file": "analyze-sonarqube.js",
+        "line": 90,
+        "message": "Remove this useless assignment to variable \"endpoint\"."
+      },
+      {
+        "file": "analyze-sonarqube.js",
+        "line": 122,
+        "message": "Remove this useless assignment to variable \"endpoint\"."
+      },
+      {
+        "file": "fix-all-eslint-errors.js",
+        "line": 16,
+        "message": "Remove this useless assignment to variable \"modified\"."
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      {
+        "file": "analyze-sonarqube.js",
+        "line": 90,
+        "message": "'endpoint' is assigned a value but never used. Allowed unused vars must match /^_/u."
+      },
+      {
+        "file": "analyze-sonarqube.js",
+        "line": 122,
+        "message": "'endpoint' is assigned a value but never used. Allowed unused vars must match /^_/u."
+      },
+      {
+        "file": "create-storage-buckets.js",
+        "line": 12,
+        "message": "'query' is defined but never used. Allowed unused args must match /^_/u."
+      }
+    ],
+    "sonarjs/no-hardcoded-passwords": [
+      {
+        "file": "apply-advertising-indexes.js",
+        "line": 11,
+        "message": "Review this potentially hard-coded password."
+      },
+      {
+        "file": "apply-migration-direct.js",
+        "line": 6,
+        "message": "Review this potentially hard-coded password."
+      },
+      {
+        "file": "create-it-services.js",
+        "line": 161,
+        "message": "Review this potentially hard-coded password."
+      }
+    ],
+    "sonarjs/sql-queries": [
+      {
+        "file": "check-database.js",
+        "line": 70,
+        "message": "Make sure that executing SQL queries is safe here."
+      },
+      {
+        "file": "check-table-structure.js",
+        "line": 68,
+        "message": "Make sure that executing SQL queries is safe here."
+      }
+    ],
+    "sonarjs/anchor-precedence": [
+      {
+        "file": "check-env-keys.js",
+        "line": 22,
+        "message": "Group parts of the regex together to make the intended operator precedence explicit."
+      }
+    ],
+    "sonarjs/slow-regex": [
+      {
+        "file": "convert-foreach-to-forof.js",
+        "line": 54,
+        "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+      },
+      {
+        "file": "fix-all-eslint-errors.js",
+        "line": 23,
+        "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+      },
+      {
+        "file": "fix-all-remaining-comprehensive.js",
+        "line": 149,
+        "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+      }
+    ],
+    "sonarjs/no-nested-template-literals": [
+      {
+        "file": "create-storage-buckets.js",
+        "line": 103,
+        "message": "Refactor this code to not use nested template literals."
+      },
+      {
+        "file": "export-supabase-settings.js",
+        "line": 360,
+        "message": "Refactor this code to not use nested template literals."
+      },
+      {
+        "file": "import-categories-hierarchical.js",
+        "line": 81,
+        "message": "Refactor this code to not use nested template literals."
+      }
+    ],
+    "sonarjs/os-command": [
+      {
+        "file": "execute-migration-api.js",
+        "line": 102,
+        "message": "Make sure that executing this OS command is safe here."
+      },
+      {
+        "file": "quality-gate.js",
+        "line": 52,
+        "message": "Make sure that executing this OS command is safe here."
+      },
+      {
+        "file": "update-vercel-env-clean.js",
+        "line": 27,
+        "message": "Make sure that executing this OS command is safe here."
+      }
+    ],
+    "sonarjs/no-ignored-exceptions": [
+      {
+        "file": "execute-migration-api.js",
+        "line": 107,
+        "message": "Handle this exception or don't catch it at all."
+      }
+    ],
+    "sonarjs/concise-regex": [
+      {
+        "file": "fix-all-unused-vars.js",
+        "line": 75,
+        "message": "Use concise character class syntax '\\w' instead of '[a-zA-Z0-9_]'."
+      },
+      {
+        "file": "fix-remaining-errors-step2.js",
+        "line": 16,
+        "message": "Use concise character class syntax '\\w' instead of '[a-zA-Z0-9_]'."
+      }
+    ],
+    "prefer-const": [
+      {
+        "file": "fix-sonarjs-unused-vars.js",
+        "line": 49,
+        "message": "'content' is never reassigned. Use 'const' instead."
+      },
+      {
+        "file": "fix-unused-vars-typescript.js",
+        "line": 17,
+        "message": "'content' is never reassigned. Use 'const' instead."
+      }
+    ],
+    "sonarjs/no-commented-code": [
+      {
+        "file": "import-csv-safe.js",
+        "line": 261,
+        "message": "Remove this commented out code."
+      },
+      {
+        "file": "push-to-supabase-api.js",
+        "line": 47,
+        "message": "Remove this commented out code."
+      }
+    ],
+    "unknown": [
+      {
+        "file": "migrate-auth-users.js",
+        "line": 135,
+        "message": "Parsing error: ';' expected."
+      }
+    ],
+    "sonarjs/no-nested-conditional": [
+      {
+        "file": "quality-gate.js",
+        "line": 169,
+        "message": "Extract this nested ternary operation into an independent statement."
+      },
+      {
+        "file": "verify-migration.js",
+        "line": 88,
+        "message": "Extract this nested ternary operation into an independent statement."
+      },
+      {
+        "file": "verify-migration.js",
+        "line": 90,
+        "message": "Extract this nested ternary operation into an independent statement."
+      }
+    ],
+    "sonarjs/no-all-duplicated-branches": [
+      {
+        "file": "update-vercel-interactive.js",
+        "line": 55,
+        "message": "Remove this conditional structure or edit its code blocks so that they're not all the same."
+      }
+    ]
+  }
+}

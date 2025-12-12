@@ -1,0 +1,22 @@
+[
+  {
+    "version": "001_initial_schema",
+    "executed_at": "2025-10-26 04:19:39.305128+00"
+  },
+  {
+    "version": "002_additional_tables",
+    "executed_at": "2025-10-26 04:19:39.689336+00"
+  },
+  {
+    "version": "003_rls_policies",
+    "executed_at": "2025-10-26 04:30:56.525817+00"
+  },
+  {
+    "version": "005_enhance_schema_for_project",
+    "executed_at": "2025-10-26 04:32:47.011654+00"
+  },
+  {
+    "version": "20251026045742_fix_seller_profiles_schema",
+    "executed_at": "2025-10-26 04:58:21.192013+00"
+  }
+]

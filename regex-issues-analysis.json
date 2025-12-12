@@ -1,0 +1,272 @@
+{
+  "concise-regex": [
+    {
+      "file": "fix-all-unused-vars.js",
+      "line": 75,
+      "column": 53,
+      "message": "Use concise character class syntax '\\w' instead of '[a-zA-Z0-9_]'.",
+      "ruleId": "sonarjs/concise-regex"
+    },
+    {
+      "file": "fix-remaining-errors-step2.js",
+      "line": 16,
+      "column": 57,
+      "message": "Use concise character class syntax '\\w' instead of '[a-zA-Z0-9_]'.",
+      "ruleId": "sonarjs/concise-regex"
+    }
+  ],
+  "slow-regex": [
+    {
+      "file": "convert-foreach-to-forof.js",
+      "line": 54,
+      "column": 26,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-all-eslint-errors.js",
+      "line": 22,
+      "column": 24,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-all-remaining-comprehensive.js",
+      "line": 149,
+      "column": 30,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-console-errors-v2.js",
+      "line": 29,
+      "column": 22,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-console-errors-v2.js",
+      "line": 84,
+      "column": 41,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-console-errors.js",
+      "line": 76,
+      "column": 41,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-last-readonly-props.js",
+      "line": 7,
+      "column": 14,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-last-readonly-props.js",
+      "line": 12,
+      "column": 14,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-last-readonly-props.js",
+      "line": 17,
+      "column": 14,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-last-readonly-props.js",
+      "line": 22,
+      "column": 14,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-last-readonly-props.js",
+      "line": 65,
+      "column": 26,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-readonly-props-batch.js",
+      "line": 41,
+      "column": 26,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-remaining-errors-step1.js",
+      "line": 18,
+      "column": 29,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-remaining-errors-step2.js",
+      "line": 16,
+      "column": 34,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-remaining-errors-step2.js",
+      "line": 52,
+      "column": 31,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-remaining-errors-step2.js",
+      "line": 56,
+      "column": 31,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-remaining-errors-step2.js",
+      "line": 60,
+      "column": 31,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-remaining-errors-step4.js",
+      "line": 15,
+      "column": 31,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-remaining-errors-step4.js",
+      "line": 19,
+      "column": 31,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-remaining-errors-step4.js",
+      "line": 23,
+      "column": 31,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-remaining-errors-step4.js",
+      "line": 85,
+      "column": 31,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-remaining-errors-step4.js",
+      "line": 91,
+      "column": 31,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-remaining-errors-step4.js",
+      "line": 97,
+      "column": 31,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-remaining-errors-step4.js",
+      "line": 98,
+      "column": 31,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-remaining-errors-step4.js",
+      "line": 119,
+      "column": 31,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-remaining-readonly-props.js",
+      "line": 61,
+      "column": 26,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-remaining-readonly-props.js",
+      "line": 69,
+      "column": 40,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-remaining-readonly-props.js",
+      "line": 78,
+      "column": 40,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-sonarjs-unused-vars.js",
+      "line": 66,
+      "column": 34,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-type-props-readonly.js",
+      "line": 32,
+      "column": 26,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-unused-vars-aggressive.js",
+      "line": 19,
+      "column": 5,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-unused-vars-aggressive.js",
+      "line": 20,
+      "column": 5,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-unused-vars-aggressive.js",
+      "line": 21,
+      "column": 5,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-unused-vars-aggressive.js",
+      "line": 22,
+      "column": 5,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "fix-unused-vars-typescript.js",
+      "line": 37,
+      "column": 34,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    },
+    {
+      "file": "verify-rls-optimization.js",
+      "line": 76,
+      "column": 38,
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service.",
+      "ruleId": "sonarjs/slow-regex"
+    }
+  ]
+}

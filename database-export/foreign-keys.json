@@ -1,0 +1,933 @@
+[
+  {
+    "table_name": "activity_logs",
+    "column_name": "user_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "activity_logs_user_id_fkey"
+  },
+  {
+    "table_name": "activity_logs",
+    "column_name": "admin_id",
+    "foreign_table_name": "admins",
+    "foreign_column_name": "id",
+    "constraint_name": "activity_logs_admin_id_fkey"
+  },
+  {
+    "table_name": "admins",
+    "column_name": "user_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "admins_user_id_fkey"
+  },
+  {
+    "table_name": "advertising_campaigns",
+    "column_name": "seller_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "advertising_campaigns_seller_id_fkey"
+  },
+  {
+    "table_name": "advertising_credits",
+    "column_name": "seller_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "advertising_credits_seller_id_fkey"
+  },
+  {
+    "table_name": "advertising_impressions",
+    "column_name": "user_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "advertising_impressions_user_id_fkey"
+  },
+  {
+    "table_name": "advertising_impressions",
+    "column_name": "service_id",
+    "foreign_table_name": "services",
+    "foreign_column_name": "id",
+    "constraint_name": "advertising_impressions_service_id_fkey"
+  },
+  {
+    "table_name": "advertising_impressions",
+    "column_name": "subscription_id",
+    "foreign_table_name": "advertising_subscriptions",
+    "foreign_column_name": "id",
+    "constraint_name": "advertising_impressions_subscription_id_fkey"
+  },
+  {
+    "table_name": "advertising_payments",
+    "column_name": "tax_invoice_id",
+    "foreign_table_name": "tax_invoices",
+    "foreign_column_name": "id",
+    "constraint_name": "advertising_payments_tax_invoice_id_fkey"
+  },
+  {
+    "table_name": "advertising_payments",
+    "column_name": "seller_id",
+    "foreign_table_name": "sellers",
+    "foreign_column_name": "id",
+    "constraint_name": "advertising_payments_seller_id_fkey"
+  },
+  {
+    "table_name": "advertising_payments",
+    "column_name": "confirmed_by",
+    "foreign_table_name": "admins",
+    "foreign_column_name": "id",
+    "constraint_name": "advertising_payments_confirmed_by_fkey"
+  },
+  {
+    "table_name": "advertising_payments",
+    "column_name": "subscription_id",
+    "foreign_table_name": "advertising_subscriptions",
+    "foreign_column_name": "id",
+    "constraint_name": "advertising_payments_subscription_id_fkey"
+  },
+  {
+    "table_name": "advertising_subscriptions",
+    "column_name": "service_id",
+    "foreign_table_name": "services",
+    "foreign_column_name": "id",
+    "constraint_name": "advertising_subscriptions_service_id_fkey"
+  },
+  {
+    "table_name": "advertising_subscriptions",
+    "column_name": "bank_transfer_confirmed_by",
+    "foreign_table_name": "admins",
+    "foreign_column_name": "id",
+    "constraint_name": "advertising_subscriptions_bank_transfer_confirmed_by_fkey"
+  },
+  {
+    "table_name": "advertising_subscriptions",
+    "column_name": "seller_id",
+    "foreign_table_name": "sellers",
+    "foreign_column_name": "id",
+    "constraint_name": "advertising_subscriptions_seller_id_fkey"
+  },
+  {
+    "table_name": "categories",
+    "column_name": "parent_id",
+    "foreign_table_name": "categories",
+    "foreign_column_name": "id",
+    "constraint_name": "categories_parent_id_fkey"
+  },
+  {
+    "table_name": "chat_favorites",
+    "column_name": "room_id",
+    "foreign_table_name": "chat_rooms",
+    "foreign_column_name": "id",
+    "constraint_name": "chat_favorites_room_id_fkey"
+  },
+  {
+    "table_name": "chat_rooms",
+    "column_name": "service_id",
+    "foreign_table_name": "services",
+    "foreign_column_name": "id",
+    "constraint_name": "chat_rooms_service_id_fkey"
+  },
+  {
+    "table_name": "conversations",
+    "column_name": "order_id",
+    "foreign_table_name": "orders",
+    "foreign_column_name": "id",
+    "constraint_name": "conversations_order_id_fkey"
+  },
+  {
+    "table_name": "conversations",
+    "column_name": "participant1_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "conversations_participant1_id_fkey"
+  },
+  {
+    "table_name": "conversations",
+    "column_name": "participant2_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "conversations_participant2_id_fkey"
+  },
+  {
+    "table_name": "credit_transactions",
+    "column_name": "credit_id",
+    "foreign_table_name": "advertising_credits",
+    "foreign_column_name": "id",
+    "constraint_name": "credit_transactions_credit_id_fkey"
+  },
+  {
+    "table_name": "credit_transactions",
+    "column_name": "seller_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "credit_transactions_seller_id_fkey"
+  },
+  {
+    "table_name": "disputes",
+    "column_name": "order_id",
+    "foreign_table_name": "orders",
+    "foreign_column_name": "id",
+    "constraint_name": "disputes_order_id_fkey"
+  },
+  {
+    "table_name": "disputes",
+    "column_name": "mediator_id",
+    "foreign_table_name": "admins",
+    "foreign_column_name": "id",
+    "constraint_name": "disputes_mediator_id_fkey"
+  },
+  {
+    "table_name": "disputes",
+    "column_name": "initiated_by",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "disputes_initiated_by_fkey"
+  },
+  {
+    "table_name": "earnings_transactions",
+    "column_name": "order_id",
+    "foreign_table_name": "orders",
+    "foreign_column_name": "id",
+    "constraint_name": "earnings_transactions_order_id_fkey"
+  },
+  {
+    "table_name": "earnings_transactions",
+    "column_name": "seller_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "earnings_transactions_seller_id_fkey"
+  },
+  {
+    "table_name": "errand_applications",
+    "column_name": "helper_id",
+    "foreign_table_name": "profiles",
+    "foreign_column_name": "id",
+    "constraint_name": "errand_applications_helper_id_fkey"
+  },
+  {
+    "table_name": "errand_applications",
+    "column_name": "errand_id",
+    "foreign_table_name": "errands",
+    "foreign_column_name": "id",
+    "constraint_name": "errand_applications_errand_id_fkey"
+  },
+  {
+    "table_name": "errand_chat_messages",
+    "column_name": "sender_id",
+    "foreign_table_name": "profiles",
+    "foreign_column_name": "id",
+    "constraint_name": "errand_chat_messages_sender_id_fkey"
+  },
+  {
+    "table_name": "errand_chat_messages",
+    "column_name": "errand_id",
+    "foreign_table_name": "errands",
+    "foreign_column_name": "id",
+    "constraint_name": "errand_chat_messages_errand_id_fkey"
+  },
+  {
+    "table_name": "errand_disputes",
+    "column_name": "reported_id",
+    "foreign_table_name": "profiles",
+    "foreign_column_name": "id",
+    "constraint_name": "errand_disputes_reported_id_fkey"
+  },
+  {
+    "table_name": "errand_disputes",
+    "column_name": "errand_id",
+    "foreign_table_name": "errands",
+    "foreign_column_name": "id",
+    "constraint_name": "errand_disputes_errand_id_fkey"
+  },
+  {
+    "table_name": "errand_disputes",
+    "column_name": "reporter_id",
+    "foreign_table_name": "profiles",
+    "foreign_column_name": "id",
+    "constraint_name": "errand_disputes_reporter_id_fkey"
+  },
+  {
+    "table_name": "errand_disputes",
+    "column_name": "resolved_by",
+    "foreign_table_name": "profiles",
+    "foreign_column_name": "id",
+    "constraint_name": "errand_disputes_resolved_by_fkey"
+  },
+  {
+    "table_name": "errand_locations",
+    "column_name": "errand_id",
+    "foreign_table_name": "errands",
+    "foreign_column_name": "id",
+    "constraint_name": "errand_locations_errand_id_fkey"
+  },
+  {
+    "table_name": "errand_locations",
+    "column_name": "helper_id",
+    "foreign_table_name": "profiles",
+    "foreign_column_name": "id",
+    "constraint_name": "errand_locations_helper_id_fkey"
+  },
+  {
+    "table_name": "errand_messages",
+    "column_name": "errand_id",
+    "foreign_table_name": "errands",
+    "foreign_column_name": "id",
+    "constraint_name": "errand_messages_errand_id_fkey"
+  },
+  {
+    "table_name": "errand_messages",
+    "column_name": "sender_id",
+    "foreign_table_name": "profiles",
+    "foreign_column_name": "id",
+    "constraint_name": "errand_messages_sender_id_fkey"
+  },
+  {
+    "table_name": "errand_reviews",
+    "column_name": "helper_id",
+    "foreign_table_name": "helper_profiles",
+    "foreign_column_name": "id",
+    "constraint_name": "errand_reviews_helper_id_fkey"
+  },
+  {
+    "table_name": "errand_reviews",
+    "column_name": "errand_id",
+    "foreign_table_name": "errands",
+    "foreign_column_name": "id",
+    "constraint_name": "errand_reviews_errand_id_fkey"
+  },
+  {
+    "table_name": "errand_reviews",
+    "column_name": "reviewer_id",
+    "foreign_table_name": "profiles",
+    "foreign_column_name": "id",
+    "constraint_name": "errand_reviews_reviewer_id_fkey"
+  },
+  {
+    "table_name": "errand_settlements",
+    "column_name": "errand_id",
+    "foreign_table_name": "errands",
+    "foreign_column_name": "id",
+    "constraint_name": "errand_settlements_errand_id_fkey"
+  },
+  {
+    "table_name": "errand_settlements",
+    "column_name": "helper_id",
+    "foreign_table_name": "helper_profiles",
+    "foreign_column_name": "id",
+    "constraint_name": "errand_settlements_helper_id_fkey"
+  },
+  {
+    "table_name": "errand_stops",
+    "column_name": "errand_id",
+    "foreign_table_name": "errands",
+    "foreign_column_name": "id",
+    "constraint_name": "errand_stops_errand_id_fkey"
+  },
+  {
+    "table_name": "errands",
+    "column_name": "helper_id",
+    "foreign_table_name": "profiles",
+    "foreign_column_name": "id",
+    "constraint_name": "errands_helper_id_fkey"
+  },
+  {
+    "table_name": "errands",
+    "column_name": "requester_id",
+    "foreign_table_name": "profiles",
+    "foreign_column_name": "id",
+    "constraint_name": "errands_requester_id_fkey"
+  },
+  {
+    "table_name": "food_carts",
+    "column_name": "store_id",
+    "foreign_table_name": "food_stores",
+    "foreign_column_name": "id",
+    "constraint_name": "food_carts_store_id_fkey"
+  },
+  {
+    "table_name": "food_menu_categories",
+    "column_name": "store_id",
+    "foreign_table_name": "food_stores",
+    "foreign_column_name": "id",
+    "constraint_name": "food_menu_categories_store_id_fkey"
+  },
+  {
+    "table_name": "food_menu_option_groups",
+    "column_name": "menu_id",
+    "foreign_table_name": "food_menus",
+    "foreign_column_name": "id",
+    "constraint_name": "food_menu_option_groups_menu_id_fkey"
+  },
+  {
+    "table_name": "food_menu_option_items",
+    "column_name": "option_group_id",
+    "foreign_table_name": "food_menu_option_groups",
+    "foreign_column_name": "id",
+    "constraint_name": "food_menu_option_items_option_group_id_fkey"
+  },
+  {
+    "table_name": "food_menus",
+    "column_name": "store_id",
+    "foreign_table_name": "food_stores",
+    "foreign_column_name": "id",
+    "constraint_name": "food_menus_store_id_fkey"
+  },
+  {
+    "table_name": "food_menus",
+    "column_name": "category_id",
+    "foreign_table_name": "food_menu_categories",
+    "foreign_column_name": "id",
+    "constraint_name": "food_menus_category_id_fkey"
+  },
+  {
+    "table_name": "food_orders",
+    "column_name": "store_id",
+    "foreign_table_name": "food_stores",
+    "foreign_column_name": "id",
+    "constraint_name": "food_orders_store_id_fkey"
+  },
+  {
+    "table_name": "food_reviews",
+    "column_name": "store_id",
+    "foreign_table_name": "food_stores",
+    "foreign_column_name": "id",
+    "constraint_name": "food_reviews_store_id_fkey"
+  },
+  {
+    "table_name": "food_reviews",
+    "column_name": "order_id",
+    "foreign_table_name": "food_orders",
+    "foreign_column_name": "id",
+    "constraint_name": "food_reviews_order_id_fkey"
+  },
+  {
+    "table_name": "food_store_favorites",
+    "column_name": "store_id",
+    "foreign_table_name": "food_stores",
+    "foreign_column_name": "id",
+    "constraint_name": "food_store_favorites_store_id_fkey"
+  },
+  {
+    "table_name": "helper_subscriptions",
+    "column_name": "helper_id",
+    "foreign_table_name": "helper_profiles",
+    "foreign_column_name": "id",
+    "constraint_name": "helper_subscriptions_helper_id_fkey"
+  },
+  {
+    "table_name": "helper_withdrawals",
+    "column_name": "processed_by",
+    "foreign_table_name": "profiles",
+    "foreign_column_name": "id",
+    "constraint_name": "helper_withdrawals_processed_by_fkey"
+  },
+  {
+    "table_name": "helper_withdrawals",
+    "column_name": "helper_id",
+    "foreign_table_name": "helper_profiles",
+    "foreign_column_name": "id",
+    "constraint_name": "helper_withdrawals_helper_id_fkey"
+  },
+  {
+    "table_name": "messages",
+    "column_name": "sender_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "messages_sender_id_fkey"
+  },
+  {
+    "table_name": "messages",
+    "column_name": "conversation_id",
+    "foreign_table_name": "conversations",
+    "foreign_column_name": "id",
+    "constraint_name": "messages_conversation_id_fkey"
+  },
+  {
+    "table_name": "notifications",
+    "column_name": "order_id",
+    "foreign_table_name": "orders",
+    "foreign_column_name": "id",
+    "constraint_name": "notifications_order_id_fkey"
+  },
+  {
+    "table_name": "order_settlements",
+    "column_name": "seller_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "order_settlements_seller_id_fkey"
+  },
+  {
+    "table_name": "order_settlements",
+    "column_name": "order_id",
+    "foreign_table_name": "orders",
+    "foreign_column_name": "id",
+    "constraint_name": "order_settlements_order_id_fkey"
+  },
+  {
+    "table_name": "order_settlements",
+    "column_name": "batch_settlement_id",
+    "foreign_table_name": "settlements",
+    "foreign_column_name": "id",
+    "constraint_name": "order_settlements_batch_settlement_id_fkey"
+  },
+  {
+    "table_name": "orders",
+    "column_name": "review_id",
+    "foreign_table_name": "reviews",
+    "foreign_column_name": "id",
+    "constraint_name": "orders_review_id_fkey"
+  },
+  {
+    "table_name": "orders",
+    "column_name": "payment_request_id",
+    "foreign_table_name": "payment_requests",
+    "foreign_column_name": "id",
+    "constraint_name": "orders_payment_request_id_fkey"
+  },
+  {
+    "table_name": "orders",
+    "column_name": "seller_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "orders_seller_id_fkey"
+  },
+  {
+    "table_name": "orders",
+    "column_name": "buyer_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "orders_buyer_id_fkey"
+  },
+  {
+    "table_name": "orders",
+    "column_name": "service_id",
+    "foreign_table_name": "services",
+    "foreign_column_name": "id",
+    "constraint_name": "orders_service_id_fkey"
+  },
+  {
+    "table_name": "payment_requests",
+    "column_name": "room_id",
+    "foreign_table_name": "chat_rooms",
+    "foreign_column_name": "id",
+    "constraint_name": "payment_requests_room_id_fkey"
+  },
+  {
+    "table_name": "payment_requests",
+    "column_name": "service_id",
+    "foreign_table_name": "services",
+    "foreign_column_name": "id",
+    "constraint_name": "payment_requests_service_id_fkey"
+  },
+  {
+    "table_name": "payment_requests",
+    "column_name": "order_id",
+    "foreign_table_name": "orders",
+    "foreign_column_name": "id",
+    "constraint_name": "payment_requests_order_id_fkey"
+  },
+  {
+    "table_name": "payment_requests",
+    "column_name": "seller_id",
+    "foreign_table_name": "sellers",
+    "foreign_column_name": "id",
+    "constraint_name": "payment_requests_seller_id_fkey"
+  },
+  {
+    "table_name": "payments",
+    "column_name": "order_id",
+    "foreign_table_name": "orders",
+    "foreign_column_name": "id",
+    "constraint_name": "payments_order_id_fkey"
+  },
+  {
+    "table_name": "portfolio_items",
+    "column_name": "seller_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "portfolio_items_seller_id_fkey"
+  },
+  {
+    "table_name": "portfolio_services",
+    "column_name": "service_id",
+    "foreign_table_name": "services",
+    "foreign_column_name": "id",
+    "constraint_name": "portfolio_services_service_id_fkey"
+  },
+  {
+    "table_name": "portfolio_services",
+    "column_name": "portfolio_id",
+    "foreign_table_name": "seller_portfolio",
+    "foreign_column_name": "id",
+    "constraint_name": "portfolio_services_portfolio_id_fkey"
+  },
+  {
+    "table_name": "premium_placements",
+    "column_name": "service_id",
+    "foreign_table_name": "services",
+    "foreign_column_name": "id",
+    "constraint_name": "premium_placements_service_id_fkey"
+  },
+  {
+    "table_name": "premium_placements",
+    "column_name": "category_id",
+    "foreign_table_name": "categories",
+    "foreign_column_name": "id",
+    "constraint_name": "premium_placements_category_id_fkey"
+  },
+  {
+    "table_name": "premium_placements",
+    "column_name": "campaign_id",
+    "foreign_table_name": "advertising_campaigns",
+    "foreign_column_name": "id",
+    "constraint_name": "premium_placements_campaign_id_fkey"
+  },
+  {
+    "table_name": "quote_responses",
+    "column_name": "quote_id",
+    "foreign_table_name": "quotes",
+    "foreign_column_name": "id",
+    "constraint_name": "quote_responses_quote_id_fkey"
+  },
+  {
+    "table_name": "quote_responses",
+    "column_name": "seller_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "quote_responses_seller_id_fkey"
+  },
+  {
+    "table_name": "quotes",
+    "column_name": "category_id",
+    "foreign_table_name": "categories",
+    "foreign_column_name": "id",
+    "constraint_name": "quotes_category_id_fkey"
+  },
+  {
+    "table_name": "quotes",
+    "column_name": "buyer_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "quotes_buyer_id_fkey"
+  },
+  {
+    "table_name": "refunds",
+    "column_name": "approved_by",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "refunds_approved_by_fkey"
+  },
+  {
+    "table_name": "refunds",
+    "column_name": "payment_id",
+    "foreign_table_name": "payments",
+    "foreign_column_name": "id",
+    "constraint_name": "refunds_payment_id_fkey"
+  },
+  {
+    "table_name": "refunds",
+    "column_name": "order_id",
+    "foreign_table_name": "orders",
+    "foreign_column_name": "id",
+    "constraint_name": "refunds_order_id_fkey"
+  },
+  {
+    "table_name": "reports",
+    "column_name": "reported_review_id",
+    "foreign_table_name": "reviews",
+    "foreign_column_name": "id",
+    "constraint_name": "reports_reported_review_id_fkey"
+  },
+  {
+    "table_name": "reports",
+    "column_name": "reporter_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "reports_reporter_id_fkey"
+  },
+  {
+    "table_name": "reports",
+    "column_name": "assigned_to",
+    "foreign_table_name": "admins",
+    "foreign_column_name": "id",
+    "constraint_name": "reports_assigned_to_fkey"
+  },
+  {
+    "table_name": "reports",
+    "column_name": "reported_order_id",
+    "foreign_table_name": "orders",
+    "foreign_column_name": "id",
+    "constraint_name": "reports_reported_order_id_fkey"
+  },
+  {
+    "table_name": "reports",
+    "column_name": "reported_service_id",
+    "foreign_table_name": "services",
+    "foreign_column_name": "id",
+    "constraint_name": "reports_reported_service_id_fkey"
+  },
+  {
+    "table_name": "reports",
+    "column_name": "reported_user_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "reports_reported_user_id_fkey"
+  },
+  {
+    "table_name": "reviews",
+    "column_name": "service_id",
+    "foreign_table_name": "services",
+    "foreign_column_name": "id",
+    "constraint_name": "reviews_service_id_fkey"
+  },
+  {
+    "table_name": "reviews",
+    "column_name": "order_id",
+    "foreign_table_name": "orders",
+    "foreign_column_name": "id",
+    "constraint_name": "reviews_order_id_fkey"
+  },
+  {
+    "table_name": "reviews",
+    "column_name": "seller_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "reviews_seller_id_fkey"
+  },
+  {
+    "table_name": "reviews",
+    "column_name": "buyer_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "reviews_buyer_id_fkey"
+  },
+  {
+    "table_name": "revision_history",
+    "column_name": "order_id",
+    "foreign_table_name": "orders",
+    "foreign_column_name": "id",
+    "constraint_name": "revision_history_order_id_fkey"
+  },
+  {
+    "table_name": "search_logs",
+    "column_name": "category_id",
+    "foreign_table_name": "categories",
+    "foreign_column_name": "id",
+    "constraint_name": "search_logs_category_id_fkey"
+  },
+  {
+    "table_name": "search_logs",
+    "column_name": "converted_service_id",
+    "foreign_table_name": "services",
+    "foreign_column_name": "id",
+    "constraint_name": "search_logs_converted_service_id_fkey"
+  },
+  {
+    "table_name": "search_logs",
+    "column_name": "user_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "search_logs_user_id_fkey"
+  },
+  {
+    "table_name": "seller_earnings",
+    "column_name": "seller_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "seller_earnings_seller_id_fkey"
+  },
+  {
+    "table_name": "seller_portfolio",
+    "column_name": "category_id",
+    "foreign_table_name": "categories",
+    "foreign_column_name": "id",
+    "constraint_name": "seller_portfolio_category_id_fkey"
+  },
+  {
+    "table_name": "seller_portfolio",
+    "column_name": "service_id",
+    "foreign_table_name": "services",
+    "foreign_column_name": "id",
+    "constraint_name": "seller_portfolio_service_id_fkey"
+  },
+  {
+    "table_name": "seller_portfolio",
+    "column_name": "seller_id",
+    "foreign_table_name": "sellers",
+    "foreign_column_name": "id",
+    "constraint_name": "seller_portfolio_seller_id_fkey"
+  },
+  {
+    "table_name": "service_categories",
+    "column_name": "category_id",
+    "foreign_table_name": "categories",
+    "foreign_column_name": "id",
+    "constraint_name": "service_categories_category_id_fkey"
+  },
+  {
+    "table_name": "service_categories",
+    "column_name": "service_id",
+    "foreign_table_name": "services",
+    "foreign_column_name": "id",
+    "constraint_name": "service_categories_service_id_fkey"
+  },
+  {
+    "table_name": "service_favorites",
+    "column_name": "service_id",
+    "foreign_table_name": "services",
+    "foreign_column_name": "id",
+    "constraint_name": "service_favorites_service_id_fkey"
+  },
+  {
+    "table_name": "service_packages",
+    "column_name": "service_id",
+    "foreign_table_name": "services",
+    "foreign_column_name": "id",
+    "constraint_name": "service_packages_service_id_fkey"
+  },
+  {
+    "table_name": "service_revision_categories",
+    "column_name": "category_id",
+    "foreign_table_name": "categories",
+    "foreign_column_name": "id",
+    "constraint_name": "service_revision_categories_category_id_fkey"
+  },
+  {
+    "table_name": "service_revision_categories",
+    "column_name": "revision_id",
+    "foreign_table_name": "service_revisions",
+    "foreign_column_name": "id",
+    "constraint_name": "service_revision_categories_revision_id_fkey"
+  },
+  {
+    "table_name": "service_revisions",
+    "column_name": "seller_id",
+    "foreign_table_name": "sellers",
+    "foreign_column_name": "id",
+    "constraint_name": "service_revisions_seller_id_fkey"
+  },
+  {
+    "table_name": "service_revisions",
+    "column_name": "service_id",
+    "foreign_table_name": "services",
+    "foreign_column_name": "id",
+    "constraint_name": "service_revisions_service_id_fkey"
+  },
+  {
+    "table_name": "service_tags",
+    "column_name": "tag_id",
+    "foreign_table_name": "tags",
+    "foreign_column_name": "id",
+    "constraint_name": "service_tags_tag_id_fkey"
+  },
+  {
+    "table_name": "service_tags",
+    "column_name": "service_id",
+    "foreign_table_name": "services",
+    "foreign_column_name": "id",
+    "constraint_name": "service_tags_service_id_fkey"
+  },
+  {
+    "table_name": "service_view_logs",
+    "column_name": "service_id",
+    "foreign_table_name": "services",
+    "foreign_column_name": "id",
+    "constraint_name": "service_view_logs_service_id_fkey"
+  },
+  {
+    "table_name": "service_views",
+    "column_name": "service_id",
+    "foreign_table_name": "services",
+    "foreign_column_name": "id",
+    "constraint_name": "service_views_service_id_fkey"
+  },
+  {
+    "table_name": "services",
+    "column_name": "last_modified_by",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "services_last_modified_by_fkey"
+  },
+  {
+    "table_name": "services",
+    "column_name": "seller_id",
+    "foreign_table_name": "sellers",
+    "foreign_column_name": "id",
+    "constraint_name": "services_seller_id_fkey"
+  },
+  {
+    "table_name": "settlement_details",
+    "column_name": "order_id",
+    "foreign_table_name": "orders",
+    "foreign_column_name": "id",
+    "constraint_name": "settlement_details_order_id_fkey"
+  },
+  {
+    "table_name": "settlement_details",
+    "column_name": "settlement_id",
+    "foreign_table_name": "settlements",
+    "foreign_column_name": "id",
+    "constraint_name": "settlement_details_settlement_id_fkey"
+  },
+  {
+    "table_name": "settlements",
+    "column_name": "seller_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "settlements_seller_id_fkey"
+  },
+  {
+    "table_name": "tax_invoices",
+    "column_name": "subscription_id",
+    "foreign_table_name": "advertising_subscriptions",
+    "foreign_column_name": "id",
+    "constraint_name": "tax_invoices_subscription_id_fkey"
+  },
+  {
+    "table_name": "tax_invoices",
+    "column_name": "payment_id",
+    "foreign_table_name": "advertising_payments",
+    "foreign_column_name": "id",
+    "constraint_name": "tax_invoices_payment_id_fkey"
+  },
+  {
+    "table_name": "user_wallets",
+    "column_name": "user_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "user_wallets_user_id_fkey"
+  },
+  {
+    "table_name": "wallet_transactions",
+    "column_name": "order_id",
+    "foreign_table_name": "orders",
+    "foreign_column_name": "id",
+    "constraint_name": "wallet_transactions_order_id_fkey"
+  },
+  {
+    "table_name": "wallet_transactions",
+    "column_name": "wallet_id",
+    "foreign_table_name": "user_wallets",
+    "foreign_column_name": "id",
+    "constraint_name": "wallet_transactions_wallet_id_fkey"
+  },
+  {
+    "table_name": "wallet_transactions",
+    "column_name": "user_id",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "wallet_transactions_user_id_fkey"
+  },
+  {
+    "table_name": "withdrawal_requests",
+    "column_name": "seller_id",
+    "foreign_table_name": "sellers",
+    "foreign_column_name": "id",
+    "constraint_name": "withdrawal_requests_seller_id_fkey"
+  },
+  {
+    "table_name": "withdrawal_requests",
+    "column_name": "processed_by",
+    "foreign_table_name": "users",
+    "foreign_column_name": "id",
+    "constraint_name": "withdrawal_requests_processed_by_fkey"
+  }
+]

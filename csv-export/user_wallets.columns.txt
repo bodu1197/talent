@@ -1,0 +1,1 @@
+id,user_id,balance,total_charged,total_used,created_at,updated_at

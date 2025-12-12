@@ -1,0 +1,1 @@
+id,seller_id,service_id,monthly_price,status,payment_method,next_billing_date,last_billed_at,bank_transfer_deadline,bank_transfer_confirmed,bank_transfer_confirmed_at,bank_transfer_confirmed_by,started_at,cancelled_at,expires_at,total_impressions,total_clicks,total_paid,created_at,updated_at

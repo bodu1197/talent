@@ -1,0 +1,1 @@
+id,owner_id,name,category,description,phone,address,detail_address,latitude,longitude,thumbnail_url,banner_url,min_order_amount,delivery_fee,estimated_prep_time,rating,review_count,order_count,is_open,is_verified,is_active,business_number,business_name,created_at,updated_at,business_document_url

@@ -1,0 +1,11 @@
+{
+  "unused-vars-typescript": [],
+  "unused-vars-sonarjs": [],
+  "dead-store": [],
+  "prefer-const": [],
+  "commented-code": [],
+  "ignored-exceptions": [],
+  "all-duplicated-branches": [],
+  "anchor-precedence": [],
+  "other": []
+}

@@ -1,0 +1,1 @@
+id,errand_id,helper_id,message,proposed_price,status,created_at,updated_at

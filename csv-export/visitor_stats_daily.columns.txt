@@ -1,0 +1,1 @@
+id,date,path,total_views,unique_visitors,desktop_views,mobile_views,tablet_views,bot_views,avg_session_duration,bounce_rate,created_at

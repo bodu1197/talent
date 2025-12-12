@@ -1,0 +1,13 @@
+[
+  {
+    "id": "a2674414-a5c4-451e-abbf-879c14506b05",
+    "user_id": "ccf26cba-d1d5-4aae-b5d9-0fe85449f086",
+    "role": "super_admin",
+    "permissions": {},
+    "department": "IT",
+    "notes": "시스템 최고 관리자",
+    "last_action_at": null,
+    "created_at": "2025-10-26 06:38:35.048899+00",
+    "updated_at": "2025-10-26 06:38:35.048899+00"
+  }
+]

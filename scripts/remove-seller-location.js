@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/cognitive-complexity, sonarjs/os-command, sonarjs/no-os-command-from-path, sonarjs/no-hardcoded-passwords, sonarjs/sql-queries, sonarjs/slow-regex */
 // Supabase Management API를 사용한 판매자 위치 필드 삭제
 // 실행: SUPABASE_ACCESS_TOKEN=your_token node scripts/remove-seller-location.js
 

@@ -1,0 +1,53 @@
+CREATE OR REPLACE VIEW order_revision_stats AS
+ SELECT order_id,
+    count(*) AS total_revisions,
+    count(*) FILTER (WHERE (completed_at IS NOT NULL)) AS completed_revisions,
+    count(*) FILTER (WHERE (completed_at IS NULL)) AS pending_revisions,
+    max(requested_at) AS last_revision_requested_at
+   FROM revision_history
+  GROUP BY order_id;;
+
+CREATE OR REPLACE VIEW seller_profiles AS
+ SELECT s.id,
+    s.user_id,
+    s.business_name,
+    s.business_number,
+    s.business_registration_file,
+    s.bank_name,
+    s.account_number,
+    s.account_holder,
+    s.is_verified,
+    s.verification_status,
+    s.verified_at,
+    s.rejection_reason,
+    s.total_sales,
+    s.total_revenue,
+    s.service_count,
+    s.rating,
+    s.review_count,
+    s.last_sale_at,
+    s.is_active,
+    s.created_at,
+    s.updated_at,
+    p.name AS display_name,
+    p.profile_image,
+    p.bio,
+    s.phone,
+    s.show_phone,
+    s.kakao_id,
+    s.kakao_openchat,
+    s.whatsapp,
+    s.website,
+    s.preferred_contact,
+    s.certificates,
+    s.experience,
+    s.is_business,
+    s.status,
+    s.real_name,
+    s.contact_hours,
+    s.tax_invoice_available,
+    s.verified,
+    s.verified_name,
+    s.verified_phone
+   FROM (sellers s
+     LEFT JOIN profiles p ON ((s.user_id = p.user_id)));;

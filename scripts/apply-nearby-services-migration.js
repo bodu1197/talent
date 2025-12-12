@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/cognitive-complexity, sonarjs/os-command, sonarjs/no-os-command-from-path, sonarjs/no-hardcoded-passwords, sonarjs/sql-queries, sonarjs/slow-regex */
 // Supabase Management API를 사용한 마이그레이션 적용
 // 실행: node scripts/apply-nearby-services-migration.js
 

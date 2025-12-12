@@ -1,0 +1,407 @@
+[
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_campaigns_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "advertising_campaigns",
+    "action_statement": "EXECUTE FUNCTION update_updated_at()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_advertising_credits_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "advertising_credits",
+    "action_statement": "EXECUTE FUNCTION update_updated_at_column()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_advertising_payments_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "advertising_payments",
+    "action_statement": "EXECUTE FUNCTION update_updated_at_column()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_advertising_subscriptions_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "advertising_subscriptions",
+    "action_statement": "EXECUTE FUNCTION update_updated_at_column()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_buyers_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "buyers",
+    "action_statement": "EXECUTE FUNCTION update_updated_at_column()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_categories_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "categories",
+    "action_statement": "EXECUTE FUNCTION update_updated_at()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "trigger_update_chat_room_last_message",
+    "event_manipulation": "INSERT",
+    "event_object_table": "chat_messages",
+    "action_statement": "EXECUTE FUNCTION update_chat_room_last_message()",
+    "action_timing": "AFTER",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_chat_room_last_message_trigger",
+    "event_manipulation": "INSERT",
+    "event_object_table": "chat_messages",
+    "action_statement": "EXECUTE FUNCTION update_chat_room_last_message()",
+    "action_timing": "AFTER",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_conversations_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "conversations",
+    "action_statement": "EXECUTE FUNCTION update_updated_at()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_disputes_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "disputes",
+    "action_statement": "EXECUTE FUNCTION update_updated_at()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "trigger_update_errand_chat_messages_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "errand_chat_messages",
+    "action_statement": "EXECUTE FUNCTION update_errand_chat_messages_updated_at()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "trigger_generate_food_order_number",
+    "event_manipulation": "INSERT",
+    "event_object_table": "food_orders",
+    "action_statement": "EXECUTE FUNCTION generate_food_order_number()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "trigger_update_food_store_rating",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "food_reviews",
+    "action_statement": "EXECUTE FUNCTION update_food_store_rating()",
+    "action_timing": "AFTER",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "trigger_update_food_store_rating",
+    "event_manipulation": "INSERT",
+    "event_object_table": "food_reviews",
+    "action_statement": "EXECUTE FUNCTION update_food_store_rating()",
+    "action_timing": "AFTER",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "trigger_update_food_store_rating",
+    "event_manipulation": "DELETE",
+    "event_object_table": "food_reviews",
+    "action_statement": "EXECUTE FUNCTION update_food_store_rating()",
+    "action_timing": "AFTER",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "trigger_notices_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "notices",
+    "action_statement": "EXECUTE FUNCTION update_notices_updated_at()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "generate_order_number_trigger",
+    "event_manipulation": "INSERT",
+    "event_object_table": "orders",
+    "action_statement": "EXECUTE FUNCTION generate_order_number()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "trigger_notify_new_order",
+    "event_manipulation": "INSERT",
+    "event_object_table": "orders",
+    "action_statement": "EXECUTE FUNCTION notify_new_order()",
+    "action_timing": "AFTER",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "trigger_notify_order_status_change",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "orders",
+    "action_statement": "EXECUTE FUNCTION notify_order_status_change()",
+    "action_timing": "AFTER",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "trigger_orders_insert",
+    "event_manipulation": "INSERT",
+    "event_object_table": "orders",
+    "action_statement": "EXECUTE FUNCTION update_service_orders_count()",
+    "action_timing": "AFTER",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_orders_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "orders",
+    "action_statement": "EXECUTE FUNCTION update_updated_at()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_portfolio_items_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "portfolio_items",
+    "action_statement": "EXECUTE FUNCTION update_updated_at()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_premium_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "premium_placements",
+    "action_statement": "EXECUTE FUNCTION update_updated_at()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_quote_response_count_on_change",
+    "event_manipulation": "INSERT",
+    "event_object_table": "quote_responses",
+    "action_statement": "EXECUTE FUNCTION update_quote_response_count()",
+    "action_timing": "AFTER",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_quote_response_count_on_change",
+    "event_manipulation": "DELETE",
+    "event_object_table": "quote_responses",
+    "action_statement": "EXECUTE FUNCTION update_quote_response_count()",
+    "action_timing": "AFTER",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_quote_responses_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "quote_responses",
+    "action_statement": "EXECUTE FUNCTION update_updated_at_column()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_quotes_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "quotes",
+    "action_statement": "EXECUTE FUNCTION update_updated_at_column()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_reports_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "reports",
+    "action_statement": "EXECUTE FUNCTION update_updated_at()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_reviews_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "reviews",
+    "action_statement": "EXECUTE FUNCTION update_updated_at()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_seller_earnings_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "seller_earnings",
+    "action_statement": "EXECUTE FUNCTION update_updated_at()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_sellers_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "sellers",
+    "action_statement": "EXECUTE FUNCTION update_updated_at_column()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "trigger_service_favorites_delete",
+    "event_manipulation": "DELETE",
+    "event_object_table": "service_favorites",
+    "action_statement": "EXECUTE FUNCTION update_service_wishlist_count()",
+    "action_timing": "AFTER",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "trigger_service_favorites_insert",
+    "event_manipulation": "INSERT",
+    "event_object_table": "service_favorites",
+    "action_statement": "EXECUTE FUNCTION update_service_wishlist_count()",
+    "action_timing": "AFTER",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "trigger_increment_view_count",
+    "event_manipulation": "INSERT",
+    "event_object_table": "service_view_logs",
+    "action_statement": "EXECUTE FUNCTION increment_service_view_count()",
+    "action_timing": "AFTER",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "trigger_service_views_insert",
+    "event_manipulation": "INSERT",
+    "event_object_table": "service_views",
+    "action_statement": "EXECUTE FUNCTION update_service_views_count()",
+    "action_timing": "AFTER",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "generate_service_slug_trigger",
+    "event_manipulation": "INSERT",
+    "event_object_table": "services",
+    "action_statement": "EXECUTE FUNCTION generate_service_slug()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "generate_service_slug_trigger",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "services",
+    "action_statement": "EXECUTE FUNCTION generate_service_slug()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_services_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "services",
+    "action_statement": "EXECUTE FUNCTION update_updated_at()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_settlements_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "settlements",
+    "action_statement": "EXECUTE FUNCTION update_updated_at()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_user_wallets_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "user_wallets",
+    "action_statement": "EXECUTE FUNCTION update_updated_at_column()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "create_wallet_on_user_creation",
+    "event_manipulation": "INSERT",
+    "event_object_table": "users",
+    "action_statement": "EXECUTE FUNCTION create_user_wallet()",
+    "action_timing": "AFTER",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "trigger_create_seller_earnings",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "users",
+    "action_statement": "EXECUTE FUNCTION create_seller_earnings()",
+    "action_timing": "AFTER",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "trigger_create_seller_earnings",
+    "event_manipulation": "INSERT",
+    "event_object_table": "users",
+    "action_statement": "EXECUTE FUNCTION create_seller_earnings()",
+    "action_timing": "AFTER",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_users_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "users",
+    "action_statement": "EXECUTE FUNCTION update_users_updated_at()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  },
+  {
+    "trigger_schema": "public",
+    "trigger_name": "update_withdrawal_requests_updated_at",
+    "event_manipulation": "UPDATE",
+    "event_object_table": "withdrawal_requests",
+    "action_statement": "EXECUTE FUNCTION update_updated_at()",
+    "action_timing": "BEFORE",
+    "action_orientation": "ROW"
+  }
+]

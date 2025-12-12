@@ -1,0 +1,111 @@
+[
+  {
+    "id": "profiles",
+    "name": "profiles",
+    "owner": null,
+    "created_at": "2025-10-30 13:57:08.952605+00",
+    "updated_at": "2025-10-30 13:57:08.952605+00",
+    "public": true,
+    "avif_autodetection": false,
+    "file_size_limit": 5242880,
+    "allowed_mime_types": [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp"
+    ],
+    "owner_id": null,
+    "type": "STANDARD"
+  },
+  {
+    "id": "services",
+    "name": "services",
+    "owner": null,
+    "created_at": "2025-10-31 08:26:34.862059+00",
+    "updated_at": "2025-10-31 08:26:34.862059+00",
+    "public": true,
+    "avif_autodetection": false,
+    "file_size_limit": 5242880,
+    "allowed_mime_types": [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp"
+    ],
+    "owner_id": null,
+    "type": "STANDARD"
+  },
+  {
+    "id": "portfolio",
+    "name": "portfolio",
+    "owner": null,
+    "created_at": "2025-11-06 10:00:58.658493+00",
+    "updated_at": "2025-11-06 10:00:58.658493+00",
+    "public": true,
+    "avif_autodetection": false,
+    "file_size_limit": 10485760,
+    "allowed_mime_types": [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp"
+    ],
+    "owner_id": null,
+    "type": "STANDARD"
+  },
+  {
+    "id": "uploads",
+    "name": "uploads",
+    "owner": null,
+    "created_at": "2025-11-07 07:54:01.046794+00",
+    "updated_at": "2025-11-07 07:54:01.046794+00",
+    "public": true,
+    "avif_autodetection": false,
+    "file_size_limit": null,
+    "allowed_mime_types": null,
+    "owner_id": null,
+    "type": "STANDARD"
+  },
+  {
+    "id": "food-stores",
+    "name": "food-stores",
+    "owner": null,
+    "created_at": "2025-12-08 19:54:48.107712+00",
+    "updated_at": "2025-12-08 19:54:48.107712+00",
+    "public": true,
+    "avif_autodetection": false,
+    "file_size_limit": 10485760,
+    "allowed_mime_types": [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp"
+    ],
+    "owner_id": null,
+    "type": "STANDARD"
+  },
+  {
+    "id": "business-documents",
+    "name": "business-documents",
+    "owner": null,
+    "created_at": "2025-12-08 20:15:35.329045+00",
+    "updated_at": "2025-12-08 20:15:35.329045+00",
+    "public": false,
+    "avif_autodetection": false,
+    "file_size_limit": 10485760,
+    "allowed_mime_types": [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+      "application/pdf"
+    ],
+    "owner_id": null,
+    "type": "STANDARD"
+  }
+]

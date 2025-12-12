@@ -1,0 +1,281 @@
+[
+  {
+    "id": "cc0e6f06-5feb-452b-bd87-e472b23335d3",
+    "user_id": "ccf26cba-d1d5-4aae-b5d9-0fe85449f086",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-10-30 10:07:18.003072+00",
+    "updated_at": "2025-10-30 10:07:18.003072+00"
+  },
+  {
+    "id": "36d7f046-11c1-4306-90e9-9f9b524c9a20",
+    "user_id": "510c9930-bc8c-46eb-82ae-da5c396710cb",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-11-17 08:43:31.606806+00",
+    "updated_at": "2025-11-17 08:43:31.606806+00"
+  },
+  {
+    "id": "533b10f1-78af-4503-a510-cb53be66e0ed",
+    "user_id": "aa213c80-16ed-4800-a527-3bf521a7c73f",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:16.31626+00",
+    "updated_at": "2025-12-03 02:01:16.31626+00"
+  },
+  {
+    "id": "19646ab3-5a88-4ec6-a287-465575d37668",
+    "user_id": "d8936072-43c0-4a3e-a4eb-a78492928b32",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:17.013232+00",
+    "updated_at": "2025-12-03 02:01:17.013232+00"
+  },
+  {
+    "id": "102817a7-ae38-4b65-808b-23d9995442a7",
+    "user_id": "eb00d2cf-77ed-48c7-9e11-1a4a079ed29e",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:17.552686+00",
+    "updated_at": "2025-12-03 02:01:17.552686+00"
+  },
+  {
+    "id": "7a8fd370-819d-445b-803d-21213d3b8bf8",
+    "user_id": "9eef92d6-6571-45ff-a673-3f53fc5b5e70",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:18.106729+00",
+    "updated_at": "2025-12-03 02:01:18.106729+00"
+  },
+  {
+    "id": "23dc2853-ae00-42c4-95ff-6bc62076a57a",
+    "user_id": "9dca98dc-68c3-439e-85f9-08c10886e1d1",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:18.639874+00",
+    "updated_at": "2025-12-03 02:01:18.639874+00"
+  },
+  {
+    "id": "a6036a2c-c3a9-4911-b62f-4d5c2aa48460",
+    "user_id": "cfb45aa4-8a9e-499f-a71d-b94b6decd103",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:19.180701+00",
+    "updated_at": "2025-12-03 02:01:19.180701+00"
+  },
+  {
+    "id": "00f9827f-ac94-4955-ac96-1b1391de4008",
+    "user_id": "113412fd-aab4-4e6e-82f3-78d000497286",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:19.710655+00",
+    "updated_at": "2025-12-03 02:01:19.710655+00"
+  },
+  {
+    "id": "05fb4802-497c-47b2-9ebf-d1d5f5da8f24",
+    "user_id": "68cd6f97-f327-41b3-a9aa-93bde066355a",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:20.249594+00",
+    "updated_at": "2025-12-03 02:01:20.249594+00"
+  },
+  {
+    "id": "05f4af44-05a3-4ad2-a4a3-a300e135f029",
+    "user_id": "b2ce6228-2972-4eb9-a868-e759647d4d8d",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:20.76292+00",
+    "updated_at": "2025-12-03 02:01:20.76292+00"
+  },
+  {
+    "id": "2808b764-dbf3-4a70-a540-72032c20fd9b",
+    "user_id": "1cde3786-ec3b-4980-81b5-10b5c4fa45b2",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:21.292202+00",
+    "updated_at": "2025-12-03 02:01:21.292202+00"
+  },
+  {
+    "id": "38e4dcdc-036d-42e9-a8af-a4367666d235",
+    "user_id": "e46a53fd-2cfc-44c2-906a-da45694810ed",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:21.85743+00",
+    "updated_at": "2025-12-03 02:01:21.85743+00"
+  },
+  {
+    "id": "cd7c1a5e-924f-4bea-95ec-e9c2572ad744",
+    "user_id": "f54b8cd8-1ca3-4b56-ab75-7512ee5f0de0",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:22.401398+00",
+    "updated_at": "2025-12-03 02:01:22.401398+00"
+  },
+  {
+    "id": "0a1a9dbe-1d52-4564-a8a1-bc706514dec5",
+    "user_id": "62b91a94-1172-4813-be41-bba0b16a2cd4",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:22.919734+00",
+    "updated_at": "2025-12-03 02:01:22.919734+00"
+  },
+  {
+    "id": "1e4f1b68-d742-446b-9643-025dbac6e771",
+    "user_id": "8200da25-dece-4dab-8b41-c57b5cd3f78e",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:23.443388+00",
+    "updated_at": "2025-12-03 02:01:23.443388+00"
+  },
+  {
+    "id": "f6a719d2-3417-456f-b9c9-58384ea2d90c",
+    "user_id": "5922c985-c778-41d0-a27c-c98bfe18683b",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:23.980217+00",
+    "updated_at": "2025-12-03 02:01:23.980217+00"
+  },
+  {
+    "id": "e5560e39-2f08-4041-a724-bd8fc3646eaa",
+    "user_id": "51e683b7-9e41-45c1-acc1-baf3437c07b5",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:24.492002+00",
+    "updated_at": "2025-12-03 02:01:24.492002+00"
+  },
+  {
+    "id": "3a8fb980-3b6f-44f6-999f-2289902c9052",
+    "user_id": "47d56e63-920b-4634-bd73-a0522b20b095",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:25.01347+00",
+    "updated_at": "2025-12-03 02:01:25.01347+00"
+  },
+  {
+    "id": "02c3eaed-6b4e-40ca-9930-58d6a2ef6724",
+    "user_id": "d17c8881-5f60-4316-ac0b-2905cb1ae762",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:25.536794+00",
+    "updated_at": "2025-12-03 02:01:25.536794+00"
+  },
+  {
+    "id": "050e5a61-2d6a-492d-8620-f1bb486391ad",
+    "user_id": "e4c6958a-7cdc-422b-8316-a9f86172f29b",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:26.070461+00",
+    "updated_at": "2025-12-03 02:01:26.070461+00"
+  },
+  {
+    "id": "30a55dfd-8885-45d7-8d44-9e75bfba3c4c",
+    "user_id": "cb45fbd8-c643-4898-bc62-547a72e130a6",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:26.585363+00",
+    "updated_at": "2025-12-03 02:01:26.585363+00"
+  },
+  {
+    "id": "142b6f5c-f4b0-4414-bdad-b6de52ea27b5",
+    "user_id": "0fefd860-b14f-403d-83d9-ce36a88ed37c",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:27.125778+00",
+    "updated_at": "2025-12-03 02:01:27.125778+00"
+  },
+  {
+    "id": "063c3636-6c74-47d4-be31-c650fd0c8d4f",
+    "user_id": "b69245ab-9beb-4723-bd19-8cc1cd065fd5",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 02:01:27.690344+00",
+    "updated_at": "2025-12-03 02:01:27.690344+00"
+  },
+  {
+    "id": "7824ab10-9003-42ee-a935-70a634dd86c2",
+    "user_id": "6e118407-7d00-4748-8c61-6be75711fa7f",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-11-18 17:30:22.132625+00",
+    "updated_at": "2025-11-18 17:30:22.132625+00"
+  },
+  {
+    "id": "a31dc5cd-bf47-4cb5-b182-c80da6d9dffb",
+    "user_id": "f4caeba4-2dfe-41a5-8c68-7e37e9461e6f",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-03 08:29:00.492872+00",
+    "updated_at": "2025-12-03 08:29:00.492872+00"
+  },
+  {
+    "id": "0d7db970-d5ff-48db-a14d-dc6139aa879b",
+    "user_id": "7f73b01b-4075-4f68-b150-dd9e7b8b2b99",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-12-05 20:52:31.385518+00",
+    "updated_at": "2025-12-05 20:52:31.385518+00"
+  },
+  {
+    "id": "56378dbc-dd50-4517-baf9-8cc4bfd2dc30",
+    "user_id": "f1ea6d0b-c373-427a-b8ed-9f2e4c0e87f1",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-11-18 18:19:46.991319+00",
+    "updated_at": "2025-11-18 18:19:46.991319+00"
+  },
+  {
+    "id": "73d60030-3e9d-43ee-9e3b-f31f998fa1bb",
+    "user_id": "759941a3-bb1c-4395-9630-8a5e1e915a8b",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-11-19 07:49:55.278498+00",
+    "updated_at": "2025-11-19 07:49:55.278498+00"
+  },
+  {
+    "id": "fc50cb9e-8d45-4cff-9cf3-15ff4cb47413",
+    "user_id": "9b42216d-56bd-4825-99e2-fff60147f35e",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-11-23 00:17:13.914113+00",
+    "updated_at": "2025-11-23 00:17:13.914113+00"
+  },
+  {
+    "id": "5ae0e0f4-c2eb-49f7-bf7f-80ab0a3dab94",
+    "user_id": "e9448937-3fea-4f14-804a-1672b5009ee5",
+    "balance": 0,
+    "total_charged": 0,
+    "total_used": 0,
+    "created_at": "2025-11-15 01:11:44.385652+00",
+    "updated_at": "2025-11-15 01:11:44.385652+00"
+  }
+]

@@ -1,0 +1,1843 @@
+{
+  "add-sonarqube-env.js": [
+    {
+      "line": 19,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 19,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'error' is defined but never used."
+    }
+  ],
+  "advanced-security-advisor.js": [
+    {
+      "line": 13,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 22 to the 15 allowed."
+    }
+  ],
+  "analyze-eslint-errors.js": [
+    {
+      "line": 6,
+      "rule": "sonarjs/no-os-command-from-path",
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories."
+    }
+  ],
+  "analyze-sonarqube.js": [
+    {
+      "line": 69,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    },
+    {
+      "line": 91,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    },
+    {
+      "line": 123,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    }
+  ],
+  "apply-advertising-direct.js": [
+    {
+      "line": 5,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_response' variable."
+    },
+    {
+      "line": 14,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    },
+    {
+      "line": 45,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    }
+  ],
+  "apply-advertising-indexes.js": [
+    {
+      "line": 11,
+      "rule": "sonarjs/no-hardcoded-passwords",
+      "message": "Review this potentially hard-coded password."
+    }
+  ],
+  "apply-advertising-migration.js": [
+    {
+      "line": 10,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 19 to the 15 allowed."
+    }
+  ],
+  "apply-bank-transfer-migration.js": [
+    {
+      "line": 55,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    }
+  ],
+  "apply-errand-applications-rls.js": [
+    {
+      "line": 26,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'executeStatementViaRest' is defined but never used. Allowed unused vars must match /^_/u."
+    }
+  ],
+  "apply-free-promotion-migration.js": [
+    {
+      "line": 66,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused 'testData' variable."
+    },
+    {
+      "line": 66,
+      "rule": "sonarjs/no-dead-store",
+      "message": "Remove this useless assignment to variable \"testData\"."
+    },
+    {
+      "line": 66,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'testData' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    }
+  ],
+  "apply-helper-location-migration.js": [
+    {
+      "line": 262,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 262,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'error' is defined but never used."
+    },
+    {
+      "line": 275,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 275,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'_error' is defined but never used."
+    },
+    {
+      "line": 278,
+      "rule": "sonarjs/no-os-command-from-path",
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories."
+    }
+  ],
+  "apply-migration-direct.js": [
+    {
+      "line": 5,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'DB_PASSWORD' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 5,
+      "rule": "sonarjs/no-hardcoded-passwords",
+      "message": "Review this potentially hard-coded password."
+    },
+    {
+      "line": 11,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 54,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    },
+    {
+      "line": 66,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 66,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'error' is defined but never used."
+    }
+  ],
+  "apply-migration-pg.js": [
+    {
+      "line": 36,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 36,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'error' is defined but never used."
+    },
+    {
+      "line": 45,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 45,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'error' is defined but never used."
+    },
+    {
+      "line": 57,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 57,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'_error' is defined but never used."
+    },
+    {
+      "line": 60,
+      "rule": "sonarjs/no-os-command-from-path",
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories."
+    }
+  ],
+  "apply-migration.js": [
+    {
+      "line": 28,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 28,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'error' is defined but never used."
+    }
+  ],
+  "apply-migrations.js": [
+    {
+      "line": 5,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'SUPABASE_URL' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    }
+  ],
+  "apply-nearby-services-migration.js": [
+    {
+      "line": 109,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_response' variable."
+    },
+    {
+      "line": 118,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    }
+  ],
+  "apply-notices-migration.js": [
+    {
+      "line": 154,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 173,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    }
+  ],
+  "apply-profile-migrations-simple.js": [
+    {
+      "line": 1,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'createClient' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 5,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'supabaseUrl' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 6,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'supabaseServiceKey' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    }
+  ],
+  "apply-profile-migrations.js": [
+    {
+      "line": 25,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_response' variable."
+    }
+  ],
+  "apply-revision-history-migration.js": [
+    {
+      "line": 8,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'supabase' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 33,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 33,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'error' is defined but never used."
+    }
+  ],
+  "apply-schema-to-new-project.js": [
+    {
+      "line": 17,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    }
+  ],
+  "check-auth-users.js": [
+    {
+      "line": 10,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    }
+  ],
+  "check-database.js": [
+    {
+      "line": 70,
+      "rule": "sonarjs/sql-queries",
+      "message": "Make sure that executing SQL queries is safe here."
+    },
+    {
+      "line": 72,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 72,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'error' is defined but never used."
+    }
+  ],
+  "check-env-keys.js": [
+    {
+      "line": 22,
+      "rule": "prefer-const",
+      "message": "'cleanValue' is never reassigned. Use 'const' instead."
+    },
+    {
+      "line": 22,
+      "rule": "sonarjs/anchor-precedence",
+      "message": "Group parts of the regex together to make the intended operator precedence explicit."
+    }
+  ],
+  "check-errand-tables.js": [
+    {
+      "line": 19,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed."
+    },
+    {
+      "line": 84,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused 'appCols' variable."
+    },
+    {
+      "line": 84,
+      "rule": "sonarjs/no-dead-store",
+      "message": "Remove this useless assignment to variable \"appCols\"."
+    },
+    {
+      "line": 84,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'appCols' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    }
+  ],
+  "check-table-structure.js": [
+    {
+      "line": 68,
+      "rule": "sonarjs/sql-queries",
+      "message": "Make sure that executing SQL queries is safe here."
+    }
+  ],
+  "cleanup-test-data.js": [
+    {
+      "line": 13,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 23 to the 15 allowed."
+    },
+    {
+      "line": 50,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused 'removeData' variable."
+    },
+    {
+      "line": 50,
+      "rule": "sonarjs/no-dead-store",
+      "message": "Remove this useless assignment to variable \"removeData\"."
+    },
+    {
+      "line": 50,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'removeData' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 65,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused 'deleteBucket' variable."
+    },
+    {
+      "line": 65,
+      "rule": "sonarjs/no-dead-store",
+      "message": "Remove this useless assignment to variable \"deleteBucket\"."
+    },
+    {
+      "line": 65,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'deleteBucket' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    }
+  ],
+  "compare-passwords.js": [
+    {
+      "line": 13,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    }
+  ],
+  "complete-seller-profiles.js": [
+    {
+      "line": 20,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    },
+    {
+      "line": 21,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    },
+    {
+      "line": 27,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    },
+    {
+      "line": 36,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    },
+    {
+      "line": 59,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'generateBusinessHours' is defined but never used. Allowed unused vars must match /^_/u."
+    }
+  ],
+  "convert-foreach-to-forof.js": [
+    {
+      "line": 54,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    }
+  ],
+  "create-it-services.js": [
+    {
+      "line": 16,
+      "rule": "no-useless-catch",
+      "message": "Unnecessary try/catch wrapper."
+    },
+    {
+      "line": 17,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_response' variable."
+    },
+    {
+      "line": 34,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 44,
+      "rule": "sonarjs/no-useless-catch",
+      "message": "Add logic to this catch clause or eliminate it and rethrow the exception automatically."
+    },
+    {
+      "line": 78,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    },
+    {
+      "line": 79,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    },
+    {
+      "line": 80,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    },
+    {
+      "line": 158,
+      "rule": "sonarjs/no-hardcoded-passwords",
+      "message": "Review this potentially hard-coded password."
+    }
+  ],
+  "create-ohy7-services.js": [
+    {
+      "line": 9,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+    },
+    {
+      "line": 64,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    },
+    {
+      "line": 65,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    },
+    {
+      "line": 66,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    },
+    {
+      "line": 110,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    },
+    {
+      "line": 111,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    },
+    {
+      "line": 112,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    }
+  ],
+  "create-sellers-for-existing-users.js": [
+    {
+      "line": 63,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'categorySlug' is defined but never used. Allowed unused args must match /^_/u."
+    },
+    {
+      "line": 91,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    },
+    {
+      "line": 92,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    },
+    {
+      "line": 93,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    }
+  ],
+  "create-storage-buckets.js": [
+    {
+      "line": 14,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 104,
+      "rule": "sonarjs/no-nested-template-literals",
+      "message": "Refactor this code to not use nested template literals."
+    },
+    {
+      "line": 153,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 153,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'_error' is defined but never used."
+    },
+    {
+      "line": 175,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 175,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'_error' is defined but never used."
+    },
+    {
+      "line": 194,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 194,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'_error' is defined but never used."
+    }
+  ],
+  "delete-all-generated-users.js": [
+    {
+      "line": 14,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_response' variable."
+    },
+    {
+      "line": 23,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    }
+  ],
+  "delete-talent-demo-users.js": [
+    {
+      "line": 14,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_response' variable."
+    },
+    {
+      "line": 23,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    }
+  ],
+  "dump-supabase-schema.js": [
+    {
+      "line": 9,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 46 to the 15 allowed."
+    },
+    {
+      "line": 14,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused 'tables' variable."
+    },
+    {
+      "line": 14,
+      "rule": "sonarjs/no-dead-store",
+      "message": "Remove this useless assignment to variable \"tables\"."
+    },
+    {
+      "line": 14,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'tables' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 24,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused 'schemaData' variable."
+    },
+    {
+      "line": 24,
+      "rule": "sonarjs/no-dead-store",
+      "message": "Remove this useless assignment to variable \"schemaData\"."
+    },
+    {
+      "line": 24,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'schemaData' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 49,
+      "rule": "sonarjs/no-hardcoded-passwords",
+      "message": "Review this potentially hard-coded password."
+    }
+  ],
+  "execute-migration-api.js": [
+    {
+      "line": 13,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 43,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    },
+    {
+      "line": 80,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    },
+    {
+      "line": 101,
+      "rule": "sonarjs/os-command",
+      "message": "Make sure that executing this OS command is safe here."
+    },
+    {
+      "line": 106,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 106,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'psqlError' is defined but never used."
+    }
+  ],
+  "execute-profile-migration.js": [
+    {
+      "line": 4,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'SUPABASE_URL' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 22,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'executeSQL' is defined but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 24,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    }
+  ],
+  "export-complete-schema.js": [
+    {
+      "line": 18,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    }
+  ],
+  "export-data-as-csv.js": [
+    {
+      "line": 22,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 96,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    }
+  ],
+  "export-full-database.js": [
+    {
+      "line": 26,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 95,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    }
+  ],
+  "export-ordered-schema.js": [
+    {
+      "line": 32,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    }
+  ],
+  "export-supabase-settings.js": [
+    {
+      "line": 71,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 360,
+      "rule": "sonarjs/no-nested-template-literals",
+      "message": "Refactor this code to not use nested template literals."
+    }
+  ],
+  "extract-foreach-issues.js": [
+    {
+      "line": 52,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 52,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'error' is defined but never used."
+    }
+  ],
+  "fetch-errand-rls.js": [
+    {
+      "line": 14,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 21 to the 15 allowed."
+    },
+    {
+      "line": 51,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    }
+  ],
+  "fetch-fresh-issues.js": [
+    {
+      "line": 60,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 60,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'error' is defined but never used."
+    }
+  ],
+  "fetch-function-definitions.js": [
+    {
+      "line": 44,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    }
+  ],
+  "fetch-rls-policies.js": [
+    {
+      "line": 46,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    }
+  ],
+  "fix-all-eslint-errors.js": [
+    {
+      "line": 16,
+      "rule": "sonarjs/no-dead-store",
+      "message": "Remove this useless assignment to variable \"modified\"."
+    },
+    {
+      "line": 23,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    }
+  ],
+  "fix-console-errors-v2.js": [
+    {
+      "line": 29,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    },
+    {
+      "line": 84,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    }
+  ],
+  "fix-console-errors.js": [
+    {
+      "line": 76,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    }
+  ],
+  "fix-last-readonly-props.js": [
+    {
+      "line": 7,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    },
+    {
+      "line": 12,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    },
+    {
+      "line": 17,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    },
+    {
+      "line": 22,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    },
+    {
+      "line": 65,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    }
+  ],
+  "fix-missing-data.js": [
+    {
+      "line": 59,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+    },
+    {
+      "line": 129,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 129,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'error' is defined but never used."
+    },
+    {
+      "line": 209,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 209,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'e' is defined but never used."
+    }
+  ],
+  "fix-readonly-props-batch.js": [
+    {
+      "line": 41,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    }
+  ],
+  "fix-remaining-readonly-props.js": [
+    {
+      "line": 61,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    },
+    {
+      "line": 69,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    },
+    {
+      "line": 78,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    }
+  ],
+  "fix-type-props-readonly.js": [
+    {
+      "line": 32,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    }
+  ],
+  "fix-unused-vars-aggressive.js": [
+    {
+      "line": 19,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    },
+    {
+      "line": 20,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    },
+    {
+      "line": 21,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    },
+    {
+      "line": 22,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    },
+    {
+      "line": 26,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused 'before' variable."
+    },
+    {
+      "line": 26,
+      "rule": "sonarjs/no-dead-store",
+      "message": "Remove this useless assignment to variable \"before\"."
+    },
+    {
+      "line": 26,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'before' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 67,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused 'before' variable."
+    },
+    {
+      "line": 67,
+      "rule": "sonarjs/no-dead-store",
+      "message": "Remove this useless assignment to variable \"before\"."
+    },
+    {
+      "line": 67,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'before' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 76,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'match' is defined but never used. Allowed unused args must match /^_/u."
+    },
+    {
+      "line": 82,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'match' is defined but never used. Allowed unused args must match /^_/u."
+    }
+  ],
+  "generate-sql-from-types.js": [
+    {
+      "line": 4,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'typeMapping' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 284,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed."
+    },
+    {
+      "line": 290,
+      "rule": "prefer-const",
+      "message": "'primaryKeys' is never reassigned. Use 'const' instead."
+    }
+  ],
+  "import-categories-hierarchical.js": [
+    {
+      "line": 17,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 59,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    },
+    {
+      "line": 74,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 74,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'_error' is defined but never used."
+    },
+    {
+      "line": 80,
+      "rule": "sonarjs/no-nested-template-literals",
+      "message": "Refactor this code to not use nested template literals."
+    },
+    {
+      "line": 87,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 152,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 152,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'_error' is defined but never used."
+    },
+    {
+      "line": 181,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    },
+    {
+      "line": 193,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    }
+  ],
+  "import-csv-data.js": [
+    {
+      "line": 17,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 147,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 147,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'_error' is defined but never used."
+    },
+    {
+      "line": 147,
+      "rule": "no-empty",
+      "message": "Empty block statement."
+    },
+    {
+      "line": 157,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 157,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'_error' is defined but never used."
+    },
+    {
+      "line": 157,
+      "rule": "no-empty",
+      "message": "Empty block statement."
+    }
+  ],
+  "import-csv-safe.js": [
+    {
+      "line": 16,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'CSV_DIR' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 21,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 72,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 125,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 125,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'error' is defined but never used."
+    },
+    {
+      "line": 260,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused 'totalSuccess' variable."
+    },
+    {
+      "line": 260,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'totalSuccess' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 260,
+      "rule": "prefer-const",
+      "message": "'totalSuccess' is never reassigned. Use 'const' instead."
+    },
+    {
+      "line": 261,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused 'totalFailed' variable."
+    },
+    {
+      "line": 261,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'totalFailed' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 261,
+      "rule": "prefer-const",
+      "message": "'totalFailed' is never reassigned. Use 'const' instead."
+    }
+  ],
+  "import-data-to-new-project.js": [
+    {
+      "line": 20,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 225,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    }
+  ],
+  "import-ordered-schema.js": [
+    {
+      "line": 20,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    }
+  ],
+  "import-single-table.js": [
+    {
+      "line": 11,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'fs' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 12,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'path' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 21,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 65,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 79,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    },
+    {
+      "line": 119,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 26 to the 15 allowed."
+    },
+    {
+      "line": 186,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 186,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'_error' is defined but never used."
+    },
+    {
+      "line": 215,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 223,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    }
+  ],
+  "keep-real-users-only.js": [
+    {
+      "line": 20,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_response' variable."
+    },
+    {
+      "line": 29,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    }
+  ],
+  "migrate-auth-users.js": [
+    {
+      "line": 18,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 55,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 91,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+    },
+    {
+      "line": 153,
+      "rule": "sonarjs/no-hardcoded-passwords",
+      "message": "Review this potentially hard-coded password."
+    }
+  ],
+  "migrate-identities.js": [
+    {
+      "line": 17,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    }
+  ],
+  "migrate-profile-images-png.js": [
+    {
+      "line": 9,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed."
+    }
+  ],
+  "migrate-profile-images-to-storage.js": [
+    {
+      "line": 9,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed."
+    }
+  ],
+  "migrate-storage-db.js": [
+    {
+      "line": 13,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'OLD_SERVICE_KEY' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 15,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'NEW_PROJECT_ID' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 16,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'NEW_ACCESS_TOKEN' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 22,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 197,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    }
+  ],
+  "migrate-storage-direct.js": [
+    {
+      "line": 20,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 198,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    }
+  ],
+  "migrate-storage-files.js": [
+    {
+      "line": 13,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'OLD_ANON_KEY' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 17,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'NEW_ANON_KEY' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 75,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    },
+    {
+      "line": 92,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 92,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'_error' is defined but never used."
+    },
+    {
+      "line": 218,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    },
+    {
+      "line": 243,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 243,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'_error' is defined but never used."
+    },
+    {
+      "line": 243,
+      "rule": "no-empty",
+      "message": "Empty block statement."
+    }
+  ],
+  "migrate-storage-signed.js": [
+    {
+      "line": 20,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 57,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 76,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    },
+    {
+      "line": 234,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    }
+  ],
+  "push-to-supabase-api.js": [
+    {
+      "line": 6,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'SUPABASE_URL' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 11,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 44,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 36 to the 15 allowed."
+    },
+    {
+      "line": 86,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    }
+  ],
+  "quality-gate.js": [
+    {
+      "line": 50,
+      "rule": "sonarjs/os-command",
+      "message": "Make sure that executing this OS command is safe here."
+    },
+    {
+      "line": 71,
+      "rule": "sonarjs/no-nested-template-literals",
+      "message": "Refactor this code to not use nested template literals."
+    },
+    {
+      "line": 84,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    },
+    {
+      "line": 167,
+      "rule": "sonarjs/no-nested-conditional",
+      "message": "Extract this nested ternary operation into an independent statement."
+    }
+  ],
+  "remove-seller-location-pg.js": [
+    {
+      "line": 41,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    }
+  ],
+  "remove-seller-location.js": [
+    {
+      "line": 38,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_response' variable."
+    },
+    {
+      "line": 47,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    }
+  ],
+  "run-migration.js": [
+    {
+      "line": 59,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 59,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'error' is defined but never used."
+    }
+  ],
+  "run-profile-migration.js": [
+    {
+      "line": 14,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 14,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'_error' is defined but never used."
+    },
+    {
+      "line": 17,
+      "rule": "sonarjs/no-os-command-from-path",
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories."
+    }
+  ],
+  "run-revision-migration.js": [
+    {
+      "line": 10,
+      "rule": "sonarjs/no-hardcoded-passwords",
+      "message": "Review this potentially hard-coded password."
+    },
+    {
+      "line": 35,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 35,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'error' is defined but never used."
+    }
+  ],
+  "run-sql.js": [
+    {
+      "line": 36,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    },
+    {
+      "line": 42,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 42,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'error' is defined but never used."
+    }
+  ],
+  "seed-beauty-full.js": [
+    {
+      "line": 94,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 32 to the 15 allowed."
+    },
+    {
+      "line": 106,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused 'needToCreate' variable."
+    },
+    {
+      "line": 106,
+      "rule": "sonarjs/no-dead-store",
+      "message": "Remove this useless assignment to variable \"needToCreate\"."
+    },
+    {
+      "line": 106,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'needToCreate' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    }
+  ],
+  "seed-beauty-services.js": [
+    {
+      "line": 55,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 27 to the 15 allowed."
+    }
+  ],
+  "seed-sellers-and-services.js": [
+    {
+      "line": 53,
+      "rule": "no-useless-catch",
+      "message": "Unnecessary try/catch wrapper."
+    },
+    {
+      "line": 54,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_response' variable."
+    },
+    {
+      "line": 71,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 82,
+      "rule": "sonarjs/no-useless-catch",
+      "message": "Add logic to this catch clause or eliminate it and rethrow the exception automatically."
+    },
+    {
+      "line": 88,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'categorySlug' is defined but never used. Allowed unused args must match /^_/u."
+    },
+    {
+      "line": 115,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    },
+    {
+      "line": 116,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    },
+    {
+      "line": 117,
+      "rule": "sonarjs/pseudo-random",
+      "message": "Make sure that using this pseudorandom number generator is safe here."
+    },
+    {
+      "line": 145,
+      "rule": "sonarjs/no-hardcoded-passwords",
+      "message": "Review this potentially hard-coded password."
+    }
+  ],
+  "setup-oauth.js": [
+    {
+      "line": 13,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'NEW_ACCESS_TOKEN' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 64,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'updateAuthConfig' is defined but never used. Allowed unused vars must match /^_/u."
+    }
+  ],
+  "sync-all-data.js": [
+    {
+      "line": 9,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+    }
+  ],
+  "test-categories-fetch.js": [
+    {
+      "line": 8,
+      "rule": "sonarjs/no-commented-code",
+      "message": "Remove this commented out code."
+    }
+  ],
+  "test-file-upload.js": [
+    {
+      "line": 2,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'fs' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 3,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'path' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 15,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 28 to the 15 allowed."
+    },
+    {
+      "line": 53,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused 'newBucket' variable."
+    },
+    {
+      "line": 53,
+      "rule": "sonarjs/no-dead-store",
+      "message": "Remove this useless assignment to variable \"newBucket\"."
+    },
+    {
+      "line": 53,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'newBucket' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 128,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused 'insertData' variable."
+    },
+    {
+      "line": 128,
+      "rule": "sonarjs/no-dead-store",
+      "message": "Remove this useless assignment to variable \"insertData\"."
+    },
+    {
+      "line": 128,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'insertData' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    }
+  ],
+  "test-login.js": [
+    {
+      "line": 7,
+      "rule": "sonarjs/no-commented-code",
+      "message": "Remove this commented out code."
+    }
+  ],
+  "update-vercel-api.js": [
+    {
+      "line": 29,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 95,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 95,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'_error' is defined but never used."
+    }
+  ],
+  "update-vercel-env-clean.js": [
+    {
+      "line": 26,
+      "rule": "sonarjs/os-command",
+      "message": "Make sure that executing this OS command is safe here."
+    },
+    {
+      "line": 35,
+      "rule": "sonarjs/os-command",
+      "message": "Make sure that executing this OS command is safe here."
+    },
+    {
+      "line": 48,
+      "rule": "sonarjs/os-command",
+      "message": "Make sure that executing this OS command is safe here."
+    },
+    {
+      "line": 57,
+      "rule": "sonarjs/os-command",
+      "message": "Make sure that executing this OS command is safe here."
+    },
+    {
+      "line": 67,
+      "rule": "sonarjs/no-os-command-from-path",
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories."
+    }
+  ],
+  "update-vercel-env-final.js": [
+    {
+      "line": 27,
+      "rule": "sonarjs/os-command",
+      "message": "Make sure that executing this OS command is safe here."
+    },
+    {
+      "line": 36,
+      "rule": "sonarjs/os-command",
+      "message": "Make sure that executing this OS command is safe here."
+    },
+    {
+      "line": 50,
+      "rule": "sonarjs/os-command",
+      "message": "Make sure that executing this OS command is safe here."
+    },
+    {
+      "line": 59,
+      "rule": "sonarjs/os-command",
+      "message": "Make sure that executing this OS command is safe here."
+    },
+    {
+      "line": 70,
+      "rule": "sonarjs/no-os-command-from-path",
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories."
+    }
+  ],
+  "update-vercel-env.js": [
+    {
+      "line": 58,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    },
+    {
+      "line": 98,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 98,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'_error' is defined but never used."
+    },
+    {
+      "line": 118,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed."
+    }
+  ],
+  "update-vercel-interactive.js": [
+    {
+      "line": 4,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'readline' is assigned a value but never used. Allowed unused vars must match /^_/u."
+    },
+    {
+      "line": 25,
+      "rule": "sonarjs/os-command",
+      "message": "Make sure that executing this OS command is safe here."
+    },
+    {
+      "line": 55,
+      "rule": "sonarjs/no-all-duplicated-branches",
+      "message": "Remove this conditional structure or edit its code blocks so that they're not all the same."
+    },
+    {
+      "line": 76,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 76,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'_error' is defined but never used."
+    }
+  ],
+  "verify-function-search-path.js": [
+    {
+      "line": 34,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    }
+  ],
+  "verify-migration.js": [
+    {
+      "line": 17,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_data' variable."
+    },
+    {
+      "line": 89,
+      "rule": "sonarjs/no-nested-conditional",
+      "message": "Extract this nested ternary operation into an independent statement."
+    },
+    {
+      "line": 91,
+      "rule": "sonarjs/no-nested-conditional",
+      "message": "Extract this nested ternary operation into an independent statement."
+    },
+    {
+      "line": 97,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 97,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'_error' is defined but never used."
+    },
+    {
+      "line": 126,
+      "rule": "sonarjs/no-ignored-exceptions",
+      "message": "Handle this exception or don't catch it at all."
+    },
+    {
+      "line": 126,
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'_error' is defined but never used."
+    },
+    {
+      "line": 147,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    }
+  ],
+  "verify-rls-optimization.js": [
+    {
+      "line": 13,
+      "rule": "sonarjs/cognitive-complexity",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed."
+    },
+    {
+      "line": 41,
+      "rule": "sonarjs/no-unused-vars",
+      "message": "Remove the declaration of the unused '_result' variable."
+    },
+    {
+      "line": 76,
+      "rule": "sonarjs/slow-regex",
+      "message": "Make sure the regex used here, which is vulnerable to super-linear runtime due to backtracking, cannot lead to denial of service."
+    },
+    {
+      "line": 76,
+      "rule": "sonarjs/stateful-regex",
+      "message": "Remove the 'g' flag from this regex as it is used on different inputs."
+    }
+  ]
+}

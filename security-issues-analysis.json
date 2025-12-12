@@ -1,0 +1,262 @@
+{
+  "os-command": [
+    {
+      "file": "execute-migration-api.js",
+      "line": 102,
+      "column": 7,
+      "message": "Make sure that executing this OS command is safe here.",
+      "ruleId": "sonarjs/os-command"
+    },
+    {
+      "file": "quality-gate.js",
+      "line": 52,
+      "column": 5,
+      "message": "Make sure that executing this OS command is safe here.",
+      "ruleId": "sonarjs/os-command"
+    },
+    {
+      "file": "update-vercel-env-clean.js",
+      "line": 27,
+      "column": 7,
+      "message": "Make sure that executing this OS command is safe here.",
+      "ruleId": "sonarjs/os-command"
+    },
+    {
+      "file": "update-vercel-env-clean.js",
+      "line": 36,
+      "column": 5,
+      "message": "Make sure that executing this OS command is safe here.",
+      "ruleId": "sonarjs/os-command"
+    },
+    {
+      "file": "update-vercel-env-clean.js",
+      "line": 49,
+      "column": 7,
+      "message": "Make sure that executing this OS command is safe here.",
+      "ruleId": "sonarjs/os-command"
+    },
+    {
+      "file": "update-vercel-env-clean.js",
+      "line": 58,
+      "column": 5,
+      "message": "Make sure that executing this OS command is safe here.",
+      "ruleId": "sonarjs/os-command"
+    },
+    {
+      "file": "update-vercel-env-final.js",
+      "line": 29,
+      "column": 7,
+      "message": "Make sure that executing this OS command is safe here.",
+      "ruleId": "sonarjs/os-command"
+    },
+    {
+      "file": "update-vercel-env-final.js",
+      "line": 38,
+      "column": 5,
+      "message": "Make sure that executing this OS command is safe here.",
+      "ruleId": "sonarjs/os-command"
+    },
+    {
+      "file": "update-vercel-env-final.js",
+      "line": 52,
+      "column": 7,
+      "message": "Make sure that executing this OS command is safe here.",
+      "ruleId": "sonarjs/os-command"
+    },
+    {
+      "file": "update-vercel-env-final.js",
+      "line": 61,
+      "column": 5,
+      "message": "Make sure that executing this OS command is safe here.",
+      "ruleId": "sonarjs/os-command"
+    },
+    {
+      "file": "update-vercel-interactive.js",
+      "line": 25,
+      "column": 18,
+      "message": "Make sure that executing this OS command is safe here.",
+      "ruleId": "sonarjs/os-command"
+    }
+  ],
+  "no-os-command-from-path": [
+    {
+      "file": "analyze-eslint-errors.js",
+      "line": 6,
+      "column": 27,
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories.",
+      "ruleId": "sonarjs/no-os-command-from-path"
+    },
+    {
+      "file": "analyze-regex-issues.js",
+      "line": 10,
+      "column": 5,
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories.",
+      "ruleId": "sonarjs/no-os-command-from-path"
+    },
+    {
+      "file": "analyze-remaining-errors.js",
+      "line": 10,
+      "column": 12,
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories.",
+      "ruleId": "sonarjs/no-os-command-from-path"
+    },
+    {
+      "file": "analyze-security-issues.js",
+      "line": 10,
+      "column": 5,
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories.",
+      "ruleId": "sonarjs/no-os-command-from-path"
+    },
+    {
+      "file": "analyze-structure-issues.js",
+      "line": 10,
+      "column": 5,
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories.",
+      "ruleId": "sonarjs/no-os-command-from-path"
+    },
+    {
+      "file": "analyze-variable-issues.js",
+      "line": 10,
+      "column": 5,
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories.",
+      "ruleId": "sonarjs/no-os-command-from-path"
+    },
+    {
+      "file": "apply-helper-location-migration.js",
+      "line": 281,
+      "column": 12,
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories.",
+      "ruleId": "sonarjs/no-os-command-from-path"
+    },
+    {
+      "file": "apply-migration-pg.js",
+      "line": 64,
+      "column": 12,
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories.",
+      "ruleId": "sonarjs/no-os-command-from-path"
+    },
+    {
+      "file": "check-final-results.js",
+      "line": 10,
+      "column": 12,
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories.",
+      "ruleId": "sonarjs/no-os-command-from-path"
+    },
+    {
+      "file": "check-parsing-errors.js",
+      "line": 9,
+      "column": 12,
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories.",
+      "ruleId": "sonarjs/no-os-command-from-path"
+    },
+    {
+      "file": "extract-unused-vars.js",
+      "line": 9,
+      "column": 27,
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories.",
+      "ruleId": "sonarjs/no-os-command-from-path"
+    },
+    {
+      "file": "fix-all-remaining-comprehensive.js",
+      "line": 145,
+      "column": 12,
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories.",
+      "ruleId": "sonarjs/no-os-command-from-path"
+    },
+    {
+      "file": "fix-sonarjs-unused-vars.js",
+      "line": 10,
+      "column": 12,
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories.",
+      "ruleId": "sonarjs/no-os-command-from-path"
+    },
+    {
+      "file": "fix-unused-vars-typescript.js",
+      "line": 151,
+      "column": 12,
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories.",
+      "ruleId": "sonarjs/no-os-command-from-path"
+    },
+    {
+      "file": "run-profile-migration.js",
+      "line": 19,
+      "column": 14,
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories.",
+      "ruleId": "sonarjs/no-os-command-from-path"
+    },
+    {
+      "file": "update-vercel-env-clean.js",
+      "line": 68,
+      "column": 12,
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories.",
+      "ruleId": "sonarjs/no-os-command-from-path"
+    },
+    {
+      "file": "update-vercel-env-final.js",
+      "line": 72,
+      "column": 12,
+      "message": "Make sure the \"PATH\" variable only contains fixed, unwriteable directories.",
+      "ruleId": "sonarjs/no-os-command-from-path"
+    }
+  ],
+  "no-hardcoded-passwords": [
+    {
+      "file": "apply-advertising-indexes.js",
+      "line": 11,
+      "column": 13,
+      "message": "Review this potentially hard-coded password.",
+      "ruleId": "sonarjs/no-hardcoded-passwords"
+    },
+    {
+      "file": "apply-migration-direct.js",
+      "line": 6,
+      "column": 22,
+      "message": "Review this potentially hard-coded password.",
+      "ruleId": "sonarjs/no-hardcoded-passwords"
+    },
+    {
+      "file": "create-it-services.js",
+      "line": 161,
+      "column": 18,
+      "message": "Review this potentially hard-coded password.",
+      "ruleId": "sonarjs/no-hardcoded-passwords"
+    },
+    {
+      "file": "dump-supabase-schema.js",
+      "line": 49,
+      "column": 21,
+      "message": "Review this potentially hard-coded password.",
+      "ruleId": "sonarjs/no-hardcoded-passwords"
+    },
+    {
+      "file": "run-revision-migration.js",
+      "line": 10,
+      "column": 13,
+      "message": "Review this potentially hard-coded password.",
+      "ruleId": "sonarjs/no-hardcoded-passwords"
+    },
+    {
+      "file": "seed-sellers-and-services.js",
+      "line": 148,
+      "column": 18,
+      "message": "Review this potentially hard-coded password.",
+      "ruleId": "sonarjs/no-hardcoded-passwords"
+    }
+  ],
+  "sql-queries": [
+    {
+      "file": "check-database.js",
+      "line": 70,
+      "column": 35,
+      "message": "Make sure that executing SQL queries is safe here.",
+      "ruleId": "sonarjs/sql-queries"
+    },
+    {
+      "file": "check-table-structure.js",
+      "line": 68,
+      "column": 32,
+      "message": "Make sure that executing SQL queries is safe here.",
+      "ruleId": "sonarjs/sql-queries"
+    }
+  ]
+}

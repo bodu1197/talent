@@ -1,0 +1,14 @@
+[
+  {
+    "id": "a6deba15-e405-4e4b-b1c3-ca8e8edb6fa9",
+    "user_id": "9b42216d-56bd-4825-99e2-fff60147f35e",
+    "room_id": "b2511471-0bae-48ee-92c1-7a6ad605f94a",
+    "created_at": "2025-11-30 01:57:38.03583+00"
+  },
+  {
+    "id": "6eace5f9-df67-4b4b-8a51-e210d1887d72",
+    "user_id": "ccf26cba-d1d5-4aae-b5d9-0fe85449f086",
+    "room_id": "b2511471-0bae-48ee-92c1-7a6ad605f94a",
+    "created_at": "2025-11-30 02:01:03.441747+00"
+  }
+]

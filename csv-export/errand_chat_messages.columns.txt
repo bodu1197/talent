@@ -1,0 +1,1 @@
+id,errand_id,sender_id,message,message_type,is_read,created_at,updated_at

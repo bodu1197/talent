@@ -1,0 +1,1 @@
+id,user_id,is_verified,id_card_verified_at,bank_name,bank_account,account_holder,grade,total_completed,total_cancelled,average_rating,total_reviews,subscription_status,subscription_expires_at,billing_key,preferred_categories,preferred_areas,bio,is_active,last_active_at,created_at,updated_at,current_lat,current_lng,last_location_at,is_online

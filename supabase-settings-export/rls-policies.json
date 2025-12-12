@@ -1,0 +1,2032 @@
+[
+  {
+    "schemaname": "public",
+    "tablename": "activity_logs",
+    "policyname": "System can insert activity logs",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "true"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "activity_logs",
+    "policyname": "Users and admins view activity logs",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((( SELECT auth.uid() AS uid) = user_id) OR (( SELECT auth.uid() AS uid) = admin_id) OR (EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "admins",
+    "policyname": "admins_insert_own",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "admins",
+    "policyname": "admins_select_own",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "admins",
+    "policyname": "admins_update_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "advertising_campaigns",
+    "policyname": "Sellers manage own campaigns",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "ALL",
+    "qual": "((( SELECT auth.uid() AS uid) = seller_id) OR is_admin())",
+    "with_check": "((( SELECT auth.uid() AS uid) = seller_id) OR is_admin())"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "advertising_credits",
+    "policyname": "sellers_select_own_credits",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(seller_id IN ( SELECT sellers.id\n   FROM sellers\n  WHERE (sellers.user_id = ( SELECT auth.uid() AS uid))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "advertising_impressions",
+    "policyname": "모든 사용자는 노출 기록 조회 가능",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "advertising_payments",
+    "policyname": "sellers_select_own_payments",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(seller_id IN ( SELECT sellers.id\n   FROM sellers\n  WHERE (sellers.user_id = ( SELECT auth.uid() AS uid))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "advertising_subscriptions",
+    "policyname": "sellers_select_own_subscriptions",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(seller_id IN ( SELECT sellers.id\n   FROM sellers\n  WHERE (sellers.user_id = ( SELECT auth.uid() AS uid))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "buyers",
+    "policyname": "buyers_insert_own",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "buyers",
+    "policyname": "buyers_select_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((user_id = ( SELECT auth.uid() AS uid)) OR is_admin())",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "buyers",
+    "policyname": "buyers_update_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "((user_id = ( SELECT auth.uid() AS uid)) OR is_admin())",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "categories",
+    "policyname": "Admins manage category deletion",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "DELETE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "categories",
+    "policyname": "Admins manage category insertion",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "categories",
+    "policyname": "Admins manage category updates",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "categories",
+    "policyname": "Everyone can view categories",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "category_visits",
+    "policyname": "Users can insert own visits",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "category_visits",
+    "policyname": "Users can update own visits",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+    "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "category_visits",
+    "policyname": "Users can view own visits",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "chat_favorites",
+    "policyname": "Users can delete their own favorites",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "DELETE",
+    "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "chat_favorites",
+    "policyname": "Users can insert their own favorites",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "chat_favorites",
+    "policyname": "Users can view their own favorites",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "chat_messages",
+    "policyname": "Users can delete their own messages",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "DELETE",
+    "qual": "((sender_id = ( SELECT auth.uid() AS uid)) AND (EXISTS ( SELECT 1\n   FROM chat_rooms\n  WHERE ((chat_rooms.id = chat_messages.room_id) AND ((chat_rooms.user1_id = ( SELECT auth.uid() AS uid)) OR (chat_rooms.user2_id = ( SELECT auth.uid() AS uid)))))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "chat_messages",
+    "policyname": "Users can send messages to their chat rooms",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "((sender_id = ( SELECT auth.uid() AS uid)) AND (EXISTS ( SELECT 1\n   FROM chat_rooms\n  WHERE ((chat_rooms.id = chat_messages.room_id) AND ((chat_rooms.user1_id = ( SELECT auth.uid() AS uid)) OR (chat_rooms.user2_id = ( SELECT auth.uid() AS uid)))))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "chat_messages",
+    "policyname": "Users can update messages in their rooms",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "UPDATE",
+    "qual": "((EXISTS ( SELECT 1\n   FROM chat_rooms\n  WHERE ((chat_rooms.id = chat_messages.room_id) AND ((chat_rooms.user1_id = ( SELECT auth.uid() AS uid)) OR (chat_rooms.user2_id = ( SELECT auth.uid() AS uid)))))) AND ((sender_id = ( SELECT auth.uid() AS uid)) OR ((sender_id <> ( SELECT auth.uid() AS uid)) AND (is_read IS DISTINCT FROM true))))",
+    "with_check": "(EXISTS ( SELECT 1\n   FROM chat_rooms\n  WHERE ((chat_rooms.id = chat_messages.room_id) AND ((chat_rooms.user1_id = ( SELECT auth.uid() AS uid)) OR (chat_rooms.user2_id = ( SELECT auth.uid() AS uid))))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "chat_messages",
+    "policyname": "Users can view messages in their chat rooms",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(EXISTS ( SELECT 1\n   FROM chat_rooms\n  WHERE ((chat_rooms.id = chat_messages.room_id) AND ((chat_rooms.user1_id = ( SELECT auth.uid() AS uid)) OR (chat_rooms.user2_id = ( SELECT auth.uid() AS uid))))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "chat_rooms",
+    "policyname": "Users can create chat rooms",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "((user1_id = ( SELECT auth.uid() AS uid)) OR (user2_id = ( SELECT auth.uid() AS uid)))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "chat_rooms",
+    "policyname": "Users can update their chat rooms",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "((user1_id = ( SELECT auth.uid() AS uid)) OR (user2_id = ( SELECT auth.uid() AS uid)))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "chat_rooms",
+    "policyname": "Users can view their own chat rooms",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((user1_id = ( SELECT auth.uid() AS uid)) OR (user2_id = ( SELECT auth.uid() AS uid)))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "company_info",
+    "policyname": "Allow admins to delete company info",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "DELETE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE ((admins.user_id = ( SELECT auth.uid() AS uid)) AND (admins.role = 'super_admin'::text))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "company_info",
+    "policyname": "Allow admins to insert company info",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE ((admins.user_id = ( SELECT auth.uid() AS uid)) AND (admins.role = 'super_admin'::text))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "company_info",
+    "policyname": "Allow admins to update company info",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE ((admins.user_id = ( SELECT auth.uid() AS uid)) AND (admins.role = 'super_admin'::text))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "company_info",
+    "policyname": "Allow public read access to company info",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "conversations",
+    "policyname": "Users create conversations",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "((( SELECT auth.uid() AS uid) = participant1_id) OR (( SELECT auth.uid() AS uid) = participant2_id))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "credit_transactions",
+    "policyname": "sellers_select_own_transactions",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(seller_id IN ( SELECT sellers.id\n   FROM sellers\n  WHERE (sellers.user_id = ( SELECT auth.uid() AS uid))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "disputes",
+    "policyname": "분쟁 조회 권한",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "SELECT",
+    "qual": "((initiated_by = ( SELECT auth.uid() AS uid)) OR (EXISTS ( SELECT 1\n   FROM orders\n  WHERE ((orders.id = disputes.order_id) AND ((orders.buyer_id = ( SELECT auth.uid() AS uid)) OR (orders.seller_id = ( SELECT auth.uid() AS uid)))))) OR (EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "disputes",
+    "policyname": "사용자는 자신의 주문에 대해 분쟁 생성 가능",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "((initiated_by = ( SELECT auth.uid() AS uid)) AND (EXISTS ( SELECT 1\n   FROM orders\n  WHERE ((orders.id = disputes.order_id) AND ((orders.buyer_id = ( SELECT auth.uid() AS uid)) OR (orders.seller_id = ( SELECT auth.uid() AS uid)))))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "disputes",
+    "policyname": "중재자는 분쟁 업데이트 가능",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "UPDATE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid))))",
+    "with_check": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "earnings_transactions",
+    "policyname": "Sellers view own earnings transactions",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((( SELECT auth.uid() AS uid) = seller_id) OR (EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_applications",
+    "policyname": "errand_applications_delete_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "DELETE",
+    "qual": "(( SELECT auth.uid() AS uid) = ( SELECT helper_profiles.user_id\n   FROM helper_profiles\n  WHERE (helper_profiles.id = errand_applications.helper_id)))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_applications",
+    "policyname": "errand_applications_insert_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(( SELECT auth.uid() AS uid) = ( SELECT helper_profiles.user_id\n   FROM helper_profiles\n  WHERE (helper_profiles.id = errand_applications.helper_id)))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_applications",
+    "policyname": "errand_applications_select_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_applications",
+    "policyname": "errand_applications_update_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "((( SELECT auth.uid() AS uid) = ( SELECT helper_profiles.user_id\n   FROM helper_profiles\n  WHERE (helper_profiles.id = errand_applications.helper_id))) OR (( SELECT auth.uid() AS uid) = ( SELECT p.user_id\n   FROM (errands e\n     JOIN profiles p ON ((e.requester_id = p.id)))\n  WHERE (e.id = errand_applications.errand_id))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_chat_messages",
+    "policyname": "errand_chat_messages_insert_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(EXISTS ( SELECT 1\n   FROM (errands e\n     JOIN profiles p ON ((p.user_id = ( SELECT auth.uid() AS uid))))\n  WHERE ((e.id = errand_chat_messages.errand_id) AND ((e.requester_id = p.id) OR (e.helper_id = p.id)) AND (errand_chat_messages.sender_id = p.id))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_chat_messages",
+    "policyname": "errand_chat_messages_select_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(EXISTS ( SELECT 1\n   FROM (errands e\n     JOIN profiles p ON ((p.user_id = ( SELECT auth.uid() AS uid))))\n  WHERE ((e.id = errand_chat_messages.errand_id) AND ((e.requester_id = p.id) OR (e.helper_id = p.id)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_chat_messages",
+    "policyname": "errand_chat_messages_service_role_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{service_role}",
+    "cmd": "ALL",
+    "qual": "true",
+    "with_check": "true"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_chat_messages",
+    "policyname": "errand_chat_messages_update_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM profiles p\n  WHERE ((p.user_id = ( SELECT auth.uid() AS uid)) AND (errand_chat_messages.sender_id = p.id))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_disputes",
+    "policyname": "errand_disputes_insert_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(( SELECT auth.uid() AS uid) = reporter_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_disputes",
+    "policyname": "errand_disputes_select_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((( SELECT auth.uid() AS uid) = reporter_id) OR (( SELECT auth.uid() AS uid) = reported_id))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_locations",
+    "policyname": "errand_locations_insert_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(( SELECT auth.uid() AS uid) = helper_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_locations",
+    "policyname": "errand_locations_select_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(EXISTS ( SELECT 1\n   FROM errands\n  WHERE ((errands.id = errand_locations.errand_id) AND ((errands.requester_id IN ( SELECT profiles.id\n           FROM profiles\n          WHERE (profiles.user_id = ( SELECT auth.uid() AS uid)))) OR (errands.helper_id = ( SELECT auth.uid() AS uid))))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_messages",
+    "policyname": "errand_messages_insert_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "((( SELECT auth.uid() AS uid) = sender_id) AND (EXISTS ( SELECT 1\n   FROM errands\n  WHERE ((errands.id = errand_messages.errand_id) AND ((errands.requester_id IN ( SELECT profiles.id\n           FROM profiles\n          WHERE (profiles.user_id = ( SELECT auth.uid() AS uid)))) OR (errands.helper_id = ( SELECT auth.uid() AS uid)))))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_messages",
+    "policyname": "errand_messages_select_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(EXISTS ( SELECT 1\n   FROM errands\n  WHERE ((errands.id = errand_messages.errand_id) AND ((errands.requester_id IN ( SELECT profiles.id\n           FROM profiles\n          WHERE (profiles.user_id = ( SELECT auth.uid() AS uid)))) OR (errands.helper_id = ( SELECT auth.uid() AS uid))))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_reviews",
+    "policyname": "errand_reviews_insert_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(( SELECT auth.uid() AS uid) = reviewer_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_reviews",
+    "policyname": "errand_reviews_select_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_settlements",
+    "policyname": "errand_settlements_select_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(EXISTS ( SELECT 1\n   FROM helper_profiles\n  WHERE ((helper_profiles.id = errand_settlements.helper_id) AND (helper_profiles.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_stops",
+    "policyname": "errand_stops_delete_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "DELETE",
+    "qual": "(( SELECT auth.uid() AS uid) = ( SELECT p.user_id\n   FROM (errands e\n     JOIN profiles p ON ((e.requester_id = p.id)))\n  WHERE (e.id = errand_stops.errand_id)))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_stops",
+    "policyname": "errand_stops_insert_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(( SELECT auth.uid() AS uid) = ( SELECT p.user_id\n   FROM (errands e\n     JOIN profiles p ON ((e.requester_id = p.id)))\n  WHERE (e.id = errand_stops.errand_id)))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_stops",
+    "policyname": "errand_stops_select_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errand_stops",
+    "policyname": "errand_stops_update_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "(( SELECT auth.uid() AS uid) = ( SELECT p.user_id\n   FROM (errands e\n     JOIN profiles p ON ((e.requester_id = p.id)))\n  WHERE (e.id = errand_stops.errand_id)))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errands",
+    "policyname": "errands_delete_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "DELETE",
+    "qual": "(requester_id IN ( SELECT profiles.id\n   FROM profiles\n  WHERE (profiles.user_id = ( SELECT auth.uid() AS uid))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errands",
+    "policyname": "errands_insert_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(requester_id IN ( SELECT profiles.id\n   FROM profiles\n  WHERE (profiles.user_id = ( SELECT auth.uid() AS uid))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errands",
+    "policyname": "errands_select_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "errands",
+    "policyname": "errands_update_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "(requester_id IN ( SELECT profiles.id\n   FROM profiles\n  WHERE (profiles.user_id = ( SELECT auth.uid() AS uid))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_carts",
+    "policyname": "food_carts_user_access",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "ALL",
+    "qual": "(( SELECT auth.uid() AS uid) = user_id)",
+    "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_menu_categories",
+    "policyname": "food_menu_categories_owner_delete",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "DELETE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM food_stores\n  WHERE ((food_stores.id = food_menu_categories.store_id) AND (food_stores.owner_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_menu_categories",
+    "policyname": "food_menu_categories_owner_insert",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(EXISTS ( SELECT 1\n   FROM food_stores\n  WHERE ((food_stores.id = food_menu_categories.store_id) AND (food_stores.owner_id = ( SELECT auth.uid() AS uid)))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_menu_categories",
+    "policyname": "food_menu_categories_owner_update",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "UPDATE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM food_stores\n  WHERE ((food_stores.id = food_menu_categories.store_id) AND (food_stores.owner_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": "(EXISTS ( SELECT 1\n   FROM food_stores\n  WHERE ((food_stores.id = food_menu_categories.store_id) AND (food_stores.owner_id = ( SELECT auth.uid() AS uid)))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_menu_categories",
+    "policyname": "food_menu_categories_public_read",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(is_active = true)",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_menu_option_groups",
+    "policyname": "food_menu_option_groups_public_read",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_menu_option_items",
+    "policyname": "food_menu_option_items_public_read",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(is_available = true)",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_menus",
+    "policyname": "food_menus_owner_delete",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "DELETE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM food_stores\n  WHERE ((food_stores.id = food_menus.store_id) AND (food_stores.owner_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_menus",
+    "policyname": "food_menus_owner_insert",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(EXISTS ( SELECT 1\n   FROM food_stores\n  WHERE ((food_stores.id = food_menus.store_id) AND (food_stores.owner_id = ( SELECT auth.uid() AS uid)))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_menus",
+    "policyname": "food_menus_owner_update",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "UPDATE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM food_stores\n  WHERE ((food_stores.id = food_menus.store_id) AND (food_stores.owner_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": "(EXISTS ( SELECT 1\n   FROM food_stores\n  WHERE ((food_stores.id = food_menus.store_id) AND (food_stores.owner_id = ( SELECT auth.uid() AS uid)))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_menus",
+    "policyname": "food_menus_public_read",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(is_available = true)",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_orders",
+    "policyname": "food_orders_customer_access",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "ALL",
+    "qual": "(( SELECT auth.uid() AS uid) = customer_id)",
+    "with_check": "(( SELECT auth.uid() AS uid) = customer_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_reviews",
+    "policyname": "food_reviews_public_read",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_reviews",
+    "policyname": "food_reviews_user_create",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_store_favorites",
+    "policyname": "food_store_favorites_user_access",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "ALL",
+    "qual": "(( SELECT auth.uid() AS uid) = user_id)",
+    "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_stores",
+    "policyname": "food_stores_insert",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(( SELECT auth.uid() AS uid) = owner_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_stores",
+    "policyname": "food_stores_owner_delete",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "DELETE",
+    "qual": "(( SELECT auth.uid() AS uid) = owner_id)",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_stores",
+    "policyname": "food_stores_owner_update",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "UPDATE",
+    "qual": "(( SELECT auth.uid() AS uid) = owner_id)",
+    "with_check": "(( SELECT auth.uid() AS uid) = owner_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "food_stores",
+    "policyname": "food_stores_public_read",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(is_active = true)",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "helper_profiles",
+    "policyname": "helper_profiles_insert_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "helper_profiles",
+    "policyname": "helper_profiles_select_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "helper_profiles",
+    "policyname": "helper_profiles_update_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "(( SELECT auth.uid() AS uid) = user_id)",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "helper_subscriptions",
+    "policyname": "helper_subscriptions_select_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(EXISTS ( SELECT 1\n   FROM helper_profiles\n  WHERE ((helper_profiles.id = helper_subscriptions.helper_id) AND (helper_profiles.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "helper_withdrawals",
+    "policyname": "helper_withdrawals_insert_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(EXISTS ( SELECT 1\n   FROM helper_profiles\n  WHERE ((helper_profiles.id = helper_withdrawals.helper_id) AND (helper_profiles.user_id = ( SELECT auth.uid() AS uid)))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "helper_withdrawals",
+    "policyname": "helper_withdrawals_select_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(EXISTS ( SELECT 1\n   FROM helper_profiles\n  WHERE ((helper_profiles.id = helper_withdrawals.helper_id) AND (helper_profiles.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "messages",
+    "policyname": "Send messages in conversations",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "((( SELECT auth.uid() AS uid) = sender_id) AND (EXISTS ( SELECT 1\n   FROM conversations\n  WHERE ((conversations.id = messages.conversation_id) AND ((conversations.participant1_id = ( SELECT auth.uid() AS uid)) OR (conversations.participant2_id = ( SELECT auth.uid() AS uid)))))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "messages",
+    "policyname": "View conversation messages",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((EXISTS ( SELECT 1\n   FROM conversations\n  WHERE ((conversations.id = messages.conversation_id) AND ((conversations.participant1_id = ( SELECT auth.uid() AS uid)) OR (conversations.participant2_id = ( SELECT auth.uid() AS uid)))))) OR is_admin())",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "notices",
+    "policyname": "notices_delete",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "DELETE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "notices",
+    "policyname": "notices_insert",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "notices",
+    "policyname": "notices_select",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((is_published = true) OR (EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "notices",
+    "policyname": "notices_update",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "notifications",
+    "policyname": "사용자는 자신의 알림만 업데이트",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "UPDATE",
+    "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+    "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "notifications",
+    "policyname": "사용자는 자신의 알림만 조회",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "SELECT",
+    "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "notifications",
+    "policyname": "알림 생성 허용",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "true"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "order_settlements",
+    "policyname": "order_settlements_insert",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "true"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "order_settlements",
+    "policyname": "order_settlements_select",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((seller_id IN ( SELECT sellers.id\n   FROM sellers\n  WHERE (sellers.user_id = ( SELECT auth.uid() AS uid)))) OR (EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "order_settlements",
+    "policyname": "order_settlements_update",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "orders",
+    "policyname": "Buyers create orders",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(( SELECT auth.uid() AS uid) = buyer_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "orders",
+    "policyname": "Related users update orders",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "((( SELECT auth.uid() AS uid) = buyer_id) OR (( SELECT auth.uid() AS uid) = seller_id) OR is_admin())",
+    "with_check": "((( SELECT auth.uid() AS uid) = buyer_id) OR (( SELECT auth.uid() AS uid) = seller_id) OR is_admin())"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "orders",
+    "policyname": "View related orders",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((( SELECT auth.uid() AS uid) = buyer_id) OR (( SELECT auth.uid() AS uid) = seller_id) OR is_admin())",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "page_views",
+    "policyname": "Admins can view page_views",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE ((admins.user_id = ( SELECT auth.uid() AS uid)) AND (admins.role = 'super_admin'::text))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "page_views",
+    "policyname": "Anyone can insert page_views",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "true"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "payment_requests",
+    "policyname": "payment_requests_buyer_update",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "(buyer_id = ( SELECT auth.uid() AS uid))",
+    "with_check": "(buyer_id = ( SELECT auth.uid() AS uid))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "payment_requests",
+    "policyname": "payment_requests_select",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((buyer_id = ( SELECT auth.uid() AS uid)) OR (seller_id IN ( SELECT sellers.id\n   FROM sellers\n  WHERE (sellers.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "payment_requests",
+    "policyname": "payment_requests_seller_insert",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(seller_id IN ( SELECT sellers.id\n   FROM sellers\n  WHERE (sellers.user_id = ( SELECT auth.uid() AS uid))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "payments",
+    "policyname": "payments_insert",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "true"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "payments",
+    "policyname": "payments_select",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(EXISTS ( SELECT 1\n   FROM orders\n  WHERE ((orders.id = payments.order_id) AND ((orders.buyer_id = ( SELECT auth.uid() AS uid)) OR (orders.seller_id = ( SELECT auth.uid() AS uid))))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "portfolio_items",
+    "policyname": "View visible portfolios or own portfolios",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((is_visible = true) OR (( SELECT auth.uid() AS uid) = seller_id))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "portfolio_services",
+    "policyname": "Anyone can view portfolio-service links",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "portfolio_services",
+    "policyname": "Sellers can link their own portfolios and services",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(EXISTS ( SELECT 1\n   FROM seller_portfolio sp\n  WHERE ((sp.id = portfolio_services.portfolio_id) AND (sp.seller_id = ( SELECT get_seller_id(( SELECT auth.uid() AS uid)) AS get_seller_id)))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "portfolio_services",
+    "policyname": "Sellers can unlink their own portfolios and services",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "DELETE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM seller_portfolio sp\n  WHERE ((sp.id = portfolio_services.portfolio_id) AND (sp.seller_id = ( SELECT get_seller_id(( SELECT auth.uid() AS uid)) AS get_seller_id)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "premium_placements",
+    "policyname": "Campaign owners create placements",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(EXISTS ( SELECT 1\n   FROM advertising_campaigns\n  WHERE ((advertising_campaigns.id = premium_placements.campaign_id) AND (advertising_campaigns.seller_id = ( SELECT auth.uid() AS uid)))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "premium_placements",
+    "policyname": "View active or own placements",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((is_active = true) OR (EXISTS ( SELECT 1\n   FROM advertising_campaigns\n  WHERE ((advertising_campaigns.id = premium_placements.campaign_id) AND (advertising_campaigns.seller_id = ( SELECT auth.uid() AS uid))))) OR is_admin())",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "profiles",
+    "policyname": "profiles_delete_own",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "DELETE",
+    "qual": "(( SELECT auth.uid() AS uid) = user_id)",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "profiles",
+    "policyname": "profiles_insert_own",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "profiles",
+    "policyname": "profiles_select_all",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "profiles",
+    "policyname": "profiles_update_own",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "(( SELECT auth.uid() AS uid) = user_id)",
+    "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "quote_responses",
+    "policyname": "Sellers create responses",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(( SELECT auth.uid() AS uid) = seller_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "quote_responses",
+    "policyname": "Sellers update own responses",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "(( SELECT auth.uid() AS uid) = seller_id)",
+    "with_check": "(( SELECT auth.uid() AS uid) = seller_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "quote_responses",
+    "policyname": "View relevant quote responses",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((( SELECT auth.uid() AS uid) = seller_id) OR (EXISTS ( SELECT 1\n   FROM quotes\n  WHERE ((quotes.id = quote_responses.quote_id) AND (quotes.buyer_id = ( SELECT auth.uid() AS uid))))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "quotes",
+    "policyname": "Buyers create quotes",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(( SELECT auth.uid() AS uid) = buyer_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "quotes",
+    "policyname": "Buyers delete own quotes",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "DELETE",
+    "qual": "(( SELECT auth.uid() AS uid) = buyer_id)",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "quotes",
+    "policyname": "Buyers update own quotes",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "(( SELECT auth.uid() AS uid) = buyer_id)",
+    "with_check": "(( SELECT auth.uid() AS uid) = buyer_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "quotes",
+    "policyname": "View active or own quotes",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((status = 'pending'::text) OR (( SELECT auth.uid() AS uid) = buyer_id))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "refunds",
+    "policyname": "refunds_insert",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(EXISTS ( SELECT 1\n   FROM orders\n  WHERE ((orders.id = refunds.order_id) AND ((orders.buyer_id = ( SELECT auth.uid() AS uid)) OR (orders.seller_id = ( SELECT auth.uid() AS uid))))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "refunds",
+    "policyname": "refunds_select",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(EXISTS ( SELECT 1\n   FROM orders\n  WHERE ((orders.id = refunds.order_id) AND ((orders.buyer_id = ( SELECT auth.uid() AS uid)) OR (orders.seller_id = ( SELECT auth.uid() AS uid))))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "reports",
+    "policyname": "Admins update reports",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "is_admin()",
+    "with_check": "is_admin()"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "reports",
+    "policyname": "Create reports",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(( SELECT auth.uid() AS uid) = reporter_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "reports",
+    "policyname": "View own or managed reports",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((( SELECT auth.uid() AS uid) = reporter_id) OR is_admin())",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "reviews",
+    "policyname": "Buyers create reviews",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(EXISTS ( SELECT 1\n   FROM orders\n  WHERE ((orders.id = reviews.order_id) AND (orders.buyer_id = ( SELECT auth.uid() AS uid)))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "reviews",
+    "policyname": "Buyers update own reviews",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "(( SELECT auth.uid() AS uid) = buyer_id)",
+    "with_check": "(( SELECT auth.uid() AS uid) = buyer_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "reviews",
+    "policyname": "View public or own reviews",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((is_visible = true) OR (( SELECT auth.uid() AS uid) = buyer_id) OR (( SELECT auth.uid() AS uid) = seller_id) OR is_admin())",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "revision_history",
+    "policyname": "구매자는 수정 요청 생성 가능",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "((requested_by = ( SELECT auth.uid() AS uid)) AND (EXISTS ( SELECT 1\n   FROM orders\n  WHERE ((orders.id = revision_history.order_id) AND (orders.buyer_id = ( SELECT auth.uid() AS uid))))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "revision_history",
+    "policyname": "수정 요청 이력 조회 권한",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "SELECT",
+    "qual": "((requested_by = ( SELECT auth.uid() AS uid)) OR (EXISTS ( SELECT 1\n   FROM orders\n  WHERE ((orders.id = revision_history.order_id) AND (orders.seller_id = ( SELECT auth.uid() AS uid))))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "revision_history",
+    "policyname": "판매자는 수정 완료 처리 가능",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "UPDATE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM orders\n  WHERE ((orders.id = revision_history.order_id) AND (orders.seller_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": "((completed_by = ( SELECT auth.uid() AS uid)) AND (EXISTS ( SELECT 1\n   FROM orders\n  WHERE ((orders.id = revision_history.order_id) AND (orders.seller_id = ( SELECT auth.uid() AS uid))))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "schema_migrations",
+    "policyname": "Anyone can view schema migrations",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "schema_migrations",
+    "policyname": "System can insert schema migrations",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "true"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "search_logs",
+    "policyname": "Insert search logs",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "true"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "search_logs",
+    "policyname": "Users and admins view search logs",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((( SELECT auth.uid() AS uid) = user_id) OR (EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "seller_earnings",
+    "policyname": "seller_earnings 생성 허용",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(seller_id = ( SELECT auth.uid() AS uid))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "seller_earnings",
+    "policyname": "수익 정보 조회 권한",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "SELECT",
+    "qual": "((seller_id = ( SELECT auth.uid() AS uid)) OR (EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "seller_earnings",
+    "policyname": "판매자는 자신의 수익 정보 업데이트 가능",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "UPDATE",
+    "qual": "(seller_id = ( SELECT auth.uid() AS uid))",
+    "with_check": "(seller_id = ( SELECT auth.uid() AS uid))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "seller_portfolio",
+    "policyname": "Anyone can view portfolio",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "seller_portfolio",
+    "policyname": "Sellers can delete own portfolio",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "DELETE",
+    "qual": "(seller_id = ( SELECT get_seller_id(( SELECT auth.uid() AS uid)) AS get_seller_id))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "seller_portfolio",
+    "policyname": "Sellers can insert own portfolio",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(seller_id = ( SELECT get_seller_id(( SELECT auth.uid() AS uid)) AS get_seller_id))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "seller_portfolio",
+    "policyname": "Sellers can update own portfolio",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "(seller_id = ( SELECT get_seller_id(( SELECT auth.uid() AS uid)) AS get_seller_id))",
+    "with_check": "(seller_id = ( SELECT get_seller_id(( SELECT auth.uid() AS uid)) AS get_seller_id))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "sellers",
+    "policyname": "Anyone can view seller public info",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "sellers",
+    "policyname": "sellers_insert_own",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "sellers",
+    "policyname": "sellers_update_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "((user_id = ( SELECT auth.uid() AS uid)) OR is_admin())",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_categories",
+    "policyname": "Anyone can view service categories",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_categories",
+    "policyname": "Enable insert for service categories",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "true"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_favorites",
+    "policyname": "Users can delete own favorites",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "DELETE",
+    "qual": "(( SELECT auth.uid() AS uid) = user_id)",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_favorites",
+    "policyname": "Users can insert own favorites",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_favorites",
+    "policyname": "service_favorites_select",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((user_id = ( SELECT auth.uid() AS uid)) OR (service_id IN ( SELECT s.id\n   FROM (services s\n     JOIN sellers sel ON ((s.seller_id = sel.id)))\n  WHERE (sel.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_packages",
+    "policyname": "service_packages_delete_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "DELETE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM (services s\n     JOIN sellers sel ON ((s.seller_id = sel.id)))\n  WHERE ((s.id = service_packages.service_id) AND (sel.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_packages",
+    "policyname": "service_packages_insert_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(EXISTS ( SELECT 1\n   FROM (services s\n     JOIN sellers sel ON ((s.seller_id = sel.id)))\n  WHERE ((s.id = service_packages.service_id) AND (sel.user_id = ( SELECT auth.uid() AS uid)))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_packages",
+    "policyname": "service_packages_select_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_packages",
+    "policyname": "service_packages_update_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM (services s\n     JOIN sellers sel ON ((s.seller_id = sel.id)))\n  WHERE ((s.id = service_packages.service_id) AND (sel.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_revision_categories",
+    "policyname": "service_revision_categories_insert_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(EXISTS ( SELECT 1\n   FROM (service_revisions\n     JOIN sellers ON ((sellers.id = service_revisions.seller_id)))\n  WHERE ((service_revisions.id = service_revision_categories.revision_id) AND (sellers.user_id = ( SELECT auth.uid() AS uid)))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_revision_categories",
+    "policyname": "service_revision_categories_select_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(is_admin() OR (EXISTS ( SELECT 1\n   FROM (service_revisions\n     JOIN sellers ON ((sellers.id = service_revisions.seller_id)))\n  WHERE ((service_revisions.id = service_revision_categories.revision_id) AND (sellers.user_id = ( SELECT auth.uid() AS uid))))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_revisions",
+    "policyname": "service_revisions_delete_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "DELETE",
+    "qual": "(((status)::text = 'rejected'::text) AND (EXISTS ( SELECT 1\n   FROM sellers\n  WHERE ((sellers.id = service_revisions.seller_id) AND (sellers.user_id = ( SELECT auth.uid() AS uid))))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_revisions",
+    "policyname": "service_revisions_insert_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(EXISTS ( SELECT 1\n   FROM sellers\n  WHERE ((sellers.id = service_revisions.seller_id) AND (sellers.user_id = ( SELECT auth.uid() AS uid)))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_revisions",
+    "policyname": "service_revisions_select_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(is_admin() OR (EXISTS ( SELECT 1\n   FROM sellers\n  WHERE ((sellers.id = service_revisions.seller_id) AND (sellers.user_id = ( SELECT auth.uid() AS uid))))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_revisions",
+    "policyname": "service_revisions_update_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "is_admin()",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_tags",
+    "policyname": "Service owners can manage their service tags",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "ALL",
+    "qual": "(EXISTS ( SELECT 1\n   FROM services\n  WHERE ((services.id = service_tags.service_id) AND (services.seller_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": "(EXISTS ( SELECT 1\n   FROM services\n  WHERE ((services.id = service_tags.service_id) AND (services.seller_id = ( SELECT auth.uid() AS uid)))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_view_logs",
+    "policyname": "Anyone can insert view logs",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "true"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_view_logs",
+    "policyname": "Users can view service logs",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((EXISTS ( SELECT 1\n   FROM (services\n     JOIN sellers ON ((sellers.id = services.seller_id)))\n  WHERE ((services.id = service_view_logs.service_id) AND (sellers.user_id = ( SELECT auth.uid() AS uid))))) OR (EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_views",
+    "policyname": "Users can delete own service views",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "DELETE",
+    "qual": "(( SELECT auth.uid() AS uid) = user_id)",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_views",
+    "policyname": "Users can insert own service views",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_views",
+    "policyname": "Users can update own service views",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "UPDATE",
+    "qual": "(( SELECT auth.uid() AS uid) = user_id)",
+    "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "service_views",
+    "policyname": "service_views_select",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((user_id = ( SELECT auth.uid() AS uid)) OR (service_id IN ( SELECT s.id\n   FROM (services s\n     JOIN sellers sel ON ((s.seller_id = sel.id)))\n  WHERE (sel.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "services",
+    "policyname": "Authorized users can update services",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "((seller_id IN ( SELECT sellers.id\n   FROM sellers\n  WHERE (sellers.user_id = ( SELECT auth.uid() AS uid)))) OR (EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "services",
+    "policyname": "Sellers manage service deletion",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "DELETE",
+    "qual": "(seller_id IN ( SELECT sellers.id\n   FROM sellers\n  WHERE (sellers.user_id = ( SELECT auth.uid() AS uid))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "services",
+    "policyname": "Sellers manage service insertion",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(seller_id IN ( SELECT sellers.id\n   FROM sellers\n  WHERE (sellers.user_id = ( SELECT auth.uid() AS uid))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "services",
+    "policyname": "Users can view services",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((status = 'active'::text) OR (seller_id IN ( SELECT sellers.id\n   FROM sellers\n  WHERE (sellers.user_id = ( SELECT auth.uid() AS uid)))) OR (EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "settlement_details",
+    "policyname": "Admins can view all settlement details",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "settlements",
+    "policyname": "관리자는 정산 생성 가능",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "settlements",
+    "policyname": "관리자는 정산 업데이트 가능",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "UPDATE",
+    "qual": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid))))",
+    "with_check": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "settlements",
+    "policyname": "정산 내역 조회 권한",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "SELECT",
+    "qual": "((seller_id = ( SELECT auth.uid() AS uid)) OR (EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid)))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "tags",
+    "policyname": "Admins can manage tags",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "ALL",
+    "qual": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid))))",
+    "with_check": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE (admins.user_id = ( SELECT auth.uid() AS uid))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "tax_invoices",
+    "policyname": "sellers_select_own_invoices",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(subscription_id IN ( SELECT advertising_subscriptions.id\n   FROM advertising_subscriptions\n  WHERE (advertising_subscriptions.seller_id IN ( SELECT sellers.id\n           FROM sellers\n          WHERE (sellers.user_id = ( SELECT auth.uid() AS uid))))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "user_wallets",
+    "policyname": "Users manage own wallet",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "ALL",
+    "qual": "(( SELECT auth.uid() AS uid) = user_id)",
+    "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "users",
+    "policyname": "Service role can insert users",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "true"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "users",
+    "policyname": "Users can update own profile",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "(id = ( SELECT auth.uid() AS uid))",
+    "with_check": "(id = ( SELECT auth.uid() AS uid))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "users",
+    "policyname": "users_select_policy",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "((id = ( SELECT auth.uid() AS uid)) OR is_admin())",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "visitor_stats_daily",
+    "policyname": "Admins can view daily stats",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE ((admins.user_id = ( SELECT auth.uid() AS uid)) AND (admins.role = 'super_admin'::text))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "visitor_stats_daily",
+    "policyname": "Service role can insert daily stats",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "true"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "visitor_stats_daily",
+    "policyname": "Service role can update daily stats",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "visitor_stats_hourly",
+    "policyname": "Admins can view hourly stats",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE ((admins.user_id = ( SELECT auth.uid() AS uid)) AND (admins.role = 'super_admin'::text))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "visitor_stats_hourly",
+    "policyname": "Service role can insert hourly stats",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "true"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "visitor_stats_hourly",
+    "policyname": "Service role can update hourly stats",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "visitor_stats_monthly",
+    "policyname": "Admins can view monthly stats",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(EXISTS ( SELECT 1\n   FROM admins\n  WHERE ((admins.user_id = ( SELECT auth.uid() AS uid)) AND (admins.role = 'super_admin'::text))))",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "visitor_stats_monthly",
+    "policyname": "Service role can insert monthly stats",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "true"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "visitor_stats_monthly",
+    "policyname": "Service role can update monthly stats",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "UPDATE",
+    "qual": "true",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "wallet_transactions",
+    "policyname": "Users view own wallet transactions",
+    "permissive": "PERMISSIVE",
+    "roles": "{public}",
+    "cmd": "SELECT",
+    "qual": "(( SELECT auth.uid() AS uid) = user_id)",
+    "with_check": null
+  },
+  {
+    "schemaname": "public",
+    "tablename": "withdrawal_requests",
+    "policyname": "Sellers can create withdrawal requests",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "INSERT",
+    "qual": null,
+    "with_check": "(seller_id IN ( SELECT sellers.id\n   FROM sellers\n  WHERE (sellers.user_id = ( SELECT auth.uid() AS uid))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "withdrawal_requests",
+    "policyname": "Sellers can update own pending withdrawals",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "UPDATE",
+    "qual": "((seller_id IN ( SELECT sellers.id\n   FROM sellers\n  WHERE (sellers.user_id = ( SELECT auth.uid() AS uid)))) AND (status = 'pending'::text))",
+    "with_check": "(seller_id IN ( SELECT sellers.id\n   FROM sellers\n  WHERE (sellers.user_id = ( SELECT auth.uid() AS uid))))"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "withdrawal_requests",
+    "policyname": "Sellers can view own withdrawal requests",
+    "permissive": "PERMISSIVE",
+    "roles": "{authenticated}",
+    "cmd": "SELECT",
+    "qual": "(seller_id IN ( SELECT sellers.id\n   FROM sellers\n  WHERE (sellers.user_id = ( SELECT auth.uid() AS uid))))",
+    "with_check": null
+  }
+]

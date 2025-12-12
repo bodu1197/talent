@@ -1,0 +1,12 @@
+[
+  {
+    "table_schema": "public",
+    "table_name": "order_revision_stats",
+    "view_definition": " SELECT order_id,\n    count(*) AS total_revisions,\n    count(*) FILTER (WHERE (completed_at IS NOT NULL)) AS completed_revisions,\n    count(*) FILTER (WHERE (completed_at IS NULL)) AS pending_revisions,\n    max(requested_at) AS last_revision_requested_at\n   FROM revision_history\n  GROUP BY order_id;"
+  },
+  {
+    "table_schema": "public",
+    "table_name": "seller_profiles",
+    "view_definition": " SELECT s.id,\n    s.user_id,\n    s.business_name,\n    s.business_number,\n    s.business_registration_file,\n    s.bank_name,\n    s.account_number,\n    s.account_holder,\n    s.is_verified,\n    s.verification_status,\n    s.verified_at,\n    s.rejection_reason,\n    s.total_sales,\n    s.total_revenue,\n    s.service_count,\n    s.rating,\n    s.review_count,\n    s.last_sale_at,\n    s.is_active,\n    s.created_at,\n    s.updated_at,\n    p.name AS display_name,\n    p.profile_image,\n    p.bio,\n    s.phone,\n    s.show_phone,\n    s.kakao_id,\n    s.kakao_openchat,\n    s.whatsapp,\n    s.website,\n    s.preferred_contact,\n    s.certificates,\n    s.experience,\n    s.is_business,\n    s.status,\n    s.real_name,\n    s.contact_hours,\n    s.tax_invoice_available,\n    s.verified,\n    s.verified_name,\n    s.verified_phone\n   FROM (sellers s\n     LEFT JOIN profiles p ON ((s.user_id = p.user_id)));"
+  }
+]

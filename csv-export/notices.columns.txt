@@ -1,0 +1,1 @@
+id,title,content,category,is_important,is_published,view_count,created_by,created_at,updated_at

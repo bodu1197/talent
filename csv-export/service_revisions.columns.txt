@@ -1,0 +1,1 @@
+id,service_id,seller_id,title,description,thumbnail_url,price,status,revision_note,admin_note,created_at,reviewed_at,reviewed_by,delivery_days,revision_count,location_address,location_latitude,location_longitude,location_region,delivery_method

@@ -1,0 +1,1 @@
+id,seller_id,available_balance,pending_balance,total_withdrawn,total_earned,created_at,updated_at
