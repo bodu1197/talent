@@ -72,7 +72,7 @@ function fixAllUnusedVars(content, filename) {
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    const match = line.match(/^(\s*)const ([a-zA-Z_][a-zA-Z0-9_]*) = (.+);$/);
+    const match = line.match(/^(\s*)const ([a-zA-Z_]\w*) = (.+);$/);
 
     if (match) {
       const [, indent, varName, value] = match;

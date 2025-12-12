@@ -13,7 +13,7 @@ function fixUnusedVariables(content, filename) {
 
   // Pattern 1: const _varName = await expression;
   // Change to: await expression;
-  const awaitAssignmentPattern = /^(\s*)const _[a-zA-Z_][a-zA-Z0-9_]* = (await [^;]+);$/gm;
+  const awaitAssignmentPattern = /^(\s*)const _[a-zA-Z_]\w* = (await [^;]+);$/gm;
   modified = modified.replace(awaitAssignmentPattern, (match, indent, awaitExpr) => {
     changes++;
     return `${indent}${awaitExpr};`;
