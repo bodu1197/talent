@@ -85,9 +85,20 @@ async function verifyTable(tableName) {
     const newCount = parseInt(newResult[0].count);
     const match = oldCount === newCount;
 
-    const status = match ? '✅' : oldCount === 0 ? '⚪' : '⚠️';
+    let status = '⚠️';
+    if (match) {
+      status = '✅';
+    } else if (oldCount === 0) {
+      status = '⚪';
+    }
+
     const diff = newCount - oldCount;
-    const diffStr = diff > 0 ? `+${diff}` : diff < 0 ? `${diff}` : '';
+    let diffStr = '';
+    if (diff > 0) {
+      diffStr = `+${diff}`;
+    } else if (diff < 0) {
+      diffStr = `${diff}`;
+    }
 
     console.log(`${status} ${tableName.padEnd(25)} | 원본: ${String(oldCount).padStart(5)} | 새: ${String(newCount).padStart(5)} ${diffStr}`);
 

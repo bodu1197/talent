@@ -78,7 +78,8 @@ async function getColumnTypes(tableName) {
 }
 
 async function importByLevel(level) {
-  console.log(`\n📦 Importing categories (${level === null ? 'Level NULL (Root)' : `Level ${level}`})...`);
+  const levelText = level === null ? 'Level NULL (Root)' : `Level ${level}`;
+  console.log(`\n📦 Importing categories (${levelText})...`);
 
   try {
     const query = level === null

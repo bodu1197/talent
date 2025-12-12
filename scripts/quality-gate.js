@@ -68,9 +68,11 @@ async function checkSonarQubeQualityGate() {
     const url = `${sonarUrl}/api/qualitygates/project_status?projectKey=${projectKey}`;
     const protocol = sonarUrl.startsWith('https') ? https : http;
 
+    const authString = `${sonarToken}:`;
+    const basicAuth = Buffer.from(authString).toString('base64');
     const options = {
       headers: {
-        'Authorization': `Basic ${Buffer.from(`${sonarToken}:`).toString('base64')}`,
+        'Authorization': `Basic ${basicAuth}`,
       },
     };
 
@@ -166,7 +168,12 @@ async function main() {
         logWarning('Quality Gate 경고 상태');
         log('\n조건별 상태:', 'yellow');
         qualityGate.conditions?.forEach((condition) => {
-          const icon = condition.status === 'OK' ? '✓' : condition.status === 'WARN' ? '⚠' : '✗';
+          let icon = '✗';
+          if (condition.status === 'OK') {
+            icon = '✓';
+          } else if (condition.status === 'WARN') {
+            icon = '⚠';
+          }
           log(`  ${icon} ${condition.metricKey}: ${condition.actualValue} (기준: ${condition.errorThreshold})`);
         });
       } else {

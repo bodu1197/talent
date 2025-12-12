@@ -356,9 +356,10 @@ async function exportEnums() {
 
     // SQL 형태로도 저장
     const sqlPath = path.join(OUTPUT_DIR, 'enums.sql');
-    const sqlContent = enums.map(e =>
-      `CREATE TYPE ${e.enum_name} AS ENUM (${e.enum_values.map(v => `'${v}'`).join(', ')});`
-    ).join('\n');
+    const sqlContent = enums.map(e => {
+      const enumValues = e.enum_values.map(v => `'${v}'`).join(', ');
+      return `CREATE TYPE ${e.enum_name} AS ENUM (${enumValues});`;
+    }).join('\n');
     fs.writeFileSync(sqlPath, sqlContent);
 
     console.log(`✅ Exported ${enums.length} enum types\n`);

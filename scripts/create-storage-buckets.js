@@ -100,9 +100,11 @@ async function createBucket(bucket) {
   console.log(`📦 Creating bucket: ${bucket.name}`);
 
   try {
-    const mimeTypes = bucket.allowed_mime_types
-      ? `ARRAY[${bucket.allowed_mime_types.map(m => `'${m}'`).join(', ')}]::text[]`
-      : 'NULL';
+    let mimeTypes = 'NULL';
+    if (bucket.allowed_mime_types) {
+      const mimeList = bucket.allowed_mime_types.map(m => `'${m}'`).join(', ');
+      mimeTypes = `ARRAY[${mimeList}]::text[]`;
+    }
 
     const query = `
       INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
