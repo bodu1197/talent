@@ -32,9 +32,9 @@ export class SupabaseManager {
    */
   static getBrowserClient(): SupabaseClient {
     if (!this.browserClient) {
-      // 환경 변수 검증
-      const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-      const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      // 환경 변수 검증 및 정리 (공백/줄바꿈 제거)
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+      const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
 
       if (!url || !key) {
         throw new Error(
@@ -53,9 +53,9 @@ export class SupabaseManager {
    * 주의: 이 메서드는 서버 환경에서만 사용해야 합니다
    */
   static async getServerClient(): Promise<SupabaseClient> {
-    // 환경 변수 검증
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    // 환경 변수 검증 및 정리 (공백/줄바꿈 제거)
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
 
     if (!url || !key) {
       throw new Error(
@@ -101,12 +101,16 @@ export class SupabaseManager {
     }
 
     if (!this.serviceClient) {
-      const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-      if (!serviceKey) {
-        throw new Error('SUPABASE_SERVICE_ROLE_KEY가 설정되지 않았습니다');
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+      const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+
+      if (!url || !serviceKey) {
+        throw new Error(
+          'NEXT_PUBLIC_SUPABASE_URL 또는 SUPABASE_SERVICE_ROLE_KEY가 설정되지 않았습니다'
+        );
       }
 
-      this.serviceClient = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, serviceKey, {
+      this.serviceClient = createServiceClient(url, serviceKey, {
         auth: {
           autoRefreshToken: false,
           persistSession: false,
