@@ -54,10 +54,10 @@ const slides: Slide[] = [
     cardDescription:
       '플랫폼은 연결해주는 다리여야 합니다. 통행료를 걷는 관문이 되어서는 안 됩니다. 돌파구는 이 철학을 코드로 실현합니다.',
     splatterPattern: [
-      { size: 400, top: '-30%', right: '-20%', opacity: 0.3, blur: '3xl' },
-      { size: 300, bottom: '-25%', left: '-15%', opacity: 0.25, blur: '3xl' },
-      { size: 120, top: '15%', left: '5%', opacity: 0.4, blur: '2xl' },
-      { size: 80, top: '45%', right: '30%', opacity: 0.5, blur: 'xl' },
+      { size: 400, top: '-30%', right: '-20%', opacity: 0.3, blur: '2xl' },
+      { size: 300, bottom: '-25%', left: '-15%', opacity: 0.25, blur: '2xl' },
+      { size: 120, top: '15%', left: '5%', opacity: 0.4, blur: 'xl' },
+      { size: 80, top: '45%', right: '30%', opacity: 0.5, blur: 'lg' },
     ],
   },
   // Slide 1: 핑크/로즈 - 따뜻하고 풍요로운 느낌 (수수료 0%)
@@ -74,15 +74,15 @@ const slides: Slide[] = [
       '당신이 번 돈, 한 푼도 떼지 않습니다. 다른 플랫폼의 15~20% 수수료는 이제 그만. 돌파구에서는 100% 당신의 것입니다.',
     splatterPattern: [
       // 메인 배경 - 거대하고 부드러운 빛 (우측 상단)
-      { size: 380, top: '-20%', right: '-25%', opacity: 0.4, blur: '3xl' },
+      { size: 380, top: '-20%', right: '-25%', opacity: 0.4, blur: '2xl' },
       // 좌측 하단 외곽
-      { size: 320, bottom: '-20%', left: '-15%', opacity: 0.3, blur: '3xl' },
+      { size: 320, bottom: '-20%', left: '-15%', opacity: 0.3, blur: '2xl' },
 
       // 중간 포인트 - 중앙 빈 공간
-      { size: 150, top: '10%', left: '10%', opacity: 0.5, blur: '2xl' },
+      { size: 150, top: '10%', left: '10%', opacity: 0.5, blur: 'xl' },
 
       // 하이라이트 - 우측 빈 공간
-      { size: 70, top: '40%', right: '35%', opacity: 0.6, blur: 'xl' },
+      { size: 70, top: '40%', right: '35%', opacity: 0.6, blur: 'lg' },
     ],
   },
   // Slide 2: 인디고/블루 - 신뢰와 공정함 (기회 균등)
@@ -99,15 +99,15 @@ const slides: Slide[] = [
       '신규든 베테랑이든, 모두에게 같은 기회. 알고리즘도, 편애도 없습니다. 오직 실력으로 승부하세요.',
     splatterPattern: [
       // 대각선 흐름 - 상단 좌측
-      { size: 400, top: '-30%', left: '-30%', opacity: 0.35, blur: '3xl' },
+      { size: 400, top: '-30%', left: '-30%', opacity: 0.35, blur: '2xl' },
       // 대각선 흐름 - 하단 우측
-      { size: 350, bottom: '-30%', right: '-30%', opacity: 0.35, blur: '3xl' },
+      { size: 350, bottom: '-30%', right: '-30%', opacity: 0.35, blur: '2xl' },
 
       // 중심 포인트
-      { size: 180, top: '20%', right: '20%', opacity: 0.4, blur: '2xl' },
+      { size: 180, top: '20%', right: '20%', opacity: 0.4, blur: 'xl' },
 
       // 하단 좌측 포인트
-      { size: 100, bottom: '25%', left: '15%', opacity: 0.5, blur: 'xl' },
+      { size: 100, bottom: '25%', left: '15%', opacity: 0.5, blur: 'lg' },
     ],
   },
   // Slide 3: 퍼플/보라 - 투명함과 고귀함 (숨은 비용 없음)
@@ -129,17 +129,17 @@ const slides: Slide[] = [
         top: '-25%',
         left: '50%',
         opacity: 0.2,
-        blur: '3xl',
+        blur: '2xl',
         transform: 'translate(-50%, 0)',
       },
 
       // 하단 좌측 베이스
-      { size: 180, bottom: '-10%', left: '5%', opacity: 0.4, blur: '2xl' },
+      { size: 180, bottom: '-10%', left: '5%', opacity: 0.4, blur: 'xl' },
       // 하단 우측 베이스
-      { size: 160, bottom: '-10%', right: '5%', opacity: 0.4, blur: '2xl' },
+      { size: 160, bottom: '-10%', right: '5%', opacity: 0.4, blur: 'xl' },
 
       // 중간 포인트
-      { size: 90, top: '40%', left: '10%', opacity: 0.6, blur: 'xl' },
+      { size: 90, top: '40%', left: '10%', opacity: 0.6, blur: 'lg' },
     ],
   },
   // Slide 4: 블루/스카이 - 희망과 시작 (지원금)
@@ -161,17 +161,17 @@ const slides: Slide[] = [
         top: '-40%',
         left: '50%',
         opacity: 0.3,
-        blur: '3xl',
+        blur: '2xl',
         transform: 'translate(-50%, 0)',
       },
 
       // 하단 우측 베이스
-      { size: 250, bottom: '-20%', right: '-20%', opacity: 0.4, blur: '2xl' },
+      { size: 250, bottom: '-20%', right: '-20%', opacity: 0.4, blur: 'xl' },
       // 하단 좌측 베이스
-      { size: 200, bottom: '-20%', left: '-20%', opacity: 0.4, blur: '2xl' },
+      { size: 200, bottom: '-20%', left: '-20%', opacity: 0.4, blur: 'xl' },
 
       // 중간 팝업 포인트
-      { size: 90, top: '35%', right: '20%', opacity: 0.6, blur: 'xl' },
+      { size: 90, top: '35%', right: '20%', opacity: 0.6, blur: 'lg' },
     ],
   },
 ];
@@ -180,6 +180,7 @@ export default function HeroSection() {
   const router = useRouter();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [hasRendered, setHasRendered] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = (e: React.FormEvent) => {
@@ -207,6 +208,11 @@ export default function HeroSection() {
   }, [currentSlide, performSlideTransition]);
 
   useEffect(() => {
+    // Mark as rendered after initial paint to enable transitions
+    setHasRendered(true);
+  }, []);
+
+  useEffect(() => {
     const timer = setInterval(advanceSlide, 8000);
     return () => clearInterval(timer);
   }, [advanceSlide]);
@@ -221,12 +227,12 @@ export default function HeroSection() {
           <div className="flex-1 w-full">
             <div className="mb-6 lg:mb-8 pt-5">
               <h1
-                className={`text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 mb-3 lg:mb-4 transition-opacity duration-500 lg:min-h-[120px] leading-[1.6] whitespace-pre-line ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+                className={`text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 mb-3 lg:mb-4 lg:min-h-[120px] leading-[1.6] whitespace-pre-line ${hasRendered ? 'transition-opacity duration-500' : ''} ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
               >
                 {slide.title}
               </h1>
               <p
-                className={`text-sm sm:text-base text-gray-600 lg:min-h-[48px] leading-[1.5] transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+                className={`text-sm sm:text-base text-gray-600 lg:min-h-[48px] leading-[1.5] ${hasRendered ? 'transition-opacity duration-500' : ''} ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
               >
                 {slide.subtitle}
               </p>
@@ -324,12 +330,11 @@ export default function HeroSection() {
                 lg: '12px',
                 xl: '16px',
                 '2xl': '24px',
-                '3xl': '64px',
               };
               return (
                 <div
                   key={`splatter-${slide.id}-${index}`}
-                  className="absolute rounded-full transition-all duration-500"
+                  className={`absolute rounded-full ${hasRendered ? 'transition-all duration-500' : ''}`}
                   style={{
                     width: `${drop.size}px`,
                     height: `${drop.size}px`,
@@ -341,17 +346,19 @@ export default function HeroSection() {
                     backgroundColor: slide.glowColor,
                     filter: drop.blur === 'none' ? 'none' : `blur(${blurValues[drop.blur]})`,
                     transform: drop.transform,
-                    // mixBlendMode: 'screen', // 흰 배경에서는 screen 모드가 보이지 않으므로 제거
+                    willChange: hasRendered ? 'transform, opacity' : 'auto',
                   }}
                 />
               );
             })}
 
             {/* 메인 카드 - 배경 없이 내용만 표시 */}
-            <div className="relative p-5 sm:p-6 transition-all duration-500 h-[250px] sm:h-[298px] flex flex-col">
+            <div
+              className={`relative p-5 sm:p-6 h-[250px] sm:h-[298px] flex flex-col ${hasRendered ? 'transition-all duration-500' : ''}`}
+            >
               {/* 아이콘 */}
               <div
-                className={`mb-4 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+                className={`mb-4 ${hasRendered ? 'transition-opacity duration-500' : ''} ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
               >
                 <div
                   className="w-14 h-14 rounded-full flex items-center justify-center text-white"
@@ -366,19 +373,19 @@ export default function HeroSection() {
 
               {/* 내용 */}
               <h2
-                className={`text-2xl font-semibold mb-2 transition-opacity duration-500 text-gray-900 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+                className={`text-2xl font-semibold mb-2 text-gray-900 ${hasRendered ? 'transition-opacity duration-500' : ''} ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
                 style={{ textShadow: '0 2px 4px rgba(255, 255, 255, 0.5)' }}
               >
                 {slide.cardTitle}
               </h2>
               <p
-                className={`text-lg mb-3 text-gray-800 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+                className={`text-lg mb-3 text-gray-800 ${hasRendered ? 'transition-opacity duration-500' : ''} ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
                 style={{ textShadow: '0 1px 2px rgba(255, 255, 255, 0.5)' }}
               >
                 {slide.cardSubtitle}
               </p>
               <p
-                className={`text-sm text-gray-700 leading-relaxed line-clamp-3 mb-6 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+                className={`text-sm text-gray-700 leading-relaxed line-clamp-3 mb-6 ${hasRendered ? 'transition-opacity duration-500' : ''} ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
                 style={{ textShadow: '0 1px 2px rgba(255, 255, 255, 0.5)' }}
               >
                 {slide.cardDescription}
