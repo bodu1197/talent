@@ -476,7 +476,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
     price: service.price,
     seller: service.seller,
     service_categories: categories.map((sc) => ({
-      category: { name: sc.category.name, slug: sc.category.slug },
+      category: { name: sc.name, slug: sc.slug },
     })),
     average_rating: service.average_rating,
     review_count: service.review_count,
