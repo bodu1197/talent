@@ -26,15 +26,17 @@ const RecentViewedServices = dynamic(() => import('@/components/home/RecentViewe
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const supabase = await createClient();
+  // const supabase = await createClient();
 
-  // 인증 상태 확인
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // // 인증 상태 확인 (진단 위해 임시 비활성화)
+  // const {
+  //   data: { user },
+  // } = await supabase.auth.getUser();
+  const user = null;
 
-  // AI 카테고리 한 번만 조회 (중복 제거)
-  const { data: aiCategories } = await supabase.from('categories').select('id').eq('is_ai', true);
+  // // AI 카테고리 한 번만 조회 (진단 위해 임시 비활성화)
+  // const { data: aiCategories } = await supabase.from('categories').select('id').eq('is_ai', true);
+  const aiCategories: any[] = [];
 
   const aiCategoryIds = aiCategories?.map((cat) => cat.id) || [];
 
