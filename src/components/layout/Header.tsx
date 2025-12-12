@@ -5,8 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
-import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import {
   ShoppingCart,
   Package,
@@ -22,24 +21,22 @@ import {
   MessageCircle,
 } from 'lucide-react';
 
-// NotificationBell과 ChatNotificationBadge를 lazy load하여 Supabase 번들을 초기 로드에서 제외
-const NotificationBell = dynamic(() => import('@/components/notifications/NotificationBell'), {
-  ssr: false,
-  loading: () => (
-    <div className="relative flex items-center">
-      <Bell className="w-6 h-6 text-gray-400 animate-pulse" aria-hidden="true" />
-    </div>
-  ),
-});
+// React.lazy를 사용하여 Supabase 번들을 초기 로드에서 완전히 제외
+const NotificationBell = lazy(() => import('@/components/notifications/NotificationBell'));
+const ChatNotificationBadge = lazy(() => import('@/components/chat/ChatNotificationBadge'));
 
-const ChatNotificationBadge = dynamic(() => import('@/components/chat/ChatNotificationBadge'), {
-  ssr: false,
-  loading: () => (
-    <div className="relative flex items-center text-gray-400">
-      <MessageCircle className="w-6 h-6 animate-pulse" />
-    </div>
-  ),
-});
+// Loading fallback 컴포넌트
+const NotificationBellLoading = () => (
+  <div className="relative flex items-center">
+    <Bell className="w-6 h-6 text-gray-400 animate-pulse" aria-hidden="true" />
+  </div>
+);
+
+const ChatBadgeLoading = () => (
+  <div className="relative flex items-center text-gray-400">
+    <MessageCircle className="w-6 h-6 animate-pulse" />
+  </div>
+);
 
 export default function Header() {
   const { user, profile, loading, signOut } = useAuth();
@@ -134,7 +131,9 @@ export default function Header() {
           {/* 모바일 버전 - 로그인 사용자만 표시 */}
           {user && (
             <div className="lg:hidden flex items-center">
-              <NotificationBell />
+              <Suspense fallback={<NotificationBellLoading />}>
+                <NotificationBell />
+              </Suspense>
             </div>
           )}
           {/* PC 버전: 네비게이션 메뉴 */}
@@ -210,10 +209,14 @@ export default function Header() {
                 </Link>
 
                 {/* 채팅 */}
-                <ChatNotificationBadge />
+                <Suspense fallback={<ChatBadgeLoading />}>
+                  <ChatNotificationBadge />
+                </Suspense>
 
                 {/* 알림 */}
-                <NotificationBell />
+                <Suspense fallback={<NotificationBellLoading />}>
+                  <NotificationBell />
+                </Suspense>
 
                 {/* 사용자 정보 드롭다운 */}
                 <div className="relative group">
