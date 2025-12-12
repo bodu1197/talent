@@ -113,7 +113,7 @@ for (const [filename, errors] of Object.entries(fileErrors)) {
         }
       } else if (ruleId === 'no-useless-catch') {
         // Remove try/catch that just rethrows
-        const _lines = content.split('\n');
+
         // This is complex, skip for now
       } else if (ruleId === 'sonarjs/concise-regex') {
         // Replace [a-zA-Z0-9_] with \\w

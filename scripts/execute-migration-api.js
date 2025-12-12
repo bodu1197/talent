@@ -12,7 +12,7 @@ const DB_PASSWORD = process.env.SUPABASE_DB_PASSWORD || 'chl1197dbA!@';
 async function executeSQL(sql) {
   return new Promise((resolve, reject) => {
     // Use Supabase Management API to execute SQL
-// const _data = JSON.stringify({ // Removed unused variable
+    const data = JSON.stringify({
       query: sql
     });
 
@@ -42,10 +42,9 @@ async function executeSQL(sql) {
 
         if (res.statusCode >= 200 && res.statusCode < 300) {
           try {
-// const _result = JSON.parse(body); // Removed unused variable
+            const result = JSON.parse(body);
             resolve(result);
-          } catch (error) {
-            console.error('에러 발생:', error);
+          } catch {
             resolve({ success: true, body });
           }
         } else {

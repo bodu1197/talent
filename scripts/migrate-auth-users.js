@@ -130,7 +130,7 @@ async function migrateUsers() {
       process.stdout.write(`\r[${i + 1}/${users.length}] ${user.email.substring(0, 30).padEnd(30)} `);
 
       // Prepare user data for Admin API
-      const _userData = {
+
         id: user.id,
         email: user.email,
         email_confirm: user.email_confirmed_at ? true : false,

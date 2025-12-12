@@ -47,7 +47,7 @@ async function cleanupTestData() {
         // 3. 파일 삭제
         console.log('\n3️⃣ 파일 삭제 중...');
         const fileNames = files.map(f => f.name);
-        const { data: _removeData, error: removeError } = await supabase.storage
+        const { error: removeError } = await supabase.storage
           .from('test-uploads')
           .remove(fileNames);
 
@@ -62,7 +62,7 @@ async function cleanupTestData() {
 
       // 4. 버킷 삭제
       console.log('\n4️⃣ test-uploads 버킷 삭제 중...');
-      const { data: _deleteBucket, error: deleteError } = await supabase.storage
+      const { error: deleteError } = await supabase.storage
         .deleteBucket('test-uploads');
 
       if (deleteError) {

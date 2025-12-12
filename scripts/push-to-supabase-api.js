@@ -43,7 +43,7 @@ function executeSQL(_sql) {
 async function applyMigration() {
   console.log('🚀 Supabase REST API를 통해 마이그레이션 적용 시작...\n');
 
-  const _migrationFile = path.join(__dirname, '../supabase/migrations/20251112120000_create_advertising_system.sql');
+
 // const _sql = fs.readFileSync(migrationFile, 'utf8'); // Removed unused variable
 
   // SQL을 실행 가능한 단위로 분리

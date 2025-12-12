@@ -52,7 +52,7 @@ async function loadLeafCategories() {
 // 2. Auth 사용자 생성
 async function createAuthUser(email, password, name) {
   try {
-    await fetch(AUTH_ADMIN_URL, {
+    const response = await fetch(AUTH_ADMIN_URL, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${SERVICE_ROLE_KEY}`,
@@ -69,7 +69,7 @@ async function createAuthUser(email, password, name) {
       })
     });
 
-    await response.json();
+    const data = await response.json();
 
     if (!response.ok) {
       // 이미 존재하는 사용자인 경우
@@ -80,7 +80,10 @@ async function createAuthUser(email, password, name) {
     }
 
     return { user_id: data.id, email: data.email };
-  
+  } catch (error) {
+    console.error('Auth user creation error:', error.message);
+    throw error;
+  }
 }
 
 // 3. Seller 생성

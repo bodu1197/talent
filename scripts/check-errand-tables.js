@@ -81,7 +81,7 @@ async function main() {
     console.log('  Found helper:', helperData.id);
 
     // Try to get errand_applications columns
-    const { data: _appCols, error: appColsError } = await supabase
+    const { error: appColsError } = await supabase
       .from('errand_applications')
       .select()
       .limit(0);

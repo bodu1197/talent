@@ -103,7 +103,7 @@ async function createBucket(bucket) {
       ? `ARRAY[${bucket.allowed_mime_types.map(m => `'${m}'`).join(', ')}]::text[]`
       : 'NULL';
 
-// const _query = ` // Removed unused variable
+    const query = `
       INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
       VALUES (
         '${bucket.id}',

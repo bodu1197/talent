@@ -23,7 +23,7 @@ function fixUnusedVariables(content, filename) {
   ];
 
   for (const pattern of unusedConstPatterns) {
-    const _before = modified;
+
     modified = modified.replace(pattern, (match) => {
       // Extract the await expression and preserve it without assignment
       const awaitMatch = match.match(/await ([^;]+);/);
@@ -64,7 +64,7 @@ function fixUnusedVariables(content, filename) {
   ];
 
   for (const pattern of unusedTopLevel) {
-    const _before = modified;
+
     modified = modified.replace(pattern, (match) => {
       changes++;
       return `// ${match} // unused`;

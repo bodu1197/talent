@@ -144,9 +144,9 @@ async function main() {
   console.log('🔓 Disabling RLS...\n');
   try {
     await executeQuery('ALTER TABLE users DISABLE ROW LEVEL SECURITY');
-  } catch (_error) {
-    // Intentionally empty}
-    console.error('에러 발생:', error);
+  } catch {
+    // Intentionally empty - RLS might not be enabled
+  }
 
   for (const tableName of TABLE_ORDER) {
     await importTableFromCSV(tableName);
@@ -155,9 +155,10 @@ async function main() {
   // Enable RLS
   console.log('\n🔒 Re-enabling RLS...\n');
   try {
-    // Intentionally empty
     await executeQuery('ALTER TABLE users ENABLE ROW LEVEL SECURITY');
-  } catch (_error) {}
+  } catch {
+    // Intentionally empty - RLS might already be enabled
+  }
 
   console.log('✅ Import completed!\n');
 }

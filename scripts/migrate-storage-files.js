@@ -241,9 +241,9 @@ async function main() {
   // 임시 디렉토리 삭제
   try {
     fs.rmSync(TEMP_DIR, { recursive: true, force: true });
-  } catch (_error) {
-    // Intentionally empty}
-    console.error('에러 발생:', error);
+  } catch {
+    // Intentionally empty - temp directory might not exist
+  }
 }
 
 main().catch(err => {

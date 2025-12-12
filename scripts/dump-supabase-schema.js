@@ -11,7 +11,7 @@ async function dumpSchema() {
     console.log('Connecting to Supabase...');
 
     // Get all tables information
-    const { data: _tables, error: tablesError } = await supabase
+    const { error: tablesError } = await supabase
       .from('information_schema.tables')
       .select('*')
       .eq('table_schema', 'public')
@@ -21,7 +21,7 @@ async function dumpSchema() {
       console.error('Error fetching tables:', tablesError);
 
       // Try alternative method using RPC
-      const { data: _schemaData, error: rpcError } = await supabase.rpc('exec_sql', {
+      const { error: rpcError } = await supabase.rpc('exec_sql', {
         query: `
           SELECT
             table_name,

@@ -63,7 +63,7 @@ ON advertising_subscriptions(is_free_promotion)`
     console.log('\n📊 Verifying columns...')
 
     // Verify the columns exist by querying the table
-    const { data: _testData, error: testError } = await supabase
+    const { error: testError } = await supabase
       .from('advertising_subscriptions')
       .select('id, is_free_promotion, promotion_end_date')
       .limit(1)

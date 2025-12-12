@@ -88,7 +88,7 @@ async function fetchSecurityHotspots() {
 
   try {
     const endpoint = `/api/hotspots/search?projectKey=${PROJECT_KEY}&ps=500`;
-    const _result = await apiCall(endpoint);
+
 
     console.log(`✅ ${result.hotspots?.length || 0}개 보안 핫스팟 발견\n`);
     return result.hotspots || [];
@@ -120,7 +120,7 @@ async function fetchMetrics() {
 
   try {
     const endpoint = `/api/measures/component?component=${PROJECT_KEY}&metricKeys=${metrics.join(',')}`;
-    const _result = await apiCall(endpoint);
+
 
     console.log('✅ 메트릭 조회 완료\n');
     return result.component.measures;

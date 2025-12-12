@@ -50,7 +50,7 @@ async function testOperations() {
 
     if (!testBucket) {
       console.log('  📦 test-uploads 버킷 생성 중...');
-      const { data: _newBucket, error: createError } = await supabase.storage.createBucket('test-uploads', {
+      const { error: createError } = await supabase.storage.createBucket('test-uploads', {
         public: false
       });
 
@@ -125,7 +125,7 @@ async function testOperations() {
     await supabase.from('users').delete().eq('id', testUserId);
 
     // 테스트 데이터 삽입
-    const { data: _insertData, error: insertError } = await supabase
+    const { error: insertError } = await supabase
       .from('users')
       .insert({
         id: testUserId,
