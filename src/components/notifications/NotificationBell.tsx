@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { logger } from '@/lib/logger';
@@ -27,6 +27,7 @@ export default function NotificationBell() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const supabase = createClient();
+  const hasLoadedNotifications = useRef(false);
 
   // ESC 키로 드롭다운 닫기
   useEffect(() => {
@@ -100,16 +101,15 @@ export default function NotificationBell() {
     }
   };
 
-  // 실시간 알림 구독
+  // 초기 로드: unread count만 조회 (성능 최적화)
   useEffect(() => {
     if (!user) return;
 
     loadUnreadCount();
-    loadNotifications();
 
     // 실시간 구독
     const channel = supabase
-      .channel('notifications')
+      .channel(`notifications-${user.id}`) // 고유한 채널명으로 중복 구독 방지
       .on(
         'postgres_changes',
         {
@@ -135,6 +135,14 @@ export default function NotificationBell() {
       supabase.removeChannel(channel);
     };
   }, [user]);
+
+  // 드롭다운 열렸을 때만 notifications 로드 (지연 로딩)
+  useEffect(() => {
+    if (showDropdown && !hasLoadedNotifications.current) {
+      loadNotifications();
+      hasLoadedNotifications.current = true;
+    }
+  }, [showDropdown]);
 
   // 알림 읽음 처리
   const markAsRead = async (notificationId: string) => {
