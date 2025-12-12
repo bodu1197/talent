@@ -1,10 +1,8 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import dynamic from 'next/dynamic';
-import type { CategoryItem } from '@/lib/categories';
-
-const MegaMenu = dynamic(() => import('./MegaMenu'));
+import MegaMenu from './MegaMenu';
+import { CategoryItem } from '@/lib/categories';
 
 interface ConditionalMegaMenuProps {
   readonly categories: CategoryItem[];

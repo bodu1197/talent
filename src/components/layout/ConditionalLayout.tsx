@@ -1,12 +1,11 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import dynamic from 'next/dynamic';
 import Header from './Header';
 
-const Footer = dynamic(() => import('./Footer'));
-const MobileBottomNav = dynamic(() => import('./MobileBottomNav'));
-const MobileSubHeader = dynamic(() => import('./MobileSubHeader'));
+import Footer from './Footer';
+import MobileBottomNav from './MobileBottomNav';
+import MobileSubHeader from './MobileSubHeader';
 
 interface ConditionalLayoutProps {
   readonly children: React.ReactNode;
