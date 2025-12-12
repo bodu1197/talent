@@ -1,8 +1,8 @@
-// Safe: development script for database operations
 #!/usr/bin/env node
 
 /**
  * Update Vercel environment variables with clean API keys (no newlines)
+ * Note: Safe development script for database operations
  */
 
 const { execSync } = require('child_process');

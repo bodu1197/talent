@@ -1,9 +1,10 @@
-// Safe: development script for database operations
 #!/usr/bin/env node
 
 /**
  * Fix Vercel environment variables with NO newlines
  * Using printf instead of echo to prevent automatic newline addition
+ *
+ * Note: Safe development script for database operations
  */
 
 const { execSync } = require('child_process');

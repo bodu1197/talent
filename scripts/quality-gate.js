@@ -1,8 +1,9 @@
-// Safe: development script for database operations
 #!/usr/bin/env node
 /**
  * SonarQube Quality Gate 검사 스크립트
  * Push 전에 코드 품질을 검증합니다.
+ *
+ * Note: Safe development script for code quality checks
  *
  * 검사 항목:
  * 1. ESLint - 코드 스타일 및 잠재적 오류
