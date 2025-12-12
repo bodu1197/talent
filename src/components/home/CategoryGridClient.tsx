@@ -96,6 +96,7 @@ export default function CategoryGridClient({
           key={category.id}
           href={category.slug === 'errands' ? '/errands' : `/categories/${category.slug}`}
           className="flex flex-col items-center group cursor-pointer w-[72px]"
+          prefetch={false}
         >
           <div
             className={`flex items-center justify-center transition-all duration-200 ${brightColors[index % brightColors.length]} group-hover:text-brand-primary`}

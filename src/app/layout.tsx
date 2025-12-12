@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Suspense } from 'react';
 import localFont from 'next/font/local';
 import './globals.css';
-import { AuthProvider } from '@/components/providers/AuthProvider';
+import dynamic from 'next/dynamic';
 
 // Pretendard Variable 폰트 (로컬)
 const pretendard = localFont({
@@ -12,15 +12,26 @@ const pretendard = localFont({
   variable: '--font-pretendard',
   preload: true,
 });
-import { ChatUnreadProvider } from '@/components/providers/ChatUnreadProvider';
+
 import { ErrorBoundary } from '@/components/providers/ErrorBoundary';
-import { QueryProvider } from '@/components/providers/QueryProvider';
 import RollbarProvider from '@/components/providers/RollbarProvider';
 import ToastProvider from '@/components/providers/ToastProvider';
 import { headers } from 'next/headers';
 import ConditionalLayout from '@/components/layout/ConditionalLayout';
 import ConditionalMegaMenuWrapper from '@/components/layout/ConditionalMegaMenuWrapper';
 import { PageViewTracker } from '@/components/analytics/PageViewTracker';
+
+// 클라이언트 Providers를 지연 로딩하여 초기 번들 크기 감소
+// Supabase + React Query + Auth 로직이 포함되어 있어 ~120KB 절약
+const ClientProviders = dynamic(
+  () =>
+    import('@/components/providers/ClientProviders').then((mod) => ({
+      default: mod.ClientProviders,
+    })),
+  {
+    ssr: true, // 서버에서 렌더링하되 클라이언트 번들에서는 지연 로드
+  }
+);
 
 export async function generateMetadata(): Promise<Metadata> {
   const headersList = await headers();
@@ -210,17 +221,13 @@ export default async function RootLayout({
                 <PageViewTracker />
               </Suspense>
             )}
-            <QueryProvider>
-              <AuthProvider>
-                <ChatUnreadProvider>
-                  <ConditionalLayout
-                    megaMenu={shouldHideMegaMenu ? null : <ConditionalMegaMenuWrapper />}
-                  >
-                    {children}
-                  </ConditionalLayout>
-                </ChatUnreadProvider>
-              </AuthProvider>
-            </QueryProvider>
+            <ClientProviders>
+              <ConditionalLayout
+                megaMenu={shouldHideMegaMenu ? null : <ConditionalMegaMenuWrapper />}
+              >
+                {children}
+              </ConditionalLayout>
+            </ClientProviders>
             <ToastProvider />
           </RollbarProvider>
         </ErrorBoundary>

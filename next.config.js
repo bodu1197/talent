@@ -58,6 +58,8 @@ const nextConfig = {
       },
     ],
   },
+  // 서버 전용 패키지 (클라이언트 번들에서 제외) - Next.js 16+
+  serverExternalPackages: ['@supabase/supabase-js'],
   experimental: {
     serverActions: {
       bodySizeLimit: '10mb',
@@ -66,8 +68,11 @@ const nextConfig = {
     optimizeCss: true,
     // 트리쉐이킹 최적화 - 자동 import 최적화
     optimizePackageImports: ['lucide-react', 'date-fns', 'lodash', 'recharts'],
-    // 서버 전용 패키지 (클라이언트 번들에서 제외)
-    serverComponentsExternalPackages: ['@supabase/supabase-js'],
+    // Prefetch 최적화 - LCP 개선을 위해 aggressive prefetch 비활성화
+    staleTimes: {
+      dynamic: 30, // 동적 페이지 캐시 30초로 제한
+      static: 180, // 정적 페이지 캐시 3분
+    },
   },
   // 프로덕션에서 Source Map 비활성화 (CSP eval 차단)
   productionBrowserSourceMaps: false,

@@ -97,6 +97,7 @@ export default async function CategoryGrid() {
                   key={category.id}
                   href={category.slug === 'errands' ? '/errands' : `/categories/${category.slug}`}
                   className="flex flex-col items-center group cursor-pointer flex-shrink-0 w-[76px]"
+                  prefetch={false}
                 >
                   <div
                     className={`text-[27px] mb-1 h-11 w-11 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[index % brightColors.length]} group-hover:text-brand-primary`}
@@ -117,6 +118,7 @@ export default async function CategoryGrid() {
                   key={category.id}
                   href={category.slug === 'errands' ? '/errands' : `/categories/${category.slug}`}
                   className="flex flex-col items-center group cursor-pointer flex-shrink-0 w-[76px]"
+                  prefetch={false}
                 >
                   <div
                     className={`text-[27px] mb-1 h-11 w-11 flex items-center justify-center rounded-full transition-all duration-200 ${brightColors[(index + 11) % brightColors.length]} group-hover:text-brand-primary`}
