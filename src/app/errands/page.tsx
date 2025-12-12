@@ -2,15 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import {
-  MapPin,
-  Zap,
-  Navigation,
-  Package,
-  ArrowRight,
-  Loader2,
-  UtensilsCrossed,
-} from 'lucide-react';
+import { MapPin, Zap, Navigation, Package, ArrowRight, Loader2 } from 'lucide-react';
 import HelperActiveToggle from '@/components/errands/HelperActiveToggle';
 import ErrandsKakaoMap from '@/components/errands/ErrandsKakaoMap';
 
@@ -236,30 +228,6 @@ export default function ErrandsPage() {
               지금 호출하기
             </Link>
           </div>
-        </section>
-
-        {/* 음식 배달 서비스 배너 */}
-        <section className="mb-6">
-          <Link
-            href="/food"
-            className="block bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-5 text-white hover:from-orange-600 hover:to-orange-700 transition-all group"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
-                  <UtensilsCrossed className="w-7 h-7" />
-                </div>
-                <div>
-                  <p className="text-xs text-orange-100 mb-0.5">🆕 새로운 서비스</p>
-                  <h3 className="text-lg font-bold">돌파구 동네배달</h3>
-                  <p className="text-sm text-orange-100">
-                    배달앱이 30% 가져갈 때, 우리는 300원만 받습니다
-                  </p>
-                </div>
-              </div>
-              <ArrowRight className="w-6 h-6 text-white/70 group-hover:translate-x-1 transition-transform" />
-            </div>
-          </Link>
         </section>
 
         {/* 라이더 활성 토글 */}

@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { getCurrentPosition, reverseGeocode } from '@/lib/location/address-api';
 
 // 인라인 SVG 아이콘들
 const HomeIcon = () => (
@@ -79,15 +78,6 @@ const PuzzleIcon = () => (
       strokeLinejoin="round"
       d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.643 48.39 48.39 0 01-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 01-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 00-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 01-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 00.657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 01-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 005.427-.63 48.05 48.05 0 00.582-4.717.532.532 0 00-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.96.401v0a.656.656 0 00.658-.663 48.422 48.422 0 00-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 01-.61-.58v0z"
     />
-  </svg>
-);
-
-// GPS 아이콘
-const GpsIcon = ({ className }: { className?: string }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <circle cx="12" cy="12" r="3" />
-    <path strokeLinecap="round" strokeLinejoin="round" d="M12 2v2m0 16v2m10-10h-2M4 12H2" />
-    <circle cx="12" cy="12" r="8" strokeDasharray="4 4" />
   </svg>
 );
 
@@ -177,27 +167,15 @@ interface CategoryCount {
   count: number;
 }
 
-interface LocationState {
-  latitude: number;
-  longitude: number;
-  region: string;
-  address: string;
-}
-
 export default function LocationHeroBanner() {
-  const [location, setLocation] = useState<LocationState | null>(null);
-  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
-  const [locationError, setLocationError] = useState<string | null>(null);
   const [categoryCounts, setCategoryCounts] = useState<CategoryCount[]>([]);
   const [isLoadingCounts, setIsLoadingCounts] = useState(false);
 
-  // 위치 기반 카테고리 수 가져오기
-  const fetchCategoryCounts = useCallback(async (lat: number, lng: number) => {
+  // 전체 카테고리 수 가져오기
+  const fetchCategoryCounts = useCallback(async () => {
     setIsLoadingCounts(true);
     try {
-      const response = await fetch(
-        `/api/experts/nearby/categories?lat=${lat}&lng=${lng}&radius=10`
-      );
+      const response = await fetch('/api/experts/nearby/categories');
       if (response.ok) {
         const data = await response.json();
         setCategoryCounts(data.categories || []);
@@ -209,54 +187,15 @@ export default function LocationHeroBanner() {
     }
   }, []);
 
-  // 현재 위치 가져오기
-  const handleGetLocation = useCallback(async () => {
-    setIsLoadingLocation(true);
-    setLocationError(null);
-
-    try {
-      // 브라우저 위치 가져오기
-      const coords = await getCurrentPosition();
-
-      // 역지오코딩으로 주소 변환
-      const result = await reverseGeocode(coords.latitude, coords.longitude);
-
-      if (result) {
-        const newLocation = {
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-          region: result.region || '알 수 없음',
-          address: result.roadAddress || result.address || '',
-        };
-        setLocation(newLocation);
-
-        // 위치 기반 카테고리 수 가져오기
-        await fetchCategoryCounts(coords.latitude, coords.longitude);
-      } else {
-        setLocationError('주소를 가져올 수 없습니다.');
-      }
-    } catch (err) {
-      setLocationError(err instanceof Error ? err.message : '위치를 가져올 수 없습니다');
-    } finally {
-      setIsLoadingLocation(false);
-    }
+  // 컴포넌트 마운트 시 카테고리 수 가져오기
+  useEffect(() => {
+    fetchCategoryCounts();
   }, [fetchCategoryCounts]);
 
-  // 컴포넌트 마운트 시 자동으로 위치 요청
-  useEffect(() => {
-    handleGetLocation();
-  }, [handleGetLocation]);
-
   // 카테고리 슬러그로 전문가 수 가져오기
-  const getNearbyCount = (slug: string): number => {
+  const getCount = (slug: string): number => {
     const found = categoryCounts.find((c) => c.category_slug === slug);
     return found?.count || 0;
-  };
-
-  // 위치 쿼리 파라미터 생성
-  const getLocationParams = () => {
-    if (!location) return '';
-    return `&lat=${location.latitude}&lng=${location.longitude}`;
   };
 
   // 배지 배경색 결정
@@ -270,8 +209,8 @@ export default function LocationHeroBanner() {
   const categories = Object.entries(categoryConfig).map(([slug, config]) => ({
     id: slug,
     ...config,
-    href: `/search?category=${slug}${getLocationParams()}`,
-    nearbyCount: getNearbyCount(slug),
+    href: `/search?category=${slug}`,
+    count: getCount(slug),
   }));
 
   return (
@@ -282,69 +221,16 @@ export default function LocationHeroBanner() {
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 mb-2">
             <span className="text-orange-500">내 주변</span>의 프리미엄 전문가
           </h2>
-          <p className="text-gray-500 text-sm md:text-base mb-3">
+          <p className="text-gray-500 text-sm md:text-base">
             가까운 곳에서 직접 만나는 전문가 서비스
           </p>
-
-          {/* 위치 정보 표시 */}
-          {location && (
-            <div className="inline-flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 text-sm text-gray-700 bg-orange-50 px-4 py-2 rounded-full border border-orange-200">
-                <MapPinIcon className="w-4 h-4 text-orange-500" />
-                <span className="font-medium">{location.region}</span>
-                <span className="text-gray-400">|</span>
-                <span className="text-gray-500 text-xs truncate max-w-[150px]">
-                  {location.address}
-                </span>
-              </span>
-              <button
-                onClick={handleGetLocation}
-                disabled={isLoadingLocation}
-                className="p-2 text-gray-500 hover:text-orange-500 hover:bg-orange-50 rounded-full transition-colors"
-                title="위치 새로고침"
-              >
-                {isLoadingLocation ? (
-                  <LoadingSpinner className="w-4 h-4" />
-                ) : (
-                  <GpsIcon className="w-4 h-4" />
-                )}
-              </button>
-            </div>
-          )}
-          {!location && isLoadingLocation && (
-            <span className="inline-flex items-center gap-2 text-sm text-gray-600 bg-gray-100 px-4 py-2 rounded-full">
-              <LoadingSpinner className="w-4 h-4" />
-              <span>위치 확인 중...</span>
-            </span>
-          )}
-          {!location && !isLoadingLocation && locationError && (
-            <div className="inline-flex flex-col items-center gap-2">
-              <span className="text-sm text-red-500">{locationError}</span>
-              <button
-                onClick={handleGetLocation}
-                className="inline-flex items-center gap-1.5 text-sm text-orange-600 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 px-4 py-2 rounded-full transition-colors"
-              >
-                <GpsIcon className="w-4 h-4" />
-                <span>위치 다시 가져오기</span>
-              </button>
-            </div>
-          )}
-          {!location && !isLoadingLocation && !locationError && (
-            <button
-              onClick={handleGetLocation}
-              className="inline-flex items-center gap-1.5 text-sm text-orange-600 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 px-4 py-2 rounded-full transition-colors"
-            >
-              <GpsIcon className="w-4 h-4" />
-              <span>내 위치 설정하기</span>
-            </button>
-          )}
         </div>
 
         {/* 카드 컨테이너 */}
         <div className="flex md:grid md:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
           {categories.map((category) => {
             const IconComponent = category.icon;
-            const hasExperts = category.nearbyCount > 0;
+            const hasExperts = category.count > 0;
 
             return (
               <Link
@@ -361,12 +247,12 @@ export default function LocationHeroBanner() {
 
                   {/* 콘텐츠 */}
                   <div className="relative z-10 h-full flex flex-col">
-                    {/* 상단: 아이콘 + 주변 전문가 배지 */}
+                    {/* 상단: 아이콘 + 전문가 수 배지 */}
                     <div className="flex items-start justify-between mb-4">
                       <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
                         <IconComponent />
                       </div>
-                      {/* 주변 전문가 수 배지 */}
+                      {/* 전문가 수 배지 */}
                       <div
                         className={`flex items-center gap-1 backdrop-blur-sm px-2.5 py-1 rounded-full ${getBadgeBackground(isLoadingCounts, hasExperts)}`}
                       >
@@ -376,7 +262,7 @@ export default function LocationHeroBanner() {
                           <>
                             <MapPinIcon className="w-3 h-3 text-white" />
                             <span className="text-white text-xs font-medium">
-                              {hasExperts ? `주변 ${category.nearbyCount}명` : '주변 0명'}
+                              {hasExperts ? `전문가 ${category.count}명` : '전문가 찾기'}
                             </span>
                           </>
                         )}
@@ -392,7 +278,7 @@ export default function LocationHeroBanner() {
 
                     {/* CTA */}
                     <div className="flex items-center gap-2 text-white font-medium text-sm mt-4 group-hover:gap-3 transition-all duration-300">
-                      <span>{hasExperts ? '주변 전문가 보기' : '전문가 찾기'}</span>
+                      <span>{hasExperts ? '전문가 보기' : '전문가 찾기'}</span>
                       <ArrowRightIcon />
                     </div>
                   </div>
@@ -401,15 +287,6 @@ export default function LocationHeroBanner() {
             );
           })}
         </div>
-
-        {/* 위치 허용 안내 (위치 미설정 시) */}
-        {!location && !isLoadingLocation && (
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-500">
-              위치를 허용하면 가까운 전문가를 더 정확하게 찾을 수 있어요
-            </p>
-          </div>
-        )}
       </div>
     </section>
   );

@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { getCurrentPosition, reverseGeocode } from '@/lib/location/address-api';
 
 // 인라인 SVG 아이콘들
 const HomeIcon = () => (
@@ -50,15 +49,6 @@ const MapPinIcon = ({ className = 'w-4 h-4' }: { className?: string }) => (
       strokeLinejoin="round"
       d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
     />
-  </svg>
-);
-
-// GPS 아이콘
-const GpsIcon = ({ className }: { className?: string }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <circle cx="12" cy="12" r="3" />
-    <path strokeLinecap="round" strokeLinejoin="round" d="M12 2v2m0 16v2m10-10h-2M4 12H2" />
-    <circle cx="12" cy="12" r="8" strokeDasharray="4 4" />
   </svg>
 );
 
@@ -164,15 +154,7 @@ interface CategoryServiceCount {
   count: number;
 }
 
-interface LocationState {
-  latitude: number;
-  longitude: number;
-  region: string;
-}
-
 export default function ThirdHeroBanner() {
-  const [location, setLocation] = useState<LocationState | null>(null);
-  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
   const [serviceCounts, setServiceCounts] = useState<CategoryServiceCount[]>([]);
   const [isLoadingCounts, setIsLoadingCounts] = useState(false);
 
@@ -193,34 +175,10 @@ export default function ThirdHeroBanner() {
     }
   }, []);
 
-  // 현재 위치 가져오기
-  const handleGetLocation = useCallback(async () => {
-    setIsLoadingLocation(true);
-
-    try {
-      const coords = await getCurrentPosition();
-      const result = await reverseGeocode(coords.latitude, coords.longitude);
-
-      if (result) {
-        const newLocation = {
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-          region: result.region || '알 수 없음',
-        };
-        setLocation(newLocation);
-      }
-    } catch (error) {
-      console.error('위치 가져오기 실패:', error);
-    } finally {
-      setIsLoadingLocation(false);
-    }
-  }, []);
-
-  // 컴포넌트 마운트 시 위치 요청 및 서비스 수 가져오기
+  // 컴포넌트 마운트 시 서비스 수 가져오기
   useEffect(() => {
-    handleGetLocation();
     fetchServiceCounts();
-  }, [handleGetLocation, fetchServiceCounts]);
+  }, [fetchServiceCounts]);
 
   // 카테고리 슬러그로 서비스 수 가져오기
   const getServiceCount = (slug: string): number => {
@@ -235,52 +193,6 @@ export default function ThirdHeroBanner() {
     return 'bg-white/15';
   };
 
-  // 위치 표시 컴포넌트 렌더링
-  const renderLocationDisplay = () => {
-    if (location) {
-      return (
-        <div className="inline-flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 text-sm text-gray-700 bg-orange-50 px-4 py-2 rounded-full border border-orange-200">
-            <MapPinIcon className="w-4 h-4 text-orange-500" />
-            <span className="font-medium">{location.region}</span>
-            <span className="text-gray-400">기준</span>
-          </span>
-          <button
-            onClick={handleGetLocation}
-            disabled={isLoadingLocation}
-            className="p-2 text-gray-500 hover:text-orange-500 hover:bg-orange-50 rounded-full transition-colors"
-            title="위치 새로고침"
-          >
-            {isLoadingLocation ? (
-              <LoadingSpinner className="w-4 h-4" />
-            ) : (
-              <GpsIcon className="w-4 h-4" />
-            )}
-          </button>
-        </div>
-      );
-    }
-
-    if (isLoadingLocation) {
-      return (
-        <span className="inline-flex items-center gap-2 text-sm text-gray-600 bg-gray-100 px-4 py-2 rounded-full">
-          <LoadingSpinner className="w-4 h-4" />
-          <span>위치 확인 중...</span>
-        </span>
-      );
-    }
-
-    return (
-      <button
-        onClick={handleGetLocation}
-        className="inline-flex items-center gap-1.5 text-sm text-orange-600 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 px-4 py-2 rounded-full transition-colors"
-      >
-        <GpsIcon className="w-4 h-4" />
-        <span>내 위치 설정하기</span>
-      </button>
-    );
-  };
-
   return (
     <section className="py-6 md:py-10">
       <div className="container-1200">
@@ -289,12 +201,9 @@ export default function ThirdHeroBanner() {
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 mb-2">
             <span className="text-orange-500">내 주변</span>의 프리미엄 전문가
           </h2>
-          <p className="text-gray-500 text-sm md:text-base mb-3">
+          <p className="text-gray-500 text-sm md:text-base">
             가까운 곳에서 직접 만나는 전문가 서비스
           </p>
-
-          {/* 위치 정보 표시 */}
-          {renderLocationDisplay()}
         </div>
 
         {/* 카드 컨테이너 - 모바일: 가로 스크롤, 데스크톱: 그리드 */}
@@ -303,15 +212,11 @@ export default function ThirdHeroBanner() {
             const IconComponent = category.icon;
             const serviceCount = getServiceCount(category.slug);
             const hasServices = serviceCount > 0;
-            // 실제 카테고리 페이지 링크 생성
-            const categoryHref = location
-              ? `/categories/${category.slug}?lat=${location.latitude}&lng=${location.longitude}`
-              : `/categories/${category.slug}`;
 
             return (
               <Link
                 key={category.slug}
-                href={categoryHref}
+                href={`/categories/${category.slug}`}
                 className="group flex-shrink-0 w-[85%] sm:w-[70%] md:w-auto snap-center"
               >
                 <div
@@ -363,15 +268,6 @@ export default function ThirdHeroBanner() {
             );
           })}
         </div>
-
-        {/* 위치 허용 안내 (위치 미설정 시) */}
-        {!location && !isLoadingLocation && (
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-500">
-              위치를 허용하면 가까운 전문가를 더 정확하게 찾을 수 있어요
-            </p>
-          </div>
-        )}
       </div>
     </section>
   );
