@@ -65,13 +65,9 @@ const nextConfig = {
     // CSS 최적화 - 불필요한 preload 경고 방지
     optimizeCss: true,
     // 트리쉐이킹 최적화 - 자동 import 최적화
-    optimizePackageImports: [
-      'lucide-react',
-      '@supabase/supabase-js',
-      'date-fns',
-      'lodash',
-      'recharts',
-    ],
+    optimizePackageImports: ['lucide-react', 'date-fns', 'lodash', 'recharts'],
+    // 서버 전용 패키지 (클라이언트 번들에서 제외)
+    serverComponentsExternalPackages: ['@supabase/supabase-js'],
   },
   // 프로덕션에서 Source Map 비활성화 (CSP eval 차단)
   productionBrowserSourceMaps: false,
