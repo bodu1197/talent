@@ -146,8 +146,8 @@ export function getCurrentPosition(): Promise<GeoLocationResult> {
         reject(new Error(message));
       },
       {
-        enableHighAccuracy: true,
-        timeout: 10000,
+        enableHighAccuracy: false, // WiFi/IP 기반 위치 사용 (더 빠름)
+        timeout: 30000, // 30초로 증가
         maximumAge: 300000, // 5분 캐시
       }
     );
