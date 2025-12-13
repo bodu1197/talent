@@ -233,7 +233,13 @@ export default async function RootLayout({
             )}
             <ClientProviders>
               <ConditionalLayout
-                megaMenu={shouldHideMegaMenu ? null : <ConditionalMegaMenuWrapper />}
+                megaMenu={
+                  shouldHideMegaMenu ? null : (
+                    <Suspense fallback={<div className="h-[60px] hidden lg:block" />}>
+                      <ConditionalMegaMenuWrapper />
+                    </Suspense>
+                  )
+                }
               >
                 {children}
               </ConditionalLayout>

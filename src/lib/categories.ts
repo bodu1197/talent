@@ -81,11 +81,36 @@ export async function getAllCategoriesTree(useAuth: boolean = true): Promise<Cat
 export const getCachedCategoriesTree = getAllCategoriesTree;
 
 /**
- * 1단계 카테고리만 가져오기 (메인 페이지용)
+ * 1단계 카테고리만 가져오기 (호환성 유지: 전체 트리 반환)
+ * MegaMenu 등 하위 카테고리가 필요한 경우 사용
  */
 export async function getTopLevelCategories(): Promise<CategoryItem[]> {
   const allCategories = await getAllCategoriesTree();
   return allCategories;
+}
+
+/**
+ * 1단계 카테고리만 가져오기 (최적화 버전: 얕은 조회)
+ * children 없이 1단계만 필요한 경우 사용 (예: 메인 페이지 그리드, 카테고리 바)
+ */
+export async function getOnlyTopLevelCategories(): Promise<CategoryItem[]> {
+  const supabase = await createClient();
+
+  const { data: categories, error } = await supabase
+    .from('categories')
+    .select(
+      'id, name, slug, icon, description, parent_id, level, service_count, is_ai, is_active, display_order'
+    )
+    .is('parent_id', null)
+    .eq('is_active', true)
+    .order('display_order');
+
+  if (error) {
+    logger.error('Failed to fetch top level categories:', error);
+    return [];
+  }
+
+  return (categories || []).map((cat) => ({ ...cat, children: [] }));
 }
 
 /**

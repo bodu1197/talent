@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getTopLevelCategories } from '@/lib/categories';
+import { getOnlyTopLevelCategories } from '@/lib/categories';
 import CategoryGridClient from './CategoryGridClient';
 import {
   Bot,
@@ -61,8 +61,8 @@ function CategoryIcon({ icon }: Readonly<{ icon?: string }>) {
 }
 
 export default async function CategoryGrid() {
-  // 데이터베이스에서 1단계 카테고리 가져오기
-  const topLevelCategories = await getTopLevelCategories();
+  // 데이터베이스에서 1단계 카테고리 가져오기 (최적화: 얕은 조회)
+  const topLevelCategories = await getOnlyTopLevelCategories();
 
   const initialVisibleCount = 11;
   const categoriesInFirstRow = topLevelCategories.slice(0, initialVisibleCount);

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getTopLevelCategories } from '@/lib/categories';
+import { getOnlyTopLevelCategories } from '@/lib/categories';
 import { Bot, Laptop, Palette, Megaphone, Video, Briefcase, LayoutGrid } from 'lucide-react';
 
 // 카테고리 아이콘 매핑
@@ -13,7 +13,7 @@ const categoryIcons: Record<string, React.ReactNode> = {
 };
 
 export default async function CategoryBar() {
-  const topLevelCategories = await getTopLevelCategories();
+  const topLevelCategories = await getOnlyTopLevelCategories();
 
   return (
     <div className="bg-white border-b border-gray-200 fixed top-20 left-0 right-0 z-40">
