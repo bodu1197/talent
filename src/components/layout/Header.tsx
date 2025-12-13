@@ -97,8 +97,12 @@ export default function Header() {
             {' '}
             <form onSubmit={handleSearch} className="relative" autoComplete="off">
               {' '}
+              <label htmlFor="header-search" className="sr-only">
+                서비스 검색
+              </label>
               <input
                 type="text"
+                id="header-search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="어떤 재능이 필요하신가요?"
@@ -109,7 +113,6 @@ export default function Header() {
                 data-form-type="other"
                 data-lpignore="true"
                 role="searchbox"
-                aria-label="서비스 검색"
                 className="focus-visible:outline-none w-full px-4 py-2 pr-10 border-2 border-gray-300 rounded-full focus:rounded-full hover:border-gray-300 focus:outline-none focus:border-gray-300 focus:shadow-none transition-none text-gray-900 text-sm"
                 style={{ WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none' }}
               />{' '}

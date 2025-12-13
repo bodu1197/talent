@@ -256,6 +256,9 @@ export default function HeroSection() {
                 className="relative w-full lg:max-w-[490px]"
                 autoComplete="off"
               >
+                <label htmlFor="hero-search" className="sr-only">
+                  서비스 검색
+                </label>
                 <input
                   type="text"
                   id="hero-search"
@@ -270,7 +273,6 @@ export default function HeroSection() {
                   data-form-type="other"
                   data-lpignore="true"
                   role="searchbox"
-                  aria-label="서비스 검색"
                   className="focus-visible:outline-none w-full px-4 sm:px-6 py-3 sm:py-4 pr-14 border-2 border-gray-300 rounded-full focus:rounded-full hover:border-gray-300 focus:outline-none focus:border-gray-300 focus:shadow-none transition-none text-gray-900 text-sm sm:text-base"
                   style={{
                     WebkitAppearance: 'none',
