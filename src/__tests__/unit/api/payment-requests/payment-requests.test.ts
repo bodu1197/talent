@@ -18,6 +18,7 @@ const mockSupabase: Record<string, any> = {
 
 vi.mock('@/lib/supabase/server', () => ({
   createClient: vi.fn(() => Promise.resolve(mockSupabase)),
+  createServiceRoleClient: vi.fn(() => mockSupabase),
 }));
 
 vi.mock('@/lib/logger', () => ({
@@ -110,6 +111,11 @@ describe('Payment Requests API', () => {
     it('should return payment requests list', async () => {
       mockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: 'user-1' } },
+        error: null,
+      });
+
+      mockSupabase.single.mockResolvedValue({
+        data: { user1_id: 'user-1', user2_id: 'user-2' },
         error: null,
       });
 

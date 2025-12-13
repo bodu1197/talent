@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { createOrderWithIdempotency } from '@/lib/transaction';
 import { randomBytes } from 'node:crypto';
 import { logger } from '@/lib/logger';
+import { checkRateLimit, directPurchaseRateLimit } from '@/lib/rate-limit';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 // 입력 유효성 검사
@@ -120,6 +121,12 @@ export async function POST(request: NextRequest) {
 
     if (authError || !user) {
       return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
+    }
+
+    // Rate Limit 체크
+    const rateLimitResult = await checkRateLimit(user.id, directPurchaseRateLimit);
+    if (!rateLimitResult.success && rateLimitResult.error) {
+      return rateLimitResult.error;
     }
 
     const body = await request.json();

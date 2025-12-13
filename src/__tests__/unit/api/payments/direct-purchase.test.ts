@@ -533,7 +533,7 @@ describe('POST /api/payments/direct-purchase', () => {
       const data = await response.json();
 
       expect(response.status).toBe(400);
-      expect(data.error).toBe('서비스 가격과 일치하지 않습니다');
+      expect(data.error).toBe('가격이 일치하지 않습니다');
     });
   });
 
