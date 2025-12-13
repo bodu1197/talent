@@ -14,7 +14,6 @@ const pretendard = localFont({
 });
 
 import { ErrorBoundary } from '@/components/providers/ErrorBoundary';
-import RollbarProvider from '@/components/providers/RollbarProvider';
 import ToastProvider from '@/components/providers/ToastProvider';
 import { headers } from 'next/headers';
 import ConditionalLayout from '@/components/layout/ConditionalLayout';
@@ -225,27 +224,25 @@ export default async function RootLayout({
       </head>
       <body className="min-h-screen bg-gray-50 overflow-x-hidden">
         <ErrorBoundary>
-          <RollbarProvider>
-            {!isAdminPage && !isMypagePage && (
-              <Suspense fallback={null}>
-                <PageViewTracker />
-              </Suspense>
-            )}
-            <ClientProviders>
-              <ConditionalLayout
-                megaMenu={
-                  shouldHideMegaMenu ? null : (
-                    <Suspense fallback={<div className="h-[60px] hidden lg:block" />}>
-                      <ConditionalMegaMenuWrapper />
-                    </Suspense>
-                  )
-                }
-              >
-                {children}
-              </ConditionalLayout>
-            </ClientProviders>
-            <ToastProvider />
-          </RollbarProvider>
+          {!isAdminPage && !isMypagePage && (
+            <Suspense fallback={null}>
+              <PageViewTracker />
+            </Suspense>
+          )}
+          <ClientProviders>
+            <ConditionalLayout
+              megaMenu={
+                shouldHideMegaMenu ? null : (
+                  <Suspense fallback={<div className="h-[60px] hidden lg:block" />}>
+                    <ConditionalMegaMenuWrapper />
+                  </Suspense>
+                )
+              }
+            >
+              {children}
+            </ConditionalLayout>
+          </ClientProviders>
+          <ToastProvider />
         </ErrorBoundary>
       </body>
     </html>
