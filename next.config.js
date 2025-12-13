@@ -67,7 +67,17 @@ const nextConfig = {
     // CSS 최적화 - 불필요한 preload 경고 방지
     optimizeCss: true,
     // 트리쉐이킹 최적화 - 자동 import 최적화
-    optimizePackageImports: ['lucide-react', 'date-fns', 'lodash', 'recharts'],
+    optimizePackageImports: [
+      'lucide-react',
+      'date-fns',
+      'lodash',
+      'recharts',
+      '@tanstack/react-query',
+      'react-hook-form',
+      'zustand',
+      'zod',
+      '@supabase/supabase-js',
+    ],
     // Prefetch 최적화 - LCP 개선을 위해 aggressive prefetch 비활성화
     staleTimes: {
       dynamic: 30, // 동적 페이지 캐시 30초로 제한
