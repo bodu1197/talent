@@ -506,9 +506,10 @@ export default function ErrandsKakaoMap({
         {helpers.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {helpers.slice(0, 8).map((helper) => (
-              <div
+              <button
                 key={helper.id}
-                className="bg-white rounded-xl p-3 shadow-sm hover:shadow-md transition cursor-pointer"
+                type="button"
+                className="bg-white rounded-xl p-3 shadow-sm hover:shadow-md transition cursor-pointer text-left"
                 onClick={() => setSelectedHelper(helper)}
               >
                 <div className="flex items-center gap-2 mb-2">
@@ -539,7 +540,7 @@ export default function ErrandsKakaoMap({
                     {getGradeLabel(helper.grade)}
                   </span>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         )}

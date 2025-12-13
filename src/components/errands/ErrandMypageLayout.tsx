@@ -249,7 +249,12 @@ export default function ErrandMypageLayout({ children, mode }: ErrandMypageLayou
       {/* 모바일 사이드 메뉴 */}
       {mobileMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-50">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setMobileMenuOpen(false)} />
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-label="메뉴 닫기"
+          />
           <div className="absolute left-0 top-0 bottom-0 w-72 bg-white">
             <div className="flex items-center justify-between p-4 border-b border-gray-200">
               <div className="flex items-center gap-2">

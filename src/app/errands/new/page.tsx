@@ -218,18 +218,20 @@ export default function NewErrandPage() {
       return;
     }
 
+    const handlePickupComplete = async (data: DaumPostcodeData) => {
+      const address = data.roadAddress || data.jibunAddress || data.address;
+      const coords = await getCoordinates(address);
+      setPickup((prev) => ({
+        ...prev,
+        address,
+        lat: coords?.lat,
+        lng: coords?.lng,
+      }));
+    };
+
     try {
       new window.daum.Postcode({
-        oncomplete: async (data: DaumPostcodeData) => {
-          const address = data.roadAddress || data.jibunAddress || data.address;
-          const coords = await getCoordinates(address);
-          setPickup((prev) => ({
-            ...prev,
-            address,
-            lat: coords?.lat,
-            lng: coords?.lng,
-          }));
-        },
+        oncomplete: (data: DaumPostcodeData) => void handlePickupComplete(data),
       }).open();
     } catch (error) {
       logger.error('Failed to open address search:', error);
@@ -250,18 +252,20 @@ export default function NewErrandPage() {
       return;
     }
 
+    const handleDeliveryComplete = async (data: DaumPostcodeData) => {
+      const address = data.roadAddress || data.jibunAddress || data.address;
+      const coords = await getCoordinates(address);
+      setDelivery((prev) => ({
+        ...prev,
+        address,
+        lat: coords?.lat,
+        lng: coords?.lng,
+      }));
+    };
+
     try {
       new window.daum.Postcode({
-        oncomplete: async (data: DaumPostcodeData) => {
-          const address = data.roadAddress || data.jibunAddress || data.address;
-          const coords = await getCoordinates(address);
-          setDelivery((prev) => ({
-            ...prev,
-            address,
-            lat: coords?.lat,
-            lng: coords?.lng,
-          }));
-        },
+        oncomplete: (data: DaumPostcodeData) => void handleDeliveryComplete(data),
       }).open();
     } catch (error) {
       logger.error('Failed to open address search:', error);
@@ -409,13 +413,15 @@ export default function NewErrandPage() {
       return;
     }
 
+    const handleStopComplete = async (data: DaumPostcodeData) => {
+      const address = data.roadAddress || data.jibunAddress || data.address;
+      const coords = await getCoordinates(address);
+      updateStopAddress(index, address, coords);
+    };
+
     try {
       new window.daum.Postcode({
-        oncomplete: async (data: DaumPostcodeData) => {
-          const address = data.roadAddress || data.jibunAddress || data.address;
-          const coords = await getCoordinates(address);
-          updateStopAddress(index, address, coords);
-        },
+        oncomplete: (data: DaumPostcodeData) => void handleStopComplete(data),
       }).open();
     } catch (error) {
       logger.error('Failed to open address search:', error);
@@ -454,17 +460,19 @@ export default function NewErrandPage() {
       return;
     }
 
+    const handleShoppingComplete = async (data: DaumPostcodeData) => {
+      const address = data.roadAddress || data.jibunAddress || data.address;
+      const coords = await getCoordinates(address);
+      setShoppingLocation({
+        address,
+        lat: coords?.lat,
+        lng: coords?.lng,
+      });
+    };
+
     try {
       new window.daum.Postcode({
-        oncomplete: async (data: DaumPostcodeData) => {
-          const address = data.roadAddress || data.jibunAddress || data.address;
-          const coords = await getCoordinates(address);
-          setShoppingLocation({
-            address,
-            lat: coords?.lat,
-            lng: coords?.lng,
-          });
-        },
+        oncomplete: (data: DaumPostcodeData) => void handleShoppingComplete(data),
       }).open();
     } catch (error) {
       logger.error('Failed to open address search:', error);

@@ -214,9 +214,10 @@ export default function Step4Images({ formData, setFormData }: ServiceFormProps)
                 </button>
               </div>
             ) : (
-              <div
+              <button
+                type="button"
                 onClick={handleFileButtonClick}
-                className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-gray-50 cursor-pointer hover:border-brand-primary hover:bg-gray-100 transition-colors"
+                className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-gray-50 cursor-pointer hover:border-brand-primary hover:bg-gray-100 transition-colors w-full"
               >
                 <ImagePlus className="text-gray-400 w-12 h-12 mb-4 mx-auto" />
                 <p className="text-gray-600 mb-4">서비스를 대표할 이미지를 업로드하세요</p>
@@ -232,7 +233,7 @@ export default function Step4Images({ formData, setFormData }: ServiceFormProps)
 
                 <p className="text-sm text-gray-500 mt-4">권장 크기: 652×488px (최대 5MB)</p>
                 <p className="text-xs text-gray-400 mt-1">JPG, PNG, GIF 형식 지원</p>
-              </div>
+              </button>
             )}
           </div>
         )}

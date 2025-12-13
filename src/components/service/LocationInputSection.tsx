@@ -143,21 +143,23 @@ export default function LocationInputSection({
     setIsSearching(true);
 
     new window.daum.Postcode({
-      oncomplete: async (data: DaumPostcodeData) => {
-        // 신주소(도로명주소) 우선, 없으면 구주소(지번주소) 사용
-        const address = data.roadAddress || data.jibunAddress || data.address;
-        const region = data.sigungu || extractRegion(address);
+      oncomplete: (data: DaumPostcodeData) => {
+        void (async () => {
+          // 신주소(도로명주소) 우선, 없으면 구주소(지번주소) 사용
+          const address = data.roadAddress || data.jibunAddress || data.address;
+          const region = data.sigungu || extractRegion(address);
 
-        // 카카오 API로 좌표 조회
-        const coords = await getCoordinates(address);
+          // 카카오 API로 좌표 조회
+          const coords = await getCoordinates(address);
 
-        onChange({
-          address,
-          latitude: coords?.lat || 0,
-          longitude: coords?.lng || 0,
-          region,
-        });
-        setIsSearching(false);
+          onChange({
+            address,
+            latitude: coords?.lat || 0,
+            longitude: coords?.lng || 0,
+            region,
+          });
+          setIsSearching(false);
+        })();
       },
       onclose: () => {
         setIsSearching(false);

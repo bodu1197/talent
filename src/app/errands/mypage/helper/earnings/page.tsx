@@ -240,9 +240,11 @@ export default function HelperEarningsPage() {
         {/* 출금 모달 (간단 구현) */}
         {withdrawModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div
+            <button
+              type="button"
               className="absolute inset-0 bg-black/50"
               onClick={() => setWithdrawModalOpen(false)}
+              aria-label="모달 닫기"
             />
             <div className="relative bg-white rounded-xl p-6 w-full max-w-md">
               <h3 className="text-lg font-bold text-gray-900 mb-4">출금 신청</h3>
