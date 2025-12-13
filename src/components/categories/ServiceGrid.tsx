@@ -107,6 +107,7 @@ export default function ServiceGrid({
           categoryId={categoryId}
           position={index + 1}
           page={page || 1}
+          priority={index < 4}
           showLocation={showLocation}
         />
       ))}
