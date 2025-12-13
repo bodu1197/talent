@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint-disable sonarjs/cognitive-complexity, sonarjs/os-command, sonarjs/no-os-command-from-path, sonarjs/no-hardcoded-passwords, sonarjs/sql-queries, sonarjs/slow-regex */
+/* eslint-disable sonarjs/cognitive-complexity, sonarjs/os-command */
 /**
  * SonarQube Quality Gate 검사 스크립트
  * Push 전에 코드 품질을 검증합니다.
@@ -61,9 +61,15 @@ function runCommand(command, description) {
 
 // SonarQube API 호출 (Quality Gate 상태 확인)
 async function checkSonarQubeQualityGate() {
-  const projectKey = 'talent';
-  const sonarUrl = process.env.SONAR_HOST_URL || 'http://localhost:9000';
-  const sonarToken = process.env.SONAR_TOKEN || 'sqa_a6454668bd672faa8dde9d8bb366139925a0f817';
+  const projectKey = 'bodu1197_talent';
+  const sonarUrl = process.env.SONAR_HOST_URL || 'https://sonarcloud.io';
+  const sonarToken = process.env.SONAR_TOKEN;
+
+  // 토큰이 없으면 스킵 (GitHub Actions에서만 실행)
+  if (!sonarToken) {
+    logWarning('SONAR_TOKEN이 설정되지 않음 - SonarQube 검사 스킵 (GitHub Actions에서 실행됨)');
+    return null;
+  }
 
   return new Promise((resolve) => {
     const url = `${sonarUrl}/api/qualitygates/project_status?projectKey=${projectKey}`;
@@ -141,9 +147,16 @@ async function main() {
     logError('TypeScript 검사 실패 - 타입 오류를 수정하세요');
   }
 
-  // 3. SonarQube 스캔
+  // 3. SonarQube 스캔 (토큰이 있을 때만)
   logStep('3/4', 'SonarQube 분석...');
-  const sonarScanPassed = runCommand('npx sonar-scanner', 'SonarQube 코드 분석');
+  let sonarScanPassed = false;
+
+  if (process.env.SONAR_TOKEN) {
+    sonarScanPassed = runCommand('npx sonar-scanner', 'SonarQube 코드 분석');
+  } else {
+    logWarning('SONAR_TOKEN이 설정되지 않음 - SonarQube 스캔 스킵');
+    logWarning('GitHub Actions에서 자동으로 SonarCloud 분석이 실행됩니다');
+  }
 
   // 4. Quality Gate 상태 확인
   if (sonarScanPassed) {
