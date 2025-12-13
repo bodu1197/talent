@@ -113,7 +113,7 @@ export default function TrendingCategoriesClient({ categories }: Props) {
                   <div
                     className={`
                       w-full bg-gradient-to-t ${barColor} rounded-t-lg
-                      transition-all duration-1000 ease-out
+                      transition-[height,transform] duration-1000 ease-out will-change-[height]
                       group-hover:shadow-lg group-hover:scale-105
                       ${isTop3 ? 'shadow-md' : ''}
                     `}
