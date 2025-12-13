@@ -19,6 +19,40 @@ interface Notice {
 
 const CATEGORIES = ['공지', '이벤트', '업데이트', '점검', '정책'];
 
+function getCategoryColor(cat: string) {
+  switch (cat) {
+    case '공지':
+      return 'bg-brand-primary text-white';
+    case '이벤트':
+      return 'bg-green-100 text-green-800';
+    case '업데이트':
+      return 'bg-blue-100 text-blue-800';
+    case '점검':
+      return 'bg-yellow-100 text-yellow-800';
+    case '정책':
+      return 'bg-gray-100 text-gray-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
+  }
+}
+
+async function sendNotificationToAllUsers(noticeId: string, noticeTitle: string) {
+  const supabase = createClient();
+  const { data: notifyResult, error: notifyError } = await supabase.rpc(
+    'notify_all_users_new_notice',
+    {
+      p_notice_id: noticeId,
+      p_notice_title: noticeTitle,
+    }
+  );
+
+  if (notifyError) {
+    console.error('알림 발송 실패:', notifyError);
+    return;
+  }
+  toast.success(`${notifyResult}명에게 알림이 발송되었습니다.`);
+}
+
 export default function AdminNoticesPage() {
   const [notices, setNotices] = useState<Notice[]>([]);
   const [loading, setLoading] = useState(true);
@@ -74,23 +108,6 @@ export default function AdminNoticesPage() {
     setIsImportant(notice.is_important);
     setIsPublished(notice.is_published);
     setIsModalOpen(true);
-  }
-
-  async function sendNotificationToAllUsers(noticeId: string, noticeTitle: string) {
-    const supabase = createClient();
-    const { data: notifyResult, error: notifyError } = await supabase.rpc(
-      'notify_all_users_new_notice',
-      {
-        p_notice_id: noticeId,
-        p_notice_title: noticeTitle,
-      }
-    );
-
-    if (notifyError) {
-      console.error('알림 발송 실패:', notifyError);
-      return;
-    }
-    toast.success(`${notifyResult}명에게 알림이 발송되었습니다.`);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -203,23 +220,6 @@ export default function AdminNoticesPage() {
     return matchesSearch && matchesCategory;
   });
 
-  function getCategoryColor(cat: string) {
-    switch (cat) {
-      case '공지':
-        return 'bg-brand-primary text-white';
-      case '이벤트':
-        return 'bg-green-100 text-green-800';
-      case '업데이트':
-        return 'bg-blue-100 text-blue-800';
-      case '점검':
-        return 'bg-yellow-100 text-yellow-800';
-      case '정책':
-        return 'bg-gray-100 text-gray-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  }
-
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -243,12 +243,14 @@ export default function AdminNoticesPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            aria-label="공지사항 검색"
           />
         </div>
         <select
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value)}
           className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
+          aria-label="카테고리 필터"
         >
           <option value="">전체 카테고리</option>
           {CATEGORIES.map((cat) => (
@@ -373,8 +375,14 @@ export default function AdminNoticesPage() {
             <form onSubmit={handleSubmit} className="p-4 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">카테고리</label>
+                  <label
+                    htmlFor="notice-category"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    카테고리
+                  </label>
                   <select
+                    id="notice-category"
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                     className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
@@ -409,8 +417,14 @@ export default function AdminNoticesPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">제목</label>
+                <label
+                  htmlFor="notice-title"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  제목
+                </label>
                 <input
+                  id="notice-title"
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
@@ -421,8 +435,14 @@ export default function AdminNoticesPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">내용</label>
+                <label
+                  htmlFor="notice-content"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  내용
+                </label>
                 <textarea
+                  id="notice-content"
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   placeholder="공지사항 내용을 입력하세요"

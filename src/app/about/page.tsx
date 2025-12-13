@@ -148,8 +148,8 @@ export default function AboutPage() {
               </div>
               <p className="text-gray-700 text-lg leading-relaxed">
                 기존 재능 마켓의 높은 수수료(10~20%)는 전문가의 수익을 줄이고 구매자의 부담을
-                늘립니다. 돌파구는 이 문제를 해결하기 위해 탄생했습니다.
-                <strong className="text-brand-primary"> 모든 거래에서 수수료 0%</strong>를 실현하여,
+                늘립니다. 돌파구는 이 문제를 해결하기 위해 탄생했습니다.{' '}
+                <strong className="text-brand-primary">모든 거래에서 수수료 0%</strong>를 실현하여,
                 재능 있는 사람들이 정당한 대가를 받을 수 있는 환경을 만들고 있습니다.
               </p>
             </div>
