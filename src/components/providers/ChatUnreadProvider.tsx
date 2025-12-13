@@ -10,6 +10,7 @@ import {
   ReactNode,
 } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import { useAuth } from './AuthProvider';
 import { logger } from '@/lib/logger';
 
 interface ChatMessage {
@@ -30,11 +31,12 @@ interface ChatUnreadContextType {
 const ChatUnreadContext = createContext<ChatUnreadContextType | undefined>(undefined);
 
 export function ChatUnreadProvider({ children }: Readonly<{ children: ReactNode }>) {
+  const { user } = useAuth(); // Use AuthProvider instead of separate getUser() call
   const [unreadCount, setUnreadCount] = useState(0);
-  const [userId, setUserId] = useState<string | null>(null);
   const [hasPermission, setHasPermission] = useState(false);
   const [myRoomIds, setMyRoomIds] = useState<string[]>([]);
   const supabase = useMemo(() => createClient(), []);
+  const userId = user?.id || null;
 
   // 알림 권한 요청
   const requestNotificationPermission = useCallback(async () => {
@@ -116,21 +118,13 @@ export function ChatUnreadProvider({ children }: Readonly<{ children: ReactNode 
     }
   }, [userId, supabase]);
 
-  // 초기화
+  // 초기화 - user가 있으면 채팅 읽지 않은 수 조회
   useEffect(() => {
-    const initUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        setUserId(user.id);
-        fetchUnreadCount();
-        requestNotificationPermission();
-      }
-    };
-
-    initUser();
-  }, [supabase, fetchUnreadCount, requestNotificationPermission]);
+    if (userId) {
+      fetchUnreadCount();
+      requestNotificationPermission();
+    }
+  }, [userId, fetchUnreadCount, requestNotificationPermission]);
 
   // userId가 설정되면 내 채팅방 목록 가져오기
   useEffect(() => {

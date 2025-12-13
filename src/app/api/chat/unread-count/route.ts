@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
 
-// 읽지 않은 메시지가 있는 채팅방 수 조회 (개별 메시지가 아닌 채팅방 단위)
+// 읽지 않은 메시지가 있는 채팅방 수 조회 (단일 쿼리로 최적화)
 export async function GET(_request: NextRequest) {
   try {
     const supabase = await createClient();
@@ -14,36 +14,32 @@ export async function GET(_request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // 사용자가 참여한 모든 채팅방 조회
-    const { data: rooms } = await supabase
-      .from('chat_rooms')
-      .select('id')
-      .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`);
+    // 단일 쿼리로 읽지 않은 메시지가 있는 채팅방 수 계산
+    // 1. 사용자가 참여한 채팅방 중
+    // 2. 사용자가 보내지 않은 메시지 중
+    // 3. 읽지 않은 메시지가 있는 채팅방의 고유한 수
+    const { data, error } = await supabase
+      .from('chat_messages')
+      .select(
+        `
+        room_id,
+        chat_rooms!inner(id, user1_id, user2_id)
+      `
+      )
+      .eq('is_read', false)
+      .neq('sender_id', user.id)
+      .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`, { referencedTable: 'chat_rooms' });
 
-    const roomIds = rooms?.map((room) => room.id) || [];
-
-    if (roomIds.length === 0) {
-      return NextResponse.json({ unreadCount: 0 });
+    if (error) {
+      logger.error('Unread count query error:', error);
+      return NextResponse.json({ error: 'Database error' }, { status: 500 });
     }
 
-    // 각 채팅방별로 읽지 않은 메시지가 있는지 확인
-    let unreadRoomCount = 0;
+    // 고유한 room_id 수 계산
+    const uniqueRoomIds = new Set(data?.map((msg) => msg.room_id) || []);
+    const unreadCount = uniqueRoomIds.size;
 
-    for (const roomId of roomIds) {
-      const { count } = await supabase
-        .from('chat_messages')
-        .select('*', { count: 'exact', head: true })
-        .eq('room_id', roomId)
-        .eq('is_read', false)
-        .neq('sender_id', user.id)
-        .limit(1); // 하나만 있어도 그 방은 읽지 않은 메시지가 있는 것
-
-      if (count && count > 0) {
-        unreadRoomCount++;
-      }
-    }
-
-    return NextResponse.json({ unreadCount: unreadRoomCount });
+    return NextResponse.json({ unreadCount });
   } catch (error) {
     logger.error('Unread count API error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

@@ -284,6 +284,7 @@ export default function HeroSection() {
             <div className="flex-wrap gap-2 sm:gap-3 hidden lg:flex">
               <Link
                 href="/categories/ai-services"
+                prefetch={false}
                 className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-blue-50 text-brand-primary rounded-full font-medium hover:bg-blue-100 transition-colors flex items-center gap-2"
               >
                 <Bot className="w-4 h-4" /> <span className="hidden sm:inline">AI 서비스</span>
@@ -291,6 +292,7 @@ export default function HeroSection() {
               </Link>
               <Link
                 href="/categories/it-programming"
+                prefetch={false}
                 className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors"
               >
                 <span className="hidden sm:inline">IT/프로그래밍</span>
@@ -298,18 +300,21 @@ export default function HeroSection() {
               </Link>
               <Link
                 href="/categories/design"
+                prefetch={false}
                 className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors"
               >
                 디자인
               </Link>
               <Link
                 href="/categories/marketing"
+                prefetch={false}
                 className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors"
               >
                 마케팅
               </Link>
               <Link
                 href="/categories/writing"
+                prefetch={false}
                 className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors hidden sm:inline-flex"
               >
                 글쓰기

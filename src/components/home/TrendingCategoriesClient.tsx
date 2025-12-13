@@ -105,6 +105,7 @@ export default function TrendingCategoriesClient({ categories }: Props) {
               <Link
                 key={category.id}
                 href={`/categories/${category.slug}`}
+                prefetch={false}
                 className={`group flex flex-col items-center w-16 sm:w-16 md:w-16 lg:w-20 ${isMobileHidden ? 'hidden md:flex' : ''}`}
               >
                 {/* 막대 */}
