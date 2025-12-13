@@ -147,7 +147,6 @@ const MotorcycleIcon = () => (
     width={360}
     height={360}
     className="w-44 h-auto md:w-56"
-    unoptimized
   />
 );
 
