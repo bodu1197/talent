@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any -- Test mocks require flexible typing */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createClient } from '@/lib/supabase/server';
 import { SupabaseManager } from '@/lib/supabase/singleton';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 // Mock the singleton module
 vi.mock('@/lib/supabase/singleton', () => ({
@@ -22,7 +22,9 @@ describe('Server Supabase Client', () => {
         from: vi.fn(),
       };
 
-      vi.mocked(SupabaseManager.getServerClient).mockResolvedValue(mockClient as any);
+      vi.mocked(SupabaseManager.getServerClient).mockResolvedValue(
+        mockClient as unknown as SupabaseClient
+      );
 
       const client = await createClient();
 
@@ -33,7 +35,9 @@ describe('Server Supabase Client', () => {
     it('should call SupabaseManager.getServerClient', async () => {
       const mockClient = { auth: {}, from: vi.fn() };
 
-      vi.mocked(SupabaseManager.getServerClient).mockResolvedValue(mockClient as any);
+      vi.mocked(SupabaseManager.getServerClient).mockResolvedValue(
+        mockClient as unknown as SupabaseClient
+      );
 
       await createClient();
 
@@ -44,7 +48,9 @@ describe('Server Supabase Client', () => {
     it('should be an async function', () => {
       const mockClient = { auth: {}, from: vi.fn() };
 
-      vi.mocked(SupabaseManager.getServerClient).mockResolvedValue(mockClient as any);
+      vi.mocked(SupabaseManager.getServerClient).mockResolvedValue(
+        mockClient as unknown as SupabaseClient
+      );
 
       const result = createClient();
 
@@ -64,8 +70,8 @@ describe('Server Supabase Client', () => {
       const mockClient2 = { id: 2, auth: {}, from: vi.fn() };
 
       vi.mocked(SupabaseManager.getServerClient)
-        .mockResolvedValueOnce(mockClient1 as any)
-        .mockResolvedValueOnce(mockClient2 as any);
+        .mockResolvedValueOnce(mockClient1 as unknown as SupabaseClient)
+        .mockResolvedValueOnce(mockClient2 as unknown as SupabaseClient);
 
       const client1 = await createClient();
       const client2 = await createClient();
@@ -77,7 +83,9 @@ describe('Server Supabase Client', () => {
     it('should handle concurrent calls', async () => {
       const mockClient = { auth: {}, from: vi.fn() };
 
-      vi.mocked(SupabaseManager.getServerClient).mockResolvedValue(mockClient as any);
+      vi.mocked(SupabaseManager.getServerClient).mockResolvedValue(
+        mockClient as unknown as SupabaseClient
+      );
 
       const [client1, client2, client3] = await Promise.all([
         createClient(),
@@ -104,7 +112,9 @@ describe('Server Supabase Client', () => {
         },
       };
 
-      vi.mocked(SupabaseManager.getServerClient).mockResolvedValue(mockClient as any);
+      vi.mocked(SupabaseManager.getServerClient).mockResolvedValue(
+        mockClient as unknown as SupabaseClient
+      );
 
       const client = await createClient();
 
@@ -127,7 +137,9 @@ describe('Server Supabase Client', () => {
     it('should work with async/await', async () => {
       const mockClient = { auth: {}, from: vi.fn() };
 
-      vi.mocked(SupabaseManager.getServerClient).mockResolvedValue(mockClient as any);
+      vi.mocked(SupabaseManager.getServerClient).mockResolvedValue(
+        mockClient as unknown as SupabaseClient
+      );
 
       const client = await createClient();
 
@@ -137,7 +149,9 @@ describe('Server Supabase Client', () => {
     it('should work with .then()', async () => {
       const mockClient = { auth: {}, from: vi.fn() };
 
-      vi.mocked(SupabaseManager.getServerClient).mockResolvedValue(mockClient as any);
+      vi.mocked(SupabaseManager.getServerClient).mockResolvedValue(
+        mockClient as unknown as SupabaseClient
+      );
 
       await createClient().then((client) => {
         expect(client).toBe(mockClient);

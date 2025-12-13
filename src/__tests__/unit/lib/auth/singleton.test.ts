@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any -- Test mocks require flexible typing */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { SupabaseManager } from '@/lib/supabase/singleton';
 
@@ -28,9 +27,34 @@ vi.mock('@supabase/supabase-js', () => ({
   })),
 }));
 
+// Define interface for the mocked client structure
+interface MockedSupabaseClient {
+  _type: string;
+  url: string;
+  key: string;
+  config: {
+    auth?: {
+      autoRefreshToken: boolean;
+      persistSession: boolean;
+      detectSessionInUrl?: boolean;
+      flowType?: string;
+      storageKey?: string;
+    };
+    global?: {
+      headers: Record<string, string>;
+    };
+    cookies?: {
+      getAll: () => { name: string; value: string }[];
+      setAll: (
+        cookies: { name: string; value: string; options?: Record<string, unknown> }[]
+      ) => void;
+    };
+  };
+}
+
 // Mock next/headers
 const mockCookieStore = {
-  get: vi.fn(),
+  getAll: vi.fn(),
   set: vi.fn(),
 };
 
@@ -102,10 +126,10 @@ describe('SupabaseManager', () => {
     });
 
     it('should include correct auth configuration', () => {
-      const client = SupabaseManager.getBrowserClient();
+      const client = SupabaseManager.getBrowserClient() as unknown as MockedSupabaseClient;
 
-      expect((client as any).config).toHaveProperty('auth');
-      expect((client as any).config.auth).toEqual({
+      expect(client.config).toHaveProperty('auth');
+      expect(client.config.auth).toEqual({
         autoRefreshToken: true,
         persistSession: true,
         detectSessionInUrl: true,
@@ -115,11 +139,11 @@ describe('SupabaseManager', () => {
     });
 
     it('should include correct global headers', () => {
-      const client = SupabaseManager.getBrowserClient();
+      const client = SupabaseManager.getBrowserClient() as unknown as MockedSupabaseClient;
 
-      expect((client as any).config).toHaveProperty('global');
-      expect((client as any).config.global).toHaveProperty('headers');
-      expect((client as any).config.global.headers).toEqual({
+      expect(client.config).toHaveProperty('global');
+      expect(client.config.global).toHaveProperty('headers');
+      expect(client.config.global?.headers).toEqual({
         'x-application-name': 'talent-hub',
       });
     });
@@ -169,50 +193,42 @@ describe('SupabaseManager', () => {
     });
 
     it('should configure cookies handlers', async () => {
-      const client = await SupabaseManager.getServerClient();
+      const client = (await SupabaseManager.getServerClient()) as unknown as MockedSupabaseClient;
 
-      expect((client as any).config).toHaveProperty('cookies');
-      expect((client as any).config.cookies).toHaveProperty('get');
-      expect((client as any).config.cookies).toHaveProperty('set');
-      expect((client as any).config.cookies).toHaveProperty('remove');
+      expect(client.config).toHaveProperty('cookies');
+      expect(client.config.cookies).toHaveProperty('getAll');
+      expect(client.config.cookies).toHaveProperty('setAll');
 
-      expect(typeof (client as any).config.cookies.get).toBe('function');
-      expect(typeof (client as any).config.cookies.set).toBe('function');
-      expect(typeof (client as any).config.cookies.remove).toBe('function');
+      expect(typeof client.config.cookies?.getAll).toBe('function');
+      expect(typeof client.config.cookies?.setAll).toBe('function');
     });
 
     it('should handle cookie get operations', async () => {
-      mockCookieStore.get.mockReturnValue({ value: 'test-cookie-value' });
+      mockCookieStore.getAll.mockReturnValue([{ name: 'test-cookie', value: 'test-cookie-value' }]);
 
-      const client = await SupabaseManager.getServerClient();
-      const result = (client as any).config.cookies.get('test-cookie');
+      const client = (await SupabaseManager.getServerClient()) as unknown as MockedSupabaseClient;
+      const result = client.config.cookies?.getAll();
 
-      expect(result).toBe('test-cookie-value');
-      expect(mockCookieStore.get).toHaveBeenCalledWith('test-cookie');
-    });
-
-    it('should handle cookie get when cookie does not exist', async () => {
-      mockCookieStore.get.mockReturnValue(undefined);
-
-      const client = await SupabaseManager.getServerClient();
-      const result = (client as any).config.cookies.get('nonexistent');
-
-      expect(result).toBeUndefined();
+      expect(result).toEqual([{ name: 'test-cookie', value: 'test-cookie-value' }]);
+      expect(mockCookieStore.getAll).toHaveBeenCalled();
     });
 
     it('should handle cookie set operations', async () => {
-      const client = await SupabaseManager.getServerClient();
-      const options = { path: '/', httpOnly: true };
+      const client = (await SupabaseManager.getServerClient()) as unknown as MockedSupabaseClient;
+      const cookiesToSet = [
+        { name: 'test-cookie', value: 'value', options: { path: '/', httpOnly: true } },
+      ];
 
       // Should not throw
       expect(() => {
-        (client as any).config.cookies.set('test-cookie', 'value', options);
+        client.config.cookies?.setAll(cookiesToSet);
       }).not.toThrow();
 
       expect(mockCookieStore.set).toHaveBeenCalledWith({
         name: 'test-cookie',
         value: 'value',
-        ...options,
+        path: '/',
+        httpOnly: true,
       });
     });
 
@@ -221,47 +237,19 @@ describe('SupabaseManager', () => {
         throw new Error('Cannot set cookie in Server Component');
       });
 
-      const client = await SupabaseManager.getServerClient();
+      const client = (await SupabaseManager.getServerClient()) as unknown as MockedSupabaseClient;
 
       // Should not throw - error is caught
       expect(() => {
-        (client as any).config.cookies.set('test-cookie', 'value', {});
-      }).not.toThrow();
-    });
-
-    it('should handle cookie remove operations', async () => {
-      const client = await SupabaseManager.getServerClient();
-      const options = { path: '/' };
-
-      expect(() => {
-        (client as any).config.cookies.remove('test-cookie', options);
-      }).not.toThrow();
-
-      expect(mockCookieStore.set).toHaveBeenCalledWith({
-        name: 'test-cookie',
-        value: '',
-        ...options,
-      });
-    });
-
-    it('should catch errors in cookie remove', async () => {
-      mockCookieStore.set.mockImplementation(() => {
-        throw new Error('Cannot remove cookie in Server Component');
-      });
-
-      const client = await SupabaseManager.getServerClient();
-
-      // Should not throw - error is caught
-      expect(() => {
-        (client as any).config.cookies.remove('test-cookie', {});
+        client.config.cookies?.setAll([{ name: 'test-cookie', value: 'value', options: {} }]);
       }).not.toThrow();
     });
 
     it('should include PKCE flow type in auth config', async () => {
-      const client = await SupabaseManager.getServerClient();
+      const client = (await SupabaseManager.getServerClient()) as unknown as MockedSupabaseClient;
 
-      expect((client as any).config).toHaveProperty('auth');
-      expect((client as any).config.auth).toEqual({
+      expect(client.config).toHaveProperty('auth');
+      expect(client.config.auth).toEqual({
         flowType: 'pkce',
         storageKey: 'sb-auth-token',
       });
@@ -322,10 +310,10 @@ describe('SupabaseManager', () => {
       // @ts-expect-error - Mocking server environment
       delete global.window;
 
-      const client = SupabaseManager.getServiceRoleClient();
+      const client = SupabaseManager.getServiceRoleClient() as unknown as MockedSupabaseClient;
 
-      expect((client as any).config).toHaveProperty('auth');
-      expect((client as any).config.auth).toEqual({
+      expect(client.config).toHaveProperty('auth');
+      expect(client.config.auth).toEqual({
         autoRefreshToken: false,
         persistSession: false,
       });
@@ -346,9 +334,9 @@ describe('SupabaseManager', () => {
       // @ts-expect-error - Mocking server environment
       delete global.window;
 
-      const client = SupabaseManager.getServiceRoleClient();
+      const client = SupabaseManager.getServiceRoleClient() as unknown as MockedSupabaseClient;
 
-      expect((client as any).url).toBe('https://test.supabase.co');
+      expect(client.url).toBe('https://test.supabase.co');
     });
   });
 

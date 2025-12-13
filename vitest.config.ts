@@ -12,7 +12,7 @@ export default defineConfig({
     exclude: [
       'node_modules',
       'src/__tests__/e2e/**/*', // Playwright E2E tests are excluded
-      'src/__tests__/unit/lib/auth/**/*', // 복잡한 Mock 필요 - 추후 정리
+
       'src/__tests__/unit/lib/logger.test.ts', // Mock 충돌 - 추후 정리
     ],
     coverage: {

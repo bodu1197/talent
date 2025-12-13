@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any -- Test mocks require flexible typing */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
   getBuyerDashboardStats,
@@ -268,7 +267,7 @@ describe('Supabase Queries - Dashboard', () => {
       const result = await getBuyerRecentFavorites('buyer-123', 5);
 
       expect(result).toEqual(mockData);
-      expect((result[0].service as any).title).toBe('Design Service');
+      expect((result[0].service as unknown as { title: string }).title).toBe('Design Service');
     });
 
     it('should return empty array when no favorites found', async () => {
