@@ -146,6 +146,7 @@ const MotorcycleIcon = () => (
     alt="배달 오토바이"
     width={360}
     height={360}
+    sizes="(max-width: 768px) 176px, 224px"
     className="w-44 h-auto md:w-56"
   />
 );

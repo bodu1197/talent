@@ -11,6 +11,7 @@ const MotorcycleIcon = () => (
     alt="배달 오토바이"
     width={360}
     height={360}
+    sizes="256px"
     className="w-64 h-auto"
   />
 );
@@ -100,6 +101,7 @@ export default function ErrandBannerStrip() {
           alt="배달 오토바이"
           width={360}
           height={360}
+          sizes="128px"
           className="w-32 h-auto opacity-70"
         />
       </div>
