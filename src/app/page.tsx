@@ -28,13 +28,16 @@ export const revalidate = 60;
 export default async function HomePage() {
   const supabase = await createClient();
 
-  // 인증 상태 확인
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  // AI 카테고리 한 번만 조회
-  const { data: aiCategories } = await supabase.from('categories').select('id').eq('is_ai', true);
+  // 병렬 처리로 데이터 로딩 속도 최적화 (Waterfall 방지)
+  const [
+    {
+      data: { user },
+    },
+    { data: aiCategories },
+  ] = await Promise.all([
+    supabase.auth.getUser(),
+    supabase.from('categories').select('id').eq('is_ai', true),
+  ]);
 
   const aiCategoryIds = aiCategories?.map((cat) => cat.id) || [];
 
