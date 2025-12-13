@@ -58,21 +58,12 @@ export default async function PortfolioEditPage({ params }: Props) {
     .in('status', ['active', 'pending'])
     .order('created_at', { ascending: false });
 
-  // 이 포트폴리오에 연결된 서비스 ID 목록 가져오기
-  const { data: linkedServices } = await supabase
-    .from('portfolio_services')
-    .select('service_id')
-    .eq('portfolio_id', id);
-
-  const linkedServiceIds = linkedServices?.map((ls) => ls.service_id) || [];
-
   return (
     <PortfolioEditClient
       portfolio={portfolio}
       sellerId={seller.id}
       categories={categories || []}
       services={services || []}
-      linkedServiceIds={linkedServiceIds}
     />
   );
 }
