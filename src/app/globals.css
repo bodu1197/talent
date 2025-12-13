@@ -2,19 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Scrollbar hide utility */
-@layer utilities {
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-}
+/* Scrollbar hide utility - Managed in tailwind.config.ts */
 
 /* Fix text-size-adjust for better browser support */
 @layer base {
+
   html,
   :host {
     -webkit-text-size-adjust: 100%;
@@ -22,32 +14,8 @@
 
   /* ========================================
      Z-Index Layer Management System
+     Managed in tailwind.config.ts
      ======================================== */
-  :root {
-    /* Base layer (default content) */
-    --z-base: 0;
-
-    /* Elevated content (badges, tooltips, content overlays) */
-    --z-elevated: 10;
-
-    /* Headers and navigation bars */
-    --z-header: 20;
-
-    /* Sticky navigation and overlays */
-    --z-sticky: 40;
-
-    /* Dropdown menus and mega menus */
-    --z-dropdown: 50;
-
-    /* Modal dialogs and full-screen overlays */
-    --z-modal: 50;
-
-    /* Notifications and alerts */
-    --z-notification: 70;
-
-    /* Accessibility elements (skip-to-content) */
-    --z-skip-link: 100;
-  }
 }
 
 /* Global Base Styles - Pretendard font (로컬) */
@@ -79,7 +47,8 @@ body {
 
 /* Hero Section Highlight */
 .hero-highlight {
-  color: rgb(17 24 39); /* gray-900 */
+  color: rgb(17 24 39);
+  /* gray-900 */
   background: transparent;
   padding: 4px 12px 4px 0;
   border-radius: 8px;
@@ -114,38 +83,47 @@ body {
   0% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(0.95);
   }
+
   100% {
     transform: scale(1);
   }
 }
 
 @keyframes bounce-click {
+
   0%,
   100% {
     transform: translateY(0);
   }
+
   25% {
     transform: translateY(-8px);
   }
+
   50% {
     transform: translateY(0);
   }
+
   75% {
     transform: translateY(-4px);
   }
 }
 
 @keyframes shake {
+
   0%,
   100% {
     transform: translateX(0);
   }
+
   25% {
     transform: translateX(-5px);
   }
+
   75% {
     transform: translateX(5px);
   }
@@ -156,6 +134,7 @@ body {
     transform: scale(1);
     opacity: 1;
   }
+
   100% {
     transform: scale(1.5);
     opacity: 0;
@@ -249,10 +228,12 @@ a:active,
 }
 
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.7;
   }
@@ -277,7 +258,8 @@ a:active,
 
 /* Focus visible - keyboard navigation */
 *:focus-visible {
-  outline: 2px solid rgb(59 130 246); /* blue-500 */
+  outline: 2px solid rgb(59 130 246);
+  /* blue-500 */
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -292,13 +274,12 @@ a:active,
   position: absolute;
   top: -40px;
   left: 0;
-  background: rgb(
-    29 78 216
-  ); /* blue-700 - WCAG AA compliant contrast ratio 7.0:1 with white text */
+  background: rgb(29 78 216);
+  /* blue-700 - WCAG AA compliant contrast ratio 7.0:1 with white text */
   color: white;
   padding: 8px 16px;
   text-decoration: none;
-  z-index: var(--z-skip-link);
+  z-index: theme('zIndex.skip-link');
   border-radius: 0 0 4px 0;
 }
 
@@ -312,8 +293,10 @@ a:focus-visible {
   outline: 2px solid rgb(59 130 246);
   outline-offset: 2px;
 }
+
 /* Reduced motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -360,26 +343,32 @@ input[type='password'] {
   padding: 0.75rem 1rem;
   font-size: 1rem;
   line-height: 1.5;
-  color: rgb(17 24 39); /* gray-900 */
-  background-color: rgb(249 250 251); /* gray-50 */
-  border: 1px solid rgb(209 213 219); /* gray-300 */
+  color: rgb(17 24 39);
+  /* gray-900 */
+  background-color: rgb(249 250 251);
+  /* gray-50 */
+  border: 1px solid rgb(209 213 219);
+  /* gray-300 */
   border-radius: 0.5rem;
   transition: all 0.2s ease;
 }
 
 .input::placeholder {
-  color: rgb(156 163 175); /* gray-400 */
+  color: rgb(156 163 175);
+  /* gray-400 */
 }
 
 .input:focus {
   outline: none;
-  border-color: rgb(59 130 246); /* blue-500 */
+  border-color: rgb(59 130 246);
+  /* blue-500 */
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   background-color: white;
 }
 
 .input:disabled {
-  background-color: rgb(243 244 246); /* gray-100 */
+  background-color: rgb(243 244 246);
+  /* gray-100 */
   cursor: not-allowed;
   opacity: 0.7;
 }
@@ -405,7 +394,8 @@ input[type='checkbox'],
 input[type='radio'] {
   width: 1rem;
   height: 1rem;
-  accent-color: rgb(37 99 235); /* blue-600 */
+  accent-color: rgb(37 99 235);
+  /* blue-600 */
   cursor: pointer;
 }
 
@@ -475,6 +465,7 @@ input[type='radio'] {
   0% {
     transform: translateX(-150px);
   }
+
   100% {
     transform: translateX(calc(100vw - 200px));
   }
@@ -486,6 +477,7 @@ input[type='radio'] {
     0% {
       transform: translateX(-150px);
     }
+
     100% {
       transform: translateX(calc(100vw - 450px));
     }
@@ -498,10 +490,12 @@ input[type='radio'] {
     opacity: 0.7;
     transform: translateX(0) scale(1);
   }
+
   50% {
     opacity: 0.4;
     transform: translateX(-15px) scale(1.3);
   }
+
   100% {
     opacity: 0;
     transform: translateX(-30px) scale(1.6);
@@ -514,25 +508,32 @@ input[type='radio'] {
     opacity: 0;
     transform: translateY(-80px) scale(0.8);
   }
+
   25% {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
+
   35% {
     transform: translateY(-25px) scale(1.05);
   }
+
   50% {
     transform: translateY(0) scale(1);
   }
+
   60% {
     transform: translateY(-12px) scale(1.02);
   }
+
   70% {
     transform: translateY(0) scale(1);
   }
+
   80% {
     transform: translateY(-5px) scale(1.01);
   }
+
   90%,
   100% {
     opacity: 1;

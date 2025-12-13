@@ -35,15 +35,9 @@ export default function MobileSearchBar() {
         />
         <button
           type="submit"
-          className="absolute right-3 top-1/2 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-brand-primary transition-colors rounded-full active:scale-100 focus:outline-none isolate"
-          style={{
-            transform: 'translate3d(0, -50%, 0)',
-            backfaceVisibility: 'hidden',
-            willChange: 'transform',
-          }}
-          aria-label="검색"
+          aria-label="서비스 검색"
         >
-          <Search className="w-4 h-4" />
+          <Search className="w-4 h-4 text-gray-500 hover:text-brand-primary transition-colors" />
         </button>
       </form>
     </div>

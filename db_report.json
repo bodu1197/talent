@@ -1,0 +1,992 @@
+[
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.activity_logs\\` has a foreign key \\`activity_logs_admin_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "activity_logs",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.activity_logs\\` has a foreign key \\`activity_logs_user_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "activity_logs",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.advertising_impressions\\` has a foreign key \\`advertising_impressions_service_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "advertising_impressions",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.advertising_impressions\\` has a foreign key \\`advertising_impressions_subscription_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "advertising_impressions",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.advertising_payments\\` has a foreign key \\`advertising_payments_seller_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "advertising_payments",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.advertising_payments\\` has a foreign key \\`advertising_payments_subscription_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "advertising_payments",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.advertising_subscriptions\\` has a foreign key \\`advertising_subscriptions_seller_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "advertising_subscriptions",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.categories\\` has a foreign key \\`categories_parent_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "categories",
+            "schema": "public",
+            "fkey_columns": [
+                4
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.chat_favorites\\` has a foreign key \\`chat_favorites_room_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "chat_favorites",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.chat_rooms\\` has a foreign key \\`chat_rooms_service_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "chat_rooms",
+            "schema": "public",
+            "fkey_columns": [
+                4
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.conversations\\` has a foreign key \\`conversations_order_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "conversations",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.conversations\\` has a foreign key \\`conversations_participant1_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "conversations",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.credit_transactions\\` has a foreign key \\`credit_transactions_credit_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "credit_transactions",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.credit_transactions\\` has a foreign key \\`credit_transactions_seller_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "credit_transactions",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.disputes\\` has a foreign key \\`disputes_initiated_by_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "disputes",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.disputes\\` has a foreign key \\`disputes_mediator_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "disputes",
+            "schema": "public",
+            "fkey_columns": [
+                12
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.disputes\\` has a foreign key \\`disputes_order_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "disputes",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.earnings_transactions\\` has a foreign key \\`earnings_transactions_order_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "earnings_transactions",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.earnings_transactions\\` has a foreign key \\`earnings_transactions_seller_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "earnings_transactions",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.errand_applications\\` has a foreign key \\`errand_applications_helper_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "errand_applications",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.errand_chat_messages\\` has a foreign key \\`errand_chat_messages_errand_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "errand_chat_messages",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.errand_chat_messages\\` has a foreign key \\`errand_chat_messages_sender_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "errand_chat_messages",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.errand_locations\\` has a foreign key \\`errand_locations_errand_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "errand_locations",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.errand_messages\\` has a foreign key \\`errand_messages_errand_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "errand_messages",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.errand_reviews\\` has a foreign key \\`errand_reviews_helper_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "errand_reviews",
+            "schema": "public",
+            "fkey_columns": [
+                4
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.errand_settlements\\` has a foreign key \\`errand_settlements_helper_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "errand_settlements",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.errands\\` has a foreign key \\`errands_helper_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "errands",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.errands\\` has a foreign key \\`errands_requester_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "errands",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.helper_subscriptions\\` has a foreign key \\`helper_subscriptions_helper_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "helper_subscriptions",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.helper_withdrawals\\` has a foreign key \\`helper_withdrawals_helper_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "helper_withdrawals",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.messages\\` has a foreign key \\`messages_conversation_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "messages",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.messages\\` has a foreign key \\`messages_sender_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "messages",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.notifications\\` has a foreign key \\`notifications_order_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "notifications",
+            "schema": "public",
+            "fkey_columns": [
+                9
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.order_settlements\\` has a foreign key \\`order_settlements_order_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "order_settlements",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.order_settlements\\` has a foreign key \\`order_settlements_seller_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "order_settlements",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.orders\\` has a foreign key \\`orders_buyer_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "orders",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.orders\\` has a foreign key \\`orders_payment_request_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "orders",
+            "schema": "public",
+            "fkey_columns": [
+                32
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.orders\\` has a foreign key \\`orders_review_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "orders",
+            "schema": "public",
+            "fkey_columns": [
+                29
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.orders\\` has a foreign key \\`orders_seller_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "orders",
+            "schema": "public",
+            "fkey_columns": [
+                4
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.orders\\` has a foreign key \\`orders_service_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "orders",
+            "schema": "public",
+            "fkey_columns": [
+                5
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.payment_requests\\` has a foreign key \\`payment_requests_room_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "payment_requests",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.payment_requests\\` has a foreign key \\`payment_requests_seller_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "payment_requests",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.payment_requests\\` has a foreign key \\`payment_requests_service_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "payment_requests",
+            "schema": "public",
+            "fkey_columns": [
+                5
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.payments\\` has a foreign key \\`payments_order_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "payments",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.portfolio_items\\` has a foreign key \\`portfolio_items_seller_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "portfolio_items",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.portfolio_services\\` has a foreign key \\`portfolio_services_service_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "portfolio_services",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.premium_placements\\` has a foreign key \\`premium_placements_campaign_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "premium_placements",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.premium_placements\\` has a foreign key \\`premium_placements_category_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "premium_placements",
+            "schema": "public",
+            "fkey_columns": [
+                6
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.premium_placements\\` has a foreign key \\`premium_placements_service_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "premium_placements",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.quote_responses\\` has a foreign key \\`quote_responses_quote_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "quote_responses",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.quote_responses\\` has a foreign key \\`quote_responses_seller_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "quote_responses",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.quotes\\` has a foreign key \\`quotes_buyer_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "quotes",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.quotes\\` has a foreign key \\`quotes_category_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "quotes",
+            "schema": "public",
+            "fkey_columns": [
+                4
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.refunds\\` has a foreign key \\`refunds_approved_by_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "refunds",
+            "schema": "public",
+            "fkey_columns": [
+                7
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.refunds\\` has a foreign key \\`refunds_order_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "refunds",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.refunds\\` has a foreign key \\`refunds_payment_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "refunds",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.reports\\` has a foreign key \\`reports_assigned_to_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "reports",
+            "schema": "public",
+            "fkey_columns": [
+                13
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.reports\\` has a foreign key \\`reports_reported_order_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "reports",
+            "schema": "public",
+            "fkey_columns": [
+                5
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.reports\\` has a foreign key \\`reports_reported_review_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "reports",
+            "schema": "public",
+            "fkey_columns": [
+                6
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.reports\\` has a foreign key \\`reports_reported_service_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "reports",
+            "schema": "public",
+            "fkey_columns": [
+                4
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.reports\\` has a foreign key \\`reports_reported_user_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "reports",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.reports\\` has a foreign key \\`reports_reporter_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "reports",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.reviews\\` has a foreign key \\`reviews_buyer_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "reviews",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.reviews\\` has a foreign key \\`reviews_seller_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "reviews",
+            "schema": "public",
+            "fkey_columns": [
+                4
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.reviews\\` has a foreign key \\`reviews_service_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "reviews",
+            "schema": "public",
+            "fkey_columns": [
+                5
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.revision_history\\` has a foreign key \\`revision_history_order_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "revision_history",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.search_logs\\` has a foreign key \\`search_logs_category_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "search_logs",
+            "schema": "public",
+            "fkey_columns": [
+                5
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.search_logs\\` has a foreign key \\`search_logs_converted_service_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "search_logs",
+            "schema": "public",
+            "fkey_columns": [
+                9
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.search_logs\\` has a foreign key \\`search_logs_user_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "search_logs",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.seller_portfolio\\` has a foreign key \\`seller_portfolio_category_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "seller_portfolio",
+            "schema": "public",
+            "fkey_columns": [
+                5
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.seller_portfolio\\` has a foreign key \\`seller_portfolio_seller_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "seller_portfolio",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.seller_portfolio\\` has a foreign key \\`seller_portfolio_service_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "seller_portfolio",
+            "schema": "public",
+            "fkey_columns": [
+                14
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.service_favorites\\` has a foreign key \\`service_favorites_service_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "service_favorites",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.service_packages\\` has a foreign key \\`service_packages_service_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "service_packages",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.service_revision_categories\\` has a foreign key \\`service_revision_categories_category_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "service_revision_categories",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.service_revision_categories\\` has a foreign key \\`service_revision_categories_revision_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "service_revision_categories",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.service_revisions\\` has a foreign key \\`service_revisions_seller_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "service_revisions",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.service_revisions\\` has a foreign key \\`service_revisions_service_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "service_revisions",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.service_view_logs\\` has a foreign key \\`service_view_logs_service_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "service_view_logs",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.service_views\\` has a foreign key \\`service_views_service_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "service_views",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.services\\` has a foreign key \\`services_last_modified_by_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "services",
+            "schema": "public",
+            "fkey_columns": [
+                30
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.services\\` has a foreign key \\`services_seller_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "services",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.settlement_details\\` has a foreign key \\`settlement_details_order_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "settlement_details",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.settlement_details\\` has a foreign key \\`settlement_details_settlement_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "settlement_details",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.settlements\\` has a foreign key \\`settlements_seller_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "settlements",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.wallet_transactions\\` has a foreign key \\`wallet_transactions_order_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "wallet_transactions",
+            "schema": "public",
+            "fkey_columns": [
+                8
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.wallet_transactions\\` has a foreign key \\`wallet_transactions_user_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "wallet_transactions",
+            "schema": "public",
+            "fkey_columns": [
+                3
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.wallet_transactions\\` has a foreign key \\`wallet_transactions_wallet_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "wallet_transactions",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.withdrawal_requests\\` has a foreign key \\`withdrawal_requests_processed_by_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "withdrawal_requests",
+            "schema": "public",
+            "fkey_columns": [
+                8
+            ]
+        }
+    },
+    {
+        "name": "unindexed_foreign_keys",
+        "detail": "Table \\`public.withdrawal_requests\\` has a foreign key \\`withdrawal_requests_seller_id_fkey\\` without a covering index.",
+        "metadata": {
+            "name": "withdrawal_requests",
+            "schema": "public",
+            "fkey_columns": [
+                2
+            ]
+        }
+    }
+]
