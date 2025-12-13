@@ -675,7 +675,7 @@ export default function AdminAdvertisingPaymentsPage() {
                   <thead>
                     <tr className="bg-gray-50">
                       <th className="px-4 py-4 text-left w-10">
-                        <input type="checkbox" className="w-4 h-4" />
+                        <input type="checkbox" className="w-4 h-4" aria-label="전체 선택" />
                       </th>
                       <th className="px-4 py-4 text-left text-sm font-semibold text-gray-700">
                         입금번호

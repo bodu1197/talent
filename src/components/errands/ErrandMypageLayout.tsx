@@ -84,6 +84,36 @@ const helperMenuItems = [
   { href: '/errands/mypage/helper/settings', icon: Settings, label: '설정', exact: false },
 ];
 
+function NavList({
+  items,
+  isActive,
+  onItemClick,
+}: {
+  items: typeof requesterMenuItems;
+  isActive: (href: string, exact: boolean) => boolean;
+  onItemClick?: () => void;
+}) {
+  return (
+    <>
+      {items.map((item) => (
+        <Link
+          key={item.href}
+          href={item.href}
+          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+            isActive(item.href, item.exact)
+              ? 'bg-blue-50 text-blue-600'
+              : 'text-gray-700 hover:bg-gray-100'
+          }`}
+          onClick={onItemClick}
+        >
+          <item.icon className="w-5 h-5" />
+          <span className="font-medium">{item.label}</span>
+        </Link>
+      ))}
+    </>
+  );
+}
+
 export default function ErrandMypageLayout({ children, mode }: ErrandMypageLayoutProps) {
   const { user, profile, loading } = useAuth();
   const pathname = usePathname();
@@ -287,21 +317,11 @@ export default function ErrandMypageLayout({ children, mode }: ErrandMypageLayou
 
             {/* 메뉴 */}
             <nav className="p-2">
-              {menuItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
-                    isActive(item.href, item.exact)
-                      ? 'bg-blue-50 text-blue-600'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  }`}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <item.icon className="w-5 h-5" />
-                  <span className="font-medium">{item.label}</span>
-                </Link>
-              ))}
+              <NavList
+                items={menuItems}
+                isActive={isActive}
+                onItemClick={() => setMobileMenuOpen(false)}
+              />
             </nav>
 
             {/* 돌파구 마이페이지로 */}
@@ -382,20 +402,7 @@ export default function ErrandMypageLayout({ children, mode }: ErrandMypageLayou
 
             {/* 네비게이션 */}
             <nav className="bg-white rounded-xl p-2 shadow-sm mb-4">
-              {menuItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                    isActive(item.href, item.exact)
-                      ? 'bg-blue-50 text-blue-600'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  }`}
-                >
-                  <item.icon className="w-5 h-5" />
-                  <span className="font-medium">{item.label}</span>
-                </Link>
-              ))}
+              <NavList items={menuItems} isActive={isActive} />
             </nav>
 
             {/* 돌파구 마이페이지로 */}

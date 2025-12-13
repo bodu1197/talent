@@ -207,6 +207,7 @@ export default function AdminOrdersPage() {
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="주문번호, 구매자명, 전문가명으로 검색"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
+              aria-label="주문 검색"
             />
           </div>
           <button
