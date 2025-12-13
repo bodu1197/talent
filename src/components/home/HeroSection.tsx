@@ -204,6 +204,9 @@ export default function HeroSection() {
 
   // 자동 슬라이드 전환 (8초 간격, 처음 2초 대기 후 시작)
   useEffect(() => {
+    // 모바일에서는 자동 슬라이드 실행 안 함 (성능 최적화)
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) return;
+
     // 기존 interval 정리
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
