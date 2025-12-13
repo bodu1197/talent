@@ -194,6 +194,16 @@ export default async function RootLayout({
             __html: `window.__nonce__ = "${nonce}";`,
           }}
         />
+        {/* Preconnect to Supabase for faster API connections - LCP optimization */}
+        <link
+          rel="preconnect"
+          href={process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://supabase.co'}
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="dns-prefetch"
+          href={process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://supabase.co'}
+        />
         {!isAdminPage && !isMypagePage && (
           <>
             <script
