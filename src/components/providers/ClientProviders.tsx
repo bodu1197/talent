@@ -2,6 +2,7 @@
 
 import { AuthProvider } from '@/components/providers/AuthProvider';
 import { ChatUnreadProvider } from '@/components/providers/ChatUnreadProvider';
+import NotificationProvider from '@/components/providers/NotificationProvider';
 import { QueryProvider } from '@/components/providers/QueryProvider';
 
 /**
@@ -13,7 +14,9 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
   return (
     <QueryProvider>
       <AuthProvider>
-        <ChatUnreadProvider>{children}</ChatUnreadProvider>
+        <NotificationProvider>
+          <ChatUnreadProvider>{children}</ChatUnreadProvider>
+        </NotificationProvider>
       </AuthProvider>
     </QueryProvider>
   );

@@ -1,32 +1,14 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
-import { createClient } from '@/lib/supabase/client';
-import { useAuth } from '@/components/providers/AuthProvider';
-import { logger } from '@/lib/logger';
+import { useState, useRef, useEffect } from 'react';
+import { useNotifications } from '@/components/providers/NotificationProvider';
 import Link from 'next/link';
 import { Bell, BellOff } from 'lucide-react';
 
-interface Notification {
-  id: string;
-  user_id: string;
-  type: string;
-  title: string;
-  message: string;
-  link: string | null;
-  is_read: boolean;
-  created_at: string;
-  order_id?: string;
-  sender_id?: string;
-  metadata?: Record<string, unknown>;
-}
-
 export default function NotificationBell() {
-  const { user } = useAuth();
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const { notifications, unreadCount, markAsRead, markAllAsRead, refreshNotifications, loading } =
+    useNotifications();
   const [showDropdown, setShowDropdown] = useState(false);
-  const supabase = createClient();
   const hasLoadedNotifications = useRef(false);
 
   // ESC 키로 드롭다운 닫기
@@ -40,135 +22,28 @@ export default function NotificationBell() {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [showDropdown]);
 
-  // 알림 소리 재생 (Web Audio API 사용)
-  const playNotificationSound = () => {
-    try {
-      const AudioContextClass =
-        globalThis.AudioContext ||
-        (
-          globalThis as typeof globalThis & {
-            webkitAudioContext: typeof AudioContext;
-          }
-        ).webkitAudioContext;
-      const audioContext = new AudioContextClass();
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
-
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-
-      oscillator.frequency.value = 800; // 800Hz
-      oscillator.type = 'sine';
-
-      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-
-      oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.3);
-    } catch (err) {
-      logger.error('Failed to play notification sound:', err);
-    }
-  };
-
-  // 읽지 않은 알림 수 조회
-  const loadUnreadCount = async () => {
-    if (!user) return;
-
-    const { count, error } = await supabase
-      .from('notifications')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', user.id)
-      .eq('is_read', false);
-
-    if (!error && count !== null) {
-      setUnreadCount(count);
-    }
-  };
-
-  // 최근 알림 5개 조회
-  const loadNotifications = async () => {
-    if (!user) return;
-
-    const { data, error } = await supabase
-      .from('notifications')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(5);
-
-    if (!error && data) {
-      setNotifications(data);
-    }
-  };
-
-  // 초기 로드: unread count만 조회 (성능 최적화)
-  useEffect(() => {
-    if (!user) return;
-
-    loadUnreadCount();
-
-    // 실시간 구독
-    const channel = supabase
-      .channel(`notifications-${user.id}`) // 고유한 채널명으로 중복 구독 방지
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'notifications',
-          filter: `user_id=eq.${user.id}`,
-        },
-        (payload) => {
-          // 알림 소리 재생
-          playNotificationSound();
-
-          // 읽지 않은 수 증가
-          setUnreadCount((prev) => prev + 1);
-
-          // 알림 목록 업데이트
-          setNotifications((prev) => [payload.new as Notification, ...prev].slice(0, 5));
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [user]);
-
-  // 드롭다운 열렸을 때만 notifications 로드 (지연 로딩)
+  // 드롭다운 열렸을 때만 notifications 새로고침 (처음 한 번만)
   useEffect(() => {
     if (showDropdown && !hasLoadedNotifications.current) {
-      loadNotifications();
+      refreshNotifications();
       hasLoadedNotifications.current = true;
     }
-  }, [showDropdown]);
+  }, [showDropdown, refreshNotifications]);
 
-  // 알림 읽음 처리
-  const markAsRead = async (notificationId: string) => {
-    await supabase.from('notifications').update({ is_read: true }).eq('id', notificationId);
+  // 알림 읽음 처리 및 드롭다운 닫기
+  const handleNotificationClick = async (notificationId: string) => {
+    await markAsRead(notificationId);
+    setShowDropdown(false);
+  };
 
-    setUnreadCount((prev) => Math.max(0, prev - 1));
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === notificationId ? { ...n, is_read: true } : n))
+  // 로딩 중이면 로딩 상태 표시
+  if (loading) {
+    return (
+      <div className="relative flex items-center">
+        <Bell className="w-6 h-6 text-gray-400 animate-pulse" aria-hidden="true" />
+      </div>
     );
-  };
-
-  // 모두 읽음 처리
-  const markAllAsRead = async () => {
-    if (!user) return;
-
-    await supabase
-      .from('notifications')
-      .update({ is_read: true })
-      .eq('user_id', user.id)
-      .eq('is_read', false);
-
-    setUnreadCount(0);
-    setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
-  };
-
-  if (!user) return null;
+  }
 
   return (
     <div className="relative flex items-center">
@@ -222,14 +97,11 @@ export default function NotificationBell() {
               </div>
             ) : (
               <div>
-                {notifications.map((notification) => (
+                {notifications.slice(0, 5).map((notification) => (
                   <Link
                     key={notification.id}
                     href={notification.link || '#'}
-                    onClick={() => {
-                      markAsRead(notification.id);
-                      setShowDropdown(false);
-                    }}
+                    onClick={() => handleNotificationClick(notification.id)}
                     className={`block px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors ${
                       notification.is_read ? '' : 'bg-blue-50'
                     }`}
