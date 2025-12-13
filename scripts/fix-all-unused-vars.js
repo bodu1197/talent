@@ -14,9 +14,7 @@ function fixAllUnusedVars(content, filename) {
 
   // Pattern 1: Remove completely unused imports
   // const { createClient } = require(...); where createClient is never used
-  const unusedImports = [
-    /const \{ createClient \} = require\('@supabase\/supabase-js'\);\n/g,
-  ];
+  const unusedImports = [/const \{ createClient \} = require\('@supabase\/supabase-js'\);\n/g];
 
   for (const pattern of unusedImports) {
     if (content.match(pattern) && !content.includes('createClient(')) {
@@ -62,7 +60,10 @@ function fixAllUnusedVars(content, filename) {
 
   // Pattern 4: Unused function parameters
   // function executeStatementViaRest(...) -> Prefix with _
-  modified = modified.replace(/function executeStatementViaRest\(/g, 'function _executeStatementViaRest(');
+  modified = modified.replace(
+    /function executeStatementViaRest\(/g,
+    'function _executeStatementViaRest('
+  );
   if (modified !== content) changes++;
 
   // Pattern 5: Simple unused variables in assignments
@@ -120,8 +121,9 @@ async function main() {
   console.log('='.repeat(60));
 
   const scriptsDir = __dirname;
-  const files = fs.readdirSync(scriptsDir)
-    .filter(f => f.endsWith('.js') && !f.startsWith('fix-') && !f.startsWith('analyze-'))
+  const files = fs
+    .readdirSync(scriptsDir)
+    .filter((f) => f.endsWith('.js') && !f.startsWith('fix-') && !f.startsWith('analyze-'))
     .sort();
 
   console.log(`\n📁 총 ${files.length}개 파일 검사 중...\n`);

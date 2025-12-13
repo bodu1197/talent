@@ -43,7 +43,15 @@ describe('search queries', () => {
         or: vi.fn().mockReturnThis(),
         limit: vi.fn().mockResolvedValue({
           data: [
-            { id: 'svc-1', title: 'AI Design', description: 'Test', price: 100, thumbnail_url: null, orders_count: 5, seller: null },
+            {
+              id: 'svc-1',
+              title: 'AI Design',
+              description: 'Test',
+              price: 100,
+              thumbnail_url: null,
+              orders_count: 5,
+              seller: null,
+            },
           ],
           error: null,
         }),
@@ -55,7 +63,16 @@ describe('search queries', () => {
         or: vi.fn().mockReturnThis(),
         limit: vi.fn().mockResolvedValue({
           data: [
-            { id: 'exp-1', user_id: 'user-1', business_name: 'AI Studio', display_name: 'John', profile_image: null, bio: 'Expert', is_verified: true, created_at: '2024-01-01' },
+            {
+              id: 'exp-1',
+              user_id: 'user-1',
+              business_name: 'AI Studio',
+              display_name: 'John',
+              profile_image: null,
+              bio: 'Expert',
+              is_verified: true,
+              created_at: '2024-01-01',
+            },
           ],
           error: null,
         }),
@@ -131,9 +148,18 @@ describe('search queries', () => {
   describe('getRecommendedSearchTerms', () => {
     it('should return recommended search terms based on category clicks', async () => {
       const mockCategoryClicks = [
-        { category_id: 'cat-1', categories: [{ id: 'cat-1', name: 'AI Art', slug: 'ai-art', level: 3 }] },
-        { category_id: 'cat-1', categories: [{ id: 'cat-1', name: 'AI Art', slug: 'ai-art', level: 3 }] },
-        { category_id: 'cat-2', categories: [{ id: 'cat-2', name: 'AI Video', slug: 'ai-video', level: 3 }] },
+        {
+          category_id: 'cat-1',
+          categories: [{ id: 'cat-1', name: 'AI Art', slug: 'ai-art', level: 3 }],
+        },
+        {
+          category_id: 'cat-1',
+          categories: [{ id: 'cat-1', name: 'AI Art', slug: 'ai-art', level: 3 }],
+        },
+        {
+          category_id: 'cat-2',
+          categories: [{ id: 'cat-2', name: 'AI Video', slug: 'ai-video', level: 3 }],
+        },
       ];
 
       const mockQuery = {
@@ -180,9 +206,18 @@ describe('search queries', () => {
 
     it('should filter only level 3 categories', async () => {
       const mockCategoryClicks = [
-        { category_id: 'cat-1', categories: [{ id: 'cat-1', name: 'Design', slug: 'design', level: 1 }] },
-        { category_id: 'cat-2', categories: [{ id: 'cat-2', name: 'AI Art', slug: 'ai-art', level: 3 }] },
-        { category_id: 'cat-3', categories: [{ id: 'cat-3', name: 'Graphics', slug: 'graphics', level: 2 }] },
+        {
+          category_id: 'cat-1',
+          categories: [{ id: 'cat-1', name: 'Design', slug: 'design', level: 1 }],
+        },
+        {
+          category_id: 'cat-2',
+          categories: [{ id: 'cat-2', name: 'AI Art', slug: 'ai-art', level: 3 }],
+        },
+        {
+          category_id: 'cat-3',
+          categories: [{ id: 'cat-3', name: 'Graphics', slug: 'graphics', level: 2 }],
+        },
       ];
 
       const mockQuery = {

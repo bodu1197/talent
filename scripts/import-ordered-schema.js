@@ -18,16 +18,15 @@ const SCHEMA_DIR = path.join(__dirname, '..', 'schema-parts');
 
 function executeQuery(_query) {
   return new Promise((resolve, reject) => {
-
     const options = {
       hostname: 'api.supabase.com',
       path: `/v1/projects/${NEW_PROJECT_ID}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${NEW_ACCESS_TOKEN}`,
+        Authorization: `Bearer ${NEW_ACCESS_TOKEN}`,
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(data)
-      }
+        'Content-Length': Buffer.byteLength(data),
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -70,7 +69,7 @@ async function main() {
     '06_triggers.sql',
     '07_views.sql',
     '08_enable_rls.sql',
-    '09_rls_policies.sql'
+    '09_rls_policies.sql',
   ];
 
   for (const file of files) {
@@ -89,7 +88,7 @@ async function main() {
       console.log(`   ✅ Success\n`);
 
       // Delay between files
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
       console.error(`   ❌ Error: ${error.message}\n`);
       console.log('⚠️  Continuing with next file...\n');

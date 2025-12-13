@@ -21,12 +21,12 @@ const stats = {
   usersFailed: 0,
   sellersCreated: 0,
   servicesCreated: 0,
-  errors: []
+  errors: [],
 };
 
 // 딜레이 함수
 function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // 1. 최하위 카테고리 로드
@@ -41,8 +41,8 @@ async function loadLeafCategories() {
   if (allError) throw allError;
 
   // 최하위 카테고리 (자식이 없는 카테고리)
-  const childIds = new Set(allCategories.map(c => c.parent_id).filter(Boolean));
-  const leafCategories = allCategories.filter(c => !childIds.has(c.id));
+  const childIds = new Set(allCategories.map((c) => c.parent_id).filter(Boolean));
+  const leafCategories = allCategories.filter((c) => !childIds.has(c.id));
 
   console.log(`✓ 최하위 카테고리 ${leafCategories.length}개 로드됨\n`);
   stats.totalCategories = leafCategories.length;
@@ -56,18 +56,18 @@ async function createAuthUser(email, password, name) {
     const response = await fetch(AUTH_ADMIN_URL, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${SERVICE_ROLE_KEY}`,
+        Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
         'Content-Type': 'application/json',
-        'apikey': SERVICE_ROLE_KEY
+        apikey: SERVICE_ROLE_KEY,
       },
       body: JSON.stringify({
         email: email,
         password: password,
         email_confirm: true,
         user_metadata: {
-          name: name
-        }
-      })
+          name: name,
+        },
+      }),
     });
 
     const data = await response.json();
@@ -100,7 +100,7 @@ async function createSeller(userId, categoryId, categoryName, _categorySlug) {
       business_name: businessName,
       description: description,
       profile_image_url: profileImage,
-      status: 'active'
+      status: 'active',
     })
     .select()
     .single();
@@ -128,14 +128,11 @@ async function createServices(sellerId, categoryId, categoryName, count = 10) {
       thumbnail_url: `https://picsum.photos/seed/${categoryId}_${i}/400/300`,
       delivery_days: deliveryDays,
       revision_count: revisionCount,
-      status: 'active'
+      status: 'active',
     });
   }
 
-  const { error } = await supabase
-    .from('services')
-    .insert(services)
-    .select();
+  const { error } = await supabase.from('services').insert(services).select();
 
   if (error) throw error;
 
@@ -146,7 +143,7 @@ async function createServices(sellerId, categoryId, categoryName, count = 10) {
 async function processCategory(category, index, total) {
   const email = `seller_${category.slug}@talent-demo.com`;
   // Development credential for local testing
-const password = 'Demo1234!@';
+  const password = 'Demo1234!@';
   const name = `${category.name} 전문가`;
 
   console.log(`[${index + 1}/${total}] ${category.name} 처리 중...`);
@@ -180,12 +177,7 @@ const password = 'Demo1234!@';
       stats.sellersCreated++;
 
       // Services 생성
-      const serviceCount = await createServices(
-        sellerId,
-        category.id,
-        category.name,
-        10
-      );
+      const serviceCount = await createServices(sellerId, category.id, category.name, 10);
       console.log(`  ✓ 서비스 ${serviceCount}개 생성\n`);
       stats.servicesCreated += serviceCount;
     } catch (sellerError) {
@@ -193,7 +185,6 @@ const password = 'Demo1234!@';
       console.error(`  상세:`, JSON.stringify(sellerError, null, 2));
       throw sellerError;
     }
-
   } catch (error) {
     console.error(`  ❌ 에러: ${error.message}\n`);
     if (error.details) console.error(`  상세: ${error.details}`);
@@ -203,7 +194,7 @@ const password = 'Demo1234!@';
       category: category.name,
       error: error.message,
       details: error.details || '',
-      hint: error.hint || ''
+      hint: error.hint || '',
     });
   }
 }
@@ -277,7 +268,6 @@ async function main() {
     }
 
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-
   } catch (error) {
     console.error('\n❌ 치명적 에러:', error);
     process.exit(1);

@@ -34,7 +34,9 @@ try {
         }
 
         // Show first/last 20 chars
-        console.log(`   Value: ${cleanValue.substring(0, 20)}...${cleanValue.substring(cleanValue.length - 20)}`);
+        console.log(
+          `   Value: ${cleanValue.substring(0, 20)}...${cleanValue.substring(cleanValue.length - 20)}`
+        );
         console.log(`   Length: ${cleanValue.length} characters\n`);
       }
     }
@@ -45,7 +47,6 @@ try {
   } else {
     console.log('❌ Issues found! API keys need to be fixed.\n');
   }
-
 } catch (error) {
   console.error('❌ Error reading .env.local:', error.message);
   process.exit(1);

@@ -33,9 +33,9 @@ function apiRequest(path, method = 'GET', body = null) {
       path: path,
       method: method,
       headers: {
-        'Authorization': `Bearer ${SUPABASE_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json'
-      }
+        Authorization: `Bearer ${SUPABASE_ACCESS_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -76,10 +76,10 @@ function executeQuery(query) {
       path: `/v1/projects/${SUPABASE_PROJECT_ID}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${SUPABASE_ACCESS_TOKEN}`,
+        Authorization: `Bearer ${SUPABASE_ACCESS_TOKEN}`,
         'Content-Type': 'application/json',
-        'Content-Length': data.length
-      }
+        'Content-Length': data.length,
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -241,7 +241,7 @@ async function exportFunctions() {
 
     // SQL 형태로도 저장
     const sqlPath = path.join(OUTPUT_DIR, 'database-functions.sql');
-    const sqlContent = functions.map(f => f.definition).join('\n\n');
+    const sqlContent = functions.map((f) => f.definition).join('\n\n');
     fs.writeFileSync(sqlPath, sqlContent);
 
     console.log(`✅ Exported ${functions.length} database functions\n`);
@@ -297,7 +297,7 @@ async function exportIndexes() {
 
     // SQL 형태로도 저장
     const sqlPath = path.join(OUTPUT_DIR, 'indexes.sql');
-    const sqlContent = indexes.map(idx => idx.indexdef + ';').join('\n');
+    const sqlContent = indexes.map((idx) => idx.indexdef + ';').join('\n');
     fs.writeFileSync(sqlPath, sqlContent);
 
     console.log(`✅ Exported ${indexes.length} indexes\n`);
@@ -325,9 +325,9 @@ async function exportViews() {
 
     // SQL 형태로도 저장
     const sqlPath = path.join(OUTPUT_DIR, 'views.sql');
-    const sqlContent = views.map(v =>
-      `CREATE OR REPLACE VIEW ${v.table_name} AS\n${v.view_definition};`
-    ).join('\n\n');
+    const sqlContent = views
+      .map((v) => `CREATE OR REPLACE VIEW ${v.table_name} AS\n${v.view_definition};`)
+      .join('\n\n');
     fs.writeFileSync(sqlPath, sqlContent);
 
     console.log(`✅ Exported ${views.length} views\n`);
@@ -357,10 +357,12 @@ async function exportEnums() {
 
     // SQL 형태로도 저장
     const sqlPath = path.join(OUTPUT_DIR, 'enums.sql');
-    const sqlContent = enums.map(e => {
-      const enumValues = e.enum_values.map(v => `'${v}'`).join(', ');
-      return `CREATE TYPE ${e.enum_name} AS ENUM (${enumValues});`;
-    }).join('\n');
+    const sqlContent = enums
+      .map((e) => {
+        const enumValues = e.enum_values.map((v) => `'${v}'`).join(', ');
+        return `CREATE TYPE ${e.enum_name} AS ENUM (${enumValues});`;
+      })
+      .join('\n');
     fs.writeFileSync(sqlPath, sqlContent);
 
     console.log(`✅ Exported ${enums.length} enum types\n`);

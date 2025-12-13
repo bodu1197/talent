@@ -27,10 +27,10 @@ function executeQuery(query) {
       path: `/v1/projects/${SUPABASE_PROJECT_ID}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${SUPABASE_ACCESS_TOKEN}`,
+        Authorization: `Bearer ${SUPABASE_ACCESS_TOKEN}`,
         'Content-Type': 'application/json',
-        'Content-Length': data.length
-      }
+        'Content-Length': data.length,
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -105,8 +105,8 @@ async function exportTableAsCSV(tableName) {
     const columns = Object.keys(data[0]);
 
     // Create CSV content
-    const rows = data.map(row => {
-      return columns.map(col => escapeCSV(row[col])).join('\t');
+    const rows = data.map((row) => {
+      return columns.map((col) => escapeCSV(row[col])).join('\t');
     });
 
     const csvContent = rows.join('\n');
@@ -120,7 +120,6 @@ async function exportTableAsCSV(tableName) {
     fs.writeFileSync(metaPath, columns.join(','));
 
     console.log(`   ✅ Exported ${rowCount} rows\n`);
-
   } catch (error) {
     console.error(`   ❌ Error: ${error.message}\n`);
   }
@@ -319,7 +318,6 @@ main();
     console.log(`📁 Output: ${OUTPUT_DIR}`);
     console.log('\n📝 To import:');
     console.log('   node scripts/import-csv-data.js [PROJECT_ID] [ACCESS_TOKEN]');
-
   } catch (error) {
     console.error('❌ Export failed:', error);
     process.exit(1);

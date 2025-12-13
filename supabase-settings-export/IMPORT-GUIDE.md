@@ -41,22 +41,28 @@ supabase db push
 ## 3. RLS Policies Import
 
 Dashboard → Authentication → Policies에서:
+
 - `rls-policies.json` 내용 참고하여 정책 수동 생성
 - 또는 SQL Editor에서 CREATE POLICY 문 실행
 
 ## 4. Storage 설정
 
 ### Buckets 생성
+
 Dashboard → Storage → Create bucket
+
 - `storage-buckets.json` 참고
 
 ### Storage Policies 설정
+
 Dashboard → Storage → [Bucket] → Policies
+
 - `storage-policies.json` 참고
 
 ## 5. Auth 설정
 
 Dashboard → Authentication → Providers
+
 - `auth-config.json` 참고하여 설정
 
 ## 6. 데이터 Import
@@ -74,6 +80,7 @@ node scripts/import-data.js
 ## 7. Environment Variables 업데이트
 
 새 프로젝트의 정보로 업데이트:
+
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
@@ -89,11 +96,13 @@ node scripts/import-data.js
 ## Export된 파일 목록
 
 ### 데이터베이스
+
 - `database-export/`: 모든 테이블 데이터 (JSON)
 - `full-schema.sql`: 전체 스키마
 - `foreign-keys.json`: 외래 키 제약조건
 
 ### 데이터베이스 객체
+
 - `enums.sql`: Enum 타입
 - `indexes.sql`: 인덱스
 - `views.sql`: 뷰
@@ -101,6 +110,7 @@ node scripts/import-data.js
 - `triggers.json`: 트리거
 
 ### 설정
+
 - `project-info.json`: 프로젝트 기본 정보
 - `auth-config.json`: Auth 설정
 - `rls-policies.json`: RLS 정책
@@ -108,6 +118,7 @@ node scripts/import-data.js
 - `storage-policies.json`: Storage 정책
 
 ### Migration 파일
+
 - `supabase/migrations/`: 기존 migration 파일 (50개)
 
 ## 주의사항

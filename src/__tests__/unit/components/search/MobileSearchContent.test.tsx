@@ -4,8 +4,18 @@ import MobileSearchContent from '@/components/search/MobileSearchContent';
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    [key: string]: unknown;
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }));
 
@@ -46,9 +56,7 @@ describe('MobileSearchContent', () => {
       name: '생활서비스',
       slug: 'life-service',
       icon: 'home',
-      children: [
-        { id: 'child-3', name: '청소', slug: 'cleaning' },
-      ],
+      children: [{ id: 'child-3', name: '청소', slug: 'cleaning' }],
     },
   ];
 
@@ -77,7 +85,9 @@ describe('MobileSearchContent', () => {
 
     fireEvent.click(screen.getByText('로고 디자인'));
 
-    expect(mockPush).toHaveBeenCalledWith('/search?q=%EB%A1%9C%EA%B3%A0%20%EB%94%94%EC%9E%90%EC%9D%B8');
+    expect(mockPush).toHaveBeenCalledWith(
+      '/search?q=%EB%A1%9C%EA%B3%A0%20%EB%94%94%EC%9E%90%EC%9D%B8'
+    );
   });
 
   it('내주변 전문가 섹션을 렌더링한다', () => {

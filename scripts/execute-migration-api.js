@@ -5,8 +5,11 @@ const path = require('path');
 const https = require('https');
 
 const PROJECT_REF = 'bpvfkkrlyrjkwgwmfrci';
-const ACCESS_TOKEN = process.env.SUPABASE_ACCESS_TOKEN || 'sbp_140ed0f35c7b31aa67f56bdca11db02fd469802f';
-const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
+const ACCESS_TOKEN =
+  process.env.SUPABASE_ACCESS_TOKEN || 'sbp_140ed0f35c7b31aa67f56bdca11db02fd469802f';
+const SERVICE_ROLE_KEY =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
 // Development credential - not used in production
 const DB_PASSWORD = process.env.SUPABASE_DB_PASSWORD || 'chl1197dbA!@';
 
@@ -14,7 +17,7 @@ async function executeSQL(sql) {
   return new Promise((resolve, reject) => {
     // Use Supabase Management API to execute SQL
     const data = JSON.stringify({
-      query: sql
+      query: sql,
     });
 
     const options = {
@@ -24,10 +27,10 @@ async function executeSQL(sql) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${ACCESS_TOKEN}`,
-        'apikey': SERVICE_ROLE_KEY,
-        'Content-Length': Buffer.byteLength(data)
-      }
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+        apikey: SERVICE_ROLE_KEY,
+        'Content-Length': Buffer.byteLength(data),
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -77,16 +80,15 @@ async function runMigration() {
     console.log(`📊 Size: ${migrationSQL.length} characters\n`);
 
     console.log('🔄 Executing migration...');
-    console.log('=' .repeat(60));
+    console.log('='.repeat(60));
 
     await executeSQL(migrationSQL);
 
-    console.log('=' .repeat(60));
+    console.log('='.repeat(60));
     console.log('✅ Migration executed!\n');
     console.log('Result:', JSON.stringify(result, null, 2));
 
     console.log('\n🎉 Migration completed!\n');
-
   } catch (error) {
     console.error('\n❌ Migration failed:');
     console.error('Error:', error.message);
@@ -102,7 +104,7 @@ async function runMigration() {
     try {
       execSync(`psql "${connectionString}" -f "${migrationFile}"`, {
         stdio: 'inherit',
-        shell: true
+        shell: true,
       });
       console.log('\n✅ Migration executed via psql!\n');
     } catch {

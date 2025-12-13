@@ -11,20 +11,19 @@ const NEW_ACCESS_TOKEN = 'sbp_f40b15f794e727f0aa9161de38c497174fcac2ee';
 
 function executeQuery(projectId, token, _query) {
   return new Promise((resolve, reject) => {
-
     const options = {
       hostname: 'api.supabase.com',
       path: `/v1/projects/${projectId}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
     };
 
     const req = https.request(options, (res) => {
       let body = '';
-      res.on('data', (chunk) => body += chunk);
+      res.on('data', (chunk) => (body += chunk));
       res.on('end', () => {
         if (res.statusCode === 200 || res.statusCode === 201) {
           try {
@@ -87,7 +86,9 @@ async function comparePasswords() {
       console.log('   ✅ Hashes MATCH');
     } else {
       console.log('   ❌ Hashes DO NOT MATCH');
-      console.log('   🔍 This means Admin API re-hashed the password instead of using the original hash!');
+      console.log(
+        '   🔍 This means Admin API re-hashed the password instead of using the original hash!'
+      );
     }
 
     // Check hash format
@@ -107,7 +108,7 @@ async function comparePasswords() {
   console.log('\n');
 }
 
-comparePasswords().catch(err => {
+comparePasswords().catch((err) => {
   console.error('\n❌ Comparison failed:', err);
   process.exit(1);
 });

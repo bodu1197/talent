@@ -11,7 +11,5 @@
 
 export async function GET() {
   // 의도적으로 에러 발생
-  throw new Error(
-    "🧪 Sentry 테스트 에러입니다! 이 에러가 Sentry.io 대시보드에 표시되면 성공!",
-  );
+  throw new Error('🧪 Sentry 테스트 에러입니다! 이 에러가 Sentry.io 대시보드에 표시되면 성공!');
 }

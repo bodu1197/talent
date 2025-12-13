@@ -1,6 +1,6 @@
 /* eslint-disable sonarjs/cognitive-complexity, sonarjs/os-command, sonarjs/no-os-command-from-path, sonarjs/no-hardcoded-passwords, sonarjs/sql-queries, sonarjs/slow-regex */
 const { createClient } = require('@supabase/supabase-js');
-require('dotenv').config({path:'.env.local'});
+require('dotenv').config({ path: '.env.local' });
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -36,7 +36,7 @@ async function checkPageViews() {
 
   if (!deviceError && deviceCounts) {
     const counts = { desktop: 0, mobile: 0, tablet: 0, bot: 0 };
-    deviceCounts.forEach(row => {
+    deviceCounts.forEach((row) => {
       const type = row.device_type?.toLowerCase() || 'desktop';
       if (type in counts) counts[type]++;
       else counts.desktop++;

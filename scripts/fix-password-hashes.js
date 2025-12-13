@@ -23,14 +23,14 @@ function executeQuery(projectId, token, query) {
       path: `/v1/projects/${projectId}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
     };
 
     const req = https.request(options, (res) => {
       let body = '';
-      res.on('data', (chunk) => body += chunk);
+      res.on('data', (chunk) => (body += chunk));
       res.on('end', () => {
         if (res.statusCode === 200 || res.statusCode === 201) {
           try {
@@ -93,14 +93,13 @@ async function fixPasswordHashes() {
 
       await executeQuery(NEW_PROJECT_ID, NEW_ACCESS_TOKEN, updateQuery);
       successCount++;
-
     } catch (error) {
       failedCount++;
       console.log(`\n❌ ${email}: ${error.message.substring(0, 60)}`);
     }
 
     // Rate limiting
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
 
   console.log('\n\n' + '═'.repeat(60));
@@ -137,7 +136,7 @@ async function fixPasswordHashes() {
   }
 }
 
-fixPasswordHashes().catch(err => {
+fixPasswordHashes().catch((err) => {
   console.error('\n❌ Fix failed:', err);
   process.exit(1);
 });

@@ -31,9 +31,10 @@ const supabase = createClient(supabaseUrl, supabaseKey);
       .eq('id', sub.service_id)
       .single();
 
-    const ctr = sub.total_impressions > 0
-      ? ((sub.total_clicks / sub.total_impressions) * 100).toFixed(2)
-      : '0.00';
+    const ctr =
+      sub.total_impressions > 0
+        ? ((sub.total_clicks / sub.total_impressions) * 100).toFixed(2)
+        : '0.00';
 
     console.log(`서비스: ${service?.title || 'Unknown'}`);
     console.log(`  - 노출수: ${sub.total_impressions}`);
@@ -45,9 +46,8 @@ const supabase = createClient(supabaseUrl, supabaseKey);
     totalClicks += sub.total_clicks;
   }
 
-  const totalCtr = totalImpressions > 0
-    ? ((totalClicks / totalImpressions) * 100).toFixed(2)
-    : '0.00';
+  const totalCtr =
+    totalImpressions > 0 ? ((totalClicks / totalImpressions) * 100).toFixed(2) : '0.00';
 
   console.log('========================================');
   console.log('📈 전체 통계:');

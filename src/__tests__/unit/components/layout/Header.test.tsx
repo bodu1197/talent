@@ -4,8 +4,18 @@ import Header from '@/components/layout/Header';
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    [key: string]: unknown;
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }));
 
@@ -68,14 +78,23 @@ describe('Header', () => {
   it('비로그인 상태에서 로그인/회원가입 버튼을 표시한다', () => {
     render(<Header />);
 
-    expect(screen.getByRole('link', { name: '로그인 페이지로 이동' })).toHaveAttribute('href', '/auth/login');
-    expect(screen.getByRole('link', { name: '회원가입 페이지로 이동' })).toHaveAttribute('href', '/auth/register');
+    expect(screen.getByRole('link', { name: '로그인 페이지로 이동' })).toHaveAttribute(
+      'href',
+      '/auth/login'
+    );
+    expect(screen.getByRole('link', { name: '회원가입 페이지로 이동' })).toHaveAttribute(
+      'href',
+      '/auth/register'
+    );
   });
 
   it('비로그인 상태에서 전문가등록 링크를 표시한다', () => {
     render(<Header />);
 
-    expect(screen.getByRole('link', { name: '전문가로 등록하기' })).toHaveAttribute('href', '/expert/register');
+    expect(screen.getByRole('link', { name: '전문가로 등록하기' })).toHaveAttribute(
+      'href',
+      '/expert/register'
+    );
   });
 
   it('로그인 상태에서 사용자 메뉴를 표시한다', () => {
@@ -102,7 +121,10 @@ describe('Header', () => {
 
     render(<Header />);
 
-    expect(screen.getByRole('link', { name: '찜한 서비스' })).toHaveAttribute('href', '/mypage/buyer/favorites');
+    expect(screen.getByRole('link', { name: '찜한 서비스' })).toHaveAttribute(
+      'href',
+      '/mypage/buyer/favorites'
+    );
   });
 
   it('로그인 상태에서 채팅 알림을 표시한다', () => {
@@ -158,7 +180,9 @@ describe('Header', () => {
     fireEvent.change(searchInput, { target: { value: '테스트 검색어' } });
     fireEvent.submit(searchInput.closest('form')!);
 
-    expect(mockPush).toHaveBeenCalledWith('/search?q=%ED%85%8C%EC%8A%A4%ED%8A%B8%20%EA%B2%80%EC%83%89%EC%96%B4');
+    expect(mockPush).toHaveBeenCalledWith(
+      '/search?q=%ED%85%8C%EC%8A%A4%ED%8A%B8%20%EA%B2%80%EC%83%89%EC%96%B4'
+    );
   });
 
   it('빈 검색어는 제출하지 않는다', () => {

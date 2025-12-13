@@ -36,7 +36,9 @@ describe('MobileSearchBar', () => {
     fireEvent.change(input, { target: { value: '로고 디자인' } });
     fireEvent.submit(form);
 
-    expect(mockPush).toHaveBeenCalledWith('/search?q=%EB%A1%9C%EA%B3%A0%20%EB%94%94%EC%9E%90%EC%9D%B8');
+    expect(mockPush).toHaveBeenCalledWith(
+      '/search?q=%EB%A1%9C%EA%B3%A0%20%EB%94%94%EC%9E%90%EC%9D%B8'
+    );
   });
 
   it('빈 검색어로 제출해도 이동하지 않는다', () => {

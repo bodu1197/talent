@@ -9,8 +9,10 @@
 const https = require('https');
 
 // API keys from Supabase (verified clean)
-const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1Mzg5MjcsImV4cCI6MjA4MTExNDkyN30.gn5LpB2VFeE778IT-nIZlOUk7XHjR0pYHstDSVukgcY';
-const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NTUzODkyNywiZXhwIjoyMDgxMTE0OTI3fQ.6dk7o_z9Bp5MoG06obd4dk6fl_nRFiTJjLysfd-7Xo8';
+const ANON_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1Mzg5MjcsImV4cCI6MjA4MTExNDkyN30.gn5LpB2VFeE778IT-nIZlOUk7XHjR0pYHstDSVukgcY';
+const SERVICE_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NTUzODkyNywiZXhwIjoyMDgxMTE0OTI3fQ.6dk7o_z9Bp5MoG06obd4dk6fl_nRFiTJjLysfd-7Xo8';
 
 // You need to set your Vercel token
 // Get it from: https://vercel.com/account/tokens
@@ -27,20 +29,19 @@ if (!VERCEL_TOKEN) {
 
 function makeRequest(method, path, _body) {
   return new Promise((resolve, reject) => {
-
     const options = {
       hostname: 'api.vercel.com',
       path: path,
       method: method,
       headers: {
-        'Authorization': `Bearer ${VERCEL_TOKEN}`,
-        'Content-Type': 'application/json'
-      }
+        Authorization: `Bearer ${VERCEL_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
     };
 
     const req = https.request(options, (res) => {
       let responseBody = '';
-      res.on('data', (chunk) => responseBody += chunk);
+      res.on('data', (chunk) => (responseBody += chunk));
       res.on('end', () => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           try {
@@ -69,7 +70,7 @@ async function updateVercelEnv() {
     // Get project info
     console.log('📋 Getting project info...');
     const projects = await makeRequest('GET', '/v9/projects');
-    const project = projects.projects.find(p => p.name === PROJECT_ID);
+    const project = projects.projects.find((p) => p.name === PROJECT_ID);
 
     if (!project) {
       console.error(`❌ Project "${PROJECT_ID}" not found`);
@@ -87,7 +88,7 @@ async function updateVercelEnv() {
     const keysToRemove = ['NEXT_PUBLIC_SUPABASE_ANON_KEY', 'SUPABASE_SERVICE_ROLE_KEY'];
 
     for (const key of keysToRemove) {
-      const existingVars = envVars.envs.filter(env => env.key === key);
+      const existingVars = envVars.envs.filter((env) => env.key === key);
       for (const envVar of existingVars) {
         try {
           await makeRequest('DELETE', `/v9/projects/${project.id}/env/${envVar.id}`);
@@ -107,14 +108,14 @@ async function updateVercelEnv() {
         key: 'NEXT_PUBLIC_SUPABASE_ANON_KEY',
         value: ANON_KEY,
         type: 'encrypted',
-        target: ['production', 'preview', 'development']
+        target: ['production', 'preview', 'development'],
       },
       {
         key: 'SUPABASE_SERVICE_ROLE_KEY',
         value: SERVICE_KEY,
         type: 'encrypted',
-        target: ['production', 'preview', 'development']
-      }
+        target: ['production', 'preview', 'development'],
+      },
     ];
 
     for (const env of envToAdd) {
@@ -132,7 +133,6 @@ async function updateVercelEnv() {
     console.log('✅ All environment variables updated!\n');
     console.log('🚀 Please redeploy your project:');
     console.log('   vercel --prod\n');
-
   } catch (error) {
     console.error('\n❌ Error:', error.message);
     process.exit(1);

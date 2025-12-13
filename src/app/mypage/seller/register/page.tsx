@@ -1,13 +1,15 @@
-import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
-import SellerRegisterClient from './SellerRegisterClient'
+import { redirect } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server';
+import SellerRegisterClient from './SellerRegisterClient';
 
 export default async function SellerRegisterPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/auth/login')
+    redirect('/auth/login');
   }
 
   // Check if already registered as seller
@@ -15,10 +17,10 @@ export default async function SellerRegisterPage() {
     .from('sellers')
     .select('id')
     .eq('user_id', user.id)
-    .maybeSingle()
+    .maybeSingle();
 
   if (seller) {
-    redirect('/mypage/seller/dashboard')
+    redirect('/mypage/seller/dashboard');
   }
 
   // Get current profile data from profiles table
@@ -26,7 +28,7 @@ export default async function SellerRegisterPage() {
     .from('profiles')
     .select('name, profile_image')
     .eq('user_id', user.id)
-    .maybeSingle()
+    .maybeSingle();
 
-  return <SellerRegisterClient userId={user.id} initialProfile={profile} />
+  return <SellerRegisterClient userId={user.id} initialProfile={profile} />;
 }

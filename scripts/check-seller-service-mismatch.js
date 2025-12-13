@@ -13,26 +13,22 @@ async function main() {
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
   // 판매자 목록
-  const { data: sellers } = await supabase
-    .from('sellers')
-    .select('id, business_name, user_id');
+  const { data: sellers } = await supabase.from('sellers').select('id, business_name, user_id');
 
   console.log(`전체 판매자: ${sellers?.length}명\n`);
-  const sellerIds = sellers?.map(s => s.id) || [];
+  const sellerIds = sellers?.map((s) => s.id) || [];
 
-  sellers?.forEach(s => {
+  sellers?.forEach((s) => {
     console.log(`- ${s.business_name} (ID: ${s.id})`);
   });
 
   // 서비스 목록
-  const { data: services } = await supabase
-    .from('services')
-    .select('id, title, seller_id');
+  const { data: services } = await supabase.from('services').select('id, title, seller_id');
 
   console.log(`\n전체 서비스: ${services?.length}개\n`);
 
   // seller_id가 실제 판매자 목록에 없는 서비스 찾기
-  const orphanedServices = services?.filter(s => !sellerIds.includes(s.seller_id)) || [];
+  const orphanedServices = services?.filter((s) => !sellerIds.includes(s.seller_id)) || [];
 
   console.log(`판매자가 없는 서비스: ${orphanedServices.length}개\n`);
 
@@ -47,7 +43,7 @@ async function main() {
   // 판매자별 서비스 개수
   console.log('\n판매자별 서비스 개수:');
   for (const seller of sellers || []) {
-    const serviceCount = services?.filter(s => s.seller_id === seller.id).length || 0;
+    const serviceCount = services?.filter((s) => s.seller_id === seller.id).length || 0;
     console.log(`- ${seller.business_name}: ${serviceCount}개`);
   }
 }

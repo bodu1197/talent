@@ -45,21 +45,14 @@ const supabase = createClient(supabaseUrl, supabaseKey);
     console.log('\n2️⃣ 테이블 구조 확인 중...');
 
     // 실제 카테고리 ID 가져오기
-    const { data: categories } = await supabase
-      .from('categories')
-      .select('id, name')
-      .limit(5);
+    const { data: categories } = await supabase.from('categories').select('id, name').limit(5);
 
     console.log('실제 카테고리 예시:', categories);
-
   } else {
     console.log('✅ 삽입 성공:', insertResult);
 
     // 테스트 데이터 삭제
-    await supabase
-      .from('advertising_impressions')
-      .delete()
-      .eq('id', insertResult[0].id);
+    await supabase.from('advertising_impressions').delete().eq('id', insertResult[0].id);
 
     console.log('✅ 테스트 데이터 삭제 완료');
   }

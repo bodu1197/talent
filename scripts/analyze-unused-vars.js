@@ -10,21 +10,21 @@ const data = JSON.parse(fs.readFileSync('scripts-all-errors.json', 'utf8'));
 // @typescript-eslint/no-unused-vars 에러만 필터링
 const unusedVarsErrors = [];
 
-data.forEach(file => {
-  const errors = file.messages.filter(m =>
-    m.ruleId === '@typescript-eslint/no-unused-vars' && m.severity === 2
+data.forEach((file) => {
+  const errors = file.messages.filter(
+    (m) => m.ruleId === '@typescript-eslint/no-unused-vars' && m.severity === 2
   );
 
   if (errors.length > 0) {
     unusedVarsErrors.push({
       filePath: file.filePath,
       errorCount: errors.length,
-      errors: errors.map(e => ({
+      errors: errors.map((e) => ({
         line: e.line,
         column: e.column,
         message: e.message,
-        variable: e.message.match(/'([^']+)'/)?.[1]
-      }))
+        variable: e.message.match(/'([^']+)'/)?.[1],
+      })),
     });
   }
 });
@@ -34,7 +34,7 @@ const totalErrors = unusedVarsErrors.reduce((sum, f) => sum + f.errorCount, 0);
 console.log(`총 ${totalErrors}개 에러 발견\n`);
 
 console.log('파일별 에러 수:');
-unusedVarsErrors.forEach(file => {
+unusedVarsErrors.forEach((file) => {
   const fileName = file.filePath.split('\\').pop();
   console.log(`  ${fileName}: ${file.errorCount}개`);
 });
@@ -51,11 +51,11 @@ const varTypes = {
   response: 0,
   error: 0,
   _prefixed: 0,
-  others: []
+  others: [],
 };
 
-unusedVarsErrors.forEach(file => {
-  file.errors.forEach(err => {
+unusedVarsErrors.forEach((file) => {
+  file.errors.forEach((err) => {
     const varName = err.variable;
     if (!varName) return;
 
@@ -89,10 +89,10 @@ if (varTypes.others.length > 0 && varTypes.others.length <= 20) {
 
 // 샘플 출력
 console.log('\n\n상세 샘플 (처음 5개 파일):');
-unusedVarsErrors.slice(0, 5).forEach(file => {
+unusedVarsErrors.slice(0, 5).forEach((file) => {
   const fileName = file.filePath.split('\\').pop();
   console.log(`\n${fileName}:`);
-  file.errors.slice(0, 5).forEach(err => {
+  file.errors.slice(0, 5).forEach((err) => {
     console.log(`  Line ${err.line}: '${err.variable}' - ${err.message}`);
   });
 });

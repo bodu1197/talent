@@ -3,7 +3,8 @@ const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 
 const _supabaseUrl = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
+const supabaseKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -34,7 +35,7 @@ async function dumpSchema() {
           FROM information_schema.columns
           WHERE table_schema = 'public'
           ORDER BY table_name, ordinal_position;
-        `
+        `,
       });
 
       if (rpcError) {
@@ -48,7 +49,7 @@ async function dumpSchema() {
           database: 'postgres',
           user: 'postgres',
           password: 'chl1197dbA!@',
-          ssl: { rejectUnauthorized: false }
+          ssl: { rejectUnauthorized: false },
         });
 
         console.log('Using direct PostgreSQL connection...');
@@ -73,7 +74,8 @@ async function dumpSchema() {
             console.log(`Dumping table: ${tableName}`);
 
             // Get table columns
-            const columnsResult = await client.query(`
+            const columnsResult = await client.query(
+              `
               SELECT
                 column_name,
                 data_type,
@@ -83,18 +85,24 @@ async function dumpSchema() {
               FROM information_schema.columns
               WHERE table_schema = 'public' AND table_name = $1
               ORDER BY ordinal_position;
-            `, [tableName]);
+            `,
+              [tableName]
+            );
 
             // Get primary key
-            const pkResult = await client.query(`
+            const pkResult = await client.query(
+              `
               SELECT a.attname
               FROM pg_index i
               JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey)
               WHERE i.indrelid = $1::regclass AND i.indisprimary;
-            `, [`public.${tableName}`]);
+            `,
+              [`public.${tableName}`]
+            );
 
             // Get foreign keys
-            const fkResult = await client.query(`
+            const fkResult = await client.query(
+              `
               SELECT
                 tc.constraint_name,
                 kcu.column_name,
@@ -110,10 +118,13 @@ async function dumpSchema() {
               WHERE tc.constraint_type = 'FOREIGN KEY'
                 AND tc.table_schema = 'public'
                 AND tc.table_name = $1;
-            `, [tableName]);
+            `,
+              [tableName]
+            );
 
             // Get indexes
-            const indexResult = await client.query(`
+            const indexResult = await client.query(
+              `
               SELECT
                 i.relname as index_name,
                 a.attname as column_name,
@@ -127,13 +138,15 @@ async function dumpSchema() {
                 AND t.relname = $1
                 AND NOT ix.indisprimary
               ORDER BY i.relname, a.attnum;
-            `, [tableName]);
+            `,
+              [tableName]
+            );
 
             // Build CREATE TABLE statement
             sqlDump += `\n-- Table: ${tableName}\n`;
             sqlDump += `CREATE TABLE IF NOT EXISTS public.${tableName} (\n`;
 
-            const columnDefs = columnsResult.rows.map(col => {
+            const columnDefs = columnsResult.rows.map((col) => {
               let def = `  ${col.column_name} ${col.data_type}`;
 
               if (col.character_maximum_length) {
@@ -155,7 +168,7 @@ async function dumpSchema() {
 
             // Add primary key
             if (pkResult.rows.length > 0) {
-              const pkColumns = pkResult.rows.map(r => r.attname).join(', ');
+              const pkColumns = pkResult.rows.map((r) => r.attname).join(', ');
               sqlDump += `,\n  PRIMARY KEY (${pkColumns})`;
             }
 
@@ -177,7 +190,7 @@ async function dumpSchema() {
                 if (!indexGroups[idx.index_name]) {
                   indexGroups[idx.index_name] = {
                     columns: [],
-                    unique: idx.is_unique
+                    unique: idx.is_unique,
                   };
                 }
                 indexGroups[idx.index_name].columns.push(idx.column_name);
@@ -195,14 +208,12 @@ async function dumpSchema() {
           fs.writeFileSync('supabase_schema_dump.sql', sqlDump);
           console.log('\n✅ Schema dump completed: supabase_schema_dump.sql');
           console.log(`Total tables dumped: ${tablesResult.rows.length}`);
-
         } finally {
           client.release();
           await pool.end();
         }
       }
     }
-
   } catch (error) {
     console.error('Error:', error);
     process.exit(1);

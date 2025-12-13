@@ -2,13 +2,14 @@
 const { createClient } = require('@supabase/supabase-js');
 
 const _supabaseUrl = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
-const _supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
+const _supabaseServiceKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   auth: {
     autoRefreshToken: false,
-    persistSession: false
-  }
+    persistSession: false,
+  },
 });
 
 async function cleanupTestData() {
@@ -24,7 +25,7 @@ async function cleanupTestData() {
       return;
     }
 
-    const testBucket = buckets.find(b => b.name === 'test-uploads');
+    const testBucket = buckets.find((b) => b.name === 'test-uploads');
 
     if (!testBucket) {
       console.log('  ℹ️  test-uploads 버킷이 존재하지 않습니다.');
@@ -33,21 +34,19 @@ async function cleanupTestData() {
 
       // 2. 버킷 내 파일 목록 조회
       console.log('\n2️⃣ 버킷 내 파일 조회 중...');
-      const { data: files, error: listError } = await supabase.storage
-        .from('test-uploads')
-        .list();
+      const { data: files, error: listError } = await supabase.storage.from('test-uploads').list();
 
       if (listError) {
         console.log(`  ⚠️  파일 목록 조회 실패: ${listError.message}`);
       } else if (files && files.length > 0) {
         console.log(`  ✅ ${files.length}개 파일 발견:`);
-        files.forEach(file => {
+        files.forEach((file) => {
           console.log(`     - ${file.name} (${file.metadata?.size || 0} bytes)`);
         });
 
         // 3. 파일 삭제
         console.log('\n3️⃣ 파일 삭제 중...');
-        const fileNames = files.map(f => f.name);
+        const fileNames = files.map((f) => f.name);
         const { error: removeError } = await supabase.storage
           .from('test-uploads')
           .remove(fileNames);
@@ -63,8 +62,7 @@ async function cleanupTestData() {
 
       // 4. 버킷 삭제
       console.log('\n4️⃣ test-uploads 버킷 삭제 중...');
-      const { error: deleteError } = await supabase.storage
-        .deleteBucket('test-uploads');
+      const { error: deleteError } = await supabase.storage.deleteBucket('test-uploads');
 
       if (deleteError) {
         console.log(`  ⚠️  버킷 삭제 실패: ${deleteError.message}`);
@@ -92,10 +90,7 @@ async function cleanupTestData() {
     } else if (testUser) {
       console.log(`  ✅ 테스트 사용자 발견: ${testUser.name} (${testUser.email})`);
 
-      const { error: deleteError } = await supabase
-        .from('users')
-        .delete()
-        .eq('id', testUserId);
+      const { error: deleteError } = await supabase.from('users').delete().eq('id', testUserId);
 
       if (deleteError) {
         console.log(`  ⚠️  삭제 실패: ${deleteError.message}`);

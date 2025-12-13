@@ -120,9 +120,7 @@
     "kakao_openchat": "https://open.kakao.com",
     "whatsapp": null,
     "website": null,
-    "preferred_contact": [
-      "플랫폼 메시지"
-    ],
+    "preferred_contact": ["플랫폼 메시지"],
     "certificates": null,
     "experience": null,
     "is_business": false,

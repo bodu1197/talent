@@ -26,10 +26,10 @@ function executeQuery(query) {
       path: `/v1/projects/${NEW_PROJECT_ID}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${NEW_ACCESS_TOKEN}`,
+        Authorization: `Bearer ${NEW_ACCESS_TOKEN}`,
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(data)
-      }
+        'Content-Length': Buffer.byteLength(data),
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -86,33 +86,35 @@ async function importTableFromJSON(tableName) {
       const row = data[i];
 
       try {
-        const values = columns.map(col => {
-          const value = row[col];
+        const values = columns
+          .map((col) => {
+            const value = row[col];
 
-          if (value === null || value === undefined) {
-            return 'NULL';
-          }
+            if (value === null || value === undefined) {
+              return 'NULL';
+            }
 
-          if (typeof value === 'string') {
-            // Escape single quotes
-            const escaped = value.replace(/'/g, "''");
-            return `'${escaped}'`;
-          }
+            if (typeof value === 'string') {
+              // Escape single quotes
+              const escaped = value.replace(/'/g, "''");
+              return `'${escaped}'`;
+            }
 
-          if (typeof value === 'boolean') {
-            return value ? 'true' : 'false';
-          }
+            if (typeof value === 'boolean') {
+              return value ? 'true' : 'false';
+            }
 
-          if (typeof value === 'object') {
-            const json = JSON.stringify(value).replace(/'/g, "''");
-            return `'${json}'::jsonb`;
-          }
+            if (typeof value === 'object') {
+              const json = JSON.stringify(value).replace(/'/g, "''");
+              return `'${json}'::jsonb`;
+            }
 
-          return value;
-        }).join(', ');
+            return value;
+          })
+          .join(', ');
 
         const insertQuery = `
-          INSERT INTO "${tableName}" (${columns.map(c => `"${c}"`).join(', ')})
+          INSERT INTO "${tableName}" (${columns.map((c) => `"${c}"`).join(', ')})
           VALUES (${values})
         `;
 
@@ -120,9 +122,10 @@ async function importTableFromJSON(tableName) {
         successCount++;
 
         if ((i + 1) % 10 === 0 || i === data.length - 1) {
-          process.stdout.write(`\r   📦 Progress: ${i + 1}/${data.length} (${successCount} success, ${errorCount} errors)`);
+          process.stdout.write(
+            `\r   📦 Progress: ${i + 1}/${data.length} (${successCount} success, ${errorCount} errors)`
+          );
         }
-
       } catch (error) {
         console.error('에러 발생:', error);
         errorCount++;
@@ -131,7 +134,6 @@ async function importTableFromJSON(tableName) {
     }
 
     console.log(`\n   ✅ Completed: ${successCount}/${data.length} rows imported\n`);
-
   } catch (error) {
     console.log(`\n   ❌ Error: ${error.message}\n`);
   }
@@ -216,7 +218,7 @@ const TABLE_ORDER = [
   'withdrawal_requests',
   'helper_withdrawals',
   'helper_subscriptions',
-  'reports'
+  'reports',
 ];
 
 async function disableRLS() {

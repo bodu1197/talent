@@ -30,13 +30,13 @@ const filesToFix = [
   'src/lib/supabase/queries/category-visits.ts',
   'src/lib/supabase/queries/dashboard.ts',
   'src/lib/supabase/queries/personalized-services.ts',
-  'src/lib/template-generator.ts'
+  'src/lib/template-generator.ts',
 ];
 
 let totalReplacements = 0;
 let filesModified = 0;
 
-filesToFix.forEach(relPath => {
+filesToFix.forEach((relPath) => {
   const filePath = path.join(__dirname, relPath);
 
   if (!fs.existsSync(filePath)) {

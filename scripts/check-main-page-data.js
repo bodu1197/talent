@@ -28,7 +28,7 @@ async function check() {
     .limit(10);
 
   console.log('활성 서비스 목록 (최대 10개):');
-  services?.forEach(s => console.log(`  - ${s.title} (${s.id})`));
+  services?.forEach((s) => console.log(`  - ${s.title} (${s.id})`));
 
   // AI 카테고리 조회
   const { data: aiCategories } = await supabase
@@ -37,10 +37,10 @@ async function check() {
     .eq('is_ai', true);
 
   console.log('\nAI 카테고리:', aiCategories?.length || 0, '개');
-  aiCategories?.forEach(cat => console.log(`  - ${cat.name} (${cat.id})`));
+  aiCategories?.forEach((cat) => console.log(`  - ${cat.name} (${cat.id})`));
 
   if (aiCategories && aiCategories.length > 0) {
-    const aiCategoryIds = aiCategories.map(c => c.id);
+    const aiCategoryIds = aiCategories.map((c) => c.id);
 
     // AI 카테고리의 서비스 수
     const { data: aiServiceLinks } = await supabase
@@ -60,7 +60,7 @@ async function check() {
   console.log(`활성 광고 구독: ${adsCount || 0}개`);
   if (ads && ads.length > 0) {
     console.log('광고 서비스 ID:');
-    ads.forEach(ad => console.log(`  - ${ad.service_id}`));
+    ads.forEach((ad) => console.log(`  - ${ad.service_id}`));
   }
 
   console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');

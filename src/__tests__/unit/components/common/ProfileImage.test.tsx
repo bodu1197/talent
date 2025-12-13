@@ -12,12 +12,7 @@ vi.mock('next/image', () => ({
 describe('ProfileImage', () => {
   describe('rendering with image', () => {
     it('should render image when src is provided', () => {
-      render(
-        <ProfileImage
-          src="https://example.com/profile.jpg"
-          alt="User profile"
-        />
-      );
+      render(<ProfileImage src="https://example.com/profile.jpg" alt="User profile" />);
 
       const img = screen.getByTestId('profile-image');
       expect(img).toBeInTheDocument();
@@ -26,25 +21,14 @@ describe('ProfileImage', () => {
     });
 
     it('should use default size of 32px', () => {
-      render(
-        <ProfileImage
-          src="https://example.com/profile.jpg"
-          alt="User"
-        />
-      );
+      render(<ProfileImage src="https://example.com/profile.jpg" alt="User" />);
 
       const container = screen.getByTestId('profile-image').parentElement;
       expect(container).toHaveStyle({ width: '32px', height: '32px' });
     });
 
     it('should use custom size when provided', () => {
-      render(
-        <ProfileImage
-          src="https://example.com/profile.jpg"
-          alt="User"
-          size={64}
-        />
-      );
+      render(<ProfileImage src="https://example.com/profile.jpg" alt="User" size={64} />);
 
       const container = screen.getByTestId('profile-image').parentElement;
       expect(container).toHaveStyle({ width: '64px', height: '64px' });
@@ -52,11 +36,7 @@ describe('ProfileImage', () => {
 
     it('should apply custom className', () => {
       render(
-        <ProfileImage
-          src="https://example.com/profile.jpg"
-          alt="User"
-          className="border-2"
-        />
+        <ProfileImage src="https://example.com/profile.jpg" alt="User" className="border-2" />
       );
 
       const container = screen.getByTestId('profile-image').parentElement;
@@ -98,34 +78,21 @@ describe('ProfileImage', () => {
   describe('error handling', () => {
     it('should retry on image error', () => {
       const { rerender } = render(
-        <ProfileImage
-          src="https://example.com/profile.jpg"
-          alt="User"
-        />
+        <ProfileImage src="https://example.com/profile.jpg" alt="User" />
       );
 
       const img = screen.getByTestId('profile-image');
 
       // Trigger first error
       fireEvent.error(img);
-      rerender(
-        <ProfileImage
-          src="https://example.com/profile.jpg"
-          alt="User"
-        />
-      );
+      rerender(<ProfileImage src="https://example.com/profile.jpg" alt="User" />);
 
       // Should still show image (retry in progress)
       expect(screen.getByTestId('profile-image')).toBeInTheDocument();
     });
 
     it('should show placeholder after max retries', () => {
-      render(
-        <ProfileImage
-          src="https://example.com/profile.jpg"
-          alt="User"
-        />
-      );
+      render(<ProfileImage src="https://example.com/profile.jpg" alt="User" />);
 
       const img = screen.getByTestId('profile-image');
 
@@ -149,12 +116,7 @@ describe('ProfileImage', () => {
     });
 
     it('should provide alt text for image', () => {
-      render(
-        <ProfileImage
-          src="https://example.com/profile.jpg"
-          alt="John Doe profile picture"
-        />
-      );
+      render(<ProfileImage src="https://example.com/profile.jpg" alt="John Doe profile picture" />);
 
       expect(screen.getByAltText('John Doe profile picture')).toBeInTheDocument();
     });

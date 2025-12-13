@@ -18,14 +18,7 @@ describe('StatCard', () => {
   });
 
   it('부제목이 있으면 렌더링한다', () => {
-    render(
-      <StatCard
-        title="리뷰"
-        value="4.8"
-        icon="fa-star"
-        subtitle="평균 별점"
-      />
-    );
+    render(<StatCard title="리뷰" value="4.8" icon="fa-star" subtitle="평균 별점" />);
 
     expect(screen.getByText('평균 별점')).toBeInTheDocument();
   });
@@ -39,9 +32,7 @@ describe('StatCard', () => {
   });
 
   it('기본 색상은 blue이다', () => {
-    const { container } = render(
-      <StatCard title="테스트" value="0" icon="fa-chart-line" />
-    );
+    const { container } = render(<StatCard title="테스트" value="0" icon="fa-chart-line" />);
 
     // blue 색상 클래스 확인
     const iconContainer = container.querySelector('.bg-blue-50');
@@ -58,9 +49,7 @@ describe('StatCard', () => {
   });
 
   it('알 수 없는 아이콘은 기본 아이콘으로 대체된다', () => {
-    const { container } = render(
-      <StatCard title="테스트" value="0" icon="unknown-icon" />
-    );
+    const { container } = render(<StatCard title="테스트" value="0" icon="unknown-icon" />);
 
     // SVG 아이콘이 렌더링되어야 함
     expect(container.querySelector('svg')).toBeInTheDocument();

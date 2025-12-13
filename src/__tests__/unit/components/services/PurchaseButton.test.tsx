@@ -154,11 +154,12 @@ describe('PurchaseButton', () => {
   it('API 오류에 상세 정보가 있으면 포함하여 표시한다', async () => {
     mockFetch.mockResolvedValueOnce({
       ok: false,
-      json: () => Promise.resolve({
-        error: '결제 준비 실패',
-        details: '잔액 부족',
-        code: 'INSUFFICIENT_BALANCE',
-      }),
+      json: () =>
+        Promise.resolve({
+          error: '결제 준비 실패',
+          details: '잔액 부족',
+          code: 'INSUFFICIENT_BALANCE',
+        }),
     });
 
     render(<PurchaseButton {...defaultProps} />);

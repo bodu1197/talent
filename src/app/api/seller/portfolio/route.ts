@@ -1,22 +1,36 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
-import { logger } from '@/lib/logger'
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
+import { logger } from '@/lib/logger';
 
 // POST: 포트폴리오 등록
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = await request.json()
-    const { seller_id, title, description, category_id, thumbnail_url, image_urls, project_url, youtube_url, service_ids, tags } = body
+    const body = await request.json();
+    const {
+      seller_id,
+      title,
+      description,
+      category_id,
+      thumbnail_url,
+      image_urls,
+      project_url,
+      youtube_url,
+      service_ids,
+      tags,
+    } = body;
 
     if (!seller_id || !title || !description) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     // seller 소유권 확인
@@ -25,10 +39,10 @@ export async function POST(request: NextRequest) {
       .select('id')
       .eq('id', seller_id)
       .eq('user_id', user.id)
-      .single()
+      .single();
 
     if (!seller) {
-      return NextResponse.json({ error: 'Unauthorized seller' }, { status: 403 })
+      return NextResponse.json({ error: 'Unauthorized seller' }, { status: 403 });
     }
 
     // 포트폴리오 생성
@@ -44,44 +58,47 @@ export async function POST(request: NextRequest) {
         project_url: project_url || null,
         youtube_url: youtube_url || null,
         service_id: null, // 기존 필드는 null로 설정
-        tags: tags || []
+        tags: tags || [],
       })
       .select()
-      .single()
+      .single();
 
     if (error) {
       logger.error('Portfolio creation error:', {
         message: error.message,
         details: error.details,
         hint: error.hint,
-        code: error.code
-      })
-      return NextResponse.json({
-        error: 'Failed to create portfolio',
-        details: error.message
-      }, { status: 500 })
+        code: error.code,
+      });
+      return NextResponse.json(
+        {
+          error: 'Failed to create portfolio',
+          details: error.message,
+        },
+        { status: 500 }
+      );
     }
 
     // 서비스 연결 (다중)
     if (service_ids && Array.isArray(service_ids) && service_ids.length > 0) {
-      const portfolioServiceLinks = service_ids.map(service_id => ({
+      const portfolioServiceLinks = service_ids.map((service_id) => ({
         portfolio_id: data.id,
-        service_id
-      }))
+        service_id,
+      }));
 
       const { error: linkError } = await supabase
         .from('portfolio_services')
-        .insert(portfolioServiceLinks)
+        .insert(portfolioServiceLinks);
 
       if (linkError) {
-        logger.error('Portfolio-service link error:', linkError)
+        logger.error('Portfolio-service link error:', linkError);
         // 연결 실패해도 포트폴리오는 생성되었으므로 경고만 로그
       }
     }
 
-    return NextResponse.json({ data }, { status: 201 })
+    return NextResponse.json({ data }, { status: 201 });
   } catch (error) {
-    logger.error('Portfolio POST error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    logger.error('Portfolio POST error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

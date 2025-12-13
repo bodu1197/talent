@@ -25,17 +25,14 @@ function fixIgnoredExceptions(content, filename) {
     if (body.includes('console.log')) {
       changes++;
       // Add error usage to the console statement
-      const updatedBody = body.replace(
-        /console\.log\(([^)]+)\);/,
-        (logMatch, message) => {
-          // Check if message already mentions error
-          if (message.includes('error')) {
-            return logMatch;
-          }
-          // Add error to the message
-          return `console.log(${message}, error);`;
+      const updatedBody = body.replace(/console\.log\(([^)]+)\);/, (logMatch, message) => {
+        // Check if message already mentions error
+        if (message.includes('error')) {
+          return logMatch;
         }
-      );
+        // Add error to the message
+        return `console.log(${message}, error);`;
+      });
       return `} catch (error) {${updatedBody}}`;
     }
 
@@ -74,8 +71,9 @@ async function main() {
   console.log('='.repeat(60));
 
   const scriptsDir = __dirname;
-  const files = fs.readdirSync(scriptsDir)
-    .filter(f => f.endsWith('.js') && !f.startsWith('fix-') && !f.startsWith('analyze-'))
+  const files = fs
+    .readdirSync(scriptsDir)
+    .filter((f) => f.endsWith('.js') && !f.startsWith('fix-') && !f.startsWith('analyze-'))
     .sort();
 
   console.log(`\n📁 총 ${files.length}개 파일 검사 중...\n`);

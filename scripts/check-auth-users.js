@@ -8,20 +8,19 @@ const NEW_ACCESS_TOKEN = 'sbp_f40b15f794e727f0aa9161de38c497174fcac2ee';
 
 function executeQuery(projectId, token, _query) {
   return new Promise((resolve, reject) => {
-
     const options = {
       hostname: 'api.supabase.com',
       path: `/v1/projects/${projectId}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
     };
 
     const req = https.request(options, (res) => {
       let body = '';
-      res.on('data', (chunk) => body += chunk);
+      res.on('data', (chunk) => (body += chunk));
       res.on('end', () => {
         if (res.statusCode === 200 || res.statusCode === 201) {
           try {
@@ -104,11 +103,13 @@ async function checkAuthUsers() {
 
   console.log('\nFirst 5 identities:');
   identities.forEach((identity, idx) => {
-    console.log(`${idx + 1}. Provider: ${identity.provider} | User: ${identity.user_id.substring(0, 8)}...`);
+    console.log(
+      `${idx + 1}. Provider: ${identity.provider} | User: ${identity.user_id.substring(0, 8)}...`
+    );
   });
 }
 
-checkAuthUsers().catch(err => {
+checkAuthUsers().catch((err) => {
   console.error('\n❌ Check failed:', err);
   process.exit(1);
 });

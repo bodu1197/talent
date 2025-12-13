@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 export default function AdminSettlementsPage() {
   return (
@@ -8,5 +8,5 @@ export default function AdminSettlementsPage() {
         <p className="text-gray-600">정산 관리 페이지입니다.</p>
       </div>
     </div>
-  )
+  );
 }

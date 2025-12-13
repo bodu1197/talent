@@ -57,12 +57,14 @@ export default function HelperEarningsPage() {
       const response = await fetch('/api/helper/earnings');
       if (response.ok) {
         const data = await response.json();
-        setSummary(data.summary || {
-          availableBalance: 0,
-          totalEarned: 0,
-          totalWithdrawn: 0,
-          pendingEarnings: 0,
-        });
+        setSummary(
+          data.summary || {
+            availableBalance: 0,
+            totalEarned: 0,
+            totalWithdrawn: 0,
+            pendingEarnings: 0,
+          }
+        );
         setTransactions(data.transactions || []);
       }
     } catch (error) {
@@ -164,9 +166,7 @@ export default function HelperEarningsPage() {
                 <div className="p-8 text-center">
                   <Wallet className="w-12 h-12 mx-auto text-gray-300 mb-3" />
                   <p className="text-gray-500">아직 거래 내역이 없습니다</p>
-                  <p className="text-sm text-gray-400 mt-1">
-                    심부름을 완료하면 수익이 발생합니다
-                  </p>
+                  <p className="text-sm text-gray-400 mt-1">심부름을 완료하면 수익이 발생합니다</p>
                 </div>
               ) : (
                 <div className="divide-y divide-gray-100">
@@ -174,7 +174,9 @@ export default function HelperEarningsPage() {
                     const { icon: Icon, color } = getTransactionIcon(tx.type, tx.status);
                     return (
                       <div key={tx.id} className="flex items-center gap-4 p-4">
-                        <div className={`w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center ${color}`}>
+                        <div
+                          className={`w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center ${color}`}
+                        >
                           <Icon className="w-5 h-5" />
                         </div>
                         <div className="flex-1 min-w-0">
@@ -193,8 +195,11 @@ export default function HelperEarningsPage() {
                           </p>
                         </div>
                         <div className="text-right">
-                          <p className={`font-bold ${tx.type === 'earning' ? 'text-blue-600' : 'text-gray-900'}`}>
-                            {tx.type === 'earning' ? '+' : '-'}{tx.amount.toLocaleString()}원
+                          <p
+                            className={`font-bold ${tx.type === 'earning' ? 'text-blue-600' : 'text-gray-900'}`}
+                          >
+                            {tx.type === 'earning' ? '+' : '-'}
+                            {tx.amount.toLocaleString()}원
                           </p>
                           {tx.status === 'pending' && (
                             <span className="text-xs text-yellow-600">처리중</span>
@@ -235,13 +240,14 @@ export default function HelperEarningsPage() {
         {/* 출금 모달 (간단 구현) */}
         {withdrawModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-black/50" onClick={() => setWithdrawModalOpen(false)} />
+            <div
+              className="absolute inset-0 bg-black/50"
+              onClick={() => setWithdrawModalOpen(false)}
+            />
             <div className="relative bg-white rounded-xl p-6 w-full max-w-md">
               <h3 className="text-lg font-bold text-gray-900 mb-4">출금 신청</h3>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  출금 금액
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">출금 금액</label>
                 <input
                   type="number"
                   placeholder="금액을 입력하세요"
@@ -252,13 +258,14 @@ export default function HelperEarningsPage() {
                 </p>
               </div>
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  입금 계좌
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">입금 계좌</label>
                 <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                   <option>등록된 계좌 없음</option>
                 </select>
-                <Link href="/errands/mypage/helper/settings" className="text-sm text-blue-600 hover:underline mt-1 inline-block">
+                <Link
+                  href="/errands/mypage/helper/settings"
+                  className="text-sm text-blue-600 hover:underline mt-1 inline-block"
+                >
                   + 계좌 등록하기
                 </Link>
               </div>

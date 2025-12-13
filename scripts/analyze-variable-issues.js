@@ -7,10 +7,11 @@ console.log('📊 변수 관련 에러 분석 중...\n');
 
 // Run ESLint and save to file first
 try {
-  execSync(
-    'npx eslint scripts --format json > eslint-output.json',
-    { encoding: 'utf8', shell: true, stdio: 'ignore' }
-  );
+  execSync('npx eslint scripts --format json > eslint-output.json', {
+    encoding: 'utf8',
+    shell: true,
+    stdio: 'ignore',
+  });
 } catch {
   // ESLint exits with error code when there are errors, but we still get the output
 }
@@ -27,12 +28,12 @@ const variableErrors = {
   'ignored-exceptions': [],
   'all-duplicated-branches': [],
   'anchor-precedence': [],
-  'other': []
+  other: [],
 };
 
 // Collect variable-related errors
-data.forEach(file => {
-  file.messages.forEach(msg => {
+data.forEach((file) => {
+  file.messages.forEach((msg) => {
     if (msg.severity !== 2) return; // Only errors
 
     const error = {
@@ -40,7 +41,7 @@ data.forEach(file => {
       line: msg.line,
       column: msg.column,
       message: msg.message,
-      ruleId: msg.ruleId
+      ruleId: msg.ruleId,
     };
 
     if (msg.ruleId === '@typescript-eslint/no-unused-vars') {
@@ -87,9 +88,6 @@ console.log(`📊 총 변수 관련 에러: ${totalErrors}개`);
 console.log('='.repeat(60));
 
 // Save detailed results
-fs.writeFileSync(
-  'variable-issues-analysis.json',
-  JSON.stringify(variableErrors, null, 2)
-);
+fs.writeFileSync('variable-issues-analysis.json', JSON.stringify(variableErrors, null, 2));
 
 console.log('\n✅ 상세 결과가 variable-issues-analysis.json에 저장되었습니다.\n');

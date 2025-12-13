@@ -33,7 +33,7 @@ async function main() {
       return;
     }
 
-    const newSellerIds = newSellers.map(s => s.id);
+    const newSellerIds = newSellers.map((s) => s.id);
 
     // 2. 해당 판매자의 서비스 삭제
     console.log('🗑️  서비스 삭제 중...\n');
@@ -64,7 +64,6 @@ async function main() {
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('✅ 삭제 완료!');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-
   } catch (error) {
     console.error('\n❌ 에러:', error);
     process.exit(1);

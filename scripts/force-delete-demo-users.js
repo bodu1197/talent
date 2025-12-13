@@ -14,11 +14,13 @@ async function main() {
 
   try {
     // 1. Auth 사용자 조회
-    const { data: { users } } = await supabase.auth.admin.listUsers();
+    const {
+      data: { users },
+    } = await supabase.auth.admin.listUsers();
     console.log(`전체 사용자: ${users.length}명\n`);
 
     // 2. @talent-demo.com 사용자 필터링
-    const demoUsers = users.filter(u => u.email?.endsWith('@talent-demo.com'));
+    const demoUsers = users.filter((u) => u.email?.endsWith('@talent-demo.com'));
 
     console.log(`삭제 대상: ${demoUsers.length}명\n`);
 
@@ -58,14 +60,15 @@ async function main() {
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
     // 4. 재확인
-    const { data: { users: remainingUsers } } = await supabase.auth.admin.listUsers();
+    const {
+      data: { users: remainingUsers },
+    } = await supabase.auth.admin.listUsers();
     console.log(`남은 전체 사용자: ${remainingUsers.length}명\n`);
 
     remainingUsers.forEach((u, idx) => {
       console.log(`  ${idx + 1}. ${u.email}`);
     });
     console.log('');
-
   } catch (error) {
     console.error('\n❌ 에러:', error);
     process.exit(1);

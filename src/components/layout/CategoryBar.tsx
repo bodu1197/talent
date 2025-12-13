@@ -1,14 +1,6 @@
 import Link from 'next/link';
 import { getTopLevelCategories } from '@/lib/categories';
-import {
-  Bot,
-  Laptop,
-  Palette,
-  Megaphone,
-  Video,
-  Briefcase,
-  LayoutGrid,
-} from 'lucide-react';
+import { Bot, Laptop, Palette, Megaphone, Video, Briefcase, LayoutGrid } from 'lucide-react';
 
 // 카테고리 아이콘 매핑
 const categoryIcons: Record<string, React.ReactNode> = {
@@ -72,7 +64,9 @@ export default async function CategoryBar() {
               className="flex flex-col items-center gap-1 p-2 text-gray-700 hover:text-brand-primary hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-brand-primary focus:outline-none"
               aria-label={`${category.name} 카테고리로 이동`}
             >
-              {categoryIcons[category.slug] || <LayoutGrid className="w-5 h-5" aria-hidden="true" />}
+              {categoryIcons[category.slug] || (
+                <LayoutGrid className="w-5 h-5" aria-hidden="true" />
+              )}
               <span className="text-xs font-medium text-center line-clamp-1">{category.name}</span>
             </Link>
           ))}

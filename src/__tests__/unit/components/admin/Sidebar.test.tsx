@@ -4,8 +4,18 @@ import AdminSidebar from '@/components/admin/Sidebar';
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    [key: string]: unknown;
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }));
 
@@ -91,9 +101,18 @@ describe('AdminSidebar', () => {
   it('올바른 링크 경로를 가진다', () => {
     render(<AdminSidebar />);
 
-    expect(screen.getByRole('link', { name: '대시보드' })).toHaveAttribute('href', '/admin/dashboard');
-    expect(screen.getByRole('link', { name: '사용자 관리' })).toHaveAttribute('href', '/admin/users');
-    expect(screen.getByRole('link', { name: '서비스 관리' })).toHaveAttribute('href', '/admin/services');
+    expect(screen.getByRole('link', { name: '대시보드' })).toHaveAttribute(
+      'href',
+      '/admin/dashboard'
+    );
+    expect(screen.getByRole('link', { name: '사용자 관리' })).toHaveAttribute(
+      'href',
+      '/admin/users'
+    );
+    expect(screen.getByRole('link', { name: '서비스 관리' })).toHaveAttribute(
+      'href',
+      '/admin/services'
+    );
   });
 
   it('모든 메뉴 항목이 렌더링된다', () => {

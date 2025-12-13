@@ -12,14 +12,14 @@ const fixes = [
     line: 90,
     find: '    const endpoint = rules[ruleId] || ruleId;',
     replace: '    // endpoint variable removed - not used',
-    description: 'Remove unused endpoint variable (line 90)'
+    description: 'Remove unused endpoint variable (line 90)',
   },
   {
     file: 'analyze-sonarqube.js',
     line: 122,
     find: '        const endpoint = rules[match[1]] || match[1];',
     replace: '        // endpoint variable removed - not used',
-    description: 'Remove unused endpoint variable (line 122)'
+    description: 'Remove unused endpoint variable (line 122)',
   },
 
   // 2. create-storage-buckets.js - Prefix unused query parameter
@@ -28,7 +28,7 @@ const fixes = [
     line: 12,
     find: 'async function executeQuery(query) {',
     replace: 'async function executeQuery(_query) {',
-    description: 'Prefix unused query parameter'
+    description: 'Prefix unused query parameter',
   },
 
   // 3. execute-migration-api.js - Remove unused psqlError
@@ -37,7 +37,7 @@ const fixes = [
     line: 107,
     find: '  } catch (psqlError) {',
     replace: '  } catch {',
-    description: 'Remove unused psqlError parameter'
+    description: 'Remove unused psqlError parameter',
   },
 
   // 4. push-to-supabase-api.js - Remove unused path variable
@@ -45,8 +45,8 @@ const fixes = [
     file: 'push-to-supabase-api.js',
     line: 3,
     find: "const path = require('path');",
-    replace: "// path module removed - not used",
-    description: 'Remove unused path import'
+    replace: '// path module removed - not used',
+    description: 'Remove unused path import',
   },
 
   // 5. seed-sellers-and-services.js - Prefix unused categorySlug
@@ -55,7 +55,7 @@ const fixes = [
     line: 90,
     find: 'function generateServiceData(serviceName, categorySlug) {',
     replace: 'function generateServiceData(serviceName, _categorySlug) {',
-    description: 'Prefix unused categorySlug parameter'
+    description: 'Prefix unused categorySlug parameter',
   },
 
   // 6. fix-all-eslint-errors.js - Remove dead store
@@ -64,7 +64,7 @@ const fixes = [
     line: 16,
     find: '  let modified = false;',
     replace: '  // modified variable removed - not actually used',
-    description: 'Remove unused modified variable'
+    description: 'Remove unused modified variable',
   },
 
   // 7. fix-ignored-exceptions.js - Remove dead store
@@ -73,26 +73,26 @@ const fixes = [
     line: 11,
     find: '  let modified = false;',
     replace: '  // modified variable removed - not actually used',
-    description: 'Remove unused modified variable'
+    description: 'Remove unused modified variable',
   },
 
   // 8. fix-sonarjs-unused-vars.js - Change let to const
   {
     file: 'fix-sonarjs-unused-vars.js',
     line: 49,
-    find: '  let content = fs.readFileSync(filePath, \'utf8\');',
-    replace: '  const content = fs.readFileSync(filePath, \'utf8\');',
-    description: 'Change let to const for content'
+    find: "  let content = fs.readFileSync(filePath, 'utf8');",
+    replace: "  const content = fs.readFileSync(filePath, 'utf8');",
+    description: 'Change let to const for content',
   },
 
   // 9. fix-unused-vars-typescript.js - Change let to const
   {
     file: 'fix-unused-vars-typescript.js',
     line: 17,
-    find: '  let content = fs.readFileSync(filePath, \'utf8\');',
-    replace: '  const content = fs.readFileSync(filePath, \'utf8\');',
-    description: 'Change let to const for content'
-  }
+    find: "  let content = fs.readFileSync(filePath, 'utf8');",
+    replace: "  const content = fs.readFileSync(filePath, 'utf8');",
+    description: 'Change let to const for content',
+  },
 ];
 
 let fixedCount = 0;

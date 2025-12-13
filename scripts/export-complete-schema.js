@@ -23,10 +23,10 @@ function executeQuery(query) {
       path: `/v1/projects/${SUPABASE_PROJECT_ID}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${SUPABASE_ACCESS_TOKEN}`,
+        Authorization: `Bearer ${SUPABASE_ACCESS_TOKEN}`,
         'Content-Type': 'application/json',
-        'Content-Length': data.length
-      }
+        'Content-Length': data.length,
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -310,7 +310,6 @@ BEGIN;
     console.log(`   1. Copy the contents of complete-schema.sql`);
     console.log(`   2. Paste into SQL Editor of new Supabase project`);
     console.log(`   3. Click "Run"`);
-
   } catch (error) {
     console.error('❌ Export failed:', error);
     process.exit(1);

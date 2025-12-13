@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/nextjs'
+import * as Sentry from '@sentry/nextjs';
 
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
@@ -11,4 +11,4 @@ Sentry.init({
 
   // 디버그 모드 (개발 환경에서만)
   debug: process.env.NODE_ENV === 'development',
-})
+});

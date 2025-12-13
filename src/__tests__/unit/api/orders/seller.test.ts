@@ -45,9 +45,7 @@ describe('Seller Orders API', () => {
         },
       ];
 
-      const mockRevisionStats = [
-        { order_id: 'order-1', total_revisions: 2, pending_revisions: 1 },
-      ];
+      const mockRevisionStats = [{ order_id: 'order-1', total_revisions: 2, pending_revisions: 1 }];
 
       let callCount = 0;
       mockSupabase.from.mockImplementation(() => {

@@ -20,14 +20,14 @@ function executeQuery(query) {
       path: `/v1/projects/${PROJECT_ID}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${ACCESS_TOKEN}`,
-        'Content-Type': 'application/json'
-      }
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
     };
 
     const req = https.request(options, (res) => {
       let body = '';
-      res.on('data', (chunk) => body += chunk);
+      res.on('data', (chunk) => (body += chunk));
       res.on('end', () => {
         if (res.statusCode === 200 || res.statusCode === 201) {
           try {
@@ -129,7 +129,6 @@ async function fixSecurityDefiner() {
     console.log('   - Removed SECURITY DEFINER property');
     console.log('   - Added SECURITY INVOKER (security_invoker = true)');
     console.log('   - Now enforces RLS policies of querying user\n');
-
   } catch (error) {
     console.error('\n❌ Fix failed:', error.message);
     process.exit(1);

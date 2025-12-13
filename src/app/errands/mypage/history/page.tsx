@@ -255,7 +255,8 @@ export default function ErrandHistoryPage() {
                   {errands
                     .filter((e) => e.status === 'COMPLETED')
                     .reduce((sum, e) => sum + e.total_price, 0)
-                    .toLocaleString()}원
+                    .toLocaleString()}
+                  원
                 </p>
                 <p className="text-xs text-gray-500">총 이용 금액</p>
               </div>

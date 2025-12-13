@@ -3,10 +3,12 @@
 ## 📋 Step 1: 원본 프로젝트에서 OAuth 설정 확인
 
 ### 1-1. 원본 Supabase 프로젝트 접속
+
 1. https://supabase.com/dashboard 로그인
 2. 원본 프로젝트 선택: `bpvfkkrlyrjkwgwmfrci`
 
 ### 1-2. Google OAuth 설정 확인
+
 1. 왼쪽 메뉴 → **Authentication** → **Providers**
 2. **Google** 클릭
 3. 다음 정보 복사:
@@ -15,6 +17,7 @@
    - ✅ **Authorized redirect URIs** 확인
 
 ### 1-3. Kakao OAuth 설정 확인
+
 1. 왼쪽 메뉴 → **Authentication** → **Providers**
 2. **Kakao** 클릭
 3. 다음 정보 복사:
@@ -26,10 +29,12 @@
 ## 🚀 Step 2: 새 프로젝트에 OAuth 설정 적용
 
 ### 2-1. 새 Supabase 프로젝트 접속
+
 1. https://supabase.com/dashboard 로그인
 2. 새 프로젝트 선택: `abroivxthindezdtdzmj`
 
 ### 2-2. Google OAuth 설정
+
 1. 왼쪽 메뉴 → **Authentication** → **Providers**
 2. **Google** 클릭
 3. **Enable** 토글 활성화
@@ -43,6 +48,7 @@
 6. **Save** 클릭
 
 ### 2-3. Kakao OAuth 설정
+
 1. 왼쪽 메뉴 → **Authentication** → **Providers**
 2. **Kakao** 클릭
 3. **Enable** 토글 활성화
@@ -98,6 +104,7 @@
 ## ✅ Step 4: 테스트
 
 ### 4-1. 로컬 환경 설정
+
 ```bash
 # .env.local 파일 업데이트
 NEXT_PUBLIC_SUPABASE_URL=https://abroivxthindezdtdzmj.supabase.co
@@ -105,11 +112,13 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzd
 ```
 
 ### 4-2. 개발 서버 실행
+
 ```bash
 npm run dev
 ```
 
 ### 4-3. 소셜 로그인 테스트
+
 1. http://localhost:3000 접속
 2. **Google 로그인** 버튼 클릭
    - Google 계정 선택
@@ -125,9 +134,11 @@ npm run dev
 ## 🐛 문제 해결
 
 ### "redirect_uri_mismatch" 오류
+
 **원인:** OAuth Provider (Google/Kakao)에 Redirect URI가 등록되지 않음
 
 **해결:**
+
 1. Google Cloud Console 또는 Kakao Developers에서
 2. Redirect URI 확인:
    ```
@@ -136,17 +147,21 @@ npm run dev
 3. 정확히 일치하는지 확인 (끝에 슬래시 없음)
 
 ### "invalid_client" 오류
+
 **원인:** Client ID 또는 Client Secret이 잘못됨
 
 **해결:**
+
 1. Supabase 대시보드에서 Provider 설정 재확인
 2. Google Cloud Console / Kakao Developers에서 정확한 값 복사
 3. 공백이나 특수문자 주의
 
 ### 로그인 후 리다이렉트 안됨
+
 **원인:** Site URL 설정 문제
 
 **해결:**
+
 1. Supabase 대시보드 → **Authentication** → **URL Configuration**
 2. **Site URL** 확인:
    ```
@@ -160,16 +175,19 @@ npm run dev
 ## 📌 중요 사항
 
 ### 기존 사용자 영향
+
 - ✅ **기존 사용자 데이터 보존됨** (users, profiles 테이블 이미 이동 완료)
 - ⚠️ **JWT Secret이 변경되어 기존 세션 무효화됨**
 - 👉 **모든 사용자는 다시 로그인해야 함**
 
 ### OAuth Client 공유
+
 - Google/Kakao OAuth Client는 **여러 Supabase 프로젝트에서 공유 가능**
 - 원본 프로젝트와 새 프로젝트 동시 사용 가능
 - Redirect URI만 두 개 모두 등록하면 됨
 
 ### 프로덕션 배포 시
+
 1. 프로덕션 도메인 (예: https://dolpagu.com)도 Redirect URI에 추가
 2. Site URL을 프로덕션 도메인으로 업데이트
 3. .env.production 파일 생성 및 배포
@@ -181,6 +199,7 @@ npm run dev
 이제 Google과 Kakao 소셜 로그인이 새 Supabase 프로젝트에서 정상 작동합니다.
 
 **다음 단계:**
+
 - [ ] 로컬에서 테스트
 - [ ] 스테이징 환경 배포 및 테스트
 - [ ] 프로덕션 배포

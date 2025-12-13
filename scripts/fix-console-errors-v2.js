@@ -14,13 +14,13 @@ const { glob } = require('glob');
 const files = glob.sync('src/**/*.{ts,tsx,js,jsx}', {
   cwd: process.cwd(),
   absolute: true,
-  ignore: ['**/node_modules/**', '**/.next/**', '**/dist/**']
+  ignore: ['**/node_modules/**', '**/.next/**', '**/dist/**'],
 });
 
 let totalFixed = 0;
 const fixes = [];
 
-files.forEach(file => {
+files.forEach((file) => {
   const content = fs.readFileSync(file, 'utf8');
   let modified = content;
   let fileFixed = 0;
@@ -34,7 +34,7 @@ files.forEach(file => {
     fixes.push({
       file: path.relative(process.cwd(), file),
       original: match,
-      fixed: `JSON.stringify(${errorVar}, Object.getOwnPropertyNames(${errorVar}), 2)`
+      fixed: `JSON.stringify(${errorVar}, Object.getOwnPropertyNames(${errorVar}), 2)`,
     });
     return `JSON.stringify(${errorVar}, Object.getOwnPropertyNames(${errorVar}), 2)`;
   });
@@ -49,11 +49,11 @@ files.forEach(file => {
     }
 
     // Extract arguments
-    const argList = args.split(',').map(a => a.trim());
+    const argList = args.split(',').map((a) => a.trim());
 
     // Find error parameter (could be error, err, e, or similar variable names)
     let changed = false;
-    const newArgList = argList.map(arg => {
+    const newArgList = argList.map((arg) => {
       // Match standalone error variables (not strings, not property access)
       if (/^(error|err|e)$/i.test(arg)) {
         changed = true;
@@ -68,7 +68,7 @@ files.forEach(file => {
       fixes.push({
         file: path.relative(process.cwd(), file),
         original: match,
-        fixed: newCall
+        fixed: newCall,
       });
       return newCall;
     }
@@ -78,10 +78,14 @@ files.forEach(file => {
 
   // Pattern: .catch(err => console.error('msg:', err instanceof Error ? err.message : String(err)))
   // Convert to: .catch(err => console.error('msg:', JSON.stringify(err, Object.getOwnPropertyNames(err), 2)))
-  const catchPattern = /\.catch\((\w+) => console\.(error|warn)\([^)]+\1 instanceof Error[^)]+\)\)/g;
+  const catchPattern =
+    /\.catch\((\w+) => console\.(error|warn)\([^)]+\1 instanceof Error[^)]+\)\)/g;
 
   modified = modified.replace(catchPattern, (match, errVar, level) => {
-    const contextMatch = content.substring(Math.max(0, content.indexOf(match) - 100), content.indexOf(match));
+    const contextMatch = content.substring(
+      Math.max(0, content.indexOf(match) - 100),
+      content.indexOf(match)
+    );
     const funcName = contextMatch.match(/(\w+)\s*\([^)]*\)\s*\..*$/)?.[1] || 'Operation';
 
     fileFixed++;
@@ -89,7 +93,7 @@ files.forEach(file => {
     fixes.push({
       file: path.relative(process.cwd(), file),
       original: match,
-      fixed: newCatch
+      fixed: newCatch,
     });
     return newCatch;
   });

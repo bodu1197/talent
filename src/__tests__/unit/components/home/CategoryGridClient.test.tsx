@@ -4,8 +4,18 @@ import CategoryGridClient from '@/components/home/CategoryGridClient';
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    [key: string]: unknown;
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }));
 
@@ -16,11 +26,7 @@ describe('CategoryGridClient', () => {
     { id: 'cat-3', name: '개발', slug: 'development', icon: 'code' },
   ];
 
-  const brightColors = [
-    'text-red-500',
-    'text-blue-500',
-    'text-green-500',
-  ];
+  const brightColors = ['text-red-500', 'text-blue-500', 'text-green-500'];
 
   it('카테고리 링크들을 렌더링한다', () => {
     render(
@@ -118,9 +124,7 @@ describe('CategoryGridClient', () => {
   });
 
   it('아이콘이 없는 카테고리는 기본 아이콘을 사용한다', () => {
-    const categoriesWithoutIcon = [
-      { id: 'cat-1', name: '기타', slug: 'others' },
-    ];
+    const categoriesWithoutIcon = [{ id: 'cat-1', name: '기타', slug: 'others' }];
 
     const { container } = render(
       <CategoryGridClient

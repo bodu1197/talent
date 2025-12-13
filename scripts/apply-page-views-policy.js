@@ -17,13 +17,12 @@ async function applyPolicy() {
   console.log('Checking existing policies on page_views...');
 
   // Check if the policy already exists
-  const { data: policies, error: policyError } = await supabase
-    .rpc('exec_sql', {
-      sql: `
+  const { data: policies, error: policyError } = await supabase.rpc('exec_sql', {
+    sql: `
         SELECT policyname FROM pg_policies
         WHERE tablename = 'page_views' AND policyname LIKE '%insert%'
-      `
-    });
+      `,
+  });
 
   if (policyError) {
     console.log('Could not check policies, trying direct creation...');
@@ -62,18 +61,18 @@ async function applyPolicy() {
     console.log('\nTrying alternative method...');
 
     // Just test if we can insert a page view
-    const testInsert = await supabase
-      .from('page_views')
-      .insert({
-        path: '/test-policy',
-        session_id: 'test-' + Date.now(),
-        device_type: 'desktop',
-        referrer: null
-      });
+    const testInsert = await supabase.from('page_views').insert({
+      path: '/test-policy',
+      session_id: 'test-' + Date.now(),
+      device_type: 'desktop',
+      referrer: null,
+    });
 
     if (testInsert.error) {
       console.error('Test insert failed:', testInsert.error);
-      console.log('\n❌ INSERT policy is NOT applied. Need to apply it manually via Supabase Dashboard.');
+      console.log(
+        '\n❌ INSERT policy is NOT applied. Need to apply it manually via Supabase Dashboard.'
+      );
       console.log('\nGo to: Supabase Dashboard > Authentication > Policies > page_views');
       console.log('Add policy: "Anyone can insert page_views" with expression: true');
     } else {

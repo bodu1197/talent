@@ -12,24 +12,24 @@ const OLD_PROJECT_ID = 'bpvfkkrlyrjkwgwmfrci';
 const OLD_ACCESS_TOKEN = 'sbp_140ed0f35c7b31aa67f56bdca11db02fd469802f';
 
 const NEW_PROJECT_REF = 'abroivxthindezdtdzmj';
-const NEW_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NTUzODkyNywiZXhwIjoyMDgxMTE0OTI3fQ.6dk7o_z9Bp5MoG06obd4dk6fl_nRFiTJjLysfd-7Xo8';
+const NEW_SERVICE_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NTUzODkyNywiZXhwIjoyMDgxMTE0OTI3fQ.6dk7o_z9Bp5MoG06obd4dk6fl_nRFiTJjLysfd-7Xo8';
 
 function executeQuery(projectId, token, _query) {
   return new Promise((resolve, reject) => {
-
     const options = {
       hostname: 'api.supabase.com',
       path: `/v1/projects/${projectId}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
     };
 
     const req = https.request(options, (res) => {
       let body = '';
-      res.on('data', (chunk) => body += chunk);
+      res.on('data', (chunk) => (body += chunk));
       res.on('end', () => {
         if (res.statusCode === 200 || res.statusCode === 201) {
           try {
@@ -52,21 +52,20 @@ function executeQuery(projectId, token, _query) {
 
 function createUser(projectRef, serviceKey, _userData) {
   return new Promise((resolve, reject) => {
-
     const options = {
       hostname: `${projectRef}.supabase.co`,
       path: '/auth/v1/admin/users',
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${serviceKey}`,
+        Authorization: `Bearer ${serviceKey}`,
         'Content-Type': 'application/json',
-        'apikey': serviceKey
-      }
+        apikey: serviceKey,
+      },
     };
 
     const req = https.request(options, (res) => {
       let body = '';
-      res.on('data', (chunk) => body += chunk);
+      res.on('data', (chunk) => (body += chunk));
       res.on('end', () => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           try {
@@ -128,7 +127,9 @@ async function migrateUsers() {
     const user = users[i];
 
     try {
-      process.stdout.write(`\r[${i + 1}/${users.length}] ${user.email.substring(0, 30).padEnd(30)} `);
+      process.stdout.write(
+        `\r[${i + 1}/${users.length}] ${user.email.substring(0, 30).padEnd(30)} `
+      );
 
       // Prepare user data for Admin API
       const userData = {
@@ -137,7 +138,7 @@ async function migrateUsers() {
         email_confirm: user.email_confirmed_at ? true : false,
         user_metadata: user.raw_user_meta_data || {},
         app_metadata: user.raw_app_meta_data || {},
-        created_at: user.created_at
+        created_at: user.created_at,
       };
 
       // Add phone if exists
@@ -154,10 +155,13 @@ async function migrateUsers() {
 
       await createUser(NEW_PROJECT_REF, NEW_SERVICE_KEY, userData);
       successCount++;
-
     } catch (error) {
       const msg = error.message;
-      if (msg.includes('duplicate') || msg.includes('already exists') || msg.includes('User already registered')) {
+      if (
+        msg.includes('duplicate') ||
+        msg.includes('already exists') ||
+        msg.includes('User already registered')
+      ) {
         skippedCount++;
       } else {
         failedCount++;
@@ -166,7 +170,7 @@ async function migrateUsers() {
     }
 
     // Rate limiting
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
 
   console.log('\n\n' + '═'.repeat(60));
@@ -182,7 +186,7 @@ async function migrateUsers() {
   }
 }
 
-migrateUsers().catch(err => {
+migrateUsers().catch((err) => {
   console.error('\n❌ Migration failed:', err);
   process.exit(1);
 });

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 export default function AdminSettingsPage() {
   return (
@@ -8,5 +8,5 @@ export default function AdminSettingsPage() {
         <p className="text-gray-600">시스템 설정 페이지입니다.</p>
       </div>
     </div>
-  )
+  );
 }

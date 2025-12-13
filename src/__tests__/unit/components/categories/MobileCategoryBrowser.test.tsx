@@ -4,8 +4,18 @@ import MobileCategoryBrowser from '@/components/categories/MobileCategoryBrowser
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    [key: string]: unknown;
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }));
 
@@ -110,9 +120,7 @@ describe('MobileCategoryBrowser', () => {
   });
 
   it('하위 카테고리가 없으면 메시지를 표시한다', () => {
-    const categoriesWithoutChildren = [
-      { id: 'cat-1', name: '기타', slug: 'others', children: [] },
-    ];
+    const categoriesWithoutChildren = [{ id: 'cat-1', name: '기타', slug: 'others', children: [] }];
 
     render(<MobileCategoryBrowser categories={categoriesWithoutChildren} />);
 
@@ -129,7 +137,9 @@ describe('MobileCategoryBrowser', () => {
   it('선택된 카테고리는 하이라이트된다', () => {
     render(<MobileCategoryBrowser categories={mockCategories} />);
 
-    const aiButton = screen.getAllByRole('button').find(btn => btn.textContent?.includes('AI 서비스'));
+    const aiButton = screen
+      .getAllByRole('button')
+      .find((btn) => btn.textContent?.includes('AI 서비스'));
     expect(aiButton).toHaveClass('bg-white', 'text-brand-primary');
   });
 

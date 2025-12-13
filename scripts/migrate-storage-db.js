@@ -11,30 +11,31 @@ const https = require('https');
 const OLD_PROJECT_ID = 'bpvfkkrlyrjkwgwmfrci';
 const OLD_ACCESS_TOKEN = 'sbp_140ed0f35c7b31aa67f56bdca11db02fd469802f';
 const OLD_PROJECT_REF = 'bpvfkkrlyrjkwgwmfrci';
-const _OLD_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
+const _OLD_SERVICE_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
 
 const _NEW_PROJECT_ID = 'abroivxthindezdtdzmj';
 const _NEW_ACCESS_TOKEN = 'sbp_f40b15f794e727f0aa9161de38c497174fcac2ee';
 const NEW_PROJECT_REF = 'abroivxthindezdtdzmj';
-const NEW_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzk4OTc2NywiZXhwIjoyMDQ5NTY1NzY3fQ.sb_secret_yjCABwj3zJbfvFsJ4baU4A_4b3YUPvT';
+const NEW_SERVICE_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzk4OTc2NywiZXhwIjoyMDQ5NTY1NzY3fQ.sb_secret_yjCABwj3zJbfvFsJ4baU4A_4b3YUPvT';
 
 function executeQuery(projectId, token, _query) {
   return new Promise((resolve, reject) => {
-
     const options = {
       hostname: 'api.supabase.com',
       path: `/v1/projects/${projectId}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(data)
-      }
+        'Content-Length': Buffer.byteLength(data),
+      },
     };
 
     const req = https.request(options, (res) => {
       let body = '';
-      res.on('data', (chunk) => body += chunk);
+      res.on('data', (chunk) => (body += chunk));
       res.on('end', () => {
         if (res.statusCode === 200 || res.statusCode === 201) {
           try {
@@ -57,20 +58,22 @@ function executeQuery(projectId, token, _query) {
 
 function downloadFile(url) {
   return new Promise((resolve, reject) => {
-    https.get(url, (res) => {
-      if (res.statusCode === 301 || res.statusCode === 302) {
-        // Redirect 처리
-        return downloadFile(res.headers.location).then(resolve).catch(reject);
-      }
+    https
+      .get(url, (res) => {
+        if (res.statusCode === 301 || res.statusCode === 302) {
+          // Redirect 처리
+          return downloadFile(res.headers.location).then(resolve).catch(reject);
+        }
 
-      if (res.statusCode !== 200) {
-        return reject(new Error(`HTTP ${res.statusCode}`));
-      }
+        if (res.statusCode !== 200) {
+          return reject(new Error(`HTTP ${res.statusCode}`));
+        }
 
-      const chunks = [];
-      res.on('data', (chunk) => chunks.push(chunk));
-      res.on('end', () => resolve(Buffer.concat(chunks)));
-    }).on('error', reject);
+        const chunks = [];
+        res.on('data', (chunk) => chunks.push(chunk));
+        res.on('end', () => resolve(Buffer.concat(chunks)));
+      })
+      .on('error', reject);
   });
 }
 
@@ -81,16 +84,16 @@ function uploadFile(projectRef, apiKey, bucket, filePath, buffer) {
       path: `/storage/v1/object/${bucket}/${encodeURIComponent(filePath).replace(/%2F/g, '/')}`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/octet-stream',
         'Content-Length': buffer.length,
-        'apikey': apiKey
-      }
+        apikey: apiKey,
+      },
     };
 
     const req = https.request(options, (res) => {
       let body = '';
-      res.on('data', (chunk) => body += chunk);
+      res.on('data', (chunk) => (body += chunk));
       res.on('end', () => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           resolve(true);
@@ -146,7 +149,6 @@ async function migrateBucket(bucketName) {
       await uploadFile(NEW_PROJECT_REF, NEW_SERVICE_KEY, bucketName, fileName, fileBuffer);
 
       successCount++;
-
     } catch (error) {
       if (error.message.includes('duplicate') || error.message.includes('already exists')) {
         skippedCount++;
@@ -157,7 +159,7 @@ async function migrateBucket(bucketName) {
     }
 
     // 각 파일 사이 100ms 대기
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
 
   console.log(`\n\n   ✅ 성공: ${successCount}개`);
@@ -180,7 +182,7 @@ async function main() {
 
   console.log('원본 프로젝트 Storage 현황:');
   let totalFiles = 0;
-  counts.forEach(c => {
+  counts.forEach((c) => {
     console.log(`   ${c.bucket_id}: ${c.count}개`);
     totalFiles += parseInt(c.count);
   });
@@ -191,7 +193,7 @@ async function main() {
   let totalFailed = 0;
   let totalSkipped = 0;
 
-  const buckets = counts.map(c => c.bucket_id);
+  const buckets = counts.map((c) => c.bucket_id);
 
   for (const bucket of buckets) {
     await migrateBucket(bucket);
@@ -200,7 +202,7 @@ async function main() {
     totalSkipped += result.skipped;
 
     // 각 버킷 사이 1초 대기
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
   console.log('\n' + '═'.repeat(60));
@@ -217,7 +219,7 @@ async function main() {
   }
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('\n❌ 오류:', err);
   process.exit(1);
 });

@@ -34,13 +34,21 @@ async function checkData() {
 
   // Check if there's a mismatch
   if (sellers && sellers.length > 0 && services && services.length > 0) {
-    const sellerIds = new Set(sellers.map(s => s.id));
-    const servicesMatchingSellers = services.filter(svc => sellerIds.has(svc.seller_id));
+    const sellerIds = new Set(sellers.map((s) => s.id));
+    const servicesMatchingSellers = services.filter((svc) => sellerIds.has(svc.seller_id));
 
     console.log('\n🔗 Services matching sellers:', servicesMatchingSellers.length);
     console.log('Seller IDs:', Array.from(sellerIds));
-    console.log('Service seller_ids:', services.map(s => s.seller_id));
+    console.log(
+      'Service seller_ids:',
+      services.map((s) => s.seller_id)
+    );
   }
 }
 
-checkData().then(() => process.exit(0)).catch(e => { console.error(e); process.exit(1); });
+checkData()
+  .then(() => process.exit(0))
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });

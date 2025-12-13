@@ -14,9 +14,9 @@ const errorData = JSON.parse(fs.readFileSync('scripts-errors-final.json', 'utf8'
 
 // Group errors by file
 const fileErrors = {};
-errorData.forEach(file => {
+errorData.forEach((file) => {
   const filename = file.filePath.split('\\').pop();
-  const errors = file.messages.filter(m => m.severity === 2);
+  const errors = file.messages.filter((m) => m.severity === 2);
   if (errors.length > 0) {
     fileErrors[filename] = errors;
   }
@@ -24,7 +24,9 @@ errorData.forEach(file => {
 
 console.log('\n🔧 Comprehensive Fix for ALL Remaining Errors\n');
 console.log('='.repeat(60));
-console.log(`\n발견된 에러: ${Object.keys(fileErrors).length}개 파일에 ${Object.values(fileErrors).reduce((sum, errs) => sum + errs.length, 0)}개 에러\n`);
+console.log(
+  `\n발견된 에러: ${Object.keys(fileErrors).length}개 파일에 ${Object.values(fileErrors).reduce((sum, errs) => sum + errs.length, 0)}개 에러\n`
+);
 
 // Fix files one by one
 let totalFixed = 0;
@@ -32,7 +34,12 @@ let totalFixed = 0;
 for (const [filename, errors] of Object.entries(fileErrors)) {
   const filePath = path.join(__dirname, filename);
 
-  if (!fs.existsSync(filePath) || filename.startsWith('fix-') || filename.startsWith('analyze-') || filename.startsWith('show-')) {
+  if (
+    !fs.existsSync(filePath) ||
+    filename.startsWith('fix-') ||
+    filename.startsWith('analyze-') ||
+    filename.startsWith('show-')
+  ) {
     continue;
   }
 
@@ -53,9 +60,15 @@ for (const [filename, errors] of Object.entries(fileErrors)) {
           // Don't prefix if already starts with _
           if (!varName.startsWith('_')) {
             // Replace declarations
-            content = content.replace(new RegExp(`\\bconst ${varName} =`, 'g'), `const _${varName} =`);
+            content = content.replace(
+              new RegExp(`\\bconst ${varName} =`, 'g'),
+              `const _${varName} =`
+            );
             content = content.replace(new RegExp(`\\blet ${varName} =`, 'g'), `let _${varName} =`);
-            content = content.replace(new RegExp(`\\bfunction ${varName}\\(`, 'g'), `function _${varName}(`);
+            content = content.replace(
+              new RegExp(`\\bfunction ${varName}\\(`, 'g'),
+              `function _${varName}(`
+            );
             modified = true;
           } else {
             // Already prefixed with _, remove the line if it's an assignment
@@ -88,7 +101,10 @@ for (const [filename, errors] of Object.entries(fileErrors)) {
         const varNameMatch = message.match(/"([^"]+)"/);
         if (varNameMatch) {
           const varName = varNameMatch[1];
-          content = content.replace(new RegExp(`\\bconst ${varName} =`, 'g'), `const _${varName} =`);
+          content = content.replace(
+            new RegExp(`\\bconst ${varName} =`, 'g'),
+            `const _${varName} =`
+          );
           modified = true;
         }
       } else if (ruleId === 'no-empty') {
@@ -114,7 +130,6 @@ for (const [filename, errors] of Object.entries(fileErrors)) {
         }
       } else if (ruleId === 'no-useless-catch') {
         // Remove try/catch that just rethrows
-
         // This is complex, skip for now
       } else if (ruleId === 'sonarjs/concise-regex') {
         // Replace [a-zA-Z0-9_] with \\w

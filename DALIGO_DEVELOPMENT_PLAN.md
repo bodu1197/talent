@@ -10,12 +10,12 @@
 
 ### 1.1 서비스 정보
 
-| 항목 | 내용 |
-|------|------|
-| 서비스명 | 달리고 (Daligo) |
-| 도메인 | daligo.com (예정) |
-| 성격 | 완전 독립 심부름 매칭 플랫폼 |
-| 타겟 | 심부름 의뢰자 + 헬퍼 (배달원) |
+| 항목     | 내용                          |
+| -------- | ----------------------------- |
+| 서비스명 | 달리고 (Daligo)               |
+| 도메인   | daligo.com (예정)             |
+| 성격     | 완전 독립 심부름 매칭 플랫폼  |
+| 타겟     | 심부름 의뢰자 + 헬퍼 (배달원) |
 
 ### 1.2 핵심 원칙
 
@@ -43,37 +43,37 @@
 
 ### 2.1 프론트엔드
 
-| 기술 | 버전 | 용도 |
-|------|------|------|
-| Next.js | 15+ | App Router 기반 프레임워크 |
-| TypeScript | 5+ | 타입 안정성 |
-| Tailwind CSS | 3+ | 스타일링 |
-| Zustand | 4+ | 상태 관리 |
-| React Query | 5+ | 서버 상태 관리 |
-| Lucide React | - | 아이콘 |
+| 기술         | 버전 | 용도                       |
+| ------------ | ---- | -------------------------- |
+| Next.js      | 15+  | App Router 기반 프레임워크 |
+| TypeScript   | 5+   | 타입 안정성                |
+| Tailwind CSS | 3+   | 스타일링                   |
+| Zustand      | 4+   | 상태 관리                  |
+| React Query  | 5+   | 서버 상태 관리             |
+| Lucide React | -    | 아이콘                     |
 
 ### 2.2 백엔드
 
-| 기술 | 용도 |
-|------|------|
-| Supabase | PostgreSQL, Auth, Realtime, Storage |
-| Edge Functions | 서버리스 함수 |
-| PortOne | 결제 처리 |
+| 기술           | 용도                                |
+| -------------- | ----------------------------------- |
+| Supabase       | PostgreSQL, Auth, Realtime, Storage |
+| Edge Functions | 서버리스 함수                       |
+| PortOne        | 결제 처리                           |
 
 ### 2.3 외부 API
 
-| API | 용도 | 발급처 |
-|-----|------|--------|
-| 카카오맵 API | Geocoding, 경로 계산, 지도 표시 | developers.kakao.com |
-| 기상청 API | 실시간 날씨 조회 | data.go.kr |
-| Firebase Cloud Messaging | 푸시 알림 | firebase.google.com |
+| API                      | 용도                            | 발급처               |
+| ------------------------ | ------------------------------- | -------------------- |
+| 카카오맵 API             | Geocoding, 경로 계산, 지도 표시 | developers.kakao.com |
+| 기상청 API               | 실시간 날씨 조회                | data.go.kr           |
+| Firebase Cloud Messaging | 푸시 알림                       | firebase.google.com  |
 
 ### 2.4 배포
 
-| 서비스 | 용도 |
-|--------|------|
-| Vercel | 프론트엔드 호스팅 |
-| Supabase Cloud | 백엔드 호스팅 |
+| 서비스         | 용도              |
+| -------------- | ----------------- |
+| Vercel         | 프론트엔드 호스팅 |
+| Supabase Cloud | 백엔드 호스팅     |
 
 ---
 
@@ -654,28 +654,28 @@ export const PRICING = {
 
   // 무게 할증
   WEIGHT_SURCHARGE: {
-    LIGHT: 0,       // 가벼움
-    MEDIUM: 2000,   // 보통
-    HEAVY: 10000,   // 무거움
+    LIGHT: 0, // 가벼움
+    MEDIUM: 2000, // 보통
+    HEAVY: 10000, // 무거움
   },
 
   // 날씨 할증 (배율)
   WEATHER_MULTIPLIER: {
     CLEAR: 1.0,
-    RAIN: 1.2,      // +20%
-    SNOW: 1.4,      // +40%
-    EXTREME: 1.5,   // +50%
+    RAIN: 1.2, // +20%
+    SNOW: 1.4, // +40%
+    EXTREME: 1.5, // +50%
   },
 
   // 시간대 할증
   TIME_SURCHARGE: {
     DAY: 0,
-    RUSH_HOUR: 2000,    // 출퇴근
-    LATE_NIGHT: 5000,   // 심야 (22시~06시)
+    RUSH_HOUR: 2000, // 출퇴근
+    LATE_NIGHT: 5000, // 심야 (22시~06시)
   },
 
   // 플랫폼 수수료
-  PLATFORM_FEE_RATE: 0.1,  // 10%
+  PLATFORM_FEE_RATE: 0.1, // 10%
 } as const;
 ```
 
@@ -687,7 +687,7 @@ export const PRICING = {
 import { PRICING } from './constants';
 
 interface PriceInput {
-  distance: number;      // km
+  distance: number; // km
   weather: 'CLEAR' | 'RAIN' | 'SNOW' | 'EXTREME';
   timeCondition: 'DAY' | 'RUSH_HOUR' | 'LATE_NIGHT';
   weightClass: 'LIGHT' | 'MEDIUM' | 'HEAVY';
@@ -757,38 +757,38 @@ export function calculateSettlement(errandPrice: number): {
 
 ### 6.1 사용자(의뢰자) 기능
 
-| 기능 | 설명 |
-|------|------|
-| 회원가입 | 카카오, 구글, 이메일 |
-| 로그인 | OAuth + 이메일/비밀번호 |
+| 기능             | 설명                              |
+| ---------------- | --------------------------------- |
+| 회원가입         | 카카오, 구글, 이메일              |
+| 로그인           | OAuth + 이메일/비밀번호           |
 | 심부름 요청 생성 | 자연어 입력 → AI 분석 → 가격 계산 |
-| 위치 선택 | 카카오맵에서 출발지/도착지 선택 |
-| 요청 목록 | 주변 요청 목록 조회 |
-| 실시간 추적 | 헬퍼 위치 실시간 확인 |
-| 결제 | PortOne 결제 |
-| 리뷰 작성 | 완료 후 헬퍼 리뷰 |
-| 내 요청 내역 | 과거 요청 조회 |
+| 위치 선택        | 카카오맵에서 출발지/도착지 선택   |
+| 요청 목록        | 주변 요청 목록 조회               |
+| 실시간 추적      | 헬퍼 위치 실시간 확인             |
+| 결제             | PortOne 결제                      |
+| 리뷰 작성        | 완료 후 헬퍼 리뷰                 |
+| 내 요청 내역     | 과거 요청 조회                    |
 
 ### 6.2 헬퍼 기능
 
-| 기능 | 설명 |
-|------|------|
-| 헬퍼 등록 | 신분증 인증, 휴대폰 인증 |
+| 기능           | 설명                     |
+| -------------- | ------------------------ |
+| 헬퍼 등록      | 신분증 인증, 휴대폰 인증 |
 | 주변 요청 조회 | 현재 위치 기반 요청 목록 |
-| 요청 수락 | 심부름 수락 |
-| 위치 전송 | 실시간 GPS 위치 전송 |
-| 시작/완료 처리 | 상태 변경 |
-| 수익 대시보드 | 수익 현황 조회 |
-| 정산 신청 | 계좌로 정산 |
+| 요청 수락      | 심부름 수락              |
+| 위치 전송      | 실시간 GPS 위치 전송     |
+| 시작/완료 처리 | 상태 변경                |
+| 수익 대시보드  | 수익 현황 조회           |
+| 정산 신청      | 계좌로 정산              |
 
 ### 6.3 관리자 기능
 
-| 기능 | 설명 |
-|------|------|
-| 사용자 관리 | 사용자 목록, 상세, 정지 |
-| 헬퍼 인증 | 인증 요청 승인/거절 |
-| 요청 모니터링 | 전체 요청 현황 |
-| 정산 처리 | 정산 승인 |
+| 기능          | 설명                    |
+| ------------- | ----------------------- |
+| 사용자 관리   | 사용자 목록, 상세, 정지 |
+| 헬퍼 인증     | 인증 요청 승인/거절     |
+| 요청 모니터링 | 전체 요청 현황          |
+| 정산 처리     | 정산 승인               |
 | 통계 대시보드 | 매출, 사용자, 요청 통계 |
 
 ---
@@ -797,22 +797,23 @@ export function calculateSettlement(errandPrice: number): {
 
 ### 7.1 전체 일정 (10주)
 
-| 주차 | 단계 | 작업 내용 |
-|------|------|----------|
-| **1** | 초기화 | 프로젝트 생성, Supabase 설정, OAuth 설정, 기본 레이아웃 |
-| **2** | 인증 | 로그인/회원가입, 프로필 설정, 세션 관리 |
-| **3** | DB/로직 | 마이그레이션, 가격계산, 위치API, 날씨API + 테스트 |
-| **4** | 심부름 | 요청 생성/목록/상세, AI 분석, 카테고리 필터 |
-| **5** | 헬퍼 | 헬퍼 등록/인증, 대시보드, 요청 수락 |
-| **6** | 실시간 | 카카오맵 연동, 위치추적, Supabase Realtime |
-| **7** | 결제 | PortOne 연동, 결제/환불, 정산 시스템 |
-| **8** | 부가기능 | 리뷰, 알림 (푸시/인앱), 채팅 |
-| **9** | 관리자 | 관리자 대시보드, 사용자/헬퍼/정산 관리 |
-| **10** | 배포 | E2E 테스트, 성능 최적화, SEO, Vercel 배포 |
+| 주차   | 단계     | 작업 내용                                               |
+| ------ | -------- | ------------------------------------------------------- |
+| **1**  | 초기화   | 프로젝트 생성, Supabase 설정, OAuth 설정, 기본 레이아웃 |
+| **2**  | 인증     | 로그인/회원가입, 프로필 설정, 세션 관리                 |
+| **3**  | DB/로직  | 마이그레이션, 가격계산, 위치API, 날씨API + 테스트       |
+| **4**  | 심부름   | 요청 생성/목록/상세, AI 분석, 카테고리 필터             |
+| **5**  | 헬퍼     | 헬퍼 등록/인증, 대시보드, 요청 수락                     |
+| **6**  | 실시간   | 카카오맵 연동, 위치추적, Supabase Realtime              |
+| **7**  | 결제     | PortOne 연동, 결제/환불, 정산 시스템                    |
+| **8**  | 부가기능 | 리뷰, 알림 (푸시/인앱), 채팅                            |
+| **9**  | 관리자   | 관리자 대시보드, 사용자/헬퍼/정산 관리                  |
+| **10** | 배포     | E2E 테스트, 성능 최적화, SEO, Vercel 배포               |
 
 ### 7.2 상세 작업 목록
 
 #### Week 1: 초기화
+
 ```
 □ Next.js 15 프로젝트 생성
 □ TypeScript strict 설정
@@ -827,6 +828,7 @@ export function calculateSettlement(errandPrice: number): {
 ```
 
 #### Week 2: 인증
+
 ```
 □ Supabase Auth 설정
 □ 카카오 OAuth 연동
@@ -841,6 +843,7 @@ export function calculateSettlement(errandPrice: number): {
 ```
 
 #### Week 3: DB & 핵심 로직
+
 ```
 □ ENUM 타입 마이그레이션
 □ profiles 테이블
@@ -855,6 +858,7 @@ export function calculateSettlement(errandPrice: number): {
 ```
 
 #### Week 4: 심부름 CRUD
+
 ```
 □ 심부름 API (CRUD)
 □ 요청 생성 폼
@@ -869,6 +873,7 @@ export function calculateSettlement(errandPrice: number): {
 ```
 
 #### Week 5: 헬퍼 시스템
+
 ```
 □ 헬퍼 등록 페이지
 □ 신분증 인증 (이미지 업로드)
@@ -883,6 +888,7 @@ export function calculateSettlement(errandPrice: number): {
 ```
 
 #### Week 6: 실시간 추적
+
 ```
 □ 카카오맵 SDK 설정
 □ KakaoMap 컴포넌트
@@ -897,6 +903,7 @@ export function calculateSettlement(errandPrice: number): {
 ```
 
 #### Week 7: 결제 시스템
+
 ```
 □ PortOne 연동
 □ 결제 요청 API
@@ -911,6 +918,7 @@ export function calculateSettlement(errandPrice: number): {
 ```
 
 #### Week 8: 부가 기능
+
 ```
 □ reviews 테이블
 □ 리뷰 작성 UI
@@ -925,6 +933,7 @@ export function calculateSettlement(errandPrice: number): {
 ```
 
 #### Week 9: 관리자
+
 ```
 □ 관리자 레이아웃
 □ 관리자 인증 (role 체크)
@@ -939,6 +948,7 @@ export function calculateSettlement(errandPrice: number): {
 ```
 
 #### Week 10: 배포
+
 ```
 □ E2E 테스트 작성
 □ 테스트 커버리지 80% 달성
@@ -959,13 +969,13 @@ export function calculateSettlement(errandPrice: number): {
 
 ### 8.1 필수 준수 사항
 
-| 항목 | 기준 | 설명 |
-|------|------|------|
-| 보안 취약점 | 0개 | SQL Injection, XSS 등 없음 |
-| 버그 | 0개 | null 참조, 타입 오류 등 없음 |
-| 코드 중복 | ≤5% | 중복 코드 최소화 |
-| 테스트 커버리지 | ≥80% | 핵심 로직 테스트 |
-| 복잡도 | ≤15 | Cognitive Complexity |
+| 항목            | 기준 | 설명                         |
+| --------------- | ---- | ---------------------------- |
+| 보안 취약점     | 0개  | SQL Injection, XSS 등 없음   |
+| 버그            | 0개  | null 참조, 타입 오류 등 없음 |
+| 코드 중복       | ≤5%  | 중복 코드 최소화             |
+| 테스트 커버리지 | ≥80% | 핵심 로직 테스트             |
+| 복잡도          | ≤15  | Cognitive Complexity         |
 
 ### 8.2 코딩 규칙
 
@@ -1012,22 +1022,22 @@ function calc(a) {
 
 ### 9.1 월간 운영 비용
 
-| 항목 | 비용 | 비고 |
-|------|------|------|
-| Supabase Pro | $25 | DB, Auth, Realtime |
-| Vercel Pro | $20 | 호스팅 |
-| 도메인 | ~$1 | 연 $12 |
-| 카카오맵 API | $0 | 월 30만 콜 무료 |
-| 기상청 API | $0 | 무료 |
-| FCM | $0 | 무료 |
-| **합계** | **~$46/월** | |
+| 항목         | 비용        | 비고               |
+| ------------ | ----------- | ------------------ |
+| Supabase Pro | $25         | DB, Auth, Realtime |
+| Vercel Pro   | $20         | 호스팅             |
+| 도메인       | ~$1         | 연 $12             |
+| 카카오맵 API | $0          | 월 30만 콜 무료    |
+| 기상청 API   | $0          | 무료               |
+| FCM          | $0          | 무료               |
+| **합계**     | **~$46/월** |                    |
 
 ### 9.2 초기 비용
 
-| 항목 | 비용 |
-|------|------|
-| 도메인 구매 | ~$12 |
-| **합계** | **~$12** |
+| 항목        | 비용     |
+| ----------- | -------- |
+| 도메인 구매 | ~$12     |
+| **합계**    | **~$12** |
 
 ---
 
@@ -1075,6 +1085,6 @@ GEMINI_API_KEY=xxx
 
 ## 변경 이력
 
-| 버전 | 날짜 | 변경 내용 |
-|------|------|----------|
-| 1.0 | 2025-12-03 | 최초 작성 |
+| 버전 | 날짜       | 변경 내용 |
+| ---- | ---------- | --------- |
+| 1.0  | 2025-12-03 | 최초 작성 |

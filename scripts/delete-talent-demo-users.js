@@ -15,9 +15,9 @@ async function deleteAuthUser(userId) {
   await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${userId}`, {
     method: 'DELETE',
     headers: {
-      'Authorization': `Bearer ${SERVICE_ROLE_KEY}`,
-      'apikey': SERVICE_ROLE_KEY
-    }
+      Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
+      apikey: SERVICE_ROLE_KEY,
+    },
   });
 
   if (!response.ok && response.status !== 404) {
@@ -33,15 +33,17 @@ async function main() {
 
   try {
     // 1. 전체 사용자 조회
-    const { data: { users } } = await supabase.auth.admin.listUsers();
+    const {
+      data: { users },
+    } = await supabase.auth.admin.listUsers();
     console.log(`전체 사용자: ${users.length}명\n`);
 
     // 2. @talent-demo.com 사용자 필터링
-    const demoUsers = users.filter(u => u.email?.endsWith('@talent-demo.com'));
-    const realUsers = users.filter(u => !u.email?.endsWith('@talent-demo.com'));
+    const demoUsers = users.filter((u) => u.email?.endsWith('@talent-demo.com'));
+    const realUsers = users.filter((u) => !u.email?.endsWith('@talent-demo.com'));
 
     console.log(`실제 회원 (보존): ${realUsers.length}명`);
-    realUsers.forEach(u => {
+    realUsers.forEach((u) => {
       console.log(`  - ${u.email}`);
     });
 
@@ -53,7 +55,7 @@ async function main() {
     }
 
     // 3. 삭제 대상 사용자의 판매자 및 서비스 삭제
-    const demoUserIds = demoUsers.map(u => u.id);
+    const demoUserIds = demoUsers.map((u) => u.id);
 
     console.log('🗑️  판매자 및 서비스 삭제 중...\n');
 
@@ -64,7 +66,7 @@ async function main() {
       .in('user_id', demoUserIds);
 
     if (sellers && sellers.length > 0) {
-      const sellerIds = sellers.map(s => s.id);
+      const sellerIds = sellers.map((s) => s.id);
 
       // 서비스 삭제
       const { data: deletedServices } = await supabase
@@ -134,7 +136,6 @@ async function main() {
     });
     console.log('');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-
   } catch (error) {
     console.error('\n❌ 치명적 에러:', error);
     process.exit(1);

@@ -26,10 +26,10 @@ function executeQuery(projectId, token, query) {
       path: `/v1/projects/${projectId}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(data)
-      }
+        'Content-Length': Buffer.byteLength(data),
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -63,9 +63,7 @@ async function downloadTable(tableName) {
   console.log(`📥 Downloading ${tableName} from original DB...`);
 
   try {
-    await executeQuery(OLD_PROJECT_ID, OLD_ACCESS_TOKEN,
-      `SELECT * FROM "${tableName}"`
-    );
+    await executeQuery(OLD_PROJECT_ID, OLD_ACCESS_TOKEN, `SELECT * FROM "${tableName}"`);
 
     console.log(`   ✅ Downloaded ${data.length} rows\n`);
     return data;
@@ -77,18 +75,22 @@ async function downloadTable(tableName) {
 
 async function getColumnTypes(tableName) {
   try {
-    await executeQuery(NEW_PROJECT_ID, NEW_ACCESS_TOKEN, `
+    await executeQuery(
+      NEW_PROJECT_ID,
+      NEW_ACCESS_TOKEN,
+      `
       SELECT column_name, udt_name, data_type
       FROM information_schema.columns
       WHERE table_name = '${tableName}'
       AND table_schema = 'public'
-    `);
+    `
+    );
 
     const typeMap = {};
-    result.forEach(col => {
+    result.forEach((col) => {
       typeMap[col.column_name] = {
         udt_name: col.udt_name,
-        data_type: col.data_type
+        data_type: col.data_type,
       };
     });
     return typeMap;
@@ -117,73 +119,78 @@ async function uploadTable(tableName, data) {
     const row = data[i];
 
     try {
-      const values = columns.map(col => {
-        const value = row[col];
-        const colType = columnTypes[col];
+      const values = columns
+        .map((col) => {
+          const value = row[col];
+          const colType = columnTypes[col];
 
-        if (value === null || value === undefined) {
-          return 'NULL';
-        }
-
-        // Handle array types (text[], varchar[], etc.)
-        if (colType && colType.udt_name && colType.udt_name.startsWith('_')) {
-          if (Array.isArray(value)) {
-            if (value.length === 0) {
-              return 'ARRAY[]::text[]';
-            }
-            const arrayValues = value.map(v => {
-              const escaped = String(v).replace(/'/g, "''").replace(/\\/g, '\\\\');
-              return `'${escaped}'`;
-            }).join(', ');
-            return `ARRAY[${arrayValues}]`;
+          if (value === null || value === undefined) {
+            return 'NULL';
           }
-          // If it's stored as JSON string but needs to be array
-          if (typeof value === 'string' && value.startsWith('[')) {
-            try {
-              const parsed = JSON.parse(value);
-              if (Array.isArray(parsed)) {
-                if (parsed.length === 0) {
-                  return 'ARRAY[]::text[]';
-                }
-                const arrayValues = parsed.map(v => {
+
+          // Handle array types (text[], varchar[], etc.)
+          if (colType && colType.udt_name && colType.udt_name.startsWith('_')) {
+            if (Array.isArray(value)) {
+              if (value.length === 0) {
+                return 'ARRAY[]::text[]';
+              }
+              const arrayValues = value
+                .map((v) => {
                   const escaped = String(v).replace(/'/g, "''").replace(/\\/g, '\\\\');
                   return `'${escaped}'`;
-                }).join(', ');
-                return `ARRAY[${arrayValues}]`;
+                })
+                .join(', ');
+              return `ARRAY[${arrayValues}]`;
+            }
+            // If it's stored as JSON string but needs to be array
+            if (typeof value === 'string' && value.startsWith('[')) {
+              try {
+                const parsed = JSON.parse(value);
+                if (Array.isArray(parsed)) {
+                  if (parsed.length === 0) {
+                    return 'ARRAY[]::text[]';
+                  }
+                  const arrayValues = parsed
+                    .map((v) => {
+                      const escaped = String(v).replace(/'/g, "''").replace(/\\/g, '\\\\');
+                      return `'${escaped}'`;
+                    })
+                    .join(', ');
+                  return `ARRAY[${arrayValues}]`;
+                }
+              } catch (error) {
+                console.error('에러 발생:', error);
+                // Fall through
               }
-            } catch (error) {
-              console.error('에러 발생:', error);
-              // Fall through
             }
           }
-        }
 
-        if (typeof value === 'string') {
-          const escaped = value.replace(/'/g, "''").replace(/\\/g, '\\\\');
-          return `'${escaped}'`;
-        }
+          if (typeof value === 'string') {
+            const escaped = value.replace(/'/g, "''").replace(/\\/g, '\\\\');
+            return `'${escaped}'`;
+          }
 
-        if (typeof value === 'boolean') {
-          return value ? 'true' : 'false';
-        }
+          if (typeof value === 'boolean') {
+            return value ? 'true' : 'false';
+          }
 
-        if (typeof value === 'object') {
-          const json = JSON.stringify(value).replace(/'/g, "''");
-          return `'${json}'::jsonb`;
-        }
+          if (typeof value === 'object') {
+            const json = JSON.stringify(value).replace(/'/g, "''");
+            return `'${json}'::jsonb`;
+          }
 
-        return value;
-      }).join(', ');
+          return value;
+        })
+        .join(', ');
 
       const insertQuery = `
-        INSERT INTO "${tableName}" (${columns.map(c => `"${c}"`).join(', ')})
+        INSERT INTO "${tableName}" (${columns.map((c) => `"${c}"`).join(', ')})
         VALUES (${values})
         ON CONFLICT DO NOTHING
       `;
 
       await executeQuery(NEW_PROJECT_ID, NEW_ACCESS_TOKEN, insertQuery);
       successCount++;
-
     } catch (error) {
       console.error('에러 발생:', error);
       failCount++;
@@ -192,7 +199,9 @@ async function uploadTable(tableName, data) {
     }
 
     if ((i + 1) % 10 === 0 || i === data.length - 1) {
-      process.stdout.write(`\r   Progress: ${i + 1}/${data.length} (✅ ${successCount}, ❌ ${failCount})`);
+      process.stdout.write(
+        `\r   Progress: ${i + 1}/${data.length} (✅ ${successCount}, ❌ ${failCount})`
+      );
     }
   }
 

@@ -26,7 +26,7 @@ if (envContent.includes('SONARQUBE_')) {
   console.log('⚠️  SonarQube 설정이 이미 존재합니다.');
   console.log('\n현재 설정:');
   const lines = envContent.split('\n');
-  lines.forEach(line => {
+  lines.forEach((line) => {
     if (line.includes('SONARQUBE_')) {
       console.log(`   ${line}`);
     }

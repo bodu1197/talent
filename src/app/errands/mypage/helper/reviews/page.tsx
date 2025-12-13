@@ -4,14 +4,7 @@ import { useState, useEffect } from 'react';
 import ErrandMypageLayout from '@/components/errands/ErrandMypageLayout';
 import { useAuth } from '@/components/providers/AuthProvider';
 import ProfileImage from '@/components/common/ProfileImage';
-import {
-  Star,
-  TrendingUp,
-  TrendingDown,
-  MessageSquare,
-  ThumbsUp,
-  Clock,
-} from 'lucide-react';
+import { Star, TrendingUp, TrendingDown, MessageSquare, ThumbsUp, Clock } from 'lucide-react';
 
 interface Review {
   id: string;
@@ -57,12 +50,14 @@ export default function HelperReviewsPage() {
       if (response.ok) {
         const data = await response.json();
         setReviews(data.reviews || []);
-        setStats(data.stats || {
-          averageRating: 0,
-          totalReviews: 0,
-          ratingDistribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
-          recentTrend: 'stable',
-        });
+        setStats(
+          data.stats || {
+            averageRating: 0,
+            totalReviews: 0,
+            ratingDistribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
+            recentTrend: 'stable',
+          }
+        );
       }
     } catch (error) {
       console.error('리뷰 로드 실패:', error);
@@ -118,14 +113,13 @@ export default function HelperReviewsPage() {
                   <div className="flex justify-center mt-1">
                     {renderStars(Math.round(stats.averageRating), 'lg')}
                   </div>
-                  <p className="text-sm text-gray-500 mt-1">
-                    {stats.totalReviews}개 리뷰
-                  </p>
+                  <p className="text-sm text-gray-500 mt-1">{stats.totalReviews}개 리뷰</p>
                 </div>
                 <div className="flex-1">
                   {[5, 4, 3, 2, 1].map((rating) => {
                     const count = stats.ratingDistribution[rating] || 0;
-                    const percentage = stats.totalReviews > 0 ? (count / stats.totalReviews) * 100 : 0;
+                    const percentage =
+                      stats.totalReviews > 0 ? (count / stats.totalReviews) * 100 : 0;
                     return (
                       <div key={rating} className="flex items-center gap-2 mb-1">
                         <span className="text-xs text-gray-500 w-3">{rating}</span>
@@ -187,23 +181,17 @@ export default function HelperReviewsPage() {
                         />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-1">
-                            <p className="font-medium text-gray-900">
-                              {review.reviewer.name}
-                            </p>
+                            <p className="font-medium text-gray-900">{review.reviewer.name}</p>
                             <div className="flex items-center gap-1 text-xs text-gray-500">
                               <Clock className="w-3 h-3" />
                               {new Date(review.created_at).toLocaleDateString('ko-KR')}
                             </div>
                           </div>
-                          <div className="mb-2">
-                            {renderStars(review.rating)}
-                          </div>
+                          <div className="mb-2">{renderStars(review.rating)}</div>
                           <p className="text-sm text-gray-500 mb-2 truncate">
                             심부름: {review.errand_title}
                           </p>
-                          {review.content && (
-                            <p className="text-gray-700">{review.content}</p>
-                          )}
+                          {review.content && <p className="text-gray-700">{review.content}</p>}
                         </div>
                       </div>
                     </div>

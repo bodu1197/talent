@@ -25,7 +25,7 @@ async function syncAllData() {
       return;
     }
 
-    const subscriptionIds = allPayments.map(p => p.subscription_id).filter(Boolean);
+    const subscriptionIds = allPayments.map((p) => p.subscription_id).filter(Boolean);
 
     if (subscriptionIds.length === 0) {
       console.log('subscription_id가 있는 결제가 없습니다.');
@@ -43,8 +43,8 @@ async function syncAllData() {
     // 3. 상태 매핑 및 업데이트할 구독 찾기
     const subsToUpdate = [];
 
-    allPayments.forEach(payment => {
-      const subscription = allSubscriptions?.find(s => s.id === payment.subscription_id);
+    allPayments.forEach((payment) => {
+      const subscription = allSubscriptions?.find((s) => s.id === payment.subscription_id);
 
       if (!subscription) return;
 
@@ -70,7 +70,7 @@ async function syncAllData() {
           id: subscription.id,
           currentStatus: subscription.status,
           targetStatus: targetStatus,
-          paymentStatus: payment.status
+          paymentStatus: payment.status,
         });
       }
     });
@@ -85,9 +85,13 @@ async function syncAllData() {
     console.table(subsToUpdate);
 
     // 4. 배치 업데이트 (상태별로 그룹화)
-    const activeIds = subsToUpdate.filter(s => s.targetStatus === 'active').map(s => s.id);
-    const cancelledIds = subsToUpdate.filter(s => s.targetStatus === 'cancelled').map(s => s.id);
-    const pendingIds = subsToUpdate.filter(s => s.targetStatus === 'pending_payment').map(s => s.id);
+    const activeIds = subsToUpdate.filter((s) => s.targetStatus === 'active').map((s) => s.id);
+    const cancelledIds = subsToUpdate
+      .filter((s) => s.targetStatus === 'cancelled')
+      .map((s) => s.id);
+    const pendingIds = subsToUpdate
+      .filter((s) => s.targetStatus === 'pending_payment')
+      .map((s) => s.id);
 
     let totalUpdated = 0;
 
@@ -97,7 +101,7 @@ async function syncAllData() {
         .from('advertising_subscriptions')
         .update({
           status: 'active',
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .in('id', activeIds);
 
@@ -116,7 +120,7 @@ async function syncAllData() {
         .update({
           status: 'cancelled',
           cancelled_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .in('id', cancelledIds);
 
@@ -134,7 +138,7 @@ async function syncAllData() {
         .from('advertising_subscriptions')
         .update({
           status: 'pending_payment',
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .in('id', pendingIds);
 
@@ -147,7 +151,6 @@ async function syncAllData() {
     }
 
     console.log(`\n=== 완료: 총 ${totalUpdated}건 동기화됨 ===\n`);
-
   } catch (error) {
     console.error('동기화 실패:', error);
   }

@@ -13,18 +13,12 @@ export async function GET(request: NextRequest) {
 
     // 위치 파라미터 검증
     if (isNaN(lat) || isNaN(lng)) {
-      return NextResponse.json(
-        { error: '위치 정보가 필요합니다 (lat, lng)' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: '위치 정보가 필요합니다 (lat, lng)' }, { status: 400 });
     }
 
     // 위도/경도 범위 검사
     if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
-      return NextResponse.json(
-        { error: '위치 범위가 올바르지 않습니다' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: '위치 범위가 올바르지 않습니다' }, { status: 400 });
     }
 
     const supabase = await createClient();
@@ -60,7 +54,10 @@ export async function GET(request: NextRequest) {
 
     if (fallbackError) {
       // 컬럼이 없는 경우
-      if (fallbackError.message.includes('current_lat') || fallbackError.message.includes('column')) {
+      if (
+        fallbackError.message.includes('current_lat') ||
+        fallbackError.message.includes('column')
+      ) {
         // 위치 컬럼 없음 - 활성 라이더 수만 반환
         const { count, error: countError } = await supabase
           .from('helper_profiles')
@@ -120,20 +117,12 @@ export async function GET(request: NextRequest) {
     logServerError(error instanceof Error ? error : new Error(String(error)), {
       context: 'nearby_helpers_count_error',
     });
-    return NextResponse.json(
-      { error: '서버 오류가 발생했습니다' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 });
   }
 }
 
 // Haversine formula로 두 지점 간 거리 계산 (km)
-function calculateDistance(
-  lat1: number,
-  lng1: number,
-  lat2: number,
-  lng2: number
-): number {
+function calculateDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
   const R = 6371; // 지구 반경 (km)
   const dLat = toRad(lat2 - lat1);
   const dLng = toRad(lng2 - lng1);

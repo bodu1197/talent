@@ -192,7 +192,9 @@ export default function BankTransferAdvertisingPage() {
               <span className={step >= 5 ? 'text-[#0f3460] font-semibold' : 'text-gray-500'}>
                 입금 확인
               </span>
-              <span className={step >= 6 ? 'text-[#0f3460] font-semibold' : 'text-gray-500'}>완료</span>
+              <span className={step >= 6 ? 'text-[#0f3460] font-semibold' : 'text-gray-500'}>
+                완료
+              </span>
             </div>
           </div>
 
@@ -355,7 +357,10 @@ export default function BankTransferAdvertisingPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="business-registration" className="block text-sm font-semibold mb-2">
+                  <label
+                    htmlFor="business-registration"
+                    className="block text-sm font-semibold mb-2"
+                  >
                     사업자 등록번호 (선택)
                   </label>
                   <input

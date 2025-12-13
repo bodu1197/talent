@@ -40,10 +40,11 @@ if (packageJson.devDependencies && packageJson.devDependencies['sonarqube-scanne
 }
 
 // 4. npm scripts 확인
-const hasScripts = packageJson.scripts &&
-                   packageJson.scripts['sonar'] &&
-                   packageJson.scripts['sonar:local'] &&
-                   packageJson.scripts['sonar:cloud'];
+const hasScripts =
+  packageJson.scripts &&
+  packageJson.scripts['sonar'] &&
+  packageJson.scripts['sonar:local'] &&
+  packageJson.scripts['sonar:cloud'];
 if (hasScripts) {
   checks.push({ name: 'SonarQube npm scripts', status: '✅', message: '설정됨' });
 } else {
@@ -54,9 +55,17 @@ if (hasScripts) {
 const hasEnvToken = process.env.SONARQUBE_TOKEN;
 const hasEnvHost = process.env.SONARQUBE_HOST_URL;
 if (hasEnvToken && hasEnvHost) {
-  checks.push({ name: '환경 변수 (SONARQUBE_TOKEN, SONARQUBE_HOST_URL)', status: '✅', message: '설정됨' });
+  checks.push({
+    name: '환경 변수 (SONARQUBE_TOKEN, SONARQUBE_HOST_URL)',
+    status: '✅',
+    message: '설정됨',
+  });
 } else {
-  checks.push({ name: '환경 변수 (SONARQUBE_TOKEN, SONARQUBE_HOST_URL)', status: '⚠️', message: '미설정 (.env.local에 추가 필요)' });
+  checks.push({
+    name: '환경 변수 (SONARQUBE_TOKEN, SONARQUBE_HOST_URL)',
+    status: '⚠️',
+    message: '미설정 (.env.local에 추가 필요)',
+  });
 }
 
 // 6. SONARQUBE_SETUP.md 가이드 확인
@@ -72,13 +81,13 @@ console.log('━━━━━━━━━━━━━━━━━━━━━━�
 console.log('                  검증 결과                           ');
 console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
-checks.forEach(check => {
+checks.forEach((check) => {
   console.log(`${check.status} ${check.name}`);
   console.log(`   → ${check.message}\n`);
 });
 
-const allPassed = checks.every(check => check.status === '✅');
-const hasWarnings = checks.some(check => check.status === '⚠️');
+const allPassed = checks.every((check) => check.status === '✅');
+const hasWarnings = checks.some((check) => check.status === '⚠️');
 
 console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 

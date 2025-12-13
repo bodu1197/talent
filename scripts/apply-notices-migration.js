@@ -152,7 +152,6 @@ ON CONFLICT DO NOTHING;
 
 async function runQuery(_query) {
   return new Promise((resolve, reject) => {
-
     const options = {
       hostname: 'api.supabase.com',
       port: 443,

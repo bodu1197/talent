@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/nextjs'
+import * as Sentry from '@sentry/nextjs';
 
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
@@ -27,5 +27,4 @@ Sentry.init({
   // Sentry가 안전한 방식으로 동작하도록 설정
   transport: Sentry.makeFetchTransport,
   stackParser: Sentry.defaultStackParser,
-})
-
+});

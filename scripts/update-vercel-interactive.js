@@ -7,16 +7,18 @@ const _readline = require('readline');
 const ENV_VARS = [
   {
     name: 'NEXT_PUBLIC_SUPABASE_URL',
-    value: 'https://abroivxthindezdtdzmj.supabase.co'
+    value: 'https://abroivxthindezdtdzmj.supabase.co',
   },
   {
     name: 'NEXT_PUBLIC_SUPABASE_ANON_KEY',
-    value: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5ODk3NjcsImV4cCI6MjA0OTU2NTc2N30.P-pJc-qGUYdw8z_jNmG-p8kE1TlhCpNzmYR4EBBZUBs'
+    value:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5ODk3NjcsImV4cCI6MjA0OTU2NTc2N30.P-pJc-qGUYdw8z_jNmG-p8kE1TlhCpNzmYR4EBBZUBs',
   },
   {
     name: 'SUPABASE_SERVICE_ROLE_KEY',
-    value: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzk4OTc2NywiZXhwIjoyMDQ5NTY1NzY3fQ.sb_secret_yjCABwj3zJbfvFsJ4baU4A_4b3YUPvT'
-  }
+    value:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzk4OTc2NywiZXhwIjoyMDQ5NTY1NzY3fQ.sb_secret_yjCABwj3zJbfvFsJ4baU4A_4b3YUPvT',
+  },
 ];
 
 function runCommand(command, args, inputs) {
@@ -25,7 +27,7 @@ function runCommand(command, args, inputs) {
 
     const proc = spawn(command, args, {
       stdio: ['pipe', 'pipe', 'pipe'],
-      shell: true
+      shell: true,
     });
 
     let output = '';
@@ -107,7 +109,7 @@ async function main() {
     await deleteEnvVar(envVar.name);
 
     // 2초 대기
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     // 추가
     const success = await addEnvVar(envVar.name, envVar.value);
@@ -119,7 +121,7 @@ async function main() {
     }
 
     // 3초 대기
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 3000));
   }
 
   console.log('\n\n═══════════════════════════════════════');
@@ -130,11 +132,13 @@ async function main() {
   if (failed === 0) {
     console.log('✨ 모든 환경변수 업데이트 완료!\n');
     console.log('📌 확인: vercel env ls');
-    console.log('📌 대시보드: https://vercel.com/soriplays-projects/talent/settings/environment-variables\n');
+    console.log(
+      '📌 대시보드: https://vercel.com/soriplays-projects/talent/settings/environment-variables\n'
+    );
   }
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('❌ 오류:', err);
   process.exit(1);
 });

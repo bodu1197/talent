@@ -115,8 +115,20 @@ describe('reviews queries', () => {
   describe('getPendingReviews', () => {
     it('should fetch completed orders without reviews', async () => {
       const mockPendingReviews = [
-        { id: 'order-1', order_number: 'ORD-001', buyer_id: 'user-1', status: 'completed', review_id: null },
-        { id: 'order-2', order_number: 'ORD-002', buyer_id: 'user-1', status: 'completed', review_id: null },
+        {
+          id: 'order-1',
+          order_number: 'ORD-001',
+          buyer_id: 'user-1',
+          status: 'completed',
+          review_id: null,
+        },
+        {
+          id: 'order-2',
+          order_number: 'ORD-002',
+          buyer_id: 'user-1',
+          status: 'completed',
+          review_id: null,
+        },
       ];
 
       const mockQuery = {

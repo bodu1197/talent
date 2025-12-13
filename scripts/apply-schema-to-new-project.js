@@ -15,7 +15,6 @@ const SCHEMA_FILE = path.join(__dirname, '..', 'complete-schema.sql');
 
 function executeQuery(_query) {
   return new Promise((resolve, reject) => {
-
     const options = {
       hostname: 'api.supabase.com',
       path: `/v1/projects/${NEW_PROJECT_ID}/database/query`,

@@ -3,6 +3,7 @@
 ## ✅ 완료된 작업
 
 ### 1. 데이터베이스 스키마 (100% 완료)
+
 - ✅ 82개 테이블
 - ✅ 56개 함수
 - ✅ 40개 트리거
@@ -11,6 +12,7 @@
 - ✅ 288개 인덱스
 
 ### 2. 데이터 마이그레이션 (99.7% 완료)
+
 - ✅ users: 31 rows
 - ✅ profiles: 30 rows
 - ✅ buyers: 31 rows
@@ -24,10 +26,12 @@
 - ✅ 기타 모든 테이블
 
 **데이터 정합성 이슈** (6 rows):
+
 - service_categories: 76/78 (존재하지 않는 category_id 참조)
 - service_revision_categories: 23/27 (존재하지 않는 category_id 참조)
 
 ### 3. Storage Buckets (100% 완료)
+
 - ✅ profiles (public, 5MB)
 - ✅ services (public, 5MB)
 - ✅ portfolio (public, 10MB)
@@ -74,6 +78,7 @@ SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhY
 ### 3. 이메일 템플릿 설정 (선택사항)
 
 Supabase 대시보드에서:
+
 - Authentication → Email Templates
 - Confirm signup
 - Invite user
@@ -86,6 +91,7 @@ Supabase 대시보드에서:
 ### 4. API Keys 및 JWT 설정
 
 **이미 완료된 설정:**
+
 - ✅ JWT Secret (자동 생성됨)
 - ✅ Anon Key (자동 생성됨)
 - ✅ Service Role Key (자동 생성됨)
@@ -113,6 +119,7 @@ Supabase 대시보드에서:
 ## 🚀 마이그레이션 완료 후 테스트
 
 ### 데이터베이스 연결 테스트
+
 ```bash
 curl -X POST "https://api.supabase.com/v1/projects/abroivxthindezdtdzmj/database/query" \
   -H "Authorization: Bearer sbp_f40b15f794e727f0aa9161de38c497174fcac2ee" \
@@ -121,11 +128,13 @@ curl -X POST "https://api.supabase.com/v1/projects/abroivxthindezdtdzmj/database
 ```
 
 ### 애플리케이션 테스트
+
 ```bash
 npm run dev
 ```
 
 브라우저에서 http://localhost:3000 접속하여:
+
 1. 회원가입/로그인 테스트
 2. Google/Kakao 소셜 로그인 테스트
 3. 프로필 페이지 테스트
@@ -137,14 +146,17 @@ npm run dev
 ## 📞 이슈 발생 시
 
 ### 인증 관련 오류
+
 - JWT Secret이 변경되었으므로 기존 세션이 무효화됨
 - 모든 사용자는 다시 로그인해야 함
 
 ### Storage 파일 누락
+
 - 원본 프로젝트의 Storage 파일은 자동으로 복사되지 않음
 - 필요시 수동으로 파일 마이그레이션 필요
 
 ### 데이터 정합성
+
 - 6개 row가 원본 데이터 정합성 문제로 실패
 - category_id `560825ff-712f-4396-82e1-357c4aa16b06`가 존재하지 않음
 - 필요시 원본 데이터베이스에서 해당 카테고리 복구 필요

@@ -10,7 +10,7 @@ const pool = new Pool({
   database: 'postgres',
   user: 'postgres',
   password: 'chl1197dbA!@',
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false },
 });
 
 async function applySQL() {
@@ -19,7 +19,10 @@ async function applySQL() {
   try {
     console.log('🚀 PostgreSQL에 연결됨\n');
 
-    const migrationFile = path.join(__dirname, '../supabase/migrations/20251112120000_create_advertising_system.sql');
+    const migrationFile = path.join(
+      __dirname,
+      '../supabase/migrations/20251112120000_create_advertising_system.sql'
+    );
     const sql = fs.readFileSync(migrationFile, 'utf8');
 
     // 전체 SQL을 한 번에 실행 (트랜잭션 내에서)
@@ -42,7 +45,7 @@ async function applySQL() {
       ORDER BY tablename
     `);
 
-    tables.rows.forEach(row => {
+    tables.rows.forEach((row) => {
       console.log(`  ✅ ${row.tablename}`);
     });
 
@@ -67,7 +70,7 @@ async function applySQL() {
     `);
 
     if (policies.rows.length > 0) {
-      policies.rows.forEach(row => {
+      policies.rows.forEach((row) => {
         console.log(`  ✅ ${row.tablename}: ${row.policyname}`);
       });
     } else {
@@ -75,7 +78,6 @@ async function applySQL() {
     }
 
     console.log('\n✨ 광고 시스템 설정 완료!');
-
   } catch (error) {
     await client.query('ROLLBACK');
 
@@ -92,7 +94,7 @@ async function applySQL() {
   }
 }
 
-applySQL().catch(err => {
+applySQL().catch((err) => {
   console.error('실패:', err);
   process.exit(1);
 });

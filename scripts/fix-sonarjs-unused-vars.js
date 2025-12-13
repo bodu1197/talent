@@ -9,7 +9,7 @@ console.log('🔧 sonarjs/no-unused-vars 에러 수정 중...\n');
 // ESLint 실행
 try {
   execSync('npx eslint scripts --ext .js --format json > scripts-sonar-unused.json', {
-    stdio: 'pipe'
+    stdio: 'pipe',
   });
 } catch {
   // ESLint가 에러를 발견하면 exit code 1을 반환하지만, JSON은 정상적으로 생성됨
@@ -20,19 +20,19 @@ const data = JSON.parse(fs.readFileSync('scripts-sonar-unused.json', 'utf8'));
 // sonarjs/no-unused-vars 에러만 추출
 const unusedVarsErrors = [];
 
-data.forEach(file => {
-  const errors = file.messages.filter(m =>
-    m.ruleId === 'sonarjs/no-unused-vars' && m.severity === 2
+data.forEach((file) => {
+  const errors = file.messages.filter(
+    (m) => m.ruleId === 'sonarjs/no-unused-vars' && m.severity === 2
   );
 
   if (errors.length > 0) {
     unusedVarsErrors.push({
       filePath: file.filePath,
-      errors: errors.map(e => ({
+      errors: errors.map((e) => ({
         line: e.line,
         message: e.message,
-        variable: e.message.match(/'([^']+)'/)?.[1]
-      }))
+        variable: e.message.match(/'([^']+)'/)?.[1],
+      })),
     });
   }
 });
@@ -41,7 +41,7 @@ console.log(`총 ${unusedVarsErrors.reduce((sum, f) => sum + f.errors.length, 0)
 
 let totalFixed = 0;
 
-unusedVarsErrors.forEach(fileData => {
+unusedVarsErrors.forEach((fileData) => {
   const filePath = fileData.filePath;
   const fileName = filePath.split('\\').pop();
 
@@ -51,7 +51,7 @@ unusedVarsErrors.forEach(fileData => {
   const lines = content.split('\n');
   let modified = false;
 
-  fileData.errors.forEach(error => {
+  fileData.errors.forEach((error) => {
     const lineNum = error.line;
     const varName = error.variable;
 
@@ -66,8 +66,8 @@ unusedVarsErrors.forEach(fileData => {
         // const { _varName, other } = ... 형태
         const match = line.match(/{\s*([^}]+)\s*}/);
         if (match) {
-          const vars = match[1].split(',').map(v => v.trim());
-          const filteredVars = vars.filter(v => v !== varName);
+          const vars = match[1].split(',').map((v) => v.trim());
+          const filteredVars = vars.filter((v) => v !== varName);
 
           if (filteredVars.length === 0) {
             // 모든 변수가 사용되지 않으면 전체 라인 제거

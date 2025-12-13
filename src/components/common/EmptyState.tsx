@@ -1,12 +1,4 @@
-import {
-  Inbox,
-  Briefcase,
-  ShoppingCart,
-  Heart,
-  Star,
-  FileText,
-  AlertCircle,
-} from 'lucide-react';
+import { Inbox, Briefcase, ShoppingCart, Heart, Star, FileText, AlertCircle } from 'lucide-react';
 
 interface EmptyStateProps {
   readonly icon?: string;

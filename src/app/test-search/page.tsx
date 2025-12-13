@@ -1,20 +1,18 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Search } from "lucide-react";
+import { useState } from 'react';
+import { Search } from 'lucide-react';
 
 export default function TestSearchPage() {
-  const [searchQuery1, setSearchQuery1] = useState("");
-  const [searchQuery2, setSearchQuery2] = useState("");
-  const [searchQuery3, setSearchQuery3] = useState("");
-  const [searchQuery4, setSearchQuery4] = useState("");
+  const [searchQuery1, setSearchQuery1] = useState('');
+  const [searchQuery2, setSearchQuery2] = useState('');
+  const [searchQuery3, setSearchQuery3] = useState('');
+  const [searchQuery4, setSearchQuery4] = useState('');
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-4xl mx-auto space-y-8">
-        <h1 className="text-3xl font-semibold text-gray-900 mb-8">
-          검색창 Focus 스타일 테스트
-        </h1>
+        <h1 className="text-3xl font-semibold text-gray-900 mb-8">검색창 Focus 스타일 테스트</h1>
 
         {/* 테스트 1: 현재 적용된 스타일 (ring-1 gray-300) */}
         <div className="bg-white p-6 rounded-lg shadow">

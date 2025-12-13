@@ -11,14 +11,25 @@ const fs = require('fs');
 const path = require('path');
 
 const OLD_PROJECT_REF = 'bpvfkkrlyrjkwgwmfrci';
-const _OLD_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEzNzg3MTYsImV4cCI6MjA3Njk1NDcxNn0.luCRwnwQVctX3ewuSjhkQJ6veanWqa2NgivpDI7_Gl4';
-const OLD_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
+const _OLD_ANON_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEzNzg3MTYsImV4cCI6MjA3Njk1NDcxNn0.luCRwnwQVctX3ewuSjhkQJ6veanWqa2NgivpDI7_Gl4';
+const OLD_SERVICE_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
 
 const NEW_PROJECT_REF = 'abroivxthindezdtdzmj';
-const _NEW_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5ODk3NjcsImV4cCI6MjA0OTU2NTc2N30.P-pJc-qGUYdw8z_jNmG-p8kE1TlhCpNzmYR4EBBZUBs';
-const NEW_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzk4OTc2NywiZXhwIjoyMDQ5NTY1NzY3fQ.sb_secret_yjCABwj3zJbfvFsJ4baU4A_4b3YUPvT';
+const _NEW_ANON_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5ODk3NjcsImV4cCI6MjA0OTU2NTc2N30.P-pJc-qGUYdw8z_jNmG-p8kE1TlhCpNzmYR4EBBZUBs';
+const NEW_SERVICE_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzk4OTc2NywiZXhwIjoyMDQ5NTY1NzY3fQ.sb_secret_yjCABwj3zJbfvFsJ4baU4A_4b3YUPvT';
 
-const BUCKETS = ['profiles', 'services', 'portfolio', 'uploads', 'food-stores', 'business-documents'];
+const BUCKETS = [
+  'profiles',
+  'services',
+  'portfolio',
+  'uploads',
+  'food-stores',
+  'business-documents',
+];
 
 const TEMP_DIR = path.join(__dirname, 'temp_storage');
 
@@ -28,7 +39,7 @@ function makeRequest(method, hostname, path, headers, body = null) {
       hostname,
       path,
       method,
-      headers
+      headers,
     };
 
     const req = https.request(options, (res) => {
@@ -78,15 +89,15 @@ async function listFiles(bucket, projectRef, apiKey, prefix = '', offset = 0, li
       `${projectRef}.supabase.co`,
       `/storage/v1/object/list/${bucket}`,
       {
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
-        'apikey': apiKey
+        apikey: apiKey,
       },
       {
         prefix: prefix,
         limit: limit,
         offset: offset,
-        sortBy: { column: 'name', order: 'asc' }
+        sortBy: { column: 'name', order: 'asc' },
       }
     );
     return result;
@@ -104,8 +115,8 @@ async function downloadFile(bucket, filePath, projectRef, apiKey) {
       `${projectRef}.supabase.co`,
       `/storage/v1/object/public/${bucket}/${encodeURIComponent(filePath).replace(/%2F/g, '/')}`,
       {
-        'Authorization': `Bearer ${apiKey}`,
-        'apikey': apiKey
+        Authorization: `Bearer ${apiKey}`,
+        apikey: apiKey,
       }
     );
     return buffer;
@@ -121,9 +132,9 @@ async function uploadFile(bucket, filePath, fileBuffer, projectRef, apiKey) {
       `${projectRef}.supabase.co`,
       `/storage/v1/object/${bucket}/${encodeURIComponent(filePath).replace(/%2F/g, '/')}`,
       {
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/octet-stream',
-        'apikey': apiKey
+        apikey: apiKey,
       },
       fileBuffer
     );
@@ -148,7 +159,7 @@ async function migrateBucket(bucketName) {
     if (!files || files.length === 0) break;
 
     // 폴더 제외, 파일만 추가
-    const actualFiles = files.filter(f => f.id && f.name);
+    const actualFiles = files.filter((f) => f.id && f.name);
     allFiles = allFiles.concat(actualFiles);
 
     console.log(`      ${allFiles.length}개 파일 발견...`);
@@ -182,7 +193,6 @@ async function migrateBucket(bucketName) {
       await uploadFile(bucketName, filePath, fileBuffer, NEW_PROJECT_REF, NEW_SERVICE_KEY);
 
       successCount++;
-
     } catch (error) {
       if (error.message.includes('Duplicate')) {
         skippedCount++;
@@ -223,7 +233,7 @@ async function main() {
     totalSkipped += result.skipped;
 
     // 각 버킷 사이 2초 대기
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
   }
 
   console.log('\n' + '═'.repeat(60));
@@ -247,7 +257,7 @@ async function main() {
   }
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('\n❌ 오류 발생:', err);
   process.exit(1);
 });

@@ -1,13 +1,15 @@
-import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
-import WithdrawClient from './WithdrawClient'
+import { redirect } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server';
+import WithdrawClient from './WithdrawClient';
 
 export default async function WithdrawPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/auth/login')
+    redirect('/auth/login');
   }
 
   // Get seller info (id and account details)
@@ -15,10 +17,10 @@ export default async function WithdrawPage() {
     .from('sellers')
     .select('id, bank_name, account_number, account_holder')
     .eq('user_id', user.id)
-    .maybeSingle()
+    .maybeSingle();
 
   if (!seller) {
-    redirect('/mypage/seller/register')
+    redirect('/mypage/seller/register');
   }
 
   // Get profile data (name and profile_image)
@@ -26,25 +28,26 @@ export default async function WithdrawPage() {
     .from('profiles')
     .select('name, profile_image')
     .eq('user_id', user.id)
-    .maybeSingle()
+    .maybeSingle();
 
   // Get completed orders to calculate available balance
   const { data: completedOrders } = await supabase
     .from('orders')
     .select('total_amount')
     .eq('seller_id', user.id)
-    .eq('status', 'completed')
+    .eq('status', 'completed');
 
   // Get withdrawal history
   const { data: withdrawals } = await supabase
     .from('withdrawal_requests')
     .select('amount, status')
     .eq('seller_id', seller.id)
-    .eq('status', 'completed')
+    .eq('status', 'completed');
 
-  const totalCompleted = completedOrders?.reduce((sum, order) => sum + (order.total_amount || 0), 0) || 0
-  const totalWithdrawn = withdrawals?.reduce((sum, w) => sum + (w.amount || 0), 0) || 0
-  const availableBalance = totalCompleted - totalWithdrawn
+  const totalCompleted =
+    completedOrders?.reduce((sum, order) => sum + (order.total_amount || 0), 0) || 0;
+  const totalWithdrawn = withdrawals?.reduce((sum, w) => sum + (w.amount || 0), 0) || 0;
+  const availableBalance = totalCompleted - totalWithdrawn;
 
   // Check for pending withdrawal
   const { data: pendingWithdrawal } = await supabase
@@ -52,7 +55,7 @@ export default async function WithdrawPage() {
     .select('id, amount, created_at')
     .eq('seller_id', seller.id)
     .eq('status', 'pending')
-    .maybeSingle()
+    .maybeSingle();
 
   return (
     <WithdrawClient
@@ -61,5 +64,5 @@ export default async function WithdrawPage() {
       availableBalance={availableBalance}
       pendingWithdrawal={pendingWithdrawal}
     />
-  )
+  );
 }

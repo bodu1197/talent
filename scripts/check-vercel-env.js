@@ -20,14 +20,17 @@ try {
       console.log(`  Has \\r: ${value ? value.includes('\r') : false}`);
       console.log(`  Has \\r\\n: ${value ? value.includes('\r\n') : false}`);
       console.log(`  First 40 chars: ${value ? value.substring(0, 40) : ''}`);
-      console.log(`  Last 40 chars: ${value ? value.substring(Math.max(0, value.length - 40)) : ''}`);
-      console.log(`  Hex of last 10 bytes: ${value ? Buffer.from(value.substring(Math.max(0, value.length - 10))).toString('hex') : ''}`);
+      console.log(
+        `  Last 40 chars: ${value ? value.substring(Math.max(0, value.length - 40)) : ''}`
+      );
+      console.log(
+        `  Hex of last 10 bytes: ${value ? Buffer.from(value.substring(Math.max(0, value.length - 10))).toString('hex') : ''}`
+      );
       console.log();
     }
   });
 
   console.log('✅ Check complete\n');
-
 } catch (error) {
   console.error('❌ Error reading .env.vercel.local:', error.message);
   process.exit(1);

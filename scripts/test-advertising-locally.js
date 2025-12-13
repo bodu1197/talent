@@ -3,7 +3,8 @@
 const { createClient } = require('@supabase/supabase-js');
 
 const SUPABASE_URL = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
-const SUPABASE_SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
+const SUPABASE_SERVICE_ROLE_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
@@ -30,7 +31,7 @@ async function testCategoryServices(categorySlug) {
     .select('service_id')
     .eq('status', 'active');
 
-  const advertisedServiceIds = advertisingData?.map(ad => ad.service_id) || [];
+  const advertisedServiceIds = advertisingData?.map((ad) => ad.service_id) || [];
   console.log(`활성 광고 수: ${advertisedServiceIds.length}개`);
 
   // 3. Get service_categories links
@@ -44,7 +45,7 @@ async function testCategoryServices(categorySlug) {
     return;
   }
 
-  const serviceIds = serviceLinks.map(sl => sl.service_id);
+  const serviceIds = serviceLinks.map((sl) => sl.service_id);
   console.log(`카테고리 내 서비스 수: ${serviceIds.length}개`);
 
   // 4. Get services
@@ -57,27 +58,29 @@ async function testCategoryServices(categorySlug) {
   console.log(`활성 서비스 수: ${services?.length || 0}개`);
 
   // 5. Check which are advertised
-  const advertisedInCategory = services?.filter(s => advertisedServiceIds.includes(s.id)) || [];
-  const regularInCategory = services?.filter(s => !advertisedServiceIds.includes(s.id)) || [];
+  const advertisedInCategory = services?.filter((s) => advertisedServiceIds.includes(s.id)) || [];
+  const regularInCategory = services?.filter((s) => !advertisedServiceIds.includes(s.id)) || [];
 
   console.log(`\n광고 서비스: ${advertisedInCategory.length}개`);
-  advertisedInCategory.forEach(s => console.log(`  - ${s.title}`));
+  advertisedInCategory.forEach((s) => console.log(`  - ${s.title}`));
 
   console.log(`\n일반 서비스: ${regularInCategory.length}개`);
-  regularInCategory.slice(0, 3).forEach(s => console.log(`  - ${s.title}`));
+  regularInCategory.slice(0, 3).forEach((s) => console.log(`  - ${s.title}`));
   if (regularInCategory.length > 3) {
     console.log(`  ... 외 ${regularInCategory.length - 3}개`);
   }
 
   // 6. Simulate the server logic
   const allServices = [...services];
-  allServices.forEach(service => {
+  allServices.forEach((service) => {
     service.is_advertised = advertisedServiceIds.includes(service.id);
   });
 
   console.log(`\n🎯 is_advertised 필드 추가 후:`);
-  console.log(`  - is_advertised = true: ${allServices.filter(s => s.is_advertised).length}개`);
-  console.log(`  - is_advertised = false/undefined: ${allServices.filter(s => !s.is_advertised).length}개`);
+  console.log(`  - is_advertised = true: ${allServices.filter((s) => s.is_advertised).length}개`);
+  console.log(
+    `  - is_advertised = false/undefined: ${allServices.filter((s) => !s.is_advertised).length}개`
+  );
 
   // 7. Check if field exists
   const sampleService = allServices[0];

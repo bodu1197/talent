@@ -11,27 +11,28 @@ const https = require('https');
 const OLD_PROJECT_ID = 'bpvfkkrlyrjkwgwmfrci';
 const OLD_ACCESS_TOKEN = 'sbp_140ed0f35c7b31aa67f56bdca11db02fd469802f';
 const OLD_PROJECT_REF = 'bpvfkkrlyrjkwgwmfrci';
-const OLD_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
+const OLD_SERVICE_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
 
 const NEW_PROJECT_REF = 'abroivxthindezdtdzmj';
-const NEW_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzk4OTc2NywiZXhwIjoyMDQ5NTY1NzY3fQ.sb_secret_yjCABwj3zJbfvFsJ4baU4A_4b3YUPvT';
+const NEW_SERVICE_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzk4OTc2NywiZXhwIjoyMDQ5NTY1NzY3fQ.sb_secret_yjCABwj3zJbfvFsJ4baU4A_4b3YUPvT';
 
 function executeQuery(projectId, token, _query) {
   return new Promise((resolve, reject) => {
-
     const options = {
       hostname: 'api.supabase.com',
       path: `/v1/projects/${projectId}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
     };
 
     const req = https.request(options, (res) => {
       let body = '';
-      res.on('data', (chunk) => body += chunk);
+      res.on('data', (chunk) => (body += chunk));
       res.on('end', () => {
         if (res.statusCode === 200 || res.statusCode === 201) {
           try {
@@ -54,16 +55,19 @@ function executeQuery(projectId, token, _query) {
 
 function downloadFile(projectRef, apiKey, bucket, filePath) {
   return new Promise((resolve, reject) => {
-    const encodedPath = filePath.split('/').map(p => encodeURIComponent(p)).join('/');
+    const encodedPath = filePath
+      .split('/')
+      .map((p) => encodeURIComponent(p))
+      .join('/');
 
     const options = {
       hostname: `${projectRef}.supabase.co`,
       path: `/storage/v1/object/${bucket}/${encodedPath}`,
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'apikey': apiKey
-      }
+        Authorization: `Bearer ${apiKey}`,
+        apikey: apiKey,
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -73,7 +77,7 @@ function downloadFile(projectRef, apiKey, bucket, filePath) {
 
       if (res.statusCode !== 200) {
         let body = '';
-        res.on('data', (chunk) => body += chunk);
+        res.on('data', (chunk) => (body += chunk));
         res.on('end', () => reject(new Error(`HTTP ${res.statusCode}: ${body.substring(0, 100)}`)));
         return;
       }
@@ -91,23 +95,26 @@ function downloadFile(projectRef, apiKey, bucket, filePath) {
 
 function uploadFile(projectRef, apiKey, bucket, filePath, buffer) {
   return new Promise((resolve, reject) => {
-    const encodedPath = filePath.split('/').map(p => encodeURIComponent(p)).join('/');
+    const encodedPath = filePath
+      .split('/')
+      .map((p) => encodeURIComponent(p))
+      .join('/');
 
     const options = {
       hostname: `${projectRef}.supabase.co`,
       path: `/storage/v1/object/${bucket}/${encodedPath}`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/octet-stream',
         'Content-Length': buffer.length,
-        'apikey': apiKey
-      }
+        apikey: apiKey,
+      },
     };
 
     const req = https.request(options, (res) => {
       let body = '';
-      res.on('data', (chunk) => body += chunk);
+      res.on('data', (chunk) => (body += chunk));
       res.on('end', () => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           resolve(true);
@@ -139,7 +146,9 @@ async function migrateBucket(bucketName) {
 
   console.log(`   ${files.length}개 파일\n`);
 
-  let success = 0, failed = 0, skipped = 0;
+  let success = 0,
+    failed = 0,
+    skipped = 0;
 
   for (let i = 0; i < files.length; i++) {
     const fileName = files[i].name;
@@ -152,20 +161,23 @@ async function migrateBucket(bucketName) {
       await uploadFile(NEW_PROJECT_REF, NEW_SERVICE_KEY, bucketName, fileName, buffer);
 
       success++;
-
     } catch (error) {
       const msg = error.message;
-      if (msg.includes('duplicate') || msg.includes('Duplicate') || msg.includes('already exists')) {
+      if (
+        msg.includes('duplicate') ||
+        msg.includes('Duplicate') ||
+        msg.includes('already exists')
+      ) {
         skipped++;
       } else if (msg.includes('404')) {
-        skipped++;  // 파일이 실제로 없음
+        skipped++; // 파일이 실제로 없음
       } else {
         failed++;
         console.log(`\n   ❌ ${fileName.substring(0, 40)}: ${msg.substring(0, 60)}`);
       }
     }
 
-    await new Promise(resolve => setTimeout(resolve, 150));
+    await new Promise((resolve) => setTimeout(resolve, 150));
   }
 
   console.log(`\n\n   ✅ ${success} | ⏭️ ${skipped} | ❌ ${failed}\n`);
@@ -185,21 +197,23 @@ async function main() {
 
   console.log('원본:');
   let total = 0;
-  counts.forEach(c => {
+  counts.forEach((c) => {
     console.log(`   ${c.bucket_id}: ${c.count}`);
     total += parseInt(c.count);
   });
   console.log(`   총 ${total}개`);
   console.log('═'.repeat(60));
 
-  let totalSuccess = 0, totalFailed = 0, totalSkipped = 0;
+  let totalSuccess = 0,
+    totalFailed = 0,
+    totalSkipped = 0;
 
   for (const { bucket_id } of counts) {
     await migrateBucket(bucket_id);
     totalSuccess += result.success;
     totalFailed += result.failed;
     totalSkipped += result.skipped;
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
   console.log('═'.repeat(60));
@@ -217,7 +231,7 @@ async function main() {
   }
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('\n❌ 오류:', err);
   process.exit(1);
 });

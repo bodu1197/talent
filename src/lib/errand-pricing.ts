@@ -218,9 +218,7 @@ export interface ShoppingPriceBreakdown {
   totalPrice: number;
 }
 
-export const calculateShoppingPrice = (
-  factors: ShoppingPriceFactors
-): ShoppingPriceBreakdown => {
+export const calculateShoppingPrice = (factors: ShoppingPriceFactors): ShoppingPriceBreakdown => {
   const { range, itemCount, distance = 0, weather, timeOfDay, hasHeavyItem } = factors;
 
   // 1. 기본료
@@ -272,7 +270,13 @@ export const calculateShoppingPrice = (
 
   // 7. 총 요금
   const subtotal =
-    basePrice + rangeFee + distancePrice + itemFee + weightSurcharge + timeSurcharge + weatherSurcharge;
+    basePrice +
+    rangeFee +
+    distancePrice +
+    itemFee +
+    weightSurcharge +
+    timeSurcharge +
+    weatherSurcharge;
   const totalPrice = Math.round(subtotal / 100) * 100;
 
   return {

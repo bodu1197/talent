@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 export default function AdminReportsPage() {
   return (
@@ -8,5 +8,5 @@ export default function AdminReportsPage() {
         <p className="text-gray-600">신고 관리 페이지입니다.</p>
       </div>
     </div>
-  )
+  );
 }

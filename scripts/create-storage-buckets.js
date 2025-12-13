@@ -19,10 +19,10 @@ function executeQuery(query) {
       path: `/v1/projects/${NEW_PROJECT_ID}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${NEW_ACCESS_TOKEN}`,
+        Authorization: `Bearer ${NEW_ACCESS_TOKEN}`,
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(data)
-      }
+        'Content-Length': Buffer.byteLength(data),
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -58,43 +58,50 @@ const BUCKETS = [
     name: 'profiles',
     public: true,
     file_size_limit: 5242880, // 5MB
-    allowed_mime_types: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+    allowed_mime_types: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'],
   },
   {
     id: 'services',
     name: 'services',
     public: true,
     file_size_limit: 5242880, // 5MB
-    allowed_mime_types: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+    allowed_mime_types: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'],
   },
   {
     id: 'portfolio',
     name: 'portfolio',
     public: true,
     file_size_limit: 10485760, // 10MB
-    allowed_mime_types: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+    allowed_mime_types: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'],
   },
   {
     id: 'uploads',
     name: 'uploads',
     public: true,
     file_size_limit: null,
-    allowed_mime_types: null
+    allowed_mime_types: null,
   },
   {
     id: 'food-stores',
     name: 'food-stores',
     public: true,
     file_size_limit: 10485760, // 10MB
-    allowed_mime_types: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+    allowed_mime_types: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'],
   },
   {
     id: 'business-documents',
     name: 'business-documents',
     public: false,
     file_size_limit: 10485760, // 10MB
-    allowed_mime_types: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'application/pdf']
-  }
+    allowed_mime_types: [
+      'image/jpeg',
+      'image/jpg',
+      'image/png',
+      'image/gif',
+      'image/webp',
+      'application/pdf',
+    ],
+  },
 ];
 
 async function createBucket(bucket) {
@@ -103,7 +110,7 @@ async function createBucket(bucket) {
   try {
     let mimeTypes = 'NULL';
     if (bucket.allowed_mime_types) {
-      const mimeList = bucket.allowed_mime_types.map(m => `'${m}'`).join(', ');
+      const mimeList = bucket.allowed_mime_types.map((m) => `'${m}'`).join(', ');
       mimeTypes = `ARRAY[${mimeList}]::text[]`;
     }
 
@@ -125,7 +132,6 @@ async function createBucket(bucket) {
 
     await executeQuery(query);
     console.log(`   ✅ Created: ${bucket.name} (${bucket.public ? 'public' : 'private'})\n`);
-
   } catch (error) {
     console.log(`   ❌ Error: ${error.message}\n`);
   }

@@ -2,7 +2,8 @@
 const { createClient } = require('@supabase/supabase-js');
 
 const SUPABASE_URL = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
-const SUPABASE_SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
+const SUPABASE_SERVICE_ROLE_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
@@ -26,7 +27,7 @@ async function testRhymixCategory() {
     .select('service_id')
     .eq('status', 'active');
 
-  const advertisedServiceIds = ads?.map(ad => ad.service_id) || [];
+  const advertisedServiceIds = ads?.map((ad) => ad.service_id) || [];
   console.log('\n활성 광고 서비스 ID:', advertisedServiceIds.length, '개');
 
   // 3. Get service links
@@ -35,7 +36,7 @@ async function testRhymixCategory() {
     .select('service_id')
     .eq('category_id', category.id);
 
-  const serviceIds = serviceLinks?.map(sl => sl.service_id) || [];
+  const serviceIds = serviceLinks?.map((sl) => sl.service_id) || [];
   console.log('라이믹스 카테고리 서비스 링크:', serviceIds.length, '개');
 
   // 4. Get actual services
@@ -48,12 +49,12 @@ async function testRhymixCategory() {
   console.log('활성 서비스:', services?.length || 0, '개\n');
 
   // 5. Add is_advertised field
-  services?.forEach(service => {
+  services?.forEach((service) => {
     service.is_advertised = advertisedServiceIds.includes(service.id);
   });
 
-  const advertisedCount = services?.filter(s => s.is_advertised).length || 0;
-  const regularCount = services?.filter(s => !s.is_advertised).length || 0;
+  const advertisedCount = services?.filter((s) => s.is_advertised).length || 0;
+  const regularCount = services?.filter((s) => !s.is_advertised).length || 0;
 
   console.log('🎯 is_advertised 필드 추가 후:');
   console.log(`  - 광고 서비스: ${advertisedCount}개`);
@@ -66,8 +67,8 @@ async function testRhymixCategory() {
   });
 
   // 7. Simulate sorting
-  const advertised = services?.filter(s => s.is_advertised) || [];
-  const regular = services?.filter(s => !s.is_advertised) || [];
+  const advertised = services?.filter((s) => s.is_advertised) || [];
+  const regular = services?.filter((s) => !s.is_advertised) || [];
   const combined = [...advertised, ...regular];
 
   console.log('\n✅ 최종 정렬 (광고 우선):');

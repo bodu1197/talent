@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { getRecentVisitedCategoriesServer } from "@/lib/supabase/queries/category-visits";
-import { History } from "lucide-react";
+import Link from 'next/link';
+import { getRecentVisitedCategoriesServer } from '@/lib/supabase/queries/category-visits';
+import { History } from 'lucide-react';
 
 export default async function RecentVisitedCategories() {
   // 최근 방문한 카테고리 조회 (서버에서 직접)
@@ -16,9 +16,7 @@ export default async function RecentVisitedCategories() {
       <div className="container-1200">
         <div className="flex items-center gap-3 mb-4">
           <History className="w-5 h-5 text-brand-primary" />
-          <h2 className="text-lg font-semibold text-gray-900">
-            최근 방문한 카테고리
-          </h2>
+          <h2 className="text-lg font-semibold text-gray-900">최근 방문한 카테고리</h2>
           <span className="text-sm text-gray-500">(최근 30일)</span>
         </div>
 

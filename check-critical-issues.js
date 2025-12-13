@@ -5,7 +5,7 @@ const options = {
   port: 9000,
   path: '/api/issues/search?componentKeys=talent&severities=CRITICAL&types=CODE_SMELL&ps=100',
   method: 'GET',
-  auth: 'admin:admin'
+  auth: 'admin:admin',
 };
 
 const req = https.request(options, (res) => {

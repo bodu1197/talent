@@ -37,10 +37,7 @@ export async function POST(request: Request) {
     for (const col of columns) {
       try {
         // 컬럼 존재 여부 확인
-        const { data: existing } = await supabase
-          .from('helper_profiles')
-          .select(col.name)
-          .limit(1);
+        const { data: existing } = await supabase.from('helper_profiles').select(col.name).limit(1);
 
         if (existing !== null) {
           results.push(`  - ${col.name}: 이미 존재`);

@@ -5,11 +5,13 @@ const path = require('path');
 const scriptsDir = __dirname;
 
 // Get all .js files in scripts directory
-const files = fs.readdirSync(scriptsDir).filter(f => f.endsWith('.js') && f !== 'add-eslint-disable.js');
+const files = fs
+  .readdirSync(scriptsDir)
+  .filter((f) => f.endsWith('.js') && f !== 'add-eslint-disable.js');
 
 let modifiedCount = 0;
 
-files.forEach(file => {
+files.forEach((file) => {
   const filePath = path.join(scriptsDir, file);
   let content = fs.readFileSync(filePath, 'utf8');
 
@@ -21,7 +23,8 @@ files.forEach(file => {
   // Check if file starts with shebang
   const hasShebang = content.startsWith('#!');
 
-  const disableComment = '/* eslint-disable sonarjs/cognitive-complexity, sonarjs/os-command, sonarjs/no-os-command-from-path, sonarjs/no-hardcoded-passwords, sonarjs/sql-queries, sonarjs/slow-regex */\n';
+  const disableComment =
+    '/* eslint-disable sonarjs/cognitive-complexity, sonarjs/os-command, sonarjs/no-os-command-from-path, sonarjs/no-hardcoded-passwords, sonarjs/sql-queries, sonarjs/slow-regex */\n';
 
   if (hasShebang) {
     // Add after shebang

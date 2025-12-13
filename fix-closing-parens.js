@@ -29,7 +29,7 @@ const filesToFix = [
   'src/lib/supabase/queries/category-visits.ts',
   'src/lib/supabase/queries/dashboard.ts',
   'src/lib/supabase/queries/personalized-services.ts',
-  'src/lib/template-generator.ts'
+  'src/lib/template-generator.ts',
 ];
 
 let totalFixes = 0;
@@ -58,7 +58,7 @@ function fixClosingBraces(content) {
   return { content: modified, fixes };
 }
 
-filesToFix.forEach(relPath => {
+filesToFix.forEach((relPath) => {
   const filePath = path.join(__dirname, relPath);
 
   if (!fs.existsSync(filePath)) {

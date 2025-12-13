@@ -22,10 +22,10 @@ function executeQuery(projectId, token, query) {
       path: `/v1/projects/${projectId}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(data)
-      }
+        'Content-Length': Buffer.byteLength(data),
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -57,18 +57,22 @@ function executeQuery(projectId, token, query) {
 
 async function getColumnTypes(tableName) {
   try {
-    await executeQuery(NEW_PROJECT_ID, NEW_ACCESS_TOKEN, `
+    await executeQuery(
+      NEW_PROJECT_ID,
+      NEW_ACCESS_TOKEN,
+      `
       SELECT column_name, udt_name, data_type
       FROM information_schema.columns
       WHERE table_name = '${tableName}'
       AND table_schema = 'public'
-    `);
+    `
+    );
 
     const typeMap = {};
-    result.forEach(col => {
+    result.forEach((col) => {
       typeMap[col.column_name] = {
         udt_name: col.udt_name,
-        data_type: col.data_type
+        data_type: col.data_type,
       };
     });
     return typeMap;
@@ -83,9 +87,10 @@ async function importByLevel(level) {
   console.log(`\n📦 Importing categories (${levelText})...`);
 
   try {
-    const query = level === null
-      ? 'SELECT * FROM categories WHERE parent_id IS NULL ORDER BY name'
-      : `SELECT * FROM categories WHERE level = ${level} ORDER BY name`;
+    const query =
+      level === null
+        ? 'SELECT * FROM categories WHERE parent_id IS NULL ORDER BY name'
+        : `SELECT * FROM categories WHERE level = ${level} ORDER BY name`;
 
     await executeQuery(OLD_PROJECT_ID, OLD_ACCESS_TOKEN, query);
 
@@ -105,67 +110,71 @@ async function importByLevel(level) {
       const row = data[i];
 
       try {
-        const values = columns.map(col => {
-          const value = row[col];
-          const colType = columnTypes[col];
+        const values = columns
+          .map((col) => {
+            const value = row[col];
+            const colType = columnTypes[col];
 
-          if (value === null || value === undefined) {
-            return 'NULL';
-          }
-
-          if (colType && colType.udt_name && colType.udt_name.startsWith('_')) {
-            if (Array.isArray(value)) {
-              if (value.length === 0) {
-                return 'ARRAY[]::text[]';
-              }
-              const arrayValues = value.map(v => {
-                const escaped = String(v).replace(/'/g, "''").replace(/\\/g, '\\\\');
-                return `'${escaped}'`;
-              }).join(', ');
-              return `ARRAY[${arrayValues}]`;
+            if (value === null || value === undefined) {
+              return 'NULL';
             }
-          }
 
-          if (typeof value === 'string') {
-            const escaped = value.replace(/'/g, "''").replace(/\\/g, '\\\\');
-            return `'${escaped}'`;
-          }
+            if (colType && colType.udt_name && colType.udt_name.startsWith('_')) {
+              if (Array.isArray(value)) {
+                if (value.length === 0) {
+                  return 'ARRAY[]::text[]';
+                }
+                const arrayValues = value
+                  .map((v) => {
+                    const escaped = String(v).replace(/'/g, "''").replace(/\\/g, '\\\\');
+                    return `'${escaped}'`;
+                  })
+                  .join(', ');
+                return `ARRAY[${arrayValues}]`;
+              }
+            }
 
-          if (typeof value === 'boolean') {
-            return value ? 'true' : 'false';
-          }
+            if (typeof value === 'string') {
+              const escaped = value.replace(/'/g, "''").replace(/\\/g, '\\\\');
+              return `'${escaped}'`;
+            }
 
-          if (typeof value === 'object') {
-            const json = JSON.stringify(value).replace(/'/g, "''");
-            return `'${json}'::jsonb`;
-          }
+            if (typeof value === 'boolean') {
+              return value ? 'true' : 'false';
+            }
 
-          return value;
-        }).join(', ');
+            if (typeof value === 'object') {
+              const json = JSON.stringify(value).replace(/'/g, "''");
+              return `'${json}'::jsonb`;
+            }
+
+            return value;
+          })
+          .join(', ');
 
         const insertQuery = `
-          INSERT INTO "categories" (${columns.map(c => `"${c}"`).join(', ')})
+          INSERT INTO "categories" (${columns.map((c) => `"${c}"`).join(', ')})
           VALUES (${values})
           ON CONFLICT (id) DO NOTHING
         `;
 
         await executeQuery(NEW_PROJECT_ID, NEW_ACCESS_TOKEN, insertQuery);
         successCount++;
-
       } catch (error) {
         console.error('에러 발생:', error);
         failCount++;
       }
 
       if ((i + 1) % 10 === 0 || i === data.length - 1) {
-        process.stdout.write(`\r   Progress: ${i + 1}/${data.length} (✅ ${successCount}, ❌ ${failCount})`);
+        process.stdout.write(
+          `\r   Progress: ${i + 1}/${data.length} (✅ ${successCount}, ❌ ${failCount})`
+        );
       }
     }
 
     console.log(`\n   ✅ Completed: ${successCount} success, ${failCount} failed\n`);
 
     return { success: successCount, failed: failCount };
-
   } catch (error) {
     console.log(`\n   ❌ Error: ${error.message}\n`);
     return { success: 0, failed: 0 };
@@ -194,7 +203,9 @@ async function main() {
 
   // Verify final count
   try {
-    await executeQuery(NEW_PROJECT_ID, NEW_ACCESS_TOKEN,
+    await executeQuery(
+      NEW_PROJECT_ID,
+      NEW_ACCESS_TOKEN,
       'SELECT COUNT(*) as count FROM categories'
     );
     console.log(`📊 Final count in new DB: ${result[0].count} categories\n`);

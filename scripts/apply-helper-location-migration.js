@@ -3,14 +3,15 @@
 const { Client } = require('pg');
 
 // Supabase PostgreSQL connection (Session mode - port 5432)
-const connectionString = 'postgresql://postgres.bpvfkkrlyrjkwgwmfrci:Skyj2124!@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres';
+const connectionString =
+  'postgresql://postgres.bpvfkkrlyrjkwgwmfrci:Skyj2124!@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres';
 
 async function applyMigration() {
   const client = new Client({
     connectionString,
     ssl: {
-      rejectUnauthorized: false
-    }
+      rejectUnauthorized: false,
+    },
   });
 
   console.log('🚀 라이더 위치 추적 마이그레이션 시작...\n');
@@ -260,7 +261,6 @@ async function applyMigration() {
     console.log('  - get_nearby_helpers_count: 주변 라이더 수 조회');
     console.log('  - get_nearby_helpers: 주변 라이더 목록 조회 (거리순)');
     console.log('  - get_nearby_errands: 주변 심부름 목록 조회 (거리순)');
-
   } catch (error) {
     console.error('에러 발생:', error);
     console.error('\n❌ 마이그레이션 오류:', err.message);

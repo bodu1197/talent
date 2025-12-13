@@ -19,7 +19,8 @@ async function main() {
   // 서비스 상세 페이지에서 사용하는 쿼리와 동일하게 테스트
   const { data: service, error } = await supabase
     .from('services')
-    .select(`
+    .select(
+      `
       *,
       seller:sellers(
         id,
@@ -34,7 +35,8 @@ async function main() {
       service_categories(
         category:categories(id, name, slug)
       )
-    `)
+    `
+    )
     .eq('id', serviceId)
     .single();
 
@@ -67,7 +69,7 @@ async function main() {
 
   console.log('\n카테고리:');
   if (service.service_categories && service.service_categories.length > 0) {
-    service.service_categories.forEach(sc => {
+    service.service_categories.forEach((sc) => {
       console.log(`  - ${sc.category?.name} (${sc.category?.slug})`);
     });
   } else {

@@ -29,7 +29,7 @@ function fixUnusedVariables(content, filename) {
     if (line.includes('} catch (error) {')) {
       // Check if error is used in the next few lines
       const nextLines = lines.slice(i + 1, i + 10).join('\n');
-      if (!nextLines.includes('error') || (nextLines.trim() === '}')) {
+      if (!nextLines.includes('error') || nextLines.trim() === '}') {
         // Error is not used, add console.error
         const indent = line.match(/^(\s*)/)[1];
         lines.splice(i + 1, 0, `${indent}  console.error('에러 발생:', error);`);
@@ -45,7 +45,10 @@ function fixUnusedVariables(content, filename) {
   // Pattern 3: Unused function declarations
   // function executeStatementViaRest(...) { ... } never called
   // Prefix with _
-  modified = modified.replace(/^function executeStatementViaRest\(/gm, 'function _executeStatementViaRest(');
+  modified = modified.replace(
+    /^function executeStatementViaRest\(/gm,
+    'function _executeStatementViaRest('
+  );
   if (modified !== content) changes++;
 
   // Pattern 4: const testData = ... where testData is never used
@@ -58,7 +61,10 @@ function fixUnusedVariables(content, filename) {
   if (modified !== content) changes++;
 
   // Pattern 6: const supabaseServiceKey = ... where it's never used
-  modified = modified.replace(/^(\s*)const supabaseServiceKey = /gm, '$1const _supabaseServiceKey = ');
+  modified = modified.replace(
+    /^(\s*)const supabaseServiceKey = /gm,
+    '$1const _supabaseServiceKey = '
+  );
   if (modified !== content) changes++;
 
   // Pattern 7: Dead store assignments
@@ -77,8 +83,15 @@ async function main() {
   console.log('='.repeat(60));
 
   const scriptsDir = __dirname;
-  const files = fs.readdirSync(scriptsDir)
-    .filter(f => f.endsWith('.js') && !f.startsWith('fix-') && !f.startsWith('analyze-') && !f.startsWith('show-'))
+  const files = fs
+    .readdirSync(scriptsDir)
+    .filter(
+      (f) =>
+        f.endsWith('.js') &&
+        !f.startsWith('fix-') &&
+        !f.startsWith('analyze-') &&
+        !f.startsWith('show-')
+    )
     .sort();
 
   console.log(`\n📁 총 ${files.length}개 파일 검사 중...\n`);

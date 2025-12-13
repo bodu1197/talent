@@ -24,7 +24,6 @@ function fixUnusedVariables(content, filename) {
   ];
 
   for (const pattern of unusedConstPatterns) {
-
     modified = modified.replace(pattern, (match) => {
       // Extract the await expression and preserve it without assignment
       const awaitMatch = match.match(/await ([^;]+);/);
@@ -65,7 +64,6 @@ function fixUnusedVariables(content, filename) {
   ];
 
   for (const pattern of unusedTopLevel) {
-
     modified = modified.replace(pattern, (match) => {
       changes++;
       return `// ${match} // unused`;
@@ -97,8 +95,9 @@ async function main() {
   console.log('='.repeat(60));
 
   const scriptsDir = __dirname;
-  const files = fs.readdirSync(scriptsDir)
-    .filter(f => f.endsWith('.js') && !f.startsWith('fix-'))
+  const files = fs
+    .readdirSync(scriptsDir)
+    .filter((f) => f.endsWith('.js') && !f.startsWith('fix-'))
     .sort();
 
   console.log(`\n📁 총 ${files.length}개 파일 검사 중...\n`);

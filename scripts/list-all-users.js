@@ -8,7 +8,9 @@ const supabase = createClient(
 );
 
 async function main() {
-  const { data: { users } } = await supabase.auth.admin.listUsers();
+  const {
+    data: { users },
+  } = await supabase.auth.admin.listUsers();
 
   console.log(`\n전체 사용자: ${users.length}명\n`);
 

@@ -11,12 +11,7 @@ describe('EmptyState', () => {
     });
 
     it('should render description when provided', () => {
-      render(
-        <EmptyState
-          title="No items"
-          description="There are no items to display"
-        />
-      );
+      render(<EmptyState title="No items" description="There are no items to display" />);
 
       expect(screen.getByText('There are no items to display')).toBeInTheDocument();
     });

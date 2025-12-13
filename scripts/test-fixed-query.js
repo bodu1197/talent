@@ -17,7 +17,8 @@ const supabase = createClient(supabaseUrl, supabaseKey);
   // 서비스 정보 가져오기 (실제 페이지와 동일한 쿼리)
   const { data: service } = await supabase
     .from('services')
-    .select(`
+    .select(
+      `
       id,
       title,
       seller:seller_profiles!seller_id(
@@ -26,7 +27,8 @@ const supabase = createClient(supabaseUrl, supabaseKey);
         display_name,
         business_name
       )
-    `)
+    `
+    )
     .eq('id', serviceId)
     .single();
 

@@ -26,7 +26,10 @@ function fixRemainingErrors(content, filename) {
 
   // 4. executeStatementViaRest that's never called - prefix with _
   if (!content.includes('executeStatementViaRest(')) {
-    modified = modified.replace(/function executeStatementViaRest\(/g, 'function _executeStatementViaRest(');
+    modified = modified.replace(
+      /function executeStatementViaRest\(/g,
+      'function _executeStatementViaRest('
+    );
     if (modified !== content) changes++;
   }
 
@@ -137,8 +140,15 @@ async function main() {
   console.log('='.repeat(60));
 
   const scriptsDir = __dirname;
-  const files = fs.readdirSync(scriptsDir)
-    .filter(f => f.endsWith('.js') && !f.startsWith('fix-') && !f.startsWith('analyze-') && !f.startsWith('show-'))
+  const files = fs
+    .readdirSync(scriptsDir)
+    .filter(
+      (f) =>
+        f.endsWith('.js') &&
+        !f.startsWith('fix-') &&
+        !f.startsWith('analyze-') &&
+        !f.startsWith('show-')
+    )
     .sort();
 
   console.log(`\n📁 총 ${files.length}개 파일 검사 중...\n`);

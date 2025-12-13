@@ -22,10 +22,10 @@ function executeQuery(query) {
       path: `/v1/projects/${NEW_PROJECT_ID}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${NEW_ACCESS_TOKEN}`,
+        Authorization: `Bearer ${NEW_ACCESS_TOKEN}`,
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(data)
-      }
+        'Content-Length': Buffer.byteLength(data),
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -80,19 +80,23 @@ async function importTableFromCSV(tableName) {
     for (let i = 0; i < rows.length; i += batchSize) {
       const batch = rows.slice(i, i + batchSize);
 
-      const values = batch.map(row => {
-        const cells = row.split('\t');
-        const formatted = cells.map(cell => {
-          if (cell === '\\N') return 'NULL';
-          // Unescape
-          cell = cell.replace(/\\n/g, '\n');
-          cell = cell.replace(/\\r/g, '\r');
-          cell = cell.replace(/\\t/g, '\t');
-          cell = cell.replace(/\\\\/g, '\\');
-          return `'${cell.replace(/'/g, "''")}'::text`;
-        }).join(', ');
-        return `(${formatted})`;
-      }).join(', ');
+      const values = batch
+        .map((row) => {
+          const cells = row.split('\t');
+          const formatted = cells
+            .map((cell) => {
+              if (cell === '\\N') return 'NULL';
+              // Unescape
+              cell = cell.replace(/\\n/g, '\n');
+              cell = cell.replace(/\\r/g, '\r');
+              cell = cell.replace(/\\t/g, '\t');
+              cell = cell.replace(/\\\\/g, '\\');
+              return `'${cell.replace(/'/g, "''")}'::text`;
+            })
+            .join(', ');
+          return `(${formatted})`;
+        })
+        .join(', ');
 
       const insertQuery = `
         INSERT INTO "${tableName}" (${columns})
@@ -106,35 +110,91 @@ async function importTableFromCSV(tableName) {
     }
 
     console.log(`\n   ✅ Completed\n`);
-
   } catch (error) {
     console.log(`\n   ❌ Error: ${error.message}\n`);
   }
 }
 
 const TABLE_ORDER = [
-  'users', 'categories', 'company_info', 'notices', 'admins',
-  'profiles', 'buyers', 'sellers', 'helper_profiles', 'user_wallets',
-  'service_categories', 'category_visits',
-  'services', 'seller_portfolio', 'seller_earnings', 'food_stores',
-  'service_revisions', 'service_revision_categories', 'service_packages',
-  'service_favorites', 'service_views', 'service_view_logs',
-  'portfolio_items', 'portfolio_services',
-  'orders', 'order_settlements', 'revision_history', 'quotes', 'quote_responses',
-  'reviews', 'payments', 'payment_requests', 'refunds', 'settlements',
-  'settlement_details', 'disputes', 'tax_invoices',
-  'chat_rooms', 'chat_messages', 'chat_favorites', 'conversations', 'messages',
-  'errands', 'errand_applications', 'errand_stops', 'errand_locations',
-  'errand_messages', 'errand_reviews', 'errand_settlements', 'errand_disputes',
+  'users',
+  'categories',
+  'company_info',
+  'notices',
+  'admins',
+  'profiles',
+  'buyers',
+  'sellers',
+  'helper_profiles',
+  'user_wallets',
+  'service_categories',
+  'category_visits',
+  'services',
+  'seller_portfolio',
+  'seller_earnings',
+  'food_stores',
+  'service_revisions',
+  'service_revision_categories',
+  'service_packages',
+  'service_favorites',
+  'service_views',
+  'service_view_logs',
+  'portfolio_items',
+  'portfolio_services',
+  'orders',
+  'order_settlements',
+  'revision_history',
+  'quotes',
+  'quote_responses',
+  'reviews',
+  'payments',
+  'payment_requests',
+  'refunds',
+  'settlements',
+  'settlement_details',
+  'disputes',
+  'tax_invoices',
+  'chat_rooms',
+  'chat_messages',
+  'chat_favorites',
+  'conversations',
+  'messages',
+  'errands',
+  'errand_applications',
+  'errand_stops',
+  'errand_locations',
+  'errand_messages',
+  'errand_reviews',
+  'errand_settlements',
+  'errand_disputes',
   'errand_chat_messages',
-  'food_menu_categories', 'food_menu_option_groups', 'food_menu_option_items',
-  'food_menus', 'food_orders', 'food_reviews', 'food_carts', 'food_store_favorites',
-  'advertising_subscriptions', 'advertising_campaigns', 'advertising_impressions',
-  'advertising_payments', 'advertising_credits', 'premium_placements',
-  'notifications', 'activity_logs', 'page_views', 'search_logs',
-  'visitor_stats_hourly', 'visitor_stats_daily', 'visitor_stats_monthly',
-  'wallet_transactions', 'credit_transactions', 'earnings_transactions',
-  'withdrawal_requests', 'helper_withdrawals', 'helper_subscriptions', 'reports'
+  'food_menu_categories',
+  'food_menu_option_groups',
+  'food_menu_option_items',
+  'food_menus',
+  'food_orders',
+  'food_reviews',
+  'food_carts',
+  'food_store_favorites',
+  'advertising_subscriptions',
+  'advertising_campaigns',
+  'advertising_impressions',
+  'advertising_payments',
+  'advertising_credits',
+  'premium_placements',
+  'notifications',
+  'activity_logs',
+  'page_views',
+  'search_logs',
+  'visitor_stats_hourly',
+  'visitor_stats_daily',
+  'visitor_stats_monthly',
+  'wallet_transactions',
+  'credit_transactions',
+  'earnings_transactions',
+  'withdrawal_requests',
+  'helper_withdrawals',
+  'helper_subscriptions',
+  'reports',
 ];
 
 async function main() {

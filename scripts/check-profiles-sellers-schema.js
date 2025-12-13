@@ -2,13 +2,14 @@
 const { createClient } = require('@supabase/supabase-js');
 
 const _supabaseUrl = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
-const _supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
+const _supabaseServiceKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   auth: {
     autoRefreshToken: false,
-    persistSession: false
-  }
+    persistSession: false,
+  },
 });
 
 async function checkSchema() {
@@ -47,7 +48,10 @@ async function checkSchema() {
 
   // Check auth.users metadata
   console.log('\n=== AUTH.USERS METADATA ===');
-  const { data: { users }, error: usersError } = await supabase.auth.admin.listUsers();
+  const {
+    data: { users },
+    error: usersError,
+  } = await supabase.auth.admin.listUsers();
 
   if (usersError) {
     console.log('❌ Error fetching users:', usersError.message);

@@ -17,7 +17,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
         DROP CONSTRAINT IF EXISTS advertising_impressions_category_id_fkey;
 
       COMMENT ON COLUMN advertising_impressions.category_id IS '카테고리 ID (통계용, 외래 키 없음)';
-    `
+    `,
   });
 
   if (error) {

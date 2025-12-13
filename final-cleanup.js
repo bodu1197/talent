@@ -14,12 +14,12 @@ const filesToFix = [
   'src/lib/supabase/queries/admin.ts',
   'src/lib/supabase/queries/dashboard.ts',
   'src/lib/supabase/queries/search.ts',
-  'src/lib/supabase/queries/services.ts'
+  'src/lib/supabase/queries/services.ts',
 ];
 
 let totalFixes = 0;
 
-filesToFix.forEach(relPath => {
+filesToFix.forEach((relPath) => {
   const filePath = path.join(__dirname, relPath);
   if (!fs.existsSync(filePath)) return;
 
@@ -45,7 +45,12 @@ filesToFix.forEach(relPath => {
           break;
         }
         // If we hit a function or other structure, stop
-        if (lines[j].includes('function') || lines[j].includes('=>') || lines[j].includes('.map(') || lines[j].includes('.forEach(')) {
+        if (
+          lines[j].includes('function') ||
+          lines[j].includes('=>') ||
+          lines[j].includes('.map(') ||
+          lines[j].includes('.forEach(')
+        ) {
           break;
         }
       }

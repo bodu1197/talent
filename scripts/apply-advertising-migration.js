@@ -4,21 +4,26 @@ const fs = require('fs');
 const path = require('path');
 
 const _supabaseUrl = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
-const _supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
+const _supabaseServiceKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 async function applyMigration() {
   console.log('🚀 광고 시스템 마이그레이션 시작...\n');
 
-  const migrationFile = path.join(__dirname, '../supabase/migrations/20251112120000_create_advertising_system.sql');
+  const migrationFile = path.join(
+    __dirname,
+    '../supabase/migrations/20251112120000_create_advertising_system.sql'
+  );
   const sql = fs.readFileSync(migrationFile, 'utf8');
 
   // SQL을 개별 문장으로 분리 (세미콜론 기준, 하지만 함수 내부는 제외)
   const statements = sql
     .split(/;\s*$/gm)
-    .map(s => s.trim())
-    .filter(s => s.length > 0 && !s.startsWith('--') && !s.match(/^COMMENT ON/));
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0 && !s.startsWith('--') && !s.match(/^COMMENT ON/));
 
   let successCount = 0;
   let errorCount = 0;
@@ -72,13 +77,11 @@ async function applyMigration() {
     'advertising_subscriptions',
     'advertising_payments',
     'advertising_impressions',
-    'credit_transactions'
+    'credit_transactions',
   ];
 
   for (const table of tables) {
-    const { error } = await supabase
-      .from(table)
-      .select('*', { count: 'exact', head: true });
+    const { error } = await supabase.from(table).select('*', { count: 'exact', head: true });
 
     if (error) {
       console.log(`  ❌ ${table}: 테이블 없음 또는 접근 불가`);
@@ -88,7 +91,7 @@ async function applyMigration() {
   }
 }
 
-applyMigration().catch(err => {
+applyMigration().catch((err) => {
   console.error('마이그레이션 실패:', err);
   process.exit(1);
 });

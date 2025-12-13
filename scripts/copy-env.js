@@ -28,12 +28,11 @@ try {
   if (hasNewSupabase) {
     console.log('✅ 새 Supabase 프로젝트로 업데이트 완료!\n');
     console.log('확인:');
-    const lines = content.split('\n').filter(line => line.includes('SUPABASE'));
-    lines.forEach(line => console.log('  ' + line));
+    const lines = content.split('\n').filter((line) => line.includes('SUPABASE'));
+    lines.forEach((line) => console.log('  ' + line));
   } else {
     console.log('⚠️  업데이트 확인 필요\n');
   }
-
 } catch (error) {
   console.error('❌ 오류:', error.message);
   process.exit(1);

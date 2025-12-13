@@ -4,13 +4,14 @@ const _fs = require('fs');
 const _path = require('path');
 
 const _supabaseUrl = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
-const _supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
+const _supabaseServiceKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   auth: {
     autoRefreshToken: false,
-    persistSession: false
-  }
+    persistSession: false,
+  },
 });
 
 async function testOperations() {
@@ -25,7 +26,7 @@ async function testOperations() {
       console.log(`  ⚠️  버킷 조회 실패: ${bucketsError.message}`);
     } else {
       console.log(`  ✅ 버킷 ${buckets.length}개 발견:`);
-      buckets.forEach(bucket => {
+      buckets.forEach((bucket) => {
         console.log(`     - ${bucket.name} (${bucket.public ? '공개' : '비공개'})`);
       });
     }
@@ -47,12 +48,12 @@ async function testOperations() {
   try {
     // 먼저 test-uploads 버킷이 있는지 확인하고 없으면 생성
     const { data: buckets } = await supabase.storage.listBuckets();
-    const testBucket = buckets?.find(b => b.name === 'test-uploads');
+    const testBucket = buckets?.find((b) => b.name === 'test-uploads');
 
     if (!testBucket) {
       console.log('  📦 test-uploads 버킷 생성 중...');
       const { error: createError } = await supabase.storage.createBucket('test-uploads', {
-        public: false
+        public: false,
       });
 
       if (createError) {
@@ -68,7 +69,7 @@ async function testOperations() {
       .from('test-uploads')
       .upload(testFileName, Buffer.from(testContent), {
         contentType: 'text/plain',
-        upsert: true
+        upsert: true,
       });
 
     if (uploadError) {
@@ -107,7 +108,7 @@ async function testOperations() {
       console.log(`  ⚠️  조회 실패: ${error.message}`);
     } else {
       console.log(`  ✅ 사용자 ${count}명 중 3명 조회 성공:`);
-      data.forEach(user => {
+      data.forEach((user) => {
         console.log(`     - ${user.name} (${user.email}) [${user.user_type}]`);
       });
     }
@@ -132,7 +133,7 @@ async function testOperations() {
         id: testUserId,
         email: `test-${Date.now()}@example.com`,
         name: '테스트 사용자',
-        user_type: 'buyer'
+        user_type: 'buyer',
       })
       .select();
 
@@ -155,10 +156,7 @@ async function testOperations() {
       }
 
       // 테스트 데이터 삭제
-      const { error: deleteError } = await supabase
-        .from('users')
-        .delete()
-        .eq('id', testUserId);
+      const { error: deleteError } = await supabase.from('users').delete().eq('id', testUserId);
 
       if (deleteError) {
         console.log(`  ⚠️  삭제 실패: ${deleteError.message}`);

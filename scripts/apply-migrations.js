@@ -4,7 +4,8 @@ const https = require('https');
 const path = require('path');
 
 const _SUPABASE_URL = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
-const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const SERVICE_ROLE_KEY =
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 async function executeSql(sql) {
   return new Promise((resolve, reject) => {
@@ -17,10 +18,10 @@ async function executeSql(sql) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'apikey': SERVICE_ROLE_KEY,
-        'Authorization': `Bearer ${SERVICE_ROLE_KEY}`,
-        'Content-Length': Buffer.byteLength(postData)
-      }
+        apikey: SERVICE_ROLE_KEY,
+        Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
+        'Content-Length': Buffer.byteLength(postData),
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -58,8 +59,20 @@ async function main() {
     console.log('🚀 Starting migration execution...\n');
 
     // Read migration files
-    const migration1Path = path.join(__dirname, '..', 'supabase', 'migrations', '20251114000000_create_revision_history.sql');
-    const migration2Path = path.join(__dirname, '..', 'supabase', 'migrations', '20251114010000_create_notifications.sql');
+    const migration1Path = path.join(
+      __dirname,
+      '..',
+      'supabase',
+      'migrations',
+      '20251114000000_create_revision_history.sql'
+    );
+    const migration2Path = path.join(
+      __dirname,
+      '..',
+      'supabase',
+      'migrations',
+      '20251114010000_create_notifications.sql'
+    );
 
     console.log('📖 Reading migration files...');
     const sql1 = fs.readFileSync(migration1Path, 'utf8');

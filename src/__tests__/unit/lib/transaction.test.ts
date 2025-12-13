@@ -1,15 +1,15 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
   createOrderWithIdempotency,
   createPaymentWithIdempotency,
   updateOrderStatusWithLocking,
   deductCreditWithLocking,
-} from "@/lib/transaction";
-import type { SupabaseClient, PostgrestError } from "@supabase/supabase-js";
-import type { Tables } from "@/types/database";
+} from '@/lib/transaction';
+import type { SupabaseClient, PostgrestError } from '@supabase/supabase-js';
+import type { Tables } from '@/types/database';
 
 // Mock logger
-vi.mock("@/lib/logger", () => ({
+vi.mock('@/lib/logger', () => ({
   logger: {
     error: vi.fn(),
     info: vi.fn(),
@@ -20,12 +20,12 @@ vi.mock("@/lib/logger", () => ({
 
 // Mock createClient
 const mockCreateClient = vi.fn();
-vi.mock("@/lib/supabase/server", () => ({
+vi.mock('@/lib/supabase/server', () => ({
   createClient: () => mockCreateClient(),
 }));
 
-describe("transaction.ts", () => {
-  describe("createOrderWithIdempotency", () => {
+describe('transaction.ts', () => {
+  describe('createOrderWithIdempotency', () => {
     let mockSupabase: SupabaseClient;
 
     beforeEach(() => {
@@ -37,18 +37,18 @@ describe("transaction.ts", () => {
       } as unknown as SupabaseClient;
     });
 
-    it("should return existing order when idempotency key already exists", async () => {
+    it('should return existing order when idempotency key already exists', async () => {
       const existingOrder = {
-        id: "order-123",
-        merchant_uid: "idempotency-key-1",
-        buyer_id: "buyer-1",
-        seller_id: "seller-1",
-        service_id: "service-1",
+        id: 'order-123',
+        merchant_uid: 'idempotency-key-1',
+        buyer_id: 'buyer-1',
+        seller_id: 'seller-1',
+        service_id: 'service-1',
         amount: 10000,
-        status: "pending",
-        created_at: "2024-01-01T00:00:00Z",
-        updated_at: "2024-01-01T00:00:00Z",
-      } as unknown as Tables<"orders">;
+        status: 'pending',
+        created_at: '2024-01-01T00:00:00Z',
+        updated_at: '2024-01-01T00:00:00Z',
+      } as unknown as Tables<'orders'>;
 
       const mockQueryBuilder = {
         select: vi.fn().mockReturnThis(),
@@ -62,39 +62,32 @@ describe("transaction.ts", () => {
       vi.mocked(mockSupabase.from).mockReturnValue(mockQueryBuilder as never);
 
       const orderData = {
-        buyer_id: "buyer-1",
-        seller_id: "seller-1",
-        service_id: "service-1",
+        buyer_id: 'buyer-1',
+        seller_id: 'seller-1',
+        service_id: 'service-1',
         amount: 10000,
       };
 
-      const result = await createOrderWithIdempotency(
-        mockSupabase,
-        orderData,
-        "idempotency-key-1",
-      );
+      const result = await createOrderWithIdempotency(mockSupabase, orderData, 'idempotency-key-1');
 
       expect(result.data).toEqual(existingOrder);
       expect(result.error).toBeNull();
       expect(result.isExisting).toBe(true);
-      expect(mockQueryBuilder.eq).toHaveBeenCalledWith(
-        "merchant_uid",
-        "idempotency-key-1",
-      );
+      expect(mockQueryBuilder.eq).toHaveBeenCalledWith('merchant_uid', 'idempotency-key-1');
     });
 
-    it("should create new order when idempotency key does not exist", async () => {
+    it('should create new order when idempotency key does not exist', async () => {
       const newOrder = {
-        id: "order-456",
-        merchant_uid: "idempotency-key-2",
-        buyer_id: "buyer-2",
-        seller_id: "seller-2",
-        service_id: "service-2",
+        id: 'order-456',
+        merchant_uid: 'idempotency-key-2',
+        buyer_id: 'buyer-2',
+        seller_id: 'seller-2',
+        service_id: 'service-2',
         amount: 20000,
-        status: "pending",
-        created_at: "2024-01-01T00:00:00Z",
-        updated_at: "2024-01-01T00:00:00Z",
-      } as unknown as Tables<"orders">;
+        status: 'pending',
+        created_at: '2024-01-01T00:00:00Z',
+        updated_at: '2024-01-01T00:00:00Z',
+      } as unknown as Tables<'orders'>;
 
       const mockQueryBuilder = {
         select: vi.fn().mockReturnThis(),
@@ -113,39 +106,35 @@ describe("transaction.ts", () => {
       vi.mocked(mockSupabase.from).mockReturnValue(mockQueryBuilder as never);
 
       const orderData = {
-        buyer_id: "buyer-2",
-        seller_id: "seller-2",
-        service_id: "service-2",
+        buyer_id: 'buyer-2',
+        seller_id: 'seller-2',
+        service_id: 'service-2',
         amount: 20000,
       };
 
-      const result = await createOrderWithIdempotency(
-        mockSupabase,
-        orderData,
-        "idempotency-key-2",
-      );
+      const result = await createOrderWithIdempotency(mockSupabase, orderData, 'idempotency-key-2');
 
       expect(result.data).toEqual(newOrder);
       expect(result.error).toBeNull();
       expect(result.isExisting).toBe(false);
       expect(mockQueryBuilder.insert).toHaveBeenCalledWith({
         ...orderData,
-        merchant_uid: "idempotency-key-2",
+        merchant_uid: 'idempotency-key-2',
       });
     });
 
-    it("should handle race condition with unique constraint violation", async () => {
+    it('should handle race condition with unique constraint violation', async () => {
       const existingOrder = {
-        id: "order-789",
-        merchant_uid: "idempotency-key-3",
-        buyer_id: "buyer-3",
-        seller_id: "seller-3",
-        service_id: "service-3",
+        id: 'order-789',
+        merchant_uid: 'idempotency-key-3',
+        buyer_id: 'buyer-3',
+        seller_id: 'seller-3',
+        service_id: 'service-3',
         amount: 30000,
-        status: "pending",
-        created_at: "2024-01-01T00:00:00Z",
-        updated_at: "2024-01-01T00:00:00Z",
-      } as unknown as Tables<"orders">;
+        status: 'pending',
+        created_at: '2024-01-01T00:00:00Z',
+        updated_at: '2024-01-01T00:00:00Z',
+      } as unknown as Tables<'orders'>;
 
       let callCount = 0;
       const mockQueryBuilder = {
@@ -163,9 +152,8 @@ describe("transaction.ts", () => {
             return Promise.resolve({
               data: null,
               error: {
-                code: "23505",
-                message:
-                  'duplicate key value violates unique constraint "orders_merchant_uid_key"',
+                code: '23505',
+                message: 'duplicate key value violates unique constraint "orders_merchant_uid_key"',
               } as PostgrestError,
             });
           } else {
@@ -181,17 +169,13 @@ describe("transaction.ts", () => {
       vi.mocked(mockSupabase.from).mockReturnValue(mockQueryBuilder as never);
 
       const orderData = {
-        buyer_id: "buyer-3",
-        seller_id: "seller-3",
-        service_id: "service-3",
+        buyer_id: 'buyer-3',
+        seller_id: 'seller-3',
+        service_id: 'service-3',
         amount: 30000,
       };
 
-      const result = await createOrderWithIdempotency(
-        mockSupabase,
-        orderData,
-        "idempotency-key-3",
-      );
+      const result = await createOrderWithIdempotency(mockSupabase, orderData, 'idempotency-key-3');
 
       expect(result.data).toEqual(existingOrder);
       expect(result.error).toBeNull();
@@ -199,10 +183,10 @@ describe("transaction.ts", () => {
       expect(mockQueryBuilder.single).toHaveBeenCalledTimes(2);
     });
 
-    it("should return error when check query fails", async () => {
+    it('should return error when check query fails', async () => {
       const checkError = {
-        code: "PGRST301",
-        message: "Database connection failed",
+        code: 'PGRST301',
+        message: 'Database connection failed',
       } as PostgrestError;
 
       const mockQueryBuilder = {
@@ -217,27 +201,23 @@ describe("transaction.ts", () => {
       vi.mocked(mockSupabase.from).mockReturnValue(mockQueryBuilder as never);
 
       const orderData = {
-        buyer_id: "buyer-4",
-        seller_id: "seller-4",
-        service_id: "service-4",
+        buyer_id: 'buyer-4',
+        seller_id: 'seller-4',
+        service_id: 'service-4',
         amount: 40000,
       };
 
-      const result = await createOrderWithIdempotency(
-        mockSupabase,
-        orderData,
-        "idempotency-key-4",
-      );
+      const result = await createOrderWithIdempotency(mockSupabase, orderData, 'idempotency-key-4');
 
       expect(result.data).toBeNull();
       expect(result.error).toEqual(checkError);
       expect(result.isExisting).toBe(false);
     });
 
-    it("should return error when insert fails with non-constraint error", async () => {
+    it('should return error when insert fails with non-constraint error', async () => {
       const insertError = {
-        code: "PGRST400",
-        message: "Invalid data format",
+        code: 'PGRST400',
+        message: 'Invalid data format',
       } as PostgrestError;
 
       const mockQueryBuilder = {
@@ -257,36 +237,32 @@ describe("transaction.ts", () => {
       vi.mocked(mockSupabase.from).mockReturnValue(mockQueryBuilder as never);
 
       const orderData = {
-        buyer_id: "buyer-5",
-        seller_id: "seller-5",
-        service_id: "service-5",
+        buyer_id: 'buyer-5',
+        seller_id: 'seller-5',
+        service_id: 'service-5',
         amount: 50000,
       };
 
-      const result = await createOrderWithIdempotency(
-        mockSupabase,
-        orderData,
-        "idempotency-key-5",
-      );
+      const result = await createOrderWithIdempotency(mockSupabase, orderData, 'idempotency-key-5');
 
       expect(result.data).toBeNull();
       expect(result.error).toEqual(insertError);
       expect(result.isExisting).toBe(false);
     });
 
-    it("should pass through additional order data fields", async () => {
+    it('should pass through additional order data fields', async () => {
       const newOrder = {
-        id: "order-999",
-        merchant_uid: "idempotency-key-6",
-        buyer_id: "buyer-6",
-        seller_id: "seller-6",
-        service_id: "service-6",
+        id: 'order-999',
+        merchant_uid: 'idempotency-key-6',
+        buyer_id: 'buyer-6',
+        seller_id: 'seller-6',
+        service_id: 'service-6',
         amount: 60000,
-        status: "pending",
-        custom_field: "custom_value",
-        created_at: "2024-01-01T00:00:00Z",
-        updated_at: "2024-01-01T00:00:00Z",
-      } as unknown as Tables<"orders">;
+        status: 'pending',
+        custom_field: 'custom_value',
+        created_at: '2024-01-01T00:00:00Z',
+        updated_at: '2024-01-01T00:00:00Z',
+      } as unknown as Tables<'orders'>;
 
       const mockQueryBuilder = {
         select: vi.fn().mockReturnThis(),
@@ -305,28 +281,24 @@ describe("transaction.ts", () => {
       vi.mocked(mockSupabase.from).mockReturnValue(mockQueryBuilder as never);
 
       const orderData = {
-        buyer_id: "buyer-6",
-        seller_id: "seller-6",
-        service_id: "service-6",
+        buyer_id: 'buyer-6',
+        seller_id: 'seller-6',
+        service_id: 'service-6',
         amount: 60000,
-        custom_field: "custom_value",
+        custom_field: 'custom_value',
       };
 
-      const result = await createOrderWithIdempotency(
-        mockSupabase,
-        orderData,
-        "idempotency-key-6",
-      );
+      const result = await createOrderWithIdempotency(mockSupabase, orderData, 'idempotency-key-6');
 
       expect(result.data).toEqual(newOrder);
       expect(mockQueryBuilder.insert).toHaveBeenCalledWith({
         ...orderData,
-        merchant_uid: "idempotency-key-6",
+        merchant_uid: 'idempotency-key-6',
       });
     });
   });
 
-  describe("createPaymentWithIdempotency", () => {
+  describe('createPaymentWithIdempotency', () => {
     let mockSupabase: SupabaseClient;
 
     beforeEach(() => {
@@ -336,16 +308,16 @@ describe("transaction.ts", () => {
       } as unknown as SupabaseClient;
     });
 
-    it("should return existing payment when payment_id already exists", async () => {
+    it('should return existing payment when payment_id already exists', async () => {
       const existingPayment = {
-        id: "payment-123",
-        order_id: "order-123",
+        id: 'payment-123',
+        order_id: 'order-123',
         amount: 10000,
-        payment_method: "card",
-        payment_id: "pay-123",
-        status: "completed",
-        created_at: "2024-01-01T00:00:00Z",
-      } as unknown as Tables<"payments">;
+        payment_method: 'card',
+        payment_id: 'pay-123',
+        status: 'completed',
+        created_at: '2024-01-01T00:00:00Z',
+      } as unknown as Tables<'payments'>;
 
       const mockQueryBuilder = {
         select: vi.fn().mockReturnThis(),
@@ -359,33 +331,30 @@ describe("transaction.ts", () => {
       vi.mocked(mockSupabase.from).mockReturnValue(mockQueryBuilder as never);
 
       const paymentData = {
-        order_id: "order-123",
+        order_id: 'order-123',
         amount: 10000,
-        payment_method: "card",
-        payment_id: "pay-123",
+        payment_method: 'card',
+        payment_id: 'pay-123',
       };
 
-      const result = await createPaymentWithIdempotency(
-        mockSupabase,
-        paymentData,
-      );
+      const result = await createPaymentWithIdempotency(mockSupabase, paymentData);
 
       expect(result.data).toEqual(existingPayment);
       expect(result.error).toBeNull();
       expect(result.isExisting).toBe(true);
-      expect(mockQueryBuilder.eq).toHaveBeenCalledWith("payment_id", "pay-123");
+      expect(mockQueryBuilder.eq).toHaveBeenCalledWith('payment_id', 'pay-123');
     });
 
-    it("should create new payment when payment_id does not exist", async () => {
+    it('should create new payment when payment_id does not exist', async () => {
       const newPayment = {
-        id: "payment-456",
-        order_id: "order-456",
+        id: 'payment-456',
+        order_id: 'order-456',
         amount: 20000,
-        payment_method: "bank_transfer",
-        payment_id: "pay-456",
-        status: "completed",
-        created_at: "2024-01-01T00:00:00Z",
-      } as unknown as Tables<"payments">;
+        payment_method: 'bank_transfer',
+        payment_id: 'pay-456',
+        status: 'completed',
+        created_at: '2024-01-01T00:00:00Z',
+      } as unknown as Tables<'payments'>;
 
       const mockQueryBuilder = {
         select: vi.fn().mockReturnThis(),
@@ -404,16 +373,13 @@ describe("transaction.ts", () => {
       vi.mocked(mockSupabase.from).mockReturnValue(mockQueryBuilder as never);
 
       const paymentData = {
-        order_id: "order-456",
+        order_id: 'order-456',
         amount: 20000,
-        payment_method: "bank_transfer",
-        payment_id: "pay-456",
+        payment_method: 'bank_transfer',
+        payment_id: 'pay-456',
       };
 
-      const result = await createPaymentWithIdempotency(
-        mockSupabase,
-        paymentData,
-      );
+      const result = await createPaymentWithIdempotency(mockSupabase, paymentData);
 
       expect(result.data).toEqual(newPayment);
       expect(result.error).toBeNull();
@@ -421,16 +387,16 @@ describe("transaction.ts", () => {
       expect(mockQueryBuilder.insert).toHaveBeenCalledWith(paymentData);
     });
 
-    it("should handle race condition with payment_id constraint violation", async () => {
+    it('should handle race condition with payment_id constraint violation', async () => {
       const existingPayment = {
-        id: "payment-789",
-        order_id: "order-789",
+        id: 'payment-789',
+        order_id: 'order-789',
         amount: 30000,
-        payment_method: "card",
-        payment_id: "pay-789",
-        status: "completed",
-        created_at: "2024-01-01T00:00:00Z",
-      } as unknown as Tables<"payments">;
+        payment_method: 'card',
+        payment_id: 'pay-789',
+        status: 'completed',
+        created_at: '2024-01-01T00:00:00Z',
+      } as unknown as Tables<'payments'>;
 
       let callCount = 0;
       const mockQueryBuilder = {
@@ -447,9 +413,8 @@ describe("transaction.ts", () => {
             return Promise.resolve({
               data: null,
               error: {
-                code: "23505",
-                message:
-                  'duplicate key value violates unique constraint "payments_payment_id_key"',
+                code: '23505',
+                message: 'duplicate key value violates unique constraint "payments_payment_id_key"',
               } as PostgrestError,
             });
           } else {
@@ -464,26 +429,23 @@ describe("transaction.ts", () => {
       vi.mocked(mockSupabase.from).mockReturnValue(mockQueryBuilder as never);
 
       const paymentData = {
-        order_id: "order-789",
+        order_id: 'order-789',
         amount: 30000,
-        payment_method: "card",
-        payment_id: "pay-789",
+        payment_method: 'card',
+        payment_id: 'pay-789',
       };
 
-      const result = await createPaymentWithIdempotency(
-        mockSupabase,
-        paymentData,
-      );
+      const result = await createPaymentWithIdempotency(mockSupabase, paymentData);
 
       expect(result.data).toEqual(existingPayment);
       expect(result.error).toBeNull();
       expect(result.isExisting).toBe(true);
     });
 
-    it("should return error when check query fails", async () => {
+    it('should return error when check query fails', async () => {
       const checkError = {
-        code: "PGRST301",
-        message: "Database connection failed",
+        code: 'PGRST301',
+        message: 'Database connection failed',
       } as PostgrestError;
 
       const mockQueryBuilder = {
@@ -498,26 +460,23 @@ describe("transaction.ts", () => {
       vi.mocked(mockSupabase.from).mockReturnValue(mockQueryBuilder as never);
 
       const paymentData = {
-        order_id: "order-error",
+        order_id: 'order-error',
         amount: 40000,
-        payment_method: "card",
-        payment_id: "pay-error",
+        payment_method: 'card',
+        payment_id: 'pay-error',
       };
 
-      const result = await createPaymentWithIdempotency(
-        mockSupabase,
-        paymentData,
-      );
+      const result = await createPaymentWithIdempotency(mockSupabase, paymentData);
 
       expect(result.data).toBeNull();
       expect(result.error).toEqual(checkError);
       expect(result.isExisting).toBe(false);
     });
 
-    it("should return error when insert fails with non-constraint error", async () => {
+    it('should return error when insert fails with non-constraint error', async () => {
       const insertError = {
-        code: "PGRST400",
-        message: "Invalid payment method",
+        code: 'PGRST400',
+        message: 'Invalid payment method',
       } as PostgrestError;
 
       const mockQueryBuilder = {
@@ -537,33 +496,30 @@ describe("transaction.ts", () => {
       vi.mocked(mockSupabase.from).mockReturnValue(mockQueryBuilder as never);
 
       const paymentData = {
-        order_id: "order-invalid",
+        order_id: 'order-invalid',
         amount: 50000,
-        payment_method: "invalid_method",
-        payment_id: "pay-invalid",
+        payment_method: 'invalid_method',
+        payment_id: 'pay-invalid',
       };
 
-      const result = await createPaymentWithIdempotency(
-        mockSupabase,
-        paymentData,
-      );
+      const result = await createPaymentWithIdempotency(mockSupabase, paymentData);
 
       expect(result.data).toBeNull();
       expect(result.error).toEqual(insertError);
       expect(result.isExisting).toBe(false);
     });
 
-    it("should pass through additional payment data fields", async () => {
+    it('should pass through additional payment data fields', async () => {
       const newPayment = {
-        id: "payment-999",
-        order_id: "order-999",
+        id: 'payment-999',
+        order_id: 'order-999',
         amount: 60000,
-        payment_method: "card",
-        payment_id: "pay-999",
-        status: "completed",
-        extra_field: "extra_value",
-        created_at: "2024-01-01T00:00:00Z",
-      } as unknown as Tables<"payments">;
+        payment_method: 'card',
+        payment_id: 'pay-999',
+        status: 'completed',
+        extra_field: 'extra_value',
+        created_at: '2024-01-01T00:00:00Z',
+      } as unknown as Tables<'payments'>;
 
       const mockQueryBuilder = {
         select: vi.fn().mockReturnThis(),
@@ -582,24 +538,21 @@ describe("transaction.ts", () => {
       vi.mocked(mockSupabase.from).mockReturnValue(mockQueryBuilder as never);
 
       const paymentData = {
-        order_id: "order-999",
+        order_id: 'order-999',
         amount: 60000,
-        payment_method: "card",
-        payment_id: "pay-999",
-        extra_field: "extra_value",
+        payment_method: 'card',
+        payment_id: 'pay-999',
+        extra_field: 'extra_value',
       };
 
-      const result = await createPaymentWithIdempotency(
-        mockSupabase,
-        paymentData,
-      );
+      const result = await createPaymentWithIdempotency(mockSupabase, paymentData);
 
       expect(result.data).toEqual(newPayment);
       expect(mockQueryBuilder.insert).toHaveBeenCalledWith(paymentData);
     });
   });
 
-  describe("updateOrderStatusWithLocking", () => {
+  describe('updateOrderStatusWithLocking', () => {
     let mockSupabase: SupabaseClient;
 
     beforeEach(() => {
@@ -609,11 +562,11 @@ describe("transaction.ts", () => {
       } as unknown as SupabaseClient;
     });
 
-    it("should successfully update order status with matching timestamp", async () => {
+    it('should successfully update order status with matching timestamp', async () => {
       const updatedOrder = {
-        id: "order-123",
-        status: "completed",
-        updated_at: "2024-01-01T01:00:00Z",
+        id: 'order-123',
+        status: 'completed',
+        updated_at: '2024-01-01T01:00:00Z',
       };
 
       const mockQueryBuilder = {
@@ -630,22 +583,19 @@ describe("transaction.ts", () => {
 
       const result = await updateOrderStatusWithLocking(
         mockSupabase,
-        "order-123",
-        "completed",
-        "2024-01-01T00:00:00Z",
+        'order-123',
+        'completed',
+        '2024-01-01T00:00:00Z'
       );
 
       expect(result.success).toBe(true);
       expect(result.data).toEqual(updatedOrder);
       expect(result.error).toBeUndefined();
-      expect(mockQueryBuilder.eq).toHaveBeenCalledWith("id", "order-123");
-      expect(mockQueryBuilder.eq).toHaveBeenCalledWith(
-        "updated_at",
-        "2024-01-01T00:00:00Z",
-      );
+      expect(mockQueryBuilder.eq).toHaveBeenCalledWith('id', 'order-123');
+      expect(mockQueryBuilder.eq).toHaveBeenCalledWith('updated_at', '2024-01-01T00:00:00Z');
     });
 
-    it("should fail with optimistic lock error when timestamp does not match", async () => {
+    it('should fail with optimistic lock error when timestamp does not match', async () => {
       const mockQueryBuilder = {
         update: vi.fn().mockReturnThis(),
         eq: vi.fn().mockReturnThis(),
@@ -653,8 +603,8 @@ describe("transaction.ts", () => {
         single: vi.fn().mockResolvedValue({
           data: null,
           error: {
-            code: "PGRST116",
-            message: "No rows updated",
+            code: 'PGRST116',
+            message: 'No rows updated',
           } as PostgrestError,
         }),
       };
@@ -663,19 +613,19 @@ describe("transaction.ts", () => {
 
       const result = await updateOrderStatusWithLocking(
         mockSupabase,
-        "order-123",
-        "completed",
-        "2024-01-01T00:00:00Z",
+        'order-123',
+        'completed',
+        '2024-01-01T00:00:00Z'
       );
 
       expect(result.success).toBe(false);
       expect(result.error).toBe(
-        "주문 상태가 이미 다른 사용자에 의해 변경되었습니다. 새로고침 후 다시 시도해주세요.",
+        '주문 상태가 이미 다른 사용자에 의해 변경되었습니다. 새로고침 후 다시 시도해주세요.'
       );
       expect(result.data).toBeUndefined();
     });
 
-    it("should return error message for other database errors", async () => {
+    it('should return error message for other database errors', async () => {
       const mockQueryBuilder = {
         update: vi.fn().mockReturnThis(),
         eq: vi.fn().mockReturnThis(),
@@ -683,8 +633,8 @@ describe("transaction.ts", () => {
         single: vi.fn().mockResolvedValue({
           data: null,
           error: {
-            code: "PGRST400",
-            message: "Invalid status value",
+            code: 'PGRST400',
+            message: 'Invalid status value',
           } as PostgrestError,
         }),
       };
@@ -693,18 +643,18 @@ describe("transaction.ts", () => {
 
       const result = await updateOrderStatusWithLocking(
         mockSupabase,
-        "order-123",
-        "invalid_status",
-        "2024-01-01T00:00:00Z",
+        'order-123',
+        'invalid_status',
+        '2024-01-01T00:00:00Z'
       );
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe("Invalid status value");
+      expect(result.error).toBe('Invalid status value');
       expect(result.data).toBeUndefined();
     });
 
-    it("should update with current timestamp", async () => {
-      const mockDate = new Date("2024-01-01T12:00:00Z");
+    it('should update with current timestamp', async () => {
+      const mockDate = new Date('2024-01-01T12:00:00Z');
       vi.setSystemTime(mockDate);
 
       const mockQueryBuilder = {
@@ -712,7 +662,7 @@ describe("transaction.ts", () => {
         eq: vi.fn().mockReturnThis(),
         select: vi.fn().mockReturnThis(),
         single: vi.fn().mockResolvedValue({
-          data: { id: "order-123", status: "completed" },
+          data: { id: 'order-123', status: 'completed' },
           error: null,
         }),
       };
@@ -721,26 +671,26 @@ describe("transaction.ts", () => {
 
       await updateOrderStatusWithLocking(
         mockSupabase,
-        "order-123",
-        "completed",
-        "2024-01-01T00:00:00Z",
+        'order-123',
+        'completed',
+        '2024-01-01T00:00:00Z'
       );
 
       expect(mockQueryBuilder.update).toHaveBeenCalledWith({
-        status: "completed",
-        updated_at: "2024-01-01T12:00:00.000Z",
+        status: 'completed',
+        updated_at: '2024-01-01T12:00:00.000Z',
       });
 
       vi.useRealTimers();
     });
   });
 
-  describe("deductCreditWithLocking", () => {
+  describe('deductCreditWithLocking', () => {
     beforeEach(() => {
       vi.clearAllMocks();
     });
 
-    it("should successfully deduct credit", async () => {
+    it('should successfully deduct credit', async () => {
       const mockRpcResponse = {
         data: {
           success: true,
@@ -756,26 +706,23 @@ describe("transaction.ts", () => {
 
       mockCreateClient.mockResolvedValue(mockSupabaseClient);
 
-      const result = await deductCreditWithLocking("credit-123", 3000);
+      const result = await deductCreditWithLocking('credit-123', 3000);
 
       expect(result.success).toBe(true);
       expect(result.remaining).toBe(5000);
       expect(result.error).toBeUndefined();
-      expect(mockSupabaseClient.rpc).toHaveBeenCalledWith(
-        "deduct_credit_safe",
-        {
-          p_credit_id: "credit-123",
-          p_amount: 3000,
-        },
-      );
+      expect(mockSupabaseClient.rpc).toHaveBeenCalledWith('deduct_credit_safe', {
+        p_credit_id: 'credit-123',
+        p_amount: 3000,
+      });
     });
 
-    it("should return error when RPC call fails", async () => {
+    it('should return error when RPC call fails', async () => {
       const mockRpcResponse = {
         data: null,
         error: {
-          message: "Insufficient credits",
-          code: "P0001",
+          message: 'Insufficient credits',
+          code: 'P0001',
         },
       };
 
@@ -785,19 +732,19 @@ describe("transaction.ts", () => {
 
       mockCreateClient.mockResolvedValue(mockSupabaseClient);
 
-      const result = await deductCreditWithLocking("credit-456", 10000);
+      const result = await deductCreditWithLocking('credit-456', 10000);
 
       expect(result.success).toBe(false);
       expect(result.remaining).toBe(0);
-      expect(result.error).toBe("Insufficient credits");
+      expect(result.error).toBe('Insufficient credits');
     });
 
-    it("should handle RPC response with error field", async () => {
+    it('should handle RPC response with error field', async () => {
       const mockRpcResponse = {
         data: {
           success: false,
           remaining: 100,
-          error: "Not enough credits",
+          error: 'Not enough credits',
         },
         error: null,
       };
@@ -808,14 +755,14 @@ describe("transaction.ts", () => {
 
       mockCreateClient.mockResolvedValue(mockSupabaseClient);
 
-      const result = await deductCreditWithLocking("credit-789", 5000);
+      const result = await deductCreditWithLocking('credit-789', 5000);
 
       expect(result.success).toBe(false);
       expect(result.remaining).toBe(100);
-      expect(result.error).toBe("Not enough credits");
+      expect(result.error).toBe('Not enough credits');
     });
 
-    it("should handle null error field in successful response", async () => {
+    it('should handle null error field in successful response', async () => {
       const mockRpcResponse = {
         data: {
           success: true,
@@ -831,7 +778,7 @@ describe("transaction.ts", () => {
 
       mockCreateClient.mockResolvedValue(mockSupabaseClient);
 
-      const result = await deductCreditWithLocking("credit-999", 1000);
+      const result = await deductCreditWithLocking('credit-999', 1000);
 
       expect(result.success).toBe(true);
       expect(result.remaining).toBe(2000);

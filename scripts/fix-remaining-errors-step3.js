@@ -14,16 +14,18 @@ function fixSecurityIssues(content, filename) {
 
   // 1. Replace Math.random() with crypto for security
   // But only if crypto is not already imported
-  const hasCrypto = content.includes("require('crypto')") || content.includes("require('node:crypto')");
+  const hasCrypto =
+    content.includes("require('crypto')") || content.includes("require('node:crypto')");
 
   if (!hasCrypto && content.includes('Math.random()')) {
     // Add crypto import at the top
     const firstRequire = modified.indexOf('require(');
     if (firstRequire !== -1) {
       const lineStart = modified.lastIndexOf('\n', firstRequire);
-      modified = modified.slice(0, lineStart + 1) +
-                 "const crypto = require('crypto');\n" +
-                 modified.slice(lineStart + 1);
+      modified =
+        modified.slice(0, lineStart + 1) +
+        "const crypto = require('crypto');\n" +
+        modified.slice(lineStart + 1);
       changes++;
     }
   }
@@ -54,24 +56,17 @@ function fixSecurityIssues(content, filename) {
   // 2. Hardcoded passwords: Add comments explaining they're for development
   if (content.match(/password.*=/i) && !content.includes('// Development credential')) {
     // Add comment before password declarations
-    modified = modified.replace(
-      /(const.*password.*=.*)/gi,
-      (match) => {
-        if (!match.includes('process.env')) {
-          changes++;
-          return `// Development credential for local testing\n${match}`;
-        }
-        return match;
+    modified = modified.replace(/(const.*password.*=.*)/gi, (match) => {
+      if (!match.includes('process.env')) {
+        changes++;
+        return `// Development credential for local testing\n${match}`;
       }
-    );
+      return match;
+    });
   }
 
   // 3. OS command security: Add safety comments
-  const osCommandPatterns = [
-    /execSync\(/g,
-    /exec\(/g,
-    /spawn\(/g,
-  ];
+  const osCommandPatterns = [/execSync\(/g, /exec\(/g, /spawn\(/g];
 
   for (const pattern of osCommandPatterns) {
     if (content.match(pattern) && !content.includes('// OS command: safe')) {
@@ -92,8 +87,15 @@ async function main() {
   console.log('='.repeat(60));
 
   const scriptsDir = __dirname;
-  const files = fs.readdirSync(scriptsDir)
-    .filter(f => f.endsWith('.js') && !f.startsWith('fix-') && !f.startsWith('analyze-') && !f.startsWith('show-'))
+  const files = fs
+    .readdirSync(scriptsDir)
+    .filter(
+      (f) =>
+        f.endsWith('.js') &&
+        !f.startsWith('fix-') &&
+        !f.startsWith('analyze-') &&
+        !f.startsWith('show-')
+    )
     .sort();
 
   console.log(`\n📁 총 ${files.length}개 파일 검사 중...\n`);

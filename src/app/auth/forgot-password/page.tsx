@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
-import { logger } from "@/lib/logger";
-import { getSecureRedirectUrl, RATE_LIMIT_CONFIG } from "@/lib/auth/config";
-import { CheckCircle, Loader2 } from "lucide-react";
+import { useState } from 'react';
+import Link from 'next/link';
+import { createClient } from '@/lib/supabase/client';
+import { logger } from '@/lib/logger';
+import { getSecureRedirectUrl, RATE_LIMIT_CONFIG } from '@/lib/auth/config';
+import { CheckCircle, Loader2 } from 'lucide-react';
 
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,9 +22,7 @@ export default function ForgotPasswordPage() {
     // Rate Limiting 체크
     if (lockoutUntil && Date.now() < lockoutUntil) {
       const remainingSeconds = Math.ceil((lockoutUntil - Date.now()) / 1000);
-      setError(
-        `너무 많은 시도가 있었습니다. ${remainingSeconds}초 후 다시 시도해주세요.`,
-      );
+      setError(`너무 많은 시도가 있었습니다. ${remainingSeconds}초 후 다시 시도해주세요.`);
       return;
     }
 
@@ -33,10 +31,7 @@ export default function ForgotPasswordPage() {
 
     try {
       // OAuth 리다이렉트 URL 검증 (CRITICAL 보안)
-      const redirectUrl = getSecureRedirectUrl(
-        globalThis.location.origin,
-        "/auth/reset-password",
-      );
+      const redirectUrl = getSecureRedirectUrl(globalThis.location.origin, '/auth/reset-password');
 
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: redirectUrl,
@@ -49,22 +44,18 @@ export default function ForgotPasswordPage() {
       setLockoutUntil(null);
       setSuccess(true);
     } catch (error: unknown) {
-      logger.error("비밀번호 재설정 요청 실패:", error);
+      logger.error('비밀번호 재설정 요청 실패:', error);
 
       const newAttempts = resetAttempts + 1;
       setResetAttempts(newAttempts);
 
       // Rate Limiting 적용
       if (newAttempts >= RATE_LIMIT_CONFIG.FORGOT_PASSWORD.MAX_ATTEMPTS) {
-        setLockoutUntil(
-          Date.now() + RATE_LIMIT_CONFIG.FORGOT_PASSWORD.LOCKOUT_DURATION,
-        );
-        setError("너무 많은 시도가 있었습니다. 10분 후 다시 시도해주세요.");
+        setLockoutUntil(Date.now() + RATE_LIMIT_CONFIG.FORGOT_PASSWORD.LOCKOUT_DURATION);
+        setError('너무 많은 시도가 있었습니다. 10분 후 다시 시도해주세요.');
       } else {
         const message =
-          error instanceof Error
-            ? error.message
-            : "비밀번호 재설정 요청 중 오류가 발생했습니다.";
+          error instanceof Error ? error.message : '비밀번호 재설정 요청 중 오류가 발생했습니다.';
         setError(message);
       }
     } finally {
@@ -88,12 +79,9 @@ export default function ForgotPasswordPage() {
             <div className="text-center">
               <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
                 <CheckCircle className="w-10 h-10 text-green-600 mb-3 mx-auto" />
-                <p className="text-green-800 font-medium mb-2">
-                  이메일 전송 완료
-                </p>
+                <p className="text-green-800 font-medium mb-2">이메일 전송 완료</p>
                 <p className="text-sm text-green-700">
-                  입력하신 이메일로 비밀번호 재설정 링크를 보내드렸습니다.
-                  이메일을 확인해주세요.
+                  입력하신 이메일로 비밀번호 재설정 링크를 보내드렸습니다. 이메일을 확인해주세요.
                 </p>
               </div>
               <Link
@@ -112,10 +100,7 @@ export default function ForgotPasswordPage() {
               )}
 
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                   이메일
                 </label>
                 <input
@@ -143,15 +128,12 @@ export default function ForgotPasswordPage() {
                     전송 중...
                   </span>
                 ) : (
-                  "비밀번호 재설정 링크 받기"
+                  '비밀번호 재설정 링크 받기'
                 )}
               </button>
 
               <div className="text-center pt-4">
-                <Link
-                  href="/auth/login"
-                  className="text-sm text-brand-primary hover:underline"
-                >
+                <Link href="/auth/login" className="text-sm text-brand-primary hover:underline">
                   로그인으로 돌아가기
                 </Link>
               </div>
@@ -162,11 +144,8 @@ export default function ForgotPasswordPage() {
         {/* 하단 링크 */}
         <div className="text-center mt-6">
           <p className="text-gray-600">
-            계정이 없으신가요?{" "}
-            <Link
-              href="/auth/register"
-              className="text-brand-primary hover:underline font-medium"
-            >
+            계정이 없으신가요?{' '}
+            <Link href="/auth/register" className="text-brand-primary hover:underline font-medium">
               회원가입
             </Link>
           </p>

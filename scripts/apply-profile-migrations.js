@@ -4,13 +4,14 @@ const fs = require('fs');
 const path = require('path');
 
 const _supabaseUrl = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
-const _supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
+const _supabaseServiceKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   auth: {
     autoRefreshToken: false,
-    persistSession: false
-  }
+    persistSession: false,
+  },
 });
 
 async function applyMigration(filePath, description) {
@@ -26,11 +27,11 @@ async function applyMigration(filePath, description) {
     await fetch(`${supabaseUrl}/rest/v1/rpc/exec`, {
       method: 'POST',
       headers: {
-        'apikey': supabaseServiceKey,
-        'Authorization': `Bearer ${supabaseServiceKey}`,
+        apikey: supabaseServiceKey,
+        Authorization: `Bearer ${supabaseServiceKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ query: sql })
+      body: JSON.stringify({ query: sql }),
     });
 
     // Alternative: Use psql-style execution
@@ -44,7 +45,6 @@ async function applyMigration(filePath, description) {
 
     console.log('✅ Migration applied successfully!');
     return true;
-
   } catch (err) {
     console.error('❌ Error executing migration:', err.message);
 
@@ -53,8 +53,8 @@ async function applyMigration(filePath, description) {
 
     const statements = sql
       .split(';')
-      .map(s => s.trim())
-      .filter(s => s.length > 0 && !s.startsWith('--'));
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0 && !s.startsWith('--'));
 
     let successCount = 0;
     let errorCount = 0;
@@ -94,12 +94,12 @@ async function main() {
   const migrations = [
     {
       file: 'supabase/migrations/20251114080000_create_profiles_table.sql',
-      description: 'Create profiles table with auto-sync trigger'
+      description: 'Create profiles table with auto-sync trigger',
     },
     {
       file: 'supabase/migrations/20251114090000_unify_seller_profile_with_profiles.sql',
-      description: 'Unify seller profile with profiles table'
-    }
+      description: 'Unify seller profile with profiles table',
+    },
   ];
 
   let allSuccess = true;
@@ -119,7 +119,7 @@ async function main() {
     }
 
     // Wait a bit between migrations
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
   }
 
   if (allSuccess) {

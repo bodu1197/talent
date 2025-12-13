@@ -3,16 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { CategoryItem } from '@/lib/categories';
-import {
-  Bot,
-  Image,
-  FileText,
-  Video,
-  Star,
-  Lightbulb,
-  TrendingUp,
-  Wand2,
-} from 'lucide-react';
+import { Bot, Image, FileText, Video, Star, Lightbulb, TrendingUp, Wand2 } from 'lucide-react';
 
 interface AIPageContentProps {
   readonly aiCategories: CategoryItem[];

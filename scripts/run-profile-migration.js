@@ -24,8 +24,8 @@ async function runMigration() {
   const client = new Client({
     connectionString,
     ssl: {
-      rejectUnauthorized: false
-    }
+      rejectUnauthorized: false,
+    },
   });
 
   try {
@@ -40,12 +40,12 @@ async function runMigration() {
     );
 
     console.log('📄 Executing migration SQL...');
-    console.log('='  .repeat(60));
+    console.log('='.repeat(60));
 
     // Execute the migration
     await client.query(migrationSQL);
 
-    console.log('='  .repeat(60));
+    console.log('='.repeat(60));
     console.log('✅ Migration executed successfully!\n');
 
     // Verify the results
@@ -75,7 +75,9 @@ async function runMigration() {
     if (sellerColumns.length === 0) {
       console.log('✅ sellers.display_name and sellers.profile_image columns dropped');
     } else {
-      console.log(`⚠️  Warning: Some columns still exist: ${sellerColumns.map(c => c.column_name).join(', ')}`);
+      console.log(
+        `⚠️  Warning: Some columns still exist: ${sellerColumns.map((c) => c.column_name).join(', ')}`
+      );
     }
 
     // Sample data check
@@ -90,7 +92,6 @@ async function runMigration() {
     });
 
     console.log('\n🎉 Migration completed successfully!\n');
-
   } catch (error) {
     console.error('\n❌ Migration failed:');
     console.error('Error:', error.message);

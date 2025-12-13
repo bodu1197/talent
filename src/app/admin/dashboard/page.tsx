@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import {
   getAdminDashboardStats,
   getAdminRecentOrders,
   getAdminRecentUsers,
   type OrderWithRelations,
-} from "@/lib/supabase/queries/admin";
-import type { Tables } from "@/types/database";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
-import ErrorState from "@/components/common/ErrorState";
-import Link from "next/link";
-import { logger } from "@/lib/logger";
-import { Users, CircleDollarSign, ShoppingCart, Flag } from "lucide-react";
+} from '@/lib/supabase/queries/admin';
+import type { Tables } from '@/types/database';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
+import ErrorState from '@/components/common/ErrorState';
+import Link from 'next/link';
+import { logger } from '@/lib/logger';
+import { Users, CircleDollarSign, ShoppingCart, Flag } from 'lucide-react';
 
 interface DashboardStats {
   totalUsers: number;
@@ -28,7 +28,7 @@ interface DashboardStats {
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [recentOrders, setRecentOrders] = useState<OrderWithRelations[]>([]);
-  const [recentUsers, setRecentUsers] = useState<Tables<"users">[]>([]);
+  const [recentUsers, setRecentUsers] = useState<Tables<'users'>[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -51,12 +51,8 @@ export default function AdminDashboardPage() {
       setRecentOrders(ordersData);
       setRecentUsers(usersData);
     } catch (err: unknown) {
-      logger.error("대시보드 데이터 로드 실패:", err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "대시보드 데이터를 불러오는데 실패했습니다",
-      );
+      logger.error('대시보드 데이터 로드 실패:', err);
+      setError(err instanceof Error ? err.message : '대시보드 데이터를 불러오는데 실패했습니다');
     } finally {
       setLoading(false);
     }
@@ -72,16 +68,16 @@ export default function AdminDashboardPage() {
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "paid":
-        return "결제완료";
-      case "in_progress":
-        return "진행중";
-      case "delivered":
-        return "완료 대기";
-      case "completed":
-        return "완료";
-      case "cancelled":
-        return "취소/환불";
+      case 'paid':
+        return '결제완료';
+      case 'in_progress':
+        return '진행중';
+      case 'delivered':
+        return '완료 대기';
+      case 'completed':
+        return '완료';
+      case 'cancelled':
+        return '취소/환불';
       default:
         return status;
     }
@@ -89,18 +85,18 @@ export default function AdminDashboardPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "paid":
-        return "bg-red-100 text-red-700";
-      case "in_progress":
-        return "bg-yellow-100 text-yellow-700";
-      case "delivered":
-        return "bg-blue-100 text-blue-700";
-      case "completed":
-        return "bg-green-100 text-green-700";
-      case "cancelled":
-        return "bg-gray-100 text-gray-700";
+      case 'paid':
+        return 'bg-red-100 text-red-700';
+      case 'in_progress':
+        return 'bg-yellow-100 text-yellow-700';
+      case 'delivered':
+        return 'bg-blue-100 text-blue-700';
+      case 'completed':
+        return 'bg-green-100 text-green-700';
+      case 'cancelled':
+        return 'bg-gray-100 text-gray-700';
       default:
-        return "bg-gray-100 text-gray-700";
+        return 'bg-gray-100 text-gray-700';
     }
   };
 
@@ -109,9 +105,7 @@ export default function AdminDashboardPage() {
       {/* Page Header */}
       <div>
         <h1 className="text-3xl font-semibold text-gray-900">대시보드</h1>
-        <p className="text-gray-600 mt-1">
-          플랫폼 전체 현황을 한눈에 확인하세요
-        </p>
+        <p className="text-gray-600 mt-1">플랫폼 전체 현황을 한눈에 확인하세요</p>
       </div>
 
       {/* KPI Cards */}
@@ -154,9 +148,7 @@ export default function AdminDashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">진행중 주문</p>
-              <p className="text-2xl font-semibold text-gray-900 mt-1">
-                {stats?.inProgressOrders}
-              </p>
+              <p className="text-2xl font-semibold text-gray-900 mt-1">{stats?.inProgressOrders}</p>
             </div>
             <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
               <ShoppingCart className="w-5 h-5 text-purple-600" />
@@ -171,9 +163,7 @@ export default function AdminDashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">대기중 신고</p>
-              <p className="text-2xl font-semibold text-gray-900 mt-1">
-                {stats?.pendingReports}
-              </p>
+              <p className="text-2xl font-semibold text-gray-900 mt-1">{stats?.pendingReports}</p>
             </div>
             <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
               <Flag className="w-5 h-5 text-red-600" />
@@ -185,17 +175,13 @@ export default function AdminDashboardPage() {
       {/* 이번달 통계 */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-sm font-medium text-gray-600 mb-2">
-            이번달 매출
-          </h3>
+          <h3 className="text-sm font-medium text-gray-600 mb-2">이번달 매출</h3>
           <p className="text-2xl font-semibold text-gray-900">
             {stats?.monthlyRevenue.toLocaleString()}원
           </p>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-sm font-medium text-gray-600 mb-2">
-            이번달 주문
-          </h3>
+          <h3 className="text-sm font-medium text-gray-600 mb-2">이번달 주문</h3>
           <p className="text-2xl font-semibold text-gray-900">
             {stats?.monthlyOrderCount.toLocaleString()}건
           </p>
@@ -213,10 +199,7 @@ export default function AdminDashboardPage() {
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900">최근 주문</h2>
-            <Link
-              href="/admin/orders"
-              className="text-sm text-brand-primary hover:underline"
-            >
+            <Link href="/admin/orders" className="text-sm text-brand-primary hover:underline">
               전체 보기 →
             </Link>
           </div>
@@ -233,15 +216,14 @@ export default function AdminDashboardPage() {
                       {order.service?.title || order.title}
                     </span>
                     <span
-                      className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(order.status || "")}`}
+                      className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(order.status || '')}`}
                     >
-                      {getStatusLabel(order.status || "")}
+                      {getStatusLabel(order.status || '')}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm text-gray-600">
                     <span>
-                      {order.buyer?.name || "Unknown"} →{" "}
-                      {order.seller?.name || "Unknown"}
+                      {order.buyer?.name || 'Unknown'} → {order.seller?.name || 'Unknown'}
                     </span>
                     <span className="font-medium">
                       {(order.total_amount ?? 0).toLocaleString()}원
@@ -250,9 +232,7 @@ export default function AdminDashboardPage() {
                 </Link>
               ))
             ) : (
-              <p className="text-center text-gray-500 py-4">
-                최근 주문이 없습니다
-              </p>
+              <p className="text-center text-gray-500 py-4">최근 주문이 없습니다</p>
             )}
           </div>
         </div>
@@ -261,10 +241,7 @@ export default function AdminDashboardPage() {
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900">최근 가입 회원</h2>
-            <Link
-              href="/admin/users"
-              className="text-sm text-brand-primary hover:underline"
-            >
+            <Link href="/admin/users" className="text-sm text-brand-primary hover:underline">
               전체 보기 →
             </Link>
           </div>
@@ -277,22 +254,16 @@ export default function AdminDashboardPage() {
                   className="block p-3 border border-gray-200 rounded-lg hover:border-brand-primary transition-colors"
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-medium text-gray-900">
-                      {user.name}
-                    </span>
+                    <span className="font-medium text-gray-900">{user.name}</span>
                     <span className="text-xs text-gray-500">
-                      {user.created_at
-                        ? new Date(user.created_at).toLocaleDateString("ko-KR")
-                        : ""}
+                      {user.created_at ? new Date(user.created_at).toLocaleDateString('ko-KR') : ''}
                     </span>
                   </div>
                   <div className="text-sm text-gray-600">{user.email}</div>
                 </Link>
               ))
             ) : (
-              <p className="text-center text-gray-500 py-4">
-                최근 가입 회원이 없습니다
-              </p>
+              <p className="text-center text-gray-500 py-4">최근 가입 회원이 없습니다</p>
             )}
           </div>
         </div>

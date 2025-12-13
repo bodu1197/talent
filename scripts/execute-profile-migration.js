@@ -3,7 +3,8 @@ const fs = require('fs');
 const https = require('https');
 
 const _SUPABASE_URL = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
-const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
+const SERVICE_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
 
 // Read the migration SQL
 const migrationSQL = fs.readFileSync('combined_profile_migration.sql', 'utf8');
@@ -15,8 +16,8 @@ console.log(`📊 SQL size: ${migrationSQL.length} characters\n`);
 // Split into individual statements for better error reporting
 const statements = migrationSQL
   .split(';')
-  .map(s => s.trim())
-  .filter(s => s.length > 10 && !s.match(/^--/));
+  .map((s) => s.trim())
+  .filter((s) => s.length > 10 && !s.match(/^--/));
 
 console.log(`📝 Found ${statements.length} SQL statements to execute\n`);
 
@@ -31,11 +32,11 @@ async function _executeSQL(sql) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'apikey': SERVICE_KEY,
-        'Authorization': `Bearer ${SERVICE_KEY}`,
+        apikey: SERVICE_KEY,
+        Authorization: `Bearer ${SERVICE_KEY}`,
         'Content-Length': data.length,
-        'Prefer': 'return=representation'
-      }
+        Prefer: 'return=representation',
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -67,9 +68,7 @@ async function main() {
   console.log('⚠️  Note: Supabase REST API may not support exec RPC.');
   console.log('If this fails, please use Supabase Dashboard SQL Editor:\n');
   console.log(`🔗 https://supabase.com/dashboard/project/bpvfkkrlyrjkwgwmfrci/sql/new\n`);
-  console.log('='
-
-.repeat(60));
+  console.log('='.repeat(60));
   console.log('\n📋 COPY THIS SQL TO SUPABASE SQL EDITOR:\n');
   console.log('='.repeat(60));
   console.log(migrationSQL);

@@ -20,16 +20,44 @@ function fixUnusedVariables(content, filename) {
   // const { data, error } = ... -> const { error } = ...
   // Simply remove the unused variable from destructuring
   const destructurePatterns = [
-    { regex: /const \{ data: _data, error \}/g, replacement: 'const { error }', desc: 'remove _data' },
+    {
+      regex: /const \{ data: _data, error \}/g,
+      replacement: 'const { error }',
+      desc: 'remove _data',
+    },
     { regex: /const \{ data, error \}/g, replacement: 'const { error }', desc: 'remove data' },
-    { regex: /const \{ response: _response, error \}/g, replacement: 'const { error }', desc: 'remove _response' },
-    { regex: /const \{ response, error \}/g, replacement: 'const { error }', desc: 'remove response' },
-    { regex: /const \{ count: _count, error \}/g, replacement: 'const { error }', desc: 'remove _count' },
+    {
+      regex: /const \{ response: _response, error \}/g,
+      replacement: 'const { error }',
+      desc: 'remove _response',
+    },
+    {
+      regex: /const \{ response, error \}/g,
+      replacement: 'const { error }',
+      desc: 'remove response',
+    },
+    {
+      regex: /const \{ count: _count, error \}/g,
+      replacement: 'const { error }',
+      desc: 'remove _count',
+    },
     { regex: /const \{ count, error \}/g, replacement: 'const { error }', desc: 'remove count' },
-    { regex: /const \{ result: _result, error \}/g, replacement: 'const { error }', desc: 'remove _result' },
+    {
+      regex: /const \{ result: _result, error \}/g,
+      replacement: 'const { error }',
+      desc: 'remove _result',
+    },
     { regex: /const \{ result, error \}/g, replacement: 'const { error }', desc: 'remove result' },
-    { regex: /const \{ testData: _testData, error \}/g, replacement: 'const { error }', desc: 'remove _testData' },
-    { regex: /const \{ testData, error \}/g, replacement: 'const { error }', desc: 'remove testData' },
+    {
+      regex: /const \{ testData: _testData, error \}/g,
+      replacement: 'const { error }',
+      desc: 'remove _testData',
+    },
+    {
+      regex: /const \{ testData, error \}/g,
+      replacement: 'const { error }',
+      desc: 'remove testData',
+    },
   ];
 
   for (const pattern of destructurePatterns) {
@@ -86,8 +114,9 @@ async function main() {
   console.log('='.repeat(60));
 
   const scriptsDir = __dirname;
-  const files = fs.readdirSync(scriptsDir)
-    .filter(f => f.endsWith('.js') && !f.startsWith('fix-'))
+  const files = fs
+    .readdirSync(scriptsDir)
+    .filter((f) => f.endsWith('.js') && !f.startsWith('fix-'))
     .sort();
 
   console.log(`\n📁 총 ${files.length}개 파일 검사 중...\n`);

@@ -14,13 +14,13 @@ const { glob } = require('glob');
 const files = glob.sync('src/**/*.{ts,tsx,js,jsx}', {
   cwd: process.cwd(),
   absolute: true,
-  ignore: ['**/node_modules/**', '**/.next/**', '**/dist/**']
+  ignore: ['**/node_modules/**', '**/.next/**', '**/dist/**'],
 });
 
 let totalFixed = 0;
 const fixes = [];
 
-files.forEach(file => {
+files.forEach((file) => {
   const content = fs.readFileSync(file, 'utf8');
   let modified = content;
   let fileFixed = 0;
@@ -32,21 +32,23 @@ files.forEach(file => {
 
   modified = modified.replace(consolePattern, (match, level, args) => {
     // Skip if already handling error properly
-    if (args.includes('instanceof Error') ||
-        args.includes('String(error)') ||
-        args.includes('JSON.stringify') ||
-        args.includes('error.message') ||
-        args.includes('error?.message') ||
-        !args.includes('error')) {
+    if (
+      args.includes('instanceof Error') ||
+      args.includes('String(error)') ||
+      args.includes('JSON.stringify') ||
+      args.includes('error.message') ||
+      args.includes('error?.message') ||
+      !args.includes('error')
+    ) {
       return match;
     }
 
     // Extract arguments
-    const argList = args.split(',').map(a => a.trim());
+    const argList = args.split(',').map((a) => a.trim());
 
     // Find 'error' parameter (could be error, err, e, or similar)
-    const errorParamIndex = argList.findIndex(arg =>
-      /\b(error|err|e)\b$/.test(arg) && !arg.includes("'") && !arg.includes('"')
+    const errorParamIndex = argList.findIndex(
+      (arg) => /\b(error|err|e)\b$/.test(arg) && !arg.includes("'") && !arg.includes('"')
     );
 
     if (errorParamIndex === -1) {
@@ -56,13 +58,14 @@ files.forEach(file => {
     const errorParam = argList[errorParamIndex];
 
     // Replace error with proper formatting
-    argList[errorParamIndex] = `${errorParam} instanceof Error ? ${errorParam}.message : String(${errorParam})`;
+    argList[errorParamIndex] =
+      `${errorParam} instanceof Error ? ${errorParam}.message : String(${errorParam})`;
 
     fileFixed++;
     fixes.push({
       file: path.relative(process.cwd(), file),
       original: match,
-      fixed: `console.${level}(${argList.join(', ')})`
+      fixed: `console.${level}(${argList.join(', ')})`,
     });
 
     return `console.${level}(${argList.join(', ')})`;
@@ -73,13 +76,16 @@ files.forEach(file => {
 
   modified = modified.replace(catchPattern, (match, level) => {
     fileFixed++;
-    const contextMatch = content.substring(Math.max(0, content.indexOf(match) - 100), content.indexOf(match));
+    const contextMatch = content.substring(
+      Math.max(0, content.indexOf(match) - 100),
+      content.indexOf(match)
+    );
     const funcName = contextMatch.match(/(\w+)\s*\([^)]*\)\s*\..*$/)?.[1] || 'Operation';
 
     fixes.push({
       file: path.relative(process.cwd(), file),
       original: match,
-      fixed: `.catch(err => console.${level}('${funcName} error:', err instanceof Error ? err.message : String(err)))`
+      fixed: `.catch(err => console.${level}('${funcName} error:', err instanceof Error ? err.message : String(err)))`,
     });
 
     return `.catch(err => console.${level}('${funcName} error:', err instanceof Error ? err.message : String(err)))`;

@@ -19,18 +19,18 @@ async function createAuthUser(email, password, name) {
     const response = await fetch(AUTH_ADMIN_URL, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${SERVICE_ROLE_KEY}`,
+        Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
         'Content-Type': 'application/json',
-        'apikey': SERVICE_ROLE_KEY
+        apikey: SERVICE_ROLE_KEY,
       },
       body: JSON.stringify({
         email: email,
         password: password,
         email_confirm: true,
         user_metadata: {
-          name: name
-        }
-      })
+          name: name,
+        },
+      }),
     });
 
     const data = await response.json();
@@ -63,7 +63,7 @@ async function createSeller(userId, categoryName) {
       status: 'active',
       is_active: true,
       verification_status: 'verified',
-      is_verified: true
+      is_verified: true,
     })
     .select()
     .single();
@@ -93,7 +93,7 @@ async function createServices(sellerId, categoryId, categoryName) {
         thumbnail_url: `https://picsum.photos/seed/${categoryId}_${sellerId}_${i}/400/300`,
         delivery_days: deliveryDays,
         revision_count: revisionCount,
-        status: 'active'
+        status: 'active',
       })
       .select()
       .single();
@@ -101,13 +101,11 @@ async function createServices(sellerId, categoryId, categoryName) {
     if (serviceError) throw serviceError;
 
     // 2. service_categories에 관계 추가
-    const { error: categoryError } = await supabase
-      .from('service_categories')
-      .insert({
-        service_id: service.id,
-        category_id: categoryId,
-        is_primary: true
-      });
+    const { error: categoryError } = await supabase.from('service_categories').insert({
+      service_id: service.id,
+      category_id: categoryId,
+      is_primary: true,
+    });
 
     if (categoryError) throw categoryError;
 
@@ -126,7 +124,7 @@ async function main() {
     usersCreated: 0,
     sellersCreated: 0,
     servicesCreated: 0,
-    errors: []
+    errors: [],
   };
 
   try {
@@ -159,7 +157,7 @@ async function main() {
       const category = itSubCategories[i];
       const email = `it_seller_${category.slug}@talent-demo.com`;
       // Development credential for local testing
-const password = 'Demo1234!@';
+      const password = 'Demo1234!@';
       const name = `${category.name} 전문가`;
 
       console.log(`[${i + 1}/${itSubCategories.length}] ${category.name} 처리 중...`);
@@ -174,7 +172,7 @@ const password = 'Demo1234!@';
 
           // 기존 사용자 ID 찾기
           const { data: users } = await supabase.auth.admin.listUsers();
-          const existingUser = users.users.find(u => u.email === email);
+          const existingUser = users.users.find((u) => u.email === email);
 
           if (!existingUser) {
             throw new Error('사용자를 찾을 수 없습니다');
@@ -209,12 +207,11 @@ const password = 'Demo1234!@';
         const serviceCount = await createServices(sellerId, category.id, category.name);
         console.log(`  ✓ 서비스 ${serviceCount}개 생성\n`);
         stats.servicesCreated += serviceCount;
-
       } catch (error) {
         console.error(`  ❌ 에러: ${error.message}\n`);
         stats.errors.push({
           category: category.name,
-          error: error.message
+          error: error.message,
         });
       }
     }
@@ -239,7 +236,6 @@ const password = 'Demo1234!@';
     }
 
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-
   } catch (error) {
     console.error('\n❌ 치명적 에러:', error);
     process.exit(1);

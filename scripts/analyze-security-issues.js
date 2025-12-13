@@ -7,10 +7,11 @@ console.log('🔍 보안 이슈 분석 중...\n');
 
 // Run ESLint and save to file
 try {
-  execSync(
-    'npx eslint scripts --format json > eslint-output.json',
-    { encoding: 'utf8', shell: true, stdio: 'ignore' }
-  );
+  execSync('npx eslint scripts --format json > eslint-output.json', {
+    encoding: 'utf8',
+    shell: true,
+    stdio: 'ignore',
+  });
 } catch {
   // ESLint exits with error code when there are errors
 }
@@ -21,12 +22,12 @@ const securityErrors = {
   'os-command': [],
   'no-os-command-from-path': [],
   'no-hardcoded-passwords': [],
-  'sql-queries': []
+  'sql-queries': [],
 };
 
 // Collect security-related errors
-data.forEach(file => {
-  file.messages.forEach(msg => {
+data.forEach((file) => {
+  file.messages.forEach((msg) => {
     if (msg.severity !== 2) return; // Only errors
 
     const error = {
@@ -34,7 +35,7 @@ data.forEach(file => {
       line: msg.line,
       column: msg.column,
       message: msg.message,
-      ruleId: msg.ruleId
+      ruleId: msg.ruleId,
     };
 
     if (msg.ruleId === 'sonarjs/os-command') {
@@ -63,7 +64,7 @@ Object.entries(securityErrors).forEach(([category, errors]) => {
 
   // Group by file
   const byFile = {};
-  errors.forEach(error => {
+  errors.forEach((error) => {
     if (!byFile[error.file]) {
       byFile[error.file] = [];
     }
@@ -72,7 +73,7 @@ Object.entries(securityErrors).forEach(([category, errors]) => {
 
   Object.entries(byFile).forEach(([file, fileErrors]) => {
     console.log(`\n  📄 ${file} (${fileErrors.length}개):`);
-    fileErrors.forEach(error => {
+    fileErrors.forEach((error) => {
       console.log(`     Line ${error.line}: ${error.message}`);
     });
   });
@@ -85,9 +86,6 @@ console.log(`📊 총 보안 이슈: ${totalErrors}개`);
 console.log('='.repeat(70));
 
 // Save detailed results
-fs.writeFileSync(
-  'security-issues-analysis.json',
-  JSON.stringify(securityErrors, null, 2)
-);
+fs.writeFileSync('security-issues-analysis.json', JSON.stringify(securityErrors, null, 2));
 
 console.log('\n✅ 상세 결과가 security-issues-analysis.json에 저장되었습니다.\n');

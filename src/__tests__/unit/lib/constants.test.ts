@@ -1,11 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  AI_TOOLS,
-  CATEGORIES,
-  PACKAGE_TYPES,
-  ORDER_STATUS,
-  SERVICE_STATUS,
-} from '@/lib/constants';
+import { AI_TOOLS, CATEGORIES, PACKAGE_TYPES, ORDER_STATUS, SERVICE_STATUS } from '@/lib/constants';
 
 describe('constants', () => {
   describe('AI_TOOLS', () => {

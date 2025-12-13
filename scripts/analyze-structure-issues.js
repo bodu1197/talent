@@ -7,10 +7,11 @@ console.log('🔍 구조 이슈 분석 중...\n');
 
 // Run ESLint and save to file
 try {
-  execSync(
-    'npx eslint scripts --format json > eslint-output.json',
-    { encoding: 'utf8', shell: true, stdio: 'ignore' }
-  );
+  execSync('npx eslint scripts --format json > eslint-output.json', {
+    encoding: 'utf8',
+    shell: true,
+    stdio: 'ignore',
+  });
 } catch {
   // ESLint exits with error code when there are errors
 }
@@ -19,12 +20,12 @@ const data = JSON.parse(fs.readFileSync('eslint-output.json', 'utf8'));
 
 const structureErrors = {
   'nested-template-literals': [],
-  'nested-conditional': []
+  'nested-conditional': [],
 };
 
 // Collect structure-related errors
-data.forEach(file => {
-  file.messages.forEach(msg => {
+data.forEach((file) => {
+  file.messages.forEach((msg) => {
     if (msg.severity !== 2) return; // Only errors
 
     const error = {
@@ -32,7 +33,7 @@ data.forEach(file => {
       line: msg.line,
       column: msg.column,
       message: msg.message,
-      ruleId: msg.ruleId
+      ruleId: msg.ruleId,
     };
 
     if (msg.ruleId === 'sonarjs/no-nested-template-literals') {
@@ -67,9 +68,6 @@ console.log(`📊 총 구조 이슈: ${totalErrors}개`);
 console.log('='.repeat(70));
 
 // Save detailed results
-fs.writeFileSync(
-  'structure-issues-analysis.json',
-  JSON.stringify(structureErrors, null, 2)
-);
+fs.writeFileSync('structure-issues-analysis.json', JSON.stringify(structureErrors, null, 2));
 
 console.log('\n✅ 상세 결과가 structure-issues-analysis.json에 저장되었습니다.\n');

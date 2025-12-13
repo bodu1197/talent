@@ -4,8 +4,18 @@ import Footer from '@/components/layout/Footer';
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    [key: string]: unknown;
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }));
 
@@ -27,7 +37,9 @@ describe('Footer', () => {
     expect(screen.getByRole('link', { name: '회사 소개' })).toBeInTheDocument();
     // 이용약관, 개인정보처리방침은 PC와 모바일에 각각 있음
     expect(screen.getAllByRole('link', { name: '이용약관' }).length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByRole('link', { name: '개인정보처리방침' }).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByRole('link', { name: '개인정보처리방침' }).length).toBeGreaterThanOrEqual(
+      1
+    );
     expect(screen.getByRole('link', { name: '제휴 문의' })).toBeInTheDocument();
   });
 
@@ -81,7 +93,10 @@ describe('Footer', () => {
     expect(termsLinks[0]).toHaveAttribute('href', '/terms');
     const privacyLinks = screen.getAllByRole('link', { name: '개인정보처리방침' });
     expect(privacyLinks[0]).toHaveAttribute('href', '/privacy');
-    expect(screen.getByRole('link', { name: '전문가 등록' })).toHaveAttribute('href', '/mypage/seller/register');
+    expect(screen.getByRole('link', { name: '전문가 등록' })).toHaveAttribute(
+      'href',
+      '/mypage/seller/register'
+    );
   });
 
   it('모바일 탭 메뉴를 렌더링한다', () => {

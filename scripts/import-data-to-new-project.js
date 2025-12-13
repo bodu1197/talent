@@ -25,10 +25,10 @@ function executeQuery(query) {
       path: `/v1/projects/${NEW_PROJECT_ID}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${NEW_ACCESS_TOKEN}`,
+        Authorization: `Bearer ${NEW_ACCESS_TOKEN}`,
         'Content-Type': 'application/json',
-        'Content-Length': data.length
-      }
+        'Content-Length': data.length,
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -161,7 +161,7 @@ const TABLE_ORDER = [
   'helper_withdrawals',
   'helper_subscriptions',
   'reports',
-  'schema_migrations'
+  'schema_migrations',
 ];
 
 async function disableRLS() {
@@ -232,8 +232,8 @@ async function importTable(tableName) {
 
     // INSERT 문 생성
     const columns = Object.keys(data[0]);
-    const values = data.map(row => {
-      const rowValues = columns.map(col => {
+    const values = data.map((row) => {
+      const rowValues = columns.map((col) => {
         const value = row[col];
         if (value === null) return 'NULL';
         if (typeof value === 'string') return `'${value.replace(/'/g, "''")}'`;
@@ -251,7 +251,7 @@ async function importTable(tableName) {
     for (let i = 0; i < values.length; i += batchSize) {
       const batch = values.slice(i, i + batchSize);
       const insertQuery = `
-        INSERT INTO "${tableName}" (${columns.map(c => `"${c}"`).join(', ')})
+        INSERT INTO "${tableName}" (${columns.map((c) => `"${c}"`).join(', ')})
         VALUES ${batch.join(', ')}
       `;
 

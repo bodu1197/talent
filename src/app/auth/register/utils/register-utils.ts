@@ -16,7 +16,7 @@ export interface RegisterFormData {
  * @returns 유효한 이메일 형식이면 true
  */
 export function isValidEmail(email: string): boolean {
-  return email.length > 0 && email.includes("@");
+  return email.length > 0 && email.includes('@');
 }
 
 /**
@@ -40,7 +40,7 @@ export function doPasswordsMatch(password: string, passwordConfirm: string): boo
 export function validateRegistration(
   formData: RegisterFormData,
   isPasswordValid: boolean,
-  emailCheckStatus: "idle" | "checking" | "available" | "taken",
+  emailCheckStatus: 'idle' | 'checking' | 'available' | 'taken',
   lockoutUntil: number | null
 ): string | null {
   // Rate limiting check
@@ -50,27 +50,27 @@ export function validateRegistration(
   }
 
   // Email availability check
-  if (emailCheckStatus === "taken") {
-    return "이미 사용 중인 이메일입니다. 다른 이메일을 사용해주세요.";
+  if (emailCheckStatus === 'taken') {
+    return '이미 사용 중인 이메일입니다. 다른 이메일을 사용해주세요.';
   }
 
-  if (emailCheckStatus === "checking") {
-    return "이메일 확인 중입니다. 잠시만 기다려주세요.";
+  if (emailCheckStatus === 'checking') {
+    return '이메일 확인 중입니다. 잠시만 기다려주세요.';
   }
 
   // Password validation
   if (!isPasswordValid) {
-    return "비밀번호 조건을 모두 충족해주세요.";
+    return '비밀번호 조건을 모두 충족해주세요.';
   }
 
   // Password match check
   if (!doPasswordsMatch(formData.password, formData.passwordConfirm)) {
-    return "비밀번호가 일치하지 않습니다.";
+    return '비밀번호가 일치하지 않습니다.';
   }
 
   // Terms agreement check
   if (!formData.agreeTerms || !formData.agreePrivacy) {
-    return "필수 약관에 동의해주세요.";
+    return '필수 약관에 동의해주세요.';
   }
 
   return null;

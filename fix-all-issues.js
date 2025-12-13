@@ -19,13 +19,13 @@ const filesToFix = [
   'src/components/services/TemplateSelector.tsx',
   'src/components/services/TextOverlayEditor.tsx',
   'src/lib/categories.ts',
-  'src/app/api/user/service-favorites/route.ts'
+  'src/app/api/user/service-favorites/route.ts',
 ];
 
 let totalFixes = 0;
 let filesModified = 0;
 
-filesToFix.forEach(relPath => {
+filesToFix.forEach((relPath) => {
   const filePath = path.join(__dirname, relPath);
 
   if (!fs.existsSync(filePath)) {

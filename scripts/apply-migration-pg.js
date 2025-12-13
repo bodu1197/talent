@@ -5,14 +5,15 @@ const fs = require('fs');
 const path = require('path');
 
 // Supabase PostgreSQL connection
-const connectionString = 'postgresql://postgres.bpvfkkrlyrjkwgwmfrci:[YOUR-PASSWORD]@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres';
+const connectionString =
+  'postgresql://postgres.bpvfkkrlyrjkwgwmfrci:[YOUR-PASSWORD]@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres';
 
 async function applyMigrations() {
   const client = new Client({
     connectionString: process.env.DATABASE_URL || connectionString,
     ssl: {
-      rejectUnauthorized: false
-    }
+      rejectUnauthorized: false,
+    },
   });
 
   try {
@@ -22,7 +23,7 @@ async function applyMigrations() {
 
     const migrations = [
       'supabase/migrations/20251114080000_create_profiles_table.sql',
-      'supabase/migrations/20251114090000_unify_seller_profile_with_profiles.sql'
+      'supabase/migrations/20251114090000_unify_seller_profile_with_profiles.sql',
     ];
 
     for (const migrationFile of migrations) {
@@ -44,7 +45,6 @@ async function applyMigrations() {
     }
 
     console.log('\n🎉 All migrations completed successfully!');
-
   } catch (error) {
     console.error('에러 발생:', error);
     console.error('\n❌ Error:', err.message);

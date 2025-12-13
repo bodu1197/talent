@@ -3,17 +3,17 @@ const fs = require('fs');
 
 // TypeScript 타입에서 PostgreSQL 타입으로 매핑
 const _typeMapping = {
-  'string': 'TEXT',
+  string: 'TEXT',
   'string | null': 'TEXT',
-  'number': 'INTEGER',
+  number: 'INTEGER',
   'number | null': 'INTEGER',
-  'boolean': 'BOOLEAN',
+  boolean: 'BOOLEAN',
   'boolean | null': 'BOOLEAN',
   'string[]': 'TEXT[]',
   'string[] | null': 'TEXT[]',
-  'Json': 'JSONB',
+  Json: 'JSONB',
   'Json | null': 'JSONB',
-  'unknown': 'INET',
+  unknown: 'INET',
 };
 
 const schema = {
@@ -37,7 +37,7 @@ const schema = {
     indexes: [
       { name: 'idx_users_email', columns: ['email'] },
       { name: 'idx_users_phone', columns: ['phone'] },
-    ]
+    ],
   },
   seller_profiles: {
     columns: {
@@ -55,7 +55,7 @@ const schema = {
       response_time: { type: 'TEXT' },
       created_at: { type: 'TIMESTAMP WITH TIME ZONE', default: 'NOW()' },
       updated_at: { type: 'TIMESTAMP WITH TIME ZONE', default: 'NOW()' },
-    }
+    },
   },
   categories: {
     columns: {
@@ -81,7 +81,7 @@ const schema = {
     indexes: [
       { name: 'idx_categories_parent_id', columns: ['parent_id'] },
       { name: 'idx_categories_slug', columns: ['slug'], unique: true },
-    ]
+    ],
   },
   services: {
     columns: {
@@ -123,7 +123,7 @@ const schema = {
       { name: 'idx_services_seller_id', columns: ['seller_id'] },
       { name: 'idx_services_slug', columns: ['slug'], unique: true },
       { name: 'idx_services_status', columns: ['status'] },
-    ]
+    ],
   },
   favorites: {
     columns: {
@@ -134,7 +134,7 @@ const schema = {
     },
     indexes: [
       { name: 'idx_favorites_user_service', columns: ['user_id', 'service_id'], unique: true },
-    ]
+    ],
   },
   orders: {
     columns: {
@@ -179,7 +179,7 @@ const schema = {
       { name: 'idx_orders_buyer_id', columns: ['buyer_id'] },
       { name: 'idx_orders_seller_id', columns: ['seller_id'] },
       { name: 'idx_orders_status', columns: ['status'] },
-    ]
+    ],
   },
   reviews: {
     columns: {
@@ -210,7 +210,7 @@ const schema = {
       { name: 'idx_reviews_order_id', columns: ['order_id'], unique: true },
       { name: 'idx_reviews_seller_id', columns: ['seller_id'] },
       { name: 'idx_reviews_service_id', columns: ['service_id'] },
-    ]
+    ],
   },
   conversations: {
     columns: {
@@ -230,7 +230,7 @@ const schema = {
     },
     indexes: [
       { name: 'idx_conversations_participants', columns: ['participant1_id', 'participant2_id'] },
-    ]
+    ],
   },
   messages: {
     columns: {
@@ -251,7 +251,7 @@ const schema = {
     indexes: [
       { name: 'idx_messages_conversation_id', columns: ['conversation_id'] },
       { name: 'idx_messages_sender_id', columns: ['sender_id'] },
-    ]
+    ],
   },
   payments: {
     columns: {
@@ -277,7 +277,7 @@ const schema = {
     indexes: [
       { name: 'idx_payments_transaction_id', columns: ['transaction_id'], unique: true },
       { name: 'idx_payments_order_id', columns: ['order_id'] },
-    ]
+    ],
   },
 };
 

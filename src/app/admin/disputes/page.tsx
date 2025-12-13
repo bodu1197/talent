@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 export default function AdminDisputesPage() {
   return (
@@ -8,5 +8,5 @@ export default function AdminDisputesPage() {
         <p className="text-gray-600">분쟁 관리 페이지입니다.</p>
       </div>
     </div>
-  )
+  );
 }

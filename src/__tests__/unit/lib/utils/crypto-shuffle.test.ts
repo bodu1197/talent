@@ -69,7 +69,7 @@ describe('crypto-shuffle utilities', () => {
   describe('partitionArray', () => {
     it('should partition numbers into even and odd', () => {
       const numbers = [1, 2, 3, 4, 5, 6];
-      const [even, odd] = partitionArray(numbers, n => n % 2 === 0);
+      const [even, odd] = partitionArray(numbers, (n) => n % 2 === 0);
 
       expect(even).toEqual([2, 4, 6]);
       expect(odd).toEqual([1, 3, 5]);
@@ -85,7 +85,7 @@ describe('crypto-shuffle utilities', () => {
 
     it('should partition when all match', () => {
       const numbers = [2, 4, 6, 8];
-      const [even, odd] = partitionArray(numbers, n => n % 2 === 0);
+      const [even, odd] = partitionArray(numbers, (n) => n % 2 === 0);
 
       expect(even).toEqual([2, 4, 6, 8]);
       expect(odd).toEqual([]);
@@ -93,7 +93,7 @@ describe('crypto-shuffle utilities', () => {
 
     it('should partition when none match', () => {
       const numbers = [1, 3, 5, 7];
-      const [even, odd] = partitionArray(numbers, n => n % 2 === 0);
+      const [even, odd] = partitionArray(numbers, (n) => n % 2 === 0);
 
       expect(even).toEqual([]);
       expect(odd).toEqual([1, 3, 5, 7]);
@@ -101,7 +101,7 @@ describe('crypto-shuffle utilities', () => {
 
     it('should partition strings by length', () => {
       const strings = ['a', 'bb', 'ccc', 'dd', 'e'];
-      const [short, long] = partitionArray(strings, s => s.length <= 1);
+      const [short, long] = partitionArray(strings, (s) => s.length <= 1);
 
       expect(short).toEqual(['a', 'e']);
       expect(long).toEqual(['bb', 'ccc', 'dd']);
@@ -113,17 +113,17 @@ describe('crypto-shuffle utilities', () => {
         { name: 'b', active: false },
         { name: 'c', active: true },
       ];
-      const [active, inactive] = partitionArray(items, item => item.active);
+      const [active, inactive] = partitionArray(items, (item) => item.active);
 
       expect(active).toHaveLength(2);
       expect(inactive).toHaveLength(1);
-      expect(active.every(i => i.active)).toBe(true);
-      expect(inactive.every(i => !i.active)).toBe(true);
+      expect(active.every((i) => i.active)).toBe(true);
+      expect(inactive.every((i) => !i.active)).toBe(true);
     });
 
     it('should preserve order within partitions', () => {
       const numbers = [5, 2, 8, 1, 4, 3];
-      const [even, odd] = partitionArray(numbers, n => n % 2 === 0);
+      const [even, odd] = partitionArray(numbers, (n) => n % 2 === 0);
 
       // Order should be preserved within each partition
       expect(even).toEqual([2, 8, 4]);
@@ -133,7 +133,7 @@ describe('crypto-shuffle utilities', () => {
     it('should not modify original array', () => {
       const original = [1, 2, 3, 4, 5];
       const copy = [...original];
-      partitionArray(original, n => n > 3);
+      partitionArray(original, (n) => n > 3);
 
       expect(original).toEqual(copy);
     });

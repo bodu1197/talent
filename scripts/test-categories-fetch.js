@@ -26,7 +26,9 @@ async function testCategoriesFetch() {
   console.log('Test 1: Fetching all active categories...');
   const { data: categories, error } = await supabase
     .from('categories')
-    .select('id, name, slug, icon, description, parent_id, level, service_count, is_ai, is_active, display_order')
+    .select(
+      'id, name, slug, icon, description, parent_id, level, service_count, is_ai, is_active, display_order'
+    )
     .eq('is_active', true)
     .order('display_order');
 
@@ -43,20 +45,20 @@ async function testCategoriesFetch() {
   console.log(`✅ Found ${categories.length} categories\n`);
 
   // Test 2: Count root categories
-  const rootCategories = categories.filter(c => c.parent_id === null);
+  const rootCategories = categories.filter((c) => c.parent_id === null);
   console.log(`   Root categories: ${rootCategories.length}`);
   console.log(`   Child categories: ${categories.length - rootCategories.length}\n`);
 
   // Test 3: Show first 5 root categories
   console.log('First 5 root categories:');
-  rootCategories.slice(0, 5).forEach(cat => {
+  rootCategories.slice(0, 5).forEach((cat) => {
     console.log(`   - ${cat.name} (${cat.slug})`);
   });
 
   console.log('\n✅ Categories are accessible from the app!\n');
 }
 
-testCategoriesFetch().catch(err => {
+testCategoriesFetch().catch((err) => {
   console.error('\n❌ Test failed:', err);
   process.exit(1);
 });

@@ -53,7 +53,9 @@ describe('Check Email API', () => {
 
       expect(response.status).toBe(200);
       expect(data.available).toBe(true);
-      expect(mockSupabase.rpc).toHaveBeenCalledWith('check_email_exists', { check_email: 'new@example.com' });
+      expect(mockSupabase.rpc).toHaveBeenCalledWith('check_email_exists', {
+        check_email: 'new@example.com',
+      });
     });
 
     it('should return available false when email already exists', async () => {

@@ -8,13 +8,7 @@
     "public": true,
     "avif_autodetection": false,
     "file_size_limit": 5242880,
-    "allowed_mime_types": [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "image/gif",
-      "image/webp"
-    ],
+    "allowed_mime_types": ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"],
     "owner_id": null,
     "type": "STANDARD"
   },
@@ -27,13 +21,7 @@
     "public": true,
     "avif_autodetection": false,
     "file_size_limit": 5242880,
-    "allowed_mime_types": [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "image/gif",
-      "image/webp"
-    ],
+    "allowed_mime_types": ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"],
     "owner_id": null,
     "type": "STANDARD"
   },
@@ -46,13 +34,7 @@
     "public": true,
     "avif_autodetection": false,
     "file_size_limit": 10485760,
-    "allowed_mime_types": [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "image/gif",
-      "image/webp"
-    ],
+    "allowed_mime_types": ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"],
     "owner_id": null,
     "type": "STANDARD"
   },
@@ -78,13 +60,7 @@
     "public": true,
     "avif_autodetection": false,
     "file_size_limit": 10485760,
-    "allowed_mime_types": [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "image/gif",
-      "image/webp"
-    ],
+    "allowed_mime_types": ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"],
     "owner_id": null,
     "type": "STANDARD"
   },

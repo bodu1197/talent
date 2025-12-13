@@ -44,7 +44,10 @@ async function main() {
     console.log('  Error:', appError.message);
     console.log('  Full error:', JSON.stringify(appError, null, 2));
   } else {
-    console.log('  Table exists, columns:', applications[0] ? Object.keys(applications[0]) : 'no rows');
+    console.log(
+      '  Table exists, columns:',
+      applications[0] ? Object.keys(applications[0]) : 'no rows'
+    );
   }
 
   // 3. Check helper_profiles table
@@ -82,10 +85,7 @@ async function main() {
     console.log('  Found helper:', helperData.id);
 
     // Try to get errand_applications columns
-    const { error: appColsError } = await supabase
-      .from('errand_applications')
-      .select()
-      .limit(0);
+    const { error: appColsError } = await supabase.from('errand_applications').select().limit(0);
 
     console.log('  errand_applications structure check - error:', appColsError?.message || 'OK');
   } else {

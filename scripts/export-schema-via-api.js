@@ -3,13 +3,14 @@ const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 
 const _supabaseUrl = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
-const _supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
+const _supabaseServiceKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   auth: {
     autoRefreshToken: false,
-    persistSession: false
-  }
+    persistSession: false,
+  },
 });
 
 // Known tables from the codebase (we'll extract their structure)
@@ -24,7 +25,7 @@ const knownTables = [
   'order_items',
   'withdrawals',
   'chats',
-  'chat_messages'
+  'chat_messages',
 ];
 
 async function exportSchema() {
@@ -42,10 +43,7 @@ async function exportSchema() {
       console.log(`Fetching structure for table: ${tableName}`);
 
       // Get a sample row to understand the structure
-      const { error } = await supabase
-        .from(tableName)
-        .select('*')
-        .limit(1);
+      const { error } = await supabase.from(tableName).select('*').limit(1);
 
       if (error) {
         console.log(`  ⚠️  Could not fetch ${tableName}: ${error.message}`);
@@ -60,7 +58,7 @@ async function exportSchema() {
         const columns = Object.keys(sampleRow);
 
         schema += `-- Columns detected from API response:\n`;
-        columns.forEach(col => {
+        columns.forEach((col) => {
           const value = sampleRow[col];
           let type = 'unknown';
 
@@ -102,7 +100,6 @@ async function exportSchema() {
       }
 
       console.log(`  ✅ Exported ${tableName}`);
-
     } catch (error) {
       console.log(`  ❌ Error with ${tableName}:`, error.message);
       schema += `\n-- Table: ${tableName} (Error: ${error.message})\n`;

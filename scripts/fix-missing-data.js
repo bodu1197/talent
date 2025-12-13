@@ -24,10 +24,10 @@ function executeQuery(query) {
       path: `/v1/projects/${NEW_PROJECT_ID}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${NEW_ACCESS_TOKEN}`,
+        Authorization: `Bearer ${NEW_ACCESS_TOKEN}`,
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(data)
-      }
+        'Content-Length': Buffer.byteLength(data),
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -93,32 +93,34 @@ async function importWithRetry(tableName, maxRetries = 3) {
 
       for (let attempt = 0; attempt < maxRetries && !success; attempt++) {
         try {
-          const values = columns.map(col => {
-            const value = row[col];
+          const values = columns
+            .map((col) => {
+              const value = row[col];
 
-            if (value === null || value === undefined) {
-              return 'NULL';
-            }
+              if (value === null || value === undefined) {
+                return 'NULL';
+              }
 
-            if (typeof value === 'string') {
-              const escaped = value.replace(/'/g, "''").replace(/\\/g, '\\\\');
-              return `'${escaped}'`;
-            }
+              if (typeof value === 'string') {
+                const escaped = value.replace(/'/g, "''").replace(/\\/g, '\\\\');
+                return `'${escaped}'`;
+              }
 
-            if (typeof value === 'boolean') {
-              return value ? 'true' : 'false';
-            }
+              if (typeof value === 'boolean') {
+                return value ? 'true' : 'false';
+              }
 
-            if (typeof value === 'object') {
-              const json = JSON.stringify(value).replace(/'/g, "''");
-              return `'${json}'::jsonb`;
-            }
+              if (typeof value === 'object') {
+                const json = JSON.stringify(value).replace(/'/g, "''");
+                return `'${json}'::jsonb`;
+              }
 
-            return value;
-          }).join(', ');
+              return value;
+            })
+            .join(', ');
 
           const insertQuery = `
-            INSERT INTO "${tableName}" (${columns.map(c => `"${c}"`).join(', ')})
+            INSERT INTO "${tableName}" (${columns.map((c) => `"${c}"`).join(', ')})
             VALUES (${values})
             ON CONFLICT DO NOTHING
           `;
@@ -126,18 +128,19 @@ async function importWithRetry(tableName, maxRetries = 3) {
           await executeQuery(insertQuery);
           successCount++;
           success = true;
-
         } catch {
           if (attempt === maxRetries - 1) {
             failCount++;
           }
           // Wait a bit before retry
-          await new Promise(resolve => setTimeout(resolve, 100 * (attempt + 1)));
+          await new Promise((resolve) => setTimeout(resolve, 100 * (attempt + 1)));
         }
       }
 
       if ((i + 1) % 10 === 0 || i === data.length - 1) {
-        process.stdout.write(`\r   Progress: ${i + 1}/${data.length} (✅ ${successCount}, ❌ ${failCount})`);
+        process.stdout.write(
+          `\r   Progress: ${i + 1}/${data.length} (✅ ${successCount}, ❌ ${failCount})`
+        );
       }
     }
 
@@ -152,7 +155,6 @@ async function importWithRetry(tableName, maxRetries = 3) {
     console.log(`\n   ✅ Completed: ${successCount} success, ${failCount} failed\n`);
 
     return { success: successCount, failed: failCount };
-
   } catch (error) {
     console.log(`\n   ❌ Error: ${error.message}\n`);
     return { success: 0, failed: data?.length || 0 };
@@ -182,7 +184,7 @@ async function main() {
     'advertising_impressions',
     'advertising_payments',
     'notifications',
-    'withdrawal_requests'
+    'withdrawal_requests',
   ];
 
   let totalSuccess = 0;

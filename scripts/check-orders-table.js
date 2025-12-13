@@ -15,10 +15,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
   const serviceId = '6e7a8d72-ffa6-4816-a7fd-3a546594907d';
 
   // 주문 전체 정보 가져오기
-  const { data: orders } = await supabase
-    .from('orders')
-    .select('*')
-    .eq('service_id', serviceId);
+  const { data: orders } = await supabase.from('orders').select('*').eq('service_id', serviceId);
 
   if (!orders || orders.length === 0) {
     console.log('❌ 주문이 없습니다.');
@@ -38,10 +35,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
   console.log('Reviews 테이블 확인');
   console.log('========================================\n');
 
-  const { data: reviews } = await supabase
-    .from('reviews')
-    .select('*')
-    .eq('service_id', serviceId);
+  const { data: reviews } = await supabase.from('reviews').select('*').eq('service_id', serviceId);
 
   console.log(`리뷰 수: ${reviews?.length || 0}건\n`);
 

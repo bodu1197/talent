@@ -12,9 +12,8 @@ async function checkDatabase() {
   console.log('🔍 Supabase 데이터베이스 무결성 검사 시작...\n');
 
   // CONNECTION STRING 확인
-  const connectionString = process.env.DATABASE_URL ||
-                          process.env.SUPABASE_DB_URL ||
-                          process.env.POSTGRES_URL;
+  const connectionString =
+    process.env.DATABASE_URL || process.env.SUPABASE_DB_URL || process.env.POSTGRES_URL;
 
   if (!connectionString) {
     console.log('⚠️  DATABASE_URL이 .env.local에 설정되지 않았습니다.');
@@ -27,7 +26,7 @@ async function checkDatabase() {
 
   const pool = new Pool({
     connectionString,
-    ssl: { rejectUnauthorized: false }
+    ssl: { rejectUnauthorized: false },
   });
 
   try {
@@ -56,7 +55,7 @@ async function checkDatabase() {
     `);
 
     console.log(`✅ 총 ${tables.rows.length}개의 테이블 발견:`);
-    tables.rows.forEach(row => console.log(`   - ${row.table_name}`));
+    tables.rows.forEach((row) => console.log(`   - ${row.table_name}`));
     console.log();
 
     // 3. 주요 테이블 레코드 수 확인
@@ -99,8 +98,10 @@ async function checkDatabase() {
     `);
 
     console.log(`✅ 총 ${fkResult.rows.length}개의 Foreign Key 제약조건`);
-    fkResult.rows.slice(0, 10).forEach(row => {
-      console.log(`   ${row.table_name}.${row.column_name} → ${row.foreign_table_name}.${row.foreign_column_name}`);
+    fkResult.rows.slice(0, 10).forEach((row) => {
+      console.log(
+        `   ${row.table_name}.${row.column_name} → ${row.foreign_table_name}.${row.foreign_column_name}`
+      );
     });
     if (fkResult.rows.length > 10) {
       console.log(`   ... 외 ${fkResult.rows.length - 10}개 더`);
@@ -134,7 +135,6 @@ async function checkDatabase() {
     console.log(`✅ 인덱스: ${indexResult.rows.length}개`);
     console.log(`✅ 연결 상태: 정상`);
     console.log('\n🎉 데이터베이스 무결성 검사 완료!\n');
-
   } catch (error) {
     console.error('\n❌ 데이터베이스 오류:', error.message);
     console.error('\n해결 방법:');

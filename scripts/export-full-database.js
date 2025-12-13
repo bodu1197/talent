@@ -31,10 +31,10 @@ function executeQuery(query) {
       path: `/v1/projects/${SUPABASE_PROJECT_ID}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${SUPABASE_ACCESS_TOKEN}`,
+        Authorization: `Bearer ${SUPABASE_ACCESS_TOKEN}`,
         'Content-Type': 'application/json',
-        'Content-Length': data.length
-      }
+        'Content-Length': data.length,
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -143,7 +143,7 @@ async function exportSchema() {
       ORDER BY table_name
     `);
 
-    const schemaSQL = schema.map(row => row.create_statement).join('\n\n');
+    const schemaSQL = schema.map((row) => row.create_statement).join('\n\n');
     const outputPath = path.join(OUTPUT_DIR, 'full-schema.sql');
     fs.writeFileSync(outputPath, schemaSQL);
 

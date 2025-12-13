@@ -9,7 +9,7 @@ console.log('📊 남은 에러 분석 중...\n');
 // ESLint 실행
 try {
   execSync('npx eslint scripts --ext .js --format json > scripts-remaining-errors.json', {
-    stdio: 'pipe'
+    stdio: 'pipe',
   });
 } catch {
   // ESLint가 에러를 발견하면 exit code 1을 반환하지만, JSON은 정상적으로 생성됨
@@ -21,10 +21,10 @@ const data = JSON.parse(fs.readFileSync('scripts-remaining-errors.json', 'utf8')
 const ruleStats = {};
 const ruleExamples = {};
 
-data.forEach(file => {
-  const errors = file.messages.filter(m => m.severity === 2);
+data.forEach((file) => {
+  const errors = file.messages.filter((m) => m.severity === 2);
 
-  errors.forEach(err => {
+  errors.forEach((err) => {
     const ruleId = err.ruleId || 'unknown';
 
     if (!ruleStats[ruleId]) {
@@ -39,7 +39,7 @@ data.forEach(file => {
       ruleExamples[ruleId].push({
         file: file.filePath.split('\\').pop(),
         line: err.line,
-        message: err.message
+        message: err.message,
       });
     }
   });
@@ -60,7 +60,7 @@ const categories = {
   complexity: [],
   style: [],
   bestPractice: [],
-  other: []
+  other: [],
 };
 
 sortedRules.forEach(([ruleId, count]) => {
@@ -68,7 +68,11 @@ sortedRules.forEach(([ruleId, count]) => {
 
   if (ruleId.includes('os-command') || ruleId.includes('hardcoded') || ruleId.includes('sql')) {
     categories.security.push(entry);
-  } else if (ruleId.includes('complexity') || ruleId.includes('nested') || ruleId.includes('cognitive')) {
+  } else if (
+    ruleId.includes('complexity') ||
+    ruleId.includes('nested') ||
+    ruleId.includes('cognitive')
+  ) {
     categories.complexity.push(entry);
   } else if (ruleId.includes('regex') || ruleId.includes('template')) {
     categories.style.push(entry);
@@ -126,18 +130,25 @@ console.log('\n\n📝 주요 에러 예제:\n');
 
 sortedRules.slice(0, 10).forEach(([ruleId, count]) => {
   console.log(`\n${ruleId} (${count}개):`);
-  ruleExamples[ruleId].forEach(example => {
+  ruleExamples[ruleId].forEach((example) => {
     console.log(`  ${example.file}:${example.line}`);
     console.log(`    ${example.message}`);
   });
 });
 
 // JSON으로도 저장
-fs.writeFileSync('scripts-error-analysis.json', JSON.stringify({
-  totalErrors,
-  categories,
-  ruleStats,
-  ruleExamples
-}, null, 2));
+fs.writeFileSync(
+  'scripts-error-analysis.json',
+  JSON.stringify(
+    {
+      totalErrors,
+      categories,
+      ruleStats,
+      ruleExamples,
+    },
+    null,
+    2
+  )
+);
 
 console.log('\n\n✅ 분석 완료! scripts-error-analysis.json에 저장됨\n');

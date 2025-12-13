@@ -55,9 +55,15 @@ describe('useRateLimiting', () => {
     it('should lock out after max attempts', () => {
       const { result } = renderHook(() => useRateLimiting(defaultConfig));
 
-      act(() => { result.current.incrementAttempts(); });
-      act(() => { result.current.incrementAttempts(); });
-      act(() => { result.current.incrementAttempts(); });
+      act(() => {
+        result.current.incrementAttempts();
+      });
+      act(() => {
+        result.current.incrementAttempts();
+      });
+      act(() => {
+        result.current.incrementAttempts();
+      });
 
       expect(result.current.attempts).toBe(3);
       expect(result.current.isLockedOut).toBe(true);
@@ -68,8 +74,12 @@ describe('useRateLimiting', () => {
     it('should reset attempts to zero', () => {
       const { result } = renderHook(() => useRateLimiting(defaultConfig));
 
-      act(() => { result.current.incrementAttempts(); });
-      act(() => { result.current.incrementAttempts(); });
+      act(() => {
+        result.current.incrementAttempts();
+      });
+      act(() => {
+        result.current.incrementAttempts();
+      });
 
       expect(result.current.attempts).toBe(2);
 

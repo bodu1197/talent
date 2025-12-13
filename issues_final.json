@@ -1,1 +1,77 @@
-{"total":686,"p":1,"ps":1,"paging":{"pageIndex":1,"pageSize":1,"total":686},"effortTotal":3448,"issues":[{"key":"8e5b65b9-74f1-496f-b980-7ed19258eace","rule":"typescript:S7721","severity":"MAJOR","component":"talent:src/app/admin/advertising/payments/page.tsx","project":"talent","line":132,"hash":"f952f824923367c42f1b539fe5844440","textRange":{"startLine":132,"endLine":132,"startOffset":2,"endOffset":26},"flows":[],"status":"OPEN","message":"Move function \u0027handleAuthError\u0027 to the outer scope.","effort":"5min","debt":"5min","author":"your_email@example.com","tags":["performance","optimization","javascript"],"creationDate":"2025-11-19T18:17:17+0000","updateDate":"2025-11-19T18:17:17+0000","type":"CODE_SMELL","scope":"MAIN","quickFixAvailable":false,"messageFormattings":[],"codeVariants":[],"cleanCodeAttribute":"EFFICIENT","cleanCodeAttributeCategory":"INTENTIONAL","impacts":[{"softwareQuality":"MAINTAINABILITY","severity":"MEDIUM"}],"issueStatus":"OPEN","prioritizedRule":false,"fromSonarQubeUpdate":false,"internalTags":[]}],"components":[{"key":"talent:src/app/admin/advertising/payments/page.tsx","enabled":true,"qualifier":"FIL","name":"page.tsx","longName":"src/app/admin/advertising/payments/page.tsx","path":"src/app/admin/advertising/payments/page.tsx"},{"key":"talent","enabled":true,"qualifier":"TRK","name":"AI Talent Hub","longName":"AI Talent Hub"}],"facets":[{"property":"severities","values":[{"val":"MINOR","count":346},{"val":"MAJOR","count":309},{"val":"CRITICAL","count":23},{"val":"INFO","count":8},{"val":"BLOCKER","count":0}]},{"property":"types","values":[{"val":"CODE_SMELL","count":670},{"val":"BUG","count":16},{"val":"VULNERABILITY","count":0}]}]}
+{
+  "total": 686,
+  "p": 1,
+  "ps": 1,
+  "paging": { "pageIndex": 1, "pageSize": 1, "total": 686 },
+  "effortTotal": 3448,
+  "issues": [
+    {
+      "key": "8e5b65b9-74f1-496f-b980-7ed19258eace",
+      "rule": "typescript:S7721",
+      "severity": "MAJOR",
+      "component": "talent:src/app/admin/advertising/payments/page.tsx",
+      "project": "talent",
+      "line": 132,
+      "hash": "f952f824923367c42f1b539fe5844440",
+      "textRange": { "startLine": 132, "endLine": 132, "startOffset": 2, "endOffset": 26 },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Move function \u0027handleAuthError\u0027 to the outer scope.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "your_email@example.com",
+      "tags": ["performance", "optimization", "javascript"],
+      "creationDate": "2025-11-19T18:17:17+0000",
+      "updateDate": "2025-11-19T18:17:17+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [{ "softwareQuality": "MAINTAINABILITY", "severity": "MEDIUM" }],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false,
+      "fromSonarQubeUpdate": false,
+      "internalTags": []
+    }
+  ],
+  "components": [
+    {
+      "key": "talent:src/app/admin/advertising/payments/page.tsx",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "page.tsx",
+      "longName": "src/app/admin/advertising/payments/page.tsx",
+      "path": "src/app/admin/advertising/payments/page.tsx"
+    },
+    {
+      "key": "talent",
+      "enabled": true,
+      "qualifier": "TRK",
+      "name": "AI Talent Hub",
+      "longName": "AI Talent Hub"
+    }
+  ],
+  "facets": [
+    {
+      "property": "severities",
+      "values": [
+        { "val": "MINOR", "count": 346 },
+        { "val": "MAJOR", "count": 309 },
+        { "val": "CRITICAL", "count": 23 },
+        { "val": "INFO", "count": 8 },
+        { "val": "BLOCKER", "count": 0 }
+      ]
+    },
+    {
+      "property": "types",
+      "values": [
+        { "val": "CODE_SMELL", "count": 670 },
+        { "val": "BUG", "count": 16 },
+        { "val": "VULNERABILITY", "count": 0 }
+      ]
+    }
+  ]
+}

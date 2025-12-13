@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
-import { User } from '@supabase/supabase-js'
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
+import { User } from '@supabase/supabase-js';
 
 /**
  * API 라우트 인증 미들웨어
@@ -15,22 +15,20 @@ import { User } from '@supabase/supabase-js'
  * })
  * ```
  */
-export function withAuth(
-  handler: (req: NextRequest, user: User) => Promise<NextResponse>
-) {
+export function withAuth(handler: (req: NextRequest, user: User) => Promise<NextResponse>) {
   return async (req: NextRequest): Promise<NextResponse> => {
-    const supabase = await createClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: '인증이 필요합니다' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
     }
 
-    return handler(req, user)
-  }
+    return handler(req, user);
+  };
 }
 
 /**
@@ -52,9 +50,11 @@ export function withOptionalAuth(
   handler: (req: NextRequest, user: User | null) => Promise<NextResponse>
 ) {
   return async (req: NextRequest): Promise<NextResponse> => {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-    return handler(req, user)
-  }
+    return handler(req, user);
+  };
 }

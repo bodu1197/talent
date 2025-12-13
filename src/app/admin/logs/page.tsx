@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 export default function AdminLogsPage() {
   return (
@@ -8,5 +8,5 @@ export default function AdminLogsPage() {
         <p className="text-gray-600">활동 로그 페이지입니다.</p>
       </div>
     </div>
-  )
+  );
 }

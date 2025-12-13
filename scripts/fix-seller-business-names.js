@@ -13,9 +13,7 @@ async function main() {
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
   // 판매자 조회
-  const { data: sellers } = await supabase
-    .from('sellers')
-    .select('id, business_name, user_id');
+  const { data: sellers } = await supabase.from('sellers').select('id, business_name, user_id');
 
   console.log(`전체 판매자: ${sellers?.length}명\n`);
 
@@ -37,7 +35,7 @@ async function main() {
     const { error } = await supabase
       .from('sellers')
       .update({
-        business_name: businessName
+        business_name: businessName,
       })
       .eq('id', seller.id);
 

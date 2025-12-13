@@ -1,4 +1,4 @@
-import { Category } from '@/types'
+import { Category } from '@/types';
 
 export const AI_TOOLS = {
   IMAGE: ['Midjourney', 'DALL-E 3', 'Stable Diffusion', 'Leonardo AI', 'Adobe Firefly'],
@@ -6,8 +6,8 @@ export const AI_TOOLS = {
   WRITING: ['ChatGPT', 'Claude', 'Gemini', 'Jasper', 'Copy.ai'],
   CODING: ['GitHub Copilot', 'Cursor', 'Tabnine', 'Amazon CodeWhisperer', 'Replit AI'],
   AUDIO: ['ElevenLabs', 'Murf', 'Speechify', 'WellSaid Labs', 'Resemble AI'],
-  MUSIC: ['Suno AI', 'Soundraw', 'Boomy', 'Amper Music', 'AIVA']
-} as const
+  MUSIC: ['Suno AI', 'Soundraw', 'Boomy', 'Amper Music', 'AIVA'],
+} as const;
 
 export const CATEGORIES: Category[] = [
   // AI 카테고리
@@ -30,7 +30,7 @@ export const CATEGORIES: Category[] = [
         display_order: 1,
         is_ai: true,
         is_active: true,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       },
       {
         id: 'ai-illustration',
@@ -40,7 +40,7 @@ export const CATEGORIES: Category[] = [
         display_order: 2,
         is_ai: true,
         is_active: true,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       },
       {
         id: 'ai-product-image',
@@ -50,7 +50,7 @@ export const CATEGORIES: Category[] = [
         display_order: 3,
         is_ai: true,
         is_active: true,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       },
       {
         id: 'ai-social-media',
@@ -60,9 +60,9 @@ export const CATEGORIES: Category[] = [
         display_order: 4,
         is_ai: true,
         is_active: true,
-        created_at: new Date().toISOString()
-      }
-    ]
+        created_at: new Date().toISOString(),
+      },
+    ],
   },
   {
     id: 'ai-video-motion',
@@ -83,7 +83,7 @@ export const CATEGORIES: Category[] = [
         display_order: 1,
         is_ai: true,
         is_active: true,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       },
       {
         id: 'ai-animation',
@@ -93,7 +93,7 @@ export const CATEGORIES: Category[] = [
         display_order: 2,
         is_ai: true,
         is_active: true,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       },
       {
         id: 'ai-avatar-video',
@@ -103,9 +103,9 @@ export const CATEGORIES: Category[] = [
         display_order: 3,
         is_ai: true,
         is_active: true,
-        created_at: new Date().toISOString()
-      }
-    ]
+        created_at: new Date().toISOString(),
+      },
+    ],
   },
   {
     id: 'ai-writing-content',
@@ -126,7 +126,7 @@ export const CATEGORIES: Category[] = [
         display_order: 1,
         is_ai: true,
         is_active: true,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       },
       {
         id: 'ai-marketing-copy',
@@ -136,7 +136,7 @@ export const CATEGORIES: Category[] = [
         display_order: 2,
         is_ai: true,
         is_active: true,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       },
       {
         id: 'ai-translation',
@@ -146,9 +146,9 @@ export const CATEGORIES: Category[] = [
         display_order: 3,
         is_ai: true,
         is_active: true,
-        created_at: new Date().toISOString()
-      }
-    ]
+        created_at: new Date().toISOString(),
+      },
+    ],
   },
   {
     id: 'ai-programming',
@@ -169,7 +169,7 @@ export const CATEGORIES: Category[] = [
         display_order: 1,
         is_ai: true,
         is_active: true,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       },
       {
         id: 'ai-app-development',
@@ -179,7 +179,7 @@ export const CATEGORIES: Category[] = [
         display_order: 2,
         is_ai: true,
         is_active: true,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       },
       {
         id: 'ai-automation',
@@ -189,9 +189,9 @@ export const CATEGORIES: Category[] = [
         display_order: 3,
         is_ai: true,
         is_active: true,
-        created_at: new Date().toISOString()
-      }
-    ]
+        created_at: new Date().toISOString(),
+      },
+    ],
   },
   {
     id: 'ai-audio-music',
@@ -212,7 +212,7 @@ export const CATEGORIES: Category[] = [
         display_order: 1,
         is_ai: true,
         is_active: true,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       },
       {
         id: 'ai-voice-over',
@@ -222,9 +222,9 @@ export const CATEGORIES: Category[] = [
         display_order: 2,
         is_ai: true,
         is_active: true,
-        created_at: new Date().toISOString()
-      }
-    ]
+        created_at: new Date().toISOString(),
+      },
+    ],
   },
   // 일반 카테고리
   {
@@ -236,7 +236,7 @@ export const CATEGORIES: Category[] = [
     display_order: 10,
     is_ai: false,
     is_active: true,
-    created_at: new Date().toISOString()
+    created_at: new Date().toISOString(),
   },
   {
     id: 'general-development',
@@ -247,7 +247,7 @@ export const CATEGORIES: Category[] = [
     display_order: 11,
     is_ai: false,
     is_active: true,
-    created_at: new Date().toISOString()
+    created_at: new Date().toISOString(),
   },
   {
     id: 'marketing',
@@ -258,16 +258,16 @@ export const CATEGORIES: Category[] = [
     display_order: 12,
     is_ai: false,
     is_active: true,
-    created_at: new Date().toISOString()
-  }
-]
+    created_at: new Date().toISOString(),
+  },
+];
 
 export const PACKAGE_TYPES = {
   BASIC: 'basic',
   STANDARD: 'standard',
   PREMIUM: 'premium',
-  CUSTOM: 'custom'
-} as const
+  CUSTOM: 'custom',
+} as const;
 
 export const ORDER_STATUS = {
   PENDING: 'pending',
@@ -276,13 +276,13 @@ export const ORDER_STATUS = {
   DELIVERED: 'delivered',
   COMPLETED: 'completed',
   CANCELLED: 'cancelled',
-  REFUNDED: 'refunded'
-} as const
+  REFUNDED: 'refunded',
+} as const;
 
 export const SERVICE_STATUS = {
   DRAFT: 'draft',
   PENDING: 'pending',
   ACTIVE: 'active',
   INACTIVE: 'inactive',
-  REJECTED: 'rejected'
-} as const
+  REJECTED: 'rejected',
+} as const;

@@ -53,7 +53,7 @@ describe('template-generator', () => {
     });
 
     it('should have unique ids', () => {
-      const ids = BACKGROUND_TEMPLATES.map(t => t.id);
+      const ids = BACKGROUND_TEMPLATES.map((t) => t.id);
       const uniqueIds = new Set(ids);
       expect(uniqueIds.size).toBe(ids.length);
     });
@@ -69,7 +69,7 @@ describe('template-generator', () => {
     });
 
     it('should have linear templates with angles', () => {
-      const linearTemplates = BACKGROUND_TEMPLATES.filter(t => t.type === 'linear');
+      const linearTemplates = BACKGROUND_TEMPLATES.filter((t) => t.type === 'linear');
       expect(linearTemplates.length).toBeGreaterThan(0);
 
       for (const template of linearTemplates) {
@@ -79,7 +79,7 @@ describe('template-generator', () => {
     });
 
     it('should have radial templates', () => {
-      const radialTemplates = BACKGROUND_TEMPLATES.filter(t => t.type === 'radial');
+      const radialTemplates = BACKGROUND_TEMPLATES.filter((t) => t.type === 'radial');
       expect(radialTemplates.length).toBeGreaterThan(0);
     });
 
@@ -332,7 +332,9 @@ describe('template-generator', () => {
         fontWeight: 'normal',
       };
 
-      await expect(generateThumbnailWithText(template, textOptions)).rejects.toThrow('Failed to create blob');
+      await expect(generateThumbnailWithText(template, textOptions)).rejects.toThrow(
+        'Failed to create blob'
+      );
     });
   });
 });

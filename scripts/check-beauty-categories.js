@@ -18,10 +18,10 @@ async function main() {
     .order('name');
 
   console.log('=== 1차 카테고리 ===');
-  level1?.forEach(c => console.log(`  ${c.slug}: ${c.name}`));
+  level1?.forEach((c) => console.log(`  ${c.slug}: ${c.name}`));
 
   // 뷰티/패션 찾기
-  const beauty = level1?.find(c => c.slug === 'beauty-fashion' || c.slug === 'beauty');
+  const beauty = level1?.find((c) => c.slug === 'beauty-fashion' || c.slug === 'beauty');
 
   if (!beauty) {
     console.log('\n❌ 뷰티/패션 카테고리를 찾을 수 없습니다.');
@@ -41,7 +41,7 @@ async function main() {
   if (!level2 || level2.length === 0) {
     console.log('  (없음)');
   } else {
-    level2.forEach(c => console.log(`  ${c.slug}: ${c.name}`));
+    level2.forEach((c) => console.log(`  ${c.slug}: ${c.name}`));
   }
 
   // 3차 카테고리 (있으면)
@@ -55,7 +55,7 @@ async function main() {
 
       if (level3 && level3.length > 0) {
         console.log(`\n=== 3차 카테고리 (${cat2.name} 하위) ===`);
-        level3.forEach(c => console.log(`  ${c.slug}: ${c.name}`));
+        level3.forEach((c) => console.log(`  ${c.slug}: ${c.name}`));
       }
     }
   }

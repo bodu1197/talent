@@ -13,7 +13,7 @@ const stats = {
   totalSellers: 0,
   updated: 0,
   failed: 0,
-  errors: []
+  errors: [],
 };
 
 // 랜덤 전화번호 생성
@@ -53,7 +53,7 @@ function generateCertificates(businessName) {
   return [
     `${categoryName} 전문가 자격증`,
     `${categoryName} 실무 교육 수료증`,
-    `서비스 품질 관리 인증`
+    `서비스 품질 관리 인증`,
   ];
 }
 
@@ -62,7 +62,7 @@ function _generateBusinessHours() {
   return {
     weekdays: '09:00-18:00',
     saturday: '10:00-15:00',
-    sunday: '휴무'
+    sunday: '휴무',
   };
 }
 
@@ -96,14 +96,14 @@ async function updateSellerProfile(seller, index, total) {
 - 고객 만족도 평균 4.8/5.0
 
 [보유 자격증]
-${certificates.map(c => `- ${c}`).join('\n')}
+${certificates.map((c) => `- ${c}`).join('\n')}
 
 [연락 가능 시간]
 ${contactHours}
 
 언제든지 편하게 문의해 주세요!`;
 
-    const { error} = await supabase
+    const { error } = await supabase
       .from('sellers')
       .update({
         bio: enhancedBio,
@@ -112,7 +112,7 @@ ${contactHours}
         kakao_id: kakaoId,
         website: website,
         experience: experience.toString() + '년',
-        contact_hours: contactHours
+        contact_hours: contactHours,
       })
       .eq('id', seller.id);
 
@@ -120,13 +120,12 @@ ${contactHours}
 
     console.log(`  ✓ 프로필 업데이트 완료 (경력: ${experience}년, 연락처: ${phone})\n`);
     stats.updated++;
-
   } catch (error) {
     console.error(`  ❌ 에러: ${error.message}\n`);
     stats.failed++;
     stats.errors.push({
       seller: seller.business_name || 'NULL',
-      error: error.message
+      error: error.message,
     });
   }
 }
@@ -160,7 +159,7 @@ async function main() {
       // Rate limit 방지
       if ((i + 1) % 10 === 0) {
         console.log(`⏸️  10명 업데이트 완료, 잠시 대기...\n`);
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
       }
     }
 
@@ -189,7 +188,6 @@ async function main() {
     }
 
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-
   } catch (error) {
     console.error('\n❌ 치명적 에러:', error);
     process.exit(1);

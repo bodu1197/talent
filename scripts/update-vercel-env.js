@@ -14,9 +14,11 @@ const TEAM_ID = 'team_sA8Fyd7y54t3sueJ23R3wEv6';
 
 // 새 Supabase 환경변수
 const NEW_ENV_VARS = {
-  'NEXT_PUBLIC_SUPABASE_URL': 'https://abroivxthindezdtdzmj.supabase.co',
-  'NEXT_PUBLIC_SUPABASE_ANON_KEY': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5ODk3NjcsImV4cCI6MjA0OTU2NTc2N30.P-pJc-qGUYdw8z_jNmG-p8kE1TlhCpNzmYR4EBBZUBs',
-  'SUPABASE_SERVICE_ROLE_KEY': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzk4OTc2NywiZXhwIjoyMDQ5NTY1NzY3fQ.sb_secret_yjCABwj3zJbfvFsJ4baU4A_4b3YUPvT'
+  NEXT_PUBLIC_SUPABASE_URL: 'https://abroivxthindezdtdzmj.supabase.co',
+  NEXT_PUBLIC_SUPABASE_ANON_KEY:
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5ODk3NjcsImV4cCI6MjA0OTU2NTc2N30.P-pJc-qGUYdw8z_jNmG-p8kE1TlhCpNzmYR4EBBZUBs',
+  SUPABASE_SERVICE_ROLE_KEY:
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFicm9pdnh0aGluZGV6ZHRkem1qIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzk4OTc2NywiZXhwIjoyMDQ5NTY1NzY3fQ.sb_secret_yjCABwj3zJbfvFsJ4baU4A_4b3YUPvT',
 };
 
 function makeVercelRequest(method, path, token, body = null) {
@@ -26,14 +28,14 @@ function makeVercelRequest(method, path, token, body = null) {
       path: path,
       method: method,
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
     };
 
     const req = https.request(options, (res) => {
       let data = '';
-      res.on('data', (chunk) => data += chunk);
+      res.on('data', (chunk) => (data += chunk));
       res.on('end', () => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           try {
@@ -56,11 +58,7 @@ function makeVercelRequest(method, path, token, body = null) {
 
 async function getExistingEnvs(token) {
   try {
-    await makeVercelRequest(
-      'GET',
-      `/v9/projects/${PROJECT_ID}/env?teamId=${TEAM_ID}`,
-      token
-    );
+    await makeVercelRequest('GET', `/v9/projects/${PROJECT_ID}/env?teamId=${TEAM_ID}`, token);
     return result.envs || [];
   } catch (error) {
     console.log(`⚠️  환경변수 조회 실패: ${error.message}`);
@@ -84,17 +82,12 @@ async function deleteEnvVar(token, envId) {
 
 async function createEnvVar(token, key, value) {
   try {
-    await makeVercelRequest(
-      'POST',
-      `/v10/projects/${PROJECT_ID}/env?teamId=${TEAM_ID}`,
-      token,
-      {
-        key: key,
-        value: value,
-        type: 'encrypted',
-        target: ['production', 'preview', 'development']
-      }
-    );
+    await makeVercelRequest('POST', `/v10/projects/${PROJECT_ID}/env?teamId=${TEAM_ID}`, token, {
+      key: key,
+      value: value,
+      type: 'encrypted',
+      target: ['production', 'preview', 'development'],
+    });
     return true;
   } catch (error) {
     console.error('에러 발생:', error);
@@ -106,7 +99,7 @@ async function createEnvVar(token, key, value) {
 async function promptForToken() {
   const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
   });
 
   return new Promise((resolve) => {
@@ -156,7 +149,7 @@ async function main() {
     console.log(`🔧 ${key} 업데이트 중...`);
 
     // 기존 환경변수 찾기
-    const existing = existingEnvs.find(env => env.key === key);
+    const existing = existingEnvs.find((env) => env.key === key);
 
     if (existing) {
       // 삭제 후 재생성
@@ -195,7 +188,9 @@ async function main() {
   if (failed === 0) {
     console.log('✨ Vercel 환경변수 업데이트 완료!\n');
     console.log('📌 다음 단계:');
-    console.log('   1. Vercel 대시보드에서 확인: https://vercel.com/dolpagu/talent/settings/environment-variables');
+    console.log(
+      '   1. Vercel 대시보드에서 확인: https://vercel.com/dolpagu/talent/settings/environment-variables'
+    );
     console.log('   2. 프로덕션 재배포 (자동 배포되지 않는 경우)\n');
   } else {
     console.log('⚠️  일부 환경변수 업데이트에 실패했습니다.');
@@ -203,7 +198,7 @@ async function main() {
   }
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('❌ 오류 발생:', err.message);
   process.exit(1);
 });

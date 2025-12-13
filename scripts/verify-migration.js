@@ -15,16 +15,15 @@ const NEW_ACCESS_TOKEN = 'sbp_f40b15f794e727f0aa9161de38c497174fcac2ee';
 
 function executeQuery(projectId, token, _query) {
   return new Promise((resolve, reject) => {
-
     const options = {
       hostname: 'api.supabase.com',
       path: `/v1/projects/${projectId}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(data)
-      }
+        'Content-Length': Buffer.byteLength(data),
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -70,15 +69,19 @@ const IMPORTANT_TABLES = [
   'notifications',
   'errands',
   'food_stores',
-  'food_menus'
+  'food_menus',
 ];
 
 async function verifyTable(tableName) {
   try {
-    const oldResult = await executeQuery(OLD_PROJECT_ID, OLD_ACCESS_TOKEN,
+    const oldResult = await executeQuery(
+      OLD_PROJECT_ID,
+      OLD_ACCESS_TOKEN,
       `SELECT COUNT(*) as count FROM "${tableName}"`
     );
-    const newResult = await executeQuery(NEW_PROJECT_ID, NEW_ACCESS_TOKEN,
+    const newResult = await executeQuery(
+      NEW_PROJECT_ID,
+      NEW_ACCESS_TOKEN,
       `SELECT COUNT(*) as count FROM "${tableName}"`
     );
 
@@ -101,10 +104,11 @@ async function verifyTable(tableName) {
       diffStr = `${diff}`;
     }
 
-    console.log(`${status} ${tableName.padEnd(25)} | 원본: ${String(oldCount).padStart(5)} | 새: ${String(newCount).padStart(5)} ${diffStr}`);
+    console.log(
+      `${status} ${tableName.padEnd(25)} | 원본: ${String(oldCount).padStart(5)} | 새: ${String(newCount).padStart(5)} ${diffStr}`
+    );
 
     return { tableName, oldCount, newCount, match };
-
   } catch (error) {
     console.error('에러 발생:', error);
     console.log(`❌ ${tableName.padEnd(25)} | Error: ${error.message}`);
@@ -116,11 +120,25 @@ async function verifyDatabaseObjects() {
   console.log('\n📊 데이터베이스 객체 검증\n');
 
   const objectTypes = [
-    { name: 'Tables', query: "SELECT COUNT(*) as count FROM pg_tables WHERE schemaname = 'public'" },
-    { name: 'Functions', query: "SELECT COUNT(*) as count FROM pg_proc p JOIN pg_namespace n ON p.pronamespace = n.oid WHERE n.nspname = 'public' AND p.prokind = 'f'" },
-    { name: 'Triggers', query: "SELECT COUNT(*) as count FROM pg_trigger t JOIN pg_class c ON t.tgrelid = c.oid JOIN pg_namespace n ON c.relnamespace = n.oid WHERE n.nspname = 'public' AND NOT t.tgisinternal" },
-    { name: 'RLS Policies', query: "SELECT COUNT(*) as count FROM pg_policies WHERE schemaname = 'public'" },
-    { name: 'Storage Buckets', query: "SELECT COUNT(*) as count FROM storage.buckets" }
+    {
+      name: 'Tables',
+      query: "SELECT COUNT(*) as count FROM pg_tables WHERE schemaname = 'public'",
+    },
+    {
+      name: 'Functions',
+      query:
+        "SELECT COUNT(*) as count FROM pg_proc p JOIN pg_namespace n ON p.pronamespace = n.oid WHERE n.nspname = 'public' AND p.prokind = 'f'",
+    },
+    {
+      name: 'Triggers',
+      query:
+        "SELECT COUNT(*) as count FROM pg_trigger t JOIN pg_class c ON t.tgrelid = c.oid JOIN pg_namespace n ON c.relnamespace = n.oid WHERE n.nspname = 'public' AND NOT t.tgisinternal",
+    },
+    {
+      name: 'RLS Policies',
+      query: "SELECT COUNT(*) as count FROM pg_policies WHERE schemaname = 'public'",
+    },
+    { name: 'Storage Buckets', query: 'SELECT COUNT(*) as count FROM storage.buckets' },
   ];
 
   for (const obj of objectTypes) {
@@ -133,8 +151,9 @@ async function verifyDatabaseObjects() {
       const match = oldCount === newCount;
 
       const status = match ? '✅' : '⚠️';
-      console.log(`${status} ${obj.name.padEnd(20)} | 원본: ${String(oldCount).padStart(4)} | 새: ${String(newCount).padStart(4)}`);
-
+      console.log(
+        `${status} ${obj.name.padEnd(20)} | 원본: ${String(oldCount).padStart(4)} | 새: ${String(newCount).padStart(4)}`
+      );
     } catch (error) {
       console.error('에러 발생:', error);
       console.log(`❌ ${obj.name.padEnd(20)} | Error: ${error.message}`);
@@ -163,9 +182,9 @@ async function main() {
 
   console.log('═'.repeat(70));
 
-  const matched = results.filter(r => r.match).length;
-  const total = results.filter(r => !r.error).length;
-  const empty = results.filter(r => r.oldCount === 0).length;
+  const matched = results.filter((r) => r.match).length;
+  const total = results.filter((r) => !r.error).length;
+  const empty = results.filter((r) => r.oldCount === 0).length;
 
   console.log(`\n📈 요약:`);
   console.log(`   ✅ 일치: ${matched}/${total} 테이블`);

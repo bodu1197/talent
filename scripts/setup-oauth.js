@@ -20,14 +20,14 @@ function makeRequest(method, path, token, body = null) {
       path: path,
       method: method,
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
     };
 
     const req = https.request(options, (res) => {
       let data = '';
-      res.on('data', (chunk) => data += chunk);
+      res.on('data', (chunk) => (data += chunk));
       res.on('end', () => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           try {
@@ -50,11 +50,7 @@ function makeRequest(method, path, token, body = null) {
 
 async function getAuthConfig(projectId, token) {
   try {
-    const config = await makeRequest(
-      'GET',
-      `/v1/projects/${projectId}/config/auth`,
-      token
-    );
+    const config = await makeRequest('GET', `/v1/projects/${projectId}/config/auth`, token);
     return config;
   } catch (error) {
     console.log(`⚠️  Auth config 조회 실패: ${error.message}`);
@@ -64,12 +60,7 @@ async function getAuthConfig(projectId, token) {
 
 async function _updateAuthConfig(projectId, token, config) {
   try {
-    await makeRequest(
-      'PATCH',
-      `/v1/projects/${projectId}/config/auth`,
-      token,
-      config
-    );
+    await makeRequest('PATCH', `/v1/projects/${projectId}/config/auth`, token, config);
     return true;
   } catch (error) {
     console.log(`⚠️  Auth config 업데이트 실패: ${error.message}`);

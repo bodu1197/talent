@@ -14,12 +14,12 @@ const stats = {
   sellersCreated: 0,
   sellersFailed: 0,
   servicesCreated: 0,
-  errors: []
+  errors: [],
 };
 
 // 딜레이 함수
 function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // 1. 최하위 카테고리 로드
@@ -34,8 +34,8 @@ async function loadLeafCategories() {
   if (allError) throw allError;
 
   // 최하위 카테고리 (자식이 없는 카테고리)
-  const childIds = new Set(allCategories.map(c => c.parent_id).filter(Boolean));
-  const leafCategories = allCategories.filter(c => !childIds.has(c.id));
+  const childIds = new Set(allCategories.map((c) => c.parent_id).filter(Boolean));
+  const leafCategories = allCategories.filter((c) => !childIds.has(c.id));
 
   console.log(`✓ 최하위 카테고리 ${leafCategories.length}개 로드됨\n`);
   stats.totalCategories = leafCategories.length;
@@ -47,14 +47,17 @@ async function loadLeafCategories() {
 async function getAllAuthUsers() {
   console.log('\n📂 Auth 사용자 로딩 중...\n');
 
-  const { data: { users }, error } = await supabase.auth.admin.listUsers({
-    perPage: 1000
+  const {
+    data: { users },
+    error,
+  } = await supabase.auth.admin.listUsers({
+    perPage: 1000,
   });
 
   if (error) throw error;
 
   // seller_로 시작하는 이메일만 필터
-  const sellerUsers = users.filter(u => u.email?.startsWith('seller_'));
+  const sellerUsers = users.filter((u) => u.email?.startsWith('seller_'));
 
   console.log(`✓ 판매자 계정 ${sellerUsers.length}개 발견\n`);
 
@@ -66,7 +69,7 @@ async function createSeller(userId, categoryId, categoryName, _categorySlug) {
   const businessName = `${categoryName} 스튜디오`;
   const bio = `${categoryName} 분야의 전문가입니다. 고객 만족을 최우선으로 생각하며, 최고의 품질을 제공합니다.`;
 
-  const { data, error} = await supabase
+  const { data, error } = await supabase
     .from('sellers')
     .insert({
       user_id: userId,
@@ -75,7 +78,7 @@ async function createSeller(userId, categoryId, categoryName, _categorySlug) {
       status: 'active',
       is_active: true,
       verification_status: 'pending',
-      is_verified: false
+      is_verified: false,
     })
     .select()
     .single();
@@ -103,14 +106,11 @@ async function createServices(sellerId, categoryId, categoryName, count = 10) {
       thumbnail_url: `https://picsum.photos/seed/${categoryId}_${i}/400/300`,
       delivery_days: deliveryDays,
       revision_count: revisionCount,
-      status: 'active'
+      status: 'active',
     });
   }
 
-  const { error } = await supabase
-    .from('services')
-    .insert(services)
-    .select();
+  const { error } = await supabase.from('services').insert(services).select();
 
   if (error) throw error;
 
@@ -119,7 +119,9 @@ async function createServices(sellerId, categoryId, categoryName, count = 10) {
 
 // 5. 단일 카테고리 처리
 async function processCategory(category, user, index, total) {
-  console.log(`[${index + 1}/${total}] ${category.name} 처리 중 (User: ${user.id.substring(0, 8)}...)...`);
+  console.log(
+    `[${index + 1}/${total}] ${category.name} 처리 중 (User: ${user.id.substring(0, 8)}...)...`
+  );
 
   try {
     // 이미 판매자가 있는지 확인
@@ -135,25 +137,14 @@ async function processCategory(category, user, index, total) {
     }
 
     // Seller 생성
-    const sellerId = await createSeller(
-      user.id,
-      category.id,
-      category.name,
-      category.slug
-    );
+    const sellerId = await createSeller(user.id, category.id, category.name, category.slug);
     console.log(`  ✓ 판매자 생성 (ID: ${sellerId})`);
     stats.sellersCreated++;
 
     // Services 생성
-    const serviceCount = await createServices(
-      sellerId,
-      category.id,
-      category.name,
-      10
-    );
+    const serviceCount = await createServices(sellerId, category.id, category.name, 10);
     console.log(`  ✓ 서비스 ${serviceCount}개 생성\n`);
     stats.servicesCreated += serviceCount;
-
   } catch (error) {
     console.error(`  ❌ 에러: ${error.message}`);
     if (error.details) console.error(`  상세: ${error.details}`);
@@ -164,7 +155,7 @@ async function processCategory(category, user, index, total) {
       user: user.email,
       error: error.message,
       details: error.details || '',
-      hint: error.hint || ''
+      hint: error.hint || '',
     });
   }
 }
@@ -248,7 +239,6 @@ async function main() {
     }
 
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-
   } catch (error) {
     console.error('\n❌ 치명적 에러:', error);
     process.exit(1);

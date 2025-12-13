@@ -4,7 +4,8 @@ const fs = require('fs');
 const path = require('path');
 
 const _supabaseUrl = 'https://bpvfkkrlyrjkwgwmfrci.supabase.co';
-const _supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
+const _supabaseServiceKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdmZra3JseXJqa3dnd21mcmNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTM3ODcxNiwiZXhwIjoyMDc2OTU0NzE2fQ.6ySh-7ICfCqr0_ZeVUcjsUoSEsVe3tSddTBh7V7nOn8';
 
 console.log(`
 ============================================================
@@ -33,7 +34,10 @@ const migration1 = fs.readFileSync(
 );
 
 const migration2 = fs.readFileSync(
-  path.join(process.cwd(), 'supabase/migrations/20251114090000_unify_seller_profile_with_profiles.sql'),
+  path.join(
+    process.cwd(),
+    'supabase/migrations/20251114090000_unify_seller_profile_with_profiles.sql'
+  ),
   'utf8'
 );
 

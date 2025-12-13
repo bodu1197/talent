@@ -80,9 +80,7 @@ describe('orders queries', () => {
 
   describe('getSellerOrders', () => {
     it('should fetch orders for a seller', async () => {
-      const mockOrders = [
-        { id: '1', seller_id: 'seller-1', status: 'in_progress' },
-      ];
+      const mockOrders = [{ id: '1', seller_id: 'seller-1', status: 'in_progress' }];
 
       const mockQuery = {
         select: vi.fn().mockReturnThis(),
@@ -161,7 +159,9 @@ describe('orders queries', () => {
         eq: vi.fn().mockReturnThis(),
       };
 
-      mockQuery.eq.mockReturnValueOnce(mockQuery).mockResolvedValueOnce({ count: null, error: null });
+      mockQuery.eq
+        .mockReturnValueOnce(mockQuery)
+        .mockResolvedValueOnce({ count: null, error: null });
 
       mockSupabase.from.mockReturnValue(mockQuery);
 

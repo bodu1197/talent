@@ -90,7 +90,6 @@ async function fetchSecurityHotspots() {
   try {
     // Endpoint for hotspots API (currently not used - direct result access)
 
-
     console.log(`✅ ${result.hotspots?.length || 0}개 보안 핫스팟 발견\n`);
     return result.hotspots || [];
   } catch (error) {
@@ -111,7 +110,6 @@ async function fetchMetrics() {
 
   try {
     // Endpoint for measures API (currently not used - direct result access)
-
 
     console.log('✅ 메트릭 조회 완료\n');
     return result.component.measures;

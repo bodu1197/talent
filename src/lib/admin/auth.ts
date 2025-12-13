@@ -1,12 +1,15 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server';
 
 export async function checkAdminAuth() {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
-  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
 
   if (authError || !user) {
-    return { isAdmin: false, user: null, error: 'Unauthorized' }
+    return { isAdmin: false, user: null, error: 'Unauthorized' };
   }
 
   // Check if user is an admin
@@ -14,21 +17,21 @@ export async function checkAdminAuth() {
     .from('admins')
     .select('*')
     .eq('user_id', user.id)
-    .single()
+    .single();
 
   if (adminError || !adminData) {
-    return { isAdmin: false, user, error: 'Not an admin' }
+    return { isAdmin: false, user, error: 'Not an admin' };
   }
 
-  return { isAdmin: true, user, admin: adminData, error: null }
+  return { isAdmin: true, user, admin: adminData, error: null };
 }
 
 export async function requireAdmin() {
-  const result = await checkAdminAuth()
+  const result = await checkAdminAuth();
 
   if (!result.isAdmin) {
-    throw new Error(result.error || 'Admin access required')
+    throw new Error(result.error || 'Admin access required');
   }
 
-  return result
+  return result;
 }

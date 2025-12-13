@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback } from 'react';
 
 /**
  * 여러 로딩 상태를 관리하는 훅
@@ -22,52 +22,53 @@ import { useState, useCallback } from 'react'
  * })
  * ```
  */
-export function useLoadingStates<T extends Record<string, boolean>>(
-  initialStates: T
-) {
-  const [states, setStates] = useState<T>(initialStates)
+export function useLoadingStates<T extends Record<string, boolean>>(initialStates: T) {
+  const [states, setStates] = useState<T>(initialStates);
 
   /**
    * 특정 로딩 상태 변경
    */
   const setLoading = useCallback((key: keyof T, value: boolean) => {
-    setStates(prev => ({ ...prev, [key]: value }))
-  }, [])
+    setStates((prev) => ({ ...prev, [key]: value }));
+  }, []);
 
   /**
    * 함수 실행 중 자동으로 로딩 상태 관리
    */
   const withLoading = useCallback(
-    async <R,>(key: keyof T, fn: () => Promise<R>): Promise<R> => {
-      setLoading(key, true)
+    async <R>(key: keyof T, fn: () => Promise<R>): Promise<R> => {
+      setLoading(key, true);
       try {
-        return await fn()
+        return await fn();
       } finally {
-        setLoading(key, false)
+        setLoading(key, false);
       }
     },
     [setLoading]
-  )
+  );
 
   /**
    * 모든 상태 초기화
    */
   const resetAll = useCallback(() => {
-    setStates(initialStates)
-  }, [initialStates])
+    setStates(initialStates);
+  }, [initialStates]);
 
   /**
    * 특정 상태만 초기화
    */
-  const reset = useCallback((key: keyof T) => {
-    setStates(prev => ({ ...prev, [key]: initialStates[key] }))
-  }, [initialStates])
+  const reset = useCallback(
+    (key: keyof T) => {
+      setStates((prev) => ({ ...prev, [key]: initialStates[key] }));
+    },
+    [initialStates]
+  );
 
   return {
     states,
     setLoading,
     withLoading,
     resetAll,
-    reset
-  }
+    reset,
+  };
 }

@@ -11,17 +11,20 @@
 ### 심각한 성능 문제 발견
 
 **1위: Supabase Realtime 구독 과다 (94.7%)**
+
 - **전체 쿼리 시간의 94.7%** 차지
 - 2,034,594회 호출 (비정상적!)
 - 총 실행 시간: **3.5시간**
 - **조치 필요: 최우선 해결**
 
 **2위: categories 테이블 조회 (4.0%)**
+
 - 63,397회 빈번한 조회
 - 총 실행 시간: 528초
 - **인덱스는 이미 최적화됨** ✅
 
 **3위: chat_rooms seller_id 조회 (미비)**
+
 - **seller_id 인덱스 누락** 발견
 - 마이그레이션 필요
 
@@ -43,6 +46,7 @@
 ### 원인 분석
 
 **Realtime 구독 사용처 (11개 파일):**
+
 1. `NotificationBell.tsx` - 알림 실시간 업데이트
 2. `NotificationProvider.tsx` - 알림 글로벌 상태
 3. `ChatListClient.tsx` - 채팅방 목록
@@ -52,6 +56,7 @@
 7. 나머지 API Routes (서버 사이드)
 
 **문제:**
+
 - 클라이언트가 너무 많은 테이블/채널을 구독
 - 페이지 이동 시 구독 해제가 제대로 안 되고 있을 가능성
 - 중복 구독 (같은 데이터를 여러 컴포넌트에서 구독)
@@ -61,6 +66,7 @@
 #### 1. 중복 구독 제거 (가장 중요!)
 
 **Before (문제):**
+
 ```tsx
 // NotificationBell.tsx
 useEffect(() => {
@@ -80,24 +86,29 @@ useEffect(() => {
 ```
 
 **After (해결):**
+
 ```tsx
 // 전역 Provider에서만 구독
 // NotificationProvider.tsx
 useEffect(() => {
   const channel = supabase
     .channel('notifications')
-    .on('postgres_changes', {
-      event: '*',
-      schema: 'public',
-      table: 'notifications',
-      filter: `user_id=eq.${userId}`  // 현재 사용자만!
-    }, handler)
-    .subscribe()
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'notifications',
+        filter: `user_id=eq.${userId}`, // 현재 사용자만!
+      },
+      handler
+    )
+    .subscribe();
 
   return () => {
-    supabase.removeChannel(channel) // 반드시 cleanup!
-  }
-}, [userId])
+    supabase.removeChannel(channel); // 반드시 cleanup!
+  };
+}, [userId]);
 
 // NotificationBell.tsx에서는 구독 제거, Provider의 상태만 사용
 ```
@@ -105,6 +116,7 @@ useEffect(() => {
 #### 2. 필터링 최적화
 
 **Before (모든 데이터 구독):**
+
 ```tsx
 .on('postgres_changes', {
   event: '*',
@@ -114,6 +126,7 @@ useEffect(() => {
 ```
 
 **After (필요한 것만):**
+
 ```tsx
 .on('postgres_changes', {
   event: '*',
@@ -190,16 +203,16 @@ ON categories(slug);
 
 ```tsx
 // app/api/categories/route.ts
-export const revalidate = 3600 // 1시간 캐싱
+export const revalidate = 3600; // 1시간 캐싱
 
 export async function GET() {
   const { data } = await supabase
     .from('categories')
     .select('*')
     .eq('is_active', true)
-    .order('display_order')
+    .order('display_order');
 
-  return Response.json(data)
+  return Response.json(data);
 }
 ```
 
@@ -217,6 +230,7 @@ export async function GET() {
 ```
 
 **인덱스 누락:**
+
 - `seller_id` 컬럼에 인덱스가 없음
 - FK 제약은 있지만 인덱스는 자동 생성 안 됨
 
@@ -243,12 +257,12 @@ COMMENT ON INDEX idx_chat_rooms_seller_id IS
 
 ## 📊 전체 최적화 효과 예상
 
-| 항목 | Before | After | 개선율 |
-|------|--------|-------|--------|
-| Realtime 구독 시간 | 3.5시간 (94.7%) | 1분 (0.01%) | **99.5%** |
-| categories 조회 | 528초 (4.0%) | 528초 (유지) | 0% (이미 최적화됨) |
-| chat_rooms 조회 | 6초 (0.05%) | 1초 (0.008%) | **80%** |
-| **총 실행 시간** | **13,208초** | **591초** | **95.5% 향상** |
+| 항목               | Before          | After        | 개선율             |
+| ------------------ | --------------- | ------------ | ------------------ |
+| Realtime 구독 시간 | 3.5시간 (94.7%) | 1분 (0.01%)  | **99.5%**          |
+| categories 조회    | 528초 (4.0%)    | 528초 (유지) | 0% (이미 최적화됨) |
+| chat_rooms 조회    | 6초 (0.05%)     | 1초 (0.008%) | **80%**            |
+| **총 실행 시간**   | **13,208초**    | **591초**    | **95.5% 향상**     |
 
 ---
 
@@ -298,10 +312,12 @@ node scripts/execute-pending-migrations.js
 ## 📋 체크리스트
 
 ### 즉시 실행 (데이터베이스)
+
 - [ ] chat_rooms seller_id 인덱스 추가
 - [ ] 마이그레이션 실행 및 검증
 
 ### 코드 수정 필요 (우선순위 순)
+
 - [ ] ChatUnreadProvider.tsx - Realtime 구독 필터링
 - [ ] NotificationProvider.tsx - Realtime 구독 필터링
 - [ ] ChatListClient.tsx - Realtime 구독 필터링
@@ -309,6 +325,7 @@ node scripts/execute-pending-migrations.js
 - [ ] DirectChatClient.tsx - cleanup 확인
 
 ### 모니터링
+
 - [ ] 1시간 후 느린 쿼리 재확인
 - [ ] Realtime 호출 횟수 감소 확인 (목표: 99% 감소)
 - [ ] 전체 성능 95% 향상 확인
@@ -332,15 +349,18 @@ node scripts/execute-pending-migrations.js
 ### 조치 사항
 
 **즉시 (5분):**
+
 - ✅ chat_rooms seller_id 인덱스 추가
 
 **단기 (1-2일):**
+
 - ⚠️ Realtime 구독 최적화 (코드 수정)
   - 필터링 추가
   - cleanup 철저히
   - 중복 구독 제거
 
 **예상 효과:**
+
 - 전체 성능 **95.5% 향상**
 - 데이터베이스 부하 **99% 감소**
 - 사용자 경험 대폭 개선

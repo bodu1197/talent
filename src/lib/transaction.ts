@@ -3,10 +3,10 @@
  * Race Condition 방지 및 Idempotency 보장
  */
 
-import { createClient } from '@/lib/supabase/server'
-import { SupabaseClient, PostgrestError } from '@supabase/supabase-js'
-import { logger } from '@/lib/logger'
-import type { Tables } from '@/types/database'
+import { createClient } from '@/lib/supabase/server';
+import { SupabaseClient, PostgrestError } from '@supabase/supabase-js';
+import { logger } from '@/lib/logger';
+import type { Tables } from '@/types/database';
 
 /**
  * Idempotency Key를 사용한 중복 주문 방지
@@ -15,11 +15,11 @@ import type { Tables } from '@/types/database'
 export async function createOrderWithIdempotency(
   supabase: SupabaseClient,
   orderData: {
-    buyer_id: string
-    seller_id: string
-    service_id: string
-    amount: number
-    [key: string]: unknown
+    buyer_id: string;
+    seller_id: string;
+    service_id: string;
+    amount: number;
+    [key: string]: unknown;
   },
   idempotencyKey: string
 ): Promise<{ data: Tables<'orders'> | null; error: PostgrestError | null; isExisting: boolean }> {
@@ -28,15 +28,15 @@ export async function createOrderWithIdempotency(
     .from('orders')
     .select('*')
     .eq('merchant_uid', idempotencyKey)
-    .maybeSingle()
+    .maybeSingle();
 
   if (checkError) {
-    return { data: null, error: checkError, isExisting: false }
+    return { data: null, error: checkError, isExisting: false };
   }
 
   // 2. 이미 존재하는 주문이면 그대로 반환 (멱등성 보장)
   if (existingOrder) {
-    return { data: existingOrder, error: null, isExisting: true }
+    return { data: existingOrder, error: null, isExisting: true };
   }
 
   // 3. 새 주문 생성
@@ -47,7 +47,7 @@ export async function createOrderWithIdempotency(
       merchant_uid: idempotencyKey,
     })
     .select()
-    .single()
+    .single();
 
   if (createError) {
     // merchant_uid unique constraint 위반 시 (동시 요청)
@@ -57,15 +57,15 @@ export async function createOrderWithIdempotency(
         .from('orders')
         .select('*')
         .eq('merchant_uid', idempotencyKey)
-        .single()
+        .single();
 
-      return { data: existingOrder2, error: null, isExisting: true }
+      return { data: existingOrder2, error: null, isExisting: true };
     }
 
-    return { data: null, error: createError, isExisting: false }
+    return { data: null, error: createError, isExisting: false };
   }
 
-  return { data: newOrder, error: null, isExisting: false }
+  return { data: newOrder, error: null, isExisting: false };
 }
 
 /**
@@ -74,11 +74,11 @@ export async function createOrderWithIdempotency(
 export async function createPaymentWithIdempotency(
   supabase: SupabaseClient,
   paymentData: {
-    order_id: string
-    amount: number
-    payment_method: string
-    payment_id: string
-    [key: string]: unknown
+    order_id: string;
+    amount: number;
+    payment_method: string;
+    payment_id: string;
+    [key: string]: unknown;
   }
 ): Promise<{ data: Tables<'payments'> | null; error: PostgrestError | null; isExisting: boolean }> {
   // 1. payment_id로 기존 결제 확인
@@ -86,15 +86,15 @@ export async function createPaymentWithIdempotency(
     .from('payments')
     .select('*')
     .eq('payment_id', paymentData.payment_id)
-    .maybeSingle()
+    .maybeSingle();
 
   if (checkError) {
-    return { data: null, error: checkError, isExisting: false }
+    return { data: null, error: checkError, isExisting: false };
   }
 
   // 2. 이미 존재하는 결제면 그대로 반환
   if (existingPayment) {
-    return { data: existingPayment, error: null, isExisting: true }
+    return { data: existingPayment, error: null, isExisting: true };
   }
 
   // 3. 새 결제 생성
@@ -102,7 +102,7 @@ export async function createPaymentWithIdempotency(
     .from('payments')
     .insert(paymentData)
     .select()
-    .single()
+    .single();
 
   if (createError) {
     // payment_id unique constraint 위반 시
@@ -111,15 +111,15 @@ export async function createPaymentWithIdempotency(
         .from('payments')
         .select('*')
         .eq('payment_id', paymentData.payment_id)
-        .single()
+        .single();
 
-      return { data: existingPayment2, error: null, isExisting: true }
+      return { data: existingPayment2, error: null, isExisting: true };
     }
 
-    return { data: null, error: createError, isExisting: false }
+    return { data: null, error: createError, isExisting: false };
   }
 
-  return { data: newPayment, error: null, isExisting: false }
+  return { data: newPayment, error: null, isExisting: false };
 }
 
 /**
@@ -132,7 +132,7 @@ export async function updateOrderStatusWithLocking(
   newStatus: string,
   expectedUpdatedAt: string
 ): Promise<{ success: boolean; error?: string; data?: unknown }> {
-  const now = new Date().toISOString()
+  const now = new Date().toISOString();
 
   // updated_at이 예상값과 일치하는 경우에만 업데이트 (Optimistic Lock)
   const { data, error } = await supabase
@@ -144,7 +144,7 @@ export async function updateOrderStatusWithLocking(
     .eq('id', orderId)
     .eq('updated_at', expectedUpdatedAt) // Lock 조건
     .select()
-    .single()
+    .single();
 
   if (error) {
     if (error.code === 'PGRST116') {
@@ -152,12 +152,12 @@ export async function updateOrderStatusWithLocking(
       return {
         success: false,
         error: '주문 상태가 이미 다른 사용자에 의해 변경되었습니다. 새로고침 후 다시 시도해주세요.',
-      }
+      };
     }
-    return { success: false, error: error.message }
+    return { success: false, error: error.message };
   }
 
-  return { success: true, data }
+  return { success: true, data };
 }
 
 /**
@@ -168,22 +168,22 @@ export async function deductCreditWithLocking(
   creditId: string,
   amount: number
 ): Promise<{ success: boolean; remaining: number; error?: string }> {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
   // RPC 함수 호출 (PostgreSQL 트랜잭션 + FOR UPDATE)
   const { data, error } = await supabase.rpc('deduct_credit_safe', {
     p_credit_id: creditId,
     p_amount: amount,
-  })
+  });
 
   if (error) {
-    logger.error('Credit deduction failed', error)
-    return { success: false, remaining: 0, error: error.message }
+    logger.error('Credit deduction failed', error);
+    return { success: false, remaining: 0, error: error.message };
   }
 
   return {
     success: data.success,
     remaining: data.remaining,
     error: data.error || undefined,
-  }
+  };
 }

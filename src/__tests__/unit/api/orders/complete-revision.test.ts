@@ -35,9 +35,12 @@ describe('Complete Revision API', () => {
         error: { message: 'Not authenticated' },
       });
 
-      const request = new NextRequest('http://localhost:3000/api/orders/order-1/complete-revision', {
-        method: 'PATCH',
-      });
+      const request = new NextRequest(
+        'http://localhost:3000/api/orders/order-1/complete-revision',
+        {
+          method: 'PATCH',
+        }
+      );
 
       const response = await PATCH(request, { params: Promise.resolve({ id: 'order-1' }) });
       const data = await response.json();
@@ -60,9 +63,12 @@ describe('Complete Revision API', () => {
 
       mockSupabase.from.mockReturnValue(selectChain);
 
-      const request = new NextRequest('http://localhost:3000/api/orders/order-1/complete-revision', {
-        method: 'PATCH',
-      });
+      const request = new NextRequest(
+        'http://localhost:3000/api/orders/order-1/complete-revision',
+        {
+          method: 'PATCH',
+        }
+      );
 
       const response = await PATCH(request, { params: Promise.resolve({ id: 'order-1' }) });
       const data = await response.json();
@@ -86,9 +92,12 @@ describe('Complete Revision API', () => {
 
       mockSupabase.from.mockReturnValue(selectChain);
 
-      const request = new NextRequest('http://localhost:3000/api/orders/order-1/complete-revision', {
-        method: 'PATCH',
-      });
+      const request = new NextRequest(
+        'http://localhost:3000/api/orders/order-1/complete-revision',
+        {
+          method: 'PATCH',
+        }
+      );
 
       const response = await PATCH(request, { params: Promise.resolve({ id: 'order-1' }) });
       const data = await response.json();
@@ -112,9 +121,12 @@ describe('Complete Revision API', () => {
 
       mockSupabase.from.mockReturnValue(selectChain);
 
-      const request = new NextRequest('http://localhost:3000/api/orders/order-1/complete-revision', {
-        method: 'PATCH',
-      });
+      const request = new NextRequest(
+        'http://localhost:3000/api/orders/order-1/complete-revision',
+        {
+          method: 'PATCH',
+        }
+      );
 
       const response = await PATCH(request, { params: Promise.resolve({ id: 'order-1' }) });
       const data = await response.json();
@@ -159,9 +171,12 @@ describe('Complete Revision API', () => {
         }
       });
 
-      const request = new NextRequest('http://localhost:3000/api/orders/order-1/complete-revision', {
-        method: 'PATCH',
-      });
+      const request = new NextRequest(
+        'http://localhost:3000/api/orders/order-1/complete-revision',
+        {
+          method: 'PATCH',
+        }
+      );
 
       const response = await PATCH(request, { params: Promise.resolve({ id: 'order-1' }) });
       const data = await response.json();
@@ -195,9 +210,12 @@ describe('Complete Revision API', () => {
         }
       });
 
-      const request = new NextRequest('http://localhost:3000/api/orders/order-1/complete-revision', {
-        method: 'PATCH',
-      });
+      const request = new NextRequest(
+        'http://localhost:3000/api/orders/order-1/complete-revision',
+        {
+          method: 'PATCH',
+        }
+      );
 
       const response = await PATCH(request, { params: Promise.resolve({ id: 'order-1' }) });
       const data = await response.json();
@@ -209,9 +227,12 @@ describe('Complete Revision API', () => {
     it('should handle unexpected errors', async () => {
       mockSupabase.auth.getUser.mockRejectedValue(new Error('Unexpected'));
 
-      const request = new NextRequest('http://localhost:3000/api/orders/order-1/complete-revision', {
-        method: 'PATCH',
-      });
+      const request = new NextRequest(
+        'http://localhost:3000/api/orders/order-1/complete-revision',
+        {
+          method: 'PATCH',
+        }
+      );
 
       const response = await PATCH(request, { params: Promise.resolve({ id: 'order-1' }) });
       const data = await response.json();

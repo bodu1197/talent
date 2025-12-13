@@ -9,7 +9,7 @@ const errorsData = JSON.parse(fs.readFileSync('scripts-unused-vars.json', 'utf8'
 
 let totalFixed = 0;
 
-errorsData.forEach(fileData => {
+errorsData.forEach((fileData) => {
   const filePath = fileData.filePath;
   const fileName = filePath.split('\\').pop();
 
@@ -19,7 +19,7 @@ errorsData.forEach(fileData => {
   const lines = content.split('\n');
   let modified = false;
 
-  fileData.errors.forEach(error => {
+  fileData.errors.forEach((error) => {
     const lineNum = error.line;
     const varName = error.variable;
     const message = error.message;
@@ -27,9 +27,10 @@ errorsData.forEach(fileData => {
     console.log(`  Line ${lineNum}: '${varName}'`);
 
     // Case 1: import 문에서 사용되지 않는 변수
-    if (message.includes('is assigned a value but never used') &&
-        lines[lineNum - 1].includes('require(')) {
-
+    if (
+      message.includes('is assigned a value but never used') &&
+      lines[lineNum - 1].includes('require(')
+    ) {
       const line = lines[lineNum - 1];
 
       // const { varName } = require(...) 형태
@@ -37,11 +38,11 @@ errorsData.forEach(fileData => {
         // 여러 개 중 하나인지 확인
         const match = line.match(/{\s*([^}]+)\s*}/);
         if (match) {
-          const imports = match[1].split(',').map(s => s.trim());
+          const imports = match[1].split(',').map((s) => s.trim());
 
           if (imports.length > 1) {
             // 여러 개 중 하나 -> 해당 변수만 제거
-            const newImports = imports.filter(imp => imp !== varName);
+            const newImports = imports.filter((imp) => imp !== varName);
             const newLine = line.replace(match[0], `{ ${newImports.join(', ')} }`);
             lines[lineNum - 1] = newLine;
             modified = true;
@@ -63,18 +64,16 @@ errorsData.forEach(fileData => {
     }
 
     // Case 2: 함수 파라미터에서 사용되지 않는 변수
-    else if (message.includes('is defined but never used') &&
-             message.includes('Allowed unused args must match')) {
-
+    else if (
+      message.includes('is defined but never used') &&
+      message.includes('Allowed unused args must match')
+    ) {
       const line = lines[lineNum - 1];
 
       // 함수 파라미터인 경우 _ 접두사 추가
       if (line.includes('function') || line.includes('=>') || line.includes('async')) {
         // 파라미터 이름에 _ 접두사 추가
-        const newLine = line.replace(
-          new RegExp(`\\b${varName}\\b(?=[,\\)])`, 'g'),
-          `_${varName}`
-        );
+        const newLine = line.replace(new RegExp(`\\b${varName}\\b(?=[,\\)])`, 'g'), `_${varName}`);
         if (newLine !== line) {
           lines[lineNum - 1] = newLine;
           modified = true;
@@ -85,7 +84,6 @@ errorsData.forEach(fileData => {
 
     // Case 3: 할당받았지만 사용되지 않는 변수
     else if (message.includes('is assigned a value but never used')) {
-
       const line = lines[lineNum - 1];
 
       // const varName = ... 형태
@@ -115,15 +113,11 @@ errorsData.forEach(fileData => {
 
     // Case 4: 정의되었지만 사용되지 않는 변수 (일반)
     else if (message.includes('is defined but never used')) {
-
       const line = lines[lineNum - 1];
 
       // const varName = ... 형태
       if (line.match(new RegExp(`const\\s+${varName}\\s*=`))) {
-        const newLine = line.replace(
-          new RegExp(`const\\s+${varName}\\s*=`),
-          `const _${varName} =`
-        );
+        const newLine = line.replace(new RegExp(`const\\s+${varName}\\s*=`), `const _${varName} =`);
         lines[lineNum - 1] = newLine;
         modified = true;
         console.log(`    ✓ 변수명에 _ 접두사 추가`);
@@ -150,18 +144,20 @@ const { execSync } = require('child_process');
 
 try {
   execSync('npx eslint scripts --ext .js --format json > scripts-all-errors-after.json 2>nul', {
-    stdio: 'inherit'
+    stdio: 'inherit',
   });
 
   const afterData = JSON.parse(fs.readFileSync('scripts-all-errors-after.json', 'utf8'));
   const afterUnusedVars = afterData.reduce((count, file) => {
-    return count + file.messages.filter(m =>
-      m.ruleId === '@typescript-eslint/no-unused-vars' && m.severity === 2
-    ).length;
+    return (
+      count +
+      file.messages.filter(
+        (m) => m.ruleId === '@typescript-eslint/no-unused-vars' && m.severity === 2
+      ).length
+    );
   }, 0);
 
   console.log(`\n남은 @typescript-eslint/no-unused-vars 에러: ${afterUnusedVars}개\n`);
-
 } catch {
   console.log('검사 완료\n');
 }

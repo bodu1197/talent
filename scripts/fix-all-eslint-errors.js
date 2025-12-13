@@ -48,8 +48,9 @@ async function main() {
   console.log('='.repeat(60));
 
   const scriptsDir = __dirname;
-  const files = fs.readdirSync(scriptsDir)
-    .filter(f => f.endsWith('.js') && f !== 'fix-all-eslint-errors.js')
+  const files = fs
+    .readdirSync(scriptsDir)
+    .filter((f) => f.endsWith('.js') && f !== 'fix-all-eslint-errors.js')
     .sort();
 
   console.log(`\n📁 총 ${files.length}개 파일 검사 중...\n`);

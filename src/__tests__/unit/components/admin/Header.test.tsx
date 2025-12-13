@@ -4,8 +4,18 @@ import AdminHeader from '@/components/admin/Header';
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    [key: string]: unknown;
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }));
 
@@ -103,7 +113,10 @@ describe('AdminHeader', () => {
     const userButton = screen.getByText('admin@example.com').closest('button');
     fireEvent.click(userButton!);
 
-    expect(screen.getByRole('link', { name: /프로필/ })).toHaveAttribute('href', '/mypage/settings');
+    expect(screen.getByRole('link', { name: /프로필/ })).toHaveAttribute(
+      'href',
+      '/mypage/settings'
+    );
   });
 
   it('설정 링크가 올바른 href를 가진다', () => {

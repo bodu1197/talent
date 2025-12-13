@@ -6,10 +6,10 @@ async function executeSql(sql) {
   await fetch('https://api.supabase.com/v1/projects/bpvfkkrlyrjkwgwmfrci/database/query', {
     method: 'POST',
     headers: {
-      'Authorization': 'Bearer sbp_140ed0f35c7b31aa67f56bdca11db02fd469802f',
-      'Content-Type': 'application/json'
+      Authorization: 'Bearer sbp_140ed0f35c7b31aa67f56bdca11db02fd469802f',
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ query: sql })
+    body: JSON.stringify({ query: sql }),
   });
 
   await response.json();
@@ -24,7 +24,10 @@ async function executeSql(sql) {
 async function applyMigration() {
   console.log('🚀 광고 시스템 마이그레이션 시작...\n');
 
-  const migrationFile = path.join(__dirname, '../supabase/migrations/20251112120000_create_advertising_system.sql');
+  const migrationFile = path.join(
+    __dirname,
+    '../supabase/migrations/20251112120000_create_advertising_system.sql'
+  );
   const fullSql = fs.readFileSync(migrationFile, 'utf8');
 
   try {
@@ -39,14 +42,13 @@ async function applyMigration() {
       'advertising_subscriptions',
       'advertising_payments',
       'advertising_impressions',
-      'credit_transactions'
+      'credit_transactions',
     ];
 
     for (const table of tables) {
       const result = await executeSql(`SELECT COUNT(*) FROM ${table};`);
       console.log(`  ✅ ${table}: ${result[0].count}개 레코드`);
     }
-
   } catch (error) {
     console.error('❌ 마이그레이션 실패:', error.message);
     process.exit(1);

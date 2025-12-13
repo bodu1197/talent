@@ -37,10 +37,10 @@ function executeQuery(query) {
       path: `/v1/projects/${SUPABASE_PROJECT_ID}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${SUPABASE_ACCESS_TOKEN}`,
+        Authorization: `Bearer ${SUPABASE_ACCESS_TOKEN}`,
         'Content-Type': 'application/json',
-        'Content-Length': data.length
-      }
+        'Content-Length': data.length,
+      },
     };
 
     const req = https.request(options, (res) => {
@@ -408,7 +408,6 @@ main();
     console.log(`📁 Output directory: ${OUTPUT_DIR}`);
     console.log('\n📝 To import:');
     console.log('   node scripts/import-ordered-schema.js [PROJECT_ID] [ACCESS_TOKEN]');
-
   } catch (error) {
     console.error('❌ Export failed:', error);
     process.exit(1);

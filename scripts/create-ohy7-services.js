@@ -16,8 +16,10 @@ async function main() {
   try {
     // 1. ohy7@gmail.com 사용자 찾기
     console.log('📂 사용자 조회 중...\n');
-    const { data: { users } } = await supabase.auth.admin.listUsers();
-    const ohy7User = users.find(u => u.email === 'ohy7@gmail.com');
+    const {
+      data: { users },
+    } = await supabase.auth.admin.listUsers();
+    const ohy7User = users.find((u) => u.email === 'ohy7@gmail.com');
 
     if (!ohy7User) {
       throw new Error('ohy7@gmail.com 사용자를 찾을 수 없습니다');
@@ -78,7 +80,7 @@ async function main() {
           thumbnail_url: `https://picsum.photos/seed/ai_${seller.id}_${i}/400/300`,
           delivery_days: deliveryDays,
           revision_count: revisionCount,
-          status: 'active'
+          status: 'active',
         })
         .select()
         .single();
@@ -86,13 +88,11 @@ async function main() {
       if (serviceError) throw serviceError;
 
       // 카테고리 연결
-      const { error: categoryError } = await supabase
-        .from('service_categories')
-        .insert({
-          service_id: service.id,
-          category_id: aiCategory.id,
-          is_primary: true
-        });
+      const { error: categoryError } = await supabase.from('service_categories').insert({
+        service_id: service.id,
+        category_id: aiCategory.id,
+        is_primary: true,
+      });
 
       if (categoryError) throw categoryError;
 
@@ -124,7 +124,7 @@ async function main() {
           thumbnail_url: `https://picsum.photos/seed/rhymix_${seller.id}_${i}/400/300`,
           delivery_days: deliveryDays,
           revision_count: revisionCount,
-          status: 'active'
+          status: 'active',
         })
         .select()
         .single();
@@ -132,13 +132,11 @@ async function main() {
       if (serviceError) throw serviceError;
 
       // 카테고리 연결
-      const { error: categoryError } = await supabase
-        .from('service_categories')
-        .insert({
-          service_id: service.id,
-          category_id: rhymixCategory.id,
-          is_primary: true
-        });
+      const { error: categoryError } = await supabase.from('service_categories').insert({
+        service_id: service.id,
+        category_id: rhymixCategory.id,
+        is_primary: true,
+      });
 
       if (categoryError) throw categoryError;
 
@@ -161,7 +159,6 @@ async function main() {
     console.log(`   총: ${aiServicesCreated + rhymixServicesCreated}개`);
     console.log('');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-
   } catch (error) {
     console.error('\n❌ 에러:', error);
     process.exit(1);

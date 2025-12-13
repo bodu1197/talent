@@ -73,7 +73,7 @@ async function checkSonarQubeQualityGate() {
     const basicAuth = Buffer.from(authString).toString('base64');
     const options = {
       headers: {
-        'Authorization': `Basic ${basicAuth}`,
+        Authorization: `Basic ${basicAuth}`,
       },
     };
 
@@ -135,10 +135,7 @@ async function main() {
 
   // 2. TypeScript 타입 검사
   logStep('2/4', 'TypeScript 타입 검사...');
-  const tscPassed = runCommand(
-    'npx tsc --noEmit',
-    'TypeScript 타입 검사'
-  );
+  const tscPassed = runCommand('npx tsc --noEmit', 'TypeScript 타입 검사');
   if (!tscPassed) {
     allPassed = false;
     logError('TypeScript 검사 실패 - 타입 오류를 수정하세요');
@@ -146,17 +143,14 @@ async function main() {
 
   // 3. SonarQube 스캔
   logStep('3/4', 'SonarQube 분석...');
-  const sonarScanPassed = runCommand(
-    'npx sonar-scanner',
-    'SonarQube 코드 분석'
-  );
+  const sonarScanPassed = runCommand('npx sonar-scanner', 'SonarQube 코드 분석');
 
   // 4. Quality Gate 상태 확인
   if (sonarScanPassed) {
     logStep('4/4', 'Quality Gate 상태 확인...');
 
     // 스캔 완료 후 잠시 대기 (SonarQube가 분석을 완료할 시간)
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 3000));
 
     const qualityGate = await checkSonarQubeQualityGate();
 
@@ -175,15 +169,22 @@ async function main() {
           } else if (condition.status === 'WARN') {
             icon = '⚠';
           }
-          log(`  ${icon} ${condition.metricKey}: ${condition.actualValue} (기준: ${condition.errorThreshold})`);
+          log(
+            `  ${icon} ${condition.metricKey}: ${condition.actualValue} (기준: ${condition.errorThreshold})`
+          );
         });
       } else {
         logError('Quality Gate 실패! ❌');
         allPassed = false;
         log('\n실패한 조건:', 'red');
-        qualityGate.conditions?.filter(c => c.status !== 'OK').forEach((condition) => {
-          log(`  ✗ ${condition.metricKey}: ${condition.actualValue} (기준: ${condition.errorThreshold})`, 'red');
-        });
+        qualityGate.conditions
+          ?.filter((c) => c.status !== 'OK')
+          .forEach((condition) => {
+            log(
+              `  ✗ ${condition.metricKey}: ${condition.actualValue} (기준: ${condition.errorThreshold})`,
+              'red'
+            );
+          });
       }
     } else {
       logWarning('Quality Gate 상태를 확인할 수 없습니다 (SonarQube 서버 확인 필요)');

@@ -32,7 +32,7 @@ async function applyMigration() {
     database: 'postgres',
     user: 'postgres.jdubrjczdyqqtsppojgu',
     password: password,
-    ssl: { rejectUnauthorized: false }
+    ssl: { rejectUnauthorized: false },
   });
 
   try {
@@ -50,7 +50,6 @@ async function applyMigration() {
         AND column_name LIKE 'location%';
     `);
     console.log('남은 location 컬럼:', check.rows);
-
   } catch (error) {
     console.error('❌ 오류:', error.message);
   } finally {

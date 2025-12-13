@@ -3,7 +3,9 @@ const { Client } = require('pg');
 require('dotenv').config({ path: '.env.local' });
 
 // Supabase 연결 정보
-const connectionString = process.env.DATABASE_URL || 'postgresql://postgres.bpvfkkrlyrjkwgwmfrci:chl1197dbA!@@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres';
+const connectionString =
+  process.env.DATABASE_URL ||
+  'postgresql://postgres.bpvfkkrlyrjkwgwmfrci:chl1197dbA!@@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres';
 
 const client = new Client({
   connectionString,

@@ -42,7 +42,7 @@ async function testLogin() {
   console.log('\n✅ Login should now work!\n');
 }
 
-testLogin().catch(err => {
+testLogin().catch((err) => {
   console.error('\n❌ Test failed:', err);
   process.exit(1);
 });

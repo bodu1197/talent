@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { useEffect } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 export function PageViewTracker() {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     // Track page view
     const trackPageView = async () => {
       try {
-        const url = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '')
+        const url = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '');
 
         await fetch('/api/analytics/track', {
           method: 'POST',
@@ -22,15 +22,15 @@ export function PageViewTracker() {
             path: url,
             referrer: document.referrer || undefined,
           }),
-        })
+        });
       } catch {
         // Silent failure - analytics should never break the app
         // Error ignored intentionally
       }
-    }
+    };
 
-    trackPageView()
-  }, [pathname, searchParams])
+    trackPageView();
+  }, [pathname, searchParams]);
 
-  return null
+  return null;
 }

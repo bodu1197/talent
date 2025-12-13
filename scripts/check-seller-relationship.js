@@ -17,11 +17,13 @@ const supabase = createClient(supabaseUrl, supabaseKey);
   // 1. 서비스 정보 (seller 조인)
   const { data: service, error: serviceError } = await supabase
     .from('services')
-    .select(`
+    .select(
+      `
       id,
       title,
       seller_id
-    `)
+    `
+    )
     .eq('id', serviceId)
     .single();
 
@@ -74,7 +76,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
   const { count: orderCount } = await supabase
     .from('orders')
     .select('*', { count: 'exact', head: true })
-    .eq('seller_id', service.seller_id)  // service.seller_id 사용
+    .eq('seller_id', service.seller_id) // service.seller_id 사용
     .eq('status', 'completed');
 
   console.log(`  - service.seller_id로 조회한 completed 주문: ${orderCount || 0}건`);
@@ -82,7 +84,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
   const { count: orderCount2 } = await supabase
     .from('orders')
     .select('*', { count: 'exact', head: true })
-    .eq('seller_id', orderSellerId)  // orders 테이블의 실제 seller_id 사용
+    .eq('seller_id', orderSellerId) // orders 테이블의 실제 seller_id 사용
     .eq('status', 'completed');
 
   console.log(`  - 실제 주문의 seller_id로 조회한 completed 주문: ${orderCount2 || 0}건\n`);
@@ -118,7 +120,11 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
   console.log('\n========================================');
   console.log('결론:');
-  console.log(`  - 서비스와 주문의 seller_id가 ${serviceSellerId === orderSellerId ? '일치하지 않음' : '일치함'}`);
-  console.log(`  - ${orderSellerId}는 sellers 테이블에 ${seller2 ? '존재함' : '존재하지 않음 (user_id일 가능성)'}`);
+  console.log(
+    `  - 서비스와 주문의 seller_id가 ${serviceSellerId === orderSellerId ? '일치하지 않음' : '일치함'}`
+  );
+  console.log(
+    `  - ${orderSellerId}는 sellers 테이블에 ${seller2 ? '존재함' : '존재하지 않음 (user_id일 가능성)'}`
+  );
   console.log('========================================');
 })();

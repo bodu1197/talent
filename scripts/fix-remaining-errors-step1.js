@@ -63,7 +63,8 @@ function fixEasyErrors(content, filename) {
   // 9. Unused top-level variables that are clearly not needed
   const unusedVarPatterns = [
     { regex: /^const DB_PASSWORD = [^;]+;\n/gm, name: 'DB_PASSWORD' },
-    { regex: /^const SUPABASE_URL = [^;]+;\n/gm, name: 'SUPABASE_URL' },  ];
+    { regex: /^const SUPABASE_URL = [^;]+;\n/gm, name: 'SUPABASE_URL' },
+  ];
 
   for (const { regex, name } of unusedVarPatterns) {
     if (content.match(regex)) {
@@ -90,8 +91,15 @@ async function main() {
   console.log('='.repeat(60));
 
   const scriptsDir = __dirname;
-  const files = fs.readdirSync(scriptsDir)
-    .filter(f => f.endsWith('.js') && !f.startsWith('fix-') && !f.startsWith('analyze-') && !f.startsWith('show-'))
+  const files = fs
+    .readdirSync(scriptsDir)
+    .filter(
+      (f) =>
+        f.endsWith('.js') &&
+        !f.startsWith('fix-') &&
+        !f.startsWith('analyze-') &&
+        !f.startsWith('show-')
+    )
     .sort();
 
   console.log(`\n📁 총 ${files.length}개 파일 검사 중...\n`);

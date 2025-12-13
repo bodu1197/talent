@@ -15,20 +15,19 @@ const NEW_ACCESS_TOKEN = 'sbp_f40b15f794e727f0aa9161de38c497174fcac2ee';
 
 function executeQuery(projectId, token, _query) {
   return new Promise((resolve, reject) => {
-
     const options = {
       hostname: 'api.supabase.com',
       path: `/v1/projects/${projectId}/database/query`,
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
     };
 
     const req = https.request(options, (res) => {
       let body = '';
-      res.on('data', (chunk) => body += chunk);
+      res.on('data', (chunk) => (body += chunk));
       res.on('end', () => {
         if (res.statusCode === 200 || res.statusCode === 201) {
           try {
@@ -86,7 +85,9 @@ async function migrateIdentities() {
     try {
       const provider = identity.provider;
       const display = provider === 'email' ? identity.identity_data?.email : provider;
-      process.stdout.write(`\r[${i + 1}/${identities.length}] ${String(display).substring(0, 30).padEnd(30)} `);
+      process.stdout.write(
+        `\r[${i + 1}/${identities.length}] ${String(display).substring(0, 30).padEnd(30)} `
+      );
 
       // Convert identity_data object to JSON string
       const identityDataJson = JSON.stringify(identity.identity_data || {}).replace(/'/g, "''");
@@ -114,7 +115,6 @@ async function migrateIdentities() {
 
       await executeQuery(NEW_PROJECT_ID, NEW_ACCESS_TOKEN, insertQuery);
       successCount++;
-
     } catch (error) {
       const msg = error.message;
       if (msg.includes('duplicate') || msg.includes('already exists')) {
@@ -126,7 +126,7 @@ async function migrateIdentities() {
     }
 
     // Rate limiting
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
 
   console.log('\n\n' + '═'.repeat(60));
@@ -142,7 +142,7 @@ async function migrateIdentities() {
   }
 }
 
-migrateIdentities().catch(err => {
+migrateIdentities().catch((err) => {
   console.error('\n❌ Migration failed:', err);
   process.exit(1);
 });

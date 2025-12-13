@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
 // NICE 본인인증 요청 API
 // 실제 환경에서는 NICE 평가정보 API를 연동해야 함
@@ -141,7 +141,7 @@ export async function GET(_request: NextRequest) {
 
   return new NextResponse(html, {
     headers: {
-      "Content-Type": "text/html; charset=utf-8",
+      'Content-Type': 'text/html; charset=utf-8',
     },
   });
 }

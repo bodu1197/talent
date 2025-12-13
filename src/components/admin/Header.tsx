@@ -1,18 +1,10 @@
-"use client";
+'use client';
 
-import { useAuth } from "@/components/providers/AuthProvider";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import {
-  Search,
-  Bell,
-  Plus,
-  ChevronDown,
-  User,
-  Settings,
-  LogOut,
-} from "lucide-react";
+import { useAuth } from '@/components/providers/AuthProvider';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Search, Bell, Plus, ChevronDown, User, Settings, LogOut } from 'lucide-react';
 
 export default function AdminHeader() {
   const { user, signOut } = useAuth();
@@ -22,12 +14,12 @@ export default function AdminHeader() {
   // ESC 키로 메뉴 닫기
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && showUserMenu) {
+      if (e.key === 'Escape' && showUserMenu) {
         setShowUserMenu(false);
       }
     };
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
   }, [showUserMenu]);
 
   return (
@@ -64,12 +56,10 @@ export default function AdminHeader() {
               className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <div className="w-8 h-8 bg-brand-primary rounded-full flex items-center justify-center text-white font-semibold">
-                {user?.email?.[0]?.toUpperCase() || "A"}
+                {user?.email?.[0]?.toUpperCase() || 'A'}
               </div>
               <div className="text-left hidden md:block">
-                <div className="text-sm font-semibold text-gray-700">
-                  {user?.email || "관리자"}
-                </div>
+                <div className="text-sm font-semibold text-gray-700">{user?.email || '관리자'}</div>
                 <div className="text-xs text-gray-500">관리자</div>
               </div>
               <ChevronDown className="w-4 h-4 text-gray-400" />
@@ -101,7 +91,7 @@ export default function AdminHeader() {
                   <button
                     onClick={async () => {
                       await signOut();
-                      router.push("/");
+                      router.push('/');
                     }}
                     className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
                   >
