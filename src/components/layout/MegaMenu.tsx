@@ -158,33 +158,11 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                 <span>전체 카테고리</span>
               </button>
 
-              {/* 인기 카테고리 퀵링크 - AI와 IT는 고정, 나머지는 인기도 순 */}
+              {/* 인기 카테고리 퀵링크 - 서비스 수 순으로 상위 6개 표시 */}
               <div className="flex items-center gap-6 px-6">
-                {/* AI 서비스 (고정) */}
-                <Link
-                  href="/categories/ai-services"
-                  className="text-brand-primary font-medium hover:text-brand-light flex items-center gap-1"
-                  onClick={handleCategoryClick}
-                  aria-label="AI 서비스 카테고리 보기"
-                >
-                  <Bot className="w-4 h-4" aria-hidden="true" /> AI 서비스
-                </Link>
-
-                {/* IT/프로그래밍 (고정) */}
-                <Link
-                  href="/categories/it-programming"
-                  className="hover:text-gray-900"
-                  onClick={handleCategoryClick}
-                  aria-label="IT/프로그래밍 카테고리 보기"
-                >
-                  IT/프로그래밍
-                </Link>
-
-                {/* 서비스 수 순으로 상위 4개 표시 (AI, IT 제외) */}
                 {categories
-                  .filter((cat) => cat.id !== 'ai-services' && cat.id !== 'it-programming')
                   .sort((a, b) => (b.service_count || 0) - (a.service_count || 0))
-                  .slice(0, 4)
+                  .slice(0, 6)
                   .map((cat) => (
                     <Link
                       key={cat.id}
