@@ -76,7 +76,6 @@ const nextConfig = {
       'react-hook-form',
       'zustand',
       'zod',
-      '@supabase/supabase-js',
     ],
     // Prefetch 최적화 - LCP 개선을 위해 aggressive prefetch 비활성화
     staleTimes: {
