@@ -14,19 +14,20 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
 
   // 섹션으로 스크롤
   const scrollToSection = (sectionId: string) => {
-    setActiveSection(sectionId);
     const element = document.getElementById(sectionId);
     if (element) {
       const offset = 100;
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementRect = element.getBoundingClientRect().top;
-      const elementPosition = elementRect - bodyRect;
+      // Use window.scrollY for more reliable and performant calculation
+      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
       const offsetPosition = elementPosition - offset;
 
       window.scrollTo({
         top: offsetPosition,
         behavior: 'smooth',
       });
+
+      // Update state AFTER layout operations to prevent forced reflow
+      setActiveSection(sectionId);
     }
   };
 
