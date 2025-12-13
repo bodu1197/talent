@@ -34,12 +34,17 @@ function ErrorBoundaryFallback({ children, hasError }: { children: ReactNode; ha
   return <>{children}</>;
 }
 
+interface RollbarState {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Provider: React.ComponentType<{ instance?: any; children: ReactNode }>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ErrorBoundary: React.ComponentType<{ fallbackUI?: any; children: ReactNode }>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  rollbar: any;
+}
+
 export default function RollbarProvider({ children }: RollbarProviderProps) {
-  const [RollbarComponents, setRollbarComponents] = useState<{
-    Provider: React.ComponentType<{ instance: unknown; children: ReactNode }>;
-    ErrorBoundary: React.ComponentType<{ fallbackUI: React.ComponentType; children: ReactNode }>;
-    rollbar: unknown;
-  } | null>(null);
+  const [RollbarComponents, setRollbarComponents] = useState<RollbarState | null>(null);
   const [hasError, setHasError] = useState(false);
 
   // Rollbar 토큰 확인
