@@ -21,12 +21,24 @@ const COPY_TEXT = '귀찮은 일 모두 돌파구에 맡겨 주세요';
 
 export default function ErrandBannerStrip() {
   const [scooterStarted, setScooterStarted] = useState(false);
-  const [scooterStopped, setScooterStopped] = useState(false);
-  const [bikePosition, setBikePosition] = useState(-150);
+  // 종료 위치 상태 (초기값 1000, 마운트 후 계산)
+  const [endPosition, setEndPosition] = useState(1000);
   const sectionRef = useRef<HTMLElement>(null);
-  const animationRef = useRef<number | null>(null);
 
-  // 스크롤 감지하여 스쿠터 애니메이션 시작
+  // 초기화 및 화면 너비 계산
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // 도착 위치 계산: 화면 너비 - 450px
+      setEndPosition(window.innerWidth - 450);
+
+      // 리사이즈 대응
+      const handleResize = () => setEndPosition(window.innerWidth - 450);
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }
+  }, []);
+
+  // 스크롤 감지하여 애니메이션 트리거
   useEffect(() => {
     // 모바일에서는 애니메이션 기능 끄기
     if (typeof window !== 'undefined' && window.innerWidth < 768) return;
@@ -57,44 +69,9 @@ export default function ErrandBannerStrip() {
     };
   }, [scooterStarted]);
 
-  // 오토바이 위치 추적
-  useEffect(() => {
-    if (!scooterStarted || typeof window === 'undefined') return;
-    if (window.innerWidth < 768) return; // 모바일 차단 (이중 체크)
-
-    const totalDuration = 7000;
-    const startTime = Date.now();
-    const maxPosition = window.innerWidth - 450;
-
-    const animate = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / totalDuration, 1);
-
-      // 오토바이 위치 계산 (ease-out)
-      const easeOut = 1 - Math.pow(1 - progress, 3);
-      const currentPosition = -150 + easeOut * (maxPosition + 150);
-      setBikePosition(currentPosition);
-
-      if (progress < 1) {
-        animationRef.current = requestAnimationFrame(animate);
-      } else {
-        setScooterStopped(true);
-      }
-    };
-
-    animationRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [scooterStarted]);
-
   return (
     <section ref={sectionRef} className="relative" style={{ overflow: 'visible' }}>
-      {/* 오토바이 - 가장 위 레이어 */}
-      {/* 모바일: 왼쪽에 오토바이 (절반만 보임) */}
+      {/* ... 기존 모바일 코드 유지 ... */}
       <div
         className="absolute pointer-events-none z-30 md:hidden overflow-hidden"
         style={{
@@ -113,7 +90,7 @@ export default function ErrandBannerStrip() {
         />
       </div>
 
-      {/* 데스크톱: 애니메이션 오토바이 */}
+      {/* 데스크톱: 애니메이션 오토바이 (CSS Transition 적용) */}
       <div
         className="absolute pointer-events-none z-50 hidden md:block"
         style={{
@@ -127,12 +104,19 @@ export default function ErrandBannerStrip() {
         <div
           className="absolute flex items-center"
           style={{
-            transform: `translateX(${bikePosition}px)`,
+            // 시작 위치: -150px, 도착 위치: endPosition
+            transform: `translateX(${scooterStarted ? endPosition : -150}px)`,
+            // GPU 가속을 사용한 부드러운 이동 (7초)
+            transition: 'transform 7s cubic-bezier(0.1, 0.7, 1.0, 0.1)',
+            willChange: 'transform',
           }}
         >
-          {/* 연기 효과 */}
-          {!scooterStopped && scooterStarted && (
-            <div className="absolute -left-16 flex items-center gap-1">
+          {/* 연기 효과 - 오토바이가 출발하면 보임 */}
+          {scooterStarted && (
+            <div
+              className="absolute -left-16 flex items-center gap-1 transition-opacity duration-500"
+              style={{ opacity: scooterStarted ? 1 : 0 }}
+            >
               <div
                 className="w-10 h-10 rounded-full bg-gray-400/70"
                 style={{ animation: 'smoke-puff 0.8s ease-out infinite' }}
@@ -156,10 +140,13 @@ export default function ErrandBannerStrip() {
       <div
         className="absolute inset-y-0 z-40 pointer-events-none hidden md:block"
         style={{
-          left: scooterStarted ? `${bikePosition - 70}px` : '-50px',
+          left: '-70px',
           width: '300vw',
+          transform: `translateX(${scooterStarted ? endPosition : -150}px)`,
           background:
             'linear-gradient(to right, transparent 0px, rgba(17,24,39,0.3) 15px, rgba(17,24,39,0.7) 30px, rgb(17,24,39) 50px)',
+          transition: 'transform 7s cubic-bezier(0.1, 0.7, 1.0, 0.1)',
+          willChange: 'transform',
         }}
       />
 
