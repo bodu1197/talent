@@ -7,7 +7,7 @@ interface RollbarProviderProps {
 }
 
 // 에러 발생 시 보여줄 Fallback UI
-function ErrorFallback() {
+function ErrorFallback({ resetError }: { error?: Error | null; resetError?: () => void }) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="text-center p-8">
@@ -16,7 +16,7 @@ function ErrorFallback() {
           일시적인 오류가 발생했습니다. 페이지를 새로고침해 주세요.
         </p>
         <button
-          onClick={() => window.location.reload()}
+          onClick={() => (resetError ? resetError() : window.location.reload())}
           className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
         >
           새로고침
@@ -34,13 +34,13 @@ function ErrorBoundaryFallback({ children, hasError }: { children: ReactNode; ha
   return <>{children}</>;
 }
 
+import type Rollbar from 'rollbar';
+import type { ErrorBoundaryProps } from '@rollbar/react';
+
 interface RollbarState {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Provider: React.ComponentType<{ instance?: any; children: ReactNode }>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ErrorBoundary: React.ComponentType<{ fallbackUI?: any; children: ReactNode }>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  rollbar: any;
+  Provider: React.ComponentType<{ instance?: Rollbar; children: ReactNode }>;
+  ErrorBoundary: React.ComponentType<ErrorBoundaryProps>;
+  rollbar: Rollbar;
 }
 
 export default function RollbarProvider({ children }: RollbarProviderProps) {
