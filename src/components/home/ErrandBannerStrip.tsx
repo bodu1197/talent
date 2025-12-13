@@ -28,17 +28,22 @@ export default function ErrandBannerStrip() {
 
   // 스크롤 감지하여 스쿠터 애니메이션 시작
   useEffect(() => {
-    let observer: IntersectionObserver | null = null;
+    // 모바일에서는 애니메이션 기능 끄기
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return;
 
-    const delay = setTimeout(() => {
-      observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting && !scooterStarted) {
-            setScooterStarted(true);
-          }
-        },
-        { threshold: 0.2 }
-      );
+    let observer: IntersectionObserver | null = null;
+    let startTimeout: NodeJS.Timeout | null = null;
+
+    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+      const [entry] = entries;
+      if (entry.isIntersecting && !scooterStarted) {
+        // 감지 후 0.5초 뒤에 출발
+        startTimeout = setTimeout(() => setScooterStarted(true), 500);
+      }
+    };
+
+    const initTimeout = setTimeout(() => {
+      observer = new IntersectionObserver(handleIntersect, { threshold: 0.6 });
 
       if (sectionRef.current) {
         observer.observe(sectionRef.current);
@@ -46,7 +51,8 @@ export default function ErrandBannerStrip() {
     }, 1000);
 
     return () => {
-      clearTimeout(delay);
+      clearTimeout(initTimeout);
+      if (startTimeout) clearTimeout(startTimeout);
       if (observer) observer.disconnect();
     };
   }, [scooterStarted]);
@@ -54,6 +60,7 @@ export default function ErrandBannerStrip() {
   // 오토바이 위치 추적
   useEffect(() => {
     if (!scooterStarted || typeof window === 'undefined') return;
+    if (window.innerWidth < 768) return; // 모바일 차단 (이중 체크)
 
     const totalDuration = 7000;
     const startTime = Date.now();
