@@ -267,7 +267,7 @@ export default function HeroSection() {
                 />
                 <button
                   type="submit"
-                  className="absolute right-2 top-1/2 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-brand-primary transition-colors rounded-full hover:bg-gray-100 active:scale-100 focus:outline-none isolate"
+                  className="absolute right-2 top-1/2 w-12 h-12 flex items-center justify-center text-gray-400 hover:text-brand-primary transition-colors rounded-full hover:bg-gray-100 active:scale-100 focus:outline-none isolate"
                   style={{
                     transform: 'translate3d(0, -50%, 0)',
                     backfaceVisibility: 'hidden',
@@ -275,7 +275,7 @@ export default function HeroSection() {
                   }}
                   aria-label="검색"
                 >
-                  <Search className="w-5 h-5" />
+                  <Search className="w-6 h-6" />
                 </button>
               </form>
             </div>

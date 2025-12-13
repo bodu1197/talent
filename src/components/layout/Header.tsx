@@ -115,7 +115,7 @@ export default function Header() {
               />{' '}
               <button
                 type="submit"
-                className="absolute right-2 top-1/2 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-brand-primary transition-colors rounded-full hover:bg-gray-100 active:scale-100 focus:outline-none isolate"
+                className="absolute right-2 top-1/2 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-brand-primary transition-colors rounded-full hover:bg-gray-100 active:scale-100 focus:outline-none isolate"
                 style={{
                   transform: 'translate3d(0, -50%, 0)',
                   backfaceVisibility: 'hidden',
@@ -124,7 +124,7 @@ export default function Header() {
                 aria-label="검색"
               >
                 {' '}
-                <Search className="w-4 h-4" />{' '}
+                <Search className="w-5 h-5" />{' '}
               </button>{' '}
             </form>{' '}
           </div>
