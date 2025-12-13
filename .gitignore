@@ -65,3 +65,9 @@ errand-banner-temp/
 ddoring-temp/
 *-temp/
 *-analysis/
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+
