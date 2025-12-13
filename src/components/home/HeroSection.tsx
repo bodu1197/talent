@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import SearchForm from '@/components/common/SearchForm';
+
 import { useRouter } from 'next/navigation';
-import { Banknote, Scale, Shield, Megaphone, Search } from 'lucide-react';
+import { Banknote, Scale, Shield, Megaphone } from 'lucide-react';
 
 interface SplatterDrop {
   size: number;
@@ -179,15 +181,7 @@ export default function HeroSection() {
   const router = useRouter();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-    }
-  };
 
   const performSlideTransition = useCallback((newSlide: number) => {
     setCurrentSlide(newSlide);
@@ -251,48 +245,16 @@ export default function HeroSection() {
 
             {/* 검색창 - PC에서만 표시 */}
             <div className="mb-4 lg:mb-6 hidden lg:block">
-              <form
-                onSubmit={handleSearch}
-                className="relative w-full lg:max-w-[490px]"
-                autoComplete="off"
-              >
-                <label htmlFor="hero-search" className="sr-only">
-                  서비스 검색
-                </label>
-                <input
-                  type="text"
-                  id="hero-search"
-                  name="hero-search-query"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="어떤 재능이 필요하신가요?"
-                  autoComplete="off"
-                  autoCorrect="off"
-                  autoCapitalize="off"
-                  spellCheck={false}
-                  data-form-type="other"
-                  data-lpignore="true"
-                  role="searchbox"
-                  className="focus-visible:outline-none w-full px-4 sm:px-6 py-3 sm:py-4 pr-14 border-2 border-gray-300 rounded-full focus:rounded-full hover:border-gray-300 focus:outline-none focus:border-gray-300 focus:shadow-none transition-none text-gray-900 text-sm sm:text-base"
-                  style={{
-                    WebkitAppearance: 'none',
-                    MozAppearance: 'none',
-                    appearance: 'none',
-                  }}
-                />
-                <button
-                  type="submit"
-                  className="absolute right-2 top-1/2 w-12 h-12 flex items-center justify-center text-gray-400 hover:text-brand-primary transition-colors rounded-full hover:bg-gray-100 active:scale-100 focus:outline-none isolate"
-                  style={{
-                    transform: 'translate3d(0, -50%, 0)',
-                    backfaceVisibility: 'hidden',
-                    willChange: 'transform',
-                  }}
-                  aria-label="검색"
-                >
-                  <Search className="w-6 h-6" />
-                </button>
-              </form>
+              <SearchForm
+                onSubmit={(query) => {
+                  if (query.trim()) {
+                    router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+                  }
+                }}
+                inputClassName="px-4 sm:px-6 py-3 sm:py-4 pr-14 text-sm sm:text-base"
+                buttonClassName="w-12 h-12"
+                iconClassName="w-6 h-6"
+              />
             </div>
           </div>
 

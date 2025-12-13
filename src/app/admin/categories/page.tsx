@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import type { Category } from '@/types/common';
-import { Plus, Folder, Edit, Trash2, FolderOpen } from 'lucide-react';
+import { Plus, Folder } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
+import CategoryRow from '@/components/admin/CategoryRow';
 
 interface CategoryFormData {
   name: string;
@@ -172,36 +173,12 @@ export default function AdminCategoriesPage() {
                 className="bg-white rounded-lg border border-slate-200 overflow-hidden"
               >
                 <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="rounded-lg bg-white p-2 border border-slate-200">
-                        <Folder className="text-[#0f3460] w-5 h-5" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-slate-900">{parent.name}</h3>
-                        <p className="text-sm text-slate-600 mt-1">/{parent.slug}</p>
-                      </div>
-                      {!parent.is_active && (
-                        <span className="rounded-full bg-slate-200 px-3 py-1 text-xs font-medium text-slate-700">
-                          비활성
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => handleEdit(parent)}
-                        className="px-3 py-2 border border-slate-200 rounded-md hover:bg-slate-50 transition-colors"
-                      >
-                        <Edit className="text-slate-700 w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(parent)}
-                        className="px-3 py-2 border border-slate-200 rounded-md hover:bg-red-50 text-red-600 hover:text-red-700 transition-colors"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
+                  <CategoryRow
+                    category={parent}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    isParent={true}
+                  />
                 </div>
 
                 {children.length > 0 && (
@@ -210,36 +187,14 @@ export default function AdminCategoriesPage() {
                       {children.map((child) => (
                         <div
                           key={child.id}
-                          className="flex items-center justify-between rounded-lg border border-slate-200 bg-white p-4"
+                          className="rounded-lg border border-slate-200 bg-white p-4"
                         >
-                          <div className="flex items-center gap-3">
-                            <div className="rounded-lg bg-slate-50 p-2">
-                              <FolderOpen className="text-slate-600 w-4 h-4" />
-                            </div>
-                            <div>
-                              <p className="font-medium text-slate-900">{child.name}</p>
-                              <p className="text-sm text-slate-600">/{child.slug}</p>
-                            </div>
-                            {!child.is_active && (
-                              <span className="rounded-full bg-slate-200 px-3 py-1 text-xs font-medium text-slate-700">
-                                비활성
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <button
-                              onClick={() => handleEdit(child)}
-                              className="px-3 py-2 border border-slate-200 rounded-md hover:bg-slate-50 transition-colors"
-                            >
-                              <Edit className="text-slate-700 w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(child)}
-                              className="px-3 py-2 border border-slate-200 rounded-md hover:bg-red-50 text-red-600 hover:text-red-700 transition-colors"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
+                          <CategoryRow
+                            category={child}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
+                            isParent={false}
+                          />
                         </div>
                       ))}
                     </div>

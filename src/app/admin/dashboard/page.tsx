@@ -13,6 +13,7 @@ import ErrorState from '@/components/common/ErrorState';
 import Link from 'next/link';
 import { logger } from '@/lib/logger';
 import { Users, CircleDollarSign, ShoppingCart, Flag } from 'lucide-react';
+import StatsCard from '@/components/admin/StatsCard';
 
 interface DashboardStats {
   totalUsers: number;
@@ -110,66 +111,40 @@ export default function AdminDashboardPage() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Link
+        <StatsCard
+          label="전체 회원"
+          value={stats?.totalUsers.toLocaleString() || '0'}
+          icon={Users}
           href="/admin/users"
-          className="bg-white rounded-lg border border-gray-200 p-6 hover:border-brand-primary transition-colors"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">전체 회원</p>
-              <p className="text-2xl font-semibold text-gray-900 mt-1">
-                {stats?.totalUsers.toLocaleString()}
-              </p>
-            </div>
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <Users className="w-5 h-5 text-blue-600" />
-            </div>
-          </div>
-        </Link>
+          iconBgClass="bg-blue-100"
+          iconColorClass="text-blue-600"
+        />
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">오늘 매출</p>
-              <p className="text-2xl font-semibold text-gray-900 mt-1">
-                {stats?.todayRevenue.toLocaleString()}원
-              </p>
-            </div>
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-              <CircleDollarSign className="w-5 h-5 text-green-600" />
-            </div>
-          </div>
-        </div>
+        <StatsCard
+          label="오늘 매출"
+          value={`${stats?.todayRevenue.toLocaleString() || '0'}원`}
+          icon={CircleDollarSign}
+          iconBgClass="bg-green-100"
+          iconColorClass="text-green-600"
+        />
 
-        <Link
+        <StatsCard
+          label="진행중 주문"
+          value={stats?.inProgressOrders || 0}
+          icon={ShoppingCart}
           href="/admin/orders"
-          className="bg-white rounded-lg border border-gray-200 p-6 hover:border-brand-primary transition-colors"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">진행중 주문</p>
-              <p className="text-2xl font-semibold text-gray-900 mt-1">{stats?.inProgressOrders}</p>
-            </div>
-            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-              <ShoppingCart className="w-5 h-5 text-purple-600" />
-            </div>
-          </div>
-        </Link>
+          iconBgClass="bg-purple-100"
+          iconColorClass="text-purple-600"
+        />
 
-        <Link
+        <StatsCard
+          label="대기중 신고"
+          value={stats?.pendingReports || 0}
+          icon={Flag}
           href="/admin/reports"
-          className="bg-white rounded-lg border border-gray-200 p-6 hover:border-brand-primary transition-colors"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">대기중 신고</p>
-              <p className="text-2xl font-semibold text-gray-900 mt-1">{stats?.pendingReports}</p>
-            </div>
-            <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-              <Flag className="w-5 h-5 text-red-600" />
-            </div>
-          </div>
-        </Link>
+          iconBgClass="bg-red-100"
+          iconColorClass="text-red-600"
+        />
       </div>
 
       {/* 이번달 통계 */}

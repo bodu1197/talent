@@ -1,11 +1,13 @@
 'use client';
 
 import ProfileImage from '@/components/common/ProfileImage';
+import SearchForm from '@/components/common/SearchForm';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { useState, lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import {
   ShoppingCart,
   Package,
@@ -13,7 +15,6 @@ import {
   Settings,
   LogOut,
   ChevronDown,
-  Search,
   Heart,
   Bike,
   MapPin,
@@ -42,17 +43,9 @@ export default function Header() {
   const { user, profile, loading, signOut } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
-  const [searchQuery, setSearchQuery] = useState('');
 
   // 메인 페이지에서는 헤더 검색창 숨김 (하단에 별도 검색 섹션 있음)
   const isHomePage = pathname === '/';
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-    }
-  };
 
   // 통합 마이페이지 허브 URL
   const getMypageUrl = () => {
@@ -94,42 +87,15 @@ export default function Header() {
           </Link>
           {/* 검색창 - PC에서만 표시 (메인 페이지 제외) */}
           <div className={`flex-1 max-w-md ${isHomePage ? 'hidden' : 'hidden lg:block'}`}>
-            {' '}
-            <form onSubmit={handleSearch} className="relative" autoComplete="off">
-              {' '}
-              <label htmlFor="header-search" className="sr-only">
-                서비스 검색
-              </label>
-              <input
-                type="text"
-                id="header-search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="어떤 재능이 필요하신가요?"
-                autoComplete="off"
-                autoCorrect="off"
-                autoCapitalize="off"
-                spellCheck={false}
-                data-form-type="other"
-                data-lpignore="true"
-                role="searchbox"
-                className="focus-visible:outline-none w-full px-4 py-2 pr-10 border-2 border-gray-300 rounded-full focus:rounded-full hover:border-gray-300 focus:outline-none focus:border-gray-300 focus:shadow-none transition-none text-gray-900 text-sm"
-                style={{ WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none' }}
-              />{' '}
-              <button
-                type="submit"
-                className="absolute right-2 top-1/2 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-brand-primary transition-colors rounded-full hover:bg-gray-100 active:scale-100 focus:outline-none isolate"
-                style={{
-                  transform: 'translate3d(0, -50%, 0)',
-                  backfaceVisibility: 'hidden',
-                  willChange: 'transform',
-                }}
-                aria-label="검색"
-              >
-                {' '}
-                <Search className="w-5 h-5" />{' '}
-              </button>{' '}
-            </form>{' '}
+            <SearchForm
+              onSubmit={(query) => {
+                if (query.trim()) {
+                  router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+                }
+              }}
+              inputClassName="px-4 py-2 pr-10 text-sm"
+              iconClassName="w-5 h-5"
+            />
           </div>
           {/* 모바일 버전 - 로그인 사용자만 표시 */}
           {user && (
