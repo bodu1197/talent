@@ -47,7 +47,8 @@ export default function AITalentShowcase({ services = [] }: Props) {
                     className="object-cover group-hover:scale-105 transition-transform duration-200"
                     sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
                     priority={index < 4}
-                    loading={index < 4 ? undefined : 'lazy'}
+                    loading={index < 4 ? 'eager' : 'lazy'}
+                    fetchPriority={index < 4 ? 'high' : 'auto'}
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gray-100">

@@ -110,7 +110,8 @@ export default function ServiceCard({
             className="object-cover group-hover:scale-105 transition-transform duration-200"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             priority={priority}
-            loading={priority ? undefined : 'lazy'}
+            loading={priority ? 'eager' : 'lazy'}
+            fetchPriority={priority ? 'high' : 'auto'}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-100">

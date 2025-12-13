@@ -256,7 +256,9 @@ export default async function RecentViewedServices() {
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-200"
                       sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
-                      loading="lazy"
+                      priority={index < 2}
+                      loading={index < 2 ? 'eager' : 'lazy'}
+                      fetchPriority={index < 2 ? 'high' : 'auto'}
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gray-100">
