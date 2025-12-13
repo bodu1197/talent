@@ -1,9 +1,8 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import Link from 'next/link';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Bot, Banknote, Scale, Shield, Megaphone, Search } from 'lucide-react';
+import { Banknote, Scale, Shield, Megaphone, Search } from 'lucide-react';
 
 interface SplatterDrop {
   size: number;
@@ -181,6 +180,7 @@ export default function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -199,21 +199,34 @@ export default function HeroSection() {
     setTimeout(() => performSlideTransition(index), 300);
   };
 
+  // 슬라이드 전환 로직 (중첩 함수 방지를 위해 분리)
   const advanceSlide = useCallback(() => {
     setIsTransitioning(true);
     setTimeout(() => {
-      performSlideTransition((currentSlide + 1) % slides.length);
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+      setIsTransitioning(false);
     }, 300);
-  }, [currentSlide, performSlideTransition]);
+  }, []);
 
+  // 자동 슬라이드 전환 (8초 간격, 처음 2초 대기 후 시작)
   useEffect(() => {
-    const timerId = setTimeout(() => {
-      const intervalId = setInterval(advanceSlide, 8000);
-      return () => clearInterval(intervalId);
-    }, 2000); // Wait 2 seconds before starting the carousel
+    // 기존 interval 정리
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
 
-    return () => clearTimeout(timerId);
-  }, [advanceSlide]);
+    // 2초 후 자동 슬라이드 시작
+    const timerId = setTimeout(() => {
+      intervalRef.current = setInterval(advanceSlide, 8000);
+    }, 2000);
+
+    return () => {
+      clearTimeout(timerId);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [advanceSlide]); // advanceSlide는 의존성이 빈 배열이므로 안정적
 
   const slide = slides[currentSlide];
 
@@ -278,47 +291,6 @@ export default function HeroSection() {
                   <Search className="w-6 h-6" />
                 </button>
               </form>
-            </div>
-
-            {/* 인기 카테고리 - PC에서만 표시 */}
-            <div className="flex-wrap gap-2 sm:gap-3 hidden lg:flex">
-              <Link
-                href="/categories/ai-services"
-                prefetch={false}
-                className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-blue-50 text-brand-primary rounded-full font-medium hover:bg-blue-100 transition-colors flex items-center gap-2"
-              >
-                <Bot className="w-4 h-4" /> <span className="hidden sm:inline">AI 서비스</span>
-                <span className="sm:hidden">AI</span>
-              </Link>
-              <Link
-                href="/categories/it-programming"
-                prefetch={false}
-                className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors"
-              >
-                <span className="hidden sm:inline">IT/프로그래밍</span>
-                <span className="sm:hidden">IT</span>
-              </Link>
-              <Link
-                href="/categories/design"
-                prefetch={false}
-                className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors"
-              >
-                디자인
-              </Link>
-              <Link
-                href="/categories/marketing"
-                prefetch={false}
-                className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors"
-              >
-                마케팅
-              </Link>
-              <Link
-                href="/categories/writing"
-                prefetch={false}
-                className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors hidden sm:inline-flex"
-              >
-                글쓰기
-              </Link>
             </div>
           </div>
 
