@@ -139,7 +139,7 @@ const LockIcon = () => (
   </svg>
 );
 
-// 배달 오토바이 이미지 (로컬)
+// 배달 오토바이 이미지 (로컬) - LCP 요소이므로 priority 적용
 const MotorcycleIcon = () => (
   <Image
     src="/delivery-bike.png"
@@ -148,6 +148,7 @@ const MotorcycleIcon = () => (
     height={360}
     sizes="(max-width: 768px) 176px, 224px"
     className="w-44 h-auto md:w-56"
+    priority // LCP 최적화: loading="eager" + fetchpriority="high" 적용
   />
 );
 
