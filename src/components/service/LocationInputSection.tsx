@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { reverseGeocode, getCurrentPosition, extractRegion } from '@/lib/location/address-api';
 import type { DaumPostcodeData } from '@/types/daum-postcode';
+import Script from 'next/script';
 
 // 아이콘 컴포넌트
 const MapPinIcon = ({ className }: { className?: string }) => (
@@ -85,22 +86,11 @@ export default function LocationInputSection({
   const [locationError, setLocationError] = useState<string | null>(null);
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
-  // Daum Postcode 스크립트 로드
+  // Script component handles loading now
   useEffect(() => {
     if (typeof window !== 'undefined' && window.daum) {
       setIsScriptLoaded(true);
-      return;
     }
-
-    const script = document.createElement('script');
-    script.src = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
-    script.async = true;
-    script.onload = () => setIsScriptLoaded(true);
-    document.head.appendChild(script);
-
-    return () => {
-      // cleanup은 하지 않음 (한번 로드된 스크립트는 유지)
-    };
   }, []);
 
   // 서버 API를 통해 좌표 조회 (Kakao API 403 에러 방지)
@@ -207,6 +197,11 @@ export default function LocationInputSection({
 
   return (
     <div className="space-y-2">
+      <Script
+        src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
+        strategy="lazyOnload"
+        onLoad={() => setIsScriptLoaded(true)}
+      />
       {/* 라벨 */}
       <label className="block text-sm font-medium text-gray-700">
         {label}

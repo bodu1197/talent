@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { Loader2, Navigation, MapPin, RefreshCw, Star, AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
+import Script from 'next/script';
 
 // 카카오 지도 타입 선언
 declare global {
@@ -98,7 +99,6 @@ export default function ErrandsKakaoMap({
   const overlaysRef = useRef<KakaoCustomOverlay[]>([]);
   const circleRef = useRef<KakaoCircle | null>(null);
   const userMarkerRef = useRef<KakaoMarker | null>(null);
-  const sdkCheckIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [isMapReady, setIsMapReady] = useState(false);
@@ -182,83 +182,6 @@ export default function ErrandsKakaoMap({
     }
   }, [userLocation, fetchHelpers]);
 
-  // 카카오맵 SDK 초기화 헬퍼
-  const initializeKakaoMaps = useCallback(() => {
-    if (!window.kakao?.maps) return;
-    window.kakao.maps.load(() => {
-      setIsLoaded(true);
-    });
-  }, []);
-
-  // 카카오 SDK 동적 로드 (컴포넌트 내에서 직접 로드)
-  useEffect(() => {
-    if (isLoaded) return;
-
-    // 이미 SDK가 로드되어 있으면 바로 사용
-    if (window.kakao?.maps) {
-      initializeKakaoMaps();
-      return;
-    }
-
-    // 폴링 함수 (이미 로드 중인 스크립트를 기다림)
-    const startPolling = () => {
-      let attempts = 0;
-      const maxAttempts = 40; // 20초
-
-      sdkCheckIntervalRef.current = setInterval(() => {
-        attempts++;
-
-        if (window.kakao?.maps) {
-          clearInterval(sdkCheckIntervalRef.current!);
-          initializeKakaoMaps();
-        } else if (attempts >= maxAttempts) {
-          clearInterval(sdkCheckIntervalRef.current!);
-          setSdkError('카카오맵 로드 시간이 초과되었습니다.');
-        }
-      }, 500);
-    };
-
-    // 이미 스크립트가 추가되어 있는지 확인
-    const existingScript = document.querySelector('script[src*="dapi.kakao.com"]');
-    if (existingScript) {
-      startPolling();
-      return;
-    }
-
-    // SDK 스크립트 동적 로드
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&autoload=false`;
-    script.async = true;
-    // CORS 문제 해결을 위해 crossorigin 제거 (카카오 SDK는 CORS 헤더 미제공)
-    // script.crossOrigin = 'anonymous';  // 이 줄을 추가하면 오히려 문제가 됨
-
-    script.onload = () => {
-      if (window.kakao) {
-        initializeKakaoMaps();
-      } else {
-        console.error('[KakaoMap] kakao object not found after load');
-        setSdkError('카카오맵 초기화에 실패했습니다.');
-      }
-    };
-
-    script.onerror = (e) => {
-      console.error('[KakaoMap] SDK load error:', e);
-      console.error(
-        '[KakaoMap] This may be caused by domain not registered in Kakao Developer Console'
-      );
-      setSdkError('카카오맵 SDK 로드에 실패했습니다. 도메인 설정을 확인해주세요.');
-    };
-
-    document.head.appendChild(script);
-
-    return () => {
-      if (sdkCheckIntervalRef.current) {
-        clearInterval(sdkCheckIntervalRef.current);
-      }
-    };
-  }, [isLoaded, initializeKakaoMaps]);
-
   // 지도 초기화
   useEffect(() => {
     if (!isLoaded || !mapContainerRef.current || !userLocation) {
@@ -329,7 +252,7 @@ export default function ErrandsKakaoMap({
       if (circleRef.current) circleRef.current.setMap(null);
       if (userMarkerRef.current) userMarkerRef.current.setMap(null);
     };
-  }, [isLoaded, userLocation]);
+  }, [isLoaded]);
 
   // 라이더 마커 추가
   useEffect(() => {
@@ -573,6 +496,20 @@ export default function ErrandsKakaoMap({
 
   return (
     <div className={`relative rounded-2xl overflow-hidden shadow-lg ${className}`}>
+      <Script
+        src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&autoload=false`}
+        strategy="lazyOnload"
+        onLoad={() => {
+          if (window.kakao) {
+            window.kakao.maps.load(() => {
+              setIsLoaded(true);
+            });
+          }
+        }}
+        onError={() => {
+          setSdkError('카카오맵 SDK 로드에 실패했습니다. 도메인 설정을 확인해주세요.');
+        }}
+      />
       {/* 지도 컨테이너 */}
       <div ref={mapContainerRef} className="w-full h-[400px] md:h-[500px] bg-gray-200" />
 
