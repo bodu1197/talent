@@ -164,9 +164,6 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
   useEffect(() => {
     let mounted = true;
 
-    // Service Worker 등록
-    registerServiceWorker();
-
     // 초기 세션 체크 - 단순화
     const checkSession = async () => {
       try {
@@ -196,6 +193,16 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
     };
 
     checkSession();
+
+    // Service Worker는 idle 시간에 등록 (초기 렌더링 차단 방지)
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      (
+        window as Window & { requestIdleCallback: (cb: IdleRequestCallback) => number }
+      ).requestIdleCallback(() => registerServiceWorker(), { timeout: 5000 });
+    } else {
+      // requestIdleCallback 미지원 시 setTimeout으로 지연
+      setTimeout(() => registerServiceWorker(), 2000);
+    }
 
     // 인증 상태 변화 구독
     const {

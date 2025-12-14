@@ -118,19 +118,28 @@ export function ChatUnreadProvider({ children }: Readonly<{ children: ReactNode 
     }
   }, [userId, supabase]);
 
-  // 초기화 - user가 있으면 채팅 읽지 않은 수 조회
+  // 초기화 - user가 있으면 채팅 읽지 않은 수 조회 (지연 로딩으로 메인 스레드 차단 최소화)
   useEffect(() => {
-    if (userId) {
+    if (!userId) return;
+
+    // 초기 페이지 렌더링 이후 채팅 데이터 로드 (LCP 차단 방지)
+    const timer = setTimeout(() => {
       fetchUnreadCount();
       requestNotificationPermission();
-    }
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, [userId, fetchUnreadCount, requestNotificationPermission]);
 
-  // userId가 설정되면 내 채팅방 목록 가져오기
+  // userId가 설정되면 내 채팅방 목록 가져오기 (지연 로딩)
   useEffect(() => {
-    if (userId) {
+    if (!userId) return;
+
+    const timer = setTimeout(() => {
       fetchMyRooms();
-    }
+    }, 3500);
+
+    return () => clearTimeout(timer);
   }, [userId, fetchMyRooms]);
 
   // 실시간 메시지 구독

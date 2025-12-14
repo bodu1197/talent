@@ -121,9 +121,14 @@ export default function NotificationProvider({
     }
   }, []);
 
-  // 초기 로드
+  // 초기 로드 - 지연 로딩으로 메인 스레드 차단 최소화
   useEffect(() => {
-    fetchNotifications();
+    // 초기 페이지 렌더링 이후 알림 로드 (LCP 차단 방지)
+    const timer = setTimeout(() => {
+      fetchNotifications();
+    }, 2000);
+
+    return () => clearTimeout(timer);
   }, [fetchNotifications]);
 
   // Handler for INSERT notification events
