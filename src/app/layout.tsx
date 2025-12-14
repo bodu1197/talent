@@ -193,6 +193,8 @@ export default async function RootLayout({
             __html: `window.__nonce__ = "${nonce}";`,
           }}
         />
+        {/* LCP 이미지 Preload - delivery-bike.png */}
+        <link rel="preload" as="image" href="/delivery-bike.png" fetchPriority="high" />
         {/* Preconnect to Supabase for faster API connections - LCP optimization */}
         <link
           rel="preconnect"
