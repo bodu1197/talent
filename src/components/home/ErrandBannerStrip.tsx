@@ -106,8 +106,8 @@ export default function ErrandBannerStrip() {
           style={{
             // 시작 위치: -150px, 도착 위치: endPosition
             transform: `translateX(${scooterStarted ? endPosition : -150}px)`,
-            // GPU 가속을 사용한 부드러운 이동 (7초)
-            transition: 'transform 7s cubic-bezier(0.1, 0.7, 1.0, 0.1)',
+            // GPU 가속을 사용한 부드러운 이동 (5초, 일정 속도)
+            transition: 'transform 5s linear',
             willChange: 'transform',
           }}
         >
@@ -145,7 +145,7 @@ export default function ErrandBannerStrip() {
           transform: `translateX(${scooterStarted ? endPosition : -150}px)`,
           background:
             'linear-gradient(to right, transparent 0px, rgba(17,24,39,0.3) 15px, rgba(17,24,39,0.7) 30px, rgb(17,24,39) 50px)',
-          transition: 'transform 7s cubic-bezier(0.1, 0.7, 1.0, 0.1)',
+          transition: 'transform 5s linear',
           willChange: 'transform',
         }}
       />

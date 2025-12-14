@@ -309,7 +309,7 @@ export default function SecondHeroBanner() {
           className="absolute hidden md:flex items-center"
           style={{
             transform: scooterStarted ? undefined : 'translateX(-150px)',
-            animation: scooterStarted ? 'scooter-enter 7s ease-out forwards' : 'none',
+            animation: scooterStarted ? 'scooter-enter 5s linear forwards' : 'none',
           }}
           onAnimationEnd={() => setScooterStopped(true)}
         >
