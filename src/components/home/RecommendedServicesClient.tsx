@@ -35,18 +35,30 @@ export default function RecommendedServicesClient({
 
   // 스크롤 상태 체크
   useEffect(() => {
+    let ticking = false;
+
     const checkScroll = () => {
-      const container = tabContainerRef.current;
-      if (container) {
-        setShowLeftArrow(container.scrollLeft > 0);
-        setShowRightArrow(container.scrollLeft < container.scrollWidth - container.clientWidth - 5);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const container = tabContainerRef.current;
+          if (container) {
+            setShowLeftArrow(container.scrollLeft > 0);
+            setShowRightArrow(
+              container.scrollLeft < container.scrollWidth - container.clientWidth - 5
+            );
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
     checkScroll();
     const container = tabContainerRef.current;
-    container?.addEventListener('scroll', checkScroll);
-    window.addEventListener('resize', checkScroll);
+
+    // Use passive listener for better scroll performance
+    container?.addEventListener('scroll', checkScroll, { passive: true });
+    window.addEventListener('resize', checkScroll, { passive: true });
 
     return () => {
       container?.removeEventListener('scroll', checkScroll);
