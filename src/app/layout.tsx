@@ -221,6 +221,45 @@ export default async function RootLayout({
             />
           </>
         )}
+        {/* Critical CSS - LCP 요소에 필요한 최소한의 인라인 스타일 */}
+        <style
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html: `
+              /* Critical: Layout & Container */
+              .container-1200{max-width:1200px;margin-left:auto;margin-right:auto;padding-left:10px;padding-right:10px}
+              /* Critical: Hero Section */
+              .bg-white{background-color:#fff}
+              .py-2{padding-top:0.5rem;padding-bottom:0.5rem}
+              .py-8{padding-top:2rem;padding-bottom:2rem}
+              .pt-2{padding-top:0.5rem}
+              .pb-4{padding-bottom:1rem}
+              /* Critical: Typography */
+              .text-xl{font-size:1.25rem;line-height:1.75rem}
+              .text-2xl{font-size:1.5rem;line-height:2rem}
+              .text-3xl{font-size:1.875rem;line-height:2.25rem}
+              .font-semibold{font-weight:600}
+              .text-gray-900{color:rgb(17 24 39)}
+              .text-gray-600{color:rgb(75 85 99)}
+              /* Critical: Flexbox */
+              .flex{display:flex}
+              .flex-col{flex-direction:column}
+              .flex-1{flex:1 1 0%}
+              .items-center{align-items:center}
+              .gap-8{gap:2rem}
+              /* Critical: Mobile Search */
+              .lg\\:hidden{display:none}
+              @media(min-width:1024px){.lg\\:block{display:block}.lg\\:hidden{display:none}.hidden.lg\\:block{display:block}}
+              /* Critical: Category Grid */
+              .rounded-full{border-radius:9999px}
+              .h-11{height:2.75rem}
+              .w-11{width:2.75rem}
+              /* Critical: Skeleton Animation */
+              @keyframes pulse{50%{opacity:.5}}
+              .animate-pulse{animation:pulse 2s cubic-bezier(0.4,0,0.6,1) infinite}
+            `,
+          }}
+        />
       </head>
       <body className="min-h-screen bg-gray-50 overflow-x-hidden">
         <ErrorBoundary>
