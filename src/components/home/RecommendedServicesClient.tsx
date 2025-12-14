@@ -35,30 +35,18 @@ export default function RecommendedServicesClient({
 
   // 스크롤 상태 체크
   useEffect(() => {
-    let ticking = false;
-
     const checkScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const container = tabContainerRef.current;
-          if (container) {
-            setShowLeftArrow(container.scrollLeft > 0);
-            setShowRightArrow(
-              container.scrollLeft < container.scrollWidth - container.clientWidth - 5
-            );
-          }
-          ticking = false;
-        });
-        ticking = true;
+      const container = tabContainerRef.current;
+      if (container) {
+        setShowLeftArrow(container.scrollLeft > 0);
+        setShowRightArrow(container.scrollLeft < container.scrollWidth - container.clientWidth - 5);
       }
     };
 
     checkScroll();
     const container = tabContainerRef.current;
-
-    // Use passive listener for better scroll performance
-    container?.addEventListener('scroll', checkScroll, { passive: true });
-    window.addEventListener('resize', checkScroll, { passive: true });
+    container?.addEventListener('scroll', checkScroll);
+    window.addEventListener('resize', checkScroll);
 
     return () => {
       container?.removeEventListener('scroll', checkScroll);
