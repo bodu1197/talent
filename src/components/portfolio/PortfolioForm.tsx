@@ -7,6 +7,29 @@ import { logger } from '@/lib/logger';
 import { CheckCircle, X, Loader2, Youtube, ImagePlus } from 'lucide-react';
 import toast from 'react-hot-toast';
 
+// YouTube 비디오 ID 추출 (Helper)
+const extractYoutubeVideoId = (url: string): string | null => {
+  if (!url) return null;
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
+    /youtube\.com\/embed\/([^&\n?#]+)/,
+  ];
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match?.[1]) return match[1];
+  }
+  return null;
+};
+
+// 파일 미리보기 생성 (Helper)
+const createFilePreview = (file: File): Promise<string> => {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result as string);
+    reader.readAsDataURL(file);
+  });
+};
+
 interface Category {
   id: string;
   name: string;
@@ -41,15 +64,6 @@ interface PortfolioFormProps {
   mode: 'create' | 'edit';
 }
 
-// Helper function to read file as data URL
-function readFileAsDataURL(file: File): Promise<string> {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result as string);
-    reader.readAsDataURL(file);
-  });
-}
-
 export default function PortfolioForm({
   sellerId,
   categories,
@@ -80,41 +94,24 @@ export default function PortfolioForm({
   // 이미지 미리보기
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
-  // YouTube 비디오 ID 추출
-  const extractYoutubeVideoId = useCallback((url: string): string | null => {
-    if (!url) return null;
-    const patterns = [
-      /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
-      /youtube\.com\/embed\/([^&\n?#]+)/,
-    ];
-    for (const pattern of patterns) {
-      const match = url.match(pattern);
-      if (match?.[1]) return match[1];
-    }
-    return null;
-  }, []);
-
   // YouTube 썸네일 URL
   const youtubeThumbnail = useMemo(() => {
     const videoId = extractYoutubeVideoId(formData.youtube_url);
     return videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : null;
-  }, [formData.youtube_url, extractYoutubeVideoId]);
+  }, [formData.youtube_url]);
 
   // YouTube URL 변경 핸들러
-  const handleYoutubeUrlChange = useCallback(
-    (url: string) => {
-      setFormData((prev) => ({ ...prev, youtube_url: url }));
-      const videoId = extractYoutubeVideoId(url);
-      if (url && !videoId) {
-        toast.error('올바른 YouTube URL을 입력해주세요');
-      }
-    },
-    [extractYoutubeVideoId]
-  );
+  const handleYoutubeUrlChange = useCallback((url: string) => {
+    setFormData((prev) => ({ ...prev, youtube_url: url }));
+    const videoId = extractYoutubeVideoId(url);
+    if (url && !videoId) {
+      toast.error('올바른 YouTube URL을 입력해주세요');
+    }
+  }, []);
 
   // 이미지 미리보기 생성 헬퍼
   const generatePreviews = useCallback(async (files: File[]) => {
-    const previews = await Promise.all(files.map(readFileAsDataURL));
+    const previews = await Promise.all(files.map(createFilePreview));
     setImagePreviews((prev) => [...prev, ...previews]);
   }, []);
 

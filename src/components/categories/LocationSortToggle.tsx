@@ -56,7 +56,8 @@ export default function LocationSortToggle({ className = '' }: LocationSortToggl
       params.set('lng', longitude.toFixed(6));
       params.delete('page'); // Reset to first page when enabling location sort
 
-      router.push(`${pathname}?${params.toString()}`);
+      // Force full page reload for location sort to ensure server component re-renders
+      window.location.href = `${pathname}?${params.toString()}`;
     } catch (err) {
       if (err instanceof GeolocationPositionError) {
         switch (err.code) {
@@ -88,8 +89,9 @@ export default function LocationSortToggle({ className = '' }: LocationSortToggl
     params.delete('page'); // Reset to first page
 
     const queryString = params.toString();
-    router.push(queryString ? `${pathname}?${queryString}` : pathname);
-  }, [router, pathname, searchParams]);
+    // Force full page reload
+    window.location.href = queryString ? `${pathname}?${queryString}` : pathname;
+  }, [pathname, searchParams]);
 
   // Auto-enable location on mount (optional - can be enabled if desired)
   // useEffect(() => {
