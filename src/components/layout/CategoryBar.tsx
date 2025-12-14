@@ -16,7 +16,7 @@ export default async function CategoryBar() {
   const topLevelCategories = await getOnlyTopLevelCategories();
 
   return (
-    <div className="bg-white border-b border-gray-200 fixed top-[60px] lg:top-20 left-0 right-0 z-40">
+    <div className="bg-white border-b border-gray-200 fixed top-20 left-0 right-0 z-40">
       <div className="container-1200 px-4 sm:px-6 lg:px-8">
         {/* PC: 가로 스크롤 카테고리 */}
         <div className="hidden lg:flex items-center gap-6 overflow-x-auto py-3 scrollbar-hide">
@@ -56,8 +56,8 @@ export default async function CategoryBar() {
             <span className="text-xs font-medium text-center">전체</span>
           </Link>
 
-          {/* 개별 카테고리 */}
-          {topLevelCategories.map((category) => (
+          {/* 개별 카테고리 (최대 7개) */}
+          {topLevelCategories.slice(0, 7).map((category) => (
             <Link
               key={category.id}
               href={`/categories/${category.slug}`}
