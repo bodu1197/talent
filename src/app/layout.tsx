@@ -19,6 +19,7 @@ import ToastProvider from '@/components/providers/ToastProvider';
 import { headers } from 'next/headers';
 import ConditionalLayout from '@/components/layout/ConditionalLayout';
 import ConditionalMegaMenuWrapper from '@/components/layout/ConditionalMegaMenuWrapper';
+import CategoryBar from '@/components/layout/CategoryBar';
 import { PageViewTracker } from '@/components/analytics/PageViewTracker';
 
 // 클라이언트 Providers를 지연 로딩하여 초기 번들 크기 감소
@@ -281,6 +282,7 @@ export default async function RootLayout({
                     </Suspense>
                   )
                 }
+                categoryBar={<CategoryBar />}
               >
                 {children}
               </ConditionalLayout>
