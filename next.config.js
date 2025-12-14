@@ -60,8 +60,7 @@ const nextConfig = {
   },
   // 서버 전용 패키지 (클라이언트 번들에서 제외) - Next.js 16+
   serverExternalPackages: ['@supabase/supabase-js'],
-  // SWC Minify 최적화 활성화 (ESNext 타겟으로 트랜스파일 최소화)
-  swcMinify: true,
+  // SWC Minify는 Next.js 15+에서 기본 활성화됨
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
   },
