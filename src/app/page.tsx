@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
-import { createClient } from '@/lib/supabase/server';
 import HeroWithCategories from '@/components/common/HeroWithCategories';
 import { Service } from '@/types';
 
@@ -8,27 +7,20 @@ import { Service } from '@/types';
 // HeroWithCategories는 LCP에 영향을 주므로 즉시 로드
 
 // Below-the-fold: 동적 로드로 초기 번들 크기 감소
-const AITalentShowcase = dynamic(() => import('@/components/home/AITalentShowcase'));
-const RecommendedServices = dynamic(() => import('@/components/home/RecommendedServices'));
-const PersonalizedServices = dynamic(() => import('@/components/home/PersonalizedServices'));
 const SellerRegistrationGuide = dynamic(() => import('@/components/home/SellerRegistrationGuide'));
 const UserReviews = dynamic(() => import('@/components/home/UserReviews'));
 const TrendingCategories = dynamic(() => import('@/components/home/TrendingCategories'));
 const SecondHeroBanner = dynamic(() => import('@/components/home/SecondHeroBanner'));
 const ThirdHeroBanner = dynamic(() => import('@/components/home/ThirdHeroBanner'));
-const ErrandBannerStrip = dynamic(() => import('@/components/home/ErrandBannerStrip'));
-
-// 로그인 사용자 전용 컴포넌트
-const RecentVisitedCategories = dynamic(() => import('@/components/home/RecentVisitedCategories'));
-const RecentViewedServices = dynamic(() => import('@/components/home/RecentViewedServices'));
 
 // 캐싱 최적화: 60초마다 재생성
 export const revalidate = 60;
 
-export default async function HomePage() {
+// 인증된 사용자 전용 섹션 (별도 서버 컴포넌트로 분리하여 Supabase 번들 지연 로드)
+async function AuthenticatedSections() {
+  const { createClient } = await import('@/lib/supabase/server');
   const supabase = await createClient();
 
-  // 병렬 처리로 데이터 로딩 속도 최적화 (Waterfall 방지)
   const [
     {
       data: { user },
@@ -39,65 +31,97 @@ export default async function HomePage() {
     supabase.from('categories').select('id').eq('is_ai', true),
   ]);
 
+  if (!user) {
+    // 비로그인 사용자용 섹션
+    return (
+      <>
+        {/* 실시간 인기재능 섹션 - Suspense로 스트리밍 (LCP blocking 방지) */}
+        <Suspense fallback={<TrendingSkeleton />}>
+          <TrendingCategories />
+        </Suspense>
+
+        {/* 제2 히어로 배너 - 심부름 헬퍼 */}
+        <SecondHeroBanner />
+
+        {/* 제3 히어로 배너 - 현장 전문가 서비스 (생활/이벤트/뷰티) */}
+        <ThirdHeroBanner />
+
+        {/* 전문가 등록 안내 섹션 */}
+        <SellerRegistrationGuide />
+
+        {/* 사용자 리뷰 섹션 */}
+        <Suspense fallback={<ReviewsSkeleton />}>
+          <UserReviews />
+        </Suspense>
+      </>
+    );
+  }
+
+  // 로그인된 사용자용 섹션 - 동적 import로 코드 분할
+  const [
+    { default: RecentVisitedCategories },
+    { default: RecentViewedServices },
+    { default: RecommendedServices },
+    { default: ErrandBannerStrip },
+    { default: PersonalizedServices },
+  ] = await Promise.all([
+    import('@/components/home/RecentVisitedCategories'),
+    import('@/components/home/RecentViewedServices'),
+    import('@/components/home/RecommendedServices'),
+    import('@/components/home/ErrandBannerStrip'),
+    import('@/components/home/PersonalizedServices'),
+  ]);
+
   const aiCategoryIds = aiCategories?.map((cat) => cat.id) || [];
 
   return (
+    <>
+      <RecentVisitedCategories />
+      <RecentViewedServices />
+
+      {/* AI 재능 쇼케이스 (로그인 시에만 표시) */}
+      <AIServicesSection aiCategoryIds={aiCategoryIds} />
+
+      {/* 추천 서비스 섹션 (로그인 시에만 표시) */}
+      <Suspense fallback={<RecommendedSkeleton />}>
+        <RecommendedServices aiCategoryIds={aiCategoryIds} />
+      </Suspense>
+
+      {/* 심부름 배너 띠 (프리미엄 전문가 섹션 위) */}
+      <ErrandBannerStrip />
+
+      {/* 내 주변의 프리미엄 전문가 (로그인 시에도 표시) */}
+      <ThirdHeroBanner />
+
+      {/* 회원 맞춤 관심 카테고리 서비스 */}
+      <Suspense fallback={<PersonalizedSkeleton />}>
+        <PersonalizedServices />
+      </Suspense>
+    </>
+  );
+}
+
+export default async function HomePage() {
+  return (
     <div className="pb-0">
-      {/* 히어로 섹션 + 카테고리 (즉시 표시) */}
+      {/* 히어로 섹션 + 카테고리 (즉시 표시) - LCP 최적화 */}
       <HeroWithCategories />
 
-      {/* 로그인 사용자 전용 섹션 */}
-      {user && (
-        <>
-          <RecentVisitedCategories />
-          <RecentViewedServices />
+      {/* 인증 기반 섹션 - Supabase 호출을 Suspense로 감싸서 LCP 차단 방지 */}
+      <Suspense fallback={<HomeSkeleton />}>
+        <AuthenticatedSections />
+      </Suspense>
+    </div>
+  );
+}
 
-          {/* AI 재능 쇼케이스 (로그인 시에만 표시) */}
-          <AIServicesSection aiCategoryIds={aiCategoryIds} />
-
-          {/* 추천 서비스 섹션 (로그인 시에만 표시) */}
-          <Suspense fallback={<RecommendedSkeleton />}>
-            <RecommendedServices aiCategoryIds={aiCategoryIds} />
-          </Suspense>
-
-          {/* 심부름 배너 띠 (프리미엄 전문가 섹션 위) */}
-          <ErrandBannerStrip />
-
-          {/* 내 주변의 프리미엄 전문가 (로그인 시에도 표시) */}
-          <ThirdHeroBanner />
-        </>
-      )}
-
-      {/* 로그인 전 사용자 전용 섹션 */}
-      {!user && (
-        <>
-          {/* 실시간 인기재능 섹션 - Suspense로 스트리밍 (LCP blocking 방지) */}
-          <Suspense fallback={<TrendingSkeleton />}>
-            <TrendingCategories />
-          </Suspense>
-
-          {/* 제2 히어로 배너 - 심부름 헬퍼 */}
-          <SecondHeroBanner />
-
-          {/* 제3 히어로 배너 - 현장 전문가 서비스 (생활/이벤트/뷰티) */}
-          <ThirdHeroBanner />
-
-          {/* 전문가 등록 안내 섹션 */}
-          <SellerRegistrationGuide />
-
-          {/* 사용자 리뷰 섹션 */}
-          <Suspense fallback={<ReviewsSkeleton />}>
-            <UserReviews />
-          </Suspense>
-        </>
-      )}
-
-      {/* 회원 맞춤 관심 카테고리 서비스 (Suspense로 감싸기) - 로그인 시에만 표시 */}
-      {user && (
-        <Suspense fallback={<PersonalizedSkeleton />}>
-          <PersonalizedServices />
-        </Suspense>
-      )}
+// 홈페이지 스켈레톤 (LCP 후 표시)
+function HomeSkeleton() {
+  return (
+    <div className="py-8 bg-gray-50">
+      <div className="container-1200">
+        <div className="h-64 bg-gray-100 rounded-lg animate-pulse" />
+      </div>
     </div>
   );
 }
@@ -152,6 +176,8 @@ function formatServicesWithRating(
 
 // AI 서비스 섹션 (서버 컴포넌트)
 async function AIServicesSection({ aiCategoryIds }: { readonly aiCategoryIds: string[] }) {
+  const { default: AITalentShowcase } = await import('@/components/home/AITalentShowcase');
+
   if (aiCategoryIds.length === 0) {
     return <AITalentShowcase services={[]} />;
   }
