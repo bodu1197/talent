@@ -62,6 +62,7 @@ export default function AdvertisingPage() {
 
   // 탭 변경 시 해당 섹션으로 스크롤
   const scrollToSection = useCallback((tab: TabType) => {
+    setActiveTab(tab);
     const refMap = {
       stats: statsRef,
       active: activeAdsRef,
@@ -77,7 +78,6 @@ export default function AdvertisingPage() {
         behavior: 'smooth',
       });
     }
-    setActiveTab(tab);
   }, []);
 
   // 할인율 계산: 1개월 20만원(공급가액) → 12개월 10만원(공급가액) (선형 할인)
