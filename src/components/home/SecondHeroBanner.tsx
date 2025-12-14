@@ -148,7 +148,8 @@ const MotorcycleIcon = () => (
     height={360}
     sizes="(max-width: 768px) 176px, 224px"
     className="w-44 h-auto md:w-56"
-    priority // LCP 최적화: loading="eager" + fetchpriority="high" 적용
+    priority // LCP 최적화: loading="eager" 적용
+    fetchPriority="high" // 명시적으로 fetchpriority="high" 추가
   />
 );
 
