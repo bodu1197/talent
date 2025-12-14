@@ -1,16 +1,155 @@
 'use client';
 
-import { useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+
+// 배달 오토바이 이미지 (데스크톱용)
+const MotorcycleIcon = () => (
+  <Image
+    src="/delivery-bike.png"
+    alt="배달 오토바이"
+    width={360}
+    height={360}
+    sizes="256px"
+    className="w-64 h-auto"
+  />
+);
 
 // 광고 카피
 const COPY_TEXT = '귀찮은 일 모두 돌파구에 맡겨 주세요';
 
 export default function ErrandBannerStrip() {
+  const [scooterStarted, setScooterStarted] = useState(false);
+  // 종료 위치 상태 (초기값 1000, 마운트 후 계산)
+  const [endPosition, setEndPosition] = useState(1000);
   const sectionRef = useRef<HTMLElement>(null);
 
+  // 초기화 및 화면 너비 계산
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // 도착 위치 계산: 화면 너비 - 450px
+      setEndPosition(window.innerWidth - 450);
+
+      // 리사이즈 대응
+      const handleResize = () => setEndPosition(window.innerWidth - 450);
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }
+  }, []);
+
+  // 스크롤 감지하여 애니메이션 트리거
+  useEffect(() => {
+    // 모바일에서는 애니메이션 기능 끄기
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return;
+
+    let observer: IntersectionObserver | null = null;
+    let startTimeout: NodeJS.Timeout | null = null;
+
+    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+      const [entry] = entries;
+      if (entry.isIntersecting && !scooterStarted) {
+        // 감지 후 0.5초 뒤에 출발
+        startTimeout = setTimeout(() => setScooterStarted(true), 500);
+      }
+    };
+
+    const initTimeout = setTimeout(() => {
+      observer = new IntersectionObserver(handleIntersect, { threshold: 0.6 });
+
+      if (sectionRef.current) {
+        observer.observe(sectionRef.current);
+      }
+    }, 1000);
+
+    return () => {
+      clearTimeout(initTimeout);
+      if (startTimeout) clearTimeout(startTimeout);
+      if (observer) observer.disconnect();
+    };
+  }, [scooterStarted]);
+
   return (
-    <section ref={sectionRef} className="relative">
+    <section ref={sectionRef} className="relative" style={{ overflow: 'visible' }}>
+      {/* ... 기존 모바일 코드 유지 ... */}
+      <div
+        className="absolute pointer-events-none z-30 md:hidden overflow-hidden"
+        style={{
+          top: '50%',
+          left: '-60px',
+          transform: 'translateY(-50%)',
+        }}
+      >
+        <Image
+          src="/delivery-bike.png"
+          alt="배달 오토바이"
+          width={360}
+          height={360}
+          sizes="128px"
+          className="w-32 h-auto opacity-70"
+        />
+      </div>
+
+      {/* 데스크톱: 애니메이션 오토바이 (CSS Transition 적용) */}
+      <div
+        className="absolute pointer-events-none z-50 hidden md:block"
+        style={{
+          top: '50%',
+          left: 0,
+          right: 0,
+          marginTop: '-160px',
+          overflow: 'visible',
+        }}
+      >
+        <div
+          className="absolute flex items-center"
+          style={{
+            // 시작 위치: -150px, 도착 위치: endPosition
+            transform: `translateX(${scooterStarted ? endPosition : -150}px)`,
+            // GPU 가속을 사용한 부드러운 이동 (7초)
+            transition: 'transform 7s cubic-bezier(0.1, 0.7, 1.0, 0.1)',
+            willChange: 'transform',
+          }}
+        >
+          {/* 연기 효과 - 오토바이가 출발하면 보임 */}
+          {scooterStarted && (
+            <div
+              className="absolute -left-16 flex items-center gap-1 transition-opacity duration-500"
+              style={{ opacity: scooterStarted ? 1 : 0 }}
+            >
+              <div
+                className="w-10 h-10 rounded-full bg-gray-400/70"
+                style={{ animation: 'smoke-puff 0.8s ease-out infinite' }}
+              />
+              <div
+                className="w-8 h-8 rounded-full bg-gray-400/60"
+                style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.15s' }}
+              />
+              <div
+                className="w-12 h-12 rounded-full bg-gray-400/50"
+                style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.3s' }}
+              />
+            </div>
+          )}
+          <MotorcycleIcon />
+        </div>
+      </div>
+
+      {/* 글자를 가리는 마스크 - 오토바이 전체를 감싸고, 뒷바퀴가 왼쪽 끝 근처 (데스크톱만) */}
+      {/* 시작 전: 전체 화면을 덮음 / 시작 후: 오토바이와 함께 이동 */}
+      <div
+        className="absolute inset-y-0 z-40 pointer-events-none hidden md:block"
+        style={{
+          left: '-70px',
+          width: '300vw',
+          transform: `translateX(${scooterStarted ? endPosition : -150}px)`,
+          background:
+            'linear-gradient(to right, transparent 0px, rgba(17,24,39,0.3) 15px, rgba(17,24,39,0.7) 30px, rgb(17,24,39) 50px)',
+          transition: 'transform 7s cubic-bezier(0.1, 0.7, 1.0, 0.1)',
+          willChange: 'transform',
+        }}
+      />
+
       {/* 배경 */}
       <div className="bg-gray-900 border-y border-gray-800">
         {/* 도트 패턴 */}
