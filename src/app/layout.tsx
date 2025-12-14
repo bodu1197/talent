@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import localFont from 'next/font/local';
 import './globals.css';
 import dynamic from 'next/dynamic';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 // Pretendard Variable 폰트 (로컬)
 const pretendard = localFont({
@@ -286,6 +287,7 @@ export default async function RootLayout({
               </ConditionalLayout>
             </ClientProviders>
             <ToastProvider />
+            <SpeedInsights />
           </RollbarProvider>
         </ErrorBoundary>
       </body>
