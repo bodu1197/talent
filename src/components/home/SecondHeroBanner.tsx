@@ -139,20 +139,6 @@ const LockIcon = () => (
   </svg>
 );
 
-// 배달 오토바이 이미지 (로컬) - LCP 요소이므로 priority 적용
-const MotorcycleIcon = () => (
-  <Image
-    src="/delivery-bike.png"
-    alt="배달 오토바이"
-    width={360}
-    height={360}
-    sizes="(max-width: 768px) 176px, 224px"
-    className="w-44 h-auto md:w-56"
-    priority // LCP 최적화: loading="eager" 적용
-    fetchPriority="high" // 명시적으로 fetchpriority="high" 추가
-  />
-);
-
 // 초기값 상수 (SSR과 클라이언트 일치를 위해)
 const INITIAL_TOTAL_COUNT = 26;
 
@@ -162,41 +148,12 @@ export default function SecondHeroBanner() {
   const [totalCount, setTotalCount] = useState(INITIAL_TOTAL_COUNT);
   const [isHydrated, setIsHydrated] = useState(false);
 
-  // 스쿠터 애니메이션 상태
-  const [scooterStarted, setScooterStarted] = useState(false);
-  const [scooterStopped, setScooterStopped] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
   // 클라이언트 하이드레이션 완료 후 동적 업데이트 시작
   useEffect(() => {
     setIsHydrated(true);
   }, []);
-
-  // 스크롤 감지하여 스쿠터 애니메이션 시작 (페이지 로드 후 약간의 지연)
-  useEffect(() => {
-    let observer: IntersectionObserver | null = null;
-
-    // 페이지 로드 직후에는 트리거하지 않도록 1초 대기
-    const delay = setTimeout(() => {
-      observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting && !scooterStarted) {
-            setScooterStarted(true);
-          }
-        },
-        { threshold: 0.2 }
-      );
-
-      if (sectionRef.current) {
-        observer.observe(sectionRef.current);
-      }
-    }, 1000);
-
-    return () => {
-      clearTimeout(delay);
-      if (observer) observer.disconnect();
-    };
-  }, [scooterStarted]);
 
   // 헬퍼 동적 업데이트
   const updateHelpers = useCallback(() => {
@@ -287,59 +244,6 @@ export default function SecondHeroBanner() {
 
   return (
     <section ref={sectionRef} className="py-6 md:py-10 relative">
-      {/* 오토바이 - 모바일: 왼쪽에 고정, 데스크톱: 애니메이션 */}
-      <div
-        className="absolute pointer-events-none z-50"
-        style={{
-          top: '50%',
-          left: 0,
-          right: 0,
-          transform: 'translateY(-50%)',
-          overflow: 'visible',
-        }}
-      >
-        {/* 모바일: 고정 위치 (왼쪽에 반만 걸침) */}
-        <div
-          className="absolute flex items-center md:hidden"
-          style={{ transform: 'translateX(-80px)' }}
-        >
-          <MotorcycleIcon />
-        </div>
-
-        {/* 데스크톱: 애니메이션 */}
-        <div
-          className="absolute hidden md:flex items-center"
-          style={{
-            transform: scooterStarted ? undefined : 'translateX(-150px)',
-            animation: scooterStarted ? 'scooter-enter 7s ease-out forwards' : 'none',
-          }}
-          onAnimationEnd={() => setScooterStopped(true)}
-        >
-          {/* 연기 효과 - 스쿠터가 정지하면 멈춤 */}
-          {!scooterStopped && (
-            <div className="absolute -left-16 flex items-center gap-1">
-              <div
-                className="w-10 h-10 rounded-full bg-gray-400/70"
-                style={{ animation: 'smoke-puff 0.8s ease-out infinite' }}
-              />
-              <div
-                className="w-8 h-8 rounded-full bg-gray-400/60"
-                style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.15s' }}
-              />
-              <div
-                className="w-12 h-12 rounded-full bg-gray-400/50"
-                style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.3s' }}
-              />
-              <div
-                className="w-8 h-8 rounded-full bg-gray-400/40"
-                style={{ animation: 'smoke-puff 0.8s ease-out infinite 0.45s' }}
-              />
-            </div>
-          )}
-          <MotorcycleIcon />
-        </div>
-      </div>
-
       <div className="container-1200">
         <div className="relative overflow-hidden rounded-2xl md:rounded-3xl bg-gray-900 border border-gray-800 shadow-2xl">
           {/* 배경 도트 패턴 */}
