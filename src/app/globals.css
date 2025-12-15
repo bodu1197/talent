@@ -17,10 +17,10 @@
      ======================================== */
 }
 
-/* Global Base Styles - Pretendard CDN (Subset 버전) + 시스템 폰트 폴백 */
+/* Global Base Styles - 시스템 폰트 (LCP 최적화: 폰트 로딩 없음) */
 html,
 body {
-  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Segoe UI', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Segoe UI', Arial, sans-serif;
 }
 
 /* 모바일 수평 오버플로우 방지 */

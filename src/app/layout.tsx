@@ -196,12 +196,6 @@ export default async function RootLayout({
           rel="dns-prefetch"
           href={process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://supabase.co'}
         />
-        {/* Pretendard CDN - Subset 버전 (한글만, ~200KB) */}
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
-        />
         {/* LCP 최적화: 로고 이미지 preload */}
         <link rel="preload" href="/logo.png" as="image" type="image/png" />
         <link rel="preload" href="/icon.png" as="image" type="image/png" />
