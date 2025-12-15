@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 interface CategoryData {
@@ -57,15 +56,8 @@ interface Props {
 }
 
 export default function TrendingCategoriesClient({ categories }: Props) {
-  const [isAnimated, setIsAnimated] = useState(false);
-
-  // 마운트 후 애니메이션 시작
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsAnimated(true);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
+  // 애니메이션 제거 - 성능 최적화 (리플로우 방지)
+  const isAnimated = true;
 
   // 최대 ratio 값 (높이 계산용)
   const maxRatio = Math.max(...categories.map((c) => c.ratio));
