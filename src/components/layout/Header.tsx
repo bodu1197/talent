@@ -61,10 +61,10 @@ export default function Header() {
     <header className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-50">
       <div className="container-1200">
         <div className="flex items-center justify-between h-[60px] lg:h-20 gap-4">
-          {/* 로고 - 서버 컴포넌트로 분리하여 LCP 최적화 */}
+          {/* 로고 - LCP 디버깅: 모바일에서 완전 숨김 */}
           <Link
             href="/"
-            className="flex items-center gap-1.5 lg:gap-2 flex-shrink-0"
+            className="hidden lg:flex items-center gap-1.5 lg:gap-2 flex-shrink-0"
             aria-label="돌파구 홈으로 이동"
           >
             <Image
@@ -99,14 +99,8 @@ export default function Header() {
               iconClassName="w-5 h-5"
             />
           </div>
-          {/* 모바일 버전 - 로그인 사용자만 표시 */}
-          {user && (
-            <div className="lg:hidden flex items-center">
-              <Suspense fallback={<NotificationBellLoading />}>
-                <NotificationBell />
-              </Suspense>
-            </div>
-          )}
+          {/* 모바일 버전 알림 - LCP 디버깅: 완전 제거 */}
+          {/* LCP 테스트: 모바일 알림벨 제거됨 */}
           {/* PC 버전: 네비게이션 메뉴 */}
           <nav className="hidden lg:flex items-center space-x-6">
             {user ? (
