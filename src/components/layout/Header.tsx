@@ -61,7 +61,7 @@ export default function Header() {
     <header className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-50">
       <div className="container-1200">
         <div className="flex items-center justify-between h-[60px] lg:h-20 gap-4">
-          {/* 로고 */}
+          {/* 로고 - 서버 컴포넌트로 분리하여 LCP 최적화 */}
           <Link
             href="/"
             className="flex items-center gap-1.5 lg:gap-2 flex-shrink-0"
@@ -74,6 +74,7 @@ export default function Header() {
               height={32}
               className="h-7 w-7 lg:h-8 lg:w-8"
               priority
+              fetchPriority="high"
             />
             <Image
               src="/logo.png"
@@ -83,6 +84,7 @@ export default function Header() {
               className="h-7 lg:h-8 w-auto"
               sizes="(max-width: 1024px) 120px, 150px"
               priority
+              fetchPriority="high"
             />
           </Link>
           {/* 검색창 - PC에서만 표시 (메인 페이지 제외) */}

@@ -203,6 +203,17 @@ export default async function RootLayout({
           rel="dns-prefetch"
           href={process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://supabase.co'}
         />
+        {/* LCP 최적화: 로고 이미지 preload (12.6초 → 목표 2.5초 이하) */}
+        <link rel="preload" href="/logo.png" as="image" type="image/png" />
+        <link rel="preload" href="/icon.png" as="image" type="image/png" />
+        {/* 폰트 preload - 렌더링 차단 방지 */}
+        <link
+          rel="preload"
+          href="/fonts/PretendardVariable.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
         {!isAdminPage && !isMypagePage && (
           <>
             <script

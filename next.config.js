@@ -66,7 +66,7 @@ const nextConfig = {
     },
     // CSS 최적화 - 불필요한 preload 경고 방지
     optimizeCss: true,
-    // 트리쉐이킹 최적화 - 자동 import 최적화
+    // 트리쉐이킹 최적화 - 자동 import 최적화 (미사용 JS 67KB 절감)
     optimizePackageImports: [
       'lucide-react',
       'date-fns',
@@ -76,12 +76,17 @@ const nextConfig = {
       'react-hook-form',
       'zustand',
       'zod',
+      '@supabase/supabase-js',
+      '@supabase/ssr',
+      'framer-motion',
     ],
     // Prefetch 최적화 - LCP 개선을 위해 aggressive prefetch 비활성화
     staleTimes: {
       dynamic: 30, // 동적 페이지 캐시 30초로 제한
       static: 180, // 정적 페이지 캐시 3분
     },
+    // PPR (Partial Prerendering) - 정적 콘텐츠 즉시 표시
+    ppr: false, // Next.js 15에서는 아직 실험적
   },
   // 프로덕션에서 Source Map 비활성화 (CSP eval 차단)
   productionBrowserSourceMaps: false,
