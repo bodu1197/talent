@@ -1,43 +1,64 @@
-// Service Worker for push notifications
+// 돌파구 Service Worker
+// 오프라인 캐시 및 빠른 로딩을 위한 PWA
+
+const CACHE_NAME = 'dolpagu-v1';
+
+// 캐시할 파일들 (홈페이지 필수 리소스)
+const STATIC_ASSETS = ['/', '/manifest.json', '/icon-192x192.png', '/icon-512x512.png'];
+
+// 설치 시 정적 파일 캐시
 self.addEventListener('install', (event) => {
-  console.log('[Service Worker] Installing...');
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(STATIC_ASSETS);
+    })
+  );
   self.skipWaiting();
 });
 
+// 활성화 시 오래된 캐시 삭제
 self.addEventListener('activate', (event) => {
-  console.log('[Service Worker] Activated');
-  event.waitUntil(clients.claim());
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.filter((name) => name !== CACHE_NAME).map((name) => caches.delete(name))
+      );
+    })
+  );
+  self.clients.claim();
 });
 
-// 푸시 알림 수신
-self.addEventListener('push', (event) => {
-  console.log('[Service Worker] Push received');
-
-  const options = {
-    body: event.data ? event.data.text() : '새로운 메시지가 도착했습니다',
-    icon: '/favicon.ico',
-    badge: '/favicon.ico',
-    vibrate: [200, 100, 200],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: 1,
-    },
-  };
-
-  event.waitUntil(self.registration.showNotification('새 메시지', options));
-});
-
-// 알림 클릭 처리
-self.addEventListener('notificationclick', (event) => {
-  console.log('[Service Worker] Notification click');
-  event.notification.close();
-
-  event.waitUntil(clients.openWindow('/chat'));
-});
-
-// 백그라운드 동기화
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'refresh-unread-count') {
-    console.log('[Service Worker] Syncing unread count');
+// 네트워크 요청 가로채기 (Network First 전략)
+self.addEventListener('fetch', (event) => {
+  // API 요청은 캐시하지 않음
+  if (
+    event.request.url.includes('/api/') ||
+    event.request.url.includes('/rest/') ||
+    event.request.url.includes('supabase')
+  ) {
+    return;
   }
+
+  // GET 요청만 캐시
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
+  event.respondWith(
+    fetch(event.request)
+      .then((response) => {
+        // 성공적인 응답을 캐시에 저장
+        if (response.status === 200) {
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+        }
+        return response;
+      })
+      .catch(() => {
+        // 네트워크 실패 시 캐시에서 반환
+        return caches.match(event.request);
+      })
+  );
 });

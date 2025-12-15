@@ -1,0 +1,21 @@
+{
+  "name": "돌파구",
+  "short_name": "돌파구",
+  "description": "재능 마켓플레이스 - 전문가와 연결되세요",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f97316",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "shopping"],
+  "lang": "ko",
+  "dir": "ltr"
+}
