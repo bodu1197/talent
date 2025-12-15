@@ -61,10 +61,10 @@ export default function Header() {
     <header className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-50">
       <div className="container-1200">
         <div className="flex items-center justify-between h-[60px] lg:h-20 gap-4">
-          {/* 로고 - LCP 디버깅: 모바일에서 완전 숨김 */}
+          {/* 로고 */}
           <Link
             href="/"
-            className="hidden lg:flex items-center gap-1.5 lg:gap-2 flex-shrink-0"
+            className="flex items-center gap-1.5 lg:gap-2 flex-shrink-0"
             aria-label="돌파구 홈으로 이동"
           >
             <Image

@@ -6,7 +6,6 @@
 
 /* Fix text-size-adjust for better browser support */
 @layer base {
-
   html,
   :host {
     -webkit-text-size-adjust: 100%;
@@ -18,17 +17,10 @@
      ======================================== */
 }
 
-/* Global Base Styles - Pretendard font (로컬) */
+/* Global Base Styles - LCP 테스트: 시스템 폰트만 사용 (Pretendard 제거) */
 html,
 body {
-  font-family:
-    var(--font-pretendard),
-    'Pretendard',
-    -apple-system,
-    BlinkMacSystemFont,
-    system-ui,
-    Roboto,
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Segoe UI', Arial, sans-serif;
 }
 
 /* 모바일 수평 오버플로우 방지 */
@@ -94,7 +86,6 @@ body {
 }
 
 @keyframes bounce-click {
-
   0%,
   100% {
     transform: translateY(0);
@@ -114,7 +105,6 @@ body {
 }
 
 @keyframes shake {
-
   0%,
   100% {
     transform: translateX(0);
@@ -228,7 +218,6 @@ a:active,
 }
 
 @keyframes pulse {
-
   0%,
   100% {
     opacity: 1;
@@ -296,7 +285,6 @@ a:focus-visible {
 
 /* Reduced motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
-
   *,
   *::before,
   *::after {

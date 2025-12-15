@@ -1,17 +1,10 @@
 import type { Metadata, Viewport } from 'next';
 import { Suspense } from 'react';
-import localFont from 'next/font/local';
 import './globals.css';
 import dynamic from 'next/dynamic';
 
-// Pretendard Variable 폰트 (로컬) - LCP 최적화: preload false로 이중 로드 방지
-const pretendard = localFont({
-  src: '../../public/fonts/PretendardVariable.woff2',
-  display: 'swap', // 시스템 폰트 먼저 표시 → 폰트 로드 후 교체
-  weight: '100 900',
-  variable: '--font-pretendard',
-  preload: false, // 수동 preload에서 제어하여 중복 방지
-});
+/* LCP 테스트: Pretendard 폰트 완전 제거, 시스템 폰트 사용
+   시스템 폰트 스택: -apple-system, BlinkMacSystemFont, Arial, sans-serif */
 
 import { ErrorBoundary } from '@/components/providers/ErrorBoundary';
 import ToastProvider from '@/components/providers/ToastProvider';
@@ -184,7 +177,7 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang="ko" suppressHydrationWarning className={pretendard.variable}>
+    <html lang="ko" suppressHydrationWarning>
       <head>
         {/* Set window.__nonce__ for third-party libraries like goober */}
         <script
