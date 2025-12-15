@@ -76,7 +76,6 @@ const nextConfig = {
       'react-hook-form',
       'zustand',
       'zod',
-      '@supabase/supabase-js',
       '@supabase/ssr',
       'framer-motion',
     ],
