@@ -4,13 +4,13 @@ import localFont from 'next/font/local';
 import './globals.css';
 import dynamic from 'next/dynamic';
 
-// Pretendard Variable 폰트 (로컬)
+// Pretendard Variable 폰트 (로컬) - LCP 최적화: preload false로 이중 로드 방지
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
-  display: 'swap',
+  display: 'swap', // 시스템 폰트 먼저 표시 → 폰트 로드 후 교체
   weight: '100 900',
   variable: '--font-pretendard',
-  preload: true,
+  preload: false, // 수동 preload에서 제어하여 중복 방지
 });
 
 import { ErrorBoundary } from '@/components/providers/ErrorBoundary';
@@ -203,17 +203,10 @@ export default async function RootLayout({
           rel="dns-prefetch"
           href={process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://supabase.co'}
         />
-        {/* LCP 최적화: 로고 이미지 preload (12.6초 → 목표 2.5초 이하) */}
+        {/* LCP 최적화: 로고 이미지 preload */}
         <link rel="preload" href="/logo.png" as="image" type="image/png" />
         <link rel="preload" href="/icon.png" as="image" type="image/png" />
-        {/* 폰트 preload - 렌더링 차단 방지 */}
-        <link
-          rel="preload"
-          href="/fonts/PretendardVariable.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
+        {/* 폰트 preload 제거됨 - localFont()에서 처리, 중복 로드 방지 */}
         {!isAdminPage && !isMypagePage && (
           <>
             <script
