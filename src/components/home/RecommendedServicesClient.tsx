@@ -33,22 +33,30 @@ export default function RecommendedServicesClient({
     }
   }, [categories, activeTab]);
 
-  // 스크롤 상태 체크
+  // 스크롤 상태 체크 - requestAnimationFrame으로 강제 리플로우 방지
   useEffect(() => {
+    let rafId: number;
+
     const checkScroll = () => {
-      const container = tabContainerRef.current;
-      if (container) {
-        setShowLeftArrow(container.scrollLeft > 0);
-        setShowRightArrow(container.scrollLeft < container.scrollWidth - container.clientWidth - 5);
-      }
+      // requestAnimationFrame으로 레이아웃 읽기를 다음 프레임으로 지연
+      rafId = requestAnimationFrame(() => {
+        const container = tabContainerRef.current;
+        if (container) {
+          setShowLeftArrow(container.scrollLeft > 0);
+          setShowRightArrow(
+            container.scrollLeft < container.scrollWidth - container.clientWidth - 5
+          );
+        }
+      });
     };
 
     checkScroll();
     const container = tabContainerRef.current;
-    container?.addEventListener('scroll', checkScroll);
+    container?.addEventListener('scroll', checkScroll, { passive: true });
     window.addEventListener('resize', checkScroll);
 
     return () => {
+      cancelAnimationFrame(rafId);
       container?.removeEventListener('scroll', checkScroll);
       window.removeEventListener('resize', checkScroll);
     };
