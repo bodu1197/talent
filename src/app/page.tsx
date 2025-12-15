@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
-import { cookies } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
 import HeroWithCategories from '@/components/common/HeroWithCategories';
 import { Service } from '@/types';
@@ -27,32 +26,20 @@ const RecentViewedServices = dynamic(() => import('@/components/home/RecentViewe
 export const revalidate = 60;
 
 export default async function HomePage() {
-  // 1. 쿠키 기반 빠른 로그인 체크 (네트워크 요청 없음!)
-  const cookieStore = await cookies();
-  const hasAuthCookie = cookieStore
-    .getAll()
-    .some((cookie) => cookie.name.startsWith('sb-') && cookie.name.includes('-auth-token'));
+  const supabase = await createClient();
 
-  // 2. 로그인하지 않은 사용자는 getUser() 호출 스킵 (LCP 최적화!)
-  let user = null;
-  let aiCategoryIds: string[] = [];
+  // 병렬 처리로 데이터 로딩 속도 최적화 (Waterfall 방지)
+  const [
+    {
+      data: { user },
+    },
+    { data: aiCategories },
+  ] = await Promise.all([
+    supabase.auth.getUser(),
+    supabase.from('categories').select('id').eq('is_ai', true),
+  ]);
 
-  if (hasAuthCookie) {
-    // 로그인 사용자: getUser() + AI 카테고리 조회
-    const supabase = await createClient();
-    const [
-      {
-        data: { user: authUser },
-      },
-      { data: aiCategories },
-    ] = await Promise.all([
-      supabase.auth.getUser(),
-      supabase.from('categories').select('id').eq('is_ai', true),
-    ]);
-    user = authUser;
-    aiCategoryIds = aiCategories?.map((cat) => cat.id) || [];
-  }
-  // 로그인 안 한 사용자: Supabase 호출 없이 바로 렌더링!
+  const aiCategoryIds = aiCategories?.map((cat) => cat.id) || [];
 
   return (
     <div className="pb-0">
