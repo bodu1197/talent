@@ -1,6 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
 import Header from './Header';
 
 import Footer from './Footer';
@@ -14,6 +15,14 @@ interface ConditionalLayoutProps {
 
 export default function ConditionalLayout({ children, megaMenu }: ConditionalLayoutProps) {
   const pathname = usePathname();
+
+  // LCP 최적화: 클라이언트 Header가 마운트되면 서버 Header 숨김
+  useEffect(() => {
+    document.body.classList.add('client-header-loaded');
+    return () => {
+      document.body.classList.remove('client-header-loaded');
+    };
+  }, []);
 
   // 관리자 및 마이페이지에서 헤더/푸터 숨기기
   const hideLayout = pathname?.startsWith('/admin') || pathname?.startsWith('/mypage');

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Suspense } from 'react';
 import localFont from 'next/font/local';
+import Image from 'next/image';
 import './globals.css';
 import dynamic from 'next/dynamic';
 
@@ -234,6 +235,45 @@ export default async function RootLayout({
         )}
       </head>
       <body className="min-h-screen bg-gray-50 overflow-x-hidden">
+        {/* LCP 최적화: 서버 렌더링 로고 - JS 로딩 전에 즉시 표시 */}
+        {!isAdminPage && !isMypagePage && (
+          <div
+            id="server-header"
+            className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40 h-[60px] lg:h-20"
+          >
+            <div className="container-1200 h-full flex items-center">
+              <a href="/" className="flex items-center gap-1.5 lg:gap-2">
+                <Image
+                  src="/icon.png"
+                  alt=""
+                  width={32}
+                  height={32}
+                  className="h-7 w-7 lg:h-8 lg:w-8"
+                  priority
+                  fetchPriority="high"
+                />
+                <Image
+                  src="/logo.png"
+                  alt="돌파구"
+                  width={607}
+                  height={178}
+                  className="h-7 lg:h-8 w-auto"
+                  priority
+                  fetchPriority="high"
+                />
+              </a>
+            </div>
+          </div>
+        )}
+        {/* 서버 로고 숨기기 위한 스타일 - 클라이언트 Header 로드 후 */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              /* 클라이언트 Header가 로드되면 서버 Header 숨김 */
+              .client-header-loaded #server-header { display: none !important; }
+            `,
+          }}
+        />
         <ErrorBoundary>
           {!isAdminPage && !isMypagePage && (
             <Suspense fallback={null}>
