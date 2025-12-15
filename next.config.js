@@ -64,8 +64,8 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '10mb',
     },
-    // CSS 최적화 - 불필요한 preload 경고 방지
-    optimizeCss: true,
+    // CSS 최적화 비활성화 - preload 경고 해결
+    optimizeCss: false,
     // 트리쉐이킹 최적화 - 자동 import 최적화 (미사용 JS 67KB 절감)
     optimizePackageImports: [
       'lucide-react',
