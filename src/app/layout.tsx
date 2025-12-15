@@ -196,9 +196,7 @@ export default async function RootLayout({
           rel="dns-prefetch"
           href={process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://supabase.co'}
         />
-        {/* LCP 최적화: 로고 이미지 preload */}
-        <link rel="preload" href="/logo.png" as="image" type="image/png" />
-        <link rel="preload" href="/icon.png" as="image" type="image/png" />
+        {/* preload 제거: Header가 클라이언트 컴포넌트라 바로 사용되지 않음 */}
         {!isAdminPage && !isMypagePage && (
           <>
             <script
