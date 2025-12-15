@@ -203,6 +203,25 @@ export default async function RootLayout({
           rel="dns-prefetch"
           href={process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://supabase.co'}
         />
+        {/* Critical CSS - Above-the-fold 스타일 인라인 (렌더링 차단 방지) */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              /* Critical CSS - 즉시 적용 */
+              *,*::before,*::after{box-sizing:border-box}
+              html{-webkit-text-size-adjust:100%;line-height:1.5}
+              body{margin:0;min-height:100vh;background-color:#f9fafb;font-family:var(--font-pretendard),'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif}
+              /* Container */
+              .container-1200{max-width:1200px;margin-left:auto;margin-right:auto;padding-left:10px;padding-right:10px}
+              /* Above-the-fold 레이아웃 */
+              .min-h-screen{min-height:100vh}
+              .bg-gray-50{background-color:#f9fafb}
+              .bg-white{background-color:#fff}
+              .hidden{display:none}
+              @media(min-width:1024px){.lg\\:block{display:block}}
+            `,
+          }}
+        />
         {!isAdminPage && !isMypagePage && (
           <>
             <script
