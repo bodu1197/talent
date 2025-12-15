@@ -95,7 +95,6 @@ export default function TrendingCategoriesClient({ categories }: Props) {
           {categories.map((category, index) => {
             const barColor = barColors[index % barColors.length];
             const heightPercent = maxRatio > 0 ? (category.ratio / maxRatio) * 100 : 0;
-            const animatedHeight = isAnimated ? `${Math.max(heightPercent, 15)}%` : '0%';
             const isTop3 = index < 3;
 
             // 모바일에서는 5위까지만 표시
@@ -108,17 +107,18 @@ export default function TrendingCategoriesClient({ categories }: Props) {
                 prefetch={false}
                 className={`group flex flex-col items-center w-16 sm:w-16 md:w-16 lg:w-20 ${isMobileHidden ? 'hidden md:flex' : ''}`}
               >
-                {/* 막대 */}
+                {/* 막대 - scaleY 애니메이션으로 리플로우 방지 */}
                 <div className="relative w-12 sm:w-12 md:w-12 lg:w-14 h-28 sm:h-32 md:h-36 lg:h-44 flex items-end">
                   <div
                     className={`
-                      w-full bg-gradient-to-t ${barColor} rounded-t-lg
-                      transition-[height,transform] duration-1000 ease-out will-change-[height]
-                      group-hover:shadow-lg group-hover:scale-105
+                      w-full bg-gradient-to-t ${barColor} rounded-t-lg origin-bottom
+                      transition-transform duration-1000 ease-out
+                      group-hover:shadow-lg
                       ${isTop3 ? 'shadow-md' : ''}
                     `}
                     style={{
-                      height: animatedHeight,
+                      height: `${Math.max(heightPercent, 15)}%`,
+                      transform: isAnimated ? 'scaleY(1)' : 'scaleY(0)',
                       transitionDelay: `${index * 100}ms`,
                     }}
                   >
