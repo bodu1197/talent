@@ -1,31 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import {
-  Bot,
-  Palette,
-  Scissors,
-  Code,
-  Megaphone,
-  Camera,
-  Languages,
-  PenTool,
-  Briefcase,
-  BookOpen,
-  Music,
-  Calendar,
-  Sparkles,
-  Target,
-  Star,
-  Library,
-  Gavel,
-  Hammer,
-  GraduationCap,
-  TrendingUp,
-  Home,
-  Bike,
-  Circle,
-} from 'lucide-react';
+import { Circle } from 'lucide-react';
+import { CATEGORY_ICON_MAP } from '@/lib/categories/icons';
 
 interface Category {
   id: string;
@@ -41,32 +18,6 @@ interface Props {
   readonly brightColors: string[];
 }
 
-// Icon mapping using lookup table for O(1) access
-const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  robot: Bot,
-  palette: Palette,
-  scissors: Scissors,
-  code: Code,
-  bullhorn: Megaphone,
-  camera: Camera,
-  language: Languages,
-  'pen-fancy': PenTool,
-  briefcase: Briefcase,
-  book: BookOpen,
-  music: Music,
-  calendar: Calendar,
-  spa: Sparkles,
-  bullseye: Target,
-  star: Star,
-  'book-open': Library,
-  gavel: Gavel,
-  hammer: Hammer,
-  'graduation-cap': GraduationCap,
-  'chart-line': TrendingUp,
-  home: Home,
-  motorcycle: Bike,
-};
-
 function CategoryIcon({
   icon,
   color,
@@ -77,7 +28,7 @@ function CategoryIcon({
   size?: string;
 }) {
   const iconClass = `${size} ${color}`;
-  const IconComponent = (icon && ICON_MAP[icon]) || Circle;
+  const IconComponent = (icon && CATEGORY_ICON_MAP[icon]) || Circle;
   return <IconComponent className={iconClass} />;
 }
 

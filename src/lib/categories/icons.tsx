@@ -1,4 +1,7 @@
-import React from 'react';
+/**
+ * 카테고리 아이콘 매핑
+ * 카테고리 아이콘 문자열을 Lucide React 컴포넌트로 변환
+ */
 import {
   Bot,
   Palette,
@@ -22,11 +25,11 @@ import {
   TrendingUp,
   Home,
   Bike,
-  PersonStanding,
+  Activity,
   Circle,
 } from 'lucide-react';
 
-export const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+export const CATEGORY_ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   robot: Bot,
   palette: Palette,
   scissors: Scissors,
@@ -49,10 +52,10 @@ export const ICON_MAP: Record<string, React.ComponentType<{ className?: string }
   'chart-line': TrendingUp,
   home: Home,
   motorcycle: Bike,
-  running: PersonStanding,
+  running: Activity,
 };
 
-export function CategoryIcon({ icon }: Readonly<{ icon?: string }>) {
-  const IconComponent = (icon && ICON_MAP[icon]) || Circle;
-  return <IconComponent className="w-5 h-5" />;
+export function CategoryIcon({ icon, className }: { icon?: string; className?: string }) {
+  const IconComponent = (icon && CATEGORY_ICON_MAP[icon]) || Circle;
+  return <IconComponent className={className} />;
 }

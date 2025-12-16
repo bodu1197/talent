@@ -3,63 +3,12 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { CategoryItem } from '@/lib/categories';
-import {
-  Bot,
-  ChevronRight,
-  Flame,
-  Palette,
-  Scissors,
-  Code,
-  Megaphone,
-  Camera,
-  Languages,
-  PenTool,
-  Briefcase,
-  BookOpen,
-  Music,
-  Calendar,
-  Sparkles,
-  Target,
-  Star,
-  Library,
-  Gavel,
-  Hammer,
-  GraduationCap,
-  TrendingUp,
-  Home,
-  Bike,
-  Circle,
-} from 'lucide-react';
+import { CATEGORY_ICON_MAP } from '@/lib/categories/icons';
+import { ChevronRight, Flame, Circle, Bot } from 'lucide-react';
 
 interface MegaMenuProps {
   readonly categories: CategoryItem[];
 }
-
-// 아이콘 매핑 테이블 (O(1) 접근)
-const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  robot: Bot,
-  palette: Palette,
-  scissors: Scissors,
-  code: Code,
-  bullhorn: Megaphone,
-  camera: Camera,
-  language: Languages,
-  'pen-fancy': PenTool,
-  briefcase: Briefcase,
-  book: BookOpen,
-  music: Music,
-  calendar: Calendar,
-  spa: Sparkles,
-  bullseye: Target,
-  star: Star,
-  'book-open': Library,
-  gavel: Gavel,
-  hammer: Hammer,
-  'graduation-cap': GraduationCap,
-  'chart-line': TrendingUp,
-  home: Home,
-  motorcycle: Bike,
-};
 
 export default function MegaMenu({ categories }: MegaMenuProps) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -71,7 +20,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
   const renderIcon = (iconName?: string) => {
     if (!iconName) return null;
 
-    const IconComponent = ICON_MAP[iconName] || Circle;
+    const IconComponent = CATEGORY_ICON_MAP[iconName] || Circle;
     return <IconComponent className="w-5 h-5" aria-hidden="true" />;
   };
 

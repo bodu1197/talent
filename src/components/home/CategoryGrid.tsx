@@ -1,62 +1,11 @@
 import Link from 'next/link';
 import { getOnlyTopLevelCategories } from '@/lib/categories';
 import CategoryGridClient from './CategoryGridClient';
-import {
-  Bot,
-  Palette,
-  Scissors,
-  Code,
-  Megaphone,
-  Camera,
-  Languages,
-  PenTool,
-  Briefcase,
-  BookOpen,
-  Music,
-  Calendar,
-  Sparkles,
-  Target,
-  Star,
-  Library,
-  Gavel,
-  Hammer,
-  GraduationCap,
-  TrendingUp,
-  Home,
-  Bike,
-  Activity,
-  Circle,
-} from 'lucide-react';
-
-// Icon mapping using lookup table for O(1) access
-const ICON_MAP: Record<string, React.ComponentType> = {
-  robot: Bot,
-  palette: Palette,
-  scissors: Scissors,
-  code: Code,
-  bullhorn: Megaphone,
-  camera: Camera,
-  language: Languages,
-  'pen-fancy': PenTool,
-  briefcase: Briefcase,
-  book: BookOpen,
-  music: Music,
-  calendar: Calendar,
-  spa: Sparkles,
-  bullseye: Target,
-  star: Star,
-  'book-open': Library,
-  gavel: Gavel,
-  hammer: Hammer,
-  'graduation-cap': GraduationCap,
-  'chart-line': TrendingUp,
-  home: Home,
-  motorcycle: Bike,
-  running: Activity,
-};
+import { CATEGORY_ICON_MAP } from '@/lib/categories/icons';
+import { Circle } from 'lucide-react';
 
 function CategoryIcon({ icon }: Readonly<{ icon?: string }>) {
-  const IconComponent = (icon && ICON_MAP[icon]) || Circle;
+  const IconComponent = (icon && CATEGORY_ICON_MAP[icon]) || Circle;
   return <IconComponent />;
 }
 

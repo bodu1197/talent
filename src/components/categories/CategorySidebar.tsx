@@ -3,32 +3,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { CategoryItem } from '@/lib/categories';
-import {
-  Bot,
-  Palette,
-  Scissors,
-  Code,
-  Megaphone,
-  Camera,
-  Languages,
-  PenTool,
-  Briefcase,
-  BookOpen,
-  Music,
-  Calendar,
-  Sparkles,
-  Target,
-  Star,
-  Library,
-  Gavel,
-  Hammer,
-  GraduationCap,
-  TrendingUp,
-  Home,
-  Bike,
-  Circle,
-  ChevronRight,
-} from 'lucide-react';
+import { CATEGORY_ICON_MAP } from '@/lib/categories/icons';
+import { Circle, ChevronRight } from 'lucide-react';
 
 interface CategorySidebarProps {
   readonly categories: CategoryItem[];
@@ -36,33 +12,8 @@ interface CategorySidebarProps {
   readonly categoryPath: CategoryItem[];
 }
 
-const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  robot: Bot,
-  palette: Palette,
-  scissors: Scissors,
-  code: Code,
-  bullhorn: Megaphone,
-  camera: Camera,
-  language: Languages,
-  'pen-fancy': PenTool,
-  briefcase: Briefcase,
-  book: BookOpen,
-  music: Music,
-  calendar: Calendar,
-  spa: Sparkles,
-  bullseye: Target,
-  star: Star,
-  'book-open': Library,
-  gavel: Gavel,
-  hammer: Hammer,
-  'graduation-cap': GraduationCap,
-  'chart-line': TrendingUp,
-  home: Home,
-  motorcycle: Bike,
-};
-
 function getCategoryIcon(icon?: string) {
-  const IconComponent = (icon && ICON_MAP[icon]) || Circle;
+  const IconComponent = (icon && CATEGORY_ICON_MAP[icon]) || Circle;
   return <IconComponent className="w-5 h-5" />;
 }
 
