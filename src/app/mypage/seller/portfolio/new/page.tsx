@@ -3,7 +3,7 @@ import PortfolioNewClient from './PortfolioNewClient';
 
 export default async function PortfolioNewPage() {
   // 판매자 인증 확인
-  const { supabase } = await requireSellerAuth();
+  const { supabase, seller } = await requireSellerAuth();
 
   // 카테고리 목록 가져오기
   const { data: categories } = await supabase

@@ -107,7 +107,6 @@ export default async function ServiceStatisticsPage({
   if (!service) {
     logger.warn('[ServiceStatistics] 서비스 없음 - 리다이렉트:', {
       serviceId,
-      userId: user.id,
       error: serviceError,
     });
     redirect('/mypage/seller/services');
