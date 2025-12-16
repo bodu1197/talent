@@ -17,6 +17,23 @@ interface Notice {
   updated_at: string;
 }
 
+function getCategoryStyle(category: string) {
+  switch (category) {
+    case '공지':
+      return 'bg-brand-primary text-white';
+    case '이벤트':
+      return 'bg-green-100 text-green-800';
+    case '업데이트':
+      return 'bg-blue-100 text-blue-800';
+    case '점검':
+      return 'bg-yellow-100 text-yellow-800';
+    case '정책':
+      return 'bg-gray-100 text-gray-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
+  }
+}
+
 export default function NoticeDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -77,23 +94,6 @@ export default function NoticeDetailPage() {
 
     setNextNotice(nextData);
     setLoading(false);
-  }
-
-  function getCategoryStyle(category: string) {
-    switch (category) {
-      case '공지':
-        return 'bg-brand-primary text-white';
-      case '이벤트':
-        return 'bg-green-100 text-green-800';
-      case '업데이트':
-        return 'bg-blue-100 text-blue-800';
-      case '점검':
-        return 'bg-yellow-100 text-yellow-800';
-      case '정책':
-        return 'bg-gray-100 text-gray-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
   }
 
   if (loading) {

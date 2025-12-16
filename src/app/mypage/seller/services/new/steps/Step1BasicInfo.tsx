@@ -69,7 +69,7 @@ export default function Step1BasicInfo({ formData, setFormData }: Props) {
         } else {
           setLevel1Categories(data || []);
           // 1차 카테고리만 선택한 경우 복원 완료
-          if (isRestoring && formData.category_ids && formData.category_ids.length === 1) {
+          if (isRestoring && formData.category_ids?.length === 1) {
             setIsRestoring(false);
           }
         }

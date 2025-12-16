@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
 
     // 응답에서 거리와 시간 추출
     const route = data.routes?.[0];
-    if (!route || route.result_code !== 0) {
+    if (route?.result_code !== 0) {
       // 경로를 찾을 수 없는 경우 직선 거리 사용
       const straightDistance = calculateStraightDistance(originLat, originLng, destLat, destLng);
       const estimatedRoadDistance = straightDistance * 1.4;

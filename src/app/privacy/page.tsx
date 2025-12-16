@@ -153,20 +153,19 @@ export default function PrivacyPage() {
                       <p className="text-xs text-gray-600 leading-relaxed">{section.content}</p>
                     )}
 
-                    {section.subsections &&
-                      section.subsections.map((sub, subIdx) => (
-                        <div key={subIdx} className="mt-2">
-                          <h3 className="text-xs font-medium text-gray-700 mb-1">{sub.subtitle}</h3>
-                          <ul className="space-y-1">
-                            {sub.items.map((item, itemIdx) => (
-                              <li key={itemIdx} className="text-xs text-gray-600 flex gap-2">
-                                <span className="text-gray-400">•</span>
-                                {item}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
+                    {section.subsections?.map((sub, subIdx) => (
+                      <div key={subIdx} className="mt-2">
+                        <h3 className="text-xs font-medium text-gray-700 mb-1">{sub.subtitle}</h3>
+                        <ul className="space-y-1">
+                          {sub.items.map((item, itemIdx) => (
+                            <li key={itemIdx} className="text-xs text-gray-600 flex gap-2">
+                              <span className="text-gray-400">•</span>
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
 
                     {section.items && (
                       <ul className="space-y-1 mt-2">

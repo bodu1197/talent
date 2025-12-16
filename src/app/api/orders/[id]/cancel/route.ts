@@ -109,11 +109,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     // 결제가 완료된 주문인 경우 PortOne 환불 처리
     const payment = order.payments?.[0];
-    if (
-      payment &&
-      payment.payment_id &&
-      (order.status === 'paid' || order.status === 'in_progress')
-    ) {
+    if (payment?.payment_id && (order.status === 'paid' || order.status === 'in_progress')) {
       const cancelResult = await cancelPaymentOnPortOne(payment.payment_id, cancel_reason.trim());
 
       if (!cancelResult.success) {

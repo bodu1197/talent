@@ -57,7 +57,7 @@ export default function MobilePackageSelector({
   // 활성화된 패키지만 필터링하고 정렬
   const activePackages = PACKAGE_TYPE_ORDER.map((type) =>
     packages.find((pkg) => pkg.package_type === type)
-  ).filter((pkg): pkg is ServicePackage => pkg !== undefined && pkg.is_active);
+  ).filter((pkg): pkg is ServicePackage => pkg?.is_active === true);
 
   const [selectedType, setSelectedType] = useState<PackageType>(
     activePackages[0]?.package_type || 'standard'
