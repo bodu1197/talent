@@ -27,10 +27,11 @@ interface Props {
   isBusiness?: boolean;
 }
 
-// VAT 포함 가격 계산 함수
-const calculateDisplayPrice = (price: number, isBusiness: boolean): number => {
-  return isBusiness ? Math.floor(price * 1.1) : price;
-};
+// VAT 포함 가격 계산 함수 (사업자용)
+const calculateBusinessPrice = (price: number): number => Math.floor(price * 1.1);
+
+// VAT 미포함 가격 계산 함수 (일반 소비자용)
+const calculateConsumerPrice = (price: number): number => price;
 
 export default function ServicePackageSelector({
   serviceId,
@@ -100,7 +101,11 @@ export default function ServicePackageSelector({
     <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
       <div className="p-5">
         <div className="text-xl font-semibold mb-1">
-          {calculateDisplayPrice(servicePrice, isBusiness).toLocaleString()}원
+          {(isBusiness
+            ? calculateBusinessPrice(servicePrice)
+            : calculateConsumerPrice(servicePrice)
+          ).toLocaleString()}
+          원
         </div>
         {isBusiness && (
           <div className="text-xs text-gray-500 mb-1">

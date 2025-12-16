@@ -29,10 +29,11 @@ interface Props {
   isBusiness?: boolean; // 사업자 여부 (VAT 계산용)
 }
 
-// VAT 포함 가격 계산 함수
-const calculateDisplayPrice = (price: number, isBusiness: boolean): number => {
-  return isBusiness ? Math.floor(price * 1.1) : price;
-};
+// VAT 포함 가격 계산 함수 (사업자용)
+const calculateBusinessPrice = (price: number): number => Math.floor(price * 1.1);
+
+// VAT 미포함 가격 계산 함수 (일반 소비자용)
+const calculateConsumerPrice = (price: number): number => price;
 
 export default function MobilePackageSelector({
   serviceId,
@@ -203,7 +204,11 @@ export default function MobilePackageSelector({
             <div className="px-4 py-4 bg-gray-50 border-t border-gray-100">
               {/* 가격 */}
               <div className="text-xl font-bold text-brand-primary mb-1">
-                {calculateDisplayPrice(selectedPackage.price, isBusiness).toLocaleString()}원
+                {(isBusiness
+                  ? calculateBusinessPrice(selectedPackage.price)
+                  : calculateConsumerPrice(selectedPackage.price)
+                ).toLocaleString()}
+                원
               </div>
               {isBusiness && (
                 <div className="text-xs text-gray-500 mb-2">
@@ -253,7 +258,11 @@ export default function MobilePackageSelector({
       {!hasPackages && (
         <div className="lg:hidden bg-white px-4 py-3 border-b border-gray-100">
           <div className="text-lg font-semibold text-brand-primary">
-            {calculateDisplayPrice(servicePrice, isBusiness).toLocaleString()}원
+            {(isBusiness
+              ? calculateBusinessPrice(servicePrice)
+              : calculateConsumerPrice(servicePrice)
+            ).toLocaleString()}
+            원
           </div>
           {isBusiness && (
             <div className="text-xs text-gray-500">

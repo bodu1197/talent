@@ -19,10 +19,11 @@ interface Props {
   isBusiness?: boolean; // 사업자 여부 (VAT 계산용)
 }
 
-// VAT 포함 가격 계산 함수
-const calculateDisplayPrice = (price: number, isBusiness: boolean): number => {
-  return isBusiness ? Math.floor(price * 1.1) : price;
-};
+// VAT 포함 가격 계산 함수 (사업자용)
+const calculateBusinessPrice = (price: number): number => Math.floor(price * 1.1);
+
+// VAT 미포함 가격 계산 함수 (일반 소비자용)
+const calculateConsumerPrice = (price: number): number => price;
 
 export default function PackageSelector({
   packages,
@@ -85,7 +86,11 @@ export default function PackageSelector({
           {/* 가격 */}
           <div className="mb-4">
             <span className="text-base font-semibold text-gray-900">
-              {formatPrice(calculateDisplayPrice(selectedPackage.price, isBusiness))}
+              {formatPrice(
+                isBusiness
+                  ? calculateBusinessPrice(selectedPackage.price)
+                  : calculateConsumerPrice(selectedPackage.price)
+              )}
             </span>
             <span className="text-gray-600 ml-1">원</span>
             {isBusiness && (
