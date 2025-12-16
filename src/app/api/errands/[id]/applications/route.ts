@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServiceRoleClient } from '@/lib/supabase/server';
+import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 import { logServerError } from '@/lib/rollbar/server';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { requireLogin, getUserProfileId } from '@/lib/api/auth';
