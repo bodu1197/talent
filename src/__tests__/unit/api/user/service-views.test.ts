@@ -40,9 +40,10 @@ describe('Service Views API', () => {
       });
 
       const response = await POST(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(401);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(401);
       expect(data.error).toBe('Unauthorized');
     });
 
@@ -58,9 +59,10 @@ describe('Service Views API', () => {
       });
 
       const response = await POST(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(400);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(400);
       expect(data.error).toBe('Missing serviceId');
     });
 
@@ -82,9 +84,10 @@ describe('Service Views API', () => {
       });
 
       const response = await POST(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(200);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(200);
       expect(data.message).toBe('Service view tracked successfully');
     });
 
@@ -106,9 +109,10 @@ describe('Service Views API', () => {
       });
 
       const response = await POST(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(500);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(500);
       expect(data.error).toBe('Failed to track service view');
     });
 
@@ -121,9 +125,10 @@ describe('Service Views API', () => {
       });
 
       const response = await POST(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(500);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(500);
       expect(data.error).toBe('Internal server error');
     });
   });
@@ -138,9 +143,10 @@ describe('Service Views API', () => {
       const request = new NextRequest('http://localhost:3000/api/user/service-views');
 
       const response = await GET(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(401);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(401);
       expect(data.error).toBe('Unauthorized');
     });
 
@@ -167,9 +173,10 @@ describe('Service Views API', () => {
       const request = new NextRequest('http://localhost:3000/api/user/service-views');
 
       const response = await GET(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(200);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(200);
       expect(data.data).toHaveLength(2);
     });
 
@@ -213,9 +220,10 @@ describe('Service Views API', () => {
       const request = new NextRequest('http://localhost:3000/api/user/service-views');
 
       const response = await GET(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(500);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(500);
       expect(data.error).toBe('Failed to fetch service views');
     });
 
@@ -225,9 +233,10 @@ describe('Service Views API', () => {
       const request = new NextRequest('http://localhost:3000/api/user/service-views');
 
       const response = await GET(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(500);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(500);
       expect(data.error).toBe('Internal server error');
     });
   });

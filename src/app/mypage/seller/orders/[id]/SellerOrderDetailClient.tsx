@@ -98,7 +98,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
         setLoading(true);
         setError(null);
       },
-      onSuccess: (order) => setOrder(order as OrderDetail),
+      onSuccess: (order) => setOrder(order as OrderData),
       onError: (error) => setError(error),
       onFinally: () => setLoading(false),
     });

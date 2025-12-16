@@ -40,9 +40,10 @@ describe('Service Favorites API', () => {
       });
 
       const response = await POST(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(401);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(401);
       expect(data.error).toBe('Unauthorized');
     });
 
@@ -58,9 +59,10 @@ describe('Service Favorites API', () => {
       });
 
       const response = await POST(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(400);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(400);
       expect(data.error).toBe('Missing serviceId');
     });
 
@@ -101,9 +103,10 @@ describe('Service Favorites API', () => {
       });
 
       const response = await POST(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(201);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(201);
       expect(data.message).toBe('Added to favorites');
     });
 
@@ -125,9 +128,10 @@ describe('Service Favorites API', () => {
       });
 
       const response = await POST(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(200);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(200);
       expect(data.message).toBe('Already favorited');
     });
   });
@@ -144,9 +148,10 @@ describe('Service Favorites API', () => {
       );
 
       const response = await DELETE(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(401);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(401);
       expect(data.error).toBe('Unauthorized');
     });
 
@@ -159,9 +164,10 @@ describe('Service Favorites API', () => {
       const request = new NextRequest('http://localhost:3000/api/user/service-favorites');
 
       const response = await DELETE(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(400);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(400);
       expect(data.error).toBe('Missing serviceId');
     });
 
@@ -205,9 +211,10 @@ describe('Service Favorites API', () => {
       );
 
       const response = await DELETE(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(200);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(200);
       expect(data.message).toBe('Removed from favorites');
     });
   });
@@ -222,9 +229,10 @@ describe('Service Favorites API', () => {
       const request = new NextRequest('http://localhost:3000/api/user/service-favorites');
 
       const response = await GET(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(401);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(401);
       expect(data.error).toBe('Unauthorized');
     });
 
@@ -250,9 +258,10 @@ describe('Service Favorites API', () => {
       const request = new NextRequest('http://localhost:3000/api/user/service-favorites');
 
       const response = await GET(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(200);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(200);
       expect(data.data).toHaveLength(2);
     });
 
@@ -273,9 +282,10 @@ describe('Service Favorites API', () => {
       const request = new NextRequest('http://localhost:3000/api/user/service-favorites');
 
       const response = await GET(request);
-      const data = await response.json();
 
-      expect(response.status).toBe(500);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(500);
       expect(data.error).toBe('Failed to fetch favorites');
     });
   });

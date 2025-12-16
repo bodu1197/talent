@@ -41,9 +41,10 @@ describe('Order Revision API', () => {
       });
 
       const response = await POST(request, { params: Promise.resolve({ id: 'order-1' }) });
-      const data = await response.json();
 
-      expect(response.status).toBe(401);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(401);
       expect(data.error).toBe('인증이 필요합니다');
     });
 
@@ -59,9 +60,10 @@ describe('Order Revision API', () => {
       });
 
       const response = await POST(request, { params: Promise.resolve({ id: 'order-1' }) });
-      const data = await response.json();
 
-      expect(response.status).toBe(400);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(400);
       expect(data.error).toBe('수정 요청 사유가 필요합니다');
     });
 
@@ -77,9 +79,10 @@ describe('Order Revision API', () => {
       });
 
       const response = await POST(request, { params: Promise.resolve({ id: 'order-1' }) });
-      const data = await response.json();
 
-      expect(response.status).toBe(400);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(400);
       expect(data.error).toBe('수정 요청 사유가 필요합니다');
     });
 
@@ -103,9 +106,10 @@ describe('Order Revision API', () => {
       });
 
       const response = await POST(request, { params: Promise.resolve({ id: 'order-1' }) });
-      const data = await response.json();
 
-      expect(response.status).toBe(404);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(404);
       expect(data.error).toBe('주문을 찾을 수 없습니다');
     });
 
@@ -130,9 +134,10 @@ describe('Order Revision API', () => {
       });
 
       const response = await POST(request, { params: Promise.resolve({ id: 'order-1' }) });
-      const data = await response.json();
 
-      expect(response.status).toBe(403);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(403);
       expect(data.error).toBe('권한이 없습니다');
     });
 
@@ -174,9 +179,10 @@ describe('Order Revision API', () => {
       });
 
       const response = await POST(request, { params: Promise.resolve({ id: 'order-1' }) });
-      const data = await response.json();
 
-      expect(response.status).toBe(200);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(200);
       expect(data.success).toBe(true);
     });
 
@@ -211,9 +217,10 @@ describe('Order Revision API', () => {
       });
 
       const response = await POST(request, { params: Promise.resolve({ id: 'order-1' }) });
-      const data = await response.json();
 
-      expect(response.status).toBe(500);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(500);
       expect(data.error).toBe('수정 요청에 실패했습니다');
     });
 
@@ -226,9 +233,10 @@ describe('Order Revision API', () => {
       });
 
       const response = await POST(request, { params: Promise.resolve({ id: 'order-1' }) });
-      const data = await response.json();
 
-      expect(response.status).toBe(500);
+      expect(response).toBeDefined();
+      const data = await response!.json();
+      expect(response!.status).toBe(500);
       expect(data.error).toBe('서버 오류가 발생했습니다');
     });
   });

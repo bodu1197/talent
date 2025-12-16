@@ -1946,6 +1946,228 @@ export type Database = {
           },
         ];
       };
+      order_settlements: {
+        Row: {
+          created_at: string | null;
+          id: string;
+          net_amount: number;
+          order_amount: number;
+          order_id: string;
+          pg_fee: number;
+          platform_fee: number;
+          seller_id: string;
+          status: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          id?: string;
+          net_amount: number;
+          order_amount: number;
+          order_id: string;
+          pg_fee: number;
+          platform_fee: number;
+          seller_id: string;
+          status?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          id?: string;
+          net_amount?: number;
+          order_amount?: number;
+          order_id?: string;
+          pg_fee?: number;
+          platform_fee?: number;
+          seller_id?: string;
+          status?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'order_settlements_order_id_fkey';
+            columns: ['order_id'];
+            isOneToOne: false;
+            referencedRelation: 'orders';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'order_settlements_seller_id_fkey';
+            columns: ['seller_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      payment_requests: {
+        Row: {
+          amount: number;
+          buyer_id: string;
+          created_at: string | null;
+          id: string;
+          order_id: string;
+          payment_key: string | null;
+          status: string | null;
+        };
+        Insert: {
+          amount: number;
+          buyer_id: string;
+          created_at?: string | null;
+          id?: string;
+          order_id: string;
+          payment_key?: string | null;
+          status?: string | null;
+        };
+        Update: {
+          amount?: number;
+          buyer_id?: string;
+          created_at?: string | null;
+          id?: string;
+          order_id?: string;
+          payment_key?: string | null;
+          status?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'payment_requests_buyer_id_fkey';
+            columns: ['buyer_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'payment_requests_order_id_fkey';
+            columns: ['order_id'];
+            isOneToOne: false;
+            referencedRelation: 'orders';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      seller_portfolio: {
+        Row: {
+          category_id: string | null;
+          created_at: string | null;
+          description: string;
+          id: string;
+          images: Json | null;
+          is_featured: boolean | null;
+          order_index: number | null;
+          seller_id: string;
+          tags: string[] | null;
+          title: string;
+          updated_at: string | null;
+          video_url: string | null;
+        };
+        Insert: {
+          category_id?: string | null;
+          created_at?: string | null;
+          description: string;
+          id?: string;
+          images?: Json | null;
+          is_featured?: boolean | null;
+          order_index?: number | null;
+          seller_id: string;
+          tags?: string[] | null;
+          title: string;
+          updated_at?: string | null;
+          video_url?: string | null;
+        };
+        Update: {
+          category_id?: string | null;
+          created_at?: string | null;
+          description?: string;
+          id?: string;
+          images?: Json | null;
+          is_featured?: boolean | null;
+          order_index?: number | null;
+          seller_id?: string;
+          tags?: string[] | null;
+          title?: string;
+          updated_at?: string | null;
+          video_url?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'seller_portfolio_category_id_fkey';
+            columns: ['category_id'];
+            isOneToOne: false;
+            referencedRelation: 'categories';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'seller_portfolio_seller_id_fkey';
+            columns: ['seller_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      service_favorites: {
+        Row: {
+          created_at: string | null;
+          service_id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string | null;
+          service_id: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string | null;
+          service_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'service_favorites_service_id_fkey';
+            columns: ['service_id'];
+            isOneToOne: false;
+            referencedRelation: 'services';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'service_favorites_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      service_views: {
+        Row: {
+          service_id: string;
+          user_id: string;
+          viewed_at: string | null;
+        };
+        Insert: {
+          service_id: string;
+          user_id: string;
+          viewed_at?: string | null;
+        };
+        Update: {
+          service_id?: string;
+          user_id?: string;
+          viewed_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'service_views_service_id_fkey';
+            columns: ['service_id'];
+            isOneToOne: false;
+            referencedRelation: 'services';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'service_views_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       tags: {
         Row: {
           created_at: string | null;

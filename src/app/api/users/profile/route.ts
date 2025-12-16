@@ -13,6 +13,9 @@ export async function PATCH(request: NextRequest) {
     }
 
     const { user } = authResult;
+    if (!user) {
+      return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    }
 
     const body = await request.json();
     const { name, profile_image } = body;
@@ -53,7 +56,6 @@ export async function PATCH(request: NextRequest) {
     // auth.users 메타데이터도 동기화 (자동 생성된 닉네임 덮어쓰기)
     const { error: authError } = await serviceClient.auth.admin.updateUserById(user.id, {
       user_metadata: {
-        ...user.user_metadata,
         name,
       },
     });

@@ -63,15 +63,12 @@ export async function POST(request: NextRequest) {
 // DELETE: 찜 취소
 export async function DELETE(request: NextRequest) {
   try {
-    const supabase = await createClient();
+    const authResult = await requireAuth();
+    if (!authResult.success) return authResult.error;
 
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { supabase, user } = authResult;
+    if (!supabase || !user) {
+      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -117,15 +114,12 @@ export async function DELETE(request: NextRequest) {
 // GET: 찜 목록 조회
 export async function GET(_request: NextRequest) {
   try {
-    const supabase = await createClient();
+    const authResult = await requireAuth();
+    if (!authResult.success) return authResult.error;
 
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { supabase, user } = authResult;
+    if (!supabase || !user) {
+      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
     }
 
     // 한 번의 쿼리로 favorites와 services join
