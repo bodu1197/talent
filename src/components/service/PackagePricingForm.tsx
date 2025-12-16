@@ -198,7 +198,10 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                   }}
                   className="flex items-center"
                 >
-                  <label className="relative inline-flex items-center cursor-pointer">
+                  <label
+                    aria-label={`${PACKAGE_TYPE_LABELS[type]} 활성화`}
+                    className="relative inline-flex items-center cursor-pointer"
+                  >
                     <input
                       type="checkbox"
                       checked={pkg.is_enabled}
@@ -249,7 +252,10 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                       {/* 패키지 제목 */}
                       <div>
                         <div className="flex items-center justify-between mb-2">
-                          <label className="text-sm font-medium text-gray-700">
+                          <label
+                            htmlFor={`${type}-title`}
+                            className="text-sm font-medium text-gray-700"
+                          >
                             패키지 제목 <span className="text-red-500">*</span>
                           </label>
                           <span
@@ -263,6 +269,7 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                           </span>
                         </div>
                         <input
+                          id={`${type}-title`}
                           type="text"
                           value={pkg.title || ''}
                           onChange={(e) => {
@@ -288,11 +295,15 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* 가격 */}
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label
+                            htmlFor={`${type}-price`}
+                            className="block text-sm font-medium text-gray-700 mb-2"
+                          >
                             가격 <span className="text-red-500">*</span>
                           </label>
                           <div className="relative">
                             <input
+                              id={`${type}-price`}
                               type="text"
                               value={formatPrice(pkg.price)}
                               onChange={(e) => handlePriceChange(type, e.target.value)}
@@ -308,11 +319,15 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
 
                         {/* 작업 기간 */}
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label
+                            htmlFor={`${type}-delivery-days`}
+                            className="block text-sm font-medium text-gray-700 mb-2"
+                          >
                             작업 기간 <span className="text-red-500">*</span>
                           </label>
                           <div className="relative">
                             <input
+                              id={`${type}-delivery-days`}
                               type="number"
                               value={pkg.delivery_days}
                               onChange={(e) =>
@@ -331,10 +346,10 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                       </div>
 
                       {/* 수정 횟수 */}
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <fieldset>
+                        <legend className="block text-sm font-medium text-gray-700 mb-2">
                           수정 횟수
-                        </label>
+                        </legend>
                         <div className="flex flex-wrap gap-2">
                           {[
                             { value: '0', label: '수정 불가' },
@@ -360,12 +375,15 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                             </button>
                           ))}
                         </div>
-                      </div>
+                      </fieldset>
 
                       {/* 패키지 간단 설명 */}
                       <div>
                         <div className="flex items-center justify-between mb-2">
-                          <label className="text-sm font-medium text-gray-700">
+                          <label
+                            htmlFor={`${type}-description`}
+                            className="text-sm font-medium text-gray-700"
+                          >
                             패키지 한줄 설명 <span className="text-red-500">*</span>
                           </label>
                           <span
@@ -379,6 +397,7 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                           </span>
                         </div>
                         <input
+                          id={`${type}-description`}
                           type="text"
                           value={pkg.description}
                           onChange={(e) => {
@@ -403,7 +422,10 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
 
                       {/* 포함 기능 */}
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label
+                          htmlFor={`${type}-features`}
+                          className="block text-sm font-medium text-gray-700 mb-2"
+                        >
                           포함 기능 <span className="text-red-500">*</span>
                         </label>
 
@@ -454,6 +476,7 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                         {/* 새 기능 추가 */}
                         <div className="flex gap-2">
                           <input
+                            id={`${type}-features`}
                             type="text"
                             value={newFeatures[type]}
                             onChange={(e) =>

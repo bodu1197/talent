@@ -612,7 +612,10 @@ export default function ErrandRiderRegisterPage() {
             <div className="space-y-5">
               {/* 신분증 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="id-card-upload"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   신분증 사본 <span className="text-red-500">*</span>
                 </label>
                 <p className="text-xs text-gray-500 mb-2">주민등록증, 운전면허증, 여권 중 1개</p>
@@ -661,6 +664,7 @@ export default function ErrandRiderRegisterPage() {
                   </button>
                 )}
                 <input
+                  id="id-card-upload"
                   ref={idCardRef}
                   type="file"
                   accept="image/*,.pdf"
@@ -672,7 +676,10 @@ export default function ErrandRiderRegisterPage() {
 
               {/* 본인 얼굴 사진 (셀카) */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="selfie-upload"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   본인 얼굴 사진 <span className="text-red-500">*</span>
                 </label>
                 <p className="text-xs text-gray-500 mb-2">
@@ -725,6 +732,7 @@ export default function ErrandRiderRegisterPage() {
                   </button>
                 )}
                 <input
+                  id="selfie-upload"
                   ref={selfieRef}
                   type="file"
                   accept="image/*"
@@ -736,7 +744,10 @@ export default function ErrandRiderRegisterPage() {
 
               {/* 범죄경력회보서 (성범죄경력 포함) */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="criminal-record-upload"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   범죄경력회보서 (성범죄경력 포함) <span className="text-red-500">*</span>
                 </label>
                 <p className="text-xs text-gray-500 mb-2">
@@ -793,6 +804,7 @@ export default function ErrandRiderRegisterPage() {
                   </button>
                 )}
                 <input
+                  id="criminal-record-upload"
                   ref={criminalRecordRef}
                   type="file"
                   accept="image/*,.pdf"
@@ -950,8 +962,12 @@ export default function ErrandRiderRegisterPage() {
             </div>
 
             <div className="space-y-3">
-              <label className="flex items-start gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+              <label
+                htmlFor="agree-terms"
+                className="flex items-start gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
                 <input
+                  id="agree-terms"
                   type="checkbox"
                   name="agree_terms"
                   checked={formData.agree_terms}
@@ -968,8 +984,12 @@ export default function ErrandRiderRegisterPage() {
                 </div>
               </label>
 
-              <label className="flex items-start gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+              <label
+                htmlFor="agree-privacy"
+                className="flex items-start gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
                 <input
+                  id="agree-privacy"
                   type="checkbox"
                   name="agree_privacy"
                   checked={formData.agree_privacy}
@@ -986,8 +1006,12 @@ export default function ErrandRiderRegisterPage() {
                 </div>
               </label>
 
-              <label className="flex items-start gap-3 p-3 border border-orange-200 bg-orange-50 rounded-lg cursor-pointer hover:bg-orange-100">
+              <label
+                htmlFor="agree-criminal-check"
+                className="flex items-start gap-3 p-3 border border-orange-200 bg-orange-50 rounded-lg cursor-pointer hover:bg-orange-100"
+              >
                 <input
+                  id="agree-criminal-check"
                   type="checkbox"
                   name="agree_criminal_check"
                   checked={formData.agree_criminal_check}

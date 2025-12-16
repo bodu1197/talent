@@ -143,10 +143,16 @@ export default function RequesterSettingsPage() {
 
                 {/* 이름 */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">이름</label>
+                  <label
+                    htmlFor="user-name"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    이름
+                  </label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
+                      id="user-name"
                       type="text"
                       value={settings.name}
                       onChange={(e) => setSettings({ ...settings, name: e.target.value })}
@@ -158,10 +164,16 @@ export default function RequesterSettingsPage() {
 
                 {/* 연락처 */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">연락처</label>
+                  <label
+                    htmlFor="user-phone"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    연락처
+                  </label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
+                      id="user-phone"
                       type="tel"
                       value={settings.phone}
                       onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
@@ -173,12 +185,16 @@ export default function RequesterSettingsPage() {
 
                 {/* 기본 주소 */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="user-default-address"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     기본 배달 주소
                   </label>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
+                      id="user-default-address"
                       type="text"
                       value={settings.defaultAddress}
                       onChange={(e) => setSettings({ ...settings, defaultAddress: e.target.value })}

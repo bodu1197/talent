@@ -200,10 +200,16 @@ export default function HelperSettingsPage() {
 
                 {/* 이름 */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">이름</label>
+                  <label
+                    htmlFor="helper-name"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    이름
+                  </label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
+                      id="helper-name"
                       type="text"
                       value={settings.name}
                       onChange={(e) => setSettings({ ...settings, name: e.target.value })}
@@ -215,10 +221,16 @@ export default function HelperSettingsPage() {
 
                 {/* 연락처 */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">연락처</label>
+                  <label
+                    htmlFor="helper-phone"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    연락처
+                  </label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
+                      id="helper-phone"
                       type="tel"
                       value={settings.phone}
                       onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
@@ -240,8 +252,10 @@ export default function HelperSettingsPage() {
               </div>
               <div className="p-4 space-y-4">
                 {/* 이동 수단 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">이동 수단</label>
+                <fieldset>
+                  <legend className="block text-sm font-medium text-gray-700 mb-2">
+                    이동 수단
+                  </legend>
                   <div className="grid grid-cols-4 gap-2">
                     {vehicleOptions.map((option) => (
                       <button
@@ -258,14 +272,20 @@ export default function HelperSettingsPage() {
                       </button>
                     ))}
                   </div>
-                </div>
+                </fieldset>
 
                 {/* 활동 지역 */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">활동 지역</label>
+                  <label
+                    htmlFor="helper-service-area"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    활동 지역
+                  </label>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
+                      id="helper-service-area"
                       type="text"
                       value={settings.serviceArea}
                       onChange={(e) => setSettings({ ...settings, serviceArea: e.target.value })}
@@ -276,10 +296,10 @@ export default function HelperSettingsPage() {
                 </div>
 
                 {/* 활동 요일 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                <fieldset>
+                  <legend className="block text-sm font-medium text-gray-700 mb-2">
                     활동 가능 요일
-                  </label>
+                  </legend>
                   <div className="flex gap-2">
                     {Object.entries(settings.availability).map(([day, active]) => (
                       <button
@@ -301,7 +321,7 @@ export default function HelperSettingsPage() {
                       </button>
                     ))}
                   </div>
-                </div>
+                </fieldset>
               </div>
             </div>
 
@@ -316,8 +336,14 @@ export default function HelperSettingsPage() {
               <div className="p-4 space-y-4">
                 {/* 은행 선택 */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">은행</label>
+                  <label
+                    htmlFor="helper-bank"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    은행
+                  </label>
                   <select
+                    id="helper-bank"
                     value={settings.bankAccount.bank}
                     onChange={(e) =>
                       setSettings({
@@ -338,8 +364,14 @@ export default function HelperSettingsPage() {
 
                 {/* 계좌번호 */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">계좌번호</label>
+                  <label
+                    htmlFor="helper-account-number"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    계좌번호
+                  </label>
                   <input
+                    id="helper-account-number"
                     type="text"
                     value={settings.bankAccount.accountNumber}
                     onChange={(e) =>
@@ -355,8 +387,14 @@ export default function HelperSettingsPage() {
 
                 {/* 예금주 */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">예금주</label>
+                  <label
+                    htmlFor="helper-account-holder"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    예금주
+                  </label>
                   <input
+                    id="helper-account-holder"
                     type="text"
                     value={settings.bankAccount.accountHolder}
                     onChange={(e) =>
