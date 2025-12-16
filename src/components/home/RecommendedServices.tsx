@@ -1,6 +1,7 @@
 import RecommendedServicesClient from './RecommendedServicesClient';
 import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 import { Service } from '@/types';
+import { buildRatingMap, formatServicesWithAdvertising } from '@/lib/services/service-helpers';
 
 interface RecommendedServicesProps {
   readonly aiCategoryIds: string[];
@@ -22,59 +23,6 @@ const EXCLUDED_CATEGORY_SLUGS = [
   'hobby-handmade', // 취미 · 핸드메이드
   'errands', // 심부름
 ];
-
-// 배열 랜덤 셔플 (Fisher-Yates)
-function shuffleArray<T>(array: T[]): void {
-  for (let i = array.length - 1; i > 0; i--) {
-    const arr = new Uint32Array(1);
-    crypto.getRandomValues(arr);
-    const j = Math.floor((arr[0] / 0xffffffff) * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
-
-// 리뷰 통계 맵 생성
-function buildRatingMap(
-  reviewStats: { service_id: string; rating: number }[] | null
-): Map<string, { sum: number; count: number }> {
-  const ratingMap = new Map<string, { sum: number; count: number }>();
-  if (!reviewStats) return ratingMap;
-
-  for (const review of reviewStats) {
-    const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
-    ratingMap.set(review.service_id, {
-      sum: current.sum + review.rating,
-      count: current.count + 1,
-    });
-  }
-  return ratingMap;
-}
-
-// 서비스 포맷 변환 (리뷰 통계 포함)
-function formatServicesWithRating(
-  services: Array<{ id: string; [key: string]: unknown }>,
-  ratingMap: Map<string, { sum: number; count: number }>,
-  advertisedServiceIds: Set<string>
-): Service[] {
-  // 광고 서비스와 일반 서비스 분리
-  const advertisedServices = services.filter((s) => advertisedServiceIds.has(s.id));
-  const regularServices = services.filter((s) => !advertisedServiceIds.has(s.id));
-
-  shuffleArray(advertisedServices);
-  shuffleArray(regularServices);
-
-  // 광고 서비스 우선 + 일반 서비스 (상위 15개)
-  const combinedServices = [...advertisedServices, ...regularServices].slice(0, 15);
-
-  return combinedServices.map((service) => {
-    const stats = ratingMap.get(service.id);
-    return {
-      ...service,
-      rating: stats && stats.count > 0 ? stats.sum / stats.count : 0,
-      review_count: stats?.count || 0,
-    } as unknown as Service;
-  });
-}
 
 export default async function RecommendedServices({ aiCategoryIds }: RecommendedServicesProps) {
   const supabase = await createClient();
@@ -210,7 +158,7 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
   for (const categoryId of Object.keys(servicesByCategory)) {
     const services = servicesByCategory[categoryId];
     if (services && services.length > 0) {
-      servicesByCategory[categoryId] = formatServicesWithRating(
+      servicesByCategory[categoryId] = formatServicesWithAdvertising(
         services as unknown as Array<{ id: string; [key: string]: unknown }>,
         ratingMap,
         advertisedServiceIds

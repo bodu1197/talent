@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { createClient } from '@/lib/supabase/server';
 import HeroWithCategories from '@/components/common/HeroWithCategories';
-import { Service } from '@/types';
+import { buildRatingMap, formatServicesWithRating } from '@/lib/services/service-helpers';
 
 // Above-the-fold: 즉시 로드 (LCP에 영향)
 // HeroWithCategories는 LCP에 영향을 주므로 즉시 로드
@@ -100,54 +100,6 @@ export default async function HomePage() {
       )}
     </div>
   );
-}
-
-// 배열 랜덤 셔플 (Fisher-Yates) - crypto 기반 보안 강화
-function shuffleArray<T>(array: T[]): void {
-  for (let i = array.length - 1; i > 0; i--) {
-    const arr = new Uint32Array(1);
-    crypto.getRandomValues(arr);
-    const j = Math.floor((arr[0] / 0xffffffff) * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
-
-// 리뷰 통계 맵 생성
-interface ReviewStat {
-  service_id: string;
-  rating: number;
-}
-
-function buildRatingMap(
-  reviewStats: ReviewStat[] | null
-): Map<string, { sum: number; count: number }> {
-  const ratingMap = new Map<string, { sum: number; count: number }>();
-  if (!reviewStats) return ratingMap;
-
-  for (const review of reviewStats) {
-    const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
-    ratingMap.set(review.service_id, {
-      sum: current.sum + review.rating,
-      count: current.count + 1,
-    });
-  }
-  return ratingMap;
-}
-
-// 서비스 최종 포맷 변환
-function formatServicesWithRating(
-  services: Array<{ id: string; orders_count?: number; [key: string]: unknown }>,
-  ratingMap: Map<string, { sum: number; count: number }>
-): Service[] {
-  return services.map((service) => {
-    const stats = ratingMap.get(service.id);
-    const rating = stats && stats.count > 0 ? stats.sum / stats.count : 0;
-    return {
-      ...service,
-      rating,
-      review_count: stats?.count || 0,
-    } as unknown as Service;
-  });
 }
 
 // AI 서비스 섹션 (서버 컴포넌트)
