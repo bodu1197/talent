@@ -14,6 +14,7 @@ export async function POST(request: NextRequest) {
     const { user, supabase, room_id } = authResult;
 
     // 기존 즐겨찾기 확인
+    // @ts-expect-error - chat_favorites table exists but not in generated types yet
     const { data: existingFavorite } = await supabase
       .from('chat_favorites')
       .select('id')
@@ -23,6 +24,7 @@ export async function POST(request: NextRequest) {
 
     if (existingFavorite) {
       // 즐겨찾기 제거
+      // @ts-expect-error - chat_favorites table exists but not in generated types yet
       const { error } = await supabase
         .from('chat_favorites')
         .delete()
@@ -36,6 +38,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ is_favorite: false });
     } else {
       // 즐겨찾기 추가
+      // @ts-expect-error - chat_favorites table exists but not in generated types yet
       const { error } = await supabase.from('chat_favorites').insert({ user_id: user.id, room_id });
 
       if (error) {
