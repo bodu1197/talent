@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react';
 import ErrandMypageLayout from '@/components/errands/ErrandMypageLayout';
 import { useAuth } from '@/components/providers/AuthProvider';
-import ProfileImage from '@/components/common/ProfileImage';
-import { User, Phone, MapPin, Bell, Shield, ChevronRight, Save, Camera, Check } from 'lucide-react';
+import SettingsLoadingState from '@/components/errands/SettingsLoadingState';
+import ProfileSection from '@/components/errands/ProfileSection';
+import { MapPin, Bell, Shield, ChevronRight, Save, Check } from 'lucide-react';
 
 interface UserSettings {
   name: string;
@@ -115,75 +116,26 @@ export default function RequesterSettingsPage() {
         </div>
 
         {loading ? (
-          <div className="bg-white rounded-xl p-8 text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-600 border-t-transparent mx-auto" />
-            <p className="mt-4 text-gray-500">불러오는 중...</p>
-          </div>
+          <SettingsLoadingState />
         ) : (
           <div className="space-y-6">
             {/* 프로필 정보 */}
+            <ProfileSection
+              profile={profile}
+              userEmail={user?.email}
+              name={settings.name}
+              phone={settings.phone}
+              onNameChange={(value) => setSettings({ ...settings, name: value })}
+              onPhoneChange={(value) => setSettings({ ...settings, phone: value })}
+              idPrefix="user"
+            />
+
+            {/* 기본 배달 주소 */}
             <div className="bg-white rounded-xl shadow-sm overflow-hidden">
               <div className="p-4 border-b border-gray-100">
-                <h2 className="font-bold text-gray-900">프로필 정보</h2>
+                <h2 className="font-bold text-gray-900">배달 설정</h2>
               </div>
-              <div className="p-4 space-y-4">
-                {/* 프로필 이미지 */}
-                <div className="flex items-center gap-4">
-                  <div className="relative">
-                    <ProfileImage src={profile?.profile_image} alt={settings.name} size={64} />
-                    <button className="absolute bottom-0 right-0 w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white">
-                      <Camera className="w-3 h-3" />
-                    </button>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">{settings.name || '이름 없음'}</p>
-                    <p className="text-sm text-gray-500">{user?.email}</p>
-                  </div>
-                </div>
-
-                {/* 이름 */}
-                <div>
-                  <label
-                    htmlFor="user-name"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    이름
-                  </label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      id="user-name"
-                      type="text"
-                      value={settings.name}
-                      onChange={(e) => setSettings({ ...settings, name: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="이름을 입력하세요"
-                    />
-                  </div>
-                </div>
-
-                {/* 연락처 */}
-                <div>
-                  <label
-                    htmlFor="user-phone"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    연락처
-                  </label>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      id="user-phone"
-                      type="tel"
-                      value={settings.phone}
-                      onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="010-0000-0000"
-                    />
-                  </div>
-                </div>
-
-                {/* 기본 주소 */}
+              <div className="p-4">
                 <div>
                   <label
                     htmlFor="user-default-address"
