@@ -150,8 +150,11 @@ export default function PartnerTermsPage() {
         <div className="container-1200 px-4">
           <div className="max-w-3xl mx-auto">
             <div className="bg-white rounded-lg border border-gray-200 p-6 space-y-6">
-              {sections.map((section, index) => (
-                <div key={index} className="border-b border-gray-100 pb-5 last:border-0 last:pb-0">
+              {sections.map((section) => (
+                <div
+                  key={section.title}
+                  className="border-b border-gray-100 pb-5 last:border-0 last:pb-0"
+                >
                   <h2 className="text-sm font-semibold text-gray-900 mb-2">{section.title}</h2>
                   {section.content && (
                     <p className="text-xs text-gray-600 leading-relaxed">{section.content}</p>
@@ -159,7 +162,10 @@ export default function PartnerTermsPage() {
                   {section.list && (
                     <ol className="space-y-1.5 mt-2">
                       {section.list.map((item, idx) => (
-                        <li key={idx} className="text-xs text-gray-600 leading-relaxed flex gap-2">
+                        <li
+                          key={`${section.title}-${idx}`}
+                          className="text-xs text-gray-600 leading-relaxed flex gap-2"
+                        >
                           <span className="text-gray-400 flex-shrink-0">{idx + 1}.</span>
                           {item}
                         </li>

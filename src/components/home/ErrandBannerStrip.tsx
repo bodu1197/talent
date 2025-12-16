@@ -18,6 +18,13 @@ const MotorcycleIcon = () => (
 
 // 광고 카피
 const COPY_TEXT = '귀찮은 일 모두 돌파구에 맡겨 주세요';
+// Generate unique keys for each character
+const COPY_CHARS = COPY_TEXT.split('').map((char, index) => ({
+  char,
+  key: `char-${index}-${char}`,
+  isSpace: char === ' ',
+  isHighlight: char === '돌' || char === '파' || char === '구',
+}));
 
 export default function ErrandBannerStrip() {
   const [scooterStarted, setScooterStarted] = useState(false);
@@ -166,17 +173,14 @@ export default function ErrandBannerStrip() {
           <div className="flex flex-col items-center justify-center py-8 min-h-[120px] md:hidden relative z-40">
             {/* 글자 - 가로 한줄, 가독성 있는 큰 폰트 */}
             <div className="flex items-center justify-center flex-wrap mb-4">
-              {COPY_TEXT.split('').map((char, index) => {
-                const isSpace = char === ' ';
-                const isHighlight = char === '돌' || char === '파' || char === '구';
-
+              {COPY_CHARS.map(({ char, key, isSpace, isHighlight }) => {
                 if (isSpace) {
-                  return <span key={index} className="w-1.5" />;
+                  return <span key={key} className="w-1.5" />;
                 }
 
                 return (
                   <span
-                    key={index}
+                    key={key}
                     className="font-bold text-base"
                     style={{
                       textShadow: '0 2px 8px rgba(0,0,0,0.8)',
@@ -206,17 +210,14 @@ export default function ErrandBannerStrip() {
             {/* 글자들 - 항상 보이는 상태, 마스크에 의해 가려짐 */}
             <div className="flex items-center justify-center h-24">
               <div className="flex items-center">
-                {COPY_TEXT.split('').map((char, index) => {
-                  const isSpace = char === ' ';
-                  const isHighlight = char === '돌' || char === '파' || char === '구';
-
+                {COPY_CHARS.map(({ char, key, isSpace, isHighlight }) => {
                   if (isSpace) {
-                    return <span key={index} className="w-3 lg:w-4" />;
+                    return <span key={key} className="w-3 lg:w-4" />;
                   }
 
                   return (
                     <span
-                      key={index}
+                      key={key}
                       className="font-bold text-3xl lg:text-4xl"
                       style={{
                         textShadow: '0 2px 10px rgba(0,0,0,0.5)',

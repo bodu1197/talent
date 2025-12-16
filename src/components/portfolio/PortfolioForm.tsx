@@ -374,7 +374,7 @@ export default function PortfolioForm({
           {existingImages.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {existingImages.map((url, index) => (
-                <div key={`existing-${index}`} className="relative">
+                <div key={`existing-${url}`} className="relative">
                   <img
                     src={url}
                     alt={`기존 이미지 ${index + 1}`}
@@ -396,7 +396,7 @@ export default function PortfolioForm({
           {imagePreviews.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {imagePreviews.map((preview, index) => (
-                <div key={`new-${index}`} className="relative">
+                <div key={`new-${preview}`} className="relative">
                   <img
                     src={preview}
                     alt={`새 이미지 ${index + 1}`}
