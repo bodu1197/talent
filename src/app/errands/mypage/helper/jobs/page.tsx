@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import ErrandMypageLayout from '@/components/errands/ErrandMypageLayout';
 import { useAuth } from '@/components/providers/AuthProvider';
+import { getCategoryLabel } from '@/lib/errands/category';
 import {
   MapPin,
   Clock,
@@ -82,21 +83,6 @@ export default function HelperJobsPage() {
       default:
         return { text: status, color: 'bg-gray-100 text-gray-700', icon: AlertCircle };
     }
-  };
-
-  const getCategoryLabel = (category: string) => {
-    const categoryMap: Record<string, string> = {
-      DELIVERY: '배달',
-      SHOPPING: '구매대행',
-      MOVING: '이사/운반',
-      QUEUEING: '줄서기',
-      PET_CARE: '반려동물',
-      CLEANING: '청소',
-      BUG_CATCHING: '벌레 잡기',
-      DOCUMENT: '서류',
-      OTHER: '기타',
-    };
-    return categoryMap[category] || category;
   };
 
   const tabs = [
