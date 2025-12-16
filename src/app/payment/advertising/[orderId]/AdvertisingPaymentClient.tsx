@@ -272,7 +272,7 @@ export default function AdvertisingPaymentClient({ payment, buyer }: Props) {
                       id="buyer-phone"
                       type="tel"
                       value={phoneInput}
-                      onChange={(e) => setPhoneInput(e.target.value.replace(/\D/g, ''))}
+                      onChange={(e) => setPhoneInput(e.target.value.replaceAll(/\D/g, ''))}
                       placeholder="01012345678"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
                       maxLength={11}

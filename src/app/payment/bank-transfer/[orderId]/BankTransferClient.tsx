@@ -86,7 +86,7 @@ export default function BankTransferClient({ order }: Props) {
 
     // 휴대폰 번호 검증 (숫자만, 10-11자리)
     if (cashReceiptType === 'personal') {
-      const phoneOnly = cashReceiptValue.replace(/\D/g, '');
+      const phoneOnly = cashReceiptValue.replaceAll(/\D/g, '');
       if (phoneOnly.length < 10 || phoneOnly.length > 11) {
         toast.error('올바른 휴대폰 번호를 입력해주세요.');
         return false;
@@ -95,7 +95,7 @@ export default function BankTransferClient({ order }: Props) {
 
     // 사업자등록번호 검증 (숫자만, 10자리)
     if (cashReceiptType === 'business') {
-      const bizNumOnly = cashReceiptValue.replace(/\D/g, '');
+      const bizNumOnly = cashReceiptValue.replaceAll(/\D/g, '');
       if (bizNumOnly.length !== 10) {
         toast.error('올바른 사업자등록번호를 입력해주세요. (10자리)');
         return false;
@@ -122,7 +122,7 @@ export default function BankTransferClient({ order }: Props) {
             canIssueCashReceipt && cashReceiptType !== 'none'
               ? {
                   type: cashReceiptType,
-                  value: cashReceiptValue.replace(/\D/g, ''), // 숫자만 전송
+                  value: cashReceiptValue.replaceAll(/\D/g, ''), // 숫자만 전송
                 }
               : null,
         }),

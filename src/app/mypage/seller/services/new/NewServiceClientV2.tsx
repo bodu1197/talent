@@ -188,7 +188,7 @@ export default function NewServiceClientV2({ sellerId, profileData, isBusiness }
       );
 
       if (enabledPackage) {
-        basePrice = Number.parseInt(enabledPackage.price.replace(/,/g, '')) || 0;
+        basePrice = Number.parseInt(enabledPackage.price.replaceAll(',', '')) || 0;
         baseDeliveryDays = Number.parseInt(enabledPackage.delivery_days) || 7;
         baseRevisionCount = Number.parseInt(enabledPackage.revision_count) || 0;
       }

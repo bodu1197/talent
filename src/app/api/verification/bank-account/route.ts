@@ -79,7 +79,7 @@ async function verifyBankAccount(bankCode: string, accountNumber: string) {
   }
 
   // 계좌번호에서 공백과 하이픈 제거
-  const cleanAccountNumber = accountNumber.replace(/[\s-]/g, '');
+  const cleanAccountNumber = accountNumber.replaceAll(/[\s-]/g, '');
 
   const response = await fetch(
     `https://api.portone.io/platform/bank-accounts/${encodeURIComponent(bankCode)}/${encodeURIComponent(cleanAccountNumber)}/holder`,
@@ -177,8 +177,8 @@ export async function POST(request: NextRequest) {
 
     if (accountHolder && actualHolder) {
       // 공백 제거 후 비교
-      const inputName = accountHolder.replace(/\s/g, '');
-      const actualName = actualHolder.replace(/\s/g, '');
+      const inputName = accountHolder.replaceAll(/\s/g, '');
+      const actualName = actualHolder.replaceAll(/\s/g, '');
       nameMatch = inputName === actualName;
     }
 

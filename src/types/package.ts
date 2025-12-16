@@ -121,7 +121,7 @@ export function validatePackage(data: PackageFormData, type: PackageType): strin
     );
   }
 
-  const price = Number.parseInt(data.price.replace(/,/g, ''), 10);
+  const price = Number.parseInt(data.price.replaceAll(',', ''), 10);
   if (isNaN(price) || price < MIN_PACKAGE_PRICE) {
     errors.push(
       `${PACKAGE_TYPE_LABELS[type]} 가격은 최소 ${MIN_PACKAGE_PRICE.toLocaleString()}원 이상이어야 합니다.`
@@ -189,7 +189,7 @@ export function packageFormToDbData(
     service_id: serviceId,
     name: data.title || PACKAGE_TYPE_LABELS[type], // 제목이 있으면 사용, 없으면 기본 라벨
     package_type: type,
-    price: Number.parseInt(data.price.replace(/,/g, ''), 10),
+    price: Number.parseInt(data.price.replaceAll(',', ''), 10),
     delivery_days: Number.parseInt(data.delivery_days, 10),
     revision_count: Number.parseInt(data.revision_count, 10),
     features: data.features,

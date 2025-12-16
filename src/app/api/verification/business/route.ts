@@ -5,7 +5,7 @@ import { logger } from '@/lib/logger';
 // 사업자등록번호 형식 검증 (000-00-00000)
 function isValidBusinessNumber(businessNumber: string): boolean {
   // 하이픈 제거
-  const cleanNumber = businessNumber.replace(/-/g, '');
+  const cleanNumber = businessNumber.replaceAll('-', '');
 
   // 10자리 숫자인지 확인
   if (!/^\d{10}$/.test(cleanNumber)) {
@@ -34,7 +34,7 @@ async function verifyBusinessNumber(businessNumber: string) {
   }
 
   // 하이픈 제거
-  const cleanNumber = businessNumber.replace(/-/g, '');
+  const cleanNumber = businessNumber.replaceAll('-', '');
 
   const response = await fetch('https://api.portone.io/b2b/companies/business-info', {
     method: 'POST',

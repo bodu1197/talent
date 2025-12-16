@@ -35,7 +35,7 @@ export function formatDate(date: Date | string): string {
       month: '2-digit',
       day: '2-digit',
     })
-    .replace(/\. /g, '-')
+    .replaceAll(/\. /g, '-')
     .replace('.', '');
 }
 
@@ -69,7 +69,7 @@ export function formatDateTime(date: Date | string): string {
       minute: '2-digit',
       hour12: false,
     })
-    .replace(/\. /g, '-')
+    .replaceAll(/\. /g, '-')
     .replace('.', ' ');
 }
 
