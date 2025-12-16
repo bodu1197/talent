@@ -18,5 +18,14 @@ export default async function SellerReviewsPage() {
     .eq('seller_id', user.id)
     .order('created_at', { ascending: false });
 
-  return <SellerReviewsClient reviews={reviews || []} />;
+  // DB 타입을 클라이언트 타입으로 변환
+  const mappedReviews =
+    reviews?.map((r) => ({
+      ...r,
+      content: r.comment || '',
+      is_visible: r.is_visible ?? true,
+      moderated: r.moderated ?? false,
+    })) || [];
+
+  return <SellerReviewsClient reviews={mappedReviews} />;
 }

@@ -37,20 +37,39 @@ export async function getPortfolioWithAuth(portfolioId: string) {
   const { supabase, seller } = await requireSellerAuth();
 
   // 포트폴리오 조회
-  const { data: portfolio } = await supabase
+  const { data: dbPortfolio } = await supabase
     .from('seller_portfolio')
     .select('*')
     .eq('id', portfolioId)
     .single();
 
-  if (!portfolio) {
+  if (!dbPortfolio) {
     notFound();
   }
 
   // 본인 소유 확인
-  if (portfolio.seller_id !== seller.id) {
+  if (dbPortfolio.seller_id !== seller.id) {
     redirect('/mypage/seller/portfolio');
   }
+
+  // DB 타입을 클라이언트 타입으로 변환
+  const images = (dbPortfolio.images as string[]) || [];
+  const portfolio = {
+    id: dbPortfolio.id,
+    seller_id: dbPortfolio.seller_id,
+    title: dbPortfolio.title,
+    description: dbPortfolio.description,
+    category_id: dbPortfolio.category_id,
+    thumbnail_url: images[0] || null,
+    image_urls: images.slice(1),
+    project_url: null,
+    youtube_url: dbPortfolio.video_url,
+    service_id: null,
+    tags: (dbPortfolio.tags as string[]) || [],
+    view_count: 0,
+    created_at: dbPortfolio.created_at || '',
+    updated_at: dbPortfolio.updated_at || '',
+  };
 
   return { portfolio, sellerId: seller.id };
 }

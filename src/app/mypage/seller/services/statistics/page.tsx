@@ -148,9 +148,11 @@ export default async function ServiceStatisticsPage({
     ]);
 
   // 헬퍼 함수로 통계 계산
-  const revenue = calculateRevenue(orders);
+  const revenue = calculateRevenue(orders?.map((o) => ({ ...o, status: o.status || '' })) || null);
   const { avgRating, ratingPercentages } = calculateReviewStats(reviews);
-  const dailyViews = calculateDailyViews(viewLogs);
+  const dailyViews = calculateDailyViews(
+    viewLogs?.map((v) => ({ ...v, viewed_at: v.viewed_at || '' })) || null
+  );
 
   const stats = {
     serviceName: service.title,
