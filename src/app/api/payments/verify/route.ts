@@ -1,51 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 import type { Tables } from '@/types/database';
 import { notifyPaymentReceived } from '@/lib/notifications';
-import { paymentVerifyRateLimit } from '@/lib/rate-limit';
 import { createPaymentWithIdempotency } from '@/lib/transaction';
 import { logger } from '@/lib/logger';
-import { requireAuthWithRateLimit } from '@/lib/api/auth';
-import { validateUUID } from '@/lib/api/validation';
-import { verifyOrderBuyer } from '@/lib/api/ownership';
+import { verifyPaymentAuth, verifyOrderForPayment } from '@/lib/api/payment-verify';
 
 export async function POST(request: NextRequest) {
   try {
-    // 사용자 인증 및 Rate Limiting 확인 (검증은 더 엄격하게: 분당 5회)
-    const authResult = await requireAuthWithRateLimit(paymentVerifyRateLimit);
+    // 인증 및 기본 검증
+    const authResult = await verifyPaymentAuth(request);
     if (!authResult.success) {
-      return authResult.error!;
+      return authResult.error;
     }
 
-    const { user, supabase } = authResult;
-    if (!user || !supabase) {
-      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
-    }
-
-    const body = await request.json();
+    const { user, supabase, body } = authResult;
     const { payment_id, order_id, payment_request_id } = body;
 
-    // 입력 검증
-    if (!payment_id || !order_id) {
-      return NextResponse.json({ error: '필수 정보가 누락되었습니다' }, { status: 400 });
-    }
-
-    // UUID 형식 검증
-    const uuidError = validateUUID(order_id, '주문 ID');
-    if (uuidError) return uuidError;
-
-    // 주문 정보 조회 및 구매자 확인
-    const orderResult = await verifyOrderBuyer(supabase, order_id, user.id);
+    // 주문 검증
+    const orderResult = await verifyOrderForPayment(supabase, order_id, user.id);
     if (!orderResult.success) {
-      return orderResult.error!;
+      return orderResult.error;
     }
 
     // Type assertion for order
-    const typedOrder = orderResult.data!.order as Tables<'orders'>;
-
-    // 이미 결제된 주문인지 확인
-    if (typedOrder.status === 'paid' || typedOrder.status === 'in_progress') {
-      return NextResponse.json({ error: '이미 결제된 주문입니다' }, { status: 400 });
-    }
+    const typedOrder = orderResult.order as Tables<'orders'>;
 
     // [Production] 실제 환경에서는 PortOne API를 통해 결제 정보를 검증해야 합니다
     // const portOneResponse = await fetch(`https://api.portone.io/payments/${payment_id}`, {
