@@ -324,7 +324,7 @@ export default function NewErrandPage() {
   // 쇼핑 상태 초기화
   const resetShoppingState = () => {
     setShoppingRange('LOCAL');
-    setShoppingItems([{ name: '', quantity: 1 }]);
+    setShoppingItems([{ itemId: crypto.randomUUID(), name: '', quantity: 1 }]);
     setHasHeavyItem(false);
   };
 
