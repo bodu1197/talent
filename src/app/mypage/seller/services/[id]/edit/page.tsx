@@ -1,35 +1,10 @@
-import { redirect, notFound } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { notFound } from 'next/navigation';
+import { requireSellerAuth } from '@/lib/seller/page-auth';
 import EditServiceClient from './EditServiceClient';
-
-// Helper function to authenticate and get seller
-async function authenticateAndGetSeller(supabase: Awaited<ReturnType<typeof createClient>>) {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
-    redirect('/auth/login');
-  }
-
-  const { data: seller } = await supabase
-    .from('sellers')
-    .select('id')
-    .eq('user_id', user.id)
-    .maybeSingle();
-
-  if (!seller) {
-    redirect('/mypage/seller/register');
-  }
-
-  return seller;
-}
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 // Helper function to fetch service
-async function fetchService(
-  supabase: Awaited<ReturnType<typeof createClient>>,
-  id: string,
-  sellerId: string
-) {
+async function fetchService(supabase: SupabaseClient, id: string, sellerId: string) {
   const { data: service, error } = await supabase
     .from('services')
     .select(
@@ -51,7 +26,7 @@ async function fetchService(
 
 // Helper function to fetch category hierarchy
 async function fetchCategoryHierarchy(
-  supabase: Awaited<ReturnType<typeof createClient>>,
+  supabase: SupabaseClient,
   service: { readonly service_categories: Array<{ category_id: string }> }
 ) {
   if (!service.service_categories || service.service_categories.length === 0) {
@@ -89,10 +64,7 @@ export default async function EditServicePage({
   readonly params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createClient();
-
-  // Authenticate and get seller
-  const seller = await authenticateAndGetSeller(supabase);
+  const { supabase, seller } = await requireSellerAuth();
 
   // Fetch service
   const service = await fetchService(supabase, id, seller.id);

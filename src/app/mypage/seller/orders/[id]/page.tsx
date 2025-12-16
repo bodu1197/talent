@@ -1,5 +1,4 @@
-import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { requireSellerAuth } from '@/lib/seller/page-auth';
 import SellerOrderDetailClient from './SellerOrderDetailClient';
 
 // 페이지를 dynamic으로 설정 (캐싱 비활성화)
@@ -14,24 +13,7 @@ interface PageProps {
 
 export default async function SellerOrderDetailPage({ params }: PageProps) {
   const { id } = await params;
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect('/auth/login');
-  }
-
-  const { data: seller } = await supabase
-    .from('sellers')
-    .select('id')
-    .eq('user_id', user.id)
-    .maybeSingle();
-
-  if (!seller) {
-    redirect('/mypage/seller/register');
-  }
+  await requireSellerAuth();
 
   return <SellerOrderDetailClient orderId={id} />;
 }

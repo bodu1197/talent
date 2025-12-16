@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { requireSellerAuth } from '@/lib/seller/page-auth';
 import ServiceStatisticsClient from './ServiceStatisticsClient';
 import { logger } from '@/lib/logger';
 
@@ -83,24 +83,7 @@ export default async function ServiceStatisticsPage({
 }: {
   readonly searchParams: Promise<{ id?: string }>;
 }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect('/auth/login');
-  }
-
-  const { data: seller } = await supabase
-    .from('sellers')
-    .select('id')
-    .eq('user_id', user.id)
-    .maybeSingle();
-
-  if (!seller) {
-    redirect('/mypage/seller/register');
-  }
+  const { supabase, seller } = await requireSellerAuth();
 
   const params = await searchParams;
   const serviceId = params.id;

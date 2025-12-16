@@ -1,26 +1,8 @@
-import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { requireSellerAuth } from '@/lib/seller/page-auth';
 import SellerStatisticsClient from './SellerStatisticsClient';
 
 export default async function SellerStatisticsPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect('/auth/login');
-  }
-
-  const { data: seller } = await supabase
-    .from('sellers')
-    .select('id')
-    .eq('user_id', user.id)
-    .maybeSingle();
-
-  if (!seller) {
-    redirect('/mypage/seller/register');
-  }
+  const { supabase, seller } = await requireSellerAuth();
 
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());

@@ -1,5 +1,4 @@
-import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { requireSellerAuth } from '@/lib/seller/page-auth';
 import SellerServicesClient from './SellerServicesClient';
 import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -68,29 +67,7 @@ export default async function SellerServicesPage({
   readonly searchParams: Promise<{ status?: string }>;
 }) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      redirect('/auth/login');
-    }
-
-    const { data: seller, error: sellerError } = await supabase
-      .from('sellers')
-      .select('id')
-      .eq('user_id', user.id)
-      .maybeSingle();
-
-    if (sellerError) {
-      logger.error('Seller 조회 오류:', sellerError);
-      throw new Error(`Seller 조회 실패: ${sellerError.message}`);
-    }
-
-    if (!seller) {
-      redirect('/mypage/seller/register');
-    }
+    const { supabase, seller } = await requireSellerAuth();
 
     const params = await searchParams;
     const statusFilter = (params.status as ServiceStatus) || 'all';
