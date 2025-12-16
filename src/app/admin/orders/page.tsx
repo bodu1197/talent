@@ -9,6 +9,7 @@ import {
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorState from '@/components/common/ErrorState';
 import EmptyState from '@/components/common/EmptyState';
+import { getOrderStatusLabel, getOrderStatusColor } from '@/lib/orders/status';
 import { logger } from '@/lib/logger';
 import { RefreshCw } from 'lucide-react';
 
@@ -87,40 +88,6 @@ export default function AdminOrdersPage() {
     }
     return true;
   });
-
-  const getStatusLabel = (status: string) => {
-    switch (status) {
-      case 'paid':
-        return '결제완료';
-      case 'in_progress':
-        return '진행중';
-      case 'delivered':
-        return '완료 대기';
-      case 'completed':
-        return '완료';
-      case 'cancelled':
-        return '취소/환불';
-      default:
-        return status;
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'paid':
-        return 'bg-red-100 text-red-700';
-      case 'in_progress':
-        return 'bg-yellow-100 text-yellow-700';
-      case 'delivered':
-        return 'bg-blue-100 text-blue-700';
-      case 'completed':
-        return 'bg-green-100 text-green-700';
-      case 'cancelled':
-        return 'bg-gray-100 text-gray-700';
-      default:
-        return 'bg-gray-100 text-gray-700';
-    }
-  };
 
   const tabs = [
     { value: 'all' as OrderStatus, label: '전체', count: statusCounts.all },
@@ -292,9 +259,9 @@ export default function AdminOrdersPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status || '')}`}
+                        className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getOrderStatusColor(order.status || '')}`}
                       >
-                        {getStatusLabel(order.status || '')}
+                        {getOrderStatusLabel(order.status || '')}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
