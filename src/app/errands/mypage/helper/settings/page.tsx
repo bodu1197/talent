@@ -5,17 +5,8 @@ import ErrandMypageLayout from '@/components/errands/ErrandMypageLayout';
 import { useAuth } from '@/components/providers/AuthProvider';
 import SettingsLoadingState from '@/components/errands/SettingsLoadingState';
 import ProfileSection from '@/components/errands/ProfileSection';
-import {
-  MapPin,
-  Bell,
-  CreditCard,
-  Shield,
-  Bike,
-  ChevronRight,
-  Save,
-  Check,
-  AlertCircle,
-} from 'lucide-react';
+import SaveButtonContent from '@/components/common/SaveButtonContent';
+import { MapPin, Bell, CreditCard, Shield, Bike, ChevronRight, AlertCircle } from 'lucide-react';
 
 interface HelperSettings {
   name: string;
@@ -134,32 +125,6 @@ export default function HelperSettingsPage() {
     { value: 'car', label: '자동차', icon: Bike },
     { value: 'walk', label: '도보', icon: Bike },
   ];
-
-  // 저장 버튼 내용 렌더링 (nested ternary 해결)
-  const renderSaveButtonContent = (isSaving: boolean, isSuccess: boolean) => {
-    if (isSaving) {
-      return (
-        <>
-          <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
-          저장 중...
-        </>
-      );
-    }
-    if (isSuccess) {
-      return (
-        <>
-          <Check className="w-5 h-5" />
-          저장 완료
-        </>
-      );
-    }
-    return (
-      <>
-        <Save className="w-5 h-5" />
-        변경사항 저장
-      </>
-    );
-  };
 
   return (
     <ErrandMypageLayout mode="helper">
@@ -482,7 +447,7 @@ export default function HelperSettingsPage() {
                 saveSuccess ? 'bg-green-600 text-white' : 'bg-blue-600 text-white hover:bg-blue-700'
               }`}
             >
-              {renderSaveButtonContent(saving, saveSuccess)}
+              <SaveButtonContent isSaving={saving} isSuccess={saveSuccess} />
             </button>
           </div>
         )}
