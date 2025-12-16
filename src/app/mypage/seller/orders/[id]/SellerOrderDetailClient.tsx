@@ -9,6 +9,7 @@ import { logger } from '@/lib/logger';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorState from '@/components/common/ErrorState';
 import toast from 'react-hot-toast';
+import { loadOrderData } from '@/lib/api/order-loader';
 import OrderInfoSection from '@/components/orders/OrderInfoSection';
 import PaymentInfoSidebar from '@/components/orders/PaymentInfoSidebar';
 import RequirementsSection from '@/components/orders/RequirementsSection';
@@ -91,25 +92,16 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
   }, [orderId]);
 
   async function loadOrder() {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await fetch(`/api/orders/${orderId}`);
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || '주문을 찾을 수 없습니다');
-      }
-
-      const { order } = await response.json();
-      setOrder(order);
-    } catch (err: unknown) {
-      logger.error('주문 조회 실패:', err);
-      setError(err instanceof Error ? err.message : '주문 정보를 불러오는데 실패했습니다');
-    } finally {
-      setLoading(false);
-    }
+    await loadOrderData({
+      orderId,
+      onStart: () => {
+        setLoading(true);
+        setError(null);
+      },
+      onSuccess: (order) => setOrder(order as OrderDetail),
+      onError: (error) => setError(error),
+      onFinally: () => setLoading(false),
+    });
   }
 
   async function handleAcceptOrder() {

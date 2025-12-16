@@ -11,6 +11,7 @@ import ErrorState from '@/components/common/ErrorState';
 import { logger } from '@/lib/logger';
 import type { Order, Service, User, Seller } from '@/types/common';
 import toast from 'react-hot-toast';
+import { loadOrderData } from '@/lib/api/order-loader';
 import ConfirmModal from '../components/ConfirmModal';
 import CancelModal from '../components/CancelModal';
 import RevisionModal from '../components/RevisionModal';
@@ -77,25 +78,16 @@ export default function BuyerOrderDetailPage({ params }: PageProps) {
   }, [user, id]);
 
   async function loadOrder() {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await fetch(`/api/orders/${id}`);
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || '주문을 찾을 수 없습니다');
-      }
-
-      const { order } = await response.json();
-      setOrder(order);
-    } catch (err: unknown) {
-      logger.error('주문 조회 실패:', err);
-      setError(err instanceof Error ? err.message : '주문 정보를 불러오는데 실패했습니다');
-    } finally {
-      setLoading(false);
-    }
+    await loadOrderData({
+      orderId: id,
+      onStart: () => {
+        setLoading(true);
+        setError(null);
+      },
+      onSuccess: (order) => setOrder(order as OrderDetail),
+      onError: (error) => setError(error),
+      onFinally: () => setLoading(false),
+    });
   }
 
   const handleConfirm = async () => {
