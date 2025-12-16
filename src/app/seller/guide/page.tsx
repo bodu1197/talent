@@ -8,13 +8,14 @@ import {
   Star,
   Shield,
   TrendingUp,
-  HelpCircle,
   CheckCircle,
   ArrowRight,
   Zap,
   Clock,
   Users,
 } from 'lucide-react';
+import BenefitsSection from '@/components/seller/BenefitsSection';
+import FAQSection from '@/components/seller/FAQSection';
 
 export const metadata: Metadata = {
   title: '전문가 가이드 | 돌파구',
@@ -183,21 +184,7 @@ export default function SellerGuidePage() {
       </section>
 
       {/* Benefits */}
-      <section className="py-8 bg-white border-b">
-        <div className="container-1200 px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            {benefits.map((benefit) => (
-              <div key={benefit.title} className="text-center">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-brand-primary/10 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <benefit.icon className="w-5 h-5 md:w-6 md:h-6 text-brand-primary" />
-                </div>
-                <h3 className="text-xs md:text-sm font-semibold mb-0.5">{benefit.title}</h3>
-                <p className="text-xs text-gray-500 hidden md:block">{benefit.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <BenefitsSection benefits={benefits} />
 
       {/* Steps */}
       <section className="py-10 md:py-12">
@@ -259,24 +246,7 @@ export default function SellerGuidePage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-10 md:py-12">
-        <div className="container-1200 px-4">
-          <h2 className="text-lg md:text-xl font-bold text-center mb-6">자주 묻는 질문</h2>
-          <div className="max-w-2xl mx-auto space-y-3">
-            {faqs.map((faq) => (
-              <div key={faq.question} className="bg-white rounded-lg p-4 shadow-sm">
-                <div className="flex items-start gap-2">
-                  <HelpCircle className="w-4 h-4 text-brand-primary flex-shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="text-sm font-semibold mb-1">{faq.question}</h3>
-                    <p className="text-xs text-gray-600 leading-relaxed">{faq.answer}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <FAQSection faqs={faqs} />
 
       {/* CTA */}
       <section className="py-10 md:py-12 bg-brand-primary text-white text-center">
