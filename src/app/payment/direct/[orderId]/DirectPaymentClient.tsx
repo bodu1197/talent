@@ -3,21 +3,15 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import * as PortOne from '@portone/browser-sdk/v2';
-import {
-  ArrowLeft,
-  Check,
-  ImageIcon,
-  Loader2,
-  CreditCard,
-  Building2,
-  Smartphone,
-  Globe,
-  Wallet,
-} from 'lucide-react';
+import { ArrowLeft, Check, ImageIcon, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
 import { createClient } from '@/lib/supabase/client';
+import { usePaymentState } from '@/hooks/usePaymentState';
+import { requestPortOnePayment, validatePaymentPreconditions } from '@/lib/payment/portone';
+import { extractNumbers } from '@/lib/validation/input';
+import TermsAgreement from '@/components/payment/TermsAgreement';
+import PaymentMethodSelector from '@/components/payment/PaymentMethodSelector';
 
 interface Order {
   id: string;
@@ -54,9 +48,6 @@ interface Buyer {
   phone: string | null;
 }
 
-type PaymentMethod = 'CARD' | 'TRANSFER' | 'VIRTUAL_ACCOUNT' | 'MOBILE' | 'EASY_PAY';
-type EasyPayProvider = 'TOSSPAY' | 'NAVERPAY' | 'KAKAOPAY' | null;
-
 interface Props {
   readonly order: Order;
   readonly seller: Seller | null;
@@ -64,15 +55,26 @@ interface Props {
 
 export default function DirectPaymentClient({ order, seller }: Props) {
   const router = useRouter();
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [agreedToTerms, setAgreedToTerms] = useState(false);
-  const [agreedToPrivacy, setAgreedToPrivacy] = useState(false);
   const [buyer, setBuyer] = useState<Buyer | null>(null);
   const [service, setService] = useState<Service | null>(null);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>('CARD');
-  const [easyPayProvider, setEasyPayProvider] = useState<EasyPayProvider>(null);
-  const [isInternationalCard, setIsInternationalCard] = useState(false);
-  const [phoneInput, setPhoneInput] = useState('');
+
+  // 결제 상태 관리 (공통 hook 사용)
+  const {
+    isProcessing,
+    setIsProcessing,
+    agreedToTerms,
+    setAgreedToTerms,
+    agreedToPrivacy,
+    setAgreedToPrivacy,
+    selectedPaymentMethod,
+    setSelectedPaymentMethod,
+    easyPayProvider,
+    setEasyPayProvider,
+    isInternationalCard,
+    setIsInternationalCard,
+    phoneInput,
+    setPhoneInput,
+  } = usePaymentState();
 
   // 총 결제 금액 (수수료 없음)
   const totalAmount = order.amount;
@@ -120,15 +122,11 @@ export default function DirectPaymentClient({ order, seller }: Props) {
   };
 
   const handlePayment = async () => {
-    if (!agreedToTerms || !agreedToPrivacy) {
-      toast.error('필수 약관에 동의해주세요');
-      return;
-    }
-
-    // 전화번호 확인 (이니시스 V2 필수)
+    // 전화번호 확인
     const phone = buyer?.phone || phoneInput;
-    if (!phone) {
-      toast.error('결제를 위해 휴대폰 번호가 필요합니다');
+
+    // 결제 전 유효성 검사 (공통 유틸리티 사용)
+    if (!validatePaymentPreconditions(agreedToTerms, agreedToPrivacy, phone)) {
       return;
     }
 
@@ -136,57 +134,21 @@ export default function DirectPaymentClient({ order, seller }: Props) {
     setIsProcessing(true);
 
     try {
-      // 환경변수 확인
-      const storeId = process.env.NEXT_PUBLIC_PORTONE_STORE_ID;
-      const channelKey = process.env.NEXT_PUBLIC_PORTONE_CHANNEL_KEY;
-
-      if (!storeId || !channelKey) {
-        logger.error('PortOne configuration missing', {
-          storeId: !!storeId,
-          channelKey: !!channelKey,
-        });
-        toast.error('결제 설정이 올바르지 않습니다. 관리자에게 문의하세요.');
-        setIsProcessing(false);
-        return;
-      }
-
-      // PortOne V2 결제창 호출 (플랫폼 자체 에스크로 방식)
-      // PG 에스크로가 아닌 돌파구가 직접 대금 보관 후 구매확정 시 전문가에게 정산
-      const paymentConfig: Parameters<typeof PortOne.requestPayment>[0] = {
-        storeId,
-        paymentId: order.merchant_uid,
+      // PortOne 결제 요청 (공통 유틸리티 사용)
+      const result = await requestPortOnePayment({
+        merchantUid: order.merchant_uid,
         orderName: order.title,
-        totalAmount: totalAmount,
-        currency: 'CURRENCY_KRW',
-        channelKey,
-        payMethod: selectedPaymentMethod,
-        customer: {
-          fullName: buyer?.name || '구매자',
-          phoneNumber: phone,
-          email: buyer?.email || undefined,
-        },
-        customData: {
-          order_id: order.id,
-        },
-      };
-
-      // 간편결제 provider 설정 (해당 채널이 설정된 경우에만 동작)
-      if (selectedPaymentMethod === 'EASY_PAY' && easyPayProvider) {
-        paymentConfig.easyPay = { easyPayProvider };
-      }
-
-      logger.debug('Payment request config', {
-        storeId,
-        channelKey,
-        payMethod: selectedPaymentMethod,
+        amount: totalAmount,
+        buyerName: buyer?.name || '구매자',
+        buyerEmail: buyer?.email || null,
+        buyerPhone: phone,
+        paymentMethod: selectedPaymentMethod,
         easyPayProvider,
+        isInternationalCard,
       });
 
-      const response = await PortOne.requestPayment(paymentConfig);
-
-      // 결제 결과 처리
-      if (response?.code != null) {
-        toast.error(`결제 실패: ${response.message}`);
+      if (!result.success) {
+        toast.error(result.error || '결제에 실패했습니다');
         setIsProcessing(false);
         return;
       }
@@ -196,7 +158,7 @@ export default function DirectPaymentClient({ order, seller }: Props) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          payment_id: response?.paymentId,
+          payment_id: result.paymentId,
           order_id: order.id,
         }),
       });
@@ -217,42 +179,6 @@ export default function DirectPaymentClient({ order, seller }: Props) {
 
   const sellerName = seller?.display_name || seller?.business_name || '전문가';
   const allAgreed = agreedToTerms && agreedToPrivacy;
-
-  const paymentMethods = [
-    { id: 'TRANSFER' as PaymentMethod, label: '퀵계좌이체', icon: Building2, badge: '혜택' },
-    { id: 'CARD' as PaymentMethod, label: '신용카드', icon: CreditCard },
-    { id: 'VIRTUAL_ACCOUNT' as PaymentMethod, label: '무통장입금', icon: Building2 },
-    { id: 'MOBILE' as PaymentMethod, label: '휴대폰', icon: Smartphone },
-    {
-      id: 'EASY_PAY' as PaymentMethod,
-      label: 'tosspay',
-      icon: Wallet,
-      provider: 'TOSSPAY' as EasyPayProvider,
-    },
-    {
-      id: 'EASY_PAY' as PaymentMethod,
-      label: 'N Pay',
-      icon: Wallet,
-      provider: 'NAVERPAY' as EasyPayProvider,
-    },
-    {
-      id: 'EASY_PAY' as PaymentMethod,
-      label: '카카오pay',
-      icon: Wallet,
-      provider: 'KAKAOPAY' as EasyPayProvider,
-    },
-    { id: 'CARD' as PaymentMethod, label: '해외신용카드', icon: Globe, isInternational: true },
-  ];
-
-  const handleSelectPaymentMethod = (
-    method: PaymentMethod,
-    provider?: EasyPayProvider,
-    isIntl?: boolean
-  ) => {
-    setSelectedPaymentMethod(method);
-    setEasyPayProvider(provider || null);
-    setIsInternationalCard(isIntl || false);
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -349,7 +275,7 @@ export default function DirectPaymentClient({ order, seller }: Props) {
                       id="buyer-phone-direct"
                       type="tel"
                       value={phoneInput}
-                      onChange={(e) => setPhoneInput(e.target.value.replaceAll(/\D/g, ''))}
+                      onChange={(e) => setPhoneInput(extractNumbers(e.target.value))}
                       placeholder="01012345678"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
                       maxLength={11}
@@ -364,90 +290,25 @@ export default function DirectPaymentClient({ order, seller }: Props) {
 
             {/* 결제 방법 */}
             <section className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">결제 방법</h2>
-
-              <div className="grid grid-cols-4 gap-3">
-                {paymentMethods.map((method, index) => {
-                  const Icon = method.icon;
-                  let isSelected = false;
-                  if (method.provider) {
-                    isSelected =
-                      selectedPaymentMethod === method.id && easyPayProvider === method.provider;
-                  } else if (method.isInternational) {
-                    isSelected = selectedPaymentMethod === method.id && isInternationalCard;
-                  } else {
-                    isSelected =
-                      selectedPaymentMethod === method.id &&
-                      !easyPayProvider &&
-                      !isInternationalCard;
-                  }
-                  return (
-                    <button
-                      key={`${method.id}-${index}`}
-                      type="button"
-                      onClick={() =>
-                        handleSelectPaymentMethod(
-                          method.id,
-                          method.provider,
-                          method.isInternational
-                        )
-                      }
-                      className={`relative flex flex-col items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all ${
-                        isSelected
-                          ? 'border-brand-primary bg-brand-primary/5'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      {method.badge && (
-                        <span className="absolute -top-2 -left-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded">
-                          {method.badge}
-                        </span>
-                      )}
-                      <Icon
-                        className={`w-5 h-5 ${isSelected ? 'text-brand-primary' : 'text-gray-500'}`}
-                      />
-                      <span
-                        className={`text-xs font-medium ${isSelected ? 'text-brand-primary' : 'text-gray-700'}`}
-                      >
-                        {method.label}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {selectedPaymentMethod === 'TRANSFER' && (
-                <p className="mt-3 text-sm text-green-600">계좌이체 결제 시 0.5% 즉시 할인</p>
-              )}
+              <PaymentMethodSelector
+                selectedMethod={selectedPaymentMethod}
+                easyPayProvider={easyPayProvider}
+                isInternationalCard={isInternationalCard}
+                onMethodChange={setSelectedPaymentMethod}
+                onEasyPayProviderChange={setEasyPayProvider}
+                onInternationalCardChange={setIsInternationalCard}
+              />
             </section>
 
             {/* 약관 동의 (모바일) */}
             <section className="lg:hidden bg-white rounded-lg border border-gray-200 p-6">
               <h2 className="text-lg font-bold text-gray-900 mb-4">약관 동의</h2>
-              <div className="space-y-3">
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={agreedToTerms}
-                    onChange={(e) => setAgreedToTerms(e.target.checked)}
-                    className="w-5 h-5 mt-0.5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
-                  />
-                  <span className="text-sm text-gray-700">
-                    <span className="text-red-500">[필수]</span> 구매 조건 및 환불 정책에 동의합니다
-                  </span>
-                </label>
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={agreedToPrivacy}
-                    onChange={(e) => setAgreedToPrivacy(e.target.checked)}
-                    className="w-5 h-5 mt-0.5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
-                  />
-                  <span className="text-sm text-gray-700">
-                    <span className="text-red-500">[필수]</span> 개인정보 제3자 제공에 동의합니다
-                  </span>
-                </label>
-              </div>
+              <TermsAgreement
+                agreedToTerms={agreedToTerms}
+                agreedToPrivacy={agreedToPrivacy}
+                onTermsChange={setAgreedToTerms}
+                onPrivacyChange={setAgreedToPrivacy}
+              />
 
               {/* 모바일 결제 버튼 */}
               <button
@@ -491,30 +352,14 @@ export default function DirectPaymentClient({ order, seller }: Props) {
               </div>
 
               {/* 약관 동의 */}
-              <div className="py-4 space-y-3">
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={agreedToTerms}
-                    onChange={(e) => setAgreedToTerms(e.target.checked)}
-                    className="w-4 h-4 mt-0.5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
-                  />
-                  <span className="text-xs text-gray-600">결제 전 안내사항</span>
-                </label>
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={agreedToPrivacy}
-                    onChange={(e) => setAgreedToPrivacy(e.target.checked)}
-                    className="w-4 h-4 mt-0.5 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
-                  />
-                  <span className="text-xs text-gray-600">개인정보 제3자 제공</span>
-                </label>
+              <div className="py-4">
+                <TermsAgreement
+                  agreedToTerms={agreedToTerms}
+                  agreedToPrivacy={agreedToPrivacy}
+                  onTermsChange={setAgreedToTerms}
+                  onPrivacyChange={setAgreedToPrivacy}
+                />
               </div>
-
-              <p className="text-xs text-gray-500 text-center mb-4">
-                위 내용을 확인하였고, 결제에 동의합니다.
-              </p>
 
               {/* 결제 버튼 */}
               <button
