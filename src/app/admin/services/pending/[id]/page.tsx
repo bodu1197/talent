@@ -59,9 +59,9 @@ export default async function PendingServiceDetailPage({
 
       if (sellerData.user_id) {
         const { data: userData } = await supabase
-          .from('profiles')
-          .select('user_id, name, email')
-          .eq('user_id', sellerData.user_id)
+          .from('users')
+          .select('id, name, email')
+          .eq('id', sellerData.user_id)
           .single();
 
         if (userData) {
@@ -72,7 +72,7 @@ export default async function PendingServiceDetailPage({
             profile_image: sellerData.profile_image,
             user_id: sellerData.user_id,
             user: {
-              id: userData.user_id,
+              id: userData.id,
               name: userData.name,
               email: userData.email,
             },
