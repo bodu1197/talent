@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
+import { createServiceRoleClient } from '@/lib/supabase/server';
 import { logServerError } from '@/lib/rollbar/server';
 import { SupabaseClient } from '@supabase/supabase-js';
+import { requireLogin, getUserProfileId } from '@/lib/api/auth';
+import { verifyErrandRequester } from '@/lib/api/ownership';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -62,32 +64,28 @@ function isValidSubscription(status: string | null): boolean {
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const supabase = await createClient();
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    // 사용자 인증 확인
+    const authResult = await requireLogin();
+    if (!authResult.success) {
+      return authResult.error!;
+    }
 
-    if (!user) {
-      return NextResponse.json({ error: '로그인이 필요합니다' }, { status: 401 });
+    const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
     }
 
     // 현재 사용자의 profile.id 조회
-    const { data: userProfile } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('user_id', user.id)
-      .single();
+    const profileId = await getUserProfileId(supabase, user.id);
+    if (!profileId) {
+      return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
+    }
 
-    // 심부름 요청자인지 확인 (requester_id는 profiles.id)
-    const { data: errand } = await supabase
-      .from('errands')
-      .select('requester_id')
-      .eq('id', id)
-      .single();
-
-    if (!errand || !userProfile || errand.requester_id !== userProfile.id) {
-      return NextResponse.json({ error: '조회 권한이 없습니다' }, { status: 403 });
+    // 심부름 요청자 권한 확인
+    const ownershipResult = await verifyErrandRequester(supabase, id, profileId);
+    if (!ownershipResult.success) {
+      return ownershipResult.error!;
     }
 
     const { data: applications, error } = await supabase

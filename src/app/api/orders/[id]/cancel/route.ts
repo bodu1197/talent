@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import { orderStatusRateLimit, checkRateLimit } from '@/lib/rate-limit';
 import { logger } from '@/lib/logger';
 import { notifyOrderCancelled } from '@/lib/notifications';
+import { requireAuth } from '@/lib/api/auth';
 
 // 취소 가능한 상태들
 const CANCELLABLE_STATUSES = ['pending_payment', 'paid', 'in_progress'];
@@ -47,19 +47,20 @@ async function cancelPaymentOnPortOne(
 }
 
 // POST /api/orders/[id]/cancel - 주문 취소 요청
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const supabase = await createClient();
 
     // 사용자 인증 확인
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    const authResult = await requireAuth();
+    if (!authResult.success) {
+      return authResult.error!;
+    }
 
-    if (authError || !user) {
-      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
+    const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
     }
 
     // Redis 기반 Rate Limiting 체크
