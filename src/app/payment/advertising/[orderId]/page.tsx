@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import AdvertisingPaymentClient from './AdvertisingPaymentClient';
 
 interface Props {
-  params: Promise<{ orderId: string }>;
+  readonly params: Promise<{ orderId: string }>;
 }
 
 export default async function AdvertisingPaymentPage({ params }: Props) {

@@ -67,7 +67,7 @@ const jsonLd = {
   },
 };
 
-export default function ErrandsLayout({ children }: { children: React.ReactNode }) {
+export default function ErrandsLayout({ children }: { readonly children: React.ReactNode }) {
   return (
     <>
       <script

@@ -84,8 +84,8 @@ interface HelperLocation {
 }
 
 interface ErrandsKakaoMapProps {
-  className?: string;
-  onHelperCountChange?: (count: number) => void;
+  readonly className?: string;
+  readonly onHelperCountChange?: (count: number) => void;
 }
 
 export default function ErrandsKakaoMap({

@@ -13,8 +13,8 @@ interface CustomerInfo {
 }
 
 interface Props {
-  customerInfo: CustomerInfo;
-  returnUrl: string;
+  readonly customerInfo: CustomerInfo;
+  readonly returnUrl: string;
 }
 
 export default function VerifyIdentityClient({ customerInfo, returnUrl }: Props) {

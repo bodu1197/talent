@@ -14,6 +14,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function FAQLayout({ children }: { children: React.ReactNode }) {
+export default function FAQLayout({ children }: { readonly children: React.ReactNode }) {
   return <>{children}</>;
 }

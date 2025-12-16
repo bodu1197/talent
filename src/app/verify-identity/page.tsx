@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import VerifyIdentityClient from './VerifyIdentityClient';
 
 interface Props {
-  searchParams: Promise<{ returnUrl?: string }>;
+  readonly searchParams: Promise<{ returnUrl?: string }>;
 }
 
 export default async function VerifyIdentityPage({ searchParams }: Props) {

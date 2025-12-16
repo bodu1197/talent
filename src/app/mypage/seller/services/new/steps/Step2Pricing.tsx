@@ -13,7 +13,7 @@ import { ServiceFormProps } from '@/types/service-form';
 import { Building2, User } from 'lucide-react';
 
 interface Step2PricingProps extends ServiceFormProps {
-  isBusiness: boolean;
+  readonly isBusiness: boolean;
 }
 
 // 패키지 초기값

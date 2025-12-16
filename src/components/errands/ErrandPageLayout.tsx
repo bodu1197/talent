@@ -4,10 +4,10 @@ import Link from 'next/link';
 import { ChevronLeft, Home } from 'lucide-react';
 
 interface ErrandPageLayoutProps {
-  children: React.ReactNode;
-  title?: string;
-  showBackButton?: boolean;
-  backHref?: string;
+  readonly children: React.ReactNode;
+  readonly title?: string;
+  readonly showBackButton?: boolean;
+  readonly backHref?: string;
 }
 
 export default function ErrandPageLayout({

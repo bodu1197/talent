@@ -2,12 +2,12 @@ import Link from 'next/link';
 import { LucideIcon } from 'lucide-react';
 
 interface StatsCardProps {
-  label: string;
-  value: string | number;
-  icon: LucideIcon;
-  href?: string;
-  iconColorClass: string;
-  iconBgClass: string;
+  readonly label: string;
+  readonly value: string | number;
+  readonly icon: LucideIcon;
+  readonly href?: string;
+  readonly iconColorClass: string;
+  readonly iconBgClass: string;
 }
 
 interface CardContentProps {

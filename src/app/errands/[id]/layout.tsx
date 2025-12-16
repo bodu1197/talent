@@ -65,6 +65,6 @@ export async function generateMetadata({
   };
 }
 
-export default function ErrandDetailLayout({ children }: { children: React.ReactNode }) {
+export default function ErrandDetailLayout({ children }: { readonly children: React.ReactNode }) {
   return <>{children}</>;
 }

@@ -38,7 +38,7 @@ interface CategoryItem {
 }
 
 interface MobileCategoryBrowserProps {
-  categories: CategoryItem[];
+  readonly categories: CategoryItem[];
 }
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {

@@ -36,6 +36,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ErrandRegisterLayout({ children }: { children: React.ReactNode }) {
+export default function ErrandRegisterLayout({ children }: { readonly children: React.ReactNode }) {
   return <>{children}</>;
 }

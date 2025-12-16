@@ -2,10 +2,10 @@ import { Category } from '@/types/common';
 import { Folder, FolderOpen, Edit, Trash2 } from 'lucide-react';
 
 interface CategoryRowProps {
-  category: Category;
-  onEdit: (category: Category) => void;
-  onDelete: (category: Category) => void;
-  isParent?: boolean;
+  readonly category: Category;
+  readonly onEdit: (category: Category) => void;
+  readonly onDelete: (category: Category) => void;
+  readonly isParent?: boolean;
 }
 
 export default function CategoryRow({

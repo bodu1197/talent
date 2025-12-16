@@ -5,7 +5,7 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { MapPin, Send, X, Loader2 } from 'lucide-react';
 
 interface LocationSortToggleProps {
-  className?: string;
+  readonly className?: string;
 }
 
 export default function LocationSortToggle({ className = '' }: LocationSortToggleProps) {

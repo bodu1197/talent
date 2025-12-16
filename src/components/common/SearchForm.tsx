@@ -5,13 +5,13 @@ import { useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
 
 interface SearchFormProps {
-  initialQuery?: string;
-  placeholder?: string;
-  className?: string; // Container className
-  inputClassName?: string;
-  buttonClassName?: string;
-  iconClassName?: string;
-  onSubmit?: (query: string) => void;
+  readonly initialQuery?: string;
+  readonly placeholder?: string;
+  readonly className?: string; // Container className
+  readonly inputClassName?: string;
+  readonly buttonClassName?: string;
+  readonly iconClassName?: string;
+  readonly onSubmit?: (query: string) => void;
 }
 
 export default function SearchForm({

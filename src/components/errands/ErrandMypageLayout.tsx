@@ -52,7 +52,13 @@ const helperBottomNavItems: BottomNavItem[] = [
   { href: '/errands/mypage/helper/settings', icon: User, label: '설정' },
 ];
 
-function BottomNavLink({ item, pathname }: { item: BottomNavItem; pathname: string }) {
+function BottomNavLink({
+  item,
+  pathname,
+}: {
+  readonly item: BottomNavItem;
+  readonly pathname: string;
+}) {
   const isActive = item.isExact ? pathname === item.href : pathname.startsWith(item.href);
   const Icon = item.icon;
 
@@ -89,9 +95,9 @@ function NavList({
   isActive,
   onItemClick,
 }: {
-  items: typeof requesterMenuItems;
-  isActive: (href: string, exact: boolean) => boolean;
-  onItemClick?: () => void;
+  readonly items: typeof requesterMenuItems;
+  readonly isActive: (href: string, exact: boolean) => boolean;
+  readonly onItemClick?: () => void;
 }) {
   return (
     <>

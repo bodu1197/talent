@@ -61,7 +61,7 @@ const jsonLd = {
   },
 };
 
-export default function ExpertRegisterLayout({ children }: { children: React.ReactNode }) {
+export default function ExpertRegisterLayout({ children }: { readonly children: React.ReactNode }) {
   return (
     <>
       <script
