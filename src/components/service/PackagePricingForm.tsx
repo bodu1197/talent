@@ -185,16 +185,8 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                 </div>
                 {/* 활성화 토글 */}
                 <div
-                  role="button"
-                  tabIndex={0}
                   onClick={(e) => {
                     e.stopPropagation();
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }
                   }}
                   className="flex items-center"
                 >

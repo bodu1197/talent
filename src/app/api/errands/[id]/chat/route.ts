@@ -139,7 +139,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       .eq('is_read', false);
 
     return NextResponse.json({
-      messages: messages ? [...messages].reverse() : [],
+      messages: messages ? messages.toReversed() : [],
       errand: {
         id,
         title: errand.title,

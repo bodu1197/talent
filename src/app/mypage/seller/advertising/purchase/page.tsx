@@ -203,22 +203,15 @@ export default function AdvertisingPurchasePage() {
             const originalPrice = 150000 * product.months;
 
             return (
-              <div
+              <button
                 key={product.id}
-                className={`relative bg-white rounded-xl border-2 p-5 lg:p-6 transition-all hover:shadow-lg cursor-pointer ${
+                type="button"
+                className={`relative bg-white rounded-xl border-2 p-5 lg:p-6 transition-all hover:shadow-lg cursor-pointer text-left w-full ${
                   product.popular
                     ? 'border-brand-primary shadow-md'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
-                role="button"
-                tabIndex={0}
                 onClick={() => openPurchaseModal(product)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    openPurchaseModal(product);
-                  }
-                }}
               >
                 {/* 인기 배지 */}
                 {product.popular && (
@@ -268,7 +261,7 @@ export default function AdvertisingPurchasePage() {
                   </div>
 
                   {/* 구매 버튼 */}
-                  <button
+                  <div
                     className={`w-full py-3 rounded-lg font-semibold transition-all ${
                       product.popular
                         ? 'bg-brand-primary text-white hover:bg-blue-700'
@@ -276,9 +269,9 @@ export default function AdvertisingPurchasePage() {
                     }`}
                   >
                     신청하기
-                  </button>
+                  </div>
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>

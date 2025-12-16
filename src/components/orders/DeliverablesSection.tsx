@@ -11,7 +11,7 @@ interface Deliverable {
 
 interface DeliverablesSectionProps {
   readonly deliverables: Deliverable[] | null | undefined;
-  readonly sellerMessage?: string | null | undefined;
+  readonly sellerMessage?: string | null;
   readonly showDownloadAll?: boolean;
   readonly mode?: 'buyer' | 'seller';
 }

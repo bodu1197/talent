@@ -87,7 +87,7 @@ export default function LocationInputSection({
 
   // Daum Postcode 스크립트 로드
   useEffect(() => {
-    if (typeof globalThis.window !== 'undefined' && globalThis.window.daum) {
+    if (globalThis.window?.daum) {
       setIsScriptLoaded(true);
       return;
     }

@@ -38,8 +38,8 @@ export default function PaymentSummarySidebar({
       <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-20">
         {/* 금액 상세 */}
         <div className="space-y-3 pb-4 border-b border-gray-200">
-          {priceBreakdown.map((item, index) => (
-            <div key={index} className="flex justify-between text-sm">
+          {priceBreakdown.map((item) => (
+            <div key={item.label} className="flex justify-between text-sm">
               <span className="text-gray-600">{item.label}</span>
               <span className="text-gray-900 font-medium">{item.amount.toLocaleString()}원</span>
             </div>

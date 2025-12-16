@@ -2,7 +2,7 @@ import { Info } from 'lucide-react';
 
 interface RequirementsSectionProps {
   readonly requirements: string | null | undefined;
-  readonly buyerNote?: string | null | undefined;
+  readonly buyerNote?: string | null;
   readonly title?: string;
 }
 
