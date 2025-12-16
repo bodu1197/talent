@@ -10,7 +10,7 @@ import { QueryProvider } from '@/components/providers/QueryProvider';
  * 이 컴포넌트는 동적으로 로드되어 초기 번들 크기를 줄입니다.
  * Supabase + React Query 의존성이 여기에 포함됩니다.
  */
-export function ClientProviders({ children }: { children: React.ReactNode }) {
+export function ClientProviders({ children }: { readonly children: React.ReactNode }) {
   return (
     <QueryProvider>
       <AuthProvider>

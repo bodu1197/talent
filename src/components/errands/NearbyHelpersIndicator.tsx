@@ -5,11 +5,11 @@ import { Bike, MapPin, Loader2, AlertCircle, RefreshCw } from 'lucide-react';
 
 interface NearbyHelpersIndicatorProps {
   /** 클래스 이름 */
-  className?: string;
+  readonly className?: string;
   /** 반경 (km, 기본 5) */
-  radiusKm?: number;
+  readonly radiusKm?: number;
   /** 컴팩트 모드 (작은 표시) */
-  compact?: boolean;
+  readonly compact?: boolean;
 }
 
 interface NearbyHelpersData {

@@ -7,10 +7,10 @@ import { useAuth } from '@/components/providers/AuthProvider';
 import { createClient } from '@/lib/supabase/client';
 
 interface MobileServiceBottomBarProps {
-  serviceId: string;
-  sellerId: string;
-  sellerUserId: string;
-  initialIsFavorite?: boolean;
+  readonly serviceId: string;
+  readonly sellerId: string;
+  readonly sellerUserId: string;
+  readonly initialIsFavorite?: boolean;
 }
 
 export default function MobileServiceBottomBar({

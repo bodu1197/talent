@@ -7,8 +7,8 @@ import { ShoppingBag, Bike, Store, ClipboardList } from 'lucide-react';
 const LAST_SERVICE_KEY = 'dolpagu_last_mypage_service';
 
 interface ServiceTabsProps {
-  isRegisteredSeller?: boolean;
-  isRegisteredHelper?: boolean;
+  readonly isRegisteredSeller?: boolean;
+  readonly isRegisteredHelper?: boolean;
 }
 
 type ServiceType = 'market-buyer' | 'market-seller' | 'errands-requester' | 'errands-helper';

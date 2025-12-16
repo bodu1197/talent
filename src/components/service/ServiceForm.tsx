@@ -17,23 +17,23 @@ const TextOverlayEditor = dynamic(() => import('@/components/services/TextOverla
 });
 
 interface Category {
-  id: string;
-  name: string;
-  slug: string;
-  level: number;
-  parent_id: string | null;
-  service_type?: ServiceType;
+  readonly id: string;
+  readonly name: string;
+  readonly slug: string;
+  readonly level: number;
+  readonly parent_id: string | null;
+  readonly service_type?: ServiceType;
 }
 
 interface TextStyleConfig {
-  text: string;
-  x: number;
-  y: number;
-  fontSize: number;
-  color: string;
-  textAlign: CanvasTextAlign;
-  fontWeight: string;
-  shadowBlur: number;
+  readonly text: string;
+  readonly x: number;
+  readonly y: number;
+  readonly fontSize: number;
+  readonly color: string;
+  readonly textAlign: CanvasTextAlign;
+  readonly fontWeight: string;
+  readonly shadowBlur: number;
 }
 
 export interface ServiceFormState {
@@ -51,16 +51,16 @@ export interface ServiceFormState {
 }
 
 export interface ServiceFormProps {
-  initialData?: Partial<ServiceFormState>;
-  mode: 'create' | 'edit';
-  sellerId: string;
-  onSubmit: (data: ServiceFormState, publicThumbnailUrl: string | null) => Promise<void>;
-  onCancel: () => void;
+  readonly initialData?: Partial<ServiceFormState>;
+  readonly mode: 'create' | 'edit';
+  readonly sellerId: string;
+  readonly onSubmit: (data: ServiceFormState, publicThumbnailUrl: string | null) => Promise<void>;
+  readonly onCancel: () => void;
   // Category hierarchy for edit mode
-  initialCategoryHierarchy?: {
-    level1: string | null;
-    level2: string | null;
-    level3: string | null;
+  readonly initialCategoryHierarchy?: {
+    readonly level1: string | null;
+    readonly level2: string | null;
+    readonly level3: string | null;
   };
 }
 

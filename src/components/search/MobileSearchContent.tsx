@@ -33,15 +33,15 @@ import {
 import { OFFLINE_CATEGORY_SLUGS } from '@/lib/constants/categories';
 
 interface CategoryItem {
-  id: string;
-  name: string;
-  slug: string;
-  icon?: string;
-  children?: CategoryItem[];
+  readonly id: string;
+  readonly name: string;
+  readonly slug: string;
+  readonly icon?: string;
+  readonly children?: CategoryItem[];
 }
 
 interface MobileSearchContentProps {
-  categories: CategoryItem[];
+  readonly categories: CategoryItem[];
 }
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {

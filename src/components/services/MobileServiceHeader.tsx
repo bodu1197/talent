@@ -4,9 +4,9 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft, Phone, Share2 } from 'lucide-react';
 
 interface MobileServiceHeaderProps {
-  serviceId: string;
-  serviceTitle: string;
-  sellerPhone?: string;
+  readonly serviceId: string;
+  readonly serviceTitle: string;
+  readonly sellerPhone?: string;
 }
 
 export default function MobileServiceHeader({

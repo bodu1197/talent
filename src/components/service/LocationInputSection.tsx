@@ -5,7 +5,7 @@ import { reverseGeocode, getCurrentPosition, extractRegion } from '@/lib/locatio
 import type { DaumPostcodeData } from '@/types/daum-postcode';
 
 // 아이콘 컴포넌트
-const MapPinIcon = ({ className }: { className?: string }) => (
+const MapPinIcon = ({ className }: { readonly className?: string }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
     <path
       strokeLinecap="round"
@@ -16,7 +16,7 @@ const MapPinIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const GpsIcon = ({ className }: { className?: string }) => (
+const GpsIcon = ({ className }: { readonly className?: string }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
     <circle cx="12" cy="12" r="3" />
     <path strokeLinecap="round" strokeLinejoin="round" d="M12 2v2m0 16v2m10-10h-2M4 12H2" />
@@ -24,7 +24,7 @@ const GpsIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const SearchIcon = ({ className }: { className?: string }) => (
+const SearchIcon = ({ className }: { readonly className?: string }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
     <path
       strokeLinecap="round"
@@ -34,13 +34,13 @@ const SearchIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const XIcon = ({ className }: { className?: string }) => (
+const XIcon = ({ className }: { readonly className?: string }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
   </svg>
 );
 
-const LoadingSpinner = ({ className }: { className?: string }) => (
+const LoadingSpinner = ({ className }: { readonly className?: string }) => (
   <svg className={`animate-spin ${className}`} fill="none" viewBox="0 0 24 24">
     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
     <path
@@ -60,14 +60,14 @@ export interface LocationData {
 }
 
 interface LocationInputSectionProps {
-  value?: LocationData | null;
-  onChange: (location: LocationData | null) => void;
-  required?: boolean;
-  disabled?: boolean;
-  label?: string;
-  placeholder?: string;
-  helpText?: string;
-  error?: string;
+  readonly value?: LocationData | null;
+  readonly onChange: (location: LocationData | null) => void;
+  readonly required?: boolean;
+  readonly disabled?: boolean;
+  readonly label?: string;
+  readonly placeholder?: string;
+  readonly helpText?: string;
+  readonly error?: string;
 }
 
 export default function LocationInputSection({

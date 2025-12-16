@@ -6,9 +6,9 @@ import { MapPin, Power, Loader2, AlertTriangle, CheckCircle, Navigation } from '
 
 interface HelperLocationTrackerProps {
   /** 라이더 활동 가능 여부 (구독 상태 등) */
-  isActiveHelper?: boolean;
+  readonly isActiveHelper?: boolean;
   /** 클래스 이름 */
-  className?: string;
+  readonly className?: string;
 }
 
 // eslint-disable-next-line sonarjs/cognitive-complexity -- 위치 추적 UI 상태 분기로 인한 예외 처리

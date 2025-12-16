@@ -12,9 +12,9 @@ import {
 } from '@/types/package';
 
 interface Props {
-  packages: Record<PackageType, PackageFormData>;
-  onChange: (packages: Record<PackageType, PackageFormData>) => void;
-  errors?: Partial<Record<PackageType, string[]>>;
+  readonly packages: Record<PackageType, PackageFormData>;
+  readonly onChange: (packages: Record<PackageType, PackageFormData>) => void;
+  readonly errors?: Partial<Record<PackageType, string[]>>;
 }
 
 export default function PackagePricingForm({ packages, onChange, errors = {} }: Props) {

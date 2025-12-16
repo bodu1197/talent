@@ -7,24 +7,24 @@ import PurchaseButton from '@/components/services/PurchaseButton';
 import { ServicePackage } from '@/types/package';
 
 interface Props {
-  serviceId: string;
-  sellerId: string;
-  sellerUserId: string;
-  serviceTitle: string;
-  serviceDescription?: string;
+  readonly serviceId: string;
+  readonly sellerId: string;
+  readonly sellerUserId: string;
+  readonly serviceTitle: string;
+  readonly serviceDescription?: string;
   // 단일 가격 모드용
-  servicePrice: number;
-  deliveryDays: number;
-  revisionCount: number;
+  readonly servicePrice: number;
+  readonly deliveryDays: number;
+  readonly revisionCount: number;
   // 패키지 모드용
-  hasPackages: boolean;
-  packages: ServicePackage[];
+  readonly hasPackages: boolean;
+  readonly packages: ServicePackage[];
   // 사용자 정보
-  currentUserId?: string;
+  readonly currentUserId?: string;
   // 추가 버튼 (문의/찜/공유)
-  children?: React.ReactNode;
+  readonly children?: React.ReactNode;
   // 사업자 여부 (VAT 계산용)
-  isBusiness?: boolean;
+  readonly isBusiness?: boolean;
 }
 
 // VAT 포함 가격 계산 함수 (사업자용)

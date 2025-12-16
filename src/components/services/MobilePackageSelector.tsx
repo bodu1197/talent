@@ -15,18 +15,18 @@ import {
 } from '@/types/package';
 
 interface Props {
-  serviceId: string;
-  sellerId: string;
-  sellerUserId: string;
-  serviceTitle: string;
-  serviceDescription?: string;
-  servicePrice: number;
-  deliveryDays: number;
-  revisionCount: number;
-  hasPackages: boolean;
-  packages: ServicePackage[];
-  initialIsFavorite?: boolean;
-  isBusiness?: boolean; // 사업자 여부 (VAT 계산용)
+  readonly serviceId: string;
+  readonly sellerId: string;
+  readonly sellerUserId: string;
+  readonly serviceTitle: string;
+  readonly serviceDescription?: string;
+  readonly servicePrice: number;
+  readonly deliveryDays: number;
+  readonly revisionCount: number;
+  readonly hasPackages: boolean;
+  readonly packages: ServicePackage[];
+  readonly initialIsFavorite?: boolean;
+  readonly isBusiness?: boolean; // 사업자 여부 (VAT 계산용)
 }
 
 // VAT 포함 가격 계산 함수 (사업자용)

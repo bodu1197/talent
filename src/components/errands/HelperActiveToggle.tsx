@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 
 interface HelperActiveToggleProps {
-  className?: string;
+  readonly className?: string;
 }
 
 export default function HelperActiveToggle({ className = '' }: HelperActiveToggleProps) {

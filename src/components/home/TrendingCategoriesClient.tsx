@@ -33,7 +33,7 @@ const FlameIcon = () => (
   </svg>
 );
 
-const TrendingUpIcon = ({ className }: { className: string }) => (
+const TrendingUpIcon = ({ className }: { readonly className: string }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
   </svg>
@@ -52,7 +52,7 @@ const barColors = [
 ];
 
 interface Props {
-  categories: CategoryData[];
+  readonly categories: CategoryData[];
 }
 
 export default function TrendingCategoriesClient({ categories }: Props) {

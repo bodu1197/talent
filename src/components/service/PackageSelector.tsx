@@ -9,14 +9,14 @@ import {
 } from '@/types/package';
 
 interface Props {
-  packages: ServicePackage[];
-  serviceId: string;
-  sellerId: string;
-  serviceTitle: string;
-  onPurchase: (pkg: ServicePackage) => void;
-  disabled?: boolean;
-  children?: React.ReactNode;
-  isBusiness?: boolean; // 사업자 여부 (VAT 계산용)
+  readonly packages: ServicePackage[];
+  readonly serviceId: string;
+  readonly sellerId: string;
+  readonly serviceTitle: string;
+  readonly onPurchase: (pkg: ServicePackage) => void;
+  readonly disabled?: boolean;
+  readonly children?: React.ReactNode;
+  readonly isBusiness?: boolean; // 사업자 여부 (VAT 계산용)
 }
 
 // VAT 포함 가격 계산 함수 (사업자용)

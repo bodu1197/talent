@@ -1,11 +1,11 @@
 import Link from 'next/link';
 
 interface BenefitCardProps {
-  iconBg: string; // e.g., 'bg-pink-100'
-  iconColor: string; // e.g., 'text-pink-600'
-  iconPath: string; // SVG path d attribute
-  title: string;
-  description: string;
+  readonly iconBg: string; // e.g., 'bg-pink-100'
+  readonly iconColor: string; // e.g., 'text-pink-600'
+  readonly iconPath: string; // SVG path d attribute
+  readonly title: string;
+  readonly description: string;
 }
 
 function BenefitCard({ iconBg, iconColor, iconPath, title, description }: BenefitCardProps) {
