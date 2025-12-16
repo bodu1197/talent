@@ -1,26 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
-import { requireLogin } from '@/lib/api/auth';
+import { verifyChatAuth } from '@/lib/api/chat-common';
 
 // 즐겨찾기 토글
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireLogin();
+    // 인증 및 room_id 검증
+    const authResult = await verifyChatAuth(request);
     if (!authResult.success) {
-      return authResult.error!;
+      return authResult.error;
     }
 
-    const { user, supabase } = authResult;
-    if (!user || !supabase) {
-      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
-    }
-
-    const body = await request.json();
-    const { room_id } = body;
-
-    if (!room_id) {
-      return NextResponse.json({ error: 'room_id is required' }, { status: 400 });
-    }
+    const { user, supabase, room_id } = authResult;
 
     // 기존 즐겨찾기 확인
     const { data: existingFavorite } = await supabase
