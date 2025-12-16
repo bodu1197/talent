@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
+import { countOrdersByStatus } from '@/utils/orderCountHelpers';
 
 // GET /api/orders/buyer/count - 구매자 주문 상태별 카운트
 export async function GET(_request: NextRequest) {
@@ -29,24 +30,7 @@ export async function GET(_request: NextRequest) {
     }
 
     // JavaScript로 카운트 계산 (데이터베이스 쿼리보다 훨씬 빠름)
-    const counts = {
-      paid: 0,
-      in_progress: 0,
-      delivered: 0,
-      completed: 0,
-      cancelled: 0,
-      all: orders?.length || 0,
-    };
-
-    if (orders) {
-      for (const order of orders) {
-        if (order.status === 'paid') counts.paid++;
-        else if (order.status === 'in_progress') counts.in_progress++;
-        else if (order.status === 'delivered') counts.delivered++;
-        else if (order.status === 'completed') counts.completed++;
-        else if (order.status === 'cancelled') counts.cancelled++;
-      }
-    }
+    const counts = countOrdersByStatus(orders);
 
     return NextResponse.json({ counts });
   } catch (error) {
