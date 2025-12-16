@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { calculateDistance } from '@/lib/geo';
 
 const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY || '';
 
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest) {
 
     if (!KAKAO_REST_API_KEY) {
       // API 키가 없으면 직선 거리 × 1.4 보정계수 적용
-      const straightDistance = calculateStraightDistance(originLat, originLng, destLat, destLng);
+      const straightDistance = calculateDistance(originLat, originLng, destLat, destLng);
       const estimatedRoadDistance = straightDistance * 1.4;
 
       return NextResponse.json({
@@ -49,7 +50,7 @@ export async function POST(request: NextRequest) {
       console.error('[Directions] Kakao API error:', response.status, errorText);
 
       // API 오류 시 직선 거리 × 1.4 보정계수 적용
-      const straightDistance = calculateStraightDistance(originLat, originLng, destLat, destLng);
+      const straightDistance = calculateDistance(originLat, originLng, destLat, destLng);
       const estimatedRoadDistance = straightDistance * 1.4;
 
       return NextResponse.json({
@@ -68,7 +69,7 @@ export async function POST(request: NextRequest) {
     const route = data.routes?.[0];
     if (route?.result_code !== 0) {
       // 경로를 찾을 수 없는 경우 직선 거리 사용
-      const straightDistance = calculateStraightDistance(originLat, originLng, destLat, destLng);
+      const straightDistance = calculateDistance(originLat, originLng, destLat, destLng);
       const estimatedRoadDistance = straightDistance * 1.4;
 
       return NextResponse.json({
@@ -102,16 +103,3 @@ export async function POST(request: NextRequest) {
 }
 
 // Haversine 공식으로 직선 거리 계산 (km)
-function calculateStraightDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
-  const R = 6371; // 지구 반지름 (km)
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLng = ((lng2 - lng1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLng / 2) *
-      Math.sin(dLng / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-}

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { orderStatusRateLimit, checkRateLimit } from '@/lib/rate-limit';
+import { orderStatusRateLimit } from '@/lib/rate-limit';
 import { logger } from '@/lib/logger';
-import { requireAuth } from '@/lib/api/auth';
+import { requireAuthWithRateLimit } from '@/lib/api/auth';
 
 // 주문 상태 전환 규칙 (보안: 임의 상태 변경 방지)
 const ALLOWED_TRANSITIONS: Record<string, Record<string, string[]>> = {
@@ -40,8 +40,8 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
   try {
     const { id } = await params;
 
-    // 사용자 인증 확인
-    const authResult = await requireAuth();
+    // 사용자 인증 및 Rate Limiting 확인
+    const authResult = await requireAuthWithRateLimit(orderStatusRateLimit);
     if (!authResult.success) {
       return authResult.error!;
     }
@@ -49,12 +49,6 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     const { user, supabase } = authResult;
     if (!user || !supabase) {
       return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
-    }
-
-    // Redis 기반 Rate Limiting 체크
-    const rateLimitResult = await checkRateLimit(user.id, orderStatusRateLimit);
-    if (!rateLimitResult.success) {
-      return rateLimitResult.error!;
     }
 
     const { status: newStatus } = await request.json();

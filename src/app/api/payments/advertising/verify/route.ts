@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
+import { requireAuth } from '@/lib/api/auth';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 // PortOne V2 API 결제 정보 조회
 async function getPortOnePayment(paymentId: string) {
@@ -25,16 +26,17 @@ async function getPortOnePayment(paymentId: string) {
   return response.json();
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    const authResult = await requireAuth();
+    if (!authResult.success) {
+      return authResult.error!;
+    }
 
-    if (authError || !user) {
-      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
+    const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
     }
 
     const body = await request.json();
@@ -143,7 +145,7 @@ export async function POST(request: NextRequest) {
 
 // 구독형 광고 결제 처리
 async function handleSubscriptionPayment(
-  supabase: Awaited<ReturnType<typeof createClient>>,
+  supabase: SupabaseClient,
   userId: string,
   advertisingPaymentId: string,
   portOnePayment: { amount?: { total: number }; pgTxId?: string }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
+import { requireAuth } from '@/lib/api/auth';
 
 // 사업자등록번호 형식 검증 (000-00-00000)
 function isValidBusinessNumber(businessNumber: string): boolean {
@@ -68,14 +68,14 @@ async function verifyBusinessNumber(businessNumber: string) {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    const authResult = await requireAuth();
+    if (!authResult.success) {
+      return authResult.error!;
+    }
 
-    if (authError || !user) {
-      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
+    const { user } = authResult;
+    if (!user) {
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
     }
 
     const body = await request.json();

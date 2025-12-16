@@ -1,27 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import type { Tables } from '@/types/database';
 import { notifyPaymentReceived } from '@/lib/notifications';
-import { paymentVerifyRateLimit, checkRateLimit } from '@/lib/rate-limit';
+import { paymentVerifyRateLimit } from '@/lib/rate-limit';
 import { createPaymentWithIdempotency } from '@/lib/transaction';
 import { logger } from '@/lib/logger';
+import { requireAuthWithRateLimit } from '@/lib/api/auth';
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
+    // 사용자 인증 및 Rate Limiting 확인 (검증은 더 엄격하게: 분당 5회)
+    const authResult = await requireAuthWithRateLimit(paymentVerifyRateLimit);
+    if (!authResult.success) {
+      return authResult.error!;
     }
 
-    // Redis 기반 Rate Limiting 체크 (검증은 더 엄격하게: 분당 5회)
-    const rateLimitResult = await checkRateLimit(user.id, paymentVerifyRateLimit);
-    if (!rateLimitResult.success) {
-      return rateLimitResult.error!;
+    const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
     }
 
     const body = await request.json();

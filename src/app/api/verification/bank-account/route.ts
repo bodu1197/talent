@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
+import { requireAuth } from '@/lib/api/auth';
 
 // 한국 주요 은행 코드 매핑
 const BANK_CODES: Record<string, string> = {
@@ -117,14 +117,14 @@ async function verifyBankAccount(bankCode: string, accountNumber: string) {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    const authResult = await requireAuth();
+    if (!authResult.success) {
+      return authResult.error!;
+    }
 
-    if (authError || !user) {
-      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
+    const { user } = authResult;
+    if (!user) {
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
     }
 
     const body = await request.json();

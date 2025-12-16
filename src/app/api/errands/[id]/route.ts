@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { logServerError } from '@/lib/rollbar/server';
 import type { ErrandStatus } from '@/types/errand';
 import { SupabaseClient } from '@supabase/supabase-js';
+import { requireLogin, getUserProfileId } from '@/lib/api/auth';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -224,27 +225,25 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 }
 
 // 심부름 수정
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const supabase = await createClient();
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    // 사용자 인증 확인
+    const authResult = await requireLogin();
+    if (!authResult.success) {
+      return authResult.error!;
+    }
 
-    if (!user) {
-      return NextResponse.json({ error: '로그인이 필요합니다' }, { status: 401 });
+    const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
     }
 
     // 사용자 프로필 조회 (profiles.id 필요)
-    const { data: userProfile } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('user_id', user.id)
-      .single();
-
-    if (!userProfile) {
+    const profileId = await getUserProfileId(supabase, user.id);
+    if (!profileId) {
       return NextResponse.json({ error: '프로필을 찾을 수 없습니다' }, { status: 404 });
     }
 
@@ -258,7 +257,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     // 권한 확인 (profiles.id로 비교)
-    const { isRequester, isHelper } = checkUserPermission(currentErrand, userProfile.id);
+    const { isRequester, isHelper } = checkUserPermission(currentErrand, profileId);
     if (!isRequester && !isHelper) {
       return NextResponse.json({ error: '수정 권한이 없습니다' }, { status: 403 });
     }
@@ -316,24 +315,21 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const supabase = await createClient();
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    // 사용자 인증 확인
+    const authResult = await requireLogin();
+    if (!authResult.success) {
+      return authResult.error!;
+    }
 
-    if (!user) {
-      return NextResponse.json({ error: '로그인이 필요합니다' }, { status: 401 });
+    const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
     }
 
     // 사용자 프로필 조회 (profiles.id 필요)
-    const { data: userProfile } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('user_id', user.id)
-      .single();
-
-    if (!userProfile) {
+    const profileId = await getUserProfileId(supabase, user.id);
+    if (!profileId) {
       return NextResponse.json({ error: '프로필을 찾을 수 없습니다' }, { status: 404 });
     }
 
@@ -345,7 +341,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     // 권한 확인 (요청자만 삭제 가능) - profiles.id로 비교
-    if (currentErrand.requester_id !== userProfile.id) {
+    if (currentErrand.requester_id !== profileId) {
       return NextResponse.json({ error: '삭제 권한이 없습니다' }, { status: 403 });
     }
 

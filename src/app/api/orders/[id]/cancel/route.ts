@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { orderStatusRateLimit, checkRateLimit } from '@/lib/rate-limit';
+import { orderStatusRateLimit } from '@/lib/rate-limit';
 import { logger } from '@/lib/logger';
 import { notifyOrderCancelled } from '@/lib/notifications';
-import { requireAuth } from '@/lib/api/auth';
+import { requireAuthWithRateLimit } from '@/lib/api/auth';
 
 // 취소 가능한 상태들
 const CANCELLABLE_STATUSES = ['pending_payment', 'paid', 'in_progress'];
@@ -47,13 +47,12 @@ async function cancelPaymentOnPortOne(
 }
 
 // POST /api/orders/[id]/cancel - 주문 취소 요청
-// eslint-disable-next-line sonarjs/cognitive-complexity
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
 
-    // 사용자 인증 확인
-    const authResult = await requireAuth();
+    // 사용자 인증 및 Rate Limiting 확인
+    const authResult = await requireAuthWithRateLimit(orderStatusRateLimit);
     if (!authResult.success) {
       return authResult.error!;
     }
@@ -61,12 +60,6 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const { user, supabase } = authResult;
     if (!user || !supabase) {
       return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
-    }
-
-    // Redis 기반 Rate Limiting 체크
-    const rateLimitResult = await checkRateLimit(user.id, orderStatusRateLimit);
-    if (!rateLimitResult.success) {
-      return rateLimitResult.error!;
     }
 
     const { cancel_reason } = await request.json();

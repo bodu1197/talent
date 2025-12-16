@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { Ratelimit } from '@upstash/ratelimit';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 /**
  * API 인증 결과 타입
@@ -12,7 +14,7 @@ export interface AuthResult {
     email?: string;
   };
   supabase?: SupabaseClient;
-  error?: NextResponse;
+  error?: NextResponse | Response;
 }
 
 /**
@@ -94,4 +96,39 @@ export async function getUserSellerId(
     .single();
 
   return seller?.id || null;
+}
+
+/**
+ * API 라우트에서 사용자 인증 + Rate Limiting 확인
+ * 인증 후 Rate Limit 체크까지 수행
+ */
+export async function requireAuthWithRateLimit(rateLimiter: Ratelimit): Promise<AuthResult> {
+  // 먼저 인증 확인
+  const authResult = await requireAuth();
+  if (!authResult.success) {
+    return authResult;
+  }
+
+  const { user, supabase } = authResult;
+  if (!user || !supabase) {
+    return {
+      success: false,
+      error: NextResponse.json({ error: 'Authentication failed' }, { status: 401 }),
+    };
+  }
+
+  // Rate Limiting 체크
+  const rateLimitResult = await checkRateLimit(user.id, rateLimiter);
+  if (!rateLimitResult.success) {
+    return {
+      success: false,
+      error: rateLimitResult.error,
+    };
+  }
+
+  return {
+    success: true,
+    user,
+    supabase,
+  };
 }
