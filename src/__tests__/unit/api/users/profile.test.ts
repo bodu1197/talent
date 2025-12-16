@@ -57,7 +57,7 @@ describe('Users Profile API', () => {
       const data = await response.json();
 
       expect(response.status).toBe(401);
-      expect(data.error).toBe('Unauthorized');
+      expect(data.error).toBe('로그인이 필요합니다');
     });
 
     it('should return 400 if name is not provided', async () => {
