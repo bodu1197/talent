@@ -8,29 +8,20 @@ import Link from 'next/link';
 import EmptyState from '@/components/common/EmptyState';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorState from '@/components/common/ErrorState';
+import OrdersTabNavigation from '@/components/orders/OrdersTabNavigation';
+import OrdersFilterPanel, { type OrdersFilter } from '@/components/orders/OrdersFilterPanel';
 import { logger } from '@/lib/logger';
 import { createClient } from '@/lib/supabase/client';
-import type { Order, Service, User } from '@/types/common';
-import { Eye, Check, RotateCcw, ChevronLeft, ChevronRight } from 'lucide-react';
+import type { Order, Service, User, OrderStatus } from '@/types/common';
+import {
+  getOrderStatusLabel,
+  getOrderStatusColor,
+  formatOrderDate,
+  formatDeliveryDate,
+  calculateDaysLeft,
+} from '@/utils/orderHelpers';
+import { Eye, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import toast from 'react-hot-toast';
-
-type OrderStatus =
-  | 'all'
-  | 'paid'
-  | 'in_progress'
-  | 'revision'
-  | 'delivered'
-  | 'completed'
-  | 'cancelled';
-
-interface OrderFilter {
-  status: OrderStatus;
-  searchQuery: string;
-  startDate: string;
-  endDate: string;
-  minPrice: string;
-  maxPrice: string;
-}
 
 interface SellerOrderListItem extends Order {
   order_number?: string;
@@ -61,7 +52,7 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
     cancelled: 0,
   });
 
-  const [filters, setFilters] = useState<OrderFilter>({
+  const [filters, setFilters] = useState<OrdersFilter & { status: OrderStatus }>({
     status: statusFromUrl,
     searchQuery: '',
     startDate: '',
@@ -216,49 +207,6 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
     });
   };
 
-  const getStatusLabel = (status: string) => {
-    switch (status) {
-      case 'pending_payment':
-        return '결제 대기';
-      case 'paid':
-      case 'payment_completed':
-        return '결제완료';
-      case 'in_progress':
-        return '진행중';
-      case 'revision':
-        return '수정 요청';
-      case 'delivered':
-        return '완료 대기';
-      case 'completed':
-        return '완료';
-      case 'cancelled':
-        return '취소/환불';
-      case 'refunded':
-        return '환불완료';
-      case 'in_review':
-        return '검토중';
-      default:
-        return status;
-    }
-  };
-
-  const getStatusColor = (status: string): 'red' | 'yellow' | 'green' | 'gray' => {
-    switch (status) {
-      case 'paid':
-        return 'red';
-      case 'in_progress':
-        return 'yellow';
-      case 'revision':
-        return 'red';
-      case 'delivered':
-        return 'green';
-      case 'completed':
-        return 'gray';
-      default:
-        return 'gray';
-    }
-  };
-
   const getActionButtons = (order: SellerOrderListItem) => {
     if (order.status === 'paid') {
       return (
@@ -376,16 +324,12 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
       thumbnailUrl: order.service?.thumbnail_url,
       buyerName: order.buyer?.name,
       status: order.status,
-      statusLabel: getStatusLabel(order.status),
-      statusColor: getStatusColor(order.status),
+      statusLabel: getOrderStatusLabel(order.status),
+      statusColor: getOrderStatusColor(order.status, 'seller'),
       price: order.total_amount,
-      orderDate: new Date(order.created_at).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
-      expectedDeliveryDate: order.delivery_date
-        ? new Date(order.delivery_date).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' })
-        : '-',
-      daysLeft: order.delivery_date
-        ? Math.ceil((new Date(order.delivery_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
-        : 0,
+      orderDate: formatOrderDate(order.created_at),
+      expectedDeliveryDate: formatDeliveryDate(order.delivery_date || null),
+      daysLeft: calculateDaysLeft(order.delivery_date || null),
       requirements: order.requirements,
       revisionCount: order.revision_count || 0,
     };
@@ -421,136 +365,19 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
         </div>
 
         {/* 탭 네비게이션 */}
-        <div className="bg-white rounded-lg border border-gray-200 mb-4 lg:mb-6">
-          <div className="flex items-center overflow-x-auto">
-            {tabs.map((tab) => (
-              <button
-                key={tab.value}
-                onClick={() => setFilters({ ...filters, status: tab.value as OrderStatus })}
-                className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
-                  filters.status === tab.value
-                    ? 'border-brand-primary text-brand-primary'
-                    : 'border-transparent text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                {tab.label}
-                {tab.count > 0 && (
-                  <span
-                    className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                      filters.status === tab.value
-                        ? 'bg-brand-primary text-white'
-                        : 'bg-gray-200 text-gray-600'
-                    }`}
-                  >
-                    {tab.count}
-                  </span>
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
+        <OrdersTabNavigation
+          tabs={tabs}
+          activeStatus={filters.status}
+          onStatusChange={(status) => setFilters({ ...filters, status })}
+        />
 
         {/* 검색 및 필터 */}
-        <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 mb-4 lg:mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
-            {/* 검색 */}
-            <div className="lg:col-span-2">
-              <label
-                htmlFor="seller-order-search"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                주문번호 / 구매자명 검색
-              </label>
-              <input
-                id="seller-order-search"
-                type="text"
-                value={filters.searchQuery}
-                onChange={(e) => setFilters({ ...filters, searchQuery: e.target.value })}
-                placeholder="검색어를 입력하세요"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-              />
-            </div>
-
-            {/* 기간 검색 */}
-            <div>
-              <label
-                htmlFor="seller-order-start-date"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                시작일
-              </label>
-              <input
-                id="seller-order-start-date"
-                type="date"
-                value={filters.startDate}
-                onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="seller-order-end-date"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                종료일
-              </label>
-              <input
-                id="seller-order-end-date"
-                type="date"
-                value={filters.endDate}
-                onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-              />
-            </div>
-
-            {/* 가격 범위 */}
-            <div>
-              <label
-                htmlFor="seller-order-min-price"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                최소 금액
-              </label>
-              <input
-                id="seller-order-min-price"
-                type="number"
-                value={filters.minPrice}
-                onChange={(e) => setFilters({ ...filters, minPrice: e.target.value })}
-                placeholder="0"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="seller-order-max-price"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                최대 금액
-              </label>
-              <input
-                id="seller-order-max-price"
-                type="number"
-                value={filters.maxPrice}
-                onChange={(e) => setFilters({ ...filters, maxPrice: e.target.value })}
-                placeholder="0"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-              />
-            </div>
-
-            {/* 초기화 버튼 */}
-            <div className="lg:col-span-2 flex items-end">
-              <button
-                onClick={resetFilters}
-                className="inline-flex items-center gap-2 w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium whitespace-nowrap"
-              >
-                <RotateCcw aria-hidden="true" className="w-4 h-4" />
-                초기화
-              </button>
-            </div>
-          </div>
-        </div>
+        <OrdersFilterPanel
+          filters={filters}
+          onFiltersChange={setFilters}
+          onReset={resetFilters}
+          mode="seller"
+        />
 
         {/* 결과 카운트 */}
         <div className="mb-4 text-sm text-gray-600">

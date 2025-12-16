@@ -110,6 +110,16 @@ export interface ServicePackage {
   updated_at: string;
 }
 
+// Order status type for filters (includes 'all')
+export type OrderStatus =
+  | 'all'
+  | 'paid'
+  | 'in_progress'
+  | 'revision'
+  | 'delivered'
+  | 'completed'
+  | 'cancelled';
+
 export interface Order {
   id: string;
   buyer_id: string;
