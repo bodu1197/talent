@@ -342,6 +342,9 @@ export async function POST(request: NextRequest) {
     }
 
     const { user, supabase } = authResult;
+    if (!supabase) {
+      return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    }
 
     // profiles 테이블에서 사용자의 profile id 조회 (FK 참조용)
     const { data: existingProfile, error: profileError } = await supabase
