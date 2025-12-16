@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { logServerError } from '@/lib/rollbar/server';
 import type { ErrandStatus } from '@/types/errand';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { requireLogin, getUserProfileId } from '@/lib/api/auth';
+import { verifyErrandsAuth } from '@/lib/api/errands-common';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -225,27 +225,17 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 }
 
 // 심부름 수정
-// eslint-disable-next-line sonarjs/cognitive-complexity
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
 
-    // 사용자 인증 확인
-    const authResult = await requireLogin();
+    // 인증 및 프로필 조회
+    const authResult = await verifyErrandsAuth();
     if (!authResult.success) {
-      return authResult.error!;
+      return authResult.error;
     }
 
-    const { user, supabase } = authResult;
-    if (!user || !supabase) {
-      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
-    }
-
-    // 사용자 프로필 조회 (profiles.id 필요)
-    const profileId = await getUserProfileId(supabase, user.id);
-    if (!profileId) {
-      return NextResponse.json({ error: '프로필을 찾을 수 없습니다' }, { status: 404 });
-    }
+    const { supabase, profileId } = authResult;
 
     const body = await request.json();
 
@@ -316,22 +306,13 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
 
-    // 사용자 인증 확인
-    const authResult = await requireLogin();
+    // 인증 및 프로필 조회
+    const authResult = await verifyErrandsAuth();
     if (!authResult.success) {
-      return authResult.error!;
+      return authResult.error;
     }
 
-    const { user, supabase } = authResult;
-    if (!user || !supabase) {
-      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
-    }
-
-    // 사용자 프로필 조회 (profiles.id 필요)
-    const profileId = await getUserProfileId(supabase, user.id);
-    if (!profileId) {
-      return NextResponse.json({ error: '프로필을 찾을 수 없습니다' }, { status: 404 });
-    }
+    const { supabase, profileId } = authResult;
 
     // 현재 심부름 조회
     const { errand: currentErrand, error: fetchError } = await fetchErrand(supabase, id);
