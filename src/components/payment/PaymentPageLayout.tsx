@@ -3,6 +3,7 @@ import BuyerPhoneInput from './BuyerPhoneInput';
 import PaymentMethodSelector from './PaymentMethodSelector';
 import PaymentTermsSection from './PaymentTermsSection';
 import PaymentSummarySidebar from './PaymentSummarySidebar';
+import type { PaymentMethod, EasyPayProvider } from '@/hooks/usePaymentState';
 
 interface PaymentPageLayoutProps {
   readonly title: string;
@@ -14,11 +15,11 @@ interface PaymentPageLayoutProps {
   readonly phoneInput: string;
   readonly onPhoneChange: (phone: string) => void;
   readonly phoneInputId?: string;
-  readonly selectedPaymentMethod: string;
-  readonly easyPayProvider: string | null;
+  readonly selectedPaymentMethod: PaymentMethod;
+  readonly easyPayProvider: EasyPayProvider;
   readonly isInternationalCard: boolean;
-  readonly onMethodChange: (method: string) => void;
-  readonly onEasyPayProviderChange: (provider: string | null) => void;
+  readonly onMethodChange: (method: PaymentMethod) => void;
+  readonly onEasyPayProviderChange: (provider: EasyPayProvider) => void;
   readonly onInternationalCardChange: (isInternational: boolean) => void;
   readonly agreedToTerms: boolean;
   readonly agreedToPrivacy: boolean;
