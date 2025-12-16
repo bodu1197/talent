@@ -3,34 +3,9 @@
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import MobileSearchBar from '@/components/home/MobileSearchBar';
-import {
-  Bot,
-  Palette,
-  Scissors,
-  Code,
-  Megaphone,
-  Camera,
-  Languages,
-  PenTool,
-  Briefcase,
-  BookOpen,
-  Music,
-  Calendar,
-  Sparkles,
-  Target,
-  Star,
-  Library,
-  Gavel,
-  Hammer,
-  GraduationCap,
-  TrendingUp,
-  Home,
-  Bike,
-  PersonStanding,
-  Circle,
-  Plus,
-} from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { OFFLINE_CATEGORY_SLUGS } from '@/lib/constants/categories';
+import { CategoryIcon } from '@/lib/categories/icons';
 
 interface CategoryItem {
   readonly id: string;
@@ -42,37 +17,6 @@ interface CategoryItem {
 
 interface MobileSearchContentProps {
   readonly categories: CategoryItem[];
-}
-
-const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  robot: Bot,
-  palette: Palette,
-  scissors: Scissors,
-  code: Code,
-  bullhorn: Megaphone,
-  camera: Camera,
-  language: Languages,
-  'pen-fancy': PenTool,
-  briefcase: Briefcase,
-  book: BookOpen,
-  music: Music,
-  calendar: Calendar,
-  spa: Sparkles,
-  bullseye: Target,
-  star: Star,
-  'book-open': Library,
-  gavel: Gavel,
-  hammer: Hammer,
-  'graduation-cap': GraduationCap,
-  'chart-line': TrendingUp,
-  home: Home,
-  motorcycle: Bike,
-  running: PersonStanding,
-};
-
-function CategoryIcon({ icon }: Readonly<{ icon?: string }>) {
-  const IconComponent = (icon && ICON_MAP[icon]) || Circle;
-  return <IconComponent className="w-5 h-5" />;
 }
 
 const brightColors = [
