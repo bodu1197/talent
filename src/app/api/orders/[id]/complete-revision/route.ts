@@ -1,22 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
+import { requireAuth } from '@/lib/api/auth';
 
 // PATCH /api/orders/[id]/complete-revision - 수정 완료
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const supabase = await createClient();
 
     // 사용자 인증 확인
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
+    const authResult = await requireAuth();
+    if (!authResult.success) {
+      return authResult.error!;
     }
+
+    const { user, supabase } = authResult;
 
     // 주문 조회 및 권한 확인
     const { data: order, error: fetchError } = await supabase

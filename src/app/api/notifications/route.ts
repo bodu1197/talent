@@ -1,21 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
+import { requireAuth } from '@/lib/api/auth';
 
 // GET /api/notifications - 알림 목록 조회
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient();
-
     // 사용자 인증 확인
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
+    const authResult = await requireAuth();
+    if (!authResult.success) {
+      return authResult.error!;
     }
+
+    const { user, supabase } = authResult;
 
     // URL 파라미터
     const { searchParams } = new URL(request.url);

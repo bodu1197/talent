@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 import { logServerError } from '@/lib/rollbar/server';
+import { requireLogin } from '@/lib/api/auth';
 import type { ErrandCategory, ErrandStatus, CreateErrandRequest } from '@/types/errand';
 import {
   calculateErrandPrice,
@@ -334,16 +335,13 @@ export async function GET(request: NextRequest) {
 // 심부름 등록
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-
     // 사용자 인증 확인
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: '로그인이 필요합니다' }, { status: 401 });
+    const authResult = await requireLogin();
+    if (!authResult.success) {
+      return authResult.error!;
     }
+
+    const { user, supabase } = authResult;
 
     // profiles 테이블에서 사용자의 profile id 조회 (FK 참조용)
     const { data: existingProfile, error: profileError } = await supabase

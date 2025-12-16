@@ -1,20 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { logger } from '@/lib/logger';
+import { requireLogin } from '@/lib/api/auth';
 
 // 프로필 업데이트 API
 export async function PATCH(request: NextRequest) {
   try {
-    // 먼저 일반 클라이언트로 사용자 인증 확인
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // 사용자 인증 확인
+    const authResult = await requireLogin();
+    if (!authResult.success) {
+      return authResult.error!;
     }
+
+    const { user } = authResult;
 
     const body = await request.json();
     const { name, profile_image } = body;
