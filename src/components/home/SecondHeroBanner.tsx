@@ -373,7 +373,7 @@ export default function SecondHeroBanner() {
                   <span className="sm:hidden">호출 가능</span>{' '}
                   <span className="text-green-400 font-bold transition-all duration-500 inline-block min-w-[2ch] tabular-nums">
                     {nearbyCount}
-                  </span>
+                  </span>{' '}
                   명 · <span className="text-white font-bold">5분 내</span> 매칭
                 </p>
 

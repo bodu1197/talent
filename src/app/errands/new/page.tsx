@@ -1063,7 +1063,7 @@ export default function NewErrandPage() {
               <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <span className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs">
                   ₩
-                </span>
+                </span>{' '}
                 스마트 요금 계산
               </h3>
 

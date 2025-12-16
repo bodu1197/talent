@@ -99,7 +99,7 @@ export default function Step2Pricing({ formData, setFormData, isBusiness }: Step
               className="w-4 h-4 text-brand-primary focus:ring-brand-primary"
             />
             <span className="text-sm font-medium text-gray-700">
-              패키지별 가격
+              패키지별 가격{' '}
               <span className="ml-1 text-xs text-brand-primary">(STANDARD / DELUXE / PREMIUM)</span>
             </span>
           </label>

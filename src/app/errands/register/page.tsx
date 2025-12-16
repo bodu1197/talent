@@ -599,7 +599,7 @@ export default function ErrandRiderRegisterPage() {
                       >
                         정부24
                         <ExternalLink className="w-3 h-3" />
-                      </a>
+                      </a>{' '}
                       에서 무료 발급 가능합니다
                     </li>
                     <li>• 발급일로부터 3개월 이내의 서류만 유효합니다</li>
