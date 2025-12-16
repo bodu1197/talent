@@ -9,16 +9,17 @@ import { logger } from '@/lib/logger';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorState from '@/components/common/ErrorState';
 import toast from 'react-hot-toast';
+import OrderInfoSection from '@/components/orders/OrderInfoSection';
+import PaymentInfoSidebar from '@/components/orders/PaymentInfoSidebar';
+import RequirementsSection from '@/components/orders/RequirementsSection';
+import DeliverablesSection from '@/components/orders/DeliverablesSection';
+import StatusHistorySection from '@/components/orders/StatusHistorySection';
+import { getStatusLabel, getStatusColor, buildStatusHistory } from '@/lib/orders/statusHelpers';
 
 import {
   ArrowLeft,
   MessageCircle,
   Upload,
-  ImageIcon,
-  FileText,
-  Download,
-  Info,
-  Check,
   Loader2,
   CheckCircle,
   Ban,
@@ -119,7 +120,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
     try {
       setSubmitting(true);
       await updateOrderStatus(orderId, 'in_progress');
-      await loadOrder(); // 주문 정보 새로고침
+      await loadOrder();
       toast.success('주문이 접수되었습니다. 구매자에게 작업 시작 알림이 전송되었습니다.');
     } catch (err: unknown) {
       logger.error('주문 접수 실패:', err);
@@ -141,7 +142,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
       setSubmitting(true);
       await updateOrderStatus(orderId, 'delivered');
       setShowDeliveryModal(false);
-      await loadOrder(); // 주문 정보 새로고침
+      await loadOrder();
       toast.success('납품이 완료되었습니다');
     } catch (err: unknown) {
       logger.error('납품 실패:', err);
@@ -164,7 +165,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
       await cancelOrder(orderId, cancelReason);
       setShowCancelModal(false);
       setCancelReason('');
-      await loadOrder(); // 주문 정보 새로고침
+      await loadOrder();
       toast.success('주문이 취소되었습니다');
     } catch (err: unknown) {
       logger.error('주문 취소 실패:', err);
@@ -175,49 +176,6 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
       setSubmitting(false);
     }
   }
-
-  const getStatusLabel = (status: string) => {
-    switch (status) {
-      case 'pending_payment':
-        return '결제 대기';
-      case 'paid':
-      case 'payment_completed':
-        return '결제완료';
-      case 'in_progress':
-        return '진행중';
-      case 'revision':
-        return '수정 요청';
-      case 'delivered':
-        return '완료 대기';
-      case 'completed':
-        return '완료';
-      case 'cancelled':
-        return '취소/환불';
-      case 'refunded':
-        return '환불완료';
-      case 'in_review':
-        return '검토중';
-      default:
-        return status;
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'paid':
-        return 'bg-red-100 text-red-700';
-      case 'in_progress':
-        return 'bg-yellow-100 text-yellow-700';
-      case 'delivered':
-        return 'bg-blue-100 text-blue-700';
-      case 'completed':
-        return 'bg-green-100 text-green-700';
-      case 'cancelled':
-        return 'bg-gray-100 text-gray-700';
-      default:
-        return 'bg-gray-100 text-gray-700';
-    }
-  };
 
   if (loading) {
     return (
@@ -237,34 +195,6 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
         </div>
       </MypageLayoutWrapper>
     );
-  }
-
-  // Helper: Build status history entry
-  function buildStatusEntry(
-    status: string,
-    timestamp: string | undefined,
-    actor: string
-  ): { status: string; date: string; actor: string } | null {
-    if (!timestamp || typeof timestamp !== 'string') return null;
-
-    return {
-      status,
-      date: new Date(timestamp).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
-      actor,
-    };
-  }
-
-  // Helper: Build complete status history
-  function buildStatusHistory(order: OrderData) {
-    const entries = [
-      buildStatusEntry('주문 접수', order.created_at, '시스템'),
-      buildStatusEntry('결제 완료', order.paid_at, '구매자'),
-      buildStatusEntry('작업 시작', order.started_at, '전문가'),
-      buildStatusEntry('납품 완료', order.delivered_at, '전문가'),
-      buildStatusEntry('구매 확정', order.completed_at, '구매자'),
-    ];
-
-    return entries.filter((entry): entry is NonNullable<typeof entry> => entry !== null);
   }
 
   const statusHistory = buildStatusHistory(order);
@@ -317,159 +247,52 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
           {/* 왼쪽: 주요 정보 */}
           <div className="lg:col-span-2 space-y-4 lg:space-y-6">
             {/* 주문 정보 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
-              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
-                주문 정보
-              </h2>
-
-              <div className="space-y-3 lg:space-y-4">
-                <div className="flex items-start gap-3 lg:gap-4">
-                  <div className="w-20 h-20 lg:w-32 lg:h-32 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center">
-                    {order.service?.thumbnail_url ? (
-                      <img
-                        src={order.service.thumbnail_url}
-                        alt={order.title || order.service?.title}
-                        className="w-full h-full object-cover rounded-lg"
-                      />
-                    ) : (
-                      <ImageIcon className="text-gray-400 w-6 h-6 lg:w-8 lg:h-8" />
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-sm lg:text-lg font-semibold text-gray-900 mb-2 break-words">
-                      {order.title || order.service?.title || '서비스 제목 없음'}
-                    </h3>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-3 text-xs lg:text-sm">
-                      <div>
-                        <span className="text-gray-600">패키지:</span>
-                        <span className="ml-2 font-medium">{order.package || 'standard'}</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-600">수정 횟수:</span>
-                        <span className="ml-2 font-medium">{order.revision_count || 0}회</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-600">예상 완료일:</span>
-                        <span className="ml-2 font-medium">
-                          {order.delivery_date && typeof order.delivery_date === 'string'
-                            ? new Date(order.delivery_date).toLocaleDateString('ko-KR', {
-                                timeZone: 'Asia/Seoul',
-                              })
-                            : '-'}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-gray-600">남은 기간:</span>
-                        <span className="ml-2 font-medium text-red-600">
-                          {order.delivery_date && typeof order.delivery_date === 'string'
-                            ? `D-${Math.ceil((new Date(order.delivery_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24))}일`
-                            : '-'}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+            <OrderInfoSection order={order}>
+              <h3 className="text-sm lg:text-lg font-semibold text-gray-900 mb-2 break-words">
+                {order.title || order.service?.title || '서비스 제목 없음'}
+              </h3>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-3 text-xs lg:text-sm">
+                <div>
+                  <span className="text-gray-600">패키지:</span>
+                  <span className="ml-2 font-medium">{order.package || 'standard'}</span>
+                </div>
+                <div>
+                  <span className="text-gray-600">수정 횟수:</span>
+                  <span className="ml-2 font-medium">{order.revision_count || 0}회</span>
+                </div>
+                <div>
+                  <span className="text-gray-600">예상 완료일:</span>
+                  <span className="ml-2 font-medium">
+                    {order.delivery_date && typeof order.delivery_date === 'string'
+                      ? new Date(order.delivery_date).toLocaleDateString('ko-KR', {
+                          timeZone: 'Asia/Seoul',
+                        })
+                      : '-'}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-gray-600">남은 기간:</span>
+                  <span className="ml-2 font-medium text-red-600">
+                    {order.delivery_date && typeof order.delivery_date === 'string'
+                      ? `D-${Math.ceil((new Date(order.delivery_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24))}일`
+                      : '-'}
+                  </span>
                 </div>
               </div>
-            </div>
+            </OrderInfoSection>
 
             {/* 요구사항 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
-              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
-                구매자 요구사항
-              </h2>
-              <div className="bg-gray-50 rounded-lg p-3 lg:p-4 mb-3 lg:mb-4">
-                <p className="text-gray-700 whitespace-pre-wrap text-xs lg:text-sm">
-                  {order.requirements || '요구사항이 없습니다'}
-                </p>
-              </div>
-              {order.buyer_note && (
-                <div className="bg-blue-50 rounded-lg p-3 lg:p-4">
-                  <div className="flex items-start gap-2">
-                    <Info className="text-blue-600 mt-1 w-4 h-4 lg:w-5 lg:h-5" />
-                    <div>
-                      <div className="font-medium text-blue-900 mb-1 text-xs lg:text-sm">
-                        추가 메모
-                      </div>
-                      <p className="text-blue-700 text-xs lg:text-sm">{order.buyer_note}</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+            <RequirementsSection
+              requirements={order.requirements}
+              buyerNote={order.buyer_note}
+              title="구매자 요구사항"
+            />
 
             {/* 납품 파일 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
-              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
-                납품 파일
-              </h2>
-              {order.deliverables && order.deliverables.length > 0 ? (
-                <div className="space-y-2 lg:space-y-3">
-                  {order.deliverables.map((file) => (
-                    <div
-                      key={file.id}
-                      className="flex items-center justify-between p-3 lg:p-4 bg-gray-50 rounded-lg gap-2"
-                    >
-                      <div className="flex items-center gap-2 lg:gap-3 min-w-0 flex-1">
-                        <FileText className="text-blue-500 w-5 h-5 lg:w-7 lg:h-7 flex-shrink-0" />
-                        <div className="min-w-0">
-                          <div className="font-medium text-gray-900 text-xs lg:text-sm truncate">
-                            {file.file_name}
-                          </div>
-                          <div className="text-xs lg:text-sm text-gray-600">
-                            {(file.file_size / 1024 / 1024).toFixed(2)}MB •{' '}
-                            {file.created_at && typeof file.created_at === 'string'
-                              ? new Date(file.created_at).toLocaleString('ko-KR', {
-                                  timeZone: 'Asia/Seoul',
-                                })
-                              : '날짜 정보 없음'}
-                          </div>
-                        </div>
-                      </div>
-                      <a
-                        href={file.file_url}
-                        download
-                        className="px-3 py-1.5 text-xs lg:px-4 lg:py-2 lg:text-sm text-brand-primary hover:bg-blue-50 rounded-lg transition-colors flex-shrink-0"
-                      >
-                        <Download className="mr-1 lg:mr-2 inline w-3 h-3 lg:w-4 lg:h-4" />
-                        <span className="hidden sm:inline">다운로드</span>
-                        <span className="sm:hidden">다운</span>
-                      </a>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-6 lg:py-8 text-gray-500 text-xs lg:text-sm">
-                  아직 납품한 파일이 없습니다
-                </div>
-              )}
-            </div>
+            <DeliverablesSection deliverables={order.deliverables} mode="seller" />
 
             {/* 상태 이력 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
-              <h2 className="text-sm lg:text-base font-semibold text-gray-900 mb-3 lg:mb-4">
-                상태 이력
-              </h2>
-              <div className="space-y-2 lg:space-y-3">
-                {statusHistory.map((history, index) => (
-                  <div
-                    key={`status-${history.status}-${index}`}
-                    className="flex items-start gap-2 lg:gap-3 pb-2 lg:pb-3 border-b border-gray-200 last:border-0"
-                  >
-                    <div className="w-6 h-6 lg:w-8 lg:h-8 bg-brand-primary rounded-full flex items-center justify-center flex-shrink-0">
-                      <Check className="text-white w-3 h-3 lg:w-4 lg:h-4" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-medium text-gray-900 text-xs lg:text-sm">
-                        {history.status}
-                      </div>
-                      <div className="text-xs lg:text-sm text-gray-600">
-                        {history.date} • {history.actor}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <StatusHistorySection statusHistory={statusHistory} title="상태 이력" />
           </div>
 
           {/* 오른쪽: 사이드바 */}
@@ -514,37 +337,7 @@ export default function SellerOrderDetailClient({ orderId }: Props) {
             </div>
 
             {/* 결제 정보 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
-              <h3 className="font-semibold text-gray-900 mb-3 lg:mb-4 text-xs lg:text-base">
-                결제 정보
-              </h3>
-              <div className="space-y-2 lg:space-y-3">
-                <div className="flex items-center justify-between text-xs lg:text-sm">
-                  <span className="text-gray-600">주문 금액</span>
-                  <span className="font-medium">
-                    {order.total_amount?.toLocaleString() || '0'}원
-                  </span>
-                </div>
-                <div className="flex items-center justify-between pt-2 lg:pt-3 border-t border-gray-200">
-                  <span className="font-semibold text-gray-900 text-xs lg:text-sm">최종 금액</span>
-                  <span className="font-semibold text-brand-primary text-sm lg:text-lg">
-                    {order.total_amount?.toLocaleString() || '0'}원
-                  </span>
-                </div>
-                <div className="pt-2 lg:pt-3 border-t border-gray-200 text-xs lg:text-sm text-gray-600 space-y-1">
-                  <div>
-                    주문일:{' '}
-                    {new Date(order.created_at).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })}
-                  </div>
-                  {order.paid_at && typeof order.paid_at === 'string' && (
-                    <div>
-                      결제일:{' '}
-                      {new Date(order.paid_at).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+            <PaymentInfoSidebar totalAmount={order.total_amount} finalLabel="최종 금액" />
 
             {/* 빠른 액션 */}
             <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4">
