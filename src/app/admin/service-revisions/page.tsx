@@ -6,6 +6,9 @@ import toast from 'react-hot-toast';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorState from '@/components/common/ErrorState';
 import EmptyState from '@/components/common/EmptyState';
+import AdminTabNavigation from '@/components/admin/AdminTabNavigation';
+import AdminSearchBar from '@/components/admin/AdminSearchBar';
+import AdminResultCount from '@/components/admin/AdminResultCount';
 import { logger } from '@/lib/logger';
 import {
   getServiceRevisions,
@@ -14,7 +17,7 @@ import {
   rejectServiceRevision,
   type ServiceRevision,
 } from '@/lib/supabase/queries/admin';
-import { RefreshCw, ExternalLink, Info, Eye, Check, X } from 'lucide-react';
+import { ExternalLink, Info, Eye, Check, X } from 'lucide-react';
 
 type RevisionStatus = 'all' | 'pending' | 'approved' | 'rejected';
 
@@ -184,63 +187,19 @@ export default function AdminServiceRevisionsPage() {
       </div>
 
       {/* 탭 네비게이션 */}
-      <div className="bg-white rounded-lg border border-gray-200">
-        <div className="flex items-center overflow-x-auto">
-          {tabs.map((tab) => (
-            <button
-              key={tab.value}
-              onClick={() => setStatusFilter(tab.value)}
-              className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
-                statusFilter === tab.value
-                  ? 'border-brand-primary text-brand-primary'
-                  : 'border-transparent text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              {tab.label}
-              {tab.count > 0 && (
-                <span
-                  className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                    statusFilter === tab.value
-                      ? 'bg-brand-primary text-white'
-                      : 'bg-gray-200 text-gray-600'
-                  }`}
-                >
-                  {tab.count}
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
-      </div>
+      <AdminTabNavigation tabs={tabs} activeTab={statusFilter} onTabChange={setStatusFilter} />
 
       {/* 검색 */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <div className="flex gap-4">
-          <div className="flex-1">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="서비스명 또는 전문가명으로 검색"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-              aria-label="수정 요청 검색"
-            />
-          </div>
-          <button
-            onClick={() => setSearchQuery('')}
-            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-          >
-            <RefreshCw className="w-4 h-4 inline mr-2" />
-            초기화
-          </button>
-        </div>
-      </div>
+      <AdminSearchBar
+        value={searchQuery}
+        onChange={setSearchQuery}
+        onReset={() => setSearchQuery('')}
+        placeholder="서비스명 또는 전문가명으로 검색"
+        ariaLabel="수정 요청 검색"
+      />
 
       {/* 결과 카운트 */}
-      <div className="text-sm text-gray-600">
-        총 <span className="font-semibold text-gray-900">{filteredRevisions.length}</span> 개의 수정
-        요청
-      </div>
+      <AdminResultCount count={filteredRevisions.length} label="개의 수정 요청" />
 
       {/* 수정 요청 목록 */}
       <div className="bg-white rounded-lg border border-gray-200">

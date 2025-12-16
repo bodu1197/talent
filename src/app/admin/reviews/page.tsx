@@ -5,8 +5,11 @@ import { getAdminReviews, type ReviewWithRelations } from '@/lib/supabase/querie
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorState from '@/components/common/ErrorState';
 import EmptyState from '@/components/common/EmptyState';
+import AdminTabNavigation from '@/components/admin/AdminTabNavigation';
+import AdminSearchBar from '@/components/admin/AdminSearchBar';
+import AdminResultCount from '@/components/admin/AdminResultCount';
 import { logger } from '@/lib/logger';
-import { Star, RefreshCw, Reply } from 'lucide-react';
+import { Star, Reply } from 'lucide-react';
 
 type RatingFilter = 'all' | '5' | '4' | '3' | '2' | '1';
 
@@ -133,61 +136,18 @@ export default function AdminReviewsPage() {
       </div>
 
       {/* 탭 네비게이션 */}
-      <div className="bg-white rounded-lg border border-gray-200">
-        <div className="flex items-center overflow-x-auto">
-          {tabs.map((tab) => (
-            <button
-              key={tab.value}
-              onClick={() => setRatingFilter(tab.value)}
-              className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
-                ratingFilter === tab.value
-                  ? 'border-brand-primary text-brand-primary'
-                  : 'border-transparent text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              {tab.label}
-              {tab.count > 0 && (
-                <span
-                  className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                    ratingFilter === tab.value
-                      ? 'bg-brand-primary text-white'
-                      : 'bg-gray-200 text-gray-600'
-                  }`}
-                >
-                  {tab.count}
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
-      </div>
+      <AdminTabNavigation tabs={tabs} activeTab={ratingFilter} onTabChange={setRatingFilter} />
 
       {/* 검색 */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <div className="flex gap-4">
-          <div className="flex-1">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="리뷰 내용, 구매자명, 전문가명으로 검색"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-            />
-          </div>
-          <button
-            onClick={() => setSearchQuery('')}
-            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-          >
-            <RefreshCw className="w-4 h-4 inline mr-2" />
-            초기화
-          </button>
-        </div>
-      </div>
+      <AdminSearchBar
+        value={searchQuery}
+        onChange={setSearchQuery}
+        onReset={() => setSearchQuery('')}
+        placeholder="리뷰 내용, 구매자명, 전문가명으로 검색"
+      />
 
       {/* 결과 카운트 */}
-      <div className="text-sm text-gray-600">
-        총 <span className="font-semibold text-gray-900">{filteredReviews.length}</span> 개의 리뷰
-      </div>
+      <AdminResultCount count={filteredReviews.length} label="개의 리뷰" />
 
       {/* 리뷰 목록 */}
       <div className="space-y-4">
