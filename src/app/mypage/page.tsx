@@ -16,6 +16,21 @@ interface RecentActivity {
   time: string;
 }
 
+function getActivityIcon(type: string) {
+  switch (type) {
+    case 'order':
+      return '📦';
+    case 'sale':
+      return '💰';
+    case 'errand':
+      return '📋';
+    case 'delivery':
+      return '🏍️';
+    default:
+      return '📌';
+  }
+}
+
 export default function MypageHubPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
@@ -98,21 +113,6 @@ export default function MypageHubPage() {
       router.push('/mypage/buyer/dashboard');
     } else {
       router.push('/errands/mypage');
-    }
-  }
-
-  function getActivityIcon(type: string) {
-    switch (type) {
-      case 'order':
-        return '📦';
-      case 'sale':
-        return '💰';
-      case 'errand':
-        return '📋';
-      case 'delivery':
-        return '🏍️';
-      default:
-        return '📌';
     }
   }
 
