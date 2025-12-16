@@ -215,7 +215,7 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
 
   // Helper: Navigate to chat room based on device
   function navigateToRoom(roomId: string): void {
-    const isMobile = window.innerWidth < 768;
+    const isMobile = globalThis.window.innerWidth < 768;
 
     if (isMobile) {
       router.push(`/chat/${roomId}`);

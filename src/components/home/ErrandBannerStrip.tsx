@@ -34,21 +34,21 @@ export default function ErrandBannerStrip() {
 
   // 초기화 및 화면 너비 계산
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof globalThis.window !== 'undefined') {
       // 도착 위치 계산: 화면 너비 - 450px
-      setEndPosition(window.innerWidth - 450);
+      setEndPosition(globalThis.window.innerWidth - 450);
 
       // 리사이즈 대응
-      const handleResize = () => setEndPosition(window.innerWidth - 450);
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
+      const handleResize = () => setEndPosition(globalThis.window.innerWidth - 450);
+      globalThis.window.addEventListener('resize', handleResize);
+      return () => globalThis.window.removeEventListener('resize', handleResize);
     }
   }, []);
 
   // 스크롤 감지하여 애니메이션 트리거
   useEffect(() => {
     // 모바일에서는 애니메이션 기능 끄기
-    if (typeof window !== 'undefined' && window.innerWidth < 768) return;
+    if (typeof globalThis.window !== 'undefined' && globalThis.window.innerWidth < 768) return;
 
     let observer: IntersectionObserver | null = null;
     let startTimeout: NodeJS.Timeout | null = null;

@@ -53,12 +53,12 @@ export default function RecommendedServicesClient({
     checkScroll();
     const container = tabContainerRef.current;
     container?.addEventListener('scroll', checkScroll, { passive: true });
-    window.addEventListener('resize', checkScroll);
+    globalThis.window.addEventListener('resize', checkScroll);
 
     return () => {
       cancelAnimationFrame(rafId);
       container?.removeEventListener('scroll', checkScroll);
-      window.removeEventListener('resize', checkScroll);
+      globalThis.window.removeEventListener('resize', checkScroll);
     };
   }, []);
 

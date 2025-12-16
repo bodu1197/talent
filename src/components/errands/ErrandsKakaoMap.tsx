@@ -184,8 +184,8 @@ export default function ErrandsKakaoMap({
 
   // 카카오맵 SDK 초기화 헬퍼
   const initializeKakaoMaps = useCallback(() => {
-    if (!window.kakao?.maps) return;
-    window.kakao.maps.load(() => {
+    if (!globalThis.window.kakao?.maps) return;
+    globalThis.window.kakao.maps.load(() => {
       setIsLoaded(true);
     });
   }, []);
@@ -195,7 +195,7 @@ export default function ErrandsKakaoMap({
     if (isLoaded) return;
 
     // 이미 SDK가 로드되어 있으면 바로 사용
-    if (window.kakao?.maps) {
+    if (globalThis.window.kakao?.maps) {
       initializeKakaoMaps();
       return;
     }
@@ -208,7 +208,7 @@ export default function ErrandsKakaoMap({
       sdkCheckIntervalRef.current = setInterval(() => {
         attempts++;
 
-        if (window.kakao?.maps) {
+        if (globalThis.window.kakao?.maps) {
           clearInterval(sdkCheckIntervalRef.current!);
           initializeKakaoMaps();
         } else if (attempts >= maxAttempts) {
@@ -234,7 +234,7 @@ export default function ErrandsKakaoMap({
     // script.crossOrigin = 'anonymous';  // 이 줄을 추가하면 오히려 문제가 됨
 
     script.onload = () => {
-      if (window.kakao) {
+      if (globalThis.window.kakao) {
         initializeKakaoMaps();
       } else {
         console.error('[KakaoMap] kakao object not found after load');
@@ -446,7 +446,7 @@ export default function ErrandsKakaoMap({
 
   // 페이지 새로고침
   const handlePageReload = useCallback(() => {
-    window.location.reload();
+    globalThis.window.location.reload();
   }, []);
 
   // 등급 배지 색상

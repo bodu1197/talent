@@ -22,14 +22,14 @@ export default function MobileServiceHeader({
 
   const handleCall = () => {
     if (sellerPhone) {
-      window.location.href = `tel:${sellerPhone}`;
+      globalThis.window.location.href = `tel:${sellerPhone}`;
     } else {
       alert('전문가 연락처가 등록되지 않았습니다.');
     }
   };
 
   const handleShare = async () => {
-    const shareUrl = `${window.location.origin}/services/${serviceId}`;
+    const shareUrl = `${globalThis.window.location.origin}/services/${serviceId}`;
 
     if (navigator.share) {
       try {

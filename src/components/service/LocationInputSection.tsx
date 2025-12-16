@@ -87,7 +87,7 @@ export default function LocationInputSection({
 
   // Daum Postcode 스크립트 로드
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.daum) {
+    if (typeof globalThis.window !== 'undefined' && globalThis.window.daum) {
       setIsScriptLoaded(true);
       return;
     }
@@ -134,7 +134,7 @@ export default function LocationInputSection({
   const handleOpenPostcode = () => {
     if (!isScriptLoaded || disabled) return;
 
-    if (!window.daum?.Postcode) {
+    if (!globalThis.window.daum?.Postcode) {
       setLocationError('주소 검색 기능을 사용할 수 없습니다');
       return;
     }
@@ -142,7 +142,7 @@ export default function LocationInputSection({
     setLocationError(null);
     setIsSearching(true);
 
-    new window.daum.Postcode({
+    new globalThis.window.daum.Postcode({
       oncomplete: (data: DaumPostcodeData) => {
         void (async () => {
           // 신주소(도로명주소) 우선, 없으면 구주소(지번주소) 사용

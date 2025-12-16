@@ -71,8 +71,8 @@ export default function AdvertisingPage() {
     if (targetRef.current) {
       const headerOffset = 120; // 탭 헤더 높이 + 여백
       const elementPosition = targetRef.current.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - headerOffset;
-      window.scrollTo({
+      const offsetPosition = elementPosition + globalThis.window.scrollY - headerOffset;
+      globalThis.window.scrollTo({
         top: offsetPosition,
         behavior: 'smooth',
       });

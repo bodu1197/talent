@@ -106,7 +106,7 @@ export async function GET(_request: NextRequest) {
       </div>
 
       <button type="submit">인증 완료</button>
-      <button type="button" class="cancel" onclick="window.close()">취소</button>
+      <button type="button" class="cancel" onclick="globalThis.window.close()">취소</button>
     </form>
   </div>
 
@@ -119,8 +119,8 @@ export async function GET(_request: NextRequest) {
       const birthDate = document.getElementById('birthDate').value;
 
       // 부모 창으로 인증 결과 전송
-      if (window.opener) {
-        window.opener.postMessage({
+      if (globalThis.window.opener) {
+        globalThis.window.opener.postMessage({
           type: 'NICE_VERIFICATION_SUCCESS',
           data: {
             name: name,
@@ -128,10 +128,10 @@ export async function GET(_request: NextRequest) {
             birthDate: birthDate,
             gender: 'M'
           }
-        }, window.location.origin);
+        }, globalThis.window.location.origin);
 
         alert('본인인증이 완료되었습니다.');
-        window.close();
+        globalThis.window.close();
       }
     });
   </script>

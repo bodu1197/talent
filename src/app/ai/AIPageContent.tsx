@@ -17,11 +17,11 @@ export default function AIPageContent({ aiCategories }: AIPageContentProps) {
     const element = document.getElementById(sectionId);
     if (element) {
       const offset = 100;
-      // Use window.scrollY for more reliable and performant calculation
-      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+      // Use globalThis.window.scrollY for more reliable and performant calculation
+      const elementPosition = element.getBoundingClientRect().top + globalThis.window.scrollY;
       const offsetPosition = elementPosition - offset;
 
-      window.scrollTo({
+      globalThis.window.scrollTo({
         top: offsetPosition,
         behavior: 'smooth',
       });

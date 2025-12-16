@@ -158,7 +158,7 @@ export default function NewErrandPage() {
   // Daum Postcode 스크립트 로드
   useEffect(() => {
     // 이미 로드되어 있는지 확인
-    if (typeof window !== 'undefined' && window.daum?.Postcode) {
+    if (typeof globalThis.window !== 'undefined' && globalThis.window.daum?.Postcode) {
       setIsScriptLoaded(true);
       return;
     }
@@ -214,7 +214,7 @@ export default function NewErrandPage() {
       return;
     }
 
-    if (!window.daum?.Postcode) {
+    if (!globalThis.window.daum?.Postcode) {
       toast.error('주소 검색 기능을 사용할 수 없습니다.');
       logger.error('Daum Postcode not available');
       return;
@@ -232,7 +232,7 @@ export default function NewErrandPage() {
     };
 
     try {
-      new window.daum.Postcode({
+      new globalThis.window.daum.Postcode({
         oncomplete: (data: DaumPostcodeData) => void handlePickupComplete(data),
       }).open();
     } catch (error) {
@@ -248,7 +248,7 @@ export default function NewErrandPage() {
       return;
     }
 
-    if (!window.daum?.Postcode) {
+    if (!globalThis.window.daum?.Postcode) {
       toast.error('주소 검색 기능을 사용할 수 없습니다.');
       logger.error('Daum Postcode not available');
       return;
@@ -266,7 +266,7 @@ export default function NewErrandPage() {
     };
 
     try {
-      new window.daum.Postcode({
+      new globalThis.window.daum.Postcode({
         oncomplete: (data: DaumPostcodeData) => void handleDeliveryComplete(data),
       }).open();
     } catch (error) {
@@ -409,7 +409,7 @@ export default function NewErrandPage() {
       return;
     }
 
-    if (!window.daum?.Postcode) {
+    if (!globalThis.window.daum?.Postcode) {
       toast.error('주소 검색 기능을 사용할 수 없습니다.');
       logger.error('Daum Postcode not available');
       return;
@@ -422,7 +422,7 @@ export default function NewErrandPage() {
     };
 
     try {
-      new window.daum.Postcode({
+      new globalThis.window.daum.Postcode({
         oncomplete: (data: DaumPostcodeData) => void handleStopComplete(data),
       }).open();
     } catch (error) {
@@ -456,7 +456,7 @@ export default function NewErrandPage() {
       return;
     }
 
-    if (!window.daum?.Postcode) {
+    if (!globalThis.window.daum?.Postcode) {
       toast.error('주소 검색 기능을 사용할 수 없습니다.');
       logger.error('Daum Postcode not available');
       return;
@@ -473,7 +473,7 @@ export default function NewErrandPage() {
     };
 
     try {
-      new window.daum.Postcode({
+      new globalThis.window.daum.Postcode({
         oncomplete: (data: DaumPostcodeData) => void handleShoppingComplete(data),
       }).open();
     } catch (error) {

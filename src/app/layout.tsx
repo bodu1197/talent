@@ -179,11 +179,11 @@ export default async function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
-        {/* Set window.__nonce__ for third-party libraries like goober */}
+        {/* Set globalThis.window.__nonce__ for third-party libraries like goober */}
         <script
           nonce={nonce}
           dangerouslySetInnerHTML={{
-            __html: `window.__nonce__ = "${nonce}";`,
+            __html: `globalThis.window.__nonce__ = "${nonce}";`,
           }}
         />
         {/* Preconnect to Supabase for faster API connections - LCP optimization */}
@@ -208,7 +208,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
+                globalThis.window.addEventListener('load', function() {
                   navigator.serviceWorker.register('/sw.js').catch(function(err) {
                     console.log('ServiceWorker registration failed: ', err);
                   });
