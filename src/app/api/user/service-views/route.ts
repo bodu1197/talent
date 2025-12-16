@@ -5,8 +5,13 @@ import { requireAuth } from '@/lib/api/auth';
 // POST: 서비스 조회 기록 저장
 export async function POST(request: NextRequest) {
   try {
-    const { supabase, user, error: authError } = await requireAuth();
-    if (authError) return authError;
+    const authResult = await requireAuth();
+    if (!authResult.success) return authResult.error;
+
+    const { supabase, user } = authResult;
+    if (!supabase || !user) {
+      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
+    }
 
     const body = await request.json();
     const { serviceId } = body;
@@ -42,8 +47,13 @@ export async function POST(request: NextRequest) {
 // GET: 최근 본 서비스 조회
 export async function GET(request: NextRequest) {
   try {
-    const { supabase, user, error: authError } = await requireAuth();
-    if (authError) return authError;
+    const authResult = await requireAuth();
+    if (!authResult.success) return authResult.error;
+
+    const { supabase, user } = authResult;
+    if (!supabase || !user) {
+      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
+    }
 
     const { searchParams } = new URL(request.url);
     const limit = Number.parseInt(searchParams.get('limit') || '20');

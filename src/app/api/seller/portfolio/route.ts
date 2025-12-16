@@ -5,8 +5,13 @@ import { logger } from '@/lib/logger';
 // POST: 포트폴리오 등록
 export async function POST(request: NextRequest) {
   try {
-    const { supabase, user, error: authError } = await requireAuth();
-    if (authError) return authError;
+    const authResult = await requireAuth();
+    if (!authResult.success) return authResult.error;
+
+    const { supabase, user } = authResult;
+    if (!supabase || !user) {
+      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
+    }
 
     const body = await request.json();
     const {

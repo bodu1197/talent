@@ -6,8 +6,13 @@ import { requireAuth } from '@/lib/api/auth';
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const { supabase, user, error: authError } = await requireAuth();
-    if (authError) return authError;
+    const authResult = await requireAuth();
+    if (!authResult.success) return authResult.error;
+
+    const { supabase, user } = authResult;
+    if (!supabase || !user) {
+      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
+    }
 
     const { reason } = await request.json();
 
