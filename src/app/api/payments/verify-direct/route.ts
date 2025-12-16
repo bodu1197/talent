@@ -3,6 +3,8 @@ import { notifyPaymentReceived } from '@/lib/notifications';
 import { logger } from '@/lib/logger';
 import { paymentVerifyRateLimit } from '@/lib/rate-limit';
 import { requireAuthWithRateLimit } from '@/lib/api/auth';
+import { validateUUID } from '@/lib/api/validation';
+import { verifyOrderBuyer } from '@/lib/api/ownership';
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,26 +28,17 @@ export async function POST(request: NextRequest) {
     }
 
     // UUID 형식 검증
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    if (!uuidRegex.test(order_id)) {
-      return NextResponse.json({ error: '유효하지 않은 주문 ID입니다' }, { status: 400 });
+    const uuidError = validateUUID(order_id, '주문 ID');
+    if (uuidError) return uuidError;
+
+    // 주문 정보 조회 및 구매자 확인
+    const orderResult = await verifyOrderBuyer(supabase, order_id, user.id);
+    if (!orderResult.success) {
+      return orderResult.error!;
     }
 
-    // 주문 정보 조회
-    const { data: order, error: orderError } = await supabase
-      .from('orders')
-      .select('*')
-      .eq('id', order_id)
-      .single();
-
-    if (orderError || !order) {
-      return NextResponse.json({ error: '주문을 찾을 수 없습니다' }, { status: 404 });
-    }
-
-    // 구매자 확인
-    if (order.buyer_id !== user.id) {
-      return NextResponse.json({ error: '구매자만 결제 검증을 할 수 있습니다' }, { status: 403 });
-    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const order = orderResult.data!.order as any;
 
     // 이미 결제된 주문인지 확인
     if (order.status === 'paid' || order.status === 'in_progress') {

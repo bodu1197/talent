@@ -166,3 +166,39 @@ export async function verifyOrderAccess(
     data: { order },
   };
 }
+
+/**
+ * 주문 구매자 권한 확인
+ * 주문을 조회하고 현재 사용자가 구매자인지 확인
+ */
+export async function verifyOrderBuyer(
+  supabase: SupabaseClient,
+  orderId: string,
+  userId: string
+): Promise<OwnershipResult> {
+  const { data: order, error: orderError } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('id', orderId)
+    .single();
+
+  if (orderError || !order) {
+    return {
+      success: false,
+      error: NextResponse.json({ error: '주문을 찾을 수 없습니다' }, { status: 404 }),
+    };
+  }
+
+  // 구매자 확인
+  if (order.buyer_id !== userId) {
+    return {
+      success: false,
+      error: NextResponse.json({ error: '구매자만 결제 검증을 할 수 있습니다' }, { status: 403 }),
+    };
+  }
+
+  return {
+    success: true,
+    data: { order },
+  };
+}

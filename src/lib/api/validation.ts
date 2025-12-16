@@ -1,19 +1,19 @@
 import { NextResponse } from 'next/server';
 
-export function validateUUID(id: string): boolean {
+/**
+ * UUID 형식 검증
+ */
+export function isValidUUID(uuid: string): boolean {
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  return uuidRegex.test(id);
+  return uuidRegex.test(uuid);
 }
 
-export function createErrorResponse(message: string, status: number) {
-  return NextResponse.json({ error: message }, { status });
-}
-
-export function validateRequiredFields(fields: Record<string, unknown>): string | null {
-  for (const [key, value] of Object.entries(fields)) {
-    if (!value) {
-      return `${key} is required`;
-    }
+/**
+ * UUID 검증 및 에러 응답 반환
+ */
+export function validateUUID(uuid: string, fieldName = 'ID'): NextResponse | null {
+  if (!isValidUUID(uuid)) {
+    return NextResponse.json({ error: `유효하지 않은 ${fieldName}입니다` }, { status: 400 });
   }
   return null;
 }
