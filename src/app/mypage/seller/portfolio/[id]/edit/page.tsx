@@ -1,48 +1,16 @@
-import { redirect, notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import PortfolioEditClient from './PortfolioEditClient';
+import { getPortfolioWithAuth } from '@/lib/seller/portfolioData';
 
 interface Props {
   readonly params: Promise<{ id: string }>;
 }
 
 export default async function PortfolioEditPage({ params }: Props) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect('/auth/login');
-  }
-
-  const { data: seller } = await supabase
-    .from('sellers')
-    .select('id')
-    .eq('user_id', user.id)
-    .maybeSingle();
-
-  if (!seller) {
-    redirect('/mypage/seller/register');
-  }
-
   const { id } = await params;
+  const { portfolio, sellerId } = await getPortfolioWithAuth(id);
 
-  // 포트폴리오 조회
-  const { data: portfolio } = await supabase
-    .from('seller_portfolio')
-    .select('*')
-    .eq('id', id)
-    .single();
-
-  if (!portfolio) {
-    notFound();
-  }
-
-  // 본인 소유 확인
-  if (portfolio.seller_id !== seller.id) {
-    redirect('/mypage/seller/portfolio');
-  }
+  const supabase = await createClient();
 
   // 카테고리 목록 가져오기
   const { data: categories } = await supabase
@@ -54,14 +22,14 @@ export default async function PortfolioEditPage({ params }: Props) {
   const { data: services } = await supabase
     .from('services')
     .select('id, title, status')
-    .eq('seller_id', seller.id)
+    .eq('seller_id', sellerId)
     .in('status', ['active', 'pending'])
     .order('created_at', { ascending: false });
 
   return (
     <PortfolioEditClient
       portfolio={portfolio}
-      sellerId={seller.id}
+      sellerId={sellerId}
       categories={categories || []}
       services={services || []}
     />
