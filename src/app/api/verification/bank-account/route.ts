@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
-import { requireAuth } from '@/lib/api/auth';
+import { verifyAuth } from '@/lib/api/verification-common';
 
 // 한국 주요 은행 코드 매핑
 const BANK_CODES: Record<string, string> = {
@@ -115,19 +115,21 @@ async function verifyBankAccount(bankCode: string, accountNumber: string) {
   return response.json();
 }
 
+interface BankAccountRequest {
+  bankName: string;
+  accountNumber: string;
+  accountHolder?: string;
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireAuth();
+    // 인증 및 본문 파싱
+    const authResult = await verifyAuth<BankAccountRequest>(request);
     if (!authResult.success) {
-      return authResult.error!;
+      return authResult.error;
     }
 
-    const { user } = authResult;
-    if (!user) {
-      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
-    }
-
-    const body = await request.json();
+    const { user, body } = authResult;
     const { bankName, accountNumber, accountHolder } = body;
 
     if (!bankName || !accountNumber) {

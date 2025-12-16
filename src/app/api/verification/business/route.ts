@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
-import { requireAuth } from '@/lib/api/auth';
+import { verifyAuth } from '@/lib/api/verification-common';
 
 // 사업자등록번호 형식 검증 (000-00-00000)
 function isValidBusinessNumber(businessNumber: string): boolean {
@@ -66,19 +66,19 @@ async function verifyBusinessNumber(businessNumber: string) {
   return response.json();
 }
 
+interface BusinessVerificationRequest {
+  businessNumber: string;
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireAuth();
+    // 인증 및 본문 파싱
+    const authResult = await verifyAuth<BusinessVerificationRequest>(request);
     if (!authResult.success) {
-      return authResult.error!;
+      return authResult.error;
     }
 
-    const { user } = authResult;
-    if (!user) {
-      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
-    }
-
-    const body = await request.json();
+    const { user, body } = authResult;
     const { businessNumber } = body;
 
     if (!businessNumber) {
