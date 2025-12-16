@@ -1,11 +1,10 @@
 'use client';
 
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
-import Link from 'next/link';
+import ServicePageHeader from '@/components/mypage/seller/services/ServicePageHeader';
 import { createClient } from '@/lib/supabase/client';
 import { logger } from '@/lib/logger';
 import toast from 'react-hot-toast';
-import { ArrowLeft } from 'lucide-react';
 import ServiceForm, { ServiceFormState } from '@/components/service/ServiceForm';
 import type { DeliveryMethod } from '@/types/service-form';
 
@@ -127,20 +126,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
   return (
     <MypageLayoutWrapper mode="seller">
       <div className="pt-2 pb-4 px-4 lg:py-8 lg:px-6">
-        <div className="mb-4 lg:mb-6">
-          <Link
-            href="/mypage/seller/services"
-            className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm lg:text-base">서비스 관리로</span>
-          </Link>
-        </div>
-
-        <div className="mb-6 lg:mb-8">
-          <h1 className="text-base lg:text-lg font-semibold text-gray-900">서비스 수정</h1>
-          <p className="text-gray-600 mt-1 text-sm">서비스 정보를 수정하세요</p>
-        </div>
+        <ServicePageHeader title="서비스 수정" description="서비스 정보를 수정하세요" />
 
         <ServiceForm
           mode="edit"
