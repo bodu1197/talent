@@ -226,7 +226,7 @@ export default function ErrandApplyPage() {
                     type="number"
                     value={proposedPrice || ''}
                     onChange={(e) =>
-                      setProposedPrice(e.target.value ? parseInt(e.target.value, 10) : null)
+                      setProposedPrice(e.target.value ? Number.parseInt(e.target.value, 10) : null)
                     }
                     placeholder="다른 금액을 제안하려면 입력하세요"
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-12"

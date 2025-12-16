@@ -241,7 +241,7 @@ export default function ErrandRiderRegisterPage() {
       toast.error('주소를 입력해주세요');
       return false;
     }
-    const birthYear = parseInt(formData.birth_date.split('-')[0]);
+    const birthYear = Number.parseInt(formData.birth_date.split('-')[0]);
     const currentYear = new Date().getFullYear();
     if (currentYear - birthYear < 19) {
       toast.error('만 19세 이상만 등록 가능합니다');

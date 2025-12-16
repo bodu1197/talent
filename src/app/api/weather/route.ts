@@ -140,10 +140,10 @@ export async function GET(request: NextRequest) {
           temp = parseFloat(item.obsrValue);
           break;
         case 'REH': // 습도
-          humidity = parseInt(item.obsrValue, 10);
+          humidity = Number.parseInt(item.obsrValue, 10);
           break;
         case 'PTY': // 강수형태
-          pty = parseInt(item.obsrValue, 10);
+          pty = Number.parseInt(item.obsrValue, 10);
           break;
       }
     }

@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     const lat = parseFloat(searchParams.get('lat') || '');
     const lng = parseFloat(searchParams.get('lng') || '');
     const radiusKm = parseFloat(searchParams.get('radius') || '5');
-    const limit = parseInt(searchParams.get('limit') || '20');
+    const limit = Number.parseInt(searchParams.get('limit') || '20');
 
     // 위치 파라미터 검증
     if (isNaN(lat) || isNaN(lng)) {

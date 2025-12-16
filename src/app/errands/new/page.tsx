@@ -932,7 +932,11 @@ export default function NewErrandPage() {
                           type="number"
                           value={item.quantity}
                           onChange={(e) =>
-                            updateShoppingItem(index, 'quantity', parseInt(e.target.value) || 1)
+                            updateShoppingItem(
+                              index,
+                              'quantity',
+                              Number.parseInt(e.target.value) || 1
+                            )
                           }
                           min={1}
                           className="w-16 px-2 py-2.5 border border-gray-200 rounded-lg text-sm text-center"

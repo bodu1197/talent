@@ -12,9 +12,9 @@ export async function GET(request: NextRequest) {
     // 쿼리 파라미터 파싱
     const lat = parseFloat(searchParams.get('lat') || '');
     const lng = parseFloat(searchParams.get('lng') || '');
-    const radius = parseInt(searchParams.get('radius') || '10'); // 기본 10km
+    const radius = Number.parseInt(searchParams.get('radius') || '10'); // 기본 10km
     const category = searchParams.get('category') || null; // 카테고리 필터 (slug)
-    const limit = parseInt(searchParams.get('limit') || '20');
+    const limit = Number.parseInt(searchParams.get('limit') || '20');
 
     // 필수 파라미터 검증
     if (isNaN(lat) || isNaN(lng)) {

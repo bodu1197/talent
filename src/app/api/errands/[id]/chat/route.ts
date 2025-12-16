@@ -103,7 +103,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     // 메시지 조회 (발신자 정보 포함)
     const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get('limit') || '50', 10);
+    const limit = Number.parseInt(searchParams.get('limit') || '50', 10);
     const before = searchParams.get('before'); // cursor pagination
 
     let query = supabase

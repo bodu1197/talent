@@ -175,8 +175,8 @@ function parseErrandListParams(searchParams: URLSearchParams): ErrandListParams 
   return {
     status: statusParam && statusParam !== 'all' ? (statusParam as ErrandStatus) : null,
     category: searchParams.get('category') as ErrandCategory | null,
-    limit: parseInt(searchParams.get('limit') || '20', 10),
-    offset: parseInt(searchParams.get('offset') || '0', 10),
+    limit: Number.parseInt(searchParams.get('limit') || '20', 10),
+    offset: Number.parseInt(searchParams.get('offset') || '0', 10),
     mode: searchParams.get('mode'),
     helperLat: parseFloat(searchParams.get('lat') || '0'),
     helperLng: parseFloat(searchParams.get('lng') || '0'),

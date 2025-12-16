@@ -17,13 +17,13 @@ function isValidBusinessNumber(businessNumber: string): boolean {
   let sum = 0;
 
   for (let i = 0; i < 9; i++) {
-    sum += parseInt(cleanNumber[i]) * checkSum[i];
+    sum += Number.parseInt(cleanNumber[i]) * checkSum[i];
   }
 
-  sum += Math.floor((parseInt(cleanNumber[8]) * 5) / 10);
+  sum += Math.floor((Number.parseInt(cleanNumber[8]) * 5) / 10);
   const remainder = (10 - (sum % 10)) % 10;
 
-  return remainder === parseInt(cleanNumber[9]);
+  return remainder === Number.parseInt(cleanNumber[9]);
 }
 
 // PortOne B2B API로 사업자등록 정보 조회

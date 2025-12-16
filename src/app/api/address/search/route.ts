@@ -123,9 +123,9 @@ export async function POST(request: NextRequest) {
       })
     );
 
-    const total = parseInt(common.totalCount, 10);
-    const currentPage = parseInt(common.currentPage, 10);
-    const perPage = parseInt(common.countPerPage, 10);
+    const total = Number.parseInt(common.totalCount, 10);
+    const currentPage = Number.parseInt(common.currentPage, 10);
+    const perPage = Number.parseInt(common.countPerPage, 10);
 
     return NextResponse.json({
       results,

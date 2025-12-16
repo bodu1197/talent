@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     const lat = parseFloat(searchParams.get('lat') || '');
     const lng = parseFloat(searchParams.get('lng') || '');
     const radiusKm = parseFloat(searchParams.get('radius') || '5'); // 기본 5km
-    const staleMinutes = parseInt(searchParams.get('stale') || '10'); // 기본 10분
+    const staleMinutes = Number.parseInt(searchParams.get('stale') || '10'); // 기본 10분
 
     // 위치 파라미터 검증
     if (isNaN(lat) || isNaN(lng)) {

@@ -121,14 +121,14 @@ export function validatePackage(data: PackageFormData, type: PackageType): strin
     );
   }
 
-  const price = parseInt(data.price.replace(/,/g, ''), 10);
+  const price = Number.parseInt(data.price.replace(/,/g, ''), 10);
   if (isNaN(price) || price < MIN_PACKAGE_PRICE) {
     errors.push(
       `${PACKAGE_TYPE_LABELS[type]} 가격은 최소 ${MIN_PACKAGE_PRICE.toLocaleString()}원 이상이어야 합니다.`
     );
   }
 
-  const deliveryDays = parseInt(data.delivery_days, 10);
+  const deliveryDays = Number.parseInt(data.delivery_days, 10);
   if (isNaN(deliveryDays) || deliveryDays < 1 || deliveryDays > 365) {
     errors.push(`${PACKAGE_TYPE_LABELS[type]} 작업 기간은 1~365일 사이여야 합니다.`);
   }
@@ -189,9 +189,9 @@ export function packageFormToDbData(
     service_id: serviceId,
     name: data.title || PACKAGE_TYPE_LABELS[type], // 제목이 있으면 사용, 없으면 기본 라벨
     package_type: type,
-    price: parseInt(data.price.replace(/,/g, ''), 10),
-    delivery_days: parseInt(data.delivery_days, 10),
-    revision_count: parseInt(data.revision_count, 10),
+    price: Number.parseInt(data.price.replace(/,/g, ''), 10),
+    delivery_days: Number.parseInt(data.delivery_days, 10),
+    revision_count: Number.parseInt(data.revision_count, 10),
     features: data.features,
     description: data.description || null,
     is_active: data.is_enabled,

@@ -72,8 +72,12 @@ function aggregateClicks(
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const limit = searchParams.get('limit') ? parseInt(searchParams.get('limit')!, 10) : undefined;
-    const offset = searchParams.get('offset') ? parseInt(searchParams.get('offset')!, 10) : 0;
+    const limit = searchParams.get('limit')
+      ? Number.parseInt(searchParams.get('limit')!, 10)
+      : undefined;
+    const offset = searchParams.get('offset')
+      ? Number.parseInt(searchParams.get('offset')!, 10)
+      : 0;
 
     const supabase = createServiceRoleClient();
 
