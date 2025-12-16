@@ -342,7 +342,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { user, supabase } = authResult;
-    if (!supabase) {
+    if (!user || !supabase) {
       return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
 
