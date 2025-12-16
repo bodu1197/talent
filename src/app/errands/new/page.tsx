@@ -627,10 +627,10 @@ export default function NewErrandPage() {
         <div className="max-w-2xl">
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* 카테고리 선택 */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+            <fieldset>
+              <legend className="block text-sm font-medium text-gray-700 mb-2">
                 어떤 심부름이 필요하세요?
-              </label>
+              </legend>
               <div className="flex flex-wrap gap-2">
                 {CATEGORIES.map((cat) => (
                   <button
@@ -648,15 +648,15 @@ export default function NewErrandPage() {
                   </button>
                 ))}
               </div>
-            </div>
+            </fieldset>
 
             {/* 출발지 (배달 카테고리만) */}
             {formData.category === 'DELIVERY' && (
-              <div className="bg-white rounded-xl border border-gray-200 p-4">
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <fieldset className="bg-white rounded-xl border border-gray-200 p-4">
+                <legend className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                   <div className="w-2 h-2 rounded-full bg-blue-500" />
                   출발지
-                </label>
+                </legend>
                 <div className="flex gap-2 mb-2">
                   <button
                     type="button"
@@ -689,7 +689,7 @@ export default function NewErrandPage() {
                     className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 )}
-              </div>
+              </fieldset>
             )}
 
             {/* 도착지 / 배달 받을 주소 */}
@@ -1037,10 +1037,14 @@ export default function NewErrandPage() {
 
             {/* 요청 내용 */}
             <div className="bg-white rounded-xl border border-gray-200 p-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="errand-title"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 요청 내용 <span className="text-red-500">*</span>
               </label>
               <input
+                id="errand-title"
                 type="text"
                 name="title"
                 value={formData.title || ''}

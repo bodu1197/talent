@@ -262,10 +262,14 @@ export default function AdvertisingPaymentClient({ payment, buyer }: Props) {
                 <h2 className="text-lg font-bold text-gray-900 mb-4">결제자 정보</h2>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label
+                      htmlFor="buyer-phone"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
                       휴대폰 번호 <span className="text-red-500">*</span>
                     </label>
                     <input
+                      id="buyer-phone"
                       type="tel"
                       value={phoneInput}
                       onChange={(e) => setPhoneInput(e.target.value.replace(/\D/g, ''))}

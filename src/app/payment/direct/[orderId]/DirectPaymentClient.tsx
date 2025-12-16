@@ -339,10 +339,14 @@ export default function DirectPaymentClient({ order, seller }: Props) {
                 <h2 className="text-lg font-bold text-gray-900 mb-4">구매자 정보</h2>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label
+                      htmlFor="buyer-phone-direct"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
                       휴대폰 번호 <span className="text-red-500">*</span>
                     </label>
                     <input
+                      id="buyer-phone-direct"
                       type="tel"
                       value={phoneInput}
                       onChange={(e) => setPhoneInput(e.target.value.replace(/\D/g, ''))}

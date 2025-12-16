@@ -1128,10 +1128,10 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                <fieldset>
+                  <legend className="block text-sm font-medium text-gray-700 mb-2">
                     선호하는 연락 수단 (복수 선택 가능)
-                  </label>
+                  </legend>
                   <div className="space-y-2">
                     {['플랫폼 메시지', '카카오톡', 'WhatsApp', '이메일', '전화'].map((contact) => (
                       <label
@@ -1150,7 +1150,7 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
                       </label>
                     ))}
                   </div>
-                </div>
+                </fieldset>
               </div>
             </div>
           )}

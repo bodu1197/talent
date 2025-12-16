@@ -191,10 +191,14 @@ export default function ErrandApplyPage() {
 
               {/* 메시지 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="apply-message"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   지원 메시지 (선택)
                 </label>
                 <textarea
+                  id="apply-message"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="요청자에게 전달할 메시지를 입력하세요. 예: 빠르게 배달해드리겠습니다!"
@@ -207,7 +211,10 @@ export default function ErrandApplyPage() {
 
               {/* 제안 금액 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="proposed-price"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   제안 금액 (선택)
                 </label>
                 <p className="text-sm text-gray-500 mb-2">
@@ -215,6 +222,7 @@ export default function ErrandApplyPage() {
                 </p>
                 <div className="relative">
                   <input
+                    id="proposed-price"
                     type="number"
                     value={proposedPrice || ''}
                     onChange={(e) =>
