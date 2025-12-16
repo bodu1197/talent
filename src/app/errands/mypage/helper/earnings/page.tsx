@@ -249,8 +249,14 @@ export default function HelperEarningsPage() {
             <div className="relative bg-white rounded-xl p-6 w-full max-w-md">
               <h3 className="text-lg font-bold text-gray-900 mb-4">출금 신청</h3>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">출금 금액</label>
+                <label
+                  htmlFor="withdrawal-amount"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  출금 금액
+                </label>
                 <input
+                  id="withdrawal-amount"
                   type="number"
                   placeholder="금액을 입력하세요"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -260,8 +266,16 @@ export default function HelperEarningsPage() {
                 </p>
               </div>
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-1">입금 계좌</label>
-                <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <label
+                  htmlFor="withdrawal-account"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  입금 계좌
+                </label>
+                <select
+                  id="withdrawal-account"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
                   <option>등록된 계좌 없음</option>
                 </select>
                 <Link

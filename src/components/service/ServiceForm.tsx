@@ -301,10 +301,10 @@ export default function ServiceForm({
         <div className="space-y-4">
           {/* 썸네일 */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="block text-sm font-medium text-gray-700 mb-2">
               썸네일 이미지 <span className="text-red-500">*</span>
               <span className="text-xs text-gray-500 ml-1">(권장: 652×488px)</span>
-            </label>
+            </div>
             <div className="flex gap-2 mb-3">
               <button
                 type="button"
@@ -349,10 +349,14 @@ export default function ServiceForm({
                     </button>
                   </div>
                 ) : (
-                  <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-brand-primary hover:bg-gray-50">
+                  <label
+                    htmlFor="service-thumbnail"
+                    className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-brand-primary hover:bg-gray-50"
+                  >
                     <CloudUpload className="w-10 h-10 text-gray-400 mb-2" />
                     <span className="text-sm text-gray-500">클릭하여 이미지 업로드</span>
                     <input
+                      id="service-thumbnail"
                       type="file"
                       className="hidden"
                       accept="image/*"

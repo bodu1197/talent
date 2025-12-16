@@ -261,10 +261,11 @@ export default function PortfolioForm({
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* 제목 */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="portfolio-title" className="block text-sm font-medium text-gray-700 mb-2">
           제목 <span className="text-red-500">*</span>
         </label>
         <input
+          id="portfolio-title"
           type="text"
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -276,10 +277,14 @@ export default function PortfolioForm({
 
       {/* 설명 */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="portfolio-description"
+          className="block text-sm font-medium text-gray-700 mb-2"
+        >
           설명 <span className="text-red-500">*</span>
         </label>
         <textarea
+          id="portfolio-description"
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
@@ -291,10 +296,14 @@ export default function PortfolioForm({
 
       {/* 카테고리 */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="portfolio-category"
+          className="block text-sm font-medium text-gray-700 mb-2"
+        >
           카테고리 <span className="text-red-500">*</span>
         </label>
         <select
+          id="portfolio-category"
           value={formData.category_id}
           onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
@@ -310,8 +319,11 @@ export default function PortfolioForm({
 
       {/* 연관 서비스 */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">연관 서비스 (선택)</label>
+        <label htmlFor="portfolio-service" className="block text-sm font-medium text-gray-700 mb-2">
+          연관 서비스 (선택)
+        </label>
         <select
+          id="portfolio-service"
           value={formData.service_id}
           onChange={(e) => setFormData({ ...formData, service_id: e.target.value })}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
@@ -327,9 +339,12 @@ export default function PortfolioForm({
 
       {/* YouTube URL */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">YouTube URL (선택)</label>
+        <label htmlFor="portfolio-youtube" className="block text-sm font-medium text-gray-700 mb-2">
+          YouTube URL (선택)
+        </label>
         <div className="space-y-2">
           <input
+            id="portfolio-youtube"
             type="url"
             value={formData.youtube_url}
             onChange={(e) => handleYoutubeUrlChange(e.target.value)}
@@ -351,7 +366,9 @@ export default function PortfolioForm({
 
       {/* 이미지 업로드 */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">이미지 (최대 5개)</label>
+        <label htmlFor="portfolio-images" className="block text-sm font-medium text-gray-700 mb-2">
+          이미지 (최대 5개)
+        </label>
         <div className="space-y-4">
           {/* 기존 이미지 */}
           {existingImages.length > 0 && (
@@ -399,8 +416,9 @@ export default function PortfolioForm({
 
           {/* 업로드 버튼 */}
           {formData.images.length + existingImages.length < 5 && (
-            <label className="block">
+            <label htmlFor="portfolio-images" className="block">
               <input
+                id="portfolio-images"
                 type="file"
                 accept="image/*"
                 multiple
@@ -421,9 +439,12 @@ export default function PortfolioForm({
 
       {/* 태그 */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">태그 (최대 5개)</label>
+        <label htmlFor="portfolio-tags" className="block text-sm font-medium text-gray-700 mb-2">
+          태그 (최대 5개)
+        </label>
         <div className="flex gap-2 mb-2">
           <input
+            id="portfolio-tags"
             type="text"
             value={tagInput}
             onChange={(e) => setTagInput(e.target.value)}
