@@ -17,23 +17,28 @@ export interface CategoryItem {
 }
 
 /**
+ * useAuth 플래그에 따라 적절한 Supabase 클라이언트를 생성
+ */
+async function getSupabaseClient(useAuth: boolean) {
+  if (useAuth) {
+    return await createClient();
+  }
+
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) {
+    return await createClient();
+  }
+  return createClientDirect(url, key);
+}
+
+/**
  * 데이터베이스에서 모든 카테고리를 가져와서 트리 구조로 변환
  * React cache로 요청 중복 제거
  * useAuth=false이면 anon 클라이언트 사용 (캐싱 가능)
  */
 export async function getAllCategoriesTree(useAuth: boolean = true): Promise<CategoryItem[]> {
-  let supabase;
-  if (useAuth) {
-    supabase = await createClient();
-  } else {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    if (!url || !key) {
-      supabase = await createClient();
-    } else {
-      supabase = createClientDirect(url, key);
-    }
-  }
+  const supabase = await getSupabaseClient(useAuth);
 
   const { data: categories, error } = await supabase
     .from('categories')
@@ -173,18 +178,7 @@ export async function getCategoryPath(
   categoryId: string,
   useAuth: boolean = true
 ): Promise<CategoryItem[]> {
-  let supabase;
-  if (useAuth) {
-    supabase = await createClient();
-  } else {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    if (!url || !key) {
-      supabase = await createClient();
-    } else {
-      supabase = createClientDirect(url, key);
-    }
-  }
+  const supabase = await getSupabaseClient(useAuth);
 
   // PostgreSQL 재귀 CTE로 모든 부모 카테고리를 한 번에 조회
   // Note: categoryId must be a valid UUID string
