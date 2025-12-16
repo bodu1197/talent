@@ -333,6 +333,60 @@ export type Database = {
           },
         ];
       };
+      chat_messages: {
+        Row: {
+          created_at: string | null;
+          file_name: string | null;
+          file_size: number | null;
+          file_type: string | null;
+          file_url: string | null;
+          id: string;
+          is_read: boolean | null;
+          message: string | null;
+          room_id: string;
+          sender_id: string;
+        };
+        Insert: {
+          created_at?: string | null;
+          file_name?: string | null;
+          file_size?: number | null;
+          file_type?: string | null;
+          file_url?: string | null;
+          id?: string;
+          is_read?: boolean | null;
+          message?: string | null;
+          room_id: string;
+          sender_id: string;
+        };
+        Update: {
+          created_at?: string | null;
+          file_name?: string | null;
+          file_size?: number | null;
+          file_type?: string | null;
+          file_url?: string | null;
+          id?: string;
+          is_read?: boolean | null;
+          message?: string | null;
+          room_id?: string;
+          sender_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'chat_messages_room_id_fkey';
+            columns: ['room_id'];
+            isOneToOne: false;
+            referencedRelation: 'conversations';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'chat_messages_sender_id_fkey';
+            columns: ['sender_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       conversations: {
         Row: {
           created_at: string | null;
