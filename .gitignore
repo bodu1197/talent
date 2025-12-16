@@ -72,3 +72,5 @@ playwright-report/
 blob-report/
 
 /jscpd-report/
+.jscpd/
+.jscpd-new/

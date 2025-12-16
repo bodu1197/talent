@@ -2,17 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import { ArrowLeft, Check, ImageIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
 import { createClient } from '@/lib/supabase/client';
 import { usePaymentState } from '@/hooks/usePaymentState';
 import { requestPortOnePayment, validatePaymentPreconditions } from '@/lib/payment/portone';
-import BuyerPhoneInput from '@/components/payment/BuyerPhoneInput';
-import PaymentMethodSelector from '@/components/payment/PaymentMethodSelector';
-import PaymentTermsSection from '@/components/payment/PaymentTermsSection';
-import PaymentSummarySidebar from '@/components/payment/PaymentSummarySidebar';
+import PaymentPageLayout from '@/components/payment/PaymentPageLayout';
+import DirectOrderProductInfo from '@/components/payment/DirectOrderProductInfo';
 
 interface Order {
   id: string;
@@ -179,138 +175,33 @@ export default function DirectPaymentClient({ order, seller }: Props) {
   };
 
   const sellerName = seller?.display_name || seller?.business_name || '전문가';
-  const allAgreed = agreedToTerms && agreedToPrivacy;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* 헤더 */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-4 h-14 flex items-center">
-          <button
-            onClick={handleBack}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            <span className="font-medium">결제하기</span>
-          </button>
-        </div>
-      </header>
-
-      <div className="max-w-6xl mx-auto px-4 py-6">
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* 왼쪽: 주문 정보 */}
-          <div className="flex-1 space-y-6">
-            {/* 주문 내역 */}
-            <section className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">주문 내역</h2>
-
-              {/* 상품 정보 */}
-              <div className="flex gap-4 pb-4 border-b border-gray-100">
-                <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 relative">
-                  {service?.thumbnail_url ? (
-                    <Image
-                      src={service.thumbnail_url}
-                      alt={order.title}
-                      fill
-                      className="object-cover"
-                      sizes="80px"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <ImageIcon className="w-8 h-8 text-gray-400" />
-                    </div>
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-medium text-gray-900 mb-1 line-clamp-2">{order.title}</h3>
-                  <p className="text-sm text-gray-500">{sellerName}</p>
-                </div>
-              </div>
-
-              {/* 기본항목 테이블 */}
-              <div className="mt-4">
-                <div className="grid grid-cols-4 text-sm text-gray-500 pb-2 border-b border-gray-100">
-                  <span>기본항목</span>
-                  <span className="text-center">수량</span>
-                  <span className="text-center">작업일</span>
-                  <span className="text-right">가격</span>
-                </div>
-                <div className="grid grid-cols-4 text-sm py-3 items-center">
-                  <span className="text-gray-900 font-medium">{order.title}</span>
-                  <span className="text-center text-gray-700">1</span>
-                  <span className="text-center text-gray-700">{order.delivery_days}일</span>
-                  <span className="text-right font-semibold text-gray-900">
-                    {order.amount.toLocaleString()}원
-                  </span>
-                </div>
-              </div>
-
-              {/* 포함 사항 */}
-              <div className="mt-4 space-y-2">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Check className="w-4 h-4 text-green-500" />
-                  <span>작업기간: {order.delivery_days}일</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Check className="w-4 h-4 text-green-500" />
-                  <span>
-                    수정: {order.revision_count === 999 ? '무제한' : `${order.revision_count}회`}
-                  </span>
-                </div>
-              </div>
-            </section>
-
-            {/* 구매자 정보 - 전화번호 미입력 시 */}
-            {!buyer?.phone && (
-              <BuyerPhoneInput
-                phoneInput={phoneInput}
-                onPhoneChange={setPhoneInput}
-                title="구매자 정보"
-                showHelperText={true}
-                inputId="buyer-phone-direct"
-              />
-            )}
-
-            {/* 결제 방법 */}
-            <section className="bg-white rounded-lg border border-gray-200 p-6">
-              <PaymentMethodSelector
-                selectedMethod={selectedPaymentMethod}
-                easyPayProvider={easyPayProvider}
-                isInternationalCard={isInternationalCard}
-                onMethodChange={setSelectedPaymentMethod}
-                onEasyPayProviderChange={setEasyPayProvider}
-                onInternationalCardChange={setIsInternationalCard}
-              />
-            </section>
-
-            {/* 약관 동의 (모바일) */}
-            <PaymentTermsSection
-              agreedToTerms={agreedToTerms}
-              agreedToPrivacy={agreedToPrivacy}
-              onTermsChange={setAgreedToTerms}
-              onPrivacyChange={setAgreedToPrivacy}
-              onPayment={handlePayment}
-              isProcessing={isProcessing}
-              disabled={!allAgreed}
-              amount={totalAmount}
-            />
-          </div>
-
-          {/* 오른쪽: 결제 요약 (PC) */}
-          <PaymentSummarySidebar
-            priceBreakdown={[{ label: '주문 금액', amount: order.amount }]}
-            totalAmount={totalAmount}
-            totalLabel="총 결제 금액 (VAT 포함)"
-            agreedToTerms={agreedToTerms}
-            agreedToPrivacy={agreedToPrivacy}
-            onTermsChange={setAgreedToTerms}
-            onPrivacyChange={setAgreedToPrivacy}
-            onPayment={handlePayment}
-            isProcessing={isProcessing}
-            disabled={!allAgreed}
-          />
-        </div>
-      </div>
-    </div>
+    <PaymentPageLayout
+      title="결제하기"
+      onBack={handleBack}
+      productInfoSection={
+        <DirectOrderProductInfo order={order} service={service} sellerName={sellerName} />
+      }
+      buyer={buyer}
+      phoneInput={phoneInput}
+      onPhoneChange={setPhoneInput}
+      phoneInputId="buyer-phone-direct"
+      selectedPaymentMethod={selectedPaymentMethod}
+      easyPayProvider={easyPayProvider}
+      isInternationalCard={isInternationalCard}
+      onMethodChange={setSelectedPaymentMethod}
+      onEasyPayProviderChange={setEasyPayProvider}
+      onInternationalCardChange={setIsInternationalCard}
+      agreedToTerms={agreedToTerms}
+      agreedToPrivacy={agreedToPrivacy}
+      onTermsChange={setAgreedToTerms}
+      onPrivacyChange={setAgreedToPrivacy}
+      onPayment={handlePayment}
+      isProcessing={isProcessing}
+      totalAmount={totalAmount}
+      priceBreakdown={[{ label: '주문 금액', amount: order.amount }]}
+      sidebarTotalLabel="총 결제 금액 (VAT 포함)"
+    />
   );
 }

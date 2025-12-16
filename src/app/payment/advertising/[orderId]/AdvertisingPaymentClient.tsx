@@ -1,16 +1,12 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import { ArrowLeft, Megaphone, ImageIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
 import { usePaymentState } from '@/hooks/usePaymentState';
 import { requestPortOnePayment, validatePaymentPreconditions } from '@/lib/payment/portone';
-import BuyerPhoneInput from '@/components/payment/BuyerPhoneInput';
-import PaymentMethodSelector from '@/components/payment/PaymentMethodSelector';
-import PaymentTermsSection from '@/components/payment/PaymentTermsSection';
-import PaymentSummarySidebar from '@/components/payment/PaymentSummarySidebar';
+import PaymentPageLayout from '@/components/payment/PaymentPageLayout';
+import AdvertisingProductInfo from '@/components/payment/AdvertisingProductInfo';
 
 interface Payment {
   id: string;
@@ -124,132 +120,32 @@ export default function AdvertisingPaymentClient({ payment, buyer }: Props) {
     }
   };
 
-  const allAgreed = agreedToTerms && agreedToPrivacy;
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* 헤더 */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-4 h-14 flex items-center">
-          <button
-            onClick={handleBack}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            <span className="font-medium">광고 결제</span>
-          </button>
-        </div>
-      </header>
-
-      <div className="max-w-6xl mx-auto px-4 py-6">
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* 왼쪽: 광고 정보 */}
-          <div className="flex-1 space-y-6">
-            {/* 광고 상품 정보 */}
-            <section className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Megaphone className="w-5 h-5 text-brand-primary" />
-                광고 상품
-              </h2>
-
-              <div className="flex gap-4 pb-4 border-b border-gray-100">
-                <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 relative">
-                  {payment.services?.thumbnail_url ? (
-                    <Image
-                      src={payment.services.thumbnail_url}
-                      alt={payment.services.title}
-                      fill
-                      className="object-cover"
-                      sizes="80px"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <ImageIcon className="w-8 h-8 text-gray-400" />
-                    </div>
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-medium text-gray-900 mb-1 line-clamp-2">
-                    {payment.services?.title || '서비스'}
-                  </h3>
-                  <p className="text-sm text-brand-primary font-semibold">
-                    {payment.months}개월 광고
-                  </p>
-                </div>
-              </div>
-
-              {/* 금액 상세 */}
-              <div className="mt-4 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">월 광고비</span>
-                  <span className="text-gray-900">{payment.monthly_price.toLocaleString()}원</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">광고 기간</span>
-                  <span className="text-gray-900">{payment.months}개월</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">공급가액</span>
-                  <span className="text-gray-900">{payment.supply_amount.toLocaleString()}원</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">부가세 (10%)</span>
-                  <span className="text-gray-900">{payment.vat_amount.toLocaleString()}원</span>
-                </div>
-              </div>
-            </section>
-
-            {/* 구매자 정보 - 전화번호 미입력 시 */}
-            {!buyer?.phone && (
-              <BuyerPhoneInput
-                phoneInput={phoneInput}
-                onPhoneChange={setPhoneInput}
-                inputId="buyer-phone"
-              />
-            )}
-
-            {/* 결제 방법 */}
-            <section className="bg-white rounded-lg border border-gray-200 p-6">
-              <PaymentMethodSelector
-                selectedMethod={selectedPaymentMethod}
-                easyPayProvider={easyPayProvider}
-                isInternationalCard={isInternationalCard}
-                onMethodChange={setSelectedPaymentMethod}
-                onEasyPayProviderChange={setEasyPayProvider}
-                onInternationalCardChange={setIsInternationalCard}
-              />
-            </section>
-
-            {/* 약관 동의 (모바일) */}
-            <PaymentTermsSection
-              agreedToTerms={agreedToTerms}
-              agreedToPrivacy={agreedToPrivacy}
-              onTermsChange={setAgreedToTerms}
-              onPrivacyChange={setAgreedToPrivacy}
-              onPayment={handlePayment}
-              isProcessing={isProcessing}
-              disabled={!allAgreed}
-              amount={payment.amount}
-            />
-          </div>
-
-          {/* 오른쪽: 결제 요약 (PC) */}
-          <PaymentSummarySidebar
-            priceBreakdown={[
-              { label: '공급가액', amount: payment.supply_amount },
-              { label: '부가세', amount: payment.vat_amount },
-            ]}
-            totalAmount={payment.amount}
-            agreedToTerms={agreedToTerms}
-            agreedToPrivacy={agreedToPrivacy}
-            onTermsChange={setAgreedToTerms}
-            onPrivacyChange={setAgreedToPrivacy}
-            onPayment={handlePayment}
-            isProcessing={isProcessing}
-            disabled={!allAgreed}
-          />
-        </div>
-      </div>
-    </div>
+    <PaymentPageLayout
+      title="광고 결제"
+      onBack={handleBack}
+      productInfoSection={<AdvertisingProductInfo payment={payment} />}
+      buyer={buyer}
+      phoneInput={phoneInput}
+      onPhoneChange={setPhoneInput}
+      phoneInputId="buyer-phone"
+      selectedPaymentMethod={selectedPaymentMethod}
+      easyPayProvider={easyPayProvider}
+      isInternationalCard={isInternationalCard}
+      onMethodChange={setSelectedPaymentMethod}
+      onEasyPayProviderChange={setEasyPayProvider}
+      onInternationalCardChange={setIsInternationalCard}
+      agreedToTerms={agreedToTerms}
+      agreedToPrivacy={agreedToPrivacy}
+      onTermsChange={setAgreedToTerms}
+      onPrivacyChange={setAgreedToPrivacy}
+      onPayment={handlePayment}
+      isProcessing={isProcessing}
+      totalAmount={payment.amount}
+      priceBreakdown={[
+        { label: '공급가액', amount: payment.supply_amount },
+        { label: '부가세', amount: payment.vat_amount },
+      ]}
+    />
   );
 }
