@@ -1,6 +1,5 @@
-import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
 import type { ServiceDetailWithCategories } from '@/lib/supabase/queries/admin';
+import { requireAdminAuth } from '@/lib/admin/page-auth';
 import PendingServiceDetailClient from './PendingServiceDetailClient';
 
 export default async function PendingServiceDetailPage({
@@ -9,25 +8,9 @@ export default async function PendingServiceDetailPage({
   params: Promise<{ id: string }>;
 }>) {
   const { id } = await params;
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect('/auth/login');
-  }
-
-  // 관리자 확인
-  const { data: admin } = await supabase
-    .from('admins')
-    .select('id')
-    .eq('user_id', user.id)
-    .maybeSingle();
-
-  if (!admin) {
-    redirect('/');
-  }
+  // 관리자 인증 확인
+  const { supabase } = await requireAdminAuth();
 
   try {
     // 서비스 정보 조회 (pending 또는 suspended 상태)
