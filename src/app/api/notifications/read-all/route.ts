@@ -12,6 +12,9 @@ export async function PATCH(_request: NextRequest) {
     }
 
     const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    }
 
     // 모든 안 읽은 알림 읽음 처리
     const { error } = await supabase

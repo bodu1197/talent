@@ -12,6 +12,9 @@ export async function GET(request: NextRequest) {
     }
 
     const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    }
 
     // URL 파라미터
     const { searchParams } = new URL(request.url);

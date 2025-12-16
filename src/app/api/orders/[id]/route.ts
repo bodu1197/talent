@@ -14,6 +14,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    }
 
     // 주문 조회
     const { data: order, error } = await supabase

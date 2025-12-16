@@ -14,6 +14,9 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     }
 
     const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    }
 
     // 주문 조회 및 권한 확인
     const { data: order, error: fetchError } = await supabase

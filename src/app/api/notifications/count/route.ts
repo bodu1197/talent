@@ -12,6 +12,9 @@ export async function GET(_request: NextRequest) {
     }
 
     const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    }
 
     // 안 읽은 알림 개수 조회
     const { count, error } = await supabase
