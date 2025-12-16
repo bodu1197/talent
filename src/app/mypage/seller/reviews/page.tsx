@@ -18,14 +18,28 @@ export default async function SellerReviewsPage() {
     .eq('seller_id', user.id)
     .order('created_at', { ascending: false });
 
-  // DB 타입을 클라이언트 타입으로 변환
+  // DB 타입을 클라이언트 타입으로 변환 - unknown을 통한 타입 캐스팅
   const mappedReviews =
     reviews?.map((r) => ({
-      ...r,
+      id: r.id,
+      order_id: r.order_id,
+      buyer_id: r.buyer_id,
+      seller_id: r.seller_id,
+      service_id: r.service_id,
+      rating: r.rating || 0,
       content: r.comment || '',
       is_visible: r.is_visible ?? true,
       moderated: r.moderated ?? false,
+      seller_reply: r.seller_reply,
+      seller_reply_at: r.seller_reply_at,
+      created_at: r.created_at || '',
+      updated_at: r.updated_at || '',
+      buyer: r.buyer,
+      service: r.service,
+      order: r.order,
     })) || [];
 
-  return <SellerReviewsClient reviews={mappedReviews} />;
+  return (
+    <SellerReviewsClient reviews={mappedReviews as unknown as import('@/types/common').Review[]} />
+  );
 }

@@ -172,7 +172,7 @@ async function AIServicesSection({ aiCategoryIds }: { readonly aiCategoryIds: st
   const ratingMap = buildRatingMap(reviewStats as ReviewStat[] | null);
   const services = formatServicesWithRating(combinedServices, ratingMap);
 
-  return <AITalentShowcase services={services} />;
+  return <AITalentShowcase services={services as unknown as import('@/types').Service[]} />;
 }
 
 // 스켈레톤 로딩 컴포넌트

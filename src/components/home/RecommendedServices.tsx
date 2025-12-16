@@ -157,7 +157,7 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
         services as unknown as Array<{ id: string; [key: string]: unknown }>,
         ratingMap,
         advertisedServiceIds
-      );
+      ) as never[];
     }
   }
 

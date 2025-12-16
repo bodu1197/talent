@@ -2,20 +2,8 @@ import { requireSellerAuth } from '@/lib/seller/page-auth';
 import SellerServicesClient from './SellerServicesClient';
 import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Service } from '@/types';
 
 type ServiceStatus = 'all' | 'active' | 'inactive' | 'pending';
-
-interface ServiceWithRejection extends Service {
-  hasPendingRevision?: boolean;
-  activeOrderCount?: number;
-  _rejectedRevision?: {
-    id: string;
-    rejection_reason: string;
-    reviewed_at?: string;
-    admin_note?: string;
-  };
-}
 
 interface RevisionData {
   service_id: string;
@@ -153,7 +141,7 @@ export default async function SellerServicesPage({
 
     return (
       <SellerServicesClient
-        initialServices={services as ServiceWithRejection[]}
+        initialServices={services as never[]}
         statusFilter={statusFilter}
         statusCounts={statusCounts}
       />
