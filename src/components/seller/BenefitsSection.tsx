@@ -8,13 +8,17 @@ interface Benefit {
 
 interface BenefitsSectionProps {
   readonly benefits: Benefit[];
+  readonly gridClassName?: string;
 }
 
-export default function BenefitsSection({ benefits }: BenefitsSectionProps) {
+export default function BenefitsSection({
+  benefits,
+  gridClassName = 'grid-cols-2 md:grid-cols-4',
+}: BenefitsSectionProps) {
   return (
     <section className="py-8 bg-white border-b">
       <div className="container-1200 px-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        <div className={`grid ${gridClassName} gap-4 md:gap-6`}>
           {benefits.map((benefit) => (
             <div key={benefit.title} className="text-center">
               <div className="w-10 h-10 md:w-12 md:h-12 bg-brand-primary/10 rounded-full flex items-center justify-center mx-auto mb-2">
