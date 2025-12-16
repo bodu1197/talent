@@ -41,6 +41,81 @@ export interface ServiceWithSeller extends ServiceRow {
   } | null;
 }
 
+/**
+ * 주문 목록에서 buyer와 seller 정보를 조회하여 조합하는 헬퍼 함수
+ * @param supabase Supabase 클라이언트
+ * @param orders 주문 목록
+ * @returns buyer와 seller 정보가 포함된 주문 목록
+ */
+async function enrichOrdersWithBuyerSeller(
+  supabase: ReturnType<typeof createClient>,
+  orders: OrderRow[]
+): Promise<OrderWithRelations[]> {
+  if (!orders || orders.length === 0) return [];
+
+  // buyer_id와 seller_id 수집
+  const buyerIds = [...new Set(orders.map((o) => o.buyer_id))];
+  const sellerIds = [...new Set(orders.map((o) => o.seller_id))];
+
+  // buyer 정보 조회 (profiles 테이블 - email 제외)
+  const { data: buyerProfiles } = await supabase
+    .from('profiles')
+    .select('user_id, name')
+    .in('user_id', buyerIds);
+
+  // buyer email 조회 (users 테이블)
+  const { data: buyerUsers } = await supabase.from('users').select('id, email').in('id', buyerIds);
+
+  // seller 정보 조회 (seller_profiles 뷰)
+  const { data: sellers } = await supabase
+    .from('seller_profiles')
+    .select('id, user_id, display_name, business_name, profile_image')
+    .in('user_id', sellerIds);
+
+  // seller email 조회 (users 테이블)
+  const { data: sellerUsers } = await supabase
+    .from('users')
+    .select('id, email')
+    .in('id', sellerIds);
+
+  // email 맵 생성
+  const buyerEmailMap = new Map(buyerUsers?.map((u) => [u.id, u.email]) || []);
+  const sellerEmailMap = new Map(sellerUsers?.map((u) => [u.id, u.email]) || []);
+
+  // buyer와 seller 맵 생성
+  const buyerMap = new Map(
+    buyerProfiles?.map((b) => [
+      b.user_id,
+      {
+        id: b.user_id,
+        name: b.name,
+        email: buyerEmailMap.get(b.user_id) || '이메일 없음',
+      },
+    ]) || []
+  );
+
+  const sellerMap = new Map(
+    sellers?.map((s) => [
+      s.user_id,
+      {
+        id: s.user_id,
+        name: s.display_name || s.business_name || '전문가',
+        email: sellerEmailMap.get(s.user_id) || '이메일 없음',
+        display_name: s.display_name,
+        business_name: s.business_name,
+        profile_image: s.profile_image,
+      },
+    ]) || []
+  );
+
+  // 데이터 조합
+  return orders.map((order) => ({
+    ...order,
+    buyer: buyerMap.get(order.buyer_id) || null,
+    seller: sellerMap.get(order.seller_id) || null,
+  })) as OrderWithRelations[];
+}
+
 export interface ServiceRevision {
   id: string;
   service_id: string;
@@ -179,70 +254,9 @@ export async function getAdminRecentOrders(limit: number = 10): Promise<OrderWit
     .limit(limit);
 
   if (error) throw error;
-  if (!orders || orders.length === 0) return [];
 
-  // buyer_id와 seller_id 수집
-  const buyerIds = [...new Set(orders.map((o) => o.buyer_id))];
-  const sellerIds = [...new Set(orders.map((o) => o.seller_id))];
-
-  // buyer 정보 조회 (profiles 테이블 - email 제외)
-  const { data: buyerProfiles } = await supabase
-    .from('profiles')
-    .select('user_id, name')
-    .in('user_id', buyerIds);
-
-  // buyer email 조회 (users 테이블)
-  const { data: buyerUsers } = await supabase.from('users').select('id, email').in('id', buyerIds);
-
-  // seller 정보 조회 (seller_profiles 뷰)
-  const { data: sellers } = await supabase
-    .from('seller_profiles')
-    .select('id, user_id, display_name, business_name, profile_image')
-    .in('user_id', sellerIds);
-
-  // seller email 조회 (users 테이블)
-  const { data: sellerUsers } = await supabase
-    .from('users')
-    .select('id, email')
-    .in('id', sellerIds);
-
-  // email 맵 생성
-  const buyerEmailMap = new Map(buyerUsers?.map((u) => [u.id, u.email]) || []);
-
-  const sellerEmailMap = new Map(sellerUsers?.map((u) => [u.id, u.email]) || []);
-
-  // buyer와 seller 맵 생성
-  const buyerMap = new Map(
-    buyerProfiles?.map((b) => [
-      b.user_id,
-      {
-        id: b.user_id,
-        name: b.name,
-        email: buyerEmailMap.get(b.user_id) || '이메일 없음',
-      },
-    ]) || []
-  );
-
-  const sellerMap = new Map(
-    sellers?.map((s) => [
-      s.user_id,
-      {
-        id: s.user_id,
-        name: s.display_name || s.business_name || '전문가',
-        email: sellerEmailMap.get(s.user_id) || '이메일 없음',
-        display_name: s.display_name,
-        business_name: s.business_name,
-        profile_image: s.profile_image,
-      },
-    ]) || []
-  );
-
-  // 데이터 조합
-  return orders.map((order) => ({
-    ...order,
-    buyer: buyerMap.get(order.buyer_id) || null,
-    seller: sellerMap.get(order.seller_id) || null,
-  })) as OrderWithRelations[];
+  // 헬퍼 함수를 사용하여 buyer와 seller 정보 조회 및 조합
+  return enrichOrdersWithBuyerSeller(supabase, orders || []);
 }
 
 // 최근 가입 회원
@@ -500,70 +514,9 @@ export async function getAdminOrders(filters?: {
   const { data: orders, error } = await query;
 
   if (error) throw error;
-  if (!orders || orders.length === 0) return [];
 
-  // buyer_id와 seller_id 수집
-  const buyerIds = [...new Set(orders.map((o) => o.buyer_id))];
-  const sellerIds = [...new Set(orders.map((o) => o.seller_id))];
-
-  // buyer 정보 조회 (profiles 테이블 - email 제외)
-  const { data: buyerProfiles } = await supabase
-    .from('profiles')
-    .select('user_id, name')
-    .in('user_id', buyerIds);
-
-  // buyer email 조회 (users 테이블)
-  const { data: buyerUsers } = await supabase.from('users').select('id, email').in('id', buyerIds);
-
-  // seller 정보 조회 (seller_profiles 뷰)
-  const { data: sellers } = await supabase
-    .from('seller_profiles')
-    .select('id, user_id, display_name, business_name, profile_image')
-    .in('user_id', sellerIds);
-
-  // seller email 조회 (users 테이블)
-  const { data: sellerUsers } = await supabase
-    .from('users')
-    .select('id, email')
-    .in('id', sellerIds);
-
-  // email 맵 생성
-  const buyerEmailMap = new Map(buyerUsers?.map((u) => [u.id, u.email]) || []);
-
-  const sellerEmailMap = new Map(sellerUsers?.map((u) => [u.id, u.email]) || []);
-
-  // buyer와 seller 맵 생성
-  const buyerMap = new Map(
-    buyerProfiles?.map((b) => [
-      b.user_id,
-      {
-        id: b.user_id,
-        name: b.name,
-        email: buyerEmailMap.get(b.user_id) || '이메일 없음',
-      },
-    ]) || []
-  );
-
-  const sellerMap = new Map(
-    sellers?.map((s) => [
-      s.user_id,
-      {
-        id: s.user_id,
-        name: s.display_name || s.business_name || '전문가',
-        email: sellerEmailMap.get(s.user_id) || '이메일 없음',
-        display_name: s.display_name,
-        business_name: s.business_name,
-        profile_image: s.profile_image,
-      },
-    ]) || []
-  );
-
-  // 데이터 조합
-  return orders.map((order) => ({
-    ...order,
-    buyer: buyerMap.get(order.buyer_id) || null,
-    seller: sellerMap.get(order.seller_id) || null,
-  })) as OrderWithRelations[];
+  // 헬퍼 함수를 사용하여 buyer와 seller 정보 조회 및 조합
+  return enrichOrdersWithBuyerSeller(supabase, orders || []);
 }
 
 // 관리자 주문 상태별 카운트
