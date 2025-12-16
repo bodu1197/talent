@@ -1,7 +1,7 @@
 import { FileText, Download, UserCircle } from 'lucide-react';
 
 interface Deliverable {
-  id: string;
+  id?: string;
   file_name: string;
   file_url: string;
   file_size: number;
