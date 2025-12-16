@@ -49,6 +49,7 @@ export async function requestPortOnePayment(config: PortOneConfig): Promise<Port
       totalAmount: config.amount,
       currency: 'CURRENCY_KRW',
       channelKey,
+      payMethod: config.paymentMethod,
       customer: {
         fullName: config.buyerName || undefined,
         email: config.buyerEmail || undefined,
@@ -59,10 +60,8 @@ export async function requestPortOnePayment(config: PortOneConfig): Promise<Port
     // 결제 수단별 추가 설정
     switch (config.paymentMethod) {
       case 'CARD':
-        paymentConfig.payMethod = 'CARD';
         if (config.isInternationalCard) {
-          paymentConfig.pgProvider = 'PG_PROVIDER_PAYPAL';
-          paymentConfig.locale = 'EN_US';
+          // 국제카드는 별도 설정 필요 시 추가
         }
         break;
       case 'TRANSFER':
