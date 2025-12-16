@@ -17,6 +17,7 @@ import {
   CheckCircle,
 } from 'lucide-react';
 import HelperLocationTracker from '@/components/errands/HelperLocationTracker';
+import HelperGuideSection from '@/components/errands/HelperGuideSection';
 
 interface HelperProfile {
   id: string;
@@ -305,25 +306,7 @@ export default function ErrandHelperDashboard() {
 
         {/* 활동 가이드 */}
         <div className="bg-blue-50 rounded-xl p-4">
-          <h3 className="font-semibold text-blue-900 mb-2">라이더 활동 가이드</h3>
-          <ul className="space-y-2 text-sm text-blue-700">
-            <li className="flex items-start gap-2">
-              <span className="font-bold">1.</span>
-              <span>주변 심부름을 찾아 지원하세요</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="font-bold">2.</span>
-              <span>요청자가 수락하면 심부름을 시작하세요</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="font-bold">3.</span>
-              <span>심부름 완료 후 대금을 정산받으세요</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="font-bold">4.</span>
-              <span>좋은 리뷰를 받으면 등급이 올라갑니다</span>
-            </li>
-          </ul>
+          <HelperGuideSection />
         </div>
       </div>
     </ErrandMypageLayout>

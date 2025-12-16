@@ -18,6 +18,7 @@ import {
   ChevronRight,
   AlertCircle,
 } from 'lucide-react';
+import HelperGuideSection from '@/components/errands/HelperGuideSection';
 
 interface HelperStats {
   availableBalance: number;
@@ -308,25 +309,11 @@ export default function HelperDashboardPage() {
 
         {/* 활동 안내 */}
         <div className="bg-orange-50 rounded-lg border border-orange-200 p-4">
-          <h3 className="font-semibold text-orange-700 mb-2">심부름꾼 활동 가이드</h3>
-          <ul className="space-y-2 text-sm text-orange-600">
-            <li className="flex items-start gap-2">
-              <span className="font-bold">1.</span>
-              <span>주변 심부름을 찾아 지원하세요</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="font-bold">2.</span>
-              <span>요청자가 수락하면 심부름을 시작하세요</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="font-bold">3.</span>
-              <span>심부름 완료 후 대금을 정산받으세요</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="font-bold">4.</span>
-              <span>좋은 리뷰를 받으면 등급이 올라갑니다</span>
-            </li>
-          </ul>
+          <HelperGuideSection
+            title="심부름꾼 활동 가이드"
+            titleColor="text-orange-700"
+            textColor="text-orange-600"
+          />
         </div>
       </div>
     </MypageLayoutWrapper>
