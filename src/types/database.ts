@@ -545,6 +545,132 @@ export type Database = {
           },
         ];
       };
+      errands: {
+        Row: {
+          base_price: number;
+          cancel_reason: string | null;
+          cancelled_at: string | null;
+          category: string;
+          completed_at: string | null;
+          created_at: string | null;
+          delivery_address: string;
+          delivery_detail: string | null;
+          delivery_lat: number | null;
+          delivery_lng: number | null;
+          description: string | null;
+          distance_price: number;
+          estimated_distance: number | null;
+          helper_id: string | null;
+          id: string;
+          is_multi_stop: boolean | null;
+          item_fee: number | null;
+          pickup_address: string;
+          pickup_detail: string | null;
+          pickup_lat: number | null;
+          pickup_lng: number | null;
+          range_fee: number | null;
+          requester_id: string;
+          scheduled_at: string | null;
+          shopping_items: Json | null;
+          shopping_range: string | null;
+          started_at: string | null;
+          status: string | null;
+          stop_fee: number | null;
+          tip: number | null;
+          title: string;
+          total_price: number;
+          total_stops: number | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          base_price: number;
+          cancel_reason?: string | null;
+          cancelled_at?: string | null;
+          category: string;
+          completed_at?: string | null;
+          created_at?: string | null;
+          delivery_address: string;
+          delivery_detail?: string | null;
+          delivery_lat?: number | null;
+          delivery_lng?: number | null;
+          description?: string | null;
+          distance_price: number;
+          estimated_distance?: number | null;
+          helper_id?: string | null;
+          id?: string;
+          is_multi_stop?: boolean | null;
+          item_fee?: number | null;
+          pickup_address: string;
+          pickup_detail?: string | null;
+          pickup_lat?: number | null;
+          pickup_lng?: number | null;
+          range_fee?: number | null;
+          requester_id: string;
+          scheduled_at?: string | null;
+          shopping_items?: Json | null;
+          shopping_range?: string | null;
+          started_at?: string | null;
+          status?: string | null;
+          stop_fee?: number | null;
+          tip?: number | null;
+          title: string;
+          total_price: number;
+          total_stops?: number | null;
+          updated_at?: string | null;
+        };
+        Update: {
+          base_price?: number;
+          cancel_reason?: string | null;
+          cancelled_at?: string | null;
+          category?: string;
+          completed_at?: string | null;
+          created_at?: string | null;
+          delivery_address?: string;
+          delivery_detail?: string | null;
+          delivery_lat?: number | null;
+          delivery_lng?: number | null;
+          description?: string | null;
+          distance_price?: number;
+          estimated_distance?: number | null;
+          helper_id?: string | null;
+          id?: string;
+          is_multi_stop?: boolean | null;
+          item_fee?: number | null;
+          pickup_address?: string;
+          pickup_detail?: string | null;
+          pickup_lat?: number | null;
+          pickup_lng?: number | null;
+          range_fee?: number | null;
+          requester_id?: string;
+          scheduled_at?: string | null;
+          shopping_items?: Json | null;
+          shopping_range?: string | null;
+          started_at?: string | null;
+          status?: string | null;
+          stop_fee?: number | null;
+          tip?: number | null;
+          title?: string;
+          total_price?: number;
+          total_stops?: number | null;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'errands_helper_id_fkey';
+            columns: ['helper_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'errands_requester_id_fkey';
+            columns: ['requester_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       favorites: {
         Row: {
           created_at: string | null;
