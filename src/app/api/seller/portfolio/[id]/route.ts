@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
+import { requireAuth } from '@/lib/api/auth';
+import { verifyPortfolioOwnership } from '@/lib/api/ownership';
 
 // DELETE: 포트폴리오 삭제
 export async function DELETE(
@@ -8,39 +9,18 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const authResult = await requireAuth();
+    if (!authResult.success) {
+      return authResult.error!;
     }
 
+    const { user, supabase } = authResult;
     const { id: portfolioId } = await params;
 
-    // 포트폴리오 조회 및 소유권 확인
-    const { data: portfolio } = await supabase
-      .from('seller_portfolio')
-      .select('seller_id')
-      .eq('id', portfolioId)
-      .single();
-
-    if (!portfolio) {
-      return NextResponse.json({ error: 'Portfolio not found' }, { status: 404 });
-    }
-
-    // seller 소유권 확인
-    const { data: seller } = await supabase
-      .from('sellers')
-      .select('id')
-      .eq('id', portfolio.seller_id)
-      .eq('user_id', user.id)
-      .single();
-
-    if (!seller) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+    // 포트폴리오 소유권 확인
+    const ownershipResult = await verifyPortfolioOwnership(supabase!, portfolioId, user!.id);
+    if (!ownershipResult.success) {
+      return ownershipResult.error!;
     }
 
     // 포트폴리오 삭제
@@ -61,40 +41,19 @@ export async function DELETE(
 // PUT: 포트폴리오 수정
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const authResult = await requireAuth();
+    if (!authResult.success) {
+      return authResult.error!;
     }
 
+    const { user, supabase } = authResult;
     const { id: portfolioId } = await params;
     const body = await request.json();
 
-    // 포트폴리오 조회 및 소유권 확인
-    const { data: portfolio } = await supabase
-      .from('seller_portfolio')
-      .select('seller_id')
-      .eq('id', portfolioId)
-      .single();
-
-    if (!portfolio) {
-      return NextResponse.json({ error: 'Portfolio not found' }, { status: 404 });
-    }
-
-    // seller 소유권 확인
-    const { data: seller } = await supabase
-      .from('sellers')
-      .select('id')
-      .eq('id', portfolio.seller_id)
-      .eq('user_id', user.id)
-      .single();
-
-    if (!seller) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+    // 포트폴리오 소유권 확인
+    const ownershipResult = await verifyPortfolioOwnership(supabase!, portfolioId, user!.id);
+    if (!ownershipResult.success) {
+      return ownershipResult.error!;
     }
 
     // 포트폴리오 업데이트
