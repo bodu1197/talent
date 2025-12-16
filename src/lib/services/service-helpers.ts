@@ -19,7 +19,7 @@ export function shuffleArray<T>(array: T[]): void {
 /**
  * 리뷰 통계 맵 생성
  */
-interface ReviewStat {
+export interface ReviewStat {
   service_id: string;
   rating: number;
 }

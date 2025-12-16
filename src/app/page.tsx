@@ -2,7 +2,12 @@ import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { createClient } from '@/lib/supabase/server';
 import HeroWithCategories from '@/components/common/HeroWithCategories';
-import { buildRatingMap, formatServicesWithRating } from '@/lib/services/service-helpers';
+import {
+  buildRatingMap,
+  formatServicesWithRating,
+  shuffleArray,
+  type ReviewStat,
+} from '@/lib/services/service-helpers';
 import { getActiveAdvertisedServiceIds } from '@/lib/services/advertising-helpers';
 
 // Above-the-fold: 즉시 로드 (LCP에 영향)
