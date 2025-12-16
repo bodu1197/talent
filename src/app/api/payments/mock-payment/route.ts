@@ -1,21 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
+import { requireAuth } from '@/lib/api/auth';
 
 // 테스트용 Mock 결제 API
 // 실제 결제 없이 주문 상태를 paid로 변경
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
-    }
+    const { supabase, user, error: authError } = await requireAuth();
+    if (authError) return authError;
 
     const body = await request.json();
     const { order_id } = body;
