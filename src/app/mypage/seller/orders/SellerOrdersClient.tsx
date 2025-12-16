@@ -186,7 +186,7 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
     return true;
   });
 
-  const tabs = [
+  const tabs: Array<{ value: OrderStatus; label: string; count: number }> = [
     { value: 'all', label: '전체', count: statusCounts.all },
     { value: 'paid', label: '신규 주문', count: statusCounts.paid },
     { value: 'in_progress', label: '진행중', count: statusCounts.in_progress },
@@ -374,7 +374,7 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
         {/* 검색 및 필터 */}
         <OrdersFilterPanel
           filters={filters}
-          onFiltersChange={setFilters}
+          onFiltersChange={(newFilters) => setFilters({ ...newFilters, status: filters.status })}
           onReset={resetFilters}
           mode="seller"
         />

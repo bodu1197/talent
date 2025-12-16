@@ -20,7 +20,7 @@ import {
   formatDeliveryDate,
   calculateDaysLeft,
 } from '@/utils/orderHelpers';
-import { Eye, Download, Check, Star } from 'lucide-react';
+import { RotateCcw, Eye, Download, Check, Star } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface BuyerOrderListItem extends Order {
@@ -171,7 +171,7 @@ function BuyerOrdersContent() {
     return true;
   });
 
-  const tabs = [
+  const tabs: Array<{ value: OrderStatus; label: string; count: number }> = [
     { value: 'all', label: '전체', count: statusCounts.all },
     { value: 'paid', label: '결제완료', count: statusCounts.paid },
     { value: 'in_progress', label: '진행중', count: statusCounts.in_progress },
@@ -365,7 +365,7 @@ function BuyerOrdersContent() {
         {/* 검색 및 필터 */}
         <OrdersFilterPanel
           filters={filters}
-          onFiltersChange={setFilters}
+          onFiltersChange={(newFilters) => setFilters({ ...newFilters, status: filters.status })}
           onReset={resetFilters}
           mode="buyer"
         />
