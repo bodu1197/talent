@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 import { requireAuth } from '@/lib/api/auth';
 import { verifyPortfolioOwnership } from '@/lib/api/ownership';
+import { createClient } from '@/lib/supabase/server';
 
 // DELETE: 포트폴리오 삭제
 export async function DELETE(
@@ -15,10 +16,14 @@ export async function DELETE(
     }
 
     const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
+    }
+
     const { id: portfolioId } = await params;
 
     // 포트폴리오 소유권 확인
-    const ownershipResult = await verifyPortfolioOwnership(supabase!, portfolioId, user!.id);
+    const ownershipResult = await verifyPortfolioOwnership(supabase, portfolioId, user.id);
     if (!ownershipResult.success) {
       return ownershipResult.error!;
     }
@@ -47,11 +52,15 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
+    }
+
     const { id: portfolioId } = await params;
     const body = await request.json();
 
     // 포트폴리오 소유권 확인
-    const ownershipResult = await verifyPortfolioOwnership(supabase!, portfolioId, user!.id);
+    const ownershipResult = await verifyPortfolioOwnership(supabase, portfolioId, user.id);
     if (!ownershipResult.success) {
       return ownershipResult.error!;
     }
