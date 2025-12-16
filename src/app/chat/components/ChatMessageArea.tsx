@@ -7,6 +7,7 @@ import { logger } from '@/lib/logger';
 import { createClient } from '@/lib/supabase/client';
 import PaymentRequestCard, { type PaymentRequest } from '@/components/chat/PaymentRequestCard';
 import PaymentRequestModal from '@/components/chat/PaymentRequestModal';
+import { createChatTimeline } from '@/lib/chat/timeline';
 
 interface Message {
   id: string;
@@ -143,25 +144,7 @@ export default function ChatMessageArea({
   }, [selectedRoom?.id]);
 
   // 메시지와 결제 요청을 시간순으로 정렬한 타임라인 생성
-  const getTimeline = () => {
-    const timeline: Array<{
-      type: 'message' | 'payment';
-      data: Message | PaymentRequest;
-      timestamp: string;
-    }> = [];
-
-    for (const msg of messages) {
-      timeline.push({ type: 'message', data: msg, timestamp: msg.created_at });
-    }
-
-    for (const req of paymentRequests) {
-      timeline.push({ type: 'payment', data: req, timestamp: req.created_at });
-    }
-
-    return timeline.sort(
-      (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
-    );
-  };
+  const getTimeline = () => createChatTimeline(messages, paymentRequests);
 
   // Helper function to get submit button text
   const getSubmitButtonText = () => {

@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
+import { createChatTimeline } from '@/lib/chat/timeline';
 
 import {
   ArrowLeft,
@@ -175,25 +176,7 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
   }, []);
 
   // 메시지와 결제 요청을 시간순으로 정렬한 타임라인 생성
-  const getTimeline = () => {
-    const timeline: Array<{
-      type: 'message' | 'payment';
-      data: Message | PaymentRequest;
-      timestamp: string;
-    }> = [];
-
-    for (const msg of messages) {
-      timeline.push({ type: 'message', data: msg, timestamp: msg.created_at });
-    }
-
-    for (const req of paymentRequests) {
-      timeline.push({ type: 'payment', data: req, timestamp: req.created_at });
-    }
-
-    return timeline.sort(
-      (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
-    );
-  };
+  const getTimeline = () => createChatTimeline(messages, paymentRequests);
 
   // 초기 로드
   useEffect(() => {
