@@ -41,29 +41,36 @@ export default async function PendingServiceDetailPage({
     // seller user 정보 (profiles 테이블 사용)
     let sellerWithUser: ServiceDetailWithCategories['seller'] = null;
     if (seller && typeof seller === 'object' && 'id' in seller) {
+      const sellerData = seller as {
+        id: string;
+        business_name: string;
+        display_name: string;
+        profile_image: string | null;
+        user_id: string;
+      };
       sellerWithUser = {
-        id: seller.id,
-        business_name: seller.business_name,
-        display_name: seller.display_name,
-        profile_image: seller.profile_image,
-        user_id: seller.user_id,
+        id: sellerData.id,
+        business_name: sellerData.business_name,
+        display_name: sellerData.display_name,
+        profile_image: sellerData.profile_image,
+        user_id: sellerData.user_id,
         user: null,
       };
 
-      if (seller.user_id) {
+      if (sellerData.user_id) {
         const { data: userData } = await supabase
           .from('profiles')
           .select('user_id, name, email')
-          .eq('user_id', seller.user_id)
+          .eq('user_id', sellerData.user_id)
           .single();
 
         if (userData) {
           sellerWithUser = {
-            id: seller.id,
-            business_name: seller.business_name,
-            display_name: seller.display_name,
-            profile_image: seller.profile_image,
-            user_id: seller.user_id,
+            id: sellerData.id,
+            business_name: sellerData.business_name,
+            display_name: sellerData.display_name,
+            profile_image: sellerData.profile_image,
+            user_id: sellerData.user_id,
             user: {
               id: userData.user_id,
               name: userData.name,
