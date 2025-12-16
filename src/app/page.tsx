@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { createClient } from '@/lib/supabase/server';
 import HeroWithCategories from '@/components/common/HeroWithCategories';
 import { buildRatingMap, formatServicesWithRating } from '@/lib/services/service-helpers';
+import { getActiveAdvertisedServiceIds } from '@/lib/services/advertising-helpers';
 
 // Above-the-fold: 즉시 로드 (LCP에 영향)
 // HeroWithCategories는 LCP에 영향을 주므로 즉시 로드
@@ -108,17 +109,11 @@ async function AIServicesSection({ aiCategoryIds }: { readonly aiCategoryIds: st
     return <AITalentShowcase services={[]} />;
   }
 
-  const { createClient, createServiceRoleClient } = await import('@/lib/supabase/server');
+  const { createClient } = await import('@/lib/supabase/server');
   const supabase = await createClient();
 
-  // 광고 서비스 ID 조회 - Service Role 클라이언트 사용하여 RLS 우회
-  const serviceRoleClient = createServiceRoleClient();
-  const { data: advertisingData } = await serviceRoleClient
-    .from('advertising_subscriptions')
-    .select('service_id')
-    .eq('status', 'active');
-
-  const advertisedServiceIds = new Set(advertisingData?.map((ad) => ad.service_id) || []);
+  // 광고 서비스 ID 조회
+  const advertisedServiceIds = await getActiveAdvertisedServiceIds();
 
   // AI 카테고리의 서비스 조회 (JOIN으로 한 번에)
   const { data: aiServices } = await supabase

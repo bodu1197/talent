@@ -1,7 +1,8 @@
 import RecommendedServicesClient from './RecommendedServicesClient';
-import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/server';
 import { Service } from '@/types';
 import { buildRatingMap, formatServicesWithAdvertising } from '@/lib/services/service-helpers';
+import { getActiveAdvertisedServiceIds } from '@/lib/services/advertising-helpers';
 
 interface RecommendedServicesProps {
   readonly aiCategoryIds: string[];
@@ -44,13 +45,7 @@ export default async function RecommendedServices({ aiCategoryIds }: Recommended
   }
 
   // 2. 광고 서비스 ID 조회
-  const serviceRoleClient = createServiceRoleClient();
-  const { data: advertisingData } = await serviceRoleClient
-    .from('advertising_subscriptions')
-    .select('service_id')
-    .eq('status', 'active');
-
-  const advertisedServiceIds = new Set(advertisingData?.map((ad) => ad.service_id) || []);
+  const advertisedServiceIds = await getActiveAdvertisedServiceIds();
 
   // 3. 하위 카테고리 조회 (2단계 + 3단계 모두)
   const allCategoryIds = filteredCategories.map((c) => c.id);
