@@ -3,15 +3,16 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { ArrowLeft, Check, ImageIcon, Loader2 } from 'lucide-react';
+import { ArrowLeft, Check, ImageIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { logger } from '@/lib/logger';
 import { createClient } from '@/lib/supabase/client';
 import { usePaymentState } from '@/hooks/usePaymentState';
 import { requestPortOnePayment, validatePaymentPreconditions } from '@/lib/payment/portone';
-import { extractNumbers } from '@/lib/validation/input';
-import TermsAgreement from '@/components/payment/TermsAgreement';
+import BuyerPhoneInput from '@/components/payment/BuyerPhoneInput';
 import PaymentMethodSelector from '@/components/payment/PaymentMethodSelector';
+import PaymentTermsSection from '@/components/payment/PaymentTermsSection';
+import PaymentSummarySidebar from '@/components/payment/PaymentSummarySidebar';
 
 interface Order {
   id: string;
@@ -261,31 +262,13 @@ export default function DirectPaymentClient({ order, seller }: Props) {
 
             {/* 구매자 정보 - 전화번호 미입력 시 */}
             {!buyer?.phone && (
-              <section className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">구매자 정보</h2>
-                <div className="space-y-4">
-                  <div>
-                    <label
-                      htmlFor="buyer-phone-direct"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      휴대폰 번호 <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="buyer-phone-direct"
-                      type="tel"
-                      value={phoneInput}
-                      onChange={(e) => setPhoneInput(extractNumbers(e.target.value))}
-                      placeholder="01012345678"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
-                      maxLength={11}
-                    />
-                    <p className="mt-1 text-xs text-gray-500">
-                      결제 진행을 위해 휴대폰 번호가 필요합니다
-                    </p>
-                  </div>
-                </div>
-              </section>
+              <BuyerPhoneInput
+                phoneInput={phoneInput}
+                onPhoneChange={setPhoneInput}
+                title="구매자 정보"
+                showHelperText={true}
+                inputId="buyer-phone-direct"
+              />
             )}
 
             {/* 결제 방법 */}
@@ -301,83 +284,31 @@ export default function DirectPaymentClient({ order, seller }: Props) {
             </section>
 
             {/* 약관 동의 (모바일) */}
-            <section className="lg:hidden bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">약관 동의</h2>
-              <TermsAgreement
-                agreedToTerms={agreedToTerms}
-                agreedToPrivacy={agreedToPrivacy}
-                onTermsChange={setAgreedToTerms}
-                onPrivacyChange={setAgreedToPrivacy}
-              />
-
-              {/* 모바일 결제 버튼 */}
-              <button
-                onClick={handlePayment}
-                disabled={!allAgreed || isProcessing}
-                className="w-full mt-6 h-14 bg-brand-primary text-white rounded-lg font-bold text-lg disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-colors"
-              >
-                {isProcessing ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    처리 중...
-                  </>
-                ) : (
-                  `${totalAmount.toLocaleString()}원 결제하기`
-                )}
-              </button>
-            </section>
+            <PaymentTermsSection
+              agreedToTerms={agreedToTerms}
+              agreedToPrivacy={agreedToPrivacy}
+              onTermsChange={setAgreedToTerms}
+              onPrivacyChange={setAgreedToPrivacy}
+              onPayment={handlePayment}
+              isProcessing={isProcessing}
+              disabled={!allAgreed}
+              amount={totalAmount}
+            />
           </div>
 
           {/* 오른쪽: 결제 요약 (PC) */}
-          <div className="hidden lg:block w-80 flex-shrink-0">
-            <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-20">
-              {/* 금액 상세 */}
-              <div className="space-y-3 pb-4 border-b border-gray-200">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">주문 금액</span>
-                  <span className="text-gray-900 font-medium">
-                    {order.amount.toLocaleString()} 원
-                  </span>
-                </div>
-              </div>
-
-              {/* 총 결제 금액 */}
-              <div className="flex justify-between items-center py-4 border-b border-gray-200">
-                <span className="font-medium text-gray-900">
-                  총 결제 금액 <span className="text-xs text-gray-500">(VAT 포함)</span>
-                </span>
-                <span className="text-2xl font-bold text-brand-primary">
-                  {totalAmount.toLocaleString()}원
-                </span>
-              </div>
-
-              {/* 약관 동의 */}
-              <div className="py-4">
-                <TermsAgreement
-                  agreedToTerms={agreedToTerms}
-                  agreedToPrivacy={agreedToPrivacy}
-                  onTermsChange={setAgreedToTerms}
-                  onPrivacyChange={setAgreedToPrivacy}
-                />
-              </div>
-
-              {/* 결제 버튼 */}
-              <button
-                onClick={handlePayment}
-                disabled={!allAgreed || isProcessing}
-                className="w-full h-14 bg-brand-primary text-white rounded-lg font-bold text-lg disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-colors hover:bg-brand-dark"
-              >
-                {isProcessing ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    처리 중...
-                  </>
-                ) : (
-                  '결제하기'
-                )}
-              </button>
-            </div>
-          </div>
+          <PaymentSummarySidebar
+            priceBreakdown={[{ label: '주문 금액', amount: order.amount }]}
+            totalAmount={totalAmount}
+            totalLabel="총 결제 금액 (VAT 포함)"
+            agreedToTerms={agreedToTerms}
+            agreedToPrivacy={agreedToPrivacy}
+            onTermsChange={setAgreedToTerms}
+            onPrivacyChange={setAgreedToPrivacy}
+            onPayment={handlePayment}
+            isProcessing={isProcessing}
+            disabled={!allAgreed}
+          />
         </div>
       </div>
     </div>
