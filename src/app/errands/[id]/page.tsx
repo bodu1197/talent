@@ -346,7 +346,7 @@ export default function ErrandDetailPage() {
                 <div className="space-y-2">
                   {errand.shopping_items.map((item, index) => (
                     <div
-                      key={index}
+                      key={`${item.name}-${item.quantity}`}
                       className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0"
                     >
                       <div className="flex items-center gap-2">

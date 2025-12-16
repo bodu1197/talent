@@ -154,9 +154,9 @@ export default function HowToOrderPage() {
                     </div>
                     <p className="text-xs text-gray-600 mb-2">{step.description}</p>
                     <ul className="flex flex-wrap gap-2">
-                      {step.tips.map((tip, index) => (
+                      {step.tips.map((tip) => (
                         <li
-                          key={index}
+                          key={tip}
                           className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded"
                         >
                           {tip}
@@ -181,8 +181,8 @@ export default function HowToOrderPage() {
               <span className="text-sm font-semibold text-yellow-900">꼭 확인하세요</span>
             </div>
             <ul className="space-y-2">
-              {notices.map((notice, index) => (
-                <li key={index} className="flex items-start gap-2 text-xs text-yellow-800">
+              {notices.map((notice) => (
+                <li key={notice} className="flex items-start gap-2 text-xs text-yellow-800">
                   <span className="text-yellow-600">•</span>
                   {notice}
                 </li>

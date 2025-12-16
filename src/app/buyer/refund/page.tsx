@@ -128,8 +128,8 @@ export default function BuyerRefundPage() {
                     <h3 className={`text-sm font-semibold ${colors.title}`}>{refund.title}</h3>
                   </div>
                   <ul className="space-y-1.5">
-                    {refund.items.map((item, index) => (
-                      <li key={index} className={`text-xs leading-relaxed ${colors.text}`}>
+                    {refund.items.map((item) => (
+                      <li key={item} className={`text-xs leading-relaxed ${colors.text}`}>
                         • {item}
                       </li>
                     ))}
@@ -148,7 +148,7 @@ export default function BuyerRefundPage() {
           <div className="max-w-xl mx-auto">
             <ol className="space-y-3">
               {steps.map((step, index) => (
-                <li key={index} className="flex items-start gap-3 bg-gray-50 rounded-lg p-4">
+                <li key={step} className="flex items-start gap-3 bg-gray-50 rounded-lg p-4">
                   <span className="w-6 h-6 bg-brand-primary rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                     {index + 1}
                   </span>

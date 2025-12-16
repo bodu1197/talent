@@ -158,8 +158,8 @@ export default function BuyerGuidePage() {
         <div className="container-1200 px-4">
           <h2 className="text-lg md:text-xl font-bold text-center mb-6">자주 묻는 질문</h2>
           <div className="max-w-2xl mx-auto space-y-3">
-            {faqs.map((faq, index) => (
-              <div key={index} className="bg-gray-50 rounded-lg p-4">
+            {faqs.map((faq) => (
+              <div key={faq.question} className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-start gap-2">
                   <HelpCircle className="w-4 h-4 text-brand-primary flex-shrink-0 mt-0.5" />
                   <div>

@@ -131,8 +131,8 @@ export default function BuyerPaymentPage() {
               <span className="text-sm font-semibold text-blue-900">보안 결제 시스템</span>
             </div>
             <ul className="space-y-2">
-              {securityFeatures.map((feature, index) => (
-                <li key={index} className="flex items-center gap-2 text-sm text-blue-800">
+              {securityFeatures.map((feature) => (
+                <li key={feature} className="flex items-center gap-2 text-sm text-blue-800">
                   <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0" />
                   {feature}
                 </li>

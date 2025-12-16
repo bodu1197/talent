@@ -182,9 +182,9 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   return (
     <>
       {/* JSON-LD 구조화 데이터 (SEO/AI 최적화) */}
-      {jsonLd.map((data, index) => (
+      {jsonLd.map((data) => (
         <script
-          key={index}
+          key={JSON.stringify(data)}
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
         />
