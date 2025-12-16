@@ -184,9 +184,17 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                   {!pkg.is_enabled && <span className="text-sm text-gray-400">비활성화됨</span>}
                 </div>
                 {/* 활성화 토글 */}
-                <span
+                <div
+                  role="button"
+                  tabIndex={0}
                   onClick={(e) => {
                     e.stopPropagation();
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }
                   }}
                   className="flex items-center"
                 >
@@ -206,7 +214,7 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                       className={`w-11 h-6 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all ${getToggleSwitchClass(pkg.is_enabled, isExpanded)}`}
                     />
                   </label>
-                </span>
+                </div>
               </button>
 
               {/* 펼쳐진 내용 */}

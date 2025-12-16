@@ -210,7 +210,15 @@ export default function AdvertisingPurchasePage() {
                     ? 'border-brand-primary shadow-md'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
+                role="button"
+                tabIndex={0}
                 onClick={() => openPurchaseModal(product)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openPurchaseModal(product);
+                  }
+                }}
               >
                 {/* 인기 배지 */}
                 {product.popular && (
