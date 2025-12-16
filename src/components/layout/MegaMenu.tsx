@@ -160,8 +160,8 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
 
               {/* 인기 카테고리 퀵링크 - 서비스 수 순으로 상위 6개 표시 */}
               <div className="flex items-center gap-6 px-6">
-                {[...categories]
-                  .sort((a, b) => (b.service_count || 0) - (a.service_count || 0))
+                {categories
+                  .toSorted((a, b) => (b.service_count || 0) - (a.service_count || 0))
                   .slice(0, 6)
                   .map((cat) => (
                     <Link
