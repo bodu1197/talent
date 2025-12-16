@@ -42,16 +42,8 @@ export async function POST(request: NextRequest) {
 // GET: 최근 본 서비스 조회
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient();
-
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { supabase, user, error: authError } = await requireAuth();
+    if (authError) return authError;
 
     const { searchParams } = new URL(request.url);
     const limit = Number.parseInt(searchParams.get('limit') || '20');
