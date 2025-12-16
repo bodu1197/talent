@@ -343,8 +343,8 @@ export default function HelperGuidePage() {
             아래 사항에 해당하는 경우 심부름꾼 등록이 불가합니다
           </p>
           <div className="max-w-2xl mx-auto grid md:grid-cols-2 gap-3">
-            {disqualifications.map((item, index) => (
-              <div key={index} className="flex items-start gap-2 bg-gray-800 rounded-lg p-3">
+            {disqualifications.map((item) => (
+              <div key={item} className="flex items-start gap-2 bg-gray-800 rounded-lg p-3">
                 <Scale className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
                 <span className="text-xs text-gray-300">{item}</span>
               </div>
@@ -394,8 +394,8 @@ export default function HelperGuidePage() {
         <div className="container-1200 px-4">
           <h2 className="text-lg md:text-xl font-bold text-center mb-6">자주 묻는 질문</h2>
           <div className="max-w-2xl mx-auto space-y-3">
-            {faqs.map((faq, index) => (
-              <div key={index} className="bg-white rounded-lg p-4 shadow-sm">
+            {faqs.map((faq) => (
+              <div key={faq.question} className="bg-white rounded-lg p-4 shadow-sm">
                 <div className="flex items-start gap-2">
                   <HelpCircle className="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5" />
                   <div>

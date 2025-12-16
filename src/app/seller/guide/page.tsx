@@ -245,8 +245,8 @@ export default function SellerGuidePage() {
                   <h3 className="text-sm font-semibold">{tip.title}</h3>
                 </div>
                 <ul className="space-y-2">
-                  {tip.items.map((item, index) => (
-                    <li key={index} className="flex items-start gap-2 text-xs text-gray-700">
+                  {tip.items.map((item) => (
+                    <li key={item} className="flex items-start gap-2 text-xs text-gray-700">
                       <CheckCircle className="w-3.5 h-3.5 text-green-500 flex-shrink-0 mt-0.5" />
                       {item}
                     </li>
@@ -263,8 +263,8 @@ export default function SellerGuidePage() {
         <div className="container-1200 px-4">
           <h2 className="text-lg md:text-xl font-bold text-center mb-6">자주 묻는 질문</h2>
           <div className="max-w-2xl mx-auto space-y-3">
-            {faqs.map((faq, index) => (
-              <div key={index} className="bg-white rounded-lg p-4 shadow-sm">
+            {faqs.map((faq) => (
+              <div key={faq.question} className="bg-white rounded-lg p-4 shadow-sm">
                 <div className="flex items-start gap-2">
                   <HelpCircle className="w-4 h-4 text-brand-primary flex-shrink-0 mt-0.5" />
                   <div>

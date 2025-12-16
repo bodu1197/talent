@@ -242,8 +242,8 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                       {pkgErrors.length > 0 && (
                         <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
                           <ul className="list-disc list-inside text-sm text-red-600 space-y-1">
-                            {pkgErrors.map((err, i) => (
-                              <li key={i}>{err}</li>
+                            {pkgErrors.map((err) => (
+                              <li key={err}>{err}</li>
                             ))}
                           </ul>
                         </div>
@@ -433,7 +433,7 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                         <div className="flex flex-wrap gap-2 mb-3">
                           {(pkg.features || []).map((feature, index) => (
                             <div
-                              key={index}
+                              key={`${type}-${feature}-${index}`}
                               className="flex items-center gap-1 px-3 py-1.5 bg-green-50 text-green-700 rounded-full text-sm"
                             >
                               <svg

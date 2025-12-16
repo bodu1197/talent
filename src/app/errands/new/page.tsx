@@ -120,7 +120,9 @@ export default function NewErrandPage() {
 
   // 구매대행 상태
   const [shoppingRange, setShoppingRange] = useState<ShoppingRange>('LOCAL');
-  const [shoppingItems, setShoppingItems] = useState<ShoppingItem[]>([{ name: '', quantity: 1 }]);
+  const [shoppingItems, setShoppingItems] = useState<(ShoppingItem & { itemId: string })[]>([
+    { itemId: crypto.randomUUID(), name: '', quantity: 1 },
+  ]);
   const [shoppingLocation, setShoppingLocation] = useState<{
     address: string;
     detail?: string;
@@ -431,7 +433,7 @@ export default function NewErrandPage() {
 
   // 구매대행 품목 추가
   const addShoppingItem = () => {
-    setShoppingItems((prev) => [...prev, { name: '', quantity: 1 }]);
+    setShoppingItems((prev) => [...prev, { itemId: crypto.randomUUID(), name: '', quantity: 1 }]);
   };
 
   // 구매대행 품목 삭제
@@ -755,7 +757,10 @@ export default function NewErrandPage() {
                 {isMultiStop && (
                   <div className="space-y-4">
                     {stops.map((stop, index) => (
-                      <div key={index} className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                      <div
+                        key={stop.stop_order}
+                        className="bg-gray-50 rounded-lg p-3 border border-gray-200"
+                      >
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-xs font-medium text-gray-600">
                             추가 정차지 #{index + 1}
@@ -915,7 +920,7 @@ export default function NewErrandPage() {
                   </p>
                   <div className="space-y-2">
                     {shoppingItems.map((item, index) => (
-                      <div key={index} className="flex gap-2">
+                      <div key={item.itemId} className="flex gap-2">
                         <input
                           type="text"
                           value={item.name}

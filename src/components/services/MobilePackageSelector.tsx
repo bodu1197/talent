@@ -241,8 +241,8 @@ export default function MobilePackageSelector({
               {/* 포함 기능 */}
               {selectedPackage.features && selectedPackage.features.length > 0 && (
                 <div className="space-y-1.5">
-                  {selectedPackage.features.map((feature, index) => (
-                    <div key={index} className="flex items-center gap-2 text-xs text-gray-700">
+                  {selectedPackage.features.map((feature) => (
+                    <div key={feature} className="flex items-center gap-2 text-xs text-gray-700">
                       <Check className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />
                       <span>{feature}</span>
                     </div>

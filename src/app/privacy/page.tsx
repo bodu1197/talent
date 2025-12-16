@@ -142,9 +142,9 @@ export default function PrivacyPage() {
               </p>
 
               <div className="space-y-6">
-                {sections.map((section, index) => (
+                {sections.map((section) => (
                   <div
-                    key={index}
+                    key={section.title}
                     className="border-b border-gray-100 pb-5 last:border-0 last:pb-0"
                   >
                     <h2 className="text-sm font-semibold text-gray-900 mb-2">{section.title}</h2>
@@ -153,12 +153,12 @@ export default function PrivacyPage() {
                       <p className="text-xs text-gray-600 leading-relaxed">{section.content}</p>
                     )}
 
-                    {section.subsections?.map((sub, subIdx) => (
-                      <div key={subIdx} className="mt-2">
+                    {section.subsections?.map((sub) => (
+                      <div key={sub.subtitle} className="mt-2">
                         <h3 className="text-xs font-medium text-gray-700 mb-1">{sub.subtitle}</h3>
                         <ul className="space-y-1">
-                          {sub.items.map((item, itemIdx) => (
-                            <li key={itemIdx} className="text-xs text-gray-600 flex gap-2">
+                          {sub.items.map((item) => (
+                            <li key={item} className="text-xs text-gray-600 flex gap-2">
                               <span className="text-gray-400">•</span>
                               {item}
                             </li>
@@ -169,8 +169,8 @@ export default function PrivacyPage() {
 
                     {section.items && (
                       <ul className="space-y-1 mt-2">
-                        {section.items.map((item, idx) => (
-                          <li key={idx} className="text-xs text-gray-600 flex gap-2">
+                        {section.items.map((item) => (
+                          <li key={item} className="text-xs text-gray-600 flex gap-2">
                             <span className="text-gray-400">•</span>
                             {item}
                           </li>
@@ -192,8 +192,8 @@ export default function PrivacyPage() {
                             </tr>
                           </thead>
                           <tbody>
-                            {section.table.map((row, idx) => (
-                              <tr key={idx}>
+                            {section.table.map((row) => (
+                              <tr key={row.company}>
                                 <td className="px-3 py-2 text-gray-600 border">{row.company}</td>
                                 <td className="px-3 py-2 text-gray-600 border">{row.task}</td>
                               </tr>

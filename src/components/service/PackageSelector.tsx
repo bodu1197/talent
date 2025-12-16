@@ -138,8 +138,8 @@ export default function PackageSelector({
           <div className="border-t border-gray-100 pt-4 mb-5">
             <h4 className="text-sm font-medium text-gray-700 mb-3">포함 기능</h4>
             <ul className="space-y-2">
-              {selectedPackage.features.map((feature, index) => (
-                <li key={index} className="flex items-center gap-2 text-sm">
+              {selectedPackage.features.map((feature) => (
+                <li key={feature} className="flex items-center gap-2 text-sm">
                   <svg
                     className="w-4 h-4 text-green-500 flex-shrink-0"
                     fill="none"
@@ -165,9 +165,9 @@ export default function PackageSelector({
                     self.indexOf(feature) === index && !selectedPackage.features.includes(feature)
                 )
                 .slice(0, 3)
-                .map((feature, index) => (
+                .map((feature) => (
                   <li
-                    key={`inactive-${index}`}
+                    key={`inactive-${feature}`}
                     className="flex items-center gap-2 text-sm opacity-50"
                   >
                     <svg
