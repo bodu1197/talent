@@ -10,10 +10,10 @@ async function fetchService(supabase: SupabaseClient, id: string, sellerId: stri
     .select(
       `
       *,
-      service_categories!inner(
+      service_categories(
         category_id,
         is_primary,
-        categories!inner(level)
+        categories(level)
       )
     `
     )
