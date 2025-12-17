@@ -116,25 +116,33 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
     serviceId: string,
     categoryId: string
   ) => {
-    // First delete existing categories
+    // First, delete categories that are NOT the new category
+    // This avoids the PK conflict when trying to re-insert the same category
     const { error: deleteError } = await supabase
       .from('service_categories')
       .delete()
-      .eq('service_id', serviceId);
+      .eq('service_id', serviceId)
+      .neq('category_id', categoryId);
 
     if (deleteError) {
       logger.error('Error deleting old categories:', deleteError);
       throw deleteError;
     }
 
-    // Insert new category
-    const { error: insertError } = await supabase.from('service_categories').insert({
-      service_id: serviceId,
-      category_id: categoryId,
-      is_primary: true,
-    });
+    // Use upsert to insert or update the category
+    // onConflict handles the case where the same service_id + category_id already exists
+    const { error: upsertError } = await supabase.from('service_categories').upsert(
+      {
+        service_id: serviceId,
+        category_id: categoryId,
+        is_primary: true,
+      },
+      {
+        onConflict: 'service_id,category_id',
+      }
+    );
 
-    if (insertError) throw insertError;
+    if (upsertError) throw upsertError;
   };
 
   const handleSubmit = async (data: ServiceFormState, publicThumbnailUrl: string | null) => {
