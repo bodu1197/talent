@@ -11,6 +11,35 @@ export interface OwnershipResult {
 }
 
 /**
+ * seller 소유권 확인 헬퍼
+ * seller가 현재 사용자의 seller인지 확인
+ */
+async function verifySeller(
+  supabase: SupabaseClient,
+  sellerId: string,
+  userId: string
+): Promise<OwnershipResult> {
+  const { data: seller } = await supabase
+    .from('sellers')
+    .select('id')
+    .eq('id', sellerId)
+    .eq('user_id', userId)
+    .single();
+
+  if (!seller) {
+    return {
+      success: false,
+      error: NextResponse.json({ error: 'Unauthorized' }, { status: 403 }),
+    };
+  }
+
+  return {
+    success: true,
+    data: { seller },
+  };
+}
+
+/**
  * 포트폴리오 소유권 확인
  * 1. 포트폴리오 존재 여부 확인
  * 2. 포트폴리오의 seller가 현재 사용자의 seller인지 확인
@@ -35,23 +64,14 @@ export async function verifyPortfolioOwnership(
   }
 
   // seller 소유권 확인
-  const { data: seller } = await supabase
-    .from('sellers')
-    .select('id')
-    .eq('id', portfolio.seller_id)
-    .eq('user_id', userId)
-    .single();
-
-  if (!seller) {
-    return {
-      success: false,
-      error: NextResponse.json({ error: 'Unauthorized' }, { status: 403 }),
-    };
+  const sellerResult = await verifySeller(supabase, portfolio.seller_id, userId);
+  if (!sellerResult.success) {
+    return sellerResult;
   }
 
   return {
     success: true,
-    data: { portfolio, seller },
+    data: { portfolio, seller: sellerResult.data?.seller },
   };
 }
 
@@ -77,23 +97,15 @@ export async function verifyServiceOwnership(
     };
   }
 
-  const { data: seller } = await supabase
-    .from('sellers')
-    .select('id')
-    .eq('id', service.seller_id)
-    .eq('user_id', userId)
-    .single();
-
-  if (!seller) {
-    return {
-      success: false,
-      error: NextResponse.json({ error: 'Unauthorized' }, { status: 403 }),
-    };
+  // seller 소유권 확인
+  const sellerResult = await verifySeller(supabase, service.seller_id, userId);
+  if (!sellerResult.success) {
+    return sellerResult;
   }
 
   return {
     success: true,
-    data: { service, seller },
+    data: { service, seller: sellerResult.data?.seller },
   };
 }
 
