@@ -4,7 +4,7 @@
 const CACHE_NAME = 'dolpagu-v1';
 
 // 캐시할 파일들 (홈페이지 필수 리소스)
-const STATIC_ASSETS = ['/', '/manifest.json', '/icon-192x192.png', '/icon-512x512.png'];
+const STATIC_ASSETS = ['/', '/manifest.json', '/icon.png'];
 
 // 설치 시 정적 파일 캐시
 self.addEventListener('install', (event) => {
