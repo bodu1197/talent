@@ -9,8 +9,8 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
 
     // 쿼리 파라미터 파싱
-    const lat = Number.parseFloat(searchParams.get('lat') || '');
-    const lng = Number.parseFloat(searchParams.get('lng') || '');
+    const lat = Number.parseFloat(searchParams.get('lat') ?? '');
+    const lng = Number.parseFloat(searchParams.get('lng') ?? '');
     const radius = Number.parseInt(searchParams.get('radius') || '10'); // 기본 10km
 
     // 필수 파라미터 검증

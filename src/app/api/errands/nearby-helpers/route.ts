@@ -7,8 +7,8 @@ import { calculateDistance } from '@/lib/geo';
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const lat = Number.parseFloat(searchParams.get('lat') || '');
-    const lng = Number.parseFloat(searchParams.get('lng') || '');
+    const lat = Number.parseFloat(searchParams.get('lat') ?? '');
+    const lng = Number.parseFloat(searchParams.get('lng') ?? '');
     const radiusKm = Number.parseFloat(searchParams.get('radius') || '5'); // 기본 5km
     const staleMinutes = Number.parseInt(searchParams.get('stale') || '10'); // 기본 10분
 

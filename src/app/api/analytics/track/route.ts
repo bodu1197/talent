@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get request metadata
-    const userAgent = request.headers.get('user-agent') || '';
+    const userAgent = request.headers.get('user-agent') ?? '';
     const deviceType = getDeviceType(userAgent);
     const ipAddress = getClientIp(request);
 
