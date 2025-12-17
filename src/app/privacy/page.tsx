@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import { ArrowRight, Shield } from 'lucide-react';
+import { Shield } from 'lucide-react';
+import PolicyLayout from '@/components/common/PolicyLayout';
 
 export const metadata: Metadata = {
   title: '개인정보처리방침 | 돌파구',
@@ -118,145 +118,96 @@ export default function PrivacyPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-brand-primary to-brand-dark text-white py-10 md:py-12">
-        <div className="container-1200 px-4">
-          <div className="flex items-center gap-3 mb-3">
-            <Shield className="w-6 h-6" />
-            <h1 className="text-2xl md:text-3xl font-bold">개인정보처리방침</h1>
-          </div>
-          <p className="text-sm text-blue-100">시행일: 2024년 1월 1일</p>
-        </div>
-      </section>
+    <PolicyLayout
+      title="개인정보처리방침"
+      effectiveDate="2024년 1월 1일"
+      icon={Shield}
+      bgGradient="bg-gradient-to-br from-brand-primary to-brand-dark"
+      textColor="text-blue-100"
+      relatedLinks={[
+        { href: '/terms', label: '이용약관' },
+        { href: '/help', label: '고객센터' },
+      ]}
+    >
+      <p className="text-xs text-gray-600 leading-relaxed mb-6">
+        (주)플랫폼몬스터(이하 "회사")는 개인정보보호법 등 관련 법령에 따라 이용자의 개인정보를
+        보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이
+        개인정보처리방침을 수립·공개합니다.
+      </p>
 
-      {/* Content */}
-      <section className="py-10 md:py-12">
-        <div className="container-1200 px-4">
-          <div className="max-w-3xl mx-auto">
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <p className="text-xs text-gray-600 leading-relaxed mb-6">
-                (주)플랫폼몬스터(이하 "회사")는 개인정보보호법 등 관련 법령에 따라 이용자의
-                개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기
-                위하여 다음과 같이 개인정보처리방침을 수립·공개합니다.
-              </p>
+      <div className="space-y-6">
+        {sections.map((section) => (
+          <div
+            key={section.title}
+            className="border-b border-gray-100 pb-5 last:border-0 last:pb-0"
+          >
+            <h2 className="text-sm font-semibold text-gray-900 mb-2">{section.title}</h2>
 
-              <div className="space-y-6">
-                {sections.map((section) => (
-                  <div
-                    key={section.title}
-                    className="border-b border-gray-100 pb-5 last:border-0 last:pb-0"
-                  >
-                    <h2 className="text-sm font-semibold text-gray-900 mb-2">{section.title}</h2>
+            {section.content && (
+              <p className="text-xs text-gray-600 leading-relaxed">{section.content}</p>
+            )}
 
-                    {section.content && (
-                      <p className="text-xs text-gray-600 leading-relaxed">{section.content}</p>
-                    )}
-
-                    {section.subsections?.map((sub) => (
-                      <div key={sub.subtitle} className="mt-2">
-                        <h3 className="text-xs font-medium text-gray-700 mb-1">{sub.subtitle}</h3>
-                        <ul className="space-y-1">
-                          {sub.items.map((item) => (
-                            <li key={item} className="text-xs text-gray-600 flex gap-2">
-                              <span className="text-gray-400">•</span>
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-
-                    {section.items && (
-                      <ul className="space-y-1 mt-2">
-                        {section.items.map((item) => (
-                          <li key={item} className="text-xs text-gray-600 flex gap-2">
-                            <span className="text-gray-400">•</span>
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-
-                    {section.table && (
-                      <div className="mt-2 overflow-x-auto">
-                        <table className="w-full text-xs">
-                          <thead>
-                            <tr className="bg-gray-50">
-                              <th className="px-3 py-2 text-left font-medium text-gray-700 border">
-                                수탁업체
-                              </th>
-                              <th className="px-3 py-2 text-left font-medium text-gray-700 border">
-                                위탁업무
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {section.table.map((row) => (
-                              <tr key={row.company}>
-                                <td className="px-3 py-2 text-gray-600 border">{row.company}</td>
-                                <td className="px-3 py-2 text-gray-600 border">{row.task}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-
-                    {section.contact && (
-                      <div className="mt-2 p-3 bg-gray-50 rounded text-xs text-gray-600">
-                        <p className="font-medium text-gray-700 mb-1">개인정보 보호책임자</p>
-                        <p>성명: {section.contact.name}</p>
-                        <p>직책: {section.contact.position}</p>
-                        <p>이메일: {section.contact.email}</p>
-                      </div>
-                    )}
-                  </div>
-                ))}
-
-                {/* 부칙 */}
-                <div className="pt-4 border-t border-gray-200">
-                  <h2 className="text-sm font-semibold text-gray-900 mb-2">부칙</h2>
-                  <p className="text-xs text-gray-600">
-                    본 개인정보처리방침은 2024년 1월 1일부터 시행됩니다.
-                  </p>
-                </div>
-
-                {/* 회사 정보 */}
-                <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                  <p className="text-xs text-gray-500 leading-relaxed">
-                    <strong className="text-gray-700">(주)플랫폼몬스터</strong>
-                    <br />
-                    사업자등록번호: 363-06-01936 | 대표: 배미미
-                    <br />
-                    주소: 서울시 마포구 월드컵로 81 3층
-                    <br />
-                    고객센터: 070-8019-6077 | dolpagu@dolpagu.com
-                  </p>
-                </div>
+            {section.subsections?.map((sub) => (
+              <div key={sub.subtitle} className="mt-2">
+                <h3 className="text-xs font-medium text-gray-700 mb-1">{sub.subtitle}</h3>
+                <ul className="space-y-1">
+                  {sub.items.map((item) => (
+                    <li key={item} className="text-xs text-gray-600 flex gap-2">
+                      <span className="text-gray-400">•</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
+            ))}
 
-            {/* Related Links */}
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              <Link
-                href="/terms"
-                className="flex items-center justify-between bg-white rounded-lg p-4 border border-gray-200 hover:border-brand-primary transition-colors"
-              >
-                <span className="text-sm font-medium">이용약관</span>
-                <ArrowRight className="w-4 h-4 text-gray-400" />
-              </Link>
-              <Link
-                href="/help"
-                className="flex items-center justify-between bg-white rounded-lg p-4 border border-gray-200 hover:border-brand-primary transition-colors"
-              >
-                <span className="text-sm font-medium">고객센터</span>
-                <ArrowRight className="w-4 h-4 text-gray-400" />
-              </Link>
-            </div>
+            {section.items && (
+              <ul className="space-y-1 mt-2">
+                {section.items.map((item) => (
+                  <li key={item} className="text-xs text-gray-600 flex gap-2">
+                    <span className="text-gray-400">•</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {section.table && (
+              <div className="mt-2 overflow-x-auto">
+                <table className="w-full text-xs">
+                  <thead>
+                    <tr className="bg-gray-50">
+                      <th className="px-3 py-2 text-left font-medium text-gray-700 border">
+                        수탁업체
+                      </th>
+                      <th className="px-3 py-2 text-left font-medium text-gray-700 border">
+                        위탁업무
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {section.table.map((row) => (
+                      <tr key={row.company}>
+                        <td className="px-3 py-2 text-gray-600 border">{row.company}</td>
+                        <td className="px-3 py-2 text-gray-600 border">{row.task}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {section.contact && (
+              <div className="mt-2 p-3 bg-gray-50 rounded text-xs text-gray-600">
+                <p className="font-medium text-gray-700 mb-1">개인정보 보호책임자</p>
+                <p>성명: {section.contact.name}</p>
+                <p>직책: {section.contact.position}</p>
+                <p>이메일: {section.contact.email}</p>
+              </div>
+            )}
           </div>
-        </div>
-      </section>
-    </div>
+        ))}
+      </div>
+    </PolicyLayout>
   );
 }

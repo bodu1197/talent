@@ -89,29 +89,30 @@ export default function RecommendedServicesClient({
           <p className="text-mobile-md text-gray-600">믿을 수 있는 검증된 전문가들의 서비스</p>
         </div>
 
-        {/* 탭 UI - 스크롤 가능 */}
-        <div className="relative mb-6">
-          {/* 왼쪽 화살표 - 모바일만 */}
+        {/* 탭 UI - 스크롤 가능 (항상 한 줄) */}
+        <div className="relative mb-6 group">
+          {/* 왼쪽 화살표 - 스크롤 가능할 때 표시 */}
           {showLeftArrow && (
             <button
               onClick={() => scrollTabs('left')}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white shadow-md rounded-full flex items-center justify-center hover:bg-gray-50 lg:hidden"
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white shadow-md border border-gray-100 rounded-full flex items-center justify-center hover:bg-gray-50 opacity-90 hover:opacity-100 transition-opacity"
+              aria-label="이전 카테고리"
             >
               <ChevronLeft className="w-5 h-5 text-gray-600" />
             </button>
           )}
 
-          {/* 탭 컨테이너 - PC: 한 줄 표시 / 모바일: 스크롤 */}
+          {/* 탭 컨테이너 - 항상 한 줄(No Wrap) + 스크롤 */}
           <div
             ref={tabContainerRef}
-            className="flex gap-1 lg:gap-1.5 overflow-x-auto scrollbar-hide px-1 py-1 lg:justify-center"
+            className="flex gap-1 lg:gap-1.5 overflow-x-auto scrollbar-hide px-8 py-1 lg:justify-start"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {categories.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-2.5 lg:px-3 py-1.5 text-xs lg:text-sm font-medium rounded-full whitespace-nowrap transition-all flex-shrink-0 ${
+                className={`px-2 lg:px-2.5 py-1 lg:py-1.5 text-[11px] lg:text-xs font-medium rounded-full whitespace-nowrap transition-all flex-shrink-0 ${
                   activeTab === tab.id
                     ? 'bg-orange-500 text-white shadow-sm'
                     : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
@@ -122,11 +123,12 @@ export default function RecommendedServicesClient({
             ))}
           </div>
 
-          {/* 오른쪽 화살표 - 모바일만 */}
+          {/* 오른쪽 화살표 - 스크롤 가능할 때 표시 */}
           {showRightArrow && (
             <button
               onClick={() => scrollTabs('right')}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white shadow-md rounded-full flex items-center justify-center hover:bg-gray-50 lg:hidden"
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white shadow-md border border-gray-100 rounded-full flex items-center justify-center hover:bg-gray-50 opacity-90 hover:opacity-100 transition-opacity"
+              aria-label="다음 카테고리"
             >
               <ChevronRight className="w-5 h-5 text-gray-600" />
             </button>

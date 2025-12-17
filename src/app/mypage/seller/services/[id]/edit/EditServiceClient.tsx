@@ -74,8 +74,8 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
 
   // Helper: Update Active Service via Revisions
   const updateActiveServiceRevision = async (
-    supabase: any,
-    baseData: any,
+    supabase: ReturnType<typeof createClient>,
+    baseData: Record<string, unknown>,
     sellerId: string,
     serviceId: string
   ) => {
@@ -92,9 +92,9 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
 
   // Helper: Update Inactive Service directly
   const updateInactiveService = async (
-    supabase: any,
-    baseData: any,
-    extendedData: any,
+    supabase: ReturnType<typeof createClient>,
+    baseData: Record<string, unknown>,
+    extendedData: Record<string, unknown>,
     serviceId: string,
     currentStatus: string
   ) => {
@@ -111,7 +111,11 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
   };
 
   // Helper: Update Categories
-  const updateServiceCategories = async (supabase: any, serviceId: string, categoryId: string) => {
+  const updateServiceCategories = async (
+    supabase: ReturnType<typeof createClient>,
+    serviceId: string,
+    categoryId: string
+  ) => {
     // First delete existing categories
     const { error: deleteError } = await supabase
       .from('service_categories')

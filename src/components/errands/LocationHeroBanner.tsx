@@ -1,8 +1,5 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import Link from 'next/link';
-
 import {
   HomeIcon,
   MicIcon,
@@ -10,10 +7,10 @@ import {
   WrenchIcon,
   ChatBubbleIcon,
   PuzzleIcon,
-  MapPinIcon,
-  ArrowRightIcon,
-  LoadingSpinner,
 } from '@/components/home/HeroIcons';
+import GradientCategoryBanner, {
+  BannerCategoryConfig,
+} from '@/components/common/GradientCategoryBanner';
 
 // 카테고리 설정 (아이콘, 스타일 등)
 const categoryConfig: Record<
@@ -22,7 +19,7 @@ const categoryConfig: Record<
     title: string;
     subtitle: string;
     description: string;
-    icon: React.FC;
+    icon: React.FC<{ className?: string }>;
     gradient: string;
     bgLight: string;
     textColor: string;
@@ -84,132 +81,27 @@ const categoryConfig: Record<
   },
 };
 
-interface CategoryCount {
-  category_slug: string;
-  count: number;
-}
-
 export default function LocationHeroBanner() {
-  const [categoryCounts, setCategoryCounts] = useState<CategoryCount[]>([]);
-  const [isLoadingCounts, setIsLoadingCounts] = useState(false);
-
-  // 전체 카테고리 수 가져오기
-  const fetchCategoryCounts = useCallback(async () => {
-    setIsLoadingCounts(true);
-    try {
-      const response = await fetch('/api/experts/nearby/categories');
-      if (response.ok) {
-        const data = await response.json();
-        setCategoryCounts(data.categories || []);
-      }
-    } catch (error) {
-      console.error('카테고리 수 로딩 실패:', error);
-    } finally {
-      setIsLoadingCounts(false);
-    }
-  }, []);
-
-  // 컴포넌트 마운트 시 카테고리 수 가져오기
-  useEffect(() => {
-    fetchCategoryCounts();
-  }, [fetchCategoryCounts]);
-
-  // 카테고리 슬러그로 전문가 수 가져오기
-  const getCount = (slug: string): number => {
-    const found = categoryCounts.find((c) => c.category_slug === slug);
-    return found?.count || 0;
-  };
-
-  // 배지 배경색 결정
-  const getBadgeBackground = (loading: boolean, hasExperts: boolean) => {
-    if (loading) return 'bg-white/20';
-    if (hasExperts) return 'bg-white/25';
-    return 'bg-white/15';
-  };
-
-  // 카테고리 데이터 생성
-  const categories = Object.entries(categoryConfig).map(([slug, config]) => ({
-    id: slug,
-    ...config,
-    href: `/search?category=${slug}`,
-    count: getCount(slug),
-  }));
+  const categories: BannerCategoryConfig[] = Object.entries(categoryConfig).map(
+    ([slug, config]) => ({
+      slug,
+      href: `/search?category=${slug}`,
+      ...config,
+    })
+  );
 
   return (
-    <section className="py-6 md:py-10">
-      <div className="container-1200">
-        {/* 헤더 */}
-        <div className="text-center mb-6 md:mb-8">
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 mb-2">
-            <span className="text-orange-700">내 주변</span>의 프리미엄 전문가
-          </h2>
-          <p className="text-gray-500 text-sm md:text-base">
-            가까운 곳에서 직접 만나는 전문가 서비스
-          </p>
-        </div>
-
-        {/* 카드 컨테이너 */}
-        <div className="flex md:grid md:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
-          {categories.map((category) => {
-            const IconComponent = category.icon;
-            const hasExperts = category.count > 0;
-
-            return (
-              <Link
-                key={category.id}
-                href={category.href}
-                className="group flex-shrink-0 w-[85%] sm:w-[70%] md:w-auto snap-center"
-              >
-                <div
-                  className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${category.gradient} p-6 md:p-8 h-full min-h-[200px] md:min-h-[220px] transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-xl`}
-                >
-                  {/* 배경 장식 */}
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
-                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2" />
-
-                  {/* 콘텐츠 */}
-                  <div className="relative z-10 h-full flex flex-col">
-                    {/* 상단: 아이콘 + 전문가 수 배지 */}
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
-                        <IconComponent />
-                      </div>
-                      {/* 전문가 수 배지 */}
-                      <div
-                        className={`flex items-center gap-1 backdrop-blur-sm px-2.5 py-1 rounded-full ${getBadgeBackground(isLoadingCounts, hasExperts)}`}
-                      >
-                        {isLoadingCounts ? (
-                          <LoadingSpinner className="w-3 h-3 text-white" />
-                        ) : (
-                          <>
-                            <MapPinIcon className="w-3 h-3 text-white" />
-                            <span className="text-white text-xs font-medium">
-                              {hasExperts ? `전문가 ${category.count}명` : '전문가 찾기'}
-                            </span>
-                          </>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* 텍스트 */}
-                    <h3 className="text-xl md:text-2xl font-bold text-white mb-1">
-                      {category.title}
-                    </h3>
-                    <p className="text-white/80 text-sm mb-2">{category.subtitle}</p>
-                    <p className="text-white/60 text-xs mb-auto">{category.description}</p>
-
-                    {/* CTA */}
-                    <div className="flex items-center gap-2 text-white font-medium text-sm mt-4 group-hover:gap-3 transition-all duration-300">
-                      <span>{hasExperts ? '전문가 보기' : '전문가 찾기'}</span>
-                      <ArrowRightIcon />
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </div>
-    </section>
+    <GradientCategoryBanner
+      title={
+        <>
+          <span className="text-orange-700">내 주변</span>의 프리미엄 전문가
+        </>
+      }
+      description="가까운 곳에서 직접 만나는 전문가 서비스"
+      categories={categories}
+      fetchCountsUrl="/api/experts/nearby/categories"
+      getBadgeText={(count, hasExperts) => (hasExperts ? `전문가 ${count}명` : '전문가 찾기')}
+      getCtaText={(hasExperts) => (hasExperts ? '전문가 보기' : '전문가 찾기')}
+    />
   );
 }
