@@ -107,45 +107,82 @@ export default function ServiceForm({
   const originalThumbnailUrl = initialData?.thumbnailPreview || null; // For restore
 
   // --- Category Logic ---
-  // Track if this is the initial mount to avoid resetting categories
-  const isInitialMount = useRef(true);
+  // Track if categories have been initialized (for edit mode)
+  const categoriesInitialized = useRef(false);
 
+  // Initial load of all categories for edit mode
   useEffect(() => {
-    async function fetchLevel1Categories() {
+    async function initializeCategories() {
+      const supabase = createClient();
+
       try {
-        const supabase = createClient();
-        const { data, error } = await supabase
+        // 1. Always fetch level 1 categories
+        const { data: level1Data, error: level1Error } = await supabase
           .from('categories')
           .select('id, name, slug, level, parent_id, service_type')
           .eq('is_active', true)
           .eq('level', 1)
           .order('display_order', { ascending: true });
 
-        if (error) throw error;
-        setLevel1Categories(data || []);
+        if (level1Error) throw level1Error;
+        setLevel1Categories(level1Data || []);
+
+        // 2. If we have initial hierarchy (edit mode), load level 2 & 3
+        if (initialCategoryHierarchy?.level1 && !categoriesInitialized.current) {
+          // Fetch level 2 categories for the initial level 1
+          const { data: level2Data } = await supabase
+            .from('categories')
+            .select('*')
+            .eq('is_active', true)
+            .eq('parent_id', initialCategoryHierarchy.level1)
+            .order('display_order');
+
+          setLevel2Categories(level2Data || []);
+
+          // Fetch level 3 categories if we have initial level 2
+          if (initialCategoryHierarchy.level2) {
+            const { data: level3Data } = await supabase
+              .from('categories')
+              .select('*')
+              .eq('is_active', true)
+              .eq('parent_id', initialCategoryHierarchy.level2)
+              .order('display_order');
+
+            setLevel3Categories(level3Data || []);
+          }
+
+          categoriesInitialized.current = true;
+        }
       } catch (error) {
-        logger.error('1차 카테고리 로딩 실패:', error);
+        logger.error('카테고리 로딩 실패:', error);
       } finally {
         setLoadingCategory(false);
       }
     }
-    fetchLevel1Categories();
-  }, []);
 
-  // Fetch level 2 categories when level 1 changes
+    initializeCategories();
+  }, [initialCategoryHierarchy]);
+
+  // Fetch level 2 categories when user changes level 1
   useEffect(() => {
-    if (!selectedLevel1) {
-      setLevel2Categories([]);
-      // Only reset selection if not initial mount with initial values
-      if (!isInitialMount.current || !initialCategoryHierarchy?.level2) {
-        setSelectedLevel2('');
-      }
-      // If no level2 in initial hierarchy, mark initial mount complete
-      if (isInitialMount.current && !initialCategoryHierarchy?.level2) {
-        isInitialMount.current = false;
-      }
+    // Skip if not yet initialized and we have initial hierarchy
+    if (!categoriesInitialized.current && initialCategoryHierarchy?.level1) {
       return;
     }
+
+    if (!selectedLevel1) {
+      setLevel2Categories([]);
+      setSelectedLevel2('');
+      setLevel3Categories([]);
+      setSelectedLevel3('');
+      return;
+    }
+
+    // Skip fetch if same as initial (already loaded)
+    if (selectedLevel1 === initialCategoryHierarchy?.level1 && categoriesInitialized.current) {
+      return;
+    }
+
     async function fetchLevel2() {
       const supabase = createClient();
       const { data } = await supabase
@@ -155,25 +192,31 @@ export default function ServiceForm({
         .eq('parent_id', selectedLevel1)
         .order('display_order');
       setLevel2Categories(data || []);
-
-      // If no level3 in initial hierarchy, mark initial mount complete after level2 loads
-      if (isInitialMount.current && !initialCategoryHierarchy?.level3) {
-        isInitialMount.current = false;
-      }
+      setLevel3Categories([]);
+      setSelectedLevel2('');
+      setSelectedLevel3('');
     }
     fetchLevel2();
-  }, [selectedLevel1]);
+  }, [selectedLevel1, initialCategoryHierarchy]);
 
-  // Fetch level 3 categories when level 2 changes
+  // Fetch level 3 categories when user changes level 2
   useEffect(() => {
-    if (!selectedLevel2) {
-      setLevel3Categories([]);
-      // Only reset selection if not initial mount with initial values
-      if (!isInitialMount.current || !initialCategoryHierarchy?.level3) {
-        setSelectedLevel3('');
-      }
+    // Skip if not yet initialized and we have initial hierarchy
+    if (!categoriesInitialized.current && initialCategoryHierarchy?.level2) {
       return;
     }
+
+    if (!selectedLevel2) {
+      setLevel3Categories([]);
+      setSelectedLevel3('');
+      return;
+    }
+
+    // Skip fetch if same as initial (already loaded)
+    if (selectedLevel2 === initialCategoryHierarchy?.level2 && categoriesInitialized.current) {
+      return;
+    }
+
     async function fetchLevel3() {
       const supabase = createClient();
       const { data } = await supabase
@@ -183,14 +226,10 @@ export default function ServiceForm({
         .eq('parent_id', selectedLevel2)
         .order('display_order');
       setLevel3Categories(data || []);
-
-      // Mark initial mount as complete after level 3 is loaded
-      if (isInitialMount.current) {
-        isInitialMount.current = false;
-      }
+      setSelectedLevel3('');
     }
     fetchLevel3();
-  }, [selectedLevel2]);
+  }, [selectedLevel2, initialCategoryHierarchy]);
 
   // Update final category in formData
   useEffect(() => {
