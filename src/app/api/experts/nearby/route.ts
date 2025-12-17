@@ -1,24 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
-
-// 좌표 검증 헬퍼
-function validateCoordinates(lat: number, lng: number): NextResponse | null {
-  // NaN 체크
-  if (Number.isNaN(lat) || Number.isNaN(lng)) {
-    return NextResponse.json(
-      { error: 'Missing or invalid coordinates: lat, lng required' },
-      { status: 400 }
-    );
-  }
-
-  // 범위 검증
-  if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
-    return NextResponse.json({ error: 'Coordinates out of range' }, { status: 400 });
-  }
-
-  return null;
-}
+import { validateCoordinates } from '@/lib/api/validation';
 
 // GET: 주변 서비스 조회 (서비스 위치 기반)
 // 판매자가 아닌 실제 서비스 제공 위치를 기준으로 검색
