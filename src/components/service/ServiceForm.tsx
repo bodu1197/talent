@@ -341,29 +341,46 @@ export default function ServiceForm({
                     />
                     <button
                       type="button"
-                      onClick={mode === 'create' ? removeThumbnail : cancelNewThumbnail}
-                      className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded hover:bg-red-600"
+                      onClick={removeThumbnail}
+                      className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded hover:bg-red-600 shadow-md transition-colors"
                       aria-label="이미지 삭제"
                     >
                       <X className="w-4 h-4" />
                     </button>
                   </div>
                 ) : (
-                  <label
-                    htmlFor="service-thumbnail"
-                    className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-brand-primary hover:bg-gray-50"
-                  >
-                    <CloudUpload className="w-10 h-10 text-gray-400 mb-2" />
-                    <span className="text-sm text-gray-500">클릭하여 이미지 업로드</span>
-                    <input
-                      id="service-thumbnail"
-                      type="file"
-                      className="hidden"
-                      accept="image/*"
-                      onChange={handleThumbnailChange}
-                      aria-label="썸네일 파일 선택"
-                    />
-                  </label>
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="service-thumbnail"
+                      className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-brand-primary hover:bg-gray-50 transition-colors"
+                    >
+                      <CloudUpload className="w-10 h-10 text-gray-400 mb-2" />
+                      <span className="text-sm text-gray-500">클릭하여 이미지 업로드</span>
+                      <input
+                        id="service-thumbnail"
+                        type="file"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleThumbnailChange}
+                        aria-label="썸네일 파일 선택"
+                      />
+                    </label>
+                    {mode === 'edit' && originalThumbnailUrl && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormData((prev) => ({
+                            ...prev,
+                            thumbnailFile: null, // Clear new file
+                            thumbnailPreview: originalThumbnailUrl, // Restore original
+                          }));
+                        }}
+                        className="text-sm text-gray-500 hover:text-gray-700 underline"
+                      >
+                        기존 이미지 복구
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
             )}
