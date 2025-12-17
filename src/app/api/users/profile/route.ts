@@ -29,7 +29,7 @@ export async function PATCH(request: NextRequest) {
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
     const serviceClient = createServiceClient(supabaseUrl, supabaseServiceKey);
 
-    // Update profiles table (unified source)
+    // Update profiles table
     const { data, error } = await serviceClient
       .from('profiles')
       .update({
@@ -51,6 +51,21 @@ export async function PATCH(request: NextRequest) {
         },
         { status: 500 }
       );
+    }
+
+    // users 테이블도 동기화
+    const { error: usersError } = await serviceClient
+      .from('users')
+      .update({
+        name,
+        profile_image: profile_image || null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', user.id);
+
+    if (usersError) {
+      logger.warn('Users table sync failed:', { message: usersError.message });
+      // 프로필 업데이트는 성공했으므로 계속 진행
     }
 
     // auth.users 메타데이터도 동기화 (자동 생성된 닉네임 덮어쓰기)

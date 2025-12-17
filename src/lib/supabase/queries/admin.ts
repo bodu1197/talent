@@ -172,9 +172,9 @@ export interface AdminUserProfile {
 export async function getAdminDashboardStats() {
   const supabase = createClient();
 
-  // 전체 회원 수
+  // 전체 회원 수 (profiles 기준 - 실제 활성 사용자)
   const { count: totalUsers } = await supabase
-    .from('users')
+    .from('profiles')
     .select('*', { count: 'exact', head: true });
 
   // 오늘 매출 (오늘 완료된 주문들의 합계)

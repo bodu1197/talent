@@ -51,7 +51,7 @@ function CallbackCompleteContent() {
 
         if (user && nickname) {
           // users 테이블 업데이트
-          const { error: updateError } = await supabase
+          const { error: usersUpdateError } = await supabase
             .from('users')
             .update({
               name: nickname,
@@ -59,8 +59,21 @@ function CallbackCompleteContent() {
             })
             .eq('id', user.id);
 
-          if (updateError) {
-            logger.error('Failed to update user profile:', updateError);
+          if (usersUpdateError) {
+            logger.error('Failed to update users table:', usersUpdateError);
+          }
+
+          // profiles 테이블 업데이트 (동기화)
+          const { error: profilesUpdateError } = await supabase
+            .from('profiles')
+            .update({
+              name: nickname,
+              profile_image: profileImage,
+            })
+            .eq('user_id', user.id);
+
+          if (profilesUpdateError) {
+            logger.error('Failed to update profiles table:', profilesUpdateError);
             // 업데이트 실패해도 로그인은 성공했으므로 계속 진행
           }
         }
