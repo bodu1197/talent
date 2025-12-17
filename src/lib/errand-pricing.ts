@@ -1,7 +1,5 @@
 // 심부름 스마트 요금 계산 로직
 
-import { calculateDistance as geoCalculateDistance } from './geo';
-
 export type WeatherCondition = 'CLEAR' | 'RAIN' | 'SNOW' | 'EXTREME';
 export type TimeCondition = 'DAY' | 'LATE_NIGHT' | 'RUSH_HOUR';
 export type WeightClass = 'LIGHT' | 'MEDIUM' | 'HEAVY';
@@ -146,7 +144,7 @@ export const WEIGHT_LABELS: Record<WeightClass, string> = {
 };
 
 // 두 좌표 간 거리 계산 (Haversine 공식)
-export const calculateDistance = geoCalculateDistance;
+export { calculateDistance } from './geo';
 
 // ============================================
 // 다중 배달 요금 계산

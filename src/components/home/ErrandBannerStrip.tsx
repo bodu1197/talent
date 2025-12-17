@@ -34,7 +34,7 @@ export default function ErrandBannerStrip() {
 
   // 초기화 및 화면 너비 계산
   useEffect(() => {
-    if (typeof globalThis.window !== 'undefined') {
+    if (globalThis.window !== undefined) {
       // 도착 위치 계산: 화면 너비 - 450px
       setEndPosition(globalThis.window.innerWidth - 450);
 

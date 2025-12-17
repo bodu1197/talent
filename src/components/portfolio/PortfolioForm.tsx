@@ -88,7 +88,7 @@ export default function PortfolioForm({
       /youtube\.com\/embed\/([^&\n?#]+)/,
     ];
     for (const pattern of patterns) {
-      const match = url.match(pattern);
+      const match = pattern.exec(url);
       if (match?.[1]) return match[1];
     }
     return null;

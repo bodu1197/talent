@@ -373,7 +373,6 @@ export default function DirectChatClient({ roomId, userId, isSeller, otherUser, 
                     <PaymentRequestCard
                       key={`pay-${paymentRequest.id}`}
                       paymentRequest={paymentRequest}
-                      userId={userId}
                       isSeller={isSeller}
                       onUpdate={loadPaymentRequests}
                     />

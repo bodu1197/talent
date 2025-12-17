@@ -192,7 +192,6 @@ export default function ChatMessageArea({
               <PaymentRequestCard
                 key={`pay-${paymentRequest.id}`}
                 paymentRequest={paymentRequest}
-                userId={userId}
                 isSeller={isSeller}
                 onUpdate={loadPaymentRequests}
               />

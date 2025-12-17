@@ -28,7 +28,6 @@ export interface PaymentRequest {
 
 interface PaymentRequestCardProps {
   readonly paymentRequest: PaymentRequest;
-  readonly userId: string;
   readonly isSeller: boolean;
   readonly onUpdate: () => void;
 }
