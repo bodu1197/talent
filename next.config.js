@@ -10,7 +10,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'bpvfkkrlyrjkwgwmfrci.supabase.co',
+        hostname: 'abroivxthindezdtdzmj.supabase.co',
         port: '',
         pathname: '/storage/v1/object/public/**',
       },
@@ -47,6 +47,12 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'media.giphy.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ui-avatars.com',
         port: '',
         pathname: '/**',
       },

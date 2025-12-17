@@ -425,7 +425,7 @@ export default function SecondHeroBanner() {
                         style={{ animationDuration: `${1.5 + helper.id * 0.2}s` }}
                       >
                         <Image
-                          src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${helper.seed}`}
+                          src={`https://ui-avatars.com/api/?name=${helper.seed}&background=random&size=40`}
                           alt="Helper"
                           width={40}
                           height={40}
