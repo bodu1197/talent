@@ -209,7 +209,9 @@ export default function NotificationProvider({
   return (
     <NotificationContext.Provider value={value}>
       {/* 신호음 오디오 - 이벤트 발생 시에만 재생 */}
-      <audio ref={audioRef} src="/sounds/notification.mp3" preload="none" tabIndex={-1} />
+      <audio ref={audioRef} src="/sounds/notification.mp3" preload="none" tabIndex={-1}>
+        <track kind="captions" />
+      </audio>
       {children}
     </NotificationContext.Provider>
   );
