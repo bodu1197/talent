@@ -9,7 +9,6 @@ import {
   ERRAND_CATEGORY_LABELS,
   ERRAND_STATUS_LABELS,
   SHOPPING_RANGE_LABELS,
-  ShoppingRange,
 } from '@/types/errand';
 import { useAuth } from '@/components/providers/AuthProvider';
 
@@ -87,7 +86,7 @@ export default function ErrandDetailPage() {
   const [hasHelperProfile, setHasHelperProfile] = useState(false);
   const [hasApplied, setHasApplied] = useState(false);
 
-  const id = params?.id as string;
+  const id = typeof params?.id === 'string' ? params.id : (params?.id?.[0] ?? '');
 
   // 권한 체크
   const isRequester = profile?.id === errand?.requester_id;
@@ -340,7 +339,7 @@ export default function ErrandDetailPage() {
                 <h2 className="text-sm font-medium text-gray-500 mb-4">구매 품목</h2>
                 {errand.shopping_range && (
                   <div className="mb-3 text-sm text-gray-600">
-                    {SHOPPING_RANGE_LABELS[errand.shopping_range as ShoppingRange]}
+                    {SHOPPING_RANGE_LABELS[errand.shopping_range]}
                   </div>
                 )}
                 <div className="space-y-2">
