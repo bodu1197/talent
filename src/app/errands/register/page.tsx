@@ -964,6 +964,7 @@ export default function ErrandRiderRegisterPage() {
             <div className="space-y-3">
               <label
                 htmlFor="agree-terms"
+                aria-label="라이더 이용약관 동의"
                 className="flex items-start gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50"
               >
                 <input
@@ -986,6 +987,7 @@ export default function ErrandRiderRegisterPage() {
 
               <label
                 htmlFor="agree-privacy"
+                aria-label="개인정보 수집 및 이용 동의"
                 className="flex items-start gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50"
               >
                 <input
@@ -1008,6 +1010,7 @@ export default function ErrandRiderRegisterPage() {
 
               <label
                 htmlFor="agree-criminal-check"
+                aria-label="범죄경력 및 성범죄경력 조회 동의"
                 className="flex items-start gap-3 p-3 border border-orange-200 bg-orange-50 rounded-lg cursor-pointer hover:bg-orange-100"
               >
                 <input

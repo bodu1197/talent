@@ -184,15 +184,13 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                   {!pkg.is_enabled && <span className="text-sm text-gray-400">비활성화됨</span>}
                 </div>
                 {/* 활성화 토글 */}
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                  className="flex items-center"
-                >
+                <div className="flex items-center">
                   <label
                     aria-label={`${PACKAGE_TYPE_LABELS[type]} 활성화`}
                     className="relative inline-flex items-center cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
                   >
                     <input
                       type="checkbox"

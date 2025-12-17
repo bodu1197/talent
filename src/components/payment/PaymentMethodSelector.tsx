@@ -70,6 +70,7 @@ export default function PaymentMethodSelector({
         {PAYMENT_OPTIONS.map((option) => (
           <label
             key={option.method}
+            htmlFor={`payment-${option.method}`}
             className={`flex items-center gap-4 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
               selectedMethod === option.method
                 ? 'border-brand-primary bg-blue-50'
@@ -78,6 +79,7 @@ export default function PaymentMethodSelector({
           >
             <input
               type="radio"
+              id={`payment-${option.method}`}
               name="paymentMethod"
               value={option.method}
               checked={selectedMethod === option.method}
