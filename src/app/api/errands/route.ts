@@ -165,10 +165,10 @@ function parseErrandListParams(searchParams: URLSearchParams): ErrandListParams 
     limit: Number.parseInt(searchParams.get('limit') || '20', 10),
     offset: Number.parseInt(searchParams.get('offset') || '0', 10),
     mode: searchParams.get('mode'),
-    helperLat: parseFloat(searchParams.get('lat') || '0'),
-    helperLng: parseFloat(searchParams.get('lng') || '0'),
+    helperLat: Number.parseFloat(searchParams.get('lat') || '0'),
+    helperLng: Number.parseFloat(searchParams.get('lng') || '0'),
     sortBy: searchParams.get('sort') || 'recent',
-    maxDistance: parseFloat(searchParams.get('maxDistance') || '0'),
+    maxDistance: Number.parseFloat(searchParams.get('maxDistance') || '0'),
   };
 }
 

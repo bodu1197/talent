@@ -98,7 +98,7 @@ export async function GET(request: NextRequest) {
     }
 
     // 위경도 → 격자 좌표 변환
-    const { nx, ny } = convertToGrid(parseFloat(lat), parseFloat(lng));
+    const { nx, ny } = convertToGrid(Number.parseFloat(lat), Number.parseFloat(lng));
     const { baseDate, baseTime } = getBaseDateTime();
 
     // 기상청 초단기실황 API 호출
@@ -137,7 +137,7 @@ export async function GET(request: NextRequest) {
     for (const item of items) {
       switch (item.category) {
         case 'T1H': // 기온
-          temp = parseFloat(item.obsrValue);
+          temp = Number.parseFloat(item.obsrValue);
           break;
         case 'REH': // 습도
           humidity = Number.parseInt(item.obsrValue, 10);

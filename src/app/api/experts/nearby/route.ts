@@ -10,14 +10,14 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
 
     // 쿼리 파라미터 파싱
-    const lat = parseFloat(searchParams.get('lat') || '');
-    const lng = parseFloat(searchParams.get('lng') || '');
+    const lat = Number.parseFloat(searchParams.get('lat') || '');
+    const lng = Number.parseFloat(searchParams.get('lng') || '');
     const radius = Number.parseInt(searchParams.get('radius') || '10'); // 기본 10km
     const category = searchParams.get('category') || null; // 카테고리 필터 (slug)
     const limit = Number.parseInt(searchParams.get('limit') || '20');
 
     // 필수 파라미터 검증
-    if (isNaN(lat) || isNaN(lng)) {
+    if (Number.isNaN(lat) || Number.isNaN(lng)) {
       return NextResponse.json(
         {
           error: 'Missing or invalid coordinates: lat, lng required',

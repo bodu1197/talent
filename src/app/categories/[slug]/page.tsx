@@ -136,8 +136,8 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   const userLocation =
     latParam && lngParam
       ? {
-          lat: parseFloat(latParam),
-          lng: parseFloat(lngParam),
+          lat: Number.parseFloat(latParam),
+          lng: Number.parseFloat(lngParam),
         }
       : undefined;
 

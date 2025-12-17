@@ -122,14 +122,14 @@ export function validatePackage(data: PackageFormData, type: PackageType): strin
   }
 
   const price = Number.parseInt(data.price.replaceAll(',', ''), 10);
-  if (isNaN(price) || price < MIN_PACKAGE_PRICE) {
+  if (Number.isNaN(price) || price < MIN_PACKAGE_PRICE) {
     errors.push(
       `${PACKAGE_TYPE_LABELS[type]} 가격은 최소 ${MIN_PACKAGE_PRICE.toLocaleString()}원 이상이어야 합니다.`
     );
   }
 
   const deliveryDays = Number.parseInt(data.delivery_days, 10);
-  if (isNaN(deliveryDays) || deliveryDays < 1 || deliveryDays > 365) {
+  if (Number.isNaN(deliveryDays) || deliveryDays < 1 || deliveryDays > 365) {
     errors.push(`${PACKAGE_TYPE_LABELS[type]} 작업 기간은 1~365일 사이여야 합니다.`);
   }
 

@@ -176,8 +176,8 @@ async function getKakaoCoordinates(
 
     const doc = data.documents[0];
     return {
-      latitude: parseFloat(doc.y),
-      longitude: parseFloat(doc.x),
+      latitude: Number.parseFloat(doc.y),
+      longitude: Number.parseFloat(doc.x),
     };
   } catch {
     return null;

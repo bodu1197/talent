@@ -18,13 +18,13 @@ interface HelperLocation {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const lat = parseFloat(searchParams.get('lat') || '');
-    const lng = parseFloat(searchParams.get('lng') || '');
-    const radiusKm = parseFloat(searchParams.get('radius') || '5');
+    const lat = Number.parseFloat(searchParams.get('lat') || '');
+    const lng = Number.parseFloat(searchParams.get('lng') || '');
+    const radiusKm = Number.parseFloat(searchParams.get('radius') || '5');
     const limit = Number.parseInt(searchParams.get('limit') || '20');
 
     // 위치 파라미터 검증
-    if (isNaN(lat) || isNaN(lng)) {
+    if (Number.isNaN(lat) || Number.isNaN(lng)) {
       return NextResponse.json({ error: '위치 정보가 필요합니다 (lat, lng)' }, { status: 400 });
     }
 
@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
         profileImage: profile?.profile_image || null,
         lat: lat + offsetLat,
         lng: lng + offsetLng,
-        distance: parseFloat(distance.toFixed(2)),
+        distance: Number.parseFloat(distance.toFixed(2)),
         grade: h.grade || 'NEWBIE',
         rating: h.average_rating || 0,
       };

@@ -48,8 +48,8 @@ export async function POST(request: NextRequest) {
         if (keywordData.documents && keywordData.documents.length > 0) {
           const result = keywordData.documents[0];
           return NextResponse.json({
-            latitude: parseFloat(result.y),
-            longitude: parseFloat(result.x),
+            latitude: Number.parseFloat(result.y),
+            longitude: Number.parseFloat(result.x),
           });
         }
       }
@@ -59,8 +59,8 @@ export async function POST(request: NextRequest) {
 
     const result = data.documents[0];
     return NextResponse.json({
-      latitude: parseFloat(result.y),
-      longitude: parseFloat(result.x),
+      latitude: Number.parseFloat(result.y),
+      longitude: Number.parseFloat(result.x),
     });
   } catch (error) {
     console.error('Geocode error:', error);
