@@ -74,6 +74,10 @@ async function deleteRelatedData(supabaseAdmin: SupabaseClient, serviceId: strin
   await supabaseAdmin.from('service_favorites').delete().eq('service_id', serviceId);
   await supabaseAdmin.from('reviews').delete().eq('service_id', serviceId);
   await supabaseAdmin.from('premium_placements').delete().eq('service_id', serviceId);
+  await supabaseAdmin.from('service_revisions').delete().eq('service_id', serviceId);
+
+  // chat_rooms의 service_id를 NULL로 설정 (외래 키 제약 조건 방지)
+  await supabaseAdmin.from('chat_rooms').update({ service_id: null }).eq('service_id', serviceId);
 
   // NULL로 설정
   await supabaseAdmin
