@@ -320,7 +320,7 @@ export default function SellerOrdersClient({ sellerId }: Readonly<{ sellerId: st
     return {
       id: order.id,
       orderNumber: order.order_number,
-      title: order.title || order.service?.title || '',
+      title: order.title ?? order.service?.title ?? '',
       thumbnailUrl: order.service?.thumbnail_url,
       buyerName: order.buyer?.name,
       status: order.status,

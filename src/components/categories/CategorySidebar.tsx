@@ -13,7 +13,7 @@ interface CategorySidebarProps {
 }
 
 function getCategoryIcon(icon?: string) {
-  const IconComponent = (icon && CATEGORY_ICON_MAP[icon]) || Circle;
+  const IconComponent = (icon ? CATEGORY_ICON_MAP[icon] : undefined) ?? Circle;
   return <IconComponent className="w-5 h-5" />;
 }
 

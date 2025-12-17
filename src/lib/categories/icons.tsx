@@ -56,6 +56,6 @@ export const CATEGORY_ICON_MAP: Record<string, React.ComponentType<{ className?:
 };
 
 export function CategoryIcon({ icon, className }: { icon?: string; className?: string }) {
-  const IconComponent = (icon && CATEGORY_ICON_MAP[icon]) || Circle;
+  const IconComponent = (icon ? CATEGORY_ICON_MAP[icon] : undefined) ?? Circle;
   return <IconComponent className={className} />;
 }

@@ -994,7 +994,7 @@ export default function AdminAdvertisingPaymentsPage() {
               <div>
                 <h3 className="text-base font-semibold text-gray-700 mb-4">📌 메모</h3>
                 <textarea
-                  value={memoText || detailPayment.admin_memo || ''}
+                  value={memoText ?? detailPayment.admin_memo ?? ''}
                   onChange={(e) => setMemoText(e.target.value)}
                   className="w-full min-h-[100px] px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#667eea]"
                   placeholder="메모를 입력하세요..."

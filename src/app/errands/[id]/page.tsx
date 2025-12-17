@@ -425,7 +425,7 @@ export default function ErrandDetailPage() {
               <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
                 {errand.requester?.avatar_url || errand.requester?.profile_image ? (
                   <img
-                    src={errand.requester.avatar_url || errand.requester.profile_image || ''}
+                    src={errand.requester.avatar_url ?? errand.requester.profile_image ?? ''}
                     alt={errand.requester.name}
                     className="w-full h-full object-cover"
                   />
@@ -449,7 +449,7 @@ export default function ErrandDetailPage() {
                 <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
                   {errand.helper?.avatar_url || errand.helper?.profile_image ? (
                     <img
-                      src={errand.helper.avatar_url || errand.helper.profile_image || ''}
+                      src={errand.helper.avatar_url ?? errand.helper.profile_image ?? ''}
                       alt={errand.helper.name}
                       className="w-full h-full object-cover"
                     />

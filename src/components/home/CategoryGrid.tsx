@@ -5,7 +5,7 @@ import { CATEGORY_ICON_MAP } from '@/lib/categories/icons';
 import { Circle } from 'lucide-react';
 
 function CategoryIcon({ icon }: Readonly<{ icon?: string }>) {
-  const IconComponent = (icon && CATEGORY_ICON_MAP[icon]) || Circle;
+  const IconComponent = (icon ? CATEGORY_ICON_MAP[icon] : undefined) ?? Circle;
   return <IconComponent />;
 }
 

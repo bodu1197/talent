@@ -28,7 +28,7 @@ function CategoryIcon({
   size?: string;
 }) {
   const iconClass = `${size} ${color}`;
-  const IconComponent = (icon && CATEGORY_ICON_MAP[icon]) || Circle;
+  const IconComponent = (icon ? CATEGORY_ICON_MAP[icon] : undefined) ?? Circle;
   return <IconComponent className={iconClass} />;
 }
 

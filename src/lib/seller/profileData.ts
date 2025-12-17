@@ -40,7 +40,7 @@ export async function getSellerProfileData() {
   const profileWithData = {
     ...seller,
     profile_image: profileData?.profile_image || null,
-    display_name: profileData?.name || seller.name || '',
+    display_name: profileData?.name ?? seller.name ?? '',
   };
 
   return profileWithData;
