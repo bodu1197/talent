@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Clear Old Supabase Storage</title>
+</head>
+<body>
+  <h1>Clearing old Supabase localStorage...</h1>
+  <pre id="log"></pre>
+
+  <script>
+    const log = document.getElementById('log');
+
+    function logMessage(msg) {
+      log.textContent += msg + '\n';
+      console.log(msg);
+    }
+
+    // Get all localStorage keys
+    const allKeys = Object.keys(localStorage);
+    logMessage(`Found ${allKeys.length} localStorage keys`);
+
+    // Find Supabase auth keys
+    const supabaseKeys = allKeys.filter(key =>
+      key.includes('supabase') ||
+      key.includes('sb-') ||
+      key.includes('auth')
+    );
+
+    logMessage(`\nFound ${supabaseKeys.length} Supabase-related keys:`);
+    supabaseKeys.forEach(key => {
+      const value = localStorage.getItem(key);
+      const preview = value?.substring(0, 100);
+      logMessage(`  - ${key}: ${preview}...`);
+    });
+
+    // Clear all localStorage
+    logMessage('\nClearing all localStorage...');
+    localStorage.clear();
+
+    logMessage('✅ localStorage cleared!');
+    logMessage('\nPlease reload the page to continue.');
+
+    // Auto reload after 2 seconds
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 2000);
+  </script>
+</body>
+</html>
