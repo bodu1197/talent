@@ -2,33 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { checkAdminAuth } from '@/lib/admin/auth';
 import { logger } from '@/lib/logger';
-
-type Period = 'hour' | 'day' | 'month' | 'year';
-
-function getStartDate(period: Period): Date {
-  const now = new Date();
-
-  switch (period) {
-    case 'hour':
-      // Last 7 days for hourly view
-      return new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-    case 'day':
-      // Last 30 days for daily view
-      return new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-    case 'month': {
-      // Last 12 months for monthly view
-      const monthlyStart = new Date(now);
-      monthlyStart.setMonth(monthlyStart.getMonth() - 12);
-      return monthlyStart;
-    }
-    case 'year': {
-      // Last 5 years for yearly view
-      const yearlyStart = new Date(now);
-      yearlyStart.setFullYear(yearlyStart.getFullYear() - 5);
-      return yearlyStart;
-    }
-  }
-}
+import { type Period, getStartDate } from '@/lib/admin/analytics-helpers';
 
 export async function GET(request: NextRequest) {
   try {

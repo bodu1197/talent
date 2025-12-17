@@ -2,26 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { checkAdminAuth } from '@/lib/admin/auth';
 import { logger } from '@/lib/logger';
-
-type Period = 'hour' | 'day' | 'month' | 'year';
-
-// 한국 표준시(KST) 변환 함수
-function toKST(date: Date): Date {
-  // UTC 시간에 9시간 추가
-  return new Date(date.getTime() + 9 * 60 * 60 * 1000);
-}
-
-// KST 기준으로 날짜 문자열 생성
-function formatKSTDate(date: Date): string {
-  const kst = toKST(date);
-  return kst.toISOString().split('T')[0];
-}
-
-// KST 기준으로 시간 문자열 생성
-function formatKSTHour(date: Date): string {
-  const kst = toKST(date);
-  return kst.toISOString().substring(0, 13) + ':00:00';
-}
+import {
+  type Period,
+  getDateRange,
+  toKST,
+  formatKSTDate,
+  formatKSTHour,
+} from '@/lib/admin/analytics-helpers';
 
 interface PageViewRow {
   created_at: string;
@@ -45,44 +32,6 @@ interface AggregatedStats {
 
 interface InternalStats extends AggregatedStats {
   _sessions: Set<string>;
-}
-
-// Get date range based on period
-function getDateRange(period: Period): { startDate: Date; groupBy: string } {
-  const now = new Date();
-
-  switch (period) {
-    case 'hour':
-      // Last 7 days for hourly view
-      return {
-        startDate: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
-        groupBy: 'hour',
-      };
-    case 'day':
-      // Last 30 days for daily view
-      return {
-        startDate: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
-        groupBy: 'day',
-      };
-    case 'month': {
-      // Last 12 months for monthly view
-      const monthlyStart = new Date(now);
-      monthlyStart.setMonth(monthlyStart.getMonth() - 12);
-      return {
-        startDate: monthlyStart,
-        groupBy: 'month',
-      };
-    }
-    case 'year': {
-      // Last 5 years for yearly view
-      const yearlyStart = new Date(now);
-      yearlyStart.setFullYear(yearlyStart.getFullYear() - 5);
-      return {
-        startDate: yearlyStart,
-        groupBy: 'year',
-      };
-    }
-  }
 }
 
 // Aggregate page views by period (KST 기준)
