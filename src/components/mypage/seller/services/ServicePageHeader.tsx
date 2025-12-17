@@ -2,10 +2,10 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 interface ServicePageHeaderProps {
-  title: string;
-  description: string;
-  backHref?: string;
-  backLabel?: string;
+  readonly title: string;
+  readonly description: string;
+  readonly backHref?: string;
+  readonly backLabel?: string;
 }
 
 /**

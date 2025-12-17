@@ -1,8 +1,8 @@
 import { Save, Check } from 'lucide-react';
 
 interface SaveButtonContentProps {
-  isSaving: boolean;
-  isSuccess: boolean;
+  readonly isSaving: boolean;
+  readonly isSuccess: boolean;
 }
 
 /**

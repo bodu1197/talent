@@ -1,11 +1,11 @@
 import { RefreshCw } from 'lucide-react';
 
 interface AdminSearchBarProps {
-  value: string;
-  onChange: (value: string) => void;
-  onReset: () => void;
-  placeholder: string;
-  ariaLabel?: string;
+  readonly value: string;
+  readonly onChange: (value: string) => void;
+  readonly onReset: () => void;
+  readonly placeholder: string;
+  readonly ariaLabel?: string;
 }
 
 export default function AdminSearchBar({

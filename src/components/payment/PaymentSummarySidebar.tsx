@@ -2,22 +2,22 @@ import { Loader2 } from 'lucide-react';
 import TermsAgreement from './TermsAgreement';
 
 interface PriceBreakdownItem {
-  label: string;
-  amount: number;
+  readonly label: string;
+  readonly amount: number;
 }
 
 interface PaymentSummarySidebarProps {
-  priceBreakdown: PriceBreakdownItem[];
-  totalAmount: number;
-  agreedToTerms: boolean;
-  agreedToPrivacy: boolean;
-  onTermsChange: (value: boolean) => void;
-  onPrivacyChange: (value: boolean) => void;
-  onPayment: () => void;
-  isProcessing: boolean;
-  disabled: boolean;
-  buttonText?: string;
-  totalLabel?: string;
+  readonly priceBreakdown: PriceBreakdownItem[];
+  readonly totalAmount: number;
+  readonly agreedToTerms: boolean;
+  readonly agreedToPrivacy: boolean;
+  readonly onTermsChange: (value: boolean) => void;
+  readonly onPrivacyChange: (value: boolean) => void;
+  readonly onPayment: () => void;
+  readonly isProcessing: boolean;
+  readonly disabled: boolean;
+  readonly buttonText?: string;
+  readonly totalLabel?: string;
 }
 
 export default function PaymentSummarySidebar({

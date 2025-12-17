@@ -2,17 +2,17 @@ import { Loader2 } from 'lucide-react';
 import TermsAgreement from './TermsAgreement';
 
 interface PaymentTermsSectionProps {
-  agreedToTerms: boolean;
-  agreedToPrivacy: boolean;
-  onTermsChange: (value: boolean) => void;
-  onPrivacyChange: (value: boolean) => void;
-  onPayment: () => void;
-  isProcessing: boolean;
-  disabled: boolean;
-  amount: number;
-  buttonText?: string;
-  showTitle?: boolean;
-  className?: string;
+  readonly agreedToTerms: boolean;
+  readonly agreedToPrivacy: boolean;
+  readonly onTermsChange: (value: boolean) => void;
+  readonly onPrivacyChange: (value: boolean) => void;
+  readonly onPayment: () => void;
+  readonly isProcessing: boolean;
+  readonly disabled: boolean;
+  readonly amount: number;
+  readonly buttonText?: string;
+  readonly showTitle?: boolean;
+  readonly className?: string;
 }
 
 export default function PaymentTermsSection({

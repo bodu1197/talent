@@ -2,15 +2,15 @@ import ProfileImage from '@/components/common/ProfileImage';
 import { User, Phone, Camera } from 'lucide-react';
 
 interface ProfileSectionProps {
-  profile: {
-    profile_image?: string | null;
+  readonly profile: {
+    readonly profile_image?: string | null;
   } | null;
-  userEmail?: string | null;
-  name: string;
-  phone: string;
-  onNameChange: (value: string) => void;
-  onPhoneChange: (value: string) => void;
-  idPrefix: string;
+  readonly userEmail?: string | null;
+  readonly name: string;
+  readonly phone: string;
+  readonly onNameChange: (value: string) => void;
+  readonly onPhoneChange: (value: string) => void;
+  readonly idPrefix: string;
 }
 
 export default function ProfileSection({

@@ -1,11 +1,11 @@
 import { extractNumbers } from '@/lib/validation/input';
 
 interface BuyerPhoneInputProps {
-  phoneInput: string;
-  onPhoneChange: (value: string) => void;
-  title?: string;
-  showHelperText?: boolean;
-  inputId?: string;
+  readonly phoneInput: string;
+  readonly onPhoneChange: (value: string) => void;
+  readonly title?: string;
+  readonly showHelperText?: boolean;
+  readonly inputId?: string;
 }
 
 export default function BuyerPhoneInput({

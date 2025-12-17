@@ -1,13 +1,13 @@
 interface Tab<T extends string> {
-  value: T;
-  label: string;
-  count: number;
+  readonly value: T;
+  readonly label: string;
+  readonly count: number;
 }
 
 interface AdminTabNavigationProps<T extends string> {
-  tabs: Tab<T>[];
-  activeTab: T;
-  onTabChange: (tab: T) => void;
+  readonly tabs: Tab<T>[];
+  readonly activeTab: T;
+  readonly onTabChange: (tab: T) => void;
 }
 
 export default function AdminTabNavigation<T extends string>({

@@ -31,14 +31,14 @@ interface PortfolioFormData {
 }
 
 interface PortfolioFormProps {
-  sellerId: string;
-  categories: Category[];
-  services: Service[];
-  initialData?: Partial<PortfolioFormData> & {
-    id?: string;
-    existing_images?: string[];
+  readonly sellerId: string;
+  readonly categories: Category[];
+  readonly services: Service[];
+  readonly initialData?: Partial<PortfolioFormData> & {
+    readonly id?: string;
+    readonly existing_images?: string[];
   };
-  mode: 'create' | 'edit';
+  readonly mode: 'create' | 'edit';
 }
 
 // Helper function to read file as data URL

@@ -1,6 +1,6 @@
 interface AdminResultCountProps {
-  count: number;
-  label: string;
+  readonly count: number;
+  readonly label: string;
 }
 
 export default function AdminResultCount({ count, label }: AdminResultCountProps) {
