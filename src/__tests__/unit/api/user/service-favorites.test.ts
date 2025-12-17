@@ -228,7 +228,7 @@ describe('Service Favorites API', () => {
 
       const request = new NextRequest('http://localhost:3000/api/user/service-favorites');
 
-      const response = await GET(request);
+      const response = await GET(request, { params: Promise.resolve({}) });
 
       expect(response).toBeDefined();
       const data = await response!.json();
@@ -257,7 +257,7 @@ describe('Service Favorites API', () => {
 
       const request = new NextRequest('http://localhost:3000/api/user/service-favorites');
 
-      const response = await GET(request);
+      const response = await GET(request, { params: Promise.resolve({}) });
 
       expect(response).toBeDefined();
       const data = await response!.json();
@@ -281,7 +281,7 @@ describe('Service Favorites API', () => {
 
       const request = new NextRequest('http://localhost:3000/api/user/service-favorites');
 
-      const response = await GET(request);
+      const response = await GET(request, { params: Promise.resolve({}) });
 
       expect(response).toBeDefined();
       const data = await response!.json();

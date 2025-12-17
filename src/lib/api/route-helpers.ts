@@ -153,7 +153,8 @@ export function withAuthenticatedGET(handler: GETHandler, hasIdParam = false) {
     };
   }
 
-  return async (request: NextRequest) => {
+  return async (request: NextRequest, { params }: { params: Promise<Record<string, never>> }) => {
+    await params; // Consume params even if empty
     return withAuth(requireAuth, handler, request, {}, '인증이 필요합니다');
   };
 }
