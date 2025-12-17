@@ -139,7 +139,8 @@ export default function AdminUsersPage() {
   const roleOrder: Record<string, number> = {
     admin: 1,
     seller: 2,
-    buyer: 3,
+    helper: 3,
+    buyer: 4,
   };
 
   // 필터링 및 정렬
@@ -157,8 +158,11 @@ export default function AdminUsersPage() {
       if (!sortField) return 0;
 
       if (sortField === 'role') {
-        const orderA = roleOrder[a.role] || 99;
-        const orderB = roleOrder[b.role] || 99;
+        // 첫 번째 역할로 정렬 (admin > seller > helper > buyer 순)
+        const firstRoleA = a.roles[0] || 'buyer';
+        const firstRoleB = b.roles[0] || 'buyer';
+        const orderA = roleOrder[firstRoleA] || 99;
+        const orderB = roleOrder[firstRoleB] || 99;
         return sortOrder === 'asc' ? orderA - orderB : orderB - orderA;
       }
 
@@ -179,6 +183,8 @@ export default function AdminUsersPage() {
         return '전문가';
       case 'admin':
         return '관리자';
+      case 'helper':
+        return '헬퍼';
       default:
         return role;
     }
@@ -192,6 +198,8 @@ export default function AdminUsersPage() {
         return 'bg-green-100 text-green-700';
       case 'admin':
         return 'bg-purple-100 text-purple-700';
+      case 'helper':
+        return 'bg-yellow-100 text-yellow-700';
       default:
         return 'bg-gray-100 text-gray-700';
     }
@@ -304,12 +312,17 @@ export default function AdminUsersPage() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">{user.email}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getRoleBadgeColor(user.role)}`}
-                    >
-                      {getRoleLabel(user.role)}
-                    </span>
+                  <td className="px-6 py-4">
+                    <div className="flex flex-wrap gap-1">
+                      {user.roles.map((role) => (
+                        <span
+                          key={role}
+                          className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getRoleBadgeColor(role)}`}
+                        >
+                          {getRoleLabel(role)}
+                        </span>
+                      ))}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(user.created_at).toLocaleDateString('ko-KR', {
@@ -454,11 +467,16 @@ export default function AdminUsersPage() {
                   </div>
                   <div>
                     <h3 className="text-2xl font-semibold text-gray-900">{selectedUser.name}</h3>
-                    <span
-                      className={`inline-block mt-1 px-3 py-1 text-xs leading-5 font-semibold rounded-full ${getRoleBadgeColor(selectedUser.role)}`}
-                    >
-                      {getRoleLabel(selectedUser.role)}
-                    </span>
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {selectedUser.roles.map((role) => (
+                        <span
+                          key={role}
+                          className={`px-3 py-1 text-xs leading-5 font-semibold rounded-full ${getRoleBadgeColor(role)}`}
+                        >
+                          {getRoleLabel(role)}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
@@ -476,7 +494,16 @@ export default function AdminUsersPage() {
                   </div>
                   <div>
                     <p className="block text-sm font-medium text-gray-500 mb-1">역할</p>
-                    <p className="text-sm text-gray-900">{getRoleLabel(selectedUser.role)}</p>
+                    <div className="flex flex-wrap gap-1">
+                      {selectedUser.roles.map((role) => (
+                        <span
+                          key={role}
+                          className={`px-2 py-1 text-xs leading-5 font-semibold rounded-full ${getRoleBadgeColor(role)}`}
+                        >
+                          {getRoleLabel(role)}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                   <div>
                     <p className="block text-sm font-medium text-gray-500 mb-1">상태</p>

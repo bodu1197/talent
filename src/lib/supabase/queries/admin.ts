@@ -161,7 +161,7 @@ export interface ServiceDetailWithCategories extends ServiceRow {
 export interface AdminUserProfile {
   id: string;
   email: string;
-  role: string;
+  roles: string[]; // Changed from 'role' to 'roles' to support multiple roles
   created_at: string;
   status: string;
   name: string;
@@ -372,6 +372,14 @@ export async function getAdminUsers(filters?: {
   const { data: sellers } = await supabase.from('sellers').select('user_id');
   const sellerUserIds = new Set(sellers?.map((s) => s.user_id) || []);
 
+  // admins 테이블에서 관리자 목록 조회
+  const { data: admins } = await supabase.from('admins').select('user_id');
+  const adminUserIds = new Set(admins?.map((a) => a.user_id) || []);
+
+  // helper_profiles 테이블에서 헬퍼(라이더) 목록 조회
+  const { data: helpers } = await supabase.from('helper_profiles').select('user_id');
+  const helperUserIds = new Set(helpers?.map((h) => h.user_id) || []);
+
   // 역할 필터링: seller인 경우 sellers 테이블 기준으로 필터링
   let query = supabase.from('profiles').select('*').order('created_at', { ascending: false });
 
@@ -396,18 +404,21 @@ export async function getAdminUsers(filters?: {
   // users 테이블에서 email 조회
   const { data: users } = await supabase.from('users').select('id, email').in('id', userIds);
 
-  // admins 테이블에서 관리자 목록 조회
-  const { data: admins } = await supabase.from('admins').select('user_id');
-  const adminUserIds = new Set(admins?.map((a) => a.user_id) || []);
-
   // email 맵 생성
   const emailMap = new Map(users?.map((u) => [u.id, u.email]) || []);
 
-  // 역할 결정 함수: admins > sellers > buyer 순으로 확인
-  const determineRole = (userId: string): string => {
-    if (adminUserIds.has(userId)) return 'admin';
-    if (sellerUserIds.has(userId)) return 'seller';
-    return 'buyer';
+  // 역할 결정 함수: 모든 해당 역할을 배열로 반환
+  const determineRoles = (userId: string): string[] => {
+    const roles: string[] = [];
+
+    if (adminUserIds.has(userId)) roles.push('admin');
+    if (sellerUserIds.has(userId)) roles.push('seller');
+    if (helperUserIds.has(userId)) roles.push('helper');
+
+    // 모든 사용자는 기본적으로 buyer
+    roles.push('buyer');
+
+    return roles;
   };
 
   // profiles 데이터를 users 형식으로 변환
@@ -421,7 +432,7 @@ export async function getAdminUsers(filters?: {
     }): AdminUserProfile => ({
       id: profile.user_id,
       email: emailMap.get(profile.user_id) || '이메일 없음',
-      role: determineRole(profile.user_id),
+      roles: determineRoles(profile.user_id),
       created_at: profile.created_at,
       status: 'active',
       name: profile.name || 'Unknown',
@@ -431,7 +442,7 @@ export async function getAdminUsers(filters?: {
 
   // 역할 필터 적용
   if (filters?.role && filters.role !== 'all') {
-    result = result.filter((user) => user.role === filters.role);
+    result = result.filter((user) => user.roles.includes(filters.role!));
   }
 
   return result;
