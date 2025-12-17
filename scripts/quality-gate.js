@@ -1,227 +1,175 @@
 #!/usr/bin/env node
-/* eslint-disable sonarjs/cognitive-complexity, sonarjs/os-command */
+/* eslint-disable sonarjs/cognitive-complexity, sonarjs/os-command, no-console */
+
 /**
- * SonarQube Quality Gate 검사 스크립트
- * Push 전에 코드 품질을 검증합니다.
- *
- * Note: Safe development script for code quality checks
- *
- * 검사 항목:
- * 1. ESLint - 코드 스타일 및 잠재적 오류
- * 2. TypeScript - 타입 안전성
- * 3. SonarQube - 코드 품질 (버그, 취약점, 코드 스멜)
+ * Super App Quality Gate Script
+ * -----------------------------
+ * Enforces strict code quality standards before push.
+ * 
+ * Checks:
+ * 1. ESLint (Zero warnings allowed)
+ * 2. TypeScript (Strict type checking)
+ * 3. Duplicate Code (JSCPD, max 5%)
+ * 4. Circular Dependencies (Madge, zero tolerance)
+ * 5. SonarQube (Static Analysis, if token present)
  */
 
-const { execSync } = require('child_process');
-const https = require('https');
-const http = require('http');
+const { execSync } = require('node:child_process');
+const https = require('node:https');
+const http = require('node:http');
 
-// 색상 코드
+// Colors for console output
 const colors = {
   reset: '\x1b[0m',
   red: '\x1b[31m',
   green: '\x1b[32m',
   yellow: '\x1b[33m',
   blue: '\x1b[34m',
+  magenta: '\x1b[35m',
   cyan: '\x1b[36m',
+  white: '\x1b[37m',
 };
 
-function log(message, color = 'reset') {
-  console.log(`${colors[color]}${message}${colors.reset}`);
-}
+// Logging Helpers
+const log = (msg, color = 'reset') => console.log(`${colors[color]}${msg}${colors.reset}`);
+const logStep = (step, msg) => console.log(`\n${colors.cyan}[${step}]${colors.reset} ${colors.white}${msg}${colors.reset}`);
+const logSuccess = (msg) => console.log(`${colors.green}  ✓ ${msg}${colors.reset}`);
+const logError = (msg) => console.error(`${colors.red}  ✗ ${msg}${colors.reset}`);
+const logWarn = (msg) => console.warn(`${colors.yellow}  ⚠ ${msg}${colors.reset}`);
 
-function logStep(step, message) {
-  console.log(`\n${colors.cyan}[${step}]${colors.reset} ${message}`);
-}
-
-function logSuccess(message) {
-  console.log(`${colors.green}✓${colors.reset} ${message}`);
-}
-
-function logError(message) {
-  console.log(`${colors.red}✗${colors.reset} ${message}`);
-}
-
-function logWarning(message) {
-  console.log(`${colors.yellow}⚠${colors.reset} ${message}`);
-}
-
-// 명령어 실행 함수
-function runCommand(command, description) {
-  logStep('실행', description);
+/**
+ * Execute a shell command synchronously
+ */
+function runCommand(command, description, ignoreError = false) {
   try {
+    // stdio: 'inherit' prints output directly to console
     execSync(command, { stdio: 'inherit', encoding: 'utf8' });
-    logSuccess(`${description} 완료`);
+    logSuccess(`${description} Passed`);
     return true;
-  } catch {
-    logError(`${description} 실패`);
+  } catch (e) {
+    if (!ignoreError) {
+      logError(`${description} Failed`);
+    }
     return false;
   }
 }
 
-// SonarQube API 호출 (Quality Gate 상태 확인)
+/**
+ * Check SonarQube Quality Gate Status via API
+ */
 async function checkSonarQubeQualityGate() {
   const projectKey = 'bodu1197_talent';
   const sonarUrl = process.env.SONAR_HOST_URL || 'https://sonarcloud.io';
   const sonarToken = process.env.SONAR_TOKEN;
 
-  // 토큰이 없으면 스킵 (GitHub Actions에서만 실행)
-  if (!sonarToken) {
-    logWarning('SONAR_TOKEN이 설정되지 않음 - SonarQube 검사 스킵 (GitHub Actions에서 실행됨)');
-    return null;
-  }
+  if (!sonarToken) return null;
 
   return new Promise((resolve) => {
     const url = `${sonarUrl}/api/qualitygates/project_status?projectKey=${projectKey}`;
     const protocol = sonarUrl.startsWith('https') ? https : http;
-
-    const authString = `${sonarToken}:`;
-    const basicAuth = Buffer.from(authString).toString('base64');
+    const auth = Buffer.from(`${sonarToken}:`).toString('base64');
+    
     const options = {
-      headers: {
-        Authorization: `Basic ${basicAuth}`,
-      },
+      headers: { Authorization: `Basic ${auth}` },
     };
 
-    const request = protocol.get(url, options, (response) => {
+    const req = protocol.get(url, options, (res) => {
       let data = '';
-
-      response.on('data', (chunk) => {
-        data += chunk;
-      });
-
-      response.on('end', () => {
+      res.on('data', (chunk) => (data += chunk));
+      res.on('end', () => {
         try {
-          const result = JSON.parse(data);
-          if (result.projectStatus) {
-            resolve(result.projectStatus);
-          } else {
-            logWarning('SonarQube 응답 형식 오류');
-            resolve(null);
-          }
+          const json = JSON.parse(data);
+          resolve(json.projectStatus || null);
         } catch {
-          logWarning('SonarQube 응답 파싱 실패');
           resolve(null);
         }
       });
     });
 
-    request.on('error', () => {
-      logWarning('SonarQube 서버 연결 실패 (스캔만 진행)');
-      resolve(null);
-    });
-
-    request.setTimeout(10000, () => {
-      request.destroy();
-      logWarning('SonarQube 서버 응답 시간 초과');
+    req.on('error', () => resolve(null));
+    req.setTimeout(5000, () => {
+      req.destroy();
       resolve(null);
     });
   });
 }
 
-// 메인 실행 함수
+/**
+ * Main Execution Function
+ */
 async function main() {
-  log('\n╔════════════════════════════════════════════╗', 'cyan');
-  log('║     🔍 코드 품질 검사 (Quality Gate)       ║', 'cyan');
-  log('║     노동자의 피를 빨아먹지 않는 플랫폼     ║', 'cyan');
-  log('╚════════════════════════════════════════════╝', 'cyan');
+  console.clear();
+  log('╔════════════════════════════════════════════════════════════╗', 'magenta');
+  log('║           🛡️  SUPER APP QUALITY GATE  🛡️                 ║', 'magenta');
+  log('║      Ensuring code excellence before deployment            ║', 'magenta');
+  log('╚════════════════════════════════════════════════════════════╝', 'magenta');
 
-  let allPassed = true;
+  const steps = [
+    { name: 'ESLint (Strict)', cmd: 'npx eslint src --ext .ts,.tsx --max-warnings 0', critical: true },
+    { name: 'TypeScript (Type Check)', cmd: 'npx tsc --noEmit', critical: true },
+    // Threshold 5% duplication allowed, ignore test/types/next stuff
+    { name: 'Code Duplication (JSCPD)', cmd: 'npx jscpd src --threshold 5 --ignore "**/*.d.ts,**/*.test.ts,**/*.spec.ts,**/node_modules/**,**/.next/**,**/scripts/**"', critical: false }, 
+    // Circular dependencies are critical for runtime stability
+    { name: 'Circular Dependencies (Madge)', cmd: 'npx madge --circular --extensions ts,tsx src', critical: true },
+  ];
 
-  // 1. ESLint 검사
-  logStep('1/4', 'ESLint 검사...');
-  const eslintPassed = runCommand(
-    'npx eslint src --ext .ts,.tsx --max-warnings 0',
-    'ESLint 코드 스타일 검사'
-  );
-  if (!eslintPassed) {
-    allPassed = false;
-    logError('ESLint 검사 실패 - 먼저 린트 오류를 수정하세요');
-  }
+  let failed = false;
 
-  // 2. TypeScript 타입 검사
-  logStep('2/4', 'TypeScript 타입 검사...');
-  const tscPassed = runCommand('npx tsc --noEmit', 'TypeScript 타입 검사');
-  if (!tscPassed) {
-    allPassed = false;
-    logError('TypeScript 검사 실패 - 타입 오류를 수정하세요');
-  }
-
-  // 3. SonarQube 스캔 (토큰이 있을 때만)
-  logStep('3/4', 'SonarQube 분석...');
-  let sonarScanPassed = false;
-
-  if (process.env.SONAR_TOKEN) {
-    sonarScanPassed = runCommand('npx sonar-scanner', 'SonarQube 코드 분석');
-  } else {
-    logWarning('SONAR_TOKEN이 설정되지 않음 - SonarQube 스캔 스킵');
-    logWarning('GitHub Actions에서 자동으로 SonarCloud 분석이 실행됩니다');
-  }
-
-  // 4. Quality Gate 상태 확인
-  if (sonarScanPassed) {
-    logStep('4/4', 'Quality Gate 상태 확인...');
-
-    // 스캔 완료 후 잠시 대기 (SonarQube가 분석을 완료할 시간)
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-
-    const qualityGate = await checkSonarQubeQualityGate();
-
-    if (qualityGate) {
-      const status = qualityGate.status;
-
-      if (status === 'OK') {
-        logSuccess('Quality Gate 통과! ✅');
-      } else if (status === 'WARN') {
-        logWarning('Quality Gate 경고 상태');
-        log('\n조건별 상태:', 'yellow');
-        qualityGate.conditions?.forEach((condition) => {
-          let icon = '✗';
-          if (condition.status === 'OK') {
-            icon = '✓';
-          } else if (condition.status === 'WARN') {
-            icon = '⚠';
-          }
-          log(
-            `  ${icon} ${condition.metricKey}: ${condition.actualValue} (기준: ${condition.errorThreshold})`
-          );
-        });
+  // 1. Run Local Checks
+  for (const [index, step] of steps.entries()) {
+    logStep(`${index + 1}/${steps.length + 1}`, `Running ${step.name}...`);
+    const success = runCommand(step.cmd, step.name);
+    
+    if (!success) {
+      if (step.critical) {
+        logError(`Critical check failed: ${step.name}`);
+        failed = true;
       } else {
-        logError('Quality Gate 실패! ❌');
-        allPassed = false;
-        log('\n실패한 조건:', 'red');
-        qualityGate.conditions
-          ?.filter((c) => c.status !== 'OK')
-          .forEach((condition) => {
-            log(
-              `  ✗ ${condition.metricKey}: ${condition.actualValue} (기준: ${condition.errorThreshold})`,
-              'red'
-            );
-          });
+        logWarn(`Non-critical check warning: ${step.name}`);
+        // Optional: fail on non-critical too if being very strict?
+        // failed = true; 
       }
+    }
+  }
+
+  // 2. Run Remote Checks (SonarQube)
+  logStep(`${steps.length + 1}/${steps.length + 1}`, 'SonarQube Analysis & Gate...');
+  if (process.env.SONAR_TOKEN) {
+    const scannerSuccess = runCommand('npx sonar-scanner', 'SonarQube Scanner');
+    if (scannerSuccess) {
+        log('  Waiting for server processing...');
+        await new Promise(r => setTimeout(r, 3000));
+        const gateStatus = await checkSonarQubeQualityGate();
+        
+        if (gateStatus?.status === 'OK') {
+            logSuccess('SonarQube Quality Gate: Passed');
+        } else if (gateStatus?.status === 'ERROR') {
+            logError('SonarQube Quality Gate: Failed');
+            failed = true;
+        } else {
+            logWarn('SonarQube Quality Gate check skipped (Unknown status)');
+        }
     } else {
-      logWarning('Quality Gate 상태를 확인할 수 없습니다 (SonarQube 서버 확인 필요)');
-      // SonarQube 서버가 없어도 ESLint, TSC 통과하면 진행
+        logWarn('SonarQube scan failed locally, skipping gate check.');
     }
   } else {
-    logWarning('SonarQube 스캔 실패 - ESLint/TypeScript 결과만으로 판단');
+    logWarn('Skipping SonarQube (No token). Check GitHub Actions for details.');
   }
 
-  // 결과 출력
-  log('\n════════════════════════════════════════════', 'cyan');
-  if (allPassed) {
-    log('✅ 모든 품질 검사 통과! Push를 진행합니다.', 'green');
-    log('════════════════════════════════════════════\n', 'cyan');
-    process.exit(0);
-  } else {
-    log('❌ 품질 검사 실패! Push가 차단되었습니다.', 'red');
-    log('위의 오류를 수정한 후 다시 시도하세요.', 'red');
-    log('════════════════════════════════════════════\n', 'cyan');
+  // 3. Final Result
+  log('\n════════════════════════════════════════════════════════════', 'magenta');
+  if (failed) {
+    log('❌  QUALITY GATE FAILED', 'red');
+    log('    Please fix the errors above before pushing.', 'red');
     process.exit(1);
+  } else {
+    log('✅  QUALITY GATE PASSED', 'green');
+    log('    Code is ready for the Super App!', 'green');
+    process.exit(0);
   }
 }
 
-main().catch((error) => {
-  logError(`예상치 못한 오류: ${error.message}`);
+main().catch(err => {
+  console.error('Fatal Error:', err);
   process.exit(1);
 });
