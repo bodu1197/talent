@@ -188,13 +188,13 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                   <label
                     aria-label={`${PACKAGE_TYPE_LABELS[type]} 활성화`}
                     className="relative inline-flex items-center cursor-pointer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
                   >
                     <input
                       type="checkbox"
                       checked={pkg.is_enabled}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
                       onChange={(e) => {
                         handlePackageChange(type, 'is_enabled', e.target.checked);
                         if (e.target.checked && !isExpanded) {

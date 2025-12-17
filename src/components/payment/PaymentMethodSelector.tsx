@@ -71,6 +71,7 @@ export default function PaymentMethodSelector({
           <label
             key={option.method}
             htmlFor={`payment-${option.method}`}
+            aria-label={option.label}
             className={`flex items-center gap-4 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
               selectedMethod === option.method
                 ? 'border-brand-primary bg-blue-50'
