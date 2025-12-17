@@ -10,7 +10,11 @@ async function fetchService(supabase: SupabaseClient, id: string, sellerId: stri
     .select(
       `
       *,
-      service_categories(category_id, is_primary)
+      service_categories!inner(
+        category_id,
+        is_primary,
+        categories!inner(level)
+      )
     `
     )
     .eq('id', id)
@@ -27,16 +31,23 @@ async function fetchService(supabase: SupabaseClient, id: string, sellerId: stri
 // Helper function to fetch category hierarchy
 async function fetchCategoryHierarchy(
   supabase: SupabaseClient,
-  service: { readonly service_categories: Array<{ category_id: string; is_primary?: boolean }> }
+  service: {
+    readonly service_categories: Array<{
+      category_id: string;
+      is_primary?: boolean;
+      categories: { level: number };
+    }>;
+  }
 ) {
   if (!service.service_categories || service.service_categories.length === 0) {
     return null;
   }
 
-  // Find primary category or use the first one
-  const primaryCat =
-    service.service_categories.find((sc) => sc.is_primary) || service.service_categories[0];
-  const leafCategoryId = primaryCat.category_id;
+  // Find the deepest level category (highest level number = leaf category)
+  const deepestCat = service.service_categories.reduce((prev, current) => {
+    return current.categories.level > prev.categories.level ? current : prev;
+  });
+  const leafCategoryId = deepestCat.category_id;
 
   // 1. Try to get path via RPC
   const { data: pathData, error: rpcError } = await supabase.rpc('get_category_path', {

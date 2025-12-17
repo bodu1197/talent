@@ -192,9 +192,13 @@ export default function ServiceForm({
         .eq('parent_id', selectedLevel1)
         .order('display_order');
       setLevel2Categories(data || []);
-      setLevel3Categories([]);
-      setSelectedLevel2('');
-      setSelectedLevel3('');
+
+      // Only reset level 2 and 3 if this is a user-initiated change (not initial load)
+      if (categoriesInitialized.current) {
+        setLevel3Categories([]);
+        setSelectedLevel2('');
+        setSelectedLevel3('');
+      }
     }
     fetchLevel2();
   }, [selectedLevel1, initialCategoryHierarchy]);
@@ -226,7 +230,11 @@ export default function ServiceForm({
         .eq('parent_id', selectedLevel2)
         .order('display_order');
       setLevel3Categories(data || []);
-      setSelectedLevel3('');
+
+      // Only reset level 3 if this is a user-initiated change (not initial load)
+      if (categoriesInitialized.current) {
+        setSelectedLevel3('');
+      }
     }
     fetchLevel3();
   }, [selectedLevel2, initialCategoryHierarchy]);
