@@ -12,6 +12,11 @@ export interface MockUser {
 }
 
 /**
+ * 기본 Mock 사용자
+ */
+const DEFAULT_MOCK_USER: MockUser = { id: 'user-1', email: 'test@example.com' };
+
+/**
  * withAuth 미들웨어 모킹 (인증된 사용자)
  * @example
  * ```ts
@@ -20,7 +25,7 @@ export interface MockUser {
  * mockWithAuth({ id: 'user-123', email: 'test@example.com' });
  * ```
  */
-export const mockWithAuth = (user: MockUser = { id: 'user-1', email: 'test@example.com' }) => {
+export const mockWithAuth = (user: MockUser = DEFAULT_MOCK_USER) => {
   vi.mock('@/lib/api/auth-middleware', () => ({
     withAuth: vi.fn((handler) => {
       return async (request: NextRequest) => {
@@ -51,7 +56,7 @@ export const mockWithAuthUnauthorized = () => {
 /**
  * requireAuth 모킹 (인증된 사용자)
  */
-export const mockRequireAuth = (user: MockUser = { id: 'user-1', email: 'test@example.com' }) => {
+export const mockRequireAuth = (user: MockUser = DEFAULT_MOCK_USER) => {
   vi.mock('@/lib/auth/server', () => ({
     requireAuth: vi.fn(async () => ({
       user,
