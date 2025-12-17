@@ -76,7 +76,8 @@ export default function SettingsEditClient({ profile, userEmail, isSeller }: Pro
       // 파일 확장자 추출
       const fileExt = file.name.split('.').pop();
       const fileName = `${user.id}_${Date.now()}.${fileExt}`;
-      const filePath = `profiles/${fileName}`;
+      // 버킷 이름이 이미 'profiles'이므로 중복 방지
+      const filePath = fileName;
 
       // Supabase Storage에 업로드
       const { error: uploadError } = await supabase.storage

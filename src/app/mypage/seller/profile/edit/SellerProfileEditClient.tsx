@@ -272,7 +272,8 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
       if (profileImage) {
         const fileExt = profileImage.name.split('.').pop();
         const fileName = `${profile.user_id}_${Date.now()}.${fileExt}`;
-        const filePath = `profiles/${fileName}`;
+        // 버킷 이름이 이미 'profiles'이므로 중복 방지
+        const filePath = fileName;
 
         const { error: uploadError } = await supabase.storage
           .from('profiles')

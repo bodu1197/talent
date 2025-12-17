@@ -113,7 +113,8 @@ export default function RegisterPage() {
 
       const tempId = Date.now();
       const fileName = `temp_${tempId}.svg`;
-      const filePath = `profiles/${fileName}`;
+      // 버킷 이름이 이미 'profiles'이므로 중복 방지
+      const filePath = fileName;
 
       const { error: uploadError } = await supabase.storage
         .from('profiles')
@@ -141,7 +142,8 @@ export default function RegisterPage() {
       const pngBlob = await pngResponse.blob();
 
       const fileName = `${userId}_${Date.now()}.png`;
-      const filePath = `profiles/${fileName}`;
+      // 버킷 이름이 이미 'profiles'이므로 중복 방지
+      const filePath = fileName;
 
       const { error: uploadError } = await supabase.storage
         .from('profiles')
