@@ -1,6 +1,6 @@
 {
   "statistics": {
-    "detectionDate": "2025-12-17T09:35:47.422Z",
+    "detectionDate": "2025-12-17T11:45:19.182Z",
     "formats": {
       "javascript": {
         "sources": {
@@ -2249,14 +2249,14 @@
             "newClones": 0
           },
           "src/components/service/ServiceForm.tsx": {
-            "lines": 312,
-            "tokens": 2376,
+            "lines": 311,
+            "tokens": 2391,
             "sources": 1,
             "clones": 1,
             "duplicatedLines": 54,
             "duplicatedTokens": 356,
-            "percentage": 17.31,
-            "percentageTokens": 14.98,
+            "percentage": 17.36,
+            "percentageTokens": 14.89,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -3630,8 +3630,8 @@
           }
         },
         "total": {
-          "lines": 24632,
-          "tokens": 199559,
+          "lines": 24631,
+          "tokens": 199574,
           "sources": 302,
           "clones": 8,
           "duplicatedLines": 508,
@@ -3645,8 +3645,8 @@
       "tsx": {
         "sources": {
           "src/app/mypage/seller/services/[id]/edit/page.tsx": {
-            "lines": 100,
-            "tokens": 891,
+            "lines": 102,
+            "tokens": 1023,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -3657,8 +3657,8 @@
             "newClones": 0
           },
           "src/app/mypage/seller/services/[id]/edit/EditServiceClient.tsx": {
-            "lines": 191,
-            "tokens": 1826,
+            "lines": 229,
+            "tokens": 2116,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -3720,11 +3720,11 @@
             "lines": 426,
             "tokens": 3806,
             "sources": 1,
-            "clones": 1,
-            "duplicatedLines": 11,
-            "duplicatedTokens": 115,
-            "percentage": 2.58,
-            "percentageTokens": 3.02,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -3825,14 +3825,14 @@
             "newClones": 0
           },
           "src/app/mypage/seller/profile/edit/SellerProfileEditClient.tsx": {
-            "lines": 849,
-            "tokens": 7193,
+            "lines": 855,
+            "tokens": 7244,
             "sources": 1,
             "clones": 3,
             "duplicatedLines": 39,
             "duplicatedTokens": 492,
-            "percentage": 4.59,
-            "percentageTokens": 6.84,
+            "percentage": 4.56,
+            "percentageTokens": 6.79,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -6309,14 +6309,14 @@
             "newClones": 0
           },
           "src/components/service/ServiceForm.tsx": {
-            "lines": 620,
-            "tokens": 5293,
+            "lines": 691,
+            "tokens": 5769,
             "sources": 1,
-            "clones": 3,
-            "duplicatedLines": 27,
-            "duplicatedTokens": 312,
-            "percentage": 4.35,
-            "percentageTokens": 5.89,
+            "clones": 2,
+            "duplicatedLines": 16,
+            "duplicatedTokens": 197,
+            "percentage": 2.32,
+            "percentageTokens": 3.41,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -7906,14 +7906,14 @@
           }
         },
         "total": {
-          "lines": 62360,
-          "tokens": 508529,
+          "lines": 62477,
+          "tokens": 509478,
           "sources": 355,
-          "clones": 173,
-          "duplicatedLines": 2279,
-          "duplicatedTokens": 18400,
-          "percentage": 3.65,
-          "percentageTokens": 3.62,
+          "clones": 172,
+          "duplicatedLines": 2268,
+          "duplicatedTokens": 18285,
+          "percentage": 3.63,
+          "percentageTokens": 3.59,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -7957,26 +7957,26 @@
             "newClones": 0
           },
           "src/app/api/seller/services/[serviceId]/route.ts": {
-            "lines": 216,
-            "tokens": 2063,
+            "lines": 220,
+            "tokens": 2121,
             "sources": 1,
             "clones": 1,
             "duplicatedLines": 11,
             "duplicatedTokens": 119,
-            "percentage": 5.09,
-            "percentageTokens": 5.77,
+            "percentage": 5,
+            "percentageTokens": 5.61,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
           "src/app/api/seller/portfolio/[id]/route.ts": {
-            "lines": 143,
-            "tokens": 1490,
+            "lines": 164,
+            "tokens": 1709,
             "sources": 1,
             "clones": 4,
             "duplicatedLines": 48,
             "duplicatedTokens": 537,
-            "percentage": 33.57,
-            "percentageTokens": 36.04,
+            "percentage": 29.27,
+            "percentageTokens": 31.42,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -9984,6 +9984,30 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/lib/storage-utils.ts": {
+            "lines": 169,
+            "tokens": 1317,
+            "sources": 1,
+            "clones": 3,
+            "duplicatedLines": 51,
+            "duplicatedTokens": 490,
+            "percentage": 30.18,
+            "percentageTokens": 37.21,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/storage-utils-server.ts": {
+            "lines": 116,
+            "tokens": 1015,
+            "sources": 1,
+            "clones": 3,
+            "duplicatedLines": 51,
+            "duplicatedTokens": 490,
+            "percentage": 43.97,
+            "percentageTokens": 48.28,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/lib/serviceWorker.ts": {
             "lines": 15,
             "tokens": 148,
@@ -10226,14 +10250,14 @@
           }
         },
         "total": {
-          "lines": 25196,
-          "tokens": 207818,
-          "sources": 192,
-          "clones": 105,
-          "duplicatedLines": 1173,
-          "duplicatedTokens": 12040,
-          "percentage": 4.66,
-          "percentageTokens": 5.79,
+          "lines": 25506,
+          "tokens": 210427,
+          "sources": 194,
+          "clones": 108,
+          "duplicatedLines": 1224,
+          "duplicatedTokens": 12530,
+          "percentage": 4.8,
+          "percentageTokens": 5.95,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -10268,14 +10292,14 @@
       }
     },
     "total": {
-      "lines": 112199,
-      "tokens": 916003,
-      "sources": 850,
-      "clones": 286,
-      "duplicatedLines": 3960,
-      "duplicatedTokens": 34449,
-      "percentage": 3.53,
-      "percentageTokens": 3.76,
+      "lines": 112625,
+      "tokens": 919576,
+      "sources": 852,
+      "clones": 288,
+      "duplicatedLines": 4000,
+      "duplicatedTokens": 34824,
+      "percentage": 3.55,
+      "percentageTokens": 3.79,
       "newDuplicatedLines": 0,
       "newClones": 0
     }
@@ -10360,17 +10384,17 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\app\\mypage\\seller\\profile\\edit\\SellerProfileEditClient.tsx",
-        "start": 243,
-        "end": 254,
+        "start": 244,
+        "end": 255,
         "startLoc": {
-          "line": 243,
+          "line": 244,
           "column": 2,
-          "position": 2101
+          "position": 2115
         },
         "endLoc": {
-          "line": 254,
+          "line": 255,
           "column": 16,
-          "position": 2231
+          "position": 2245
         }
       },
       "secondFile": {
@@ -10396,32 +10420,32 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\app\\mypage\\seller\\profile\\edit\\SellerProfileEditClient.tsx",
-        "start": 576,
-        "end": 590,
+        "start": 582,
+        "end": 596,
         "startLoc": {
-          "line": 576,
+          "line": 582,
           "column": 6,
-          "position": 4908
+          "position": 4959
         },
         "endLoc": {
-          "line": 590,
+          "line": 596,
           "column": 3,
-          "position": 5089
+          "position": 5140
         }
       },
       "secondFile": {
         "name": "src\\app\\mypage\\seller\\profile\\edit\\SellerProfileEditClient.tsx",
-        "start": 548,
-        "end": 562,
+        "start": 554,
+        "end": 568,
         "startLoc": {
-          "line": 548,
+          "line": 554,
           "column": 8,
-          "position": 4591
+          "position": 4642
         },
         "endLoc": {
-          "line": 562,
+          "line": 568,
           "column": 2,
-          "position": 4772
+          "position": 4823
         }
       }
     },
@@ -10720,17 +10744,17 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\app\\api\\seller\\portfolio\\[id]\\route.ts",
-        "start": 13,
-        "end": 23,
+        "start": 14,
+        "end": 24,
         "startLoc": {
-          "line": 13,
+          "line": 14,
           "column": 12,
-          "position": 133
+          "position": 146
         },
         "endLoc": {
-          "line": 23,
+          "line": 24,
           "column": 6,
-          "position": 227
+          "position": 240
         }
       },
       "secondFile": {
@@ -10756,32 +10780,32 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\app\\api\\seller\\portfolio\\[id]\\route.ts",
-        "start": 47,
-        "end": 60,
+        "start": 68,
+        "end": 81,
         "startLoc": {
-          "line": 47,
+          "line": 68,
           "column": 4,
-          "position": 481
+          "position": 700
         },
         "endLoc": {
-          "line": 60,
+          "line": 81,
           "column": 6,
-          "position": 645
+          "position": 864
         }
       },
       "secondFile": {
         "name": "src\\app\\api\\seller\\portfolio\\[id]\\route.ts",
-        "start": 8,
-        "end": 25,
+        "start": 9,
+        "end": 26,
         "startLoc": {
-          "line": 8,
+          "line": 9,
           "column": 7,
-          "position": 78
+          "position": 91
         },
         "endLoc": {
-          "line": 25,
-          "column": 16,
-          "position": 247
+          "line": 26,
+          "column": 29,
+          "position": 260
         }
       }
     },
@@ -10879,17 +10903,17 @@
       },
       "secondFile": {
         "name": "src\\app\\api\\seller\\portfolio\\[id]\\route.ts",
-        "start": 11,
-        "end": 23,
+        "start": 12,
+        "end": 24,
         "startLoc": {
-          "line": 11,
+          "line": 12,
           "column": 1,
-          "position": 114
+          "position": 127
         },
         "endLoc": {
-          "line": 23,
+          "line": 24,
           "column": 2,
-          "position": 229
+          "position": 242
         }
       }
     },
@@ -11060,16 +11084,16 @@
       "secondFile": {
         "name": "src\\app\\api\\orders\\[id]\\confirm\\route.ts",
         "start": 17,
-        "end": 23,
+        "end": 24,
         "startLoc": {
           "line": 17,
           "column": 1,
           "position": 114
         },
         "endLoc": {
-          "line": 23,
+          "line": 24,
           "column": 3,
-          "position": 231
+          "position": 244
         }
       }
     },
@@ -11275,17 +11299,17 @@
       },
       "secondFile": {
         "name": "src\\app\\api\\seller\\services\\[serviceId]\\route.ts",
-        "start": 166,
-        "end": 177,
+        "start": 170,
+        "end": 181,
         "startLoc": {
-          "line": 166,
+          "line": 170,
           "column": 5,
-          "position": 1556
+          "position": 1614
         },
         "endLoc": {
-          "line": 177,
+          "line": 181,
           "column": 15,
-          "position": 1675
+          "position": 1733
         }
       }
     },
@@ -18044,16 +18068,16 @@
       "secondFile": {
         "name": "src\\app\\api\\payments\\advertising\\verify\\route.ts",
         "start": 30,
-        "end": 23,
+        "end": 24,
         "startLoc": {
           "line": 30,
           "column": 5,
           "position": 268
         },
         "endLoc": {
-          "line": 23,
+          "line": 24,
           "column": 3,
-          "position": 231
+          "position": 244
         }
       }
     },
@@ -19248,57 +19272,21 @@
     {
       "format": "tsx",
       "lines": 12,
-      "fragment": "useEffect(() => {\n    async function fetchLevel1Categories() {\n      try {\n        const supabase = createClient();\n        const { data, error } = await supabase\n          .from('categories')\n          .select('id, name, slug, level, parent_id, service_type')\n          .eq('is_active', true)\n          .eq('level', 1)\n          .order('display_order', { ascending: true });\n\n        if (error) throw",
-      "tokens": 0,
-      "firstFile": {
-        "name": "src\\components\\service\\ServiceForm.tsx",
-        "start": 109,
-        "end": 120,
-        "startLoc": {
-          "line": 109,
-          "column": 3,
-          "position": 1116
-        },
-        "endLoc": {
-          "line": 120,
-          "column": 6,
-          "position": 1231
-        }
-      },
-      "secondFile": {
-        "name": "src\\app\\mypage\\seller\\services\\new\\steps\\Step1BasicInfo.tsx",
-        "start": 56,
-        "end": 67,
-        "startLoc": {
-          "line": 56,
-          "column": 3,
-          "position": 610
-        },
-        "endLoc": {
-          "line": 67,
-          "column": 2,
-          "position": 736
-        }
-      }
-    },
-    {
-      "format": "tsx",
-      "lines": 12,
       "fragment": "const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {\n    const file = e.target.files?.[0];\n    if (file) {\n      if (file.size > 5 * 1024 * 1024) {\n        toast.error('파일 크기는 5MB를 초과할 수 없습니다.');\n        return;\n      }\n      if (!file.type.startsWith('image/')) {\n        toast.error('이미지 파일만 업로드 가능합니다.');\n        return;\n      }\n      setFormData",
       "tokens": 0,
       "firstFile": {
         "name": "src\\components\\service\\ServiceForm.tsx",
-        "start": 180,
-        "end": 191,
+        "start": 245,
+        "end": 256,
         "startLoc": {
-          "line": 180,
+          "line": 245,
           "column": 3,
-          "position": 1732
+          "position": 2172
         },
         "endLoc": {
-          "line": 191,
+          "line": 256,
           "column": 12,
-          "position": 1855
+          "position": 2295
         }
       },
       "secondFile": {
@@ -19324,17 +19312,17 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\components\\service\\ServiceForm.tsx",
-        "start": 589,
-        "end": 594,
+        "start": 660,
+        "end": 665,
         "startLoc": {
-          "line": 589,
+          "line": 660,
           "column": 11,
-          "position": 5058
+          "position": 5534
         },
         "endLoc": {
-          "line": 594,
+          "line": 665,
           "column": 10,
-          "position": 5132
+          "position": 5608
         }
       },
       "secondFile": {
@@ -20167,17 +20155,17 @@
       },
       "secondFile": {
         "name": "src\\components\\service\\ServiceForm.tsx",
-        "start": 560,
-        "end": 602,
+        "start": 631,
+        "end": 673,
         "startLoc": {
-          "line": 560,
+          "line": 631,
           "column": 2,
-          "position": 4811
+          "position": 5287
         },
         "endLoc": {
-          "line": 602,
+          "line": 673,
           "column": 9,
-          "position": 5180
+          "position": 5656
         }
       }
     },
@@ -20502,6 +20490,114 @@
           "line": 126,
           "column": 17,
           "position": 1147
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 23,
+      "fragment": "export function extractBucketName(publicUrl: string): string | null {\r\n  try {\r\n    const url = new URL(publicUrl);\r\n    const pathParts = url.pathname.split('/storage/v1/object/public/');\r\n    if (pathParts.length < 2) return null;\r\n\r\n    const afterPublic = pathParts[1];\r\n    const slashIndex = afterPublic.indexOf('/');\r\n    if (slashIndex === -1) return afterPublic;\r\n\r\n    return afterPublic.substring(0, slashIndex);\r\n  } catch {\r\n    return null;\r\n  }\r\n}\r\n\r\n/**\r\n * Storage에서 이미지 삭제 (서버용)\r\n *\r\n * @param imageUrl - 삭제할 이미지의 공개 URL\r\n * @param bucket - Storage 버킷 이름 (옵션)\r\n * @returns 삭제 성공 여부\r\n */",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\lib\\storage-utils-server.ts",
+        "start": 26,
+        "end": 48,
+        "startLoc": {
+          "line": 26,
+          "column": 1,
+          "position": 209
+        },
+        "endLoc": {
+          "line": 48,
+          "column": 4,
+          "position": 381
+        }
+      },
+      "secondFile": {
+        "name": "src\\lib\\storage-utils.ts",
+        "start": 33,
+        "end": 56,
+        "startLoc": {
+          "line": 33,
+          "column": 1,
+          "position": 223
+        },
+        "endLoc": {
+          "line": 56,
+          "column": 4,
+          "position": 395
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 9,
+      "fragment": "(\r\n  imageUrls: (string | null | undefined)[],\r\n  bucket: string\r\n): Promise<boolean> {\r\n  const validUrls = imageUrls.filter((url): url is string => !!url);\r\n  if (validUrls.length === 0) return true;\r\n\r\n  try {\r\n    const supabase = await",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\lib\\storage-utils-server.ts",
+        "start": 88,
+        "end": 96,
+        "startLoc": {
+          "line": 88,
+          "column": 27,
+          "position": 695
+        },
+        "endLoc": {
+          "line": 96,
+          "column": 6,
+          "position": 801
+        }
+      },
+      "secondFile": {
+        "name": "src\\lib\\storage-utils.ts",
+        "start": 97,
+        "end": 105,
+        "startLoc": {
+          "line": 97,
+          "column": 21,
+          "position": 711
+        },
+        "endLoc": {
+          "line": 105,
+          "column": 13,
+          "position": 817
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 22,
+      "fragment": "createClient();\r\n\r\n    const filePaths = validUrls\r\n      .map((url) => extractStoragePath(url))\r\n      .filter((path): path is string => !!path);\r\n\r\n    if (filePaths.length === 0) return true;\r\n\r\n    const { error } = await supabase.storage.from(bucket).remove(filePaths);\r\n\r\n    if (error) {\r\n      logger.error('Failed to delete multiple images:', error);\r\n      return false;\r\n    }\r\n\r\n    logger.info(`Successfully deleted ${filePaths.length} images from ${bucket}`);\r\n    return true;\r\n  } catch (error) {\r\n    logger.error('Error deleting multiple images:', error);\r\n    return false;\r\n  }\r\n}",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\lib\\storage-utils-server.ts",
+        "start": 96,
+        "end": 117,
+        "startLoc": {
+          "line": 96,
+          "column": 2,
+          "position": 803
+        },
+        "endLoc": {
+          "line": 117,
+          "column": 2,
+          "position": 1015
+        }
+      },
+      "secondFile": {
+        "name": "src\\lib\\storage-utils.ts",
+        "start": 105,
+        "end": 126,
+        "startLoc": {
+          "line": 105,
+          "column": 2,
+          "position": 817
+        },
+        "endLoc": {
+          "line": 126,
+          "column": 2,
+          "position": 1029
         }
       }
     },
