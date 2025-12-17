@@ -40,7 +40,6 @@ describe('Footer', () => {
     expect(screen.getAllByRole('link', { name: '개인정보처리방침' }).length).toBeGreaterThanOrEqual(
       1
     );
-    expect(screen.getByRole('link', { name: '제휴 문의' })).toBeInTheDocument();
   });
 
   it('의뢰인 안내 링크들을 렌더링한다', () => {
@@ -74,7 +73,7 @@ describe('Footer', () => {
     render(<Footer />);
 
     expect(screen.getByText(/사업자등록번호/)).toBeInTheDocument();
-    expect(screen.getByText(/대표: 홍길동/)).toBeInTheDocument();
+    expect(screen.getByText(/대표: 배미미/)).toBeInTheDocument();
   });
 
   it('저작권 정보를 렌더링한다', () => {

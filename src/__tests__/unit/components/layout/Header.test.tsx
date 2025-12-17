@@ -71,7 +71,7 @@ describe('Header', () => {
   it('로고를 렌더링한다', () => {
     render(<Header />);
 
-    expect(screen.getByText('돌파구')).toBeInTheDocument();
+    expect(screen.getByAltText('돌파구')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: '돌파구 홈으로 이동' })).toHaveAttribute('href', '/');
   });
 
@@ -127,7 +127,7 @@ describe('Header', () => {
     );
   });
 
-  it('로그인 상태에서 채팅 알림을 표시한다', () => {
+  it('로그인 상태에서 채팅 알림을 표시한다', async () => {
     mockUseAuth.mockReturnValue({
       user: { id: 'user-1' },
       profile: { name: '홍길동', is_seller: false },
@@ -137,10 +137,12 @@ describe('Header', () => {
 
     render(<Header />);
 
-    expect(screen.getByTestId('chat-notification')).toBeInTheDocument();
+    // Lazy loaded component - wait for it to appear
+    const chatNotification = await screen.findByTestId('chat-notification');
+    expect(chatNotification).toBeInTheDocument();
   });
 
-  it('로그인 상태에서 알림을 표시한다', () => {
+  it('로그인 상태에서 알림을 표시한다', async () => {
     mockUseAuth.mockReturnValue({
       user: { id: 'user-1' },
       profile: { name: '홍길동', is_seller: false },
@@ -150,9 +152,9 @@ describe('Header', () => {
 
     render(<Header />);
 
-    // PC와 모바일 버전 모두 있음
-    const notifications = screen.getAllByTestId('notification-bell');
-    expect(notifications.length).toBeGreaterThanOrEqual(1);
+    // Lazy loaded component - wait for it to appear
+    const notification = await screen.findByTestId('notification-bell');
+    expect(notification).toBeInTheDocument();
   });
 
   it('메인 페이지가 아닐 때 검색창을 표시한다', () => {
@@ -208,7 +210,7 @@ describe('Header', () => {
     expect(skeletons.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('판매자는 판매자 대시보드로 마이페이지 링크가 연결된다', () => {
+  it('판매자는 통합 마이페이지로 링크가 연결된다', () => {
     mockUseAuth.mockReturnValue({
       user: { id: 'user-1' },
       profile: { name: '홍길동', is_seller: true },
@@ -219,11 +221,11 @@ describe('Header', () => {
     const { container } = render(<Header />);
 
     // 드롭다운 메뉴 내의 마이페이지 링크 확인 (invisible 상태이지만 DOM에 존재)
-    const mypageLink = container.querySelector('a[href="/mypage/seller/dashboard"]');
+    const mypageLink = container.querySelector('a[href="/mypage"]');
     expect(mypageLink).toBeInTheDocument();
   });
 
-  it('구매자는 구매자 대시보드로 마이페이지 링크가 연결된다', () => {
+  it('구매자는 통합 마이페이지로 링크가 연결된다', () => {
     mockUseAuth.mockReturnValue({
       user: { id: 'user-1' },
       profile: { name: '홍길동', is_seller: false },
@@ -234,7 +236,7 @@ describe('Header', () => {
     const { container } = render(<Header />);
 
     // 드롭다운 메뉴 내의 마이페이지 링크 확인 (invisible 상태이지만 DOM에 존재)
-    const mypageLink = container.querySelector('a[href="/mypage/buyer/dashboard"]');
+    const mypageLink = container.querySelector('a[href="/mypage"]');
     expect(mypageLink).toBeInTheDocument();
   });
 });

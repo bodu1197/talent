@@ -50,7 +50,7 @@ describe('ShareButton', () => {
   it('공유 버튼을 렌더링한다', () => {
     render(<ShareButton serviceId={mockServiceId} serviceTitle={mockServiceTitle} />);
 
-    expect(screen.getByText('공유')).toBeInTheDocument();
+    expect(screen.getByText('공유하기')).toBeInTheDocument();
   });
 
   it('Share2 아이콘을 표시한다', () => {
@@ -97,6 +97,6 @@ describe('ShareButton', () => {
     render(<ShareButton serviceId={mockServiceId} serviceTitle={mockServiceTitle} />);
 
     const button = screen.getByRole('button');
-    expect(button).toHaveClass('w-full', 'py-3', 'border', 'rounded-lg');
+    expect(button).toHaveClass('w-full', 'h-12', 'border', 'border-gray-300', 'rounded-lg');
   });
 });

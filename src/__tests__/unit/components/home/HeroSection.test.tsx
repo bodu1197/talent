@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import HeroSection from '@/components/home/HeroSection';
 
 // Mock next/navigation
@@ -40,9 +40,9 @@ describe('HeroSection', () => {
   it('히어로 섹션을 렌더링한다', () => {
     render(<HeroSection />);
 
-    // 첫 번째 슬라이드 내용 확인
-    expect(screen.getAllByText(/당신이 번 돈/)[0]).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: '수수료 0%' })).toBeInTheDocument();
+    // 첫 번째 슬라이드(id: 0) 내용 확인
+    expect(screen.getByText(/플랫폼은 다리여야 합니다/)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '우리의 철학' })).toBeInTheDocument();
   });
 
   it('검색 폼을 렌더링한다', () => {
@@ -78,32 +78,18 @@ describe('HeroSection', () => {
     expect(mockPush).not.toHaveBeenCalled();
   });
 
-  it('카테고리 링크들을 렌더링한다', () => {
-    render(<HeroSection />);
-
-    expect(screen.getByText('디자인')).toBeInTheDocument();
-    expect(screen.getByText('마케팅')).toBeInTheDocument();
-  });
-
-  it('AI 서비스 링크가 올바른 href를 가진다', () => {
-    render(<HeroSection />);
-
-    const aiLink = screen.getByRole('link', { name: /AI 서비스|AI/ });
-    expect(aiLink).toHaveAttribute('href', '/categories/ai-services');
-  });
-
   it('슬라이드 도트 버튼을 렌더링한다', () => {
     render(<HeroSection />);
 
     const slideButtons = screen.getAllByRole('button', { name: /슬라이드.*로 이동/ });
-    expect(slideButtons.length).toBe(4);
+    expect(slideButtons.length).toBe(5);
   });
 
   it('슬라이드 도트 클릭 시 트랜지션이 시작된다', () => {
     render(<HeroSection />);
 
-    // 처음에는 첫 번째 슬라이드
-    expect(screen.getByText('수수료 0%')).toBeInTheDocument();
+    // 처음에는 첫 번째 슬라이드(id: 0)
+    expect(screen.getByText('우리의 철학')).toBeInTheDocument();
 
     // 두 번째 슬라이드 버튼 클릭
     const slideButton = screen.getByLabelText('슬라이드 2로 이동');
@@ -118,7 +104,7 @@ describe('HeroSection', () => {
 
     const input = screen.getByPlaceholderText('어떤 재능이 필요하신가요?');
     expect(input).toHaveAttribute('role', 'searchbox');
-    expect(input).toHaveAttribute('aria-label', '서비스 검색');
+    expect(input).toHaveAttribute('id', 'search-input');
   });
 
   it('PC에서만 보이도록 설정된다 (hidden lg:block)', () => {

@@ -21,7 +21,7 @@ describe('CategorySort', () => {
   it('정렬 컴포넌트를 렌더링한다', () => {
     render(<CategorySort />);
 
-    expect(screen.getByText('정렬:')).toBeInTheDocument();
+    expect(screen.getByLabelText('서비스 정렬 방식 선택')).toBeInTheDocument();
   });
 
   it('정렬 셀렉트 박스를 렌더링한다', () => {
@@ -35,8 +35,8 @@ describe('CategorySort', () => {
 
     expect(screen.getByRole('option', { name: '인기순' })).toBeInTheDocument();
     expect(screen.getByRole('option', { name: '최신순' })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: '가격 낮은순' })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: '가격 높은순' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: '낮은가격' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: '높은가격' })).toBeInTheDocument();
     expect(screen.getByRole('option', { name: '평점순' })).toBeInTheDocument();
   });
 
