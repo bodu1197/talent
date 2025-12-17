@@ -352,18 +352,17 @@ export default function ServiceForm({
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    <label
-                      htmlFor="service-thumbnail"
-                      className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-brand-primary hover:bg-gray-50 transition-colors"
-                    >
+                    <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-brand-primary hover:bg-gray-50 transition-colors">
                       <CloudUpload className="w-10 h-10 text-gray-400 mb-2" />
                       <span className="text-sm text-gray-500">클릭하여 이미지 업로드</span>
                       <input
-                        id="service-thumbnail"
                         type="file"
-                        className="hidden"
+                        className="sr-only"
                         accept="image/*"
                         onChange={handleThumbnailChange}
+                        onClick={(e) => {
+                          (e.target as HTMLInputElement).value = '';
+                        }}
                         aria-label="썸네일 파일 선택"
                       />
                     </label>
