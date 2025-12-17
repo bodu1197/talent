@@ -270,7 +270,7 @@ export default function AdminCategoriesPage() {
                   </label>
                   <select
                     id="parent"
-                    value={formData.parent_id || ''}
+                    value={formData.parent_id ?? ''}
                     onChange={(e) =>
                       setFormData({
                         ...formData,

@@ -234,8 +234,8 @@ export default function AdminOrdersPage() {
                       <div className="flex items-center">
                         {order.service?.thumbnail_url && (
                           <img
-                            src={order.service.thumbnail_url || ''}
-                            alt={order.service?.title || ''}
+                            src={order.service.thumbnail_url ?? ''}
+                            alt={order.service?.title ?? ''}
                             className="w-10 h-10 rounded object-cover mr-3"
                           />
                         )}
@@ -259,9 +259,9 @@ export default function AdminOrdersPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getOrderStatusColor(order.status || '')}`}
+                        className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getOrderStatusColor(order.status ?? '')}`}
                       >
-                        {getOrderStatusLabel(order.status || '')}
+                        {getOrderStatusLabel(order.status ?? '')}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

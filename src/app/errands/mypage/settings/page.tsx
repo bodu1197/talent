@@ -38,8 +38,8 @@ export default function RequesterSettingsPage() {
   useEffect(() => {
     if (profile) {
       setSettings({
-        name: profile.name || '',
-        phone: profile.phone || '',
+        name: profile.name ?? '',
+        phone: profile.phone ?? '',
         defaultAddress: '',
         notifications: {
           push: true,

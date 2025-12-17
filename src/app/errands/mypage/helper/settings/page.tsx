@@ -69,8 +69,8 @@ export default function HelperSettingsPage() {
     if (profile) {
       setSettings((prev) => ({
         ...prev,
-        name: profile.name || '',
-        phone: profile.phone || '',
+        name: profile.name ?? '',
+        phone: profile.phone ?? '',
       }));
       setLoading(false);
     }

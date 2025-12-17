@@ -341,7 +341,7 @@ export default function ChatListClient({ userId, sellerId: _sellerId }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           room_id: selectedRoomId,
-          message: messageText || '',
+          message: messageText ?? '',
           file_url: fileUrl || null,
           file_name: fileName || null,
           file_size: fileSize || null,

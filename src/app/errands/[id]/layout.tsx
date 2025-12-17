@@ -29,7 +29,7 @@ export async function generateMetadata({
   };
 
   const categoryName = categoryLabels[errand.category] || '심부름';
-  const description = `${errand.pickup_address || ''}에서 ${categoryName} 심부름 요청. 돌파구에서 빠르게 헬퍼를 찾아보세요.`;
+  const description = `${errand.pickup_address ?? ''}에서 ${categoryName} 심부름 요청. 돌파구에서 빠르게 헬퍼를 찾아보세요.`;
 
   return {
     title: `${errand.title || categoryName + ' 심부름'} | 돌파구`,

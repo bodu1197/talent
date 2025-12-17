@@ -535,7 +535,7 @@ export default function NewErrandPage() {
   // 배달 데이터 생성
   const buildDeliveryData = (): CreateErrandRequest => ({
     ...formData,
-    title: formData.title || '',
+    title: formData.title ?? '',
     category: formData.category || 'DELIVERY',
     pickup_address: pickup.address,
     pickup_detail: pickup.detail || undefined,
@@ -559,7 +559,7 @@ export default function NewErrandPage() {
     const isSpecific = shoppingRange === 'SPECIFIC';
     return {
       ...formData,
-      title: formData.title || '',
+      title: formData.title ?? '',
       category: 'SHOPPING',
       pickup_address: isSpecific ? shoppingLocation.address : delivery.address,
       pickup_detail: isSpecific ? shoppingLocation.detail : undefined,
@@ -799,7 +799,7 @@ export default function NewErrandPage() {
                         {stop.address && (
                           <input
                             type="text"
-                            value={stop.address_detail || ''}
+                            value={stop.address_detail ?? ''}
                             onChange={(e) => updateStop(index, 'address_detail', e.target.value)}
                             placeholder="상세주소"
                             className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm mb-2"
@@ -811,7 +811,7 @@ export default function NewErrandPage() {
                             <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                             <input
                               type="text"
-                              value={stop.recipient_name || ''}
+                              value={stop.recipient_name ?? ''}
                               onChange={(e) => updateStop(index, 'recipient_name', e.target.value)}
                               placeholder="수령인"
                               className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm"
@@ -821,7 +821,7 @@ export default function NewErrandPage() {
                             <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                             <input
                               type="text"
-                              value={stop.recipient_phone || ''}
+                              value={stop.recipient_phone ?? ''}
                               onChange={(e) => updateStop(index, 'recipient_phone', e.target.value)}
                               placeholder="연락처"
                               className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm"
@@ -905,7 +905,7 @@ export default function NewErrandPage() {
                     {shoppingLocation.address && (
                       <input
                         type="text"
-                        value={shoppingLocation.detail || ''}
+                        value={shoppingLocation.detail ?? ''}
                         onChange={(e) =>
                           setShoppingLocation((prev) => ({ ...prev, detail: e.target.value }))
                         }
@@ -1064,14 +1064,14 @@ export default function NewErrandPage() {
                 id="errand-title"
                 type="text"
                 name="title"
-                value={formData.title || ''}
+                value={formData.title ?? ''}
                 onChange={handleChange}
                 placeholder="예: 편의점에서 물건 가져다주세요"
                 className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm mb-3"
               />
               <textarea
                 name="description"
-                value={formData.description || ''}
+                value={formData.description ?? ''}
                 onChange={handleChange}
                 rows={3}
                 placeholder="상세 설명 (선택)"

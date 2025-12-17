@@ -44,7 +44,7 @@ export default function AdminReviewsPage() {
   const filteredReviews = reviews.filter((review) => {
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      const reviewComment = review.comment || '';
+      const reviewComment = review.comment ?? '';
       return (
         reviewComment.toLowerCase().includes(query) ||
         review.buyer?.name?.toLowerCase().includes(query) ||

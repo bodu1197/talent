@@ -224,7 +224,7 @@ export default function ErrandApplyPage() {
                   <input
                     id="proposed-price"
                     type="number"
-                    value={proposedPrice || ''}
+                    value={proposedPrice ?? ''}
                     onChange={(e) =>
                       setProposedPrice(e.target.value ? Number.parseInt(e.target.value, 10) : null)
                     }

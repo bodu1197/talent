@@ -66,9 +66,9 @@ async function verifyIdentityWithServer(identityVerificationId: string) {
   }
 
   return {
-    name: result.name || '',
-    phone: result.phone || '',
-    birthDate: result.birthDate || '',
+    name: result.name ?? '',
+    phone: result.phone ?? '',
+    birthDate: result.birthDate ?? '',
     gender: convertGenderFromApi(result.gender),
   };
 }
@@ -326,7 +326,7 @@ export default function ErrandRiderRegisterPage() {
       submitData.append('bank_name', formData.bank_name);
       submitData.append('bank_account', formData.bank_account);
       submitData.append('account_holder', formData.account_holder);
-      submitData.append('bio', formData.bio || '');
+      submitData.append('bio', formData.bio ?? '');
 
       if (formData.id_card.file) {
         submitData.append('id_card', formData.id_card.file);

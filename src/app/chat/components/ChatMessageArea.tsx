@@ -210,7 +210,7 @@ export default function ChatMessageArea({
               {!isMine && (
                 <ProfileImage
                   src={sender?.profile_image}
-                  alt={sender?.name || ''}
+                  alt={sender?.name ?? ''}
                   size={32}
                   className="flex-shrink-0"
                 />

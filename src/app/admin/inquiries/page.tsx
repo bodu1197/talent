@@ -76,7 +76,7 @@ export default function AdminInquiriesPage() {
 
   function openDetailModal(inquiry: Inquiry) {
     setSelectedInquiry(inquiry);
-    setReplyContent(inquiry.admin_reply || '');
+    setReplyContent(inquiry.admin_reply ?? '');
   }
 
   async function handleReply() {

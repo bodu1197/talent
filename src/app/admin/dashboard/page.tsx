@@ -158,9 +158,9 @@ export default function AdminDashboardPage() {
                       {order.service?.title || order.title}
                     </span>
                     <span
-                      className={`px-2 py-1 rounded text-xs font-medium ${getOrderStatusColor(order.status || '')}`}
+                      className={`px-2 py-1 rounded text-xs font-medium ${getOrderStatusColor(order.status ?? '')}`}
                     >
-                      {getOrderStatusLabel(order.status || '')}
+                      {getOrderStatusLabel(order.status ?? '')}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm text-gray-600">
