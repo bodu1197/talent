@@ -1,6 +1,7 @@
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
 import { cryptoShuffleArray } from '@/lib/utils/crypto-shuffle';
+import { buildRatingMap } from '@/lib/services/service-helpers';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 interface SellerInfo {
@@ -54,23 +55,6 @@ export interface SearchResult {
   services: ServiceWithRating[];
   experts: ExpertWithStats[];
   portfolios: PortfolioResult[];
-}
-
-// Helper: Build rating map from review stats
-function buildRatingMap(
-  reviewStats: Array<{ service_id: string; rating: number }> | null
-): Map<string, { sum: number; count: number }> {
-  const ratingMap = new Map<string, { sum: number; count: number }>();
-  if (!reviewStats) return ratingMap;
-
-  for (const review of reviewStats) {
-    const current = ratingMap.get(review.service_id) || { sum: 0, count: 0 };
-    ratingMap.set(review.service_id, {
-      sum: current.sum + review.rating,
-      count: current.count + 1,
-    });
-  }
-  return ratingMap;
 }
 
 // Helper: Extract first seller from Supabase array response
