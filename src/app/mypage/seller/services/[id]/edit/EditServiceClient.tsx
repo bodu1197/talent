@@ -73,21 +73,48 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
   };
 
   // Helper: Update Active Service via Revisions
+  // If a pending revision already exists, update it. Otherwise, create a new one.
   const updateActiveServiceRevision = async (
     supabase: ReturnType<typeof createClient>,
     baseData: Record<string, unknown>,
     sellerId: string,
     serviceId: string
   ) => {
-    const { error } = await supabase.from('service_revisions').insert({
-      service_id: serviceId,
-      seller_id: sellerId,
-      ...baseData,
-      status: 'pending',
-      revision_note: '서비스 정보 수정',
-    });
-    if (error) throw error;
-    toast.success('수정 요청이 제출되었습니다. 관리자 승인 후 반영됩니다.');
+    // First, check if there's already a pending revision for this service
+    const { data: existingRevision } = await supabase
+      .from('service_revisions')
+      .select('id')
+      .eq('service_id', serviceId)
+      .eq('seller_id', sellerId)
+      .eq('status', 'pending')
+      .single();
+
+    if (existingRevision) {
+      // Update the existing pending revision
+      const { error } = await supabase
+        .from('service_revisions')
+        .update({
+          ...baseData,
+          revision_note: '서비스 정보 수정 (재수정)',
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', existingRevision.id);
+
+      if (error) throw error;
+      toast.success('수정 요청이 업데이트되었습니다. 관리자 승인 후 반영됩니다.');
+    } else {
+      // Create a new revision
+      const { error } = await supabase.from('service_revisions').insert({
+        service_id: serviceId,
+        seller_id: sellerId,
+        ...baseData,
+        status: 'pending',
+        revision_note: '서비스 정보 수정',
+      });
+
+      if (error) throw error;
+      toast.success('수정 요청이 제출되었습니다. 관리자 승인 후 반영됩니다.');
+    }
   };
 
   // Helper: Update Inactive Service directly
@@ -171,7 +198,9 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
         );
       }
 
-      if (data.category) {
+      // Only update categories for inactive services
+      // Active services don't directly modify categories - handled via revision approval
+      if (data.category && service.status !== 'active') {
         await updateServiceCategories(supabase, service.id, data.category);
       }
 
