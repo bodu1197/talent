@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
+import { createServiceRoleClient } from '@/lib/supabase/server';
 import { logServerError } from '@/lib/rollbar/server';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { requireLogin, getUserProfileId } from '@/lib/api/auth';
@@ -163,14 +163,16 @@ async function updateErrandToMatched(
 export async function POST(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const supabase = await createClient();
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    // 사용자 인증 확인
+    const authResult = await requireLogin();
+    if (!authResult.success) {
+      return authResult.error!;
+    }
 
-    if (!user) {
-      return NextResponse.json({ error: '로그인이 필요합니다' }, { status: 401 });
+    const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
     }
 
     // 헬퍼 프로필 확인

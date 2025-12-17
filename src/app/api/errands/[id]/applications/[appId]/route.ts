@@ -1,26 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import { logServerError } from '@/lib/rollbar/server';
 import { SupabaseClient } from '@supabase/supabase-js';
+import { requireLogin } from '@/lib/api/auth';
 
 interface RouteParams {
   params: Promise<{ id: string; appId: string }>;
-}
-
-// 공통: 인증된 사용자 확인
-async function getAuthenticatedUser(supabase: SupabaseClient) {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return {
-      user: null,
-      error: NextResponse.json({ error: '로그인이 필요합니다' }, { status: 401 }),
-    };
-  }
-
-  return { user, error: null };
 }
 
 // 지원 수락 처리
@@ -98,13 +82,21 @@ async function handleRejectApplication(
 }
 
 // 지원 수락/거절 (요청자)
+// eslint-disable-next-line sonarjs/cognitive-complexity -- 지원 수락/거절 검증 로직으로 인한 예외 처리
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
     const { id, appId } = await params;
-    const supabase = await createClient();
 
-    const { user, error: authError } = await getAuthenticatedUser(supabase);
-    if (authError) return authError;
+    // 사용자 인증 확인
+    const authResult = await requireLogin();
+    if (!authResult.success) {
+      return authResult.error!;
+    }
+
+    const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
+    }
 
     // 현재 사용자의 profile.id 조회
     const { data: userProfile } = await supabase
@@ -185,10 +177,17 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
     const { id, appId } = await params;
-    const supabase = await createClient();
 
-    const { user, error: authError } = await getAuthenticatedUser(supabase);
-    if (authError) return authError;
+    // 사용자 인증 확인
+    const authResult = await requireLogin();
+    if (!authResult.success) {
+      return authResult.error!;
+    }
+
+    const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
+    }
 
     // 헬퍼 프로필 확인
     const { data: helperProfile } = await supabase
