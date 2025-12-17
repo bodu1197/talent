@@ -99,7 +99,6 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
         .update({
           ...baseData,
           revision_note: '서비스 정보 수정 (재수정)',
-          updated_at: new Date().toISOString(),
         })
         .eq('id', existingRevision.id);
 
