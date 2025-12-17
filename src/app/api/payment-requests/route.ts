@@ -1,17 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
+import { createServiceRoleClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
+import { requireAuth } from '@/lib/api/auth';
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    const authResult = await requireAuth();
+    if (!authResult.success) {
+      return authResult.error!;
+    }
 
-    if (authError || !user) {
-      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
+    const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
     }
 
     const body = await request.json();
@@ -93,14 +94,14 @@ export async function POST(request: NextRequest) {
 // GET: 결제 요청 목록 조회
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    const authResult = await requireAuth();
+    if (!authResult.success) {
+      return authResult.error!;
+    }
 
-    if (authError || !user) {
-      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
+    const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
