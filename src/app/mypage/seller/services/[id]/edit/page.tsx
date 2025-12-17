@@ -28,6 +28,19 @@ async function fetchService(supabase: SupabaseClient, id: string, sellerId: stri
   return service;
 }
 
+// Helper function to fetch pending revision
+async function fetchPendingRevision(supabase: SupabaseClient, serviceId: string, sellerId: string) {
+  const { data: revision } = await supabase
+    .from('service_revisions')
+    .select('*')
+    .eq('service_id', serviceId)
+    .eq('seller_id', sellerId)
+    .eq('status', 'pending')
+    .single();
+
+  return revision;
+}
+
 // Helper function to fetch category hierarchy
 async function fetchCategoryHierarchy(
   supabase: SupabaseClient,
@@ -90,6 +103,59 @@ async function fetchCategoryHierarchy(
   };
 }
 
+// Helper function to fetch revision category hierarchy
+async function fetchRevisionCategoryHierarchy(
+  supabase: SupabaseClient,
+  revisionId: string
+): Promise<{
+  level1: string | null;
+  level2: string | null;
+  level3: string | null;
+} | null> {
+  const { data: revisionCategories } = await supabase
+    .from('service_revision_categories')
+    .select('category_id')
+    .eq('revision_id', revisionId)
+    .single();
+
+  if (!revisionCategories || !('category_id' in revisionCategories)) {
+    return null;
+  }
+
+  const categoryId = revisionCategories.category_id as string;
+
+  // Get category hierarchy from revision category
+  const { data: category } = await supabase
+    .from('categories')
+    .select('id, level, parent_id')
+    .eq('id', categoryId)
+    .single();
+
+  if (!category) {
+    return null;
+  }
+
+  // Build hierarchy by traversing parents
+  const { data: pathData } = await supabase.rpc('get_category_path', {
+    p_category_id: category.id,
+  });
+
+  if (!pathData || !Array.isArray(pathData)) {
+    return null;
+  }
+
+  const path = pathData as Array<{ id: string; level: number; parent_id: string | null }>;
+  const level1Cat = path.find((c) => c.level === 1);
+  const level2Cat = path.find((c) => c.level === 2);
+  const level3Cat = path.find((c) => c.level === 3);
+
+  return {
+    level1: level1Cat?.id || null,
+    level2: level2Cat?.id || null,
+    level3: level3Cat?.id || null,
+  };
+}
+
 export default async function EditServicePage({
   params,
 }: {
@@ -101,12 +167,39 @@ export default async function EditServicePage({
   // Fetch service
   const service = await fetchService(supabase, id, seller.id);
 
-  // Fetch category hierarchy
-  const categoryHierarchy = await fetchCategoryHierarchy(supabase, service);
+  // For active services, check if there's a pending revision
+  let serviceToEdit = service;
+  let categoryHierarchy = await fetchCategoryHierarchy(supabase, service);
+
+  if (service.status === 'active') {
+    const pendingRevision = await fetchPendingRevision(supabase, id, seller.id);
+
+    if (pendingRevision) {
+      // Use pending revision data instead of service data
+      serviceToEdit = {
+        ...service,
+        title: pendingRevision.title,
+        description: pendingRevision.description,
+        thumbnail_url: pendingRevision.thumbnail_url,
+        price: pendingRevision.price,
+        delivery_days: pendingRevision.delivery_days,
+        revision_count: pendingRevision.revision_count,
+      };
+
+      // Fetch category hierarchy from pending revision
+      const revisionCategoryHierarchy = await fetchRevisionCategoryHierarchy(
+        supabase,
+        pendingRevision.id
+      );
+      if (revisionCategoryHierarchy) {
+        categoryHierarchy = revisionCategoryHierarchy;
+      }
+    }
+  }
 
   return (
     <EditServiceClient
-      service={service}
+      service={serviceToEdit}
       sellerId={seller.id}
       categoryHierarchy={categoryHierarchy}
     />

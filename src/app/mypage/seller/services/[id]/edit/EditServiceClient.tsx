@@ -78,7 +78,8 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
     supabase: ReturnType<typeof createClient>,
     baseData: Record<string, unknown>,
     sellerId: string,
-    serviceId: string
+    serviceId: string,
+    categoryId: string | null
   ) => {
     // First, check if there's already a pending revision for this service
     const { data: existingRevision } = await supabase
@@ -88,6 +89,8 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
       .eq('seller_id', sellerId)
       .eq('status', 'pending')
       .single();
+
+    let revisionId: string;
 
     if (existingRevision) {
       // Update the existing pending revision
@@ -101,19 +104,42 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
         .eq('id', existingRevision.id);
 
       if (error) throw error;
+      revisionId = existingRevision.id;
       toast.success('수정 요청이 업데이트되었습니다. 관리자 승인 후 반영됩니다.');
     } else {
       // Create a new revision
-      const { error } = await supabase.from('service_revisions').insert({
-        service_id: serviceId,
-        seller_id: sellerId,
-        ...baseData,
-        status: 'pending',
-        revision_note: '서비스 정보 수정',
+      const { data: newRevision, error } = await supabase
+        .from('service_revisions')
+        .insert({
+          service_id: serviceId,
+          seller_id: sellerId,
+          ...baseData,
+          status: 'pending',
+          revision_note: '서비스 정보 수정',
+        })
+        .select('id')
+        .single();
+
+      if (error || !newRevision) throw error;
+      revisionId = newRevision.id;
+      toast.success('수정 요청이 제출되었습니다. 관리자 승인 후 반영됩니다.');
+    }
+
+    // Handle category for this revision
+    if (categoryId) {
+      // Delete existing categories for this revision
+      await supabase.from('service_revision_categories').delete().eq('revision_id', revisionId);
+
+      // Insert new category
+      const { error: categoryError } = await supabase.from('service_revision_categories').insert({
+        revision_id: revisionId,
+        category_id: categoryId,
       });
 
-      if (error) throw error;
-      toast.success('수정 요청이 제출되었습니다. 관리자 승인 후 반영됩니다.');
+      if (categoryError) {
+        logger.error('Failed to save revision category:', categoryError);
+        throw categoryError;
+      }
     }
   };
 
@@ -172,14 +198,56 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
     if (upsertError) throw upsertError;
   };
 
+  // Helper: Get existing category for preservation
+  const getExistingCategory = async (
+    supabase: ReturnType<typeof createClient>,
+    serviceId: string,
+    sellerId: string
+  ): Promise<string | null> => {
+    // Try to get category from pending revision first
+    const { data: existingRevision } = await supabase
+      .from('service_revisions')
+      .select('id')
+      .eq('service_id', serviceId)
+      .eq('seller_id', sellerId)
+      .eq('status', 'pending')
+      .single();
+
+    if (existingRevision) {
+      const { data: revisionCategories } = await supabase
+        .from('service_revision_categories')
+        .select('category_id')
+        .eq('revision_id', existingRevision.id)
+        .single();
+
+      if (revisionCategories) {
+        return revisionCategories.category_id;
+      }
+    }
+
+    // If no revision category, get from original service
+    const { data: serviceCategories } = await supabase
+      .from('service_categories')
+      .select('category_id')
+      .eq('service_id', serviceId)
+      .limit(1)
+      .single();
+
+    return serviceCategories?.category_id || null;
+  };
+
   const handleSubmit = async (data: ServiceFormState, publicThumbnailUrl: string | null) => {
     try {
       const supabase = createClient();
       const baseData = prepareServiceData(data, publicThumbnailUrl);
 
       if (service.status === 'active') {
+        // For active services, determine category to save
+        const categoryToSave =
+          data.category || (await getExistingCategory(supabase, service.id, sellerId));
+
         // service_revisions lacks extra fields
-        await updateActiveServiceRevision(supabase, baseData, sellerId, service.id);
+        await updateActiveServiceRevision(supabase, baseData, sellerId, service.id, categoryToSave);
       } else {
         // services table includes extra fields
         const extendedData = {
@@ -196,12 +264,12 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
           service.id,
           service.status || 'pending'
         );
-      }
 
-      // Only update categories for inactive services
-      // Active services don't directly modify categories - handled via revision approval
-      if (data.category && service.status !== 'active') {
-        await updateServiceCategories(supabase, service.id, data.category);
+        // Only update categories for inactive services
+        // Active services don't directly modify categories - handled via revision approval
+        if (data.category) {
+          await updateServiceCategories(supabase, service.id, data.category);
+        }
       }
 
       globalThis.location.href = '/mypage/seller/services';
