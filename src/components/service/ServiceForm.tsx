@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { createClient } from '@/lib/supabase/client';
 import { logger } from '@/lib/logger';
@@ -107,6 +107,9 @@ export default function ServiceForm({
   const originalThumbnailUrl = initialData?.thumbnailPreview || null; // For restore
 
   // --- Category Logic ---
+  // Track if this is the initial mount to avoid resetting categories
+  const isInitialMount = useRef(true);
+
   useEffect(() => {
     async function fetchLevel1Categories() {
       try {
@@ -129,10 +132,18 @@ export default function ServiceForm({
     fetchLevel1Categories();
   }, []);
 
+  // Fetch level 2 categories when level 1 changes
   useEffect(() => {
     if (!selectedLevel1) {
       setLevel2Categories([]);
-      setSelectedLevel2('');
+      // Only reset selection if not initial mount with initial values
+      if (!isInitialMount.current || !initialCategoryHierarchy?.level2) {
+        setSelectedLevel2('');
+      }
+      // If no level2 in initial hierarchy, mark initial mount complete
+      if (isInitialMount.current && !initialCategoryHierarchy?.level2) {
+        isInitialMount.current = false;
+      }
       return;
     }
     async function fetchLevel2() {
@@ -144,14 +155,23 @@ export default function ServiceForm({
         .eq('parent_id', selectedLevel1)
         .order('display_order');
       setLevel2Categories(data || []);
+
+      // If no level3 in initial hierarchy, mark initial mount complete after level2 loads
+      if (isInitialMount.current && !initialCategoryHierarchy?.level3) {
+        isInitialMount.current = false;
+      }
     }
     fetchLevel2();
   }, [selectedLevel1]);
 
+  // Fetch level 3 categories when level 2 changes
   useEffect(() => {
     if (!selectedLevel2) {
       setLevel3Categories([]);
-      setSelectedLevel3('');
+      // Only reset selection if not initial mount with initial values
+      if (!isInitialMount.current || !initialCategoryHierarchy?.level3) {
+        setSelectedLevel3('');
+      }
       return;
     }
     async function fetchLevel3() {
@@ -163,6 +183,11 @@ export default function ServiceForm({
         .eq('parent_id', selectedLevel2)
         .order('display_order');
       setLevel3Categories(data || []);
+
+      // Mark initial mount as complete after level 3 is loaded
+      if (isInitialMount.current) {
+        isInitialMount.current = false;
+      }
     }
     fetchLevel3();
   }, [selectedLevel2]);
