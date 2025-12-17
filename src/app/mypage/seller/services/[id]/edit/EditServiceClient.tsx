@@ -124,6 +124,7 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
 
     if (deleteError) {
       logger.error('Error deleting old categories:', deleteError);
+      throw deleteError;
     }
 
     // Insert new category
