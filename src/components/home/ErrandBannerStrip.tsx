@@ -48,7 +48,7 @@ export default function ErrandBannerStrip() {
   // 스크롤 감지하여 애니메이션 트리거
   useEffect(() => {
     // 모바일에서는 애니메이션 기능 끄기
-    if (typeof globalThis.window !== 'undefined' && globalThis.window.innerWidth < 768) return;
+    if (globalThis.window !== undefined && globalThis.window.innerWidth < 768) return;
 
     let observer: IntersectionObserver | null = null;
     let startTimeout: NodeJS.Timeout | null = null;

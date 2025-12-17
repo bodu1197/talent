@@ -687,9 +687,7 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                       <p className="text-xs text-green-700">
                         <CheckCircle className="w-3 h-3 inline mr-1" />
                         예금주:{' '}
-                        {String(
-                          bankAccountVerification.data?.holderName ?? profile.account_holder ?? ''
-                        )}
+                        {`${bankAccountVerification.data?.holderName ?? profile.account_holder ?? ''}`}
                       </p>
                     </div>
                   )}
@@ -771,18 +769,16 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
                         </p>
                         <div className="text-xs text-green-700 space-y-1">
                           {businessVerification.data.businessName ? (
-                            <p>상호: {String(businessVerification.data.businessName ?? '')}</p>
+                            <p>상호: {`${businessVerification.data.businessName}`}</p>
                           ) : null}
                           {businessVerification.data.representativeName ? (
-                            <p>
-                              대표자: {String(businessVerification.data.representativeName ?? '')}
-                            </p>
+                            <p>대표자: {`${businessVerification.data.representativeName}`}</p>
                           ) : null}
                           <p>
                             상태:{' '}
                             {businessVerification.data.isActive
                               ? '정상 영업 중'
-                              : String(businessVerification.data.status ?? '확인됨')}
+                              : `${businessVerification.data.status ?? '확인됨'}`}
                           </p>
                         </div>
                       </div>
