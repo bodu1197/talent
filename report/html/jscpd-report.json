@@ -1,6 +1,6 @@
 {
   "statistics": {
-    "detectionDate": "2025-12-17T08:51:38.794Z",
+    "detectionDate": "2025-12-17T09:35:47.422Z",
     "formats": {
       "javascript": {
         "sources": {
@@ -2825,8 +2825,8 @@
             "newClones": 0
           },
           "src/components/home/ThirdHeroBanner.tsx": {
-            "lines": 11,
-            "tokens": 92,
+            "lines": 9,
+            "tokens": 94,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -3017,8 +3017,8 @@
             "newClones": 0
           },
           "src/components/errands/LocationHeroBanner.tsx": {
-            "lines": 11,
-            "tokens": 88,
+            "lines": 9,
+            "tokens": 90,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -3125,8 +3125,8 @@
             "newClones": 0
           },
           "src/components/common/PolicyLayout.tsx": {
-            "lines": 43,
-            "tokens": 454,
+            "lines": 45,
+            "tokens": 460,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -3137,8 +3137,8 @@
             "newClones": 0
           },
           "src/components/common/Icons.tsx": {
-            "lines": 156,
-            "tokens": 1088,
+            "lines": 104,
+            "tokens": 1084,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -3630,8 +3630,8 @@
           }
         },
         "total": {
-          "lines": 24686,
-          "tokens": 199553,
+          "lines": 24632,
+          "tokens": 199559,
           "sources": 302,
           "clones": 8,
           "duplicatedLines": 508,
@@ -3645,8 +3645,8 @@
       "tsx": {
         "sources": {
           "src/app/mypage/seller/services/[id]/edit/page.tsx": {
-            "lines": 81,
-            "tokens": 670,
+            "lines": 100,
+            "tokens": 891,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -5973,14 +5973,14 @@
             "newClones": 0
           },
           "src/app/admin/orders/page.tsx": {
-            "lines": 219,
-            "tokens": 1818,
+            "lines": 217,
+            "tokens": 1816,
             "sources": 1,
             "clones": 1,
             "duplicatedLines": 17,
             "duplicatedTokens": 114,
-            "percentage": 7.76,
-            "percentageTokens": 6.27,
+            "percentage": 7.83,
+            "percentageTokens": 6.28,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -6970,7 +6970,7 @@
           },
           "src/components/home/ThirdHeroBanner.tsx": {
             "lines": 87,
-            "tokens": 564,
+            "tokens": 568,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -6996,11 +6996,11 @@
             "lines": 479,
             "tokens": 4278,
             "sources": 1,
-            "clones": 4,
-            "duplicatedLines": 20,
-            "duplicatedTokens": 260,
-            "percentage": 4.18,
-            "percentageTokens": 6.08,
+            "clones": 5,
+            "duplicatedLines": 30,
+            "duplicatedTokens": 325,
+            "percentage": 6.26,
+            "percentageTokens": 7.6,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -7197,8 +7197,8 @@
             "newClones": 0
           },
           "src/components/errands/LocationHeroBanner.tsx": {
-            "lines": 104,
-            "tokens": 773,
+            "lines": 106,
+            "tokens": 785,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -7317,8 +7317,8 @@
             "newClones": 0
           },
           "src/components/common/PolicyLayout.tsx": {
-            "lines": 89,
-            "tokens": 789,
+            "lines": 91,
+            "tokens": 795,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -7341,14 +7341,14 @@
             "newClones": 0
           },
           "src/components/common/Icons.tsx": {
-            "lines": 182,
-            "tokens": 1254,
+            "lines": 129,
+            "tokens": 1250,
             "sources": 1,
-            "clones": 2,
-            "duplicatedLines": 22,
-            "duplicatedTokens": 134,
-            "percentage": 12.09,
-            "percentageTokens": 10.69,
+            "clones": 1,
+            "duplicatedLines": 10,
+            "duplicatedTokens": 65,
+            "percentage": 7.75,
+            "percentageTokens": 5.2,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -7365,8 +7365,8 @@
             "newClones": 0
           },
           "src/components/common/GradientCategoryBanner.tsx": {
-            "lines": 185,
-            "tokens": 1535,
+            "lines": 179,
+            "tokens": 1521,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -7906,12 +7906,12 @@
           }
         },
         "total": {
-          "lines": 62398,
-          "tokens": 508306,
+          "lines": 62360,
+          "tokens": 508529,
           "sources": 355,
           "clones": 173,
-          "duplicatedLines": 2280,
-          "duplicatedTokens": 18402,
+          "duplicatedLines": 2279,
+          "duplicatedTokens": 18400,
           "percentage": 3.65,
           "percentageTokens": 3.62,
           "newDuplicatedLines": 0,
@@ -10268,12 +10268,12 @@
       }
     },
     "total": {
-      "lines": 112291,
-      "tokens": 915774,
+      "lines": 112199,
+      "tokens": 916003,
       "sources": 850,
       "clones": 286,
-      "duplicatedLines": 3961,
-      "duplicatedTokens": 34451,
+      "duplicatedLines": 3960,
+      "duplicatedTokens": 34449,
       "percentage": 3.53,
       "percentageTokens": 3.76,
       "newDuplicatedLines": 0,
@@ -20111,37 +20111,37 @@
     },
     {
       "format": "tsx",
-      "lines": 12,
-      "fragment": "}: IconProps) => (\r\n  <svg\r\n    className={className}\r\n    fill=\"none\"\r\n    viewBox=\"0 0 24 24\"\r\n    stroke=\"currentColor\"\r\n    strokeWidth={2}\r\n  >\r\n    <path\r\n      strokeLinecap=\"round\"\r\n      strokeLinejoin=\"round\"\r\n      d=\"M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z",
+      "lines": 11,
+      "fragment": ">\r\n    <path strokeLinecap=\"round\" strokeLinejoin=\"round\" d=\"M15 10.5a3 3 0 11-6 0 3 3 0 016 0z\" />\r\n    <path\r\n      strokeLinecap=\"round\"\r\n      strokeLinejoin=\"round\"\r\n      d=\"M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z\"\r\n    />\r\n  </svg>\r\n);\r\n\r\n// This matches LocationInputSection MapPinIcon (Filled/Solid style paths)",
       "tokens": 0,
       "firstFile": {
         "name": "src\\components\\common\\Icons.tsx",
-        "start": 87,
-        "end": 98,
+        "start": 62,
+        "end": 72,
         "startLoc": {
-          "line": 87,
+          "line": 62,
           "column": 2,
-          "position": 593
+          "position": 511
         },
         "endLoc": {
-          "line": 98,
-          "column": 83,
-          "position": 660
+          "line": 72,
+          "column": 75,
+          "position": 576
         }
       },
       "secondFile": {
-        "name": "src\\components\\common\\Icons.tsx",
-        "start": 65,
-        "end": 76,
+        "name": "src\\components\\home\\SecondHeroBanner.tsx",
+        "start": 96,
+        "end": 106,
         "startLoc": {
-          "line": 65,
-          "column": 2,
-          "position": 467
+          "line": 96,
+          "column": 3,
+          "position": 881
         },
         "endLoc": {
-          "line": 76,
-          "column": 35,
-          "position": 534
+          "line": 106,
+          "column": 6,
+          "position": 946
         }
       }
     },

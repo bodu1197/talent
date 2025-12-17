@@ -10,7 +10,7 @@ async function fetchService(supabase: SupabaseClient, id: string, sellerId: stri
     .select(
       `
       *,
-      service_categories(category_id)
+      service_categories(category_id, is_primary)
     `
     )
     .eq('id', id)
@@ -27,29 +27,48 @@ async function fetchService(supabase: SupabaseClient, id: string, sellerId: stri
 // Helper function to fetch category hierarchy
 async function fetchCategoryHierarchy(
   supabase: SupabaseClient,
-  service: { readonly service_categories: Array<{ category_id: string }> }
+  service: { readonly service_categories: Array<{ category_id: string; is_primary?: boolean }> }
 ) {
   if (!service.service_categories || service.service_categories.length === 0) {
     return null;
   }
 
-  // Get all category IDs
-  const categoryIds = service.service_categories.map((sc) => sc.category_id);
+  // Find primary category or use the first one
+  const primaryCat =
+    service.service_categories.find((sc) => sc.is_primary) || service.service_categories[0];
+  const leafCategoryId = primaryCat.category_id;
 
-  // Fetch all categories
-  const { data: categories } = await supabase
-    .from('categories')
-    .select('id, name, level, parent_id')
-    .in('id', categoryIds);
+  // 1. Try to get path via RPC
+  const { data: pathData, error: rpcError } = await supabase.rpc('get_category_path', {
+    p_category_id: leafCategoryId,
+  });
 
-  if (!categories || categories.length === 0) {
-    return null;
+  let path: Array<{ id: string; level: number; parent_id: string | null }> = [];
+
+  if (!rpcError && pathData) {
+    path = pathData;
+  } else {
+    // 2. Fallback: Iteratively fetch parents if RPC fails
+    let currentId: string | null = leafCategoryId;
+    // Max depth 5 to prevent infinite loops
+    for (let i = 0; i < 5; i++) {
+      if (!currentId) break;
+      const { data: cat } = await supabase
+        .from('categories')
+        .select('id, level, parent_id')
+        .eq('id', currentId)
+        .single();
+
+      if (!cat) break;
+      path.unshift(cat); // Add to beginning (parent first)
+      currentId = cat.parent_id;
+    }
   }
 
-  // Find categories by level
-  const level1Cat = categories.find((c) => c.level === 1);
-  const level2Cat = categories.find((c) => c.level === 2);
-  const level3Cat = categories.find((c) => c.level === 3);
+  // Find categories by level from the full path
+  const level1Cat = path.find((c) => c.level === 1);
+  const level2Cat = path.find((c) => c.level === 2);
+  const level3Cat = path.find((c) => c.level === 3);
 
   return {
     level1: level1Cat?.id || null,
