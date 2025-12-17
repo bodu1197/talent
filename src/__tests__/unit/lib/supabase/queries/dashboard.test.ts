@@ -354,11 +354,13 @@ describe('Supabase Queries - Dashboard', () => {
         eq: vi.fn().mockResolvedValue({ data: mockOrders, error: null }),
       };
 
-      vi.mocked(createClient).mockResolvedValue({
+      const mockSupabase = {
         from: vi.fn(() => mockQuery),
-      } as unknown as Awaited<ReturnType<typeof createClient>>);
+      } as unknown as Awaited<ReturnType<typeof createClient>>;
 
-      const result = await getSellerDashboardStats('seller-123');
+      vi.mocked(createClient).mockResolvedValue(mockSupabase);
+
+      const result = await getSellerDashboardStats(mockSupabase, 'seller-123');
 
       expect(result.newOrders).toBe(1);
       expect(result.inProgressOrders).toBe(1);
@@ -373,11 +375,13 @@ describe('Supabase Queries - Dashboard', () => {
         eq: vi.fn().mockResolvedValue({ data: [], error: null }),
       };
 
-      vi.mocked(createClient).mockResolvedValue({
+      const mockSupabase = {
         from: vi.fn(() => mockQuery),
-      } as unknown as Awaited<ReturnType<typeof createClient>>);
+      } as unknown as Awaited<ReturnType<typeof createClient>>;
 
-      const result = await getSellerDashboardStats('seller-123');
+      vi.mocked(createClient).mockResolvedValue(mockSupabase);
+
+      const result = await getSellerDashboardStats(mockSupabase, 'seller-123');
 
       expect(result.newOrders).toBe(0);
       expect(result.inProgressOrders).toBe(0);
@@ -394,11 +398,13 @@ describe('Supabase Queries - Dashboard', () => {
         eq: vi.fn().mockResolvedValue({ data: null, error: mockError }),
       };
 
-      vi.mocked(createClient).mockResolvedValue({
+      const mockSupabase = {
         from: vi.fn(() => mockQuery),
-      } as unknown as Awaited<ReturnType<typeof createClient>>);
+      } as unknown as Awaited<ReturnType<typeof createClient>>;
 
-      const result = await getSellerDashboardStats('seller-123');
+      vi.mocked(createClient).mockResolvedValue(mockSupabase);
+
+      const result = await getSellerDashboardStats(mockSupabase, 'seller-123');
 
       expect(result.newOrders).toBe(0);
       expect(result.inProgressOrders).toBe(0);
@@ -436,11 +442,13 @@ describe('Supabase Queries - Dashboard', () => {
         limit: vi.fn().mockResolvedValue({ data: mockData, error: null }),
       };
 
-      vi.mocked(createClient).mockResolvedValue({
+      const mockSupabase = {
         from: vi.fn(() => mockQuery),
-      } as unknown as Awaited<ReturnType<typeof createClient>>);
+      } as unknown as Awaited<ReturnType<typeof createClient>>;
 
-      const result = await getSellerRecentOrders('seller-123', 5);
+      vi.mocked(createClient).mockResolvedValue(mockSupabase);
+
+      const result = await getSellerRecentOrders(mockSupabase, 'seller-123', 5);
 
       expect(result).toEqual(mockData);
       expect(result[0].buyer.name).toBe('John Buyer');
@@ -456,11 +464,13 @@ describe('Supabase Queries - Dashboard', () => {
         limit: vi.fn().mockResolvedValue({ data: [], error: null }),
       };
 
-      vi.mocked(createClient).mockResolvedValue({
+      const mockSupabase = {
         from: vi.fn(() => mockQuery),
-      } as unknown as Awaited<ReturnType<typeof createClient>>);
+      } as unknown as Awaited<ReturnType<typeof createClient>>;
 
-      await getSellerRecentOrders('seller-123', 5);
+      vi.mocked(createClient).mockResolvedValue(mockSupabase);
+
+      await getSellerRecentOrders(mockSupabase, 'seller-123', 5);
 
       expect(mockQuery.in).toHaveBeenCalledWith('status', ['paid', 'in_progress', 'delivered']);
     });
@@ -476,11 +486,13 @@ describe('Supabase Queries - Dashboard', () => {
         limit: vi.fn().mockResolvedValue({ data: null, error: mockError }),
       };
 
-      vi.mocked(createClient).mockResolvedValue({
+      const mockSupabase = {
         from: vi.fn(() => mockQuery),
-      } as unknown as Awaited<ReturnType<typeof createClient>>);
+      } as unknown as Awaited<ReturnType<typeof createClient>>;
 
-      await expect(getSellerRecentOrders('seller-123')).rejects.toEqual(mockError);
+      vi.mocked(createClient).mockResolvedValue(mockSupabase);
+
+      await expect(getSellerRecentOrders(mockSupabase, 'seller-123')).rejects.toEqual(mockError);
     });
 
     it('should respect the limit parameter', async () => {
@@ -492,11 +504,13 @@ describe('Supabase Queries - Dashboard', () => {
         limit: vi.fn().mockResolvedValue({ data: [], error: null }),
       };
 
-      vi.mocked(createClient).mockResolvedValue({
+      const mockSupabase = {
         from: vi.fn(() => mockQuery),
-      } as unknown as Awaited<ReturnType<typeof createClient>>);
+      } as unknown as Awaited<ReturnType<typeof createClient>>;
 
-      await getSellerRecentOrders('seller-123', 10);
+      vi.mocked(createClient).mockResolvedValue(mockSupabase);
+
+      await getSellerRecentOrders(mockSupabase, 'seller-123', 10);
 
       expect(mockQuery.limit).toHaveBeenCalledWith(10);
     });

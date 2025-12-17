@@ -222,9 +222,10 @@ export async function getBuyerBenefits(_userId: string) {
   };
 }
 
-export async function getSellerDashboardStats(sellerUserId: string): Promise<SellerDashboardStats> {
-  const supabase = await createClient();
-
+export async function getSellerDashboardStats(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  sellerUserId: string
+): Promise<SellerDashboardStats> {
   const { data: orders, error } = await supabase
     .from('orders')
     .select('status, total_amount, created_at')
@@ -242,9 +243,11 @@ export async function getSellerDashboardStats(sellerUserId: string): Promise<Sel
   return calculateSellerStats(orders, getMonthStartISO());
 }
 
-export async function getSellerRecentOrders(sellerUserId: string, limit: number = 5) {
-  const supabase = await createClient();
-
+export async function getSellerRecentOrders(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  sellerUserId: string,
+  limit: number = 5
+) {
   const { data, error } = await supabase
     .from('orders')
     .select(

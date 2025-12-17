@@ -37,9 +37,10 @@ export default async function SellerDashboardPage() {
 
   // 대시보드 데이터 서버에서 로드
   // Note: orders.seller_id references users.id, not sellers.id
+  // supabase 인스턴스를 전달하여 인증 컨텍스트 유지
   const [stats, recentOrders] = await Promise.all([
-    getSellerDashboardStats(user.id),
-    getSellerRecentOrders(user.id, 5),
+    getSellerDashboardStats(supabase, user.id),
+    getSellerRecentOrders(supabase, user.id, 5),
   ]);
 
   // 클라이언트 컴포넌트에 데이터 전달
