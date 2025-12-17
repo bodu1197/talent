@@ -89,7 +89,7 @@ async function deleteRelatedData(supabaseAdmin: SupabaseClient, serviceId: strin
     .eq('reported_service_id', serviceId);
 }
 
-// 진행 중인 주문 확인
+// 진행 중인 주문 확인 (완료/취소된 주문은 제외)
 async function checkActiveOrders(supabaseAdmin: SupabaseClient, serviceId: string) {
   const { data: activeOrders } = await supabaseAdmin
     .from('orders')
