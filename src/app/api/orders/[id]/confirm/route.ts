@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { orderStatusRateLimit, checkRateLimit } from '@/lib/rate-limit';
+import { orderStatusRateLimit } from '@/lib/rate-limit';
 import { logger } from '@/lib/logger';
 import { notifyOrderConfirmed } from '@/lib/notifications';
+import { requireAuthWithRateLimit } from '@/lib/api/auth';
+import { verifyOrderBuyer } from '@/lib/api/ownership';
 
 // 구매확정 가능한 상태들
 const CONFIRMABLE_STATUSES = [
@@ -16,39 +17,26 @@ const CONFIRMABLE_STATUSES = [
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const supabase = await createClient();
 
-    // 사용자 인증 확인
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 });
+    // 사용자 인증 및 Rate Limiting 확인
+    const authResult = await requireAuthWithRateLimit(orderStatusRateLimit);
+    if (!authResult.success) {
+      return authResult.error!;
     }
 
-    // Rate Limiting 체크
-    const rateLimitResult = await checkRateLimit(user.id, orderStatusRateLimit);
-    if (!rateLimitResult.success) {
-      return rateLimitResult.error!;
+    const { user, supabase } = authResult;
+    if (!user || !supabase) {
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
     }
 
-    // 주문 조회
-    const { data: order, error: fetchError } = await supabase
-      .from('orders')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (fetchError || !order) {
-      return NextResponse.json({ error: '주문을 찾을 수 없습니다' }, { status: 404 });
+    // 주문 조회 및 구매자 권한 확인
+    const orderResult = await verifyOrderBuyer(supabase, id, user.id);
+    if (!orderResult.success) {
+      return orderResult.error!;
     }
 
-    // 구매자 권한 확인
-    if (order.buyer_id !== user.id) {
-      return NextResponse.json({ error: '구매자만 구매확정을 할 수 있습니다' }, { status: 403 });
-    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const order = orderResult.data!.order as any;
 
     // 구매확정 가능한 상태인지 확인
     if (!CONFIRMABLE_STATUSES.includes(order.status)) {

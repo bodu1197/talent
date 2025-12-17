@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 import { requireAuth } from '@/lib/api/auth';
+import { verifyOrderBuyer } from '@/lib/api/ownership';
 
 // POST /api/orders/[id]/revision - 수정 요청
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -20,21 +21,14 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ error: '수정 요청 사유가 필요합니다' }, { status: 400 });
     }
 
-    // 주문 조회 및 권한 확인
-    const { data: order, error: fetchError } = await supabase
-      .from('orders')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (fetchError || !order) {
-      return NextResponse.json({ error: '주문을 찾을 수 없습니다' }, { status: 404 });
+    // 주문 조회 및 구매자 권한 확인
+    const orderResult = await verifyOrderBuyer(supabase, id, user.id);
+    if (!orderResult.success) {
+      return orderResult.error!;
     }
 
-    // 구매자만 수정 요청 가능
-    if (order.buyer_id !== user.id) {
-      return NextResponse.json({ error: '권한이 없습니다' }, { status: 403 });
-    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const order = orderResult.data!.order as any;
 
     // 트랜잭션으로 처리: orders 업데이트 + revision_history 추가
     // 1. 상태를 'revision'으로 변경
