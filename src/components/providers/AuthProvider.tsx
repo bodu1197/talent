@@ -48,11 +48,19 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
   const fetchProfile = async (userId: string) => {
     logger.debug('[AuthProvider] fetchProfile called for user:', { userId });
     try {
+      // URL 아바타 마이그레이션 헬퍼
+      const migrateUrl = (url: string | undefined) => {
+        if (!url) return undefined;
+        // 구 프로젝트 URL이 있으면 신규 프로젝트 URL로 교체
+        return url.replace('bpvfkkrlyrjkwgwmfrci', 'abroivxthindezdtdzmj');
+      };
+
       // auth.users에서 SNS 아바타 URL 가져오기
       const {
         data: { user: authUser },
       } = await supabase.auth.getUser();
-      const snsAvatarUrl = authUser?.user_metadata?.avatar_url as string | undefined;
+      const rawSnsAvatarUrl = authUser?.user_metadata?.avatar_url as string | undefined;
+      const snsAvatarUrl = migrateUrl(rawSnsAvatarUrl);
 
       // profiles 테이블에서 기본 정보 조회
       const { data: userData, error: userError } = await supabase
