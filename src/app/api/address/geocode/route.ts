@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 
-const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY || '';
+const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY ?? '';
 
 // POST: 주소 → 좌표 변환 (Kakao REST API 사용)
 export async function POST(request: NextRequest) {

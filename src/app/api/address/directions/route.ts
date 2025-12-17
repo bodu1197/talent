@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { calculateDistance } from '@/lib/geo';
 
-const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY || '';
+const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY ?? '';
 
 interface DirectionsResponse {
   distance: number; // 미터 단위
