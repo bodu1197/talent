@@ -102,7 +102,7 @@ class Logger {
 
     const sanitized = this.sanitizeData(data);
     // eslint-disable-next-line no-console
-    console.log(this.formatMessage('debug', message), sanitized || '');
+    console.log(this.formatMessage('debug', message), sanitized ?? '');
   }
 
   info(message: string, data?: LogMetadata) {
@@ -110,14 +110,14 @@ class Logger {
 
     const sanitized = this.sanitizeData(data);
     // eslint-disable-next-line no-console
-    console.info(this.formatMessage('info', message), sanitized || '');
+    console.info(this.formatMessage('info', message), sanitized ?? '');
   }
 
   warn(message: string, data?: LogMetadata) {
     if (!this.shouldLog('warn')) return;
 
     const sanitized = this.sanitizeData(data);
-    console.warn(this.formatMessage('warn', message), sanitized || '');
+    console.warn(this.formatMessage('warn', message), sanitized ?? '');
   }
 
   error(message: string, error?: unknown, data?: LogMetadata) {
@@ -133,7 +133,7 @@ class Logger {
         ...(sanitized as Record<string, unknown>),
       });
     } else {
-      console.error(this.formatMessage('error', message), error, sanitized || '');
+      console.error(this.formatMessage('error', message), error, sanitized ?? '');
     }
 
     // [Production] 프로덕션 환경에서는 Sentry 에러 트래킹 서비스로 전송
@@ -150,7 +150,7 @@ class Logger {
   dev(message: string, data?: LogMetadata) {
     if (this.isDevelopment) {
       // eslint-disable-next-line no-console
-      console.log(`[DEV] ${message}`, data || '');
+      console.log(`[DEV] ${message}`, data ?? '');
     }
   }
 }

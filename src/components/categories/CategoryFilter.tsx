@@ -14,8 +14,8 @@ export default function CategoryFilter({
 }: CategoryFilterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const currentPrice = searchParams.get('price') || '';
-  const currentTaxInvoice = searchParams.get('tax') || '';
+  const currentPrice = searchParams.get('price') ?? '';
+  const currentTaxInvoice = searchParams.get('tax') ?? '';
 
   const handleFilterChange = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams);

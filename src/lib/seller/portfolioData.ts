@@ -67,8 +67,8 @@ export async function getPortfolioWithAuth(portfolioId: string) {
     service_id: null,
     tags: (dbPortfolio.tags as string[]) || [],
     view_count: 0,
-    created_at: dbPortfolio.created_at || '',
-    updated_at: dbPortfolio.updated_at || '',
+    created_at: dbPortfolio.created_at ?? '',
+    updated_at: dbPortfolio.updated_at ?? '',
   };
 
   return { portfolio, sellerId: seller.id };

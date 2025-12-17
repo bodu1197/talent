@@ -25,7 +25,7 @@ export default function PaymentRequestModal({
   onSuccess,
 }: PaymentRequestModalProps) {
   const [formData, setFormData] = useState({
-    title: service?.title || '',
+    title: service?.title ?? '',
     amount: '',
     description: '',
     deliveryDays: '7',

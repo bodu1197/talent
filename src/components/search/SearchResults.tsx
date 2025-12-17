@@ -230,7 +230,7 @@ export default function SearchResults({
                               {portfolio.seller.profile_image ? (
                                 <Image
                                   src={portfolio.seller.profile_image}
-                                  alt={portfolio.seller.display_name || ''}
+                                  alt={portfolio.seller.display_name ?? ''}
                                   width={20}
                                   height={20}
                                   className="rounded-full"

@@ -614,9 +614,9 @@ export async function issueTaxInvoice(paymentId: string, _issuedBy: string) {
 
       // 공급받는자 정보
       buyer_business_number: buyerInfo.business_number,
-      buyer_company_name: buyerInfo.business_name || '',
-      buyer_ceo_name: buyerInfo.ceo_name || '',
-      buyer_address: buyerInfo.business_address || '',
+      buyer_company_name: buyerInfo.business_name ?? '',
+      buyer_ceo_name: buyerInfo.ceo_name ?? '',
+      buyer_address: buyerInfo.business_address ?? '',
       buyer_business_type: buyerInfo.business_type,
       buyer_business_item: buyerInfo.business_item,
       buyer_email: buyerInfo.business_email,

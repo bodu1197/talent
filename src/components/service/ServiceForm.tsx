@@ -78,20 +78,20 @@ export default function ServiceForm({
   const [level3Categories, setLevel3Categories] = useState<Category[]>([]);
   const [loadingCategory, setLoadingCategory] = useState(true);
 
-  const [selectedLevel1, setSelectedLevel1] = useState(initialCategoryHierarchy?.level1 || '');
-  const [selectedLevel2, setSelectedLevel2] = useState(initialCategoryHierarchy?.level2 || '');
-  const [selectedLevel3, setSelectedLevel3] = useState(initialCategoryHierarchy?.level3 || '');
+  const [selectedLevel1, setSelectedLevel1] = useState(initialCategoryHierarchy?.level1 ?? '');
+  const [selectedLevel2, setSelectedLevel2] = useState(initialCategoryHierarchy?.level2 ?? '');
+  const [selectedLevel3, setSelectedLevel3] = useState(initialCategoryHierarchy?.level3 ?? '');
 
   // Form State
   const [formData, setFormData] = useState<ServiceFormState>({
-    title: initialData?.title || '',
-    category: initialData?.category || '',
-    description: initialData?.description || '',
-    price: initialData?.price || '',
-    deliveryDays: initialData?.deliveryDays || '',
+    title: initialData?.title ?? '',
+    category: initialData?.category ?? '',
+    description: initialData?.description ?? '',
+    price: initialData?.price ?? '',
+    deliveryDays: initialData?.deliveryDays ?? '',
     revisionCount: initialData?.revisionCount || '0',
     taxInvoiceAvailable: initialData?.taxInvoiceAvailable || false,
-    searchKeywords: initialData?.searchKeywords || '',
+    searchKeywords: initialData?.searchKeywords ?? '',
     location: initialData?.location || null,
     thumbnailFile: initialData?.thumbnailFile || null,
     thumbnailPreview: initialData?.thumbnailPreview || null,

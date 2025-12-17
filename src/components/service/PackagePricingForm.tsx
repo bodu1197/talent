@@ -261,7 +261,7 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                         <input
                           id={`${type}-title`}
                           type="text"
-                          value={pkg.title || ''}
+                          value={pkg.title ?? ''}
                           onChange={(e) => {
                             const value = e.target.value;
                             if (value.length <= PACKAGE_TITLE_MAX_LENGTH) {

@@ -9,8 +9,8 @@ import { logger } from '@/lib/logger';
 
 // Upstash Redis 클라이언트 초기화
 const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL || '',
-  token: process.env.UPSTASH_REDIS_REST_TOKEN || '',
+  url: process.env.UPSTASH_REDIS_REST_URL ?? '',
+  token: process.env.UPSTASH_REDIS_REST_TOKEN ?? '',
 });
 
 /**

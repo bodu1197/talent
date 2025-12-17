@@ -17,7 +17,7 @@ interface MobileCategoryBrowserProps {
 }
 
 export default function MobileCategoryBrowser({ categories }: MobileCategoryBrowserProps) {
-  const [selectedId, setSelectedId] = useState<string>(categories[0]?.id || '');
+  const [selectedId, setSelectedId] = useState<string>(categories[0]?.id ?? '');
 
   const selectedCategory = categories.find((c) => c.id === selectedId);
 

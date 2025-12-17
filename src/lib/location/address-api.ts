@@ -91,9 +91,9 @@ export async function reverseGeocode(
     const data = await response.json();
 
     return {
-      address: data.address || '',
+      address: data.address ?? '',
       roadAddress: data.roadAddress || null,
-      region: data.region || '',
+      region: data.region ?? '',
       latitude,
       longitude,
     };

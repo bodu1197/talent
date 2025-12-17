@@ -103,7 +103,7 @@ export default function OrdersFilterPanel({
               <input
                 id="order-min-price"
                 type="number"
-                value={filters.minPrice || ''}
+                value={filters.minPrice ?? ''}
                 onChange={(e) =>
                   onFiltersChange({
                     ...filters,
@@ -125,7 +125,7 @@ export default function OrdersFilterPanel({
               <input
                 id="order-max-price"
                 type="number"
-                value={filters.maxPrice || ''}
+                value={filters.maxPrice ?? ''}
                 onChange={(e) =>
                   onFiltersChange({
                     ...filters,

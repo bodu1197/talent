@@ -26,7 +26,7 @@ export async function getSettingsData() {
 
   return {
     profile,
-    userEmail: user.email || '',
+    userEmail: user.email ?? '',
     isSeller: !!seller,
   };
 }

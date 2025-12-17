@@ -63,11 +63,11 @@ export default function PortfolioForm({
 
   // 폼 데이터
   const [formData, setFormData] = useState<PortfolioFormData>({
-    title: initialData?.title || '',
-    description: initialData?.description || '',
-    category_id: initialData?.category_id || '',
-    service_id: initialData?.service_id || '',
-    youtube_url: initialData?.youtube_url || '',
+    title: initialData?.title ?? '',
+    description: initialData?.description ?? '',
+    category_id: initialData?.category_id ?? '',
+    service_id: initialData?.service_id ?? '',
+    youtube_url: initialData?.youtube_url ?? '',
     tags: initialData?.tags || [],
     images: [],
   });

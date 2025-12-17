@@ -43,7 +43,7 @@ export async function getUserConversations(userId: string) {
       userId: otherUser.user_id, // profiles.user_id로 수정
       userName: otherUser.name,
       userImage: otherUser.profile_image,
-      lastMessage: conv.last_message_preview || '',
+      lastMessage: conv.last_message_preview ?? '',
       lastMessageTime,
       unreadCount,
       orderNumber: conv.order?.order_number,

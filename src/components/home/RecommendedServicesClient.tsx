@@ -21,7 +21,7 @@ export default function RecommendedServicesClient({
   servicesByCategory,
 }: RecommendedServicesClientProps) {
   // 첫 번째 카테고리를 기본 탭으로 설정
-  const [activeTab, setActiveTab] = useState<string>(categories[0]?.id || '');
+  const [activeTab, setActiveTab] = useState<string>(categories[0]?.id ?? '');
   const tabContainerRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);

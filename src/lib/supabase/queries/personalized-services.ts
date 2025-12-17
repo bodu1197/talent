@@ -357,8 +357,8 @@ async function fetchCategoryVisitsFallback(
       visit_count: cat.visitCount,
     }))
     .sort((a, b) => {
-      const aTime = categoryMap.get(a.category_id)?.maxVisitedAt || '';
-      const bTime = categoryMap.get(b.category_id)?.maxVisitedAt || '';
+      const aTime = categoryMap.get(a.category_id)?.maxVisitedAt ?? '';
+      const bTime = categoryMap.get(b.category_id)?.maxVisitedAt ?? '';
       return bTime.localeCompare(aTime); // 최신 방문 순 (내림차순)
     })
     .slice(0, limit);
