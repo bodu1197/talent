@@ -3,6 +3,7 @@ import { logger } from '@/lib/logger';
 import { requireAuth } from '@/lib/api/auth';
 import { verifyPortfolioOwnership } from '@/lib/api/ownership';
 import { createClient } from '@/lib/supabase/server';
+import { deleteMultipleImagesServer } from '@/lib/storage-utils-server';
 
 // DELETE: 포트폴리오 삭제
 export async function DELETE(
@@ -22,11 +23,31 @@ export async function DELETE(
 
     const { id: portfolioId } = await params;
 
-    // 포트폴리오 소유권 확인
-    const ownershipResult = await verifyPortfolioOwnership(supabase, portfolioId, user.id);
-    if (!ownershipResult.success) {
-      return ownershipResult.error!;
+    // 포트폴리오 소유권 확인 및 이미지 URL 조회
+    const { data: portfolio, error: fetchError } = await supabase
+      .from('seller_portfolio')
+      .select('id, seller_id, thumbnail_url, image_urls')
+      .eq('id', portfolioId)
+      .single();
+
+    if (fetchError || !portfolio) {
+      return NextResponse.json({ error: 'Portfolio not found' }, { status: 404 });
     }
+
+    // 판매자가 해당 유저 소유인지 확인
+    const { data: seller } = await supabase
+      .from('sellers')
+      .select('user_id')
+      .eq('id', portfolio.seller_id)
+      .single();
+
+    if (!seller || seller.user_id !== user.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+    }
+
+    // 포트폴리오 이미지들 삭제 (thumbnail + image_urls)
+    const allImageUrls = [portfolio.thumbnail_url, ...(portfolio.image_urls || [])];
+    await deleteMultipleImagesServer(allImageUrls, 'portfolios');
 
     // 포트폴리오 삭제
     const { error } = await supabase.from('seller_portfolio').delete().eq('id', portfolioId);

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { createClient } from '@/lib/supabase/client';
 import { logger } from '@/lib/logger';
+import { deleteOldImage } from '@/lib/storage-utils';
 import TemplateSelector from '@/components/services/TemplateSelector';
 import toast from 'react-hot-toast';
 import { Upload, Palette, X, CloudUpload, Sparkles } from 'lucide-react';
@@ -245,6 +246,11 @@ export default function ServiceForm({
     const fileExt = formData.thumbnailFile.name.split('.').pop();
     const fileName = `${sellerId}-${Date.now()}.${fileExt}`;
     const filePath = `service-thumbnails/${fileName}`;
+
+    // Delete old thumbnail if exists (prevent orphaned images)
+    if (originalThumbnailUrl) {
+      await deleteOldImage(originalThumbnailUrl, 'services');
+    }
 
     const { error } = await supabase.storage
       .from('services')

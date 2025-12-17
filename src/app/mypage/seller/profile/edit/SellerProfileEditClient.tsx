@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import { logger } from '@/lib/logger';
+import { deleteOldImage } from '@/lib/storage-utils';
 import type { Seller } from '@/types/common';
 import { Camera, X, Loader2, CheckCircle, Building2, CreditCard } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -278,6 +279,11 @@ export default function SellerProfileEditClient({ profile: initialProfile }: Pro
         const { error: uploadError } = await supabase.storage
           .from('profiles')
           .upload(filePath, profileImage, { upsert: true });
+
+        // Delete old profile image if exists (prevent orphaned images)
+        if (initialProfile.profile_image) {
+          await deleteOldImage(initialProfile.profile_image, 'profiles');
+        }
 
         if (uploadError) {
           logger.error('Profile image upload error:', uploadError);
