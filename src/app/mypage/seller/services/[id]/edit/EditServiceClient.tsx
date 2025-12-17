@@ -63,8 +63,8 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
     try {
       const supabase = createClient();
 
-      // Update logic (Active vs Non-active service)
-      const updateData = {
+      // Common data for both active and non-active services
+      const commonUpdateData = {
         title: data.title,
         description: data.description,
         price: Number.parseInt(data.price),
@@ -72,7 +72,6 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
         revision_count:
           data.revisionCount === 'unlimited' ? 999 : Number.parseInt(data.revisionCount),
         thumbnail_url: publicThumbnailUrl,
-        search_keywords: data.searchKeywords,
         location_address: data.location?.address,
         location_latitude: data.location?.latitude,
         location_longitude: data.location?.longitude,
@@ -80,22 +79,22 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
       };
 
       if (service.status === 'active') {
-        // Create revision
         const { error } = await supabase.from('service_revisions').insert({
           service_id: service.id,
           seller_id: sellerId,
-          ...updateData,
+          ...commonUpdateData,
+          // Note: service_revisions table doesn't have search_keywords column
           status: 'pending',
           revision_note: '서비스 정보 수정',
         });
         if (error) throw error;
         toast.success('수정 요청이 제출되었습니다. 관리자 승인 후 반영됩니다.');
       } else {
-        // Update directly
         const { error } = await supabase
           .from('services')
           .update({
-            ...updateData,
+            ...commonUpdateData,
+            search_keywords: data.searchKeywords,
             status: service.status === 'suspended' ? 'pending' : service.status,
           })
           .eq('id', service.id);
@@ -103,17 +102,27 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
         toast.success('서비스가 수정되었습니다.');
       }
 
-      // Update categories if changed (Logic simplified for brevity, ideally check diff)
+      // Update categories if changed
       if (data.category) {
-        // This part assumes we handle category updates via a separate relation update as before
-        // For strict correctness we might need to verify if category changed but for now we follow the pattern
-        // Note: Real implementation might need to delete old and insert new service_categories
-        await supabase.from('service_categories').delete().eq('service_id', service.id);
-        await supabase.from('service_categories').insert({
+        // First delete existing categories
+        const { error: deleteError } = await supabase
+          .from('service_categories')
+          .delete()
+          .eq('service_id', service.id);
+
+        if (deleteError) {
+          logger.error('Error deleting old categories:', deleteError);
+          // Continue anyway to try inserting new one
+        }
+
+        // Insert new category
+        const { error: insertError } = await supabase.from('service_categories').insert({
           service_id: service.id,
           category_id: data.category,
           is_primary: true,
         });
+
+        if (insertError) throw insertError;
       }
 
       globalThis.location.href = '/mypage/seller/services';
