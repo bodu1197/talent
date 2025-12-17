@@ -59,70 +59,107 @@ export default function EditServiceClient({ service, sellerId, categoryHierarchy
       : null,
   };
 
+  // Helper: Prepare common data
+  const prepareServiceData = (data: ServiceFormState, publicThumbnailUrl: string | null) => {
+    return {
+      title: data.title,
+      description: data.description,
+      price: Number.parseInt(data.price),
+      delivery_days: Number.parseInt(data.deliveryDays),
+      revision_count:
+        data.revisionCount === 'unlimited' ? 999 : Number.parseInt(data.revisionCount),
+      thumbnail_url: publicThumbnailUrl,
+    };
+  };
+
+  // Helper: Update Active Service via Revisions
+  const updateActiveServiceRevision = async (
+    supabase: any,
+    baseData: any,
+    sellerId: string,
+    serviceId: string
+  ) => {
+    const { error } = await supabase.from('service_revisions').insert({
+      service_id: serviceId,
+      seller_id: sellerId,
+      ...baseData,
+      status: 'pending',
+      revision_note: '서비스 정보 수정',
+    });
+    if (error) throw error;
+    toast.success('수정 요청이 제출되었습니다. 관리자 승인 후 반영됩니다.');
+  };
+
+  // Helper: Update Inactive Service directly
+  const updateInactiveService = async (
+    supabase: any,
+    baseData: any,
+    extendedData: any,
+    serviceId: string,
+    currentStatus: string
+  ) => {
+    const { error } = await supabase
+      .from('services')
+      .update({
+        ...baseData,
+        ...extendedData,
+        status: currentStatus === 'suspended' ? 'pending' : currentStatus,
+      })
+      .eq('id', serviceId);
+    if (error) throw error;
+    toast.success('서비스가 수정되었습니다.');
+  };
+
+  // Helper: Update Categories
+  const updateServiceCategories = async (supabase: any, serviceId: string, categoryId: string) => {
+    // First delete existing categories
+    const { error: deleteError } = await supabase
+      .from('service_categories')
+      .delete()
+      .eq('service_id', serviceId);
+
+    if (deleteError) {
+      logger.error('Error deleting old categories:', deleteError);
+    }
+
+    // Insert new category
+    const { error: insertError } = await supabase.from('service_categories').insert({
+      service_id: serviceId,
+      category_id: categoryId,
+      is_primary: true,
+    });
+
+    if (insertError) throw insertError;
+  };
+
   const handleSubmit = async (data: ServiceFormState, publicThumbnailUrl: string | null) => {
     try {
       const supabase = createClient();
-
-      // Common data for both active and non-active services
-      const commonUpdateData = {
-        title: data.title,
-        description: data.description,
-        price: Number.parseInt(data.price),
-        delivery_days: Number.parseInt(data.deliveryDays),
-        revision_count:
-          data.revisionCount === 'unlimited' ? 999 : Number.parseInt(data.revisionCount),
-        thumbnail_url: publicThumbnailUrl,
-        location_address: data.location?.address,
-        location_latitude: data.location?.latitude,
-        location_longitude: data.location?.longitude,
-        location_region: data.location?.region,
-      };
+      const baseData = prepareServiceData(data, publicThumbnailUrl);
 
       if (service.status === 'active') {
-        const { error } = await supabase.from('service_revisions').insert({
-          service_id: service.id,
-          seller_id: sellerId,
-          ...commonUpdateData,
-          // Note: service_revisions table doesn't have search_keywords column
-          status: 'pending',
-          revision_note: '서비스 정보 수정',
-        });
-        if (error) throw error;
-        toast.success('수정 요청이 제출되었습니다. 관리자 승인 후 반영됩니다.');
+        // service_revisions lacks extra fields
+        await updateActiveServiceRevision(supabase, baseData, sellerId, service.id);
       } else {
-        const { error } = await supabase
-          .from('services')
-          .update({
-            ...commonUpdateData,
-            search_keywords: data.searchKeywords,
-            status: service.status === 'suspended' ? 'pending' : service.status,
-          })
-          .eq('id', service.id);
-        if (error) throw error;
-        toast.success('서비스가 수정되었습니다.');
+        // services table includes extra fields
+        const extendedData = {
+          search_keywords: data.searchKeywords,
+          location_address: data.location?.address,
+          location_latitude: data.location?.latitude,
+          location_longitude: data.location?.longitude,
+          location_region: data.location?.region,
+        };
+        await updateInactiveService(
+          supabase,
+          baseData,
+          extendedData,
+          service.id,
+          service.status || 'pending'
+        );
       }
 
-      // Update categories if changed
       if (data.category) {
-        // First delete existing categories
-        const { error: deleteError } = await supabase
-          .from('service_categories')
-          .delete()
-          .eq('service_id', service.id);
-
-        if (deleteError) {
-          logger.error('Error deleting old categories:', deleteError);
-          // Continue anyway to try inserting new one
-        }
-
-        // Insert new category
-        const { error: insertError } = await supabase.from('service_categories').insert({
-          service_id: service.id,
-          category_id: data.category,
-          is_primary: true,
-        });
-
-        if (insertError) throw insertError;
+        await updateServiceCategories(supabase, service.id, data.category);
       }
 
       globalThis.location.href = '/mypage/seller/services';
