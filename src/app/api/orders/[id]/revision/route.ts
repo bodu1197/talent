@@ -27,9 +27,6 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return orderResult.error!;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const order = orderResult.data!.order as any;
-
     // 트랜잭션으로 처리: orders 업데이트 + revision_history 추가
     // 1. 상태를 'revision'으로 변경
     const { error: updateError } = await supabase
