@@ -3,6 +3,7 @@ import { orderStatusRateLimit } from '@/lib/rate-limit';
 import { logger } from '@/lib/logger';
 import { notifyOrderCancelled } from '@/lib/notifications';
 import { requireAuthWithRateLimit } from '@/lib/api/auth';
+import { verifyOrderBuyer } from '@/lib/api/ownership';
 
 // 취소 가능한 상태들
 const CANCELLABLE_STATUSES = ['pending_payment', 'paid', 'in_progress'];
@@ -69,7 +70,13 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ error: '취소 사유를 입력해주세요' }, { status: 400 });
     }
 
-    // 주문 조회 및 결제 정보 함께 조회
+    // 주문 조회 및 구매자 권한 확인
+    const orderResult = await verifyOrderBuyer(supabase, id, user.id);
+    if (!orderResult.success) {
+      return orderResult.error!;
+    }
+
+    // 결제 정보와 함께 주문 재조회
     const { data: order, error: fetchError } = await supabase
       .from('orders')
       .select('*, payments(*)')
@@ -77,12 +84,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       .single();
 
     if (fetchError || !order) {
-      return NextResponse.json({ error: '주문을 찾을 수 없습니다' }, { status: 404 });
-    }
-
-    // 구매자 권한 확인
-    if (order.buyer_id !== user.id) {
-      return NextResponse.json({ error: '권한이 없습니다' }, { status: 403 });
+      return NextResponse.json({ error: '주문 정보를 가져올 수 없습니다' }, { status: 500 });
     }
 
     // 취소 가능한 상태인지 확인

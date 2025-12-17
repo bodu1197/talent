@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 import { requireAuth } from '@/lib/api/auth';
+import { verifyOrderBuyer } from '@/lib/api/ownership';
 
 // 무통장 입금 요청 API
 // 주문 상태를 pending_bank_transfer로 변경
@@ -33,21 +34,14 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 주문 조회
-    const { data: order, error: orderError } = await supabase
-      .from('orders')
-      .select('*')
-      .eq('id', order_id)
-      .single();
-
-    if (orderError || !order) {
-      return NextResponse.json({ error: '주문을 찾을 수 없습니다' }, { status: 404 });
+    // 주문 조회 및 구매자 권한 확인
+    const orderResult = await verifyOrderBuyer(supabase, order_id, user.id);
+    if (!orderResult.success) {
+      return orderResult.error!;
     }
 
-    // 본인 주문인지 확인
-    if (order.buyer_id !== user.id) {
-      return NextResponse.json({ error: '권한이 없습니다' }, { status: 403 });
-    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const order = orderResult.data!.order as any;
 
     // 이미 처리된 주문인지 확인
     if (order.status !== 'pending_payment') {

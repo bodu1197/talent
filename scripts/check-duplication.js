@@ -1,0 +1,10 @@
+const fs = require('fs');
+const data = JSON.parse(fs.readFileSync('report/jscpd-report.json', 'utf8'));
+const s = data.statistics.total;
+console.log(`\n=== Code Duplication Report ===`);
+console.log(`Total Lines: ${s.lines}`);
+console.log(`Duplicated Lines: ${s.duplicatedLines}`);
+console.log(`Clones: ${s.clones}`);
+console.log(`Duplication Rate: ${s.percentage.toFixed(2)}%`);
+console.log(`Token Duplication: ${s.percentageTokens.toFixed(2)}%`);
+console.log(`===============================\n`);
