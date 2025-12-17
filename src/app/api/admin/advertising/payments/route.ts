@@ -140,10 +140,10 @@ export async function GET(request: NextRequest) {
     if (search) {
       const searchLower = search.toLowerCase();
       filteredPayments = filteredPayments.filter((p) => {
-        const sellerName = p.seller?.user?.name?.toLowerCase() || '';
-        const sellerEmail = p.seller?.user?.email?.toLowerCase() || '';
-        const depositorName = p.depositor_name?.toLowerCase() || '';
-        const serviceTitle = p.subscription?.service?.title?.toLowerCase() || '';
+        const sellerName = p.seller?.user?.name?.toLowerCase() ?? '';
+        const sellerEmail = p.seller?.user?.email?.toLowerCase() ?? '';
+        const depositorName = p.depositor_name?.toLowerCase() ?? '';
+        const serviceTitle = p.subscription?.service?.title?.toLowerCase() ?? '';
 
         return (
           sellerName.includes(searchLower) ||
