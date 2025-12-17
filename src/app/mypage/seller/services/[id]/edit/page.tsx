@@ -53,11 +53,13 @@ async function fetchCategoryHierarchy(
     // Max depth 5 to prevent infinite loops
     for (let i = 0; i < 5; i++) {
       if (!currentId) break;
-      const { data: cat } = await supabase
+      const {
+        data: cat,
+      }: { data: { id: string; level: number; parent_id: string | null } | null } = await supabase
         .from('categories')
         .select('id, level, parent_id')
         .eq('id', currentId)
-        .single<{ id: string; level: number; parent_id: string | null }>();
+        .single();
 
       if (!cat) break;
       path.unshift(cat); // Add to beginning (parent first)
