@@ -275,14 +275,16 @@ export default function ServiceForm({
 
     setLoading(true);
     try {
-      let publicUrl = null;
-      // If new file exists, upload it. If not, we might be editing and kept old url.
+      let publicUrl = originalThumbnailUrl;
+
+      // If new file exists, upload it.
       if (formData.thumbnailFile) {
         publicUrl = await uploadThumbnail();
-      } else {
-        // Keep existing URL if edit mode
-        publicUrl = originalThumbnailUrl;
       }
+
+      // If publicUrl is still null and we have a template preview but no file (edge case where generate didn't create file?)
+      // ideally generateTemplateThumbnail sets the file.
+      // If we are in edit mode and didn't touch thumbnail, publicUrl stays originalThumbnailUrl.
 
       await onSubmit(formData, publicUrl);
     } catch (error) {

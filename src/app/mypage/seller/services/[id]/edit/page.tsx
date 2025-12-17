@@ -57,7 +57,7 @@ async function fetchCategoryHierarchy(
         .from('categories')
         .select('id, level, parent_id')
         .eq('id', currentId)
-        .single();
+        .single<{ id: string; level: number; parent_id: string | null }>();
 
       if (!cat) break;
       path.unshift(cat); // Add to beginning (parent first)
