@@ -87,10 +87,11 @@ export default async function BuyerDashboardPage() {
     .maybeSingle();
 
   // 대시보드 데이터 서버에서 로드
+  // supabase 인스턴스를 전달하여 인증 컨텍스트 유지
   const [stats, recentOrders, favorites, benefits] = await Promise.all([
-    getBuyerDashboardStats(user.id),
-    getBuyerRecentOrders(user.id, 5),
-    getBuyerRecentFavorites(user.id, 5),
+    getBuyerDashboardStats(supabase, user.id),
+    getBuyerRecentOrders(supabase, user.id, 5),
+    getBuyerRecentFavorites(supabase, user.id, 5),
     getBuyerBenefits(user.id),
   ]);
 

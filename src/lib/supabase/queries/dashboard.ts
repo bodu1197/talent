@@ -125,10 +125,11 @@ function getDefaultSellerStats(): SellerDashboardStats {
   };
 }
 
-export async function getBuyerDashboardStats(userId: string): Promise<BuyerDashboardStats> {
+export async function getBuyerDashboardStats(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string
+): Promise<BuyerDashboardStats> {
   try {
-    const supabase = await createClient();
-
     const { data: orders, error } = await supabase
       .from('orders')
       .select('status, review_id, created_at')
@@ -150,10 +151,12 @@ export async function getBuyerDashboardStats(userId: string): Promise<BuyerDashb
   }
 }
 
-export async function getBuyerRecentOrders(userId: string, limit: number = 5) {
+export async function getBuyerRecentOrders(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string,
+  limit: number = 5
+) {
   try {
-    const supabase = await createClient();
-
     const { data, error } = await supabase
       .from('orders')
       .select(
@@ -180,10 +183,12 @@ export async function getBuyerRecentOrders(userId: string, limit: number = 5) {
   }
 }
 
-export async function getBuyerRecentFavorites(userId: string, limit: number = 5) {
+export async function getBuyerRecentFavorites(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string,
+  limit: number = 5
+) {
   try {
-    const supabase = await createClient();
-
     const { data, error } = await supabase
       .from('service_favorites')
       .select(
