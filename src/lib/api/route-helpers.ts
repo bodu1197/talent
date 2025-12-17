@@ -145,6 +145,23 @@ export function withRateLimitedPOST(rateLimitConfig: Ratelimit, handler: POSTHan
  *   // id is undefined
  * });
  */
+// Overload signatures
+
+export function withAuthenticatedGET(
+  handler: GETHandler,
+  hasIdParam: true
+): (request: NextRequest, context: RouteParams) => Promise<NextResponse>;
+// eslint-disable-next-line no-redeclare
+export function withAuthenticatedGET(
+  handler: GETHandler,
+  hasIdParam?: false
+): (
+  request: NextRequest,
+  context: { params: Promise<Record<string, never>> }
+) => Promise<NextResponse>;
+
+// Implementation
+// eslint-disable-next-line no-redeclare
 export function withAuthenticatedGET(handler: GETHandler, hasIdParam = false) {
   if (hasIdParam) {
     return async (request: NextRequest, { params }: RouteParams) => {
