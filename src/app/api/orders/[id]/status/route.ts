@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { orderStatusRateLimit } from '@/lib/rate-limit';
 import { logger } from '@/lib/logger';
-import { requireAuthWithRateLimit } from '@/lib/api/auth';
+import { withRateLimitedPATCH } from '@/lib/api/route-helpers';
 
 // 주문 상태 전환 규칙 (보안: 임의 상태 변경 방지)
 const ALLOWED_TRANSITIONS: Record<string, Record<string, string[]>> = {
@@ -36,21 +36,9 @@ function canTransition(
 }
 
 // PATCH /api/orders/[id]/status - 주문 상태 업데이트
-export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  try {
-    const { id } = await params;
-
-    // 사용자 인증 및 Rate Limiting 확인
-    const authResult = await requireAuthWithRateLimit(orderStatusRateLimit);
-    if (!authResult.success) {
-      return authResult.error!;
-    }
-
-    const { user, supabase } = authResult;
-    if (!user || !supabase) {
-      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
-    }
-
+export const PATCH = withRateLimitedPATCH(
+  orderStatusRateLimit,
+  async (request, { user, supabase, id }) => {
     const { status: newStatus } = await request.json();
 
     // 상태 값 검증
@@ -142,8 +130,5 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       success: true,
       status: newStatus,
     });
-  } catch (error) {
-    logger.error('Order status update API error:', error);
-    return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 });
   }
-}
+);
