@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { logger } from '@/lib/logger';
-import { X, Plus, Info, Loader2, Youtube } from 'lucide-react';
+import { X, Plus, Info, Loader2, Video } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { ServiceFormProps } from '@/types/service-form';
 
@@ -442,7 +442,7 @@ export default function Step5Requirements({
                 {youtubeVideoId && (
                   <div className="mt-4 bg-gray-50 border border-gray-200 rounded-lg p-4">
                     <p className="text-sm text-gray-700 mb-2">
-                      <Youtube className="text-red-600 w-4 h-4 mr-2 inline" />
+                      <Video className="text-red-600 w-4 h-4 mr-2 inline" />
                       YouTube 영상 미리보기
                     </p>
                     <div className="aspect-video bg-black rounded-lg overflow-hidden">

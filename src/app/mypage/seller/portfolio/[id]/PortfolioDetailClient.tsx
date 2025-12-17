@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import MypageLayoutWrapper from '@/components/mypage/MypageLayoutWrapper';
 import Link from 'next/link';
 import { logger } from '@/lib/logger';
-import { ArrowLeft, Pencil, Trash2, Eye, Calendar, Youtube, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Pencil, Trash2, Eye, Calendar, Video, ExternalLink } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface Portfolio {
@@ -174,7 +174,7 @@ export default function PortfolioDetailClient({ portfolio, sellerId: _sellerId }
           {youtubeVideoId && (
             <div className="bg-white border border-gray-200 rounded-lg p-4 lg:p-6 mb-6">
               <h2 className="text-base lg:text-lg font-semibold text-gray-900 mb-4">
-                <Youtube className="inline w-4 h-4 lg:w-5 lg:h-5 text-red-600 mr-2" />
+                <Video className="inline w-4 h-4 lg:w-5 lg:h-5 text-red-600 mr-2" />
                 프로젝트 영상
               </h2>
               <div className="aspect-video bg-black rounded-lg overflow-hidden">

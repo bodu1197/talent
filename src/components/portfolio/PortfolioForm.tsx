@@ -4,7 +4,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { logger } from '@/lib/logger';
-import { CheckCircle, X, Loader2, Youtube, ImagePlus } from 'lucide-react';
+import { CheckCircle, X, Loader2, Video, ImagePlus } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface Category {
@@ -358,7 +358,7 @@ export default function PortfolioForm({
                 alt="YouTube thumbnail"
                 className="w-full h-48 object-cover rounded-lg"
               />
-              <Youtube className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 text-white opacity-80" />
+              <Video className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 text-white opacity-80" />
             </div>
           )}
         </div>
@@ -448,7 +448,7 @@ export default function PortfolioForm({
             type="text"
             value={tagInput}
             onChange={(e) => setTagInput(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
+            onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent"
             placeholder="태그 입력 후 Enter"
             maxLength={20}
