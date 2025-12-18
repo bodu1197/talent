@@ -82,7 +82,7 @@ export default function AIChatbot() {
         setIsRateLimited(true);
         const errorMessage: Message = {
           role: 'assistant',
-          content: `⏰ ${data.message || '질문 횟수를 초과했습니다.'}\n\n약 ${data.retryAfterMinutes || 60}분 후에 다시 시도해주세요.\n\n긴급한 문의는 help@dolpagu.com으로 연락해주세요.`,
+          content: `⏰ ${data.message || '질문 횟수를 초과했습니다.'}\n\n약 ${data.retryAfterMinutes || 60}분 후에 다시 시도해주세요.\n\n긴급한 문의는 1:1 문의 페이지를 이용해주세요.`,
           timestamp: new Date(),
         };
         setMessages((prev) => [...prev, errorMessage]);
@@ -247,12 +247,21 @@ export default function AIChatbot() {
                 <Send className="w-5 h-5" />
               </button>
             </div>
-            <p className="text-xs text-gray-400 mt-2 text-center">
+            <div className="text-xs text-gray-400 mt-2 text-center">
               {rateLimit 
                 ? `시간당 ${rateLimit.remaining}/${rateLimit.limit}회 질문 가능` 
-                : 'AI가 응답합니다. 복잡한 문의는 help@dolpagu.com으로 연락주세요.'
+                : 'AI가 응답합니다.'
               }
-            </p>
+              {' · '}
+              <a 
+                href="/help/contact" 
+                className="text-blue-500 hover:text-blue-700 hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                1:1 문의하기
+              </a>
+            </div>
           </div>
         </div>
       )}

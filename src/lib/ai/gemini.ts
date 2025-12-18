@@ -43,7 +43,7 @@ const SYSTEM_PROMPT = `당신은 'Dolpagu'(돌파구)의 공식 AI 고객지원 
 
 === 고객지원 ===
 - **AI 챗봇**: 24시간 자동 상담 (지금 대화 중)
-- **이메일**: help@dolpagu.com (영업일 24시간 내 답변)
+- **1:1 문의**: https://dolpagu.com/help/contact (AI 상담으로 해결되지 않을 때)
 - **FAQ**: 웹사이트 하단 도움말 센터
 
 === 응답 규칙 ===
@@ -51,7 +51,7 @@ const SYSTEM_PROMPT = `당신은 'Dolpagu'(돌파구)의 공식 AI 고객지원 
 2. 다른 플랫폼(크몽, 숨고 등) 비교 질문: 돌파구의 0% 수수료 장점 강조
 3. 답변 길이: 간결하게 3-5문장 (필요시 리스트 사용)
 4. 톤: 친절하고 전문적, 이모지 적절히 사용 (😊, 💡, ✅)
-5. 모르는 질문: "help@dolpagu.com으로 문의해주시면 빠르게 도와드리겠습니다" 안내
+5. 모르는 질문: "https://dolpagu.com/help/contact 에서 1:1 문의해주시면 담당자가 빠르게 도와드립니다" 안내
 6. 플랫폼 외 질문: 정중히 플랫폼 관련 도움만 가능하다고 안내`;
 
 export interface ChatMessage {
@@ -124,14 +124,14 @@ export async function generateChatResponse(
     // API 오류시 친절한 폴백 메시지
     if (error instanceof Error) {
       if (error.message.includes('quota')) {
-        return '죄송합니다. 현재 많은 문의가 몰려 일시적으로 AI 상담이 어렵습니다. help@dolpagu.com으로 문의주시면 빠르게 도와드리겠습니다. 🙏';
+        return '죄송합니다. 현재 많은 문의가 몰려 일시적으로 AI 상담이 어렵습니다. https://dolpagu.com/help/contact 에서 1:1 문의해주시면 빠르게 도와드리겠습니다. 🙏';
       }
       if (error.message.includes('API key')) {
         return '시스템 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
       }
     }
     
-    return '죄송합니다. 응답 생성 중 오류가 발생했습니다. 다시 시도해주시거나 help@dolpagu.com으로 문의해주세요.';
+    return '죄송합니다. 응답 생성 중 오류가 발생했습니다. 다시 시도해주시거나 https://dolpagu.com/help/contact 에서 1:1 문의해주세요.';
   }
 }
 

@@ -1,6 +1,6 @@
 {
   "statistics": {
-    "detectionDate": "2025-12-18T23:24:25.399Z",
+    "detectionDate": "2025-12-18T23:30:28.464Z",
     "formats": {
       "javascript": {
         "sources": {
@@ -2044,6 +2044,18 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/app/admin/ai-faq/page.tsx": {
+            "lines": 275,
+            "tokens": 2425,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/app/admin/advertising/page.tsx": {
             "lines": 391,
             "tokens": 3127,
@@ -3642,14 +3654,14 @@
           }
         },
         "total": {
-          "lines": 24854,
-          "tokens": 201412,
-          "sources": 303,
+          "lines": 25129,
+          "tokens": 203837,
+          "sources": 304,
           "clones": 8,
           "duplicatedLines": 508,
           "duplicatedTokens": 4009,
-          "percentage": 2.04,
-          "percentageTokens": 1.99,
+          "percentage": 2.02,
+          "percentageTokens": 1.97,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -6068,6 +6080,18 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/app/admin/ai-faq/page.tsx": {
+            "lines": 540,
+            "tokens": 4943,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/app/admin/advertising/page.tsx": {
             "lines": 524,
             "tokens": 4195,
@@ -7581,8 +7605,8 @@
             "newClones": 0
           },
           "src/components/admin/Sidebar.tsx": {
-            "lines": 214,
-            "tokens": 1880,
+            "lines": 216,
+            "tokens": 1907,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -7930,14 +7954,14 @@
           }
         },
         "total": {
-          "lines": 63093,
-          "tokens": 514814,
-          "sources": 356,
+          "lines": 63635,
+          "tokens": 519784,
+          "sources": 357,
           "clones": 173,
           "duplicatedLines": 2279,
           "duplicatedTokens": 18431,
-          "percentage": 3.61,
-          "percentageTokens": 3.58,
+          "percentage": 3.58,
+          "percentageTokens": 3.55,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -10352,14 +10376,14 @@
       }
     },
     "total": {
-      "lines": 114314,
-      "tokens": 933601,
-      "sources": 857,
+      "lines": 115131,
+      "tokens": 940996,
+      "sources": 859,
       "clones": 290,
       "duplicatedLines": 4020,
       "duplicatedTokens": 35083,
-      "percentage": 3.52,
-      "percentageTokens": 3.76,
+      "percentage": 3.49,
+      "percentageTokens": 3.73,
       "newDuplicatedLines": 0,
       "newClones": 0
     }
