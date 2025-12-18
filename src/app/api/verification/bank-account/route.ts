@@ -152,9 +152,20 @@ export async function POST(request: NextRequest) {
     try {
       accountInfo = await verifyBankAccount(bankCode, accountNumber);
     } catch (error) {
-      logger.error('Bank account verification fetch failed:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      logger.error('Bank account verification fetch failed:', {
+        error: errorMessage,
+        bankCode,
+        userId: user.id,
+      });
+      
+      // 개발/디버깅을 위해 더 상세한 오류 메시지 반환
+      const isDev = process.env.NODE_ENV === 'development';
       return NextResponse.json(
-        { error: '계좌 조회 실패. 잠시 후 다시 시도해주세요.' },
+        { 
+          error: '계좌 조회 실패. 잠시 후 다시 시도해주세요.',
+          ...(isDev && { debug: errorMessage })
+        },
         { status: 500 }
       );
     }

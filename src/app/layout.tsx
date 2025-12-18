@@ -12,6 +12,7 @@ import { headers } from 'next/headers';
 import ConditionalLayout from '@/components/layout/ConditionalLayout';
 import ConditionalMegaMenuWrapper from '@/components/layout/ConditionalMegaMenuWrapper';
 import { PageViewTracker } from '@/components/analytics/PageViewTracker';
+import AIChatbot from '@/components/chatbot/AIChatbot';
 
 // 클라이언트 Providers를 지연 로딩하여 초기 번들 크기 감소
 // Supabase + React Query + Auth 로직이 포함되어 있어 ~120KB 절약
@@ -259,6 +260,8 @@ export default async function RootLayout({
             </ConditionalLayout>
           </ClientProviders>
           <ToastProvider />
+          {/* AI 챗봇 - Admin 및 Mypage 제외 */}
+          {!isAdminPage && !isMypagePage && <AIChatbot />}
         </ErrorBoundary>
       </body>
     </html>

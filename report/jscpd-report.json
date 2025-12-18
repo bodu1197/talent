@@ -1,6 +1,6 @@
 {
   "statistics": {
-    "detectionDate": "2025-12-17T11:45:19.182Z",
+    "detectionDate": "2025-12-18T05:46:57.894Z",
     "formats": {
       "javascript": {
         "sources": {
@@ -1193,8 +1193,8 @@
             "newClones": 0
           },
           "src/app/mypage/seller/dashboard/page.tsx": {
-            "lines": 11,
-            "tokens": 103,
+            "lines": 12,
+            "tokens": 112,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -1913,8 +1913,8 @@
             "newClones": 0
           },
           "src/app/admin/users/page.tsx": {
-            "lines": 283,
-            "tokens": 2151,
+            "lines": 302,
+            "tokens": 2282,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -3245,8 +3245,8 @@
             "newClones": 0
           },
           "src/components/categories/LocationSortToggle.tsx": {
-            "lines": 24,
-            "tokens": 142,
+            "lines": 125,
+            "tokens": 985,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -3630,14 +3630,14 @@
           }
         },
         "total": {
-          "lines": 24631,
-          "tokens": 199574,
+          "lines": 24752,
+          "tokens": 200557,
           "sources": 302,
           "clones": 8,
           "duplicatedLines": 508,
           "duplicatedTokens": 4009,
-          "percentage": 2.06,
-          "percentageTokens": 2.01,
+          "percentage": 2.05,
+          "percentageTokens": 2,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -3645,20 +3645,20 @@
       "tsx": {
         "sources": {
           "src/app/mypage/seller/services/[id]/edit/page.tsx": {
-            "lines": 102,
-            "tokens": 1023,
+            "lines": 206,
+            "tokens": 1949,
             "sources": 1,
-            "clones": 0,
-            "duplicatedLines": 0,
-            "duplicatedTokens": 0,
-            "percentage": 0,
-            "percentageTokens": 0,
+            "clones": 2,
+            "duplicatedLines": 22,
+            "duplicatedTokens": 292,
+            "percentage": 10.68,
+            "percentageTokens": 14.98,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
           "src/app/mypage/seller/services/[id]/edit/EditServiceClient.tsx": {
-            "lines": 229,
-            "tokens": 2116,
+            "lines": 296,
+            "tokens": 2681,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -5037,8 +5037,8 @@
             "newClones": 0
           },
           "src/app/mypage/seller/dashboard/page.tsx": {
-            "lines": 46,
-            "tokens": 378,
+            "lines": 47,
+            "tokens": 387,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -5157,8 +5157,8 @@
             "newClones": 0
           },
           "src/app/mypage/buyer/dashboard/page.tsx": {
-            "lines": 107,
-            "tokens": 867,
+            "lines": 108,
+            "tokens": 981,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -5289,8 +5289,8 @@
             "newClones": 0
           },
           "src/app/auth/callback/complete/page.tsx": {
-            "lines": 104,
-            "tokens": 809,
+            "lines": 117,
+            "tokens": 900,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -5865,8 +5865,8 @@
             "newClones": 0
           },
           "src/app/admin/users/page.tsx": {
-            "lines": 521,
-            "tokens": 4193,
+            "lines": 548,
+            "tokens": 4392,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -6309,14 +6309,14 @@
             "newClones": 0
           },
           "src/components/service/ServiceForm.tsx": {
-            "lines": 691,
-            "tokens": 5769,
+            "lines": 699,
+            "tokens": 5805,
             "sources": 1,
             "clones": 2,
             "duplicatedLines": 16,
             "duplicatedTokens": 197,
-            "percentage": 2.32,
-            "percentageTokens": 3.41,
+            "percentage": 2.29,
+            "percentageTokens": 3.39,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -7461,8 +7461,8 @@
             "newClones": 0
           },
           "src/components/categories/LocationSortToggle.tsx": {
-            "lines": 146,
-            "tokens": 1181,
+            "lines": 270,
+            "tokens": 2214,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -7641,8 +7641,8 @@
             "newClones": 0
           },
           "src/app/verify-identity/VerifyIdentityClient.tsx": {
-            "lines": 190,
-            "tokens": 1561,
+            "lines": 198,
+            "tokens": 1617,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -7906,14 +7906,14 @@
           }
         },
         "total": {
-          "lines": 62477,
-          "tokens": 509478,
+          "lines": 62830,
+          "tokens": 512507,
           "sources": 355,
-          "clones": 172,
-          "duplicatedLines": 2268,
-          "duplicatedTokens": 18285,
+          "clones": 173,
+          "duplicatedLines": 2279,
+          "duplicatedTokens": 18431,
           "percentage": 3.63,
-          "percentageTokens": 3.59,
+          "percentageTokens": 3.6,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -7957,14 +7957,14 @@
             "newClones": 0
           },
           "src/app/api/seller/services/[serviceId]/route.ts": {
-            "lines": 220,
-            "tokens": 2121,
+            "lines": 219,
+            "tokens": 2309,
             "sources": 1,
             "clones": 1,
             "duplicatedLines": 11,
             "duplicatedTokens": 119,
-            "percentage": 5,
-            "percentageTokens": 5.61,
+            "percentage": 5.02,
+            "percentageTokens": 5.15,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -8365,8 +8365,8 @@
             "newClones": 0
           },
           "src/app/api/users/profile/route.ts": {
-            "lines": 79,
-            "tokens": 687,
+            "lines": 94,
+            "tokens": 806,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -9085,8 +9085,8 @@
             "newClones": 0
           },
           "src/lib/supabase/queries/dashboard.ts": {
-            "lines": 263,
-            "tokens": 1724,
+            "lines": 271,
+            "tokens": 1983,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -9121,14 +9121,14 @@
             "newClones": 0
           },
           "src/lib/supabase/queries/admin.ts": {
-            "lines": 862,
-            "tokens": 7855,
+            "lines": 873,
+            "tokens": 7987,
             "sources": 1,
-            "clones": 4,
-            "duplicatedLines": 48,
-            "duplicatedTokens": 396,
-            "percentage": 5.57,
-            "percentageTokens": 5.04,
+            "clones": 6,
+            "duplicatedLines": 66,
+            "duplicatedTokens": 622,
+            "percentage": 7.56,
+            "percentageTokens": 7.79,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -9543,6 +9543,18 @@
           "src/lib/orders/status.ts": {
             "lines": 42,
             "tokens": 208,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/location/geolocation-error.ts": {
+            "lines": 384,
+            "tokens": 2608,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -10250,14 +10262,14 @@
           }
         },
         "total": {
-          "lines": 25506,
-          "tokens": 210427,
-          "sources": 194,
-          "clones": 108,
-          "duplicatedLines": 1224,
-          "duplicatedTokens": 12530,
-          "percentage": 4.8,
-          "percentageTokens": 5.95,
+          "lines": 25923,
+          "tokens": 213733,
+          "sources": 195,
+          "clones": 109,
+          "duplicatedLines": 1233,
+          "duplicatedTokens": 12643,
+          "percentage": 4.76,
+          "percentageTokens": 5.92,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -10292,19 +10304,55 @@
       }
     },
     "total": {
-      "lines": 112625,
-      "tokens": 919576,
-      "sources": 852,
-      "clones": 288,
-      "duplicatedLines": 4000,
-      "duplicatedTokens": 34824,
-      "percentage": 3.55,
+      "lines": 113516,
+      "tokens": 926894,
+      "sources": 853,
+      "clones": 290,
+      "duplicatedLines": 4020,
+      "duplicatedTokens": 35083,
+      "percentage": 3.54,
       "percentageTokens": 3.79,
       "newDuplicatedLines": 0,
       "newClones": 0
     }
   },
   "duplicates": [
+    {
+      "format": "tsx",
+      "lines": 12,
+      "fragment": "const level1Cat = path.find((c) => c.level === 1);\r\n  const level2Cat = path.find((c) => c.level === 2);\r\n  const level3Cat = path.find((c) => c.level === 3);\r\n\r\n  return {\r\n    level1: level1Cat?.id || null,\r\n    level2: level2Cat?.id || null,\r\n    level3: level3Cat?.id || null,\r\n  };\r\n}\r\n\r\nexport",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\app\\mypage\\seller\\services\\[id]\\edit\\page.tsx",
+        "start": 148,
+        "end": 159,
+        "startLoc": {
+          "line": 148,
+          "column": 3,
+          "position": 1405
+        },
+        "endLoc": {
+          "line": 159,
+          "column": 7,
+          "position": 1551
+        }
+      },
+      "secondFile": {
+        "name": "src\\app\\mypage\\seller\\services\\[id]\\edit\\page.tsx",
+        "start": 95,
+        "end": 106,
+        "startLoc": {
+          "line": 95,
+          "column": 3,
+          "position": 861
+        },
+        "endLoc": {
+          "line": 106,
+          "column": 56,
+          "position": 1007
+        }
+      }
+    },
     {
       "format": "typescript",
       "lines": 16,
@@ -11299,17 +11347,17 @@
       },
       "secondFile": {
         "name": "src\\app\\api\\seller\\services\\[serviceId]\\route.ts",
-        "start": 170,
-        "end": 181,
+        "start": 169,
+        "end": 180,
         "startLoc": {
-          "line": 170,
+          "line": 169,
           "column": 5,
-          "position": 1614
+          "position": 1751
         },
         "endLoc": {
-          "line": 181,
+          "line": 180,
           "column": 15,
-          "position": 1733
+          "position": 1881
         }
       }
     },
@@ -16571,37 +16619,73 @@
     },
     {
       "format": "typescript",
+      "lines": 10,
+      "fragment": "// user_id 수집\n  const userIds = profiles.map((p) => p.user_id);\n\n  // users 테이블에서 email 조회\n  const { data: users } = await supabase.from('users').select('id, email').in('id', userIds);\n\n  // email 맵 생성\n  const emailMap = new Map(users?.map((u) => [u.id, u.email]) || []);\n\n  // 역할 결정 함수: 모든 해당 역할을 배열로 반환",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\lib\\supabase\\queries\\admin.ts",
+        "start": 401,
+        "end": 410,
+        "startLoc": {
+          "line": 401,
+          "column": 3,
+          "position": 3801
+        },
+        "endLoc": {
+          "line": 410,
+          "column": 30,
+          "position": 3914
+        }
+      },
+      "secondFile": {
+        "name": "src\\lib\\supabase\\queries\\admin.ts",
+        "start": 276,
+        "end": 285,
+        "startLoc": {
+          "line": 276,
+          "column": 3,
+          "position": 2558
+        },
+        "endLoc": {
+          "line": 285,
+          "column": 33,
+          "position": 2671
+        }
+      }
+    },
+    {
+      "format": "typescript",
       "lines": 13,
       "fragment": ").select('*', { count: 'exact', head: true });\n\n  if (status) {\n    query = query.eq('status', status);\n  }\n\n  const { count, error } = await query;\n\n  if (error) throw error;\n  return count || 0;\n}\n\n// 관리자 리뷰 목록 조회",
       "tokens": 0,
       "firstFile": {
         "name": "src\\lib\\supabase\\queries\\admin.ts",
-        "start": 602,
-        "end": 614,
+        "start": 613,
+        "end": 625,
         "startLoc": {
-          "line": 602,
+          "line": 613,
           "column": 11,
-          "position": 5602
+          "position": 5734
         },
         "endLoc": {
-          "line": 614,
+          "line": 625,
           "column": 16,
-          "position": 5701
+          "position": 5833
         }
       },
       "secondFile": {
         "name": "src\\lib\\supabase\\queries\\admin.ts",
-        "start": 526,
-        "end": 538,
+        "start": 537,
+        "end": 549,
         "startLoc": {
-          "line": 526,
+          "line": 537,
           "column": 9,
-          "position": 4971
+          "position": 5103
         },
         "endLoc": {
-          "line": 538,
+          "line": 549,
           "column": 17,
-          "position": 5070
+          "position": 5202
         }
       }
     },
@@ -16612,32 +16696,32 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\lib\\supabase\\queries\\admin.ts",
-        "start": 720,
-        "end": 732,
+        "start": 731,
+        "end": 743,
         "startLoc": {
-          "line": 720,
+          "line": 731,
           "column": 20,
-          "position": 6496
+          "position": 6628
         },
         "endLoc": {
-          "line": 732,
+          "line": 743,
           "column": 16,
-          "position": 6595
+          "position": 6727
         }
       },
       "secondFile": {
         "name": "src\\lib\\supabase\\queries\\admin.ts",
-        "start": 526,
-        "end": 538,
+        "start": 537,
+        "end": 549,
         "startLoc": {
-          "line": 526,
+          "line": 537,
           "column": 9,
-          "position": 4971
+          "position": 5103
         },
         "endLoc": {
-          "line": 538,
+          "line": 549,
           "column": 17,
-          "position": 5070
+          "position": 5202
         }
       }
     },
@@ -19276,17 +19360,17 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\components\\service\\ServiceForm.tsx",
-        "start": 245,
-        "end": 256,
+        "start": 253,
+        "end": 264,
         "startLoc": {
-          "line": 245,
+          "line": 253,
           "column": 3,
-          "position": 2172
+          "position": 2208
         },
         "endLoc": {
-          "line": 256,
+          "line": 264,
           "column": 12,
-          "position": 2295
+          "position": 2331
         }
       },
       "secondFile": {
@@ -19312,17 +19396,17 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\components\\service\\ServiceForm.tsx",
-        "start": 660,
-        "end": 665,
+        "start": 668,
+        "end": 673,
         "startLoc": {
-          "line": 660,
+          "line": 668,
           "column": 11,
-          "position": 5534
+          "position": 5570
         },
         "endLoc": {
-          "line": 665,
+          "line": 673,
           "column": 10,
-          "position": 5608
+          "position": 5644
         }
       },
       "secondFile": {
@@ -20155,17 +20239,17 @@
       },
       "secondFile": {
         "name": "src\\components\\service\\ServiceForm.tsx",
-        "start": 631,
-        "end": 673,
+        "start": 639,
+        "end": 681,
         "startLoc": {
-          "line": 631,
+          "line": 639,
           "column": 2,
-          "position": 5287
+          "position": 5323
         },
         "endLoc": {
-          "line": 673,
+          "line": 681,
           "column": 9,
-          "position": 5656
+          "position": 5692
         }
       }
     },
