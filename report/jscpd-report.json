@@ -1,6 +1,6 @@
 {
   "statistics": {
-    "detectionDate": "2025-12-18T23:04:03.142Z",
+    "detectionDate": "2025-12-18T23:16:22.554Z",
     "formats": {
       "javascript": {
         "sources": {
@@ -3197,8 +3197,8 @@
             "newClones": 0
           },
           "src/components/chatbot/AIChatbot.tsx": {
-            "lines": 91,
-            "tokens": 737,
+            "lines": 102,
+            "tokens": 855,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -3642,8 +3642,8 @@
           }
         },
         "total": {
-          "lines": 24843,
-          "tokens": 201294,
+          "lines": 24854,
+          "tokens": 201412,
           "sources": 303,
           "clones": 8,
           "duplicatedLines": 508,
@@ -7413,8 +7413,8 @@
             "newClones": 0
           },
           "src/components/chatbot/AIChatbot.tsx": {
-            "lines": 221,
-            "tokens": 1885,
+            "lines": 260,
+            "tokens": 2272,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -7930,8 +7930,8 @@
           }
         },
         "total": {
-          "lines": 63054,
-          "tokens": 514427,
+          "lines": 63093,
+          "tokens": 514814,
           "sources": 356,
           "clones": 173,
           "duplicatedLines": 2279,
@@ -9301,8 +9301,8 @@
             "newClones": 0
           },
           "src/app/api/chat/route.ts": {
-            "lines": 185,
-            "tokens": 1595,
+            "lines": 248,
+            "tokens": 2174,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -9805,7 +9805,7 @@
             "newClones": 0
           },
           "src/lib/ai/gemini.ts": {
-            "lines": 140,
+            "lines": 170,
             "tokens": 1009,
             "sources": 1,
             "clones": 0,
@@ -10081,8 +10081,8 @@
             "newClones": 0
           },
           "src/lib/rate-limit.ts": {
-            "lines": 101,
-            "tokens": 605,
+            "lines": 105,
+            "tokens": 629,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -10310,14 +10310,14 @@
           }
         },
         "total": {
-          "lines": 26259,
-          "tokens": 216675,
+          "lines": 26356,
+          "tokens": 217278,
           "sources": 197,
           "clones": 109,
           "duplicatedLines": 1233,
           "duplicatedTokens": 12643,
-          "percentage": 4.7,
-          "percentageTokens": 5.84,
+          "percentage": 4.68,
+          "percentageTokens": 5.82,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -10352,8 +10352,8 @@
       }
     },
     "total": {
-      "lines": 114167,
-      "tokens": 932493,
+      "lines": 114314,
+      "tokens": 933601,
       "sources": 857,
       "clones": 290,
       "duplicatedLines": 4020,
