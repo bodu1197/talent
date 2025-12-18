@@ -6,10 +6,34 @@ import {
   generateSessionId,
   type ChatMessage,
 } from '@/lib/ai/gemini';
+import { aiChatRateLimit, checkRateLimit, isRedisConfigured } from '@/lib/rate-limit';
 
 interface ChatRequestBody {
   message: string;
   sessionId?: string;
+}
+
+// Rate Limit 상태 조회를 위한 함수
+async function getRateLimitInfo(identifier: string) {
+  if (!isRedisConfigured()) {
+    return { remaining: 20, limit: 20, resetInMinutes: 60 };
+  }
+  
+  try {
+    const { success, limit, remaining, reset } = await aiChatRateLimit.limit(identifier);
+    // limit 호출로 카운트가 증가했으므로, 성공했다면 remaining은 이미 감소한 상태
+    // 실패했다면 remaining은 0
+    const resetInMinutes = Math.ceil((reset - Date.now()) / 60000);
+    
+    return {
+      remaining: success ? remaining : 0,
+      limit,
+      resetInMinutes: Math.max(0, resetInMinutes),
+      isLimited: !success,
+    };
+  } catch {
+    return { remaining: 20, limit: 20, resetInMinutes: 60 };
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -29,6 +53,36 @@ export async function POST(request: NextRequest) {
     
     // 현재 사용자 확인 (선택사항 - 비로그인 사용자도 허용)
     const { data: { user } } = await supabase.auth.getUser();
+
+    // Rate Limiting 체크
+    // 로그인 사용자: user_id 기반, 비로그인: IP 기반
+    const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() 
+      || request.headers.get('x-real-ip') 
+      || 'anonymous';
+    const rateLimitIdentifier = user?.id || `ip:${clientIp}`;
+
+    if (isRedisConfigured()) {
+      const rateLimitResult = await checkRateLimit(rateLimitIdentifier, aiChatRateLimit);
+      
+      if (!rateLimitResult.success && rateLimitResult.error) {
+        // Rate limit 초과 - 친절한 메시지 반환
+        return NextResponse.json(
+          { 
+            error: '질문 횟수를 초과했습니다.',
+            message: '시간당 20회까지 질문할 수 있습니다. 잠시 후 다시 시도해주세요.',
+            rateLimited: true,
+            retryAfterMinutes: 60,
+          },
+          { 
+            status: 429,
+            headers: {
+              'X-RateLimit-Limit': '20',
+              'X-RateLimit-Remaining': '0',
+            }
+          }
+        );
+      }
+    }
 
     // 세션 ID 처리
     let sessionId = clientSessionId;
@@ -57,6 +111,7 @@ export async function POST(request: NextRequest) {
           metadata: {
             created_from: 'web',
             user_agent: request.headers.get('user-agent'),
+            ip: clientIp,
           },
         })
         .select('id')
@@ -120,9 +175,17 @@ export async function POST(request: NextRequest) {
       .update({ updated_at: new Date().toISOString() })
       .eq('id', dbSessionId);
 
+    // 남은 질문 횟수 조회
+    const rateLimitInfo = await getRateLimitInfo(rateLimitIdentifier);
+
     return NextResponse.json({
       response: aiResponse,
       sessionId,
+      rateLimit: {
+        remaining: rateLimitInfo.remaining,
+        limit: rateLimitInfo.limit,
+        resetInMinutes: rateLimitInfo.resetInMinutes,
+      },
     });
   } catch (error) {
     console.error('Chat API Error:', error);

@@ -1,6 +1,6 @@
 {
   "statistics": {
-    "detectionDate": "2025-12-18T05:46:57.894Z",
+    "detectionDate": "2025-12-18T23:04:03.142Z",
     "formats": {
       "javascript": {
         "sources": {
@@ -3196,6 +3196,18 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/components/chatbot/AIChatbot.tsx": {
+            "lines": 91,
+            "tokens": 737,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/components/chat/PaymentRequestModal.tsx": {
             "lines": 116,
             "tokens": 784,
@@ -3630,14 +3642,14 @@
           }
         },
         "total": {
-          "lines": 24752,
-          "tokens": 200557,
-          "sources": 302,
+          "lines": 24843,
+          "tokens": 201294,
+          "sources": 303,
           "clones": 8,
           "duplicatedLines": 508,
           "duplicatedTokens": 4009,
-          "percentage": 2.05,
-          "percentageTokens": 2,
+          "percentage": 2.04,
+          "percentageTokens": 1.99,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -7400,6 +7412,18 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/components/chatbot/AIChatbot.tsx": {
+            "lines": 221,
+            "tokens": 1885,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/components/chat/PaymentRequestModal.tsx": {
             "lines": 212,
             "tokens": 1547,
@@ -7881,8 +7905,8 @@
             "newClones": 0
           },
           "src/app/layout.tsx": {
-            "lines": 265,
-            "tokens": 1949,
+            "lines": 268,
+            "tokens": 1984,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -7906,14 +7930,14 @@
           }
         },
         "total": {
-          "lines": 62830,
-          "tokens": 512507,
-          "sources": 355,
+          "lines": 63054,
+          "tokens": 514427,
+          "sources": 356,
           "clones": 173,
           "duplicatedLines": 2279,
           "duplicatedTokens": 18431,
-          "percentage": 3.63,
-          "percentageTokens": 3.6,
+          "percentage": 3.61,
+          "percentageTokens": 3.58,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -8353,8 +8377,8 @@
             "newClones": 0
           },
           "src/app/api/verification/bank-account/route.ts": {
-            "lines": 235,
-            "tokens": 1958,
+            "lines": 246,
+            "tokens": 2296,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -9276,6 +9300,18 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/app/api/chat/route.ts": {
+            "lines": 185,
+            "tokens": 1595,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/__tests__/mocks/supabase.ts": {
             "lines": 141,
             "tokens": 1190,
@@ -9765,6 +9801,18 @@
             "duplicatedTokens": 103,
             "percentage": 18.64,
             "percentageTokens": 29.94,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai/gemini.ts": {
+            "lines": 140,
+            "tokens": 1009,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -10262,14 +10310,14 @@
           }
         },
         "total": {
-          "lines": 25923,
-          "tokens": 213733,
-          "sources": 195,
+          "lines": 26259,
+          "tokens": 216675,
+          "sources": 197,
           "clones": 109,
           "duplicatedLines": 1233,
           "duplicatedTokens": 12643,
-          "percentage": 4.76,
-          "percentageTokens": 5.92,
+          "percentage": 4.7,
+          "percentageTokens": 5.84,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -10304,14 +10352,14 @@
       }
     },
     "total": {
-      "lines": 113516,
-      "tokens": 926894,
-      "sources": 853,
+      "lines": 114167,
+      "tokens": 932493,
+      "sources": 857,
       "clones": 290,
       "duplicatedLines": 4020,
       "duplicatedTokens": 35083,
-      "percentage": 3.54,
-      "percentageTokens": 3.79,
+      "percentage": 3.52,
+      "percentageTokens": 3.76,
       "newDuplicatedLines": 0,
       "newClones": 0
     }
