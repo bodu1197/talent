@@ -221,6 +221,14 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
   // PortOne 본인인증 처리
   const handleNiceVerification = async () => {
     try {
+      // 환경변수 확인
+      const storeId = process.env.NEXT_PUBLIC_PORTONE_STORE_ID;
+      const channelKey = process.env.NEXT_PUBLIC_PORTONE_IDENTITY_CHANNEL_KEY;
+
+      if (!storeId || !channelKey) {
+        throw new Error('본인인증 설정이 올바르지 않습니다. 관리자에게 문의해주세요.');
+      }
+
       // 고유한 인증 ID 생성
       const timestamp = Date.now();
       const randomPart = crypto.randomUUID().slice(0, 8);
@@ -231,8 +239,8 @@ export default function SellerRegisterClient({ userId, initialProfile }: Props) 
 
       // PortOne 본인인증 요청 (KCP 휴대폰 본인인증)
       const response = await PortOne.requestIdentityVerification({
-        storeId: 'store-8855d73e-d61a-469b-a5ed-60e21cc45122',
-        channelKey: 'channel-key-112bb8b1-8dcc-4045-9686-66b83f0f0026',
+        storeId,
+        channelKey,
         identityVerificationId,
         redirectUrl: `${globalThis.window.location.origin}/verify-identity/callback`,
         windowType: {
