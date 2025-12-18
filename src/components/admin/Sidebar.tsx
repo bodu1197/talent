@@ -28,11 +28,13 @@ import {
   Home,
   Bell,
   MessageSquare,
+  MessageCircle,
 } from 'lucide-react';
 
 const menuItems = [
   { name: '대시보드', path: '/admin/dashboard', icon: TrendingUp },
   { name: '공지사항 관리', path: '/admin/notices', icon: Bell },
+  { name: 'AI 챗봇 FAQ', path: '/admin/ai-faq', icon: MessageCircle },
   { name: '문의 관리', path: '/admin/inquiries', icon: MessageSquare, badge: 'pendingInquiries' },
   { name: '사용자 관리', path: '/admin/users', icon: Users },
   {
