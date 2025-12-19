@@ -1,6 +1,6 @@
 {
   "statistics": {
-    "detectionDate": "2025-12-18T23:35:17.332Z",
+    "detectionDate": "2025-12-19T00:25:57.260Z",
     "formats": {
       "javascript": {
         "sources": {
@@ -1675,6 +1675,18 @@
           "src/app/help/faq/page.tsx": {
             "lines": 39,
             "tokens": 378,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/help/dispute/page.tsx": {
+            "lines": 183,
+            "tokens": 1709,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -3654,14 +3666,14 @@
           }
         },
         "total": {
-          "lines": 25129,
-          "tokens": 203837,
-          "sources": 304,
+          "lines": 25312,
+          "tokens": 205546,
+          "sources": 305,
           "clones": 8,
           "duplicatedLines": 508,
           "duplicatedTokens": 4009,
-          "percentage": 2.02,
-          "percentageTokens": 1.97,
+          "percentage": 2.01,
+          "percentageTokens": 1.95,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -5591,6 +5603,18 @@
           "src/app/help/faq/layout.tsx": {
             "lines": 18,
             "tokens": 138,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/help/dispute/page.tsx": {
+            "lines": 450,
+            "tokens": 4370,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -7954,14 +7978,14 @@
           }
         },
         "total": {
-          "lines": 63644,
-          "tokens": 519835,
-          "sources": 357,
+          "lines": 64094,
+          "tokens": 524205,
+          "sources": 358,
           "clones": 173,
           "duplicatedLines": 2279,
           "duplicatedTokens": 18431,
-          "percentage": 3.58,
-          "percentageTokens": 3.55,
+          "percentage": 3.56,
+          "percentageTokens": 3.52,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -9829,7 +9853,7 @@
             "newClones": 0
           },
           "src/lib/ai/gemini.ts": {
-            "lines": 170,
+            "lines": 181,
             "tokens": 1009,
             "sources": 1,
             "clones": 0,
@@ -10334,7 +10358,7 @@
           }
         },
         "total": {
-          "lines": 26356,
+          "lines": 26367,
           "tokens": 217278,
           "sources": 197,
           "clones": 109,
@@ -10376,14 +10400,14 @@
       }
     },
     "total": {
-      "lines": 115140,
-      "tokens": 941047,
-      "sources": 859,
+      "lines": 115784,
+      "tokens": 947126,
+      "sources": 861,
       "clones": 290,
       "duplicatedLines": 4020,
       "duplicatedTokens": 35083,
-      "percentage": 3.49,
-      "percentageTokens": 3.73,
+      "percentage": 3.47,
+      "percentageTokens": 3.7,
       "newDuplicatedLines": 0,
       "newClones": 0
     }

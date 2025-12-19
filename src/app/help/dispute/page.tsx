@@ -32,6 +32,16 @@ const DISPUTE_TYPES = [
   { value: 'other', label: '기타', description: '위 항목에 해당하지 않는 분쟁' },
 ];
 
+function getStatusBadge(status: string): { className: string; label: string } {
+  if (status === 'completed') {
+    return { className: 'bg-green-100 text-green-700', label: '완료' };
+  }
+  if (status === 'in_progress') {
+    return { className: 'bg-blue-100 text-blue-700', label: '진행중' };
+  }
+  return { className: 'bg-gray-100 text-gray-700', label: status };
+}
+
 export default function DisputeApplyPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -304,14 +314,8 @@ export default function DisputeApplyPage() {
                         <p className="font-semibold text-gray-900">
                           {order.total_amount?.toLocaleString()}원
                         </p>
-                        <span className={`text-xs px-2 py-1 rounded ${
-                          order.status === 'completed' ? 'bg-green-100 text-green-700' :
-                          order.status === 'in_progress' ? 'bg-blue-100 text-blue-700' :
-                          'bg-gray-100 text-gray-700'
-                        }`}>
-                          {order.status === 'completed' ? '완료' :
-                           order.status === 'in_progress' ? '진행중' :
-                           order.status}
+                        <span className={`text-xs px-2 py-1 rounded ${getStatusBadge(order.status).className}`}>
+                          {getStatusBadge(order.status).label}
                         </span>
                       </div>
                     </div>
