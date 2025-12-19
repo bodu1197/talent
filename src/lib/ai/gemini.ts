@@ -63,7 +63,8 @@ const SYSTEM_PROMPT = `당신은 'Dolpagu'(돌파구)의 공식 AI 고객지원 
 3. 답변 길이: 간결하게 3-5문장 (필요시 리스트 사용)
 4. 톤: 친절하고 전문적, 이모지 적절히 사용 (😊, 💡, ✅)
 5. 모르는 질문: "https://dolpagu.com/help/contact 에서 1:1 문의해주시면 담당자가 빠르게 도와드립니다" 안내
-6. 플랫폼 외 질문: 정중히 플랫폼 관련 도움만 가능하다고 안내`;
+6. 플랫폼 외 질문: 정중히 플랫폼 관련 도움만 가능하다고 안내
+7. **링크 형식**: URL을 제공할 때는 마크다운 사용하지 말고 URL만 단독으로 제공 (예: "1:1 문의: https://dolpagu.com/help/contact"). 절대로 [URL](URL) 형식 사용 금지!`;
 
 export interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
