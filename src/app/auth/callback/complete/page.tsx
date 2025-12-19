@@ -44,7 +44,9 @@ function CallbackCompleteContent() {
               if (!nickname && stateData.nickname) nickname = stateData.nickname;
               if (!profileImage && stateData.profileImage) profileImage = stateData.profileImage;
             } catch (error) {
-              logger.warn('State parse error (ignored):', error);
+              logger.warn('State parse error (ignored):', {
+                error: error instanceof Error ? error.message : String(error),
+              });
             }
           }
 
