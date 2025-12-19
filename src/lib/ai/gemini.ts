@@ -142,7 +142,7 @@ export async function generateChatResponse(message: string, context: ChatContext
         temperature: 0.7,
         topP: 0.8,
         topK: 40,
-        maxOutputTokens: 1024,
+        maxOutputTokens: 2048, // 응답 잘림 방지를 위해 증가
       },
     });
 

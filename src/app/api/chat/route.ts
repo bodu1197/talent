@@ -6,34 +6,41 @@ import {
   generateSessionId,
   type ChatMessage,
 } from '@/lib/ai/gemini';
-import { aiChatRateLimit, checkRateLimit, isRedisConfigured } from '@/lib/rate-limit';
+import { aiChatRateLimit, isRedisConfigured } from '@/lib/rate-limit';
 
 interface ChatRequestBody {
   message: string;
   sessionId?: string;
 }
 
-// Rate Limit 상태 조회를 위한 함수
-async function getRateLimitInfo(identifier: string) {
+// Rate Limit 상태 조회용 캐시 (요청당 1회만 체크하기 위해)
+let lastRateLimitResult: {
+  identifier: string;
+  remaining: number;
+  limit: number;
+  resetInMinutes: number;
+} | null = null;
+
+// Rate Limit 체크 결과 저장 (실제 limit 체크 후 호출)
+export function cacheRateLimitResult(identifier: string, remaining: number, limit: number, reset: number) {
+  const resetInMinutes = Math.max(0, Math.ceil((reset - Date.now()) / 60000));
+  lastRateLimitResult = { identifier, remaining, limit, resetInMinutes };
+}
+
+// Rate Limit 상태 조회를 위한 함수 (캐시된 결과 반환)
+function getRateLimitInfo(identifier: string) {
+  // 캐시된 결과가 있고 같은 사용자면 반환
+  if (lastRateLimitResult?.identifier === identifier) {
+    return lastRateLimitResult;
+  }
+  
+  // Redis 미설정 시 기본값
   if (!isRedisConfigured()) {
     return { remaining: 20, limit: 20, resetInMinutes: 60 };
   }
   
-  try {
-    const { success, limit, remaining, reset } = await aiChatRateLimit.limit(identifier);
-    // limit 호출로 카운트가 증가했으므로, 성공했다면 remaining은 이미 감소한 상태
-    // 실패했다면 remaining은 0
-    const resetInMinutes = Math.ceil((reset - Date.now()) / 60000);
-    
-    return {
-      remaining: success ? remaining : 0,
-      limit,
-      resetInMinutes: Math.max(0, resetInMinutes),
-      isLimited: !success,
-    };
-  } catch {
-    return { remaining: 20, limit: 20, resetInMinutes: 60 };
-  }
+  // 캐시 없으면 기본값 (실제 체크는 checkRateLimit에서 수행)
+  return { remaining: 20, limit: 20, resetInMinutes: 60 };
 }
 
 export async function POST(request: NextRequest) {
@@ -62,22 +69,32 @@ export async function POST(request: NextRequest) {
     const rateLimitIdentifier = user?.id || `ip:${clientIp}`;
 
     if (isRedisConfigured()) {
-      const rateLimitResult = await checkRateLimit(rateLimitIdentifier, aiChatRateLimit);
+      // Rate limit 체크 (limit() 호출은 카운트를 증가시킴)
+      const { success, limit, remaining, reset } = await aiChatRateLimit.limit(rateLimitIdentifier);
       
-      if (!rateLimitResult.success && rateLimitResult.error) {
+      // 결과 캐시 저장 (나중에 응답에 포함하기 위해)
+      cacheRateLimitResult(rateLimitIdentifier, remaining, limit, reset);
+      
+      if (!success) {
         // Rate limit 초과 - 친절한 메시지 반환
         return NextResponse.json(
           { 
             error: '질문 횟수를 초과했습니다.',
             message: '시간당 20회까지 질문할 수 있습니다. 잠시 후 다시 시도해주세요.',
             rateLimited: true,
-            retryAfterMinutes: 60,
+            retryAfterMinutes: Math.ceil((reset - Date.now()) / 60000),
+            rateLimit: {
+              remaining: 0,
+              limit,
+              resetInMinutes: Math.ceil((reset - Date.now()) / 60000),
+            },
           },
           { 
             status: 429,
             headers: {
-              'X-RateLimit-Limit': '20',
+              'X-RateLimit-Limit': limit.toString(),
               'X-RateLimit-Remaining': '0',
+              'X-RateLimit-Reset': reset.toString(),
             }
           }
         );
