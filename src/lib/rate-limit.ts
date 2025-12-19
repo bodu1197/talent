@@ -42,7 +42,7 @@ export const orderStatusRateLimit = createRateLimiter(20, 60000);
 
 // AI 챗봇용 Rate Limiter (1시간에 20회)
 // 비로그인 사용자는 IP 기반, 로그인 사용자는 user_id 기반
-export const aiChatRateLimit = createRateLimiter(100, 3600000); // 1시간 = 3,600,000ms
+export const aiChatRateLimit = createRateLimiter(20, 3600000); // 1시간 = 3,600,000ms
 
 /**
  * Rate Limit 체크 및 에러 응답 반환
