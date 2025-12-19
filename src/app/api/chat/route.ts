@@ -13,6 +13,57 @@ interface ChatRequestBody {
   sessionId?: string;
 }
 
+// ============================================
+// 메모리 기반 Rate Limiter (Redis 미설정 시 fallback)
+// 주의: 서버리스 환경에서는 인스턴스마다 메모리가 분리되어 완벽하지 않음
+// ============================================
+const MEMORY_RATE_LIMIT = 20; // 시간당 요청 수
+const MEMORY_WINDOW_MS = 60 * 60 * 1000; // 1시간
+
+// 메모리 저장소: { identifier: { count, resetAt } }
+const memoryRateLimitStore: Map<string, { count: number; resetAt: number }> = new Map();
+
+// 오래된 항목 정리 (메모리 누수 방지)
+function cleanupOldEntries() {
+  const now = Date.now();
+  for (const [key, value] of memoryRateLimitStore.entries()) {
+    if (value.resetAt < now) {
+      memoryRateLimitStore.delete(key);
+    }
+  }
+}
+
+// 메모리 기반 Rate Limit 체크
+function checkMemoryRateLimit(identifier: string): { 
+  success: boolean; 
+  remaining: number; 
+  limit: number; 
+  resetAt: number;
+} {
+  const now = Date.now();
+  
+  // 5분마다 정리 (최대 1000개 초과 시에도)
+  if (memoryRateLimitStore.size > 1000) {
+    cleanupOldEntries();
+  }
+  
+  let entry = memoryRateLimitStore.get(identifier);
+  
+  // 새 사용자이거나 리셋 시간이 지난 경우
+  if (!entry || entry.resetAt < now) {
+    entry = { count: 0, resetAt: now + MEMORY_WINDOW_MS };
+    memoryRateLimitStore.set(identifier, entry);
+  }
+  
+  // 카운트 증가
+  entry.count++;
+  
+  const remaining = Math.max(0, MEMORY_RATE_LIMIT - entry.count);
+  const success = entry.count <= MEMORY_RATE_LIMIT;
+  
+  return { success, remaining, limit: MEMORY_RATE_LIMIT, resetAt: entry.resetAt };
+}
+
 // Rate Limit 상태 조회용 캐시 (요청당 1회만 체크하기 위해)
 let lastRateLimitResult: {
   identifier: string;
@@ -22,7 +73,7 @@ let lastRateLimitResult: {
 } | null = null;
 
 // Rate Limit 체크 결과 저장 (실제 limit 체크 후 호출)
-export function cacheRateLimitResult(identifier: string, remaining: number, limit: number, reset: number) {
+function cacheRateLimitResult(identifier: string, remaining: number, limit: number, reset: number) {
   const resetInMinutes = Math.max(0, Math.ceil((reset - Date.now()) / 60000));
   lastRateLimitResult = { identifier, remaining, limit, resetInMinutes };
 }
@@ -34,13 +85,8 @@ function getRateLimitInfo(identifier: string) {
     return lastRateLimitResult;
   }
   
-  // Redis 미설정 시 기본값
-  if (!isRedisConfigured()) {
-    return { remaining: 20, limit: 20, resetInMinutes: 60 };
-  }
-  
-  // 캐시 없으면 기본값 (실제 체크는 checkRateLimit에서 수행)
-  return { remaining: 20, limit: 20, resetInMinutes: 60 };
+  // 캐시 없으면 기본값
+  return { remaining: MEMORY_RATE_LIMIT, limit: MEMORY_RATE_LIMIT, resetInMinutes: 60 };
 }
 
 export async function POST(request: NextRequest) {
@@ -69,7 +115,7 @@ export async function POST(request: NextRequest) {
     const rateLimitIdentifier = user?.id || `ip:${clientIp}`;
 
     if (isRedisConfigured()) {
-      // Rate limit 체크 (limit() 호출은 카운트를 증가시킴)
+      // Redis 기반 Rate limit 체크 (limit() 호출은 카운트를 증가시킴)
       const { success, limit, remaining, reset } = await aiChatRateLimit.limit(rateLimitIdentifier);
       
       // 결과 캐시 저장 (나중에 응답에 포함하기 위해)
@@ -95,6 +141,37 @@ export async function POST(request: NextRequest) {
               'X-RateLimit-Limit': limit.toString(),
               'X-RateLimit-Remaining': '0',
               'X-RateLimit-Reset': reset.toString(),
+            }
+          }
+        );
+      }
+    } else {
+      // 메모리 기반 Rate Limit (Redis 미설정 시 fallback)
+      const { success, remaining, limit, resetAt } = checkMemoryRateLimit(rateLimitIdentifier);
+      
+      // 결과 캐시 저장
+      cacheRateLimitResult(rateLimitIdentifier, remaining, limit, resetAt);
+      
+      if (!success) {
+        const resetInMinutes = Math.ceil((resetAt - Date.now()) / 60000);
+        return NextResponse.json(
+          { 
+            error: '질문 횟수를 초과했습니다.',
+            message: '시간당 20회까지 질문할 수 있습니다. 잠시 후 다시 시도해주세요.',
+            rateLimited: true,
+            retryAfterMinutes: resetInMinutes,
+            rateLimit: {
+              remaining: 0,
+              limit,
+              resetInMinutes,
+            },
+          },
+          { 
+            status: 429,
+            headers: {
+              'X-RateLimit-Limit': limit.toString(),
+              'X-RateLimit-Remaining': '0',
+              'X-RateLimit-Reset': resetAt.toString(),
             }
           }
         );
