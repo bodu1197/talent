@@ -19,28 +19,6 @@ function CallbackCompleteContent() {
       setIsProcessing(true);
 
       try {
-        // state 파라미터에서 데이터 추출 (안전한 방법)
-        const stateParam = searchParams.get('state');
-        let nickname: string | null = null;
-        let profileImage: string | null = null;
-
-        if (stateParam) {
-          try {
-            const stateData = parseOAuthState<{
-              nickname: string;
-              profileImage: string;
-            }>(stateParam);
-            nickname = stateData.nickname;
-            profileImage = stateData.profileImage;
-          } catch (error) {
-            logger.warn(
-              'Invalid or expired state parameter:',
-              error instanceof Error ? { message: error.message } : { error: String(error) }
-            );
-            // state가 유효하지 않아도 로그인은 성공했으므로 계속 진행
-          }
-        }
-
         // 현재 사용자 정보 가져오기
         const {
           data: { user },
@@ -49,32 +27,52 @@ function CallbackCompleteContent() {
 
         if (userError) throw userError;
 
-        if (user && nickname) {
-          // users 테이블 업데이트
-          const { error: usersUpdateError } = await supabase
-            .from('users')
-            .update({
-              name: nickname,
-              profile_image: profileImage,
-            })
-            .eq('id', user.id);
+        if (user) {
+          // 1. 소셜 로그인(user_metadata)에서 정보 추출 - 우선순위 1
+          let nickname = user.user_metadata?.full_name || user.user_metadata?.name;
+          let profileImage = user.user_metadata?.avatar_url || user.user_metadata?.picture;
 
-          if (usersUpdateError) {
-            logger.error('Failed to update users table:', usersUpdateError);
+          // 2. state 파라미터에서 정보 추출 (메타데이터가 없을 경우) - 우선순위 2
+          const stateParam = searchParams.get('state');
+          if (stateParam) {
+            try {
+              const stateData = parseOAuthState<{
+                nickname?: string;
+                profileImage?: string;
+              }>(stateParam);
+              
+              if (!nickname && stateData.nickname) nickname = stateData.nickname;
+              if (!profileImage && stateData.profileImage) profileImage = stateData.profileImage;
+            } catch (error) {
+              logger.warn('State parse error (ignored):', error);
+            }
           }
 
-          // profiles 테이블 업데이트 (동기화)
-          const { error: profilesUpdateError } = await supabase
-            .from('profiles')
-            .update({
-              name: nickname,
-              profile_image: profileImage,
-            })
-            .eq('user_id', user.id);
+          // 업데이트할 정보가 있는 경우에만 DB 업데이트
+          if (nickname || profileImage) {
+            const updates: { name?: string; profile_image?: string } = {};
+            if (nickname) updates.name = nickname;
+            if (profileImage) updates.profile_image = profileImage;
 
-          if (profilesUpdateError) {
-            logger.error('Failed to update profiles table:', profilesUpdateError);
-            // 업데이트 실패해도 로그인은 성공했으므로 계속 진행
+            // users 테이블 업데이트
+            const { error: usersUpdateError } = await supabase
+              .from('users')
+              .update(updates)
+              .eq('id', user.id);
+
+            if (usersUpdateError) {
+              logger.error('Failed to update users table:', usersUpdateError);
+            }
+
+            // profiles 테이블 업데이트 (동기화)
+            const { error: profilesUpdateError } = await supabase
+              .from('profiles')
+              .update(updates)
+              .eq('user_id', user.id);
+
+            if (profilesUpdateError) {
+              logger.error('Failed to update profiles table:', profilesUpdateError);
+            }
           }
         }
 
@@ -82,7 +80,6 @@ function CallbackCompleteContent() {
         router.push('/');
       } catch (error: unknown) {
         logger.error('Profile update error:', error);
-        // 에러가 있어도 홈으로 리다이렉트
         router.push('/');
       }
     };
