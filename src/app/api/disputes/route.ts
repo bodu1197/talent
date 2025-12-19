@@ -5,7 +5,6 @@ import {
   SERVICE_TYPES, 
   DISPUTE_TYPES, 
   SERVICE_STAGES, 
-  VERDICT_RULES,
   analyzeDispute,
   generateVerdictDocument,
   DisputeContext
@@ -15,7 +14,7 @@ import {
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 // 분쟁 목록 조회
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const supabase = await createClient();
     
@@ -336,7 +335,7 @@ async function analyzeWithGemini(
   basicVerdict: { verdict: string; reason: string; recommendations: string[] }
 ) {
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-3-flash-preview' });
 
     const prompt = `
 당신은 돌파구 플랫폼의 AI 분쟁 심판관입니다. 다음 분쟁 사안을 분석하고 판결해주세요.

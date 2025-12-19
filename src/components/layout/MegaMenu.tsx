@@ -115,7 +115,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                   .map((cat) => (
                     <Link
                       key={cat.id}
-                      href={`/categories/${cat.slug}`}
+                      href={cat.slug === 'errands' ? '/errands' : `/categories/${cat.slug}`}
                       className="hover:text-gray-900"
                       onClick={handleCategoryClick}
                       aria-label={`${cat.name} 카테고리 보기`}
@@ -155,7 +155,7 @@ export default function MegaMenu({ categories }: MegaMenuProps) {
                   {categories.map((category) => (
                     <div key={category.id} className="mb-1">
                       <Link
-                        href={`/categories/${category.slug}`}
+                        href={category.slug === 'errands' ? '/errands' : `/categories/${category.slug}`}
                         className={`flex items-center justify-between px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
                           activeCategory === category.id
                             ? 'bg-gray-100 text-gray-800'
