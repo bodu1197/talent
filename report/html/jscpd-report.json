@@ -1,6 +1,6 @@
 {
   "statistics": {
-    "detectionDate": "2025-12-18T23:30:28.464Z",
+    "detectionDate": "2025-12-18T23:35:17.332Z",
     "formats": {
       "javascript": {
         "sources": {
@@ -7437,8 +7437,8 @@
             "newClones": 0
           },
           "src/components/chatbot/AIChatbot.tsx": {
-            "lines": 260,
-            "tokens": 2272,
+            "lines": 269,
+            "tokens": 2323,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -7954,8 +7954,8 @@
           }
         },
         "total": {
-          "lines": 63635,
-          "tokens": 519784,
+          "lines": 63644,
+          "tokens": 519835,
           "sources": 357,
           "clones": 173,
           "duplicatedLines": 2279,
@@ -10376,8 +10376,8 @@
       }
     },
     "total": {
-      "lines": 115131,
-      "tokens": 940996,
+      "lines": 115140,
+      "tokens": 941047,
       "sources": 859,
       "clones": 290,
       "duplicatedLines": 4020,
