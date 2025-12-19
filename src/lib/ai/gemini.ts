@@ -84,7 +84,7 @@ export async function generateChatResponse(message: string, context: ChatContext
   try {
     // Gemini 1.5 Flash 모델 초기화 (안정적인 무료 모델)
     const model = genAI.getGenerativeModel({
-      model: 'gemini-2.5-flash-lite', // 할당량 관대한 모델
+      model: 'gemini-1.5-flash',
       generationConfig: {
         temperature: 0.7,
         topP: 0.8,
