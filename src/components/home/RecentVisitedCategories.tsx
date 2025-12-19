@@ -24,7 +24,11 @@ export default async function RecentVisitedCategories() {
           {allCategories.map((category) => (
             <Link
               key={category.category_id}
-              href={`/categories/${category.category_slug}`}
+              href={
+                category.category_slug === 'errands'
+                  ? '/errands'
+                  : `/categories/${category.category_slug}`
+              }
               className="flex-shrink-0"
             >
               <div className="px-4 py-2 bg-white border border-gray-200 rounded-full hover:border-brand-primary hover:bg-brand-primary hover:text-white transition-all duration-200 group">

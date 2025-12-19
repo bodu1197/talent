@@ -54,7 +54,11 @@ export default async function PersonalizedServices() {
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-semibold text-gray-900">{category.category_name}</h3>
                 <Link
-                  href={`/categories/${category.category_slug}`}
+                  href={
+                    category.category_slug === 'errands'
+                      ? '/errands'
+                      : `/categories/${category.category_slug}`
+                  }
                   className="text-sm text-brand-primary hover:underline flex items-center gap-1"
                 >
                   더보기

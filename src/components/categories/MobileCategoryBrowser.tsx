@@ -52,7 +52,11 @@ export default function MobileCategoryBrowser({ categories }: MobileCategoryBrow
           <div>
             {/* 선택된 1차 카테고리 전체보기 링크 */}
             <Link
-              href={`/categories/${selectedCategory.slug}`}
+              href={
+                selectedCategory.slug === 'errands'
+                  ? '/errands'
+                  : `/categories/${selectedCategory.slug}`
+              }
               className="block text-sm font-semibold text-brand-primary mb-3 pb-2 border-b border-gray-200"
             >
               {selectedCategory.name} 전체보기 →
@@ -65,7 +69,11 @@ export default function MobileCategoryBrowser({ categories }: MobileCategoryBrow
                   <div key={child2.id}>
                     {/* 2차 카테고리 */}
                     <Link
-                      href={`/categories/${child2.slug}`}
+                      href={
+                        selectedCategory.slug === 'errands' || child2.slug === 'errands'
+                          ? '/errands'
+                          : `/categories/${child2.slug}`
+                      }
                       className="block text-sm font-medium text-gray-900 mb-2 hover:text-brand-primary"
                     >
                       {child2.name}
@@ -77,7 +85,11 @@ export default function MobileCategoryBrowser({ categories }: MobileCategoryBrow
                         {child2.children.map((child3) => (
                           <Link
                             key={child3.id}
-                            href={`/categories/${child3.slug}`}
+                            href={
+                              selectedCategory.slug === 'errands'
+                                ? '/errands'
+                                : `/categories/${child3.slug}`
+                            }
                             className="px-2 py-1 text-xs text-gray-600 bg-gray-100 rounded hover:bg-brand-primary hover:text-white transition-colors"
                           >
                             {child3.name}

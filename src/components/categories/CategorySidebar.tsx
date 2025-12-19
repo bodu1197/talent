@@ -49,13 +49,14 @@ export default function CategorySidebar({
             <div key={category1.id} className="mb-1">
               {/* 1차 카테고리 */}
               <Link
-                href={`/categories/${category1.slug}`}
+                href={category1.slug === 'errands' ? '/errands' : `/categories/${category1.slug}`}
                 className={`flex items-center justify-between pl-0 pr-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
                   category1.id === currentCategoryId
                     ? 'bg-gray-100 text-gray-800'
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
                 onClick={(e) => {
+                  if (category1.slug === 'errands') return; // 심부름은 토글 없이 바로 이동
                   if (category1.children && category1.children.length > 0) {
                     toggleCategory(category1.id, e);
                   }
@@ -88,7 +89,11 @@ export default function CategorySidebar({
                   {category1.children.map((category2) => (
                     <div key={category2.id}>
                       <Link
-                        href={`/categories/${category2.slug}`}
+                        href={
+                          category2.slug === 'errands'
+                            ? '/errands'
+                            : `/categories/${category2.slug}`
+                        }
                         className={`flex items-center justify-between px-4 py-2 text-sm font-medium transition-all duration-200 ${
                           category2.id === currentCategoryId
                             ? 'bg-gray-200 text-gray-900'

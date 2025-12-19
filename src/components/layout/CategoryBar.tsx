@@ -34,7 +34,7 @@ export default async function CategoryBar() {
           {topLevelCategories.map((category) => (
             <Link
               key={category.id}
-              href={`/categories/${category.slug}`}
+              href={category.slug === 'errands' ? '/errands' : `/categories/${category.slug}`}
               className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-brand-primary hover:bg-gray-50 rounded-lg transition-colors whitespace-nowrap font-medium focus:ring-2 focus:ring-brand-primary focus:outline-none"
               aria-label={`${category.name} 카테고리로 이동`}
             >
@@ -60,7 +60,7 @@ export default async function CategoryBar() {
           {topLevelCategories.slice(0, 7).map((category) => (
             <Link
               key={category.id}
-              href={`/categories/${category.slug}`}
+              href={category.slug === 'errands' ? '/errands' : `/categories/${category.slug}`}
               className="flex flex-col items-center gap-1 p-2 text-gray-700 hover:text-brand-primary hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-brand-primary focus:outline-none"
               aria-label={`${category.name} 카테고리로 이동`}
             >
