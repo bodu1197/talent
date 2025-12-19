@@ -80,13 +80,10 @@ export interface ChatContext {
 /**
  * Gemini 3 Flash 모델을 사용하여 챗봇 응답 생성
  */
-export async function generateChatResponse(
-  message: string,
-  context: ChatContext
-): Promise<string> {
+export async function generateChatResponse(message: string, context: ChatContext): Promise<string> {
   try {
     // Gemini 1.5 Flash 모델 초기화 (안정적인 무료 모델)
-    const model = genAI.getGenerativeModel({ 
+    const model = genAI.getGenerativeModel({
       model: 'gemini-2.5-flash-lite', // 할당량 관대한 모델
       generationConfig: {
         temperature: 0.7,
@@ -131,7 +128,7 @@ export async function generateChatResponse(
     return text;
   } catch (error) {
     console.error('Gemini API Error:', error);
-    
+
     // API 오류시 친절한 폴백 메시지
     if (error instanceof Error) {
       if (error.message.includes('quota')) {
@@ -141,7 +138,7 @@ export async function generateChatResponse(
         return '시스템 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
       }
     }
-    
+
     return '죄송합니다. 응답 생성 중 오류가 발생했습니다. 다시 시도해주시거나 https://dolpagu.com/help/contact 에서 1:1 문의해주세요.';
   }
 }
@@ -154,7 +151,7 @@ export function searchKnowledgeBase(
   knowledgeBase: Array<{ question: string; answer: string; keywords: string[] }>
 ): string | null {
   const normalizedQuery = query.toLowerCase();
-  
+
   // 키워드 매칭
   const matches = knowledgeBase.filter((item) => {
     const keywordMatch = item.keywords.some((keyword) =>
@@ -167,9 +164,7 @@ export function searchKnowledgeBase(
   if (matches.length === 0) return null;
 
   // 매칭된 FAQ를 컨텍스트로 구성
-  return matches
-    .map((item) => `Q: ${item.question}\nA: ${item.answer}`)
-    .join('\n\n');
+  return matches.map((item) => `Q: ${item.question}\nA: ${item.answer}`).join('\n\n');
 }
 
 /**

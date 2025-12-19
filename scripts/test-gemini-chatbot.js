@@ -5,6 +5,7 @@
  * node scripts/test-gemini-chatbot.js
  */
 
+/* eslint-disable no-console */
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 require('dotenv').config({ path: '.env.local' });
 
