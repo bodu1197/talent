@@ -9,6 +9,7 @@ import {
   ShoppingBag,
   Store,
   ArrowRight,
+  Scale,
 } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -50,6 +51,12 @@ export default function HelpPage() {
       title: '1:1 문의',
       description: '직접 문의하기',
       href: '/help/contact',
+    },
+    {
+      icon: Scale,
+      title: '분쟁 조정 신청',
+      description: 'AI 공정 해결',
+      href: '/help/dispute',
     },
   ];
 

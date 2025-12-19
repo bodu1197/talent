@@ -166,6 +166,11 @@ export default function Footer() {
                     1:1 문의
                   </Link>
                 </li>
+                <li>
+                  <Link href="/help/dispute" className="hover:text-brand-primary transition-colors text-blue-600 font-medium">
+                    분쟁 조정 신청
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
