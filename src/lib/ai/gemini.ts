@@ -75,6 +75,59 @@ export interface ChatContext {
   userId?: string;
   history: ChatMessage[];
   knowledgeBase?: string;
+  // 사용자 맞춤 컨텍스트 (개인화 응답용)
+  userContext?: {
+    displayName?: string;
+    isSeller?: boolean;
+    isBuyer?: boolean;
+    activeOrders?: number;
+    pendingDisputes?: number;
+    recentCategories?: string[];
+  };
+}
+
+/**
+ * 사용자 컨텍스트를 문자열로 변환
+ */
+function buildUserContextString(userContext?: ChatContext['userContext']): string {
+  if (!userContext) return '';
+  
+  const parts: string[] = ['\n\n=== 현재 사용자 정보 ==='];
+  
+  if (userContext.displayName) {
+    parts.push(`- 닉네임: ${userContext.displayName}`);
+  }
+  if (userContext.isSeller) {
+    parts.push('- 역할: 판매자 (서비스 등록 가능)');
+  }
+  if (userContext.isBuyer && userContext.activeOrders) {
+    parts.push(`- 진행 중인 주문: ${userContext.activeOrders}건`);
+  }
+  if (userContext.pendingDisputes && userContext.pendingDisputes > 0) {
+    parts.push(`- 진행 중인 분쟁: ${userContext.pendingDisputes}건 (분쟁 관련 질문 시 상세 안내)`);
+  }
+  if (userContext.recentCategories && userContext.recentCategories.length > 0) {
+    parts.push(`- 관심 카테고리: ${userContext.recentCategories.join(', ')}`);
+  }
+  
+  parts.push('\n이 정보를 활용하여 맞춤형 답변을 제공하세요. 비로그인 사용자에게는 회원가입 혜택을 안내하세요.');
+  
+  return parts.join('\n');
+}
+
+/**
+ * API 오류에 대한 사용자 친화적 메시지 반환
+ */
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    if (error.message.includes('quota')) {
+      return '죄송합니다. 현재 많은 문의가 몰려 일시적으로 AI 상담이 어렵습니다. https://dolpagu.com/help/contact 에서 1:1 문의해주시면 빠르게 도와드리겠습니다. 🙏';
+    }
+    if (error.message.includes('API key')) {
+      return '시스템 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+    }
+  }
+  return '죄송합니다. 응답 생성 중 오류가 발생했습니다. 다시 시도해주시거나 https://dolpagu.com/help/contact 에서 1:1 문의해주세요.';
 }
 
 /**
@@ -82,7 +135,6 @@ export interface ChatContext {
  */
 export async function generateChatResponse(message: string, context: ChatContext): Promise<string> {
   try {
-    // Gemini 3 Flash Preview (최신 모델)
     const model = genAI.getGenerativeModel({
       model: 'gemini-3-flash-preview',
       generationConfig: {
@@ -99,47 +151,29 @@ export async function generateChatResponse(message: string, context: ChatContext
       parts: [{ text: msg.content }],
     }));
 
-    // 지식 베이스가 있으면 시스템 프롬프트에 추가
+    // 시스템 프롬프트 구성
     let enhancedSystemPrompt = SYSTEM_PROMPT;
+    
     if (context.knowledgeBase) {
       enhancedSystemPrompt += `\n\n관련 정보:\n${context.knowledgeBase}`;
     }
+    
+    enhancedSystemPrompt += buildUserContextString(context.userContext);
 
-    // 채팅 세션 시작
+    // 채팅 세션 시작 및 응답 생성
     const chat = model.startChat({
       history: [
-        {
-          role: 'user',
-          parts: [{ text: enhancedSystemPrompt }],
-        },
-        {
-          role: 'model',
-          parts: [{ text: '안녕하세요! Dolpagu 고객 지원팀입니다. 무엇을 도와드릴까요? 😊' }],
-        },
+        { role: 'user', parts: [{ text: enhancedSystemPrompt }] },
+        { role: 'model', parts: [{ text: '안녕하세요! Dolpagu 고객 지원팀입니다. 무엇을 도와드릴까요? 😊' }] },
         ...history,
       ],
     });
 
-    // 응답 생성
     const result = await chat.sendMessage(message);
-    const response = await result.response;
-    const text = response.text();
-
-    return text;
+    return result.response.text();
   } catch (error) {
     console.error('Gemini API Error:', error);
-
-    // API 오류시 친절한 폴백 메시지
-    if (error instanceof Error) {
-      if (error.message.includes('quota')) {
-        return '죄송합니다. 현재 많은 문의가 몰려 일시적으로 AI 상담이 어렵습니다. https://dolpagu.com/help/contact 에서 1:1 문의해주시면 빠르게 도와드리겠습니다. 🙏';
-      }
-      if (error.message.includes('API key')) {
-        return '시스템 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
-      }
-    }
-
-    return '죄송합니다. 응답 생성 중 오류가 발생했습니다. 다시 시도해주시거나 https://dolpagu.com/help/contact 에서 1:1 문의해주세요.';
+    return getErrorMessage(error);
   }
 }
 

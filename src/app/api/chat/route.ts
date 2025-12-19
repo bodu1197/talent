@@ -147,6 +147,56 @@ export async function POST(request: NextRequest) {
       ? searchKnowledgeBase(message, knowledgeBase)
       : null;
 
+    // 사용자 컨텍스트 조회 (개인화 응답용)
+    let userContext: {
+      displayName?: string;
+      isSeller?: boolean;
+      isBuyer?: boolean;
+      activeOrders?: number;
+      pendingDisputes?: number;
+      recentCategories?: string[];
+    } | undefined;
+
+    if (user) {
+      // 사용자 프로필 정보
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('display_name, is_seller')
+        .eq('id', user.id)
+        .single();
+
+      // 진행 중인 주문 수
+      const { count: orderCount } = await supabase
+        .from('orders')
+        .select('*', { count: 'exact', head: true })
+        .eq('buyer_id', user.id)
+        .in('status', ['pending', 'paid', 'in_progress', 'delivered', 'revision']);
+
+      // 진행 중인 분쟁 수
+      const { count: disputeCount } = await supabase
+        .from('disputes')
+        .select('*', { count: 'exact', head: true })
+        .or(`plaintiff_id.eq.${user.id},defendant_id.eq.${user.id}`)
+        .in('status', ['pending', 'waiting_response', 'ai_reviewing', 'ai_verdict']);
+
+      // 최근 방문 카테고리
+      const { data: recentCategories } = await supabase
+        .from('category_visits')
+        .select('category_name')
+        .eq('user_id', user.id)
+        .order('last_visited_at', { ascending: false })
+        .limit(3);
+
+      userContext = {
+        displayName: profile?.display_name,
+        isSeller: profile?.is_seller,
+        isBuyer: true,
+        activeOrders: orderCount ?? 0,
+        pendingDisputes: disputeCount ?? 0,
+        recentCategories: recentCategories?.map(c => c.category_name),
+      };
+    }
+
     // 사용자 메시지 저장 - ai_support_messages 테이블 사용
     await supabase.from('ai_support_messages').insert({
       session_id: dbSessionId,
@@ -154,12 +204,13 @@ export async function POST(request: NextRequest) {
       content: message,
     });
 
-    // AI 응답 생성
+    // AI 응답 생성 (개인화 컨텍스트 포함)
     const aiResponse = await generateChatResponse(message, {
       sessionId,
       userId: user?.id,
       history,
       knowledgeBase: relevantKnowledge || undefined,
+      userContext,
     });
 
     // AI 응답 저장
