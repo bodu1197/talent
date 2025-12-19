@@ -78,13 +78,13 @@ export interface ChatContext {
 }
 
 /**
- * Gemini 1.5 Pro 모델을 사용하여 챗봇 응답 생성
+ * Gemini 3 Flash (Preview) 모델을 사용하여 챗봇 응답 생성
  */
 export async function generateChatResponse(message: string, context: ChatContext): Promise<string> {
   try {
-    // Gemini 1.5 Flash 모델 초기화 (안정적인 무료 모델)
+    // Gemini 3 Flash Preview (최신 모델)
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-3-flash-preview',
       generationConfig: {
         temperature: 0.7,
         topP: 0.8,
