@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import {
   getCategoryBySlug as getCategory,
@@ -129,6 +129,12 @@ interface CategoryPageProps {
 
 export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
   const { slug } = await params;
+  
+  // 심부름 카테고리는 전용 페이지로 리다이렉트
+  if (slug === 'errands') {
+    redirect('/errands');
+  }
+  
   const { page: pageParam, lat: latParam, lng: lngParam } = await searchParams;
   const currentPage = Number.parseInt(pageParam || '1', 10);
 
