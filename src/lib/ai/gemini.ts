@@ -78,7 +78,7 @@ export interface ChatContext {
 }
 
 /**
- * Gemini 3 Flash 모델을 사용하여 챗봇 응답 생성
+ * Gemini 1.5 Pro 모델을 사용하여 챗봇 응답 생성
  */
 export async function generateChatResponse(message: string, context: ChatContext): Promise<string> {
   try {
