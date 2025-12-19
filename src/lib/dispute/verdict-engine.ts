@@ -442,7 +442,9 @@ export interface VerdictResult {
     | 'no_refund'
     | 'extra_payment'
     | 'negotiation'
-    | 'continue';
+    | 'continue'
+    | 'compensation'
+    | 'review';
   refundAmount: number;
   refundPercentage: number;
   reason: string;
@@ -451,122 +453,119 @@ export interface VerdictResult {
   confidence: 'high' | 'medium' | 'low';
 }
 
-export function analyzeDispute(context: DisputeContext): VerdictResult {
-  const serviceConfig = SERVICE_TYPES[context.serviceType];
+function analyzeBeforeStart(context: DisputeContext): VerdictResult {
+  return {
+    verdict: 'full_refund',
+    refundAmount: context.contractDetails.totalAmount,
+    refundPercentage: 100,
+    reason: VERDICT_RULES.BASIC.beforeStart.reason,
+    legalBasis: VERDICT_RULES.BASIC.beforeStart.legalBasis,
+    recommendations: ['판매자는 차후 더 신중한 계약을 권장합니다.'],
+    confidence: 'high',
+  };
+}
 
-
-  // CASE 1: 서비스 시작 전 취소
-  if (context.serviceStage === 'BEFORE_START') {
+function analyzeNoResponseSeller(context: DisputeContext): VerdictResult | null {
+  if (context.evidence.responseTime && context.evidence.responseTime >= 48) {
+    const refundPercentage = 100 - context.progress.percentage;
     return {
-      verdict: 'full_refund',
-      refundAmount: context.contractDetails.totalAmount,
+      verdict: 'partial_refund',
+      refundAmount: Math.round(context.contractDetails.totalAmount * (refundPercentage / 100)),
+      refundPercentage,
+      reason: `판매자가 ${context.evidence.responseTime}시간 이상 무응답 상태입니다. 미진행 부분에 대해 환불 처리합니다.`,
+      legalBasis: '소비자분쟁해결기준',
+      recommendations: ['판매자에게 경고 조치', '반복 시 판매자 자격 제한 검토'],
+      confidence: 'high',
+    };
+  }
+  return null;
+}
+
+function analyzeModificationAbuse(context: DisputeContext): VerdictResult {
+  const limit = context.contractDetails.revisionLimit;
+  const used = context.progress.revisionsUsed;
+
+  if (limit && used > limit) {
+    return {
+      verdict: 'extra_payment',
+      refundAmount: 0,
+      refundPercentage: 0,
+      reason: `계약된 수정 횟수(${limit}회)를 초과했습니다. 추가 수정에 대해 별도 비용이 발생합니다.`,
+      recommendations: [
+        `추가 수정 ${used - limit}회에 대한 비용 협의 권장`,
+        '서비스 설명에 수정 횟수 명시 여부 확인',
+      ],
+      confidence: 'high',
+    };
+  } else if (!limit) {
+    return {
+      verdict: 'review',
+      refundAmount: 0,
+      refundPercentage: 0,
+      reason: '수정 횟수가 명시되지 않았습니다. 일반적으로 2-3회가 합리적 범위입니다.',
+      recommendations: [
+        `현재 ${used}회 수정 진행됨`,
+        used <= 3 ? '합리적 범위 내 수정 의무 인정' : '추가 수정 비용 협의 권장',
+      ],
+      confidence: 'medium',
+    };
+  }
+
+  return getDefaultVerdict();
+}
+
+function analyzeCreativeQuality(context: DisputeContext): VerdictResult {
+  const hasStrongEvidence = context.evidence.contract && context.evidence.chatLogs;
+
+  if (context.progress.deliveredItems && context.progress.deliveredItems.length > 0) {
+    return {
+      verdict: 'review',
+      refundAmount: 0,
+      refundPercentage: 0,
+      reason: '창작물이 전달된 상태입니다. 계약 내용 충족 여부를 검토합니다.',
+      recommendations: [
+        '최초 요구사항과 결과물 비교 필요',
+        '약정된 수정 횟수 내 수정 권장',
+        hasStrongEvidence ? '증거 기반 판단 가능' : '추가 증거 제출 권장',
+      ],
+      confidence: hasStrongEvidence ? 'medium' : 'low',
+    };
+  }
+
+  return getDefaultVerdict();
+}
+
+function analyzeErrandDispute(context: DisputeContext): VerdictResult | null {
+  if (context.disputeType === 'DAMAGED_GOODS') {
+    return {
+      verdict: 'compensation',
+      refundAmount: context.contractDetails.totalAmount, // 물품 가액 필요
       refundPercentage: 100,
-      reason: VERDICT_RULES.BASIC.beforeStart.reason,
-      legalBasis: VERDICT_RULES.BASIC.beforeStart.legalBasis,
-      recommendations: ['판매자는 차후 더 신중한 계약을 권장합니다.'],
+      reason: '심부름 중 물품 파손에 대한 배상 책임이 있습니다.',
+      recommendations: ['물품 가액 증빙 필요', '파손 경위 확인 필요', '라이더 과실 여부 판단'],
+      confidence: 'medium',
+    };
+  }
+
+  if (context.serviceStage === 'IN_PROGRESS') {
+    return {
+      verdict: 'no_refund',
+      refundAmount: 0,
+      refundPercentage: 0,
+      reason: VERDICT_RULES.ERRAND.afterDeparture.reason,
+      recommendations: [
+        '라이더가 이미 출발한 경우 취소 불가',
+        '특별한 사유 있을 시 관리자 검토 요청',
+      ],
       confidence: 'high',
     };
   }
 
-  // CASE 2: 판매자 무응답
-  if (context.disputeType === 'NO_RESPONSE_SELLER') {
-    if (context.evidence.responseTime && context.evidence.responseTime >= 48) {
-      const refundPercentage = 100 - context.progress.percentage;
-      return {
-        verdict: 'partial_refund',
-        refundAmount: Math.round(context.contractDetails.totalAmount * (refundPercentage / 100)),
-        refundPercentage,
-        reason: `판매자가 ${context.evidence.responseTime}시간 이상 무응답 상태입니다. 미진행 부분에 대해 환불 처리합니다.`,
-        legalBasis: '소비자분쟁해결기준',
-        recommendations: ['판매자에게 경고 조치', '반복 시 판매자 자격 제한 검토'],
-        confidence: 'high',
-      };
-    }
-  }
+  return null;
+}
 
-  // CASE 3: 수정 횟수 분쟁
-  if (context.disputeType === 'MODIFICATION_ABUSE') {
-    const limit = context.contractDetails.revisionLimit;
-    const used = context.progress.revisionsUsed;
-
-    if (limit && used > limit) {
-      return {
-        verdict: 'extra_payment',
-        refundAmount: 0,
-        refundPercentage: 0,
-        reason: `계약된 수정 횟수(${limit}회)를 초과했습니다. 추가 수정에 대해 별도 비용이 발생합니다.`,
-        recommendations: [
-          `추가 수정 ${used - limit}회에 대한 비용 협의 권장`,
-          '서비스 설명에 수정 횟수 명시 여부 확인',
-        ],
-        confidence: 'high',
-      };
-    } else if (!limit) {
-      return {
-        verdict: 'review',
-        refundAmount: 0,
-        refundPercentage: 0,
-        reason: '수정 횟수가 명시되지 않았습니다. 일반적으로 2-3회가 합리적 범위입니다.',
-        recommendations: [
-          `현재 ${used}회 수정 진행됨`,
-          used <= 3 ? '합리적 범위 내 수정 의무 인정' : '추가 수정 비용 협의 권장',
-        ],
-        confidence: 'medium',
-      };
-    }
-  }
-
-  // CASE 4: 품질 불만 (창작물)
-  if (context.disputeType === 'QUALITY_COMPLAINT' && context.serviceType === 'CREATIVE') {
-    // 증거 평가
-    const hasStrongEvidence = context.evidence.contract && context.evidence.chatLogs;
-
-    if (context.progress.deliveredItems && context.progress.deliveredItems.length > 0) {
-      return {
-        verdict: 'review',
-        refundAmount: 0,
-        refundPercentage: 0,
-        reason: '창작물이 전달된 상태입니다. 계약 내용 충족 여부를 검토합니다.',
-        recommendations: [
-          '최초 요구사항과 결과물 비교 필요',
-          '약정된 수정 횟수 내 수정 권장',
-          hasStrongEvidence ? '증거 기반 판단 가능' : '추가 증거 제출 권장',
-        ],
-        confidence: hasStrongEvidence ? 'medium' : 'low',
-      };
-    }
-  }
-
-  // CASE 5: 심부름 관련 분쟁
-  if (context.serviceType === 'ERRAND') {
-    if (context.disputeType === 'DAMAGED_GOODS') {
-      return {
-        verdict: 'compensation',
-        refundAmount: context.contractDetails.totalAmount, // 물품 가액 필요
-        refundPercentage: 100,
-        reason: '심부름 중 물품 파손에 대한 배상 책임이 있습니다.',
-        recommendations: ['물품 가액 증빙 필요', '파손 경위 확인 필요', '라이더 과실 여부 판단'],
-        confidence: 'medium',
-      };
-    }
-
-    if (context.serviceStage === 'IN_PROGRESS') {
-      return {
-        verdict: 'no_refund',
-        refundAmount: 0,
-        refundPercentage: 0,
-        reason: VERDICT_RULES.ERRAND.afterDeparture.reason,
-        recommendations: [
-          '라이더가 이미 출발한 경우 취소 불가',
-          '특별한 사유 있을 시 관리자 검토 요청',
-        ],
-        confidence: 'high',
-      };
-    }
-  }
-
-  // CASE 6: 가분적 용역 - 진행 중
-  if (serviceConfig.divisible && context.serviceStage === 'IN_PROGRESS') {
+function analyzeInProgress(context: DisputeContext, divisible: boolean): VerdictResult {
+  if (divisible) {
     const refundPercentage = 100 - context.progress.percentage;
     return {
       verdict: 'partial_refund',
@@ -580,10 +579,7 @@ export function analyzeDispute(context: DisputeContext): VerdictResult {
       ],
       confidence: 'high',
     };
-  }
-
-  // CASE 7: 불가분적 용역 - 진행 중
-  if (!serviceConfig.divisible && context.serviceStage === 'IN_PROGRESS') {
+  } else {
     return {
       verdict: 'no_refund',
       refundAmount: 0,
@@ -598,25 +594,25 @@ export function analyzeDispute(context: DisputeContext): VerdictResult {
       confidence: 'high',
     };
   }
+}
 
-  // CASE 8: 구매 확정 후
-  if (context.serviceStage === 'COMPLETED') {
-    return {
-      verdict: 'negotiation',
-      refundAmount: 0,
-      refundPercentage: 0,
-      reason: VERDICT_RULES.BASIC.afterConfirmation.reason,
-      legalBasis: VERDICT_RULES.BASIC.afterConfirmation.legalBasis,
-      recommendations: [
-        '구매 확정 후에는 당사자 협의가 원칙입니다',
-        '판매자의 동의 하에 환불 가능',
-        '합의 불가 시 관리자 중재 요청',
-      ],
-      confidence: 'high',
-    };
-  }
+function analyzeCompleted(): VerdictResult {
+  return {
+    verdict: 'negotiation',
+    refundAmount: 0,
+    refundPercentage: 0,
+    reason: VERDICT_RULES.BASIC.afterConfirmation.reason,
+    legalBasis: VERDICT_RULES.BASIC.afterConfirmation.legalBasis,
+    recommendations: [
+      '구매 확정 후에는 당사자 협의가 원칙입니다',
+      '판매자의 동의 하에 환불 가능',
+      '합의 불가 시 관리자 중재 요청',
+    ],
+    confidence: 'high',
+  };
+}
 
-  // 기본값: 검토 필요
+function getDefaultVerdict(): VerdictResult {
   return {
     verdict: 'negotiation',
     refundAmount: 0,
@@ -629,6 +625,46 @@ export function analyzeDispute(context: DisputeContext): VerdictResult {
     ],
     confidence: 'low',
   };
+}
+
+export function analyzeDispute(context: DisputeContext): VerdictResult {
+  const serviceConfig = SERVICE_TYPES[context.serviceType];
+
+  // CASE 1: 서비스 시작 전
+  if (context.serviceStage === 'BEFORE_START') {
+    return analyzeBeforeStart(context);
+  }
+
+  // CASE 2: 판매자 무응답
+  const noResponseResult =
+    context.disputeType === 'NO_RESPONSE_SELLER' ? analyzeNoResponseSeller(context) : null;
+  if (noResponseResult) return noResponseResult;
+
+  // CASE 3: 수정 횟수 분쟁
+  const modAbuseResult =
+    context.disputeType === 'MODIFICATION_ABUSE' ? analyzeModificationAbuse(context) : null;
+  if (modAbuseResult) return modAbuseResult;
+
+  // CASE 4: 품질 불만 (창작물)
+  const qualityResult =
+    context.disputeType === 'QUALITY_COMPLAINT' && context.serviceType === 'CREATIVE'
+      ? analyzeCreativeQuality(context)
+      : null;
+  if (qualityResult) return qualityResult;
+
+  // CASE 5: 심부름 관련 분쟁
+  const errandResult = context.serviceType === 'ERRAND' ? analyzeErrandDispute(context) : null;
+  if (errandResult) return errandResult;
+
+  // CASE 6, 7, 8: 서비스 단계별 처리
+  switch (context.serviceStage) {
+    case 'IN_PROGRESS':
+      return analyzeInProgress(context, serviceConfig.divisible);
+    case 'COMPLETED':
+      return analyzeCompleted();
+    default:
+      return getDefaultVerdict();
+  }
 }
 
 // ============================================
@@ -657,6 +693,19 @@ export function generateVerdictDocument(
     continue: '서비스 계속 진행',
     compensation: '손해 배상',
     review: '추가 검토 필요',
+  };
+
+  const getConfidenceStars = (confidence: 'high' | 'medium' | 'low') => {
+    switch (confidence) {
+      case 'high':
+        return '높음 ⭐⭐⭐';
+      case 'medium':
+        return '보통 ⭐⭐';
+      case 'low':
+        return '낮음 ⭐';
+      default:
+        return '낮음 ⭐';
+    }
   };
 
   return `
@@ -716,7 +765,7 @@ ${
 ${verdictResult.recommendations.map((r, i) => `  ${i + 1}. ${r}`).join('\n')}
 
 ───────────────────────────────────────────────────────────────
-■ 판결 신뢰도: ${verdictResult.confidence === 'high' ? '높음 ⭐⭐⭐' : (verdictResult.confidence === 'medium' ? '보통 ⭐⭐' : '낮음 ⭐')}
+■ 판결 신뢰도: ${getConfidenceStars(verdictResult.confidence)}
 ───────────────────────────────────────────────────────────────
 
   본 판결에 이의가 있는 당사자는 24시간 내 이의 신청이 가능합니다.
