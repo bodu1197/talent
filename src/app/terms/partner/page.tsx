@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Handshake } from 'lucide-react';
+import { Briefcase } from 'lucide-react';
 import PolicyLayout from '@/components/common/PolicyLayout';
 
 export const metadata: Metadata = {
@@ -136,7 +136,7 @@ export default function PartnerTermsPage() {
     <PolicyLayout
       title="파트너 업무위수탁 약관"
       effectiveDate="2025년 1월 1일"
-      icon={Handshake}
+      icon={Briefcase}
       bgGradient="bg-gradient-to-br from-orange-500 to-orange-600"
       textColor="text-orange-100"
       relatedLinks={[
