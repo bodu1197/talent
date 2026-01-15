@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { MapPin } from 'lucide-react';
 import PolicyLayout from '@/components/common/PolicyLayout';
+import PolicySections from '@/components/common/PolicySections';
 
 export const metadata: Metadata = {
   title: '위치기반서비스 이용약관 | 돌파구',
@@ -126,29 +127,7 @@ export default function LocationTermsPage() {
         { href: '/privacy', label: '개인정보처리방침' },
       ]}
     >
-      <div className="space-y-6">
-        {sections.map((section) => (
-          <div
-            key={section.title}
-            className="border-b border-gray-100 pb-5 last:border-0 last:pb-0"
-          >
-            <h2 className="text-sm font-semibold text-gray-900 mb-2">{section.title}</h2>
-            {section.content && (
-              <p className="text-xs text-gray-600 leading-relaxed">{section.content}</p>
-            )}
-            {section.list && (
-              <ol className="space-y-1.5 mt-2">
-                {section.list.map((item, idx) => (
-                  <li key={item} className="text-xs text-gray-600 leading-relaxed flex gap-2">
-                    <span className="text-gray-400 flex-shrink-0">{idx + 1}.</span>
-                    {item}
-                  </li>
-                ))}
-              </ol>
-            )}
-          </div>
-        ))}
-      </div>
+      <PolicySections sections={sections} />
     </PolicyLayout>
   );
 }

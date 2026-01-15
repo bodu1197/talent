@@ -1,43 +1,9 @@
 import { createClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
+import { extractStoragePath, extractBucketName } from './storage-utils-common';
 
-/**
- * Supabase Storage URL에서 파일 경로 추출 (서버용)
- */
-export function extractStoragePath(publicUrl: string): string | null {
-  try {
-    const url = new URL(publicUrl);
-    const pathParts = url.pathname.split('/storage/v1/object/public/');
-    if (pathParts.length < 2) return null;
-
-    const afterBucket = pathParts[1];
-    const slashIndex = afterBucket.indexOf('/');
-    if (slashIndex === -1) return null;
-
-    return afterBucket.substring(slashIndex + 1);
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Supabase Storage URL에서 버킷 이름 추출 (서버용)
- */
-export function extractBucketName(publicUrl: string): string | null {
-  try {
-    const url = new URL(publicUrl);
-    const pathParts = url.pathname.split('/storage/v1/object/public/');
-    if (pathParts.length < 2) return null;
-
-    const afterPublic = pathParts[1];
-    const slashIndex = afterPublic.indexOf('/');
-    if (slashIndex === -1) return afterPublic;
-
-    return afterPublic.substring(0, slashIndex);
-  } catch {
-    return null;
-  }
-}
+// Re-export common utilities for server usage
+export { extractStoragePath, extractBucketName };
 
 /**
  * Storage에서 이미지 삭제 (서버용)
