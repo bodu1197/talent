@@ -105,8 +105,45 @@ export default function DisputeApplyPage() {
     }
     setUser(user);
 
-    // 내 주문 목록 조회
-    const { data: ordersData, error } = await supabase
+    // 내 주문 목록 조회 (구매자/판매자 각각 조회 후 합침)
+    const selectFields = `
+      id,
+      total_amount,
+      status,
+      created_at,
+      buyer_id,
+      service:services(
+        id,
+        title,
+        seller_id,
+        seller:profiles!services_seller_id_fkey(display_name)
+      )
+    `;
+
+    type OrderQueryResult = {
+      id: string;
+      total_amount: number;
+      status: string;
+      created_at: string;
+      buyer_id: string;
+      service: {
+        id: string;
+        title: string;
+        seller_id: string;
+        seller: { display_name: string };
+      };
+    };
+
+    // 1. 구매자로서의 주문
+    const { data: buyerOrders, error: buyerError } = await supabase
+      .from('orders')
+      .select(selectFields)
+      .eq('buyer_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(50);
+
+    // 2. 판매자로서의 주문 (services 테이블 inner join)
+    const { data: sellerOrders, error: sellerError } = await supabase
       .from('orders')
       .select(
         `
@@ -115,7 +152,7 @@ export default function DisputeApplyPage() {
         status,
         created_at,
         buyer_id,
-        service:services(
+        service:services!inner(
           id,
           title,
           seller_id,
@@ -123,17 +160,33 @@ export default function DisputeApplyPage() {
         )
       `
       )
-      .or(`buyer_id.eq.${user.id},service.seller_id.eq.${user.id}`)
+      .eq('service.seller_id', user.id)
       .order('created_at', { ascending: false })
       .limit(50);
 
+    const error = buyerError || sellerError;
+
     if (error) {
       console.error('Orders load error:', error);
-    } else if (ordersData) {
+    } else {
+      // 타입 단언 후 합치기
+      const buyerData = (buyerOrders || []) as unknown as OrderQueryResult[];
+      const sellerData = (sellerOrders || []) as unknown as OrderQueryResult[];
+
+      // 중복 제거
+      const buyerOrderIds = new Set(buyerData.map((o) => o.id));
+      const uniqueSellerOrders = sellerData.filter((o) => !buyerOrderIds.has(o.id));
+      const ordersData = [...buyerData, ...uniqueSellerOrders];
+
+      // 날짜순 정렬
+      ordersData.sort(
+        (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+
       // 타입 변환
       const formattedOrders = ordersData.map((order) => ({
         ...order,
-        service: order.service as unknown as Order['service'],
+        service: order.service as Order['service'],
       })) as Order[];
       setOrders(formattedOrders);
 
@@ -341,10 +394,11 @@ export default function DisputeApplyPage() {
                     key={order.id}
                     htmlFor={`order-${order.id}`}
                     aria-label={`주문 선택: ${order.service?.title || '서비스'} - ${order.total_amount?.toLocaleString()}원`}
-                    className={`block p-4 border rounded-lg cursor-pointer transition ${selectedOrder?.id === order.id
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
-                      }`}
+                    className={`block p-4 border rounded-lg cursor-pointer transition ${
+                      selectedOrder?.id === order.id
+                        ? 'border-blue-500 bg-blue-50'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
                   >
                     <input
                       type="radio"
@@ -396,10 +450,11 @@ export default function DisputeApplyPage() {
               {DISPUTE_TYPES.map((type) => (
                 <label
                   key={type.value}
-                  className={`p-4 border rounded-lg cursor-pointer transition ${disputeType === type.value
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                  className={`p-4 border rounded-lg cursor-pointer transition ${
+                    disputeType === type.value
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
                 >
                   <input
                     type="radio"
