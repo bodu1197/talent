@@ -591,25 +591,39 @@ export default function ErrandRiderRegisterPage() {
               </div>
             </div>
 
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-5">
+              <div className="flex items-start gap-2">
+                <FileText className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-blue-800 mb-2">
+                    범죄경력회보서 발급 방법
+                  </p>
+                  <ol className="text-xs text-blue-700 space-y-1 mb-3">
+                    <li>1. 정부24 접속</li>
+                    <li>2. &quot;범죄경력회보서&quot; 검색</li>
+                    <li>3. &quot;본인용&quot; 선택</li>
+                    <li>4. 성범죄경력 조회 포함 체크</li>
+                    <li>5. 무료 발급 완료</li>
+                  </ol>
+                  <a
+                    href="https://www.gov.kr"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-md hover:bg-blue-700 transition-colors"
+                  >
+                    정부24 바로가기
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              </div>
+            </div>
+
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-5">
               <div className="flex items-start gap-2">
                 <AlertTriangle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm font-medium text-yellow-800 mb-1">서류 발급 안내</p>
+                  <p className="text-sm font-medium text-yellow-800 mb-1">서류 안내</p>
                   <ul className="text-xs text-yellow-700 space-y-1">
-                    <li>
-                      • 범죄경력회보서(성범죄경력 포함)는{' '}
-                      <a
-                        href="https://www.gov.kr"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline font-medium inline-flex items-center gap-0.5"
-                      >
-                        정부24
-                        <ExternalLink className="w-3 h-3" />
-                      </a>{' '}
-                      에서 무료 발급 가능합니다
-                    </li>
                     <li>• 발급일로부터 3개월 이내의 서류만 유효합니다</li>
                     <li>• 모바일에서 카메라로 직접 촬영하거나 갤러리에서 선택할 수 있습니다</li>
                   </ul>
