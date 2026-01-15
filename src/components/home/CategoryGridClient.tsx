@@ -21,11 +21,11 @@ function CategoryIcon({
   icon,
   color,
   size = 'w-6 h-6',
-}: {
+}: Readonly<{
   icon?: string;
   color: string;
   size?: string;
-}) {
+}>) {
   const iconClass = `${size} ${color}`;
   const IconComponent = (icon ? CATEGORY_ICON_MAP[icon] : undefined) ?? Circle;
   return <IconComponent className={iconClass} />;

@@ -48,8 +48,9 @@ export async function POST(request: Request) {
 
     // 2. Supabase Client로는 직접 DDL 실행 불가
     // SQL Editor에서 직접 실행해야 함
-    results.push('\n⚠️ Supabase Dashboard SQL Editor에서 다음 SQL을 실행해주세요:');
-    results.push(`
+    results.push(
+      '\n⚠️ Supabase Dashboard SQL Editor에서 다음 SQL을 실행해주세요:',
+      `
 -- 1. 컬럼 추가
 ALTER TABLE helper_profiles
 ADD COLUMN IF NOT EXISTS current_lat DECIMAL(10, 8),
@@ -225,7 +226,8 @@ COMMENT ON COLUMN helper_profiles.current_lat IS '라이더 현재 위도';
 COMMENT ON COLUMN helper_profiles.current_lng IS '라이더 현재 경도';
 COMMENT ON COLUMN helper_profiles.last_location_at IS '마지막 위치 업데이트 시간';
 COMMENT ON COLUMN helper_profiles.is_online IS '라이더 온라인 상태';
-    `);
+    `
+    );
 
     return NextResponse.json({
       success: true,

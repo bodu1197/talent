@@ -20,12 +20,12 @@ function NavLink({
   pathname,
   user,
   badge,
-}: {
+}: Readonly<{
   item: NavItem;
   pathname: string;
   user: unknown;
   badge?: React.ReactNode;
-}) {
+}>) {
   const isActive = item.isActiveCheck(pathname);
   const href = item.requiresAuth && !user ? (item.authRedirect ?? '/auth/login') : item.path;
 

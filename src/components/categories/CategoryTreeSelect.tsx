@@ -149,9 +149,7 @@ export default function CategoryTreeSelect({
                     } ${!hasChildren ? 'ml-8' : ''}`}
                   >
                     {isSelected && <Check className="w-4 h-4" />}
-                    <span className={!isSelected && !hasChildren ? 'ml-6' : ''}>
-                      {category.name}
-                    </span>
+                    <span className={isSelected || hasChildren ? '' : 'ml-6'}>{category.name}</span>
                   </Link>
                 </div>
 

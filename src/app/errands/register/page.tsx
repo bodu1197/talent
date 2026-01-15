@@ -172,7 +172,7 @@ export default function ErrandRiderRegisterPage() {
 
   const removeFile = (fieldName: 'id_card' | 'selfie' | 'criminal_record') => {
     if (formData[fieldName].preview) {
-      URL.revokeObjectURL(formData[fieldName].preview!);
+      URL.revokeObjectURL(formData[fieldName].preview);
     }
     setFormData((prev) => ({
       ...prev,
@@ -442,45 +442,7 @@ export default function ErrandRiderRegisterPage() {
               본인인증
             </h3>
 
-            {!formData.phone_verified ? (
-              <>
-                <div className="bg-gray-50 rounded-lg p-4 mb-5">
-                  <div className="flex items-start gap-3">
-                    <Phone className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-sm font-medium text-gray-900 mb-1">
-                        본인 명의 휴대폰으로 인증이 필요합니다
-                      </p>
-                      <p className="text-xs text-gray-600">
-                        인증 완료 시 이름, 생년월일, 성별, 휴대폰 번호가 자동으로 입력됩니다.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  onClick={handleIdentityVerification}
-                  disabled={isVerifying}
-                  className="w-full py-3.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isVerifying ? (
-                    <>
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      인증 진행 중...
-                    </>
-                  ) : (
-                    <>
-                      <Fingerprint className="w-5 h-5" />
-                      본인인증 진행하기
-                    </>
-                  )}
-                </button>
-
-                <p className="text-xs text-gray-500 text-center mt-3">
-                  KCP 휴대폰 본인인증으로 진행됩니다
-                </p>
-              </>
-            ) : (
+            {formData.phone_verified ? (
               <>
                 {/* 본인인증 완료 - 정보 표시 */}
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-5">
@@ -557,6 +519,44 @@ export default function ErrandRiderRegisterPage() {
                   다음
                   <ChevronRight className="w-4 h-4" />
                 </button>
+              </>
+            ) : (
+              <>
+                <div className="bg-gray-50 rounded-lg p-4 mb-5">
+                  <div className="flex items-start gap-3">
+                    <Phone className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-900 mb-1">
+                        본인 명의 휴대폰으로 인증이 필요합니다
+                      </p>
+                      <p className="text-xs text-gray-600">
+                        인증 완료 시 이름, 생년월일, 성별, 휴대폰 번호가 자동으로 입력됩니다.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleIdentityVerification}
+                  disabled={isVerifying}
+                  className="w-full py-3.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isVerifying ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      인증 진행 중...
+                    </>
+                  ) : (
+                    <>
+                      <Fingerprint className="w-5 h-5" />
+                      본인인증 진행하기
+                    </>
+                  )}
+                </button>
+
+                <p className="text-xs text-gray-500 text-center mt-3">
+                  KCP 휴대폰 본인인증으로 진행됩니다
+                </p>
               </>
             )}
           </div>

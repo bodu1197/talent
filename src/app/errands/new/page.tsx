@@ -664,8 +664,7 @@ export default function NewErrandPage() {
             {formData.category === 'DELIVERY' && (
               <div className="bg-white rounded-xl border border-gray-200 p-4">
                 <span className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                  <span className="w-2 h-2 rounded-full bg-blue-500" />
-                  출발지
+                  <span className="w-2 h-2 rounded-full bg-blue-500" /> 출발지
                 </span>
                 <div className="flex gap-2 mb-2">
                   <button

@@ -255,7 +255,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     // 상태 변경 처리
     if (body.status) {
       const newStatus = body.status as ErrandStatus;
-      const currentStatus = currentErrand.status as ErrandStatus;
+      const currentStatus = currentErrand.status;
 
       // 상태 전이 유효성 검사
       if (!isValidStatusTransition(currentStatus, newStatus)) {

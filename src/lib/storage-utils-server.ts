@@ -3,7 +3,7 @@ import { logger } from '@/lib/logger';
 import { extractStoragePath, extractBucketName } from './storage-utils-common';
 
 // Re-export common utilities for server usage
-export { extractStoragePath, extractBucketName };
+export { extractStoragePath, extractBucketName } from './storage-utils-common';
 
 /**
  * Storage에서 이미지 삭제 (서버용)

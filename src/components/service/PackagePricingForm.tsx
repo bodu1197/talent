@@ -213,19 +213,7 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
               {/* 펼쳐진 내용 */}
               {isExpanded && (
                 <div className="p-5 bg-white">
-                  {!pkg.is_enabled ? (
-                    /* 비활성화 상태 */
-                    <div className="text-center py-8">
-                      <p className="text-gray-500 mb-4">이 패키지는 비활성화되어 있습니다</p>
-                      <button
-                        type="button"
-                        onClick={() => applyTemplate(type)}
-                        className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-primary/90 transition-colors"
-                      >
-                        {PACKAGE_TYPE_LABELS[type]} 템플릿으로 시작하기
-                      </button>
-                    </div>
-                  ) : (
+                  {pkg.is_enabled ? (
                     /* 활성화된 패키지 폼 - 전체 너비 */
                     <div className="space-y-6">
                       {/* 에러 메시지 */}
@@ -493,6 +481,18 @@ export default function PackagePricingForm({ packages, onChange, errors = {} }: 
                           예: 기본 디자인, 소스 파일 제공, 상업적 사용권, 고해상도 이미지 등
                         </p>
                       </div>
+                    </div>
+                  ) : (
+                    /* 비활성화 상태 */
+                    <div className="text-center py-8">
+                      <p className="text-gray-500 mb-4">이 패키지는 비활성화되어 있습니다</p>
+                      <button
+                        type="button"
+                        onClick={() => applyTemplate(type)}
+                        className="px-6 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-primary/90 transition-colors"
+                      >
+                        {PACKAGE_TYPE_LABELS[type]} 템플릿으로 시작하기
+                      </button>
                     </div>
                   )}
                 </div>

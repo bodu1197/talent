@@ -191,7 +191,7 @@ async function handlePaymentCancelled(paymentId: string, _payment: Record<string
 // 결제 실패 처리
 async function handlePaymentFailed(paymentId: string, payment: Record<string, unknown>) {
   const merchantUid = paymentId;
-  const failReason = (payment as Record<string, unknown>).failReason || 'Unknown';
+  const failReason = payment.failReason || 'Unknown';
 
   const { error } = await supabase
     .from('orders')
