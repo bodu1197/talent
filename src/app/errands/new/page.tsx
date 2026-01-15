@@ -662,11 +662,11 @@ export default function NewErrandPage() {
 
             {/* 출발지 (배달 카테고리만) */}
             {formData.category === 'DELIVERY' && (
-              <fieldset className="bg-white rounded-xl border border-gray-200 p-4">
-                <legend className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                  <div className="w-2 h-2 rounded-full bg-blue-500" />
+              <div className="bg-white rounded-xl border border-gray-200 p-4">
+                <span className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                  <span className="w-2 h-2 rounded-full bg-blue-500" />
                   출발지
-                </legend>
+                </span>
                 <div className="flex gap-2 mb-2">
                   <button
                     type="button"
@@ -699,7 +699,7 @@ export default function NewErrandPage() {
                     className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 )}
-              </fieldset>
+              </div>
             )}
 
             {/* 도착지 / 배달 받을 주소 */}
