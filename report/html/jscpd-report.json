@@ -1,6 +1,6 @@
 {
   "statistics": {
-    "detectionDate": "2026-01-15T14:14:47.246Z",
+    "detectionDate": "2026-01-15T16:11:17.434Z",
     "formats": {
       "javascript": {
         "sources": {
@@ -641,8 +641,8 @@
             "newClones": 0
           },
           "src/__tests__/unit/components/mypage/Sidebar.test.tsx": {
-            "lines": 146,
-            "tokens": 1620,
+            "lines": 150,
+            "tokens": 1673,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -1697,8 +1697,8 @@
             "newClones": 0
           },
           "src/app/help/dispute/page.tsx": {
-            "lines": 190,
-            "tokens": 1716,
+            "lines": 191,
+            "tokens": 1779,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -2069,8 +2069,8 @@
             "newClones": 0
           },
           "src/app/admin/ai-faq/page.tsx": {
-            "lines": 275,
-            "tokens": 2425,
+            "lines": 279,
+            "tokens": 2502,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -3233,7 +3233,7 @@
             "newClones": 0
           },
           "src/components/chatbot/AIChatbot.tsx": {
-            "lines": 102,
+            "lines": 100,
             "tokens": 855,
             "sources": 1,
             "clones": 0,
@@ -3293,8 +3293,8 @@
             "newClones": 0
           },
           "src/components/categories/LocationSortToggle.tsx": {
-            "lines": 125,
-            "tokens": 985,
+            "lines": 124,
+            "tokens": 977,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -3425,7 +3425,7 @@
             "newClones": 0
           },
           "src/components/admin/AdminDataView.tsx": {
-            "lines": 79,
+            "lines": 77,
             "tokens": 601,
             "sources": 1,
             "clones": 0,
@@ -3678,8 +3678,8 @@
           }
         },
         "total": {
-          "lines": 25614,
-          "tokens": 208828,
+          "lines": 25618,
+          "tokens": 209013,
           "sources": 306,
           "clones": 8,
           "duplicatedLines": 508,
@@ -3694,13 +3694,13 @@
         "sources": {
           "src/app/mypage/seller/services/[id]/edit/page.tsx": {
             "lines": 206,
-            "tokens": 1949,
+            "tokens": 1957,
             "sources": 1,
             "clones": 2,
             "duplicatedLines": 22,
             "duplicatedTokens": 292,
             "percentage": 10.68,
-            "percentageTokens": 14.98,
+            "percentageTokens": 14.92,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -4250,9 +4250,9 @@
             "sources": 1,
             "clones": 17,
             "duplicatedLines": 334,
-            "duplicatedTokens": 2261,
+            "duplicatedTokens": 2255,
             "percentage": 170.41,
-            "percentageTokens": 126.31,
+            "percentageTokens": 125.98,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -4293,8 +4293,8 @@
             "newClones": 0
           },
           "src/__tests__/unit/components/services/MobileServiceHeader.test.tsx": {
-            "lines": 115,
-            "tokens": 1195,
+            "lines": 119,
+            "tokens": 1227,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -4401,14 +4401,14 @@
             "newClones": 0
           },
           "src/__tests__/unit/components/mypage/Sidebar.test.tsx": {
-            "lines": 167,
-            "tokens": 1837,
+            "lines": 171,
+            "tokens": 1890,
             "sources": 1,
             "clones": 1,
             "duplicatedLines": 20,
             "duplicatedTokens": 139,
-            "percentage": 11.98,
-            "percentageTokens": 7.57,
+            "percentage": 11.7,
+            "percentageTokens": 7.35,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -4430,9 +4430,9 @@
             "sources": 1,
             "clones": 1,
             "duplicatedLines": 20,
-            "duplicatedTokens": 125,
+            "duplicatedTokens": 119,
             "percentage": 13.33,
-            "percentageTokens": 9.05,
+            "percentageTokens": 8.62,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -5242,7 +5242,7 @@
           },
           "src/app/help/dispute/[id]/page.tsx": {
             "lines": 691,
-            "tokens": 6534,
+            "tokens": 6536,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -5349,8 +5349,8 @@
             "newClones": 0
           },
           "src/app/auth/callback/complete/page.tsx": {
-            "lines": 149,
-            "tokens": 1420,
+            "lines": 148,
+            "tokens": 1407,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -5637,8 +5637,8 @@
             "newClones": 0
           },
           "src/app/help/dispute/page.tsx": {
-            "lines": 509,
-            "tokens": 4613,
+            "lines": 510,
+            "tokens": 4676,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -6129,8 +6129,8 @@
             "newClones": 0
           },
           "src/app/admin/ai-faq/page.tsx": {
-            "lines": 540,
-            "tokens": 4943,
+            "lines": 544,
+            "tokens": 5020,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -6849,14 +6849,14 @@
             "newClones": 0
           },
           "src/components/mypage/MobileMyPageNav.tsx": {
-            "lines": 143,
-            "tokens": 1508,
+            "lines": 152,
+            "tokens": 1455,
             "sources": 1,
-            "clones": 4,
-            "duplicatedLines": 20,
-            "duplicatedTokens": 338,
-            "percentage": 13.99,
-            "percentageTokens": 22.41,
+            "clones": 2,
+            "duplicatedLines": 10,
+            "duplicatedTokens": 164,
+            "percentage": 6.58,
+            "percentageTokens": 11.27,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -7450,7 +7450,7 @@
           },
           "src/components/common/GradientCategoryBanner.tsx": {
             "lines": 179,
-            "tokens": 1521,
+            "tokens": 1524,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -7485,7 +7485,7 @@
             "newClones": 0
           },
           "src/components/chatbot/AIChatbot.tsx": {
-            "lines": 269,
+            "lines": 267,
             "tokens": 2323,
             "sources": 1,
             "clones": 0,
@@ -7557,8 +7557,8 @@
             "newClones": 0
           },
           "src/components/categories/LocationSortToggle.tsx": {
-            "lines": 270,
-            "tokens": 2214,
+            "lines": 269,
+            "tokens": 2206,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -7725,8 +7725,8 @@
             "newClones": 0
           },
           "src/components/admin/AdminDataView.tsx": {
-            "lines": 145,
-            "tokens": 1105,
+            "lines": 143,
+            "tokens": 1108,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -8002,14 +8002,14 @@
           }
         },
         "total": {
-          "lines": 64932,
-          "tokens": 533875,
+          "lines": 64948,
+          "tokens": 534042,
           "sources": 359,
-          "clones": 172,
-          "duplicatedLines": 2267,
-          "duplicatedTokens": 18474,
-          "percentage": 3.49,
-          "percentageTokens": 3.46,
+          "clones": 171,
+          "duplicatedLines": 2262,
+          "duplicatedTokens": 18381,
+          "percentage": 3.48,
+          "percentageTokens": 3.44,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -9373,14 +9373,14 @@
             "newClones": 0
           },
           "src/app/api/disputes/route.ts": {
-            "lines": 176,
-            "tokens": 1683,
+            "lines": 188,
+            "tokens": 1753,
             "sources": 1,
             "clones": 5,
             "duplicatedLines": 58,
             "duplicatedTokens": 628,
-            "percentage": 32.95,
-            "percentageTokens": 37.31,
+            "percentage": 30.85,
+            "percentageTokens": 35.82,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -9398,7 +9398,7 @@
           },
           "src/app/api/chat/route.ts": {
             "lines": 372,
-            "tokens": 3439,
+            "tokens": 3437,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -9685,8 +9685,8 @@
             "newClones": 0
           },
           "src/lib/location/geolocation-error.ts": {
-            "lines": 384,
-            "tokens": 2608,
+            "lines": 401,
+            "tokens": 2607,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -10418,8 +10418,8 @@
           }
         },
         "total": {
-          "lines": 27886,
-          "tokens": 229281,
+          "lines": 27915,
+          "tokens": 229348,
           "sources": 200,
           "clones": 113,
           "duplicatedLines": 1280,
@@ -10460,14 +10460,14 @@
       }
     },
     "total": {
-      "lines": 118443,
-      "tokens": 972081,
+      "lines": 118492,
+      "tokens": 972500,
       "sources": 866,
-      "clones": 293,
-      "duplicatedLines": 4055,
-      "duplicatedTokens": 35641,
+      "clones": 292,
+      "duplicatedLines": 4050,
+      "duplicatedTokens": 35548,
       "percentage": 3.42,
-      "percentageTokens": 3.67,
+      "percentageTokens": 3.66,
       "newDuplicatedLines": 0,
       "newClones": 0
     }
@@ -10485,12 +10485,12 @@
         "startLoc": {
           "line": 148,
           "column": 3,
-          "position": 1405
+          "position": 1413
         },
         "endLoc": {
           "line": 159,
           "column": 7,
-          "position": 1551
+          "position": 1559
         }
       },
       "secondFile": {
@@ -10500,12 +10500,12 @@
         "startLoc": {
           "line": 95,
           "column": 3,
-          "position": 861
+          "position": 869
         },
         "endLoc": {
           "line": 106,
           "column": 56,
-          "position": 1007
+          "position": 1015
         }
       }
     },
@@ -12460,17 +12460,17 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\__tests__\\unit\\components\\notifications\\NotificationBell.test.tsx",
-        "start": 3,
-        "end": 22,
+        "start": 4,
+        "end": 23,
         "startLoc": {
-          "line": 3,
+          "line": 4,
           "column": 46,
-          "position": 56
+          "position": 70
         },
         "endLoc": {
-          "line": 22,
+          "line": 23,
           "column": 16,
-          "position": 192
+          "position": 206
         }
       },
       "secondFile": {
@@ -12501,12 +12501,12 @@
         "startLoc": {
           "line": 39,
           "column": 2,
-          "position": 381
+          "position": 358
         },
         "endLoc": {
           "line": 52,
           "column": 42,
-          "position": 480
+          "position": 457
         }
       },
       "secondFile": {
@@ -12528,7 +12528,7 @@
     {
       "format": "tsx",
       "lines": 21,
-      "fragment": ";\r\n\r\n// Mock next/link\r\nvi.mock('next/link', () => ({\r\n  default: ({\r\n    children,\r\n    href,\r\n    ...props\r\n  }: {\r\n    children: React.ReactNode;\r\n    href: string;\r\n    [key: string]: unknown;\r\n  }) => (\r\n    <a href={href} {...props}>\r\n      {children}\r\n    </a>\r\n  ),\r\n}));\r\n\r\n// Mock next/navigation\r\nlet",
+      "fragment": ";\r\n\r\n// Mock next/link\r\nvi.mock('next/link', () => ({\r\n  default: ({\r\n    children,\r\n    href,\r\n    ...props\r\n  }: {\r\n    children: React.ReactNode;\r\n    href: string;\r\n    [key: string]: unknown;\r\n  }) => (\r\n    <a href={href} {...props}>\r\n      {children}\r\n    </a>\r\n  ),\r\n}));\r\n\r\n// Mock next/navigation\r\n// Mock next/navigation",
       "tokens": 0,
       "firstFile": {
         "name": "src\\__tests__\\unit\\components\\mypage\\Sidebar.test.tsx",
@@ -12541,7 +12541,7 @@
         },
         "endLoc": {
           "line": 23,
-          "column": 4,
+          "column": 24,
           "position": 192
         }
       },
@@ -12600,7 +12600,7 @@
     {
       "format": "tsx",
       "lines": 21,
-      "fragment": ";\n\n// Mock next/link\nvi.mock('next/link', () => ({\n  default: ({\n    children,\n    href,\n    ...props\n  }: {\n    children: React.ReactNode;\n    href: string;\n    [key: string]: unknown;\n  }) => (\n    <a href={href} {...props}>\n      {children}\n    </a>\n  ),\n}));\n\n// Mock next/navigation\nlet mockPathname = '/mypage/buyer/orders'",
+      "fragment": ";\n\n// Mock next/link\nvi.mock('next/link', () => ({\n  default: ({\n    children,\n    href,\n    ...props\n  }: {\n    children: React.ReactNode;\n    href: string;\n    [key: string]: unknown;\n  }) => (\n    <a href={href} {...props}>\n      {children}\n    </a>\n  ),\n}));\n\n// Mock next/navigation\nlet",
       "tokens": 0,
       "firstFile": {
         "name": "src\\__tests__\\unit\\components\\mypage\\MobileMyPageNav.test.tsx",
@@ -12613,8 +12613,8 @@
         },
         "endLoc": {
           "line": 23,
-          "column": 23,
-          "position": 176
+          "column": 4,
+          "position": 170
         }
       },
       "secondFile": {
@@ -12628,8 +12628,8 @@
         },
         "endLoc": {
           "line": 23,
-          "column": 27,
-          "position": 198
+          "column": 6,
+          "position": 170
         }
       }
     },
@@ -13348,8 +13348,8 @@
         },
         "endLoc": {
           "line": 23,
-          "column": 27,
-          "position": 198
+          "column": 23,
+          "position": 176
         }
       }
     },
@@ -18508,17 +18508,17 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\app\\api\\disputes\\route.ts",
-        "start": 77,
-        "end": 85,
+        "start": 89,
+        "end": 97,
         "startLoc": {
-          "line": 77,
+          "line": 89,
           "column": 1,
-          "position": 778
+          "position": 839
         },
         "endLoc": {
-          "line": 85,
+          "line": 97,
           "column": 14,
-          "position": 876
+          "position": 937
         }
       },
       "secondFile": {
@@ -18544,17 +18544,17 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\app\\api\\disputes\\route.ts",
-        "start": 116,
-        "end": 124,
+        "start": 128,
+        "end": 136,
         "startLoc": {
-          "line": 116,
+          "line": 128,
           "column": 1,
-          "position": 1128
+          "position": 1189
         },
         "endLoc": {
-          "line": 124,
+          "line": 136,
           "column": 14,
-          "position": 1226
+          "position": 1287
         }
       },
       "secondFile": {
@@ -18580,32 +18580,32 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\app\\api\\disputes\\route.ts",
-        "start": 116,
-        "end": 127,
+        "start": 128,
+        "end": 139,
         "startLoc": {
-          "line": 116,
+          "line": 128,
           "column": 8,
-          "position": 1137
+          "position": 1198
         },
         "endLoc": {
-          "line": 127,
+          "line": 139,
           "column": 6,
-          "position": 1250
+          "position": 1311
         }
       },
       "secondFile": {
         "name": "src\\app\\api\\disputes\\route.ts",
-        "start": 77,
-        "end": 88,
+        "start": 89,
+        "end": 100,
         "startLoc": {
-          "line": 77,
+          "line": 89,
           "column": 9,
-          "position": 787
+          "position": 848
         },
         "endLoc": {
-          "line": 88,
+          "line": 100,
           "column": 16,
-          "position": 900
+          "position": 961
         }
       }
     },
@@ -18640,7 +18640,7 @@
         },
         "endLoc": {
           "line": 29,
-          "column": 15,
+          "column": 17,
           "position": 283
         }
       }
@@ -20020,68 +20020,32 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\components\\mypage\\MobileMyPageNav.tsx",
-        "start": 53,
-        "end": 58,
+        "start": 52,
+        "end": 57,
         "startLoc": {
-          "line": 53,
+          "line": 52,
           "column": 5,
-          "position": 651
+          "position": 647
         },
         "endLoc": {
-          "line": 58,
+          "line": 57,
           "column": 16,
-          "position": 733
+          "position": 729
         }
       },
       "secondFile": {
         "name": "src\\components\\mypage\\MobileMyPageNav.tsx",
-        "start": 36,
-        "end": 41,
+        "start": 35,
+        "end": 40,
         "startLoc": {
-          "line": 36,
+          "line": 35,
           "column": 9,
-          "position": 309
+          "position": 305
         },
         "endLoc": {
-          "line": 41,
+          "line": 40,
           "column": 16,
-          "position": 391
-        }
-      }
-    },
-    {
-      "format": "tsx",
-      "lines": 6,
-      "fragment": ", icon: <User className=\"w-6 h-6\" /> },\n  { label: '알림', href: '/mypage/notifications', icon: <Bell className=\"w-6 h-6\" /> },\n  { label: '설정', href: '/mypage/settings', icon: <Settings className=\"w-6 h-6\" /> },\n];\n\ninterface",
-      "tokens": 0,
-      "firstFile": {
-        "name": "src\\components\\mypage\\MobileMyPageNav.tsx",
-        "start": 68,
-        "end": 73,
-        "startLoc": {
-          "line": 68,
-          "column": 25,
-          "position": 922
-        },
-        "endLoc": {
-          "line": 73,
-          "column": 10,
-          "position": 1009
-        }
-      },
-      "secondFile": {
-        "name": "src\\components\\mypage\\MobileMyPageNav.tsx",
-        "start": 53,
-        "end": 41,
-        "startLoc": {
-          "line": 53,
-          "column": 25,
-          "position": 644
-        },
-        "endLoc": {
-          "line": 41,
-          "column": 6,
-          "position": 389
+          "position": 387
         }
       }
     },

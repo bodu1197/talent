@@ -91,14 +91,33 @@ vi.mock('@/lib/supabase/client', () => ({
   createClient: vi.fn(() => mockSupabase),
 }));
 
+// Mock user object with required Supabase User properties
+const mockUser = {
+  id: 'user-123',
+  email: 'test@example.com',
+  app_metadata: {},
+  user_metadata: {},
+  aud: 'authenticated',
+  created_at: new Date().toISOString(),
+} as const;
+
+// Mock AuthContextType
+const createMockAuthContext = (user: typeof mockUser | null) => ({
+  user,
+  profile: null,
+  loading: false,
+  signOut: vi.fn(),
+  refreshProfile: vi.fn(),
+});
+
 describe('NotificationBell', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(useAuth).mockReturnValue({ user: { id: 'user-123', email: 'test@example.com' } });
+    vi.mocked(useAuth).mockReturnValue(createMockAuthContext(mockUser));
   });
 
   it('비로그인 상태에서는 아무것도 렌더링하지 않는다', () => {
-    vi.mocked(useAuth).mockReturnValue({ user: null });
+    vi.mocked(useAuth).mockReturnValue(createMockAuthContext(null));
 
     const { container } = render(<NotificationBell />);
 
