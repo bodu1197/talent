@@ -154,8 +154,8 @@ export default function LocationSortToggle({ className = '' }: LocationSortToggl
             {/* 종이비행기 날아오는 애니메이션 */}
             <span
               className={`inline-flex transition-all duration-700 ease-out ${isAnimated
-                  ? 'translate-x-0 translate-y-0 rotate-0 opacity-100'
-                  : '-translate-x-8 -translate-y-4 -rotate-45 opacity-0'
+                ? 'translate-x-0 translate-y-0 rotate-0 opacity-100'
+                : '-translate-x-8 -translate-y-4 -rotate-45 opacity-0'
                 }`}
             >
               {isLoading ? (
@@ -190,16 +190,15 @@ export default function LocationSortToggle({ className = '' }: LocationSortToggl
 
       {/* 오류 상세 모달 */}
       {showErrorModal && errorDetails && (
-        <button
-          type="button"
+        <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
-          onClick={() => setShowErrorModal(false)}
+          role="presentation"
         >
-          <div
+          <dialog
+            open
             className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 animate-in fade-in zoom-in-95 duration-200"
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
+            aria-labelledby="error-dialog-title"
+            aria-describedby="error-dialog-desc"
           >
             {/* 헤더 */}
             <div className="flex items-start gap-3 mb-4">
@@ -207,12 +206,13 @@ export default function LocationSortToggle({ className = '' }: LocationSortToggl
                 <AlertCircle className={`w-6 h-6 ${getErrorIconColor(errorDetails.severity)}`} />
               </div>
               <div className="flex-1">
-                <h3 className="font-bold text-gray-900">{errorDetails.title}</h3>
-                <p className="text-sm text-gray-600 mt-1">{errorDetails.userMessage}</p>
+                <h3 id="error-dialog-title" className="font-bold text-gray-900">{errorDetails.title}</h3>
+                <p id="error-dialog-desc" className="text-sm text-gray-600 mt-1">{errorDetails.userMessage}</p>
               </div>
               <button
                 onClick={() => setShowErrorModal(false)}
                 className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="닫기"
               >
                 <X className="w-5 h-5 text-gray-400" />
               </button>
@@ -265,8 +265,8 @@ export default function LocationSortToggle({ className = '' }: LocationSortToggl
                 닫기
               </button>
             </div>
-          </div>
-        </button>
+          </dialog>
+        </div>
       )}
     </>
   );

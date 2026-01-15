@@ -340,9 +340,10 @@ export default function DisputeApplyPage() {
                   <label
                     key={order.id}
                     htmlFor={`order-${order.id}`}
+                    aria-label={`주문 선택: ${order.service?.title || '서비스'} - ${order.total_amount?.toLocaleString()}원`}
                     className={`block p-4 border rounded-lg cursor-pointer transition ${selectedOrder?.id === order.id
-                        ? 'border-blue-500 bg-blue-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
                       }`}
                   >
                     <input
@@ -396,8 +397,8 @@ export default function DisputeApplyPage() {
                 <label
                   key={type.value}
                   className={`p-4 border rounded-lg cursor-pointer transition ${disputeType === type.value
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-blue-500 bg-blue-50'
+                    : 'border-gray-200 hover:border-gray-300'
                     }`}
                 >
                   <input

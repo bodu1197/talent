@@ -437,14 +437,14 @@ export interface DisputeContext {
 
 export interface VerdictResult {
   verdict:
-    | 'full_refund'
-    | 'partial_refund'
-    | 'no_refund'
-    | 'extra_payment'
-    | 'negotiation'
-    | 'continue'
-    | 'compensation'
-    | 'review';
+  | 'full_refund'
+  | 'partial_refund'
+  | 'no_refund'
+  | 'extra_payment'
+  | 'negotiation'
+  | 'continue'
+  | 'compensation'
+  | 'review';
   refundAmount: number;
   refundPercentage: number;
   reason: string;
@@ -564,36 +564,36 @@ function analyzeErrandDispute(context: DisputeContext): VerdictResult | null {
   return null;
 }
 
-function analyzeInProgress(context: DisputeContext, divisible: boolean): VerdictResult {
-  if (divisible) {
-    const refundPercentage = 100 - context.progress.percentage;
-    return {
-      verdict: 'partial_refund',
-      refundAmount: Math.round(context.contractDetails.totalAmount * (refundPercentage / 100)),
-      refundPercentage,
-      reason: VERDICT_RULES.BASIC.inProgressDivisible.reason,
-      legalBasis: VERDICT_RULES.BASIC.inProgressDivisible.legalBasis,
-      recommendations: [
-        `진행률 ${context.progress.percentage}% 기준 정산`,
-        '완료된 작업물 인도 권장',
-      ],
-      confidence: 'high',
-    };
-  } else {
-    return {
-      verdict: 'no_refund',
-      refundAmount: 0,
-      refundPercentage: 0,
-      reason: VERDICT_RULES.BASIC.inProgressIndivisible.reason,
-      legalBasis: VERDICT_RULES.BASIC.inProgressIndivisible.legalBasis,
-      recommendations: [
-        '불가분적 용역은 시작 후 환불이 어렵습니다',
-        '양측 협의를 통한 해결 권장',
-        '판매자 귀책사유 시 예외 검토 가능',
-      ],
-      confidence: 'high',
-    };
-  }
+function analyzeInProgressDivisible(context: DisputeContext): VerdictResult {
+  const refundPercentage = 100 - context.progress.percentage;
+  return {
+    verdict: 'partial_refund',
+    refundAmount: Math.round(context.contractDetails.totalAmount * (refundPercentage / 100)),
+    refundPercentage,
+    reason: VERDICT_RULES.BASIC.inProgressDivisible.reason,
+    legalBasis: VERDICT_RULES.BASIC.inProgressDivisible.legalBasis,
+    recommendations: [
+      `진행률 ${context.progress.percentage}% 기준 정산`,
+      '완료된 작업물 인도 권장',
+    ],
+    confidence: 'high',
+  };
+}
+
+function analyzeInProgressIndivisible(): VerdictResult {
+  return {
+    verdict: 'no_refund',
+    refundAmount: 0,
+    refundPercentage: 0,
+    reason: VERDICT_RULES.BASIC.inProgressIndivisible.reason,
+    legalBasis: VERDICT_RULES.BASIC.inProgressIndivisible.legalBasis,
+    recommendations: [
+      '불가분적 용역은 시작 후 환불이 어렵습니다',
+      '양측 협의를 통한 해결 권장',
+      '판매자 귀책사유 시 예외 검토 가능',
+    ],
+    confidence: 'high',
+  };
 }
 
 function analyzeCompleted(): VerdictResult {
@@ -659,7 +659,9 @@ export function analyzeDispute(context: DisputeContext): VerdictResult {
   // CASE 6, 7, 8: 서비스 단계별 처리
   switch (context.serviceStage) {
     case 'IN_PROGRESS':
-      return analyzeInProgress(context, serviceConfig.divisible);
+      return serviceConfig.divisible
+        ? analyzeInProgressDivisible(context)
+        : analyzeInProgressIndivisible();
     case 'COMPLETED':
       return analyzeCompleted();
     default:
@@ -736,13 +738,12 @@ export function generateVerdictDocument(
 
   📌 ${verdictText[verdictResult.verdict] || verdictResult.verdict}
 
-${
-  verdictResult.refundAmount > 0
-    ? `
+${verdictResult.refundAmount > 0
+      ? `
   💰 환불 금액: ${verdictResult.refundAmount.toLocaleString()}원 (${verdictResult.refundPercentage}%)
 `
-    : ''
-}
+      : ''
+    }
 
 ───────────────────────────────────────────────────────────────
 ■ 판결 이유
@@ -750,14 +751,13 @@ ${
 
   ${verdictResult.reason}
 
-${
-  verdictResult.legalBasis
-    ? `
+${verdictResult.legalBasis
+      ? `
 【적용 법령】
   ${verdictResult.legalBasis}
 `
-    : ''
-}
+      : ''
+    }
 
 ───────────────────────────────────────────────────────────────
 ■ 권고 사항
