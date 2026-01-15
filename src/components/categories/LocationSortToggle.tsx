@@ -153,11 +153,10 @@ export default function LocationSortToggle({ className = '' }: LocationSortToggl
           >
             {/* 종이비행기 날아오는 애니메이션 */}
             <span
-              className={`inline-flex transition-all duration-700 ease-out ${
-                isAnimated
+              className={`inline-flex transition-all duration-700 ease-out ${isAnimated
                   ? 'translate-x-0 translate-y-0 rotate-0 opacity-100'
                   : '-translate-x-8 -translate-y-4 -rotate-45 opacity-0'
-              }`}
+                }`}
             >
               {isLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin text-orange-500" />
@@ -191,13 +190,16 @@ export default function LocationSortToggle({ className = '' }: LocationSortToggl
 
       {/* 오류 상세 모달 */}
       {showErrorModal && errorDetails && (
-        <div
+        <button
+          type="button"
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
           onClick={() => setShowErrorModal(false)}
         >
           <div
             className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 animate-in fade-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
           >
             {/* 헤더 */}
             <div className="flex items-start gap-3 mb-4">
@@ -223,9 +225,9 @@ export default function LocationSortToggle({ className = '' }: LocationSortToggl
                 해결 방법
               </h4>
               <ul className="space-y-2">
-                {errorDetails.solutions.map((solution, index) => (
-                  <li key={index} className="text-sm text-gray-600 flex items-start gap-2">
-                    <span className="text-orange-500 font-bold mt-0.5">{index + 1}.</span>
+                {errorDetails.solutions.map((solution) => (
+                  <li key={solution} className="text-sm text-gray-600 flex items-start gap-2">
+                    <span className="text-orange-500 font-bold mt-0.5">•</span>
                     <span>{solution}</span>
                   </li>
                 ))}
@@ -264,7 +266,7 @@ export default function LocationSortToggle({ className = '' }: LocationSortToggl
               </button>
             </div>
           </div>
-        </div>
+        </button>
       )}
     </>
   );

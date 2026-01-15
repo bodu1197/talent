@@ -5,8 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { parseOAuthState } from '@/lib/auth/config';
 import { logger } from '@/lib/logger';
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { User } from '@supabase/supabase-js';
+import type { SupabaseClient, User } from '@supabase/supabase-js';
 
 // Helper: state 파라미터에서 추가 정보 추출
 function extractFromStateParam(

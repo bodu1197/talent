@@ -227,13 +227,13 @@ export async function POST(request: NextRequest) {
     // 사용자 컨텍스트 조회 (개인화 응답용)
     let userContext:
       | {
-          displayName?: string;
-          isSeller?: boolean;
-          isBuyer?: boolean;
-          activeOrders?: number;
-          pendingDisputes?: number;
-          recentCategories?: string[];
-        }
+        displayName?: string;
+        isSeller?: boolean;
+        isBuyer?: boolean;
+        activeOrders?: number;
+        pendingDisputes?: number;
+        recentCategories?: string[];
+      }
       | undefined;
 
     if (user) {
@@ -306,7 +306,7 @@ export async function POST(request: NextRequest) {
       .eq('id', dbSessionId);
 
     // 남은 질문 횟수 조회
-    const rateLimitInfo = await getRateLimitInfo(rateLimitIdentifier);
+    const rateLimitInfo = getRateLimitInfo(rateLimitIdentifier);
 
     return NextResponse.json({
       response: aiResponse,

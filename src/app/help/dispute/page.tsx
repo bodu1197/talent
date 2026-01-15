@@ -339,14 +339,15 @@ export default function DisputeApplyPage() {
                 {orders.slice(0, 5).map((order) => (
                   <label
                     key={order.id}
-                    className={`block p-4 border rounded-lg cursor-pointer transition ${
-                      selectedOrder?.id === order.id
+                    htmlFor={`order-${order.id}`}
+                    className={`block p-4 border rounded-lg cursor-pointer transition ${selectedOrder?.id === order.id
                         ? 'border-blue-500 bg-blue-50'
                         : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                      }`}
                   >
                     <input
                       type="radio"
+                      id={`order-${order.id}`}
                       name="order"
                       value={order.id}
                       checked={selectedOrder?.id === order.id}
@@ -394,11 +395,10 @@ export default function DisputeApplyPage() {
               {DISPUTE_TYPES.map((type) => (
                 <label
                   key={type.value}
-                  className={`p-4 border rounded-lg cursor-pointer transition ${
-                    disputeType === type.value
+                  className={`p-4 border rounded-lg cursor-pointer transition ${disputeType === type.value
                       ? 'border-blue-500 bg-blue-50'
                       : 'border-gray-200 hover:border-gray-300'
-                  }`}
+                    }`}
                 >
                   <input
                     type="radio"
@@ -462,7 +462,7 @@ export default function DisputeApplyPage() {
               <div className="mt-4 space-y-2">
                 {evidenceFiles.map((file, index) => (
                   <div
-                    key={index}
+                    key={`evidence-${file.name}-${file.size}`}
                     className="flex items-center justify-between bg-gray-50 px-4 py-2 rounded-lg"
                   >
                     <span className="text-sm text-gray-700 truncate">{file.name}</span>

@@ -59,7 +59,7 @@ async function fetchCategoryHierarchy(
   // Find the deepest level category (highest level number = leaf category)
   const deepestCat = service.service_categories.reduce((prev, current) => {
     return current.categories.level > prev.categories.level ? current : prev;
-  });
+  }, service.service_categories[0]);
   const leafCategoryId = deepestCat.category_id;
 
   // 1. Try to get path via RPC

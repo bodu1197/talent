@@ -53,7 +53,7 @@ export default function GradientCategoryBanner({
   fetchCountsUrl,
   getBadgeText,
   getCtaText,
-}: GradientCategoryBannerProps) {
+}: Readonly<GradientCategoryBannerProps>) {
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(false);
 

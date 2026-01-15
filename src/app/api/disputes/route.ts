@@ -26,17 +26,29 @@ interface Dispute {
   service?: { id: string; title: string; category: string; revision_count?: number };
 }
 
+// 액션 처리 파라미터 타입
+interface DisputeActionParams {
+  supabase: SupabaseClient;
+  action: string;
+  disputeId: string;
+  userId: string;
+  dispute: Dispute;
+  isDefendant: boolean;
+  isPlaintiff: boolean;
+  body: { response?: string; appealReason?: string };
+}
+
 // 액션 처리 헬퍼 함수
-function handleDisputeAction(
-  supabase: SupabaseClient,
-  action: string,
-  disputeId: string,
-  userId: string,
-  dispute: Dispute,
-  isDefendant: boolean,
-  isPlaintiff: boolean,
-  body: { response?: string; appealReason?: string }
-): Promise<NextResponse> | NextResponse {
+function handleDisputeAction({
+  supabase,
+  action,
+  disputeId,
+  userId,
+  dispute,
+  isDefendant,
+  isPlaintiff,
+  body,
+}: DisputeActionParams): Promise<NextResponse> | NextResponse {
   switch (action) {
     case 'submit_response':
       if (!isDefendant) {
@@ -160,16 +172,16 @@ export async function POST(request: NextRequest) {
 
     // 타입 변환 및 액션 처리
     const typedDispute = dispute as unknown as Dispute;
-    return handleDisputeAction(
+    return handleDisputeAction({
       supabase,
       action,
       disputeId,
-      user.id,
-      typedDispute,
+      userId: user.id,
+      dispute: typedDispute,
       isDefendant,
       isPlaintiff,
-      body
-    );
+      body,
+    });
   } catch (error) {
     console.error('Dispute action error:', error);
     return NextResponse.json({ error: '서버 오류가 발생했습니다.' }, { status: 500 });

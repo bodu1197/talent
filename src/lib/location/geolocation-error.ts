@@ -48,7 +48,7 @@ interface DeviceInfo {
  * 현재 디바이스/브라우저 정보 감지
  */
 function getDeviceInfo(): DeviceInfo {
-  if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+  if (typeof globalThis.window === 'undefined' || typeof navigator === 'undefined') {
     return {
       isMobile: false,
       isIOS: false,
@@ -71,7 +71,7 @@ function getDeviceInfo(): DeviceInfo {
     isFirefox: /firefox/i.test(ua),
     isSafari: /safari/i.test(ua) && !/chrome/i.test(ua),
     isEdge: /edge|edg/i.test(ua),
-    isSecureContext: window.isSecureContext ?? location.protocol === 'https:',
+    isSecureContext: globalThis.window?.isSecureContext ?? location.protocol === 'https:',
   };
 }
 
@@ -299,7 +299,7 @@ export function checkGeolocationAvailability(): {
   reason?: string;
   canRetry: boolean;
 } {
-  if (typeof window === 'undefined') {
+  if (typeof globalThis.window === 'undefined') {
     return {
       available: false,
       reason: '서버 환경에서는 위치 기능을 사용할 수 없습니다',
@@ -307,7 +307,7 @@ export function checkGeolocationAvailability(): {
     };
   }
 
-  if (!window.isSecureContext && location.protocol !== 'https:') {
+  if (!globalThis.window?.isSecureContext && location.protocol !== 'https:') {
     return { available: false, reason: 'HTTPS 연결이 필요합니다', canRetry: false };
   }
 

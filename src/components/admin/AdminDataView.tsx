@@ -53,7 +53,7 @@ export default function AdminDataView<T extends string>({
     description: '검색 조건에 맞는 데이터가 없습니다',
   },
   children,
-}: AdminDataViewProps<T>) {
+}: Readonly<AdminDataViewProps<T>>) {
   if (isLoading) {
     return <LoadingSpinner message={`${title} 목록을 불러오는 중...`} />;
   }
@@ -77,20 +77,18 @@ export default function AdminDataView<T extends string>({
             <button
               key={tab.value}
               onClick={() => onTabChange(tab.value)}
-              className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
-                activeTab === tab.value
+              className={`flex-shrink-0 px-6 py-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${activeTab === tab.value
                   ? 'border-brand-primary text-brand-primary'
                   : 'border-transparent text-gray-600 hover:text-gray-900'
-              }`}
+                }`}
             >
               {tab.label}
               {tab.count > 0 && (
                 <span
-                  className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                    activeTab === tab.value
+                  className={`ml-2 px-2 py-0.5 rounded-full text-xs ${activeTab === tab.value
                       ? 'bg-brand-primary text-white'
                       : 'bg-gray-200 text-gray-600'
-                  }`}
+                    }`}
                 >
                   {tab.count}
                 </span>

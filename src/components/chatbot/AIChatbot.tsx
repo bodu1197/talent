@@ -112,7 +112,7 @@ export default function AIChatbot() {
       setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
       console.error('Chat error:', error);
-      
+
       // 에러 메시지
       const errorMessage: Message = {
         role: 'assistant',
@@ -144,7 +144,7 @@ export default function AIChatbot() {
         >
           <MessageCircle className="w-6 h-6" />
           <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
-          
+
           {/* 툴팁 */}
           <span className="absolute bottom-full right-0 mb-2 px-3 py-1 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
             AI 상담 시작하기
@@ -164,8 +164,8 @@ export default function AIChatbot() {
               <div>
                 <h3 className="font-semibold text-lg">AI 고객 상담</h3>
                 <p className="text-xs text-white/80">
-                  {rateLimit 
-                    ? `남은 질문: ${rateLimit.remaining}/${rateLimit.limit}회` 
+                  {rateLimit
+                    ? `남은 질문: ${rateLimit.remaining}/${rateLimit.limit}회`
                     : '언제든지 물어보세요!'
                   }
                 </p>
@@ -187,17 +187,15 @@ export default function AIChatbot() {
                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[80%] px-4 py-3 rounded-2xl ${
-                    msg.role === 'user'
+                  className={`max-w-[80%] px-4 py-3 rounded-2xl ${msg.role === 'user'
                       ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
                       : 'bg-white text-gray-800 shadow-sm border border-gray-200'
-                  }`}
+                    }`}
                 >
                   <p className="text-sm whitespace-pre-wrap break-words">{msg.content}</p>
                   <p
-                    className={`text-xs mt-1 ${
-                      msg.role === 'user' ? 'text-white/70' : 'text-gray-400'
-                    }`}
+                    className={`text-xs mt-1 ${msg.role === 'user' ? 'text-white/70' : 'text-gray-400'
+                      }`}
                   >
                     {msg.timestamp.toLocaleTimeString('ko-KR', {
                       hour: '2-digit',
@@ -233,7 +231,7 @@ export default function AIChatbot() {
                 type="text"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyPress}
                 placeholder={isRateLimited ? "잠시 후 다시 시도해주세요..." : "메시지를 입력하세요..."}
                 className="flex-1 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm disabled:bg-gray-100"
                 disabled={isLoading || isRateLimited}
@@ -248,13 +246,13 @@ export default function AIChatbot() {
               </button>
             </div>
             <div className="text-xs text-gray-400 mt-2 text-center">
-              {rateLimit 
-                ? `시간당 ${rateLimit.remaining}/${rateLimit.limit}회 질문 가능` 
+              {rateLimit
+                ? `시간당 ${rateLimit.remaining}/${rateLimit.limit}회 질문 가능`
                 : 'AI가 응답합니다.'
               }
               {' · '}
-              <a 
-                href="/help/contact" 
+              <a
+                href="/help/contact"
                 className="text-blue-500 hover:text-blue-700 hover:underline"
                 target="_blank"
                 rel="noopener noreferrer"

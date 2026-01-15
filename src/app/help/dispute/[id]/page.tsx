@@ -153,7 +153,7 @@ function getMessageLabel(messageType: string): string {
 }
 
 // Helper: 메시지 타입별 아이콘 렌더링
-function MessageIcon({ type }: { type: string }) {
+function MessageIcon({ type }: { readonly type: string }) {
   switch (type) {
     case 'ai_verdict':
       return <Scale className="w-5 h-5 text-purple-600" />;
