@@ -41,11 +41,11 @@ export default function AdminFAQPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
-  
+
   // 모달 상태
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingFaq, setEditingFaq] = useState<FAQ | null>(null);
-  
+
   // 폼 상태
   const [formData, setFormData] = useState({
     category: '기타',
@@ -59,19 +59,19 @@ export default function AdminFAQPage() {
   const fetchFaqs = useCallback(async () => {
     setLoading(true);
     const supabase = createClient();
-    
+
     let query = supabase
       .from('ai_support_knowledge')
       .select('*')
       .order('priority', { ascending: false })
       .order('created_at', { ascending: false });
-    
+
     if (selectedCategory) {
       query = query.eq('category', selectedCategory);
     }
-    
+
     const { data, error } = await query;
-    
+
     if (error) {
       toast.error('FAQ 목록을 불러오는데 실패했습니다.');
       console.error(error);
@@ -113,7 +113,7 @@ export default function AdminFAQPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.question.trim() || !formData.answer.trim()) {
       toast.error('질문과 답변을 입력해주세요.');
       return;
@@ -256,16 +256,16 @@ export default function AdminFAQPage() {
       {/* 통계 카드 */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">
         {Object.entries(categoryStats).slice(0, 6).map(([category, count]) => (
-          <div
+          <button
+            type="button"
             key={category}
-            className={`p-3 rounded-lg cursor-pointer transition hover:scale-105 ${
-              selectedCategory === category ? 'ring-2 ring-blue-500' : ''
-            } ${getCategoryColor(category)}`}
+            className={`p-3 rounded-lg cursor-pointer transition hover:scale-105 text-left ${selectedCategory === category ? 'ring-2 ring-blue-500' : ''
+              } ${getCategoryColor(category)}`}
             onClick={() => setSelectedCategory(selectedCategory === category ? '' : category)}
           >
             <div className="text-lg font-bold">{count}</div>
             <div className="text-sm">{category}</div>
-          </div>
+          </button>
         ))}
       </div>
 
@@ -308,22 +308,21 @@ export default function AdminFAQPage() {
           <p className="mt-4 text-gray-600">로딩 중...</p>
         </div>
       )}
-      
+
       {!loading && filteredFaqs.length === 0 && (
         <div className="text-center py-12 bg-gray-50 rounded-lg">
           <MessageCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
           <p className="text-gray-600">등록된 FAQ가 없습니다.</p>
         </div>
       )}
-      
+
       {!loading && filteredFaqs.length > 0 && (
         <div className="space-y-4">
           {filteredFaqs.map((faq) => (
             <div
               key={faq.id}
-              className={`bg-white rounded-lg border p-4 ${
-                faq.is_active ? 'border-gray-200' : 'border-red-200 bg-red-50/30'
-              }`}
+              className={`bg-white rounded-lg border p-4 ${faq.is_active ? 'border-gray-200' : 'border-red-200 bg-red-50/30'
+                }`}
             >
               <div className="flex justify-between items-start gap-4">
                 <div className="flex-1">
@@ -342,8 +341,8 @@ export default function AdminFAQPage() {
                   </p>
                   {faq.keywords.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-2">
-                      {faq.keywords.map((keyword, idx) => (
-                        <span key={idx} className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs">
+                      {faq.keywords.map((keyword) => (
+                        <span key={`${faq.id}-${keyword}`} className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs">
                           #{keyword}
                         </span>
                       ))}
@@ -418,14 +417,15 @@ export default function AdminFAQPage() {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="p-4 space-y-4">
               {/* 카테고리 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="faq-category" className="block text-sm font-medium text-gray-700 mb-1">
                   카테고리 *
                 </label>
                 <select
+                  id="faq-category"
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
@@ -439,10 +439,11 @@ export default function AdminFAQPage() {
 
               {/* 질문 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="faq-question" className="block text-sm font-medium text-gray-700 mb-1">
                   질문 *
                 </label>
                 <input
+                  id="faq-question"
                   type="text"
                   value={formData.question}
                   onChange={(e) => setFormData({ ...formData, question: e.target.value })}
@@ -454,10 +455,11 @@ export default function AdminFAQPage() {
 
               {/* 답변 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="faq-answer" className="block text-sm font-medium text-gray-700 mb-1">
                   답변 *
                 </label>
                 <textarea
+                  id="faq-answer"
                   value={formData.answer}
                   onChange={(e) => setFormData({ ...formData, answer: e.target.value })}
                   placeholder="마크다운 형식으로 작성 가능합니다. 예: **강조**, - 목록"
@@ -469,10 +471,11 @@ export default function AdminFAQPage() {
 
               {/* 키워드 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="faq-keywords" className="block text-sm font-medium text-gray-700 mb-1">
                   키워드 (쉼표로 구분)
                 </label>
                 <input
+                  id="faq-keywords"
                   type="text"
                   value={formData.keywords}
                   onChange={(e) => setFormData({ ...formData, keywords: e.target.value })}
@@ -486,15 +489,16 @@ export default function AdminFAQPage() {
 
               {/* 우선순위 */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="faq-priority" className="block text-sm font-medium text-gray-700 mb-1">
                   우선순위 (0-100)
                 </label>
                 <input
+                  id="faq-priority"
                   type="number"
                   min="0"
                   max="100"
                   value={formData.priority}
-                  onChange={(e) => setFormData({ ...formData, priority: parseInt(e.target.value) || 0 })}
+                  onChange={(e) => setFormData({ ...formData, priority: Number.parseInt(e.target.value, 10) || 0 })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
                 <p className="text-xs text-gray-500 mt-1">
