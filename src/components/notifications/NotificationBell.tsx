@@ -2,14 +2,19 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useNotifications } from '@/components/providers/NotificationProvider';
+import { useAuth } from '@/components/providers/AuthProvider';
 import Link from 'next/link';
 import { Bell, BellOff } from 'lucide-react';
 
 export default function NotificationBell() {
+  const { user } = useAuth();
   const { notifications, unreadCount, markAsRead, markAllAsRead, refreshNotifications, loading } =
     useNotifications();
+
   const [showDropdown, setShowDropdown] = useState(false);
   const hasLoadedNotifications = useRef(false);
+
+
 
   // ESC 키로 드롭다운 닫기
   useEffect(() => {
@@ -35,6 +40,8 @@ export default function NotificationBell() {
     await markAsRead(notificationId);
     setShowDropdown(false);
   };
+
+  if (!user) return null;
 
   // 로딩 중이면 로딩 상태 표시
   if (loading) {
@@ -102,21 +109,18 @@ export default function NotificationBell() {
                     key={notification.id}
                     href={notification.link || '#'}
                     onClick={() => handleNotificationClick(notification.id)}
-                    className={`block px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors ${
-                      notification.is_read ? '' : 'bg-blue-50'
-                    }`}
+                    className={`block px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors ${notification.is_read ? '' : 'bg-blue-50'
+                      }`}
                   >
                     <div className="flex items-start gap-3">
                       <div
-                        className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${
-                          notification.is_read ? 'bg-transparent' : 'bg-blue-500'
-                        }`}
+                        className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${notification.is_read ? 'bg-transparent' : 'bg-blue-500'
+                          }`}
                       ></div>
                       <div className="flex-1 min-w-0">
                         <h4
-                          className={`text-sm font-medium mb-1 ${
-                            notification.is_read ? 'text-gray-700' : 'text-gray-900'
-                          }`}
+                          className={`text-sm font-medium mb-1 ${notification.is_read ? 'text-gray-700' : 'text-gray-900'
+                            }`}
                         >
                           {notification.title}
                         </h4>

@@ -457,6 +457,14 @@ describe('Supabase Queries - Admin', () => {
         from: vi.fn((table: string) => {
           if (table === 'profiles') return mockProfilesQuery;
           if (table === 'users') return mockUsersQuery;
+          if (table === 'sellers')
+            return {
+              select: vi.fn().mockResolvedValue({ data: [{ user_id: 'user-1' }] }),
+            };
+          if (table === 'admins' || table === 'helper_profiles')
+            return {
+              select: vi.fn().mockResolvedValue({ data: [] }),
+            };
           return mockProfilesQuery;
         }),
       } as unknown as ReturnType<typeof createClient>);
@@ -507,7 +515,7 @@ describe('Supabase Queries - Admin', () => {
   describe('getAdminUsersCount', () => {
     it('should return count of users', async () => {
       const mockQuery = {
-        select: vi.fn().mockReturnThis(),
+        select: vi.fn().mockResolvedValue({ count: 42, error: null }),
         eq: vi.fn().mockResolvedValue({ count: 42, error: null }),
       };
 

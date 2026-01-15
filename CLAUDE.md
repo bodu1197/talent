@@ -9,7 +9,8 @@
 - **Region**: `ap-northeast-2` (서울)
 - **Database Host**: `db.abroivxthindezdtdzmj.supabase.co`
 - **로컬 프로젝트 ID**: `kmong`
-- **Access Token**: `sbp_753b67c2411cad6320ef44d6626ac13ee2ba6296`
+
+⚠️ **보안**: Access Token은 환경 변수로 관리됩니다. `scripts/README.md` 참조
 
 ### 방법 1: Supabase CLI (로컬 개발 - 권장)
 
@@ -79,18 +80,23 @@ Supabase Management API를 통해 직접 데이터베이스 쿼리를 실행할 
 #### 사용 예시
 
 ```bash
+# 환경 변수 설정 (토큰은 Supabase Dashboard에서 발급)
+export SUPABASE_ACCESS_TOKEN=your_token_here
+
 # 테이블 목록 조회
 curl -s -X POST "https://api.supabase.com/v1/projects/abroivxthindezdtdzmj/database/query" \
-  -H "Authorization: Bearer sbp_753b67c2411cad6320ef44d6626ac13ee2ba6296" \
+  -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"query": "SELECT tablename FROM pg_tables WHERE schemaname = '\''public'\'' ORDER BY tablename"}'
 
 # users 테이블 조회
 curl -s -X POST "https://api.supabase.com/v1/projects/abroivxthindezdtdzmj/database/query" \
-  -H "Authorization: Bearer sbp_753b67c2411cad6320ef44d6626ac13ee2ba6296" \
+  -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"query": "SELECT * FROM users LIMIT 10"}'
 ```
+
+**토큰 발급 방법**: [Supabase Dashboard](https://supabase.com/dashboard) → Settings → API → Management API tokens
 
 ### 추천 방법
 

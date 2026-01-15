@@ -15,6 +15,11 @@ const mockServiceClient = {
   eq: vi.fn(() => mockServiceClient),
   select: vi.fn(() => mockServiceClient),
   single: vi.fn(),
+  auth: {
+    admin: {
+      updateUserById: vi.fn().mockResolvedValue({ error: null }),
+    },
+  },
 };
 
 vi.mock('@/lib/supabase/server', () => ({

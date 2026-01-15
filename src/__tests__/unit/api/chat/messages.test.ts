@@ -48,7 +48,7 @@ describe('Chat Messages API', () => {
       const data = await response.json();
 
       expect(response.status).toBe(401);
-      expect(data.error).toBe('로그인이 필요합니다');
+      expect(data.error).toBe('Unauthorized');
     });
 
     it('should return 400 if room_id is missing', async () => {
@@ -144,7 +144,7 @@ describe('Chat Messages API', () => {
       const data = await response.json();
 
       expect(response.status).toBe(401);
-      expect(data.error).toBe('로그인이 필요합니다');
+      expect(data.error).toBe('Unauthorized');
     });
 
     it('should return 400 if room_id is missing', async () => {

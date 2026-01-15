@@ -8,8 +8,13 @@ const fs = require('fs');
 const path = require('path');
 
 // Supabase 설정
-const SUPABASE_PROJECT_REF = 'abroivxthindezdtdzmj';
-const SUPABASE_ACCESS_TOKEN = 'sbp_753b67c2411cad6320ef44d6626ac13ee2ba6296';
+const SUPABASE_PROJECT_REF = process.env.SUPABASE_PROJECT_ID || 'abroivxthindezdtdzmj';
+const SUPABASE_ACCESS_TOKEN = process.env.SUPABASE_ACCESS_TOKEN;
+
+if (!SUPABASE_ACCESS_TOKEN) {
+  console.error('❌ Error: SUPABASE_ACCESS_TOKEN environment variable is required');
+  process.exit(1);
+}
 
 // 마이그레이션 SQL 읽기
 const migrationPath = path.join(__dirname, '../supabase/migrations/20251219_expand_ai_knowledge_base.sql');

@@ -180,7 +180,7 @@ describe('Category Visits API', () => {
       const data = await response.json();
 
       expect(response.status).toBe(401);
-      expect(data.error).toBe('로그인이 필요합니다');
+      expect(data.error).toBe('Unauthorized');
     });
 
     it('should return category visits', async () => {

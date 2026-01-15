@@ -13,8 +13,7 @@ vi.mock('next/navigation', () => ({
 describe('MobileServiceHeader', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Reset window.location.href
-    delete (window as { location?: unknown }).location;
+    // Reset window.location mock
     Object.defineProperty(window, 'location', {
       writable: true,
       value: { href: '', origin: 'https://example.com' },
@@ -52,7 +51,7 @@ describe('MobileServiceHeader', () => {
   });
 
   it('전화번호가 없으면 알림을 표시한다', () => {
-    const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
+    const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => { });
 
     render(<MobileServiceHeader serviceId="service-1" serviceTitle="테스트 서비스" />);
 
@@ -94,7 +93,7 @@ describe('MobileServiceHeader', () => {
       writable: true,
     });
 
-    const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
+    const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => { });
 
     render(<MobileServiceHeader serviceId="service-1" serviceTitle="테스트 서비스" />);
 

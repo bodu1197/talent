@@ -115,6 +115,7 @@ describe('Footer', () => {
   it('모바일 회사 정보 텍스트를 렌더링한다', () => {
     render(<Footer />);
 
-    expect(screen.getByText(/돌파구는 통신판매중개자이며/)).toBeInTheDocument();
+    const texts = screen.getAllByText(/돌파구는 통신판매중개자이며/);
+    expect(texts.length).toBeGreaterThanOrEqual(1);
   });
 });

@@ -36,19 +36,19 @@ describe('SellerRegistrationGuide', () => {
     render(<SellerRegistrationGuide />);
 
     // 모바일과 PC 버전 모두 있으므로 getAllByText 사용
-    const zeroFeeTexts = screen.getAllByText('수수료 0원');
+    const zeroFeeTexts = screen.getAllByText(/수수료 0원/);
     expect(zeroFeeTexts.length).toBeGreaterThanOrEqual(1);
 
-    const equalOpportunityTexts = screen.getAllByText('판매기회균등');
+    const equalOpportunityTexts = screen.getAllByText(/기회균등/);
     expect(equalOpportunityTexts.length).toBeGreaterThanOrEqual(1);
 
-    const revenueTexts = screen.getAllByText('수익 창출');
+    const revenueTexts = screen.getAllByText(/수익 창출/);
     expect(revenueTexts.length).toBeGreaterThanOrEqual(1);
 
-    const customerTexts = screen.getAllByText('넓은 고객층');
+    const customerTexts = screen.getAllByText(/넓은 고객층/);
     expect(customerTexts.length).toBeGreaterThanOrEqual(1);
 
-    const safeTradeTexts = screen.getAllByText('안전한 거래');
+    const safeTradeTexts = screen.getAllByText(/안전한 거래/);
     expect(safeTradeTexts.length).toBeGreaterThanOrEqual(1);
   });
 

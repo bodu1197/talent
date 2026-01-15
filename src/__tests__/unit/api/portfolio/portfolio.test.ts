@@ -40,7 +40,7 @@ describe('Portfolio API', () => {
       const data = await response.json();
 
       expect(response.status).toBe(401);
-      expect(data.error).toBe('로그인이 필요합니다');
+      expect(data.error).toBe('Unauthorized');
     });
 
     it('should return 400 if itemId is missing', async () => {
@@ -111,7 +111,7 @@ describe('Portfolio API', () => {
       const data = await response.json();
 
       expect(response.status).toBe(403);
-      expect(data.error).toBe('로그인이 필요합니다');
+      expect(data.error).toBe('Unauthorized');
     });
 
     it('should delete portfolio successfully', async () => {

@@ -59,7 +59,7 @@ describe('Sidebar', () => {
     it('구매자 페이지 전환 버튼을 표시한다', () => {
       render(<Sidebar mode="seller" profileData={profileData} />);
 
-      expect(screen.getByText('구매자 페이지로')).toBeInTheDocument();
+      expect(screen.getByText('구매자')).toBeInTheDocument();
     });
 
     it('하위 메뉴가 있는 항목 클릭 시 확장된다', () => {
@@ -120,7 +120,7 @@ describe('Sidebar', () => {
       mockPathname = '/mypage/buyer/dashboard';
       render(<Sidebar mode="buyer" profileData={profileData} />);
 
-      expect(screen.getByText('전문가 페이지로')).toBeInTheDocument();
+      expect(screen.getByText('전문가')).toBeInTheDocument();
     });
 
     it('주문 내역 하위 메뉴가 확장된다', () => {
@@ -154,7 +154,7 @@ describe('Sidebar', () => {
       const { container } = render(<Sidebar mode="seller" profileData={null} />);
 
       const aside = container.querySelector('aside');
-      expect(aside).toHaveClass('hidden', 'lg:flex');
+      expect(aside).toHaveClass('hidden', 'lg:block');
     });
 
     it('현재 경로와 일치하는 메뉴가 활성화된다', () => {

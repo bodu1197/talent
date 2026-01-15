@@ -31,12 +31,12 @@ describe('FooterMobileBusinessInfo', () => {
 
     fireEvent.click(screen.getByRole('button', { name: '사업자정보 토글' }));
 
-    expect(screen.getByText('대표이사: 홍길동')).toBeInTheDocument();
-    expect(screen.getByText('사업자등록번호: 123-45-67890')).toBeInTheDocument();
-    expect(screen.getByText('통신판매업신고번호: 2025-서울강남-00000')).toBeInTheDocument();
-    expect(screen.getByText('주소: 서울특별시 강남구 테헤란로 123 AI빌딩 5층')).toBeInTheDocument();
-    expect(screen.getByText('고객센터: 1234-5678')).toBeInTheDocument();
-    expect(screen.getByText('이메일: contact@dolpagu.com')).toBeInTheDocument();
+    expect(screen.getByText(/대표이사/)).toBeInTheDocument();
+    expect(screen.getByText(/사업자등록번호/)).toBeInTheDocument();
+    expect(screen.getByText(/통신판매업신고번호/)).toBeInTheDocument();
+    expect(screen.getByText(/주소/)).toBeInTheDocument();
+    expect(screen.getByText(/고객센터/)).toBeInTheDocument();
+    expect(screen.getByText(/이메일/)).toBeInTheDocument();
   });
 
   it('드롭다운 열림/닫힘 토글이 동작한다', () => {

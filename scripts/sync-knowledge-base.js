@@ -1,10 +1,11 @@
 /* eslint-disable no-console */
 const https = require('node:https');
+const getConfig = require('./get-config');
 
-// Supabase Configuration
-// Note: In a real scenario, never hardcode these.
-const SUPABASE_PROJECT_REF = 'abroivxthindezdtdzmj';
-const SUPABASE_ACCESS_TOKEN = 'sbp_753b67c2411cad6320ef44d6626ac13ee2ba6296';
+// Supabase 설정 로드
+const config = getConfig();
+const SUPABASE_PROJECT_REF = config.PROJECT_ID;
+const SUPABASE_ACCESS_TOKEN = config.TOKEN;
 
 const KNOWLEDGE_BASE_DATA = [
   {

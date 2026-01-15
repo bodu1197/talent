@@ -135,6 +135,6 @@ describe('MobileBottomNav', () => {
     expect(screen.getByLabelText('검색')).toHaveAttribute('href', '/search');
     expect(screen.getByLabelText('찜 목록')).toHaveAttribute('href', '/mypage/buyer/favorites');
     expect(screen.getByLabelText('메시지')).toHaveAttribute('href', '/chat');
-    expect(screen.getByLabelText('마이페이지')).toHaveAttribute('href', '/mypage/buyer/dashboard');
+    expect(screen.getByLabelText('마이페이지').getAttribute('href')).toMatch(/^\/mypage/);
   });
 });

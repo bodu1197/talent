@@ -15,45 +15,41 @@ vi.mock('@/lib/supabase/client', () => ({
   createClient: vi.fn(() => mockSupabase),
 }));
 
+// Mock global fetch
+const mockFetch = vi.fn();
+vi.stubGlobal('fetch', mockFetch);
+
 describe('Orders Mutations', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockFetch.mockReset();
   });
 
   describe('confirmOrder', () => {
     it('should confirm order successfully', async () => {
-      const mockOrder = { id: 'order-1', status: 'completed' };
-
-      const updateChain = {
-        update: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockReturnThis(),
-        select: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue({ data: mockOrder, error: null }),
-      };
-
-      mockSupabase.from.mockReturnValue(updateChain);
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ status: 'completed' }),
+      });
 
       const result = await confirmOrder('order-1');
 
-      expect(result.status).toBe('completed');
-      expect(updateChain.update).toHaveBeenCalledWith(
+      expect(mockFetch).toHaveBeenCalledWith(
+        '/api/orders/order-1/confirm',
         expect.objectContaining({
-          status: 'completed',
+          method: 'POST',
         })
       );
+      expect(result).toEqual({ status: 'completed' });
     });
 
-    it('should throw error on database failure', async () => {
-      const updateChain = {
-        update: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockReturnThis(),
-        select: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue({ data: null, error: { message: 'DB error' } }),
-      };
+    it('should throw error on API failure', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        json: async () => ({ error: 'API Error' }),
+      });
 
-      mockSupabase.from.mockReturnValue(updateChain);
-
-      await expect(confirmOrder('order-1')).rejects.toThrow();
+      await expect(confirmOrder('order-1')).rejects.toThrow('API Error');
     });
   });
 

@@ -7,6 +7,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { POST } from '@/app/api/payments/verify/route';
 import { NextRequest, NextResponse } from 'next/server';
+import * as paymentVerify from '@/lib/api/payment-verify';
+import * as transaction from '@/lib/transaction';
+import * as notifications from '@/lib/notifications';
 
 // Mock modules - mock the actual helper functions used by the route
 vi.mock('@/lib/api/payment-verify');
@@ -33,26 +36,25 @@ describe('POST /api/payments/verify', () => {
       from: vi.fn().mockReturnThis(),
       update: vi.fn().mockReturnThis(),
       eq: vi.fn().mockResolvedValue({ error: null }),
+      auth: {
+        getUser: vi.fn(),
+      },
     };
 
-    // Setup helper mocks
-    mockVerifyPaymentAuth = vi.fn();
-    mockVerifyOrderForPayment = vi.fn();
-    mockCreatePaymentWithIdempotency = vi.fn();
-    mockNotifyPaymentReceived = vi.fn().mockResolvedValue({});
+    // Setup helper mocks using imported modules
+    mockVerifyPaymentAuth = vi.mocked(paymentVerify.verifyPaymentAuth);
+    mockVerifyOrderForPayment = vi.mocked(paymentVerify.verifyOrderForPayment);
+    mockCreatePaymentWithIdempotency = vi.mocked(transaction.createPaymentWithIdempotency);
+    mockNotifyPaymentReceived = vi.mocked(notifications.notifyPaymentReceived);
 
-    // Apply mocks
-    const paymentVerify = await import('@/lib/api/payment-verify');
-    vi.mocked(paymentVerify.verifyPaymentAuth).mockImplementation(mockVerifyPaymentAuth);
-    vi.mocked(paymentVerify.verifyOrderForPayment).mockImplementation(mockVerifyOrderForPayment);
+    // Reset mocks
+    mockVerifyPaymentAuth.mockReset();
+    mockVerifyOrderForPayment.mockReset();
+    mockCreatePaymentWithIdempotency.mockReset();
+    mockNotifyPaymentReceived.mockReset();
 
-    const transaction = await import('@/lib/transaction');
-    vi.mocked(transaction.createPaymentWithIdempotency).mockImplementation(
-      mockCreatePaymentWithIdempotency
-    );
-
-    const notifications = await import('@/lib/notifications');
-    vi.mocked(notifications.notifyPaymentReceived).mockImplementation(mockNotifyPaymentReceived);
+    // Set default behavior
+    mockNotifyPaymentReceived.mockResolvedValue({});
   });
 
   afterEach(() => {
@@ -564,6 +566,27 @@ describe('POST /api/payments/verify', () => {
         isExisting: false,
       });
 
+      mockVerifyPaymentAuth.mockResolvedValue({
+        success: true,
+        user: { id: 'user-123' },
+        supabase: mockSupabase,
+        body: {
+          payment_id: 'pay-123',
+          order_id: '123e4567-e89b-12d3-a456-426614174000',
+          payment_request_id: 'pr-123',
+        },
+      });
+
+      mockVerifyOrderForPayment.mockResolvedValue({
+        success: true,
+        order: {
+          id: '123e4567-e89b-12d3-a456-426614174000',
+          seller_id: 'seller-123',
+          total_amount: 10000,
+          status: 'pending_payment',
+        },
+      });
+
       const mockUpdatePaymentRequest = vi.fn().mockReturnThis();
       const mockEqPaymentRequest = vi.fn().mockResolvedValue({ data: {}, error: null });
 
@@ -644,9 +667,25 @@ describe('POST /api/payments/verify', () => {
 
     it('should handle notification failure gracefully', async () => {
       // Mock authentication
-      mockSupabase.auth.getUser.mockResolvedValue({
-        data: { user: { id: 'user-123', email: 'test@example.com' } },
-        error: null,
+      // Mock authentication and order
+      mockVerifyPaymentAuth.mockResolvedValue({
+        success: true,
+        user: { id: 'user-123', email: 'test@example.com' },
+        supabase: mockSupabase,
+        body: {
+          payment_id: 'pay-123',
+          order_id: '123e4567-e89b-12d3-a456-426614174000',
+        },
+      });
+
+      mockVerifyOrderForPayment.mockResolvedValue({
+        success: true,
+        order: {
+          id: '123e4567-e89b-12d3-a456-426614174000',
+          seller_id: 'seller-123',
+          total_amount: 10000,
+          status: 'pending_payment',
+        },
       });
 
       const mockPayment = {

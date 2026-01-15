@@ -42,6 +42,8 @@ passwords.txt
 
 # Supabase
 .supabase
+scripts/config.js
+scripts/.env
 
 # SonarQube
 .scannerwork/

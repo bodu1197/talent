@@ -21,11 +21,22 @@ vi.mock('next/link', () => ({
 
 // Mock useAuth
 const mockUser = { id: 'user-123', email: 'test@example.com' };
-const mockUseAuth = vi.fn(() => ({
-  user: mockUser as { id: string; email: string } | null,
-}));
+const mockUseAuth = vi.fn();
 vi.mock('@/components/providers/AuthProvider', () => ({
   useAuth: () => mockUseAuth(),
+}));
+
+// Mock NotificationProvider
+const mockUseNotifications = vi.fn(() => ({
+  notifications: [],
+  unreadCount: 0,
+  markAsRead: vi.fn(),
+  markAllAsRead: vi.fn(),
+  refreshNotifications: vi.fn(),
+}));
+
+vi.mock('@/components/providers/NotificationProvider', () => ({
+  useNotifications: () => mockUseNotifications(),
 }));
 
 // Mock logger

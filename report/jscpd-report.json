@@ -1,6 +1,6 @@
 {
   "statistics": {
-    "detectionDate": "2025-12-19T00:32:44.043Z",
+    "detectionDate": "2026-01-15T14:14:47.246Z",
     "formats": {
       "javascript": {
         "sources": {
@@ -546,7 +546,7 @@
           },
           "src/__tests__/unit/components/services/PurchaseButton.test.tsx": {
             "lines": 109,
-            "tokens": 898,
+            "tokens": 1009,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -642,7 +642,7 @@
           },
           "src/__tests__/unit/components/mypage/Sidebar.test.tsx": {
             "lines": 146,
-            "tokens": 1474,
+            "tokens": 1620,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -1336,6 +1336,18 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/app/help/dispute/[id]/page.tsx": {
+            "lines": 273,
+            "tokens": 2616,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/app/errands/[id]/chat/page.tsx": {
             "lines": 158,
             "tokens": 1264,
@@ -1685,8 +1697,8 @@
             "newClones": 0
           },
           "src/app/help/dispute/page.tsx": {
-            "lines": 177,
-            "tokens": 1663,
+            "lines": 190,
+            "tokens": 1716,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -2597,8 +2609,8 @@
             "newClones": 0
           },
           "src/components/notifications/NotificationBell.tsx": {
-            "lines": 91,
-            "tokens": 683,
+            "lines": 88,
+            "tokens": 739,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -2718,7 +2730,7 @@
           },
           "src/components/layout/MegaMenu.tsx": {
             "lines": 162,
-            "tokens": 1186,
+            "tokens": 1317,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -2802,7 +2814,7 @@
           },
           "src/components/layout/CategoryBar.tsx": {
             "lines": 29,
-            "tokens": 233,
+            "tokens": 259,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -2909,8 +2921,8 @@
             "newClones": 0
           },
           "src/components/home/RecentVisitedCategories.tsx": {
-            "lines": 1,
-            "tokens": 17,
+            "lines": 5,
+            "tokens": 31,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -2933,8 +2945,8 @@
             "newClones": 0
           },
           "src/components/home/PersonalizedServices.tsx": {
-            "lines": 16,
-            "tokens": 141,
+            "lines": 20,
+            "tokens": 155,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -3269,8 +3281,8 @@
             "newClones": 0
           },
           "src/components/categories/MobileCategoryBrowser.tsx": {
-            "lines": 50,
-            "tokens": 394,
+            "lines": 62,
+            "tokens": 444,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -3317,8 +3329,8 @@
             "newClones": 0
           },
           "src/components/categories/CategorySidebar.tsx": {
-            "lines": 81,
-            "tokens": 626,
+            "lines": 86,
+            "tokens": 678,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -3522,7 +3534,7 @@
           },
           "src/app/help/page.tsx": {
             "lines": 66,
-            "tokens": 573,
+            "tokens": 632,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -3666,14 +3678,14 @@
           }
         },
         "total": {
-          "lines": 25306,
-          "tokens": 205500,
-          "sources": 305,
+          "lines": 25614,
+          "tokens": 208828,
+          "sources": 306,
           "clones": 8,
           "duplicatedLines": 508,
           "duplicatedTokens": 4009,
-          "percentage": 2.01,
-          "percentageTokens": 1.95,
+          "percentage": 1.98,
+          "percentageTokens": 1.92,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -4238,21 +4250,21 @@
             "sources": 1,
             "clones": 17,
             "duplicatedLines": 334,
-            "duplicatedTokens": 2184,
+            "duplicatedTokens": 2261,
             "percentage": 170.41,
-            "percentageTokens": 122.01,
+            "percentageTokens": 126.31,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
           "src/__tests__/unit/components/services/PurchaseButton.test.tsx": {
             "lines": 182,
-            "tokens": 1507,
+            "tokens": 1679,
             "sources": 1,
             "clones": 3,
             "duplicatedLines": 55,
-            "duplicatedTokens": 396,
+            "duplicatedTokens": 438,
             "percentage": 30.22,
-            "percentageTokens": 26.28,
+            "percentageTokens": 26.09,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -4281,8 +4293,8 @@
             "newClones": 0
           },
           "src/__tests__/unit/components/services/MobileServiceHeader.test.tsx": {
-            "lines": 116,
-            "tokens": 1104,
+            "lines": 115,
+            "tokens": 1195,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -4310,9 +4322,9 @@
             "sources": 1,
             "clones": 9,
             "duplicatedLines": 113,
-            "duplicatedTokens": 956,
+            "duplicatedTokens": 980,
             "percentage": 46.31,
-            "percentageTokens": 44.61,
+            "percentageTokens": 45.73,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -4330,13 +4342,13 @@
           },
           "src/__tests__/unit/components/services/ContactSellerButton.test.tsx": {
             "lines": 146,
-            "tokens": 1248,
+            "tokens": 1387,
             "sources": 1,
             "clones": 4,
             "duplicatedLines": 58,
-            "duplicatedTokens": 481,
+            "duplicatedTokens": 541,
             "percentage": 39.73,
-            "percentageTokens": 38.54,
+            "percentageTokens": 39.01,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -4365,14 +4377,14 @@
             "newClones": 0
           },
           "src/__tests__/unit/components/notifications/NotificationBell.test.tsx": {
-            "lines": 150,
-            "tokens": 1365,
+            "lines": 161,
+            "tokens": 1597,
             "sources": 1,
-            "clones": 4,
-            "duplicatedLines": 55,
-            "duplicatedTokens": 435,
-            "percentage": 36.67,
-            "percentageTokens": 31.87,
+            "clones": 2,
+            "duplicatedLines": 32,
+            "duplicatedTokens": 235,
+            "percentage": 19.88,
+            "percentageTokens": 14.72,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -4390,13 +4402,13 @@
           },
           "src/__tests__/unit/components/mypage/Sidebar.test.tsx": {
             "lines": 167,
-            "tokens": 1670,
+            "tokens": 1837,
             "sources": 1,
             "clones": 1,
             "duplicatedLines": 20,
-            "duplicatedTokens": 119,
+            "duplicatedTokens": 139,
             "percentage": 11.98,
-            "percentageTokens": 7.13,
+            "percentageTokens": 7.57,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -4450,13 +4462,13 @@
           },
           "src/__tests__/unit/components/layout/MobileBottomNav.test.tsx": {
             "lines": 139,
-            "tokens": 1396,
+            "tokens": 1537,
             "sources": 1,
             "clones": 1,
-            "duplicatedLines": 12,
-            "duplicatedTokens": 119,
-            "percentage": 8.63,
-            "percentageTokens": 8.52,
+            "duplicatedLines": 11,
+            "duplicatedTokens": 124,
+            "percentage": 7.91,
+            "percentageTokens": 8.07,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -4486,7 +4498,7 @@
           },
           "src/__tests__/unit/components/layout/FooterMobileBusinessInfo.test.tsx": {
             "lines": 61,
-            "tokens": 611,
+            "tokens": 672,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -4497,14 +4509,14 @@
             "newClones": 0
           },
           "src/__tests__/unit/components/layout/Footer.test.tsx": {
-            "lines": 119,
-            "tokens": 1260,
+            "lines": 120,
+            "tokens": 1393,
             "sources": 1,
             "clones": 1,
             "duplicatedLines": 19,
-            "duplicatedTokens": 117,
-            "percentage": 15.97,
-            "percentageTokens": 9.29,
+            "duplicatedTokens": 136,
+            "percentage": 15.83,
+            "percentageTokens": 9.76,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -4522,13 +4534,13 @@
           },
           "src/__tests__/unit/components/home/SellerRegistrationGuide.test.tsx": {
             "lines": 84,
-            "tokens": 730,
+            "tokens": 814,
             "sources": 1,
             "clones": 1,
             "duplicatedLines": 19,
-            "duplicatedTokens": 119,
+            "duplicatedTokens": 138,
             "percentage": 22.62,
-            "percentageTokens": 16.3,
+            "percentageTokens": 16.95,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -4546,13 +4558,13 @@
           },
           "src/__tests__/unit/components/home/MobileSearchBar.test.tsx": {
             "lines": 110,
-            "tokens": 981,
+            "tokens": 1077,
             "sources": 1,
             "clones": 2,
             "duplicatedLines": 25,
             "duplicatedTokens": 209,
             "percentage": 22.73,
-            "percentageTokens": 21.3,
+            "percentageTokens": 19.41,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -5228,6 +5240,18 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/app/help/dispute/[id]/page.tsx": {
+            "lines": 691,
+            "tokens": 6534,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/app/errands/[id]/chat/page.tsx": {
             "lines": 435,
             "tokens": 3564,
@@ -5325,8 +5349,8 @@
             "newClones": 0
           },
           "src/app/auth/callback/complete/page.tsx": {
-            "lines": 117,
-            "tokens": 900,
+            "lines": 149,
+            "tokens": 1420,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -5613,8 +5637,8 @@
             "newClones": 0
           },
           "src/app/help/dispute/page.tsx": {
-            "lines": 454,
-            "tokens": 4454,
+            "lines": 509,
+            "tokens": 4613,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -5805,8 +5829,8 @@
             "newClones": 0
           },
           "src/app/categories/[slug]/page.tsx": {
-            "lines": 320,
-            "tokens": 2576,
+            "lines": 326,
+            "tokens": 2609,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -6753,8 +6777,8 @@
             "newClones": 0
           },
           "src/components/notifications/NotificationBell.tsx": {
-            "lines": 150,
-            "tokens": 1152,
+            "lines": 154,
+            "tokens": 1318,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -6874,7 +6898,7 @@
           },
           "src/components/layout/MegaMenu.tsx": {
             "lines": 255,
-            "tokens": 1974,
+            "tokens": 2197,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -6921,8 +6945,8 @@
             "newClones": 0
           },
           "src/components/layout/Footer.tsx": {
-            "lines": 295,
-            "tokens": 1947,
+            "lines": 300,
+            "tokens": 2220,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -6970,7 +6994,7 @@
           },
           "src/components/layout/CategoryBar.tsx": {
             "lines": 76,
-            "tokens": 691,
+            "tokens": 717,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -7089,8 +7113,8 @@
             "newClones": 0
           },
           "src/components/home/RecentVisitedCategories.tsx": {
-            "lines": 47,
-            "tokens": 374,
+            "lines": 51,
+            "tokens": 388,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -7125,14 +7149,14 @@
             "newClones": 0
           },
           "src/components/home/PersonalizedServices.tsx": {
-            "lines": 76,
-            "tokens": 649,
+            "lines": 80,
+            "tokens": 663,
             "sources": 1,
             "clones": 2,
             "duplicatedLines": 14,
             "duplicatedTokens": 148,
-            "percentage": 18.42,
-            "percentageTokens": 22.8,
+            "percentage": 17.5,
+            "percentageTokens": 22.32,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -7377,8 +7401,8 @@
             "newClones": 0
           },
           "src/components/common/PolicyLayout.tsx": {
-            "lines": 91,
-            "tokens": 795,
+            "lines": 89,
+            "tokens": 789,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -7521,8 +7545,8 @@
             "newClones": 0
           },
           "src/components/categories/MobileCategoryBrowser.tsx": {
-            "lines": 98,
-            "tokens": 738,
+            "lines": 110,
+            "tokens": 788,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -7581,14 +7605,14 @@
             "newClones": 0
           },
           "src/components/categories/CategorySidebar.tsx": {
-            "lines": 146,
-            "tokens": 1147,
+            "lines": 151,
+            "tokens": 1199,
             "sources": 1,
             "clones": 1,
             "duplicatedLines": 13,
             "duplicatedTokens": 92,
-            "percentage": 8.9,
-            "percentageTokens": 8.02,
+            "percentage": 8.61,
+            "percentageTokens": 7.67,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -7821,14 +7845,14 @@
             "newClones": 0
           },
           "src/app/help/page.tsx": {
-            "lines": 186,
-            "tokens": 1399,
+            "lines": 193,
+            "tokens": 1611,
             "sources": 1,
             "clones": 2,
             "duplicatedLines": 26,
-            "duplicatedTokens": 190,
-            "percentage": 13.98,
-            "percentageTokens": 13.58,
+            "duplicatedTokens": 210,
+            "percentage": 13.47,
+            "percentageTokens": 13.04,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -7978,14 +8002,14 @@
           }
         },
         "total": {
-          "lines": 64098,
-          "tokens": 524289,
-          "sources": 358,
-          "clones": 173,
-          "duplicatedLines": 2279,
-          "duplicatedTokens": 18431,
-          "percentage": 3.56,
-          "percentageTokens": 3.52,
+          "lines": 64932,
+          "tokens": 533875,
+          "sources": 359,
+          "clones": 172,
+          "duplicatedLines": 2267,
+          "duplicatedTokens": 18474,
+          "percentage": 3.49,
+          "percentageTokens": 3.46,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -8260,11 +8284,11 @@
             "lines": 84,
             "tokens": 795,
             "sources": 1,
-            "clones": 7,
-            "duplicatedLines": 71,
-            "duplicatedTokens": 744,
-            "percentage": 84.52,
-            "percentageTokens": 93.58,
+            "clones": 8,
+            "duplicatedLines": 79,
+            "duplicatedTokens": 842,
+            "percentage": 94.05,
+            "percentageTokens": 105.91,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -8812,11 +8836,11 @@
             "lines": 55,
             "tokens": 584,
             "sources": 1,
-            "clones": 2,
-            "duplicatedLines": 22,
-            "duplicatedTokens": 215,
-            "percentage": 40,
-            "percentageTokens": 36.82,
+            "clones": 3,
+            "duplicatedLines": 30,
+            "duplicatedTokens": 313,
+            "percentage": 54.55,
+            "percentageTokens": 53.6,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -9348,9 +9372,33 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/app/api/disputes/route.ts": {
+            "lines": 176,
+            "tokens": 1683,
+            "sources": 1,
+            "clones": 5,
+            "duplicatedLines": 58,
+            "duplicatedTokens": 628,
+            "percentage": 32.95,
+            "percentageTokens": 37.31,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/disputes/handlers.ts": {
+            "lines": 411,
+            "tokens": 3282,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 20,
+            "duplicatedTokens": 206,
+            "percentage": 4.87,
+            "percentageTokens": 6.28,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/app/api/chat/route.ts": {
-            "lines": 248,
-            "tokens": 2174,
+            "lines": 372,
+            "tokens": 3439,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -9684,6 +9732,18 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/lib/dispute/verdict-engine.ts": {
+            "lines": 777,
+            "tokens": 5440,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/lib/constants/categories.ts": {
             "lines": 26,
             "tokens": 115,
@@ -9853,8 +9913,8 @@
             "newClones": 0
           },
           "src/lib/ai/gemini.ts": {
-            "lines": 181,
-            "tokens": 1009,
+            "lines": 212,
+            "tokens": 1342,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -10358,14 +10418,14 @@
           }
         },
         "total": {
-          "lines": 26367,
-          "tokens": 217278,
-          "sources": 197,
-          "clones": 109,
-          "duplicatedLines": 1233,
-          "duplicatedTokens": 12643,
-          "percentage": 4.68,
-          "percentageTokens": 5.82,
+          "lines": 27886,
+          "tokens": 229281,
+          "sources": 200,
+          "clones": 113,
+          "duplicatedLines": 1280,
+          "duplicatedTokens": 13158,
+          "percentage": 4.59,
+          "percentageTokens": 5.74,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -10400,14 +10460,14 @@
       }
     },
     "total": {
-      "lines": 115782,
-      "tokens": 947164,
-      "sources": 861,
-      "clones": 290,
-      "duplicatedLines": 4020,
-      "duplicatedTokens": 35083,
-      "percentage": 3.47,
-      "percentageTokens": 3.7,
+      "lines": 118443,
+      "tokens": 972081,
+      "sources": 866,
+      "clones": 293,
+      "duplicatedLines": 4055,
+      "duplicatedTokens": 35641,
+      "percentage": 3.42,
+      "percentageTokens": 3.67,
       "newDuplicatedLines": 0,
       "newClones": 0
     }
@@ -12060,12 +12120,12 @@
         "startLoc": {
           "line": 19,
           "column": 2,
-          "position": 185
+          "position": 203
         },
         "endLoc": {
           "line": 32,
           "column": 14,
-          "position": 270
+          "position": 301
         }
       }
     },
@@ -12180,7 +12240,7 @@
     {
       "format": "tsx",
       "lines": 34,
-      "fragment": ";\n\n// Mock next/navigation\nconst mockPush = vi.fn();\nvi.mock('next/navigation', () => ({\n  useRouter: () => ({\n    push: mockPush,\n  }),\n}));\n\n// Mock react-hot-toast\nconst mockToastError = vi.fn();\nvi.mock('react-hot-toast', () => ({\n  default: {\n    error: (msg: string) => mockToastError(msg),\n    success: vi.fn(),\n  },\n}));\n\n// Mock logger\nvi.mock('@/lib/logger', () => ({\n  logger: {\n    error: vi.fn(),\n    info: vi.fn(),\n    warn: vi.fn(),\n    debug: vi.fn(),\n  },\n}));\n\n// Mock fetch\nconst mockFetch = vi.fn();\nglobal.fetch = mockFetch;\n\ndescribe('ContactSellerButton'",
+      "fragment": ";\r\n\r\n// Mock next/navigation\r\nconst mockPush = vi.fn();\r\nvi.mock('next/navigation', () => ({\r\n  useRouter: () => ({\r\n    push: mockPush,\r\n  }),\r\n}));\r\n\r\n// Mock react-hot-toast\r\nconst mockToastError = vi.fn();\r\nvi.mock('react-hot-toast', () => ({\r\n  default: {\r\n    error: (msg: string) => mockToastError(msg),\r\n    success: vi.fn(),\r\n  },\r\n}));\r\n\r\n// Mock logger\r\nvi.mock('@/lib/logger', () => ({\r\n  logger: {\r\n    error: vi.fn(),\r\n    info: vi.fn(),\r\n    warn: vi.fn(),\r\n    debug: vi.fn(),\r\n  },\r\n}));\r\n\r\n// Mock fetch\r\nconst mockFetch = vi.fn();\r\nglobalThis.fetch = mockFetch;\r\n\r\ndescribe('ContactSellerButton'",
       "tokens": 0,
       "firstFile": {
         "name": "src\\__tests__\\unit\\components\\services\\ContactSellerButton.test.tsx",
@@ -12189,12 +12249,12 @@
         "startLoc": {
           "line": 3,
           "column": 44,
-          "position": 54
+          "position": 56
         },
         "endLoc": {
           "line": 36,
           "column": 22,
-          "position": 297
+          "position": 332
         }
       },
       "secondFile": {
@@ -12204,19 +12264,19 @@
         "startLoc": {
           "line": 3,
           "column": 39,
-          "position": 54
+          "position": 56
         },
         "endLoc": {
           "line": 36,
           "column": 17,
-          "position": 297
+          "position": 332
         }
       }
     },
     {
       "format": "tsx",
       "lines": 10,
-      "fragment": " {...defaultProps} />);\n\n    fireEvent.click(screen.getByRole('button'));\n\n    await waitFor(() => {\n      expect(screen.getByRole('button')).toBeDisabled();\n    });\n  });\n\n  it('로딩 중에는 처리 중 텍스트를 표시한다'",
+      "fragment": " {...defaultProps} />);\r\n\r\n    fireEvent.click(screen.getByRole('button'));\r\n\r\n    await waitFor(() => {\r\n      expect(screen.getByRole('button')).toBeDisabled();\r\n    });\r\n  });\r\n\r\n  it('로딩 중에는 처리 중 텍스트를 표시한다'",
       "tokens": 0,
       "firstFile": {
         "name": "src\\__tests__\\unit\\components\\services\\ContactSellerButton.test.tsx",
@@ -12225,12 +12285,12 @@
         "startLoc": {
           "line": 127,
           "column": 20,
-          "position": 1071
+          "position": 1189
         },
         "endLoc": {
           "line": 136,
           "column": 24,
-          "position": 1139
+          "position": 1266
         }
       },
       "secondFile": {
@@ -12240,19 +12300,19 @@
         "startLoc": {
           "line": 145,
           "column": 15,
-          "position": 1224
+          "position": 1358
         },
         "endLoc": {
           "line": 154,
           "column": 31,
-          "position": 1292
+          "position": 1435
         }
       }
     },
     {
       "format": "tsx",
       "lines": 9,
-      "fragment": ", async () => {\n    mockFetch.mockImplementation(() => new Promise(() => {}));\n\n    render(<ContactSellerButton {...defaultProps} />);\n\n    fireEvent.click(screen.getByRole('button'));\n\n    await waitFor(() => {\n      expect(screen.getByText",
+      "fragment": ", async () => {\r\n    mockFetch.mockImplementation(() => new Promise(() => { }));\r\n\r\n    render(<ContactSellerButton {...defaultProps} />);\r\n\r\n    fireEvent.click(screen.getByRole('button'));\r\n\r\n    await waitFor(() => {\r\n      expect(screen.getByText",
       "tokens": 0,
       "firstFile": {
         "name": "src\\__tests__\\unit\\components\\services\\ContactSellerButton.test.tsx",
@@ -12261,12 +12321,12 @@
         "startLoc": {
           "line": 136,
           "column": 24,
-          "position": 1140
+          "position": 1267
         },
         "endLoc": {
           "line": 144,
           "column": 10,
-          "position": 1225
+          "position": 1361
         }
       },
       "secondFile": {
@@ -12276,12 +12336,12 @@
         "startLoc": {
           "line": 124,
           "column": 20,
-          "position": 1029
+          "position": 1143
         },
         "endLoc": {
           "line": 132,
           "column": 10,
-          "position": 1114
+          "position": 1237
         }
       }
     },
@@ -12396,7 +12456,7 @@
     {
       "format": "tsx",
       "lines": 20,
-      "fragment": ";\n\n// Mock next/link\nvi.mock('next/link', () => ({\n  default: ({\n    children,\n    href,\n    ...props\n  }: {\n    children: React.ReactNode;\n    href: string;\n    [key: string]: unknown;\n  }) => (\n    <a href={href} {...props}>\n      {children}\n    </a>\n  ),\n}));\n\n// Mock useAuth",
+      "fragment": ";\r\n\r\n// Mock next/link\r\nvi.mock('next/link', () => ({\r\n  default: ({\r\n    children,\r\n    href,\r\n    ...props\r\n  }: {\r\n    children: React.ReactNode;\r\n    href: string;\r\n    [key: string]: unknown;\r\n  }) => (\r\n    <a href={href} {...props}>\r\n      {children}\r\n    </a>\r\n  ),\r\n}));\r\n\r\n// Mock useAuth",
       "tokens": 0,
       "firstFile": {
         "name": "src\\__tests__\\unit\\components\\notifications\\NotificationBell.test.tsx",
@@ -12405,12 +12465,12 @@
         "startLoc": {
           "line": 3,
           "column": 46,
-          "position": 54
+          "position": 56
         },
         "endLoc": {
           "line": 22,
           "column": 16,
-          "position": 171
+          "position": 192
         }
       },
       "secondFile": {
@@ -12431,58 +12491,22 @@
     },
     {
       "format": "tsx",
-      "lines": 12,
-      "fragment": ";\n\n// Mock useAuth\nconst mockUser = { id: 'user-123', email: 'test@example.com' };\nconst mockUseAuth = vi.fn(() => ({\n  user: mockUser as { id: string; email: string } | null,\n}));\nvi.mock('@/components/providers/AuthProvider', () => ({\n  useAuth: () => mockUseAuth(),\n}));\n\n// Mock logger",
-      "tokens": 0,
-      "firstFile": {
-        "name": "src\\__tests__\\unit\\components\\notifications\\NotificationBell.test.tsx",
-        "start": 20,
-        "end": 31,
-        "startLoc": {
-          "line": 20,
-          "column": 2,
-          "position": 168
-        },
-        "endLoc": {
-          "line": 31,
-          "column": 15,
-          "position": 281
-        }
-      },
-      "secondFile": {
-        "name": "src\\__tests__\\unit\\components\\services\\FavoriteButton.test.tsx",
-        "start": 4,
-        "end": 15,
-        "startLoc": {
-          "line": 4,
-          "column": 39,
-          "position": 56
-        },
-        "endLoc": {
-          "line": 15,
-          "column": 18,
-          "position": 169
-        }
-      }
-    },
-    {
-      "format": "tsx",
       "lines": 14,
-      "fragment": "),\n}));\n\n// Mock logger\nvi.mock('@/lib/logger', () => ({\n  logger: {\n    error: vi.fn(),\n    info: vi.fn(),\n    warn: vi.fn(),\n    debug: vi.fn(),\n  },\n}));\n\n// Mock Supabase client with proper chain",
+      "fragment": "),\r\n}));\r\n\r\n// Mock logger\r\nvi.mock('@/lib/logger', () => ({\r\n  logger: {\r\n    error: vi.fn(),\r\n    info: vi.fn(),\r\n    warn: vi.fn(),\r\n    debug: vi.fn(),\r\n  },\r\n}));\r\n\r\n// Mock Supabase client with proper chain",
       "tokens": 0,
       "firstFile": {
         "name": "src\\__tests__\\unit\\components\\notifications\\NotificationBell.test.tsx",
-        "start": 28,
-        "end": 41,
+        "start": 39,
+        "end": 52,
         "startLoc": {
-          "line": 28,
+          "line": 39,
           "column": 2,
-          "position": 272
+          "position": 381
         },
         "endLoc": {
-          "line": 41,
+          "line": 52,
           "column": 42,
-          "position": 358
+          "position": 480
         }
       },
       "secondFile": {
@@ -12497,14 +12521,14 @@
         "endLoc": {
           "line": 32,
           "column": 14,
-          "position": 270
+          "position": 301
         }
       }
     },
     {
       "format": "tsx",
       "lines": 21,
-      "fragment": ";\n\n// Mock next/link\nvi.mock('next/link', () => ({\n  default: ({\n    children,\n    href,\n    ...props\n  }: {\n    children: React.ReactNode;\n    href: string;\n    [key: string]: unknown;\n  }) => (\n    <a href={href} {...props}>\n      {children}\n    </a>\n  ),\n}));\n\n// Mock next/navigation\nlet",
+      "fragment": ";\r\n\r\n// Mock next/link\r\nvi.mock('next/link', () => ({\r\n  default: ({\r\n    children,\r\n    href,\r\n    ...props\r\n  }: {\r\n    children: React.ReactNode;\r\n    href: string;\r\n    [key: string]: unknown;\r\n  }) => (\r\n    <a href={href} {...props}>\r\n      {children}\r\n    </a>\r\n  ),\r\n}));\r\n\r\n// Mock next/navigation\r\nlet",
       "tokens": 0,
       "firstFile": {
         "name": "src\\__tests__\\unit\\components\\mypage\\Sidebar.test.tsx",
@@ -12513,12 +12537,12 @@
         "startLoc": {
           "line": 3,
           "column": 30,
-          "position": 51
+          "position": 53
         },
         "endLoc": {
           "line": 23,
           "column": 4,
-          "position": 170
+          "position": 192
         }
       },
       "secondFile": {
@@ -12605,38 +12629,38 @@
         "endLoc": {
           "line": 23,
           "column": 27,
-          "position": 176
+          "position": 198
         }
       }
     },
     {
       "format": "tsx",
-      "lines": 13,
-      "fragment": "),\n}));\n\n// Mock useAuth\nconst mockUser = { id: 'user-123', email: 'test@example.com' };\nconst mockUseAuth = vi.fn(() => ({\n  user: mockUser as { id: string; email: string } | null,\n}));\nvi.mock('@/components/providers/AuthProvider', () => ({\n  useAuth: () => mockUseAuth(),\n}));\n\n// Mock useChatUnreadCount",
+      "lines": 12,
+      "fragment": ";\r\n\r\n// Mock useAuth\r\nconst mockUser = { id: 'user-123', email: 'test@example.com' };\r\nconst mockUseAuth = vi.fn(() => ({\r\n  user: mockUser as { id: string; email: string } | null,\r\n}));\r\nvi.mock('@/components/providers/AuthProvider', () => ({\r\n  useAuth: () => mockUseAuth(),\r\n}));\r\n\r\n// Mock useChatUnreadCount",
       "tokens": 0,
       "firstFile": {
         "name": "src\\__tests__\\unit\\components\\layout\\MobileBottomNav.test.tsx",
-        "start": 8,
+        "start": 9,
         "end": 20,
         "startLoc": {
-          "line": 8,
+          "line": 9,
           "column": 2,
-          "position": 98
+          "position": 112
         },
         "endLoc": {
           "line": 20,
           "column": 27,
-          "position": 217
+          "position": 236
         }
       },
       "secondFile": {
-        "name": "src\\__tests__\\unit\\components\\notifications\\NotificationBell.test.tsx",
-        "start": 19,
+        "name": "src\\__tests__\\unit\\components\\services\\FavoriteButton.test.tsx",
+        "start": 4,
         "end": 15,
         "startLoc": {
-          "line": 19,
-          "column": 3,
-          "position": 162
+          "line": 4,
+          "column": 39,
+          "position": 56
         },
         "endLoc": {
           "line": 15,
@@ -12756,7 +12780,7 @@
     {
       "format": "tsx",
       "lines": 20,
-      "fragment": ";\n\n// Mock next/link\nvi.mock('next/link', () => ({\n  default: ({\n    children,\n    href,\n    ...props\n  }: {\n    children: React.ReactNode;\n    href: string;\n    [key: string]: unknown;\n  }) => (\n    <a href={href} {...props}>\n      {children}\n    </a>\n  ),\n}));\n\n// Mock FooterMobileBusinessInfo",
+      "fragment": ";\r\n\r\n// Mock next/link\r\nvi.mock('next/link', () => ({\r\n  default: ({\r\n    children,\r\n    href,\r\n    ...props\r\n  }: {\r\n    children: React.ReactNode;\r\n    href: string;\r\n    [key: string]: unknown;\r\n  }) => (\r\n    <a href={href} {...props}>\r\n      {children}\r\n    </a>\r\n  ),\r\n}));\r\n\r\n// Mock FooterMobileBusinessInfo",
       "tokens": 0,
       "firstFile": {
         "name": "src\\__tests__\\unit\\components\\layout\\Footer.test.tsx",
@@ -12765,12 +12789,12 @@
         "startLoc": {
           "line": 3,
           "column": 29,
-          "position": 45
+          "position": 47
         },
         "endLoc": {
           "line": 22,
           "column": 33,
-          "position": 162
+          "position": 183
         }
       },
       "secondFile": {
@@ -12792,7 +12816,7 @@
     {
       "format": "tsx",
       "lines": 20,
-      "fragment": ";\n\n// Mock next/link\nvi.mock('next/link', () => ({\n  default: ({\n    children,\n    href,\n    ...props\n  }: {\n    children: React.ReactNode;\n    href: string;\n    [key: string]: unknown;\n  }) => (\n    <a href={href} {...props}>\n      {children}\n    </a>\n  ),\n}));\n\ndescribe('SellerRegistrationGuide'",
+      "fragment": ";\r\n\r\n// Mock next/link\r\nvi.mock('next/link', () => ({\r\n  default: ({\r\n    children,\r\n    href,\r\n    ...props\r\n  }: {\r\n    children: React.ReactNode;\r\n    href: string;\r\n    [key: string]: unknown;\r\n  }) => (\r\n    <a href={href} {...props}>\r\n      {children}\r\n    </a>\r\n  ),\r\n}));\r\n\r\ndescribe('SellerRegistrationGuide'",
       "tokens": 0,
       "firstFile": {
         "name": "src\\__tests__\\unit\\components\\home\\SellerRegistrationGuide.test.tsx",
@@ -12801,12 +12825,12 @@
         "startLoc": {
           "line": 3,
           "column": 44,
-          "position": 45
+          "position": 47
         },
         "endLoc": {
           "line": 22,
           "column": 26,
-          "position": 164
+          "position": 185
         }
       },
       "secondFile": {
@@ -12888,12 +12912,12 @@
         "startLoc": {
           "line": 31,
           "column": 16,
-          "position": 260
+          "position": 290
         },
         "endLoc": {
           "line": 45,
           "column": 16,
-          "position": 373
+          "position": 417
         }
       }
     },
@@ -12924,12 +12948,12 @@
         "startLoc": {
           "line": 45,
           "column": 16,
-          "position": 374
+          "position": 418
         },
         "endLoc": {
           "line": 56,
           "column": 21,
-          "position": 470
+          "position": 525
         }
       }
     },
@@ -13325,7 +13349,7 @@
         "endLoc": {
           "line": 23,
           "column": 27,
-          "position": 176
+          "position": 198
         }
       }
     },
@@ -18478,6 +18502,150 @@
       }
     },
     {
+      "format": "typescript",
+      "lines": 9,
+      "fragment": "export async function GET(_request: NextRequest) {\r\n  try {\r\n    const supabase = await createClient();\r\n\r\n    const {\r\n      data: { user },\r\n    } = await supabase.auth.getUser();\r\n    if (!user) {\r\n      return NextResponse.json({ error: '로그인이 필요합니다.'",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\app\\api\\disputes\\route.ts",
+        "start": 77,
+        "end": 85,
+        "startLoc": {
+          "line": 77,
+          "column": 1,
+          "position": 778
+        },
+        "endLoc": {
+          "line": 85,
+          "column": 14,
+          "position": 876
+        }
+      },
+      "secondFile": {
+        "name": "src\\app\\api\\chat\\unread-count\\route.ts",
+        "start": 6,
+        "end": 14,
+        "startLoc": {
+          "line": 6,
+          "column": 1,
+          "position": 45
+        },
+        "endLoc": {
+          "line": 14,
+          "column": 15,
+          "position": 135
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 9,
+      "fragment": "export async function POST(request: NextRequest) {\r\n  try {\r\n    const supabase = await createClient();\r\n\r\n    const {\r\n      data: { user },\r\n    } = await supabase.auth.getUser();\r\n    if (!user) {\r\n      return NextResponse.json({ error: '로그인이 필요합니다.'",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\app\\api\\disputes\\route.ts",
+        "start": 116,
+        "end": 124,
+        "startLoc": {
+          "line": 116,
+          "column": 1,
+          "position": 1128
+        },
+        "endLoc": {
+          "line": 124,
+          "column": 14,
+          "position": 1226
+        }
+      },
+      "secondFile": {
+        "name": "src\\app\\api\\chat\\rooms\\create-from-order\\route.ts",
+        "start": 6,
+        "end": 14,
+        "startLoc": {
+          "line": 6,
+          "column": 1,
+          "position": 45
+        },
+        "endLoc": {
+          "line": 14,
+          "column": 12,
+          "position": 135
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 12,
+      "fragment": ": NextRequest) {\r\n  try {\r\n    const supabase = await createClient();\r\n\r\n    const {\r\n      data: { user },\r\n    } = await supabase.auth.getUser();\r\n    if (!user) {\r\n      return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });\r\n    }\r\n\r\n    const",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\app\\api\\disputes\\route.ts",
+        "start": 116,
+        "end": 127,
+        "startLoc": {
+          "line": 116,
+          "column": 8,
+          "position": 1137
+        },
+        "endLoc": {
+          "line": 127,
+          "column": 6,
+          "position": 1250
+        }
+      },
+      "secondFile": {
+        "name": "src\\app\\api\\disputes\\route.ts",
+        "start": 77,
+        "end": 88,
+        "startLoc": {
+          "line": 77,
+          "column": 9,
+          "position": 787
+        },
+        "endLoc": {
+          "line": 88,
+          "column": 16,
+          "position": 900
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 21,
+      "fragment": ";\r\n\r\n// 분쟁 타입 정의\r\ninterface Dispute {\r\n  id: string;\r\n  case_number: string;\r\n  plaintiff_id: string;\r\n  defendant_id: string;\r\n  dispute_amount: number;\r\n  dispute_type: string;\r\n  plaintiff_claim: string;\r\n  defendant_response?: string;\r\n  plaintiff_role: 'buyer' | 'seller';\r\n  status: string;\r\n  plaintiff?: { display_name: string };\r\n  defendant?: { display_name: string };\r\n  order?: { id: string; total_amount: number; status: string; created_at: string };\r\n  service?: { id: string; title: string; category: string; revision_count?: number };\r\n}\r\n\r\ninterface",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\app\\api\\disputes\\handlers.ts",
+        "start": 18,
+        "end": 38,
+        "startLoc": {
+          "line": 18,
+          "column": 2,
+          "position": 109
+        },
+        "endLoc": {
+          "line": 38,
+          "column": 10,
+          "position": 315
+        }
+      },
+      "secondFile": {
+        "name": "src\\app\\api\\disputes\\route.ts",
+        "start": 9,
+        "end": 29,
+        "startLoc": {
+          "line": 9,
+          "column": 24,
+          "position": 77
+        },
+        "endLoc": {
+          "line": 29,
+          "column": 15,
+          "position": 283
+        }
+      }
+    },
+    {
       "format": "tsx",
       "lines": 12,
       "fragment": "if (loading) {\n    return (\n      <div className=\"flex items-center justify-center min-h-[400px]\">\n        <div className=\"text-center\">\n          <div className=\"inline-block w-12 h-12 border-4 border-brand-primary border-t-transparent rounded-full animate-spin mb-4\"></div>\n          <p className=\"text-gray-600\">로딩 중...</p>\n        </div>\n      </div>\n    );\n  }\n\n  return",
@@ -20496,36 +20664,36 @@
     {
       "format": "tsx",
       "lines": 14,
-      "fragment": ".map((guide) => (\n                  <li key={guide.href}>\n                    <Link\n                      href={guide.href}\n                      className=\"flex items-center justify-between text-xs text-gray-600 hover:text-brand-primary transition-colors py-1\"\n                    >\n                      <span>{guide.title}</span>\n                      <ArrowRight className=\"w-3 h-3\" />\n                    </Link>\n                  </li>\n                ))}\n              </ul>\n            </div>\n          </",
+      "fragment": ".map((guide) => (\r\n                  <li key={guide.href}>\r\n                    <Link\r\n                      href={guide.href}\r\n                      className=\"flex items-center justify-between text-xs text-gray-600 hover:text-brand-primary transition-colors py-1\"\r\n                    >\r\n                      <span>{guide.title}</span>\r\n                      <ArrowRight className=\"w-3 h-3\" />\r\n                    </Link>\r\n                  </li>\r\n                ))}\r\n              </ul>\r\n            </div>\r\n          </",
       "tokens": 0,
       "firstFile": {
         "name": "src\\app\\help\\page.tsx",
-        "start": 169,
-        "end": 182,
+        "start": 176,
+        "end": 189,
         "startLoc": {
-          "line": 169,
+          "line": 176,
           "column": 13,
-          "position": 1281
+          "position": 1478
         },
         "endLoc": {
-          "line": 182,
+          "line": 189,
           "column": 3,
-          "position": 1376
+          "position": 1583
         }
       },
       "secondFile": {
         "name": "src\\app\\help\\page.tsx",
-        "start": 148,
-        "end": 162,
+        "start": 155,
+        "end": 169,
         "startLoc": {
-          "line": 148,
+          "line": 155,
           "column": 12,
-          "position": 1123
+          "position": 1302
         },
         "endLoc": {
-          "line": 162,
+          "line": 169,
           "column": 2,
-          "position": 1219
+          "position": 1409
         }
       }
     },

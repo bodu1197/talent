@@ -1,7 +1,12 @@
 const https = require('https');
 
-const PROJECT_ID = 'abroivxthindezdtdzmj';
-const TOKEN = 'sbp_753b67c2411cad6320ef44d6626ac13ee2ba6296';
+const PROJECT_ID = process.env.SUPABASE_PROJECT_ID || 'abroivxthindezdtdzmj';
+const TOKEN = process.env.SUPABASE_ACCESS_TOKEN;
+
+if (!TOKEN) {
+  console.error('❌ Error: SUPABASE_ACCESS_TOKEN environment variable is required');
+  process.exit(1);
+}
 
 const approveFunctionSql = `
 CREATE OR REPLACE FUNCTION public.approve_service_revision(revision_id_param uuid)

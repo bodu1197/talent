@@ -11,7 +11,8 @@ const mockSupabase: Record<string, any> = {
   from: vi.fn(() => mockSupabase),
   select: vi.fn(() => mockSupabase),
   eq: vi.fn(() => mockSupabase),
-  neq: vi.fn(() => mockSupabase),
+  neq: vi.fn(),
+  in: vi.fn(() => mockSupabase),
   or: vi.fn(() => mockSupabase),
   limit: vi.fn(),
 };
@@ -34,7 +35,8 @@ describe('Chat Unread Count API', () => {
     mockSupabase.from.mockReturnValue(mockSupabase);
     mockSupabase.select.mockReturnValue(mockSupabase);
     mockSupabase.eq.mockReturnValue(mockSupabase);
-    mockSupabase.neq.mockReturnValue(mockSupabase);
+    mockSupabase.in.mockReturnValue(mockSupabase);
+    mockSupabase.or.mockReturnValue(mockSupabase);
   });
 
   describe('GET /api/chat/unread-count', () => {
@@ -73,14 +75,15 @@ describe('Chat Unread Count API', () => {
         data: { user: { id: 'user-1' } },
       });
 
+      // 1. First query (rooms)
       mockSupabase.or.mockResolvedValue({
         data: [{ id: 'room-1' }, { id: 'room-2' }],
       });
 
-      // Mock count for each room
-      mockSupabase.limit
-        .mockResolvedValueOnce({ count: 3 }) // room-1 has unread
-        .mockResolvedValueOnce({ count: 0 }); // room-2 has no unread
+      // 2. Second query (messages)
+      mockSupabase.neq.mockResolvedValue({
+        data: [{ room_id: 'room-1' }, { room_id: 'room-1' }, { room_id: 'room-2' }],
+      });
 
       const request = new NextRequest('http://localhost:3000/api/chat/unread-count');
 
@@ -88,7 +91,7 @@ describe('Chat Unread Count API', () => {
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.unreadCount).toBe(1);
+      expect(data.unreadCount).toBe(2);
     });
 
     it('should handle database error', async () => {

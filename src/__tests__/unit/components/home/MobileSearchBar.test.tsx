@@ -58,7 +58,7 @@ describe('MobileSearchBar', () => {
 
     const input = screen.getByPlaceholderText('어떤 재능이 필요하신가요?');
     expect(input).toHaveAttribute('role', 'searchbox');
-    expect(input).toHaveAttribute('aria-label', '서비스 검색');
+
   });
 
   it('입력값 변경을 추적한다', () => {

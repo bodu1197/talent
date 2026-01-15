@@ -3,9 +3,14 @@ const https = require('node:https');
 const fs = require('node:fs');
 const path = require('node:path');
 
-// Supabase Configuration from previous script
-const SUPABASE_PROJECT_REF = 'abroivxthindezdtdzmj';
-const SUPABASE_ACCESS_TOKEN = 'sbp_753b67c2411cad6320ef44d6626ac13ee2ba6296';
+// Supabase Configuration
+const SUPABASE_PROJECT_REF = process.env.SUPABASE_PROJECT_ID || 'abroivxthindezdtdzmj';
+const SUPABASE_ACCESS_TOKEN = process.env.SUPABASE_ACCESS_TOKEN;
+
+if (!SUPABASE_ACCESS_TOKEN) {
+  console.error('❌ Error: SUPABASE_ACCESS_TOKEN environment variable is required');
+  process.exit(1);
+}
 
 const MIGRATIONS = [
   'supabase/migrations/20251219_create_chatbot_tables.sql',

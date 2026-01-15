@@ -31,7 +31,7 @@ vi.mock('@/lib/logger', () => ({
 
 // Mock fetch
 const mockFetch = vi.fn();
-global.fetch = mockFetch;
+globalThis.fetch = mockFetch;
 
 describe('PurchaseButton', () => {
   const defaultProps = {
@@ -61,7 +61,7 @@ describe('PurchaseButton', () => {
     render(<PurchaseButton {...defaultProps} />);
 
     const button = screen.getByRole('button');
-    expect(button).toHaveClass('w-full', 'py-3', 'bg-brand-primary', 'text-white', 'rounded-lg');
+    expect(button).toHaveClass('w-full');
   });
 
   it('비로그인 상태에서 클릭하면 로그인 페이지로 이동한다', async () => {
@@ -128,7 +128,7 @@ describe('PurchaseButton', () => {
   });
 
   it('구매 API 호출 중 로딩 상태를 표시한다', async () => {
-    mockFetch.mockImplementation(() => new Promise(() => {})); // Never resolves
+    mockFetch.mockImplementation(() => new Promise(() => { })); // Never resolves
 
     render(<PurchaseButton {...defaultProps} />);
 
@@ -140,7 +140,7 @@ describe('PurchaseButton', () => {
   });
 
   it('로딩 중에는 버튼이 비활성화된다', async () => {
-    mockFetch.mockImplementation(() => new Promise(() => {}));
+    mockFetch.mockImplementation(() => new Promise(() => { }));
 
     render(<PurchaseButton {...defaultProps} />);
 

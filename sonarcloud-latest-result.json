@@ -1,17 +1,17 @@
 {
-  "timestamp": "2025-12-16T21:54:20.748Z",
+  "timestamp": "2026-01-15T11:42:20.543Z",
   "projectKey": "bodu1197_talent",
   "organization": "bodu1197",
   "qualityGate": {
     "status": "ERROR",
     "conditions": [
       {
-        "status": "OK",
+        "status": "ERROR",
         "metricKey": "new_reliability_rating",
         "comparator": "GT",
         "periodIndex": 1,
         "errorThreshold": "1",
-        "actualValue": "1"
+        "actualValue": "3"
       },
       {
         "status": "OK",
@@ -38,12 +38,12 @@
         "actualValue": "0.0"
       },
       {
-        "status": "ERROR",
+        "status": "OK",
         "metricKey": "new_duplicated_lines_density",
         "comparator": "GT",
         "periodIndex": 1,
         "errorThreshold": "3",
-        "actualValue": "4.385000610724319"
+        "actualValue": "2.3417519181585678"
       },
       {
         "status": "OK",
@@ -65,43 +65,45 @@
   },
   "metrics": {
     "coverage": "0.0",
-    "complexity": "9943",
-    "reliability_rating": "1.0",
-    "code_smells": "121",
-    "duplicated_lines_density": "2.4",
+    "complexity": "10321",
+    "reliability_rating": "3.0",
+    "code_smells": "69",
+    "duplicated_lines_density": "2.1",
     "new_vulnerabilities": "0",
     "security_rating": "1.0",
-    "new_reliability_rating": "1.0",
+    "new_reliability_rating": "3.0",
     "new_coverage": "0.0",
     "new_security_rating": "1.0",
     "security_hotspots": "0",
-    "sqale_index": "460",
-    "new_bugs": "0",
+    "sqale_index": "259",
+    "new_bugs": "4",
     "sqale_rating": "1.0",
-    "new_code_smells": "48",
-    "bugs": "0",
-    "cognitive_complexity": "5170",
-    "ncloc": "80660",
+    "new_code_smells": "33",
+    "bugs": "4",
+    "cognitive_complexity": "5352",
+    "ncloc": "82634",
     "vulnerabilities": "0",
     "new_maintainability_rating": "1.0",
-    "new_duplicated_lines_density": "4.385000610724319"
+    "new_duplicated_lines_density": "2.3417519181585678"
   },
   "issues": {
-    "total": 137,
+    "total": 152,
     "byType": {
-      "CODE_SMELL": 132,
-      "BUG": 5
+      "CODE_SMELL": 146,
+      "BUG": 6
     },
     "bySeverity": {
-      "MAJOR": 137
+      "MAJOR": 151,
+      "CRITICAL": 1
     },
     "byTag": {
+      "accessibility": 67,
+      "react": 124,
+      "jsx": 50,
+      "performance": 55,
+      "confusing": 1,
+      "type-dependent": 15,
       "redundant": 2,
-      "type-dependent": 13,
-      "jsx": 47,
-      "performance": 52,
-      "react": 111,
-      "accessibility": 57,
       "async": 5,
       "promise": 5,
       "javascript": 5,
@@ -110,12 +112,615 @@
     },
     "items": [
       {
+        "key": "AZs0COK_TuTaRi97H4I4",
+        "rule": "typescript:S6853",
+        "severity": "MAJOR",
+        "component": "bodu1197_talent:src/app/help/dispute/page.tsx",
+        "project": "bodu1197_talent",
+        "line": 287,
+        "hash": "8be788feb26c8751f2190b902ece29d6",
+        "textRange": {
+          "startLine": 287,
+          "endLine": 287,
+          "startOffset": 19,
+          "endOffset": 24
+        },
+        "flows": [],
+        "status": "OPEN",
+        "message": "A form label must have accessible text.",
+        "effort": "5min",
+        "debt": "5min",
+        "author": "your_email@example.com",
+        "tags": [
+          "accessibility",
+          "react"
+        ],
+        "creationDate": "2025-12-19T00:24:49+0000",
+        "updateDate": "2025-12-19T00:34:27+0000",
+        "type": "CODE_SMELL",
+        "organization": "bodu1197",
+        "cleanCodeAttribute": "LOGICAL",
+        "cleanCodeAttributeCategory": "INTENTIONAL",
+        "impacts": [
+          {
+            "softwareQuality": "RELIABILITY",
+            "severity": "MEDIUM"
+          }
+        ],
+        "issueStatus": "OPEN",
+        "projectName": "AI Talent Hub"
+      },
+      {
+        "key": "AZs0COK_TuTaRi97H4I5",
+        "rule": "typescript:S6479",
+        "severity": "MAJOR",
+        "component": "bodu1197_talent:src/app/help/dispute/page.tsx",
+        "project": "bodu1197_talent",
+        "line": 412,
+        "hash": "d98125d4e0dfa7e0cb3db7006427c1a9",
+        "textRange": {
+          "startLine": 412,
+          "endLine": 412,
+          "startOffset": 28,
+          "endOffset": 33
+        },
+        "flows": [],
+        "status": "OPEN",
+        "message": "Do not use Array index in keys",
+        "effort": "5min",
+        "debt": "5min",
+        "author": "your_email@example.com",
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
+        "creationDate": "2025-12-19T00:24:49+0000",
+        "updateDate": "2025-12-19T00:34:27+0000",
+        "type": "CODE_SMELL",
+        "organization": "bodu1197",
+        "cleanCodeAttribute": "LOGICAL",
+        "cleanCodeAttributeCategory": "INTENTIONAL",
+        "impacts": [
+          {
+            "softwareQuality": "MAINTAINABILITY",
+            "severity": "MEDIUM"
+          }
+        ],
+        "issueStatus": "OPEN",
+        "projectName": "AI Talent Hub"
+      },
+      {
+        "key": "AZszz9qxo5TbUEqePdY0",
+        "rule": "typescript:S6848",
+        "severity": "MAJOR",
+        "component": "bodu1197_talent:src/app/admin/ai-faq/page.tsx",
+        "project": "bodu1197_talent",
+        "line": 259,
+        "hash": "d90c26198ff23a5c54f81269ceed5c01",
+        "textRange": {
+          "startLine": 259,
+          "endLine": 265,
+          "startOffset": 10,
+          "endOffset": 11
+        },
+        "flows": [],
+        "status": "OPEN",
+        "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+        "effort": "5min",
+        "debt": "5min",
+        "author": "your_email@example.com",
+        "tags": [
+          "accessibility",
+          "react"
+        ],
+        "creationDate": "2025-12-18T23:29:30+0000",
+        "updateDate": "2025-12-18T23:32:09+0000",
+        "type": "CODE_SMELL",
+        "organization": "bodu1197",
+        "cleanCodeAttribute": "CONVENTIONAL",
+        "cleanCodeAttributeCategory": "CONSISTENT",
+        "impacts": [
+          {
+            "softwareQuality": "RELIABILITY",
+            "severity": "MEDIUM"
+          },
+          {
+            "softwareQuality": "MAINTAINABILITY",
+            "severity": "LOW"
+          }
+        ],
+        "issueStatus": "OPEN",
+        "projectName": "AI Talent Hub"
+      },
+      {
+        "key": "AZszz9qxo5TbUEqePdY2",
+        "rule": "typescript:S6479",
+        "severity": "MAJOR",
+        "component": "bodu1197_talent:src/app/admin/ai-faq/page.tsx",
+        "project": "bodu1197_talent",
+        "line": 346,
+        "hash": "bace0eb8bf316370339db7f76fc273cc",
+        "textRange": {
+          "startLine": 346,
+          "endLine": 346,
+          "startOffset": 35,
+          "endOffset": 38
+        },
+        "flows": [],
+        "status": "OPEN",
+        "message": "Do not use Array index in keys",
+        "effort": "5min",
+        "debt": "5min",
+        "author": "your_email@example.com",
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
+        "creationDate": "2025-12-18T23:29:30+0000",
+        "updateDate": "2025-12-18T23:32:09+0000",
+        "type": "CODE_SMELL",
+        "organization": "bodu1197",
+        "cleanCodeAttribute": "LOGICAL",
+        "cleanCodeAttributeCategory": "INTENTIONAL",
+        "impacts": [
+          {
+            "softwareQuality": "MAINTAINABILITY",
+            "severity": "MEDIUM"
+          }
+        ],
+        "issueStatus": "OPEN",
+        "projectName": "AI Talent Hub"
+      },
+      {
+        "key": "AZszz9qxo5TbUEqePdY3",
+        "rule": "typescript:S6853",
+        "severity": "MAJOR",
+        "component": "bodu1197_talent:src/app/admin/ai-faq/page.tsx",
+        "project": "bodu1197_talent",
+        "line": 425,
+        "hash": "2ddac1c5e8b03623364c4a8f4d125d6d",
+        "textRange": {
+          "startLine": 425,
+          "endLine": 425,
+          "startOffset": 17,
+          "endOffset": 22
+        },
+        "flows": [],
+        "status": "OPEN",
+        "message": "A form label must be associated with a control.",
+        "effort": "5min",
+        "debt": "5min",
+        "author": "your_email@example.com",
+        "tags": [
+          "accessibility",
+          "react"
+        ],
+        "creationDate": "2025-12-18T23:29:30+0000",
+        "updateDate": "2025-12-18T23:32:09+0000",
+        "type": "CODE_SMELL",
+        "organization": "bodu1197",
+        "cleanCodeAttribute": "LOGICAL",
+        "cleanCodeAttributeCategory": "INTENTIONAL",
+        "impacts": [
+          {
+            "softwareQuality": "RELIABILITY",
+            "severity": "MEDIUM"
+          }
+        ],
+        "issueStatus": "OPEN",
+        "projectName": "AI Talent Hub"
+      },
+      {
+        "key": "AZszz9qxo5TbUEqePdY4",
+        "rule": "typescript:S6853",
+        "severity": "MAJOR",
+        "component": "bodu1197_talent:src/app/admin/ai-faq/page.tsx",
+        "project": "bodu1197_talent",
+        "line": 442,
+        "hash": "2ddac1c5e8b03623364c4a8f4d125d6d",
+        "textRange": {
+          "startLine": 442,
+          "endLine": 442,
+          "startOffset": 17,
+          "endOffset": 22
+        },
+        "flows": [],
+        "status": "OPEN",
+        "message": "A form label must be associated with a control.",
+        "effort": "5min",
+        "debt": "5min",
+        "author": "your_email@example.com",
+        "tags": [
+          "accessibility",
+          "react"
+        ],
+        "creationDate": "2025-12-18T23:29:30+0000",
+        "updateDate": "2025-12-18T23:32:09+0000",
+        "type": "CODE_SMELL",
+        "organization": "bodu1197",
+        "cleanCodeAttribute": "LOGICAL",
+        "cleanCodeAttributeCategory": "INTENTIONAL",
+        "impacts": [
+          {
+            "softwareQuality": "RELIABILITY",
+            "severity": "MEDIUM"
+          }
+        ],
+        "issueStatus": "OPEN",
+        "projectName": "AI Talent Hub"
+      },
+      {
+        "key": "AZszz9qxo5TbUEqePdY5",
+        "rule": "typescript:S6853",
+        "severity": "MAJOR",
+        "component": "bodu1197_talent:src/app/admin/ai-faq/page.tsx",
+        "project": "bodu1197_talent",
+        "line": 457,
+        "hash": "2ddac1c5e8b03623364c4a8f4d125d6d",
+        "textRange": {
+          "startLine": 457,
+          "endLine": 457,
+          "startOffset": 17,
+          "endOffset": 22
+        },
+        "flows": [],
+        "status": "OPEN",
+        "message": "A form label must be associated with a control.",
+        "effort": "5min",
+        "debt": "5min",
+        "author": "your_email@example.com",
+        "tags": [
+          "accessibility",
+          "react"
+        ],
+        "creationDate": "2025-12-18T23:29:30+0000",
+        "updateDate": "2025-12-18T23:32:09+0000",
+        "type": "CODE_SMELL",
+        "organization": "bodu1197",
+        "cleanCodeAttribute": "LOGICAL",
+        "cleanCodeAttributeCategory": "INTENTIONAL",
+        "impacts": [
+          {
+            "softwareQuality": "RELIABILITY",
+            "severity": "MEDIUM"
+          }
+        ],
+        "issueStatus": "OPEN",
+        "projectName": "AI Talent Hub"
+      },
+      {
+        "key": "AZszz9qxo5TbUEqePdY6",
+        "rule": "typescript:S6853",
+        "severity": "MAJOR",
+        "component": "bodu1197_talent:src/app/admin/ai-faq/page.tsx",
+        "project": "bodu1197_talent",
+        "line": 472,
+        "hash": "2ddac1c5e8b03623364c4a8f4d125d6d",
+        "textRange": {
+          "startLine": 472,
+          "endLine": 472,
+          "startOffset": 17,
+          "endOffset": 22
+        },
+        "flows": [],
+        "status": "OPEN",
+        "message": "A form label must be associated with a control.",
+        "effort": "5min",
+        "debt": "5min",
+        "author": "your_email@example.com",
+        "tags": [
+          "accessibility",
+          "react"
+        ],
+        "creationDate": "2025-12-18T23:29:30+0000",
+        "updateDate": "2025-12-18T23:32:09+0000",
+        "type": "CODE_SMELL",
+        "organization": "bodu1197",
+        "cleanCodeAttribute": "LOGICAL",
+        "cleanCodeAttributeCategory": "INTENTIONAL",
+        "impacts": [
+          {
+            "softwareQuality": "RELIABILITY",
+            "severity": "MEDIUM"
+          }
+        ],
+        "issueStatus": "OPEN",
+        "projectName": "AI Talent Hub"
+      },
+      {
+        "key": "AZszz9qxo5TbUEqePdY7",
+        "rule": "typescript:S6853",
+        "severity": "MAJOR",
+        "component": "bodu1197_talent:src/app/admin/ai-faq/page.tsx",
+        "project": "bodu1197_talent",
+        "line": 489,
+        "hash": "2ddac1c5e8b03623364c4a8f4d125d6d",
+        "textRange": {
+          "startLine": 489,
+          "endLine": 489,
+          "startOffset": 17,
+          "endOffset": 22
+        },
+        "flows": [],
+        "status": "OPEN",
+        "message": "A form label must be associated with a control.",
+        "effort": "5min",
+        "debt": "5min",
+        "author": "your_email@example.com",
+        "tags": [
+          "accessibility",
+          "react"
+        ],
+        "creationDate": "2025-12-18T23:29:30+0000",
+        "updateDate": "2025-12-18T23:32:09+0000",
+        "type": "CODE_SMELL",
+        "organization": "bodu1197",
+        "cleanCodeAttribute": "LOGICAL",
+        "cleanCodeAttributeCategory": "INTENTIONAL",
+        "impacts": [
+          {
+            "softwareQuality": "RELIABILITY",
+            "severity": "MEDIUM"
+          }
+        ],
+        "issueStatus": "OPEN",
+        "projectName": "AI Talent Hub"
+      },
+      {
+        "key": "AZszt9Uc0DPLCVguegth",
+        "rule": "typescript:S4123",
+        "severity": "CRITICAL",
+        "component": "bodu1197_talent:src/lib/ai/gemini.ts",
+        "project": "bodu1197_talent",
+        "line": 128,
+        "hash": "85390172a0e10928ac5176c88d7b60b6",
+        "textRange": {
+          "startLine": 128,
+          "endLine": 128,
+          "startOffset": 21,
+          "endOffset": 42
+        },
+        "flows": [],
+        "status": "OPEN",
+        "message": "Unexpected `await` of a non-Promise (non-\"Thenable\") value.",
+        "effort": "1min",
+        "debt": "1min",
+        "author": "your_email@example.com",
+        "tags": [
+          "confusing",
+          "type-dependent"
+        ],
+        "creationDate": "2025-12-18T23:03:10+0000",
+        "updateDate": "2025-12-18T23:05:51+0000",
+        "type": "CODE_SMELL",
+        "organization": "bodu1197",
+        "cleanCodeAttribute": "CLEAR",
+        "cleanCodeAttributeCategory": "INTENTIONAL",
+        "impacts": [
+          {
+            "softwareQuality": "MAINTAINABILITY",
+            "severity": "HIGH"
+          }
+        ],
+        "issueStatus": "OPEN",
+        "projectName": "AI Talent Hub"
+      },
+      {
+        "key": "AZsvylCmDkrsqRDmPOSd",
+        "rule": "typescript:S6848",
+        "severity": "MAJOR",
+        "component": "bodu1197_talent:src/components/categories/LocationSortToggle.tsx",
+        "project": "bodu1197_talent",
+        "line": 194,
+        "hash": "d90c26198ff23a5c54f81269ceed5c01",
+        "textRange": {
+          "startLine": 194,
+          "endLine": 197,
+          "startOffset": 8,
+          "endOffset": 9
+        },
+        "flows": [],
+        "status": "OPEN",
+        "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+        "effort": "5min",
+        "debt": "5min",
+        "author": "your_email@example.com",
+        "tags": [
+          "accessibility",
+          "react"
+        ],
+        "creationDate": "2025-12-18T04:47:41+0000",
+        "updateDate": "2025-12-18T04:47:41+0000",
+        "type": "CODE_SMELL",
+        "organization": "bodu1197",
+        "cleanCodeAttribute": "CONVENTIONAL",
+        "cleanCodeAttributeCategory": "CONSISTENT",
+        "impacts": [
+          {
+            "softwareQuality": "RELIABILITY",
+            "severity": "MEDIUM"
+          },
+          {
+            "softwareQuality": "MAINTAINABILITY",
+            "severity": "LOW"
+          }
+        ],
+        "issueStatus": "OPEN",
+        "projectName": "AI Talent Hub"
+      },
+      {
+        "key": "AZsvylCmDkrsqRDmPOSf",
+        "rule": "typescript:S6848",
+        "severity": "MAJOR",
+        "component": "bodu1197_talent:src/components/categories/LocationSortToggle.tsx",
+        "project": "bodu1197_talent",
+        "line": 198,
+        "hash": "d90c26198ff23a5c54f81269ceed5c01",
+        "textRange": {
+          "startLine": 198,
+          "endLine": 201,
+          "startOffset": 10,
+          "endOffset": 11
+        },
+        "flows": [],
+        "status": "OPEN",
+        "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+        "effort": "5min",
+        "debt": "5min",
+        "author": "your_email@example.com",
+        "tags": [
+          "accessibility",
+          "react"
+        ],
+        "creationDate": "2025-12-18T04:47:41+0000",
+        "updateDate": "2025-12-18T04:47:41+0000",
+        "type": "CODE_SMELL",
+        "organization": "bodu1197",
+        "cleanCodeAttribute": "CONVENTIONAL",
+        "cleanCodeAttributeCategory": "CONSISTENT",
+        "impacts": [
+          {
+            "softwareQuality": "RELIABILITY",
+            "severity": "MEDIUM"
+          },
+          {
+            "softwareQuality": "MAINTAINABILITY",
+            "severity": "LOW"
+          }
+        ],
+        "issueStatus": "OPEN",
+        "projectName": "AI Talent Hub"
+      },
+      {
+        "key": "AZsvylCmDkrsqRDmPOSh",
+        "rule": "typescript:S6479",
+        "severity": "MAJOR",
+        "component": "bodu1197_talent:src/components/categories/LocationSortToggle.tsx",
+        "project": "bodu1197_talent",
+        "line": 227,
+        "hash": "a2219911fc83f3125fc727220be06253",
+        "textRange": {
+          "startLine": 227,
+          "endLine": 227,
+          "startOffset": 27,
+          "endOffset": 32
+        },
+        "flows": [],
+        "status": "OPEN",
+        "message": "Do not use Array index in keys",
+        "effort": "5min",
+        "debt": "5min",
+        "author": "your_email@example.com",
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
+        "creationDate": "2025-12-18T04:47:41+0000",
+        "updateDate": "2025-12-18T04:47:41+0000",
+        "type": "CODE_SMELL",
+        "organization": "bodu1197",
+        "cleanCodeAttribute": "LOGICAL",
+        "cleanCodeAttributeCategory": "INTENTIONAL",
+        "impacts": [
+          {
+            "softwareQuality": "MAINTAINABILITY",
+            "severity": "MEDIUM"
+          }
+        ],
+        "issueStatus": "OPEN",
+        "projectName": "AI Talent Hub"
+      },
+      {
+        "key": "AZssWUNHCCBJkh3wRtN7",
+        "rule": "typescript:S6959",
+        "severity": "MAJOR",
+        "component": "bodu1197_talent:src/app/mypage/seller/services/[id]/edit/page.tsx",
+        "project": "bodu1197_talent",
+        "line": 60,
+        "hash": "b25a4b8f61964d836e1ebb244b53a21e",
+        "textRange": {
+          "startLine": 60,
+          "endLine": 60,
+          "startOffset": 48,
+          "endOffset": 54
+        },
+        "flows": [],
+        "status": "OPEN",
+        "message": "Add an initial value to this \"reduce()\" call.",
+        "effort": "2min",
+        "debt": "2min",
+        "author": "your_email@example.com",
+        "tags": [
+          "type-dependent"
+        ],
+        "creationDate": "2025-12-17T12:45:14+0000",
+        "updateDate": "2025-12-17T12:45:14+0000",
+        "type": "BUG",
+        "organization": "bodu1197",
+        "cleanCodeAttribute": "CONVENTIONAL",
+        "cleanCodeAttributeCategory": "CONSISTENT",
+        "impacts": [
+          {
+            "softwareQuality": "RELIABILITY",
+            "severity": "MEDIUM"
+          }
+        ],
+        "issueStatus": "OPEN",
+        "projectName": "AI Talent Hub"
+      },
+      {
+        "key": "AZspxOdHuYdnK53_23IJ",
+        "rule": "typescript:S6847",
+        "severity": "MAJOR",
+        "component": "bodu1197_talent:src/components/service/PackagePricingForm.tsx",
+        "project": "bodu1197_talent",
+        "hash": "8be788feb26c8751f2190b902ece29d6",
+        "textRange": {
+          "startLine": 188,
+          "endLine": 194,
+          "startOffset": 18,
+          "endOffset": 19
+        },
+        "flows": [],
+        "resolution": "FIXED",
+        "status": "CLOSED",
+        "message": "Non-interactive elements should not be assigned mouse or keyboard event listeners.",
+        "effort": "5min",
+        "debt": "5min",
+        "author": "your_email@example.com",
+        "tags": [
+          "accessibility",
+          "react"
+        ],
+        "creationDate": "2025-12-17T00:43:55+0000",
+        "updateDate": "2025-12-17T00:55:00+0000",
+        "closeDate": "2025-12-17T00:55:00+0000",
+        "type": "CODE_SMELL",
+        "organization": "bodu1197",
+        "cleanCodeAttribute": "CONVENTIONAL",
+        "cleanCodeAttributeCategory": "CONSISTENT",
+        "impacts": [
+          {
+            "softwareQuality": "RELIABILITY",
+            "severity": "LOW"
+          },
+          {
+            "softwareQuality": "MAINTAINABILITY",
+            "severity": "MEDIUM"
+          }
+        ],
+        "issueStatus": "FIXED",
+        "projectName": "AI Talent Hub"
+      },
+      {
         "key": "AZsl-15UEBb1laEx8Mnx",
         "rule": "typescript:S4782",
         "severity": "MAJOR",
         "component": "bodu1197_talent:src/components/orders/DeliverablesSection.tsx",
         "project": "bodu1197_talent",
-        "line": 14,
         "hash": "4e93430503d72ca4b0ecbbced1b62036",
         "textRange": {
           "startLine": 14,
@@ -138,14 +743,19 @@
             ]
           }
         ],
-        "status": "OPEN",
+        "resolution": "FIXED",
+        "status": "CLOSED",
         "message": "Consider removing 'undefined' type or '?' specifier, one of them is redundant.",
         "effort": "1min",
         "debt": "1min",
         "author": "your_email@example.com",
-        "tags": ["redundant", "type-dependent"],
+        "tags": [
+          "redundant",
+          "type-dependent"
+        ],
         "creationDate": "2025-12-16T06:59:37+0000",
-        "updateDate": "2025-12-16T07:05:00+0000",
+        "updateDate": "2025-12-16T23:19:05+0000",
+        "closeDate": "2025-12-16T23:19:05+0000",
         "type": "CODE_SMELL",
         "organization": "bodu1197",
         "cleanCodeAttribute": "CLEAR",
@@ -156,7 +766,7 @@
             "severity": "MEDIUM"
           }
         ],
-        "issueStatus": "OPEN",
+        "issueStatus": "FIXED",
         "projectName": "AI Talent Hub"
       },
       {
@@ -165,7 +775,6 @@
         "severity": "MAJOR",
         "component": "bodu1197_talent:src/components/orders/RequirementsSection.tsx",
         "project": "bodu1197_talent",
-        "line": 5,
         "hash": "92fbb4f2eb77f00a95ba6f0fea07caa2",
         "textRange": {
           "startLine": 5,
@@ -188,14 +797,19 @@
             ]
           }
         ],
-        "status": "OPEN",
+        "resolution": "FIXED",
+        "status": "CLOSED",
         "message": "Consider removing 'undefined' type or '?' specifier, one of them is redundant.",
         "effort": "1min",
         "debt": "1min",
         "author": "your_email@example.com",
-        "tags": ["redundant", "type-dependent"],
+        "tags": [
+          "redundant",
+          "type-dependent"
+        ],
         "creationDate": "2025-12-16T06:59:37+0000",
-        "updateDate": "2025-12-16T07:05:00+0000",
+        "updateDate": "2025-12-16T23:19:05+0000",
+        "closeDate": "2025-12-16T23:19:05+0000",
         "type": "CODE_SMELL",
         "organization": "bodu1197",
         "cleanCodeAttribute": "CLEAR",
@@ -206,7 +820,7 @@
             "severity": "MEDIUM"
           }
         ],
-        "issueStatus": "OPEN",
+        "issueStatus": "FIXED",
         "projectName": "AI Talent Hub"
       },
       {
@@ -215,7 +829,6 @@
         "severity": "MAJOR",
         "component": "bodu1197_talent:src/components/payment/PaymentSummarySidebar.tsx",
         "project": "bodu1197_talent",
-        "line": 42,
         "hash": "4ec66da90a864fd38de54cd18abaaa27",
         "textRange": {
           "startLine": 42,
@@ -224,14 +837,20 @@
           "endOffset": 27
         },
         "flows": [],
-        "status": "OPEN",
+        "resolution": "FIXED",
+        "status": "CLOSED",
         "message": "Do not use Array index in keys",
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-16T06:03:57+0000",
-        "updateDate": "2025-12-16T06:09:27+0000",
+        "updateDate": "2025-12-16T23:19:05+0000",
+        "closeDate": "2025-12-16T23:19:05+0000",
         "type": "CODE_SMELL",
         "organization": "bodu1197",
         "cleanCodeAttribute": "LOGICAL",
@@ -242,7 +861,7 @@
             "severity": "MEDIUM"
           }
         ],
-        "issueStatus": "OPEN",
+        "issueStatus": "FIXED",
         "projectName": "AI Talent Hub"
       },
       {
@@ -251,7 +870,6 @@
         "severity": "MAJOR",
         "component": "bodu1197_talent:src/components/payment/PaymentMethodSelector.tsx",
         "project": "bodu1197_talent",
-        "line": 71,
         "hash": "8be788feb26c8751f2190b902ece29d6",
         "textRange": {
           "startLine": 71,
@@ -260,14 +878,19 @@
           "endOffset": 16
         },
         "flows": [],
-        "status": "OPEN",
+        "resolution": "FIXED",
+        "status": "CLOSED",
         "message": "A form label must have accessible text.",
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-16T04:16:39+0000",
-        "updateDate": "2025-12-16T04:22:36+0000",
+        "updateDate": "2025-12-17T00:55:00+0000",
+        "closeDate": "2025-12-17T00:55:00+0000",
         "type": "CODE_SMELL",
         "organization": "bodu1197",
         "cleanCodeAttribute": "LOGICAL",
@@ -278,7 +901,7 @@
             "severity": "MEDIUM"
           }
         ],
-        "issueStatus": "OPEN",
+        "issueStatus": "FIXED",
         "projectName": "AI Talent Hub"
       },
       {
@@ -287,7 +910,6 @@
         "severity": "MAJOR",
         "component": "bodu1197_talent:src/app/errands/new/page.tsx",
         "project": "bodu1197_talent",
-        "line": 161,
         "hash": "b84085082e4cfcbf40e40b589e5476a7",
         "textRange": {
           "startLine": 161,
@@ -296,14 +918,16 @@
           "endOffset": 84
         },
         "flows": [],
-        "status": "OPEN",
+        "resolution": "FIXED",
+        "status": "CLOSED",
         "message": "Prefer using an optional chain expression instead, as it's more concise and easier to read.",
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
         "tags": [],
         "creationDate": "2025-12-16T03:48:11+0000",
-        "updateDate": "2025-12-16T03:48:11+0000",
+        "updateDate": "2025-12-16T23:19:05+0000",
+        "closeDate": "2025-12-16T23:19:05+0000",
         "type": "CODE_SMELL",
         "organization": "bodu1197",
         "cleanCodeAttribute": "CLEAR",
@@ -314,7 +938,7 @@
             "severity": "MEDIUM"
           }
         ],
-        "issueStatus": "OPEN",
+        "issueStatus": "FIXED",
         "projectName": "AI Talent Hub"
       },
       {
@@ -323,7 +947,6 @@
         "severity": "MAJOR",
         "component": "bodu1197_talent:src/app/errands/register/page.tsx",
         "project": "bodu1197_talent",
-        "line": 965,
         "hash": "8be788feb26c8751f2190b902ece29d6",
         "textRange": {
           "startLine": 965,
@@ -332,14 +955,19 @@
           "endOffset": 20
         },
         "flows": [],
-        "status": "OPEN",
+        "resolution": "FIXED",
+        "status": "CLOSED",
         "message": "A form label must have accessible text.",
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-16T03:48:11+0000",
-        "updateDate": "2025-12-16T03:48:11+0000",
+        "updateDate": "2025-12-17T00:43:55+0000",
+        "closeDate": "2025-12-17T00:43:55+0000",
         "type": "CODE_SMELL",
         "organization": "bodu1197",
         "cleanCodeAttribute": "LOGICAL",
@@ -350,7 +978,7 @@
             "severity": "MEDIUM"
           }
         ],
-        "issueStatus": "OPEN",
+        "issueStatus": "FIXED",
         "projectName": "AI Talent Hub"
       },
       {
@@ -359,7 +987,6 @@
         "severity": "MAJOR",
         "component": "bodu1197_talent:src/app/errands/register/page.tsx",
         "project": "bodu1197_talent",
-        "line": 987,
         "hash": "8be788feb26c8751f2190b902ece29d6",
         "textRange": {
           "startLine": 987,
@@ -368,14 +995,19 @@
           "endOffset": 20
         },
         "flows": [],
-        "status": "OPEN",
+        "resolution": "FIXED",
+        "status": "CLOSED",
         "message": "A form label must have accessible text.",
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-16T03:48:11+0000",
-        "updateDate": "2025-12-16T03:48:11+0000",
+        "updateDate": "2025-12-17T00:43:55+0000",
+        "closeDate": "2025-12-17T00:43:55+0000",
         "type": "CODE_SMELL",
         "organization": "bodu1197",
         "cleanCodeAttribute": "LOGICAL",
@@ -386,7 +1018,7 @@
             "severity": "MEDIUM"
           }
         ],
-        "issueStatus": "OPEN",
+        "issueStatus": "FIXED",
         "projectName": "AI Talent Hub"
       },
       {
@@ -395,7 +1027,6 @@
         "severity": "MAJOR",
         "component": "bodu1197_talent:src/app/errands/register/page.tsx",
         "project": "bodu1197_talent",
-        "line": 1009,
         "hash": "8be788feb26c8751f2190b902ece29d6",
         "textRange": {
           "startLine": 1009,
@@ -404,14 +1035,19 @@
           "endOffset": 20
         },
         "flows": [],
-        "status": "OPEN",
+        "resolution": "FIXED",
+        "status": "CLOSED",
         "message": "A form label must have accessible text.",
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-16T03:48:11+0000",
-        "updateDate": "2025-12-16T03:48:11+0000",
+        "updateDate": "2025-12-17T00:43:55+0000",
+        "closeDate": "2025-12-17T00:43:55+0000",
         "type": "CODE_SMELL",
         "organization": "bodu1197",
         "cleanCodeAttribute": "LOGICAL",
@@ -422,7 +1058,7 @@
             "severity": "MEDIUM"
           }
         ],
-        "issueStatus": "OPEN",
+        "issueStatus": "FIXED",
         "projectName": "AI Talent Hub"
       },
       {
@@ -431,7 +1067,6 @@
         "severity": "MAJOR",
         "component": "bodu1197_talent:src/app/mypage/seller/advertising/purchase/page.tsx",
         "project": "bodu1197_talent",
-        "line": 206,
         "hash": "d90c26198ff23a5c54f81269ceed5c01",
         "textRange": {
           "startLine": 206,
@@ -440,14 +1075,19 @@
           "endOffset": 15
         },
         "flows": [],
-        "status": "OPEN",
+        "resolution": "FIXED",
+        "status": "CLOSED",
         "message": "Use <input type=\"button\">, <input type=\"image\">, <input type=\"reset\">, <input type=\"submit\">, or <button> instead of the \"button\" role to ensure accessibility across all devices.",
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-16T03:48:11+0000",
-        "updateDate": "2025-12-16T03:48:11+0000",
+        "updateDate": "2025-12-16T23:19:05+0000",
+        "closeDate": "2025-12-16T23:19:05+0000",
         "type": "CODE_SMELL",
         "organization": "bodu1197",
         "cleanCodeAttribute": "CONVENTIONAL",
@@ -458,7 +1098,7 @@
             "severity": "MEDIUM"
           }
         ],
-        "issueStatus": "OPEN",
+        "issueStatus": "FIXED",
         "projectName": "AI Talent Hub"
       },
       {
@@ -467,7 +1107,6 @@
         "severity": "MAJOR",
         "component": "bodu1197_talent:src/components/service/LocationInputSection.tsx",
         "project": "bodu1197_talent",
-        "line": 90,
         "hash": "efb1e5c33b678e28ffdddda86c7e4177",
         "textRange": {
           "startLine": 90,
@@ -476,14 +1115,16 @@
           "endOffset": 74
         },
         "flows": [],
-        "status": "OPEN",
+        "resolution": "FIXED",
+        "status": "CLOSED",
         "message": "Prefer using an optional chain expression instead, as it's more concise and easier to read.",
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
         "tags": [],
         "creationDate": "2025-12-16T03:48:11+0000",
-        "updateDate": "2025-12-16T03:48:11+0000",
+        "updateDate": "2025-12-16T23:19:05+0000",
+        "closeDate": "2025-12-16T23:19:05+0000",
         "type": "CODE_SMELL",
         "organization": "bodu1197",
         "cleanCodeAttribute": "CLEAR",
@@ -494,7 +1135,7 @@
             "severity": "MEDIUM"
           }
         ],
-        "issueStatus": "OPEN",
+        "issueStatus": "FIXED",
         "projectName": "AI Talent Hub"
       },
       {
@@ -503,7 +1144,6 @@
         "severity": "MAJOR",
         "component": "bodu1197_talent:src/components/service/PackagePricingForm.tsx",
         "project": "bodu1197_talent",
-        "line": 187,
         "hash": "d90c26198ff23a5c54f81269ceed5c01",
         "textRange": {
           "startLine": 187,
@@ -512,14 +1152,19 @@
           "endOffset": 17
         },
         "flows": [],
-        "status": "OPEN",
+        "resolution": "FIXED",
+        "status": "CLOSED",
         "message": "Use <input type=\"button\">, <input type=\"image\">, <input type=\"reset\">, <input type=\"submit\">, or <button> instead of the \"button\" role to ensure accessibility across all devices.",
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-16T03:48:11+0000",
-        "updateDate": "2025-12-16T03:48:11+0000",
+        "updateDate": "2025-12-16T23:19:05+0000",
+        "closeDate": "2025-12-16T23:19:05+0000",
         "type": "CODE_SMELL",
         "organization": "bodu1197",
         "cleanCodeAttribute": "CONVENTIONAL",
@@ -530,7 +1175,7 @@
             "severity": "MEDIUM"
           }
         ],
-        "issueStatus": "OPEN",
+        "issueStatus": "FIXED",
         "projectName": "AI Talent Hub"
       },
       {
@@ -553,7 +1198,9 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["type-dependent"],
+        "tags": [
+          "type-dependent"
+        ],
         "creationDate": "2025-12-16T00:11:13+0000",
         "updateDate": "2025-12-16T00:33:58+0000",
         "closeDate": "2025-12-16T00:33:58+0000",
@@ -590,7 +1237,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-15T05:48:58+0000",
         "updateDate": "2025-12-15T06:08:35+0000",
         "closeDate": "2025-12-15T06:08:35+0000",
@@ -627,7 +1278,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-15T05:48:58+0000",
         "updateDate": "2025-12-15T06:08:35+0000",
         "closeDate": "2025-12-15T06:08:35+0000",
@@ -664,7 +1319,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-15T05:48:58+0000",
         "updateDate": "2025-12-15T06:08:35+0000",
         "closeDate": "2025-12-15T06:08:35+0000",
@@ -701,7 +1360,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-15T05:48:58+0000",
         "updateDate": "2025-12-15T06:08:35+0000",
         "closeDate": "2025-12-15T06:08:35+0000",
@@ -738,7 +1401,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-15T05:48:58+0000",
         "updateDate": "2025-12-15T06:08:35+0000",
         "closeDate": "2025-12-15T06:08:35+0000",
@@ -775,7 +1442,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-13T18:34:28+0000",
         "updateDate": "2025-12-16T00:33:58+0000",
         "closeDate": "2025-12-16T00:33:58+0000",
@@ -812,7 +1482,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-13T18:34:28+0000",
         "updateDate": "2025-12-16T00:33:58+0000",
         "closeDate": "2025-12-16T00:33:58+0000",
@@ -849,7 +1522,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-13T18:34:28+0000",
         "updateDate": "2025-12-16T00:33:58+0000",
         "closeDate": "2025-12-16T00:33:58+0000",
@@ -886,7 +1562,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-13T18:34:28+0000",
         "updateDate": "2025-12-16T00:33:58+0000",
         "closeDate": "2025-12-16T00:33:58+0000",
@@ -923,7 +1602,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-13T18:34:28+0000",
         "updateDate": "2025-12-16T00:33:58+0000",
         "closeDate": "2025-12-16T00:33:58+0000",
@@ -960,7 +1642,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-13T18:34:28+0000",
         "updateDate": "2025-12-16T00:33:58+0000",
         "closeDate": "2025-12-16T00:33:58+0000",
@@ -997,7 +1682,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-13T18:34:28+0000",
         "updateDate": "2025-12-16T00:45:49+0000",
         "closeDate": "2025-12-16T00:45:49+0000",
@@ -1034,7 +1723,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-13T18:34:28+0000",
         "updateDate": "2025-12-16T00:45:49+0000",
         "closeDate": "2025-12-16T00:45:49+0000",
@@ -1071,7 +1764,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-13T18:34:28+0000",
         "updateDate": "2025-12-16T00:33:58+0000",
         "closeDate": "2025-12-16T00:33:58+0000",
@@ -1108,7 +1804,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-13T16:55:12+0000",
         "updateDate": "2025-12-16T00:33:58+0000",
         "closeDate": "2025-12-16T00:33:58+0000",
@@ -1145,7 +1845,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-13T16:08:54+0000",
         "updateDate": "2025-12-16T00:33:58+0000",
         "closeDate": "2025-12-16T00:33:58+0000",
@@ -1182,7 +1885,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-13T02:59:58+0000",
         "updateDate": "2025-12-16T00:45:49+0000",
         "closeDate": "2025-12-16T00:45:49+0000",
@@ -1219,7 +1926,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-13T02:59:58+0000",
         "updateDate": "2025-12-16T00:45:49+0000",
         "closeDate": "2025-12-16T00:45:49+0000",
@@ -1256,7 +1967,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-13T02:59:58+0000",
         "updateDate": "2025-12-16T00:45:49+0000",
         "closeDate": "2025-12-16T00:45:49+0000",
@@ -1293,7 +2008,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-13T01:07:28+0000",
         "updateDate": "2025-12-13T18:05:02+0000",
         "closeDate": "2025-12-13T18:05:02+0000",
@@ -1334,7 +2052,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-13T01:07:28+0000",
         "updateDate": "2025-12-16T00:33:58+0000",
         "closeDate": "2025-12-16T00:33:58+0000",
@@ -1371,7 +2092,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-13T01:07:28+0000",
         "updateDate": "2025-12-16T00:33:58+0000",
         "closeDate": "2025-12-16T00:33:58+0000",
@@ -1408,7 +2132,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["async", "promise", "type-dependent"],
+        "tags": [
+          "async",
+          "promise",
+          "type-dependent"
+        ],
         "creationDate": "2025-12-12T17:00:15+0000",
         "updateDate": "2025-12-13T18:05:02+0000",
         "closeDate": "2025-12-13T18:05:02+0000",
@@ -1445,7 +2173,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["async", "promise", "type-dependent"],
+        "tags": [
+          "async",
+          "promise",
+          "type-dependent"
+        ],
         "creationDate": "2025-12-12T17:00:15+0000",
         "updateDate": "2025-12-13T18:05:02+0000",
         "closeDate": "2025-12-13T18:05:02+0000",
@@ -1482,7 +2214,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["async", "promise", "type-dependent"],
+        "tags": [
+          "async",
+          "promise",
+          "type-dependent"
+        ],
         "creationDate": "2025-12-12T17:00:15+0000",
         "updateDate": "2025-12-13T18:05:02+0000",
         "closeDate": "2025-12-13T18:05:02+0000",
@@ -1519,7 +2255,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["async", "promise", "type-dependent"],
+        "tags": [
+          "async",
+          "promise",
+          "type-dependent"
+        ],
         "creationDate": "2025-12-12T17:00:15+0000",
         "updateDate": "2025-12-13T18:05:02+0000",
         "closeDate": "2025-12-13T18:05:02+0000",
@@ -1556,7 +2296,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["async", "promise", "type-dependent"],
+        "tags": [
+          "async",
+          "promise",
+          "type-dependent"
+        ],
         "creationDate": "2025-12-12T17:00:15+0000",
         "updateDate": "2025-12-13T18:05:02+0000",
         "closeDate": "2025-12-13T18:05:02+0000",
@@ -1593,7 +2337,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-08T06:15:30+0000",
         "updateDate": "2025-12-16T00:45:49+0000",
         "closeDate": "2025-12-16T00:45:49+0000",
@@ -1630,7 +2378,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-08T06:15:30+0000",
         "updateDate": "2025-12-16T00:45:49+0000",
         "closeDate": "2025-12-16T00:45:49+0000",
@@ -1667,7 +2419,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-08T06:15:30+0000",
         "updateDate": "2025-12-16T00:45:49+0000",
         "closeDate": "2025-12-16T00:45:49+0000",
@@ -1704,7 +2460,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-08T06:15:30+0000",
         "updateDate": "2025-12-16T00:45:49+0000",
         "closeDate": "2025-12-16T00:45:49+0000",
@@ -1741,7 +2501,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-08T04:33:05+0000",
         "updateDate": "2025-12-16T00:45:49+0000",
         "closeDate": "2025-12-16T00:45:49+0000",
@@ -1778,7 +2542,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-08T04:09:47+0000",
         "updateDate": "2025-12-16T00:45:49+0000",
         "closeDate": "2025-12-16T00:45:49+0000",
@@ -1815,7 +2583,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-08T04:03:21+0000",
         "updateDate": "2025-12-16T00:45:49+0000",
         "closeDate": "2025-12-16T00:45:49+0000",
@@ -1852,7 +2624,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["javascript", "optimization", "performance"],
+        "tags": [
+          "javascript",
+          "optimization",
+          "performance"
+        ],
         "creationDate": "2025-12-07T00:23:12+0000",
         "updateDate": "2025-12-16T01:01:17+0000",
         "closeDate": "2025-12-16T01:01:17+0000",
@@ -1889,7 +2665,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T22:33:58+0000",
         "updateDate": "2025-12-16T00:45:49+0000",
         "closeDate": "2025-12-16T00:45:49+0000",
@@ -1926,7 +2706,9 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["react"],
+        "tags": [
+          "react"
+        ],
         "creationDate": "2025-12-06T11:16:42+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -1967,7 +2749,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-06T11:16:42+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2004,7 +2789,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-06T11:16:42+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2041,7 +2829,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-06T11:16:42+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2078,7 +2869,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-06T11:16:42+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2115,7 +2909,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-06T11:16:42+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2152,7 +2949,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-06T11:16:42+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2189,7 +2989,9 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["react"],
+        "tags": [
+          "react"
+        ],
         "creationDate": "2025-12-06T10:47:05+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2230,7 +3032,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:47:05+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2267,7 +3073,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:47:05+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2304,7 +3114,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:36:03+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2341,7 +3155,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:36:03+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2378,7 +3196,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:36:03+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2415,7 +3237,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:36:03+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2452,7 +3278,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:36:03+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2489,7 +3319,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:36:03+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2526,7 +3360,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:36:03+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2600,7 +3438,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:36:03+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2637,7 +3479,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:36:03+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2674,7 +3520,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:36:03+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2711,7 +3561,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:36:03+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2748,7 +3602,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:36:03+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2785,7 +3643,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:36:03+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2822,7 +3684,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:36:03+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2859,7 +3725,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:36:03+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2896,7 +3766,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:36:03+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2933,7 +3807,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-06T10:00:19+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -2970,7 +3848,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-06T03:27:05+0000",
         "updateDate": "2025-12-13T18:05:02+0000",
         "closeDate": "2025-12-13T18:05:02+0000",
@@ -3011,7 +3892,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-05T09:57:15+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3048,7 +3932,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-05T09:57:15+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3085,7 +3972,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-05T09:57:15+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3122,7 +4012,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-05T09:57:15+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3159,7 +4052,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-05T09:57:15+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3196,7 +4092,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-05T09:57:15+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3233,7 +4132,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-05T09:57:15+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3270,7 +4172,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-05T09:57:15+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3307,7 +4212,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-05T09:57:15+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3344,7 +4252,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-05T03:51:16+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3381,7 +4292,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-05T03:51:16+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3418,7 +4332,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-05T00:12:52+0000",
         "updateDate": "2025-12-13T18:05:02+0000",
         "closeDate": "2025-12-13T18:05:02+0000",
@@ -3459,7 +4376,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-04T20:24:28+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3496,7 +4416,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-04T20:24:28+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3533,7 +4456,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-04T16:30:59+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3570,7 +4497,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-04T03:23:09+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3607,7 +4538,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-12-04T01:49:03+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3681,7 +4616,9 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["react"],
+        "tags": [
+          "react"
+        ],
         "creationDate": "2025-12-04T00:00:44+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3722,7 +4659,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-03T23:07:05+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3759,7 +4699,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-03T23:07:05+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3796,7 +4739,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-12-03T21:40:40+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3833,7 +4779,9 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["react"],
+        "tags": [
+          "react"
+        ],
         "creationDate": "2025-12-02T02:22:00+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3889,7 +4837,10 @@
         "effort": "15min",
         "debt": "15min",
         "author": "your_email@example.com",
-        "tags": ["design", "type-dependent"],
+        "tags": [
+          "design",
+          "type-dependent"
+        ],
         "creationDate": "2025-11-29T23:51:19+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3941,7 +4892,10 @@
         "effort": "15min",
         "debt": "15min",
         "author": "your_email@example.com",
-        "tags": ["design", "type-dependent"],
+        "tags": [
+          "design",
+          "type-dependent"
+        ],
         "creationDate": "2025-11-29T23:51:19+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -3993,7 +4947,10 @@
         "effort": "15min",
         "debt": "15min",
         "author": "your_email@example.com",
-        "tags": ["design", "type-dependent"],
+        "tags": [
+          "design",
+          "type-dependent"
+        ],
         "creationDate": "2025-11-29T23:51:19+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -4045,7 +5002,10 @@
         "effort": "15min",
         "debt": "15min",
         "author": "your_email@example.com",
-        "tags": ["design", "type-dependent"],
+        "tags": [
+          "design",
+          "type-dependent"
+        ],
         "creationDate": "2025-11-29T23:51:19+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -4082,7 +5042,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["javascript", "optimization", "performance"],
+        "tags": [
+          "javascript",
+          "optimization",
+          "performance"
+        ],
         "creationDate": "2025-11-29T14:49:55+0000",
         "updateDate": "2025-12-13T15:50:05+0000",
         "closeDate": "2025-12-13T15:50:05+0000",
@@ -4119,7 +5083,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["javascript", "optimization", "performance"],
+        "tags": [
+          "javascript",
+          "optimization",
+          "performance"
+        ],
         "creationDate": "2025-11-29T14:29:23+0000",
         "updateDate": "2025-12-13T15:50:05+0000",
         "closeDate": "2025-12-13T15:50:05+0000",
@@ -4156,7 +5124,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-11-29T14:29:23+0000",
         "updateDate": "2025-12-13T15:50:05+0000",
         "closeDate": "2025-12-13T15:50:05+0000",
@@ -4193,7 +5164,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-11-29T14:29:23+0000",
         "updateDate": "2025-12-13T15:50:05+0000",
         "closeDate": "2025-12-13T15:50:05+0000",
@@ -4230,7 +5204,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-11-29T14:29:23+0000",
         "updateDate": "2025-12-13T15:50:05+0000",
         "closeDate": "2025-12-13T15:50:05+0000",
@@ -4267,7 +5244,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["javascript", "optimization", "performance"],
+        "tags": [
+          "javascript",
+          "optimization",
+          "performance"
+        ],
         "creationDate": "2025-11-29T14:29:23+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -4304,7 +5285,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["javascript", "optimization", "performance"],
+        "tags": [
+          "javascript",
+          "optimization",
+          "performance"
+        ],
         "creationDate": "2025-11-29T14:29:23+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -4341,7 +5326,9 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["react"],
+        "tags": [
+          "react"
+        ],
         "creationDate": "2025-11-29T14:06:02+0000",
         "updateDate": "2025-12-13T15:50:05+0000",
         "closeDate": "2025-12-13T15:50:05+0000",
@@ -4382,7 +5369,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-11-28T23:47:48+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -4419,7 +5409,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-11-28T23:34:37+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -4460,7 +5453,9 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["react"],
+        "tags": [
+          "react"
+        ],
         "creationDate": "2025-11-28T23:29:42+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -4538,7 +5533,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-11-28T21:23:21+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -4575,7 +5573,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-11-28T15:39:56+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -4686,7 +5688,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-11-28T14:49:59+0000",
         "updateDate": "2025-12-13T18:05:02+0000",
         "closeDate": "2025-12-13T18:05:02+0000",
@@ -4727,7 +5732,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-11-28T14:09:23+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -4764,7 +5772,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-11-28T14:09:23+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -4801,10 +5812,13 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-11-28T13:59:09+0000",
-        "updateDate": "2025-12-16T03:48:11+0000",
-        "closeDate": "2025-12-16T03:48:11+0000",
+        "updateDate": "2025-12-17T00:43:55+0000",
+        "closeDate": "2025-12-17T00:43:55+0000",
         "type": "CODE_SMELL",
         "organization": "bodu1197",
         "cleanCodeAttribute": "CONVENTIONAL",
@@ -4842,7 +5856,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-11-28T13:59:09+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -4879,7 +5897,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-11-28T13:59:09+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -4916,7 +5937,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-11-28T13:59:09+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -4953,7 +5977,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-11-28T13:59:09+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -4990,7 +6017,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-11-28T13:59:09+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -5027,7 +6057,9 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["react"],
+        "tags": [
+          "react"
+        ],
         "creationDate": "2025-11-28T13:43:48+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -5068,7 +6100,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-11-28T13:43:48+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -5105,7 +6140,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-11-28T13:43:48+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -5179,7 +6218,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-11-28T13:43:48+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -5216,7 +6259,11 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["jsx", "performance", "react"],
+        "tags": [
+          "jsx",
+          "performance",
+          "react"
+        ],
         "creationDate": "2025-11-28T13:43:48+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -5253,7 +6300,10 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["accessibility", "react"],
+        "tags": [
+          "accessibility",
+          "react"
+        ],
         "creationDate": "2025-11-27T08:48:36+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",
@@ -5290,7 +6340,9 @@
         "effort": "5min",
         "debt": "5min",
         "author": "your_email@example.com",
-        "tags": ["type-dependent"],
+        "tags": [
+          "type-dependent"
+        ],
         "creationDate": "2025-11-25T01:37:33+0000",
         "updateDate": "2025-12-16T03:48:11+0000",
         "closeDate": "2025-12-16T03:48:11+0000",

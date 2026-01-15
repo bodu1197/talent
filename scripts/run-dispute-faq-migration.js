@@ -6,8 +6,13 @@ const https = require('node:https');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const SUPABASE_PROJECT_REF = 'abroivxthindezdtdzmj';
-const SUPABASE_ACCESS_TOKEN = 'sbp_753b67c2411cad6320ef44d6626ac13ee2ba6296';
+const SUPABASE_PROJECT_REF = process.env.SUPABASE_PROJECT_ID || 'abroivxthindezdtdzmj';
+const SUPABASE_ACCESS_TOKEN = process.env.SUPABASE_ACCESS_TOKEN;
+
+if (!SUPABASE_ACCESS_TOKEN) {
+  console.error('❌ Error: SUPABASE_ACCESS_TOKEN environment variable is required');
+  process.exit(1);
+}
 
 const migrationPath = path.join(__dirname, '../supabase/migrations/20251219_add_dispute_faq.sql');
 const sql = fs.readFileSync(migrationPath, 'utf8');
