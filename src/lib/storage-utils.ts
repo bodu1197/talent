@@ -4,8 +4,8 @@ import { createClient } from '@/lib/supabase/client';
 import { logger } from '@/lib/logger';
 import { extractStoragePath, extractBucketName } from './storage-utils-common';
 
-// Re-export common utilities
-export { extractStoragePath, extractBucketName };
+// Re-export common utilities using export...from syntax
+export { extractStoragePath, extractBucketName } from './storage-utils-common';
 
 /**
  * Storage에서 이전 이미지 삭제
