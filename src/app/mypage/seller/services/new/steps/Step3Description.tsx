@@ -1,7 +1,7 @@
 import { Lightbulb, Check } from 'lucide-react';
 import { ServiceFormProps } from '@/types/service-form';
 
-export default function Step3Description({ formData, setFormData }: ServiceFormProps) {
+export default function Step3Description({ formData, setFormData }: Readonly<ServiceFormProps>) {
   return (
     <div className="space-y-6">
       <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-6">서비스 설명</h2>

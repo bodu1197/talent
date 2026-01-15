@@ -146,7 +146,7 @@ export default function CategoryTreeSelect({
                       isSelected
                         ? 'bg-brand-primary/10 text-brand-primary font-medium'
                         : 'text-gray-700'
-                    } ${!hasChildren ? 'ml-8' : ''}`}
+                    } ${hasChildren ? '' : 'ml-8'}`}
                   >
                     {isSelected && <Check className="w-4 h-4" />}
                     <span className={isSelected || hasChildren ? '' : 'ml-6'}>{category.name}</span>

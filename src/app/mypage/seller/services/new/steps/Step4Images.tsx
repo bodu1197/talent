@@ -27,7 +27,7 @@ interface TextStyle {
   shadowBlur: number;
 }
 
-export default function Step4Images({ formData, setFormData }: ServiceFormProps) {
+export default function Step4Images({ formData, setFormData }: Readonly<ServiceFormProps>) {
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const [uploadMode, setUploadMode] = useState<'file' | 'template'>('file');
   const [selectedTemplate, setSelectedTemplate] = useState<GradientTemplate | null>(null);

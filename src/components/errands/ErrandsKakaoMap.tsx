@@ -5,43 +5,45 @@ import { Loader2, Navigation, MapPin, RefreshCw, Star, AlertTriangle } from 'luc
 import Image from 'next/image';
 
 // 카카오 지도 타입 선언
+interface KakaoMapsAPI {
+  load: (callback: () => void) => void;
+  Map: new (container: HTMLElement, options: { center: unknown; level: number }) => KakaoMap;
+  LatLng: new (lat: number, lng: number) => KakaoLatLng;
+  Marker: new (options: { position: unknown; map?: KakaoMap; image?: unknown }) => KakaoMarker;
+  MarkerImage: new (src: string, size: unknown, options?: { offset?: unknown }) => unknown;
+  Size: new (width: number, height: number) => unknown;
+  Point: new (x: number, y: number) => unknown;
+  CustomOverlay: new (options: {
+    position: unknown;
+    content: string | HTMLElement;
+    yAnchor?: number;
+    xAnchor?: number;
+  }) => KakaoCustomOverlay;
+  Circle: new (options: {
+    center: unknown;
+    radius: number;
+    strokeWeight: number;
+    strokeColor: string;
+    strokeOpacity: number;
+    strokeStyle: string;
+    fillColor: string;
+    fillOpacity: number;
+  }) => KakaoCircle;
+  event: {
+    addListener: (target: unknown, type: string, handler: () => void) => void;
+  };
+}
+
+interface KakaoSDK {
+  maps: KakaoMapsAPI;
+}
+
 declare global {
   interface Window {
-    kakao: {
-      maps: {
-        load: (callback: () => void) => void;
-        Map: new (container: HTMLElement, options: { center: unknown; level: number }) => KakaoMap;
-        LatLng: new (lat: number, lng: number) => KakaoLatLng;
-        Marker: new (options: {
-          position: unknown;
-          map?: KakaoMap;
-          image?: unknown;
-        }) => KakaoMarker;
-        MarkerImage: new (src: string, size: unknown, options?: { offset?: unknown }) => unknown;
-        Size: new (width: number, height: number) => unknown;
-        Point: new (x: number, y: number) => unknown;
-        CustomOverlay: new (options: {
-          position: unknown;
-          content: string | HTMLElement;
-          yAnchor?: number;
-          xAnchor?: number;
-        }) => KakaoCustomOverlay;
-        Circle: new (options: {
-          center: unknown;
-          radius: number;
-          strokeWeight: number;
-          strokeColor: string;
-          strokeOpacity: number;
-          strokeStyle: string;
-          fillColor: string;
-          fillOpacity: number;
-        }) => KakaoCircle;
-        event: {
-          addListener: (target: unknown, type: string, handler: () => void) => void;
-        };
-      };
-    };
+    kakao: KakaoSDK;
   }
+
+  var kakao: KakaoSDK;
 }
 
 interface KakaoLatLng {
@@ -266,7 +268,7 @@ export default function ErrandsKakaoMap({
     }
 
     try {
-      const { kakao } = window;
+      const { kakao } = globalThis;
       const container = mapContainerRef.current;
       const options = {
         center: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
@@ -335,7 +337,7 @@ export default function ErrandsKakaoMap({
   useEffect(() => {
     if (!isMapReady || !mapRef.current || helpers.length === 0) return;
 
-    const { kakao } = window;
+    const { kakao } = globalThis;
     const map = mapRef.current;
 
     // 기존 마커 제거
@@ -433,7 +435,7 @@ export default function ErrandsKakaoMap({
   // 내 위치로 이동
   const moveToMyLocation = useCallback(() => {
     if (!mapRef.current || !userLocation) return;
-    const { kakao } = window;
+    const { kakao } = globalThis;
     mapRef.current.panTo(new kakao.maps.LatLng(userLocation.lat, userLocation.lng));
     mapRef.current.setLevel(5);
   }, [userLocation]);
