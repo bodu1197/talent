@@ -72,11 +72,12 @@ const helperMenuItems: MenuItem[] = [
     icon: <Star className="w-6 h-6" />,
   },
   {
-    label: '설정',
+    label: '프로필',
     href: '/errands/mypage/helper/settings',
-    icon: <Settings className="w-6 h-6" />,
+    icon: <User className="w-6 h-6" />,
   },
   { label: '알림', href: '/mypage/notifications', icon: <Bell className="w-6 h-6" /> },
+  { label: '설정', href: '/mypage/settings', icon: <Settings className="w-6 h-6" /> },
 ];
 
 interface Props {
