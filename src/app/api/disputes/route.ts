@@ -6,6 +6,7 @@ import {
   handleAcceptVerdict,
   handleAppeal,
 } from './handlers';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 // 분쟁 타입 정의
 interface Dispute {
@@ -25,12 +26,61 @@ interface Dispute {
   service?: { id: string; title: string; category: string; revision_count?: number };
 }
 
+// 액션 처리 헬퍼 함수
+function handleDisputeAction(
+  supabase: SupabaseClient,
+  action: string,
+  disputeId: string,
+  userId: string,
+  dispute: Dispute,
+  isDefendant: boolean,
+  isPlaintiff: boolean,
+  body: { response?: string; appealReason?: string }
+): Promise<NextResponse> | NextResponse {
+  switch (action) {
+    case 'submit_response':
+      if (!isDefendant) {
+        return NextResponse.json({ error: '피고만 답변을 제출할 수 있습니다.' }, { status: 403 });
+      }
+      return handleSubmitResponse(supabase, disputeId, userId, body.response ?? '');
+
+    case 'request_verdict':
+      if (dispute.status !== 'ai_reviewing' && dispute.status !== 'waiting_response') {
+        return NextResponse.json(
+          { error: '현재 상태에서는 AI 판결을 요청할 수 없습니다.' },
+          { status: 400 }
+        );
+      }
+      return handleRequestVerdict(supabase, dispute);
+
+    case 'accept_verdict':
+      if (dispute.status !== 'ai_verdict') {
+        return NextResponse.json({ error: 'AI 판결 후에만 수용할 수 있습니다.' }, { status: 400 });
+      }
+      return handleAcceptVerdict(supabase, disputeId, userId, isPlaintiff);
+
+    case 'appeal':
+      if (dispute.status !== 'ai_verdict') {
+        return NextResponse.json(
+          { error: 'AI 판결 후에만 이의 신청할 수 있습니다.' },
+          { status: 400 }
+        );
+      }
+      return handleAppeal(supabase, disputeId, userId, body.appealReason ?? '');
+
+    default:
+      return NextResponse.json({ error: '알 수 없는 액션입니다.' }, { status: 400 });
+  }
+}
+
 // 분쟁 목록 조회
 export async function GET(_request: NextRequest) {
   try {
     const supabase = await createClient();
-    
-    const { data: { user } } = await supabase.auth.getUser();
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) {
       return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
     }
@@ -38,13 +88,15 @@ export async function GET(_request: NextRequest) {
     // 내가 관련된 분쟁 조회
     const { data: disputes, error } = await supabase
       .from('disputes')
-      .select(`
+      .select(
+        `
         *,
         plaintiff:profiles!disputes_plaintiff_id_fkey(display_name, avatar_url),
         defendant:profiles!disputes_defendant_id_fkey(display_name, avatar_url),
         order:orders(id, total_amount, status),
         service:services(id, title, category)
-      `)
+      `
+      )
       .or(`plaintiff_id.eq.${user.id},defendant_id.eq.${user.id}`)
       .order('created_at', { ascending: false });
 
@@ -54,7 +106,6 @@ export async function GET(_request: NextRequest) {
     }
 
     return NextResponse.json({ disputes });
-
   } catch (error) {
     console.error('Disputes API error:', error);
     return NextResponse.json({ error: '서버 오류가 발생했습니다.' }, { status: 500 });
@@ -65,8 +116,10 @@ export async function GET(_request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient();
-    
-    const { data: { user } } = await supabase.auth.getUser();
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) {
       return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
     }
@@ -81,13 +134,15 @@ export async function POST(request: NextRequest) {
     // 분쟁 정보 조회
     const { data: dispute, error: disputeError } = await supabase
       .from('disputes')
-      .select(`
+      .select(
+        `
         *,
         plaintiff:profiles!disputes_plaintiff_id_fkey(display_name),
         defendant:profiles!disputes_defendant_id_fkey(display_name),
         order:orders(id, total_amount, status, created_at),
         service:services(id, title, category, revision_count)
-      `)
+      `
+      )
       .eq('id', disputeId)
       .single();
 
@@ -98,44 +153,23 @@ export async function POST(request: NextRequest) {
     // 권한 확인 (당사자인지)
     const isPlaintiff = user.id === dispute.plaintiff_id;
     const isDefendant = user.id === dispute.defendant_id;
-    
+
     if (!isPlaintiff && !isDefendant) {
       return NextResponse.json({ error: '권한이 없습니다.' }, { status: 403 });
     }
 
-    // 타입 변환
+    // 타입 변환 및 액션 처리
     const typedDispute = dispute as unknown as Dispute;
-
-    // 액션별 처리 (각 핸들러로 분리)
-    switch (action) {
-      case 'submit_response':
-        if (!isDefendant) {
-          return NextResponse.json({ error: '피고만 답변을 제출할 수 있습니다.' }, { status: 403 });
-        }
-        return handleSubmitResponse(supabase, disputeId, user.id, body.response);
-
-      case 'request_verdict':
-        if (dispute.status !== 'ai_reviewing' && dispute.status !== 'waiting_response') {
-          return NextResponse.json({ error: '현재 상태에서는 AI 판결을 요청할 수 없습니다.' }, { status: 400 });
-        }
-        return handleRequestVerdict(supabase, typedDispute);
-
-      case 'accept_verdict':
-        if (dispute.status !== 'ai_verdict') {
-          return NextResponse.json({ error: 'AI 판결 후에만 수용할 수 있습니다.' }, { status: 400 });
-        }
-        return handleAcceptVerdict(supabase, disputeId, user.id, isPlaintiff);
-
-      case 'appeal':
-        if (dispute.status !== 'ai_verdict') {
-          return NextResponse.json({ error: 'AI 판결 후에만 이의 신청할 수 있습니다.' }, { status: 400 });
-        }
-        return handleAppeal(supabase, disputeId, user.id, body.appealReason);
-
-      default:
-        return NextResponse.json({ error: '알 수 없는 액션입니다.' }, { status: 400 });
-    }
-
+    return handleDisputeAction(
+      supabase,
+      action,
+      disputeId,
+      user.id,
+      typedDispute,
+      isDefendant,
+      isPlaintiff,
+      body
+    );
   } catch (error) {
     console.error('Dispute action error:', error);
     return NextResponse.json({ error: '서버 오류가 발생했습니다.' }, { status: 500 });

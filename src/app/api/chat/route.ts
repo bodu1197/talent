@@ -34,33 +34,33 @@ function cleanupOldEntries() {
 }
 
 // 메모리 기반 Rate Limit 체크
-function checkMemoryRateLimit(identifier: string): { 
-  success: boolean; 
-  remaining: number; 
-  limit: number; 
+function checkMemoryRateLimit(identifier: string): {
+  success: boolean;
+  remaining: number;
+  limit: number;
   resetAt: number;
 } {
   const now = Date.now();
-  
+
   // 5분마다 정리 (최대 1000개 초과 시에도)
   if (memoryRateLimitStore.size > 1000) {
     cleanupOldEntries();
   }
-  
+
   let entry = memoryRateLimitStore.get(identifier);
-  
+
   // 새 사용자이거나 리셋 시간이 지난 경우
   if (!entry || entry.resetAt < now) {
     entry = { count: 0, resetAt: now + MEMORY_WINDOW_MS };
     memoryRateLimitStore.set(identifier, entry);
   }
-  
+
   // 카운트 증가
   entry.count++;
-  
+
   const remaining = Math.max(0, MEMORY_RATE_LIMIT - entry.count);
   const success = entry.count <= MEMORY_RATE_LIMIT;
-  
+
   return { success, remaining, limit: MEMORY_RATE_LIMIT, resetAt: entry.resetAt };
 }
 
@@ -84,9 +84,53 @@ function getRateLimitInfo(identifier: string) {
   if (lastRateLimitResult?.identifier === identifier) {
     return lastRateLimitResult;
   }
-  
+
   // 캐시 없으면 기본값
   return { remaining: MEMORY_RATE_LIMIT, limit: MEMORY_RATE_LIMIT, resetInMinutes: 60 };
+}
+
+// Rate Limit 초과 응답 생성 헬퍼
+function createRateLimitExceededResponse(limit: number, reset: number) {
+  const resetInMinutes = Math.ceil((reset - Date.now()) / 60000);
+  return NextResponse.json(
+    {
+      error: '질문 횟수를 초과했습니다.',
+      message: '시간당 20회까지 질문할 수 있습니다. 잠시 후 다시 시도해주세요.',
+      rateLimited: true,
+      retryAfterMinutes: resetInMinutes,
+      rateLimit: {
+        remaining: 0,
+        limit,
+        resetInMinutes,
+      },
+    },
+    {
+      status: 429,
+      headers: {
+        'X-RateLimit-Limit': limit.toString(),
+        'X-RateLimit-Remaining': '0',
+        'X-RateLimit-Reset': reset.toString(),
+      },
+    }
+  );
+}
+
+// Rate Limit 체크 및 처리 (Redis 또는 메모리 기반)
+async function checkRateLimit(identifier: string): Promise<NextResponse | null> {
+  if (isRedisConfigured()) {
+    const { success, limit, remaining, reset } = await aiChatRateLimit.limit(identifier);
+    cacheRateLimitResult(identifier, remaining, limit, reset);
+    if (!success) {
+      return createRateLimitExceededResponse(limit, reset);
+    }
+  } else {
+    const { success, remaining, limit, resetAt } = checkMemoryRateLimit(identifier);
+    cacheRateLimitResult(identifier, remaining, limit, resetAt);
+    if (!success) {
+      return createRateLimitExceededResponse(limit, resetAt);
+    }
+  }
+  return null;
 }
 
 export async function POST(request: NextRequest) {
@@ -95,87 +139,28 @@ export async function POST(request: NextRequest) {
     const { message, sessionId: clientSessionId } = body;
 
     if (!message || message.trim().length === 0) {
-      return NextResponse.json(
-        { error: '메시지를 입력해주세요.' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: '메시지를 입력해주세요.' }, { status: 400 });
     }
 
     // Supabase 클라이언트 생성
     const supabase = await createClient();
-    
+
     // 현재 사용자 확인 (선택사항 - 비로그인 사용자도 허용)
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
     // Rate Limiting 체크
     // 로그인 사용자: user_id 기반, 비로그인: IP 기반
-    const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() 
-      || request.headers.get('x-real-ip') 
-      || 'anonymous';
+    const clientIp =
+      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+      request.headers.get('x-real-ip') ||
+      'anonymous';
     const rateLimitIdentifier = user?.id || `ip:${clientIp}`;
 
-    if (isRedisConfigured()) {
-      // Redis 기반 Rate limit 체크 (limit() 호출은 카운트를 증가시킴)
-      const { success, limit, remaining, reset } = await aiChatRateLimit.limit(rateLimitIdentifier);
-      
-      // 결과 캐시 저장 (나중에 응답에 포함하기 위해)
-      cacheRateLimitResult(rateLimitIdentifier, remaining, limit, reset);
-      
-      if (!success) {
-        // Rate limit 초과 - 친절한 메시지 반환
-        return NextResponse.json(
-          { 
-            error: '질문 횟수를 초과했습니다.',
-            message: '시간당 20회까지 질문할 수 있습니다. 잠시 후 다시 시도해주세요.',
-            rateLimited: true,
-            retryAfterMinutes: Math.ceil((reset - Date.now()) / 60000),
-            rateLimit: {
-              remaining: 0,
-              limit,
-              resetInMinutes: Math.ceil((reset - Date.now()) / 60000),
-            },
-          },
-          { 
-            status: 429,
-            headers: {
-              'X-RateLimit-Limit': limit.toString(),
-              'X-RateLimit-Remaining': '0',
-              'X-RateLimit-Reset': reset.toString(),
-            }
-          }
-        );
-      }
-    } else {
-      // 메모리 기반 Rate Limit (Redis 미설정 시 fallback)
-      const { success, remaining, limit, resetAt } = checkMemoryRateLimit(rateLimitIdentifier);
-      
-      // 결과 캐시 저장
-      cacheRateLimitResult(rateLimitIdentifier, remaining, limit, resetAt);
-      
-      if (!success) {
-        const resetInMinutes = Math.ceil((resetAt - Date.now()) / 60000);
-        return NextResponse.json(
-          { 
-            error: '질문 횟수를 초과했습니다.',
-            message: '시간당 20회까지 질문할 수 있습니다. 잠시 후 다시 시도해주세요.',
-            rateLimited: true,
-            retryAfterMinutes: resetInMinutes,
-            rateLimit: {
-              remaining: 0,
-              limit,
-              resetInMinutes,
-            },
-          },
-          { 
-            status: 429,
-            headers: {
-              'X-RateLimit-Limit': limit.toString(),
-              'X-RateLimit-Remaining': '0',
-              'X-RateLimit-Reset': resetAt.toString(),
-            }
-          }
-        );
-      }
+    const rateLimitResponse = await checkRateLimit(rateLimitIdentifier);
+    if (rateLimitResponse) {
+      return rateLimitResponse;
     }
 
     // 세션 ID 처리
@@ -237,19 +222,19 @@ export async function POST(request: NextRequest) {
       .order('priority', { ascending: false });
 
     // 지식 베이스 검색
-    const relevantKnowledge = knowledgeBase
-      ? searchKnowledgeBase(message, knowledgeBase)
-      : null;
+    const relevantKnowledge = knowledgeBase ? searchKnowledgeBase(message, knowledgeBase) : null;
 
     // 사용자 컨텍스트 조회 (개인화 응답용)
-    let userContext: {
-      displayName?: string;
-      isSeller?: boolean;
-      isBuyer?: boolean;
-      activeOrders?: number;
-      pendingDisputes?: number;
-      recentCategories?: string[];
-    } | undefined;
+    let userContext:
+      | {
+          displayName?: string;
+          isSeller?: boolean;
+          isBuyer?: boolean;
+          activeOrders?: number;
+          pendingDisputes?: number;
+          recentCategories?: string[];
+        }
+      | undefined;
 
     if (user) {
       // 사용자 프로필 정보
@@ -287,7 +272,7 @@ export async function POST(request: NextRequest) {
         isBuyer: true,
         activeOrders: orderCount ?? 0,
         pendingDisputes: disputeCount ?? 0,
-        recentCategories: recentCategories?.map(c => c.category_name),
+        recentCategories: recentCategories?.map((c) => c.category_name),
       };
     }
 
@@ -335,9 +320,9 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Chat API Error:', error);
     return NextResponse.json(
-      { 
+      {
         error: '응답 생성 중 오류가 발생했습니다.',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -351,10 +336,7 @@ export async function GET(request: NextRequest) {
     const sessionId = searchParams.get('sessionId');
 
     if (!sessionId) {
-      return NextResponse.json(
-        { error: 'sessionId가 필요합니다.' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'sessionId가 필요합니다.' }, { status: 400 });
     }
 
     const supabase = await createClient();
@@ -367,10 +349,7 @@ export async function GET(request: NextRequest) {
       .single();
 
     if (!session) {
-      return NextResponse.json(
-        { error: '세션을 찾을 수 없습니다.' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: '세션을 찾을 수 없습니다.' }, { status: 404 });
     }
 
     // 메시지 조회 - ai_support_messages 테이블 사용

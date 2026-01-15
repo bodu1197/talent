@@ -14,7 +14,6 @@ import {
   FileText,
   ChevronRight,
   User,
-  Send,
   ThumbsUp,
   ThumbsDown,
   AlertCircle,
@@ -127,6 +126,47 @@ const DISPUTE_TYPE_LABELS: Record<string, string> = {
   mod_abuse: '과도한 수정 요청',
   other: '기타',
 };
+
+// Helper: 메시지 타입별 배경색
+const MESSAGE_TYPE_BG_COLORS: Record<string, string> = {
+  ai_verdict: 'bg-purple-100',
+  claim: 'bg-blue-100',
+  response: 'bg-gray-100',
+  acceptance: 'bg-green-100',
+};
+
+function getMessageBgColor(messageType: string): string {
+  return MESSAGE_TYPE_BG_COLORS[messageType] || 'bg-orange-100';
+}
+
+// Helper: 메시지 타입별 레이블
+const MESSAGE_TYPE_LABELS: Record<string, string> = {
+  ai_verdict: 'AI 심판관',
+  claim: '원고 주장',
+  response: '피고 답변',
+  acceptance: '판결 수용',
+  appeal: '이의 신청',
+};
+
+function getMessageLabel(messageType: string): string {
+  return MESSAGE_TYPE_LABELS[messageType] || '시스템';
+}
+
+// Helper: 메시지 타입별 아이콘 렌더링
+function MessageIcon({ type }: { type: string }) {
+  switch (type) {
+    case 'ai_verdict':
+      return <Scale className="w-5 h-5 text-purple-600" />;
+    case 'claim':
+      return <MessageSquare className="w-5 h-5 text-blue-600" />;
+    case 'response':
+      return <MessageSquare className="w-5 h-5 text-gray-600" />;
+    case 'acceptance':
+      return <CheckCircle className="w-5 h-5 text-green-600" />;
+    default:
+      return <AlertTriangle className="w-5 h-5 text-orange-600" />;
+  }
+}
 
 export default function DisputeDetailPage() {
   const params = useParams();
@@ -449,31 +489,37 @@ export default function DisputeDetailPage() {
               )}
             </div>
 
-            {dispute.defendant_response ? (
+            {/* 피고 답변 내용 렌더링 */}
+            {dispute.defendant_response && (
               <p className="text-gray-700 whitespace-pre-wrap">{dispute.defendant_response}</p>
-            ) : isDefendant && dispute.status === 'waiting_response' ? (
-              <div className="space-y-3">
-                <textarea
-                  value={response}
-                  onChange={(e) => setResponse(e.target.value)}
-                  placeholder="분쟁에 대한 답변을 작성해주세요. (최소 20자)"
-                  rows={5}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
-                />
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">{response.length}자</span>
-                  <button
-                    onClick={handleSubmitResponse}
-                    disabled={submitting || response.length < 20}
-                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-                  >
-                    {submitting ? '제출 중...' : '답변 제출'}
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <p className="text-gray-400 italic">아직 답변이 없습니다.</p>
             )}
+            {!dispute.defendant_response &&
+              isDefendant &&
+              dispute.status === 'waiting_response' && (
+                <div className="space-y-3">
+                  <textarea
+                    value={response}
+                    onChange={(e) => setResponse(e.target.value)}
+                    placeholder="분쟁에 대한 답변을 작성해주세요. (최소 20자)"
+                    rows={5}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+                  />
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-500">{response.length}자</span>
+                    <button
+                      onClick={handleSubmitResponse}
+                      disabled={submitting || response.length < 20}
+                      className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                    >
+                      {submitting ? '제출 중...' : '답변 제출'}
+                    </button>
+                  </div>
+                </div>
+              )}
+            {!dispute.defendant_response &&
+              !(isDefendant && dispute.status === 'waiting_response') && (
+                <p className="text-gray-400 italic">아직 답변이 없습니다.</p>
+              )}
           </div>
         </div>
 
@@ -621,44 +667,14 @@ export default function DisputeDetailPage() {
             {messages.map((msg) => (
               <div key={msg.id} className="flex gap-3">
                 <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                    msg.message_type === 'ai_verdict'
-                      ? 'bg-purple-100'
-                      : msg.message_type === 'claim'
-                        ? 'bg-blue-100'
-                        : msg.message_type === 'response'
-                          ? 'bg-gray-100'
-                          : msg.message_type === 'acceptance'
-                            ? 'bg-green-100'
-                            : 'bg-orange-100'
-                  }`}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${getMessageBgColor(msg.message_type)}`}
                 >
-                  {msg.message_type === 'ai_verdict' ? (
-                    <Scale className="w-5 h-5 text-purple-600" />
-                  ) : msg.message_type === 'claim' ? (
-                    <MessageSquare className="w-5 h-5 text-blue-600" />
-                  ) : msg.message_type === 'response' ? (
-                    <MessageSquare className="w-5 h-5 text-gray-600" />
-                  ) : msg.message_type === 'acceptance' ? (
-                    <CheckCircle className="w-5 h-5 text-green-600" />
-                  ) : (
-                    <AlertTriangle className="w-5 h-5 text-orange-600" />
-                  )}
+                  <MessageIcon type={msg.message_type} />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-gray-900">
-                      {msg.message_type === 'ai_verdict'
-                        ? 'AI 심판관'
-                        : msg.message_type === 'claim'
-                          ? '원고 주장'
-                          : msg.message_type === 'response'
-                            ? '피고 답변'
-                            : msg.message_type === 'acceptance'
-                              ? '판결 수용'
-                              : msg.message_type === 'appeal'
-                                ? '이의 신청'
-                                : '시스템'}
+                      {getMessageLabel(msg.message_type)}
                     </span>
                     <span className="text-sm text-gray-400">
                       {new Date(msg.created_at).toLocaleString('ko-KR')}
